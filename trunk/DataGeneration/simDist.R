@@ -7,8 +7,6 @@ loading.from.alpha <- function(alpha, ni) {
 run <- function(object, ...) {}
 setGeneric("run")
 
-name <- function(x) deparse(substitute(x))
-
 setClass("Runif",
 	representation(
 		Lower="numeric",
