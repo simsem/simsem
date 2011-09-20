@@ -1,6 +1,6 @@
 x <- rnorm(25,1,1)
 
-data <- matrix(rep(rnorm(100,1,1),10),ncol=10)
+data <- matrix(rep(rnorm(100,1,1),5),ncol=5)
 
 
 
@@ -8,14 +8,21 @@ data <- matrix(rep(rnorm(100,1,1),10),ncol=10)
 # Input: Data Set
 # Output: Data Set wit data removed
 #
-# So, each row is an observation and each column an item
-#
+# Base, 3 form exampe:
+#      [,1]  [,2]  [,3]
+# [1,]   1     2     3
+# [2,]   NA    2     3
+# [3,]   1     NA    3
+# [4,]   1     2     NA
+
+# This function assumes that each column in the data set is a form, and each row an item.
+# For a 3 form design, a different 25% of the observations in each column will be removed.
+# This works for n forms and m observations, where percent removed in a column is m/(n+1)
 
 poke.holes <- function(data) {
 
   nforms <- dim(data)[2]
   nitems <- dim(data)[1]
-
 
   num.in.group <- nitems/(nforms+1)
 
