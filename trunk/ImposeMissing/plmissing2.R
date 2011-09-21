@@ -1,6 +1,6 @@
 x <- rnorm(25,1,1)
 
-data <- matrix(rep(rnorm(100,1,1),15),ncol=15)
+data <- matrix(rep(rnorm(24,1,1),12),ncol=12)
 
 # Function to poke holes in the data for planned missing designs. Currently, we assume a 3-form design.
 # Input: Data Set
@@ -9,8 +9,12 @@ data <- matrix(rep(rnorm(100,1,1),15),ncol=15)
 # So, each row is an observation and each column an item
 #
 
+
+
+
 poke.holes <- function(data) {
 
+  
   nitems <- dim(data)[2]
   nobs <- dim(data)[1]
   nforms <- 3
@@ -18,24 +22,18 @@ poke.holes <- function(data) {
   items.in.group <- nitems/(nforms+1)
   item.index.list <- generate.indices(nforms+1,items.in.group)
 
-  # Items (col indices) each group will be missing
-  groupA.miss <- item.index.list[[2]]
-  groupB.miss <- item.index.list[[3]]
-  groupC.miss <- item.index.list[[4]]
-
   obs.in.group <- nobs / (nforms)
   obs.index.list <- generate.indices(nforms,obs.in.group)
 
-  groupA <- obs.index.list[[1]]
-  groupB <- obs.index.list[[2]]
-  groupC <- obs.index.list[[3]]
+  # Items (col indices) each group will be missing
+  for(i in 1:nforms) {
+    data[obs.index.list[[i]],item.index.list[[i+1]]] <- NA
+       }
 
-  data[groupA,groupA.miss] <- NA
-  data[groupB,groupB.miss] <- NA
-  data[groupC,groupC.miss] <- NA
-  
+ 
   return (data)
 }
+
 
 # Generates sequential groups of lists of numbers based on the desired number of groups,
 # and the number of items in a group.
@@ -48,6 +46,7 @@ poke.holes <- function(data) {
 # [[3]]
 # [1] 9 10 11 12
 generate.indices <- function(ngroups, items.in.group) {
+
   
   for (i in 1:ngroups) {
     if (i == 1) {
