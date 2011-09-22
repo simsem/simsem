@@ -31,4 +31,3 @@ summary(object, ...)
     n02 <- rnorm.object(0, 0.2)
     summary(n02)
 }
-\keyword{ summary }

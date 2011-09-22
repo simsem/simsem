@@ -28,4 +28,3 @@ Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 n02 <- rnorm.object(0, 0.2)
 run(n02)
 }
-\keyword{ run }

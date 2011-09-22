@@ -1,8 +1,6 @@
 \name{loading.from.alpha}
 \alias{loading.from.alpha}
-\title{
-    Find standardized factor loading from coefficient alpha
-}
+\title{Find standardized factor loading from coefficient alpha}
 \description{
     Find standardized factor loading from coefficient alpha assuming that all items have equal loadings.
 }
@@ -22,5 +20,3 @@ loading.from.alpha(alpha, ni)
 \examples{
     loading.from.alpha(0.8, 4)
 }
-\keyword{ factor loading }
-\keyword{ alpha }

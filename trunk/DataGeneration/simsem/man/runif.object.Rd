@@ -27,4 +27,3 @@ Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 u1 <- runif(-0.1, 0.1)
 run(u1)
 }
-\keyword{ uniform distribution }
