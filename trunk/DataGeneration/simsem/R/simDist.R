@@ -5,7 +5,7 @@ setClass("Runif",
 	)
 )
 
-setGeneric("run", function(.Object) { 
+setGeneric("run", function(object) { 
 	return(standardGeneric("run")) 
 } )
 
