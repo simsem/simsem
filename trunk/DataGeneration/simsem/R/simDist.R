@@ -5,6 +5,10 @@ setClass("Runif",
 	)
 )
 
+setGeneric("run", function(.Object) { 
+	return(standardGeneric("run")) 
+} )
+
 setMethod("run", signature="Runif", definition=function(object) 
 		runif(1,object@Lower, object@Upper)
 )
