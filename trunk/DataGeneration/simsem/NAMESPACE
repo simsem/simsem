@@ -1,1 +1,3 @@
-exportMethods(summary)
+exportPattern(Rnorm, Runif)
+exportMethods(summary, run)
+export(loading.from.alpha, runif.object, rnorm.object)
