@@ -3,30 +3,29 @@
 \alias{simsem}
 \docType{package}
 \title{
-What the package does (short line)
-~~ package title ~~
+SIMulated Structural Equation Modeling data. 
 }
 \description{
-More about what it does (maybe more than one line)
+This package will generate data for structural equation modeling framework. This package is tailored to use those simulated data for various purposes, such as model fit evaluation.
 ~~ A concise (1-5 lines) description of the package ~~
 }
 \details{
 \tabular{ll}{
 Package: \tab simsem\cr
 Type: \tab Package\cr
-Version: \tab 1.0\cr
-Date: \tab 2011-09-20\cr
-License: \tab What license is it under?\cr
+Version: \tab 0.0.1\cr
+Depends: \tab R(>=2.12), lavaan\cr
+Date: \tab 2011-09-22\cr
+License: \tab NA\cr
 LazyLoad: \tab yes\cr
 }
 ~~ An overview of how to use the package, including the most important ~~
 ~~ functions ~~
 }
 \author{
-Who wrote it
+Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 
-Maintainer: Who to complain to <yourfault@somewhere.net>
-~~ The author and/or maintainer of the package ~~
+Maintainer: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 }
 \references{
 ~~ Literature or other references for background information ~~
@@ -34,6 +33,8 @@ Maintainer: Who to complain to <yourfault@somewhere.net>
 ~~ Optionally other standard keywords, one per line, from file KEYWORDS in ~~
 ~~ the R documentation directory ~~
 \keyword{ package }
+\keyword{ sem }
+\keyword{ simulation }
 \seealso{
 ~~ Optional links to other man pages, e.g. ~~
 ~~ \code{\link[<pkg>:<pkg>-package]{<pkg>}} ~~

@@ -2,9 +2,11 @@
 \alias{summary}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
+Summary all simsem objects
 %%  ~~function to do ... ~~
 }
 \description{
+The function will summarize all information in desired objects
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
@@ -13,16 +15,20 @@ summary(object, ...)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{object}{
+    The name of desired object
 %%     ~~Describe \code{object} here~~
 }
   \item{\dots}{
+    Any additional arguments based on characteristics of each type of objects
 %%     ~~Describe \code{\dots} here~~
 }
 }
 \details{
+    The function summarize all information that used specified inside particular object.
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{
+    Nothing returned from this function.
 %%  ~Describe the value returned
 %%  If it is a LIST, use
 %%  \item{comp1 }{Description of 'comp1'}
@@ -33,6 +39,7 @@ summary(object, ...)
 %% ~put references to the literature/web site here ~
 }
 \author{
+        Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 %%  ~~who you are~~
 }
 \note{
@@ -45,6 +52,11 @@ summary(object, ...)
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
+    u1 <- runif.object(-0.1, 0.1)
+    summary(u1)
+    
+    n02 <- rnorm.object(0, 0.2)
+    summary(n02)
 ##---- Should be DIRECTLY executable !! ----
 ##-- ==>  Define data, use random,
 ##--	or do  help(data=index)  for the standard data sets.
@@ -60,5 +72,5 @@ UseMethod("summary"), target = structure(character(0), .Names = character(0), cl
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ ~kwd1 }
+\keyword{ summary }
 \keyword{ ~kwd2 }% __ONLY ONE__ keyword per line

@@ -2,9 +2,11 @@
 \alias{rnorm.object}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
+    Create random normal distribution object
 %%  ~~function to do ... ~~
 }
 \description{
+    Create random normal distribution object. Random normal distribution object will save mean and standard deviation parameter. This will use in specifying parameters that distributed as normal distribution.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
@@ -13,9 +15,11 @@ rnorm.object(Mean, SD)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{Mean}{
+    Desired population mean
 %%     ~~Describe \code{Mean} here~~
 }
   \item{SD}{
+    Desired population standard deviation
 %%     ~~Describe \code{SD} here~~
 }
 }
@@ -23,6 +27,7 @@ rnorm.object(Mean, SD)
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{
+    \item{Rnorm} {Random Normal Distribution object that save the specified parameters}
 %%  ~Describe the value returned
 %%  If it is a LIST, use
 %%  \item{comp1 }{Description of 'comp1'}
@@ -33,6 +38,7 @@ rnorm.object(Mean, SD)
 %% ~put references to the literature/web site here ~
 }
 \author{
+    Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 %%  ~~who you are~~
 }
 \note{
@@ -45,14 +51,8 @@ rnorm.object(Mean, SD)
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
-
-## The function is currently defined as
-function(Mean, SD) {
-	temp <- new("Rnorm", Mean=Mean, SD=SD)
-  }
+    n02 <- rnorm.object(0, 0.2)
+    run(n02)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

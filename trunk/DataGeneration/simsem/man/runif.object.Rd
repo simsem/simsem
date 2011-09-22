@@ -2,20 +2,20 @@
 \alias{runif.object}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-%%  ~~function to do ... ~~
+    Create random uniform distribution object
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+    Create random uniform distribution object. Random uniform distribution object will save mean and standard deviation parameter. This will use in specifying parameters that distributed as normal distribution.
 }
 \usage{
 runif.object(Lower, Upper)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{Lower}{
+  \item{Lower}{ Lower bound of the distribution
 %%     ~~Describe \code{Lower} here~~
 }
-  \item{Upper}{
+  \item{Upper}{ Upper bound of the distribution
 %%     ~~Describe \code{Upper} here~~
 }
 }
@@ -23,6 +23,7 @@ runif.object(Lower, Upper)
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{
+    \item{Runif} {Random Uniform Distribution object that save the specified parameters}
 %%  ~Describe the value returned
 %%  If it is a LIST, use
 %%  \item{comp1 }{Description of 'comp1'}
@@ -33,7 +34,7 @@ runif.object(Lower, Upper)
 %% ~put references to the literature/web site here ~
 }
 \author{
-%%  ~~who you are~~
+Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 }
 \note{
 %%  ~~further notes~~
@@ -45,6 +46,8 @@ runif.object(Lower, Upper)
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
+u1 <- runif(-0.1, 0.1)
+run(u1)
 ##---- Should be DIRECTLY executable !! ----
 ##-- ==>  Define data, use random,
 ##--	or do  help(data=index)  for the standard data sets.
@@ -56,5 +59,4 @@ function(Lower, Upper) {
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+\keyword{ uniform distribution }

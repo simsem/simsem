@@ -1,62 +1,26 @@
 \name{loading.from.alpha}
 \alias{loading.from.alpha}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-%%  ~~function to do ... ~~
+    Find standardized factor loading from coefficient alpha
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+    Find standardized factor loading from coefficient alpha assuming that all items have equal loadings.
 }
 \usage{
 loading.from.alpha(alpha, ni)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{alpha}{
-%%     ~~Describe \code{alpha} here~~
-}
-  \item{ni}{
-%%     ~~Describe \code{ni} here~~
-}
-}
-\details{
-%%  ~~ If necessary, more details than the description above ~~
+  \item{alpha}{A desired coefficient alpha value.}
+  \item{ni}{A desired number of items.}
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
-}
-\references{
-%% ~put references to the literature/web site here ~
+    \item{result} {The standardized factor loadings that make desired coefficient alpha with specified number of items.}
 }
 \author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+    Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
-
-## The function is currently defined as
-function(alpha, ni) {
-	denominator <- ni - ((ni - 1) * alpha)
-	result <- sqrt(alpha/ denominator)
-	return(result)
-  }
+    loading.from.alpha(0.8, 4)
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+\keyword{ factor loading }
+\keyword{ alpha }

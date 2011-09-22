@@ -2,9 +2,11 @@
 \alias{run}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
+Run a particular object in simsem package.
 %%  ~~function to do ... ~~
 }
 \description{
+Run a particular object such as running any distribution objects to create number.
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
@@ -13,9 +15,11 @@ run(object, ...)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{object}{
+    \sQuote{simsem} object
 %%     ~~Describe \code{object} here~~
 }
   \item{\dots}{
+    any additional arguments
 %%     ~~Describe \code{\dots} here~~
 }
 }
@@ -23,6 +27,7 @@ run(object, ...)
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{
+    \item{object} {depends on particular object}
 %%  ~Describe the value returned
 %%  If it is a LIST, use
 %%  \item{comp1 }{Description of 'comp1'}
@@ -33,7 +38,7 @@ run(object, ...)
 %% ~put references to the literature/web site here ~
 }
 \author{
-%%  ~~who you are~~
+Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 }
 \note{
 %%  ~~further notes~~
@@ -45,22 +50,10 @@ run(object, ...)
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
-
-## The function is currently defined as
-structure(function (object, ...) 
-standardGeneric("run"), generic = structure("run", package = ".GlobalEnv"), package = ".GlobalEnv", group = list(), valueClass = character(0), signature = "object", default = structure(function (object, 
-    ...) 
-{
-  }, target = structure(character(0), .Names = character(0), class = structure("signature", package = "methods")), defined = structure(character(0), .Names = character(0), class = structure("signature", package = "methods")), generic = structure("run", package = ".GlobalEnv"), class = structure("derivedDefaultMethod", package = "methods")), skeleton = structure(function (object, 
-    ...) 
-{
-  }, target = structure(character(0), .Names = character(0), class = structure("signature", package = "methods")), defined = structure(character(0), .Names = character(0), class = structure("signature", package = "methods")), generic = structure("run", package = ".GlobalEnv"), class = structure("derivedDefaultMethod", package = "methods"))(object, 
-    ...), class = structure("standardGeneric", package = "methods"))
+n02 <- rnorm.object(0, 0.2)
+run(n02)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ ~kwd1 }
+\keyword{ run }
 \keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
