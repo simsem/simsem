@@ -24,6 +24,6 @@ Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 
 
 \examples{
-u1 <- runif(-0.1, 0.1)
+u1 <- runif.object(-0.1, 0.1)
 run(u1)
 }
