@@ -2,14 +2,14 @@
 
 setClass("results",
          representation(
-                        pop.model="matrix",
-                        analysis.model="matrix",
+                        pop.model="list",
+                        analysis.model="list",
                         combined.estimates="numeric",
                         combined.fit="numeric",
                         combined.se="numeric"),
          prototype(
-                   pop.model=matrix(),
-                   analysis.model=matrix(),
+                   pop.model=list(),
+                   analysis.model=list(),
                    combined.estimates=c(0),
                    combined.fit=c(0),
                    combined.se=c(0)),
@@ -22,7 +22,7 @@ setClass("results",
 combine <- function(analysis.ls) {
 
   # res <- new("results")
-  # do some things
+  # do some things (rbind?)
   # return(res)
   
 }
@@ -30,7 +30,7 @@ combine <- function(analysis.ls) {
 
 # Public summary method.
 # Input: results object
-# Output: numerical summaries
+# Output: numerical summaries (means of simulations? can we compute bias, emp se, power?)
 setMethod("summary",signature="results",
           definition=function(object, detail=FALSE) {
            
@@ -47,4 +47,8 @@ setMethod("plot",signature="results",
 
 
 # Questions
-# 1) Convergence?
+# 1) Convergence? 
+
+#Answers
+# 1) Convergences can be a variable in the analysis object and then summarized (this is probably the way to go).
+#    Or, non-convergence could simply not output an analysis object 
