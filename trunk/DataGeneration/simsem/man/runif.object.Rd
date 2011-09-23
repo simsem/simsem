@@ -16,13 +16,11 @@ runif.object(Lower, Upper)
 }
 }
 \value{
-    \item{Runif} {Random Uniform Distribution object that save the specified parameters}
+    \item{Runif}{Random Uniform Distribution object that save the specified parameters}
 }
 \author{
 Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 }
-
-
 \examples{
 u1 <- runif.object(-0.1, 0.1)
 run(u1)

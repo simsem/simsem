@@ -18,7 +18,7 @@ rnorm.object(Mean, SD)
 }
 }
 \value{
-    \item{Rnorm} {Random Normal Distribution object that save the specified parameters}
+    \item{Rnorm}{Random Normal Distribution object that save the specified parameters}
 }
 \author{
     Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)

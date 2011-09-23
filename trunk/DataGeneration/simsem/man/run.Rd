@@ -27,7 +27,7 @@ run(object, ...)
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{
-    \item{object} {depends on particular object}
+    \item{object}{depends on particular object}
 %%  ~Describe the value returned
 %%  If it is a LIST, use
 %%  \item{comp1 }{Description of 'comp1'}
@@ -56,4 +56,3 @@ run(n02)
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ run }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
