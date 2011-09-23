@@ -2,13 +2,13 @@
 
 setClass("analysis",
          representation(
-                        model="matrix",
+                        model="list",
                         estimates="numeric",
                         fit="numeric",
                         se="numeric",
                         convergence="logical"),
          prototype(
-                   model=matrix(),
+                   model=list(),
                    estimates=c(0),
                    fit=c(0),
                    se=c(0),
@@ -16,7 +16,7 @@ setClass("analysis",
          sealed=TRUE)
 
 # Internal function to do the analysis.
-# Input: List of imputed data matrices, and an analysis matrix (maybe list?)
+# Input: List of imputed data matrices, and an analysis  list of matrices (Make analysis matrices logical matrices?), maybe start values, maybe constraint matrices
 # Returns: List of estimates, fit, se, vectors, and convergence 
 .analyze <- function(data.mat.ls, analysis.mat) {
 
@@ -28,7 +28,7 @@ setClass("analysis",
 
 
 # User Interface for generating analysis objects.
-# Input: dataGen object, and an analysis matrix
+# Input: dataGen object, and an analysis list of matrices
 # Returns: an analysis object
 
 run <- function(ob.dataGen, analysis.mat) {}
