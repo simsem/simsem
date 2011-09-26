@@ -13,7 +13,7 @@ This package will generate data for structural equation modeling framework. This
 Package: \tab simsem\cr
 Type: \tab Package\cr
 Version: \tab 0.0.1\cr
-Depends: \tab R(>=2.12), lavaan\cr
+Depends: \tab R(>=2.12)\cr
 Date: \tab 2011-09-22\cr
 License: \tab NA\cr
 LazyLoad: \tab yes\cr
