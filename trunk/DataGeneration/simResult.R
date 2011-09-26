@@ -4,45 +4,57 @@ setClass("simResult",
 		Data="simData",
 		Model="simModel",
 		Replication="numeric",
-		Output="data.frame",
-		Convergence="numeric",
+                Estimates="data.frame",
+		Fit="data.frame",
+                SE="data.frame",
+		Convergence="logical",
 		Seed="numeric")
 )
 
-result.object <- function(simData, simModel, NRep, seed = 123321, silent=FALSE) {
-	Tag <- simData@Tag
-	if(Tag != simModel@Tag) stop("simData and simModel do not have the same tag")
-	Kept.Fit <- c("Chi", "p", "AIC", "BIC", "RMSEA", "CFI", "TLI", "SRMR")
-	Output <- matrix(NA, NRep, length(Kept.Fit))
-	colnames(Output) <- Kept.Fit
-	Convergence <- 0
+result.object <- function(simData, simModel.l, NRep, seed = 123321, silent=FALSE) {
+	#Tag <- simData@Tag
+        ###Check whether simModel analyze the same number of variables and the same tag
+	#if(Tag != simModel@Tag) stop("simData and simModel do not have the same tag")
+	Fit.l <- NULL 
+        Estimates.l <- NULL # We need them. Trut me (Sunthud).
+        SE.l <- NULL
+        Convergence <- NULL
 	set.seed(seed)
-	for(i in 1:NRep) {
-		if(!silent) cat(i, "\n")
-		data <- run(simData)
-		temp <- NULL
-		try(temp <- run(simModel, data))
-		Convergence <- Convergence + temp$Converged
-		if(!is.null(temp) & temp$Converged) {
-			fit <- NULL
-			if(simModel@Program == "OpenMx") {
-				fit <- find.fit.indices.OpenMx(temp)
-			} else if(simModel@Program == "lavaan") {
-				fit <- temp$Summary
-				Output[i, 6] <- fit$CFI
-				Output[i, 7] <- fit$TLI
-				Output[i, 8] <- fit$SRMR
-			}
-			Output[i, 1] <- fit$Chi
-			Output[i, 2] <- fit$p.Chi
-			Output[i, 3] <- fit$AIC
-			Output[i, 4] <- fit$BIC
-			Output[i, 5] <- fit$RMSEA
-		}
+        if(!silent) cat(1, "\n")
+        data <- run(SimData)
+        SimAnalysis.l <- lapply(simModel.l, run, Data=data)
+        # If we have complete data, simAnalysis provides 1 object.
+        # If we have missing data and want to try different analyses (complete, MI, FIML), simAnalysis provides multiple objects.
+        
+        Estimates.l[[1]] <- lapply(SimAnalysis.l, function(object) object@Estimates) # It is list of list (Inner list is different model, Outer list is different replications).
+        SE.l[[1]] <- lapply(SimAnalysis.l, function(object) object@SE)
+        Fit.l[[1]] <- lapply(SimAnalysis.l, function(object) object@Fit)
+        Convergence[[1]] <- lapply(SimAnalysis.l, function(object) object@Convergence)
+        
+	for(i in 2:NRep) {
+          if(!silent) cat(i, "\n")
+          data <- run(SimData)
+          SimAnalysis.l <- lapply(simModel.l, run, Data=data)
+          Estimates.l[[i]] <- lapply(SimAnalysis.l, function(object) object@Estimates) # It is list of list (Inner list is different model, Outer list is different replications).
+          SE.l[[i]] <- lapply(SimAnalysis.l, function(object) object@SE)
+          Fit.l[[i]] <- lapply(SimAnalysis.l, function(object) object@Fit)
+          Convergence[[1]] <- lapply(SimAnalysis.l, function(object) object@Convergence)
 	}
-	Output <- as.data.frame(Output)
-	Result <- new("simResult", Tag=Tag, Data=simData, Model=simModel, Replication=NRep, Output=Output, Convergence=Convergence, Seed=seed)
-	return <- Result
+        
+        Result.l <- NULL
+        
+        for(i in 1:length(simModel.l)) {
+          Model.Estimate <- sapply(Estimates.l, function(object) object[[i]]) # Object is the inner list. We want to extract element i (model i) from the inner list. The sapply function will go to each replication.
+          Model.SE <- sapply(SE.l, function(object) object[[i]])
+          Model.Fit <- sapply(Fit.l, function(object) object[[i]]) 
+          Model.Convergence <- sapply(Convergence.l, function(object) object[[i]])
+          
+          Result.l[[i]] <- new("simResult", Tag=Tag, Data=simData, Model=simModel, Replication=NRep,
+                      Estimates=as.data.frame(t(Model.Estimate)), SE=as.data.frame(t(Model.SE)), Fit=as.data.frame(t(Model.Fit)),
+                      Convergence=as.data.frame(t(Model.Convergence)), Seed=seed)
+        }
+        if(length(Result.l) == 1) unlist(Result.l)
+	return <- Result.l
 }
 
 find.fit.indices.OpenMx <- function(indiv.result) {
