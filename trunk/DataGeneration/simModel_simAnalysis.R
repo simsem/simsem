@@ -117,8 +117,8 @@ runLavaan <- function(object, Data) {
         names(Fit.indices) <- names(fitmeasures(Fit))
         Estimates <- inspect(Fit, "coef")
         SE <- inspect(Fit, "se")
-	Converged <- Fit@Fit@converged
-        ### lavaan always converges, even it does not provide SE. We need something to check convergence status.
+	#Converged <- Fit@Fit@converged
+        ifelse(sum(unlist(lapply(inspect(fit, "se"), sum))) == 0, Converged = FALSE, Converged = TRUE)
         return(new("simAnalysis", Parameters=object@Parameters, Starting.Values=object@Starting.Values,
                    Constraint=object@Constraint, Program=object@Program, Estimates=Estimates,
                    Fit=Fit.indices, SE=SE, Convergence=Converged))
