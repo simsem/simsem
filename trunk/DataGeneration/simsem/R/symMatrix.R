@@ -1,0 +1,3 @@
+setClass("symMatrix",
+	contains = "simMatrix"
+)

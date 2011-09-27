@@ -1,7 +1,7 @@
 Package: simsem
 Type: Package
 Title: SIMulated Structural Equation Modeling data. 
-Version: 0.0-1
+Version: 0.0-2
 Date: 2011-09-22
 Author@R: c(person("Sunthud", "Pornprasertmanit", email = "psunthud@ku.edu"))
 Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)

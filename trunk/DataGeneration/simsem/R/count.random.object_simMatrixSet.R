@@ -1,0 +1,26 @@
+setMethod("count.random.object", signature="simMatrixSet", definition=function(object) {
+	return(sum(c(count.random.object(object@LY),
+		count.random.object(object@TE),
+		count.random.object(object@VTE),
+		count.random.object(object@PS),
+		count.random.object(object@VPS),
+		count.random.object(object@BE),
+		count.random.object(object@TY),
+		count.random.object(object@AL),
+		count.random.object(object@ME),
+		count.random.object(object@MY),
+		count.random.object(object@VE),
+		count.random.object(object@VY),
+		count.random.object(object@LX),
+		count.random.object(object@TD),
+		count.random.object(object@VTD),
+		count.random.object(object@PH),
+		count.random.object(object@GA),
+		count.random.object(object@TX),
+		count.random.object(object@KA),
+		count.random.object(object@MX),
+		count.random.object(object@VPH),
+		count.random.object(object@VX),
+		count.random.object(object@TH))))
+	}
+)
