@@ -15,7 +15,7 @@ source("simResult.R")
 source("subMatrixSet.R")
 source("simConstraint.R")
 
-# Generate complete data
+# Generate complete data -
 
 complete.l <- run(simData, 1000)
 
