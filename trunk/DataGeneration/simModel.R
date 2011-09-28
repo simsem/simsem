@@ -22,7 +22,7 @@ setClass("simAnalysis",
                         Convergence="logical"),
          prototype(
                 Constraint=.NULL.simConstraint,
-                   convergence=FALSE),
+                   Convergence=FALSE),
          sealed=TRUE)
 
 setMethod("model.object", signature(object="freeParamSet"), definition=function(object, Starting.Values = NULL, Constraint=.NULL.simConstraint, Program="lavaan") {

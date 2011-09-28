@@ -1,5 +1,5 @@
-# 
-
+# Assumes starting in trunk
+setwd(paste(getwd(),"/DataGeneration",sep="")) 
 
 source("simDist.R")
 source("simMatrix.R")
@@ -16,6 +16,7 @@ source("subMatrixSet.R")
 source("simConstraint.R")
 
 # Generate complete data
+
 complete.l <- run(simData, 1000)
 
 # Impose missing data

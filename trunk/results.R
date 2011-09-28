@@ -19,7 +19,7 @@ setClass("results",
 # Public combine method. This will create the results object from a list of analysis objects.
 # Input: List of analysis objects
 # Returns: new results object
-combine <- function(analysis.ls) {
+combine <- function(rep, analysis.ls) {
 
   # res <- new("results")
   # do some things (rbind?)
