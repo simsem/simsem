@@ -1,17 +1,14 @@
 x <- rnorm(25,1,1)
 
-data <- matrix(rep(rnorm(24,1,1),12),ncol=12)
+data <- matrix(rep(rnorm(10,1,1),20),ncol=20)
 
 # Function to poke holes in the data for planned missing designs. Currently, we assume a 3-form design.
 # Input: Data Set
-# Output: Data Set wit data removed
+# Output: Data Set with data removed
 #
-# So, each row is an observation and each column an item
-#
-
-
-
-
+# Right now, function assumes a basic 3-form design, and that items are grouped sequentially
+# (i.e. columns 1-5 are shared, 6-10 are A, 11-15 are B, and 16-20 are C)
+# 
 poke.holes <- function(data) {
 
   
@@ -20,17 +17,18 @@ poke.holes <- function(data) {
   nforms <- 3
 
   items.in.group <- nitems/(nforms+1)
+  # groups items into sets of column indices (in the 3 form case, shared/a/b/c)
   item.index.list <- generate.indices(nforms+1,items.in.group)
 
   obs.in.group <- nobs / (nforms)
+  # groups observations into sets of row indices. Each set "receives" a different "form"
   obs.index.list <- generate.indices(nforms,obs.in.group)
 
-  # Items (col indices) each group will be missing
+  # Pokes holes in the data
   for(i in 1:nforms) {
     data[obs.index.list[[i]],item.index.list[[i+1]]] <- NA
        }
 
- 
   return (data)
 }
 
