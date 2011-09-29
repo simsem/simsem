@@ -19,7 +19,7 @@ source("ImposeMissing/plmissing2.R")
 
 # Generate complete data -
 
-build.example.model <- function(n) {
+build.example.model <- function() {
   factor.loading <- matrix(NA, 4, 2)
   factor.loading[,1] <- 1
   factor.loading[,2] <- 0:3
@@ -45,15 +45,14 @@ build.example.model <- function(n) {
 
   LCA.Model <- matrix.CFA.object(LY=LY, PS=PS, VPS=VPS, AL=AL,
                                VTE=VTE, TE=TE, TY=TY)
+  return(LCA.Model)
   
-  Data.True <- data.object(n, LCA.Model)
-  return(Data.True)
 }
 
 # It seems like build.example.model should return a simData that actually has a data set in it, and then the run fuction creates 1000 of such data sets.
 
-simData <- build.example.model(300)
-
+data.model <- build.example.model()
+data.object <- data.object(300, data.model)
 # This is actually just a matrix with 1000 observations
 # complete.mat <- run(simData, 1000)
 
@@ -97,13 +96,17 @@ imputed.l <- lapply(missing.l, imputeMissing,10)
 # Analyze
 
 # with complete data and  FIML
+complete.results.l <- list()
+# results <- function(data.model,complete.l) {
+#  for(i in 1:length(complete.l)) { results.l[[i]] <- run(data.model,complete.l[[i]]) }
+#  return(results.l) }
+      
 
-complete.results.l <- run(simModel, complete.l)
 
 
   #lapply(complete.l, run, simModel)
 
-FIML.results.l <- run(missing.l, simModel)
+FMIL.results.l <- run(missing.l, simModel)
 
 # with MI
 
