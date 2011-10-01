@@ -1,14 +1,20 @@
-exportClasses("Rnorm", 
+exportClasses(
+	"Rnorm", 
 	"Runif", 
 	"simDist",
 	"simMatrix", 
-	"symMatrix", 
-	"simVector", 
-	"simMatrixSet"
+	#"symMatrix", 
+	"simVector" #, 
+	#"nullVector",
+	#"nullMatrix"#,
+	#"nullSimMatrix" #,
+	#"nullSymMatrix",
+	#"nullSimVector"
 	)
 exportMethods(
 	"summary", 
-	"run", 
+	"run",
+	"is.null.object", 
 	"adjust.object", 
 	"summary.short"
 	)
@@ -18,8 +24,5 @@ export(
 	"rnorm.object", 
 	"matrix.object", 
 	"sym.matrix.object", 
-	"vector.object",
-	"matrix.CFA.object", 
-	"matrix.SEM.object", 
-	"matrix.Path.object"
+	"vector.object"
 	)

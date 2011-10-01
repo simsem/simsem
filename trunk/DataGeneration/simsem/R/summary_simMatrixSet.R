@@ -17,6 +17,7 @@ setMethod("summary", signature="simMatrixSet", definition= function(object) {
 		print.if.not.null(object@ME, "\nME: Mean of Factor.ETA")
 		cat("-------------------------------------------------", "\n")
 		cat("-- Exogeneous Variable --\n")
+		#browser()
 		print.if.not.null(object@LX, "\nLX: Loading of Indicator.X on Factor.KSI")
 		print.if.not.null(object@VTD, "\nVTD: Variance of Measurement.Error.DELTA")
 		print.if.not.null(object@TD, "\nTD: Correlation of Measurement.Error.DELTA")

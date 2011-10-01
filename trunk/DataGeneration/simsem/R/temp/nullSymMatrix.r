@@ -1,0 +1,1 @@
+setClass("nullSymMatrix", contains="symMatrix")

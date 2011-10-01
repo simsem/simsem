@@ -1,8 +1,8 @@
-matrix.CFA.object <-
-function(...) { #loading, latent.cor, error.cor, latent.var = NULL, error.var = NULL, indicator.var = NULL, intercept = NULL, indicator.mean = NULL, factor.mean = NULL) {
+matrix.CFA.object <- function(...) { #loading, latent.cor, error.cor, latent.var = NULL, error.var = NULL, indicator.var = NULL, intercept = NULL, indicator.mean = NULL, factor.mean = NULL) {
+	W <- get.keywords()
 	List <- list(...)
 	Names <- names(List)
-	keywords <- list(.loading, .error, .latent.cor, c("Variance of Measurement Error", .VTD, .VTE), c("Variance of Indicators", .VX, .VY), .intercept, .factor.mean, c("Means of Indicators", .MX, .MY), c("Variance of Factors", .VE, .VPS, .VPH))
+	keywords <- list(W$loading, W$error, W$latent.cor, c("Variance of Measurement Error", W$VTD, W$VTE), c("Variance of Indicators", W$VX, W$VY), W$intercept, W$factor.mean, c("Means of Indicators", W$MX, W$MY), c("Variance of Factors", W$VE, W$VPS, W$VPH))
 	position <- match.keyword(Names, keywords)
 	if(length(position) != length(unique(position))) stop("Some objects were identified more than once.")
 	ifelse(contain(1, position), LY <- List[position == 1], stop("No loading object in CFA"))
@@ -10,13 +10,12 @@ function(...) { #loading, latent.cor, error.cor, latent.var = NULL, error.var = 
 	nk <- ncol(run(LY[[1]]))
 	ifelse(contain(2, position), TE <- List[position == 2], stop("No error correlation object in CFA"))
 	ifelse(contain(3, position), PS <- List[position == 3], stop("No latent variables correlation object in CFA"))
-	ifelse(contain(4, position), VTE <- List[position == 4], VTE <- list(.NULL.simVector))
-	ifelse(contain(5, position), VY <- List[position == 5], ifelse(is.null.object(VTE[[1]]), { VY <- list(constant.vector(1, ni)); comment(VY[[1]]) <- "default"}, VY <- list(.NULL.simVector)))
-	ifelse(contain(8, position), MY <- List[position == 8], MY <- list(.NULL.simVector))
-	ifelse(contain(6, position), TY <- List[position == 6], ifelse(is.null.object(MY[[1]]), { TY <- list(constant.vector(0, ni)); comment(TY[[1]]) <- "default"}, TY <- list(.NULL.simVector)))
+	ifelse(contain(4, position), VTE <- List[position == 4], VTE <- list(new("nullSimVector")))
+	ifelse(contain(5, position), VY <- List[position == 5], ifelse(is.null.object(VTE[[1]]), { VY <- list(constant.vector(1, ni)); comment(VY[[1]]) <- "default"}, VY <- list(new("nullSimVector"))))
+	ifelse(contain(8, position), MY <- List[position == 8], MY <- list(new("nullSimVector")))
+	ifelse(contain(6, position), TY <- List[position == 6], ifelse(is.null.object(MY[[1]]), { TY <- list(constant.vector(0, ni)); comment(TY[[1]]) <- "default"}, TY <- list(new("nullSimVector"))))
 	ifelse(contain(7, position), ME <- List[position == 7], { ME <- list(constant.vector(0, nk)); comment(ME[[1]]) <- "default"})
 	ifelse(contain(9, position), VE <- List[position == 9], { VE <- list(constant.vector(1, nk)); comment(VE[[1]]) <- "default"})
 	Output <- new("simMatrixSet", LY=LY[[1]], PS=PS[[1]], TE=TE[[1]], VE=VE[[1]], VPS=VE[[1]], VTE=VTE[[1]], VY=VY[[1]], TY=TY[[1]], MY=MY[[1]], ME=ME[[1]], AL=ME[[1]], Tag="CFA")
 	return(Output)
 }
-

@@ -1,5 +1,4 @@
-create.free.parameters <-
-function(object) {
+create.free.parameters <- function(object) {
 	if(!is(object, "simMatrixSet")) stop("The attribute is not a simMatrixSet object.")
 	LY <- object@LY@Data
 	is.measurement.Y <- !(is.null.object(LY))
@@ -40,4 +39,3 @@ function(object) {
 	Output <- new("freeParamSet", LY=LY, TE=TE, BE=BE, PS=PS, AL=AL, TY=TY,
 			LX=LX, TD=TD, TX=TX, GA=GA, PH=PH, KA=KA, TH=TH, Tag=object@Tag)	
 }
-

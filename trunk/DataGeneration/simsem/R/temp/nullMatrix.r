@@ -1,0 +1,1 @@
+setClass("nullMatrix", contains = "matrix")

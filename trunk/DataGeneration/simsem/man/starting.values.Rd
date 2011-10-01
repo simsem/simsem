@@ -33,25 +33,25 @@ starting.values(object, trial, ...)
 	Internal Function
 }
 \examples{
-u89 <- runif.object(0.8, 0.9)
-loading <- matrix(0, 6, 2)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-loadingValues <- matrix(0, 6, 2)
-LX <- matrix.object(loading, "u89")
+#u89 <- runif.object(0.8, 0.9)
+#loading <- matrix(0, 6, 2)
+#loading[1:3, 1] <- NA
+#loading[4:6, 2] <- NA
+#loadingValues <- matrix(0, 6, 2)
+#LX <- matrix.object(loading, "u89")
 
-latent.cor <- matrix(NA, 2, 2)
-diag(latent.cor) <- 1
-PH <- sym.matrix.object(latent.cor, 0.5)
+#latent.cor <- matrix(NA, 2, 2)
+#diag(latent.cor) <- 1
+#PH <- sym.matrix.object(latent.cor, 0.5)
 
-error.cor <- matrix(0, 6, 6)
-diag(error.cor) <- 1
-TD <- sym.matrix.object(error.cor)
+#error.cor <- matrix(0, 6, 6)
+#diag(error.cor) <- 1
+#TD <- sym.matrix.object(error.cor)
 
-CFA.Model <- matrix.CFA.object(LX = LX, PH = PH, TD = TD)
-starting.values(LX, 10)
-result <- starting.values(CFA.Model, 10)
-summary(result)
+#CFA.Model <- matrix.CFA.object(LX = LX, PH = PH, TD = TD)
+#starting.values(LX, 10)
+#result <- starting.values(CFA.Model, 10)
+#summary(result)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

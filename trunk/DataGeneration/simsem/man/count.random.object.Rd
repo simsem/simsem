@@ -24,12 +24,12 @@ count.random.object(object)
 	Internal function
 }
 \examples{
-	n02 <- rnorm.object(0, 0.2)
-	AL <- vector.object(rep(NA, 4), "n02")
-	count.random.object(AL)
+	#n02 <- rnorm.object(0, 0.2)
+	#AL <- vector.object(rep(NA, 4), "n02")
+	#count.random.object(AL)
 	
-	loading <- matrix(0, 9, 3)
-	loading[1:3, 1] <- loading[4:6, 2] <- loading[7:9, 3] <- NA
-	LX <- matrix.object(loading, "n02")
-	count.random.object(LX)
+	#loading <- matrix(0, 9, 3)
+	#loading[1:3, 1] <- loading[4:6, 2] <- loading[7:9, 3] <- NA
+	#LX <- matrix.object(loading, "n02")
+	#count.random.object(LX)
 }

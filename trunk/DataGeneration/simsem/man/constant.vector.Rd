@@ -16,6 +16,7 @@ constant.vector(constant, ni)
   \item{ni}{
 	Number of items
 }
+}
 \value{
 	Return constant \code{simVector}
 }
@@ -26,5 +27,5 @@ constant.vector(constant, ni)
 	Internal function
 }
 \examples{
-	constant.vector(0, 4)
+	#constant.vector(0, 4)
 }

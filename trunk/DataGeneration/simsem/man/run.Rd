@@ -12,11 +12,9 @@ run(object, ...)
 \arguments{
   \item{object}{
     \sQuote{simsem} object
-%%     ~~Describe \code{object} here~~
 }
   \item{\dots}{
     any additional arguments
-%%     ~~Describe \code{\dots} here~~
 }
 }
 \value{

@@ -1,0 +1,1 @@
+setClass("nullSimMatrixSet", contains="simMatrixSet")

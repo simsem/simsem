@@ -1,0 +1,1 @@
+setClass("nullSimVector", contains="simVector")

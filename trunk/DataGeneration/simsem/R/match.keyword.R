@@ -1,5 +1,4 @@
-match.keyword <-
-function(Names, keywords) {
+match.keyword <- function(Names, keywords) {
 	Length <- length(Names)
 	Result <- rep(NA, Length)
 	for(i in 1:Length) {
@@ -12,4 +11,3 @@ function(Names, keywords) {
 	}
 	return(Result)
 }
-

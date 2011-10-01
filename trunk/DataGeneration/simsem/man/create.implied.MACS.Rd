@@ -32,24 +32,24 @@ Ansari, A., Jedidi, K., & Jagpal, S. (2000). A hierarchical Bayesian methodology
 }
 \examples{
 
-loading <- matrix(0, 6, 2)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-loadingValues <- matrix(0, 6, 2)
-loadingValues[1:3, 1] <- 0.7
-loadingValues[4:6, 2] <- 0.7
-LX <- matrix.object(loading, loadingValues)
-summary(LX)
+#loading <- matrix(0, 6, 2)
+#loading[1:3, 1] <- NA
+#loading[4:6, 2] <- NA
+#loadingValues <- matrix(0, 6, 2)
+#loadingValues[1:3, 1] <- 0.7
+#loadingValues[4:6, 2] <- 0.7
+#LX <- matrix.object(loading, loadingValues)
+#summary(LX)
 
-latent.cor <- matrix(NA, 2, 2)
-diag(latent.cor) <- 1
-PH <- sym.matrix.object(latent.cor, 0.5)
+#latent.cor <- matrix(NA, 2, 2)
+#diag(latent.cor) <- 1
+#PH <- sym.matrix.object(latent.cor, 0.5)
 
-error.cor <- matrix(0, 6, 6)
-diag(error.cor) <- 1
-TD <- sym.matrix.object(error.cor)
+#error.cor <- matrix(0, 6, 6)
+#diag(error.cor) <- 1
+#TD <- sym.matrix.object(error.cor)
 
-CFA.Model <- matrix.CFA.object(LX = LX, PH = PH, TD = TD)
+#CFA.Model <- matrix.CFA.object(LX = LX, PH = PH, TD = TD)
 #CFA.Model.Param <- run(CFA.Model)
 #create.implied.MACS(CFA.Model.Param)
 }
