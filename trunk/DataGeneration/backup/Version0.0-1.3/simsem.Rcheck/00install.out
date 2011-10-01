@@ -1,0 +1,12 @@
+* installing *source* package 'simsem' ...
+** R
+** preparing package for lazy loading
+This is lavaan 0.4-9
+lavaan is BETA software! Please report any bugs.
+in method for 'run' with signature 'object="simMatrix"': no definition for class "simMatrix"
+** help
+*** installing help indices
+** building package indices ...
+** testing if installed package can be loaded
+
+* DONE (simsem)

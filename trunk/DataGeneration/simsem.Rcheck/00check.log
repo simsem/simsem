@@ -1,0 +1,14 @@
+* using log directory 'C:/Users/Sunthud/Desktop/My Dropbox/Fit Indices/Program/simsem/trunk/DataGeneration/simsem.Rcheck'
+* using R version 2.13.1 (2011-07-08)
+* using platform: i386-pc-mingw32 (32-bit)
+* using session charset: ISO8859-1
+* checking for file 'simsem/DESCRIPTION' ... OK
+* checking extension type ... Package
+* this is package 'simsem' version '0.0-2'
+* checking package name space information ... OK
+* checking package dependencies ... OK
+* checking if this is a source package ... OK
+* checking for executable files ... OK
+* checking whether package 'simsem' can be installed ... ERROR
+Installation failed.
+See 'C:/Users/Sunthud/Desktop/My Dropbox/Fit Indices/Program/simsem/trunk/DataGeneration/simsem.Rcheck/00install.out' for details.

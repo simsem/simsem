@@ -1,0 +1,11 @@
+* installing *source* package 'simsem' ...
+** R
+** data
+** preparing package for lazy loading
+Creating a new generic function for "summary" in "simsem"
+** help
+*** installing help indices
+** building package indices ...
+** testing if installed package can be loaded
+
+* DONE (simsem)

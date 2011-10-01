@@ -1,0 +1,12 @@
+import(methods)
+#importFrom("methods",
+	   ## still needed {group generics needed to be explicitly imported} ?
+#	   Ops, Arith, Compare, Logic, Math, Math2, Summary, Complex,
+           ## generics for which we export new methods:
+#	   coerce, show, setClass)
+
+exportClasses(simDist, Rnorm, Runif, simMatrix)
+export(run)
+exportMethods(summary, run)
+
+export(loading.from.alpha, runif.object, rnorm.object)
