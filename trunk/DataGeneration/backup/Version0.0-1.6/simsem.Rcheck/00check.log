@@ -1,0 +1,76 @@
+* using log directory 'C:/Users/Sunthud/simsem_backup/simsem.Rcheck'
+* using R version 2.13.1 (2011-07-08)
+* using platform: i386-pc-mingw32 (32-bit)
+* using session charset: ISO8859-1
+* checking for file 'simsem/DESCRIPTION' ... OK
+* checking extension type ... Package
+* this is package 'simsem' version '0.0-1'
+* checking package name space information ... OK
+* checking package dependencies ... OK
+* checking if this is a source package ... OK
+* checking for executable files ... OK
+* checking whether package 'simsem' can be installed ... OK
+* checking installed package size ... OK
+* checking package directory ... OK
+* checking for portable file names ... OK
+* checking DESCRIPTION meta-information ... OK
+* checking top-level files ... OK
+* checking index information ... OK
+* checking package subdirectories ... OK
+* checking R files for non-ASCII characters ... OK
+* checking R files for syntax errors ... OK
+* checking whether the package can be loaded ... OK
+* checking whether the package can be loaded with stated dependencies ... OK
+* checking whether the package can be unloaded cleanly ... OK
+* checking whether the name space can be loaded with stated dependencies ... OK
+* checking whether the name space can be unloaded cleanly ... OK
+* checking for unstated dependencies in R code ... OK
+* checking S3 generic/method consistency ... OK
+* checking replacement functions ... OK
+* checking foreign function calls ... OK
+* checking R code for possible problems ... NOTE
+runOpenMx: no visible binding for global variable 'LY'
+runOpenMx: no visible binding for global variable 'PS'
+runOpenMx: no visible binding for global variable 'TE'
+runOpenMx: no visible binding for global variable 'TY'
+runOpenMx: no visible binding for global variable 'AL'
+runOpenMx: no visible binding for global variable 'ID'
+runOpenMx: no visible binding for global variable 'BE'
+* checking Rd files ... OK
+* checking Rd metadata ... OK
+* checking Rd cross-references ... OK
+* checking for missing documentation entries ... WARNING
+Undocumented code objects:
+  constraint.object data.object find.cutoff find.power
+  misspecified.CFA.object misspecified.Path.object
+  misspecified.SEM.object overlap.hist pvalue result.object visualize
+Undocumented S4 classes:
+  simConstraint simData simModel simResult
+Undocumented S4 methods:
+  generic 'model.object' and siglist 'freeParamSet'
+  generic 'model.object' and siglist 'simMatrixSet'
+  generic 'run' and siglist 'simData'
+  generic 'run' and siglist 'simMatrixSet'
+  generic 'run' and siglist 'simMisspecifiedSet'
+  generic 'run' and siglist 'simModel'
+  generic 'summary.short' and siglist 'matrix'
+  generic 'summary.short' and siglist 'vector'
+  generic 'summary' and siglist 'freeParamSet'
+  generic 'summary' and siglist 'labelsSet'
+  generic 'summary' and siglist 'matrixSet'
+  generic 'summary' and siglist 'reducedMatrixSet'
+  generic 'summary' and siglist 'simConstraint'
+  generic 'summary' and siglist 'simData'
+All user-level objects in a package (including S4 classes and methods)
+should have documentation entries.
+See the chapter 'Writing R documentation files' in the 'Writing R
+Extensions' manual.
+* checking for code/documentation mismatches ... OK
+* checking Rd \usage sections ... OK
+* checking Rd contents ... OK
+* checking for unstated dependencies in examples ... OK
+* checking examples ... OK
+* checking PDF version of manual ... OK
+WARNING: There was 1 warning, see
+  'C:/Users/Sunthud/simsem_backup/simsem.Rcheck/00check.log'
+for details

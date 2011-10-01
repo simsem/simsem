@@ -1,0 +1,1074 @@
+
+R version 2.13.1 (2011-07-08)
+Copyright (C) 2011 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: i386-pc-mingw32/i386 (32-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> pkgname <- "simsem"
+> source(file.path(R.home("share"), "R", "examples-header.R"))
+> options(warn = 1)
+> options(pager = "console")
+> library('simsem')
+Loading required package: lavaan
+This is lavaan 0.4-9
+lavaan is BETA software! Please report any bugs.
+Loading required package: MASS
+> 
+> assign(".oldSearch", search(), pos = 'CheckExEnv')
+> cleanEx()
+> nameEx("Rnorm-class")
+> ### * Rnorm-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: Rnorm-class
+> ### Title: Class "Rnorm"
+> ### Aliases: Rnorm-class run,Rnorm-method summary,Rnorm-method
+> ### Keywords: classes
+> 
+> ### ** Examples
+> 
+> showClass("Rnorm")
+Class "Rnorm" [package "simsem"]
+
+Slots:
+                      
+Name:     Mean      SD
+Class: numeric numeric
+
+Extends: "simDist"
+> n2 <- rnorm.object(0, 0.2)
+> run(n2)
+[1] -0.1252908
+> summary(n2)
+[1] "Random Normal Distribution Object."
+[1] "Mean is 0."
+[1] "Standard deviation is 0.2."
+> 
+> 
+> 
+> cleanEx()
+> nameEx("Runif-class")
+> ### * Runif-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: Runif-class
+> ### Title: Class "Runif"
+> ### Aliases: Runif-class run,Runif-method summary,Runif-method
+> ### Keywords: classes
+> 
+> ### ** Examples
+> 
+> showClass("Runif")
+Class "Runif" [package "simsem"]
+
+Slots:
+                      
+Name:    Lower   Upper
+Class: numeric numeric
+
+Extends: "simDist"
+> u1 <- runif.object(-0.1, 0.1)
+> run(u1)
+[1] -0.04689827
+> summary(u1)
+[1] "Random Uniform Distribution Object."
+[1] "Lower bound is -0.1."
+[1] "Upper bound is 0.1."
+> 
+> 
+> 
+> cleanEx()
+> nameEx("adjust.object")
+> ### * adjust.object
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: adjust.object
+> ### Title: Change an element in 'simMatrix', 'symMatrix', or 'simVector'.
+> ### Aliases: adjust.object
+> 
+> ### ** Examples
+> 
+> #loading <- matrix(0, 6, 2)
+> #loading[1:3, 1] <- NA
+> #loading[4:6, 2] <- NA
+> #LX <- matrix.object(loading, 0.7)
+> #summary(LX)
+> #run(LX)
+> 
+> #u34 <- runif.object(0.3, 0.4)
+> #LX <- adjust.object(LX, "u34", c(2, 1))
+> #summary(LX)
+> #run(LX)
+> 
+> #LX <- adjust.object(LX, 0, c(2,1))
+> #LX <- adjust.object(LX, 0.5, c(2,2), FALSE)
+> #summary(LX)
+> #run(LX)
+> 
+> #factor.mean <- rep(NA, 2)
+> #factor.mean.starting <- c(5, 2)
+> #AL <- vector.object(factor.mean, factor.mean.starting)
+> #run(AL)
+> #summary(AL)
+> 
+> #n01 <- rnorm.object(0, 1)
+> #AL <- adjust.object(AL, "n01", 2)
+> #run(AL)
+> #summary(AL)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("constant.vector")
+> ### * constant.vector
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: constant.vector
+> ### Title: Create constant 'simVector' (Internal)
+> ### Aliases: constant.vector
+> 
+> ### ** Examples
+> 
+> 	#constant.vector(0, 4)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("contain")
+> ### * contain
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: contain
+> ### Title: Check whether an element is in a vector (Internal)
+> ### Aliases: contain
+> 
+> ### ** Examples
+> 
+> 	#contain(0, 1:3)
+> 	#contain(1, 1:3)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("create.free.parameters")
+> ### * create.free.parameters
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: create.free.parameters
+> ### Title: Create free parameters object from model specification
+> ### Aliases: create.free.parameters
+> 
+> ### ** Examples
+> 
+> #loading <- matrix(0, 6, 2)
+> #loading[1:3, 1] <- NA
+> #loading[4:6, 2] <- NA
+> #loadingValues <- matrix(0, 6, 2)
+> #loadingValues[1:3, 1] <- 0.7
+> #loadingValues[4:6, 2] <- 0.7
+> #LX <- matrix.object(loading, loadingValues)
+> 
+> #latent.cor <- matrix(NA, 2, 2)
+> #diag(latent.cor) <- 1
+> #PH <- sym.matrix.object(latent.cor, 0.5)
+> 
+> #error.cor <- matrix(0, 6, 6)
+> #diag(error.cor) <- 1
+> #TD <- sym.matrix.object(error.cor)
+> 
+> #indicator.mean <- rep(NA, 6)
+> #MX <- vector.object(indicator.mean, 0)
+> 
+> #CFA.Model <- matrix.CFA.object(LX = LX, PH = PH, TD = TD, MX = MX)
+> #free <- create.free.parameters(CFA.Model)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("create.implied.MACS")
+> ### * create.implied.MACS
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: create.implied.MACS
+> ### Title: Create model implied Means and Covariance Matrix (MACS)
+> ### Aliases: create.implied.MACS
+> ### Keywords: ~kwd1 ~kwd2
+> 
+> ### ** Examples
+> 
+> 
+> #loading <- matrix(0, 6, 2)
+> #loading[1:3, 1] <- NA
+> #loading[4:6, 2] <- NA
+> #loadingValues <- matrix(0, 6, 2)
+> #loadingValues[1:3, 1] <- 0.7
+> #loadingValues[4:6, 2] <- 0.7
+> #LX <- matrix.object(loading, loadingValues)
+> #summary(LX)
+> 
+> #latent.cor <- matrix(NA, 2, 2)
+> #diag(latent.cor) <- 1
+> #PH <- sym.matrix.object(latent.cor, 0.5)
+> 
+> #error.cor <- matrix(0, 6, 6)
+> #diag(error.cor) <- 1
+> #TD <- sym.matrix.object(error.cor)
+> 
+> #CFA.Model <- matrix.CFA.object(LX = LX, PH = PH, TD = TD)
+> #CFA.Model.Param <- run(CFA.Model)
+> #create.implied.MACS(CFA.Model.Param)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("find.OpenMx.values")
+> ### * find.OpenMx.values
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: find.OpenMx.values
+> ### Title: Rearrange starting values such that it is appropriate for OpenMx
+> ###   matrix specification (Internal)
+> ### Aliases: find.OpenMx.values
+> 
+> ### ** Examples
+> 
+> #parameter <- c(NA, NA, 0, 0)
+> #starting.values <- c(2, 5, 0, 0)
+> #find.OpenMx.Values(parameter, starting.values)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("loading.from.alpha")
+> ### * loading.from.alpha
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: loading.from.alpha
+> ### Title: Find standardized factor loading from coefficient alpha
+> ### Aliases: loading.from.alpha
+> 
+> ### ** Examples
+> 
+>     loading.from.alpha(0.8, 4)
+[1] 0.7071068
+> 
+> 
+> 
+> cleanEx()
+> nameEx("match.keyword")
+> ### * match.keyword
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: match.keyword
+> ### Title: Search for the keywords and check whether the specified text
+> ###   match one in the vector (Internal)
+> ### Aliases: match.keyword
+> 
+> ### ** Examples
+> 
+> 	#match.keyword("LY", c("LY", "Ly", "ly", "LX", "Lx", "lx"))
+> 
+> 
+> 
+> cleanEx()
+> nameEx("matrix.CFA.object")
+> ### * matrix.CFA.object
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: matrix.CFA.object
+> ### Title: Create a set of matrix that belongs to CFA model.
+> ### Aliases: matrix.CFA.object
+> 
+> ### ** Examples
+> 
+> loading <- matrix(0, 6, 2)
+> loading[1:3, 1] <- NA
+> loading[4:6, 2] <- NA
+> loadingValues <- matrix(0, 6, 2)
+> loadingValues[1:3, 1] <- 0.7
+> loadingValues[4:6, 2] <- 0.7
+> LX <- matrix.object(loading, loadingValues)
+> summary(LX)
+[1] "Random Full Matrix Object."
+[1] "Parameters:"
+     [,1] [,2]
+[1,]   NA    0
+[2,]   NA    0
+[3,]   NA    0
+[4,]    0   NA
+[5,]    0   NA
+[6,]    0   NA
+[1] "Starting Values:"
+     [,1]  [,2] 
+[1,] "0.7" ""   
+[2,] "0.7" ""   
+[3,] "0.7" ""   
+[4,] ""    "0.7"
+[5,] ""    "0.7"
+[6,] ""    "0.7"
+> 
+> latent.cor <- matrix(NA, 2, 2)
+> diag(latent.cor) <- 1
+> PH <- sym.matrix.object(latent.cor, 0.5)
+> 
+> # Error Correlation Object
+> error.cor <- matrix(0, 6, 6)
+> diag(error.cor) <- 1
+> TD <- sym.matrix.object(error.cor)
+> 
+> CFA.Model <- matrix.CFA.object(LX = LX, PH = PH, TD = TD)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("matrix.Path.object")
+> ### * matrix.Path.object
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: matrix.Path.object
+> ### Title: Create a set of matrix belongs to Path analysis model
+> ### Aliases: matrix.Path.object
+> 
+> ### ** Examples
+>  
+> u35 <- runif.object(0.3, 0.5)
+> u57 <- runif.object(0.5, 0.7)
+> u1 <- runif.object(-0.1, 0.1)
+> n31 <- rnorm.object(0.3, 0.1)
+> 
+> path.BE <- matrix(0, 4, 4)
+> path.BE[3, 1:2] <- NA
+> path.BE[4, 3] <- NA
+> starting.BE <- matrix("", 4, 4)
+> starting.BE[3, 1:2] <- "u35"
+> starting.BE[4, 3] <- "u57"
+> BE <- matrix.object(path.BE, starting.BE)
+> 
+> residual.error <- diag(4)
+> residual.error[1,2] <- residual.error[2,1] <- NA
+> PS <- sym.matrix.object(residual.error, "n31")
+> 
+> Path.Model <- matrix.Path.object(PS = PS, BE = BE)
+> 
+> u35 <- runif.object(0.3, 0.5)
+> u57 <- runif.object(0.5, 0.7)
+> u1 <- runif.object(-0.1, 0.1)
+> n31 <- rnorm.object(0.3, 0.1)
+> 
+> path.GA <- matrix(0, 2, 2)
+> path.GA[1, 1:2] <- NA
+> GA <- matrix.object(path.GA, "u35")
+> 
+> path.BE <- matrix(0, 2, 2)
+> path.BE[2, 1] <- NA
+> BE <- matrix.object(path.BE, "u57")
+> 
+> exo.cor <- matrix(NA, 2, 2)
+> diag(exo.cor) <- 1
+> PH <- sym.matrix.object(exo.cor, "n31")
+> 
+> PS <- sym.matrix.object(diag(2))
+> 
+> Path.Exo.Model <- matrix.Path.object(PS = PS, BE = BE, PH = PH, GA = GA, exo=TRUE)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("matrix.SEM.object")
+> ### * matrix.SEM.object
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: matrix.SEM.object
+> ### Title: Create a set of matrix belongs to SEM model
+> ### Aliases: matrix.SEM.object
+> 
+> ### ** Examples
+> 
+> u68 <- runif.object(0.6, 0.8)
+> loading <- matrix(0, 8, 3)
+> loading[1:3, 1] <- NA
+> loading[4:6, 2] <- NA
+> loading[7:8, 3] <- NA
+> loading.start <- matrix("", 8, 3)
+> loading.start[1:3, 1] <- 0.7
+> loading.start[4:6, 2] <- 0.7
+> loading.start[7:8, 3] <- "u68"
+> LY <- matrix.object(loading, loading.start)
+> 
+> TE <- sym.matrix.object(diag(8))
+> 
+> factor.cor <- diag(3)
+> factor.cor[1, 2] <- factor.cor[2, 1] <- NA
+> PS <- sym.matrix.object(factor.cor, 0.5)
+> 
+> path <- matrix(0, 3, 3)
+> path[3, 1:2] <- NA
+> path.start <- matrix(0, 3, 3)
+> path.start[3, 1] <- "n65"
+> path.start[3, 2] <- "u35"
+> BE <- matrix.object(path, path.start)
+> 
+> SEM.model <- matrix.SEM.object(BE=BE, LY=LY, PS=PS, TE=TE)
+> 
+> loading.X <- matrix(0, 6, 2)
+> loading.X[1:3, 1] <- NA
+> loading.X[4:6, 2] <- NA
+> LX <- matrix.object(loading.X, 0.7)
+> 
+> loading.Y <- matrix(NA, 2, 1)
+> LY <- matrix.object(loading.Y, "u68")
+> 
+> TD <- sym.matrix.object(diag(6))
+> 
+> TE <- sym.matrix.object(diag(2))
+> 
+> factor.K.cor <- matrix(NA, 2, 2)
+> diag(factor.K.cor) <- 1
+> PH <- sym.matrix.object(factor.K.cor, 0.5)
+> 
+> PS <- sym.matrix.object(as.matrix(1))
+> 
+> path.GA <- matrix(NA, 1, 2)
+> path.GA.start <- matrix(c("n65", "u35"), ncol=2)
+> GA <- matrix.object(path.GA, path.GA.start)
+> 
+> BE <- matrix.object(as.matrix(0))
+> 
+> SEM.Exo.model <- matrix.SEM.object(GA=GA, BE=BE, LX=LX, LY=LY, PH=PH, PS=PS, TD=TD, TE=TE, exo=TRUE)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("matrix.object")
+> ### * matrix.object
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: matrix.object
+> ### Title: Create matrix object that save free parameters and starting
+> ###   values, as well as fixed values
+> ### Aliases: matrix.object
+> 
+> ### ** Examples
+> 
+> loading <- matrix(0, 6, 2)
+> loading[1:3, 1] <- NA
+> loading[4:6, 2] <- NA
+> loadingValues <- matrix(0, 6, 2)
+> loadingValues[1:3, 1] <- 0.7
+> loadingValues[4:6, 2] <- 0.7
+> LX <- matrix.object(loading, loadingValues)
+> summary(LX)
+[1] "Random Full Matrix Object."
+[1] "Parameters:"
+     [,1] [,2]
+[1,]   NA    0
+[2,]   NA    0
+[3,]   NA    0
+[4,]    0   NA
+[5,]    0   NA
+[6,]    0   NA
+[1] "Starting Values:"
+     [,1]  [,2] 
+[1,] "0.7" ""   
+[2,] "0.7" ""   
+[3,] "0.7" ""   
+[4,] ""    "0.7"
+[5,] ""    "0.7"
+[6,] ""    "0.7"
+> run(LX)
+     [,1] [,2]
+[1,]  0.7  0.0
+[2,]  0.7  0.0
+[3,]  0.7  0.0
+[4,]  0.0  0.7
+[5,]  0.0  0.7
+[6,]  0.0  0.7
+> 
+> n65 <- rnorm.object(0.6, 0.05)
+> LY <- matrix.object(loading, "n65")
+> summary(LY)
+[1] "Random Full Matrix Object."
+[1] "Parameters:"
+     [,1] [,2]
+[1,]   NA    0
+[2,]   NA    0
+[3,]   NA    0
+[4,]    0   NA
+[5,]    0   NA
+[6,]    0   NA
+[1] "Starting Values:"
+     [,1]  [,2] 
+[1,] "n65" ""   
+[2,] "n65" ""   
+[3,] "n65" ""   
+[4,] ""    "n65"
+[5,] ""    "n65"
+[6,] ""    "n65"
+> run(LY)
+          [,1]      [,2]
+[1,] 0.5686773 0.0000000
+[2,] 0.6091822 0.0000000
+[3,] 0.5582186 0.0000000
+[4,] 0.0000000 0.6797640
+[5,] 0.0000000 0.6164754
+[6,] 0.0000000 0.5589766
+> 
+> 
+> 
+> cleanEx()
+> nameEx("model.object")
+> ### * model.object
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: model.object
+> ### Title: Create model object from model specification
+> ### Aliases: model.object
+> ### Keywords: ~kwd1 ~kwd2
+> 
+> ### ** Examples
+> 
+> #loading <- matrix(0, 6, 2)
+> #loading[1:3, 1] <- NA
+> #loading[4:6, 2] <- NA
+> #loadingValues <- matrix(0, 6, 2)
+> #loadingValues[1:3, 1] <- 0.7
+> #loadingValues[4:6, 2] <- 0.7
+> #LX <- matrix.object(loading, loadingValues)
+> #summary(LX)
+> 
+> #latent.cor <- matrix(NA, 2, 2)
+> #diag(latent.cor) <- 1
+> #PH <- sym.matrix.object(latent.cor, 0.5)
+> 
+> #error.cor <- matrix(0, 6, 6)
+> #diag(error.cor) <- 1
+> #TD <- sym.matrix.object(error.cor)
+> 
+> #CFA.Model <- matrix.CFA.object(LX = LX, PH = PH, TD = TD)
+> 
+> #SimModel <- model.object(CFA.Model)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("print.if.not.null")
+> ### * print.if.not.null
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: print.if.not.null
+> ### Title: Provide basic summary of each object if that object is not NULL
+> ###   (Internal)
+> ### Aliases: print.if.not.null
+> 
+> ### ** Examples
+> 
+> #AL <- vector.object(rep(NA, 5), "0")
+> #print.if.not.null(AL, "Factor Mean")
+> 
+> 
+> 
+> cleanEx()
+> nameEx("rnorm.object")
+> ### * rnorm.object
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: rnorm.object
+> ### Title: Create random normal distribution object
+> ### Aliases: rnorm.object
+> 
+> ### ** Examples
+> 
+>     n02 <- rnorm.object(0, 0.2)
+>     run(n02)
+[1] -0.1252908
+> 
+> 
+> 
+> cleanEx()
+> nameEx("run")
+> ### * run
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: run
+> ### Title: Run a particular object in simsem package.
+> ### Aliases: run
+> ### Keywords: run
+> 
+> ### ** Examples
+> 
+> n02 <- rnorm.object(0, 0.2)
+> run(n02)
+[1] -0.1252908
+> 
+> 
+> 
+> cleanEx()
+> nameEx("runif.object")
+> ### * runif.object
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: runif.object
+> ### Title: Create random uniform distribution object
+> ### Aliases: runif.object
+> 
+> ### ** Examples
+> 
+> u1 <- runif.object(-0.1, 0.1)
+> run(u1)
+[1] -0.04689827
+> 
+> 
+> 
+> cleanEx()
+> nameEx("simDist-class")
+> ### * simDist-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: simDist-class
+> ### Title: Class "simDist"
+> ### Aliases: simDist-class
+> ### Keywords: classes
+> 
+> ### ** Examples
+> 
+> showClass("simDist")
+Virtual Class "simDist" [package "simsem"]
+
+No Slots, prototype of class "NULL"
+
+Known Subclasses: "Runif", "Rnorm"
+> 
+> 
+> 
+> cleanEx()
+> nameEx("simMatrix-class")
+> ### * simMatrix-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: simMatrix-class
+> ### Title: Class '"simMatrix"' (Random parameters matrix)
+> ### Aliases: simMatrix-class adjust.object,simMatrix-method
+> ###   run,simMatrix-method summary.short,simMatrix-method
+> ###   summary,simMatrix-method
+> ### Keywords: classes
+> 
+> ### ** Examples
+> 
+> showClass("simMatrix")
+Class "simMatrix" [package "simsem"]
+
+Slots:
+                    
+Name:    Data Labels
+Class: matrix matrix
+
+Known Subclasses: 
+Class "symMatrix", directly
+Class "nullSimMatrix", directly
+Class "nullSymMatrix", by class "symMatrix", distance 2
+> 
+> #loading <- matrix(0, 6, 2)
+> #loading[1:3, 1] <- NA
+> #loading[4:6, 2] <- NA
+> #loadingValues <- matrix(0, 6, 2)
+> #loadingValues[1:3, 1] <- 0.7
+> #loadingValues[4:6, 2] <- 0.7
+> #LX <- matrix.object(loading, loadingValues)
+> #summary(LX)
+> #run(LX)
+> 
+> #n65 <- rnorm.object(0.6, 0.05)
+> #LY <- matrix.object(loading, "n65")
+> #summary(LY)
+> #run(LY)
+> 
+> #u34 <- runif.object(0.3, 0.4)
+> #LY <- adjust.object(LY, "u34", c(2, 1))
+> #summary(LY)
+> #run(LY)
+> #summary.short(LY)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("simMatrixSet-class")
+> ### * simMatrixSet-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: simMatrixSet-class
+> ### Title: Class '"simMatrixSet"'
+> ### Aliases: simMatrixSet-class summary,simMatrixSet-method
+> 
+> ### ** Examples
+> 
+> showClass("simMatrixSet")
+Class "simMatrixSet" [package "simsem"]
+
+Slots:
+                                                                            
+Name:        Tag        LY        TE       VTE        PS       VPS        BE
+Class: character simMatrix symMatrix simVector symMatrix simVector simMatrix
+                                                                            
+Name:         TY        AL        ME        MY        VE        VY        LX
+Class: simVector simVector simVector simVector simVector simVector simMatrix
+                                                                            
+Name:         TD       VTD        PH        GA        TX        KA        MX
+Class: symMatrix simVector symMatrix simMatrix simVector simVector simVector
+                                    
+Name:        VPH        VX        TH
+Class: simVector simVector simMatrix
+
+Known Subclasses: "nullSimMatrixSet"
+> 
+> loading <- matrix(0, 6, 2)
+> loading[1:3, 1] <- NA
+> loading[4:6, 2] <- NA
+> loadingValues <- matrix(0, 6, 2)
+> loadingValues[1:3, 1] <- 0.7
+> loadingValues[4:6, 2] <- 0.7
+> LX <- matrix.object(loading, loadingValues)
+> summary(LX)
+[1] "Random Full Matrix Object."
+[1] "Parameters:"
+     [,1] [,2]
+[1,]   NA    0
+[2,]   NA    0
+[3,]   NA    0
+[4,]    0   NA
+[5,]    0   NA
+[6,]    0   NA
+[1] "Starting Values:"
+     [,1]  [,2] 
+[1,] "0.7" ""   
+[2,] "0.7" ""   
+[3,] "0.7" ""   
+[4,] ""    "0.7"
+[5,] ""    "0.7"
+[6,] ""    "0.7"
+> 
+> latent.cor <- matrix(NA, 2, 2)
+> diag(latent.cor) <- 1
+> PH <- sym.matrix.object(latent.cor, 0.5)
+> 
+> # Error Correlation Object
+> error.cor <- matrix(0, 6, 6)
+> diag(error.cor) <- 1
+> TD <- sym.matrix.object(error.cor)
+> 
+> CFA.Model <- matrix.CFA.object(LX = LX, PH = PH, TD = TD)
+> summary(CFA.Model)
+SET OF MODEL MATRICES
+Type
+[1] "CFA"
+-- Endogeneous Variable --
+
+LY: Loading of Indicator.Y on Factor.ETA 
+     [,1]  [,2] 
+[1,] "0.7" ""   
+[2,] "0.7" ""   
+[3,] "0.7" ""   
+[4,] ""    "0.7"
+[5,] ""    "0.7"
+[6,] ""    "0.7"
+
+TE: Correlation of Measurement.Error.EPSILON 
+     [,1] [,2] [,3] [,4] [,5] [,6]
+[1,] ""   ""   ""   ""   ""   ""  
+[2,] ""   ""   ""   ""   ""   ""  
+[3,] ""   ""   ""   ""   ""   ""  
+[4,] ""   ""   ""   ""   ""   ""  
+[5,] ""   ""   ""   ""   ""   ""  
+[6,] ""   ""   ""   ""   ""   ""  
+
+VY: Variance of Indicator.Y 
+[1] "1" "1" "1" "1" "1" "1"
+
+TY: Measurement Intercept of Indicator.Y 
+[1] "0" "0" "0" "0" "0" "0"
+
+VPS: Variance of Regression.Residual.PSI 
+[1] "1" "1"
+
+PS: Correlation of Regression.Residual.PSI 
+     [,1]  [,2] 
+[1,] ""    "0.5"
+[2,] "0.5" ""   
+
+VE: Variance of Factor.ETA 
+[1] "1" "1"
+
+AL: Regression Intercept of Factor.ETA 
+[1] "0" "0"
+
+ME: Mean of Factor.ETA 
+[1] "0" "0"
+------------------------------------------------- 
+-- Exogeneous Variable --
+------------------------------------------------- 
+> #run(CFA.Model)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("simVector-class")
+> ### * simVector-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: simVector-class
+> ### Title: Class '"simVector"' (Random parameters vector)
+> ### Aliases: simVector-class adjust.object,simVector-method
+> ###   run,simVector-method summary.short,simVector-method
+> ###   summary,simVector-method
+> ### Keywords: classes
+> 
+> ### ** Examples
+> 
+> showClass("simVector")
+Class "simVector" [package "simsem"]
+
+Slots:
+                    
+Name:    Data Labels
+Class: vector vector
+
+Known Subclasses: "nullSimVector"
+> 
+> factor.mean <- rep(NA, 2)
+> factor.mean.starting <- c(5, 2)
+> AL <- vector.object(factor.mean, factor.mean.starting)
+> run(AL)
+[1] 5 2
+> summary(AL)
+[1] "Random Vector Object."
+[1] "Parameters:"
+[1] NA NA
+[1] "Starting Values:"
+[1] "5" "2"
+> summary.short(AL)
+[1] "5" "2"
+> 
+> n01 <- rnorm.object(0, 1)
+> AL <- adjust.object(AL, "n01", 2)
+> run(AL)
+[1]  5.0000000 -0.6264538
+> summary(AL)
+[1] "Random Vector Object."
+[1] "Parameters:"
+[1] NA NA
+[1] "Starting Values:"
+[1] "5"   "n01"
+> 
+> 
+> 
+> cleanEx()
+> nameEx("starting.values")
+> ### * starting.values
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: starting.values
+> ### Title: Find starting values of free parameters (Internal)
+> ### Aliases: starting.values
+> ### Keywords: ~kwd1 ~kwd2
+> 
+> ### ** Examples
+> 
+> #u89 <- runif.object(0.8, 0.9)
+> #loading <- matrix(0, 6, 2)
+> #loading[1:3, 1] <- NA
+> #loading[4:6, 2] <- NA
+> #loadingValues <- matrix(0, 6, 2)
+> #LX <- matrix.object(loading, "u89")
+> 
+> #latent.cor <- matrix(NA, 2, 2)
+> #diag(latent.cor) <- 1
+> #PH <- sym.matrix.object(latent.cor, 0.5)
+> 
+> #error.cor <- matrix(0, 6, 6)
+> #diag(error.cor) <- 1
+> #TD <- sym.matrix.object(error.cor)
+> 
+> #CFA.Model <- matrix.CFA.object(LX = LX, PH = PH, TD = TD)
+> #starting.values(LX, 10)
+> #result <- starting.values(CFA.Model, 10)
+> #summary(result)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("summary.short")
+> ### * summary.short
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: summary.short
+> ### Title: Provide short summary of an object.
+> ### Aliases: summary.short
+> 
+> ### ** Examples
+> 
+> #u89 <- runif.object(0.8, 0.9)
+> #loading <- matrix(0, 6, 2)
+> #loading[1:3, 1] <- NA
+> #loading[4:6, 2] <- NA
+> #loadingValues <- matrix(0, 6, 2)
+> #LX <- matrix.object(loading, "u89")
+> #summary.short(LX)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("sym.matrix.object")
+> ### * sym.matrix.object
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: sym.matrix.object
+> ### Title: Create symmetric matrix object that save free parameters and
+> ###   starting values, as well as fixed values
+> ### Aliases: sym.matrix.object
+> 
+> ### ** Examples
+> 
+> latent.cor <- matrix(NA, 3, 3)
+> diag(latent.cor) <- 1
+> PH <- sym.matrix.object(latent.cor, 0.5)
+> 
+> u46 <- runif.object(0.4, 0.6)
+> factor.cor <- matrix(NA, 4, 4)
+> diag(factor.cor) <- 1
+> factor.cor.start <- matrix("u46", 4, 4)
+> factor.cor.start[1, 2] <- factor.cor.start[2, 1] <- "0.5"
+> PS <- sym.matrix.object(factor.cor, factor.cor.start)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("symMatrix-class")
+> ### * symMatrix-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: symMatrix-class
+> ### Title: Class '"symMatrix"' (Random parameters symmetric matrix)
+> ### Aliases: symMatrix-class count.random.object,symMatrix-method
+> ###   run,symMatrix-method summary,symMatrix-method
+> ### Keywords: classes
+> 
+> ### ** Examples
+> 
+> showClass("symMatrix")
+Class "symMatrix" [package "simsem"]
+
+Slots:
+                    
+Name:    Data Labels
+Class: matrix matrix
+
+Extends: "simMatrix"
+
+Known Subclasses: "nullSymMatrix"
+> 
+> latent.cor <- matrix(NA, 3, 3)
+> diag(latent.cor) <- 1
+> PH <- sym.matrix.object(latent.cor, 0.5)
+> 
+> u46 <- runif.object(0.4, 0.6)
+> PH <- adjust.object(PH, "u46", c(3,2))
+> summary(PH)
+[1] "Random Symmetric Matrix Object."
+[1] "Parameters:"
+     [,1] [,2] [,3]
+[1,]    1   NA   NA
+[2,]   NA    1   NA
+[3,]   NA   NA    1
+[1] "Starting Values:"
+     [,1]  [,2]  [,3] 
+[1,] ""    "0.5" "0.5"
+[2,] "0.5" ""    "u46"
+[3,] "0.5" "u46" ""   
+> summary.short(PH)
+     [,1]  [,2]  [,3] 
+[1,] ""    "0.5" "0.5"
+[2,] "0.5" ""    "u46"
+[3,] "0.5" "u46" ""   
+> run(PH)
+     [,1]      [,2]      [,3]
+[1,]  1.0 0.5000000 0.5000000
+[2,]  0.5 1.0000000 0.4531017
+[3,]  0.5 0.4531017 1.0000000
+> 
+> 
+> 
+> cleanEx()
+> nameEx("vector.object")
+> ### * vector.object
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: vector.object
+> ### Title: Create vector object that save free parameters and starting
+> ###   values, as well as fixed values
+> ### Aliases: vector.object
+> 
+> ### ** Examples
+> 
+> factor.mean <- rep(NA, 4)
+> AL <- vector.object(factor.mean, 0)
+> 
+> n02 <- rnorm.object(0, 0.2)
+> factor.start <- rep("n02", 4)
+> KA <- vector.object(factor.mean, factor.start)
+> 
+> 
+> 
+> ### * <FOOTER>
+> ###
+> cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
+Time elapsed:  1.13 0.05 1.19 NA NA 
+> grDevices::dev.off()
+null device 
+          1 
+> ###
+> ### Local variables: ***
+> ### mode: outline-minor ***
+> ### outline-regexp: "\\(> \\)?### [*]+" ***
+> ### End: ***
+> quit('no')

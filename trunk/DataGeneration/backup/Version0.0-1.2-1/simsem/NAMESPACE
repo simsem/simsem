@@ -1,0 +1,3 @@
+exportClasses(Rnorm, Runif, simDist)
+exportMethods(summary, run)
+export(loading.from.alpha, runif.object, rnorm.object)
