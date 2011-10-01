@@ -1,3 +1,0 @@
-setClass("symMatrix",
-	contains = "simMatrix"
-)

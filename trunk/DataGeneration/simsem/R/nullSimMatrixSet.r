@@ -1,1 +1,0 @@
-setClass("nullSimMatrixSet", contains="simMatrixSet")

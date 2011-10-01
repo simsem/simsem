@@ -1,1 +1,0 @@
-setClass("nullVector", contains = "vector")

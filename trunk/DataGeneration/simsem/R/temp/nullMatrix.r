@@ -1,1 +1,0 @@
-setClass("nullMatrix", contains = "matrix")
