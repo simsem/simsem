@@ -65,7 +65,7 @@ complete.l <- build.data.sets(data.object,100,10)
 
 imposeMissing <- function(data.mat){
   
-  poke.holes(data.mat)
+  planned.missing(data.mat)
    
 } 
 
@@ -88,13 +88,19 @@ missing.l <- lapply(complete.l,imposeMissing)
                      
 
 # Impute missing data
+# Input: 1 Missing data matrix
+# Out: List of imputations
 imputeMissing <- function(data.mat,imps){
   # pull out only the imputations
   require(Amelia)
-  return(amelia(data.mat,m=imps))
-  
+  temp.am <- amelia(data.mat,m=imps)
+  return(temp.am$imputations)
+
 } # end imputeMissing
 
+
+# This is a list of lists. i.e. imputed.l[[1]] contains 10 imputations
+# imputed[[1]][[1]] is a matrix for one of the imputations.
 imputed.l <- lapply(missing.l, imputeMissing,10)
 
 # Analyze

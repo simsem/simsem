@@ -4,12 +4,12 @@ data <- matrix(rep(rnorm(10,1,1),20),ncol=20)
 
 # Function to poke holes in the data for planned missing designs. Currently, we assume a 3-form design.
 # Input: Data Set
-# Output: Data Set with data removed
+# Output: Boolean matrix of values to delete
 #
 # Right now, function assumes a basic 3-form design, and that items are grouped sequentially
 # (i.e. columns 1-5 are shared, 6-10 are A, 11-15 are B, and 16-20 are C)
 # 
-poke.holes <- function(data) {
+planned.missing <- function(data) {
 
   
   nitems <- dim(data)[2]
@@ -24,7 +24,7 @@ poke.holes <- function(data) {
   # groups observations into sets of row indices. Each set "receives" a different "form"
   obs.index.list <- generate.indices(nforms,obs.in.group)
 
-  # Pokes holes in the data
+  # Create Missing Matrix
   for(i in 1:nforms) {
     data[obs.index.list[[i]],item.index.list[[i+1]]] <- NA
        }
