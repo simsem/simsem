@@ -16,6 +16,8 @@ planned.missing <- function(data) {
   nobs <- dim(data)[1]
   nforms <- 3
 
+  log.mat <- matrix(FALSE,ncol=nitems,nrow=nobs)
+
   items.in.group <- nitems/(nforms+1)
   # groups items into sets of column indices (in the 3 form case, shared/a/b/c)
   item.index.list <- generate.indices(nforms+1,items.in.group)
@@ -26,10 +28,10 @@ planned.missing <- function(data) {
 
   # Create Missing Matrix
   for(i in 1:nforms) {
-    data[obs.index.list[[i]],item.index.list[[i+1]]] <- NA
+    log.mat[obs.index.list[[i]],item.index.list[[i+1]]] <- TRUE
        }
 
-  return (data)
+  return (log.mat)
 }
 
 

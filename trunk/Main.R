@@ -64,9 +64,12 @@ build.data.sets <- function(model,obs,sets) {
 complete.l <- build.data.sets(data.object,100,10)
 
 imposeMissing <- function(data.mat){
-  
-  planned.missing(data.mat)
-   
+
+ # TRUE values are values to delete
+ log.mat <- planned.missing(data.mat)
+ data.mat[log.mat] <- NA
+ return(data.mat)
+ 
 } 
 
 missing.l <- lapply(complete.l,imposeMissing)
