@@ -36,15 +36,24 @@ makeMAR <- function(dat,parms)
     mar.pred1 <- parms$mar.pred1
     mar.pred2 <- parms$mar.pred2
 
+    ## Create a vector of small deviations 1/2 the length of your scales
     Y <- runif(len.scale*.5,0,.25*pm)
 
+    ## Bind Y with -Y and add pm to each element
+       ## Permute the elements just described to get a vector whose elements will average to pm
     Z <- sample(c(Y+pm,-Y+pm), size=len.scale, replace=F)
 
+    ## fun1 asks the question:
+    ## Is the prob. associated with the current value of some covariate (normally dist. attached to the dataset) <= x
+       ## x = an element of Z (from above)
     fun1 <- function(x,dat) pnorm(dat,mean(dat),sd(dat)) <= x
 
+    ## Apply fun1 to half of the variables using one covariate and to the other half using a different covariate
+       ## Because Z is m elements long and our covariate is p elements long cbind(R1, R2) will total p x m
     R1 <- sapply(Z[1:(length(Z)*.5)],fun1,dat=data[,mar.pred1])
     R2 <- sapply(Z[((length(Z)*.5)+1):length(Z)],fun1,dat=data[,mar.pred2])
 
+    ## Bind the R1 and R2 to a block of FALSEs to avoid deleting any covariates
     R <- cbind(R1,R2,matrix(FALSE,dim(dat)[1],(dim(dat)[2]-(dim(R1)[2]*2))))
     
     # dat[R] <- NA

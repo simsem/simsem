@@ -20,9 +20,11 @@ testMCARbin <- function() {
 
 makeMCARbin <- function(dat,pm,len.scale)
   {
-    
+    ## Fills a pattern matrix (R) of the same dimensions as your data with a bunch of binomially distributed (p=pm) ones and zeros
+       ## Provides an R matrix with a proportion of ones = proportion missing (all iid binomial)
     R <- matrix(rbinom(n=len.scale*dim(dat)[1],size=1,prob=pm),dim(dat)[1],len.scale,byrow=TRUE)
 
+    ## Bind the above matrix to a block of FALSEs to keep from deleting any covariate data
     R2 <- cbind(R,matrix(FALSE,dim(dat)[1],(dim(dat)[2]-dim(R)[2])))
 
     return(as.logical(R2))
