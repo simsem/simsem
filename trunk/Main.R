@@ -1,6 +1,7 @@
 #Assumes start in the trunk
 # This allows us to source our files with more organization
 
+library(Rmpi)
 source("DataGeneration/simDist.R")
 source("DataGeneration/simMatrix.R")
 source("DataGeneration/simMatrixSet.R")
@@ -16,6 +17,22 @@ source("DataGeneration/subMatrixSet.R")
 source("DataGeneration/simConstraint.R")
 source("ImposeMissing/plmissing2.R")
 
+# For safety?
+.Last <- function(){ 
+  if (is.loaded("mpi_initialize")){ 
+    if (mpi.comm.size(1) > 0){ 
+      print("Please use mpi.close.Rslaves() to close slaves.") 
+      mpi.close.Rslaves() 
+      } 
+      print("Please use mpi.quit() to quit R") 
+      .Call("mpi_finalize") 
+    } 
+} 
+
+
+# After we spawn computing minions, we need to send them our instructions
+mpi.spawn.Rslaves(nslaves=5)
+mpi.bcast.Robj2slave(planned.missing)
 
 # Generate complete data -
 
@@ -61,7 +78,7 @@ build.data.sets <- function(model,obs,sets) {
   for(i in 1:sets) { complete.l[[i]] <- run(model,obs) }
   return(complete.l) }
 
-complete.l <- build.data.sets(data.object,100,10)
+complete.l <- build.data.sets(data.object,100,1)
 
 imposeMissing <- function(data.mat){
 
@@ -89,7 +106,7 @@ imposeMissing <- function(data.mat){
 } 
 
 missing.l <- lapply(complete.l,imposeMissing)
-
+missing.l <- mpi.applyLB(complete.l,imposeMissing)
 # missing.l <- imposeMissing(complete.data.l)
 
 # imposeMissing <- function(data, a, b, c)
@@ -121,7 +138,7 @@ imputeMissing <- function(data.mat,imps){
 # This is a list of lists. i.e. imputed.l[[1]] contains 10 imputations
 # imputed[[1]][[1]] is a matrix for one of the imputations.
 imputed.l <- lapply(missing.l, imputeMissing,10)
-
+imputed.l <- mpi.applyLB(missing.l,imputeMissing,10)
 # Analyze
 
 data.simAnal <- run(data.model,imputed.l)
@@ -144,4 +161,5 @@ FIML.summary <- result.object(FIML.results.l)
 
 MI.summary <- result.object(MI.results.l)
 
-
+mpi.close.Rslaves()
+mpi.quit()
