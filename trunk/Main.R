@@ -67,8 +67,24 @@ imposeMissing <- function(data.mat){
 
  # TRUE values are values to delete
  log.mat <- planned.missing(data.mat)
+
+ # This will work when we've made some more design decisions about percent missing and covariates
+ 
+ # log.mat1 <- makeMCARbin(data.mat,.1,dim(data.mat)[2])
+
+ # parms <- list()
+ # parms$len.scale <- dim(data.mat)[2]-2 # for 2 covariates
+ # parms$mar.pred1 <- "cov1"
+ # parms$mar.pred2 <- "cov2"
+ # parms$pm <- .1
+
+ # log.mat2 <- makeMAR(data.mat,parms)
+
  data.mat[log.mat] <- NA
- return(data.mat)
+ # data.mat[log.mat1] <- NA
+ # data.mat[log.mat2] <- NA
+ 
+ return(data.mat) 
  
 } 
 
