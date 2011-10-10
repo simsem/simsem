@@ -1,0 +1,302 @@
+# summary
+# Methods -- simsem package
+# Provide description of an object
+# Generic Function: summary(object, ...)
+# Argument:
+#	object: The target object that is used to summarize
+# 	... : Other arguments (None is specified currently)
+# Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
+# Date Modified: October 6, 2011
+
+setMethod("summary",
+    signature(object = "Rnorm"),
+    function (object)
+    {
+		print("Random Normal Distribution Object.")
+		print(paste("Mean is ", format(object@Mean, digits=3), ".", sep=""))
+		print(paste("Standard deviation is ", format(object@SD, digits=3), ".", sep=""))
+    }
+)
+#Arguments: 
+#	object:	Rnorm.c that users wish to summarize
+#Description: This function will print all attributes of an object
+#Return: 	NONE. Results will print on screen only.
+
+setMethod("summary",
+    signature(object = "Runif"),
+    function (object) 
+    {
+		print("Random Uniform Distribution Object.")
+		print(paste("Lower bound is ", format(object@Lower, digits=3), ".", sep=""))
+		print(paste("Upper bound is ", format(object@Upper, digits=3), ".", sep=""))
+    }
+)
+#Arguments: 
+#	object:	Runif.c that users wish to summarize
+#Description: This function will print all attributes of an object
+#Return: 	NONE. Results will print on screen only.
+
+setMethod("summary", signature="simMatrix", definition = function(object) {
+		print("Random Full Matrix Object.")
+		print("Free/Fixed Parameters:")
+		print(object@Data)
+		print("Parameter/Starting Values:")
+		print(object@Labels)
+	}	
+)
+#Arguments: 
+#	object:	simMatrix.c that users wish to summarize
+#Description: This function will print free/fixed parameters and parameter/starting values.
+#Return: 	NONE. Results will print on screen only.
+
+setMethod("summary", signature="symMatrix", definition = function(object) {
+		print("Random Symmetric Matrix Object.")
+		print("Free/Fixed Parameters:")
+		print(object@Data)
+		print("Parameter/Starting Values:")
+		print(object@Labels)
+	}	
+)
+#Arguments: 
+#	object:	symMatrix.c that users wish to summarize
+#Description: This function will print free/fixed parameters and parameter/starting values.
+#Return: 	NONE. Results will print on screen only.
+
+setMethod("summary", signature="simVector", definition = function(object) {
+		print("Random Vector Object.")
+		print("Free/Fixed Parameters:")
+		print(object@Data)
+		print("Parameter/Starting Values:")
+		print(object@Labels)
+	}	
+)
+#Arguments: 
+#	object:	simVector.c that users wish to summarize
+#Description: This function will print free/fixed parameters and parameter/starting values.
+#Return: 	NONE. Results will print on screen only.
+
+setMethod("summary", signature="simMatrixSet", definition= function(object) {
+		cat("SET OF MODEL MATRICES\n")
+		cat("Type\n")
+		print(object@Tag)
+		cat("-- Endogeneous Variable --\n")
+		print.if.not.null(object@LY, "\nLY: Loading of Indicator.Y on Factor.ETA")
+		print.if.not.null(object@VTE, "\nVTE: Variance of Measurement.Error.EPSILON")
+		print.if.not.null(object@TE, "\nTE: Correlation of Measurement.Error.EPSILON")
+		print.if.not.null(object@VY, "\nVY: Variance of Indicator.Y")
+		print.if.not.null(object@TY, "\nTY: Measurement Intercept of Indicator.Y")
+		print.if.not.null(object@MY, "\nMY: Mean of Indicator.Y")
+		print.if.not.null(object@BE, "\nBE: Regression Coefficient among Factor.ETA")
+		print.if.not.null(object@VPS, "\nVPS: Variance of Regression.Residual.PSI")
+		print.if.not.null(object@PS, "\nPS: Correlation of Regression.Residual.PSI")
+		print.if.not.null(object@VE, "\nVE: Variance of Factor.ETA")
+		print.if.not.null(object@AL, "\nAL: Regression Intercept of Factor.ETA")
+		print.if.not.null(object@ME, "\nME: Mean of Factor.ETA")
+		cat("-------------------------------------------------", "\n")
+		cat("-- Exogeneous Variable --\n")
+		#browser()
+		print.if.not.null(object@LX, "\nLX: Loading of Indicator.X on Factor.KSI")
+		print.if.not.null(object@VTD, "\nVTD: Variance of Measurement.Error.DELTA")
+		print.if.not.null(object@TD, "\nTD: Correlation of Measurement.Error.DELTA")
+		print.if.not.null(object@VX, "\nVX: Variance of Indicator.X")
+		print.if.not.null(object@TX, "\nTX: Measurement Intercept of Indicator.X")
+		print.if.not.null(object@MX, "\nMX: Mean of Indicator.X")
+		print.if.not.null(object@GA, "\nGA: Regression Coefficient of Factor.ETA on Factor.KSI")
+		print.if.not.null(object@VPH, "\nVPH: Variance of Factor.KSI")
+		print.if.not.null(object@PH, "\nPH: Correlation of Factor.KSI")
+		print.if.not.null(object@KA, "\nKA: Mean of Factor.KSI")
+		print.if.not.null(object@TH, "\nTH: Correlation of Measurement.Error.DELTA and Measurement.Error.EPSILON")
+		cat("-------------------------------------------------", "\n")
+	}
+)
+#Arguments: 
+#	object:	simMatrixSet.c that users wish to summarize
+#Description: This function will print every object that is not null in the model in short format (summary.short).
+#Return: 	NONE. Results will print on screen only.
+
+setMethod("summary", signature="simConstraint", definition=function(object){
+	cat("CONSTRAINT OBJECT\n")
+	cat("Type\n")
+	print(object@Tag)
+	cat("-------------Constraint----------------\n")
+	for(i in 1:length(object@Equality)) {
+		cat(i, ".\n", sep="")
+		print(object@Equality[[i]])
+		cat("---------------------------------------\n")
+	}
+})
+#Arguments: 
+#	object:	simConstraint.c that users wish to summarize
+#Description: This function will print all constraints in the model.
+#Return: 	NONE. Results will print on screen only.
+
+setMethod("summary", signature="matrixSet", definition=function(object) {
+		cat("RANDOM NUMBERS OF MODEL MATRICES\n")
+		cat("Type\n")
+		print(object@Tag)		
+		cat("-- Endogeneous Variable --\n")
+		print.if.not.null(object@LY, "\nLY: Loading of Indicator.Y on Factor.ETA")
+		print.if.not.null(object@VTE, "\nVTE: Variance of Measurement.Error.EPSILON")
+		print.if.not.null(object@TE, "\nTE: Correlation of Measurement.Error.EPSILON")
+		print.if.not.null(object@VY, "\nVY: Variance of Indicator.Y")
+		print.if.not.null(object@TY, "\nTY: Measurement Intercept of Indicator.Y")
+		print.if.not.null(object@MY, "\nMY: Mean of Indicator.Y")
+		print.if.not.null(object@BE, "\nBE: Regression Coefficient among Factor.ETA")
+		print.if.not.null(object@VPS, "\nVPS: Variance of Regression.Residual.PSI")
+		print.if.not.null(object@PS, "\nPS: Correlation of Regression.Residual.PSI")
+		print.if.not.null(object@VE, "\nVE: Variance of Factor.ETA")
+		print.if.not.null(object@AL, "\nAL: Regression Intercept of Factor.ETA")
+		print.if.not.null(object@ME, "\nME: Mean of Factor.ETA")
+		cat("-------------------------------------------------", "\n")
+		cat("-- Exogeneous Variable --\n")
+		print.if.not.null(object@LX, "\nLX: Loading of Indicator.X on Factor.KSI")
+		print.if.not.null(object@VTD, "\nVTD: Variance of Measurement.Error.DELTA")
+		print.if.not.null(object@TD, "\nTD: Correlation of Measurement.Error.DELTA")
+		print.if.not.null(object@VX, "\nVX: Variance of Indicator.X")
+		print.if.not.null(object@TX, "\nTX: Measurement Intercept of Indicator.X")
+		print.if.not.null(object@MX, "\nMX: Mean of Indicator.X")
+		print.if.not.null(object@GA, "\nGA: Regression Coefficient of Factor.ETA on Factor.KSI")
+		print.if.not.null(object@VPH, "\nVPH: Variance of Factor.KSI")
+		print.if.not.null(object@PH, "\nPH: Correlation of Factor.KSI")
+		print.if.not.null(object@KA, "\nKA: Mean of Factor.KSI")
+		print.if.not.null(object@TH, "\nTH: Correlation of Measurement.Error.DELTA and Measurement.Error.EPSILON")
+		cat("-------------------------------------------------", "\n")
+	}
+)
+#Arguments: 
+#	object:	matrixSet.c that users wish to summarize
+#Description: This function will print all matrices or vectors in the matrixSet.c if not NULL.
+#Return: 	NONE. Results will print on screen only.
+
+setMethod("summary", signature="freeParamSet", definition=function(object) {
+		cat("SET OF ESTIMATED PARAMETERS\n")
+		cat("Type\n")
+		print(object@Tag)		
+		cat("-- Endogeneous Variable --\n")
+		print.if.not.null(object@LY, "\nLY: Loading of Indicator.Y on Factor.ETA")
+		print.if.not.null(object@TE, "\nTE: Correlation of Measurement.Error.EPSILON")
+		print.if.not.null(object@TY, "\nTY: Measurement Intercept of Indicator.Y")
+		print.if.not.null(object@BE, "\nBE: Regression Coefficient among Factor.ETA")
+		print.if.not.null(object@PS, "\nPS: Correlation of Regression.Residual.PSI")
+		print.if.not.null(object@AL, "\nAL: Regression Intercept of Factor.ETA")
+		cat("-------------------------------------------------", "\n")
+		cat("-- Exogeneous Variable --\n")
+		print.if.not.null(object@LX, "\nLX: Loading of Indicator.X on Factor.KSI")
+		print.if.not.null(object@TD, "\nTD: Correlation of Measurement.Error.DELTA")
+		print.if.not.null(object@TX, "\nTX: Measurement Intercept of Indicator.X")
+		print.if.not.null(object@GA, "\nGA: Regression Coefficient of Factor.ETA on Factor.KSI")
+		print.if.not.null(object@PH, "\nPH: Correlation of Factor.KSI")
+		print.if.not.null(object@KA, "\nKA: Mean of Factor.KSI")
+		print.if.not.null(object@TH, "\nTH: Correlation of Measurement.Error.DELTA and Measurement.Error.EPSILON")
+		cat("-------------------------------------------------", "\n")
+	}
+)
+#Arguments: 
+#	object:	freeParamSet.c that users wish to summarize
+#Description: This function will print all matrices or vectors in the freeParamSet.c if not NULL.
+#Return: 	NONE. Results will print on screen only.
+
+setMethod("summary", signature="labelsSet", definition=function(object) {
+		cat("SET OF ESTIMATED PARAMETERS\n")
+		cat("Type\n")
+		print(object@Tag)		
+		cat("-- Endogeneous Variable --\n")
+		print.if.not.null(object@LY, "\nLY: Loading of Indicator.Y on Factor.ETA")
+		print.if.not.null(object@TE, "\nTE: Correlation of Measurement.Error.EPSILON")
+		print.if.not.null(object@TY, "\nTY: Measurement Intercept of Indicator.Y")
+		print.if.not.null(object@BE, "\nBE: Regression Coefficient among Factor.ETA")
+		print.if.not.null(object@PS, "\nPS: Correlation of Regression.Residual.PSI")
+		print.if.not.null(object@AL, "\nAL: Regression Intercept of Factor.ETA")
+		cat("-------------------------------------------------", "\n")
+		cat("-- Exogeneous Variable --\n")
+		print.if.not.null(object@LX, "\nLX: Loading of Indicator.X on Factor.KSI")
+		print.if.not.null(object@TD, "\nTD: Correlation of Measurement.Error.DELTA")
+		print.if.not.null(object@TX, "\nTX: Measurement Intercept of Indicator.X")
+		print.if.not.null(object@GA, "\nGA: Regression Coefficient of Factor.ETA on Factor.KSI")
+		print.if.not.null(object@PH, "\nPH: Correlation of Factor.KSI")
+		print.if.not.null(object@KA, "\nKA: Mean of Factor.KSI")
+		print.if.not.null(object@TH, "\nTH: Correlation of Measurement.Error.DELTA and Measurement.Error.EPSILON")
+		cat("-------------------------------------------------", "\n")
+	}
+)
+#Arguments: 
+#	object:	labelsSet.c that users wish to summarize
+#Description: This function will print all matrices or vectors in the labelsSet.c if not NULL.
+#Return: 	NONE. Results will print on screen only.
+
+setMethod("summary", signature="reducedMatrixSet", definition=function(object) {
+		cat("RANDOM NUMBERS OF MODEL MATRICES\n")
+		cat("Type\n")
+		print(object@Tag)		
+		cat("-- Endogeneous Variable --\n")
+		print.if.not.null(object@LY, "\nLY: Loading of Indicator.Y on Factor.ETA")
+		print.if.not.null(object@TE, "\nTE: Correlation of Measurement.Error.EPSILON")
+		print.if.not.null(object@TY, "\nTY: Measurement Intercept of Indicator.Y")
+		print.if.not.null(object@BE, "\nBE: Regression Coefficient among Factor.ETA")
+		print.if.not.null(object@PS, "\nPS: Correlation of Regression.Residual.PSI")
+		print.if.not.null(object@AL, "\nAL: Regression Intercept of Factor.ETA")
+		cat("-------------------------------------------------", "\n")
+		cat("-- Exogeneous Variable --\n")
+		print.if.not.null(object@LX, "\nLX: Loading of Indicator.X on Factor.KSI")
+		print.if.not.null(object@TD, "\nTD: Correlation of Measurement.Error.DELTA")
+		print.if.not.null(object@TX, "\nTX: Measurement Intercept of Indicator.X")
+		print.if.not.null(object@GA, "\nGA: Regression Coefficient of Factor.ETA on Factor.KSI")
+		print.if.not.null(object@PH, "\nPH: Correlation of Factor.KSI")
+		print.if.not.null(object@KA, "\nKA: Mean of Factor.KSI")
+		print.if.not.null(object@TH, "\nTH: Correlation of Measurement.Error.DELTA and Measurement.Error.EPSILON")
+		cat("-------------------------------------------------", "\n")
+	}
+)
+#Arguments: 
+#	object:	reducedMatrixSet.c that users wish to summarize
+#Description: This function will print all matrices or vectors in the reducedMatrixSet.c if not NULL.
+#Return: 	NONE. Results will print on screen only.
+
+setMethod("summary", signature="simData", definition=function(object, detail=FALSE) {
+		cat("DATA OBJECT\n")
+		cat("Type\n")
+		print(object@Tag)
+		cat("Sample Size\n")
+		print(object@N)
+		cat("========= Parameters Set ============\n")
+		summary(object@Parameters)
+		cat("=====================================\n")
+		if(detail) {
+			cat("============Misspecified Set================\n")
+			ifelse(!is.null.object(object@Misspecified), summary(object@Misspecified), print("None"))
+			cat("============================================\n")
+			cat("=============Constraint=====================\n")
+			ifelse(!is.null.object(object@Constraint), summary(object@simConstraint), print("None"))
+			cat("============================================\n")
+		} else {
+			cat("Adding Misspecification?\n")
+			ifelse(!is.null.object(object@Misspecified), print("Yes"), print("No"))
+			cat("Adding Constraint?\n")
+			ifelse(!is.null.object(object@Constraint), print("Yes"), print("No"))
+		}
+		if(!is.null.object(object@Misspecified) & !is.null.object(object@Constraint)) {
+			cat("Constain objects BEFORE or AFTER adding misspecification\n")
+			ifelse(object@Constrain.Parameters.Only, print("Before"), print("After"))
+		}
+		if(!is.null.object(object@Misspecified)) {
+			cat("Misfit bound\n")
+			if(!is.null.object(object@Misfit.bound)) {
+				print(paste("Lower =", object@Misfit.bound[1]))
+				print(paste("Upper =", object@Misfit.bound[2]))
+			} else {
+				print("No")
+			}
+		}
+		cat("Maximum Random Sampling Parameters\n")
+		print(object@Maximum.random)
+	}
+)
+#Arguments: 
+#	object:	simData.c that users wish to summarize
+#Description: This function will print all elements in the simData.c.
+#Return: 	NONE. Results will print on screen only.
+
+######################################
+# summary(simModel)
+# summary(simAnalysis)
+# summary(simResult)
