@@ -1,0 +1,9 @@
+simsem, Version 0.0-1.7
+
+- Write all documents of public functions and public classes, including all links within the help files.
+- Write comments on some functions about the purposes, arguments, and return values.
+- Write comments on all classes about the purposes, constructor, and its arguments.
+- Delete visualize method and write plot.cutoff instead.
+- Add find.power and plot.power methods.
+- Add summary of simModel and simResult
+- Update the vignette (the introduction manual), including the example of power analysis, add sections on help files and give us feedback. Update object diagram.
