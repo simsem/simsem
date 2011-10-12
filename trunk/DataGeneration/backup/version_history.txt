@@ -1,4 +1,4 @@
-simsem, Version 0.0-1.7
+simsem, Version 0.0-1.7 10/11/11
 
 - Write all documents of public functions and public classes, including all links within the help files.
 - Write comments on some functions about the purposes, arguments, and return values.
@@ -7,3 +7,15 @@ simsem, Version 0.0-1.7
 - Add find.power and plot.power methods.
 - Add summary of simModel and simResult
 - Update the vignette (the introduction manual), including the example of power analysis, add sections on help files and give us feedback. Update object diagram.
+
+simsem, Version 0.0-1.8 10/12/11
+
+- Add simAnalysis.c into the package
+- debug constrain.matrices(list, simConstraint) when constrained LX matrix
+- Add vectorize functions
+- Add combine.object(freeParamSet, list) where list is the lavaan object
+- Change simResult.c to save parameter estimates and SE
+- Change find.cutoff, find.power, plot.cutoff, plot.power according to the change in simResult
+- Add new function summary.parameters for simResult
+- Add documentation for simAnalysis.c and summary.parameters function
+- Update the vignette on the summary.parameters function
