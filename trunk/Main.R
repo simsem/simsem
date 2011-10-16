@@ -134,14 +134,38 @@ imputeMissing <- function(data.mat,imps){
 
 } # end imputeMissing
 
+#Impute and run data. Nested lappy statements
+#Input: 1 missing data matrices
+#Output: results from the dataset, combined with Rubin's Rules
+#Output is in the form a a list with parameters, SE, fit, FMI.1, and FMI.2
+runMI<- function(data.mat,imps,) {
+  #Impute missing data
+  imputed1.l<-imputeMissing(data.mat,imps)
+  
+  #Run models on each imputed data set
+  #Does this give results from each dataset in the list?
+  
+  imputed.results<-run(data.model,imputed1.l)
+  
+  comb.results<-MIpool(imputed.results$Parameters,imputed.results$SE,imputed.results$Fit, m=imps)
+  
+  return(comb.results)
+
+}
+
+
+# This is a list of lists. e.g. ,imputed.l[[1]] contains results from 1 simualted data set
+# imputed[[1]][[1]] is the parameters estimates from the first data set.
+MI.results.l <- lapply(missing.l, runMI,10)
+MI.results.l <- mpi.applyLB(missing.l,runMI,10)
 
 # This is a list of lists. i.e. imputed.l[[1]] contains 10 imputations
 # imputed[[1]][[1]] is a matrix for one of the imputations.
-imputed.l <- lapply(missing.l, imputeMissing,10)
-imputed.l <- mpi.applyLB(missing.l,imputeMissing,10)
+#imputed.l <- lapply(missing.l, imputeMissing,10)
+#imputed.l <- mpi.applyLB(missing.l,imputeMissing,10)
 # Analyze
 
-data.simAnal <- run(data.model,imputed.l)
+#data.simAnal <- run(data.model,imputed.l)
 
 
   #lapply(complete.l, run, simModel)
@@ -150,7 +174,7 @@ data.simAnal <- run(data.model,imputed.l)
 
 # with MI
 
-# MI.results.l <- runMI(imputed.l, simModel)
+ #MI.results.l <- runMI(imputed.l, simModel)
 
 # Summarize results
 
