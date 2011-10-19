@@ -8,7 +8,14 @@ data <- matrix(rep(rnorm(10,1,1),20),ncol=20)
 #
 # Right now, function assumes a basic 3-form design, and that items are grouped sequentially
 # (i.e. columns 1-5 are shared, 6-10 are A, 11-15 are B, and 16-20 are C)
-# 
+
+# TODO:
+# Pass item indices for grouping
+# Warnings for illegal groupings
+# Also deal with covariates?
+
+# Two method planned missing design: everyone gets cheap measure, few get expensive. 2 form? 1 form design.
+# n-form design - list of groupings. 
 planned.missing <- function(data) {
 
   

@@ -1,21 +1,23 @@
 #Assumes start in the trunk
 # This allows us to source our files with more organization
 
+install.packages("simsem_0.0-1.tar.gz")
 library(Rmpi)
-source("DataGeneration/simDist.R")
-source("DataGeneration/simMatrix.R")
-source("DataGeneration/simMatrixSet.R")
-source("DataGeneration/simConstraint.R")
-source("DataGeneration/matrixSet.R")
-source("DataGeneration/freeParamSet.R")
-source("DataGeneration/reducedMatrixSet.R")
-source("DataGeneration/misspecifiedSet.R")
-source("DataGeneration/simData.R")
-source("DataGeneration/simModel.R")
-source("DataGeneration/simResult.R")
-source("DataGeneration/subMatrixSet.R")
-source("DataGeneration/simConstraint.R")
+#source("DataGeneration/simDist.R")
+#source("DataGeneration/simMatrix.R")
+#source("DataGeneration/simMatrixSet.R")
+#source("DataGeneration/simConstraint.R")
+#source("DataGeneration/matrixSet.R")
+#source("DataGeneration/freeParamSet.R")
+#source("DataGeneration/reducedMatrixSet.R")
+#source("DataGeneration/misspecifiedSet.R")
+#source("DataGeneration/simData.R")
+#source("DataGeneration/simModel.R")
+#source("DataGeneration/simResult.R")
+#source("DataGeneration/subMatrixSet.R")
+#source("DataGeneration/simConstraint.R")
 source("ImposeMissing/plmissing2.R")
+source("ImposeMissing/MIsummary.r")
 
 # For safety?
 .Last <- function(){ 
@@ -66,12 +68,11 @@ build.example.model <- function() {
   
 }
 
-# It seems like build.example.model should return a simData that actually has a data set in it, and then the run fuction creates 1000 of such data sets.
 
 data.model <- build.example.model()
 data.object <- data.object(300, data.model)
-# This is actually just a matrix with 1000 observations
-# complete.mat <- run(simData, 1000)
+sim.data.model <- model.object(data.model)
+
 
 complete.l <- list()
 build.data.sets <- function(model,obs,sets) {
@@ -109,19 +110,6 @@ missing.l <- lapply(complete.l,imposeMissing)
 missing.l <- mpi.applyLB(complete.l,imposeMissing)
 # missing.l <- imposeMissing(complete.data.l)
 
-# imposeMissing <- function(data, a, b, c)
-
-#setClass("missing",
-#         representation=c(
-#           a="numeric",
-#           b="numeric",
-#           c="numeric")
-# )
-
-#simMiss <- missing.object(a, b, c)
-#missing.l <- run(simMiss, complete.data.l)
-
-                     
 
 # Impute missing data
 # Input: 1 Missing data matrix
@@ -138,14 +126,14 @@ imputeMissing <- function(data.mat,imps){
 #Input: 1 missing data matrices
 #Output: results from the dataset, combined with Rubin's Rules
 #Output is in the form a a list with parameters, SE, fit, FMI.1, and FMI.2
-runMI<- function(data.mat,imps,) {
+runMI<- function(data.mat,data.model,imps,) {
   #Impute missing data
-  imputed1.l<-imputeMissing(data.mat,imps)
+  imputed.l<-imputeMissing(data.mat,imps)
   
   #Run models on each imputed data set
   #Does this give results from each dataset in the list?
   
-  imputed.results<-run(data.model,imputed1.l)
+  imputed.results<-result.object(data.mat,sim.data.model,10)
   
   comb.results<-MIpool(imputed.results$Parameters,imputed.results$SE,imputed.results$Fit, m=imps)
   
@@ -156,7 +144,7 @@ runMI<- function(data.mat,imps,) {
 
 # This is a list of lists. e.g. ,imputed.l[[1]] contains results from 1 simualted data set
 # imputed[[1]][[1]] is the parameters estimates from the first data set.
-MI.results.l <- lapply(missing.l, runMI,10)
+MI.results.l <- lapply(missing.l, runMI,data.model,10)
 MI.results.l <- mpi.applyLB(missing.l,runMI,10)
 
 # This is a list of lists. i.e. imputed.l[[1]] contains 10 imputations
