@@ -2,6 +2,7 @@
 # This allows us to source our files with more organization
 
 install.packages("simsem_0.0-1.tar.gz")
+library(simsem)
 library(Rmpi)
 #source("DataGeneration/simDist.R")
 #source("DataGeneration/simMatrix.R")
@@ -133,9 +134,10 @@ runMI<- function(data.mat,data.model,imps,) {
   #Run models on each imputed data set
   #Does this give results from each dataset in the list?
   
-  imputed.results<-result.object(data.mat,sim.data.model,10)
-  
-  comb.results<-MIpool(imputed.results$Parameters,imputed.results$SE,imputed.results$Fit, m=imps)
+  # imputed.results<-result.object(imputed.l[[1]],sim.data.model,10)
+
+  imputed.results <- lapply(imputed.l,result.object,sim.data.model,1)
+  comb.results<-MIpool(imputed.results@Estimates,imputed.results@SE,imputed.results@Fit, m=imps)
   
   return(comb.results)
 
@@ -144,7 +146,7 @@ runMI<- function(data.mat,data.model,imps,) {
 
 # This is a list of lists. e.g. ,imputed.l[[1]] contains results from 1 simualted data set
 # imputed[[1]][[1]] is the parameters estimates from the first data set.
-MI.results.l <- lapply(missing.l, runMI,data.model,10)
+MI.results.l <- lapply(missing.l, runMI,data.object,10)
 MI.results.l <- mpi.applyLB(missing.l,runMI,10)
 
 # This is a list of lists. i.e. imputed.l[[1]] contains 10 imputations
