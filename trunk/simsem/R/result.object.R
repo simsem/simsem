@@ -10,7 +10,11 @@ result.object <- function(simData, simModel, NRep, seed = 123321, silent=FALSE) 
         if(!silent) cat(i, "\n")
          if(class(simData) == "simData") {
 		data <- run(simData)
-              } else { data <- simData}
+              } 
+		if(is.list(simData)) {
+		 data <- simData[[i]]
+		 }
+			else { data <- simData}
                 
 		temp <- NULL
 		try(temp <- run(simModel, data))
