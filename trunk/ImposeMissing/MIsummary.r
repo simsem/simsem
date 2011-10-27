@@ -1,16 +1,24 @@
 #Combine MI results (Rubin's Rules, etc)
+#Modified 10/27/2011
 #Turn into a function... Done!
 #Currently this function is optimized to use lavaan!
 #MIpool returns a list of results with: parameter estimates, standard errors
 #fit indices, and two types of fraction of missing information
 
-#Example: MIpool(MI.param, MI.se, MI.fit, m)
-#  MI.param = m*q matrix (m = no. imputations; q = number of estimated parameters) 
-#  MI.se = m*q matrix
-#  MI.fit = matrix of m rows and columns corresponding to fit indices
-#  m = number of imputations
+#Example: MIpool(imputed.results)
+#  imputed.results = list of imputation results from imputed.results function
 
-MIpool<-function(MI.param, MI.se, MI.fit, m){
+MIpool<-function(imputed.results){
+
+MI.param<-matrix(NA,nrow=length(imputed.results),ncol=length(imputed.results[[1]]@Estimates))
+MI.se<-matrix(NA,nrow=length(imputed.results),ncol=length(imputed.results[[1]]@SE))
+MI.fit<-matrix(NA,nrow=length(imputed.results),ncol=length(imputed.results[[1]]@Fit))
+
+for(i in 1:length(imputed.results){
+MI.param[i,]<-imputed.results[[i]]@Estimates
+MI.se[i,]<-imputed.results[[i]]@SE
+MI.fit[i,]<-imputed.results[[i]]@Fit
+}
 
 #Need to remove columns representing fixed parameters
 MI.param <- MI.param[ , colMeans( MI.param==0 ) == 0, drop=FALSE ]
