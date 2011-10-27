@@ -137,7 +137,7 @@ runMI<- function(data.mat,data.model,imps,) {
   # imputed.results<-result.object(imputed.l[[1]],sim.data.model,10)
 
   imputed.results <- lapply(imputed.l,result.object,sim.data.model,1)
-  comb.results<-MIpool(imputed.results@Estimates,imputed.results@SE,imputed.results@Fit, m=imps)
+  comb.results<-MIpool(imputed.results)
   
   return(comb.results)
 
