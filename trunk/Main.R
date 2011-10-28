@@ -1,7 +1,7 @@
 #Assumes start in the trunk
 # This allows us to source our files with more organization
 
-install.packages("simsem_0.0-1.tar.gz")
+install.packages("simsem_0.0-1.tar.gz", repos=NULL, type="source")
 library(simsem)
 library(Rmpi)
 #source("DataGeneration/simDist.R")
@@ -80,7 +80,7 @@ build.data.sets <- function(model,obs,sets) {
   for(i in 1:sets) { complete.l[[i]] <- run(model,obs) }
   return(complete.l) }
 
-complete.l <- build.data.sets(data.object,100,1)
+complete.l <- build.data.sets(data.object,100,3)
 
 imposeMissing <- function(data.mat){
 
@@ -127,7 +127,7 @@ imputeMissing <- function(data.mat,imps){
 #Input: 1 missing data matrices
 #Output: results from the dataset, combined with Rubin's Rules
 #Output is in the form a a list with parameters, SE, fit, FMI.1, and FMI.2
-runMI<- function(data.mat,data.model,imps,) {
+runMI<- function(data.mat,data.model,imps) {
   #Impute missing data
   imputed.l<-imputeMissing(data.mat,imps)
   
@@ -136,18 +136,36 @@ runMI<- function(data.mat,data.model,imps,) {
   
   # imputed.results<-result.object(imputed.l[[1]],sim.data.model,10)
 
-  imputed.results <- lapply(imputed.l,result.object,sim.data.model,1)
-  comb.results<-MIpool(imputed.results)
+  imputed.results <- lapply(imputed.l,result.object,data.model,1)
+  comb.results<-MIpool(imputed.results,imps)
   
   return(comb.results)
 
 }
 
 
+
+
+
 # This is a list of lists. e.g. ,imputed.l[[1]] contains results from 1 simualted data set
 # imputed[[1]][[1]] is the parameters estimates from the first data set.
-MI.results.l <- lapply(missing.l, runMI,data.object,10)
+MI.results.l <- lapply(missing.l, runMI,sim.data.model,10)
 MI.results.l <- mpi.applyLB(missing.l,runMI,10)
+
+#Take list of imputed results and turn into a format to coerce into results.object
+#Data frame of estimates, then SE, then fit
+MI.results.param<-matrix(NA,nrow=length(MI.results.l),ncol=length(MI.results.l[[1]][[1]]))
+MI.results.se<-matrix(NA,nrow=length(MI.results.l),ncol=length(MI.results.l[[1]][[2]]))
+MI.results.fit<-matrix(NA,nrow=length(MI.results.l),ncol=length(MI.results.l[[1]][[3]]))
+
+for(i in 1:length(MI.results.l)){
+MI.results.param[i,]<-unlist(MI.results.l[[i]][[1]])
+MI.results.se[i,]<-unlist(MI.results.l[[i]][[2]])
+MI.results.fit[i,]<-unlist(MI.results.l[[i]][[3]])
+}
+
+Result <- new("simResult", Replication=length(MI.results.l), Estimates=as.data.frame(MI.results.param), SE=as.data.frame(MI.results.se), Fit=as.data.frame(MI.results.fit), Seed=seed)
+Result
 
 # This is a list of lists. i.e. imputed.l[[1]] contains 10 imputations
 # imputed[[1]][[1]] is a matrix for one of the imputations.
