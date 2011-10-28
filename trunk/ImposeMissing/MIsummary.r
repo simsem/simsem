@@ -8,16 +8,16 @@
 #Example: MIpool(imputed.results)
 #  imputed.results = list of imputation results from imputed.results function
 
-MIpool<-function(imputed.results){
+MIpool<-function(imputed.results,imps){
 
 MI.param<-matrix(NA,nrow=length(imputed.results),ncol=length(imputed.results[[1]]@Estimates))
 MI.se<-matrix(NA,nrow=length(imputed.results),ncol=length(imputed.results[[1]]@SE))
 MI.fit<-matrix(NA,nrow=length(imputed.results),ncol=length(imputed.results[[1]]@Fit))
 
-for(i in 1:length(imputed.results){
-MI.param[i,]<-imputed.results[[i]]@Estimates
-MI.se[i,]<-imputed.results[[i]]@SE
-MI.fit[i,]<-imputed.results[[i]]@Fit
+for(i in 1:length(imputed.results)){
+MI.param[i,]<-unlist(imputed.results[[i]]@Estimates)
+MI.se[i,]<-unlist(imputed.results[[i]]@SE)
+MI.fit[i,]<-unlist(imputed.results[[i]]@Fit)
 }
 
 #Need to remove columns representing fixed parameters
@@ -41,10 +41,10 @@ Um <- apply(MI.se^2,2,mean)
 #Tm <- Um + (Bm)*((1+m)/m+1)
 
 #compute total variance: sum of between- and within- variance with correction
-SE <- Um + ((m+1)/m)*Bm
+SE <- Um + ((imps+1)/imps)*Bm
 
 #compute correction factor for fraction of missing info
-nu <- (m-1)*((((1+1/m)*Bm)/SE)^-2)
+nu <- (imps-1)*((((1+1/imps)*Bm)/SE)^-2)
 
 #compute 2 estimates of fraction of missing information
 FMI.1 <- 1-(Um/SE)
@@ -55,7 +55,7 @@ FMI<-rbind(FMI.1,FMI.2)
 Fit.indices <- colMeans(MI.fit)
 
 MI.res<-list(Estimates,SE,Fit.indices,FMI.1,FMI.2)
-
+names(MI.res)<-c('Estimates','SE','Fit.indices','FMI.1','FMI.2')
 #compute chi-square proportion (is this useful?)
 #(MI.fit.mat$chisq.p is a placeholder for however we'll index the p-value of chi square)
 #chisq <- sum(MI.fit.mat$chisq.pval<.05)/m
