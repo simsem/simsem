@@ -4,19 +4,7 @@
 install.packages("simsem_0.0-1.tar.gz", repos=NULL, type="source")
 library(simsem)
 library(Rmpi)
-#source("DataGeneration/simDist.R")
-#source("DataGeneration/simMatrix.R")
-#source("DataGeneration/simMatrixSet.R")
-#source("DataGeneration/simConstraint.R")
-#source("DataGeneration/matrixSet.R")
-#source("DataGeneration/freeParamSet.R")
-#source("DataGeneration/reducedMatrixSet.R")
-#source("DataGeneration/misspecifiedSet.R")
-#source("DataGeneration/simData.R")
-#source("DataGeneration/simModel.R")
-#source("DataGeneration/simResult.R")
-#source("DataGeneration/subMatrixSet.R")
-#source("DataGeneration/simConstraint.R")
+
 source("ImposeMissing/plmissing2.R")
 source("ImposeMissing/MIsummary.r")
 
@@ -164,34 +152,9 @@ MI.results.se[i,]<-unlist(MI.results.l[[i]][[2]])
 MI.results.fit[i,]<-unlist(MI.results.l[[i]][[3]])
 }
 
-Result <- new("simResult", Replication=length(MI.results.l), Estimates=as.data.frame(MI.results.param), SE=as.data.frame(MI.results.se), Fit=as.data.frame(MI.results.fit), Seed=seed)
+Result <- new("simResult", Replication=length(MI.results.l), Estimates=as.data.frame(MI.results.param), SE=as.data.frame(MI.results.se), Fit=as.data.frame(MI.results.fit), Convergence = c(0))
 Result
 
-# This is a list of lists. i.e. imputed.l[[1]] contains 10 imputations
-# imputed[[1]][[1]] is a matrix for one of the imputations.
-#imputed.l <- lapply(missing.l, imputeMissing,10)
-#imputed.l <- mpi.applyLB(missing.l,imputeMissing,10)
-# Analyze
-
-#data.simAnal <- run(data.model,imputed.l)
-
-
-  #lapply(complete.l, run, simModel)
-
-# FMIL.results.l <- run(missing.l, simModel)
-
-# with MI
-
- #MI.results.l <- runMI(imputed.l, simModel)
-
-# Summarize results
-
-
-complete.summary <-  result.object(complete.results.l)
-
-FIML.summary <- result.object(FIML.results.l)
-
-MI.summary <- result.object(MI.results.l)
 
 mpi.close.Rslaves()
 mpi.quit()

@@ -1,3 +1,5 @@
+
+
 x <- rnorm(25,1,1)
 
 data <- matrix(rep(rnorm(10,1,1),20),ncol=20)
