@@ -73,11 +73,11 @@ complete.l <- build.data.sets(data.object,100,3)
 imposeMissing <- function(data.mat){
 
  # TRUE values are values to delete
- log.mat <- planned.missing(data.mat)
+ log.mat <- planned.missing(dim(data.mat))
 
  # This will work when we've made some more design decisions about percent missing and covariates
  
- # log.mat1 <- makeMCARbin(data.mat,.1,dim(data.mat)[2])
+ log.mat1 <- makeMCARbin(data.mat,.1,dim(data.mat)[2])
 
  # parms <- list()
  # parms$len.scale <- dim(data.mat)[2]-2 # for 2 covariates
