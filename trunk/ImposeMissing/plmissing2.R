@@ -10,16 +10,16 @@ tests <- function() {
 
   pl2 <- planned.missing(dim(data), itemGroups=itemGroups)
 
-  obsGroups <- list(c(1,2,3,4),c(6,8,10),c(5,7,9))
-  pl3 <- planned.missing(dim(data),obsGroups = obsGroups)
+  #obsGroups <- list(c(1,2,3,4),c(6,8,10),c(5,7,9))
+  #pl3 <- planned.missing(dim(data),obsGroups = obsGroups)
 
   # Rows 6/8/10 should be the same, as should 5,7,9
   # Should alternate T/F on columns 12 - 20
   pl4 <- planned.missing(dim(data),itemGroups=itemGroups,obsGroups=obsGroups)
 
-  pl5 <- planned.missing(dim(data),nforms=2)
+  pl5 <- planned.missing(dim(data),nforms=4)
 
-  pl6 <- planned.missing(dim(data),twoMethod=c(20,.8))
+  pl6 <- planned.missing(dim(data),twoMethod=c(19,.8))
 }
 
 # Function to poke holes in the data for planned missing designs. Currently, we default a 3-form design.
@@ -52,9 +52,9 @@ planned.missing <- function(dims=c(0,0),nforms=3,itemGroups=NULL,obsGroups=NULL,
     stop("obsGroups not a list")
   }
 
-  if (!is.null(twoMethod) && (class(twoMethod) != "numeric")) {
-    stop("twoMethod not a valid value")
-  }
+  #if (!is.null(twoMethod) && (class(twoMethod) != "numeric")) {
+  #  stop("twoMethod not a valid value")
+  #}
  
   # groups items into sets of column indices (in the 3 form case, shared/a/b/c)
   if (is.null(itemGroups)) {
@@ -70,8 +70,8 @@ planned.missing <- function(dims=c(0,0),nforms=3,itemGroups=NULL,obsGroups=NULL,
   }
 
   if (!is.null(twoMethod)) {
-    col <- twoMethod[1]
-    percent <- twoMethod[2]
+    col <- unlist(twoMethod[1])
+    percent <- unlist(twoMethod[2])
     toDelete <- 1:((percent)*nobs)
     log.mat[toDelete,col] <- TRUE
   }
