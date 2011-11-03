@@ -37,7 +37,7 @@ tests <- function() {
   
 # Two method planned missing design: everyone gets cheap measure, few get expensive. 2 form? 1 form design.
 # n-form design - list of groupings. 
-planned.missing <- function(dims=c(0,0),nforms=3,itemGroups=NULL,obsGroups=NULL,twoMethod=NULL) {
+planned.missing <- function(dims=c(0,0),nforms=3,itemGroups=NULL,twoMethod=NULL, covs=NULL) {
   
   nitems <- dims[2]
   nobs <- dims[1]
@@ -97,19 +97,32 @@ planned.missing <- function(dims=c(0,0),nforms=3,itemGroups=NULL,obsGroups=NULL,
 # [1] 5 6 7 8
 # [[3]]
 # [1] 9 10 11 12
-generate.indices <- function(ngroups, items.in.group) {
+generate.indices <- function(ngroups, items.in.group,excl) {
 
-  
+  a <- 1:(ngroups*items.in.group)
+  anot <- a[-excl]
+  ipg <- length(anot)/ngroups
+
   for (i in 1:ngroups) {
-    if (i == 1) {
-      index.list <- list(1:items.in.group)
+    if (i==1) {
+      index.list <- list(anot[1:ipg])
     }
     else {
-      last.element.index <- length(index.list[[i-1]])
-      new.group.index <- (index.list[[i-1]][last.element.index]+1):(items.in.group*(i))
-      index.list <- c(index.list,list(new.group.index))
+      last.element <- index.list[[i-1]][length(index.list[[i-1]])] # Which is the last index in anot
+      index.list[[i]] <- anot[(last.element+1):(ipg*i)]
     }
   }
+    
+  #for (i in 1:ngroups) {
+  #  if (i == 1) {
+  #    index.list <- list(1:items.in.group)
+  #  }
+  #  else {
+  #    last.element.index <- length(index.list[[i-1]])
+  #    new.group.index <- (index.list[[i-1]][last.element.index]+1):(ipg*(i))
+  #    index.list <- c(index.list,list(new.group.index))
+  #  }
+  #}
   return(index.list)
 }
 

@@ -1,41 +1,36 @@
 
 # Test of the makeMar function
 testMAR <- function () {
- parms <- list()
- parms$len.scale <- 6
- parms$mar.pred1 <- "dat1"
- parms$mar.pred2 <- "dat2"
- parms$pm <- .15
- parms$nobs <- 500
+ 
+ len.scale <- 6
+ mar.pred1 <- "dat1"
+ mar.pred2 <- "dat2"
+ pm <- .15
+ nobs <- 500
 
+ data <- cbind(matrix(rnorm(len.scale*nobs,10,15),nobs,len.scale),as.matrix(rnorm(nobs,2,1)),as.matrix(rnorm(nobs,0,1)))
+  
+ miss.test <- makeMAR(data,.15,c(7,8))
 
- data <- cbind(matrix(rnorm(parms$len.scale*parms$nobs,10,15),parms$nobs,parms$len.scale),as.matrix(rnorm(parms$nobs,2,1)),as.matrix(rnorm(parms$nobs,0,1)))
+ sum(miss.test)/(nobs*len.scale)
 
- colnames(data) <- c(paste("a",1:(parms$len.scale*.5),sep=""),paste("b",1:(parms$len.scale*.5),sep=""),"dat1","dat2")
-
- dat <- data
-
- miss.test <- makeMAR(dat=data,parms=parms)
  return(miss.test)
  
 }
 
 # Function to impose MAR missing based on two covariates
-# Input: raw data, list of parameters:
-#   parms$len.scale = length of scale
-#   parms$mar.pred1 = name of predictor 1
-#   parms$mar.pred2 = name of predictor 2
-#   parms$pm = desired percent missing
-#   parms$nobs = number of observations
+# Input: raw data, desired percent missing, indices of covariates
 # Output: Logical matrix of values to be deleted
 
-makeMAR <- function(dat,parms)
+makeMAR <- function(data,pm,covs)
   {
-    pm <- parms$pm
-    len.scale <- parms$len.scale
-    mar.pred1 <- parms$mar.pred1
-    mar.pred2 <- parms$mar.pred2
-
+    
+    len.scale <- dim(data)[2]
+    
+    mar.pred1 <- covs[1]
+    mar.pred2 <- covs[2]
+    dat <- matrix(FALSE,dim(data)[1],dim(data)[2])
+    
     ## Create a vector of small deviations 1/2 the length of your scales
     Y <- runif(len.scale*.5,0,.25*pm)
 
@@ -48,41 +43,22 @@ makeMAR <- function(dat,parms)
        ## x = an element of Z (from above)
     fun1 <- function(x,dat) pnorm(dat,mean(dat),sd(dat)) <= x
 
+    # THIS INDEXING IS GOING TO BE REAL - run it through the interpreter to verify before making changes.
+    # Basically, this divides the items (columns) into 2 groups that don't include the covariates
+    c <- (1:len.scale)[-covs]
+    g1 <- c[1:(length(c)/2)]
+    g2 <- c[((length(c)/2 + 1 - length(c)%% 2):length(c))]
+
+      
     ## Apply fun1 to half of the variables using one covariate and to the other half using a different covariate
        ## Because Z is m elements long and our covariate is p elements long cbind(R1, R2) will total p x m
-    R1 <- sapply(Z[1:(length(Z)*.5)],fun1,dat=data[,mar.pred1])
-    R2 <- sapply(Z[((length(Z)*.5)+1):length(Z)],fun1,dat=data[,mar.pred2])
+    R1 <- sapply(Z[g1],fun1,dat=data[,mar.pred1])
+    R2 <- sapply(Z[g2],fun1,dat=data[,mar.pred2])
 
-    ## Bind the R1 and R2 to a block of FALSEs to avoid deleting any covariates
-    R <- cbind(R1,R2,matrix(FALSE,dim(dat)[1],(dim(dat)[2]-(dim(R1)[2]*2))))
-    
-    # dat[R] <- NA
-
-    return(R)
+    dat[,g1] <- R1
+    dat[,g2] <- R2
+        
+    return(dat)
     
 }
 
-# Validity Check
-# sum(is.na(miss.test))/(parms$nobs*parms$len.scale)
-
-# Now replaced by makeBinomMCAR.R
-makeMCAR <- function(dat,parms)
-  {
-    len.scale <- parms$len.scale
-    pm <- parms$pm
-    
-    MCARfun <- function(x) runif(1,0,1) < pm
-
-    mcarR <- apply(dat[,1:len.scale],c(1,2),FUN=MCARfun)
-
-    R <- cbind(mcarR,matrix(FALSE,dim(dat)[1],(dim(dat)[2]-(dim(mcarR)[2]))))
-
-    # dat[R] <- NA
-
-    return(R)
-  }
-
-# mcarTest <- makeMCAR(data,parms)
-
-# Validity Check
-# sum(is.na(mcarTest))/(dim(mcarTest)[1]*parms$len.scale)

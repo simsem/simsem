@@ -6,6 +6,8 @@ library(simsem)
 library(Rmpi)
 
 source("ImposeMissing/plmissing2.R")
+source("ImposeMissing/imposeMarMcarMissing.R")
+source("ImposeMissing/makeBinomMCAR.R")
 source("ImposeMissing/MIsummary.r")
 
 # For safety?
@@ -73,21 +75,15 @@ complete.l <- build.data.sets(data.object,100,3)
 imposeMissing <- function(data.mat){
 
  # TRUE values are values to delete
- log.mat <- planned.missing(dim(data.mat))
+ log.matpl <- planned.missing(dim(data.mat),covs)
 
  # This will work when we've made some more design decisions about percent missing and covariates
  
- log.mat1 <- makeMCARbin(data.mat,.1,dim(data.mat)[2])
+ log.mat1 <- makeMCAR(dim(data.mat),.1,covs)
+ 
+ log.mat2 <- makeMAR(data.mat,.1,covs)
 
- # parms <- list()
- # parms$len.scale <- dim(data.mat)[2]-2 # for 2 covariates
- # parms$mar.pred1 <- "cov1"
- # parms$mar.pred2 <- "cov2"
- # parms$pm <- .1
-
- # log.mat2 <- makeMAR(data.mat,parms)
-
- data.mat[log.mat] <- NA
+ data.mat[log.matpl] <- NA
  # data.mat[log.mat1] <- NA
  # data.mat[log.mat2] <- NA
  
