@@ -5,7 +5,7 @@ install.packages("simsem_0.0-1.tar.gz", repos=NULL, type="source")
 library(simsem)
 library(Rmpi)
 
-source("ImposeMissing/plmissing2.R")
+source("ImposeMissing/plmissing.R")
 source("ImposeMissing/imposeMarMcarMissing.R")
 source("ImposeMissing/makeBinomMCAR.R")
 source("ImposeMissing/MIsummary.r")

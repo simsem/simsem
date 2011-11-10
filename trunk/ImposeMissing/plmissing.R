@@ -41,6 +41,7 @@ planned.missing <- function(dims=c(0,0),nforms=3,itemGroups=NULL,twoMethod=NULL,
   
   nitems <- dims[2]
   nobs <- dims[1]
+  excl <- covs
 
   log.mat <- matrix(FALSE,ncol=nitems,nrow=nobs)
 
@@ -48,9 +49,9 @@ planned.missing <- function(dims=c(0,0),nforms=3,itemGroups=NULL,twoMethod=NULL,
     stop("itemGroups not a list")
   } 
 
-  if ( ((!is.null(obsGroups)) && (class(obsGroups) != "list")) ) {
-    stop("obsGroups not a list")
-  }
+#  if ( ((!is.null(obsGroups)) && (class(obsGroups) != "list")) ) {
+#    stop("obsGroups not a list")
+#  }
 
   #if (!is.null(twoMethod) && (class(twoMethod) != "numeric")) {
   #  stop("twoMethod not a valid value")
@@ -59,16 +60,14 @@ planned.missing <- function(dims=c(0,0),nforms=3,itemGroups=NULL,twoMethod=NULL,
   # groups items into sets of column indices (in the 3 form case, shared/a/b/c)
   if (is.null(itemGroups)) {
     items.in.group <- nitems/(nforms+1)
-    itemGroups <- generate.indices(nforms+1,items.in.group)
+    itemGroups <- generate.indices(nforms+1,items.in.group,excl)
   }
 
- # groups observations into sets of row indices. Each set "receives" a different "form"
-  if (is.null(obsGroups)) {
-    obs.in.group <- nobs / (nforms)
-    obsGroups <- generate.indices(nforms,obs.in.group)
+# groups observations into sets of row indices. Each set "receives" a different "form"
+
+  obs.in.group <- nobs / (nforms)
+  obsGroups <- generate.indices(nforms,obs.in.group,excl=NULL)
  
-  }
-
   if (!is.null(twoMethod)) {
     col <- unlist(twoMethod[1])
     percent <- unlist(twoMethod[2])
@@ -97,10 +96,14 @@ planned.missing <- function(dims=c(0,0),nforms=3,itemGroups=NULL,twoMethod=NULL,
 # [1] 5 6 7 8
 # [[3]]
 # [1] 9 10 11 12
-generate.indices <- function(ngroups, items.in.group,excl) {
+generate.indices <- function(ngroups, items.in.group,excl=NULL) {
 
   a <- 1:(ngroups*items.in.group)
-  anot <- a[-excl]
+  
+  if(!is.null(excl)){
+    anot <- a[-excl]
+  } else { anot <- a}
+  
   ipg <- length(anot)/ngroups
 
   for (i in 1:ngroups) {
@@ -108,8 +111,8 @@ generate.indices <- function(ngroups, items.in.group,excl) {
       index.list <- list(anot[1:ipg])
     }
     else {
-      last.element <- index.list[[i-1]][length(index.list[[i-1]])] # Which is the last index in anot
-      index.list[[i]] <- anot[(last.element+1):(ipg*i)]
+      indices.used <- length(unlist(index.list))
+      index.list[[i]] <- anot[(indices.used+1):(ipg*i)]
     }
   }
     
