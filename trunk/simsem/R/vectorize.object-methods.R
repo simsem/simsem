@@ -28,7 +28,7 @@ setMethod("vectorize.object", signature(object="matrix", labels="matrix"), defin
 			labels_lower <- labels[lower.tri(labels, diag=TRUE)]
 			result <- vectorize.object(object_lower, labels_lower)
 		} else {
-			result <- as.vector(labels[!is.na(labels)])
+			result <- as.vector(object[!is.na(labels)])
 			names(result) <- as.vector(labels[!is.na(labels)])	
 		}
 		return(result)
