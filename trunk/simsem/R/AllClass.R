@@ -1,9 +1,9 @@
 ###################################################################
-# Runif
+# SimUnif
 # Class -- simsem package
 # Object that create a random number from uniform distribution.
-# Constructor:	runif.object(Lower, Upper)
-# Parent Class: simDist
+# Constructor:	simUnif(Lower, Upper)
+# Parent Class: VirtualDist
 # Child Class:	None
 # Attributes:
 #	Lower: 	Lower bound parameter
@@ -14,24 +14,24 @@
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 7, 2011
 
-setClass("Runif",
+setClass("SimUnif",
 	representation(
 		Lower="numeric",
 		Upper="numeric"
 	)
 )
 #Examples:
-#showClass("Runif")
-#u1 <- runif.object(-0.1, 0.1)
+#showClass("SimUnif")
+#u1 <- simUnif(-0.1, 0.1)
 #run(u1)
 #summary(u1)
 
 ###################################################################
-# Rnorm
+# SimNorm
 # Class -- simsem package
 # Object that create a random number from normal distribution.
-# Constructor:	rnorm.object(M, SD)
-# Parent Class: simDist
+# Constructor:	simNorm(M, SD)
+# Parent Class: VirtualDist
 # Child Class:	None
 # Attributes:
 #	M: 		The population mean of the normal distribution
@@ -42,43 +42,43 @@ setClass("Runif",
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 7, 2011
 
-setClass("Rnorm",
+setClass("SimNorm",
 	representation(
 		Mean="numeric",
 		SD="numeric"
 	)
 )
 #Examples:
-#showClass("Rnorm")
-#n2 <- rnorm.object(0, 0.2)
+#showClass("SimNorm")
+#n2 <- simNorm(0, 0.2)
 #run(n2)
 #summary(n2)
 
 ###################################################################
-# simDist
+# VirtualDist
 # Class -- simsem package
 # Virtual class that aggregates all distribution objects together.
 # Constructor:	None
 # Parent Class: None
-# Child Class: Rnorm, Runif
+# Child Class: SimNorm, SimUnif
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 7, 2011
 
-setClassUnion("simDist", c("Runif", "Rnorm"))
+setClassUnion("VirtualDist", c("SimUnif", "SimNorm"))
 
 ###################################################################
-# simMatrix
+# SimMatrix
 # Class -- simsem package
 # This object can be used to represent a matrix in SEM model. It contains free parameters, fixed values, and starting values. 
 # This object can be represented factor loading matrix or regreesion coefficient matrix. 
-# Constructor:	matrix.object(Matrix, name.dist.object=NULL)
+# Constructor:	simMatrix(free, param=NULL)
 # Parent Class: None
-# Child Class:	symMatrix, nullSimMatrix, nullSymMatrix (2 generation)
+# Child Class:	SymMatrix, NullSimMatrix, NullSymMatrix (2 generation)
 # Attributes:
-#	Data: 		Free parameters as NA or values of fixed parameters
-# 	Labels: 	All population/starting values of those free parameters
+#	free: 		Free parameters as NA or values of fixed parameters
+# 	param: 	All population/starting values of those free parameters
 # Methods:
-#	adjust.object
+#	adjust
 #	combine.object
 #	count.random.object
 #	is.null.object
@@ -89,47 +89,47 @@ setClassUnion("simDist", c("Runif", "Rnorm"))
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 7, 2011
 
-setClass("simMatrix", 
+setClass("SimMatrix", 
 	representation(
-		Data="matrix",
-		Labels="matrix"
+		free="matrix",
+		param="matrix"
 	), 
-	prototype(Data=as.matrix(NaN), Labels=as.matrix(NaN))
+	prototype(free=as.matrix(NaN), param=as.matrix(NaN))
 )
 #Examples:
-#showClass("simMatrix")
+#showClass("SimMatrix")
 #loading <- matrix(0, 6, 2)
 #loading[1:3, 1] <- NA
 #loading[4:6, 2] <- NA
 #loadingValues <- matrix(0, 6, 2)
 #loadingValues[1:3, 1] <- 0.7
 #loadingValues[4:6, 2] <- 0.7
-#LX <- matrix.object(loading, loadingValues)
+#LX <- simMatrix(loading, loadingValues)
 #summary(LX)
 #run(LX)
-#n65 <- rnorm.object(0.6, 0.05)
-#LY <- matrix.object(loading, "n65")
+#n65 <- simNorm(0.6, 0.05)
+#LY <- simMatrix(loading, "n65")
 #summary(LY)
 #run(LY)
-#u34 <- runif.object(0.3, 0.4)
-#LY <- adjust.object(LY, "u34", c(2, 1))
+#u34 <- simUnif(0.3, 0.4)
+#LY <- adjust(LY, "u34", c(2, 1))
 #summary(LY)
 #run(LY)
 #summary.short(LY)
 
 ###################################################################
-# symMatrix
+# SymMatrix
 # Class -- simsem package
 # This object can be used to represent a symmetric matrix in SEM model. It contains free parameters, fixed values, and starting values. 
 # This object can be represented factor correlation or error correlation matrix.
-# Constructor:	sym.matrix.object(Matrix, name.dist.object=NULL)
+# Constructor:	symMatrix(free, param=NULL)
 # Parent Class: None
-# Child Class:	nullSymMatrix
+# Child Class:	NullSymMatrix
 # Attributes:
-#	Data: 		Free parameters as NA or values of fixed parameters
-# 	Labels: 	All population/starting values of those free parameters
+#	free: 		Free parameters as NA or values of fixed parameters
+# 	param: 	All population/starting values of those free parameters
 # Methods:
-#	adjust.object
+#	adjust
 #	count.random.object
 #	is.null.object
 #	run
@@ -137,33 +137,33 @@ setClass("simMatrix",
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 7, 2011
 
-setClass("symMatrix",
-	contains = "simMatrix"
+setClass("SymMatrix",
+	contains = "SimMatrix"
 )
 #Examples:
-#showClass("symMatrix")
+#showClass("SymMatrix")
 #latent.cor <- matrix(NA, 3, 3)
 #diag(latent.cor) <- 1
-#PH <- sym.matrix.object(latent.cor, 0.5)
-#u46 <- runif.object(0.4, 0.6)
-#PH <- adjust.object(PH, "u46", c(3,2))
+#PH <- symMatrix(latent.cor, 0.5)
+#u46 <- simUnif(0.4, 0.6)
+#PH <- adjust(PH, "u46", c(3,2))
 #summary(PH)
 #summary.short(PH)
 #run(PH)
 
 ###################################################################
-# simVector
+# SimVector
 # Class -- simsem package
 # This object can be used to represent a vector in SEM model. It contains free parameters, fixed values, and starting values. 
 # This object can be represented mean, intercept, or variance vectors.
-# Constructor:	vector.object(Matrix, name.dist.object=NULL)
+# Constructor:	simVector(free, param=NULL)
 # Parent Class: None
-# Child Class:	nullSimVector
+# Child Class:	NullSimVector
 # Attributes:
 #	Data: 		Free parameters as NA or values of fixed parameters
 # 	Labels: 	All population/starting values of those free parameters
 # Methods:
-#	adjust.object
+#	adjust
 #	combine.object
 #	count.random.object
 #	is.null.object
@@ -174,31 +174,31 @@ setClass("symMatrix",
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 7, 2011
 
-setClass("simVector", 
+setClass("SimVector", 
 	representation(
-		Data="vector",
-		Labels="vector"
+		free="vector",
+		param="vector"
 	), 
-	prototype(Data=as.vector(NaN), Labels=as.vector(NaN))
+	prototype(free=as.vector(NaN), param=as.vector(NaN))
 )
 #Examples:
-#showClass("simVector")
+#showClass("SimVector")
 #factor.mean <- rep(NA, 2)
 #factor.mean.starting <- c(5, 2)
-#AL <- vector.object(factor.mean, factor.mean.starting)
+#AL <- simVector(factor.mean, factor.mean.starting)
 #run(AL)
 #summary(AL)
 #summary.short(AL)
-#n01 <- rnorm.object(0, 1)
-#AL <- adjust.object(AL, "n01", 2)
+#n01 <- simNorm(0, 1)
+#AL <- adjust(AL, "n01", 2)
 #run(AL)
 #summary(AL)
 
 ###################################################################
-# nullVector
+# NullVector
 # Class -- simsem package
 # The null object of vector.c
-# Constructor:	new("nullVector")
+# Constructor:	new("NullVector")
 # Parent Class: vector
 # Child Class:	None
 # Attributes:	Zero length vector
@@ -207,13 +207,13 @@ setClass("simVector",
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 7, 2011
 
-setClass("nullVector", contains = "vector")
+setClass("NullVector", contains = "vector")
 
 ###################################################################
-# nullMatrix
+# NullMatrix
 # Class -- simsem package
 # The null object of matrix.c
-# Constructor:	new("nullMatrix")
+# Constructor:	new("NullMatrix")
 # Parent Class: matrix
 # Child Class:	None
 # Attributes:	Matrix with 0 x 0 dimension
@@ -222,190 +222,190 @@ setClass("nullVector", contains = "vector")
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 7, 2011
 
-setClass("nullMatrix", contains = "matrix")
+setClass("NullMatrix", contains = "matrix")
 
 ###################################################################
-# nullSimMatrix
+# NullSimMatrix
 # Class -- simsem package
-# The null object of simMatrix.c
-# Constructor:	new("nullSimMatrix")
-# Parent Class: simMatrix
+# The null object of SimMatrix.c
+# Constructor:	new("NullSimMatrix")
+# Parent Class: SimMatrix
 # Child Class:	None
-# Attributes:	simMatrix with NaN in both attributes
+# Attributes:	SimMatrix with NaN in both attributes
 #		Does not matter because these attributes will not be used. 
 #		It will be checked whether the class is NULL only.
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 7, 2011
 
-setClass("nullSimMatrix", contains="simMatrix")
+setClass("NullSimMatrix", contains="SimMatrix")
 
 ###################################################################
-# nullSymMatrix
+# NullSymMatrix
 # Class -- simsem package
-# The null object of symMatrix.c
-# Constructor:	new("nullSymMatrix")
-# Parent Class: symMatrix
+# The null object of SymMatrix.c
+# Constructor:	new("NullSymMatrix")
+# Parent Class: SymMatrix
 # Child Class:	None
-# Attributes:	symMatrix with NaN in both attributes
+# Attributes:	SymMatrix with NaN in both attributes
 #		Does not matter because these attributes will not be used. 
 #		It will be checked whether the class is NULL only.
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 7, 2011
 
-setClass("nullSymMatrix", contains="symMatrix")
+setClass("NullSymMatrix", contains="SymMatrix")
 
 ###################################################################
-# nullSimVector
+# NullSimVector
 # Class -- simsem package
-# The null object of simVector.c
-# Constructor:	new("nullSimVector")
-# Parent Class: simVector
+# The null object of SimVector.c
+# Constructor:	new("NullSimVector")
+# Parent Class: SimVector
 # Child Class:	None
-# Attributes:	simVector with NaN in both attributes
+# Attributes:	SimVector with NaN in both attributes
 #		Does not matter because these attributes will not be used. 
 #		It will be checked whether the class is NULL only.
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 7, 2011
 
-setClass("nullSimVector", contains="simVector")
+setClass("NullSimVector", contains="SimVector")
 
 ###################################################################
-# simMatrixSet
+# SimSet
 # Class -- simsem package
-# Set of simVector.c and simMatrix.c that saves model specification (CFA, Path analysis, or SEM)
+# Set of SimVector.c and SimMatrix.c that saves model specification (CFA, Path analysis, or SEM)
 # Constructor:	
-#	matrix.CFA.object(...) for CFA
-#	matrix.Path.object(...) for Path analysis
-#	matrix.SEM.object(...)	for SEM
+#	simSetCFA(...) for CFA
+#	simSetPath(...) for Path analysis
+#	simSetSEM(...)	for SEM
 # Parent Class: None
-# Child Class:	nullSimMatrixSet, simMisspecifiedSet, nullSimMisspecifiedSet (2 generations)
+# Child Class:	NullSimSet, SimMisspec, NullSimMisspec (2 generations)
 # Attributes:
 #	Tag:	Model type (CFA, Path, or SEM)
-#	LY:		simMatrix.c of Factor loading matrix between endogenous factors and Y indicators 
-#	TE:		symMatrix.c of Correlation matrix between Y measurement error 
-#	VTE:	simVector.c of Variance of Y measurement error 
-#	PS:		symMatrix.c of Residual correlation of endogenous factors  
-#	VPS:	simVector.c of Residual variances of endogenous factors 
-#	BE:		simMatrix.c of Regression effect among endogenous factors 
-#	TY:		simVector.c of Measurement intercepts of Y indicators 
-#	AL:		simVector.c of Factor intercepts of endogenous factors 
-#	ME:		simVector.c of Factor means of endogenous factors 
-#	MY:		simVector.c of Total Mean of Y indicators 
-#	VE:		simVector.c of Total variance of endogenous factors 
-#	VY:		simVector.c of Total variance of Y indicators 
-#	LX:		simMatrix.c of Factor loading matrix between exogenous factors and X indicators 
-#	TD:		symMatrix.c of Correlation matrix between X measurement error 
-#	VTD:	simVector.c of Variance of X measurement error 
-#	PH:		symMatrix.c of Correlation among exogenous factors 
-#	GA:		simMatrix.c of Regreeion effect from exogenous factors to endogenous factors 
-#	TX:		simVector.c of Measurement intercepts of X indicators 
-#	KA:		simVector.c of Factor Mean of exogenous factors 
-#	MX:		simVector.c of Total Mean of X indicators 
-#	VPH:	simVector.c of Variance of exogenous factors 
-#	VX:		simVector.c of Total variance of X indicators 
-#	TH:		simMatrix.c Measurement error correlation between X indicators and Y indicators 
+#	LY:		SimMatrix.c of Factor loading matrix between endogenous factors and Y indicators 
+#	TE:		SymMatrix.c of Correlation matrix between Y measurement error 
+#	VTE:	SimVector.c of Variance of Y measurement error 
+#	PS:		SymMatrix.c of Residual correlation of endogenous factors  
+#	VPS:	SimVector.c of Residual variances of endogenous factors 
+#	BE:		SimMatrix.c of Regression effect among endogenous factors 
+#	TY:		SimVector.c of Measurement intercepts of Y indicators 
+#	AL:		SimVector.c of Factor intercepts of endogenous factors 
+#	ME:		SimVector.c of Factor means of endogenous factors 
+#	MY:		SimVector.c of Total Mean of Y indicators 
+#	VE:		SimVector.c of Total variance of endogenous factors 
+#	VY:		SimVector.c of Total variance of Y indicators 
+#	LX:		SimMatrix.c of Factor loading matrix between exogenous factors and X indicators 
+#	TD:		SymMatrix.c of Correlation matrix between X measurement error 
+#	VTD:	SimVector.c of Variance of X measurement error 
+#	PH:		SymMatrix.c of Correlation among exogenous factors 
+#	GA:		SimMatrix.c of Regreeion effect from exogenous factors to endogenous factors 
+#	TX:		SimVector.c of Measurement intercepts of X indicators 
+#	KA:		SimVector.c of Factor Mean of exogenous factors 
+#	MX:		SimVector.c of Total Mean of X indicators 
+#	VPH:	SimVector.c of Variance of exogenous factors 
+#	VX:		SimVector.c of Total variance of X indicators 
+#	TH:		SimMatrix.c Measurement error correlation between X indicators and Y indicators 
 # Methods:
 #	count.random.object
 #	is.null.object
-#	model.object
+#	simModel
 #	run
 #	starting.values
 #	summary
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 7, 2011
 
-setClass("simMatrixSet", 
+setClass("SimSet", 
 	representation(
 		Tag="character", #Path, Path.exo, CFA, SEM, SEM.exo
-		LY="simMatrix",
-		TE="symMatrix",
-		VTE="simVector",
-		PS="symMatrix",
-		VPS="simVector",
-		BE="simMatrix",
-		TY="simVector",
-		AL="simVector",
-		ME="simVector",
-		MY="simVector",
-		VE="simVector",
-		VY="simVector",
-		LX="simMatrix",
-		TD="symMatrix",
-		VTD="simVector",
-		PH="symMatrix",
-		GA="simMatrix",
-		TX="simVector",
-		KA="simVector",
-		MX="simVector",
-		VPH="simVector",
-		VX="simVector",
-		TH="simMatrix"), #Delta on rows, epsilon on columns
+		LY="SimMatrix",
+		TE="SymMatrix",
+		VTE="SimVector",
+		PS="SymMatrix",
+		VPS="SimVector",
+		BE="SimMatrix",
+		TY="SimVector",
+		AL="SimVector",
+		ME="SimVector",
+		MY="SimVector",
+		VE="SimVector",
+		VY="SimVector",
+		LX="SimMatrix",
+		TD="SymMatrix",
+		VTD="SimVector",
+		PH="SymMatrix",
+		GA="SimMatrix",
+		TX="SimVector",
+		KA="SimVector",
+		MX="SimVector",
+		VPH="SimVector",
+		VX="SimVector",
+		TH="SimMatrix"), #Delta on rows, epsilon on columns
 	prototype(
-		LY=new("nullSimMatrix"),
-		TE=new("nullSymMatrix"),
-		VTE=new("nullSimVector"),
-		PS=new("nullSymMatrix"),
-		VPS=new("nullSimVector"),
-		BE=new("nullSimMatrix"),
-		TY=new("nullSimVector"),
-		AL=new("nullSimVector"),
-		ME=new("nullSimVector"),
-		MY=new("nullSimVector"),
-		VE=new("nullSimVector"),
-		VY=new("nullSimVector"), 
-		LX=new("nullSimMatrix"),
-		TD=new("nullSymMatrix"),
-		VTD=new("nullSimVector"),
-		PH=new("nullSymMatrix"),
-		GA=new("nullSimMatrix"),
-		TX=new("nullSimVector"),
-		KA=new("nullSimVector"),
-		MX=new("nullSimVector"),
-		VPH=new("nullSimVector"),
-		VX=new("nullSimVector"),
-		TH=new("nullSimMatrix"))
+		LY=new("NullSimMatrix"),
+		TE=new("NullSymMatrix"),
+		VTE=new("NullSimVector"),
+		PS=new("NullSymMatrix"),
+		VPS=new("NullSimVector"),
+		BE=new("NullSimMatrix"),
+		TY=new("NullSimVector"),
+		AL=new("NullSimVector"),
+		ME=new("NullSimVector"),
+		MY=new("NullSimVector"),
+		VE=new("NullSimVector"),
+		VY=new("NullSimVector"), 
+		LX=new("NullSimMatrix"),
+		TD=new("NullSymMatrix"),
+		VTD=new("NullSimVector"),
+		PH=new("NullSymMatrix"),
+		GA=new("NullSimMatrix"),
+		TX=new("NullSimVector"),
+		KA=new("NullSimVector"),
+		MX=new("NullSimVector"),
+		VPH=new("NullSimVector"),
+		VX=new("NullSimVector"),
+		TH=new("NullSimMatrix"))
 )
 #Examples:
-#showClass("simMatrixSet")
+#showClass("SimSet")
 #loading <- matrix(0, 6, 2)
 #loading[1:3, 1] <- NA
 #loading[4:6, 2] <- NA
 #loadingValues <- matrix(0, 6, 2)
 #loadingValues[1:3, 1] <- 0.7
 #loadingValues[4:6, 2] <- 0.7
-#LX <- matrix.object(loading, loadingValues)
+#LX <- simMatrix(loading, loadingValues)
 #summary(LX)
 #latent.cor <- matrix(NA, 2, 2)
 #diag(latent.cor) <- 1
-#PH <- sym.matrix.object(latent.cor, 0.5)
+#PH <- symMatrix(latent.cor, 0.5)
 #error.cor <- matrix(0, 6, 6)
 #diag(error.cor) <- 1
-#TD <- sym.matrix.object(error.cor)
-#CFA.Model <- matrix.CFA.object(LX = LX, PH = PH, TD = TD)
+#TD <- symMatrix(error.cor)
+#CFA.Model <- simSetCFA(LX = LX, PH = PH, TD = TD)
 #summary(CFA.Model)
 #run(CFA.Model)
 
 ###################################################################
-# nullSimMatrixSet
+# NullSimSet
 # Class -- simsem package
-# The null object of simMatrixSet.c
-# Constructor:	new("nullSimMatrixSet")
-# Parent Class: simMatrixSet
+# The null object of SimSet.c
+# Constructor:	new("NullSimSet")
+# Parent Class: SimSet
 # Child Class:	None
-# Attributes:	simMatrixSet with null object in all attributes.
+# Attributes:	SimSet with null object in all attributes.
 #		It does not matter because these attributes will not be used. 
 #		It will be checked whether the class is NULL only.
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 7, 2011
 
-setClass("nullSimMatrixSet", contains="simMatrixSet")
+setClass("NullSimSet", contains="SimSet")
 
 ###################################################################
-# matrixSet
+# MatrixSet
 # Class -- simsem package
 # Set of vectors and matrices that saves model specification (CFA, Path analysis, or SEM). 
-# This class is the result of running simMatrixSet.c. This will be a sample of all parameters of distribution objects.
-# Constructor:	run(simMatrixSet)
+# This class is the result of running SimSet.c. This will be a sample of all parameters of distribution objects.
+# Constructor:	run(SimSet)
 # Parent Class: None
 # Child Class:	misspecifiedSet
 # Attributes:
@@ -441,7 +441,7 @@ setClass("nullSimMatrixSet", contains="simMatrixSet")
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 7, 2011
 
-setClass("matrixSet", 
+setClass("MatrixSet", 
 	representation(
 		Tag="character",
 		LY="matrix",
@@ -468,57 +468,57 @@ setClass("matrixSet",
 		VX="vector",
 		TH="matrix"),
 	prototype(
-		LY=new("nullMatrix"),
-		TE=new("nullMatrix"),
-		VTE=new("nullVector"),
-		PS=new("nullMatrix"),
-		VPS=new("nullVector"),
-		BE=new("nullMatrix"),
-		TY=new("nullVector"),
-		AL=new("nullVector"),
-		ME=new("nullVector"),
-		MY=new("nullVector"),
-		VE=new("nullVector"),
-		VY=new("nullVector"),
-		LX=new("nullMatrix"),
-		TD=new("nullMatrix"),
-		VTD=new("nullVector"),
-		PH=new("nullMatrix"),
-		GA=new("nullMatrix"),
-		TX=new("nullVector"),
-		KA=new("nullVector"),
-		MX=new("nullVector"),
-		VPH=new("nullVector"),
-		VX=new("nullVector"),
-		TH=new("nullMatrix"))
+		LY=new("NullMatrix"),
+		TE=new("NullMatrix"),
+		VTE=new("NullVector"),
+		PS=new("NullMatrix"),
+		VPS=new("NullVector"),
+		BE=new("NullMatrix"),
+		TY=new("NullVector"),
+		AL=new("NullVector"),
+		ME=new("NullVector"),
+		MY=new("NullVector"),
+		VE=new("NullVector"),
+		VY=new("NullVector"),
+		LX=new("NullMatrix"),
+		TD=new("NullMatrix"),
+		VTD=new("NullVector"),
+		PH=new("NullMatrix"),
+		GA=new("NullMatrix"),
+		TX=new("NullVector"),
+		KA=new("NullVector"),
+		MX=new("NullVector"),
+		VPH=new("NullVector"),
+		VX=new("NullVector"),
+		TH=new("NullMatrix"))
 )
 #Examples:
-#showClass("simMatrixSet")
+#showClass("SimSet")
 #loading <- matrix(0, 6, 2)
 #loading[1:3, 1] <- NA
 #loading[4:6, 2] <- NA
 #loadingValues <- matrix(0, 6, 2)
 #loadingValues[1:3, 1] <- 0.7
 #loadingValues[4:6, 2] <- 0.7
-#LX <- matrix.object(loading, loadingValues)
+#LX <- simMatrix(loading, loadingValues)
 #latent.cor <- matrix(NA, 2, 2)
 #diag(latent.cor) <- 1
-#PH <- sym.matrix.object(latent.cor, 0.5)
+#PH <- symMatrix(latent.cor, 0.5)
 #error.cor <- matrix(0, 6, 6)
 #diag(error.cor) <- 1
-#TD <- sym.matrix.object(error.cor)
-#CFA.Model <- matrix.CFA.object(LX = LX, PH = PH, TD = TD)
+#TD <- symMatrix(error.cor)
+#CFA.Model <- simSetCFA(LX = LX, PH = PH, TD = TD)
 #MatrixSet <- run(CFA.Model)
 #summary(MatrixSet)
 
 ###################################################################
-# blankReducedMatrixSet
+# VirtualRSet
 # Class -- simsem package
 # Set of vectors and matrices arrangements that will save free parameters, labels, or numbers on its child class. 
 # This class will collapse those separation between mean and intercept into intercept only, as well as variance and correlation into covariance matrix only.
 # Constructor:	Depends on its child class
 # Parent Class: None
-# Child Class:	freeParamSet, labelsSet, reducedMatrixSet
+# Child Class:	SimFreeParam, SimLabels, SimRSet
 # Attributes:
 #	Tag:	Model type (CFA, Path, or SEM)
 #	LY:		matrix.c of Factor loading matrix between endogenous factors and Y indicators 
@@ -540,7 +540,7 @@ setClass("matrixSet",
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 7, 2011
 
-setClass("blankReducedMatrixSet", 
+setClass("VirtualRSet", 
 	representation(
 		Tag="character",
 		LY="matrix",
@@ -557,26 +557,26 @@ setClass("blankReducedMatrixSet",
 		KA="vector",
 		TH="matrix"),
 	prototype(
-		LY=new("nullMatrix"),
-		TE=new("nullMatrix"),
-		PS=new("nullMatrix"),
-		BE=new("nullMatrix"),
-		TY=new("nullVector"),
-		AL=new("nullVector"),
-		LX=new("nullMatrix"),
-		TD=new("nullMatrix"),
-		PH=new("nullMatrix"),
-		GA=new("nullMatrix"),
-		TX=new("nullVector"),
-		KA=new("nullVector"),
-		TH=new("nullMatrix"))
+		LY=new("NullMatrix"),
+		TE=new("NullMatrix"),
+		PS=new("NullMatrix"),
+		BE=new("NullMatrix"),
+		TY=new("NullVector"),
+		AL=new("NullVector"),
+		LX=new("NullMatrix"),
+		TD=new("NullMatrix"),
+		PH=new("NullMatrix"),
+		GA=new("NullMatrix"),
+		TX=new("NullVector"),
+		KA=new("NullVector"),
+		TH=new("NullMatrix"))
 )
 
 ###################################################################
-# simConstraint
+# SimEqualCon
 # Class -- simsem package
 # Set of equality constraints that users wish to specify
-# Constructor:	constraint.object(..., Tag)
+# Constructor:	simEqualCon(..., Tag)
 # Parent Class: None
 # Child Class:	nullSimConstrint
 # Attributes:
@@ -584,17 +584,17 @@ setClass("blankReducedMatrixSet",
 #			Each row represents each element. If the matrix has two columns, the first column indicates row of the element and 
 #			the second column indicates column of the element. If the matrix has three columns, the first column is the group
 #			of matrix. The rest is row and column. Row name represents the matrix that the element is in. The definition of row
-#			name can be seen in matrix.CFA.object, matrix.Path.object, or matrix.SEM.object, depending on analysis model you specify.
+#			name can be seen in simSetCFA, simSetPath, or simSetSEM, depending on analysis model you specify.
 #	Tag:	Analysis model (CFA, SEM, Path)
 # Methods:
-#	constrain.matrices(list, simConstraint)
-#	constrain.matrices(blankReducedMatrixSet, simConstraint)
+#	constrain.matrices(list, SimEqualCon)
+#	constrain.matrices(VirtualRSet, SimEqualCon)
 #	is.null.object
 #	summary
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 7, 2011
 
-setClass("simConstraint", 
+setClass("SimEqualCon", 
 	representation(
 		Equality="list",
 		Tag="character")
@@ -609,22 +609,22 @@ setClass("simConstraint",
 #constraint3 <- matrix(3, 2, 2)
 #constraint3[,1] <- 7:8
 #rownames(constraint3) <- rep("LY", 2)
-#equal.loading <- constraint.object(constraint1, constraint2, constraint3, Tag="SEM")
+#equal.loading <- simEqualCon(constraint1, constraint2, constraint3, Tag="SEM")
 
 ###################################################################
-# nullSimConstraint
+# NullSimEqualCon
 # Class -- simsem package
-# The null object of simConstraint.c
-# Constructor:	new("nullSimConstraint")
+# The null object of SimEqualCon.c
+# Constructor:	new("NullSimEqualCon")
 # Parent Class: simConstriant
 # Child Class:	None
-# Attributes:	simConstraint with nothing in all attributes.
+# Attributes:	SimEqualCon with nothing in all attributes.
 #		It does not matter because these attributes will not be used. 
 #		It will be checked whether the class is NULL only.
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 7, 2011
 
-setClass("nullSimConstraint", contains="simConstraint", 
+setClass("NullSimEqualCon", contains="SimEqualCon", 
 	representation(
 		Equality="list",
 		Tag="character"), 
@@ -632,45 +632,45 @@ setClass("nullSimConstraint", contains="simConstraint",
 )
 
 ###################################################################
-# simReducedConstraint
+# SimREqualCon
 # Class -- simsem package
 # Set of equality constraints that users wish to specify
-# Constructor:	reduce.constraint(simConstraint)
+# Constructor:	reduce.constraint(SimEqualCon)
 # Parent Class: None
-# Child Class:	nullSimReducedConstraint
+# Child Class:	NullSimREqualCon
 # Attributes:
 #	Equality:	List of equality constraint. Each element in the list is an individual equality constraint saved in a matrix.
 #			Each row represents each element. If the matrix has two columns, the first column indicates row of the element and 
 #			the second column indicates column of the element. If the matrix has three columns, the first column is the group
 #			of matrix. The rest is row and column. Row name represents the matrix that the element is in. The definition of row
-#			name can be seen in blankReducedMatrixSet definition.
+#			name can be seen in VirtualRSet definition.
 #	Tag:	Analysis model (CFA, SEM, Path)
 # Methods:
-#	constrain.matrices(blankReducedMatrixSet, simReducedConstraint)
+#	constrain.matrices(VirtualRSet, SimREqualCon)
 #	is.null.object
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 7, 2011
 
-setClass("simReducedConstraint", 
+setClass("SimREqualCon", 
 	representation(
 		Equality="list",
 		Tag="character")
 )
 
 ###################################################################
-# nullSimReducedConstraint
+# NullSimREqualCon
 # Class -- simsem package
-# The null object of simReducedConstraint.c
-# Constructor:	new("nullSimReducedConstraint")
+# The null object of SimREqualCon.c
+# Constructor:	new("NullSimREqualCon")
 # Parent Class: simReducedConstriant
 # Child Class:	None
-# Attributes:	simReducedConstraint with nothing in all attributes.
+# Attributes:	SimREqualCon with nothing in all attributes.
 #		It does not matter because these attributes will not be used. 
 #		It will be checked whether the class is NULL only.
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 7, 2011
 
-setClass("nullSimReducedConstraint", contains="simReducedConstraint", 
+setClass("NullSimREqualCon", contains="SimREqualCon", 
 	representation(
 		Equality="list",
 		Tag="character"), 
@@ -678,46 +678,46 @@ setClass("nullSimReducedConstraint", contains="simReducedConstraint",
 )
 
 ###################################################################
-# freeParamSet
+# SimFreeParam
 # Class -- simsem package
 # Set of vectors and matrices arrangements that will save free parameters and values of fixed parameters that will be used to model specification. 
 # Constructor:	create.free.parameters(object)
-# Parent Class: blankReducedMatrixSet
+# Parent Class: VirtualRSet
 # Child Class:	None
 # Methods:
 #	find.OpenMx.values
 #	make.labels
-#	model.object
+#	simModel
 #	summary
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 7, 2011
 
-setClass("freeParamSet", 
-	contains="blankReducedMatrixSet"
+setClass("SimFreeParam", 
+	contains="VirtualRSet"
 )
 
 ###################################################################
-# labelsSet
+# SimLabels
 # Class -- simsem package
 # Set of vectors and matrices arrangements that will save labels that will be used to run OpenMx. 
-# Constructor:	make.labels(freeParamSet)
-# Parent Class: blankReducedMatrixSet
+# Constructor:	make.labels(SimFreeParam)
+# Parent Class: VirtualRSet
 # Child Class:	None
 # Methods:
 #	summary
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 7, 2011
 
-setClass("labelsSet", 
-	contains="blankReducedMatrixSet"
+setClass("SimLabels", 
+	contains="VirtualRSet"
 )
 
 ###################################################################
-# reducedMatrixSet
+# SimRSet
 # Class -- simsem package
 # Set of vectors and matrices arrangements that will save values that will be used for various purposes. 
 # Constructor:	default.starting.values(object)
-# Parent Class: blankReducedMatrixSet
+# Parent Class: VirtualRSet
 # Child Class:	None
 # Methods:
 #	create.implied.MACS
@@ -726,53 +726,53 @@ setClass("labelsSet",
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 7, 2011
 
-setClass("reducedMatrixSet", 
-	contains="blankReducedMatrixSet"
+setClass("SimRSet", 
+	contains="VirtualRSet"
 )
-############ Change list of matrices to reducedMatrixSet ##################
+############ Change list of matrices to SimRSet ##################
 ########### May be impossible!! Let's see.
 
 ###################################################################
-# simMisspecifiedSet
+# SimMisspec
 # Class -- simsem package
-# Set of simVector.c and simMatrix.c that saves model misspecification (CFA, Path analysis, or SEM)
+# Set of SimVector.c and SimMatrix.c that saves model misspecification (CFA, Path analysis, or SEM)
 # Constructor:	
-#	misspecified.CFA.object(...) for CFA
-#	misspecified.Path.object(...) for Path analysis
-#	misspecified.SEM.object(...)	for SEM
-# Parent Class: simMatrixSet
-# Child Class:	nullSimMisspecifiedSet
+#	simMisspecCFA(...) for CFA
+#	simMisspecPath(...) for Path analysis
+#	simMisspecSEM(...)	for SEM
+# Parent Class: SimSet
+# Child Class:	NullSimMisspec
 # Methods:
 #	is.null.object
 #	run
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 7, 2011
 
-setClass("simMisspecifiedSet", 
-	contains = "simMatrixSet"
+setClass("SimMisspec", 
+	contains = "SimSet"
 )
 
 ###################################################################
-# nullSimMisspecifiedSet
+# NullSimMisspec
 # Class -- simsem package
-# The null object of simMisspecifiedSet.c
-# Constructor:	new("simMisspecifiedSet")
-# Parent Class: simMisspecifiedSet
+# The null object of SimMisspec.c
+# Constructor:	new("SimMisspec")
+# Parent Class: SimMisspec
 # Child Class:	None
-# Attributes:	simMisspecifiedSet with null objects in all attributes.
+# Attributes:	SimMisspec with null objects in all attributes.
 #		It does not matter because these attributes will not be used. 
 #		It will be checked whether the class is NULL only.
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 7, 2011
 
-setClass("nullSimMisspecifiedSet", contains = "simMisspecifiedSet")
+setClass("NullSimMisspec", contains = "SimMisspec")
 
 ###################################################################
 # misspecifiedSet
 # Class -- simsem package
-# Set of vector.c and matrix.c that a random sample of simMisspecifiedSet.c
-# Constructor:	run(simMisspecifiedSet)
-# Parent Class: matrixSet
+# Set of vector.c and matrix.c that a random sample of SimMisspec.c
+# Constructor:	run(SimMisspec)
+# Parent Class: MatrixSet
 # Child Class:	None
 # Methods:
 #	combine.object(list, misspecifiedSet)
@@ -780,22 +780,22 @@ setClass("nullSimMisspecifiedSet", contains = "simMisspecifiedSet")
 # Date Modified: October 7, 2011
 
 setClass("misspecifiedSet", 
-	contains = "matrixSet"
+	contains = "MatrixSet"
 )
 
 ###################################################################
-# simData
+# SimData
 # Class -- simsem package
 # This class will save information for data simulation and can create data by run function
-# Constructor:	data.object(N, simMatrixSet, simMisspecifiedSet=new("nullSimMisspecifiedSet"), simConstraint=new("nullSimConstraint"), Constrain.Parameters.Only=TRUE, Misfit.bound=new("nullVector"), Maximum.random=100)
+# Constructor:	simData(N, SimSet, SimMisspec=new("NullSimMisspec"), SimEqualCon=new("NullSimEqualCon"), Constrain.Parameters.Only=TRUE, Misfit.bound=new("NullVector"), Maximum.random=100)
 # Parent Class: None
 # Child Class:	None
 # Attributes:
 #	Tag:	Model type (CFA, Path, or SEM)
 #	N:		Sample size 
-#	Parameters:		simMatrixSet.c that save model specification
-#	Misspecified:	simMisspecifiedSet.c that save model misspecification
-#	Constraint:		simConstraint.c that specify equality constraint of parameters in data generation
+#	Parameters:		SimSet.c that save model specification
+#	Misspecified:	SimMisspec.c that save model misspecification
+#	Constraint:		SimEqualCon.c that specify equality constraint of parameters in data generation
 #	Constrain.Parameter.Only:	TRUE if users wish to constrain parameters before adding misspecification. 
 #								FALSE if users wish to constrain parameters after adding misspecification.
 #	Misfit.bound:		Upper bound of population RMSEA that users wish their model misspecification to be
@@ -806,37 +806,37 @@ setClass("misspecifiedSet",
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 7, 2011
 
-setClass("simData", 
+setClass("SimData", 
 	representation(
 		Tag="character",
 		N="numeric",
-		Parameters="simMatrixSet",
-		Misspecified="simMisspecifiedSet",
-		Constraint="simConstraint",
+		Parameters="SimSet",
+		Misspecified="SimMisspec",
+		Constraint="SimEqualCon",
 		Constrain.Parameters.Only="logical",
 		Misfit.bound="vector",
 		Maximum.random="numeric"),
 	prototype(
-		Misspecified=new("nullSimMisspecifiedSet"),
-		Constraint=new("nullSimConstraint"),
+		Misspecified=new("NullSimMisspec"),
+		Constraint=new("NullSimEqualCon"),
 		Constrain.Parameters.Only=TRUE,
-		Misfit.bound=new("nullVector"),
+		Misfit.bound=new("NullVector"),
 		Maximum.random=100)
 )
 
 ###################################################################
-# simModel
+# SimModel
 # Class -- simsem package
 # This class will save information for analysis model and be ready for data analysis.
-# Constructor:	model.object(simMatrixSet, Constraint, Program, trial)
-#				model.object(freeParamSet, Starting.Values, Constraint, Program)
+# Constructor:	simModel(SimSet, Constraint, Program, trial)
+#				simModel(SimFreeParam, Starting.Values, Constraint, Program)
 # Parent Class: None
 # Child Class:	None
 # Attributes:
 #	Tag:			Model type (CFA, Path, or SEM)
-#	Parameters:		freeParamSet.c that save all free parameters and values of fixed parameters
-#	Starting.Values:	All starting values of free parameters in reducedMatrixSet.c
-#	Constraint:		simConstraint.c that specify equality constraint of parameters in data analysis
+#	Parameters:		SimFreeParam.c that save all free parameters and values of fixed parameters
+#	Starting.Values:	All starting values of free parameters in SimRSet.c
+#	Constraint:		SimEqualCon.c that specify equality constraint of parameters in data analysis
 #	Program:		Packages used in the analysis (lavaan or OpenMx)
 # Methods:
 #	run
@@ -844,23 +844,23 @@ setClass("simData",
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 7, 2011
 
-setClass("simModel", 
+setClass("SimModel", 
 	representation(
 		Tag="character",
-		Parameters="freeParamSet",
-		Starting.Values="reducedMatrixSet",
-		Constraint="simConstraint",
+		Parameters="SimFreeParam",
+		Starting.Values="SimRSet",
+		Constraint="SimEqualCon",
 		Program="character"), #OpenMx, lavaan
 	prototype(
-		Constraint=new("nullSimConstraint"),
+		Constraint=new("NullSimEqualCon"),
 		Program="lavaan")
 )
 
 ###################################################################
-# simResult
+# SimResult
 # Class -- simsem package
 # This class will save data analysis results from multiple replications and ready to find some useful statistics, such as fit indices cutoffs or power.
-# Constructor:	result.object(simData, simModel, NRep, seed = 123321, silent=FALSE)
+# Constructor:	simResult(SimData, SimModel, NRep, seed = 123321, silent=FALSE)
 # Parent Class: None
 # Child Class:	None
 # Attributes:
@@ -873,14 +873,14 @@ setClass("simModel",
 #	Seed:		Random number seed
 # Methods:	
 #	summary
-#	find.cutoff
-#	find.power
-#	plot.cutoff
-#	plot.power
+#	getCutoff
+#	getPower
+#	plotCutoff
+#	plotPower
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 11, 2011
 
-setClass("simResult", 
+setClass("SimResult", 
 	representation(
 		Tag="character",
 		Replication="numeric",
@@ -893,16 +893,16 @@ setClass("simResult",
 
 
 ###################################################################
-# simAnalysis
+# SimModelOut
 # Class -- simsem package
 # This class will save information of the result of data analysis.
-# Constructor:	 	run(simModel, data)
+# Constructor:	 	run(SimModel, data)
 # Parent Class: None
 # Child Class:	None
 # Attributes:
-#	Parameters:		freeParamSet.c that save all free parameters and values of fixed parameters
-#	Starting.Values:	All starting values of free parameters in reducedMatrixSet.c
-#	Constraint:		simConstraint.c that specify equality constraint of parameters in data analysis
+#	Parameters:		SimFreeParam.c that save all free parameters and values of fixed parameters
+#	Starting.Values:	All starting values of free parameters in SimRSet.c
+#	Constraint:		SimEqualCon.c that specify equality constraint of parameters in data analysis
 #	Program:		Packages used in the analysis (lavaan or OpenMx)
 #	Estimates:	List of parameter estimates
 #	SE:			Standard errors of parameter estimates
@@ -913,17 +913,17 @@ setClass("simResult",
 # Date Modified: October 11, 2011
 
 
-setClass("simAnalysis", # The class provides model result.
+setClass("SimModelOut", # The class provides model result.
          representation(
-                        Parameters="freeParamSet",
-                        Starting.Values="reducedMatrixSet",
-                        Constraint="simConstraint",
+                        Parameters="SimFreeParam",
+                        Starting.Values="SimRSet",
+                        Constraint="SimEqualCon",
                         Program="character",
-                        Estimates="reducedMatrixSet",
+                        Estimates="SimRSet",
                         Fit="vector",
-                        SE="reducedMatrixSet",
+                        SE="SimRSet",
                         Convergence="logical"),
          prototype(
-                Constraint=new("nullSimConstraint"),
+                Constraint=new("NullSimEqualCon"),
                    Convergence=FALSE)
          )
