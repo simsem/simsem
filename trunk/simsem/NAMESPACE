@@ -1,6 +1,6 @@
 exportClasses(SimNorm, SimUnif, VirtualDist, SimMatrix, SymMatrix, SimVector, SimSet, SimEqualCon, SimData, SimModel, SimResult, SimMisspec, SimModelOut)
 exportMethods(summary, run, summary.short, adjust, simModel,
 	getCutoff, getPower, plotCutoff, plotPower, summaryParam)
-export(loading.from.alpha, runif.object, rnorm.object, matrix.object, sym.matrix.object, vector.object,
-	matrix.CFA.object, matrix.Path.object, matrix.SEM.object, constraint.object, data.object, result.object,
-	misspecified.CFA.object, misspecified.Path.object, misspecified.SEM.object)
+export(loadingFromAlpha, simUnif, simNorm, simMatrix, symMatrix, simVector,
+	simSetCFA, simSetPath, simSetSEM, simEqualCon, simData, simResult,
+	simMisspecCFA, simMisspecPath, simMisspecSEM)
