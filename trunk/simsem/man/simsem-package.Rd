@@ -12,7 +12,7 @@ This package will generate data for structural equation modeling framework. This
 \tabular{ll}{
 Package: \tab simsem\cr
 Type: \tab Package\cr
-Version: \tab 0.0.1\cr
+Version: \tab 0.0.2\cr
 Depends: \tab R(>= 2.12), methods, lavaan, MASS\cr
 Suggests: \tab OpenMx\cr
 Date: \tab 2011-09-22\cr
