@@ -1,0 +1,62 @@
+\name{SimResult-class}
+\Rdversion{1.1}
+\docType{class}
+\alias{SimResult-class}
+\alias{summary,SimResult-method}
+
+\title{Class \code{"SimResult"}}
+\description{
+This class will save data analysis results from multiple replications and ready to find some useful statistics, such as fit indices cutoffs or power.
+}
+\section{Objects from the Class}{
+Objects can be created by \code{\link{simResult}}. It can also be called from the form \code{new("SimResult", ...)}.
+}
+\section{Slots}{
+  \describe{
+    \item{\code{modelType}:}{Analysis model type (CFA, Path, or SEM) }
+    \item{\code{Replication}:}{Number of replications have been created and run simulated data. }
+    \item{\code{Estimates}:}{Parameter estimates from each replication}
+    \item{\code{SE}:}{Standard errors of parameter estimates from each replication}
+    \item{\code{Fit}:}{Fit Indices values from each replication}
+    \item{\code{Convergence}:}{Number of convergence replications }
+    \item{\code{Seed}:}{Seed number. }
+  }
+}
+\section{Methods}{
+	\enumerate{
+		\item{getCutoff} to getCutoff of fit indices based on a priori alpha level.
+		\item{getPower} to getPower of rejection when the simResult is the alternative hypothesis and users specify cutoffs of the fit indices.
+		\item{plotCutoff} to plot null hypothesis sampling distributions of fit indices with an option to draw fit indices cutoffs by specifying a priori alpha level.
+		\item{plotPower} to plot alternative hypothesis (and null hypothesis) with a priori cutoffs or alpha level.
+		\item{summary} to summarize the result output
+		\item{summaryParam} to summarize all parameter estimates
+	}
+}
+\author{
+    Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
+}
+\seealso{
+	\enumerate{
+		\item \code{\linkS4class{SimData}} for data generation model.
+		\item \code{\linkS4class{SimModel}} for analysis model
+		\item \code{\link{simResult}} for the constructor of this class
+	
+	}
+}
+\examples{
+showClass("SimResult")
+loading <- matrix(0, 6, 1)
+loading[1:6, 1] <- NA
+LX <- simMatrix(loading, 0.7)
+PH <- symMatrix(diag(1))
+TD <- symMatrix(diag(6))
+CFA.Model <- simSetCFA(LY = LX, PS = PH, TE = TD)
+SimData <- simData(500, CFA.Model)
+SimModel <- simModel(CFA.Model)
+# We make the examples running only 50 replications to save time.
+# In reality, more replications are needed.
+Output <- simResult(SimData, SimModel, 50)
+summary(Output)
+getCutoff(Output, 0.05)
+}
+\keyword{classes}
