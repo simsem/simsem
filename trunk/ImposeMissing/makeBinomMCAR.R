@@ -20,8 +20,10 @@ makeMCAR <- function(dims,pm,covs)
        ## Provides an R matrix with a proportion of ones = proportion missing (all iid binomial)
     R <- matrix(as.logical(rbinom(n=dims[2]*dims[1],size=1,prob=pm)),dims[1],dims[2],byrow=TRUE)
 
+	if ( is.numeric(covs) ) {
     # Preserve covariates
-    R[,covs] <- FALSE
+    R[,covs] <- FALSE    
+  } 
     
     return(R)
   }
