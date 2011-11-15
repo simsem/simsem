@@ -9,14 +9,14 @@
 # Date Modified: October 11, 2011
 
 setMethod("summaryParam", signature(object="SimResult"), definition=function(object, alpha=0.05) {
-	Estimates <- mean(object@Estimates, na.rm=TRUE)
-	real.SE <- sd(object@Estimates, na.rm=TRUE)
-	estimated.SE <- mean(object@SE, na.rm=TRUE)
-	z <- object@Estimates/object@SE
+	coef <- mean(object@coef, na.rm=TRUE)
+	real.se <- sd(object@coef, na.rm=TRUE)
+	estimated.se <- mean(object@se, na.rm=TRUE)
+	z <- object@coef/object@se
 	crit.value <- qnorm(1 - alpha/2)
 	sig <- abs(z) > crit.value
 	pow <- apply(sig, 2, mean, na.rm=TRUE)
-	result <- cbind(Estimates, real.SE, estimated.SE, pow)
+	result <- cbind(coef, real.se, estimated.se, pow)
 	colnames(result) <- c("Estimate Average", "Estimate SD", "Average SE", "Power (!= 0)")
 	return(as.data.frame(result))
 })

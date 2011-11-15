@@ -407,7 +407,7 @@ setClass("NullSimSet", contains="SimSet")
 # This class is the result of running SimSet.c. This will be a sample of all parameters of distribution objects.
 # Constructor:	run(SimSet)
 # Parent Class: None
-# Child Class:	misspecifiedSet
+# Child Class:	MisspecSet
 # Attributes:
 #	modelType:	Model type (CFA, Path, or SEM)
 #	LY:		matrix.c of Factor loading matrix between endogenous factors and Y indicators 
@@ -729,8 +729,6 @@ setClass("SimLabels",
 setClass("SimRSet", 
 	contains="VirtualRSet"
 )
-############ Change list of matrices to SimRSet ##################
-########### May be impossible!! Let's see.
 
 ###################################################################
 # SimMisspec
@@ -768,18 +766,18 @@ setClass("SimMisspec",
 setClass("NullSimMisspec", contains = "SimMisspec")
 
 ###################################################################
-# misspecifiedSet
+# MisspecSet
 # Class -- simsem package
 # Set of vector.c and matrix.c that a random sample of SimMisspec.c
 # Constructor:	run(SimMisspec)
 # Parent Class: MatrixSet
 # Child Class:	None
 # Methods:
-#	combine.object(list, misspecifiedSet)
+#	combine.object(list, MisspecSet)
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 7, 2011
 
-setClass("misspecifiedSet", 
+setClass("MisspecSet", 
 	contains = "MatrixSet"
 )
 
@@ -787,19 +785,19 @@ setClass("misspecifiedSet",
 # SimData
 # Class -- simsem package
 # This class will save information for data simulation and can create data by run function
-# Constructor:	simData(N, SimSet, SimMisspec=new("NullSimMisspec"), SimEqualCon=new("NullSimEqualCon"), Constrain.Parameters.Only=TRUE, Misfit.bound=new("NullVector"), Maximum.random=100)
+# Constructor:	simData(N, SimSet, SimMisspec=new("NullSimMisspec"), SimEqualCon=new("NullSimEqualCon"), conBeforeMis=TRUE, misfitBound=new("NullVector"), maxDraw=100)
 # Parent Class: None
 # Child Class:	None
 # Attributes:
 #	modelType:	Model type (CFA, Path, or SEM)
 #	N:		Sample size 
-#	Parameters:		SimSet.c that save model specification
-#	Misspecified:	SimMisspec.c that save model misspecification
-#	Constraint:		SimEqualCon.c that specify equality constraint of parameters in data generation
+#	param:		SimSet.c that save model specification
+#	misspec:	SimMisspec.c that save model misspecification
+#	equalCon:		SimEqualCon.c that specify equality constraint of parameters in data generation
 #	Constrain.Parameter.Only:	TRUE if users wish to constrain parameters before adding misspecification. 
 #								FALSE if users wish to constrain parameters after adding misspecification.
-#	Misfit.bound:		max bound of population RMSEA that users wish their model misspecification to be
-#	Maximum.random:		The maximum number of random drawn parameters and misspecification model until all parameters in the model are eligible (no negative error variance, standardized coefficients over 1).
+#	misfitBound:		max bound of population RMSEA that users wish their model misspecification to be
+#	maxDraw:		The maximum number of random drawn parameters and misspecification model until all parameters in the model are eligible (no negative error variance, standardized coefficients over 1).
 # Methods:
 #	run
 #	summary
@@ -809,35 +807,35 @@ setClass("misspecifiedSet",
 setClass("SimData", 
 	representation(
 		modelType="character",
-		N="numeric",
-		Parameters="SimSet",
-		Misspecified="SimMisspec",
-		Constraint="SimEqualCon",
-		Constrain.Parameters.Only="logical",
-		Misfit.bound="vector",
-		Maximum.random="numeric"),
+		n="numeric",
+		param="SimSet",
+		misspec="SimMisspec",
+		equalCon="SimEqualCon",
+		conBeforeMis="logical",
+		misfitBound="vector",
+		maxDraw="numeric"),
 	prototype(
-		Misspecified=new("NullSimMisspec"),
-		Constraint=new("NullSimEqualCon"),
-		Constrain.Parameters.Only=TRUE,
-		Misfit.bound=new("NullVector"),
-		Maximum.random=100)
+		misspec=new("NullSimMisspec"),
+		equalCon=new("NullSimEqualCon"),
+		conBeforeMis=TRUE,
+		misfitBound=new("NullVector"),
+		maxDraw=100)
 )
 
 ###################################################################
 # SimModel
 # Class -- simsem package
 # This class will save information for analysis model and be ready for data analysis.
-# Constructor:	simModel(SimSet, Constraint, Program, trial)
-#				simModel(SimFreeParam, Starting.Values, Constraint, Program)
+# Constructor:	simModel(SimSet, equalCon, package, trial)
+#				simModel(SimFreeParam, start, equalCon, package)
 # Parent Class: None
 # Child Class:	None
 # Attributes:
 #	modelType:			Model type (CFA, Path, or SEM)
-#	Parameters:		SimFreeParam.c that save all free parameters and values of fixed parameters
-#	Starting.Values:	All starting values of free parameters in SimRSet.c
-#	Constraint:		SimEqualCon.c that specify equality constraint of parameters in data analysis
-#	Program:		Packages used in the analysis (lavaan or OpenMx)
+#	param:		SimFreeParam.c that save all free parameters and values of fixed parameters
+#	start:	All starting values of free parameters in SimRSet.c
+#	equalCon:		SimEqualCon.c that specify equality constraint of parameters in data analysis
+#	package:		Packages used in the analysis (lavaan or OpenMx)
 # Methods:
 #	run
 #	summary
@@ -847,13 +845,13 @@ setClass("SimData",
 setClass("SimModel", 
 	representation(
 		modelType="character",
-		Parameters="SimFreeParam",
-		Starting.Values="SimRSet",
-		Constraint="SimEqualCon",
-		Program="character"), #OpenMx, lavaan
+		param="SimFreeParam",
+		start="SimRSet",
+		equalCon="SimEqualCon",
+		package="character"), #OpenMx, lavaan
 	prototype(
-		Constraint=new("NullSimEqualCon"),
-		Program="lavaan")
+		equalCon=new("NullSimEqualCon"),
+		package="lavaan")
 )
 
 ###################################################################
@@ -865,12 +863,12 @@ setClass("SimModel",
 # Child Class:	None
 # Attributes:
 #	modelType:			Model type (CFA, Path, or SEM)
-#	Replication:	Number of replication
-#	Estimates:	data.frame.c of parameter estimates of each replication
-#	SE:			data.frame.c of standard error of each replication
-#	Fit:			data.frame.c of fit indices of each replication
-#	Convergence:	Number of convergence replications
-#	Seed:		Random number seed
+#	nRep:	Number of replication
+#	coef:	data.frame.c of parameter estimates of each replication
+#	se:			data.frame.c of standard error of each replication
+#	fit:			data.frame.c of fit indices of each replication
+#	converged:	Number of convergence replications
+#	seed:		Random number seed
 # Methods:	
 #	summary
 #	getCutoff
@@ -883,12 +881,12 @@ setClass("SimModel",
 setClass("SimResult", 
 	representation(
 		modelType="character",
-		Replication="numeric",
-		Estimates="data.frame",
-		SE="data.frame",
-		Fit="data.frame",
-		Convergence="vector",
-		Seed="numeric")
+		nRep="numeric",
+		coef="data.frame",
+		se="data.frame",
+		fit="data.frame",
+		converged="vector",
+		seed="numeric")
 )
 
 
@@ -900,30 +898,30 @@ setClass("SimResult",
 # Parent Class: None
 # Child Class:	None
 # Attributes:
-#	Parameters:		SimFreeParam.c that save all free parameters and values of fixed parameters
-#	Starting.Values:	All starting values of free parameters in SimRSet.c
-#	Constraint:		SimEqualCon.c that specify equality constraint of parameters in data analysis
-#	Program:		Packages used in the analysis (lavaan or OpenMx)
-#	Estimates:	List of parameter estimates
-#	SE:			Standard errors of parameter estimates
-#	Fit:			Vector of fit indices
-#	Convergence: 	TRUE if the analysis converge
+#	param:		SimFreeParam.c that save all free parameters and values of fixed parameters
+#	start:	All starting values of free parameters in SimRSet.c
+#	equalCon:		SimEqualCon.c that specify equality constraint of parameters in data analysis
+#	package:		Packages used in the analysis (lavaan or OpenMx)
+#	coef:	List of parameter estimates
+#	se:			Standard errors of parameter estimates
+#	fit:			Vector of fit indices
+#	converged: 	TRUE if the analysis converge
 # Methods:	None for now.
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 11, 2011
 
 
 setClass("SimModelOut", # The class provides model result.
-         representation(
-                        Parameters="SimFreeParam",
-                        Starting.Values="SimRSet",
-                        Constraint="SimEqualCon",
-                        Program="character",
-                        Estimates="SimRSet",
-                        Fit="vector",
-                        SE="SimRSet",
-                        Convergence="logical"),
-         prototype(
-                Constraint=new("NullSimEqualCon"),
-                   Convergence=FALSE)
-         )
+    representation(
+        param="SimFreeParam",
+        start="SimRSet",
+        equalCon="SimEqualCon",
+        package="character",
+        coef="SimRSet",
+        fit="vector",
+        se="SimRSet",
+        converged="logical"),
+    prototype(
+        equalCon=new("NullSimEqualCon"),
+        converged=FALSE)
+)

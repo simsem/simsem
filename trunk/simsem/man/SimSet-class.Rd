@@ -50,7 +50,7 @@ Object can be created by \code{\link{simSetCFA}}, \code{\link{simSetPath}}, or \
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \seealso{
-	\enumerate{
+	\itemize{
 		\item Create an object this class by CFA, Path Analysis, or SEM model by \code{\link{simSetCFA}}, \code{\link{simSetPath}}, or \code{\link{simSetSEM}}, respectively.
 		\item See how to specify model misspecification by \code{\linkS4class{SimMisspec}}.
 	}

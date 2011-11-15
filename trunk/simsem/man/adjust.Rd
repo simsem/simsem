@@ -14,20 +14,20 @@
 	Alternatively, the element can be fixed to be a value (such as 0).
 }
 \usage{
-adjust(target, VirtualDist, position, constant.fixed)
+adjust(target, param, pos, numAsFixed)
 }
 \arguments{
   \item{target}{
 	Target \code{\linkS4class{SimMatrix}}, \code{\linkS4class{SymMatrix}}, or \code{\linkS4class{SimVector}} that you would like to adjust.
 }
-  \item{VirtualDist}{
+  \item{param}{
 	The name of \link[=VirtualDist-class]{distribution object} that you would like to specify (put as \strong{character} with single or double quotation) 
 	or number that represents fixed values or starting values.
 }
-  \item{position}{
+  \item{pos}{
 	The position of element that you would like to adjust, such as \code{"c(1,2)"} for the element in Row 1 and Column 2 in the specified matrix.
 }
-  \item{constant.fixed}{ 
+  \item{numAsFixed}{ 
 	This argument is used when the \code{VirtualDist} argument was specified as number. 
 	If \code{TRUE} (as default), the number is treated as fixed parameters. 
 	If \code{FALSE}, the number is treated as a starting value and the element is set to be free parameter.
@@ -38,7 +38,7 @@ adjust(target, VirtualDist, position, constant.fixed)
 }
 \note{
 	For \code{\linkS4class{SymMatrix}} class, above- and below-diagonal elements will be adjusted simultaneously. 
-	Either above- or below-diagonal element is specified in the \code{position} argument.
+	Either above- or below-diagonal element is specified in the \code{pos} argument.
 }
 \author{
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})

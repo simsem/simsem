@@ -26,16 +26,17 @@ simModel(object, ...)
 	\code{\linkS4class{SimModel}} that will be used for data analysis
 }
 \section{Details in \dots}{
-	\enumerate{
-		\item \emph{Constraint:} simConstrint.c that save constraints specified by users. The default is no constraint.
-		\item \emph{Program:} Desired analysis package
+	\itemize{
+		\item \emph{start:} SimRSet.c that saves all starting values in the model.
+		\item \emph{equalCon:} SimEqualCon.c that save constraints specified by users. The default is no constraint.
+		\item \emph{package:} Desired analysis package
 	}
 }
 \author{
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \seealso{
-	\enumerate{
+	\itemize{
 		\item \code{\linkS4class{SimModel}} for the simResult
 		\item \code{\linkS4class{SimSet}} for the target object containing model specification
 	}

@@ -1,41 +1,41 @@
 # simMatrix
 # Function -- simsem package
 # Description: Create SimMatrix.c object that save free parameters and starting values, as well as fixed values. 
-#		This will be used for model specification later, such as for factor loading matrix or regression coefficient matrix.
-# Function: simMatrix(Matrix, name.dist.object = NULL)
+#		This will be used for model specification later, such as for factor loading matrix or regression coefficient free.
+# Function: simMatrix(free, param = NULL)
 # Argument:
-#	Matrix:		Matrix of free parameters. Use NA to specify free parameters. Use number as fixed value (including zero)
-#	name.dist.object:	Starting values. Can be either one element or matrix with the same dimension as free parameter matrix. 
+#	free:		Matrix of free parameters. Use NA to specify free parameters. Use number as fixed value (including zero)
+#	param:	Starting values. Can be either one element or matrix with the same dimension as free parameter matrix. 
 #						Each element can be numbers (in either numeric or character format) or the name of distribution object VirtualDist.c.
 # Return: 	SimMatrix.c object that will be used for model specification later.
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 6, 2011
 
-simMatrix <- function(Matrix, name.dist.object = NULL) {
-	Nrow <- nrow(Matrix)
-	Ncol <- ncol(Matrix)
-	Labels <- matrix("", Nrow, Ncol)
-	if(is.null(name.dist.object)) {
-		return(new("SimMatrix", free=Matrix, param=Labels))
+simMatrix <- function(free, param = NULL) {
+	Nrow <- nrow(free)
+	Ncol <- ncol(free)
+	lab <- matrix("", Nrow, Ncol)
+	if(is.null(param)) {
+		return(new("SimMatrix", free=free, param=lab))
 	} else {
-		if(is.matrix(name.dist.object)) {
-			if(nrow(name.dist.object) == Nrow & ncol(name.dist.object) == Ncol) {
+		if(is.matrix(param)) {
+			if(nrow(param) == Nrow & ncol(param) == Ncol) {
 				for(i in 1:Nrow) {
 					for(j in 1:Ncol) {
-						if(is.na(Matrix[i, j])) Labels[i, j] <- name.dist.object[i, j] #first, second)
+						if(is.na(free[i, j])) lab[i, j] <- param[i, j] #first, second)
 					}
 				}
 			} else {
-				stop("Desired matrix and labels do not have the same dimensions")
+				stop("Desired Matrix and labels do not have the same dimensions")
 			}
 		} else {
 			for(i in 1:Nrow) {
 				for(j in 1:Ncol) {
-					if(is.na(Matrix[i, j])) Labels[i, j] <- name.dist.object #first, second)
+					if(is.na(free[i, j])) lab[i, j] <- param #first, second)
 				}
 			}
 		}
-		return(new("SimMatrix", free=Matrix, param=Labels))
+		return(new("SimMatrix", free=free, param=lab))
 	}
 }
 

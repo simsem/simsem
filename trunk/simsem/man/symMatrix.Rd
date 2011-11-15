@@ -7,13 +7,13 @@
 	Create \code{SymMatrix} object that save free parameters and starting values, as well as fixed values. This will be used for model specification later, such as for factor residual correlation matrix or measurement error correlation matrix.
 }
 \usage{
-symMatrix(Matrix, name.dist.object = NULL)
+symMatrix(free, param = NULL)
 }
 \arguments{
-  \item{Matrix}{
+  \item{free}{
 	Symmetric matrix of free parameters. Use NA to specify free parameters. Use number as fixed value (including zero). The input matrix need to be symmetric matrix.
 }
-  \item{name.dist.object}{
+  \item{param}{
 	Starting values. Can be either one element or matrix with the same dimension as free parameter matrix. Each element can be numbers (in either \code{as.numeric} or \code{as.character} format) or the name of distribution object \code{\linkS4class{VirtualDist}}.
 }
 }

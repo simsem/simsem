@@ -24,7 +24,7 @@ simNorm(mean, sd)
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \seealso{
-	\enumerate{
+	\itemize{
 		\item \code{\linkS4class{SimNorm}} for the simResult.
 		\item \code{\linkS4class{VirtualDist}} for other distribution objects.
 	}

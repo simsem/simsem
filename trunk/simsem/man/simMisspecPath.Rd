@@ -28,7 +28,7 @@ simMisspecPath(..., exo = FALSE)
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \seealso{
-	\enumerate{
+	\itemize{
 		\item \code{\link{simSetPath}} for matrix definition and how to specify Path analysis model
 		\item \code{\linkS4class{SimMisspec}} for the simResult
 		\item \code{\link{simMisspecCFA}} for misspecification model in CFA and \code{\link{simMisspecSEM}} for misspecification model in SEM.

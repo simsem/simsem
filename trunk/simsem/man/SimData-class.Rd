@@ -14,13 +14,13 @@ Objects can be created by \code{\link{simData}}. Also, it can be called by \code
 \section{Slots}{
   \describe{
     \item{\code{modelType}:}{Model type (CFA, Path, or SEM)}
-    \item{\code{N}:}{Sample size  }
-    \item{\code{Parameters}:}{Model specification that used in data generation. It must be in \code{\linkS4class{SimSet}} class.}
-    \item{\code{Misspecified}:}{Model misspecification that used in data generation. It must be in \code{\linkS4class{SimMisspec}} class.}
-    \item{\code{Constraint}:}{Equality constraints in data generation. It must be in \code{\linkS4class{SimEqualCon}} class.}
-    \item{\code{Constrain.Parameters.Only}:}{\code{TRUE} if users wish to constrain parameters before adding misspecification. \code{FALSE} if users wish to constrain parameters after adding misspecification. }
-    \item{\code{Misfit.bound}:}{Upper bound of population RMSEA that users wish their model misspecification to be}
-    \item{\code{Maximum.random}:}{The maximum number of random drawn parameters and misspecification model until all parameters in the model are eligible (no negative error variance, standardized coefficients over 1).}
+    \item{\code{n}:}{Sample size  }
+    \item{\code{param}:}{Model specification that used in data generation. It must be in \code{\linkS4class{SimSet}} class.}
+    \item{\code{misspec}:}{Model misspecification that used in data generation. It must be in \code{\linkS4class{SimMisspec}} class.}
+    \item{\code{equalCon}:}{Equality constraints in data generation. It must be in \code{\linkS4class{SimEqualCon}} class.}
+    \item{\code{conBeforeMis}:}{\code{TRUE} if users wish to constrain parameters before adding misspecification. \code{FALSE} if users wish to constrain parameters after adding misspecification. }
+    \item{\code{misfitBound}:}{Upper bound of population RMSEA that users wish their model misspecification to be}
+    \item{\code{maxDraw}:}{The maximum number of random drawn parameters and misspecification model until all parameters in the model are eligible (no negative error variance, standardized coefficients over 1).}
   }
 }
 \section{Methods}{
@@ -33,7 +33,7 @@ Objects can be created by \code{\link{simData}}. Also, it can be called by \code
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \seealso{
-	\enumerate{
+	\itemize{
 		\item \code{linkS4class{SimSet}} for how to specify data generation model.
 		\item \code{linkS4class{SimMisspec}} for how to specify misspecification in this data generation model. 
 		\item \code{linkS4class{SimEqualCon}} for how to set equality constraints for data generation.

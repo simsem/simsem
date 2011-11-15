@@ -32,7 +32,7 @@ This object is created by \code{"\link[=simMatrix]{simMatrix}"} function. Object
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \seealso{
-	\enumerate{
+	\itemize{
 		\item \code{\linkS4class{SymMatrix}} for symmetric random parameter matrix 
 		\item \code{\linkS4class{SimVector}} for random parameter vector.
 	}

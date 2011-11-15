@@ -22,7 +22,7 @@ simUnif(min, max)
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \seealso{
-	\enumerate{
+	\itemize{
 		\item \code{\linkS4class{SimUnif}} for the simResult.
 		\item \code{\linkS4class{VirtualDist}} for other distribution objects.
 	}

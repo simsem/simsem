@@ -6,8 +6,8 @@ runOpenMx <- function(object, Data) {
 	}
 	data <- as.data.frame(Data)
 	ni <- ncol(data)
-	Parameters <- object@Parameters
-	Labels <- make.labels(Parameters)
+	param <- object@param
+	Labels <- make.labels(param)
 	varnames <- NULL
 	for(i in 1:ni) {
 		temp <- paste("x", i, sep="")
@@ -16,25 +16,25 @@ runOpenMx <- function(object, Data) {
 	if(is.null(colnames(data))) colnames(data) <- varnames
 	mean <- mean(data)
 	CM <- cov(data)
-	N <- nrow(data)	
-	Starting.Values <- object@Starting.Values
-	if(!is.null.object(object@Constraint)) {
-		Labels <- constrain.matrices(Labels, object@Constraint)
-		Starting.Values <- constrain.matrices(Starting.Values, object@Constraint)
+	n <- nrow(data)	
+	start <- object@start
+	if(!is.null.object(object@equalCon)) {
+		Labels <- constrain.matrices(Labels, object@equalCon)
+		start <- constrain.matrices(start, object@equalCon)
 	}
-	Parameters <- collapse.exo(Parameters)
-	nk <- ncol(Parameters@PS)
+	param <- collapse.exo(param)
+	nk <- ncol(param@PS)
 	Labels <- collapse.exo(Labels, value = NA)
-	Starting.Values <- collapse.exo(Starting.Values)
-	Starting.Values <- find.OpenMx.values(Parameters, Starting.Values)
-	matrixLY <- mxMatrix(type="Full", nrow=ni, ncol=nk, free=as.vector(is.na(Parameters@LY)), values=as.vector(Starting.Values@LY), labels=as.vector(Labels@LY), name="LY")#
-	matrixPS <- mxMatrix(type="Symm", nrow=nk, ncol=nk, free=as.vector(is.na(Parameters@PS)), values=as.vector(Starting.Values@PS), labels=as.vector(Labels@PS), name="PS")#
-	matrixTE <- mxMatrix(type="Symm", nrow=ni, ncol=ni, free=as.vector(is.na(Parameters@TE)), values=as.vector(Starting.Values@TE), labels=as.vector(Labels@TE), name="TE")#
-	matrixTY <- mxMatrix(type="Full", nrow=ni, ncol=1, free=as.vector(is.na(Parameters@TY)), values=as.vector(Starting.Values@TY), labels=as.vector(Labels@TY), name="TY")#
-	matrixAL <- mxMatrix(type="Full", nrow=nk, ncol=1, free=as.vector(is.na(Parameters@AL)), values=as.vector(Starting.Values@AL), labels=as.vector(Labels@AL), name="AL")#
-	matrixBE <- mxMatrix(type="Full", nrow=nk, ncol=nk, free=as.vector(is.na(Parameters@BE)), values=as.vector(Starting.Values@BE), labels=as.vector(Labels@BE), name="BE")#
+	start <- collapse.exo(start)
+	start <- find.OpenMx.values(param, start)
+	matrixLY <- mxMatrix(type="Full", nrow=ni, ncol=nk, free=as.vector(is.na(param@LY)), values=as.vector(start@LY), labels=as.vector(Labels@LY), name="LY")#
+	matrixPS <- mxMatrix(type="Symm", nrow=nk, ncol=nk, free=as.vector(is.na(param@PS)), values=as.vector(start@PS), labels=as.vector(Labels@PS), name="PS")#
+	matrixTE <- mxMatrix(type="Symm", nrow=ni, ncol=ni, free=as.vector(is.na(param@TE)), values=as.vector(start@TE), labels=as.vector(Labels@TE), name="TE")#
+	matrixTY <- mxMatrix(type="Full", nrow=ni, ncol=1, free=as.vector(is.na(param@TY)), values=as.vector(start@TY), labels=as.vector(Labels@TY), name="TY")#
+	matrixAL <- mxMatrix(type="Full", nrow=nk, ncol=1, free=as.vector(is.na(param@AL)), values=as.vector(start@AL), labels=as.vector(Labels@AL), name="AL")#
+	matrixBE <- mxMatrix(type="Full", nrow=nk, ncol=nk, free=as.vector(is.na(param@BE)), values=as.vector(start@BE), labels=as.vector(Labels@BE), name="BE")#
 	matrixID <- mxMatrix(type="Iden", nrow=nk, ncol=nk, name="ID")
-	Data <- mxData(observed=CM, type="cov", means=mean, numObs=N)
+	Data <- mxData(observed=CM, type="cov", means=mean, numObs=n)
 	Model <- NULL
 	if(object@modelType == "CFA") {
 		algebraR <- mxAlgebra(expression = LY %*% PS %*% t(LY) + TE, name="R")
@@ -52,7 +52,7 @@ runOpenMx <- function(object, Data) {
 		Obj <- mxMLObjective(covariance="R", dimnames=varnames)
 		Model <- mxModel("Model", matrixBE, matrixLY, matrixPS, matrixTE, matrixTY, matrixAL, matrixID, algebraR, algebraM, Obj, Data)	
 	} 
-	Fit <- mxRun(Model, silent=TRUE)
-	#output <- summary(Fit)
-	return(Fit)
+	fit <- mxRun(Model, silent=TRUE)
+	#output <- summary(fit)
+	return(fit)
 }

@@ -1,12 +1,12 @@
 reduce.constraint <- function(SimEqualCon) {
 	modelType <- SimEqualCon@modelType
-	Constraint <- SimEqualCon@con
-	Length <- length(Constraint)
+	equalCon <- SimEqualCon@con
+	Length <- length(equalCon)
 	Result <- NULL
 	runnum <- 1
 	for(i in 1:Length) {
 		temp.result <- NULL
-		temp.matrix <- Constraint[[i]]
+		temp.matrix <- equalCon[[i]]
 		name <- rownames(temp.matrix)
 		if(is.mean.constraint(name)) {
 			if(sum(!is.element(name, c("ME", "MX", "MY"))) > 0) temp.result <- temp.matrix

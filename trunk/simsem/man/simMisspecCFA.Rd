@@ -24,7 +24,7 @@ simMisspecCFA(...)
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \seealso{
-	\enumerate{
+	\itemize{
 		\item \code{\link{simSetCFA}} for matrix definition and how to specify CFA model
 		\item \code{\linkS4class{SimMisspec}} for the simResult
 		\item \code{\link{simMisspecPath}} for misspecification model in Path analysis and \code{\link{simMisspecSEM}} for misspecification model in SEM.

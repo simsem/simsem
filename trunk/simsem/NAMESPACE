@@ -1,4 +1,5 @@
-exportClasses(SimNorm, SimUnif, VirtualDist, SimMatrix, SymMatrix, SimVector, SimSet, SimEqualCon, SimData, SimModel, SimResult, SimMisspec, SimModelOut)
+exportClasses(SimNorm, SimUnif, VirtualDist, SimMatrix, SymMatrix, SimVector, 
+	SimSet, SimEqualCon, SimData, SimModel, SimResult, SimMisspec, SimModelOut)
 exportMethods(summary, run, summaryShort, adjust, simModel,
 	getCutoff, getPower, plotCutoff, plotPower, summaryParam)
 export(loadingFromAlpha, simUnif, simNorm, simMatrix, symMatrix, simVector,

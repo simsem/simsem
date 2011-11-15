@@ -33,7 +33,7 @@ Objects can be created by \code{\link{simEqualCon}}. Also, it can be called of t
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \seealso{
-	\enumerate{
+	\itemize{
 		\item \code{\link{simEqualCon}} for the constructor of this class
 		\item \code{\link{simData}} for a potential use of this object to create data
 		\item \code{\link{simModel}} for a potential use of this object to run an analysis

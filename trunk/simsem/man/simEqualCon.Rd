@@ -39,7 +39,7 @@ simEqualCon(..., modelType)
 	The available constraints now are equality constraints. We expect to create nonlinear constraints soon.
 }
 \seealso{
-	\enumerate{
+	\itemize{
 		\item \code{\link{simSetCFA}} to see model specification in CFA model
 		\item \code{\link{simSetPath}} to see model specification in Path analysis model
 		\item \code{\link{simSetSEM}} to see model specification in SEM model

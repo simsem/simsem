@@ -11,21 +11,21 @@
 	Find the proportion of fit indices that indicate worse fit than a specified cutoffs. The cutoffs may be calculated from \code{\link{getCutoff}} of the null model.
 }
 \usage{
-getPower(object.alt, cutoff, reverse = FALSE, used.fit=NULL)
+getPower(altObject, cutoff, revDirec = FALSE, usedFit=NULL)
 }
 \arguments{
-  \item{object.alt}{
+  \item{altObject}{
 	\code{\linkS4class{SimResult}} that indicates alternative model that users wish to reject
 }
   \item{cutoff}{
 	Fit indices cutoffs from null model or users. This should be a vector with a specified fit indices names as the name of vector elements. 
 	The best way to specify cutoff is to calculate from \code{\link{getCutoff}} function.
 }
-  \item{reverse}{
+  \item{revDirec}{
 	The default is to count the proportion of fit indices that indicates lower fit to the model, such as 
 	how many RMSEA in the alternative model that is worse than cutoffs. The direction can be reversed by setting as \code{TRUE}.
 }
-  \item{used.fit}{
+  \item{usedFit}{
 	Vector of names of fit indices that researchers wish to getCutoffs from. The default is to getCutoffs of all fit indices.  
   }
 }
@@ -68,5 +68,5 @@ SimData.ALT <- simData(500, CFA.Model.ALT)
 Output.ALT <- simResult(SimData.ALT, SimModel, 50)
 getPower(Output.ALT, Cut.NULL)
 Rule.of.thumb <- c(RMSEA=0.05, CFI=0.95, TLI=0.95, SRMR=0.06)
-getPower(Output.ALT, Rule.of.thumb, used.fit=c("RMSEA", "CFI", "TLI", "SRMR"))
+getPower(Output.ALT, Rule.of.thumb, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
 }

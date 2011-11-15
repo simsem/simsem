@@ -51,7 +51,7 @@ Class \code{"\linkS4class{SimSet}"}, directly.
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \seealso{
-	\enumerate{
+	\itemize{
 		\item Create an object this class by CFA, Path Analysis, or SEM model by \code{\link{simMisspecCFA}}, \code{\link{simMisspecPath}}, or \code{\link{simMisspecSEM}}, respectively.
 		\item See how to specify true model by \code{\linkS4class{SimSet}}.
 	}

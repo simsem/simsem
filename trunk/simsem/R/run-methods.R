@@ -10,14 +10,14 @@
 
 setMethod("run",
     signature(object = "SimNorm"),
-    function (object, N = 1) 
+    function (object, n = 1) 
     {
-        rnorm(N,object@mean, object@sd)
+        rnorm(n,object@mean, object@sd)
     }
 )
 #Arguments: 
 #	object:	SimNorm.c object
-#	N:		Sample size. The default is 1.
+#	n:		Sample size. The default is 1.
 #Description: This function will random samples from normal distribution object.
 #Return: 	a number or numbers from normal distribution object
 #Example:
@@ -26,14 +26,14 @@ setMethod("run",
 
 setMethod("run",
     signature(object = "SimUnif"),
-    function (object, N = 1) 
+    function (object, n = 1) 
     {
-        runif(N,object@min, object@max)
+        runif(n,object@min, object@max)
     }
 )
 #Arguments: 
 #	object:	SimUnif.c object
-#	N:		Sample size. The default is 1.
+#	n:		Sample size. The default is 1.
 #Description: This function will random samples from uniform distribution object.
 #Return: 	a number or numbers from uniform distribution object
 #Example:
@@ -146,8 +146,8 @@ setMethod("run", signature="NullSimVector", definition= function(object) {
 #Description:	return NullVector, which is the null object of the vector.c
 #Return: 	NullVector.c
 
-setMethod("run", signature(object="SimSet"), definition=function(object, SimEqualCon=new("NullSimEqualCon")) {
-		Parameters <- list(LY = run(object@LY),
+setMethod("run", signature(object="SimSet"), definition=function(object, equalCon=new("NullSimEqualCon")) {
+		param <- list(LY = run(object@LY),
 			VTE = run(object@VTE),
 			TE = run(object@TE),
 			VY = run(object@VY),
@@ -170,33 +170,33 @@ setMethod("run", signature(object="SimSet"), definition=function(object, SimEqua
 			PH = run(object@PH),
 			KA = run(object@KA),
 			TH = run(object@TH))
-		if(!is.null.object(SimEqualCon)) {
-			if(object@modelType != SimEqualCon@modelType) stop("Please provide same tags of SimSet and constraint")
-			Parameters <- constrain.matrices(Parameters, SimEqualCon, object@modelType)
+		if(!is.null.object(equalCon)) {
+			if(object@modelType != equalCon@modelType) stop("Please provide same tags of SimSet and constraint")
+			param <- constrain.matrices(param, equalCon, object@modelType)
 		}
-		LY <- Parameters$LY
-		VTE <- Parameters$VTE
-		TE <- Parameters$TE
-		VY <- Parameters$VY
-		TY <- Parameters$TY
-		MY <- Parameters$MY
-		BE <- Parameters$BE
-		VPS <- Parameters$VPS
-		PS <- Parameters$PS
-		VE <- Parameters$VE
-		AL <- Parameters$AL
-		ME <- Parameters$ME
-		LX <- Parameters$LX
-		VTD <- Parameters$VTD
-		TD <- Parameters$TD
-		VX <- Parameters$VX
-		TX <- Parameters$TX
-		MX <- Parameters$MX
-		GA <- Parameters$GA
-		VPH <- Parameters$VPH
-		PH <- Parameters$PH
-		KA <- Parameters$KA
-		TH <- Parameters$TH
+		LY <- param$LY
+		VTE <- param$VTE
+		TE <- param$TE
+		VY <- param$VY
+		TY <- param$TY
+		MY <- param$MY
+		BE <- param$BE
+		VPS <- param$VPS
+		PS <- param$PS
+		VE <- param$VE
+		AL <- param$AL
+		ME <- param$ME
+		LX <- param$LX
+		VTD <- param$VTD
+		TD <- param$TD
+		VX <- param$VX
+		TX <- param$TX
+		MX <- param$MX
+		GA <- param$GA
+		VPH <- param$VPH
+		PH <- param$PH
+		KA <- param$KA
+		TH <- param$TH
 		if(object@modelType == "CFA") {
 			if(is.null.object(VTE)) VTE <- find.measurement.error.var(LY, PS, VY, VE)
 			if(is.null.object(VY)) VY <- find.indicator.var(LY, PS, VTE, VE)
@@ -275,7 +275,7 @@ setMethod("run", signature(object="SimSet"), definition=function(object, SimEqua
 )
 #Arguments: 
 #	object:	SimSet.c object
-#	SimEqualCon:	SimEqualCon.c that save all user-specified constraints.
+#	equalCon:	SimEqualCon.c that save all user-specified constraints.
 #Description: This function will draw all SimMatrix.c, SymMatrix.c, and SimVector.c and return matrix, symmetric matrix, and vector. 
 #		Also, the function will equate those elements that have equality constraint, if specified.
 #Return: 	MatrixSet.c that is a random sample of all objects in SimSet.c
@@ -304,7 +304,7 @@ setMethod("run", signature(object="SimMisspec"), definition=function(object) {
 		PH <- run(object@PH)
 		KA <- run(object@KA)
 		TH <- run(object@TH)
-		return(new("misspecifiedSet", modelType=object@modelType, LY=LY, VTE=VTE, TE=TE, VY=VY, TY=TY, MY=MY, 
+		return(new("MisspecSet", modelType=object@modelType, LY=LY, VTE=VTE, TE=TE, VY=VY, TY=TY, MY=MY, 
 		BE=BE, VPS=VPS, PS=PS, VE=VE, AL=AL, ME=ME,
 		LX=LX, VTD=VTD, TD=TD, VX=VX, TX=TX, MX=MX,
 		GA=GA, VPH=VPH, PH=PH, KA=KA, TH=TH))
@@ -315,55 +315,55 @@ setMethod("run", signature(object="SimMisspec"), definition=function(object) {
 #Description: This function will draw all available SimMatrix.c, SymMatrix.c, and SimVector.c and return matrix, symmetric matrix, and vector. 
 #Return: 	misspecifiedSet.c that is a random sample of all objects in SimMisspec.c
 
-setMethod("run", signature="SimData", definition=function(object, N=NULL) {
+setMethod("run", signature="SimData", definition=function(object, n=NULL) {
 	if(!require(MASS)) stop("Please install MASS package")
 	modelType <- object@modelType
-	if(is.null(N)) N <- object@N
-	Parameters <- NULL
-	Misspecified <- NULL
-	implied.CM.Parameters <- NULL
-	implied.CM.Misspecified <- NULL
+	if(is.null(n)) n <- object@n
+	param <- NULL
+	misspec <- NULL
+	implied.CM.param <- NULL
+	implied.CM.misspec <- NULL
 	misfit <- NULL
 	count <- 0
 	repeat {
 		#browser()
-		if(!is.null.object(object@Misspecified)) {
-			Output <- run.misspecified(object@Parameters, object@Misspecified, object@Constraint, object@Constrain.Parameters.Only)
-			Parameters <- Output$Parameters
-			Misspecified <- Output$Misspecified
-			if(validate.object(Parameters) | validate.object(Misspecified)) {
-				Parameters <- reduce.matrices(Parameters)
-				Misspecified <- reduce.matrices(Misspecified)
-				implied.CM.Parameters <- create.implied.MACS(Parameters)
-				implied.CM.Misspecified <- create.implied.MACS(Misspecified)
-				misfit <- average.misfit(implied.CM.Misspecified$M, implied.CM.Misspecified$CM, 
-					implied.CM.Parameters$M, implied.CM.Parameters$CM, count.random.object(object@Misspecified))
-				Parameters <- Misspecified # Pretend Misspecified as real parameters for data generation
-				if(is.null.object(object@Misfit.bound)) break
-				if(misfit > object@Misfit.bound[1] & misfit < object@Misfit.bound[2]) break
+		if(!is.null.object(object@misspec)) {
+			Output <- run.misspecified(object@param, object@misspec, object@equalCon, object@conBeforeMis)
+			param <- Output$param
+			misspec <- Output$misspec
+			if(validate.object(param) | validate.object(misspec)) {
+				param <- reduce.matrices(param)
+				misspec <- reduce.matrices(misspec)
+				implied.CM.param <- create.implied.MACS(param)
+				implied.CM.misspec <- create.implied.MACS(misspec)
+				misfit <- average.misfit(implied.CM.misspec$M, implied.CM.misspec$CM, 
+					implied.CM.param$M, implied.CM.param$CM, count.random.object(object@misspec))
+				param <- misspec # Pretend Misspecified as real parameters for data generation
+				if(is.null.object(object@misfitBound)) break
+				if(misfit > object@misfitBound[1] & misfit < object@misfitBound[2]) break
 			}
 		} else {
-			Parameters <- run(object@Parameters, SimEqualCon=object@Constraint)
-			if(validate.object(Parameters)) {
-				Parameters <- reduce.matrices(Parameters)
-				implied.CM.Parameters <- create.implied.MACS(Parameters)
-				implied.CM.Misspecified <- implied.CM.Parameters
+			param <- run(object@param, equalCon=object@equalCon)
+			if(validate.object(param)) {
+				param <- reduce.matrices(param)
+				implied.CM.param <- create.implied.MACS(param)
+				implied.CM.misspec <- implied.CM.param
 				break
 			}
 		}
 		count <- count + 1
-		if(count > object@Maximum.random) stop("The model cannot make a good set of parameters within limit of maximum random sampling of parameters")
+		if(count > object@maxDraw) stop("The model cannot make a good set of parameters within limit of maximum random sampling of parameters")
 	}
 	# if(modelType == "CFA") {
-		# factor.score <- mvrnorm(N, Parameters@AL, Parameters@PS)
-		# error.score <- mvrnorm(N, rep(0, length(Parameters@TY), Parameters@TE)
-		# intercept <- as.data.frame(matrix(Parameters@TY, ncol=length(Parameters@TY), byrow=TRUE))
-		# Data <- (factor.score %*% t(Parameters@LY)) + error.score + intercept
+		# factor.score <- mvrnorm(n, param@AL, param@PS)
+		# error.score <- mvrnorm(n, rep(0, length(param@TY), param@TE)
+		# intercept <- as.data.frame(matrix(param@TY, ncol=length(param@TY), byrow=TRUE))
+		# Data <- (factor.score %*% t(param@LY)) + error.score + intercept
 	# } else if (modelType == "Path") {
-		# error.score <- mvrnorm(N, Parameters@AL, Parameters@PS)
-		# ID <- matrix(0, nrow(Parameters@BE), ncol(Parameters@BE))
+		# error.score <- mvrnorm(n, param@AL, param@PS)
+		# ID <- matrix(0, nrow(param@BE), ncol(param@BE))
 		# diag(ID) <- 1
-		# data <- error.score %*% t(solve(ID - Parameters@BE))
+		# data <- error.score %*% t(solve(ID - param@BE))
 	# } else if (modelType == "Path.exo") {
 	
 	# } else if (modelType == "SEM") {
@@ -371,10 +371,10 @@ setMethod("run", signature="SimData", definition=function(object, N=NULL) {
 	# } else if (modelType == "SEM.exo") {
 	
 	# }
-	Data <- mvrnorm(N, implied.CM.Parameters$M, implied.CM.Parameters$CM)
+	Data <- mvrnorm(n, implied.CM.param$M, implied.CM.param$CM)
 	varnames <- NULL
 	if(modelType == "Path.exo") {
-		nx <- ncol(run(object@Parameters@PH))
+		nx <- ncol(run(object@param@PH))
 		for(i in 1:nx) {
 			temp <- paste("x", i, sep="")
 			varnames <- c(varnames, temp)
@@ -384,7 +384,7 @@ setMethod("run", signature="SimData", definition=function(object, N=NULL) {
 			varnames <- c(varnames, temp)
 		}
 	} else if(modelType == "SEM.exo") {
-		nx <- nrow(run(object@Parameters@LX))
+		nx <- nrow(run(object@param@LX))
 		for(i in 1:nx) {
 			temp <- paste("x", i, sep="")
 			varnames <- c(varnames, temp)
@@ -407,12 +407,12 @@ setMethod("run", signature="SimData", definition=function(object, N=NULL) {
 #Description: 	The SimData object will draw samples from specified model.
 #Return: 	Data frame drawn from the specified model.
 
-setMethod("run", signature="SimModel", definition=function(object, Data) {
+setMethod("run", signature="SimModel", definition=function(object, data) {
 	Output <- NULL
-	if(object@Program == "OpenMx") {
-		Output <- runOpenMx(object, Data)
-	} else if (object@Program == "lavaan") {
-		Output <- runLavaan(object, Data)
+	if(object@package == "OpenMx") {
+		Output <- runOpenMx(object, data)
+	} else if (object@package == "lavaan") {
+		Output <- runLavaan(object, data)
 	}
 	return(Output)
 })

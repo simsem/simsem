@@ -7,29 +7,29 @@
 	This function will be used to create data specification and ready for data simulation.
 }
 \usage{
-simData(N, SimSet, SimMisspec = new("NullSimMisspec"), SimEqualCon = new("NullSimEqualCon"), Constrain.Parameters.Only = TRUE, Misfit.bound = new("NullVector"), Maximum.random = 100)
+simData(n, param, misspec = new("NullSimMisspec"), equalCon = new("NullSimEqualCon"), conBeforeMis = TRUE, misfitBound = new("NullVector"), maxDraw = 100)
 }
 \arguments{
-  \item{N}{
+  \item{n}{
 	Desired sample size
 }
-  \item{SimSet}{
+  \item{param}{
 	Model specification matrices that are created by \code{\link{simSetCFA}}, \code{\link{simSetPath}}, or \code{\link{simSetSEM}}.
 }
-  \item{SimMisspec}{
+  \item{misspec}{
 	Model \emph{misspecification} matrices that are created by \code{\link{simMisspecCFA}}, \code{\link{simMisspecPath}}, or \code{\link{simMisspecSEM}}.
 }
-  \item{SimEqualCon}{
+  \item{equalCon}{
 	Equality constraints that are created by \code{\link{simEqualCon}}. This will specify equality econstraints of parameters in data generation process.
 }
-  \item{Constrain.Parameters.Only}{
+  \item{conBeforeMis}{
 	\code{TRUE} if users wish to constrain parameters before adding misspecification. 
 	\code{FALSE} if users wish to constrain parameters after adding misspecification.
 }
-  \item{Misfit.bound}{
+  \item{misfitBound}{
 	Upper bound of population root mean squared error of approximation (RMSEA; Browne & Cudeck, 1992) that users wish their model misspecification to be
 }
-  \item{Maximum.random}{
+  \item{maxDraw}{
 	The maximum number of random drawn parameters and misspecification model until all parameters in the model are eligible 
 	(no negative error variance, standardized coefficients over 1).
 }
@@ -51,7 +51,7 @@ simData(N, SimSet, SimMisspec = new("NullSimMisspec"), SimEqualCon = new("NullSi
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \seealso{
-	\enumerate{
+	\itemize{
 		\item \code{\link{simSetCFA}} to see CFA model specification
 		\item \code{\link{simSetPath}} to see Path analysis model specification
 		\item \code{\link{simSetSEM}} to see SEM model specification
@@ -88,7 +88,7 @@ error.cor.Mis <- matrix(NA, 6, 6)
 diag(error.cor.Mis) <- 1
 TD.Mis <- symMatrix(error.cor.Mis, "n01")
 CFA.Model.Mis <- simMisspecCFA(TD=TD.Mis)
-SimData <- simData(200, CFA.Model, SimMisspec=CFA.Model.Mis)
+SimData <- simData(200, CFA.Model, misspec=CFA.Model.Mis)
 summary(SimData)
 run(SimData)
 }

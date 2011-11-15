@@ -12,26 +12,27 @@ Objects can be created by \code{\link{run}} on the \code{\linkS4class{SimModel}}
 }
 \section{Slots}{
   \describe{
-    \item{\code{Parameters}:}{Set of all free parameters and values of fixed parameters in the model.}
-    \item{\code{Starting.Values}:}{All starting values of free parameters}
-    \item{\code{Constraint}:}{Equality constraints in \code{\linkS4class{SimEqualCon}} class }
-    \item{\code{Program}:}{Packages used in data analysis, either \code{lavaan} or \code{OpenMx}. The default is \code{lavaan} }
-    \item{\code{Estimates}:}{Parameter estimates saved in matrix arrangement}
-    \item{\code{SE}:}{Standard errors of parameter saved in matrix arrangement}
-    \item{\code{Fit}:}{Fit Indices values from each replication}
-    \item{\code{Convergence}:}{Number of convergence replications }
+    \item{\code{param}:}{Set of all free parameters and values of fixed parameters in the model.}
+    \item{\code{start}:}{All starting values of free parameters}
+    \item{\code{equalCon}:}{Equality constraints in \code{\linkS4class{SimEqualCon}} class }
+    \item{\code{package}:}{Packages used in data analysis, either \code{lavaan} or \code{OpenMx}. The default is \code{lavaan} }
+    \item{\code{coef}:}{Parameter estimates saved in matrix arrangement}
+    \item{\code{se}:}{Standard errors of parameter saved in matrix arrangement}
+    \item{\code{fit}:}{Fit Indices values from each replication}
+    \item{\code{converged}:}{Number of convergence replications }
   }
 }
 \section{Methods}{
-	\enumerate{
+	\itemize{
 		\item{summary}{To summarize the object}
+		%item{summaryParam}{To summarize only parameter estimates, standard errors, and significance}
 	}
 }
 \author{
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \seealso{
-	\enumerate{
+	\itemize{
 		\item \code{\linkS4class{SimModel}} for analysis model
 	}
 }

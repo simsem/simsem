@@ -15,10 +15,10 @@ Objects can be created by \code{\link{simModel}}. It can also be called by \code
 \section{Slots}{
   \describe{
     \item{\code{modelType}:}{Model type (CFA, Path, or SEM)}
-    \item{\code{Parameters}:}{Set of all free parameters and values of fixed parameters in the model.}
-    \item{\code{Starting.Values}:}{All starting values of free parameters}
-    \item{\code{Constraint}:}{Equality constraints in \code{\linkS4class{SimEqualCon}} class }
-    \item{\code{Program}:}{Packages used in data analysis, either \code{lavaan} or \code{OpenMx}. The default is \code{lavaan} }
+    \item{\code{param}:}{Set of all free parameters and values of fixed parameters in the model.}
+    \item{\code{start}:}{All starting values of free parameters}
+    \item{\code{equalCon}:}{Equality constraints in \code{\linkS4class{SimEqualCon}} class }
+    \item{\code{package}:}{Packages used in data analysis, either \code{lavaan} or \code{OpenMx}. The default is \code{lavaan} }
   }
 }
 \section{Methods}{
@@ -31,7 +31,7 @@ Objects can be created by \code{\link{simModel}}. It can also be called by \code
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \seealso{
-	\enumerate{
+	\itemize{
 		\item \code{\link{simModel}} for the constructor of this class.
 		\item \code{\linkS4class{SimEqualCon}} for specifying equality constraints.	
 	}

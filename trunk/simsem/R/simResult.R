@@ -1,40 +1,44 @@
 
-simResult <- function(SimData, SimModel, NRep, seed = 123321, silent=FALSE) {
+simResult <- function(simData, simModel, nRep, seed = 123321, silent=FALSE) {
 	set.seed(seed)
-	modelType <- SimModel@modelType
-	Fit.l <- NULL 
-	Estimates.l <- NULL # We need them. Trust me (Sunthud).
-	SE.l <- NULL
-	Convergence.l <- NULL
-	for(i in 1:NRep) {
+	modelType <- simModel@modelType
+	fit.l <- NULL 
+	coef.l <- NULL # We need them. Trust me (Sunthud).
+	se.l <- NULL
+	converged.l <- NULL
+	for(i in 1:nRep) {
         if(!silent) cat(i, "\n")
-         if(class(SimData) == "SimData") {
-		data <- run(SimData)
-         } else if(is.list(SimData)) {
-		 data <- SimData[[i]]
+         if(class(simData) == "SimData") {
+			data <- run(simData)
+         } else if(is.list(simData)) {
+			data <- simData[[i]]
          } else {
-                   data <- SimData
-         }
-                
+            data <- simData
+         }  
 		temp <- NULL
-		try(temp <- run(SimModel, data))
+		if(silent) {
+			invisible(capture.output(suppressMessages(try(temp <- run(simModel, data), silent=TRUE))))
+			#tryCatch(temp <- run(simModel, data), error=function(e) {print("Error")})
+		} else {
+			try(temp <- run(simModel, data))
+		}
 		if(!is.null(temp)) {
-			Convergence.l[[i]] <- temp@Convergence			
-			Labels <- make.labels(temp@Parameters, "OpenMx") #As a quick default to use OpenMx
-			Estimates.l[[i]] <- vectorize.object(temp@Estimates, Labels)
-			SE.l[[i]] <- vectorize.object(temp@SE, Labels)
-			Fit.l[[i]] <- temp@Fit
-			if(!Convergence.l[[i]]) {
-				Estimates.l[[i]] <- NA
-				SE.l[[i]] <- NA
-				Fit.l[[i]] <- NA
+			converged.l[[i]] <- temp@converged			
+			Labels <- make.labels(temp@param, "OpenMx") #As a quick default to use OpenMx
+			coef.l[[i]] <- vectorize.object(temp@coef, Labels)
+			se.l[[i]] <- vectorize.object(temp@se, Labels)
+			fit.l[[i]] <- temp@fit
+			if(!converged.l[[i]]) {
+				coef.l[[i]] <- NA
+				se.l[[i]] <- NA
+				fit.l[[i]] <- NA
 			}
 		}
 	}
-	Estimates <- as.data.frame(do.call(rbind, Estimates.l))
-	SE <- as.data.frame(do.call(rbind, SE.l))
-	Fit <- as.data.frame(do.call(rbind, Fit.l))
-	Convergence <- as.vector(unlist(Convergence.l))
-	Result <- new("SimResult", modelType=modelType, Replication=NRep, Estimates=Estimates, SE=SE, Fit=Fit, Convergence=Convergence, Seed=seed)
+	coef <- as.data.frame(do.call(rbind, coef.l))
+	se <- as.data.frame(do.call(rbind, se.l))
+	fit <- as.data.frame(do.call(rbind, fit.l))
+	converged <- as.vector(unlist(converged.l))
+	Result <- new("SimResult", modelType=modelType, nRep=nRep, coef=coef, se=se, fit=fit, converged=converged, seed=seed)
 	return <- Result
 }

@@ -2,7 +2,7 @@ setGeneric("run", function(object, ...) {
 	return(standardGeneric("run")) 
 } )
 
-setGeneric("adjust", function(target, VirtualDist, position, constant.fixed=TRUE) { 
+setGeneric("adjust", function(target, param, pos, numAsFixed=TRUE) { 
 	return(standardGeneric("adjust")) 
 } )
 
@@ -22,7 +22,7 @@ setGeneric("create.implied.MACS", function(object) {
 	return(standardGeneric("create.implied.MACS")) 
 } )
 
-setGeneric("find.OpenMx.values", function(Parameters, Starting.Values) { 
+setGeneric("find.OpenMx.values", function(param, start) { 
 	return(standardGeneric("find.OpenMx.values")) 
 } )
 
@@ -54,7 +54,7 @@ setGeneric("tag.headers", function(object, ...) {
 	return(standardGeneric("tag.headers")) 
 } )
 
-setGeneric("getCutoff", function(object, alpha, reverse=FALSE, used.fit=NULL) { 
+setGeneric("getCutoff", function(object, alpha, revDirec=FALSE, usedFit=NULL) { 
 	return(standardGeneric("getCutoff")) 
 } )
 
@@ -62,11 +62,11 @@ setGeneric("plotCutoff", function(object, ...) {
 	return(standardGeneric("plotCutoff")) 
 } )
 
-setGeneric("plotPower", function(object.alt, object.null, ...) { 
+setGeneric("plotPower", function(altObject, nullObject, ...) { 
 	return(standardGeneric("plotPower")) 
 } )
 
-setGeneric("getPower", function(object.alt, cutoff, reverse = FALSE, used.fit=NULL) { 
+setGeneric("getPower", function(altObject, cutoff, revDirec = FALSE, usedFit=NULL) { 
 	return(standardGeneric("getPower")) 
 } )
 

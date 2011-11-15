@@ -12,42 +12,42 @@
 
 
 
-setMethod("simModel", signature(object="SimFreeParam"), definition=function(object, Starting.Values = NULL, Constraint=new("NullSimEqualCon"), Program="lavaan") {
+setMethod("simModel", signature(object="SimFreeParam"), definition=function(object, start = NULL, equalCon=new("NullSimEqualCon"), package="lavaan") {
 	modelType <- object@modelType
-	if(!is.null(Starting.Values)) {
-		if(modelType != Starting.Values@modelType) stop("Starting Values and Parameters do not have the same tag")
+	if(!is.null(start)) {
+		if(modelType != start@modelType) stop("Starting Values and Parameters do not have the same tag")
 	} else {
-		Starting.Values <- default.starting.values(object)
+		start <- default.starting.values(object)
 	}
 	if(!is.null.object(SimEqualCon)) {
-		if(modelType != Constraint@modelType) stop("SimEqualCon and SimFreeParam do not have the same tag")
+		if(modelType != equalCon@modelType) stop("SimEqualCon and SimFreeParam do not have the same tag")
 	}
-	return(new("SimModel", modelType=modelType, Parameters=object, Starting.Values=Starting.Values, Constraint=Constraint, Program=Program))
+	return(new("SimModel", modelType=modelType, param=object, start=start, equalCon=equalCon, package=package))
 })
 #Arguments: 
 #	object:	SimFreeParam.c that save the specification of free parameters and values of fixed parameters
-#	Starting.Values:	Starting values for those free parameters. lavaan package will automatically create starting values before the analysis; however, starting values are required for OpenMx.
-# 	Constraint:		simConstrint.c that save constraints specified by users. The default is no constraint.
-#	Program:	Desired analysis package
+#	start:	Starting values for those free parameters. lavaan package will automatically create starting values before the analysis; however, starting values are required for OpenMx.
+# 	equalCon:		simConstrint.c that save constraints specified by users. The default is no constraint.
+#	package:	Desired analysis package
 #Description: 	This function will set up all slots needed for SimModel.c 
 #Return: 	SimModel.c with specification from the function.
 
-setMethod("simModel", signature(object="SimSet"), definition=function(object, Constraint=new("NullSimEqualCon"), Program="lavaan", trial=10) {
+setMethod("simModel", signature(object="SimSet"), definition=function(object, equalCon=new("NullSimEqualCon"), package="lavaan", trial=10) {
 	#browser()
-	Starting.Values <- starting.values(object, trial)
-	Starting.Values <- reduce.matrices(Starting.Values)
+	start <- starting.values(object, trial)
+	start <- reduce.matrices(start)
 	#browser()
 	freeParameters <- create.free.parameters(object)
 	modelType <- object@modelType
-	if(!is.null.object(Constraint)) {
-		if(modelType != Constraint@modelType) stop("SimEqualCon and SimSet do not have the same tag")
+	if(!is.null.object(equalCon)) {
+		if(modelType != equalCon@modelType) stop("SimEqualCon and SimSet do not have the same tag")
 	}
-	return(new("SimModel", modelType=modelType, Parameters=freeParameters, Starting.Values=Starting.Values, Constraint=Constraint, Program=Program))
+	return(new("SimModel", modelType=modelType, param=freeParameters, start=start, equalCon=equalCon, package=package))
 })
 #Arguments: 
 #	object:	SimSet.c that save the specification of free parameters and values of fixed parameters, as well as parameter values.
-# 	Constraint:		simConstrint.c that save constraints specified by users. The default is no constraint.
-#	Program:	Desired analysis package
+# 	equalCon:		simEqualCon.c that save constraints specified by users. The default is no constraint.
+#	package:	Desired analysis package
 #Description: 	This function will create starting.values from parameter values. If the parameters are specified as distribution object,
 #		the model will find the average of 10 samples as starting values. Then, set up all slots needed for SimModel.c 
 #Return: 	SimModel.c with specification from the function.

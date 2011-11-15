@@ -11,7 +11,7 @@
 	Extract fit indices information from the \code{\linkS4class{SimResult}} and getCutoff of fit indices given a priori alpha level
 }
 \usage{
-getCutoff(object, alpha, reverse=FALSE, used.fit=NULL)
+getCutoff(object, alpha, revDirec=FALSE, usedFit=NULL)
 }
 \arguments{
   \item{object}{
@@ -20,10 +20,10 @@ getCutoff(object, alpha, reverse=FALSE, used.fit=NULL)
   \item{alpha}{
 	A priori alpha level
 }
-  \item{reverse}{
+  \item{revDirec}{
 	The default is to find criticl point on the side that indicates worse fit (the right side of RMSEA or the left side of CFI). If specifying as \code{TRUE}, the directions are reversed.
 }
-  \item{used.fit}{
+  \item{usedFit}{
 	Vector of names of fit indices that researchers wish to getCutoffs from. The default is to getCutoffs of all fit indices.
   }
 }

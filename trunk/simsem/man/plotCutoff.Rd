@@ -31,8 +31,8 @@ NONE. Only plot the fit indices distributions.
 	\enumerate{
 		\item \code{cutoff}: A priori cutoffs for fit indices, saved in a vector
 		\item \code{alpha}:	A priori alpha level to getCutoffs of fit indices (do not specify when you have \code{cutoff})
-		\item \code{reverse}:	The default is to find critical point on the side that indicates worse fit (the right side of RMSEA or the left side of CFI). If specifying as TRUE, the directions are reversed.
-		\item \code{used.fit}:	The name of fit indices that researchers wish to plot
+		\item \code{revDirec}:	The default is to find critical point on the side that indicates worse fit (the right side of RMSEA or the left side of CFI). If specifying as TRUE, the directions are reversed.
+		\item \code{usedFit}:	The name of fit indices that researchers wish to plot
 	}
 }
 \seealso{
@@ -61,5 +61,5 @@ SimModel <- simModel(CFA.Model)
 # We make the examples running only 50 replications to save time.
 # In reality, more replications are needed.
 Output <- simResult(SimData, SimModel, 50)
-plotCutoff(Output, 0.05, used.fit=c("RMSEA", "SRMR", "CFI", "TLI"))
+plotCutoff(Output, 0.05, usedFit=c("RMSEA", "SRMR", "CFI", "TLI"))
 }

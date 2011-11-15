@@ -20,7 +20,7 @@ simSetPath(..., exo = FALSE)
 }
 \details{
 	The matrices and vectors in the endogenous side are
-	\enumerate{
+	\itemize{
 		\item REQUIRED: \code{BE} for regression coefficient matrix (need to be \code{\linkS4class{SimMatrix}} object). 
 		\item REQUIRED: \code{PS} for residual correlation matrix (need to be \code{\linkS4class{SymMatrix}} object).
 		\item \code{VPS} for residual indicator variance (need to be \code{\linkS4class{SimVector}} object).
@@ -33,18 +33,18 @@ simSetPath(..., exo = FALSE)
 		\item \code{ME} for indicator total mean (need to be \code{\linkS4class{SimVector}} object). NOTE: Either indicator intercept or indicator total mean is specified. Both cannot be simultaneously specified.
 	}
 	If users wish to include the exogenous side in their models, these options are available,
-	\enumerate{
+	\itemize{
 		\item REQUIRED for \code{"exo=TRUE"}: \code{GA} for regression coefficient matrix from exogenous variable to endogenous variable (need to be \code{\linkS4class{SimMatrix}} object).  
 		\item REQUIRED for \code{"exo=TRUE"}: \code{PH} for exogenous factor correlation (need to be \code{\linkS4class{SymMatrix}} object).
 		\item \code{VPH} or \code{VK} for exogenous variable variance (need to be \code{\linkS4class{SimVector}} object).
 		\item \code{KA} or \code{MK} for exogenous variable mean (need to be \code{\linkS4class{SimVector}} object). NOTE: Either total indicator variance or residual indicator variance is specified. Both cannot be simultaneously specified.
 	}
 	DEFAULT:
-	\itemize{
-		\item 1) All indicator variances are equal to 1. Residual variances are automatically implied from total indicator variances.
-		\item 2) All residual variances are free parameters.
-		\item 3) All indicator means are equal to 0. Intercepts are automatically implied from total indicator mean.
-		\item 4) All indicator intercepts are free parameters.
+	\enumerate{
+		\item All indicator variances are equal to 1. Residual variances are automatically implied from total indicator variances.
+		\item All residual variances are free parameters.
+		\item All indicator means are equal to 0. Intercepts are automatically implied from total indicator mean.
+		\item All indicator intercepts are free parameters.
 	}
 }
 \value{
@@ -54,7 +54,7 @@ simSetPath(..., exo = FALSE)
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \seealso{
-	\enumerate{
+	\itemize{
 		\item See class \code{\linkS4class{SimSet}} for simResult details. 
 		\item See \code{\linkS4class{SimMatrix}}, \code{\linkS4class{SymMatrix}}, or \code{\linkS4class{SimVector}} for input details.
 		\item Use \code{\link{simSetCFA}} to specify CFA model and use \code{\link{simSetSEM}} to specify full structural equation modeling.

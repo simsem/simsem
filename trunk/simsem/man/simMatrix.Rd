@@ -8,13 +8,13 @@
 	This will be used for model specification later, such as for factor loading matrix or regression coefficient matrix.
 }
 \usage{
-simMatrix(Matrix, name.dist.object = NULL)
+simMatrix(free, param = NULL)
 }
 \arguments{
-  \item{Matrix}{
+  \item{free}{
 	Matrix of free parameters. Use NA to specify free parameters. Use number as fixed value (including zero)
 }
-  \item{name.dist.object}{
+  \item{param}{
 	Starting values. Can be either one element or matrix with the same dimension as free parameter matrix. 
 	Each element can be numbers (in either \code{as.numeric} or \code{as.character} format) or the name of distribution object \code{\linkS4class{VirtualDist}}.
 }
@@ -26,7 +26,7 @@ simMatrix(Matrix, name.dist.object = NULL)
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \seealso{
-	\enumerate{
+	\itemize{
 		\item See \code{\linkS4class{VirtualDist}} for the resulting object. 
 		\item See \code{\link{symMatrix}} for creating symmetric simMatrix.
 		\item See \code{\link{simVector}} for simVector.

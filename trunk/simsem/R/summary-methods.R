@@ -257,39 +257,39 @@ setMethod("summary", signature="SimData", definition=function(object, detail=FAL
 		cat("Type\n")
 		print(object@modelType)
 		cat("Sample Size\n")
-		print(object@N)
+		print(object@n)
 		cat("========= Parameters Set ============\n")
-		summary(object@Parameters)
-		cat("Number of free parameters = ", count.random.object(object@Parameters), "\n")
+		summary(object@param)
+		cat("Number of free parameters = ", count.random.object(object@param), "\n")
 		cat("=====================================\n")
 		if(detail) {
 			cat("============Misspecified Set================\n")
-			ifelse(!is.null.object(object@Misspecified), summary(object@Misspecified), print("None"))
+			ifelse(!is.null.object(object@misspec), summary(object@misspec), print("None"))
 			cat("============================================\n")
 			cat("=============Constraint=====================\n")
-			ifelse(!is.null.object(object@Constraint), summary(object@SimEqualCon), print("None"))
+			ifelse(!is.null.object(object@equalCon), summary(object@SimEqualCon), print("None"))
 			cat("============================================\n")
 		} else {
 			cat("Adding Misspecification?\n")
-			ifelse(!is.null.object(object@Misspecified), print("Yes"), print("No"))
+			ifelse(!is.null.object(object@misspec), print("Yes"), print("No"))
 			cat("Adding Constraint?\n")
-			ifelse(!is.null.object(object@Constraint), print("Yes"), print("No"))
+			ifelse(!is.null.object(object@equalCon), print("Yes"), print("No"))
 		}
-		if(!is.null.object(object@Misspecified) & !is.null.object(object@Constraint)) {
+		if(!is.null.object(object@misspec) & !is.null.object(object@equalCon)) {
 			cat("Constain objects BEFORE or AFTER adding misspecification\n")
-			ifelse(object@Constrain.Parameters.Only, print("Before"), print("After"))
+			ifelse(object@conBeforeMis, print("Before"), print("After"))
 		}
-		if(!is.null.object(object@Misspecified)) {
+		if(!is.null.object(object@misspec)) {
 			cat("Misfit bound\n")
-			if(!is.null.object(object@Misfit.bound)) {
-				print(paste("min =", object@Misfit.bound[1]))
-				print(paste("max =", object@Misfit.bound[2]))
+			if(!is.null.object(object@misfitBound)) {
+				print(paste("min =", object@misfitBound[1]))
+				print(paste("max =", object@misfitBound[2]))
 			} else {
 				print("No")
 			}
 		}
 		cat("Maximum Random Sampling Parameters\n")
-		print(object@Maximum.random)
+		print(object@maxDraw)
 	}
 )
 #Arguments: 
@@ -297,29 +297,29 @@ setMethod("summary", signature="SimData", definition=function(object, detail=FAL
 #Description: This function will print all elements in the SimData.c.
 #Return: 	NONE. Results will print on screen only.
 
-setMethod("summary", signature="SimModel", definition=function(object, detail.constraint=FALSE, starting.values=FALSE) {
+setMethod("summary", signature="SimModel", definition=function(object, con=FALSE, start=FALSE) {
 		cat("MODEL OBJECT\n")
 		cat("Type\n")
 		print(object@modelType)
 		cat("========= Parameters Set ============\n")
-		summary(object@Parameters)
-		cat("Number of free parameters = ", count.random.object(object@Parameters), "\n")
+		summary(object@param)
+		cat("Number of free parameters = ", count.random.object(object@param), "\n")
 		cat("=====================================\n")
-		if(starting.values) {
+		if(start) {
 			cat("============Starting Values================\n")
-			ifelse(!is.null.object(object@Starting.Values), summary(object@Starting.Values), print("None"))
+			ifelse(!is.null.object(object@start), summary(object@start), print("None"))
 			cat("============================================\n")		
 		}
-		if(detail.constraint) {
+		if(con) {
 			cat("=============Constraint=====================\n")
-			ifelse(!is.null.object(object@Constraint), summary(object@SimEqualCon), print("None"))
+			ifelse(!is.null.object(object@equalCon), summary(object@SimEqualCon), print("None"))
 			cat("============================================\n")
 		} else {
 			cat("Adding Constraint?\n")
-			ifelse(!is.null.object(object@Constraint), print("Yes"), print("No"))
+			ifelse(!is.null.object(object@equalCon), print("Yes"), print("No"))
 		}
 		cat("Analysis Package\n")
-		print(object@Program)
+		print(object@package)
 	}
 )
 #Arguments: 
@@ -338,9 +338,9 @@ setMethod("summary", signature="SimResult", definition=function(object) {
 		names(dimnames(cutoffs)) <- c("Fit Indices", "Alpha")
 		print(cutoffs)
 		cat("Number of Replications\n")
-		print(object@Replication)
+		print(object@nRep)
 		cat("Number of Convergent Replications\n")
-		print(object@Convergence)
+		print(object@converged)
 	}
 )
 #Arguments: 
@@ -351,9 +351,9 @@ setMethod("summary", signature="SimResult", definition=function(object) {
 setMethod("summary", signature="SimModelOut", definition=function(object) {
 		cat("MODEL ANALYSIS RESULT OBJECT\n")
 		cat("Fit Indices\n")
-		print(object@Fit)
-		cat("Convergence\n")
-		print(object@Convergence)
+		print(object@fit)
+		cat("converged\n")
+		print(object@converged)
 	}
 )
 #Arguments: 

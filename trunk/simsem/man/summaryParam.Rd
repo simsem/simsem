@@ -27,9 +27,7 @@ summaryParam(object, ...)
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \seealso{
-	\enumerate{
-		\item \code{\linkS4class{SimResult}} for the object input
-	}
+	\code{\linkS4class{SimResult}} for the object input
 }
 \examples{
 showClass("SimResult")

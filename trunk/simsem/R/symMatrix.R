@@ -2,21 +2,21 @@
 # Function -- simsem package
 # Description: 	Create SymMatrix.c object that save free parameters and starting values, as well as fixed values. 
 #		This will be used for model specification later, such as for factor residual correlation matrix or measurement error correlation matrix.
-# Function: symMatrix(Matrix, name.dist.object = NULL)
+# Function: symMatrix(free, param = NULL)
 # Argument:
-#	Matrix:		Matrix of free parameters. Use NA to specify free parameters. Use number as fixed value (including zero)
-#	name.dist.object:	Starting values. Can be either one element or matrix with the same dimension as free parameter matrix. 
+#	free:		Matrix of free parameters. Use NA to specify free parameters. Use number as fixed value (including zero)
+#	param:	Starting values. Can be either one element or matrix with the same dimension as free parameter matrix. 
 #						Each element can be numbers (in either numeric or character format) or the name of distribution object VirtualDist.c.
 # Return: 	SymMatrix.c object that will be used for model specification later.
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 6, 2011
 
-symMatrix <- function(Matrix, name.dist.object = NULL) {
-	if(!isSymmetric(Matrix)) {
+symMatrix <- function(free, param = NULL) {
+	if(!isSymmetric(free)) {
 		stop("The input matrix is not symmetric.")
 	}
-	Nrow <- nrow(Matrix)
-	Result <- simMatrix(Matrix, name.dist.object)
+	Nrow <- nrow(free)
+	Result <- simMatrix(free, param)
 	if(Nrow > 1) {
 	for(i in 2:Nrow) {
 		for(j in 1:(i-1)) {

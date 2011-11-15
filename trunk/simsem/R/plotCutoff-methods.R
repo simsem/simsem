@@ -8,12 +8,12 @@
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 9, 2011
 
-setMethod("plotCutoff", signature(object="data.frame"), definition=function(object, cutoff=NULL, reverse = FALSE, used.fit=NULL) {
-	if(is.null(used.fit)) used.fit <- c("Chi", "AIC", "BIC", "RMSEA", "CFI", "TLI", "SRMR")
-	object <- as.data.frame(object[,used.fit])
-	cutoff <- cutoff[used.fit]
+setMethod("plotCutoff", signature(object="data.frame"), definition=function(object, cutoff=NULL, revDirec = FALSE, usedFit=NULL) {
+	if(is.null(usedFit)) usedFit <- c("Chi", "AIC", "BIC", "RMSEA", "CFI", "TLI", "SRMR")
+	object <- as.data.frame(object[,usedFit])
+	cutoff <- cutoff[usedFit]
 	object <- as.data.frame(object[,!apply(object, 2, is.na.vector)])
-	colnames(object) <- used.fit
+	colnames(object) <- usedFit
 	if(ncol(object) == 2) {
 		obj <- par(mfrow = c(1, 2))
 	} else if(ncol(object) == 3) {
@@ -34,24 +34,24 @@ setMethod("plotCutoff", signature(object="data.frame"), definition=function(obje
 #Arguments: 
 #	object:		data.frame.c that users wish to plot their sampling distribution
 # 	cutoff:		A priori cutoffs for fit indices, saved in a vector
-#	reverse:	The default is to find critical point on the side that indicates worse fit (the right side of RMSEA or the left side of CFI). If specifying as TRUE, the directions are reversed.
-#	used.fit:	The name of fit indices that researchers wish to plot
+#	revDirec:	The default is to find critical point on the side that indicates worse fit (the right side of RMSEA or the left side of CFI). If specifying as TRUE, the directions are revDirecd.
+#	usedFit:	The name of fit indices that researchers wish to plot
 #Description: 	This function plot sampling distributions and make vertical line as cutoffs
 #Return: 		NONE. Just plot.
 
-setMethod("plotCutoff", signature(object="SimResult"), definition=function(object, alpha=NULL, reverse = FALSE, used.fit=NULL) {
+setMethod("plotCutoff", signature(object="SimResult"), definition=function(object, alpha=NULL, revDirec = FALSE, usedFit=NULL) {
 	cutoff <- NULL
-	Data <- as.data.frame(object@Fit)
+	Data <- as.data.frame(object@fit)
 	if(!is.null(alpha)) {
-		if(reverse) alpha <- 1 - alpha
+		if(revDirec) alpha <- 1 - alpha
 		cutoff <- getCutoff(Data, alpha)
 	}
-	plotCutoff(Data, cutoff, reverse, used.fit)
+	plotCutoff(Data, cutoff, revDirec, usedFit)
 })
 #Arguments: 
 #	object:		data.frame.c that users wish to plot their sampling distributions
 # 	alpha:		A priori alpha level to getCutoffs of fit indices
-#	reverse:	The default is to find critical point on the side that indicates worse fit (the right side of RMSEA or the left side of CFI). If specifying as TRUE, the directions are reversed.
-#	used.fit:	The name of fit indices that researchers wish to plot
+#	revDirec:	The default is to find critical point on the side that indicates worse fit (the right side of RMSEA or the left side of CFI). If specifying as TRUE, the directions are revDirecd.
+#	usedFit:	The name of fit indices that researchers wish to plot
 #Description: 	This function will extract raw fit indices data and cutoff and pass it to the same function using data frame and vector of cutoffs
 #Return: 		NONE. Just plot.

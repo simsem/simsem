@@ -19,7 +19,11 @@ find.latent.error.var <- function(path.matrix, latent.cor.matrix, factor.var = N
 		psi.sd <- matrix(0, length(dv), length(dv))
 		for(j in 1:length(dv)) {
 			error.var[dv[j]]  <- factor.var[dv[j]] - var.reg[j, j]
-			psi.sd[j, j] <- sqrt(error.var[dv[j]])
+			if(error.var[dv[j]] < 0) {
+				psi.sd[j, j] <- NaN
+			} else {
+				psi.sd[j, j] <- sqrt(error.var[dv[j]])
+			}
 		}
 		if(i < (length(set) - 1)) {
 			psi <- cor2cov(psi, psi.sd)

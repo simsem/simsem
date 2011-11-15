@@ -1,6 +1,6 @@
-run.misspecified <- function(object, Misspecified, SimEqualCon=new("NullSimEqualCon"), Constrain.Parameters.Only=FALSE, seed=NULL) {
+run.misspecified <- function(object, misspec, SimEqualCon=new("NullSimEqualCon"), conBeforeMis=FALSE, seed=NULL) {
 	if(!is.null(seed)) set.seed(seed)
-	Parameters <- list(LY = run(object@LY),
+	param <- list(LY = run(object@LY),
 		VTE = run(object@VTE),
 		TE = run(object@TE),
 		VY = run(object@VY),
@@ -23,33 +23,33 @@ run.misspecified <- function(object, Misspecified, SimEqualCon=new("NullSimEqual
 		PH = run(object@PH),
 		KA = run(object@KA),
 		TH = run(object@TH))
-	if(!is.null.object(SimEqualCon) & (Constrain.Parameters.Only=TRUE)) {
+	if(!is.null.object(SimEqualCon) & (conBeforeMis=TRUE)) {
 		if(object@modelType != SimEqualCon@modelType) stop("Please provide same tags of SimSet and constraint")
-		Parameters <- constrain.matrices(Parameters, SimEqualCon, object@modelType)
+		param <- constrain.matrices(param, SimEqualCon, object@modelType)
 	}
-	LY <- Parameters$LY
-	VTE <- Parameters$VTE
-	TE <- Parameters$TE
-	VY <- Parameters$VY
-	TY <- Parameters$TY
-	MY <- Parameters$MY
-	BE <- Parameters$BE
-	VPS <- Parameters$VPS
-	PS <- Parameters$PS
-	VE <- Parameters$VE
-	AL <- Parameters$AL
-	ME <- Parameters$ME
-	LX <- Parameters$LX
-	VTD <- Parameters$VTD
-	TD <- Parameters$TD
-	VX <- Parameters$VX
-	TX <- Parameters$TX
-	MX <- Parameters$MX
-	GA <- Parameters$GA
-	VPH <- Parameters$VPH
-	PH <- Parameters$PH
-	KA <- Parameters$KA
-	TH <- Parameters$TH
+	LY <- param$LY
+	VTE <- param$VTE
+	TE <- param$TE
+	VY <- param$VY
+	TY <- param$TY
+	MY <- param$MY
+	BE <- param$BE
+	VPS <- param$VPS
+	PS <- param$PS
+	VE <- param$VE
+	AL <- param$AL
+	ME <- param$ME
+	LX <- param$LX
+	VTD <- param$VTD
+	TD <- param$TD
+	VX <- param$VX
+	TX <- param$TX
+	MX <- param$MX
+	GA <- param$GA
+	VPH <- param$VPH
+	PH <- param$PH
+	KA <- param$KA
+	TH <- param$TH
 	if(object@modelType == "CFA") {
 		if(is.null.object(VTE)) VTE <- find.measurement.error.var(LY, PS, VY, VE)
 		if(is.null.object(VY)) VY <- find.indicator.var(LY, PS, VTE, VE)
@@ -124,35 +124,35 @@ run.misspecified <- function(object, Misspecified, SimEqualCon=new("NullSimEqual
 		BE=BE, VPS=VPS, PS=PS, VE=VE, AL=AL, ME=ME,
 		LX=LX, VTD=VTD, TD=TD, VX=VX, TX=TX, MX=MX,
 		GA=GA, VPH=VPH, PH=PH, KA=KA, TH=TH)
-	Mis <- run(Misspecified)
-	Parameters <- combine.object(Parameters, Mis)
-	if(!is.null.object(SimEqualCon) & (Constrain.Parameters.Only=FALSE)) {
+	Mis <- run(misspec)
+	param <- combine.object(param, Mis)
+	if(!is.null.object(SimEqualCon) & (conBeforeMis=FALSE)) {
 		if(object@modelType != SimEqualCon@modelType) stop("Please provide same tags of SimSet and constraint")
-		Parameters <- constrain.matrices(Parameters, SimEqualCon, object@modelType)
+		param <- constrain.matrices(param, SimEqualCon, object@modelType)
 	}
-	LY <- Parameters$LY
-	VTE <- Parameters$VTE
-	TE <- Parameters$TE
-	VY <- Parameters$VY
-	TY <- Parameters$TY
-	MY <- Parameters$MY
-	BE <- Parameters$BE
-	VPS <- Parameters$VPS
-	PS <- Parameters$PS
-	VE <- Parameters$VE
-	AL <- Parameters$AL
-	ME <- Parameters$ME
-	LX <- Parameters$LX
-	VTD <- Parameters$VTD
-	TD <- Parameters$TD
-	VX <- Parameters$VX
-	TX <- Parameters$TX
-	MX <- Parameters$MX
-	GA <- Parameters$GA
-	VPH <- Parameters$VPH
-	PH <- Parameters$PH
-	KA <- Parameters$KA
-	TH <- Parameters$TH
+	LY <- param$LY
+	VTE <- param$VTE
+	TE <- param$TE
+	VY <- param$VY
+	TY <- param$TY
+	MY <- param$MY
+	BE <- param$BE
+	VPS <- param$VPS
+	PS <- param$PS
+	VE <- param$VE
+	AL <- param$AL
+	ME <- param$ME
+	LX <- param$LX
+	VTD <- param$VTD
+	TD <- param$TD
+	VX <- param$VX
+	TX <- param$TX
+	MX <- param$MX
+	GA <- param$GA
+	VPH <- param$VPH
+	PH <- param$PH
+	KA <- param$KA
+	TH <- param$TH
 	if(object@modelType == "CFA") {
 		if(is.null.object(VTE)) VTE <- find.measurement.error.var(LY, PS, VY, VE)
 		if(is.null.object(VY)) VY <- find.indicator.var(LY, PS, VTE, VE)
@@ -227,5 +227,5 @@ run.misspecified <- function(object, Misspecified, SimEqualCon=new("NullSimEqual
 		BE=BE, VPS=VPS, PS=PS, VE=VE, AL=AL, ME=ME,
 		LX=LX, VTD=VTD, TD=TD, VX=VX, TX=TX, MX=MX,
 		GA=GA, VPH=VPH, PH=PH, KA=KA, TH=TH)
-	return(list(Parameters=Output1, Misspecified=Output2))
+	return(list(param=Output1, misspec=Output2))
 }

@@ -175,7 +175,7 @@ setMethod("combine.object", signature(object1="MatrixSet", object2="MatrixSet"),
 #	If both objects are correlation matrices, it will retain diagonal elements of 1. 
 #Return: Resulting matrix.c
 
-setMethod("combine.object", signature(object1="list", object2="misspecifiedSet"), definition=function(object1, object2) {
+setMethod("combine.object", signature(object1="list", object2="MisspecSet"), definition=function(object1, object2) {
 		LY <- combine.object(object1$LY, object2@LY)
 		VTE <- combine.object(object1$VTE, object2@VTE)
 		TE <- combine.object(object1$TE, object2@TE, correlation = TRUE)

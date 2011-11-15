@@ -16,7 +16,7 @@ simSetCFA(...)
 }
 \details{
 	NOTE: CFA object can be either specified in X or Y side.
-	\enumerate{
+	\itemize{
 		\item REQUIRED: \code{LX} or \code{LY} for factor loading matrix (need to be \code{\linkS4class{SimMatrix}} object). 
 		\item REQUIRED: \code{TD} or \code{TE} for measurement error correlation matrix (need to be \code{\linkS4class{SymMatrix}} object).
 		\item REQUIRED: \code{PH} or \code{PH} for factor correlation matrix (need to be \code{\linkS4class{SymMatrix}} object).
@@ -31,15 +31,15 @@ simSetCFA(...)
 		\item \code{KA}, \code{AL}, \code{MK}, or \code{ME} for factor means (need to be \code{\linkS4class{SimVector}} object).
 	}
 	DEFAULT:
-	\itemize{
-		\item 1) All indicator variances are equal to 1. Measurement error variances are automatically implied from total indicator variances.
-		\item 2) All measurement error variances are free parameters.
-		\item 3) All indicator means are equal to 0. Indicator intercepts are automatically implied from indicator means.
-		\item 4) All indicator intercepts are free parameters.
-		\item 5) All factor variances are equal to 1.
-		\item 6) All factor variances are fixed.
-		\item 7) All factor means are equal to 0.
-		\item 8) All factor means are fixed.
+	\enumerate{
+		\item All indicator variances are equal to 1. Measurement error variances are automatically implied from total indicator variances.
+		\item All measurement error variances are free parameters.
+		\item All indicator means are equal to 0. Indicator intercepts are automatically implied from indicator means.
+		\item All indicator intercepts are free parameters.
+		\item All factor variances are equal to 1.
+		\item All factor variances are fixed.
+		\item All factor means are equal to 0.
+		\item All factor means are fixed.
 	}
 }
 \value{
@@ -49,7 +49,7 @@ simSetCFA(...)
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \seealso{
-	\enumerate{
+	\itemize{
 		\item See class \code{\linkS4class{SimSet}} for simResult details. 
 		\item See \code{\linkS4class{SimMatrix}}, \code{\linkS4class{SymMatrix}}, or \code{\linkS4class{SimVector}} for input details.
 		\item Use \code{\link{simSetPath}} to specify path analysis model and use \code{\link{simSetSEM}} to specify full structural equation modeling.

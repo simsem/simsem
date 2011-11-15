@@ -15,7 +15,7 @@ No methods defined with class "VirtualDist" in the signature.
 }
 \seealso{
 	List of all distribution objects.
-	\enumerate{
+	\itemize{
 		\item \code{\linkS4class{SimNorm}}
 		\item \code{\linkS4class{SimUnif}}
 	}

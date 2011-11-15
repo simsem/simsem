@@ -5,11 +5,11 @@ runLavaan <- function(object, Data) {
 	}
 	Data <- as.data.frame(Data)
 	ni <- ncol(Data)
-	Parameters <- object@Parameters
+	param <- object@param
 	modelType <- object@modelType
 	varnames <- NULL
 	if(modelType == "Path.exo") {
-		nx <- ncol(object@Parameters@PH)
+		nx <- ncol(object@param@PH)
 		for(i in 1:nx) {
 			temp <- paste("x", i, sep="")
 			varnames <- c(varnames, temp)
@@ -19,7 +19,7 @@ runLavaan <- function(object, Data) {
 			varnames <- c(varnames, temp)
 		}
 	} else if(modelType == "SEM.exo") {
-		nx <- nrow(object@Parameters@LX)
+		nx <- nrow(object@param@LX)
 		for(i in 1:nx) {
 			temp <- paste("x", i, sep="")
 			varnames <- c(varnames, temp)
@@ -35,24 +35,24 @@ runLavaan <- function(object, Data) {
 		}
 	}
 	colnames(Data) <- varnames
-	Parameters <- tag.headers(Parameters)
+	param <- tag.headers(param)
 	con.text <- NULL
-	if(!is.null.object(object@Constraint)) {
-		Constraint <- object@Constraint
-		Constraint <- reduce.constraint(Constraint)
-		con.text <- transform.constraint(Parameters, Constraint)
+	if(!is.null.object(object@equalCon)) {
+		equalCon <- object@equalCon
+		equalCon <- reduce.constraint(equalCon)
+		con.text <- transform.constraint(param, equalCon)
 	} else {
-		con.text <- blank.parameters(Parameters)
+		con.text <- blank.parameters(param)
 	}	
-	code <- write.lavaan.code(Parameters, con.text)
-	Fit <- sem(code, data=Data, meanstructure=TRUE)
-	Fit.indices <- extract.lavaan.summary(Fit)
-	Estimates <- combine.object(Parameters, inspect(Fit, "coef"))
-    SE <- combine.object(Parameters, inspect(Fit, "se"))
-	#Converged <- Fit@Fit@converged
+	code <- write.lavaan.code(param, con.text)
+	fit <- sem(code, data=Data, meanstructure=TRUE)
+	FitIndices <- extract.lavaan.summary(fit)
+	coef <- combine.object(param, inspect(fit, "coef"))
+    se <- combine.object(param, inspect(fit, "se"))
+	#Converged <- fit@fit@converged
 	Converged = TRUE
-    if(sum(unlist(lapply(inspect(Fit, "se"), sum))) == 0) Converged = FALSE
-    return(new("SimModelOut", Parameters=object@Parameters, Starting.Values=object@Starting.Values,
-        Constraint=object@Constraint, Program=object@Program, Estimates=Estimates,
-        Fit=Fit.indices, SE=SE, Convergence=Converged))
+    if(sum(unlist(lapply(inspect(fit, "se"), sum))) == 0) Converged = FALSE
+    return(new("SimModelOut", param=object@param, start=object@start,
+        equalCon=object@equalCon, package=object@package, coef=coef,
+        fit=FitIndices, se=se, converged=Converged))
 }

@@ -14,16 +14,16 @@ Objects can be created by \code{\link{simResult}}. It can also be called from th
 \section{Slots}{
   \describe{
     \item{\code{modelType}:}{Analysis model type (CFA, Path, or SEM) }
-    \item{\code{Replication}:}{Number of replications have been created and run simulated data. }
-    \item{\code{Estimates}:}{Parameter estimates from each replication}
-    \item{\code{SE}:}{Standard errors of parameter estimates from each replication}
-    \item{\code{Fit}:}{Fit Indices values from each replication}
-    \item{\code{Convergence}:}{Number of convergence replications }
-    \item{\code{Seed}:}{Seed number. }
+    \item{\code{nRep}:}{Number of replications have been created and run simulated data. }
+    \item{\code{coef}:}{Parameter estimates from each replication}
+    \item{\code{se}:}{Standard errors of parameter estimates from each replication}
+    \item{\code{fit}:}{Fit Indices values from each replication}
+    \item{\code{converged}:}{Number of convergence replications }
+    \item{\code{seed}:}{Seed number. }
   }
 }
 \section{Methods}{
-	\enumerate{
+	\itemize{
 		\item{getCutoff} to getCutoff of fit indices based on a priori alpha level.
 		\item{getPower} to getPower of rejection when the simResult is the alternative hypothesis and users specify cutoffs of the fit indices.
 		\item{plotCutoff} to plot null hypothesis sampling distributions of fit indices with an option to draw fit indices cutoffs by specifying a priori alpha level.
@@ -36,7 +36,7 @@ Objects can be created by \code{\link{simResult}}. It can also be called from th
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \seealso{
-	\enumerate{
+	\itemize{
 		\item \code{\linkS4class{SimData}} for data generation model.
 		\item \code{\linkS4class{SimModel}} for analysis model
 		\item \code{\link{simResult}} for the constructor of this class

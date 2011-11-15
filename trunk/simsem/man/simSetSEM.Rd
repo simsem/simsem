@@ -20,7 +20,7 @@ simSetSEM(..., exo = FALSE)
 }
 \details{
 	The matrices and vectors in the endogenous side are
-	\enumerate{
+	\itemize{
 		\item REQUIRED: \code{LY} for factor loading matrix from endogenous factors to Y indicators (need to be \code{\linkS4class{SimMatrix}} object). 
 		\item REQUIRED: \code{TE} for measurement error correlation matrix among Y indicators (need to be \code{\linkS4class{SymMatrix}} object).
 		\item REQUIRED: \code{BE} for regression coefficient matrix among endogenous factors (need to be \code{\linkS4class{SimMatrix}} object). 
@@ -35,7 +35,7 @@ simSetSEM(..., exo = FALSE)
 		\item \code{ME} for total mean of endogenous factors (need to be \code{\linkS4class{SimVector}} object). NOTE: Either endogenous factor intercept or total mean of endogenous factor is specified. Both cannot be simultaneously specified.
 	}
 	If users need to specify exogenous variable too, these matrices and vectors are available, 
-	\enumerate{
+	\itemize{
 		\item REQUIRED for \code{"exo=TRUE"}: \code{LX} for factor loading matrix from exogenous factors to X indicators (need to be \code{\linkS4class{SimMatrix}} object). 
 		\item REQUIRED for \code{"exo=TRUE"}: \code{TD} for measurement error correlation matrix among X indicators (need to be \code{\linkS4class{SymMatrix}} object).
 		\item REQUIRED for \code{"exo=TRUE"}: \code{GA} for regression coefficient matrix among exogenous factors (need to be \code{\linkS4class{SimMatrix}} object). 
@@ -48,15 +48,15 @@ simSetSEM(..., exo = FALSE)
 		\item \code{KA} or \code{MK} for total mean of exogenous factors (need to be \code{\linkS4class{SimVector}} object).
 	}
 	DEFAULT:
-	\itemize{
-		\item 1) All indicator variances are equal to 1. Measurement error variances are automatically implied from total indicator variances.
-		\item 2) All measurement error variances are free parameters.
-		\item 3) All indicator means are equal to 0. Indicator intercepts are automatically implied from indicator means.
-		\item 4) All indicator intercepts are free parameters.
-		\item 5) All factor variances are equal to 1.
-		\item 6) All factor variances are fixed.
-		\item 7) All factor means are equal to 0.
-		\item 8) All factor means are fixed.
+	\enumerate{
+		\item All indicator variances are equal to 1. Measurement error variances are automatically implied from total indicator variances.
+		\item All measurement error variances are free parameters.
+		\item All indicator means are equal to 0. Indicator intercepts are automatically implied from indicator means.
+		\item All indicator intercepts are free parameters.
+		\item All factor variances are equal to 1.
+		\item All factor variances are fixed.
+		\item All factor means are equal to 0.
+		\item All factor means are fixed.
 	}
 }
 \value{
@@ -66,7 +66,7 @@ simSetSEM(..., exo = FALSE)
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \seealso{
-	\enumerate{
+	\itemize{
 		\item See class \code{\linkS4class{SimSet}} for simResult details. 
 		\item See \code{\linkS4class{SimMatrix}}, \code{\linkS4class{SymMatrix}}, or \code{\linkS4class{SimVector}} for input details.
 		\item Use \code{\link{simSetCFA}} to specify CFA model and use \code{\link{simSetPath}} to specify path analysis model.

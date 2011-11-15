@@ -8,16 +8,16 @@ This function will create simResult by different ways. One way is to create data
 and \code{\linkS4class{SimModel}} and save it in the \code{\linkS4class{SimResult}}.
 }
 \usage{
-simResult(SimData, SimModel, NRep, seed = 123321, silent = FALSE)
+simResult(simData, simModel, nRep, seed = 123321, silent = FALSE)
 }
 \arguments{
-  \item{SimData}{
+  \item{simData}{
 	Data object used in data simulation.
 }
-  \item{SimModel}{
+  \item{simModel}{
 	Model object used in analyzing the simulated data.
 }
-  \item{NRep}{
+  \item{nRep}{
 	Number of replications.
 }
   \item{seed}{
@@ -34,7 +34,7 @@ simResult(SimData, SimModel, NRep, seed = 123321, silent = FALSE)
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \seealso{
-	\enumerate{
+	\itemize{
 		\item \code{\linkS4class{SimData}} for data model specification
 		\item \code{\linkS4class{SimModel}} for analysis model specification
 		\item \code{\linkS4class{SimResult}} for the type of resulting object

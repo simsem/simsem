@@ -33,7 +33,7 @@ summaryShort(object, ...)
 }
 \seealso{
 	This is the list of classes that can use \code{run} method.
-	\enumerate{
+	\itemize{
 		\item \code{\linkS4class{SimMatrix}}
 		\item \code{\linkS4class{SimVector}}
 	}

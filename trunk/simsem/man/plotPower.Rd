@@ -12,13 +12,13 @@ Plot sampling distributions of fit indices that visualize power
 This function will plot sampling distributions of fit indices that visualize power in either a histogram or overlapping histograms.
 }
 \usage{
-plotPower(object.alt, object.null, ...)
+plotPower(altObject, nullObject, ...)
 }
 \arguments{
-  \item{object.alt}{
+  \item{altObject}{
 	The object (\code{\linkS4class{SimResult}} or \code{data.frame}) that saves fit indices for alternative hypothesis
 }
-  \item{object.null}{
+  \item{nullObject}{
 	The object that represents null hypothesis. It can be \code{vector} of cutoffs (that might be calculated from \code{\link{getCutoff}} 
 	or an object that save raw data of fit indices for null hypothesis (\code{\linkS4class{SimResult}} or \code{data.frame}).
 }
@@ -35,7 +35,7 @@ NONE. Only plot the fit indices distributions.
 \section{Details in \dots}{
 	\enumerate{
 		\item \code{alpha}:	A priori alpha level to getCutoffs of fit indices (do not specify when you have \code{cutoff})
-		\item \code{used.fit}:	The name of fit indices that researchers wish to plot
+		\item \code{usedFit}:	The name of fit indices that researchers wish to plot
 	}
 }
 \seealso{
@@ -71,5 +71,5 @@ SimData.ALT <- simData(500, CFA.Model.ALT)
 Output.ALT <- simResult(SimData.ALT, SimModel, 50)
 getPower(Output.ALT, Cut.NULL)
 Rule.of.thumb <- c(RMSEA=0.05, CFI=0.95, TLI=0.95, SRMR=0.06)
-plotPower(Output.ALT, Output.NULL, alpha=0.05, used.fit=c("RMSEA", "CFI", "TLI", "SRMR"))
+plotPower(Output.ALT, Output.NULL, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
 }
