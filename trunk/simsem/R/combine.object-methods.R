@@ -1,0 +1,324 @@
+# combine.object 
+# Methods -- simsem package
+# Combine by summing or binding two objects together.
+# Generic Function: combine.object(object1, object2, ...)
+# Argument:
+#	Object1: The first object
+# 	Object2: The second object
+# 	... : Other arguments (do not have now)
+# Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
+# Date Modified: October 5, 2011
+
+setMethod("combine.object", signature(object1="SimMatrix", object2="SimMatrix"), definition= function(object1, object2) {
+		type <- "SimMatrix"
+		if(is(object1, "SymMatrix") && is(object2, "SymMatrix")) type <- "SymMatrix"
+		Labels1 <- object1@param
+		Labels2 <- object2@param
+		Nrow <- nrow(Labels1)
+		Ncol <- ncol(Labels2)
+		new.Labels <- matrix(NA, Nrow, Ncol)
+		new.Data <- matrix(NA, Nrow, Ncol)
+		if((Nrow != nrow(Labels2)) | (Ncol != ncol(Labels2))) stop("The dimension of objects are not equal")
+		for(i in 1:Nrow) {
+			for(j in 1:Ncol) {
+				if(is.na(Labels1[i, j])) {
+					if(is.na(Labels2[i, j])) {
+						new.Data[i, j] <- object1@free[i, j]
+					} else {
+						new.Labels[i, j] <- Labels2[i, j]
+					}
+				} else {
+					if(is.na(Labels2[i, j])) {
+						new.Labels[i, j] <- Labels1[i, j]
+					} else {
+						new.Labels[i, j] <- Labels2[i, j]
+					}
+				}
+			}
+		}
+		return(new(type, Data = new.Data, Labels = new.Labels))
+	}
+)
+#Arguments: object1 and object2 are SimMatrix.c or SymMatrix.c that you wish to combine
+#Description: This function will combine two SimMatrix.c together by, 
+#	1) If a parameter/starting values of an element is specified, the combined object will be free parameters with the starting value. 
+#		If both objects have parameter/starting values, one of object1 will be used. 
+#	2) If both are fixed, the fixed value of object1 will be used. 
+#Return: Resulting SimMatrix.c or SymMatrix.c.
+
+setMethod("combine.object", signature(object1="SimVector", object2="SimVector"), definition= function(object1, object2) {
+		Labels1 <- object1@param
+		Labels2 <- object2@param
+		Length <- length(Labels1)
+		new.Labels <- rep(NA, Length)
+		new.Data <- rep(NA, Length)
+		if(Length != length(Labels2))  stop("The dimension of objects are not equal")
+		for(i in 1:Length) {
+			if(is.na(Labels1[i])) {
+				if(is.na(Labels2[i])) {
+					new.Data[i] <- object1@free[i]
+				} else {
+					new.Labels[i] <- Labels2[i]
+				}
+			} else {
+				if(is.na(Labels2[i])) {
+					new.Labels[i] <- Labels1[i]
+				} else {
+					new.Labels[i] <- Labels2[i]
+				}
+			}
+		}
+		return(new(type, Data = new.Data, Labels = new.Labels))
+	}
+)
+#Arguments: object1 and object2 are SimVector.c that you wish to combine
+#Description: This function will combine two SimVector.c together by, 
+#	1) If a parameter/starting values of an element is specified, the combined object will be free parameters with the starting value. 
+#		If both objects have parameter/starting values, one of object1 will be used. 
+#	2) If both are fixed, the fixed value of object1 will be used. 
+#Return: Resulting SimVector.c.
+
+setMethod("combine.object", signature(object1="vector", object2="vector"), definition=function(object1, object2) {
+		if(is.null.object(object1)) {
+			if(is.null.object(object2)) {
+				return(new("NullVector"))
+			} else {
+				stop("Please make sure that \n
+					1) The trivially misspecified matrix set is put as a second argument. \n
+					2) Any of trivially misspecified matrices are not null in the main set.")
+			}
+		} else {
+			if(is.null.object(object2)) {
+				return(object1)
+			} else {
+				ifelse(length(object1) == length(object2), return(object1 + object2), stop("Length of vectors are not equal."))
+			}
+		}
+	}
+)
+#Arguments: object1 and object2 are vector.c or vector.c that you wish to combine
+#Description: This function is used to combine two vectors. If both are null vectors, 
+#	it will return null vectors. If object2 is null vector, it will return object1. 
+#	If both objects are not null, it will return the sum of both vectors. 
+#Return: Resulting vector.c
+
+setMethod("combine.object", signature(object1="matrix", object2="matrix"), definition=function(object1, object2, correlation = FALSE) {
+		if(is.null.object(object1)) {
+			if(is.null.object(object2)) {
+				return(new("NullMatrix"))
+			} else {
+				stop("Please make sure that \n
+					1) The trivially misspecified matrix set is put as a second argument. \n
+					2) Any of trivially misspecified matrices are not null in the main set.")
+			}
+		} else {
+			if(is.null.object(object2)) {
+				return(object1)
+			} else {
+				if(sum(dim(object1) != dim(object2)) == 0) {
+					if(correlation == TRUE) {
+						temp <- object1 + object2
+						diag(temp) <- 1
+						return(temp)
+					} else {
+						return(object1 + object2)
+					}
+				} else {
+					stop("Dimension of matrices are not equal.")
+				}
+			}
+		}
+	}
+)
+#Arguments: object1 and object2 are matrix.c that you wish to combine
+#Description: This function is used to combine two matrices. If both are null matrices, 
+#	it will return null matrices. If object2 is null matrix, it will return object1. 
+#	If both objects are not null, it will return the sum of both objects. 
+#	If both objects are correlation matrices, it will retain diagonal elements of 1. 
+#Return: Resulting matrix.c
+
+setMethod("combine.object", signature(object1="MatrixSet", object2="MatrixSet"), definition=function(object1, object2) {
+		LY <- combine.object(object1@LY, object2@LY)
+		VTE <- combine.object(object1@VTE, object2@VTE)
+		TE <- combine.object(object1@TE, object2@TE, correlation = TRUE)
+		VY <- combine.object(object1@VY, object2@VY)
+		TY <- combine.object(object1@TY, object2@TY) 
+		MY <- combine.object(object1@MY, object2@MY)
+		BE <- combine.object(object1@BE, object2@BE)
+		VPS <- combine.object(object1@VPS, object2@VPS)
+		PS <- combine.object(object1@PS, object2@PS, correlation = TRUE)
+		VE <- combine.object(object1@VE, object2@VE) 
+		AL <- combine.object(object1@AL, object2@AL) 
+		ME <- combine.object(object1@ME, object2@ME) 
+		LX <- combine.object(object1@LX, object2@LX) 
+		VTD <- combine.object(object1@VTD, object2@VTD) 
+		TD <- combine.object(object1@TD, object2@TD, correlation = TRUE)
+		VX <- combine.object(object1@VX, object2@VX)
+		TX <- combine.object(object1@TX, object2@TX)
+		MX <- combine.object(object1@MX, object2@MX)
+		GA <- combine.object(object1@GA, object2@GA)
+		VPH <- combine.object(object1@VPH, object2@VPH)
+		PH <- combine.object(object1@PH, object2@PH, correlation = TRUE)
+		KA <- combine.object(object1@KA, object2@KA)
+		TH <- combine.object(object1@TH, object2@TH)
+		Output <- new("MatrixSet", modelType=object1@modelType, LY=LY, VTE=VTE, TE=TE, VY=VY, TY=TY, MY=MY, 
+			BE=BE, VPS=VPS, PS=PS, VE=VE, AL=AL, ME=ME,
+			LX=LX, VTD=VTD, TD=TD, VX=VX, TX=TX, MX=MX,
+			GA=GA, VPH=VPH, PH=PH, KA=KA, TH=TH)
+		return(Output)
+	}
+)
+#Arguments: object1 and object2 are MatrixSet.c that you wish to combine
+#Description: This function is used to combine two matrices. If both are null matrices, 
+#	it will return null matrices. If object2 is null matrix, it will return object1. 
+#	If both objects are not null, it will return the sum of both objects. 
+#	If both objects are correlation matrices, it will retain diagonal elements of 1. 
+#Return: Resulting matrix.c
+
+setMethod("combine.object", signature(object1="list", object2="misspecifiedSet"), definition=function(object1, object2) {
+		LY <- combine.object(object1$LY, object2@LY)
+		VTE <- combine.object(object1$VTE, object2@VTE)
+		TE <- combine.object(object1$TE, object2@TE, correlation = TRUE)
+		VY <- combine.object(object1$VY, object2@VY)
+		TY <- combine.object(object1$TY, object2@TY) 
+		MY <- combine.object(object1$MY, object2@MY)
+		BE <- combine.object(object1$BE, object2@BE)
+		VPS <- combine.object(object1$VPS, object2@VPS)
+		PS <- combine.object(object1$PS, object2@PS, correlation = TRUE)
+		VE <- combine.object(object1$VE, object2@VE) 
+		AL <- combine.object(object1$AL, object2@AL) 
+		ME <- combine.object(object1$ME, object2@ME) 
+		LX <- combine.object(object1$LX, object2@LX) 
+		VTD <- combine.object(object1$VTD, object2@VTD) 
+		TD <- combine.object(object1$TD, object2@TD, correlation = TRUE)
+		VX <- combine.object(object1$VX, object2@VX)
+		TX <- combine.object(object1$TX, object2@TX)
+		MX <- combine.object(object1$MX, object2@MX)
+		GA <- combine.object(object1$GA, object2@GA)
+		VPH <- combine.object(object1$VPH, object2@VPH)
+		PH <- combine.object(object1$PH, object2@PH, correlation = TRUE)
+		KA <- combine.object(object1$KA, object2@KA)
+		TH <- combine.object(object1$TH, object2@TH)
+		Output <- list(LY=LY, VTE=VTE, TE=TE, VY=VY, TY=TY, MY=MY, 
+			BE=BE, VPS=VPS, PS=PS, VE=VE, AL=AL, ME=ME,
+			LX=LX, VTD=VTD, TD=TD, VX=VX, TX=TX, MX=MX,
+			GA=GA, VPH=VPH, PH=PH, KA=KA, TH=TH)
+		return(Output)
+	}
+)
+#Arguments: object1 are the list of true parameter matrices. (I do not know why at that point I did not use the SimSet.
+#			object2 are the set of misspecified parameter matrices
+#Description: This function is used to combine list of true parameters with set of misspecification parameters. If any matrices 
+#		of misspecification parameters are not specified, it will return the true parameters (without combine objects).
+#Return: List of parameters in list.
+
+setMethod("combine.object", signature(object1="SimFreeParam", object2="list"), definition= function(object1, object2) {
+		modelType <- object1@modelType
+		exo <- (modelType == "SEM.exo") | (modelType == "Path.exo")
+		nx <- ny <- ne <- nk <- 0
+		if(modelType == "CFA") {
+			ny <- nrow(object1@LY)
+			ne <- nrow(object1@PS)
+			name.indicator <- paste("y", 1:ny, sep="")
+			name.factor <- paste("e", 1:ne, sep="")
+			if(!is.null.object(object1@LY)) object1@LY[is.na(object1@LY)] <- (object2$lambda[name.indicator, name.factor])[is.na(object1@LY)]
+			if(!is.null.object(object1@PS)) object1@PS[is.na(object1@PS)] <- (object2$psi[name.factor, name.factor])[is.na(object1@PS)]
+			if(!is.null.object(object1@TE)) object1@TE[is.na(object1@TE)] <- (object2$theta[name.indicator, name.indicator])[is.na(object1@TE)]
+			if(!is.null.object(object1@TY)) object1@TY[is.na(object1@TY)] <- (object2$nu[name.indicator,])[is.na(object1@TY)]
+			if(!is.null.object(object1@AL)) object1@AL[is.na(object1@AL)] <- (object2$alpha[name.factor,])[is.na(object1@AL)]		
+		} else if (modelType == "Path") {
+			ny <- nrow(object1@PS)
+			name.indicator <- paste("y", 1:ny, sep="")
+			if(!is.null.object(object1@PS)) object1@PS[is.na(object1@PS)] <- (object2$psi[name.indicator, name.indicator])[is.na(object1@PS)]
+			if(!is.null.object(object1@AL)) object1@AL[is.na(object1@AL)] <- (object2$alpha[name.indicator,])[is.na(object1@AL)]		
+			if(!is.null.object(object1@BE)) object1@BE[is.na(object1@BE)] <- (object2$beta[name.indicator, name.indicator])[is.na(object1@BE)]		
+		} else if (modelType == "Path.exo") {
+			ny <- nrow(object1@PS)
+			nx <- nrow(object1@PH)
+			name.indicator <- c(paste("x", 1:nx, sep=""), paste("y", 1:ny, sep=""))
+			k.list <- 1:nx
+			e.list <- (nx+1):(nx+ny)
+			if(!is.null.object(object1@PS)) object1@PS[is.na(object1@PS)] <- ((object2$psi[name.indicator, name.indicator])[e.list, e.list])[is.na(object1@PS)]
+			if(!is.null.object(object1@AL)) object1@AL[is.na(object1@AL)] <- ((object2$alpha[name.indicator,])[e.list])[is.na(object1@AL)]		
+			if(!is.null.object(object1@BE)) object1@BE[is.na(object1@BE)] <- ((object2$beta[name.indicator, name.indicator])[e.list, e.list])[is.na(object1@BE)]		
+			if(!is.null.object(object1@PH)) object1@PH[is.na(object1@PH)] <- ((object2$psi[name.indicator, name.indicator])[k.list, k.list])[is.na(object1@PH)]
+			if(!is.null.object(object1@KA)) object1@KA[is.na(object1@KA)] <- ((object2$alpha[name.indicator,])[e.list])[is.na(object1@KA)]		
+			if(!is.null.object(object1@GA)) object1@GA[is.na(object1@GA)] <- ((object2$beta[name.indicator, name.indicator])[e.list, k.list])[is.na(object1@GA)]	
+		} else if (modelType == "SEM") {
+			ny <- nrow(object1@LY)
+			ne <- nrow(object1@PS)
+			name.indicator <- paste("y", 1:ny, sep="")
+			name.factor <- paste("e", 1:ne, sep="")
+			if(!is.null.object(object1@LY)) object1@LY[is.na(object1@LY)] <- (object2$lambda[name.indicator, name.factor])[is.na(object1@LY)]
+			if(!is.null.object(object1@PS)) object1@PS[is.na(object1@PS)] <- (object2$psi[name.factor, name.factor])[is.na(object1@PS)]
+			if(!is.null.object(object1@TE)) object1@TE[is.na(object1@TE)] <- (object2$theta[name.indicator, name.indicator])[is.na(object1@TE)]
+			if(!is.null.object(object1@TY)) object1@TY[is.na(object1@TY)] <- (object2$nu[name.indicator,])[is.na(object1@TY)]
+			if(!is.null.object(object1@AL)) object1@AL[is.na(object1@AL)] <- (object2$alpha[name.factor,])[is.na(object1@AL)]		
+			if(!is.null.object(object1@BE)) object1@BE[is.na(object1@BE)] <- (object2$beta[name.factor, name.factor])[is.na(object1@BE)]		
+		} else if (modelType == "SEM.exo") {
+			ny <- nrow(object1@LY)
+			nx <- nrow(object1@LX)
+			ne <- nrow(object1@PS)
+			nk <- nrow(object1@PH)
+			name.indicator <- c(paste("x", 1:nx, sep=""), paste("y", 1:ny, sep=""))
+			name.factor <- c(paste("k", 1:nk, sep=""), paste("e", 1:ne, sep=""))
+			k.list <- 1:nk
+			e.list <- (nk+1):(nk+ne)
+			if(!is.null.object(object1@PS)) object1@PS[is.na(object1@PS)] <- ((object2$psi[name.factor, name.factor])[e.list, e.list])[is.na(object1@PS)]
+			if(!is.null.object(object1@AL)) object1@AL[is.na(object1@AL)] <- ((object2$alpha[name.factor,])[e.list])[is.na(object1@AL)]		
+			if(!is.null.object(object1@BE)) object1@BE[is.na(object1@BE)] <- ((object2$beta[name.factor, name.factor])[e.list, e.list])[is.na(object1@BE)]		
+			if(!is.null.object(object1@PH)) object1@PH[is.na(object1@PH)] <- ((object2$psi[name.factor, name.factor])[k.list, k.list])[is.na(object1@PH)]
+			if(!is.null.object(object1@KA)) object1@KA[is.na(object1@KA)] <- ((object2$alpha[name.factor,])[e.list])[is.na(object1@KA)]		
+			if(!is.null.object(object1@GA)) object1@GA[is.na(object1@GA)] <- ((object2$beta[name.factor, name.factor])[e.list, k.list])[is.na(object1@GA)]	
+			x.list <- 1:nx
+			y.list <- (nx+1):(nx+ny)
+			if(!is.null.object(object1@LY)) object1@LY[is.na(object1@LY)] <- ((object2$lambda[name.indicator, name.factor])[y.list, e.list])[is.na(object1@LY)]
+			if(!is.null.object(object1@TE)) object1@TE[is.na(object1@TE)] <- ((object2$theta[name.indicator, name.indicator])[y.list, y.list])[is.na(object1@TE)]
+			if(!is.null.object(object1@TY)) object1@TY[is.na(object1@TY)] <- ((object2$nu[name.indicator,])[y.list])[is.na(object1@TY)]
+			if(!is.null.object(object1@LX)) object1@LX[is.na(object1@LX)] <- ((object2$lambda[name.indicator, name.factor])[x.list, k.list])[is.na(object1@LX)]
+			if(!is.null.object(object1@TD)) object1@TD[is.na(object1@TD)] <- ((object2$theta[name.indicator, name.indicator])[x.list, x.list])[is.na(object1@TD)]
+			if(!is.null.object(object1@TX)) object1@TX[is.na(object1@TX)] <- ((object2$nu[name.indicator,])[x.list])[is.na(object1@TX)]
+			if(!is.null.object(object1@TH)) object1@TH[is.na(object1@TH)] <- ((object2$theta[name.indicator, name.indicator])[x.list, y.list])[is.na(object1@TH)]
+		} else {
+			stop("something wrong!")
+		}
+		# if(exo == FALSE) {
+			# if(!is.null.object(object1@LY)) object1@LY[is.na(object1@LY)] <- object2$lambda[is.na(object1@LY)]
+			# if(!is.null.object(object1@PS)) object1@PS[is.na(object1@PS)] <- object2$psi[is.na(object1@PS)]
+			# if(!is.null.object(object1@TE)) object1@TE[is.na(object1@TE)] <- object2$theta[is.na(object1@TE)]
+			# if(!is.null.object(object1@TY)) object1@TY[is.na(object1@TY)] <- object2$nu[is.na(object1@TY)]
+			# if(!is.null.object(object1@AL)) object1@AL[is.na(object1@AL)] <- object2$alpha[is.na(object1@AL)]		
+			# if(!is.null.object(object1@BE)) object1@BE[is.na(object1@BE)] <- object2$beta[is.na(object1@BE)]		
+		# } else {
+			# ne <- nrow(object1@PS)
+			# nk <- nrow(object1@PH)
+			# k.list <- 1:nk
+			# e.list <- (nk+1):(nk+ne)
+			# if(!is.null.object(object1@PS)) object1@PS[is.na(object1@PS)] <- (object2$psi[e.list, e.list])[is.na(object1@PS)]
+			# if(!is.null.object(object1@AL)) object1@AL[is.na(object1@AL)] <- (object2$alpha[e.list])[is.na(object1@AL)]		
+			# if(!is.null.object(object1@BE)) object1@BE[is.na(object1@BE)] <- (object2$beta[e.list, e.list])[is.na(object1@BE)]		
+			# if(!is.null.object(object1@PH)) object1@PH[is.na(object1@PH)] <- (object2$psi[k.list, k.list])[is.na(object1@PH)]
+			# if(!is.null.object(object1@KA)) object1@KA[is.na(object1@KA)] <- (object2$alpha[e.list])[is.na(object1@KA)]		
+			# if(!is.null.object(object1@GA)) object1@GA[is.na(object1@GA)] <- (object2$beta[e.list, k.list])[is.na(object1@GA)]	
+			# if(modelType == "SEM.exo") {
+				# nx <- nrow(object1@LX)
+				# ny <- nrow(object1@LY)
+				# x.list <- 1:nx
+				# y.list <- (nx+1):(nx+ny)
+				# if(!is.null.object(object1@LY)) object1@LY[is.na(object1@LY)] <- (object2$lambda[y.list, e.list])[is.na(object1@LY)]
+				# if(!is.null.object(object1@TE)) object1@TE[is.na(object1@TE)] <- (object2$theta[y.list, y.list])[is.na(object1@TE)]
+				# if(!is.null.object(object1@TY)) object1@TY[is.na(object1@TY)] <- (object2$nu[y.list])[is.na(object1@TY)]
+				# if(!is.null.object(object1@LX)) object1@LX[is.na(object1@LX)] <- (object2$lambda[x.list, k.list])[is.na(object1@LX)]
+				# if(!is.null.object(object1@TD)) object1@TD[is.na(object1@TD)] <- (object2$theta[x.list, x.list])[is.na(object1@TD)]
+				# if(!is.null.object(object1@TX)) object1@TX[is.na(object1@TX)] <- (object2$nu[x.list])[is.na(object1@TX)]
+				# if(!is.null.object(object1@TH)) object1@TH[is.na(object1@TH)] <- (object2$theta[x.list, y.list])[is.na(object1@TH)]
+			# }
+		# }
+		return(new("SimRSet", modelType=object1@modelType, PS=object1@PS, AL=object1@AL, BE=object1@BE, PH=object1@PH, KA=object1@KA, GA=object1@GA,
+			LY=object1@LY, TE=object1@TE, TY=object1@TY, LX=object1@LX, TD=object1@TD, TX=object1@TX, TH=object1@TH))
+	}
+)
+#Arguments: object1 are SimFreeParam.c of that saves all free parameters and values of fixed parameters
+#			object2 are lavaan estimates or standard error
+#Description: This function will find any free parameters in the object1 and search for appropriate number from object2 and plug in the free parameters.
+#Return: SimRSet.c containing parameter estimates or standard errors.
