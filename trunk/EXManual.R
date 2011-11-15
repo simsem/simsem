@@ -1,39 +1,29 @@
-### Might need them if reading from source codes.
- # source("simDist.R")
- # source("simMatrix.R")
- # source("simMatrixSet.R")
- # source("simConstraint.R")
- # source("matrixSet.R")
- # source("freeParamSet.R")
- # source("reducedMatrixSet.R")
- # source("misspecifiedSet.R")
- # source("simData.R")
- # source("simModel.R")
- # source("simResult.R")
- # source("subMatrixSet.R")
- # source("simConstraint.R")
-
 #Include Gamma Hat and Adjusted Gamma Hat in Fit Indices
 #TRUE and FALSE + Number of starting values\
 #Call it population value instead of starting value
 #Summary function put star for fixed parameters (Any nonzero values that is fixed is labelled as stars)
 
+#####Result
+# Bias behind each simAnalysis
+# Coverage by confidence interval
+# Bias from its expected value of random distribution
+# Trimed means #
 
 ################################## Example 1 ##############################################
 library(simsem)
 
-sourceDir <- function(path, trace = TRUE, ...) {
-    for (nm in list.files(path, pattern = "\\.[RrSsQq]$")) {
-       if(trace) cat(nm,":")           
-       source(file.path(path, nm), ...)
-       if(trace) cat("\n")
-    }
- }
+# sourceDir <- function(path, trace = TRUE, ...) {
+    # for (nm in list.files(path, pattern = "\\.[RrSsQq]$")) {
+       # if(trace) cat(nm,":")           
+       # source(file.path(path, nm), ...)
+       # if(trace) cat("\n")
+    # }
+ # }
 #path <- "C:/Users/Sunthud/Desktop/My Dropbox/Fit Indices/Program/simsem/trunk/DataGeneration/backup/Version0.0-1.8/simsem/R"
-path <- "C:/Users/Sunthud/simsem_backup/simsem/R/"
-source(paste(path, "AllClass.R", sep=""))
-source(paste(path, "AllGenerics.R", sep=""))
-sourceDir(path)
+# path <- "C:/Users/Sunthud/simsem_backup/simsem/R/"
+# source(paste(path, "AllClass.R", sep=""))
+# source(paste(path, "AllGenerics.R", sep=""))
+# sourceDir(path)
 
 loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA
@@ -55,10 +45,6 @@ Output <- simResult(SimData, SimModel, 100)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 
-# Bias behind each simAnalysis
-# Coverage by confidence interval
-# Bias from its expected value of random distribution
-# Trimed means #
 
 #################################### Example 2 #######################
 

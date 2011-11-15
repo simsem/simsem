@@ -31,7 +31,8 @@ simResult(simData, simModel, nRep, seed = 123321, silent = FALSE)
 	\code{\linkS4class{SimResult}} that saves analysis result from simulate data.
 }
 \author{
-    Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
+    Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu}); 
+	Patrick Miller (University of Kansas; \email{patr1ckm@ku.edu})
 }
 \seealso{
 	\itemize{

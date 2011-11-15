@@ -1,7 +1,7 @@
 #Assumes start in the trunk
 # This allows us to source our files with more organization
 
-install.packages("simsem_0.0-1.tar.gz", repos=NULL, type="source")
+install.packages("simsem_0.0-2.tar.gz", repos=NULL, type="source")
 library(simsem)
 library(Rmpi)
 
@@ -33,27 +33,27 @@ build.example.model <- function() {
   factor.loading <- matrix(NA, 4, 2)
   factor.loading[,1] <- 1
   factor.loading[,2] <- 0:3
-  LY <- matrix.object(factor.loading)
+  LY <- simMatrix(factor.loading)
 
   factor.mean <- rep(NA, 2)
   factor.mean.starting <- c(5,2)
-  AL <- vector.object(factor.mean, factor.mean.starting)
+  AL <- simVector(factor.mean, factor.mean.starting)
 
   factor.var <- rep(NA,2)
   factor.var.starting <- c(1, 0.25)
-  VPS <- vector.object(factor.var, factor.var.starting)
+  VPS <- simVector(factor.var, factor.var.starting)
 
   factor.cor <- matrix(NA,2,2)
   diag(factor.cor) <- 1
-  PS <- sym.matrix.object(factor.cor, 0.5)
+  PS <- symMatrix(factor.cor, 0.5)
 
-  VTE <- vector.object(rep(NA,4),1.2)
+  VTE <- simVector(rep(NA,4),1.2)
 
-  TE <- sym.matrix.object(diag(4))
+  TE <- symMatrix(diag(4))
 
-  TY <- vector.object(rep(0,4))
+  TY <- simVector(rep(0,4))
 
-  LCA.Model <- matrix.CFA.object(LY=LY, PS=PS, VPS=VPS, AL=AL,
+  LCA.Model <- simSetCFA(LY=LY, PS=PS, VPS=VPS, AL=AL,
                                VTE=VTE, TE=TE, TY=TY)
   return(LCA.Model)
   
@@ -61,8 +61,8 @@ build.example.model <- function() {
 
 
 data.model <- build.example.model()
-data.object <- data.object(300, data.model)
-sim.data.model <- model.object(data.model)
+data.object <- simData(300, data.model)
+sim.data.model <- simModel(data.model)
 
 
 complete.l <- list()
@@ -70,7 +70,7 @@ build.data.sets <- function(model,obs,sets) {
   for(i in 1:sets) { complete.l[[i]] <- run(model,obs) }
   return(complete.l) }
 
-complete.l <- build.data.sets(data.object,100,3)
+complete.l <- build.data.sets(simData,100,3)
 
 imposeMissing <- function(data.mat){
 
@@ -148,7 +148,7 @@ MI.results.se[i,]<-unlist(MI.results.l[[i]][[2]])
 MI.results.fit[i,]<-unlist(MI.results.l[[i]][[3]])
 }
 
-Result <- new("simResult", Replication=length(MI.results.l), Estimates=as.data.frame(MI.results.param), SE=as.data.frame(MI.results.se), Fit=as.data.frame(MI.results.fit), Convergence = c(0))
+Result <- new("simResult", nRep=length(MI.results.l), coef=as.data.frame(MI.results.param), se=as.data.frame(MI.results.se), fit=as.data.frame(MI.results.fit), converged = c(0))
 Result
 
 

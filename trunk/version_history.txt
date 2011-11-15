@@ -19,3 +19,15 @@ simsem, Version 0.0-1.8 10/12/11
 - Add new function summary.parameters for simResult
 - Add documentation for simAnalysis.c and summary.parameters function
 - Update the vignette on the summary.parameters function
+
+simsem, Version 0.0-2.0 11/15/11
+
+- Change all public function names and public function arguments to camelCase (private functions still have bad naming)
+- Change the names and attributes of all public and private classes.
+- Change file names according to the name changes.
+*All names changes details are in the simsemNameChangeToV0.0-2.xls
+- All documentation are changed according to the name changes.
+- Use \itemize and \enumerate appropriate to the context in documentation files
+- simResult.f can take list of data frame (Thanks, Patrick)
+- Make silent argument in simResult.f to be better (some error messages still appear)
+- Update the vigette according to the name changes and comments from Maurico
