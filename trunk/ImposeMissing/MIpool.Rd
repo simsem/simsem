@@ -1,5 +1,5 @@
-\name{MIpool}
-\alias{MIpool}
+\name{miPool}
+\alias{miPool}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Function to pool imputed results
@@ -9,7 +9,7 @@ The function takes a list of imputed results (parameters, standard errors and fi
 and returns pooled parameter estimates, standard errors, and fit indices.
 }
 \usage{
-MIpool(imputed.results, imps)
+miPool(imputed.results, imps)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

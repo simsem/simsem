@@ -40,7 +40,7 @@ runMI<- function(data.mat,data.model,imps) {
 
   
   
-  comb.results<-MIpool(imputed.results,imps)
+  comb.results<-miPool(imputed.results,imps)
   
   return(comb.results)
 
