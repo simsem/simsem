@@ -22,14 +22,15 @@ tests <- function() {
 # Input: Data Set
 # Output: Boolean matrix of values to delete
 #
-# Right now, function defaults to a basic 3-form design,with sequentially grouped items
+# Right now, function defaults to NULL missingness. If number of forms is specified, items are divided equally and
+# grouped sequentially.
 # (i.e. columns 1-5 are shared, 6-10 are A, 11-15 are B, and 16-20 are C)
 
 # TODO:
 # Warnings for illegal groupings
 # Check to see if item groupings are valid?
   
-planned.missing <- function(dims=c(0,0),nforms=3,itemGroups=NULL,twoMethod=NULL, covs=NULL) {
+planned.missing <- function(dims=c(0,0),nforms=NULL,itemGroups=NULL,twoMethod=NULL, covs=NULL) {
   
   nitems <- dims[2]
   nobs <- dims[1]
@@ -37,34 +38,35 @@ planned.missing <- function(dims=c(0,0),nforms=3,itemGroups=NULL,twoMethod=NULL,
 
   log.mat <- matrix(FALSE,ncol=nitems,nrow=nobs)
 
-  if ( ((!is.null(itemGroups)) && (class(itemGroups) != "list")) ) {
-    stop("itemGroups not a list")
-  } 
- 
-  # groups items into sets of column indices (in the 3 form case, shared/a/b/c)
-  if (is.null(itemGroups)) {
-    items.in.group <- nitems/(nforms+1)
-    itemGroups <- generate.indices(nforms+1,items.in.group,excl)
-  }
+  if(!is.null(nforms) && nforms != 0) {
+    if ( ((!is.null(itemGroups)) && (class(itemGroups) != "list")) ) {
+      stop("itemGroups not a list")
+    } 
 
-  # groups observations into sets of row indices. Each set "receives" a different "form"
+   # groups items into sets of column indices (in the 3 form case, shared/a/b/c)
 
-  obs.in.group <- nobs / (nforms)
-  obsGroups <- generate.indices(nforms,obs.in.group,excl=NULL)
- 
-  if (!is.null(twoMethod)) {
-    col <- unlist(twoMethod[1])
-    percent <- unlist(twoMethod[2])
-    toDelete <- 1:((percent)*nobs)
-    log.mat[toDelete,col] <- TRUE
-  }
+   if (is.null(itemGroups)) {
+     items.in.group <- nitems/(nforms+1)
+     itemGroups <- generate.indices(nforms+1,items.in.group,excl)
+   }
+
+   # groups observations into sets of row indices. Each set "receives" a different "form"
+
+   obs.in.group <- nobs / (nforms)
+   obsGroups <- generate.indices(nforms,obs.in.group,excl=NULL)
+
+   # Create Missing Matrix
+     for(i in 1:nforms) {
+       log.mat[obsGroups[[i]],itemGroups[[i+1]]] <- TRUE
   
-  else {
-  # Create Missing Matrix
-    for(i in 1:nforms) {
-      log.mat[obsGroups[[i]],itemGroups[[i+1]]] <- TRUE
-    }
+     }
   }
+   if (!is.null(twoMethod)) {
+     col <- unlist(twoMethod[1])
+     percent <- unlist(twoMethod[2])
+     toDelete <- 1:((percent)*nobs)
+     log.mat[toDelete,col] <- TRUE
+   }
 
   return (log.mat)
 }
