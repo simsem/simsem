@@ -1,6 +1,6 @@
 
 tests <- function() {
-  data <- matrix(rep(rnorm(10,1,1),20),ncol=20)
+  data <- matrix(rep(rnorm(10,1,1),19),ncol=19)
 
   pl1 <- planned.missing(dim(data))
   
@@ -10,16 +10,12 @@ tests <- function() {
 
   pl2 <- planned.missing(dim(data), itemGroups=itemGroups)
 
-  #obsGroups <- list(c(1,2,3,4),c(6,8,10),c(5,7,9))
-  #pl3 <- planned.missing(dim(data),obsGroups = obsGroups)
-
-  # Rows 6/8/10 should be the same, as should 5,7,9
-  # Should alternate T/F on columns 12 - 20
-  pl4 <- planned.missing(dim(data),itemGroups=itemGroups,obsGroups=obsGroups)
-
   pl5 <- planned.missing(dim(data),nforms=4)
 
   pl6 <- planned.missing(dim(data),twoMethod=c(19,.8))
+
+  pl7 <- planned.missing(dim(data),covs=c(19,20))
+  pl8 <- planned.missing(dim(data),covs=c(4,5,6))
 }
 
 # Function to poke holes in the data for planned missing designs. Currently, we default a 3-form design.
@@ -30,13 +26,9 @@ tests <- function() {
 # (i.e. columns 1-5 are shared, 6-10 are A, 11-15 are B, and 16-20 are C)
 
 # TODO:
-# Pass item indices for grouping
 # Warnings for illegal groupings
-# Also deal with covariates?
 # Check to see if item groupings are valid?
   
-# Two method planned missing design: everyone gets cheap measure, few get expensive. 2 form? 1 form design.
-# n-form design - list of groupings. 
 planned.missing <- function(dims=c(0,0),nforms=3,itemGroups=NULL,twoMethod=NULL, covs=NULL) {
   
   nitems <- dims[2]
@@ -48,14 +40,6 @@ planned.missing <- function(dims=c(0,0),nforms=3,itemGroups=NULL,twoMethod=NULL,
   if ( ((!is.null(itemGroups)) && (class(itemGroups) != "list")) ) {
     stop("itemGroups not a list")
   } 
-
-#  if ( ((!is.null(obsGroups)) && (class(obsGroups) != "list")) ) {
-#    stop("obsGroups not a list")
-#  }
-
-  #if (!is.null(twoMethod) && (class(twoMethod) != "numeric")) {
-  #  stop("twoMethod not a valid value")
-  #}
  
   # groups items into sets of column indices (in the 3 form case, shared/a/b/c)
   if (is.null(itemGroups)) {
@@ -63,7 +47,7 @@ planned.missing <- function(dims=c(0,0),nforms=3,itemGroups=NULL,twoMethod=NULL,
     itemGroups <- generate.indices(nforms+1,items.in.group,excl)
   }
 
-# groups observations into sets of row indices. Each set "receives" a different "form"
+  # groups observations into sets of row indices. Each set "receives" a different "form"
 
   obs.in.group <- nobs / (nforms)
   obsGroups <- generate.indices(nforms,obs.in.group,excl=NULL)
@@ -74,6 +58,7 @@ planned.missing <- function(dims=c(0,0),nforms=3,itemGroups=NULL,twoMethod=NULL,
     toDelete <- 1:((percent)*nobs)
     log.mat[toDelete,col] <- TRUE
   }
+  
   else {
   # Create Missing Matrix
     for(i in 1:nforms) {
@@ -87,7 +72,7 @@ planned.missing <- function(dims=c(0,0),nforms=3,itemGroups=NULL,twoMethod=NULL,
 
 # Default generation method for item groupings and observation groupings.
 # Generates sequential groups of lists of numbers based on the desired number of groups,
-# and the number of items in a group.
+# and the number of items in a group, excluding certain indices.
 #
 # EX: generate.indices(3,4)
 # [[1]]
@@ -97,8 +82,8 @@ planned.missing <- function(dims=c(0,0),nforms=3,itemGroups=NULL,twoMethod=NULL,
 # [[3]]
 # [1] 9 10 11 12
 generate.indices <- function(ngroups, items.in.group,excl=NULL) {
-
-  a <- 1:(ngroups*items.in.group)
+  
+  a <- 1:(ngroups*items.in.group) # set of item indices
   
   if(!is.null(excl)){
     anot <- a[-excl]
@@ -116,16 +101,6 @@ generate.indices <- function(ngroups, items.in.group,excl=NULL) {
     }
   }
     
-  #for (i in 1:ngroups) {
-  #  if (i == 1) {
-  #    index.list <- list(1:items.in.group)
-  #  }
-  #  else {
-  #    last.element.index <- length(index.list[[i-1]])
-  #    new.group.index <- (index.list[[i-1]][last.element.index]+1):(ipg*(i))
-  #    index.list <- c(index.list,list(new.group.index))
-  #  }
-  #}
   return(index.list)
 }
 

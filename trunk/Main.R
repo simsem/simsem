@@ -70,18 +70,24 @@ build.data.sets <- function(model,obs,sets) {
   for(i in 1:sets) { complete.l[[i]] <- run(model,obs) }
   return(complete.l) }
 
-complete.l <- build.data.sets(simData,100,3)
+complete.l <- build.data.sets(data.object,100,3)
 
 imposeMissing <- function(data.mat){
 
+  # Make some covariates
+  c1 <- rnorm(dim(data.mat)[1],0,1)
+  c2 <- rnorm(dim(data.mat)[1],0,5)
+  datac <- cbind(data.mat,c1,c2)
+  covs <- c(dim(data.mat)[2]+1,dim(data.mat)[2]+2)
+
  # TRUE values are values to delete
- log.matpl <- planned.missing(dim(data.mat),covs)
+ log.matpl <- planned.missing(dim(data.mat),covs=covs)
 
  # This will work when we've made some more design decisions about percent missing and covariates
  
- log.mat1 <- makeMCAR(dim(data.mat),.1,covs)
+ log.mat1 <- makeMCAR(dim(data.mat),.1,covs=covs)
  
- log.mat2 <- makeMAR(data.mat,.1,covs)
+ log.mat2 <- makeMAR(data.mat,.1,covs=covs)
 
  data.mat[log.matpl] <- NA
  # data.mat[log.mat1] <- NA
