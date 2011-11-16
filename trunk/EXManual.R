@@ -12,18 +12,19 @@
 ################################## Example 1 ##############################################
 library(simsem)
 
-# sourceDir <- function(path, trace = TRUE, ...) {
-    # for (nm in list.files(path, pattern = "\\.[RrSsQq]$")) {
-       # if(trace) cat(nm,":")           
-       # source(file.path(path, nm), ...)
-       # if(trace) cat("\n")
-    # }
- # }
+sourceDir <- function(path, trace = TRUE, ...) {
+     for (nm in list.files(path, pattern = "\\.[RrSsQq]$")) {
+        if(trace) cat(nm,":")           
+        source(file.path(path, nm), ...)
+        if(trace) cat("\n")
+     }
+}
 #path <- "C:/Users/Sunthud/Desktop/My Dropbox/Fit Indices/Program/simsem/trunk/DataGeneration/backup/Version0.0-1.8/simsem/R"
-# path <- "C:/Users/Sunthud/simsem_backup/simsem/R/"
-# source(paste(path, "AllClass.R", sep=""))
-# source(paste(path, "AllGenerics.R", sep=""))
-# sourceDir(path)
+#path <- "C:/Users/Sunthud/simsem_backup/simsem/R/"
+path <- "C:/Users/student/Documents/simsem_backup/simsem/R/"
+ source(paste(path, "AllClass.R", sep=""))
+ source(paste(path, "AllGenerics.R", sep=""))
+ sourceDir(path)
 
 loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA
@@ -38,7 +39,11 @@ error.cor <- matrix(0, 6, 6)
 diag(error.cor) <- 1
 TD <- symMatrix(error.cor)
 
-CFA.Model <- simSetCFA(LX = LX, PH = PH, TD = TD)
+indicator.mean <- rep(NA, 6)
+MX <- simVector(indicator.mean, 0)
+
+CFA.Model <- simSetCFA(LX = LX, PH = PH, TD = TD, MX = MX)
+
 SimData <- simData(200, CFA.Model)
 SimModel <- simModel(CFA.Model)
 Output <- simResult(SimData, SimModel, 100)
@@ -77,9 +82,9 @@ LCA.Model <- simSetCFA(LY=LY, PS=PS, VPS=VPS, AL=AL, VTE=VTE, TE=TE, TY=TY)
 
 Data.True <- simData(300, LCA.Model)
 SimModel <- simModel(LCA.Model)
-Output <- simResult(Data.True, SimModel, 100)
-getCutoff(Output, 0.05)
-plotCutoff(Output, 0.05)
+#Output <- simResult(Data.True, SimModel, 100)
+#getCutoff(Output, 0.05)
+#plotCutoff(Output, 0.05)
 
 u1 <- simUnif(-0.1, 0.1)
 
@@ -116,16 +121,20 @@ residual.error <- diag(4)
 residual.error[1,2] <- residual.error[2,1] <- NA
 PS <- symMatrix(residual.error, "n31")
 
-Path.Model <- simSetPath(PS = PS, BE = BE)
+ME <- simVector(rep(NA, 4), 0)
+
+Path.Model <- simSetPath(PS = PS, BE = BE, ME = ME)
 
 mis.path.BE <- matrix(0, 4, 4)
 mis.path.BE[4, 1:2] <- NA
 mis.BE <- simMatrix(mis.path.BE, "u1")
 Path.Mis.Model <- simMisspecPath(BE = mis.BE)
 
+Data <- simData(500, Path.Model)
 Data.Mis <- simData(500, Path.Model, Path.Mis.Model)
 SimModel <- simModel(Path.Model)
-Output <- simResult(Data.Mis, SimModel, 100)
+Output <- simResult(Data, SimModel, 100)
+#Output <- simResult(Data.Mis, SimModel, 100)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
