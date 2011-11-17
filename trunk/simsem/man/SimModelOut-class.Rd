@@ -20,12 +20,13 @@ Objects can be created by \code{\link{run}} on the \code{\linkS4class{SimModel}}
     \item{\code{se}:}{Standard errors of parameter saved in matrix arrangement}
     \item{\code{fit}:}{Fit Indices values from each replication}
     \item{\code{converged}:}{Number of convergence replications }
+	\item{\code{paramValue}:}{The parameter values behind the analyzed data.}
   }
 }
 \section{Methods}{
 	\itemize{
 		\item{summary}{To summarize the object}
-		%item{summaryParam}{To summarize only parameter estimates, standard errors, and significance}
+		\item{summaryParam}{To summarize only parameter estimates, standard errors, and significance}
 	}
 }
 \author{

@@ -77,3 +77,7 @@ setGeneric("vectorize.object", function(object, labels, ...) {
 setGeneric("summaryParam", function(object, ...) { 
 	return(standardGeneric("summaryParam")) 
 } )
+
+setGeneric("subtractObject", function(object1, object2, ...) { 
+	return(standardGeneric("subtractObject")) 
+} )

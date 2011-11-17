@@ -6,22 +6,92 @@
 #	object: 	The object that users wish to find summary of the parameters.
 #	...:			Other arguments (None is identified now)
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 11, 2011
+# Date Modified: November 15, 2011
 
-setMethod("summaryParam", signature(object="SimResult"), definition=function(object, alpha=0.05) {
+setMethod("summaryParam", signature(object="SimResult"), definition=function(object, alpha=0.05, detail=FALSE) {
 	coef <- mean(object@coef, na.rm=TRUE)
 	real.se <- sd(object@coef, na.rm=TRUE)
 	estimated.se <- mean(object@se, na.rm=TRUE)
+	estimated.se[estimated.se==0] <- NA
 	z <- object@coef/object@se
 	crit.value <- qnorm(1 - alpha/2)
 	sig <- abs(z) > crit.value
 	pow <- apply(sig, 2, mean, na.rm=TRUE)
 	result <- cbind(coef, real.se, estimated.se, pow)
-	colnames(result) <- c("Estimate Average", "Estimate SD", "Average SE", "Power (!= 0)")
+	colnames(result) <- c("Estimate Average", "Estimate SD", "Average SE", "Power (Not equal 0)")
+	if(!is.null.object(object@paramValue)) {
+		nRep <- nrow(object@coef)
+		nParam <- ncol(object@coef)
+		paramValue <- object@paramValue	
+		if(nrow(object@paramValue) == 1) paramValue <- matrix(unlist(rep(paramValue, nRep)), nRep, nParam, byrow=T)
+		biasParam <- object@coef - paramValue
+		crit <- qnorm(1 - alpha/2)
+		lowerBound <- object@coef - crit * object@se
+		upperBound <- object@coef + crit * object@se
+		cover <- (paramValue > lowerBound) & (paramValue < upperBound)
+		
+		average.param <- apply(paramValue, 2, mean, na.rm=TRUE)
+		sd.param <- apply(paramValue, 2, sd, na.rm=TRUE)
+		average.bias <- apply(biasParam, 2, mean, na.rm=TRUE)
+		perc.cover <- apply(cover, 2, mean, na.rm=TRUE)
+		sd.bias <- apply(biasParam, 2, sd, na.rm=TRUE)
+		perc.cover[estimated.se == 0] <- NA
+		
+		# Estimate = (Estimate - Obtain Param) + (Obtain Param - Exp Param) + Exp Param 
+		# Var(Estimate) = Var(Estimate - Obtain Param) + Var(Obtain Param - Exp Param) + Cov(Estimate - Obtain Param, Obtain Param - Exp Param)
+		# Var(Estimate) = Var(Bias) + Var(Obtain Param) + Cov(Bias, Obtain Param)
+		# Estimated SE = sqrt(Var(Bias))
+		result2 <- cbind(average.param, sd.param, average.bias, sd.bias, perc.cover)
+		colnames(result2) <- c("Average Param", "SD Param", "Average Bias", "SD Bias","Coverage")
+		if(nrow(object@paramValue) == 1) result2 <- result2[,c(1, 3, 5)]
+		result <- data.frame(result, result2)
+		if(detail){
+			relative.bias <- biasParam/paramValue
+			relBias <- apply(relative.bias, 2, mean, na.rm=TRUE)
+			relBias[is.nan(relBias)] <- NA
+			std.bias <- NULL
+			relative.bias.se <- NULL
+			if(nrow(object@paramValue) == 1) {
+				std.bias <- average.bias/real.se
+				relative.bias.se <- (estimated.se - real.se)/real.se
+			} else {
+				std.bias <- average.bias/sd.bias
+				relative.bias.se <- (estimated.se - sd.bias)/sd.bias
+			}
+			result3 <- cbind(relBias, std.bias, relative.bias.se)
+			colnames(result3) <- c("Rel Bias", "Std Bias", "Rel SE Bias")
+			result <- data.frame(result, result3)
+		}
+	}
 	return(as.data.frame(result))
 })
 #Arguments: 
-#	object:		data.frame.c of alternative hypothesis that users wish to plot their sampling distribution
+#	object:		SimResult.c of alternative hypothesis that users wish to find summary of parameters and standard errors
 #	alpha:		A priori alpha level
 #Description: 	This function will find mean of estimates, sd of estimates, mean of standard errors, and power of rejection (null hypothesis of population = 0) from a priori alpha level.
+#Return: 		data.frame.c that contains those information of each parameter.
+
+setMethod("summaryParam", signature(object="SimModelOut"), definition=function(object, alpha=0.05) {
+	lab <- make.labels(object@param, "OpenMx")
+	coef <- vectorize.object(object@coef, lab)
+	se <- vectorize.object(object@se, lab)
+	se[se==0] <- NA
+	z <- coef/se
+	p <- (1 - pnorm(abs(z))) * 2
+	result <- cbind(coef, se, z, p)
+	colnames(result) <- c("Estimate", "SE", "z", "p")
+	if(!is.null.object(object@paramValue)) {
+		paramValue <- vectorize.object(object@paramValue, lab)		
+		biasParam <- vectorize.object(subtractObject(object@coef, object@paramValue), lab)
+		crit <- qnorm(1 - alpha/2)
+		lowerBound <- coef - crit * se
+		upperBound <- coef + crit * se
+		cover <- (paramValue > lowerBound) & (paramValue < upperBound)
+		result <- data.frame(result, Param=paramValue, Bias=biasParam, Coverage=cover)
+	}
+	return(as.data.frame(result))
+})
+#Arguments: 
+#	object:		SimModelOut.c of alternative hypothesis that users wish to find summary of parameters and standard errors
+#Description: 	This function will find estimates, standard error, Wald statistic, and p value (null hypothesis of population = 0).
 #Return: 		data.frame.c that contains those information of each parameter.

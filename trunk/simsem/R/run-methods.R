@@ -315,7 +315,7 @@ setMethod("run", signature(object="SimMisspec"), definition=function(object) {
 #Description: This function will draw all available SimMatrix.c, SymMatrix.c, and SimVector.c and return matrix, symmetric matrix, and vector. 
 #Return: 	misspecifiedSet.c that is a random sample of all objects in SimMisspec.c
 
-setMethod("run", signature="SimData", definition=function(object, n=NULL) {
+setMethod("run", signature="SimData", definition=function(object, n=NULL, dataOnly=TRUE) {
 	if(!require(MASS)) stop("Please install MASS package")
 	modelType <- object@modelType
 	if(is.null(n)) n <- object@n
@@ -338,7 +338,7 @@ setMethod("run", signature="SimData", definition=function(object, n=NULL) {
 				implied.CM.misspec <- create.implied.MACS(misspec)
 				misfit <- average.misfit(implied.CM.misspec$M, implied.CM.misspec$CM, 
 					implied.CM.param$M, implied.CM.param$CM, count.random.object(object@misspec))
-				param <- misspec # Pretend Misspecified as real parameters for data generation
+				#param <- misspec # Pretend Misspecified as real parameters for data generation
 				if(is.null.object(object@misfitBound)) break
 				if(misfit > object@misfitBound[1] & misfit < object@misfitBound[2]) break
 			}
@@ -400,7 +400,14 @@ setMethod("run", signature="SimData", definition=function(object, n=NULL) {
 		}
 	}
 	colnames(Data) <- varnames
-	return(Data)
+	Data <- as.data.frame(Data)
+	if(dataOnly) {
+		return(Data)
+	} else {
+		if(is.null(misspec)) misspec <- new("NullRSet")
+		out <- new("SimDataOut", modelType=object@modelType, data=Data, param=create.free.parameters(object@param), 
+					paramOut=param, misspecOut=misspec, equalCon=object@equalCon)
+	}
 })
 #Arguments: 
 #	object:	SimData.c object
@@ -409,10 +416,23 @@ setMethod("run", signature="SimData", definition=function(object, n=NULL) {
 
 setMethod("run", signature="SimModel", definition=function(object, data) {
 	Output <- NULL
+	DataOut <- NULL
+	if(class(data) == "SimDataOut") {
+		DataOut <- data
+		data <- DataOut@data
+	}
 	if(object@package == "OpenMx") {
 		Output <- runOpenMx(object, data)
 	} else if (object@package == "lavaan") {
 		Output <- runLavaan(object, data)
+	}
+	#is.equal(DataOut@param, Output@param) yes --> compute bias
+	if(!is.null(DataOut)) {
+		check <- all.equal(DataOut@param, Output@param)
+		if(length(check) == 1 && check == TRUE) {
+			#paramOut <- DataOut@paramOut
+			Output@paramValue <- DataOut@paramOut
+		}
 	}
 	return(Output)
 })

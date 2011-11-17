@@ -14,7 +14,7 @@ Objects can be created by \code{\link{simData}}. Also, it can be called by \code
 \section{Slots}{
   \describe{
     \item{\code{modelType}:}{Model type (CFA, Path, or SEM)}
-    \item{\code{n}:}{Sample size  }
+    \item{\code{n}:}{Sample size}
     \item{\code{param}:}{Model specification that used in data generation. It must be in \code{\linkS4class{SimSet}} class.}
     \item{\code{misspec}:}{Model misspecification that used in data generation. It must be in \code{\linkS4class{SimMisspec}} class.}
     \item{\code{equalCon}:}{Equality constraints in data generation. It must be in \code{\linkS4class{SimEqualCon}} class.}
@@ -25,7 +25,8 @@ Objects can be created by \code{\link{simData}}. Also, it can be called by \code
 }
 \section{Methods}{
   \describe{
-    \item{run}{To create data from this class. \code{N} is the additional argument that users may change the sample size when creating data.}
+    \item{run}{To create data from this class. \code{N} is the additional argument that users may change the sample size when creating data. 
+		\code{dataOnly} is default to be \code{TRUE}. If FALSE, the resulting object in \code{\linkS4class{SimDataOut}} can be used to provide details of things used in create the data.}
     \item{summary}{Summarize all attributes in the simData.}
 	 }
 }
@@ -38,6 +39,7 @@ Objects can be created by \code{\link{simData}}. Also, it can be called by \code
 		\item \code{linkS4class{SimMisspec}} for how to specify misspecification in this data generation model. 
 		\item \code{linkS4class{SimEqualCon}} for how to set equality constraints for data generation.
 		\item \code{link{simResult}} for the use of this class to run Monte Carlo simulation.
+		\item \code{linkS4class{SimModelOut}} for the output type after the \code{run} function with \code{dataOnly=TRUE}.
 	}
 }
 \examples{

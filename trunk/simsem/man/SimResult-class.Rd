@@ -20,6 +20,7 @@ Objects can be created by \code{\link{simResult}}. It can also be called from th
     \item{\code{fit}:}{Fit Indices values from each replication}
     \item{\code{converged}:}{Number of convergence replications }
     \item{\code{seed}:}{Seed number. }
+	\item{\code{paramValue}:}{Population model underlying each simulated dataset.}
   }
 }
 \section{Methods}{

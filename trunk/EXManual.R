@@ -20,8 +20,8 @@ sourceDir <- function(path, trace = TRUE, ...) {
      }
 }
 #path <- "C:/Users/Sunthud/Desktop/My Dropbox/Fit Indices/Program/simsem/trunk/DataGeneration/backup/Version0.0-1.8/simsem/R"
-#path <- "C:/Users/Sunthud/simsem_backup/simsem/R/"
-path <- "C:/Users/student/Documents/simsem_backup/simsem/R/"
+path <- "C:/Users/Sunthud/simsem_backup/simsem/R/"
+#path <- "C:/Users/student/Documents/simsem_backup/simsem/R/"
  source(paste(path, "AllClass.R", sep=""))
  source(paste(path, "AllGenerics.R", sep=""))
  sourceDir(path)
@@ -133,8 +133,8 @@ Path.Mis.Model <- simMisspecPath(BE = mis.BE)
 Data <- simData(500, Path.Model)
 Data.Mis <- simData(500, Path.Model, Path.Mis.Model)
 SimModel <- simModel(Path.Model)
-Output <- simResult(Data, SimModel, 100)
-#Output <- simResult(Data.Mis, SimModel, 100)
+#Output <- simResult(Data, SimModel, 1000)
+Output <- simResult(Data.Mis, SimModel, 100)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)

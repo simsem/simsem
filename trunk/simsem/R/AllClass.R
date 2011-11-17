@@ -731,6 +731,55 @@ setClass("SimRSet",
 )
 
 ###################################################################
+# NullRSet
+# Class -- simsem package
+# Null object for VirtualRSet.c 
+# Constructor:	new("NullRSet")
+# Parent Class: VirtualRSet
+# Child Class:	None
+# Methods:
+#	create.implied.MACS
+#	find.OpenMx.values
+#	summary
+# Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
+# Date Modified: October 7, 2011
+
+
+setClass("NullRSet", 
+	contains="SimRSet",
+	representation(
+		modelType="character",
+		LY="matrix",
+		TE="matrix",
+		PS="matrix",
+		BE="matrix",
+		TY="vector",
+		AL="vector",
+		LX="matrix",
+		TD="matrix",
+		PH="matrix",
+		GA="matrix",
+		TX="vector",
+		KA="vector",
+		TH="matrix"),
+	prototype(
+		modelType=character(0),
+		LY=new("NullMatrix"),
+		TE=new("NullMatrix"),
+		PS=new("NullMatrix"),
+		BE=new("NullMatrix"),
+		TY=new("NullVector"),
+		AL=new("NullVector"),
+		LX=new("NullMatrix"),
+		TD=new("NullMatrix"),
+		PH=new("NullMatrix"),
+		GA=new("NullMatrix"),
+		TX=new("NullVector"),
+		KA=new("NullVector"),
+		TH=new("NullMatrix"))
+)
+
+###################################################################
 # SimMisspec
 # Class -- simsem package
 # Set of SimVector.c and SimMatrix.c that saves model misspecification (CFA, Path analysis, or SEM)
@@ -823,6 +872,39 @@ setClass("SimData",
 )
 
 ###################################################################
+# SimDataOut
+# Class -- simsem package
+# This class will save information for data simulation and can create data by run function
+# Constructor:	run(simData, n)
+# Parent Class: None
+# Child Class:	None
+# Attributes:
+#	modelType:	Model type (CFA, Path, or SEM)
+#	data:	data.frame.c of a simulated data
+#	param:		SimSet.c that save model specification
+#	paramOut:	SimRSet.c that saves parameters values used in data generation
+# 	misspecOut: SimRSet.c that saves model misspecification values used in data generation
+#	equalCon:		SimEqualCon.c that specify equality constraint of parameters in data generation
+# Methods:
+#	summary
+# Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
+# Date Modified: November 16, 2011
+
+setClass("SimDataOut", 
+	representation(
+		modelType="character",
+		data="data.frame",
+		param="SimFreeParam",
+		#paramExp="SimRSet",
+		#misspecExp="SimRSet",
+		paramOut="SimRSet",
+		misspecOut="SimRSet",
+		equalCon="SimEqualCon"),
+	prototype(
+		equalCon=new("NullSimEqualCon"))
+)
+
+###################################################################
 # SimModel
 # Class -- simsem package
 # This class will save information for analysis model and be ready for data analysis.
@@ -855,6 +937,21 @@ setClass("SimModel",
 )
 
 ###################################################################
+# NullDataFrame
+# Class -- simsem package
+# The null object of data.frame.c
+# Constructor:	new("NullDataFrame")
+# Parent Class: data.frame
+# Child Class:	None
+# Attributes:	null data.frame 
+# Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
+# Date Modified: November 16, 2011
+
+setClass("NullDataFrame", 
+	contains = "data.frame"
+)
+
+###################################################################
 # SimResult
 # Class -- simsem package
 # This class will save data analysis results from multiple replications and ready to find some useful statistics, such as fit indices cutoffs or power.
@@ -868,6 +965,7 @@ setClass("SimModel",
 #	se:			data.frame.c of standard error of each replication
 #	fit:			data.frame.c of fit indices of each replication
 #	converged:	Number of convergence replications
+#	paramValue:	Parameter values of each replication
 #	seed:		Random number seed
 # Methods:	
 #	summary
@@ -876,7 +974,7 @@ setClass("SimModel",
 #	plotCutoff
 #	plotPower
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 11, 2011
+# Date Modified: November 16, 2011
 
 setClass("SimResult", 
 	representation(
@@ -886,9 +984,11 @@ setClass("SimResult",
 		se="data.frame",
 		fit="data.frame",
 		converged="vector",
-		seed="numeric")
+		paramValue="data.frame",
+		seed="numeric"),
+	prototype(
+		paramValue=new("NullDataFrame"))
 )
-
 
 ###################################################################
 # SimModelOut
@@ -906,9 +1006,10 @@ setClass("SimResult",
 #	se:			Standard errors of parameter estimates
 #	fit:			Vector of fit indices
 #	converged: 	TRUE if the analysis converge
+#	paramValue:		Parameter values behind the data and model result
 # Methods:	None for now.
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 11, 2011
+# Date Modified: November 16, 2011
 
 
 setClass("SimModelOut", # The class provides model result.
@@ -920,8 +1021,10 @@ setClass("SimModelOut", # The class provides model result.
         coef="SimRSet",
         fit="vector",
         se="SimRSet",
-        converged="logical"),
+        converged="logical",
+		paramValue="SimRSet"),
     prototype(
         equalCon=new("NullSimEqualCon"),
-        converged=FALSE)
+        converged=FALSE,
+		paramValue=new("NullRSet"))
 )

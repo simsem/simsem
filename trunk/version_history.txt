@@ -32,3 +32,21 @@ simsem, Version 0.0-2.0 11/15/11
 - Make silent argument in simResult.f to be better (some error messages still appear)
 - Update the vignette according to the name changes and comments from Maurico
 - Add the function recap section in each example in the vignette.
+
+simsem, Version 0.0-2.1 11/16/11
+
+- Add SimDataOut class. The constructor of this class is run(simData, dataOnly=FALSE). 
+	*The attributes of this class are data, free parameters, parameter value underlying the data, parameter value + misspecification underlying the data, and equality constraint.
+- run-simModel.c can take objects from SimDataOut class and analyze bias in parameter estimates and whether confidence intervals cover the underlying parameter values.
+- All summary methods are improved to be more readable and more informative.
+- summary-SimDataOut.c is added
+- summaryParam-SimModelOut.c is added.
+- summaryParam-SimResult.c is modified to provide average parameter values, standard deviation of parameter values, average bias, standard deviation of bias, percentage coverage, relative bias, relative bias of SE, and standardized bias. Last three is provided if setting detail=TRUE.
+- summaryParam documentation file is modified accordingly.
+- SimModelOut.c and SimResult.c are changed to have paramValue attributes.
+- subtractObject.f is written to subtract two sets of parameter values. 
+- Update the vignette by explaining the output from summary.f 
+
+Note
+*.f = function
+*.c = class

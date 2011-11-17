@@ -6,7 +6,7 @@
 #	object: The target object that is used to summarize
 # 	... : Other arguments (None is specified currently)
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 6, 2011
+# Date Modified: November 15, 2011
 
 setMethod("summaryShort", signature="ANY", definition = function(object) {
 		summary(object)
@@ -20,11 +20,8 @@ setMethod("summaryShort", signature="ANY", definition = function(object) {
 setMethod("summaryShort", signature="SimMatrix", definition = function(object) {
 		Data <- object@free
 		Labels <- object@param
-		for(i in 1:nrow(Data)) {
-			for(j in 1:ncol(Data)) {
-				if(is.na(Labels[i,j])) Labels[i,j] <- as.character(Data[i,j])
-			}
-		}
+		Labels[!is.na(Data)] <- as.character(Data[!is.na(Data)])
+		Labels[is.na(Data)] <- paste("NA:", Labels[is.na(Data)], sep="")
 		print(Labels)
 	}
 )
@@ -44,9 +41,8 @@ setMethod("summaryShort", signature="SimMatrix", definition = function(object) {
 setMethod("summaryShort", signature="SimVector", definition = function(object) {
 		Data <- object@free
 		Labels <- object@param
-		for(i in 1:length(Data)) {
-			if(is.na(Labels[i])) Labels[i] <- as.character(Data[i])
-		}
+		Labels[!is.na(Data)] <- as.character(Data[!is.na(Data)])
+		Labels[is.na(Data)] <- paste("NA:", Labels[is.na(Data)], sep="")
 		print(Labels)
 	}
 )

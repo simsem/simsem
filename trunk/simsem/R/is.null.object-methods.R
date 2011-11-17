@@ -5,7 +5,7 @@
 # Argument:
 #	target: 	The checked object
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 6, 2011
+# Date Modified: November 16, 2011
 
 setMethod("is.null.object", signature(target="vector"), definition=function(target) {
 		is(target, "NullVector") || is.nan(target) || (sum(length(target)) == 0)
@@ -78,3 +78,19 @@ setMethod("is.null.object", signature="SimMisspec", definition=function(target) 
 #Arguments: 	SimMisspec.c that users wish to check
 #Description: check whether the SimMisspec.c is NullSimMisspec.c
 #Return: 	TRUE if it is NullSimMisspec.c
+
+setMethod("is.null.object", signature="VirtualRSet", definition=function(target) {
+		is(target, "NullRSet")
+	}
+)
+#Arguments: 	SimMisspec.c that users wish to check
+#Description: check whether the SimMisspec.c is NullSimMisspec.c
+#Return: 	TRUE if it is NullSimMisspec.c
+
+setMethod("is.null.object", signature="data.frame", definition=function(target) {
+		is(target, "NullDataFrame")
+	}
+)
+#Arguments: 	data.frame.c that users wish to check
+#Description: check whether the data.frame.c is NullDataFrame.c
+#Return: 	TRUE if it is NullDataFrame.c

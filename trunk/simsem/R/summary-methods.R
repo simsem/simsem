@@ -6,14 +6,14 @@
 #	object: The target object that is used to summarize
 # 	... : Other arguments (None is specified currently)
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 6, 2011
+# Date Modified: November 16, 2011
 
 setMethod("summary",
     signature(object = "SimNorm"),
     function (object)
     {
 		print("Random Normal Distribution Object.")
-		print(paste("mean is ", format(object@mean, digits=3), ".", sep=""))
+		print(paste("Mean is ", format(object@mean, digits=3), ".", sep=""))
 		print(paste("Standard deviation is ", format(object@sd, digits=3), ".", sep=""))
     }
 )
@@ -27,8 +27,8 @@ setMethod("summary",
     function (object) 
     {
 		print("Random Uniform Distribution Object.")
-		print(paste("min bound is ", format(object@min, digits=3), ".", sep=""))
-		print(paste("max bound is ", format(object@max, digits=3), ".", sep=""))
+		print(paste("Minimum is ", format(object@min, digits=3), ".", sep=""))
+		print(paste("Maximum is ", format(object@max, digits=3), ".", sep=""))
     }
 )
 #Arguments: 
@@ -77,7 +77,7 @@ setMethod("summary", signature="SimVector", definition = function(object) {
 
 setMethod("summary", signature="SimSet", definition= function(object) {
 		cat("SET OF MODEL MATRICES\n")
-		cat("Type\n")
+		cat("Model Type\n")
 		print(object@modelType)
 		cat("-- Endogeneous Variable --\n")
 		print.if.not.null(object@LY, "\nLY: Loading of Indicator.Y on Factor.ETA")
@@ -92,21 +92,22 @@ setMethod("summary", signature="SimSet", definition= function(object) {
 		print.if.not.null(object@VE, "\nVE: Variance of Factor.ETA")
 		print.if.not.null(object@AL, "\nAL: Regression Intercept of Factor.ETA")
 		print.if.not.null(object@ME, "\nME: mean of Factor.ETA")
-		cat("-------------------------------------------------", "\n")
-		cat("-- Exogeneous Variable --\n")
-		#browser()
-		print.if.not.null(object@LX, "\nLX: Loading of Indicator.X on Factor.KSI")
-		print.if.not.null(object@VTD, "\nVTD: Variance of Measurement.Error.DELTA")
-		print.if.not.null(object@TD, "\nTD: Correlation of Measurement.Error.DELTA")
-		print.if.not.null(object@VX, "\nVX: Variance of Indicator.X")
-		print.if.not.null(object@TX, "\nTX: Measurement Intercept of Indicator.X")
-		print.if.not.null(object@MX, "\nMX: mean of Indicator.X")
-		print.if.not.null(object@GA, "\nGA: Regression Coefficient of Factor.ETA on Factor.KSI")
-		print.if.not.null(object@VPH, "\nVPH: Variance of Factor.KSI")
-		print.if.not.null(object@PH, "\nPH: Correlation of Factor.KSI")
-		print.if.not.null(object@KA, "\nKA: mean of Factor.KSI")
-		print.if.not.null(object@TH, "\nTH: Correlation of Measurement.Error.DELTA and Measurement.Error.EPSILON")
-		cat("-------------------------------------------------", "\n")
+		cat("--------------------------", "\n")
+		if(object@modelType == "SEM.exo" | object@modelType == "path.exo") {
+			cat("-- Exogeneous Variable --\n")
+			print.if.not.null(object@LX, "\nLX: Loading of Indicator.X on Factor.KSI")
+			print.if.not.null(object@VTD, "\nVTD: Variance of Measurement.Error.DELTA")
+			print.if.not.null(object@TD, "\nTD: Correlation of Measurement.Error.DELTA")
+			print.if.not.null(object@VX, "\nVX: Variance of Indicator.X")
+			print.if.not.null(object@TX, "\nTX: Measurement Intercept of Indicator.X")
+			print.if.not.null(object@MX, "\nMX: mean of Indicator.X")
+			print.if.not.null(object@GA, "\nGA: Regression Coefficient of Factor.ETA on Factor.KSI")
+			print.if.not.null(object@VPH, "\nVPH: Variance of Factor.KSI")
+			print.if.not.null(object@PH, "\nPH: Correlation of Factor.KSI")
+			print.if.not.null(object@KA, "\nKA: mean of Factor.KSI")
+			print.if.not.null(object@TH, "\nTH: Correlation of Measurement.Error.DELTA and Measurement.Error.EPSILON")
+			cat("--------------------------", "\n")
+		}
 	}
 )
 #Arguments: 
@@ -116,7 +117,7 @@ setMethod("summary", signature="SimSet", definition= function(object) {
 
 setMethod("summary", signature="SimEqualCon", definition=function(object){
 	cat("CONSTRAINT OBJECT\n")
-	cat("Type\n")
+	cat("Model Type\n")
 	print(object@modelType)
 	cat("-------------Constraint----------------\n")
 	for(i in 1:length(object@con)) {
@@ -132,7 +133,7 @@ setMethod("summary", signature="SimEqualCon", definition=function(object){
 
 setMethod("summary", signature="MatrixSet", definition=function(object) {
 		cat("RANDOM NUMBERS OF MODEL MATRICES\n")
-		cat("Type\n")
+		cat("Model Type\n")
 		print(object@modelType)		
 		cat("-- Endogeneous Variable --\n")
 		print.if.not.null(object@LY, "\nLY: Loading of Indicator.Y on Factor.ETA")
@@ -148,19 +149,21 @@ setMethod("summary", signature="MatrixSet", definition=function(object) {
 		print.if.not.null(object@AL, "\nAL: Regression Intercept of Factor.ETA")
 		print.if.not.null(object@ME, "\nME: mean of Factor.ETA")
 		cat("-------------------------------------------------", "\n")
+		if(object@modelType == "SEM.exo" | object@modelType == "path.exo") {
 		cat("-- Exogeneous Variable --\n")
-		print.if.not.null(object@LX, "\nLX: Loading of Indicator.X on Factor.KSI")
-		print.if.not.null(object@VTD, "\nVTD: Variance of Measurement.Error.DELTA")
-		print.if.not.null(object@TD, "\nTD: Correlation of Measurement.Error.DELTA")
-		print.if.not.null(object@VX, "\nVX: Variance of Indicator.X")
-		print.if.not.null(object@TX, "\nTX: Measurement Intercept of Indicator.X")
-		print.if.not.null(object@MX, "\nMX: mean of Indicator.X")
-		print.if.not.null(object@GA, "\nGA: Regression Coefficient of Factor.ETA on Factor.KSI")
-		print.if.not.null(object@VPH, "\nVPH: Variance of Factor.KSI")
-		print.if.not.null(object@PH, "\nPH: Correlation of Factor.KSI")
-		print.if.not.null(object@KA, "\nKA: mean of Factor.KSI")
-		print.if.not.null(object@TH, "\nTH: Correlation of Measurement.Error.DELTA and Measurement.Error.EPSILON")
-		cat("-------------------------------------------------", "\n")
+			print.if.not.null(object@LX, "\nLX: Loading of Indicator.X on Factor.KSI")
+			print.if.not.null(object@VTD, "\nVTD: Variance of Measurement.Error.DELTA")
+			print.if.not.null(object@TD, "\nTD: Correlation of Measurement.Error.DELTA")
+			print.if.not.null(object@VX, "\nVX: Variance of Indicator.X")
+			print.if.not.null(object@TX, "\nTX: Measurement Intercept of Indicator.X")
+			print.if.not.null(object@MX, "\nMX: mean of Indicator.X")
+			print.if.not.null(object@GA, "\nGA: Regression Coefficient of Factor.ETA on Factor.KSI")
+			print.if.not.null(object@VPH, "\nVPH: Variance of Factor.KSI")
+			print.if.not.null(object@PH, "\nPH: Correlation of Factor.KSI")
+			print.if.not.null(object@KA, "\nKA: mean of Factor.KSI")
+			print.if.not.null(object@TH, "\nTH: Correlation of Measurement.Error.DELTA and Measurement.Error.EPSILON")
+			cat("-------------------------------------------------", "\n")
+		}
 	}
 )
 #Arguments: 
@@ -170,7 +173,7 @@ setMethod("summary", signature="MatrixSet", definition=function(object) {
 
 setMethod("summary", signature="SimFreeParam", definition=function(object) {
 		cat("SET OF ESTIMATED PARAMETERS\n")
-		cat("Type\n")
+		cat("Model Type\n")
 		print(object@modelType)		
 		cat("-- Endogeneous Variable --\n")
 		print.if.not.null(object@LY, "\nLY: Loading of Indicator.Y on Factor.ETA")
@@ -180,15 +183,17 @@ setMethod("summary", signature="SimFreeParam", definition=function(object) {
 		print.if.not.null(object@PS, "\nPS: Correlation of Regression.Residual.PSI")
 		print.if.not.null(object@AL, "\nAL: Regression Intercept of Factor.ETA")
 		cat("-------------------------------------------------", "\n")
-		cat("-- Exogeneous Variable --\n")
-		print.if.not.null(object@LX, "\nLX: Loading of Indicator.X on Factor.KSI")
-		print.if.not.null(object@TD, "\nTD: Correlation of Measurement.Error.DELTA")
-		print.if.not.null(object@TX, "\nTX: Measurement Intercept of Indicator.X")
-		print.if.not.null(object@GA, "\nGA: Regression Coefficient of Factor.ETA on Factor.KSI")
-		print.if.not.null(object@PH, "\nPH: Correlation of Factor.KSI")
-		print.if.not.null(object@KA, "\nKA: mean of Factor.KSI")
-		print.if.not.null(object@TH, "\nTH: Correlation of Measurement.Error.DELTA and Measurement.Error.EPSILON")
-		cat("-------------------------------------------------", "\n")
+		if(object@modelType == "SEM.exo" | object@modelType == "path.exo") {
+			cat("-- Exogeneous Variable --\n")
+			print.if.not.null(object@LX, "\nLX: Loading of Indicator.X on Factor.KSI")
+			print.if.not.null(object@TD, "\nTD: Correlation of Measurement.Error.DELTA")
+			print.if.not.null(object@TX, "\nTX: Measurement Intercept of Indicator.X")
+			print.if.not.null(object@GA, "\nGA: Regression Coefficient of Factor.ETA on Factor.KSI")
+			print.if.not.null(object@PH, "\nPH: Correlation of Factor.KSI")
+			print.if.not.null(object@KA, "\nKA: mean of Factor.KSI")
+			print.if.not.null(object@TH, "\nTH: Correlation of Measurement.Error.DELTA and Measurement.Error.EPSILON")
+			cat("-------------------------------------------------", "\n")
+		}
 	}
 )
 #Arguments: 
@@ -198,7 +203,7 @@ setMethod("summary", signature="SimFreeParam", definition=function(object) {
 
 setMethod("summary", signature="SimLabels", definition=function(object) {
 		cat("SET OF ESTIMATED PARAMETERS\n")
-		cat("Type\n")
+		cat("Model Type\n")
 		print(object@modelType)		
 		cat("-- Endogeneous Variable --\n")
 		print.if.not.null(object@LY, "\nLY: Loading of Indicator.Y on Factor.ETA")
@@ -208,15 +213,17 @@ setMethod("summary", signature="SimLabels", definition=function(object) {
 		print.if.not.null(object@PS, "\nPS: Correlation of Regression.Residual.PSI")
 		print.if.not.null(object@AL, "\nAL: Regression Intercept of Factor.ETA")
 		cat("-------------------------------------------------", "\n")
-		cat("-- Exogeneous Variable --\n")
-		print.if.not.null(object@LX, "\nLX: Loading of Indicator.X on Factor.KSI")
-		print.if.not.null(object@TD, "\nTD: Correlation of Measurement.Error.DELTA")
-		print.if.not.null(object@TX, "\nTX: Measurement Intercept of Indicator.X")
-		print.if.not.null(object@GA, "\nGA: Regression Coefficient of Factor.ETA on Factor.KSI")
-		print.if.not.null(object@PH, "\nPH: Correlation of Factor.KSI")
-		print.if.not.null(object@KA, "\nKA: mean of Factor.KSI")
-		print.if.not.null(object@TH, "\nTH: Correlation of Measurement.Error.DELTA and Measurement.Error.EPSILON")
-		cat("-------------------------------------------------", "\n")
+		if(object@modelType == "SEM.exo" | object@modelType == "path.exo") {
+			cat("-- Exogeneous Variable --\n")
+			print.if.not.null(object@LX, "\nLX: Loading of Indicator.X on Factor.KSI")
+			print.if.not.null(object@TD, "\nTD: Correlation of Measurement.Error.DELTA")
+			print.if.not.null(object@TX, "\nTX: Measurement Intercept of Indicator.X")
+			print.if.not.null(object@GA, "\nGA: Regression Coefficient of Factor.ETA on Factor.KSI")
+			print.if.not.null(object@PH, "\nPH: Correlation of Factor.KSI")
+			print.if.not.null(object@KA, "\nKA: mean of Factor.KSI")
+			print.if.not.null(object@TH, "\nTH: Correlation of Measurement.Error.DELTA and Measurement.Error.EPSILON")
+			cat("-------------------------------------------------", "\n")
+		}
 	}
 )
 #Arguments: 
@@ -226,7 +233,7 @@ setMethod("summary", signature="SimLabels", definition=function(object) {
 
 setMethod("summary", signature="SimRSet", definition=function(object) {
 		cat("RANDOM NUMBERS OF MODEL MATRICES\n")
-		cat("Type\n")
+		cat("Model Type\n")
 		print(object@modelType)		
 		cat("-- Endogeneous Variable --\n")
 		print.if.not.null(object@LY, "\nLY: Loading of Indicator.Y on Factor.ETA")
@@ -236,15 +243,17 @@ setMethod("summary", signature="SimRSet", definition=function(object) {
 		print.if.not.null(object@PS, "\nPS: Correlation of Regression.Residual.PSI")
 		print.if.not.null(object@AL, "\nAL: Regression Intercept of Factor.ETA")
 		cat("-------------------------------------------------", "\n")
-		cat("-- Exogeneous Variable --\n")
-		print.if.not.null(object@LX, "\nLX: Loading of Indicator.X on Factor.KSI")
-		print.if.not.null(object@TD, "\nTD: Correlation of Measurement.Error.DELTA")
-		print.if.not.null(object@TX, "\nTX: Measurement Intercept of Indicator.X")
-		print.if.not.null(object@GA, "\nGA: Regression Coefficient of Factor.ETA on Factor.KSI")
-		print.if.not.null(object@PH, "\nPH: Correlation of Factor.KSI")
-		print.if.not.null(object@KA, "\nKA: mean of Factor.KSI")
-		print.if.not.null(object@TH, "\nTH: Correlation of Measurement.Error.DELTA and Measurement.Error.EPSILON")
-		cat("-------------------------------------------------", "\n")
+		if(object@modelType == "SEM.exo" | object@modelType == "path.exo") {
+			cat("-- Exogeneous Variable --\n")
+			print.if.not.null(object@LX, "\nLX: Loading of Indicator.X on Factor.KSI")
+			print.if.not.null(object@TD, "\nTD: Correlation of Measurement.Error.DELTA")
+			print.if.not.null(object@TX, "\nTX: Measurement Intercept of Indicator.X")
+			print.if.not.null(object@GA, "\nGA: Regression Coefficient of Factor.ETA on Factor.KSI")
+			print.if.not.null(object@PH, "\nPH: Correlation of Factor.KSI")
+			print.if.not.null(object@KA, "\nKA: mean of Factor.KSI")
+			print.if.not.null(object@TH, "\nTH: Correlation of Measurement.Error.DELTA and Measurement.Error.EPSILON")
+			cat("-------------------------------------------------", "\n")
+		}
 	}
 )
 #Arguments: 
@@ -254,7 +263,7 @@ setMethod("summary", signature="SimRSet", definition=function(object) {
 
 setMethod("summary", signature="SimData", definition=function(object, detail=FALSE) {
 		cat("DATA OBJECT\n")
-		cat("Type\n")
+		cat("Model Type\n")
 		print(object@modelType)
 		cat("Sample Size\n")
 		print(object@n)
@@ -299,7 +308,7 @@ setMethod("summary", signature="SimData", definition=function(object, detail=FAL
 
 setMethod("summary", signature="SimModel", definition=function(object, con=FALSE, start=FALSE) {
 		cat("MODEL OBJECT\n")
-		cat("Type\n")
+		cat("Model Type\n")
 		print(object@modelType)
 		cat("========= Parameters Set ============\n")
 		summary(object@param)
@@ -327,20 +336,22 @@ setMethod("summary", signature="SimModel", definition=function(object, con=FALSE
 #Description: This function will print all elements in the SimModel.c.
 #Return: 	NONE. Results will print on screen only.
 
-setMethod("summary", signature="SimResult", definition=function(object) {
+setMethod("summary", signature="SimResult", definition=function(object, digits=3) {
 		cat("RESULT OBJECT\n")
-		cat("Type\n")
+		cat("Model Type\n")
 		print(object@modelType)
 		cat("========= Fit Indices Cutoffs ============\n")
 		alpha <- c(0.10, 0.05, 0.01, 0.001)
-		cutoffs <- round(sapply(alpha, getCutoff, object=object), 3)
+		cutoffs <- round(sapply(alpha, getCutoff, object=object), digits)
 		colnames(cutoffs) <- alpha
 		names(dimnames(cutoffs)) <- c("Fit Indices", "Alpha")
 		print(cutoffs)
+		cat("========= Parameter Estimates and Standard Errors ============\n")
+		print(round(summaryParam(object), digits))
 		cat("Number of Replications\n")
 		print(object@nRep)
-		cat("Number of Convergent Replications\n")
-		print(object@converged)
+		cat("Number of Converged Replications\n")
+		print(sum(object@converged == TRUE))
 	}
 )
 #Arguments: 
@@ -348,16 +359,56 @@ setMethod("summary", signature="SimResult", definition=function(object) {
 #Description: This function will print all elements in the SimResult.c.
 #Return: 	NONE. Results will print on screen only.
 
-setMethod("summary", signature="SimModelOut", definition=function(object) {
+setMethod("summary", signature="SimModelOut", definition=function(object, digits=3) {
 		cat("MODEL ANALYSIS RESULT OBJECT\n")
 		cat("Fit Indices\n")
-		print(object@fit)
-		cat("converged\n")
+		print(round(object@fit, digits))
+		cat("========= Parameter Estimates and Standard Errors ============\n")
+		print(round(summaryParam(object), digits))
+		cat("Converged\n")
 		print(object@converged)
 	}
 )
 #Arguments: 
-#	object:	SimResult.c that users wish to summarize
-#Description: This function will print all elements in the SimResult.c.
+#	object:	SimModelOut.c that users wish to summarize
+#Description: This function will print all elements in the SimModelOut.c.
 #Return: 	NONE. Results will print on screen only.
+
+setMethod("summary", signature="SimDataOut", definition=function(object, detail=FALSE) {
+		cat("DATA RESULT OBJECT\n")
+		cat("Model Type\n")
+		print(object@modelType)
+		cat("Sample Size\n")
+		print(nrow(object@data))
+		cat("Data Summary")
+		print(summary(object@data))
+		if(detail) {
+			cat("========= Parameters Set ============\n")
+			summary(object@param)
+			cat("Number of free parameters = ", count.random.object(object@param), "\n")
+			cat("=====================================\n")
+			cat("============Parameter Values================\n")
+			summary(object@paramOut)
+			cat("============================================\n")
+			cat("============Parameter Values after adding trivial misspecification=====================\n")
+			ifelse(!is.null.object(object@misspecOut), summary(object@misspecOut), print("None"))
+			cat("============================================\n")
+		} else {
+			if(is.null.object(object@misspecOut)) {
+				cat("============Parameter Values================\n")
+				summary(object@paramOut)
+				cat("============================================\n")
+			} else {
+				cat("============Parameter Values after adding trivial misspecification=====================\n")
+				summary(object@misspecOut)
+				cat("============================================\n")
+			}
+		}
+	}
+)
+#Arguments: 
+#	object:	SimDataOut.c that users wish to summarize
+#Description: This function will print all elements in the SimDataOut.c.
+#Return: 	NONE. Results will print on screen only.
+
 
