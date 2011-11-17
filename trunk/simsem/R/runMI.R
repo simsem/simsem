@@ -24,7 +24,7 @@ runMI<- function(data.mat,data.model,imps,miPackage="amelia") {
   imputed.l<-imputeMissing(data.mat,imps)
   
     #Run models on each imputed data set using  simModel 
-  if (class(data.model)=="simModel") {
+  if (class(data.model)=="SimModel") {
     imputed.results <- lapply(imputed.l, simResult,data.model,1)
   }
   

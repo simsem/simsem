@@ -1,7 +1,7 @@
 #Assumes start in the trunk
 # This allows us to source our files with more organization
 
-install.packages("simsem_0.0-3.tar.gz", repos=NULL, type="source")
+install.packages("simsem_0.0-4.tar.gz", repos=NULL, type="source")
 library(simsem)
 library(Rmpi)
 
@@ -68,65 +68,10 @@ build.data.sets <- function(model,obs,sets) {
 complete.l <- build.data.sets(data.object,100,3)
 
 
-missing.l <- lapply(complete.l,imposeMissing)
+missing.l <- lapply(complete.l,imposeMissing,nforms=3)
 missing.l <- mpi.applyLB(complete.l,imposeMissing)
-# missing.l <- imposeMissing(complete.data.l)
 
-
-# Impute missing data
-# Input: 1 Missing data matrix
-# Out: List of imputations
-imputeMissing <- function(data.mat,imps){
-  # pull out only the imputations
-  require(Amelia)
-  temp.am <- amelia(data.mat,m=imps)
-  return(temp.am$imputations)
-
-} # end imputeMissing
-
-#Impute and run data. Nested lappy statements
-#Input: 1 missing data matrices
-#Output: results from the dataset, combined with Rubin's Rules
-#Output is in the form a a list with parameters, SE, fit, FMI.1, and FMI.2
-runMI<- function(data.mat,data.model,imps) {
-  #Impute missing data
-  imputed.l<-imputeMissing(data.mat,imps)
-  
-  #Run models on each imputed data set
-  #Does this give results from each dataset in the list?
-  
-  # imputed.results<-result.object(imputed.l[[1]],sim.data.model,10)
-
-  imputed.results <- lapply(imputed.l,result.object,data.model,1)
-  comb.results<-MIpool(imputed.results,imps)
-  
-  return(comb.results)
-
-}
-
-
-
-
-
-# This is a list of lists. e.g. ,imputed.l[[1]] contains results from 1 simualted data set
-# imputed[[1]][[1]] is the parameters estimates from the first data set.
-MI.results.l <- lapply(missing.l, runMI,sim.data.model,10)
-MI.results.l <- mpi.applyLB(missing.l,runMI,10)
-
-#Take list of imputed results and turn into a format to coerce into results.object
-#Data frame of estimates, then SE, then fit
-MI.results.param<-matrix(NA,nrow=length(MI.results.l),ncol=length(MI.results.l[[1]][[1]]))
-MI.results.se<-matrix(NA,nrow=length(MI.results.l),ncol=length(MI.results.l[[1]][[2]]))
-MI.results.fit<-matrix(NA,nrow=length(MI.results.l),ncol=length(MI.results.l[[1]][[3]]))
-
-for(i in 1:length(MI.results.l)){
-MI.results.param[i,]<-unlist(MI.results.l[[i]][[1]])
-MI.results.se[i,]<-unlist(MI.results.l[[i]][[2]])
-MI.results.fit[i,]<-unlist(MI.results.l[[i]][[3]])
-}
-
-Result <- new("simResult", nRep=length(MI.results.l), coef=as.data.frame(MI.results.param), se=as.data.frame(MI.results.se), fit=as.data.frame(MI.results.fit), converged = c(0))
-Result
+results.l <- lapply(missing.l,runMI,data.model=data.model,imps=2)
 
 
 mpi.close.Rslaves()
