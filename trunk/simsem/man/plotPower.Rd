@@ -33,13 +33,13 @@ NONE. Only plot the fit indices distributions.
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \section{Details in \dots}{
-	\enumerate{
+	\itemize{
 		\item \code{alpha}:	A priori alpha level to getCutoffs of fit indices (do not specify when you have \code{cutoff})
 		\item \code{usedFit}:	The name of fit indices that researchers wish to plot
 	}
 }
 \seealso{
-	\enumerate{
+	\itemize{
 		\item \code{\linkS4class{SimResult}} for simResult that used in this function.
 		\item \code{\link{getCutoff}} to find values of cutoffs based on null hypothesis sampling distributions only
 	}

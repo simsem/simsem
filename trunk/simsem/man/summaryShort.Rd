@@ -32,7 +32,7 @@ summaryShort(object, ...)
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \seealso{
-	This is the list of classes that can use \code{run} method.
+	This is the list of classes that can use \code{summaryShort} method.
 	\itemize{
 		\item \code{\linkS4class{SimMatrix}}
 		\item \code{\linkS4class{SimVector}}

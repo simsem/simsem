@@ -25,12 +25,12 @@ Objects can be created by \code{\link{simResult}}. It can also be called from th
 }
 \section{Methods}{
 	\itemize{
-		\item{getCutoff} to getCutoff of fit indices based on a priori alpha level.
-		\item{getPower} to getPower of rejection when the simResult is the alternative hypothesis and users specify cutoffs of the fit indices.
-		\item{plotCutoff} to plot null hypothesis sampling distributions of fit indices with an option to draw fit indices cutoffs by specifying a priori alpha level.
-		\item{plotPower} to plot alternative hypothesis (and null hypothesis) with a priori cutoffs or alpha level.
-		\item{summary} to summarize the result output
-		\item{summaryParam} to summarize all parameter estimates
+		\item \code{getCutoff} to getCutoff of fit indices based on a priori alpha level.
+		\item \code{getPower} to getPower of rejection when the simResult is the alternative hypothesis and users specify cutoffs of the fit indices.
+		\item \code{plotCutoff} to plot null hypothesis sampling distributions of fit indices with an option to draw fit indices cutoffs by specifying a priori alpha level.
+		\item \code{plotPower} to plot alternative hypothesis (and null hypothesis) with a priori cutoffs or alpha level.
+		\item \code{summary} to summarize the result output
+		\item \code{summaryParam} to summarize all parameter estimates
 	}
 }
 \author{

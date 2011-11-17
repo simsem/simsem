@@ -44,7 +44,7 @@ adjust(target, param, pos, numAsFixed)
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \seealso{
-	\enumerate{
+	\itemize{
 		\item \code{\linkS4class{SimMatrix}} for random parameter matrix
 		\item \code{\linkS4class{SymMatrix}} for symmetric random parameter matrix
 		\item \code{\linkS4class{SimVector}} for random parameter vector

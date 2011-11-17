@@ -25,8 +25,8 @@ Objects can be created by \code{\link{run}} on the \code{\linkS4class{SimModel}}
 }
 \section{Methods}{
 	\itemize{
-		\item{summary}{To summarize the object}
-		\item{summaryParam}{To summarize only parameter estimates, standard errors, and significance}
+		\item \code{\link{summary}} To summarize the object
+		\item \code{\link{summaryParam}} To summarize only parameter estimates, standard errors, and significance
 	}
 }
 \author{

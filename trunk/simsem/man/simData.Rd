@@ -43,8 +43,8 @@ simData(n, param, misspec = new("NullSimMisspec"), equalCon = new("NullSimEqualC
 }
 \references{
 	\itemize{
-	\item Stieger, J. H. & Lind, J. C. (1980). \emph{Statistically based tests for the number of factors}. Paper presented at the annual spring meeting of the Psychometric Society, Iowa City, IA. 
-	\item Browne, M. W., & Cudeck, R. (1992). Alternative ways of assessing model fit. \emph{Sociological Methods & Research, 21}, 230-258.
+		\item Stieger, J. H. & Lind, J. C. (1980). \emph{Statistically based tests for the number of factors}. Paper presented at the annual spring meeting of the Psychometric Society, Iowa City, IA. 
+		\item Browne, M. W., & Cudeck, R. (1992). Alternative ways of assessing model fit. \emph{Sociological Methods & Research, 21}, 230-258.
 	}
 }
 \author{

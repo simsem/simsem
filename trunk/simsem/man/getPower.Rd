@@ -36,7 +36,7 @@ getPower(altObject, cutoff, revDirec = FALSE, usedFit=NULL)
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \seealso{
-	\enumerate{
+	\itemize{
 		\item \code{\link{getCutoff}} to find the cutoffs from null model.
 		\item \code{\linkS4class{SimResult}} to see how to create simResult
 	}

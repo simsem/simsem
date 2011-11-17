@@ -18,7 +18,7 @@ simVector(free, param = NULL)
 }
 }
 \value{
-	\code{SimVector} object that will be used for model specification later.
+	\code{\linkS4class{SimVector}} object that will be used for model specification later.
 }
 \author{
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
