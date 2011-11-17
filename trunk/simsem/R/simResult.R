@@ -11,7 +11,7 @@ simResult <- function(simData, simModel, nRep, seed = 123321, silent=FALSE) {
         if(!silent) cat(i, "\n")
          if(class(simData) == "SimData") {
 			data <- run(simData, dataOnly=FALSE)
-         } else if(is.list(simData)) {
+         } else if(is.list(simData) && !is.data.frame(simData)) {
 			data <- simData[[i]]
          } else {
             data <- simData
