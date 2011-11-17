@@ -72,15 +72,15 @@ runMI<- function(data.mat,data.model,imps,miPackage="amelia") {
 
 
 
-##Testing
+testMI <- function() {
 ##Shamelessly using the example in lavaan
-#test<-HolzingerSwineford1939[,-5]
-##cfa(HS.model,data=test)
+test<-HolzingerSwineford1939[,-5]
+cfa(HS.model,data=test)
 
 ##Impose missing data to test
-#log.mat1 <- makeMCAR(dim(test),.1,covs=NULL)
-#test[log.mat1] <- NA
+log.mat1 <- makeMCAR(dim(test),.1,covs=NULL)
+test[log.mat1] <- NA
 
 runMI(test,HS.model,3)
-
+}
  
