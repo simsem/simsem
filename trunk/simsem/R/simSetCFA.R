@@ -11,6 +11,7 @@
 simSetCFA <- function(...) { #loading, latent.cor, error.cor, latent.var = NULL, error.var = NULL, indicator.var = NULL, intercept = NULL, indicator.mean = NULL, factor.mean = NULL) {
 	W <- get.keywords()
 	List <- list(...)
+	#List <- list(LX = LX, PH = PH, TD = TD)
 	Names <- names(List)
 	keywords <- list(W$loading, W$error, W$latent.cor, c("Variance of Measurement Error", W$VTD, W$VTE), c("Variance of Indicators", W$VX, W$VY), W$intercept, W$factor.mean, c("means of Indicators", W$MX, W$MY), c("Variance of Factors", W$VE, W$VPS, W$VPH))
 	position <- match.keyword(Names, keywords)
@@ -21,11 +22,11 @@ simSetCFA <- function(...) { #loading, latent.cor, error.cor, latent.var = NULL,
 	ifelse(contain(2, position), TE <- List[position == 2], stop("No error correlation object in CFA"))
 	ifelse(contain(3, position), PS <- List[position == 3], stop("No latent variables correlation object in CFA"))
 	ifelse(contain(4, position), VTE <- List[position == 4], VTE <- list(new("NullSimVector")))
-	ifelse(contain(5, position), VY <- List[position == 5], ifelse(is.null.object(VTE[[1]]), { VY <- list(constant.vector(1, ni)); comment(VY[[1]]) <- "default"}, VY <- list(new("NullSimVector"))))
+	ifelse(contain(5, position), VY <- List[position == 5], ifelse(is.null.object(VTE[[1]]), { VY <- list(freeVector(1, ni)); comment(VY[[1]]) <- "default"}, VY <- list(new("NullSimVector"))))
 	ifelse(contain(8, position), MY <- List[position == 8], MY <- list(new("NullSimVector")))
-	ifelse(contain(6, position), TY <- List[position == 6], ifelse(is.null.object(MY[[1]]), { TY <- list(constant.vector(0, ni)); comment(TY[[1]]) <- "default"}, TY <- list(new("NullSimVector"))))
-	ifelse(contain(7, position), ME <- List[position == 7], { ME <- list(constant.vector(0, nk)); comment(ME[[1]]) <- "default"})
-	ifelse(contain(9, position), VE <- List[position == 9], { VE <- list(constant.vector(1, nk)); comment(VE[[1]]) <- "default"})
+	ifelse(contain(6, position), TY <- List[position == 6], ifelse(is.null.object(MY[[1]]), { TY <- list(freeVector(0, ni)); comment(TY[[1]]) <- "default"}, TY <- list(new("NullSimVector"))))
+	ifelse(contain(7, position), ME <- List[position == 7], { ME <- list(constantVector(0, nk)); comment(ME[[1]]) <- "default"})
+	ifelse(contain(9, position), VE <- List[position == 9], { VE <- list(constantVector(1, nk)); comment(VE[[1]]) <- "default"})
 	Output <- new("SimSet", LY=LY[[1]], PS=PS[[1]], TE=TE[[1]], VE=VE[[1]], VPS=VE[[1]], VTE=VTE[[1]], VY=VY[[1]], TY=TY[[1]], MY=MY[[1]], ME=ME[[1]], AL=ME[[1]], modelType="CFA")
 	return(Output)
 }

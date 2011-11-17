@@ -10,6 +10,13 @@
 
 create.free.parameters <- function(object) {
 	if(!is(object, "SimSet")) stop("The attribute is not a SimSet object.")
+	#The free parameters will be only used. This will not affect the program.
+	if(is.null.object(object@AL) & !is.null.object(object@ME)) object@AL <- object@ME
+	if(is.null.object(object@TY) & !is.null.object(object@MY)) object@TY <- object@MY
+	if(is.null.object(object@TX) & !is.null.object(object@MX)) object@TX <- object@MX
+	if(is.null.object(object@VTE) & !is.null.object(object@VY)) object@VTE <- object@VY
+	if(is.null.object(object@VTD) & !is.null.object(object@VX)) object@VTD <- object@VX
+	if(is.null.object(object@VPS) & !is.null.object(object@VE)) object@VPS <- object@VE
 	LY <- object@LY@free
 	is.measurement.Y <- !(is.null.object(LY))
 	TE <- object@TE@free

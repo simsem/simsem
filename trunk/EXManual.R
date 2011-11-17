@@ -19,8 +19,8 @@ sourceDir <- function(path, trace = TRUE, ...) {
         if(trace) cat("\n")
      }
 }
-#path <- "C:/Users/Sunthud/Desktop/My Dropbox/Fit Indices/Program/simsem/trunk/DataGeneration/backup/Version0.0-1.8/simsem/R"
-path <- "C:/Users/Sunthud/simsem_backup/simsem/R/"
+path <- "C:/Users/Sunthud/Desktop/My Dropbox/Fit Indices/Program/simsem/trunk/simsem/R/"
+#path <- "C:/Users/Sunthud/simsem_backup/simsem/R/"
 #path <- "C:/Users/student/Documents/simsem_backup/simsem/R/"
  source(paste(path, "AllClass.R", sep=""))
  source(paste(path, "AllGenerics.R", sep=""))
@@ -41,15 +41,17 @@ TD <- symMatrix(error.cor)
 
 indicator.mean <- rep(NA, 6)
 MX <- simVector(indicator.mean, 0)
+indicator.var <- rep(NA, 6)
+VX <- simVector(indicator.var, 1)
 
-CFA.Model <- simSetCFA(LX = LX, PH = PH, TD = TD, MX = MX)
+CFA.Model <- simSetCFA(LX = LX, PH = PH, TD = TD) #, VX = VX, MX=MX)
 
 SimData <- simData(200, CFA.Model)
 SimModel <- simModel(CFA.Model)
 Output <- simResult(SimData, SimModel, 100)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
-
+summaryParam(Output)
 
 #################################### Example 2 #######################
 

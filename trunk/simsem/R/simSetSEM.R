@@ -28,15 +28,15 @@ simSetSEM <- function(..., exo = FALSE) {
 	ne <- ncol(run(LY[[1]]))
 	ifelse(contain(2, position), TE <- List[position == 2], stop("No measurement error correlation object between indicator.Y"))
 	ifelse(contain(3, position), VTE <- List[position == 3], VTE <- list(new("NullSimVector")))
-	ifelse(contain(4, position), VY <- List[position == 4], ifelse(is.null.object(VTE[[1]]), { VY <- list(constant.vector(1, ny)); comment(VY[[1]]) <- "default"}, VY <- list(new("NullSimVector"))))
+	ifelse(contain(4, position), VY <- List[position == 4], ifelse(is.null.object(VTE[[1]]), { VY <- list(freeVector(1, ny)); comment(VY[[1]]) <- "default"}, VY <- list(new("NullSimVector"))))
 	ifelse(contain(6, position), MY <- List[position == 6], MY <- list(new("NullSimVector")))
-	ifelse(contain(5, position), TY <- List[position == 5], ifelse(is.null.object(MY[[1]]), { TY <- list(constant.vector(0, ny)); comment(TY[[1]]) <- "default"}, TY <- list(new("NullSimVector"))))
+	ifelse(contain(5, position), TY <- List[position == 5], ifelse(is.null.object(MY[[1]]), { TY <- list(freeVector(0, ny)); comment(TY[[1]]) <- "default"}, TY <- list(new("NullSimVector"))))
 	ifelse(contain(7, position), BE <- List[position == 7], stop("No path coefficient object between factor.ETA"))
 	ifelse(contain(8, position), PS <- List[position == 8], stop("No residual correlation object between factor.ETA"))
 	ifelse(contain(9, position), VPS <- List[position == 9], VPS <- list(new("NullSimVector")))
-	ifelse(contain(10, position), VE <- List[position == 10], ifelse(is.null.object(VPS[[1]]), { VE <- list(constant.vector(1, ne)); comment(VE[[1]]) <- "default"}, VE <- list(new("NullSimVector"))))
+	ifelse(contain(10, position), VE <- List[position == 10], ifelse(is.null.object(VPS[[1]]), { VE <- list(constantVector(1, ne)); comment(VE[[1]]) <- "default"}, VE <- list(new("NullSimVector"))))
 	ifelse(contain(12, position), ME <- List[position == 12], ME <- list(new("NullSimVector")))
-	ifelse(contain(11, position), AL <- List[position == 11], ifelse(is.null.object(ME[[1]]), { AL <- list(constant.vector(0, ne)); comment(AL[[1]]) <- "default"}, AL <- list(new("NullSimVector"))))
+	ifelse(contain(11, position), AL <- List[position == 11], ifelse(is.null.object(ME[[1]]), { AL <- list(constantVector(0, ne)); comment(AL[[1]]) <- "default"}, AL <- list(new("NullSimVector"))))
 	Output <- NULL
 	if(exo) {
 		ifelse(contain(13, position), LX <- List[position == 13], stop("No loading object of indicator.X from factor.KSI in SEM"))
@@ -44,14 +44,14 @@ simSetSEM <- function(..., exo = FALSE) {
 		nk <- ncol(run(LX[[1]]))
 		ifelse(contain(14, position), TD <- List[position == 14], stop("No measurement error correlation object between indicator.Y"))
 		ifelse(contain(15, position), VTD <- List[position == 15], VTD <- list(new("NullSimVector")))
-		ifelse(contain(16, position), VX <- List[position == 16], ifelse(is.null.object(VTD[[1]]), { VX <- list(constant.vector(1, nx)); comment(VX[[1]]) <- "default"}, VX <- list(new("NullSimVector"))))
+		ifelse(contain(16, position), VX <- List[position == 16], ifelse(is.null.object(VTD[[1]]), { VX <- list(freeVector(1, nx)); comment(VX[[1]]) <- "default"}, VX <- list(new("NullSimVector"))))
 		ifelse(contain(18, position), MX <- List[position == 18], MX <- list(new("NullSimVector")))
-		ifelse(contain(17, position), TX <- List[position == 17], ifelse(is.null.object(MX[[1]]), { TX <- list(constant.vector(0, nx)); comment(TX[[1]]) <- "default"}, TX <- list(new("NullSimVector"))))
+		ifelse(contain(17, position), TX <- List[position == 17], ifelse(is.null.object(MX[[1]]), { TX <- list(freeVector(0, nx)); comment(TX[[1]]) <- "default"}, TX <- list(new("NullSimVector"))))
 		
 		ifelse(contain(19, position), GA <- List[position == 19], stop("No path coefficient object from Factor.KSI to Factor.ETA"))
 		ifelse(contain(20, position), PH <- List[position == 20], stop("No correlation object between factor.KSI"))
-		ifelse(contain(21, position), VPH <- List[position == 21], { VPH <- list(constant.vector(1, nk)); comment(VPH[[1]]) <- "default"})
-		ifelse(contain(22, position), KA <- List[position == 22], { KA <- list(constant.vector(0, nk)); comment(KA[[1]]) <- "default"})
+		ifelse(contain(21, position), VPH <- List[position == 21], { VPH <- list(constantVector(1, nk)); comment(VPH[[1]]) <- "default"})
+		ifelse(contain(22, position), KA <- List[position == 22], { KA <- list(constantVector(0, nk)); comment(KA[[1]]) <- "default"})
 		if(contain(23, position)) {
 			TH <- List[position == 23]
 			temp <- run(TH[[1]])

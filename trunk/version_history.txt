@@ -46,6 +46,11 @@ simsem, Version 0.0-2.1 11/16/11
 - SimModelOut.c and SimResult.c are changed to have paramValue attributes.
 - subtractObject.f is written to subtract two sets of parameter values. 
 - Update the vignette by explaining the output from summary.f 
+- Bug fixes in create.free.parameters.f, simSetCFA.f, simSetPath.f, simSetSEM.f that did not free error variances and measurement intercepts when using default.
+- Change the name of constant.vector.f --> constantVector.f
+- Add freeVector.f to create vector of free parameters with starting values.
+% Existing Problem: In SEM model, total endogenous factor variances are fixed as 1 in data model but, instead, residual factor variances are fixed as 1 in the estimation. Therefore, high bias in factor loading and measurement error variances in endogenous side. Change in parameter values are needed.
+
 
 Note
 *.f = function

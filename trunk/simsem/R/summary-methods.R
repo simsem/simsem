@@ -364,7 +364,9 @@ setMethod("summary", signature="SimModelOut", definition=function(object, digits
 		cat("Fit Indices\n")
 		print(round(object@fit, digits))
 		cat("========= Parameter Estimates and Standard Errors ============\n")
-		print(round(summaryParam(object), digits))
+		param <- summaryParam(object)
+		param[,-ncol(param)] <- round(param[,-ncol(param)], digits)
+		print(param)
 		cat("Converged\n")
 		print(object@converged)
 	}
