@@ -1028,3 +1028,39 @@ setClass("SimModelOut", # The class provides model result.
         converged=FALSE,
 		paramValue=new("NullRSet"))
 )
+
+###################################################################
+# SimMissing
+# Class -- simsem package
+# This class is a container for instructions to impose missing data for a simulation study. To be used with with a call to simResult.
+# Constructor:	 	new(SimModel, data)
+# Parent Class: None
+# Child Class:	None
+# Attributes:
+#  covs = list of covariates included in the data set (data will not be removed from the covariates). Needed to impose MAR
+#  pmMCAR = percent missing MCAR
+#  pmMAR = percent missing MAR
+#  nforms = number of forms for planned missing
+#  itemGroups = list of lists of item groupings (column indices) for planned missing data designs
+#  twoMethod = vector of (item, percent missing). Functions removes the given percent of data on the column index.
+# Methods:	None for now.
+# Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu), Patrick Miller (University of Kansas; patr1ckm@ku.edu)
+# Date Modified: November 17, 2011
+
+setClass("SimMissing",
+    representation(
+        covs="vector",
+        pmMCAR="numeric",
+        pmMAR="numeric",
+        nforms="numeric",
+        itemGroups="list",
+        twoMethod="vector"),
+    prototype(
+        covs=NULL,
+        pmMCAR=NULL,
+        pmMAR=NULL,
+        nforms=NULL,
+        itemGroups=NULL,
+        twoMethod=NULL)
+)
+
