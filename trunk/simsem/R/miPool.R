@@ -5,20 +5,22 @@
 #MIpool returns a list of results with: parameter estimates, standard errors
 #fit indices, and two types of fraction of missing information
 
+#To do: Needs some test cases
+
 #Example: MIpool(imputed.results)
 #  imputed.results = list of imputation results from imputed.results function
 
 miPool<-function(imputed.results,imps){
 
-MI.param<-imputed.results@coef
-MI.se<-imputed.results@se
-MI.fit<-imputed.results@fit
+#MI.param<-imputed.results@coef
+#MI.se<-imputed.results@se
+#MI.fit<-imputed.results@fit
 
-# for(i in 1:length(imputed.results)){
-# MI.param[i,]<-unlist(imputed.results[[i]]@Estimates)
-# MI.se[i,]<-unlist(imputed.results[[i]]@SE)
-# MI.fit[i,]<-unlist(imputed.results[[i]]@Fit)
-# }
+ for(i in 1:length(imputed.results)){
+ MI.param[i,]<-unlist(imputed.results[[i]]@Estimates)
+ MI.se[i,]<-unlist(imputed.results[[i]]@SE)
+ MI.fit[i,]<-unlist(imputed.results[[i]]@Fit)
+}
 
 #Need to remove columns representing fixed parameters
 MI.param <- MI.param[ , colMeans( MI.param==0 ) == 0, drop=FALSE ]
@@ -62,3 +64,5 @@ names(MI.res)<-c('coef','se','fit','FMI.1','FMI.2')
 return(MI.res)
 }
 
+
+  
