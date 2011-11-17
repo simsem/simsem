@@ -35,7 +35,7 @@ MIpool returns a list with pooled estimates, standard errors, fit indices and fr
 \references{
 Rubin, D.B. (1987) Multiple Imputation for Nonresponse in Surveys. J. Wiley & Sons, New York.
 }
-\authors{
+\author{
 Alexander M. Schoemann (University of Kansas; \email{schoemann@ku.edu})
 Mijke Rhemtulla (University of Kansas; \email{mijke@ku.edu})
 }

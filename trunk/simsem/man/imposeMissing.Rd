@@ -1,54 +1,60 @@
 \name{imposeMissing}
 \alias{imposeMissing}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{
-%%  ~~function to do ... ~~
+\title{ Impose MAR, MCAR, and planned missingness on a data set
+
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+Function imposes missing values on a data based on the known missing data types,
+including MCAR, MAR, and planned.
 }
 \usage{
-imposeMissing(data.mat, covs = NULL, pmMCAR = 0, pmMAR = 0, nforms = NULL, itemGroups = NULL, twoMethod = NULL)
+imposeMissing(data.mat, covs = NULL, pmMCAR = NULL, pmMAR = NULL, nforms = NULL, itemGroups = NULL, twoMethod = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{data.mat}{
-%%     ~~Describe \code{data.mat} here~~
+    A raw data matrix
 }
   \item{covs}{
-%%     ~~Describe \code{covs} here~~
+    Column indices of any normally distributed covariates used in the data set. Will not be
+    included in any removal procedure, and are required to impose MAR missing. 
 }
   \item{pmMCAR}{
-%%     ~~Describe \code{pmMCAR} here~~
+    Decimal percent of missingness to introduce completely at random on all variables.
 }
   \item{pmMAR}{
-%%     ~~Describe \code{pmMAR} here~~
+    Decimal percent of missingness to introduce using the listed
+    covariates as predictors. 
 }
   \item{nforms}{
-%%     ~~Describe \code{nforms} here~~
+    The number of forms for planned missing data designs, not including
+    the shared form.
 }
   \item{itemGroups}{
-%%     ~~Describe \code{itemGroups} here~~
+    List of lists of item groupings for planned missing data forms. Without this,
+    items will be divided into groups sequentially (e.g. 1-3,4-6,7-9,10-12)
 }
   \item{twoMethod}{
-%%     ~~Describe \code{twoMethod} here~~
+    Vector of (percent missing, column index). Will put a given percent
+    missing on that column in the matrix to simulate a two method
+    planned missing data research design. 
 }
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+Without specifying any any arguments, no missingness will be
+introduced. Covariates are required to impose MAR missing.
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+A data matrix with NAs introduced in the way specified by the arguments.
 }
 \references{
 %% ~put references to the literature/web site here ~
 }
 \author{
-%%  ~~who you are~~
+Patrick Miller(University of Kansas; \email{patr1ckm@ku.edu})
+Alexander M. Schoemann (University of Kansas; \email{schoemann@ku.edu})  
+Kyle Lang (University of Kansas; \email{kylelang@ku.edu})
 }
 \note{
 %%  ~~further notes~~
@@ -60,32 +66,24 @@ imposeMissing(data.mat, covs = NULL, pmMCAR = 0, pmMAR = 0, nforms = NULL, itemG
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+  data <- matrix(rep(rnorm(10,1,1),19),ncol=19)
+  datac <- cbind(data,rnorm(10,0,1),rnorm(10,5,5))
 
-## The function is currently defined as
-function(data.mat,covs=NULL,pmMCAR=0,pmMAR=0,nforms=NULL,itemGroups=NULL,twoMethod=NULL){
+  # Imposing Missing with the following arguments produces no missing values
+  imposeMissing(data)
+  imposeMissing(data,covs=c(1,2))
+  imposeMissing(data,pmMCAR=0)
+  imposeMissing(data,pmMAR=0)
+  imposeMissing(data,nforms=0)
 
- # TRUE values are values to delete
- if(!is.null(nforms) || !is.null(twoMethod)){ 
- log.matpl <- planned.missing(dim(data.mat),covs,nforms=nforms,twoMethod=twoMethod,itemGroups=itemGroups)
-  data.mat[log.matpl] <- NA
- }
-
- # Impose MAR and MCAR
- 
- log.mat1 <- makeMCAR(dim(data.mat),pmMCAR,covs)
- 
- log.mat2 <- makeMAR(data.mat,pmMAR,covs)
-
-
-  data.mat[log.mat1] <- NA
-  data.mat[log.mat2] <- NA
- 
- return(data.mat) 
- 
-  }
+  #Some more usage examples
+  imposeMissing(data,covs=c(1,2),pmMCAR=.1)
+  imposeMissing(datac,covs=c(20,21),pmMAR=.2)
+  imposeMissing(data,nforms=3)
+  imposeMissing(data,nforms=3,itemGroups=list(c(1,2,3,4,5),c(6,7,8,9,10),c(11,12,13,14,15),c(16,17,18,19)))
+  imposeMissing(datac,covs=c(20,21),nforms=3)
+  imposeMissing(data,twoMethod=c(19,.8))
+  imposeMissing(datac,covs=c(20,21),pmMCAR=.1,pmMAR=.1,nforms=3)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

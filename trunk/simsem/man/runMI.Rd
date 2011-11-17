@@ -40,8 +40,11 @@ runMI returns a list with pooled estimates, standard errors, fit indices and fra
 \references{
 Rubin, D.B. (1987) Multiple Imputation for Nonresponse in Surveys. J. Wiley & Sons, New York.
 }
-Patrick Miller & Alexander M. Schoemann
+
+\author{Patrick Miller(University of Kansas; \email{patr1ckm@ku.edu})
+  Alexander M. Schoemann (University of Kansas;  \email{schoemann@ku.edu})
 }
+
 \note{
 %%  ~~further notes~~
 }
