@@ -10,15 +10,15 @@
 
 miPool<-function(imputed.results,imps){
 
-MI.param<-matrix(NA,nrow=length(imputed.results),ncol=length(imputed.results[[1]]@Estimates))
-MI.se<-matrix(NA,nrow=length(imputed.results),ncol=length(imputed.results[[1]]@SE))
-MI.fit<-matrix(NA,nrow=length(imputed.results),ncol=length(imputed.results[[1]]@Fit))
+MI.param<-imputed.results@coef
+MI.se<-imputed.results@se
+MI.fit<-imputed.results@fit
 
-for(i in 1:length(imputed.results)){
-MI.param[i,]<-unlist(imputed.results[[i]]@Estimates)
-MI.se[i,]<-unlist(imputed.results[[i]]@SE)
-MI.fit[i,]<-unlist(imputed.results[[i]]@Fit)
-}
+# for(i in 1:length(imputed.results)){
+# MI.param[i,]<-unlist(imputed.results[[i]]@Estimates)
+# MI.se[i,]<-unlist(imputed.results[[i]]@SE)
+# MI.fit[i,]<-unlist(imputed.results[[i]]@Fit)
+# }
 
 #Need to remove columns representing fixed parameters
 MI.param <- MI.param[ , colMeans( MI.param==0 ) == 0, drop=FALSE ]
@@ -55,7 +55,7 @@ FMI<-rbind(FMI.1,FMI.2)
 Fit.indices <- colMeans(MI.fit)
 
 MI.res<-list(Estimates,SE,Fit.indices,FMI.1,FMI.2)
-names(MI.res)<-c('Estimates','SE','Fit.indices','FMI.1','FMI.2')
+names(MI.res)<-c('coef','se','fit','FMI.1','FMI.2')
 #compute chi-square proportion (is this useful?)
 #(MI.fit.mat$chisq.p is a placeholder for however we'll index the p-value of chi square)
 #chisq <- sum(MI.fit.mat$chisq.pval<.05)/m

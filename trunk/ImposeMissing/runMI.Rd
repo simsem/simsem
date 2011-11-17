@@ -8,7 +8,7 @@ Multiply impute and analyze data using lavaan
 This function takes data with missing observations, multiple imputes the data, runs a SEM using lavaan and combines the results using Rubin's rules.
 }
 \usage{
-runMI(data.mat, data.model, imps)
+runMI(data.mat, data.model, imps, miPackage="amelia")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -21,15 +21,18 @@ Specification of the model to be analyzed. data.model can be either a simModel o
   \item{imps}{
 Number of imputations wanted
 }
+ \item{miPackage}{
+Package to be used for impuation. Currently runMI only uses amelia for imputation
+}
 }
 \details{
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{
 runMI returns a list with pooled estimates, standard errors, fit indices and fraction missing information
-\item{Estimates}{Pooled parameter estimates. The order of parameter estimates corresponds to the order reported by Lavaan}
-\item{SE}{Pooled standard errors. The order of standard errors corresponds to the order reported by Lavaan}
-\item{Fit.indices}{Pooled fit indices. The order of fit indices corresponds to the order reported by Lavaan}
+\item{coef}{Pooled parameter estimates. The order of parameter estimates corresponds to the order reported by Lavaan}
+\item{se}{Pooled standard errors. The order of standard errors corresponds to the order reported by Lavaan}
+\item{fit}{Pooled fit indices. The order of fit indices corresponds to the order reported by Lavaan}
 \item{FMI.1}{Fraction of missing information for each parameter. The order of fraction missing corresponds to the order of parameters reported by Lavaan}
 \item{FMI.2}{Fraction of missing information for each parameter. The order of fraction missing corresponds to the order of parameters reported by Lavaan}
 %% ...
