@@ -31,16 +31,18 @@ runMI<- function(data.mat,data.model,imps,miPackage="amelia") {
   #Run models on each imputed data set using lavaan syntax
   if (is.character(data.model)) {
     #Function to run lavaan using lapply
-	#inputs: raw data, syntax
-	#Output: list of parameter estimates, se and fit from each model
-   runlavaan <- function(MIdata,syntax) {
+    #inputs: raw data, syntax
+    #Output: list of parameter estimates, se and fit from each model
+
+    runlavaan <- function(MIdata,syntax) {
      model <- cfa(syntax, data=MIdata)
-	 results <- list(param=coef(model),se=model@Fit@se[!model@Fit@se==0],fit=as.vector(fitmeasures(model)))
-	 return(results)
-	 }
-    imputed.results.l <- lapply(imputed.l,runlavaan,data.model)
+     results <- list(param=coef(model),se=model@Fit@se[!model@Fit@se==0],fit=as.vector(fitmeasures(model)))
+     return(results)
+    }
+
+    imputed.results <- lapply(imputed.l,runlavaan,data.model)
 	
-	results.param<-matrix(NA,nrow=length(imputed.results.l),ncol=length(imputed.results.l[[1]][[1]]))
+    results.param<-matrix(NA,nrow=length(imputed.results.l),ncol=length(imputed.results.l[[1]][[1]]))
     results.se<-matrix(NA,nrow=length(imputed.results.l),ncol=length(imputed.results.l[[1]][[2]]))
     results.fit<-matrix(NA,nrow=length(imputed.results.l),ncol=length(imputed.results.l[[1]][[3]]))
 
@@ -48,26 +50,23 @@ runMI<- function(data.mat,data.model,imps,miPackage="amelia") {
       results.param[i,]<-unlist(imputed.results.l[[i]][[1]])
       results.se[i,]<-unlist(imputed.results.l[[i]][[2]])
       results.fit[i,]<-unlist(imputed.results.l[[i]][[3]])
-      }
+    }
 	
-	imputed.results <- new("SimResult", modelType='CFA',nRep=imps, coef=as.data.frame(results.param),
+    imputed.results <- new("SimResult", modelType='CFA',nRep=imps, coef=as.data.frame(results.param),
                                se=as.data.frame(results.se), fit=as.data.frame(results.fit), converged = c(0))
-		#Result <- new("SimResult", modelType=modelType, nRep=nRep, coef=coef, se=se, fit=fit, converged=converged, seed=seed)
-
-	}
+    #Result <- new("SimResult", modelType=modelType, nRep=nRep, coef=coef, se=se, fit=fit, converged=converged, seed=seed)
+  }
 
 
   
   comb.results<-miPool(imputed.results,imps)
   ##Name elements in the list
-  fit.names<-c( "chisq","df","pvalue","baseline.chisq","baseline.df","baseline.pvalue","cfi","tli",
-               "logl","unrestricted.logl","npar","aic","bic","ntotal","bic2","rmsea","rmsea.ci.lower",
-               "rmsea.ci.upper","rmsea.pvalue","srmr")  
-  names(comb.results[[3]])<-fit.names
-  names(comb.results[[1]])<-names(imputed.results.l$imp1$param)
-  names(comb.results[[2]])<-names(imputed.results.l$imp1$param)
-  names(comb.results[[4]])<-names(imputed.results.l$imp1$param)
-  names(comb.results[[5]])<-names(imputed.results.l$imp1$param)
+  
+  names(comb.results[[1]])<-names(imputed.results$imp1@coef)
+  names(comb.results[[2]])<-names(imputed.results$imp1@se)
+  names(comb.results[[3]])<-names(imputed.results$imp1@fit)
+  names(comb.results[[4]])<-names(imputed.results$imp1@coef)
+  names(comb.results[[5]])<-names(imputed.results$imp1@coef)
 	
   return(comb.results)
 

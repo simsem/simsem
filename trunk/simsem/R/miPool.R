@@ -11,57 +11,60 @@
 #  imputed.results = list of imputation results from imputed.results function
 
 miPool<-function(imputed.results,imps){
+  ncol <- length(unlist(imputed.results[[1]]@coef))
+  nrow <- length(imputed.results)
 
-#MI.param<-imputed.results@coef
-#MI.se<-imputed.results@se
-#MI.fit<-imputed.results@fit
+# Declare and assign first rows of matrices
+  MI.param <- matrix(ncol=ncol,nrow=nrow)
+  MI.se <- matrix(ncol=ncol,nrow=nrow)
+  MI.fit <- matrix(ncol=length(unlist(imputed.results[[1]]@fit)),nrow=nrow)
 
  for(i in 1:length(imputed.results)){
- MI.param[i,]<-unlist(imputed.results[[i]]@coef)
- MI.se[i,]<-unlist(imputed.results[[i]]@se)
- MI.fit[i,]<-unlist(imputed.results[[i]]@fit)
-}
+   MI.param[i,]<-unlist(imputed.results[[i]]@coef)
+   MI.se[i,]<-unlist(imputed.results[[i]]@se)
+   MI.fit[i,]<-unlist(imputed.results[[i]]@fit)
+ }
 
 #Need to remove columns representing fixed parameters
-MI.param <- MI.param[ , colMeans( MI.param==0 ) == 0, drop=FALSE ]
-MI.param <- MI.param[ , colMeans( MI.param==1 ) == 0, drop=FALSE ]
-MI.se <- MI.se[ , colSums( MI.se==0 ) == 0, drop=FALSE ]
+  MI.param <- MI.param[ , colMeans( MI.param==0 ) == 0, drop=FALSE ]
+  MI.param <- MI.param[ , colMeans( MI.param==1 ) == 0, drop=FALSE ]
+  MI.se <- MI.se[ , colSums( MI.se==0 ) == 0, drop=FALSE ]
 
 #compute parameter estimates
-Estimates <- colMeans(MI.param)
+  Estimates <- colMeans(MI.param)
 
 #compute between-imputation variance: variance of parameter estimates
-Bm <- apply(MI.param,2,var)
+  Bm <- apply(MI.param,2,var)
 
 
 
 #compute within-imputation variance: average of squared estimated SEs 
 #Um <- colSums(MI.se^2/m)
-Um <- apply(MI.se^2,2,mean)
+  Um <- apply(MI.se^2,2,mean)
 
 #Total variance
 #Tm <- Um + (Bm)*((1+m)/m+1)
 
 #compute total variance: sum of between- and within- variance with correction
-SE <- Um + ((imps+1)/imps)*Bm
+  SE <- Um + ((imps+1)/imps)*Bm
 
 #compute correction factor for fraction of missing info
-nu <- (imps-1)*((((1+1/imps)*Bm)/SE)^-2)
+  nu <- (imps-1)*((((1+1/imps)*Bm)/SE)^-2)
 
 #compute 2 estimates of fraction of missing information
-FMI.1 <- 1-(Um/SE)
-FMI.2 <- 1- ((nu+1)*Um)/((nu+3)*SE)
-FMI<-rbind(FMI.1,FMI.2)
+  FMI.1 <- 1-(Um/SE)
+  FMI.2 <- 1- ((nu+1)*Um)/((nu+3)*SE)
+  FMI<-rbind(FMI.1,FMI.2)
 
 #compute average fit index estimates (only some of these will be interpretable!)
-Fit.indices <- colMeans(MI.fit)
+  Fit.indices <- colMeans(MI.fit)
 
-MI.res<-list(Estimates,SE,Fit.indices,FMI.1,FMI.2)
-names(MI.res)<-c('coef','se','fit','FMI.1','FMI.2')
+  MI.res<-list(Estimates,SE,Fit.indices,FMI.1,FMI.2)
+  names(MI.res)<-c('coef','se','fit','FMI.1','FMI.2')
 #compute chi-square proportion (is this useful?)
 #(MI.fit.mat$chisq.p is a placeholder for however we'll index the p-value of chi square)
 #chisq <- sum(MI.fit.mat$chisq.pval<.05)/m
-return(MI.res)
+  return(MI.res)
 }
 
 

@@ -1,9 +1,8 @@
-#Assumes start in the trunk
-# This allows us to source our files with more organization
-
+setwd("/nfs/home/patr1ckm/simsem/trunk/")
 
 install.packages("simsem_0.0-4.tar.gz", repos=NULL, type="source")
 library(simsem)
+library(debug)
 library(Rmpi)
 
 # For safety?
@@ -72,8 +71,12 @@ complete.l <- build.data.sets(data.object,100,3)
 missing.l <- lapply(complete.l,imposeMissing,nforms=3)
 missing.l <- mpi.applyLB(complete.l,imposeMissing)
 
+#results <- runMI(missing.l,data.model=sim.data.model,imps=2)
+
 results.l <- lapply(missing.l,runMI,data.model=sim.data.model,imps=2)
 
+
+mtrace(runMI)
 
 mpi.close.Rslaves()
 mpi.quit()
