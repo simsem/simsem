@@ -1,8 +1,8 @@
-##Functon to impute missing data, run Lavaan on each one 
-##input: data frames of raw data with missing data, model specification (either a simmodel object or lavaan script), number of imputations wanted)
-##Output: list of results with: parameter estimates, standard errors fit indices, and two types of fraction of missing information
-##Patrick Miller & Alexander Schoemann
-##Last modified 11/16/2011
+##  Functon to impute missing data, run Lavaan on each one 
+##  input: data frames of raw data with missing data, model specification (either a simmodel object or lavaan script), number of imputations wanted)
+##  Output: list of results with: parameter estimates, standard errors fit indices, and two types of fraction of missing information
+##  Patrick Miller & Alexander Schoemann
+##  Last modified 11/17/2011
 
 #Conveniance function to run impuations on data and only return list of data
 imputeMissing <- function(data.mat,imps){
@@ -50,7 +50,8 @@ runMI<- function(data.mat,data.model,imps,miPackage="amelia") {
       results.fit[i,]<-unlist(imputed.results.l[[i]][[3]])
       }
 	
-	imputed.results <- new("SimResult", modelType='CFA',nRep=imps, coef=as.data.frame(results.param), se=as.data.frame(results.se), fit=as.data.frame(results.fit), converged = c(0))
+	imputed.results <- new("SimResult", modelType='CFA',nRep=imps, coef=as.data.frame(results.param),
+                               se=as.data.frame(results.se), fit=as.data.frame(results.fit), converged = c(0))
 		#Result <- new("SimResult", modelType=modelType, nRep=nRep, coef=coef, se=se, fit=fit, converged=converged, seed=seed)
 
 	}
@@ -59,7 +60,9 @@ runMI<- function(data.mat,data.model,imps,miPackage="amelia") {
   
   comb.results<-miPool(imputed.results,imps)
   ##Name elements in the list
-  fit.names<-c( "chisq","df","pvalue","baseline.chisq","baseline.df","baseline.pvalue","cfi","tli","logl","unrestricted.logl","npar","aic","bic","ntotal","bic2","rmsea","rmsea.ci.lower","rmsea.ci.upper","rmsea.pvalue","srmr")  
+  fit.names<-c( "chisq","df","pvalue","baseline.chisq","baseline.df","baseline.pvalue","cfi","tli",
+               "logl","unrestricted.logl","npar","aic","bic","ntotal","bic2","rmsea","rmsea.ci.lower",
+               "rmsea.ci.upper","rmsea.pvalue","srmr")  
   names(comb.results[[3]])<-fit.names
   names(comb.results[[1]])<-names(imputed.results.l$imp1$param)
   names(comb.results[[2]])<-names(imputed.results.l$imp1$param)

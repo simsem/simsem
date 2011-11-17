@@ -1,14 +1,9 @@
 #Assumes start in the trunk
 # This allows us to source our files with more organization
 
-install.packages("simsem_0.0-2.tar.gz", repos=NULL, type="source")
+install.packages("simsem_0.0-3.tar.gz", repos=NULL, type="source")
 library(simsem)
 library(Rmpi)
-
-source("ImposeMissing/plmissing.R")
-source("ImposeMissing/imposeMarMcarMissing.R")
-source("ImposeMissing/makeBinomMCAR.R")
-source("ImposeMissing/MIsummary.r")
 
 # For safety?
 .Last <- function(){ 
@@ -72,30 +67,6 @@ build.data.sets <- function(model,obs,sets) {
 
 complete.l <- build.data.sets(data.object,100,3)
 
-imposeMissing <- function(data.mat){
-
-  # Make some covariates
-  c1 <- rnorm(dim(data.mat)[1],0,1)
-  c2 <- rnorm(dim(data.mat)[1],0,5)
-  datac <- cbind(data.mat,c1,c2)
-  covs <- c(dim(data.mat)[2]+1,dim(data.mat)[2]+2)
-
- # TRUE values are values to delete
- log.matpl <- planned.missing(dim(data.mat),covs=covs)
-
- # This will work when we've made some more design decisions about percent missing and covariates
- 
- log.mat1 <- makeMCAR(dim(data.mat),.1,covs=covs)
- 
- log.mat2 <- makeMAR(data.mat,.1,covs=covs)
-
- data.mat[log.matpl] <- NA
- # data.mat[log.mat1] <- NA
- # data.mat[log.mat2] <- NA
- 
- return(data.mat) 
- 
-} 
 
 missing.l <- lapply(complete.l,imposeMissing)
 missing.l <- mpi.applyLB(complete.l,imposeMissing)
