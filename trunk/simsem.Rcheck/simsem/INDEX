@@ -1,0 +1,53 @@
+SimData-class           Class '"SimData"'
+SimDataOut-class        Class '"SimDataOut"'
+SimEqualCon-class       Class '"SimEqualCon"'
+SimMatrix-class         Class '"SimMatrix"' (Random parameters matrix)
+SimMisspec-class        Class '"SimMisspec"'
+SimModel-class          Class '"SimModel"'
+SimModelOut-class       Class '"SimModelOut"'
+SimNorm-class           Class "SimNorm"
+SimResult-class         Class '"SimResult"'
+SimSet-class            Class '"SimSet"'
+SimUnif-class           Class "SimUnif"
+SimVector-class         Class '"SimVector"' (Random parameters vector)
+SymMatrix-class         Class '"SymMatrix"' (Random parameters
+                        symmetric matrix)
+VirtualDist-class       Class "VirtualDist"
+adjust                  Change an element in 'SimMatrix', 'SymMatrix',
+                        or 'SimVector'.
+getCutoff               Find cutoff given a priori alpha level
+getPower                Find power in rejecting alternative models
+                        based on fit indices criteria
+loadingFromAlpha        Find standardized factor loading from
+                        coefficient alpha
+plotCutoff              Plot sampling distributions of fit indices
+plotPower               Plot sampling distributions of fit indices that
+                        visualize power
+run                     Run a particular object in 'simsem' package.
+simData                 Data object
+simEqualCon             Equality Constraint Object
+simMatrix               Create simMatrix that save free parameters and
+                        starting values, as well as fixed values
+simMisspecCFA           Set of model misspecification for CFA model.
+simMisspecPath          Set of model misspecification for Path analysis
+                        model.
+simMisspecSEM           Set of model misspecification for SEM model.
+simModel                Create simModel from model specification and be
+                        ready for data analysis.
+simNorm                 Create random normal distribution object
+simResult               Create simResult.
+simSetCFA               Create a set of matrix that belongs to CFA
+                        model.
+simSetPath              Create a set of matrix belongs to Path analysis
+                        model
+simSetSEM               Create a set of matrix belongs to SEM model
+simUnif                 Create random uniform distribution object
+simVector               Create simVector that save free parameters and
+                        starting values, as well as fixed values
+simsem-package          SIMulated Structural Equation Modeling data.
+summaryParam            Provide summary of parameter estimates and
+                        standard error across replications
+summaryShort            Provide short summary of an object.
+symMatrix               Create symmetric simMatrix that save free
+                        parameters and starting values, as well as
+                        fixed values
