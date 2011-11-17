@@ -17,9 +17,9 @@ miPool<-function(imputed.results,imps){
 #MI.fit<-imputed.results@fit
 
  for(i in 1:length(imputed.results)){
- MI.param[i,]<-unlist(imputed.results[[i]]@Estimates)
- MI.se[i,]<-unlist(imputed.results[[i]]@SE)
- MI.fit[i,]<-unlist(imputed.results[[i]]@Fit)
+ MI.param[i,]<-unlist(imputed.results[[i]]@coef)
+ MI.se[i,]<-unlist(imputed.results[[i]]@se)
+ MI.fit[i,]<-unlist(imputed.results[[i]]@fit)
 }
 
 #Need to remove columns representing fixed parameters

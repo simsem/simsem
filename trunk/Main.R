@@ -1,6 +1,7 @@
 #Assumes start in the trunk
 # This allows us to source our files with more organization
 
+
 install.packages("simsem_0.0-4.tar.gz", repos=NULL, type="source")
 library(simsem)
 library(Rmpi)
@@ -57,7 +58,7 @@ build.example.model <- function() {
 
 data.model <- build.example.model()
 data.object <- simData(300, data.model)
-sim.data.model <- simModel(data.model)
+sim.data.model <- simModel(data.model) # this one is the actual model
 
 
 complete.l <- list()
@@ -71,7 +72,7 @@ complete.l <- build.data.sets(data.object,100,3)
 missing.l <- lapply(complete.l,imposeMissing,nforms=3)
 missing.l <- mpi.applyLB(complete.l,imposeMissing)
 
-results.l <- lapply(missing.l,runMI,data.model=data.model,imps=2)
+results.l <- lapply(missing.l,runMI,data.model=sim.data.model,imps=2)
 
 
 mpi.close.Rslaves()
