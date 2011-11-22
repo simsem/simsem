@@ -1,6 +1,5 @@
 \name{miPool}
 \alias{miPool}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Function to pool imputed results
 }
@@ -11,7 +10,6 @@ and returns pooled parameter estimates, standard errors, and fit indices.
 \usage{
 miPool(imputed.results, imps)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{imputed.results}{
 A simmodel object with results from each imputed data set
@@ -30,7 +28,6 @@ MIpool returns a list with pooled estimates, standard errors, fit indices and fr
 \item{Fit.indices}{Pooled fit indices. The order of fit indices corresponds to the order reported by Lavaan}
 \item{FMI.1}{Fraction of missing information for each parameter. The order of fraction missing corresponds to the order of parameters reported by Lavaan}
 \item{FMI.2}{Fraction of missing information for each parameter. The order of fraction missing corresponds to the order of parameters reported by Lavaan}
-%% ...
 }
 \references{
 Rubin, D.B. (1987) Multiple Imputation for Nonresponse in Surveys. J. Wiley & Sons, New York.
@@ -39,14 +36,10 @@ Rubin, D.B. (1987) Multiple Imputation for Nonresponse in Surveys. J. Wiley & So
 Alexander M. Schoemann (University of Kansas; \email{schoemann@ku.edu})
 Mijke Rhemtulla (University of Kansas; \email{mijke@ku.edu})
 }
-\note{
-%%  ~~further notes~~
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+	\itemize{
+		\item \code{\link{runMi}} for imputing missing values by multiple imputation and analyzing the imputed datasets.
+	}
 }
 \examples{
 ##---- Should be DIRECTLY executable !! ----
@@ -108,7 +101,4 @@ names(MI.res)<-c('Estimates','SE','Fit.indices','FMI.1','FMI.2')
 return(MI.res)
   }
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+

@@ -1,8 +1,7 @@
 \name{imposeMissing}
 \alias{imposeMissing}
-%- Also NEED an '\alias' for EACH other topic documented here.
-\title{ Impose MAR, MCAR, and planned missingness on a data set
-
+\title{ 
+Impose MAR, MCAR, and planned missingness on a data set
 }
 \description{
 Function imposes missing values on a data based on the known missing data types,
@@ -11,7 +10,6 @@ including MCAR, MAR, and planned.
 \usage{
 imposeMissing(data.mat, covs = NULL, pmMCAR = NULL, pmMAR = NULL, nforms = NULL, itemGroups = NULL, twoMethod = NULL)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{data.mat}{
     A raw data matrix
@@ -46,24 +44,18 @@ Without specifying any any arguments, no missingness will be
 introduced. Covariates are required to impose MAR missing.
 }
 \value{
-A data matrix with NAs introduced in the way specified by the arguments.
-}
-\references{
-%% ~put references to the literature/web site here ~
+A data matrix with \code{NA}s introduced in the way specified by the arguments.
 }
 \author{
 Patrick Miller(University of Kansas; \email{patr1ckm@ku.edu})
 Alexander M. Schoemann (University of Kansas; \email{schoemann@ku.edu})  
 Kyle Lang (University of Kansas; \email{kylelang@ku.edu})
 }
-\note{
-%%  ~~further notes~~
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+	\itemize{
+		\item \code{\linkS4Class{SimMissing}} for the alternative way to save missing data feature for using in the \code{\link{simResult}} function.
+		\item \code{\link{runMI}} for imputing missing data by multiple imputation and analyze the imputed data.
+	}
 }
 \examples{
   data <- matrix(rep(rnorm(10,1,1),19),ncol=19)
@@ -85,7 +77,3 @@ Kyle Lang (University of Kansas; \email{kylelang@ku.edu})
   imposeMissing(data,twoMethod=c(19,.8))
   imposeMissing(datac,covs=c(20,21),pmMCAR=.1,pmMAR=.1,nforms=3)
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line

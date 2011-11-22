@@ -76,7 +76,11 @@ runMI<- function(data.mat,data.model,imps,miPackage="amelia") {
 
 testMI <- function() {
 ##Shamelessly using the example in lavaan
+
 test<-HolzingerSwineford1939[,-5]
+HS.model <- ' visual  =~ x1 + x2 + x3
+               textual =~ x4 + x5 + x6
+               speed   =~ x7 + x8 + x9 '
 cfa(HS.model,data=test)
 
 ##Impose missing data to test
