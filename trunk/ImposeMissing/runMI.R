@@ -20,12 +20,13 @@ runMI<- function(data.mat,data.model,imps,miPackage="amelia") {
   #Currently only supports imputation by Amelia. We want to add mice, and maybe EM imputatin too...
   if(!miPackage=="amelia") stop("Currently runMI only supports imputation by amelia")
 
+  
   #Impute missing data
   imputed.l<-imputeMissing(data.mat,imps)
   
     #Run models on each imputed data set using  simModel 
   if (class(data.model)=="simModel") {
-    imputed.results <- lapply(imputed.l, simResult,data.model,1)
+    imputed.results <- lapply(imputed.l, simResult,data.model,imps)
   }
   
   #Run models on each imputed data set using lavaan syntax
@@ -58,6 +59,7 @@ runMI<- function(data.mat,data.model,imps,miPackage="amelia") {
 
   
   comb.results<-miPool(imputed.results,imps)
+  
   ##Name elements in the list
   fit.names<-c( "chisq","df","pvalue","baseline.chisq","baseline.df","baseline.pvalue","cfi","tli","logl","unrestricted.logl","npar","aic","bic","ntotal","bic2","rmsea","rmsea.ci.lower","rmsea.ci.upper","rmsea.pvalue","srmr")  
   names(comb.results[[3]])<-fit.names
@@ -65,12 +67,30 @@ runMI<- function(data.mat,data.model,imps,miPackage="amelia") {
   names(comb.results[[2]])<-names(imputed.results.l$imp1$param)
   names(comb.results[[4]])<-names(imputed.results.l$imp1$param)
   names(comb.results[[5]])<-names(imputed.results.l$imp1$param)
-	
-  return(comb.results)
 
+  return(comb.results)
+  
 }
 
+##If use lappy on runMI, get results out of it and get into results object
+##input: comb.results.l is a list of lists from MIpool (usually found when using lapply on runMI)
+##output: results object 
+runMItoResults<-function(MI.results.l){
 
+MI.results.param<-matrix(NA,nrow=length(MI.results.l),ncol=length(MI.results.l[[1]][[1]]))
+MI.results.se<-matrix(NA,nrow=length(MI.results.l),ncol=length(MI.results.l[[1]][[2]]))
+MI.results.fit<-matrix(NA,nrow=length(MI.results.l),ncol=length(MI.results.l[[1]][[3]]))
+
+for(i in 1:length(MI.results.l)){
+MI.results.param[i,]<-unlist(MI.results.l[[i]][[1]])
+MI.results.se[i,]<-unlist(MI.results.l[[i]][[2]])
+MI.results.fit[i,]<-unlist(MI.results.l[[i]][[3]])
+}
+
+Result <- new("simResult", Replication=length(MI.results.l), Estimates=as.data.frame(MI.results.param), SE=as.data.frame(MI.results.se), Fit=as.data.frame(MI.results.fit), Seed=seed)
+return(Result)
+
+}
 
 ##Testing
 ##Shamelessly using the example in lavaan
