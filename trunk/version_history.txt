@@ -55,3 +55,14 @@ simsem, Version 0.0-2.1 11/16/11
 Note
 *.f = function
 *.c = class
+
+simsem, Version 0.0-3.0 11/17/11
+- Patrick builds simsem and haphazardly increases the version number without
+  documenting the additional functionality.
+
+simsem, Version 0.0-4.0 11/17/11
+- Add imposeMissing.R to package for imposing missing data.
+- Add runMI.R to package for running multiple imputation on missing data sets
+  and managing the result pooling
+- Add miPool.R: pools MI results
+

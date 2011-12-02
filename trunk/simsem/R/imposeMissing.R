@@ -36,6 +36,7 @@ imposeMissing <- function(data.mat,covs=NULL,pmMCAR=NULL,pmMAR=NULL,nforms=NULL,
  
  log.mat2 <- makeMAR(data.mat,pmMAR,covs)
  data.mat[log.mat2] <- NA
+
  
  return(data.mat) 
  
