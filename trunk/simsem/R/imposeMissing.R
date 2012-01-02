@@ -3,8 +3,8 @@
 ##Output: data set with missing data 
 
 test <- function() {
-  data <- matrix(rep(rnorm(10,1,1),19),ncol=19)
-  datac <- cbind(data,rnorm(10,0,1),rnorm(10,5,5))
+  
+  
 
   # Imposing Missing with the following arguments produces no missing values
   imposeMissing(data)
