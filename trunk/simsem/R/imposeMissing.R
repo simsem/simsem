@@ -4,8 +4,6 @@
 
 test <- function() {
   
-  
-
   # Imposing Missing with the following arguments produces no missing values
   imposeMissing(data)
   imposeMissing(data,covs=c(1,2))
@@ -14,7 +12,7 @@ test <- function() {
   imposeMissing(data,nforms=0)
 
   #Some more usage examples
-  imposeMissing(data,covs=c(1,2),pmMCAR=.1)
+  imposeMissing(data,pmMCAR=.1)
   imposeMissing(datac,covs=c(20,21),pmMAR=.2)
   imposeMissing(data,nforms=3)
   imposeMissing(data,nforms=3,itemGroups=list(c(1,2,3,4,5),c(6,7,8,9,10),c(11,12,13,14,15),c(16,17,18,19)))
