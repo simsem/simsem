@@ -20,18 +20,31 @@ simResult <- function(simData, simModel, simMissing=NULL, nRep, seed = 123321, s
             data <- simData
           }
 
-         # Impose / Impute Missing
+         # Impose / Impute Missing 
+         # Still need impute missing. I'm working on it (Alex)
           data.mis <- imposeMissing(data, covs=simMissing@covs, pmMCAR=simMissing@pmMCAR,
                                     pmMAR=simMissing@pmMAR, nforms=simMissing@nforms,
                                     itemGroups=simMissing@itemGroups, twoMethod=simMissing@twoMethod)
           temp <- NULL
+          #Impute missing and run results NEEED TO GET PARAMETER LABELS FROM runMI
+           if(simMissing@numImps>0) {
+              tempMI<-NULL
+              if(silent) {
+                 invisible(capture.output(suppressMessages(try(tempMI <- runMI(data.mis,simModel,simMissing@numImps,simMissing@impMethod)), silent=TRUE))))
+              } else {
+                        try(tempMI <- runMI(data.mis,simModel,simMissing@numImps,simMissing@impMethod))
+              }
+              temp <- new("SimResult", modelType=simModel@modelType,nRep=1, coef=tempMI[[1]],
+                               se=tempMI[[2]], fit=tempMI[[2]], converged =!is.null(tempMI)
+              } else{
           if(silent) {
             invisible(capture.output(suppressMessages(try(temp <- run(simModel, data), silent=TRUE))))
                  #tryCatch(temp <- run(simModel, data), error=function(e) {print("Error")})
           } else {
             try(temp <- run(simModel, data))
           }
-
+          }
+          
           if(!is.null(temp)) {
             converged.l[[i]] <- temp@converged			
             Labels <- make.labels(temp@param, "OpenMx") #As a quick default to use OpenMx

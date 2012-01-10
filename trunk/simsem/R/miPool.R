@@ -8,22 +8,22 @@
 #To do: Needs some test cases
 
 #Example: MIpool(imputed.results)
-#  imputed.results = list of imputation results from imputed.results function
+#  imputed.results = simResult object from the RunMI function
 
 miPool<-function(imputed.results,imps){
-  ncol <- length(unlist(imputed.results[[1]]@coef))
-  nrow <- length(imputed.results)
+  ncol <- dim(imputed.results@coef)[1]
+  nrow <- imputed.results@nRep
 
 # Declare and assign first rows of matrices
-  MI.param <- matrix(ncol=ncol,nrow=nrow)
-  MI.se <- matrix(ncol=ncol,nrow=nrow)
-  MI.fit <- matrix(ncol=length(unlist(imputed.results[[1]]@fit)),nrow=nrow)
+  #MI.param <- matrix(ncol=ncol,nrow=nrow)
+  #MI.se <- matrix(ncol=ncol,nrow=nrow)
+  #MI.fit <- matrix(ncol=length(unlist(imputed.results[[1]]@fit)),nrow=nrow)
 
- for(i in 1:length(imputed.results)){
-   MI.param[i,]<-unlist(imputed.results[[i]]@coef)
-   MI.se[i,]<-unlist(imputed.results[[i]]@se)
-   MI.fit[i,]<-unlist(imputed.results[[i]]@fit)
- }
+ #for(i in 1:length(imputed.results)){
+   MI.param<-(imputed.results@coef)
+   MI.se<-(imputed.results@se)
+   MI.fit<-(imputed.results@fit)
+ #}
 
 #Need to remove columns representing fixed parameters
   MI.param <- MI.param[ , colMeans( MI.param==0 ) == 0, drop=FALSE ]

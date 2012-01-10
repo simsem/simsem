@@ -15,7 +15,7 @@ setClass("simMissing",
         nforms=NULL,
         itemGroups=NULL,
         twoMethod=NULL
-        impMethod=NULL
+        impMethod="amelia"
         numImps=NULL)
 )
 

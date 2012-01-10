@@ -25,7 +25,7 @@ runMI<- function(data.mat,data.model,imps,miPackage="amelia") {
   
     #Run models on each imputed data set using  simModel 
   if (class(data.model)=="SimModel") {
-    imputed.results <- lapply(imputed.l, simResult,data.model,1)
+    imputed.results <- lapply(imputed.l, simResult,data.model,nRep=imps)
   }
   
   #Run models on each imputed data set using lavaan syntax
@@ -40,7 +40,7 @@ runMI<- function(data.mat,data.model,imps,miPackage="amelia") {
      return(results)
     }
 
-    imputed.results <- lapply(imputed.l,runlavaan,data.model)
+    imputed.results.l <- lapply(imputed.l,runlavaan,data.model)
 	
     results.param<-matrix(NA,nrow=length(imputed.results.l),ncol=length(imputed.results.l[[1]][[1]]))
     results.se<-matrix(NA,nrow=length(imputed.results.l),ncol=length(imputed.results.l[[1]][[2]]))
@@ -60,33 +60,37 @@ runMI<- function(data.mat,data.model,imps,miPackage="amelia") {
 
   
   comb.results<-miPool(imputed.results,imps)
-  ##Name elements in the list
-  
-  names(comb.results[[1]])<-names(imputed.results$imp1@coef)
-  names(comb.results[[2]])<-names(imputed.results$imp1@se)
-  names(comb.results[[3]])<-names(imputed.results$imp1@fit)
-  names(comb.results[[4]])<-names(imputed.results$imp1@coef)
-  names(comb.results[[5]])<-names(imputed.results$imp1@coef)
-	
+ 
+ ##Name elements in the list
+ ##Only  named when given lavaan syntax 
+  if (is.character(data.model)) {
+  lavaan.fit.names<-c("chisq", "df", "pvalue", "baseline.chisq", "baseline.df", "baseline.pvalue",
+"cfi","tli","logl", "unrestricted.logl", "npar","aic","bic", "ntotal", "bic2", 
+"rmsea", "rmsea.ci.lower","rmsea.ci.upper","rmsea.pvalue","srmr" )
+  names(comb.results[[1]])<-names(imputed.results.l[[1]][[1]])
+  names(comb.results[[2]])<-names(imputed.results.l[[1]][[1]])
+  names(comb.results[[3]])<-lavaan.fit.names
+  names(comb.results[[4]])<-names(imputed.results.l[[1]][[1]])
+  names(comb.results[[5]])<-names(imputed.results.l[[1]][[1]])
+	}
   return(comb.results)
 
 }
-
-
+  
 
 testMI <- function() {
 ##Shamelessly using the example in lavaan
 
-test<-HolzingerSwineford1939[,-5]
+testd<-HolzingerSwineford1939[,-5]
 HS.model <- ' visual  =~ x1 + x2 + x3
                textual =~ x4 + x5 + x6
                speed   =~ x7 + x8 + x9 '
 cfa(HS.model,data=test)
 
 ##Impose missing data to test
-log.mat1 <- makeMCAR(dim(test),.1,covs=NULL)
-test[log.mat1] <- NA
+log.mat1 <- makeMCAR(dim(testd),.3,)
+testd[log.mat1] <- NA
 
-runMI(test,HS.model,3)
+runMI(testd,HS.model,3)
 }
  
