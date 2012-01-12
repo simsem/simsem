@@ -1,8 +1,11 @@
 runOpenMx <- function(object, Data) {
-	if(!require(OpenMx))
+	if(length(grep("OpenMx",installed.packages()[,1])) == 0)
 	{
-		try(source("http://openmx.psyc.virginia.edu/getOpenMx.R"), silent = TRUE)
-		tryCatch(library(OpenMx), error=function(e) {stop("The OpenMx package cannot be loaded. Please install OpenMx packages manually.")})
+		# try(source("http://openmx.psyc.virginia.edu/getOpenMx.R"), silent = TRUE)
+		# tryCatch(library(OpenMx), error=function(e) {stop("The OpenMx package cannot be loaded. Please install OpenMx packages manually.")})
+          print("Please install OpenMx.")
+          # Brief workaround while we try to figure out how to install OpenMx on the cluster. You may want to keep it
+          # like this so that users who don't use OpenMx don't have to install it to use the package.
 	}
 	data <- as.data.frame(Data)
 	ni <- ncol(data)

@@ -5,10 +5,10 @@
 ##  Last modified 11/17/2011
 
 #Conveniance function to run impuations on data and only return list of data
-imputeMissing <- function(data.mat,imps){
+imputeMissing <- function(data.mat,...){
   # pull out only the imputations
   require(Amelia)
-  temp.am <- amelia(data.mat,m=imps)
+  temp.am <- amelia(data.mat,...)
   return(temp.am$imputations)
 
 } # end imputeMissing
@@ -16,16 +16,21 @@ imputeMissing <- function(data.mat,imps){
 ##Currently outputs a list of parameter estimates, standard errors, fit indices and fraction missing information
 ##TO DO: Get names for each element from the lavaan object
 
-runMI<- function(data.mat,data.model,imps,miPackage="amelia") {
+runMI<- function(data.mat,data.model,miPackage="amelia",...) {
   #Currently only supports imputation by Amelia. We want to add mice, and maybe EM imputatin too...
   if(!miPackage=="amelia") stop("Currently runMI only supports imputation by amelia")
 
   #Impute missing data
-  imputed.l<-imputeMissing(data.mat,imps)
+  imputed.l<-imputeMissing(data.mat,...)
+
+  nRep <- 5
+  args <- list(...)
+  if(!is.null(args$m)) nRep=m
+  
   
     #Run models on each imputed data set using  simModel 
   if (class(data.model)=="SimModel") {
-    imputed.results <- lapply(imputed.l, simResult,data.model,nRep=imps)
+    imputed.results <- lapply(imputed.l, simResult,data.model,nRep)
   }
   
   #Run models on each imputed data set using lavaan syntax
@@ -52,7 +57,7 @@ runMI<- function(data.mat,data.model,imps,miPackage="amelia") {
       results.fit[i,]<-unlist(imputed.results.l[[i]][[3]])
     }
 	
-    imputed.results <- new("SimResult", modelType='CFA',nRep=imps, coef=as.data.frame(results.param),
+    imputed.results <- new("SimResult", modelType='CFA',nRep=nRep, coef=as.data.frame(results.param),
                                se=as.data.frame(results.se), fit=as.data.frame(results.fit), converged = c(0))
     #Result <- new("SimResult", modelType=modelType, nRep=nRep, coef=coef, se=se, fit=fit, converged=converged, seed=seed)
   }
