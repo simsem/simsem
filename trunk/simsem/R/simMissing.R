@@ -7,15 +7,15 @@ setClass("simMissing",
         itemGroups="list",
         twoMethod="vector",
         impMethod="vector",
-        numimps="numeric"),
+        numImps="numeric"),
     prototype(
         covs=NULL,
         pmMCAR=NULL,
         pmMAR=NULL,
         nforms=NULL,
         itemGroups=NULL,
-        twoMethod=NULL
-        impMethod="amelia"
+        twoMethod=NULL,
+        impMethod="amelia",
         numImps=NULL)
 )
 

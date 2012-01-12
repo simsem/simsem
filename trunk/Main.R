@@ -3,24 +3,6 @@ setwd("/nfs/home/patr1ckm/simsem/trunk/")
 install.packages("simsem_0.0-4.tar.gz", repos=NULL, type="source")
 library(simsem)
 library(debug)
-library(Rmpi)
-
-# For safety?
-.Last <- function(){ 
-  if (is.loaded("mpi_initialize")){ 
-    if (mpi.comm.size(1) > 0){ 
-      print("Please use mpi.close.Rslaves() to close slaves.") 
-      mpi.close.Rslaves() 
-      } 
-      print("Please use mpi.quit() to quit R") 
-      .Call("mpi_finalize") 
-    } 
-} 
-
-
-# After we spawn computing minions, we need to send them our instructions
-mpi.spawn.Rslaves(nslaves=5)
-mpi.bcast.Robj2slave(planned.missing)
 
 # Generate complete data -
 
@@ -73,7 +55,7 @@ missing.l <- mpi.applyLB(complete.l,imposeMissing)
 
 #results <- runMI(missing.l,data.model=sim.data.model,imps=2)
 
-results.l <- lapply(missing.l,runMI,data.model=sim.data.model,imps=2)
+results.l <- lapply(missing.l,runMI,data.model=sim.data.model,miPackage="amelia",m=2)
 
 
 mtrace(runMI)

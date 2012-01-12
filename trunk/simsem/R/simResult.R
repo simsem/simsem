@@ -30,12 +30,12 @@ simResult <- function(simData, simModel, simMissing=NULL, nRep, seed = 123321, s
            if(simMissing@numImps>0) {
               tempMI<-NULL
               if(silent) {
-                 invisible(capture.output(suppressMessages(try(tempMI <- runMI(data.mis,simModel,simMissing@numImps,simMissing@impMethod)), silent=TRUE))))
+                 invisible(capture.output(suppressMessages(try(tempMI <- runMI(data.mis,simModel,simMissing@numImps,simMissing@impMethod)), silent=TRUE)))
               } else {
                         try(tempMI <- runMI(data.mis,simModel,simMissing@numImps,simMissing@impMethod))
               }
               temp <- new("SimResult", modelType=simModel@modelType,nRep=1, coef=tempMI[[1]],
-                               se=tempMI[[2]], fit=tempMI[[2]], converged =!is.null(tempMI)
+                               se=tempMI[[2]], fit=tempMI[[2]], converged =!is.null(tempMI))
               } else{
           if(silent) {
             invisible(capture.output(suppressMessages(try(temp <- run(simModel, data), silent=TRUE))))
