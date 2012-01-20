@@ -27,7 +27,7 @@ simResult <- function(simData, simModel, simMissing=NULL, nRep, seed = 123321, s
                                     itemGroups=simMissing@itemGroups, twoMethod=simMissing@twoMethod)
           temp <- NULL
           #Impute missing and run results NEEED TO GET PARAMETER LABELS FROM runMI
-           if(simMissing@numImps>0) {
+           if(simMissing@numImps==NULL) {
               tempMI<-NULL
               if(silent) {
                  invisible(capture.output(suppressMessages(try(tempMI <- runMI(data.mis,simModel,simMissing@numImps,simMissing@impMethod)), silent=TRUE)))

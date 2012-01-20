@@ -1,3 +1,4 @@
+#Need container for longitudinal planned missing (e.g., number of items per time)
 setClass("simMissing",
     representation(
         covs="vector",

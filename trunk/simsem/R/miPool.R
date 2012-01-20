@@ -25,11 +25,6 @@ miPool<-function(imputed.results,imps){
    MI.fit<-(imputed.results@fit)
  #}
 
-#Need to remove columns representing fixed parameters
-  MI.param <- MI.param[ , colMeans( MI.param==0 ) == 0, drop=FALSE ]
-  MI.param <- MI.param[ , colMeans( MI.param==1 ) == 0, drop=FALSE ]
-  MI.se <- MI.se[ , colSums( MI.se==0 ) == 0, drop=FALSE ]
-
 #compute parameter estimates
   Estimates <- colMeans(MI.param)
 
