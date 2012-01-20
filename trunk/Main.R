@@ -4,6 +4,21 @@ install.packages("simsem_0.0-4.tar.gz", repos=NULL, type="source")
 library(simsem)
 library(debug)
 
+source('AllClass.R')
+source("AllGenerics.R")
+source('vectorize.object-methods.R')
+source( "make.labels-methods.R" )
+source("is.null.object-methods.R")
+source("simModel-methods.R")
+source("run-methods.R")
+source("runLavaan.R")
+source("blank.parameters.R" )
+source("write.lavaan.code.R" )
+source("write.lavaan.constraint.R" )
+source("collapse.exo.R")
+source("extract.lavaan.summary.R" )
+source("combine.object-methods.R")
+
 # Generate complete data -
 
 build.example.model <- function() {
@@ -37,6 +52,8 @@ build.example.model <- function() {
 }
 
 
+
+
 data.model <- build.example.model()
 data.object <- simData(300, data.model)
 sim.data.model <- simModel(data.model) # this one is the actual model
@@ -56,8 +73,14 @@ missing.l <- mpi.applyLB(complete.l,imposeMissing)
 #results <- runMI(missing.l,data.model=sim.data.model,imps=2)
 
 results.l <- lapply(missing.l,runMI,data.model=sim.data.model,miPackage="amelia",m=2)
+results.l
 
-
+test <- run(sim.data.model, complete.l[[1]])
+coef.l <- vectorize.object(test@coef, Labels)
+      se.l <- vectorize.object(test@se, Labels)
+      fit.l <- test@fit
+      
+      
 mtrace(runMI)
 
 mpi.close.Rslaves()
