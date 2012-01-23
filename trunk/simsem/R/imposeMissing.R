@@ -1,9 +1,9 @@
-##Function to impost planned, MAR and MCAR missing on a data set
-##inputs: data matrix, percent missing for each type of missing, indices of covariates, other arguments to planned missing
-##Output: data set with missing data 
+## Function to impost planned, MAR and MCAR missing on a data set
+## inputs: data matrix, percent missing for each type of missing, indices of covariates, other arguments to planned missing
+## Output: data set with missing data
 
 test <- function() {
-  
+
   # Imposing Missing with the following arguments produces no missing values
   imposeMissing(data)
   imposeMissing(data,covs=c(1,2))
@@ -19,25 +19,25 @@ test <- function() {
   imposeMissing(datac,covs=c(20,21),nforms=3)
   imposeMissing(data,twoMethod=c(19,.8))
   imposeMissing(datac,covs=c(20,21),pmMCAR=.1,pmMAR=.1,nforms=3)
-  
+
 }
 
-imposeMissing <- function(data.mat,covs=NULL,pmMCAR=NULL,pmMAR=NULL,nforms=NULL,itemGroups=NULL,twoMethod=NULL){
+imposeMissing <- function(data.mat,covs=NULL,pmMCAR=NULL,pmMAR=NULL,nforms=NULL,itemGroups=NULL,twoMethod=NULL,timePoints=NULL){
 
  # TRUE values are values to delete
- log.matpl <- planned.missing(dim(data.mat),covs,nforms=nforms,twoMethod=twoMethod,itemGroups=itemGroups)
+ log.matpl <- planned.missing(dim(data.mat),covs,nforms=nforms,twoMethod=twoMethod,itemGroups=itemGroups,timePoints=timePoints)
  data.mat[log.matpl] <- NA
- 
+
  # Impose MAR and MCAR
  log.mat1 <- makeMCAR(dim(data.mat),pmMCAR,covs)
  data.mat[log.mat1] <- NA
- 
+
  log.mat2 <- makeMAR(data.mat,pmMAR,covs)
  data.mat[log.mat2] <- NA
 
- 
- return(data.mat) 
- 
+
+ return(data.mat)
+
 }
 
 
@@ -50,11 +50,11 @@ makeMAR <- function(data,pm=NULL,covs=NULL)
 
     if(!is.null(pm) && !is.null(covs)) {
       len.scale <- dim(data)[2]
-    
+
       mar.pred1 <- covs[1]
       mar.pred2 <- covs[2]
 
-    
+
     ## Create a vector of small deviations 1/2 the length of your scales
       Y <- runif(len.scale*.5,0,.25*pm)
 
@@ -65,7 +65,7 @@ makeMAR <- function(data,pm=NULL,covs=NULL)
       } else {
         Z <- sample(c(Y+pm,-Y+pm,pm), size=len.scale, replace=F)
       }
-      
+
     ## fun1 asks the question:
     ## Is the prob. associated with the current value of some covariate (normally dist. attached to the dataset) <= x
        ## x = an element of Z (from above)
@@ -77,7 +77,7 @@ makeMAR <- function(data,pm=NULL,covs=NULL)
       g1 <- c[1:(length(c)/2)]
       g2 <- c[((ceiling(length(c)/2) + 1 - length(c)%% 2):length(c))]
 
-      
+
     ## Apply fun1 to half of the variables using one covariate and to the other half using a different covariate
        ## Because Z is m elements long and our covariate is p elements long cbind(R1, R2) will total p x m
       R1 <- sapply(Z[g1],fun1,dat=data[,mar.pred1])
@@ -86,9 +86,9 @@ makeMAR <- function(data,pm=NULL,covs=NULL)
       dat[,g1] <- R1
       dat[,g2] <- R2
     }
-    
+
     return(dat)
-    
+
 }
 
 # Function to make some MCAR missin'
@@ -105,9 +105,9 @@ makeMCAR <- function(dims,pm=NULL,covs=NULL)
     }
 
     if (!is.null(covs) ) {
-       R[,covs] <- FALSE    
-    } 
-    
+       R[,covs] <- FALSE
+    }
+
     return(R)
 }
 
@@ -122,37 +122,52 @@ makeMCAR <- function(dims,pm=NULL,covs=NULL)
 
 # TODO:
 # Warnings for illegal groupings
-# Check to see if item groupings are valid? 
-planned.missing <- function(dims=c(0,0),nforms=NULL,itemGroups=NULL,twoMethod=NULL, covs=NULL) {
-  
+# Check to see if item groupings are valid?
+planned.missing <- function(dims=c(0,0),nforms=NULL,itemGroups=NULL,twoMethod=NULL, covs=NULL, timePoints=1) {
+
   nitems <- dims[2]
   nobs <- dims[1]
   excl <- covs
 
-  log.mat <- matrix(FALSE,ncol=nitems,nrow=nobs)
+  itemList <- 1:dims[2]
+  itemList <- itemList[-excl]
+  itemsPerTP <- length(itemList)/timePoints
+
+  log.mat <- matrix(FALSE,ncol=itemsPerTP,nrow=nobs)
 
   if(!is.null(nforms) && nforms != 0) {
     if ( ((!is.null(itemGroups)) && (class(itemGroups) != "list")) ) {
       stop("itemGroups not a list")
-    } 
+    }
 
    # groups items into sets of column indices (in the 3 form case, shared/a/b/c)
 
    if (is.null(itemGroups)) {
-     items.in.group <- nitems/(nforms+1)
-     itemGroups <- generate.indices(nforms+1,items.in.group,excl)
+     itemGroups <- generate.indices(nforms+1,1:itemsPerTP)
    }
 
    # groups observations into sets of row indices. Each set "receives" a different "form"
 
-   obs.in.group <- nobs / (nforms)
-   obsGroups <- generate.indices(nforms,obs.in.group,excl=NULL)
+   obsGroups <- generate.indices(nforms,1:nobs,excl=NULL)
 
-   # Create Missing Matrix
+   # Create Missing Matrix: 1 TimePoint
      for(i in 1:nforms) {
        log.mat[obsGroups[[i]],itemGroups[[i+1]]] <- TRUE
-  
+
      }
+
+    # Create the full missing matrix
+    # 1) Repeat the logical matrix for each time point
+    logFull.mat <- matrix(rep(log.mat,timePoints),ncol=itemsPerTP*timePoints)
+    # 2) Create a logical matrix of FALSE for each covariate
+    covMat <- matrix(rep(FALSE,nobs*length(covs)),ncol=length(covs))
+    # 3) Add the columns of covariates to the end of the matrix, and convert to data.frame
+    fullcovs <- as.data.frame(cbind(logFull.mat,covMat))
+    # 4) Rename the colums of the data frame
+    colnames(fullcovs) <- (c(itemList,excl))
+    # 5) Sort the column names
+    fullcovs <- fullcovs[,paste(sort(as.integer(colnames(fullcovs))),sep="")]
+
   }
    if (!is.null(twoMethod)) {
      col <- unlist(twoMethod[1])
@@ -161,29 +176,29 @@ planned.missing <- function(dims=c(0,0),nforms=NULL,itemGroups=NULL,twoMethod=NU
      log.mat[toDelete,col] <- TRUE
    }
 
-  return (log.mat)
+  return (fullcovs)
 }
 
 
 # Default generation method for item groupings and observation groupings.
-# Generates sequential groups of lists of numbers based on the desired number of groups,
-# and the number of items in a group, excluding certain indices.
+# Generates sequential groups of lists of column indices  based on the desired number of groups,
+# and a range of the group column indices. You can also exclude specific column indeces.
 #
-# EX: generate.indices(3,4)
+# EX: generate.indices(3,1:12)
 # [[1]]
 # [1] 1 2 3 4
 # [[2]]
 # [1] 5 6 7 8
 # [[3]]
 # [1] 9 10 11 12
-generate.indices <- function(ngroups, items.in.group,excl=NULL) {
-  
-  a <- 1:(ngroups*items.in.group) # set of item indices
-  
+generateIndices <- function(ngroups, groupRange, excl=NULL) {
+
+  a <- groupRange
+
   if(!is.null(excl)){
     anot <- a[-excl]
   } else { anot <- a}
-  
+
   ipg <- length(anot)/ngroups
 
   for (i in 1:ngroups) {
@@ -195,7 +210,8 @@ generate.indices <- function(ngroups, items.in.group,excl=NULL) {
       index.list[[i]] <- anot[(indices.used+1):(ipg*i)]
     }
   }
-    
+
   return(index.list)
 }
+
 
