@@ -22,10 +22,12 @@ test <- function() {
 
 }
 
-imposeMissing <- function(data.mat,covs=NULL,pmMCAR=NULL,pmMAR=NULL,nforms=NULL,itemGroups=NULL,twoMethod=NULL,timePoints=NULL){
+imposeMissing <- function(data.mat,covs=NULL,pmMCAR=NULL,pmMAR=NULL,nforms=NULL,
+                          itemGroups=NULL,twoMethod=NULL,timePoints=1){
 
  # TRUE values are values to delete
- log.matpl <- planned.missing(dim(data.mat),covs,nforms=nforms,twoMethod=twoMethod,itemGroups=itemGroups,timePoints=timePoints)
+ log.matpl <- planned.missing(dim(data.mat),covs,nforms=nforms,twoMethod=twoMethod,
+                              itemGroups=itemGroups,timePoints=timePoints)
  data.mat[log.matpl] <- NA
 
  # Impose MAR and MCAR
@@ -124,13 +126,17 @@ makeMCAR <- function(dims,pm=NULL,covs=NULL)
 # Warnings for illegal groupings
 # Check to see if item groupings are valid?
 planned.missing <- function(dims=c(0,0),nforms=NULL,itemGroups=NULL,twoMethod=NULL, covs=NULL, timePoints=1) {
-
+  
   nitems <- dims[2]
   nobs <- dims[1]
   excl <- covs
 
   itemList <- 1:dims[2]
-  itemList <- itemList[-excl]
+
+  if(!is.null(excl)) {
+    itemList <- itemList[-excl]
+  }
+  
   itemsPerTP <- length(itemList)/timePoints
 
   log.mat <- matrix(FALSE,ncol=itemsPerTP,nrow=nobs)
@@ -142,13 +148,13 @@ planned.missing <- function(dims=c(0,0),nforms=NULL,itemGroups=NULL,twoMethod=NU
 
    # groups items into sets of column indices (in the 3 form case, shared/a/b/c)
 
-   if (is.null(itemGroups)) {
-     itemGroups <- generate.indices(nforms+1,1:itemsPerTP)
-   }
+    if (is.null(itemGroups)) {
+      itemGroups <- generateIndices(nforms+1,1:itemsPerTP)
+    }
 
    # groups observations into sets of row indices. Each set "receives" a different "form"
 
-   obsGroups <- generate.indices(nforms,1:nobs,excl=NULL)
+    obsGroups <- generateIndices(nforms,1:nobs)
 
    # Create Missing Matrix: 1 TimePoint
      for(i in 1:nforms) {
@@ -158,15 +164,27 @@ planned.missing <- function(dims=c(0,0),nforms=NULL,itemGroups=NULL,twoMethod=NU
 
     # Create the full missing matrix
     # 1) Repeat the logical matrix for each time point
-    logFull.mat <- matrix(rep(log.mat,timePoints),ncol=itemsPerTP*timePoints)
     # 2) Create a logical matrix of FALSE for each covariate
-    covMat <- matrix(rep(FALSE,nobs*length(covs)),ncol=length(covs))
-    # 3) Add the columns of covariates to the end of the matrix, and convert to data.frame
-    fullcovs <- as.data.frame(cbind(logFull.mat,covMat))
+    # 3) Add the columns of covariates to the end of the matrix, and convert to data frame
     # 4) Rename the colums of the data frame
-    colnames(fullcovs) <- (c(itemList,excl))
     # 5) Sort the column names
-    fullcovs <- fullcovs[,paste(sort(as.integer(colnames(fullcovs))),sep="")]
+    # 6) Convert to back to matrix
+    
+    log.mat <- matrix(rep(log.mat,timePoints),ncol=itemsPerTP*timePoints)
+
+    if(length(covs) != 0) {
+      covMat <- matrix(rep(FALSE,nobs*length(covs)),ncol=length(covs))
+      log.df <- as.data.frame(cbind(log.mat,covMat))
+      colnames(log.df) <- (c(itemList,excl))
+
+      # The column names need to be coerced to integers for the sort to work correctly, and then coerced back
+      # to strings for the data frame subsetting to work correctly.
+      log.df <- log.df[,paste(sort(as.integer(colnames(log.df))),sep="")]
+
+      log.mat <- as.matrix(log.df)
+      colnames(log.mat) <- NULL
+
+    }
 
   }
    if (!is.null(twoMethod)) {
@@ -176,7 +194,7 @@ planned.missing <- function(dims=c(0,0),nforms=NULL,itemGroups=NULL,twoMethod=NU
      log.mat[toDelete,col] <- TRUE
    }
 
-  return (fullcovs)
+  return (log.mat)
 }
 
 

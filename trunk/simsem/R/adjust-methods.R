@@ -1,15 +1,20 @@
 # adjust
 # Methods -- simsem package
-# This function will adjust an element in a target object. The specified element may be set to be free parameter with number 
-#	or distribution object as starting values. Alternatively, the element can be fixed to be a value (such as 0).
+# This function will adjust an element in a target object. The specified element may be set to be
+# free parameter with number or distribution object as starting values. Alternatively, the element can be
+# fixed to be a value (such as 0).
+
 # Generic Function: adjust(target, param, pos, numAsFixed)
 # Argument:
-#	Target: 	The target object that you would like to adjust
+#	Target: The target object that you would like to adjust
 #	param:	The name of param.c that you would like to specify (put as character with single or double quotation) 
-#				or number that represents fixed values or starting values.
-#	pos:	The pos of element that you would like to adjust, such as \code{"c(1,2)"} for the element in Row 1 and Column 2 in the specified matrix.
-#	numAsFixed:	This argument is used when the param argument was specified as number. If TRUE (as default), the number is treated as fixed parameters. 
-#					If FALSE, the number is treated as a starting value and the element is set to be free parameter.
+#		or number that represents fixed values or starting values.
+#	pos: The pos of element that you would like to adjust, such as \code{"c(1,2)"} for the element in Row 1
+#            and Column 2 in the specified matrix.
+#	numAsFixed: This argument is used when the param argument was specified as number.
+#                   If TRUE (as default), the number is treated as fixed parameters.
+#                   If FALSE, the number is treated as a starting value and the element is set to be free parameter.
+
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 6, 2011
 
