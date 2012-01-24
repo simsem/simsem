@@ -14,7 +14,7 @@ Package: \tab simsem\cr
 Type: \tab Package\cr
 Version: \tab 0.0.2\cr
 Depends: \tab R(>= 2.12), methods, lavaan, MASS\cr
-Suggests: \tab OpenMx\cr
+Suggests: \tab OpenMx, Amelia\cr
 Date: \tab 2011-11-15\cr
 License: \tab GPL (>= 2)\cr
 LazyLoad: \tab yes\cr
