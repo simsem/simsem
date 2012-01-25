@@ -130,6 +130,7 @@ planned.missing <- function(dims=c(0,0),nforms=NULL,itemGroups=NULL,twoMethod=NU
   nitems <- dims[2]
   nobs <- dims[1]
   excl <- covs
+  numExcl <- length(covs)
 
   itemList <- 1:dims[2]
 
@@ -156,11 +157,15 @@ planned.missing <- function(dims=c(0,0),nforms=NULL,itemGroups=NULL,twoMethod=NU
 
     obsGroups <- generateIndices(nforms,1:nobs)
 
-   # Create Missing Matrix: 1 TimePoint
-     for(i in 1:nforms) {
-       log.mat[obsGroups[[i]],itemGroups[[i+1]]] <- TRUE
-
-     }
+    for(j in 1:timePoints) {
+      obsGroups <- sample(obsGroups)
+      temp.mat <- matrix(FALSE,ncol=itemsPerTP,nrow=nobs)
+      
+      for(i in 1:nforms) {
+        temp.mat[obsGroups[[i]],itemGroups[[i+1]]] <- TRUE
+      }
+      log.mat <- cbind(log.mat,temp.mat)
+    }
 
     # Create the full missing matrix
     # 1) Repeat the logical matrix for each time point
@@ -170,8 +175,6 @@ planned.missing <- function(dims=c(0,0),nforms=NULL,itemGroups=NULL,twoMethod=NU
     # 5) Sort the column names
     # 6) Convert to back to matrix
     
-    log.mat <- matrix(rep(log.mat,timePoints),ncol=itemsPerTP*timePoints)
-
     if(length(covs) != 0) {
       covMat <- matrix(rep(FALSE,nobs*length(covs)),ncol=length(covs))
       log.df <- as.data.frame(cbind(log.mat,covMat))
