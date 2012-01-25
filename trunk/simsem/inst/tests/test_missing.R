@@ -50,7 +50,7 @@ expect_true((percentmis >.04) && (percentmis < .05))
 
 percentmis <- mean(replicate(10,sum(is.na(imposeMissing(dataCE,covs=c(21,22),nforms=3,timePoints=2)))
                              /length(dataCE[,1:20])))
-expect_true(percentmis == .2667)
+expect_true((percentmis > .266) && (percentmis <.267))
 
 test.dat <- imposeMissing(dataCE,covs=c(21,22),nforms=3,timePoints=2)
 expect_true(sum(is.na(test.dat[,c(1,2,11,12,21,22)])) == 0)

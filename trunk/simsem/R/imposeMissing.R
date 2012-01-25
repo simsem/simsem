@@ -4,6 +4,8 @@
 
 test <- function() {
 
+  dat1 <- matrix(rep(1,400),ncol=20)
+  
   # Imposing Missing with the following arguments produces no missing values
   imposeMissing(data)
   imposeMissing(data,covs=c(1,2))
@@ -158,13 +160,23 @@ planned.missing <- function(dims=c(0,0),nforms=NULL,itemGroups=NULL,twoMethod=NU
     obsGroups <- generateIndices(nforms,1:nobs)
 
     for(j in 1:timePoints) {
-      obsGroups <- sample(obsGroups)
-      temp.mat <- matrix(FALSE,ncol=itemsPerTP,nrow=nobs)
+      if(j == 1) {
+        temp.mat <- matrix(FALSE,ncol=itemsPerTP,nrow=nobs)
       
-      for(i in 1:nforms) {
-        temp.mat[obsGroups[[i]],itemGroups[[i+1]]] <- TRUE
+        for(i in 1:nforms) {
+          temp.mat[obsGroups[[i]],itemGroups[[i+1]]] <- TRUE
+        }
+        log.mat <- temp.mat
       }
-      log.mat <- cbind(log.mat,temp.mat)
+      else {
+        temp.mat <- matrix(FALSE,ncol=itemsPerTP,nrow=nobs)
+        obsGroups <- sample(obsGroups)
+        for(i in 1:nforms) {
+          temp.mat[obsGroups[[i]],itemGroups[[i+1]]] <- TRUE
+        }
+        log.mat <- cbind(log.mat,temp.mat)
+      }
+        
     }
 
     # Create the full missing matrix
