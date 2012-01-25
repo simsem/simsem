@@ -135,6 +135,7 @@ planned.missing <- function(dims=c(0,0),nforms=NULL,itemGroups=NULL,twoMethod=NU
   numExcl <- length(covs)
 
   itemList <- 1:dims[2]
+  
 
   if(!is.null(excl)) {
     itemList <- itemList[-excl]
@@ -142,6 +143,9 @@ planned.missing <- function(dims=c(0,0),nforms=NULL,itemGroups=NULL,twoMethod=NU
   
   itemsPerTP <- length(itemList)/timePoints
 
+  if(!is.integer(itemsPerTP)) stop "Items are not divisible by timepoints! Check the number of items and timepoints."
+
+  
   log.mat <- matrix(FALSE,ncol=itemsPerTP,nrow=nobs)
 
   if(!is.null(nforms) && nforms != 0) {
