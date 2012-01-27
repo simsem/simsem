@@ -1043,6 +1043,7 @@ setClass("SimModelOut", # The class provides model result.
 #  nforms = number of forms for planned missing
 #  itemGroups = list of lists of item groupings (column indices) for planned missing data designs
 #  twoMethod = vector of (item, percent missing). Functions removes the given percent of data on the column index.
+#  timepoints = number of timepoints in data
 # Methods:	None for now.
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu), Patrick Miller (University of Kansas; patr1ckm@ku.edu)
 # Date Modified: November 17, 2011
@@ -1054,13 +1055,15 @@ setClass("SimMissing",
         pmMAR="numeric",
         nforms="numeric",
         itemGroups="list",
-        twoMethod="vector"),
+        twoMethod="vector",
+        timePoints="numeric"),
     prototype(
-        covs=NULL,
-        pmMCAR=NULL,
-        pmMAR=NULL,
-        nforms=NULL,
-        itemGroups=NULL,
-        twoMethod=NULL)
+        covs=0,
+        pmMCAR=0,
+        pmMAR=0,
+        nforms=0,
+        itemGroups=list(NULL),
+        twoMethod=0,
+        timePoints=1)
 )
 

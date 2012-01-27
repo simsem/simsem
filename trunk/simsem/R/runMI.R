@@ -8,7 +8,7 @@
 imputeMissing <- function(data.mat,m, ...){
   # pull out only the imputations
   require(Amelia)
-  temp.am <- amelia(data.mat,m, ...)
+  temp.am <- amelia(data.mat,m, p2s=0, ...)
   return(temp.am$imputations)
 
 } # end imputeMissing
@@ -87,10 +87,6 @@ runMI<- function(data.mat,data.model, m, miPackage="amelia", ...) {
     se <- as.data.frame(results.se)
     fit <- as.data.frame(results.fit)
     
-#Need to remove columns representing fixed parameters
-  coef <- coef[ , colMeans( MI.param==0 ) == 0, drop=FALSE ]
-  coef <- coef[ , colMeans( MI.param==1 ) == 0, drop=FALSE ]
-  se <- se[ , colMeans( MI.se==0 ) == 0, drop=FALSE ]
 	  
     imputed.results <- new("SimResult", modelType='CFA',nRep=nRep, coef=coef, se=se, fit=fit, converged = c(0))
     #Result <- new("SimResult", modelType=modelType, nRep=nRep, coef=coef, se=se, fit=fit, converged=converged, seed=seed)
@@ -102,16 +98,22 @@ runMI<- function(data.mat,data.model, m, miPackage="amelia", ...) {
  
  ##Name elements in the list
  ##Only  named when given lavaan syntax 
-  if (is.character(data.model)) {
-  lavaan.fit.names<-c("chisq", "df", "pvalue", "baseline.chisq", "baseline.df", "baseline.pvalue",
-"cfi","tli","logl", "unrestricted.logl", "npar","aic","bic", "ntotal", "bic2", 
-"rmsea", "rmsea.ci.lower","rmsea.ci.upper","rmsea.pvalue","srmr" )
+  
+  if (class(data.model)=="SimModel") {
+  lavaan.fit.names<-c('Chi', 'df', 'pvalue', 'baseline.Chi', 'baseline.df', 'baseline.pvalue', 'CFI', 'TLI', 'AIC', 'BIC', 'RMSEA', 'RMSEA.ci.lower', 'RMSEA.ci.upper', 'SRMR')
+  names(comb.results[[3]])<-lavaan.fit.names
+  }
+
+if (is.character(data.model)) {
   names(comb.results[[1]])<-names(imputed.results.l[[1]][[1]])
   names(comb.results[[2]])<-names(imputed.results.l[[1]][[1]])
-  names(comb.results[[3]])<-lavaan.fit.names
+  lavaan.fit.names<-c("chisq", "df", "pvalue", "baseline.chisq", "baseline.df", "baseline.pvalue","cfi","tli","logl", "unrestricted.logl", "npar","aic","bic", "ntotal", "bic2", 
+"rmsea", "rmsea.ci.lower","rmsea.ci.upper","rmsea.pvalue","srmr" )
+names(comb.results[[3]])<-lavaan.fit.names
   names(comb.results[[4]])<-names(imputed.results.l[[1]][[1]])
   names(comb.results[[5]])<-names(imputed.results.l[[1]][[1]])
 	}
+ 
    
   return(comb.results)
 

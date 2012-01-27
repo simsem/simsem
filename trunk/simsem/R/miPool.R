@@ -14,12 +14,7 @@ miPool<-function(imputed.results,imps){
   ncol <- dim(imputed.results@coef)[1]
   nrow <- imputed.results@nRep
 
-# Declare and assign first rows of matrices
-  #MI.param <- matrix(ncol=ncol,nrow=nrow)
-  #MI.se <- matrix(ncol=ncol,nrow=nrow)
-  #MI.fit <- matrix(ncol=length(unlist(imputed.results[[1]]@fit)),nrow=nrow)
 
- #for(i in 1:length(imputed.results)){
    MI.param<-(imputed.results@coef)
    MI.se<-(imputed.results@se)
    MI.fit<-(imputed.results@fit)
@@ -52,7 +47,15 @@ miPool<-function(imputed.results,imps){
   FMI<-rbind(FMI.1,FMI.2)
 
 #compute average fit index estimates (only some of these will be interpretable!)
-  Fit.indices <- colMeans(MI.fit)
+  Fit.indices <- as.vector(colMeans(MI.fit))
+  
+#Get rid of estimates from fixed variables
+fixedParam <- Bm==0
+
+Estimates <- subset(Estimates, !fixedParam)
+SE <- subset(SE, !fixedParam)
+FMI.1 <- subset(FMI.1, !fixedParam)
+FMI.2 <- subset(FMI.2, !fixedParam)
 
   MI.res<-list(Estimates,SE,Fit.indices,FMI.1,FMI.2)
   names(MI.res)<-c('coef','se','fit','FMI.1','FMI.2')

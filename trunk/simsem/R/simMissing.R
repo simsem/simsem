@@ -8,16 +8,18 @@ setClass("simMissing",
         itemGroups="list",
         twoMethod="vector",
         impMethod="vector",
-        numImps="numeric"),
+        numImps="numeric",
+        timePoints="numeric"),
     prototype(
-        covs=NULL,
-        pmMCAR=NULL,
-        pmMAR=NULL,
-        nforms=NULL,
-        itemGroups=NULL,
-        twoMethod=NULL,
+        covs=0,
+        pmMCAR=0,
+        pmMAR=0,
+        nforms=0,
+        itemGroups=list(0),
+        twoMethod=0,
         impMethod="amelia",
-        numImps=NULL)
+        numImps=0,
+        timePoints=1)
 )
 
 # simMissing <- function(covs=NULL, pmMCAR=NULL, pmMAR=NULL, nforms=NULL, itemGroups=NULL, twoMethod=NULL) {

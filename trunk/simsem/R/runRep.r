@@ -68,4 +68,3 @@ runRep <- function(simData, simModel, simMissing=NULL, seed = 123321, silent=FAL
 	return <- Result
 }
 
-temp<-lappy(res,runrep,....)

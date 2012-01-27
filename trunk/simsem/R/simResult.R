@@ -1,4 +1,5 @@
 
+
 simResult <- function(simData, simModel, simMissing=NULL, nRep, seed = 123321, silent=FALSE) {
 	set.seed(seed)
 	modelType <- simModel@modelType
@@ -7,6 +8,14 @@ simResult <- function(simData, simModel, simMissing=NULL, nRep, seed = 123321, s
 	se.l <- NULL
 	converged.l <- NULL
 	param.l <- NULL
+  
+   if(is.null(simMissing)){
+    numImps <- 0
+    }
+    else{
+    numImps <- simMissing@numImps
+    }
+   
         
 	for(i in 1:nRep) {
           if(!silent) cat(i, "\n")
@@ -19,24 +28,30 @@ simResult <- function(simData, simModel, simMissing=NULL, nRep, seed = 123321, s
           } else {
             data <- simData
           }
-
+         
+         temp <- NULL
+         
+         if(!is.null(simMissing)){
          # Impose / Impute Missing 
-         # Still need impute missing. I'm working on it (Alex)
-          data.mis <- imposeMissing(data, covs=simMissing@covs, pmMCAR=simMissing@pmMCAR,
+        
+          data.mis <- imposeMissing(data@data, covs=simMissing@covs, pmMCAR=simMissing@pmMCAR,
                                     pmMAR=simMissing@pmMAR, nforms=simMissing@nforms,
-                                    itemGroups=simMissing@itemGroups, twoMethod=simMissing@twoMethod)
-          temp <- NULL
-          #Impute missing and run results NEEED TO GET PARAMETER LABELS FROM runMI
-           if(simMissing@numImps==NULL) {
+                                    itemGroups=simMissing@itemGroups, twoMethod=simMissing@twoMethod, timePoints=simMissing@timePoints)
+               }                     
+          
+          temp <- NULL#Impute missing and run results NEEED TO GET PARAMETER LABELS FROM runMI
+          
+          if(numImps>0) {
               tempMI<-NULL
               if(silent) {
                  invisible(capture.output(suppressMessages(try(tempMI <- runMI(data.mis,simModel,simMissing@numImps,simMissing@impMethod)), silent=TRUE)))
               } else {
                         try(tempMI <- runMI(data.mis,simModel,simMissing@numImps,simMissing@impMethod))
               }
-              temp <- new("SimResult", modelType=simModel@modelType,nRep=1, coef=tempMI[[1]],
-                               se=tempMI[[2]], fit=tempMI[[2]], converged =!is.null(tempMI))
-              } else{
+              temp <- new("SimResult", modelType=simModel@modelType,nRep=1, coef=as.data.frame(tempMI[[1]]),
+                               se=as.data.frame(tempMI[[2]]), fit=as.data.frame(t(tempMI[[3]])), converged =!is.null(tempMI))
+              } 
+              else{
           if(silent) {
             invisible(capture.output(suppressMessages(try(temp <- run(simModel, data), silent=TRUE))))
                  #tryCatch(temp <- run(simModel, data), error=function(e) {print("Error")})
@@ -45,9 +60,10 @@ simResult <- function(simData, simModel, simMissing=NULL, nRep, seed = 123321, s
           }
           }
           
+          
           if(!is.null(temp)) {
-            converged.l[[i]] <- temp@converged			
-            Labels <- make.labels(temp@param, "OpenMx") #As a quick default to use OpenMx
+            converged.l[[i]] <- temp@converged	     
+            Labels <- make.labels(temp@param, package=simModel@package) #As a quick default to use OpenMx
             coef.l[[i]] <- vectorize.object(temp@coef, Labels)
             se.l[[i]] <- vectorize.object(temp@se, Labels)
             fit.l[[i]] <- temp@fit

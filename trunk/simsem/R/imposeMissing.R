@@ -24,9 +24,18 @@ test <- function() {
 
 }
 
-imposeMissing <- function(data.mat,covs=NULL,pmMCAR=NULL,pmMAR=NULL,nforms=NULL,
-                          itemGroups=NULL,twoMethod=NULL,timePoints=1){
-
+imposeMissing <- function(data.mat,covs=0,pmMCAR=0,pmMAR=0,nforms=0,
+                          itemGroups=0,twoMethod=0,timePoints=1){
+ 
+ #Need the inputs to be numeric for the missing object. Turn to Nulls for this function
+ if (covs==0) {covs <- NULL }
+ if (pmMCAR==0) {pmMCAR <- NULL }
+ if (pmMAR==0) {pmMAR <- NULL } 
+ if (nforms==0) {nforms <- NULL }
+ if (itemGroups==0) {itemGroups <- NULL }
+ if (twoMethod==0) {twoMethod <- NULL }
+ 
+ 
  # TRUE values are values to delete
  log.matpl <- planned.missing(dim(data.mat),covs,nforms=nforms,twoMethod=twoMethod,
                               itemGroups=itemGroups,timePoints=timePoints)
@@ -143,7 +152,7 @@ planned.missing <- function(dims=c(0,0),nforms=NULL,itemGroups=NULL,twoMethod=NU
   
   itemsPerTP <- length(itemList)/timePoints
 
-  if(!is.integer(itemsPerTP)) stop "Items are not divisible by timepoints! Check the number of items and timepoints."
+  if(is.integer(itemsPerTP)) stop ("Items are not divisible by timepoints! Check the number of items and timepoints.")
 
   
   log.mat <- matrix(FALSE,ncol=itemsPerTP,nrow=nobs)
