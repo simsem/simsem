@@ -26,6 +26,7 @@ runMI<- function(data.mat,data.model, m, miPackage="amelia", ...) {
   #nRep <- m
   args <- list(...)
   
+  ## Return list of simModelOut objects, to be combined. 
   runSimMI <- function(MIdata,simModel) {
     model <- run(simModel, MIdata)
     return(model)
@@ -33,86 +34,54 @@ runMI<- function(data.mat,data.model, m, miPackage="amelia", ...) {
   
 
 
-    #Run models on each imputed data set using  simModel  GET simResult OUT!
+    #Run models on each imputed data set using  simModel  
   if (class(data.model)=="SimModel") {
     imputed.results.l <- lapply(imputed.l, runSimMI,data.model)
     
-    
-    fit.l <- NULL 
-    coef.l <- NULL # We need them. Trust me (Sunthud).
-    se.l <- NULL
-    converged.l <- NULL
-    param.l <- NULL
-    
-    for(i in 1:length(imputed.results.l)){
-      converged.l[[i]] <- imputed.results.l[[i]]@converged			
-      Labels <- make.labels(imputed.results.l[[1]]@param, "lavaan") #As a quick default to use OpenMx
-      coef.l[[i]] <- vectorize.object(imputed.results.l[[i]]@coef, Labels)
-      se.l[[i]] <- vectorize.object(imputed.results.l[[i]]@se, Labels)
-      fit.l[[i]] <- imputed.results.l[[i]]@fit
-}
-  coef <- as.data.frame(do.call(rbind, coef.l))
-	se <- as.data.frame(do.call(rbind, se.l))
-	fit <- as.data.frame(do.call(rbind, fit.l))
-	converged <- as.vector(unlist(converged.l))
-
-	imputed.results <- new("SimResult", modelType=data.model@modelType, nRep=m, coef=coef, se=se, fit=fit, converged=converged)
   }
   
-  #Run models on each imputed data set using lavaan syntax
+  #Run models on each imputed data set using lavaan syntax Can we switch to simSEM framework?
   if (is.character(data.model)) {
     #Function to run lavaan using lapply
     #inputs: raw data, syntax
     #Output: list of parameter estimates, se and fit from each model
 
     runlavaanMI <- function(MIdata,syntax) {
-     model <- cfa(syntax, data=MIdata)
-     results <- list(param=coef(model),se=model@Fit@se[!model@Fit@se==0],fit=as.vector(fitmeasures(model)))
-     return(results)
+     fit <- cfa(syntax, data=MIdata)
+     FitIndices <- extract.lavaan.summary(fit)
+	   coef <- (inspect(fit, "coef")
+     se <- (inspect(fit, "se")
+	#Converged <- fit@fit@converged
+	Converged = TRUE
+    if(sum(unlist(lapply(inspect(fit, "se"), sum))) == 0) Converged = FALSE
+    return(new("SimModelOut", package='lavaan', coef=coef,
+        fit=FitIndices, se=se, converged=Converged))
     }
 
-    imputed.results.l <- lapply(imputed.l,runlavaanMI,data.model)
-	
-    results.param<-matrix(NA,nrow=length(imputed.results.l),ncol=length(imputed.results.l[[1]][[1]]))
-    results.se<-matrix(NA,nrow=length(imputed.results.l),ncol=length(imputed.results.l[[1]][[2]]))
-    results.fit<-matrix(NA,nrow=length(imputed.results.l),ncol=length(imputed.results.l[[1]][[3]]))
-
-    for(i in 1:length(imputed.results.l)){
-      results.param[i,]<-unlist(imputed.results.l[[i]][[1]])
-      results.se[i,]<-unlist(imputed.results.l[[i]][[2]])
-      results.fit[i,]<-unlist(imputed.results.l[[i]][[3]])
+    imputed.results.l <- lapply(imputed.l, runlavaanMI, data.model)
     }
-    
-    coef <- as.data.frame(results.param)
-    se <- as.data.frame(results.se)
-    fit <- as.data.frame(results.fit)
-    
-	  
-    imputed.results <- new("SimResult", modelType='CFA',nRep=nRep, coef=coef, se=se, fit=fit, converged = c(0))
-    #Result <- new("SimResult", modelType=modelType, nRep=nRep, coef=coef, se=se, fit=fit, converged=converged, seed=seed)
-  }
 
 
-  
+  ##New miPool should return simResult object. Can be used with runRep runSIM or can be summarized. 
   comb.results<-miPool(imputed.results,m)
  
  ##Name elements in the list
  ##Only  named when given lavaan syntax 
   
-  if (class(data.model)=="SimModel") {
-  lavaan.fit.names<-c('Chi', 'df', 'pvalue', 'baseline.Chi', 'baseline.df', 'baseline.pvalue', 'CFI', 'TLI', 'AIC', 'BIC', 'RMSEA', 'RMSEA.ci.lower', 'RMSEA.ci.upper', 'SRMR')
-  names(comb.results[[3]])<-lavaan.fit.names
-  }
+  # if (class(data.model)=="SimModel") {
+  # lavaan.fit.names<-c('Chi', 'df', 'pvalue', 'baseline.Chi', 'baseline.df', 'baseline.pvalue', 'CFI', 'TLI', 'AIC', 'BIC', 'RMSEA', 'RMSEA.ci.lower', 'RMSEA.ci.upper', 'SRMR')
+  # names(comb.results[[3]])<-lavaan.fit.names
+  # }
 
-if (is.character(data.model)) {
-  names(comb.results[[1]])<-names(imputed.results.l[[1]][[1]])
-  names(comb.results[[2]])<-names(imputed.results.l[[1]][[1]])
-  lavaan.fit.names<-c("chisq", "df", "pvalue", "baseline.chisq", "baseline.df", "baseline.pvalue","cfi","tli","logl", "unrestricted.logl", "npar","aic","bic", "ntotal", "bic2", 
-"rmsea", "rmsea.ci.lower","rmsea.ci.upper","rmsea.pvalue","srmr" )
-names(comb.results[[3]])<-lavaan.fit.names
-  names(comb.results[[4]])<-names(imputed.results.l[[1]][[1]])
-  names(comb.results[[5]])<-names(imputed.results.l[[1]][[1]])
-	}
+# if (is.character(data.model)) {
+  # names(comb.results[[1]])<-names(imputed.results.l[[1]][[1]])
+  # names(comb.results[[2]])<-names(imputed.results.l[[1]][[1]])
+  # lavaan.fit.names<-c("chisq", "df", "pvalue", "baseline.chisq", "baseline.df", "baseline.pvalue","cfi","tli","logl", "unrestricted.logl", "npar","aic","bic", "ntotal", "bic2", 
+# "rmsea", "rmsea.ci.lower","rmsea.ci.upper","rmsea.pvalue","srmr" )
+# names(comb.results[[3]])<-lavaan.fit.names
+  # names(comb.results[[4]])<-names(imputed.results.l[[1]][[1]])
+  # names(comb.results[[5]])<-names(imputed.results.l[[1]][[1]])
+	# }
  
    
   return(comb.results)

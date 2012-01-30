@@ -1,9 +1,16 @@
+runSIM <- function(simData, simModel, nrep, simMissing=NULL, seed = 123321, silent=FALSE) {
+set.seed(seed)
+numseed <- round(runif(nrep, 0, 1000000))
+as.list(numseed)
+result <- mapply(simData, runRep, simModel=simModel, simMissing=simMissing, seed=numseed, silent=silent)
+#combine list together
+}
 
-runRep <- function(simData, simModel, simMissing=NULL, seed = 123321, silent=FALSE) {
+runRep <- function(simData, simModel, simMissing=NULL, seed, silent=FALSE) {
 	
 	modelType <- simModel@modelType
 
-        
+        set.seed(seed)
 
          # if(!silent) cat(i, "\n")
           
