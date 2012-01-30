@@ -137,7 +137,7 @@ makeMCAR <- function(dims,pm=NULL,covs=NULL)
 # Warnings for illegal groupings
 # Check to see if item groupings are valid?
 planned.missing <- function(dims=c(0,0),nforms=NULL,itemGroups=NULL,twoMethod=NULL, covs=NULL, timePoints=1) {
-  
+   
   nitems <- dims[2]
   nobs <- dims[1]
   excl <- covs
@@ -168,16 +168,27 @@ planned.missing <- function(dims=c(0,0),nforms=NULL,itemGroups=NULL,twoMethod=NU
       itemGroups <- generateIndices(nforms+1,1:itemsPerTP)
     }
 
-   # groups observations into sets of row indices. Each set "receives" a different "form"
+   # groups observations into sets of row indices. Each set receives a different form -
+   # that is, each observation group has one subset of variables marked for deletion.
+   # At each time point, each group of observations systematically receives a different form.
+   # To do this, we calculate all possible combinations for a given number of forms (for a 3
+   # form design, this is 6) and then repeat this matrix of permuations to cover all timepoints.
 
     obsGroups <- generateIndices(nforms,1:nobs)
+    formPerms <- matrix(unlist(permn(length(obsGroups))),ncol=3)
+
+    if(timePoints > dim(formPerms)[1]) {
+      dimMult <- ceiling((timePoints - dim(formPerms)[1])/timePoints)+1
+      formPerms <- matrix(rep(formPerms,dimMult),ncol=3)
+    }
+    
 
     for(j in 1:timePoints) {
       if(j == 1) {
         temp.mat <- matrix(FALSE,ncol=itemsPerTP,nrow=nobs)
       
         for(i in 1:nforms) {
-          temp.mat[obsGroups[[i]],itemGroups[[i+1]]] <- TRUE
+          temp.mat[obsGroups[[formPerms[j,i]]],itemGroups[[i+1]]] <- TRUE
         }
         log.mat <- temp.mat
       }
@@ -261,3 +272,38 @@ generateIndices <- function(ngroups, groupRange, excl=NULL) {
 }
 
 
+permn <- function (x, fun = NULL, ...) 
+{
+  # Taken without shame from package combinat. Put here for easy loading.
+    if (is.numeric(x) && length(x) == 1 && x > 0 && trunc(x) == 
+        x) 
+        x <- seq(x)
+    n <- length(x)
+    nofun <- is.null(fun)
+    out <- vector("list", gamma(n + 1))
+    p <- ip <- seqn <- 1:n
+    d <- rep(-1, n)
+    d[1] <- 0
+    m <- n + 1
+    p <- c(m, p, m)
+    i <- 1
+    use <- -c(1, n + 2)
+    while (m != 1) {
+        out[[i]] <- if (nofun) 
+            x[p[use]]
+        else fun(x[p[use]], ...)
+        i <- i + 1
+        m <- n
+        chk <- (p[ip + d + 1] > seqn)
+        m <- max(seqn[!chk])
+        if (m < n) 
+            d[(m + 1):n] <- -d[(m + 1):n]
+        index1 <- ip[m] + 1
+        index2 <- p[index1] <- p[index1 + d[m]]
+        p[index1 + d[m]] <- m
+        tmp <- ip[index2]
+        ip[index2] <- ip[m]
+        ip[m] <- tmp
+    }
+    out
+}
