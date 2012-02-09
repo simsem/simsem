@@ -19,9 +19,9 @@ sourceDir <- function(path, trace = TRUE, ...) {
         if(trace) cat("\n")
      }
 }
-#path <- "C:/Users/Sunthud/Desktop/My Dropbox/Fit Indices/Program/simsem/trunk/simsem/R/"
+path <- "C:/Users/Sunthud/Desktop/My Dropbox/simsem/trunk/simsem/R/"
 #path <- "C:/Users/Sunthud/simsem_backup/simsem/R/"
-path <- "C:/Users/student/Dropbox/Fit Indices/Program/simsem/trunk/simsem/R/"
+#path <- "C:/Users/student/Dropbox/Fit Indices/Program/simsem/trunk/simsem/R/"
  source(paste(path, "AllClass.R", sep=""))
  source(paste(path, "AllGenerics.R", sep=""))
  sourceDir(path)
