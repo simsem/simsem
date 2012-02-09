@@ -1030,6 +1030,38 @@ setClass("SimModelOut", # The class provides model result.
 )
 
 ###################################################################
+# SimModelMIOut
+# Class -- simsem package
+# This class will save information of the result of data analysis after pooling of MI results.
+# Constructor:	 	run(SimModel, data)
+# Parent Class: SimModelOut
+# Child Class:	None
+# Attributes:
+#	param:		SimFreeParam.c that save all free parameters and values of fixed parameters
+#	start:	All starting values of free parameters in SimRSet.c
+#	equalCon:		SimEqualCon.c that specify equality constraint of parameters in data analysis
+#	package:		Packages used in the analysis (lavaan or OpenMx)
+#	coef:	List of parameter estimates
+#	se:			Standard errors of parameter estimates
+#	fit:			Vector of fit indices
+#	converged: 	TRUE if the analysis converge
+#	paramValue:		Parameter values behind the data and model result
+# Methods:	None for now.
+# Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
+# Date Modified: November 16, 2011
+
+
+setClass("SimModelMIOut", # The class provides model result.
+	contains="SimModelOut",
+    representation(
+        FMI1="SimRSet",
+        FMI2="SimRSet"),
+	prototype(
+		FMI1=new("NullRSet"),
+		FMI2=new("NullRSet"))
+)
+
+###################################################################
 # SimMissing
 # Class -- simsem package
 # This class is a container for instructions to impose missing data for a simulation study. To be used with with a call to simResult.

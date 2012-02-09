@@ -1,32 +1,26 @@
-#Combine MI results (Rubin's Rules, etc)
-#Modified 10/27/2011
-#Turn into a function... Done!
-#Currently this function is optimized to use lavaan!
-#MIpool returns a list of results with: parameter estimates, standard errors
-#fit indices, and two types of fraction of missing information
+# miPoolVector
+# Function -- simsem package
+# Pool MI results that providing in matrix or vector formats
+# Argument:
+#	MI.param: 	Coefficients matrix (row = imputation, col = parameters)
+#	MI.se:		Standard errors matrix (row = imputation, col = parameters)
+#	imps:		Number of imputations
+# Return:
+#	coef:	Parameter estimates
+#	se:		Standard error combining the between and within variances
+#	FMI.1:	Fraction missing?
+#	FMI.2:	Fraction missing?
+# Author: 	Mijke Rhumtella
+#			Alex Schoemann
+#			Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
+# Date Modified: February 8, 2012
 
-#To do: Needs some test cases
-
-#Example: MIpool(imputed.results)
-#  imputed.results = simResult object from the RunMI function
-
-miPool<-function(imputed.results,imps){
-  ncol <- dim(imputed.results@coef)[1]
-  nrow <- imputed.results@nRep
-
-
-   MI.param<-(imputed.results@coef)
-   MI.se<-(imputed.results@se)
-   MI.fit<-(imputed.results@fit)
- #}
-
-#compute parameter estimates
+miPoolVector <- function(MI.param, MI.se, imps) {
+   #compute parameter estimates
   Estimates <- colMeans(MI.param)
 
 #compute between-imputation variance: variance of parameter estimates
   Bm <- apply(MI.param,2,var)
-
-
 
 #compute within-imputation variance: average of squared estimated SEs 
 #Um <- colSums(MI.se^2/m)
@@ -34,35 +28,108 @@ miPool<-function(imputed.results,imps){
 
 #Total variance
 #Tm <- Um + (Bm)*((1+m)/m+1)
-
 #compute total variance: sum of between- and within- variance with correction
-  SE <- Um + ((imps+1)/imps)*Bm
+  TV <- Um + ((imps+1)/imps)*Bm
 
 #compute correction factor for fraction of missing info
-  nu <- (imps-1)*((((1+1/imps)*Bm)/SE)^-2)
+  nu <- (imps-1)*((((1+1/imps)*Bm)/TV)^-2)
 
 #compute 2 estimates of fraction of missing information
-  FMI.1 <- 1-(Um/SE)
-  FMI.2 <- 1- ((nu+1)*Um)/((nu+3)*SE)
+  FMI.1 <- 1-(Um/TV)
+  FMI.2 <- 1- ((nu+1)*Um)/((nu+3)*TV)
   FMI<-rbind(FMI.1,FMI.2)
 
-#compute average fit index estimates (only some of these will be interpretable!)
-  Fit.indices <- as.vector(colMeans(MI.fit))
-  
 #Get rid of estimates from fixed variables
 fixedParam <- Bm==0
 
 Estimates <- subset(Estimates, !fixedParam)
-SE <- subset(SE, !fixedParam)
+TV <- subset(TV, !fixedParam)
 FMI.1 <- subset(FMI.1, !fixedParam)
 FMI.2 <- subset(FMI.2, !fixedParam)
-
-  MI.res<-list(Estimates,SE,Fit.indices,FMI.1,FMI.2)
-  names(MI.res)<-c('coef','se','fit','FMI.1','FMI.2')
+SE <- sqrt(TV)
+MI.res<-list(Estimates,SE,FMI.1,FMI.2)
+names(MI.res)<-c('coef','se','FMI.1','FMI.2')
 #compute chi-square proportion (is this useful?)
 #(MI.fit.mat$chisq.p is a placeholder for however we'll index the p-value of chi square)
 #chisq <- sum(MI.fit.mat$chisq.pval<.05)/m
   return(MI.res)
+}
+#Examples:
+#param <- matrix(c(0.7, 0.1, 0.5,
+#					0.75, 0.12, 0.54,
+#					0.66, 0.11, 0.56,
+#					0.74, 0.09, 0.55), nrow=4, byrow=T)
+#SE <- matrix(c(0.1, 0.01, 0.05,
+#				0.11, 0.023, 0.055,
+#				0.10, 0.005, 0.04,
+#				0.14, 0.012, 0.039), nrow=4, byrow=T)
+#nimps <- 4
+#miPoolVector(param, SE, nimps)
+
+# miPool
+# Function -- simsem package
+# Pool MI results in SimModelOut class format
+# Argument:
+#	Result.l: 	List of MI results
+# Return:
+#	output: 	SimModelMIOut that provides output and fraction missing information
+# Author: 	Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
+# Date Modified: February 8, 2012
+
+miPool <- function(Result.l) {
+	Converged <- sapply(Result.l, function(object) {object@converged})
+
+	allNames <- slotNames(Result.l[[which(Converged==TRUE)[1]]]@param)
+	paramNames <- allNames != "modelType"
+	paramNames <- allNames[paramNames]
+
+	OutputCoef <- Result.l[[which(Converged==TRUE)[1]]]@coef
+	OutputSE <- Result.l[[which(Converged==TRUE)[1]]]@se
+	OutputFMI1 <- Result.l[[which(Converged==TRUE)[1]]]@se
+	OutputFMI2 <- Result.l[[which(Converged==TRUE)[1]]]@se
+
+	for(i in 1:length(paramNames)) {
+		if(!is.null.object(slot(OutputCoef, paramNames[i]))) {
+			mparam <- sapply(Result.l, function(result, slotname1, slotname2) { slot(slot(result, slotname1), slotname2)}, slotname1 = "param", slotname2 = paramNames[i])[,1]
+			mcoef <- sapply(Result.l, function(result, slotname1, slotname2) { slot(slot(result, slotname1), slotname2)}, slotname1 = "coef", slotname2 = paramNames[i])[is.na(mparam),]
+			mse <- sapply(Result.l, function(result, slotname1, slotname2) { slot(slot(result, slotname1), slotname2)}, slotname1 = "se", slotname2 = paramNames[i])[is.na(mparam),]
+			temp <- miPoolVector(t(mcoef), t(mse), sum(is.na(mparam)))
+			temp1 <- as.vector(slot(OutputCoef, paramNames[i]))
+			temp2 <- as.vector(slot(OutputSE, paramNames[i]))
+			temp3 <- as.vector(slot(OutputFMI1, paramNames[i]))
+			temp4 <- as.vector(slot(OutputFMI2, paramNames[i]))
+			temp1[which(is.na(mparam))] <- temp$coef
+			temp2[which(is.na(mparam))] <- temp$se
+			temp3[which(is.na(mparam))] <- temp$FMI.1
+			temp4[which(is.na(mparam))] <- temp$FMI.2
+			if(is.matrix(slot(OutputCoef, paramNames[i]))) {
+				numcol <- ncol((slot(OutputCoef, paramNames[i])))
+				slot(OutputCoef, paramNames[i]) <- matrix(temp1, ncol=numcol)
+				slot(OutputSE, paramNames[i]) <- matrix(temp2, ncol=numcol)
+				slot(OutputFMI1, paramNames[i]) <- matrix(temp3, ncol=numcol)
+				slot(OutputFMI2, paramNames[i]) <- matrix(temp4, ncol=numcol)
+			} else {
+				slot(OutputCoef, paramNames[i]) <- temp1
+				slot(OutputSE, paramNames[i]) <- temp2
+				slot(OutputFMI1, paramNames[i]) <- temp3
+				slot(OutputFMI2, paramNames[i]) <- temp4
+			}
+		}
+	}
+	conv <- mean(Converged, na.rm=TRUE) > 0.8
+	start <- Result.l[[which(Converged==TRUE)[1]]]@start
+	equalCon <- Result.l[[which(Converged==TRUE)[1]]]@equalCon
+	package <- Result.l[[which(Converged==TRUE)[1]]]@package
+	param <- Result.l[[which(Converged==TRUE)[1]]]@param
+
+	Fit <- sapply(Result.l, function(object) {object@fit})
+	OutputFit <- rowMeans(Fit[,Converged], na.rm=TRUE)
+
+	return(new("SimModelMIOut", param=param, start=start,
+			equalCon=equalCon, package=package, coef=OutputCoef,
+			fit=OutputFit, se=OutputSE, converged=conv,
+			FMI1=OutputFMI1, FMI2=OutputFMI2
+			))
 }
 
 

@@ -4,6 +4,7 @@
 \alias{summaryParam,ANY-method}
 \alias{summaryParam,SimResult-method}
 \alias{summaryParam,SimModelOut-method}
+\alias{summaryParam,SimModelMIOut-method}
 \title{
 	Provide summary of parameter estimates and standard error across replications
 }

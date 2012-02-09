@@ -95,3 +95,30 @@ setMethod("summaryParam", signature(object="SimModelOut"), definition=function(o
 #	object:		SimModelOut.c of alternative hypothesis that users wish to find summary of parameters and standard errors
 #Description: 	This function will find estimates, standard error, Wald statistic, and p value (null hypothesis of population = 0).
 #Return: 		data.frame.c that contains those information of each parameter.
+
+setMethod("summaryParam", signature(object="SimModelMIOut"), definition=function(object, alpha=0.05) {
+	lab <- make.labels(object@param, "OpenMx")
+	coef <- vectorize.object(object@coef, lab)
+	se <- vectorize.object(object@se, lab)
+	FMI1 <- vectorize.object(object@FMI1, lab)
+	FMI2 <- vectorize.object(object@FMI2, lab)
+	se[se==0] <- NA
+	z <- coef/se
+	p <- (1 - pnorm(abs(z))) * 2
+	result <- cbind(coef, se, z, p, FMI1, FMI2)
+	colnames(result) <- c("Estimate", "SE", "z", "p", "FMI1", "FMI2")
+	if(!is.null.object(object@paramValue)) {
+		paramValue <- vectorize.object(object@paramValue, lab)		
+		biasParam <- vectorize.object(subtractObject(object@coef, object@paramValue), lab)
+		crit <- qnorm(1 - alpha/2)
+		lowerBound <- coef - crit * se
+		upperBound <- coef + crit * se
+		cover <- (paramValue > lowerBound) & (paramValue < upperBound)
+		result <- data.frame(result, Param=paramValue, Bias=biasParam, Coverage=cover)
+	}
+	return(as.data.frame(result))
+})
+#Arguments: 
+#	object:		SimModelOut.c of alternative hypothesis that users wish to find summary of parameters and standard errors
+#Description: 	This function will find estimates, standard error, Wald statistic, and p value (null hypothesis of population = 0).
+#Return: 		data.frame.c that contains those information of each parameter.

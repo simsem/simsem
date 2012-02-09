@@ -49,8 +49,8 @@ runMI<- function(data.mat,data.model, m, miPackage="amelia", ...) {
     runlavaanMI <- function(MIdata,syntax) {
      fit <- cfa(syntax, data=MIdata)
      FitIndices <- extract.lavaan.summary(fit)
-	   coef <- (inspect(fit, "coef")
-     se <- (inspect(fit, "se")
+	   coef <- inspect(fit, "coef")
+     se <- inspect(fit, "se")
 	#Converged <- fit@fit@converged
 	Converged = TRUE
     if(sum(unlist(lapply(inspect(fit, "se"), sum))) == 0) Converged = FALSE

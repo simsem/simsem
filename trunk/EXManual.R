@@ -19,9 +19,9 @@ sourceDir <- function(path, trace = TRUE, ...) {
         if(trace) cat("\n")
      }
 }
-path <- "C:/Users/Sunthud/Desktop/My Dropbox/Fit Indices/Program/simsem/trunk/simsem/R/"
+#path <- "C:/Users/Sunthud/Desktop/My Dropbox/Fit Indices/Program/simsem/trunk/simsem/R/"
 #path <- "C:/Users/Sunthud/simsem_backup/simsem/R/"
-#path <- "C:/Users/student/Documents/simsem_backup/simsem/R/"
+path <- "C:/Users/student/Dropbox/Fit Indices/Program/simsem/trunk/simsem/R/"
  source(paste(path, "AllClass.R", sep=""))
  source(paste(path, "AllGenerics.R", sep=""))
  sourceDir(path)
@@ -437,3 +437,42 @@ abline(h = 0.8,col="darkgreen",lwd=3)
 par(obj)
 
 cutoff2 <- find.cutoff(Output.NULL, 0.05, usedFit=x)
+
+##################################################### Get standardized calculator
+
+library(simsem)
+loading <- matrix(c(0.7, 0.2,
+					0.7, 0,
+					0.7, 0,
+					0.2, 0.7,
+					0, 0.7,
+					0, 0.7), 6, 2, byrow=TRUE)
+LX <- simMatrix(loading)
+latent.cor <- matrix(0.5, 2, 2)
+diag(latent.cor) <- 1
+PH <- symMatrix(latent.cor)
+error.cor <- matrix(0, 6, 6)
+diag(error.cor) <- 1
+TD <- symMatrix(error.cor)
+CFA.Model <- simSetCFA(LX = LX, PH = PH, TD = TD)
+summary(run(CFA.Model))
+# See the VTE element for the measurement error variance
+
+# Hu and Bentler Article
+library(simsem)
+loading <- matrix(0, 15, 3)
+loading[1:5, 1] <- loading[6:10, 2] <- loading[11:15, 3] <- c(0.7, 0.7, 0.75, 0.8, 0.8)
+loading[1, 3] <- loading[4, 2] <- loading[9, 3] <- 0.7
+LX <- simMatrix(loading)
+latent.cor <- matrix(1, 3, 3)
+latent.cor[1,2] <- latent.cor[2,1] <- 0.5
+latent.cor[1,3] <- latent.cor[3,1] <- 0.4
+latent.cor[3,2] <- latent.cor[2,3] <- 0.3
+PH <- symMatrix(latent.cor)
+error.cor <- matrix(0, 15, 15)
+diag(error.cor) <- 1
+TD <- symMatrix(error.cor)
+CFA.Model <- simSetCFA(LX = LX, PH = PH, TD = TD)
+summary(run(CFA.Model))
+
+
