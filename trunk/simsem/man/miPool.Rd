@@ -38,7 +38,7 @@ Mijke Rhemtulla (University of Kansas; \email{mijke@ku.edu})
 }
 \seealso{
 	\itemize{
-		\item \code{\link{runMi}} for imputing missing values by multiple imputation and analyzing the imputed datasets.
+		\item \code{\link{runMI}} for imputing missing values by multiple imputation and analyzing the imputed datasets.
 	}
 }
 \examples{

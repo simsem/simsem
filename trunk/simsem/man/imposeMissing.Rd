@@ -53,7 +53,7 @@ Kyle Lang (University of Kansas; \email{kylelang@ku.edu})
 }
 \seealso{
 	\itemize{
-		\item \code{\linkS4Class{SimMissing}} for the alternative way to save missing data feature for using in the \code{\link{simResult}} function.
+		\item \code{\linkS4class{SimMissing}} for the alternative way to save missing data feature for using in the \code{\link{simResult}} function.
 		\item \code{\link{runMI}} for imputing missing data by multiple imputation and analyze the imputed data.
 	}
 }

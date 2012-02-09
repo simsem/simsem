@@ -2,8 +2,10 @@ SimData-class           Class '"SimData"'
 SimDataOut-class        Class '"SimDataOut"'
 SimEqualCon-class       Class '"SimEqualCon"'
 SimMatrix-class         Class '"SimMatrix"' (Random parameters matrix)
+SimMissing-class        Class '"SimMissing"'
 SimMisspec-class        Class '"SimMisspec"'
 SimModel-class          Class '"SimModel"'
+SimModelMIOut-class     Class '"SimModelMIOut"'
 SimModelOut-class       Class '"SimModelOut"'
 SimNorm-class           Class "SimNorm"
 SimResult-class         Class '"SimResult"'
@@ -18,12 +20,16 @@ adjust                  Change an element in 'SimMatrix', 'SymMatrix',
 getCutoff               Find cutoff given a priori alpha level
 getPower                Find power in rejecting alternative models
                         based on fit indices criteria
+imposeMissing           Impose MAR, MCAR, and planned missingness on a
+                        data set
 loadingFromAlpha        Find standardized factor loading from
                         coefficient alpha
+miPool                  Function to pool imputed results
 plotCutoff              Plot sampling distributions of fit indices
 plotPower               Plot sampling distributions of fit indices that
                         visualize power
 run                     Run a particular object in 'simsem' package.
+runMI                   Multiply impute and analyze data using lavaan
 simData                 Data object
 simEqualCon             Equality Constraint Object
 simMatrix               Create simMatrix that save free parameters and

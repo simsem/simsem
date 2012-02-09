@@ -16,7 +16,10 @@ imputeMissing <- function(data.mat,m, ...){
 ##Currently outputs a list of parameter estimates, standard errors, fit indices and fraction missing information
 ##TO DO: Get names for each element from the lavaan object
 
-runMI<- function(data.mat,data.model, m, miPackage="amelia", ...) {
+runMI<- function(data.mat,data.model, m, miPackage="amelia", silent=FALSE, ...) {
+################### I put the silent argument here as the 'runRep' and 'simResult' have one.
+
+
   #Currently only supports imputation by Amelia. We want to add mice, and maybe EM imputatin too...
   if(!miPackage=="amelia") stop("Currently runMI only supports imputation by amelia")
 
@@ -63,7 +66,7 @@ runMI<- function(data.mat,data.model, m, miPackage="amelia", ...) {
 
 
   ##New miPool should return simResult object. Can be used with runRep runSIM or can be summarized. 
-  comb.results<-miPool(imputed.results,m)
+  comb.results<-miPool(imputed.results)
  
  ##Name elements in the list
  ##Only  named when given lavaan syntax 

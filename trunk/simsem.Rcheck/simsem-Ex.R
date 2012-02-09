@@ -135,6 +135,23 @@ summaryShort(LY)
 
 
 cleanEx()
+nameEx("SimMissing-class")
+### * SimMissing-class
+
+flush(stderr()); flush(stdout())
+
+### Name: SimMissing-class
+### Title: Class '"SimMissing"'
+### Aliases: SimMissing-class
+### Keywords: classes
+
+### ** Examples
+
+# No Example
+
+
+
+cleanEx()
 nameEx("SimMisspec-class")
 ### * SimMisspec-class
 
@@ -186,6 +203,23 @@ TD <- symMatrix(error.cor)
 CFA.Model <- simSetCFA(LX = LX, PH = PH, TD = TD)
 SimModel <- simModel(CFA.Model)
 summary(SimModel)
+
+
+
+cleanEx()
+nameEx("SimModelMIOut-class")
+### * SimModelMIOut-class
+
+flush(stderr()); flush(stdout())
+
+### Name: SimModelMIOut-class
+### Title: Class '"SimModelMIOut"'
+### Aliases: SimModelMIOut-class
+### Keywords: classes
+
+### ** Examples
+
+showClass("SimModelMIOut")
 
 
 
@@ -524,6 +558,39 @@ getPower(Output.ALT, Rule.of.thumb, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
 
 
 cleanEx()
+nameEx("imposeMissing")
+### * imposeMissing
+
+flush(stderr()); flush(stdout())
+
+### Name: imposeMissing
+### Title: Impose MAR, MCAR, and planned missingness on a data set
+### Aliases: imposeMissing
+
+### ** Examples
+
+  data <- matrix(rep(rnorm(10,1,1),19),ncol=19)
+  datac <- cbind(data,rnorm(10,0,1),rnorm(10,5,5))
+
+  # Imposing Missing with the following arguments produces no missing values
+  imposeMissing(data)
+  imposeMissing(data,covs=c(1,2))
+  imposeMissing(data,pmMCAR=0)
+  imposeMissing(data,pmMAR=0)
+  imposeMissing(data,nforms=0)
+
+  #Some more usage examples
+  imposeMissing(data,covs=c(1,2),pmMCAR=.1)
+  imposeMissing(datac,covs=c(20,21),pmMAR=.2)
+  imposeMissing(data,nforms=3)
+  imposeMissing(data,nforms=3,itemGroups=list(c(1,2,3,4,5),c(6,7,8,9,10),c(11,12,13,14,15),c(16,17,18,19)))
+  imposeMissing(datac,covs=c(20,21),nforms=3)
+  imposeMissing(data,twoMethod=c(19,.8))
+  imposeMissing(datac,covs=c(20,21),pmMCAR=.1,pmMAR=.1,nforms=3)
+
+
+
+cleanEx()
 nameEx("loadingFromAlpha")
 ### * loadingFromAlpha
 
@@ -536,6 +603,79 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
     loadingFromAlpha(0.8, 4)
+
+
+
+cleanEx()
+nameEx("miPool")
+### * miPool
+
+flush(stderr()); flush(stdout())
+
+### Name: miPool
+### Title: Function to pool imputed results
+### Aliases: miPool
+
+### ** Examples
+
+##---- Should be DIRECTLY executable !! ----
+##-- ==>  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
+
+## The function is currently defined as
+function(imputed.results,imps){
+
+MI.param<-matrix(NA,nrow=length(imputed.results),ncol=length(imputed.results[[1]]@Estimates))
+MI.se<-matrix(NA,nrow=length(imputed.results),ncol=length(imputed.results[[1]]@SE))
+MI.fit<-matrix(NA,nrow=length(imputed.results),ncol=length(imputed.results[[1]]@Fit))
+
+for(i in 1:length(imputed.results)){
+MI.param[i,]<-unlist(imputed.results[[i]]@Estimates)
+MI.se[i,]<-unlist(imputed.results[[i]]@SE)
+MI.fit[i,]<-unlist(imputed.results[[i]]@Fit)
+  }
+
+#Need to remove columns representing fixed parameters
+MI.param <- MI.param[ , colMeans( MI.param==0 ) == 0, drop=FALSE ]
+MI.param <- MI.param[ , colMeans( MI.param==1 ) == 0, drop=FALSE ]
+MI.se <- MI.se[ , colSums( MI.se==0 ) == 0, drop=FALSE ]
+
+#compute parameter estimates
+Estimates <- colMeans(MI.param)
+
+#compute between-imputation variance: variance of parameter estimates
+Bm <- apply(MI.param,2,var)
+
+
+
+#compute within-imputation variance: average of squared estimated SEs 
+#Um <- colSums(MI.se^2/m)
+Um <- apply(MI.se^2,2,mean)
+
+#Total variance
+#Tm <- Um + (Bm)*((1+m)/m+1)
+
+#compute total variance: sum of between- and within- variance with correction
+SE <- Um + ((imps+1)/imps)*Bm
+
+#compute correction factor for fraction of missing info
+nu <- (imps-1)*((((1+1/imps)*Bm)/SE)^-2)
+
+#compute 2 estimates of fraction of missing information
+FMI.1 <- 1-(Um/SE)
+FMI.2 <- 1- ((nu+1)*Um)/((nu+3)*SE)
+FMI<-rbind(FMI.1,FMI.2)
+
+#compute average fit index estimates (only some of these will be interpretable!)
+Fit.indices <- colMeans(MI.fit)
+
+MI.res<-list(Estimates,SE,Fit.indices,FMI.1,FMI.2)
+names(MI.res)<-c('Estimates','SE','Fit.indices','FMI.1','FMI.2')
+#compute chi-square proportion (is this useful?)
+#(MI.fit.mat$chisq.p is a placeholder for however we'll index the p-value of chi square)
+#chisq <- sum(MI.fit.mat$chisq.pval<.05)/m
+return(MI.res)
+  }
 
 
 
@@ -637,6 +777,41 @@ flush(stderr()); flush(stdout())
 
 n02 <- simNorm(0, 0.2)
 run(n02)
+
+
+
+cleanEx()
+nameEx("runMI")
+### * runMI
+
+flush(stderr()); flush(stdout())
+
+### Name: runMI
+### Title: Multiply impute and analyze data using lavaan
+### Aliases: runMI
+
+### ** Examples
+
+##---- Should be DIRECTLY executable !! ----
+##-- ==>  Define data, use random,
+##--	or do  help(data=index)  for the standard data sets.
+
+## The function is currently defined as
+function(data.mat,data.model,imps) {
+  #Impute missing data
+  imputed.l<-imputeMissing(data.mat,imps)
+  
+  #Run models on each imputed data set
+  #Does this give results from each dataset in the list?
+  
+  imputed.results<-result.object(imputed.l[[1]],sim.data.model,10)
+
+  imputed.results <- lapply(imputed.l,result.object,data.model,1)
+  comb.results<-MIpool(imputed.results,imps)
+  
+  return(comb.results)
+
+  }
 
 
 
@@ -1102,6 +1277,7 @@ flush(stderr()); flush(stdout())
 ###   replications
 ### Aliases: summaryParam summaryParam-methods summaryParam,ANY-method
 ###   summaryParam,SimResult-method summaryParam,SimModelOut-method
+###   summaryParam,SimModelMIOut-method
 
 ### ** Examples
 

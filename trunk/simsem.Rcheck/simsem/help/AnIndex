@@ -15,7 +15,9 @@ getPower,data.frame-method	getPower
 getPower,matrix-method	getPower
 getPower,SimResult-method	getPower
 getPower-methods	getPower
+imposeMissing	imposeMissing
 loadingFromAlpha	loadingFromAlpha
+miPool	miPool
 plotCutoff	plotCutoff
 plotCutoff,data.frame-method	plotCutoff
 plotCutoff,SimResult-method	plotCutoff
@@ -41,6 +43,7 @@ run,SimUnif-method	SimUnif-class
 run,SimVector-method	SimVector-class
 run,SymMatrix-method	SymMatrix-class
 run-methods	run
+runMI	runMI
 simData	simData
 SimData-class	SimData-class
 SimDataOut-class	SimDataOut-class
@@ -48,6 +51,7 @@ simEqualCon	simEqualCon
 SimEqualCon-class	SimEqualCon-class
 simMatrix	simMatrix
 SimMatrix-class	SimMatrix-class
+SimMissing-class	SimMissing-class
 SimMisspec-class	SimMisspec-class
 simMisspecCFA	simMisspecCFA
 simMisspecPath	simMisspecPath
@@ -58,6 +62,7 @@ simModel,SimFreeParam-method	simModel
 simModel,SimSet-method	simModel
 SimModel-class	SimModel-class
 simModel-methods	simModel
+SimModelMIOut-class	SimModelMIOut-class
 SimModelOut-class	SimModelOut-class
 simNorm	simNorm
 SimNorm-class	SimNorm-class
@@ -90,6 +95,7 @@ summary,SimVector-method	SimVector-class
 summary,SymMatrix-method	SymMatrix-class
 summaryParam	summaryParam
 summaryParam,ANY-method	summaryParam
+summaryParam,SimModelMIOut-method	summaryParam
 summaryParam,SimModelOut-method	summaryParam
 summaryParam,SimResult-method	summaryParam
 summaryParam-methods	summaryParam

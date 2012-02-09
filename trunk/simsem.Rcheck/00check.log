@@ -1,15 +1,19 @@
-* using log directory 'C:/Users/Sunthud/Desktop/My Dropbox/Fit Indices/Program/simsem/trunk/simsem.Rcheck'
-* using R version 2.13.2 (2011-09-30)
+* using log directory 'C:/Users/Sunthud/Desktop/My Dropbox/simsem/simsem.Rcheck'
+* using R version 2.14.1 (2011-12-22)
 * using platform: i386-pc-mingw32 (32-bit)
 * using session charset: ISO8859-1
 * checking for file 'simsem/DESCRIPTION' ... OK
 * checking extension type ... Package
-* this is package 'simsem' version '0.0-2'
+* this is package 'simsem' version '0.0-5'
 * checking package namespace information ... OK
 * checking package dependencies ... OK
 * checking if this is a source package ... OK
+* checking if there is a namespace ... OK
 * checking for executable files ... OK
-* checking whether package 'simsem' can be installed ... OK
+* checking whether package 'simsem' can be installed ... WARNING
+Found the following significant warnings:
+  Warning: C:/Users/Sunthud/Desktop/My Dropbox/simsem/simsem/man/imposeMissing.Rd:56: unknown macro '\linkS4Class'
+See 'C:/Users/Sunthud/Desktop/My Dropbox/simsem/simsem.Rcheck/00install.out' for details.
 * checking installed package size ... OK
 * checking package directory ... OK
 * checking for portable file names ... OK
@@ -24,25 +28,137 @@
 * checking whether the package can be unloaded cleanly ... OK
 * checking whether the namespace can be loaded with stated dependencies ... OK
 * checking whether the namespace can be unloaded cleanly ... OK
-* checking for unstated dependencies in R code ... OK
+* checking for unstated dependencies in R code ... WARNING
+'library' or 'require' call not declared from: 'OpenMx'
+See the information on DESCRIPTION files in the chapter 'Creating R
+packages' of the 'Writing R Extensions' manual.
 * checking S3 generic/method consistency ... OK
 * checking replacement functions ... OK
 * checking foreign function calls ... OK
 * checking R code for possible problems ... NOTE
+runMI: possible error in miPool(imputed.results, m): unused argument(s)
+  (m)
+runMI: no visible binding for global variable 'imputed.results'
+runOpenMx: no visible global function definition for 'mxMatrix'
+runOpenMx: no visible global function definition for 'mxData'
+runOpenMx: no visible global function definition for 'mxAlgebra'
 runOpenMx: no visible binding for global variable 'LY'
 runOpenMx: no visible binding for global variable 'PS'
 runOpenMx: no visible binding for global variable 'TE'
 runOpenMx: no visible binding for global variable 'TY'
 runOpenMx: no visible binding for global variable 'AL'
+runOpenMx: no visible global function definition for 'mxMLObjective'
+runOpenMx: no visible global function definition for 'mxModel'
 runOpenMx: no visible binding for global variable 'ID'
 runOpenMx: no visible binding for global variable 'BE'
-* checking Rd files ... OK
+runOpenMx: no visible global function definition for 'mxRun'
+runRep: possible error in suppressMessages(try(tempMI <-
+  runMI(data.mis, simModel, simMissing@numImps, simMissing@impMethod)),
+  silent = TRUE): unused argument(s) (silent = TRUE)
+simResult: possible error in suppressMessages(try(tempMI <-
+  runMI(data.mis, simModel, simMissing@numImps, simMissing@impMethod)),
+  silent = TRUE): unused argument(s) (silent = TRUE)
+test: no visible binding for global variable 'datac'
+* checking Rd files ... WARNING
+prepare_Rd: imposeMissing.Rd:56: unknown macro '\linkS4Class'
 * checking Rd metadata ... OK
-* checking Rd cross-references ... OK
+* checking Rd cross-references ... WARNING
+Missing link(s) in documentation object 'C:/Users/Sunthud/Desktop/My Dropbox/simsem/simsem/man/miPool.Rd':
+  'runMi'
+
+See the information in section 'Cross-references' of the 'Writing R
+Extensions' manual.
+
 * checking for missing documentation entries ... OK
-* checking for code/documentation mismatches ... OK
+* checking for code/documentation mismatches ... WARNING
+Codoc mismatches from documentation object 'imposeMissing':
+imposeMissing
+  Code: function(data.mat, covs = 0, pmMCAR = 0, pmMAR = 0, nforms = 0,
+                 itemGroups = 0, twoMethod = 0, timePoints = 1)
+  Docs: function(data.mat, covs = NULL, pmMCAR = NULL, pmMAR = NULL,
+                 nforms = NULL, itemGroups = NULL, twoMethod = NULL)
+  Argument names in code not in docs:
+    timePoints
+  Mismatches in argument default values (first 3):
+    Name: 'covs' Code: 0 Docs: NULL
+    Name: 'pmMCAR' Code: 0 Docs: NULL
+    Name: 'pmMAR' Code: 0 Docs: NULL
+
+Codoc mismatches from documentation object 'miPool':
+miPool
+  Code: function(Result.l)
+  Docs: function(imputed.results, imps)
+  Argument names in code not in docs:
+    Result.l
+  Argument names in docs not in code:
+    imputed.results imps
+  Mismatches in argument names:
+    Position: 1 Code: Result.l Docs: imputed.results
+
+Codoc mismatches from documentation object 'runMI':
+runMI
+  Code: function(data.mat, data.model, m, miPackage = "amelia", ...)
+  Docs: function(data.mat, data.model, imps, miPackage = "amelia")
+  Argument names in code not in docs:
+    m ...
+  Argument names in docs not in code:
+    imps
+  Mismatches in argument names:
+    Position: 3 Code: m Docs: imps
+
+Codoc mismatches from documentation object 'simResult':
+simResult
+  Code: function(simData, simModel, simMissing = NULL, nRep, seed =
+                 123321, silent = FALSE)
+  Docs: function(simData, simModel, nRep, seed = 123321, silent =
+                 FALSE)
+  Argument names in code not in docs:
+    simMissing
+  Mismatches in argument names:
+    Position: 3 Code: simMissing Docs: nRep
+    Position: 4 Code: nRep Docs: seed
+    Position: 5 Code: seed Docs: silent
+
+S4 class codoc mismatches from documentation object 'SimMissing-class':
+Slots for class 'SimMissing'
+  Code: covs itemGroups nforms pmMAR pmMCAR timePoints twoMethod
+  Docs: covs itemGroups nforms pmMAR pmMCAR twoMethod
+
 * checking Rd \usage sections ... OK
 * checking Rd contents ... OK
 * checking for unstated dependencies in examples ... OK
-* checking examples ... OK
-* checking PDF version of manual ... OK
+* checking examples ... ERROR
+Running examples in 'simsem-Ex.R' failed
+The error most likely occurred in:
+
+> ### Name: SimResult-class
+> ### Title: Class '"SimResult"'
+> ### Aliases: SimResult-class summary,SimResult-method
+> ### Keywords: classes
+> 
+> ### ** Examples
+> 
+> showClass("SimResult")
+Class "SimResult" [package "simsem"]
+
+Slots:
+                                                                        
+Name:   modelType       nRep       coef         se        fit  converged
+Class:  character    numeric data.frame data.frame data.frame     vector
+                            
+Name:  paramValue       seed
+Class: data.frame    numeric
+> loading <- matrix(0, 6, 1)
+> loading[1:6, 1] <- NA
+> LX <- simMatrix(loading, 0.7)
+> PH <- symMatrix(diag(1))
+> TD <- symMatrix(diag(6))
+> CFA.Model <- simSetCFA(LY = LX, PS = PH, TE = TD)
+> SimData <- simData(500, CFA.Model)
+> SimModel <- simModel(CFA.Model)
+> # We make the examples running only 50 replications to save time.
+> # In reality, more replications are needed.
+> Output <- simResult(SimData, SimModel, 50)
+Error in simResult(SimData, SimModel, 50) : 
+  trying to get slot "numImps" from an object of a basic class ("numeric") with no slots
+Execution halted
