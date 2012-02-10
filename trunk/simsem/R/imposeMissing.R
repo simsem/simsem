@@ -28,12 +28,12 @@ imposeMissing <- function(data.mat,covs=0,pmMCAR=0,pmMAR=0,nforms=0,
                           itemGroups=0,twoMethod=0,timePoints=1){
  
  #Need the inputs to be numeric for the missing object. Turn to Nulls for this function
- if (covs==0) {covs <- NULL }
+ if (length(covs) == 1 && covs==0) {covs <- NULL }
  if (pmMCAR==0) {pmMCAR <- NULL }
  if (pmMAR==0) {pmMAR <- NULL } 
  if (nforms==0) {nforms <- NULL }
- if (itemGroups==0) {itemGroups <- NULL }
- if (twoMethod==0) {twoMethod <- NULL }
+ if (is.vector(itemGroups) && length(itemGroups) == 1 && itemGroups==0) { itemGroups <- NULL }
+ if (length(twoMethod) == 1 && twoMethod==0) {twoMethod <- NULL }
  
  
  # TRUE values are values to delete

@@ -9,9 +9,9 @@
 # Date Modified: November 15, 2011
 
 setMethod("summaryParam", signature(object="SimResult"), definition=function(object, alpha=0.05, detail=FALSE) {
-	coef <- mean(object@coef, na.rm=TRUE)
-	real.se <- sd(object@coef, na.rm=TRUE)
-	estimated.se <- mean(object@se, na.rm=TRUE)
+	coef <- colMeans(object@coef, na.rm=TRUE)
+	real.se <- sapply(object@coef, sd, na.rm=TRUE)
+	estimated.se <- colMeans(object@se, na.rm=TRUE)
 	estimated.se[estimated.se==0] <- NA
 	z <- object@coef/object@se
 	crit.value <- qnorm(1 - alpha/2)

@@ -17,6 +17,7 @@ simResult <- function(nRep, simData, simModel, simMissing=new("NullSimMissing"),
 	param <- new("NullDataFrame")
 	if(!is.null(param.l)) {
 		param <- as.data.frame(do.call(rbind, param.l))
+		if(sum(dim(param)) == 0) param <- new("NullDataFrame")
 		if(nrow(unique(param)) == 1) param <- unique(param)
 	}
 	Result <- new("SimResult", modelType=modelType, nRep=nRep, coef=coef, se=se, fit=fit, converged=converged, seed=seed, paramValue=param)

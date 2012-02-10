@@ -61,6 +61,8 @@ Kyle Lang (University of Kansas; \email{kylelang@ku.edu})
   data <- matrix(rep(rnorm(10,1,1),19),ncol=19)
   datac <- cbind(data,rnorm(10,0,1),rnorm(10,5,5))
 
+  ##################### Got some problems here ###########################
+  
   # Imposing Missing with the following arguments produces no missing values
   imposeMissing(data)
   imposeMissing(data,covs=c(1,2))

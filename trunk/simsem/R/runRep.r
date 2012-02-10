@@ -9,7 +9,7 @@ result <- mapply(simData, runRep, simModel=simModel, simMissing=simMissing, seed
 runRep <- function(simData, simModel, simMissing=new("NullSimMissing"), seed=123321, silent=FALSE) {
 	
 	modelType <- simModel@modelType
-
+                param <- NULL
         set.seed(seed)
 
          # if(!silent) cat(i, "\n")
