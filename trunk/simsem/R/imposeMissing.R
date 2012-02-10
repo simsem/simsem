@@ -175,11 +175,11 @@ planned.missing <- function(dims=c(0,0),nforms=NULL,itemGroups=NULL,twoMethod=NU
    # form design, this is 6) and then repeat this matrix of permuations to cover all timepoints.
 
     obsGroups <- generateIndices(nforms,1:nobs)
-    formPerms <- matrix(unlist(permn(length(obsGroups))),ncol=3)
+    formPerms <- matrix(unlist(permn(length(obsGroups))),ncol=nforms)
 
     if(timePoints > dim(formPerms)[1]) {
       dimMult <- ceiling((timePoints - dim(formPerms)[1])/timePoints)+1
-      formPerms <- matrix(rep(formPerms,dimMult),ncol=3)
+      formPerms <- matrix(rep(formPerms,dimMult),ncol=nforms)
     }
     
 

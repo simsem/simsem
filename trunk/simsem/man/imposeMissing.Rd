@@ -8,11 +8,11 @@ Function imposes missing values on a data based on the known missing data types,
 including MCAR, MAR, and planned.
 }
 \usage{
-imposeMissing(data.mat, covs = NULL, pmMCAR = NULL, pmMAR = NULL, nforms = NULL, itemGroups = NULL, twoMethod = NULL)
+imposeMissing(data.mat, covs = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, itemGroups = 0, twoMethod = 0, timePoints = 1)
 }
 \arguments{
   \item{data.mat}{
-    A raw data matrix
+    Data to impose missing upon. Can be either a matrix or a data frame. 
 }
   \item{covs}{
     Column indices of any normally distributed covariates used in the data set. Will not be
@@ -38,6 +38,8 @@ imposeMissing(data.mat, covs = NULL, pmMCAR = NULL, pmMAR = NULL, nforms = NULL,
     missing on that column in the matrix to simulate a two method
     planned missing data research design. 
 }
+ \item{timePoints}{
+    Number of timepoints items were measured over. For longitudinal data, planned missing designs will be implemented within each timepoint. 
 }
 \details{
 Without specifying any any arguments, no missingness will be

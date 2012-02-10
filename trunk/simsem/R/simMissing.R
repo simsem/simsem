@@ -22,6 +22,6 @@ setClass("simMissing",
         timePoints=1)
 )
 
-# simMissing <- function(covs=NULL, pmMCAR=NULL, pmMAR=NULL, nforms=NULL, itemGroups=NULL, twoMethod=NULL) {
-#  return(new("simMissing",covs=covs, pmMCAR=pmMCAR, pmMAR=pmMAR, nforms=nforms, itemGroups=itemGroups,
-#             twoMethod=twoMethod))}
+ SimMissing <- function(covs=0, pmMCAR=0, pmMAR=0, nforms=0, itemGroups=list(0), timePoints=1, twoMethod=0, numImps=0) {
+  return(new("simMissing",covs=covs, pmMCAR=pmMCAR, pmMAR=pmMAR, nforms=nforms, itemGroups=itemGroups,
+             twoMethod=twoMethod, timePoints=timePoints, numImps=numImps))}

@@ -3,16 +3,25 @@
 simResult <- function(nRep, simData, simModel, simMissing=new("NullSimMissing"), seed = 123321, silent=FALSE) {
 	set.seed(seed)
 	numseed <- as.list(sample(1:999999, nRep))
+  if(is(simData, "SimData")) {
 	Result.l <- lapply(numseed, runRep, simData=simData, simModel=simModel, simMissing=simMissing, silent=silent)	
+  } else if(is(simData, "list")) {
+	Result.l <- lapply(simData, runRep, simModel=simModel, simMissing=simMissing, seed=seed, silent=silent)	
+  }  
 	modelType <- simModel@modelType
 	fit.l <- lapply(Result.l, function(object) {object$fit}) 
 	coef.l <- lapply(Result.l, function(object) {object$coef})  
 	se.l <- lapply(Result.l, function(object) {object$se}) 
 	converged.l <- lapply(Result.l, function(object) {object$converged}) 
-	param.l <- lapply(Result.l, function(object) {object$param})   
+	param.l <- lapply(Result.l, function(object) {object$param})  
+  #Same here, we need to save FMI information
+  #FMI1.l <- lapply(Result.l, function(object) {object$FMI1}) 
+	#FMI2.l <- lapply(Result.l, function(object) {object@FMI2})
 	coef <- as.data.frame(do.call(rbind, coef.l))
 	se <- as.data.frame(do.call(rbind, se.l))
 	fit <- as.data.frame(do.call(rbind, fit.l))
+  #FMI1 <- as.data.frame(do.call(rbind, FMI1.l))
+  #FMI2 <- as.data.frame(do.call(rbind, FMI2.l))
 	converged <- as.vector(unlist(converged.l))
 	param <- new("NullDataFrame")
 	if(!is.null(param.l)) {
@@ -20,6 +29,7 @@ simResult <- function(nRep, simData, simModel, simMissing=new("NullSimMissing"),
 		if(sum(dim(param)) == 0) param <- new("NullDataFrame")
 		if(nrow(unique(param)) == 1) param <- unique(param)
 	}
+  #SimResult needs informatin for FMI too...
 	Result <- new("SimResult", modelType=modelType, nRep=nRep, coef=coef, se=se, fit=fit, converged=converged, seed=seed, paramValue=param)
 	return <- Result
 }

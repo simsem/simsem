@@ -4,30 +4,32 @@
 Function to pool imputed results
 }
 \description{
-The function takes a list of imputed results (parameters, standard errors and fit indices)
-and returns pooled parameter estimates, standard errors, and fit indices.
+The function takes a list of imputed results (parameters and standard errors)
+and returns pooled parameter estimates and standard errors.
 }
 \usage{
-miPool(imputed.results, imps)
+miPool(MI.param, MI.se,, imps)
 }
 \arguments{
-  \item{imputed.results}{
-A simmodel object with results from each imputed data set
+  \item{MI.param}{
+A matrix of parameter estimates from the analysis of each imputed data set. Each column represents one parameter and each row contains results from one imputation
+}
+  \item{MI.se}{
+A matrix of standard errors from the analysis of each imputed data set. Each column represents one parameter and each row contains results from one imputation
 }
   \item{imps}{
 The number of imputations used.
 }
 }
 \details{
-Parameters and standard errors are combined using Rubin's Rules (Rubin, 1987). Fit indices are averaged across imputations.
+Parameters and standard errors are combined using Rubin's Rules (Rubin, 1987). 
 }
 \value{
 MIpool returns a list with pooled estimates, standard errors, fit indices and fraction missing information
-\item{Estimates}{Pooled parameter estimates. The order of parameter estimates corresponds to the order reported by Lavaan}
-\item{SE}{Pooled standard errors. The order of standard errors corresponds to the order reported by Lavaan}
-\item{Fit.indices}{Pooled fit indices. The order of fit indices corresponds to the order reported by Lavaan}
-\item{FMI.1}{Fraction of missing information for each parameter. The order of fraction missing corresponds to the order of parameters reported by Lavaan}
-\item{FMI.2}{Fraction of missing information for each parameter. The order of fraction missing corresponds to the order of parameters reported by Lavaan}
+\item{Estimates}{Pooled parameter estimates. }
+\item{SE}{Pooled standard errors. }
+\item{FMI.1}{Fraction of missing information for each parameter. }
+\item{FMI.2}{Fraction of missing information for each parameter. }
 }
 \references{
 Rubin, D.B. (1987) Multiple Imputation for Nonresponse in Surveys. J. Wiley & Sons, New York.

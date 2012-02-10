@@ -66,7 +66,7 @@ runMI<- function(data.mat,data.model, m, miPackage="amelia", silent=FALSE, ...) 
 
 
   ##New miPool should return simResult object. Can be used with runRep runSIM or can be summarized. 
-  comb.results<-miPool(imputed.results)
+  comb.results<-miPool(imputed.results.l)
  
  ##Name elements in the list
  ##Only  named when given lavaan syntax 

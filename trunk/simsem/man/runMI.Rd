@@ -7,7 +7,7 @@ Multiply impute and analyze data using lavaan
 This function takes data with missing observations, multiple imputes the data, runs a SEM using lavaan and combines the results using Rubin's rules.
 }
 \usage{
-runMI(data.mat, data.model, imps, miPackage="amelia")
+runMI(data.mat, data.model, m, miPackage="amelia", silent = FALSE)
 }
 \arguments{
   \item{data.mat}{
@@ -16,11 +16,14 @@ Data frame with missing observations.
   \item{data.model}{
 Specification of the model to be analyzed. data.model can be either a simModel object or lavaan syntax
 }
-  \item{imps}{
+  \item{m}{
 Number of imputations wanted
 }
  \item{miPackage}{
 Package to be used for impuation. Currently runMI only uses amelia for imputation
+}
+ \item{silent}{
+	TRUE if users do not wish to print number of imputations while running the function.
 }
 }
 \value{

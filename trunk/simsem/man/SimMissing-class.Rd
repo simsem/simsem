@@ -20,6 +20,9 @@ Objects can be created by \code{simMissing} function. It can also be called from
     \item{\code{twoMethod}:}{Vector of (percent missing, column index). Will put a given percent
 		missing on that column in the matrix to simulate a two method
 		planned missing data research design. }
+    \item{\code{timepoints}:}{Number of timepoints items were measured over. For longitudinal data, planned missing designs will be implemented within each timepoint.}
+    \item{\code{numImps}:}{The number of imputations to be used when multiply imputing missing data. Setting numImps to 0 will use FIML to handle missing data.}
+    \item{\code{impMethod}:}{Package that will be used for imputation. Currently only Amelia is supported.}
 	}  
 }
 \section{Methods}{

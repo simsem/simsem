@@ -16,15 +16,19 @@ runRep <- function(simData, simModel, simMissing=new("NullSimMissing"), seed=123
           
         # Get Data
           if(class(simData) == "SimData") {
-            data <- run(simData, dataOnly=FALSE)
-          } else if(is.list(simData) && !is.data.frame(simData)) {
+            #We need just the data to run through impose missing. This saves the paramter estimates and then only uses the data
+            dataT <- run(simData, dataOnly=FALSE)
+            data<-dataT@data
+          } else if(is.matrix(simData)) {
             data <- data.frame(simData)
-          } else {
+          } else if(is.data.frame(simData)) {
             data <- simData
+          } else {
+            stop("The simData argument is not a SimData class, a matrix, or a data frame.")
           }
 
          # Impose / Impute Missing 
-		 if(!is.null.object(simMissing)) {
+		 if(!is(simMissing, "NullSimMissing")) {
           data.mis <- imposeMissing(data, covs=simMissing@covs, pmMCAR=simMissing@pmMCAR,
                                     pmMAR=simMissing@pmMAR, nforms=simMissing@nforms,
                                     itemGroups=simMissing@itemGroups, twoMethod=simMissing@twoMethod)
@@ -33,15 +37,12 @@ runRep <- function(simData, simModel, simMissing=new("NullSimMissing"), seed=123
 		}
 		 temp <- NULL
           #Impute missing and run results 
-           if(!is.null.object(simMissing)) {
-              tempMI<-NULL
+           if(!is(simMissing, "NullSimMissing") && simMissing@numImps > 0) {
               if(silent) {
-                 invisible(capture.output(suppressMessages(try(tempMI <- runMI(data.mis,simModel,simMissing@numImps,simMissing@impMethod)), silent=TRUE)))
+                 invisible(capture.output(suppressMessages(try(temp <- runMI(data.mis,simModel,simMissing@numImps,simMissing@impMethod)), silent=TRUE)))
               } else {
-                        try(tempMI <- runMI(data.mis,simModel,simMissing@numImps,simMissing@impMethod))
-              }
-              temp <- new("SimResult", modelType=simModel@modelType,nRep=1, coef=tempMI[[1]],
-                               se=tempMI[[2]], fit=tempMI[[3]], converged =!is.null(tempMI))
+                        try(temp <- runMI(data.mis,simModel,simMissing@numImps,simMissing@impMethod))
+              } 
               } else{
           if(silent) {
             invisible(capture.output(suppressMessages(try(temp <- run(simModel, data.mis), silent=TRUE))))
@@ -57,6 +58,9 @@ runRep <- function(simData, simModel, simMissing=new("NullSimMissing"), seed=123
             coef<- vectorize.object(temp@coef, Labels)
             se <- vectorize.object(temp@se, Labels)
             fit <- temp@fit
+            #Can we make vectorize object work with simModelOutMI too?
+            #FMI1 <- vectorize.object(temp@FMI1, Labels)
+            #FMI2 <- vectorize.object(tempFMI2, Lables)
 
             if(!converged) {
               coef <- NA
@@ -64,9 +68,9 @@ runRep <- function(simData, simModel, simMissing=new("NullSimMissing"), seed=123
               fit <- NA
             }
 
-            if(!is.null.object(temp@paramValue)) {
+            if(!is.null.object(dataT@paramOut)) {
               if(converged) {
-                param <- vectorize.object(temp@paramValue, Labels)
+                param <- vectorize.object(dataT@paramOut, Labels)
               } else {
                 param <- NA
               }
@@ -74,8 +78,8 @@ runRep <- function(simData, simModel, simMissing=new("NullSimMissing"), seed=123
           }
 	       
 
-	
-  Result <- list(coef=coef, se=se, fit=fit, converged=converged, param=param)
+	#We need to output FMI also when there is missing information....
+  Result <- list(coef=coef, se=se, fit=fit, converged=converged, param=param)# FMI1=FMI1, FMI2=FMI2)
 	return <- Result
 }
 
