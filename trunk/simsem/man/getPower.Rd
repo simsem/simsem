@@ -52,7 +52,7 @@ SimData.NULL <- simData(500, CFA.Model.NULL)
 SimModel <- simModel(CFA.Model.NULL)
 # We make the examples running only 50 replications to save time.
 # In reality, more replications are needed.
-Output.NULL <- simResult(SimData.NULL, SimModel, 50)
+Output.NULL <- simResult(50, SimData.NULL, SimModel)
 Cut.NULL <- getCutoff(Output.NULL, 0.95)
 
 u79 <- simUnif(0.7, 0.9)
@@ -65,7 +65,7 @@ diag(latent.cor.alt) <- 1
 PH.ALT <- symMatrix(latent.cor.alt, "u79")
 CFA.Model.ALT <- simSetCFA(LY = LX.ALT, PS = PH.ALT, TE = TD)
 SimData.ALT <- simData(500, CFA.Model.ALT)
-Output.ALT <- simResult(SimData.ALT, SimModel, 50)
+Output.ALT <- simResult(50, SimData.ALT, SimModel)
 getPower(Output.ALT, Cut.NULL)
 Rule.of.thumb <- c(RMSEA=0.05, CFI=0.95, TLI=0.95, SRMR=0.06)
 getPower(Output.ALT, Rule.of.thumb, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))

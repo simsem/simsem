@@ -6,7 +6,7 @@ result <- mapply(simData, runRep, simModel=simModel, simMissing=simMissing, seed
 #combine list together
 }
 
-runRep <- function(simData, simModel, simMissing=NULL, seed, silent=FALSE) {
+runRep <- function(simData, simModel, simMissing=new("NullSimMissing"), seed=123321, silent=FALSE) {
 	
 	modelType <- simModel@modelType
 
@@ -24,12 +24,16 @@ runRep <- function(simData, simModel, simMissing=NULL, seed, silent=FALSE) {
           }
 
          # Impose / Impute Missing 
+		 if(!is.null.object(simMissing)) {
           data.mis <- imposeMissing(data, covs=simMissing@covs, pmMCAR=simMissing@pmMCAR,
                                     pmMAR=simMissing@pmMAR, nforms=simMissing@nforms,
                                     itemGroups=simMissing@itemGroups, twoMethod=simMissing@twoMethod)
-          temp <- NULL
+		} else {
+			data.mis <- data
+		}
+		 temp <- NULL
           #Impute missing and run results 
-           if(!is.null(simMissing@numImps)) {
+           if(!is.null.object(simMissing)) {
               tempMI<-NULL
               if(silent) {
                  invisible(capture.output(suppressMessages(try(tempMI <- runMI(data.mis,simModel,simMissing@numImps,simMissing@impMethod)), silent=TRUE)))
@@ -71,7 +75,7 @@ runRep <- function(simData, simModel, simMissing=NULL, seed, silent=FALSE) {
 	       
 
 	
-  Result <- new("SimResult", modelType=modelType, nRep=1, coef=coef, se=se, fit=fit, converged=converged, seed=seed, param=param)
+  Result <- list(coef=coef, se=se, fit=fit, converged=converged, param=param)
 	return <- Result
 }
 

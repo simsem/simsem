@@ -94,3 +94,11 @@ setMethod("is.null.object", signature="data.frame", definition=function(target) 
 #Arguments: 	data.frame.c that users wish to check
 #Description: check whether the data.frame.c is NullDataFrame.c
 #Return: 	TRUE if it is NullDataFrame.c
+
+setMethod("is.null.object", signature="SimMissing", definition=function(target) {
+		is(target, "NullSimMissing")
+	}
+)
+#Arguments: 	an object in the SimMissing class that users wish to check
+#Description: check whether the SimMissing class is the null object
+#Return: 	TRUE if it is null

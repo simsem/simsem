@@ -1099,3 +1099,16 @@ setClass("SimMissing",
         timePoints=1)
 )
 
+###################################################################
+# NullSimMissing
+# Class -- simsem package
+# This null class of the SimMissing class
+# Constructor:	 	new("NullSimModel", data)
+# Parent Class: SimMissing
+# Child Class:	None
+# Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu), Patrick Miller (University of Kansas; patr1ckm@ku.edu)
+# Date Modified: February 09, 2011
+
+setClass("NullSimMissing", 
+	contains="SimMissing"
+)

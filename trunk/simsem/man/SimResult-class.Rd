@@ -56,7 +56,7 @@ SimData <- simData(500, CFA.Model)
 SimModel <- simModel(CFA.Model)
 # We make the examples running only 50 replications to save time.
 # In reality, more replications are needed.
-Output <- simResult(SimData, SimModel, 50)
+Output <- simResult(50, SimData, SimModel)
 summary(Output)
 getCutoff(Output, 0.05)
 }

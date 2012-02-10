@@ -8,17 +8,20 @@ This function will create simResult by different ways. One way is to create data
 and \code{\linkS4class{SimModel}} and save it in the \code{\linkS4class{SimResult}}.
 }
 \usage{
-simResult(simData, simModel, nRep, seed = 123321, silent = FALSE)
+simResult(nRep, simData, simModel, simMissing = new("NullSimMissing"), seed = 123321, silent = FALSE)
 }
 \arguments{
+  \item{nRep}{
+	Number of replications.
+}
   \item{simData}{
 	Data object used in data simulation.
 }
   \item{simModel}{
 	Model object used in analyzing the simulated data.
 }
-  \item{nRep}{
-	Number of replications.
+  \item{simMissing}{
+	Model object used in providing the information about missing values.
 }
   \item{seed}{
 	Seed number
@@ -52,6 +55,6 @@ SimData <- simData(500, CFA.Model)
 SimModel <- simModel(CFA.Model)
 # We make the examples running only 50 replications to save time.
 # In reality, more replications are needed.
-Output <- simResult(SimData, SimModel, 50)
+Output <- simResult(50, SimData, SimModel)
 #summary(Output)
 }

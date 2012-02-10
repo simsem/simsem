@@ -10,7 +10,7 @@
 # Trimed means #
 
 ################################## Example 1 ##############################################
-library(simsem)
+#library(simsem)
 
 sourceDir <- function(path, trace = TRUE, ...) {
      for (nm in list.files(path, pattern = "\\.[RrSsQq]$")) {
@@ -19,9 +19,9 @@ sourceDir <- function(path, trace = TRUE, ...) {
         if(trace) cat("\n")
      }
 }
-path <- "C:/Users/Sunthud/Desktop/My Dropbox/simsem/trunk/simsem/R/"
+#path <- "C:/Users/Sunthud/Desktop/My Dropbox/simsem/trunk/simsem/R/"
 #path <- "C:/Users/Sunthud/simsem_backup/simsem/R/"
-#path <- "C:/Users/student/Dropbox/Fit Indices/Program/simsem/trunk/simsem/R/"
+path <- "C:/Users/student/Dropbox/simsem/simsem/R/"
  source(paste(path, "AllClass.R", sep=""))
  source(paste(path, "AllGenerics.R", sep=""))
  sourceDir(path)
@@ -48,7 +48,7 @@ CFA.Model <- simSetCFA(LX = LX, PH = PH, TD = TD) #, VX = VX, MX=MX)
 
 SimData <- simData(200, CFA.Model)
 SimModel <- simModel(CFA.Model)
-Output <- simResult(SimData, SimModel, 100)
+Output <- simResult(100, SimData, SimModel)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
@@ -84,7 +84,7 @@ LCA.Model <- simSetCFA(LY=LY, PS=PS, VPS=VPS, AL=AL, VTE=VTE, TE=TE, TY=TY)
 
 Data.True <- simData(300, LCA.Model)
 SimModel <- simModel(LCA.Model)
-#Output <- simResult(Data.True, SimModel, 100)
+#Output <- simResult(100, Data.True, SimModel)
 #getCutoff(Output, 0.05)
 #plotCutoff(Output, 0.05)
 
@@ -98,7 +98,7 @@ LCA.Mis <- simMisspecCFA(LY = loading.mis)
 
 Data.Mis <- simData(300, LCA.Model, LCA.Mis)
 
-Output.Mis <- simResult(Data.Mis, SimModel, 100)
+Output.Mis <- simResult(100, Data.Mis, SimModel)
 getCutoff(Output.Mis, 0.05)
 plotCutoff(Output.Mis, 0.05)
 summaryParam(Output.Mis)
@@ -135,8 +135,8 @@ Path.Mis.Model <- simMisspecPath(BE = mis.BE)
 Data <- simData(500, Path.Model)
 Data.Mis <- simData(500, Path.Model, Path.Mis.Model)
 SimModel <- simModel(Path.Model)
-#Output <- simResult(Data, SimModel, 1000)
-Output <- simResult(Data.Mis, SimModel, 100)
+#Output <- simResult(100, Data, SimModel)
+Output <- simResult(100, Data.Mis, SimModel)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
@@ -172,7 +172,7 @@ Path.Mis.Model <- simMisspecPath(GA = mis.GA, exo=TRUE)
 
 Data.Mis <- simData(500, Path.Model, Path.Mis.Model)
 SimModel <- simModel(Path.Model)
-Output <- simResult(Data.Mis, SimModel, 100)
+Output <- simResult(100, Data.Mis, SimModel)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
@@ -235,7 +235,7 @@ Data.Mis.Con <- simData(300, SEM.model, misspec=SEM.Mis.Model, equalCon=equal.lo
 Model.Original <- simModel(SEM.model)
 Model.Con <- simModel(SEM.model, equalCon=equal.loading)
 
-Output <- simResult(Data.Mis.Con, Model.Con, 200)
+Output <- simResult(200, Data.Mis.Con, Model.Con)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
@@ -350,7 +350,7 @@ Data.Mis.Con <- simData(300, SEM.model, misspec=SEM.Mis.Model,
 Model.Original <- simModel(SEM.model)
 Model.Con <- simModel(SEM.model, equalCon=equal.loading)
 
-Output <- simResult(Data.Mis.Con, Model.Con, 100)
+Output <- simResult(100, Data.Mis.Con, Model.Con)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
@@ -377,7 +377,7 @@ CFA.Model.NULL.Mis <- simMisspecCFA(TE = TD.Mis)
 
 SimData.NULL <- simData(500, CFA.Model.NULL, misspec = CFA.Model.NULL.Mis)
 SimModel <- simModel(CFA.Model.NULL)
-Output.NULL <- simResult(SimData.NULL, SimModel, 300)
+Output.NULL <- simResult(300, SimData.NULL, SimModel)
 
 loading.alt <- matrix(0, 6, 2)
 loading.alt[1:3, 1] <- NA
@@ -394,7 +394,7 @@ LX.alt.mis <- simMatrix(loading.alt.mis, "u2")
 CFA.Model.alt.mis <- simMisspecCFA(LY = LX.alt.mis, TE=TD.Mis)
 
 SimData.ALT <- simData(500, CFA.Model.ALT, misspec = CFA.Model.alt.mis)
-Output.ALT <- simResult(SimData.ALT, SimModel, 300)
+Output.ALT <- simResult(300, SimData.ALT, SimModel)
 
 cutoff <- getCutoff(Output.NULL, 0.05)
 getPower(Output.ALT, cutoff)
