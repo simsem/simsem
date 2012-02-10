@@ -66,3 +66,13 @@ simsem, Version 0.0-4.0 11/17/11
   and managing the result pooling
 - Add miPool.R: pools MI results
 
+simsem, Version 0.0-5.0 02/09/12
+- Handle warnings from the summaryParam function
+- Handle warnings and errors from the examples of imposeMissing function
+- Change the way to run simResult function to facilitate Rmpi in the future (using the runRep function)
+- Change miPool to pool the SimModelOut class
+- Change the order of the simResult function from (simData, simModel, simMissing, nRep) to (nRep, simData, simModel, simMissing). The examples and manual are changed accordingly.
+- Add the SimModelMIOut (with NullSimModelOut) class which is the child class of the SimModelOut class
+- Change the is.null.object and summaryParam functions for the SimModelMIOut class
+
+
