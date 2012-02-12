@@ -21,6 +21,8 @@ Objects can be created by \code{\link{simResult}}. It can also be called from th
     \item{\code{converged}:}{Number of convergence replications }
     \item{\code{seed}:}{Seed number. }
 	\item{\code{paramValue}:}{Population model underlying each simulated dataset.}
+	\item{\code{FMI1}:}{Fraction Missing Method 1.}
+	\item{\code{FMI2}:}{Fraction Missing Method 2.}
   }
 }
 \section{Methods}{

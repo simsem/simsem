@@ -63,6 +63,20 @@ setMethod("summaryParam", signature(object="SimResult"), definition=function(obj
 			result <- data.frame(result, result3)
 		}
 	}
+	if(!is.null.object(object@FMI1) & !is.null.object(object@FMI2)) {
+		nRep <- nrow(object@coef)
+		nFMI1 <- ncol(object@FMI1)
+		FMI1 <- object@FMI1	
+		FMI2 <- object@FMI2	
+		average.FMI1 <- apply(FMI1, 2, mean, na.rm=TRUE)
+		sd.FMI1 <- apply(FMI1, 2, sd, na.rm=TRUE)
+		average.FMI2 <- apply(FMI2, 2, mean, na.rm=TRUE)
+		sd.FMI2 <- apply(FMI2, 2, sd, na.rm=TRUE)
+
+		resultFMI <- cbind(average.FMI1, sd.FMI1, average.FMI2, sd.FMI2)
+		colnames(resultFMI) <- c("Average FMI1", "SD FMI1", "Average FMI2", "SD FMI2")
+		result <- data.frame(result, resultFMI)
+	}
 	return(as.data.frame(result))
 })
 #Arguments: 

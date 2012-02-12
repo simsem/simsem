@@ -414,17 +414,21 @@ setMethod("run", signature="SimData", definition=function(object, n=NULL, dataOn
 #Description: 	The SimData object will draw samples from specified model.
 #Return: 	Data frame drawn from the specified model.
 
-setMethod("run", signature="SimModel", definition=function(object, data) {
+setMethod("run", signature="SimModel", definition=function(object, data, simMissing=new("NullSimMissing")) {
 	Output <- NULL
 	DataOut <- NULL
 	if(class(data) == "SimDataOut") {
 		DataOut <- data
 		data <- DataOut@data
 	}
-	if(object@package == "OpenMx") {
-		Output <- runOpenMx(object, data)
-	} else if (object@package == "lavaan") {
-		Output <- runLavaan(object, data)
+	if(!is.null.object(simMissing) && simMissing@numImps > 0) {
+		Output <- runMI(data, object, simMissing@numImps,simMissing@impMethod)
+	} else {
+		if(object@package == "OpenMx") {
+			Output <- runOpenMx(object, data)
+		} else if (object@package == "lavaan") {
+			Output <- runLavaan(object, data)
+		}
 	}
 	#is.equal(DataOut@param, Output@param) yes --> compute bias
 	if(!is.null(DataOut)) {
@@ -439,5 +443,29 @@ setMethod("run", signature="SimModel", definition=function(object, data) {
 #Arguments: 
 #	object:	SimModel.c object
 #	Data:	Data that used to be analyzed by the specified model
+#Description: 	The SimData will analyze the data and return the SimModelOut.c that saves the result.
+#Return: 	SimModelOut.c that saves the result.
+
+setMethod("run", signature="SimMissing", definition=function(object, data) {
+	result <- NULL
+	if(is(data, "SimDataOut")) {
+		data@data <- imposeMissing(data@data, covs=object@covs, pmMCAR=object@pmMCAR,
+            pmMAR=object@pmMAR, nforms=object@nforms, timePoints=object@timePoints,
+            itemGroups=object@itemGroups, twoMethod=object@twoMethod)
+	} else if (is.data.frame(data)) {
+		data <- imposeMissing(data, covs=object@covs, pmMCAR=object@pmMCAR,
+            pmMAR=object@pmMAR, nforms=object@nforms, timePoints=object@timePoints,
+            itemGroups=object@itemGroups, twoMethod=object@twoMethod)	
+	} else if (is.matrix(data)) {
+		data <- as.data.frame(data)
+		data <- imposeMissing(data, covs=object@covs, pmMCAR=object@pmMCAR,
+            pmMAR=object@pmMAR, nforms=object@nforms, timePoints=object@timePoints,
+            itemGroups=object@itemGroups, twoMethod=object@twoMethod)	
+	}
+	return(data)
+})
+#Arguments: 
+#	object:	SimMissing object
+#	Data:	Data that used to be imputed missing value
 #Description: 	The SimData will analyze the data and return the SimModelOut.c that saves the result.
 #Return: 	SimModelOut.c that saves the result.

@@ -8,7 +8,7 @@ This function will create simResult by different ways. One way is to create data
 and \code{\linkS4class{SimModel}} and save it in the \code{\linkS4class{SimResult}}.
 }
 \usage{
-simResult(nRep, simData, simModel, simMissing = new("NullSimMissing"), seed = 123321, silent = FALSE)
+simResult(nRep, simData, simModel, simMissing = new("NullSimMissing"), seed = 123321, silent = FALSE, multicore = FALSE, cluster = FALSE, numProc=NULL)
 }
 \arguments{
   \item{nRep}{
@@ -28,6 +28,15 @@ simResult(nRep, simData, simModel, simMissing = new("NullSimMissing"), seed = 12
 }
   \item{silent}{
 	TRUE if users do not wish to print number of replications during running the function.
+}
+  \item{multicore}{
+	Use multiple processors within a computer. Specify as TRUE to use it.
+}
+  \item{cluster}{
+	Not applicable now. Use for specify nodes in hpc in order to be parallelizable.
+}
+  \item{numProc}{
+	Number of processors for using multiple processors. If it is \code{NULL}, the package will find the maximum number of processors.
 }
 }
 \value{

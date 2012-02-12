@@ -34,6 +34,8 @@ simData                 Data object
 simEqualCon             Equality Constraint Object
 simMatrix               Create simMatrix that save free parameters and
                         starting values, as well as fixed values
+simMissing              Construct a SimMissing object to create data
+                        with missingness and analyze missing data.
 simMisspecCFA           Set of model misspecification for CFA model.
 simMisspecPath          Set of model misspecification for Path analysis
                         model.

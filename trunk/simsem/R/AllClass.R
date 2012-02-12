@@ -985,9 +985,13 @@ setClass("SimResult",
 		fit="data.frame",
 		converged="vector",
 		paramValue="data.frame",
+		FMI1="data.frame",
+		FMI2="data.frame",
 		seed="numeric"),
 	prototype(
-		paramValue=new("NullDataFrame"))
+		paramValue=new("NullDataFrame"),
+		FMI1=new("NullDataFrame"),
+		FMI2=new("NullDataFrame"))
 )
 
 ###################################################################
@@ -1077,7 +1081,7 @@ setClass("SimModelMIOut", # The class provides model result.
 #  twoMethod = vector of (item, percent missing). Functions removes the given percent of data on the column index.
 #  timepoints = number of timepoints in data
 # Methods:	None for now.
-# Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu), Patrick Miller (University of Kansas; patr1ckm@ku.edu)
+# Author: Alex Schoemann (University of Kansas; schoemann@ku.edu), Patrick Miller (University of Kansas; patr1ckm@ku.edu)
 # Date Modified: November 17, 2011
 
 setClass("SimMissing",
@@ -1088,16 +1092,21 @@ setClass("SimMissing",
         nforms="numeric",
         itemGroups="list",
         twoMethod="vector",
+        impMethod="vector",
+        numImps="numeric",
         timePoints="numeric"),
     prototype(
         covs=0,
         pmMCAR=0,
         pmMAR=0,
         nforms=0,
-        itemGroups=list(NULL),
+        itemGroups=list(0),
         twoMethod=0,
+        impMethod="amelia",
+        numImps=0,
         timePoints=1)
 )
+
 
 ###################################################################
 # NullSimMissing

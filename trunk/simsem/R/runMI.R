@@ -31,7 +31,7 @@ runMI<- function(data.mat,data.model, m, miPackage="amelia", silent=FALSE, ...) 
   
   ## Return list of simModelOut objects, to be combined. 
   runSimMI <- function(MIdata,simModel) {
-    model <- run(simModel, MIdata)
+    model <- run(object=simModel, data=MIdata)
     return(model)
     }
   
@@ -95,16 +95,16 @@ runMI<- function(data.mat,data.model, m, miPackage="amelia", silent=FALSE, ...) 
 testMI <- function() {
 ##Shamelessly using the example in lavaan
 
-testd<-HolzingerSwineford1939[,-5]
+test<-HolzingerSwineford1939[,-5]
 HS.model <- ' visual  =~ x1 + x2 + x3
                textual =~ x4 + x5 + x6
                speed   =~ x7 + x8 + x9 '
 cfa(HS.model,data=test)
 
 ##Impose missing data to test
-log.mat1 <- makeMCAR(dim(testd),.3,)
-testd[log.mat1] <- NA
+log.mat1 <- makeMCAR(dim(test),.3,)
+test[log.mat1] <- NA
 
-runMI(testd,HS.model,3)
+runMI(test,HS.model,3)
 }
  

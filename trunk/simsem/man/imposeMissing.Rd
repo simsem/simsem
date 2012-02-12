@@ -34,12 +34,13 @@ imposeMissing(data.mat, covs = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, itemGroups 
     items will be divided into groups sequentially (e.g. 1-3,4-6,7-9,10-12)
 }
   \item{twoMethod}{
-    Vector of (percent missing, column index). Will put a given percent
+    Vector of (column index, percent missing). Will put a given percent
     missing on that column in the matrix to simulate a two method
     planned missing data research design. 
 }
  \item{timePoints}{
     Number of timepoints items were measured over. For longitudinal data, planned missing designs will be implemented within each timepoint. 
+}
 }
 \details{
 Without specifying any any arguments, no missingness will be

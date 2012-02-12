@@ -413,4 +413,44 @@ setMethod("summary", signature="SimDataOut", definition=function(object, detail=
 #Description: This function will print all elements in the SimDataOut.c.
 #Return: 	NONE. Results will print on screen only.
 
+setMethod("summary", signature="SimMissing", definition=function(object) {
+		cat("MISSING OBJECT\n")
+		handling <- "Maximum Likelihood"
+		if(object@numImps > 0) handling <- paste("Multiple Imputation with", object@numImps, "imputations")
+ 		cat(paste("The method of missing data handling:", handling, "\n"))
+		printcov <- "Covariates (will not impose any missing values):"
+		if(length(object@covs) == 1 && object@covs==0) {
+			printcov <- paste(printcov, "none", "\n") 
+		} else {
+			printcov <- paste(printcov, paste(object@covs, collapse=", "), "\n") 
+		}
+		cat(printcov)
+		if (object@pmMCAR!=0) { cat(paste("Proportion of MCAR:", round(object@pmMCAR, 3), "\n")) }
+		if (object@pmMAR!=0) { cat(paste("Proportion of MAR:", round(object@pmMAR, 3), "\n")) } 
+		if (object@nforms!=0) {
+			cat("==========PLANNED MISSING DATA==========\n")
+			cat("---------- N-Forms Design ----------\n")
+			cat(paste("Number of forms:", ceiling(object@nforms), "\n"))
+			if (!(is.vector(object@itemGroups) && length(object@itemGroups) == 1 && object@itemGroups==0)) {
+				if(is.list(object@itemGroups)) {
+					cat("Item Grouping in n-forms design:\n")
+					for(i in 1:length(object@itemGroups)) {
+						cat(paste(i, ". ", paste(object@itemGroups[[i]], collapse=", "), "\n", sep=""))
+					}
+				}
+			}
+			cat("=====================================\n")
+		}
+		if (!(length(object@twoMethod) == 1 && object@twoMethod==0)) {
+			cat("==========PLANNED MISSING DATA==========\n")
+			cat("---------- Two-Method Design ----------\n")
+			cat(paste("Proportion of the missing form:", object@twoMethod[2], "\n"))
+			cat(paste("Variables in the missing form:", paste(object@twoMethod[1], collapse=", "), "\n"))
+			###############################################
+		}
+})
+#Arguments: 
+#	object:	SimMissing class that users wish to summarize
+#Description: This function will print all elements in the SimMissing.
+#Return: 	NONE. Results will print on screen only.
 

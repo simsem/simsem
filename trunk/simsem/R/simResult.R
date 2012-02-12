@@ -1,13 +1,27 @@
 
 
-simResult <- function(nRep, simData, simModel, simMissing=new("NullSimMissing"), seed = 123321, silent=FALSE) {
+simResult <- function(nRep, simData, simModel, simMissing=new("NullSimMissing"), seed = 123321, silent=FALSE, multicore=FALSE, cluster=FALSE, numProc=NULL) {
 	set.seed(seed)
 	numseed <- as.list(sample(1:999999, nRep))
-  if(is(simData, "SimData")) {
-	Result.l <- lapply(numseed, runRep, simData=simData, simModel=simModel, simMissing=simMissing, silent=silent)	
-  } else if(is(simData, "list")) {
-	Result.l <- lapply(simData, runRep, simModel=simModel, simMissing=simMissing, seed=seed, silent=silent)	
-  }  
+	if(multicore) {
+		library(parallel)
+		if(is.null(numProc)) numProc <- detectCores()
+		cl <- makeCluster(rep("localhost", numProc), type="SOCK")
+			if(is(simData, "SimData")) {
+				Result.l <- parLapply(cl, numseed, runRep, simData=simData, simModel=simModel, simMissing=simMissing, silent=silent)	
+			} else if(is(simData, "list")) {
+				Result.l <- parLapply(cl, simData, runRep, simModel=simModel, simMissing=simMissing, seed=seed, silent=silent)	
+			}
+		stopCluster(cl)
+	} else {
+		if(is(simData, "SimData")) {
+			Result.l <- lapply(numseed, runRep, simData=simData, simModel=simModel, simMissing=simMissing, silent=silent)	
+		} else if(is(simData, "list")) {
+			Result.l <- lapply(simData, runRep, simModel=simModel, simMissing=simMissing, seed=seed, silent=silent)	
+		}  
+	}
+	
+	
 	modelType <- simModel@modelType
 	fit.l <- lapply(Result.l, function(object) {object$fit}) 
 	coef.l <- lapply(Result.l, function(object) {object$coef})  
@@ -15,22 +29,35 @@ simResult <- function(nRep, simData, simModel, simMissing=new("NullSimMissing"),
 	converged.l <- lapply(Result.l, function(object) {object$converged}) 
 	param.l <- lapply(Result.l, function(object) {object$param})  
   #Same here, we need to save FMI information
-  #FMI1.l <- lapply(Result.l, function(object) {object$FMI1}) 
-	#FMI2.l <- lapply(Result.l, function(object) {object@FMI2})
+  FMI1.l <- lapply(Result.l, function(object) {object$FMI1}) 
+	FMI2.l <- lapply(Result.l, function(object) {object$FMI2})
 	coef <- as.data.frame(do.call(rbind, coef.l))
 	se <- as.data.frame(do.call(rbind, se.l))
 	fit <- as.data.frame(do.call(rbind, fit.l))
-  #FMI1 <- as.data.frame(do.call(rbind, FMI1.l))
-  #FMI2 <- as.data.frame(do.call(rbind, FMI2.l))
+  FMI1 <- as.data.frame(do.call(rbind, FMI1.l))
+  FMI2 <- as.data.frame(do.call(rbind, FMI2.l))
 	converged <- as.vector(unlist(converged.l))
 	param <- new("NullDataFrame")
+	FMI1 <- new("NullDataFrame")
+	FMI2 <- new("NullDataFrame")
 	if(!is.null(param.l)) {
 		param <- as.data.frame(do.call(rbind, param.l))
 		if(sum(dim(param)) == 0) param <- new("NullDataFrame")
 		if(nrow(unique(param)) == 1) param <- unique(param)
 	}
+	if(!is.null(FMI1.l)) {
+		FMI1 <- as.data.frame(do.call(rbind, FMI1.l))
+		if(sum(dim(FMI1)) == 0) FMI1 <- new("NullDataFrame")
+		if(nrow(unique(FMI1)) == 1) FMI1 <- unique(FMI1)
+	}
+	if(!is.null(FMI2.l)) {
+		FMI2 <- as.data.frame(do.call(rbind, FMI2.l))
+		if(sum(dim(FMI2)) == 0) FMI2 <- new("NullDataFrame")
+		if(nrow(unique(FMI2)) == 1) FMI2 <- unique(FMI2)
+	}
   #SimResult needs informatin for FMI too...
-	Result <- new("SimResult", modelType=modelType, nRep=nRep, coef=coef, se=se, fit=fit, converged=converged, seed=seed, paramValue=param)
+	Result <- new("SimResult", modelType=modelType, nRep=nRep, coef=coef, se=se, fit=fit, converged=converged, 
+		seed=seed, paramValue=param, FMI1=FMI1, FMI2=FMI2)
 	return <- Result
 }
 

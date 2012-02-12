@@ -5,4 +5,4 @@ exportMethods(summary, run, summaryShort, adjust, simModel,
 	getCutoff, getPower, plotCutoff, plotPower, summaryParam)
 export(loadingFromAlpha, imposeMissing, simUnif, simNorm, simMatrix, symMatrix, simVector,
 	simSetCFA, simSetPath, simSetSEM, simEqualCon, simData, simResult,
-	simMisspecCFA, simMisspecPath, simMisspecSEM, runMI)
+	simMisspecCFA, simMisspecPath, simMisspecSEM, runMI, simMissing, imposeMissing)

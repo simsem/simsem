@@ -13,8 +13,8 @@ This package will generate data for structural equation modeling framework. This
 Package: \tab simsem\cr
 Type: \tab Package\cr
 Version: \tab 0.0.5\cr
-Depends: \tab R(>= 2.12), methods, lavaan, MASS\cr
-Suggests: \tab OpenMx, Amelia\cr
+Depends: \tab R(>= 2.14), methods, lavaan, MASS\cr
+Suggests: \tab parallel, Amelia\cr
 Date: \tab 2011-11-15\cr
 License: \tab GPL (>= 2)\cr
 LazyLoad: \tab yes\cr
@@ -22,8 +22,8 @@ LazyLoad: \tab yes\cr
 }
 \author{
 Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-
-Maintainer: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
+Patrick Miller (University of Kansas; patr1ckm@ku.edu)
+Alex Schoemann (University of Kansas; schoemann@ku.edu)
 }
 \keyword{ package }
 \keyword{ sem }

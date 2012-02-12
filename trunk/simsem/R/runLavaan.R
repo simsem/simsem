@@ -1,4 +1,4 @@
-runLavaan <- function(object, Data) {
+runLavaan <- function(object, Data, miss="fiml") {
 	if(!require(lavaan)) {
 		install.packages("lavaan")
 		tryCatch(library(lavaan), error=function(e) {stop("The lavaan package cannot be loaded. Please install lavaan packages manually.")})
@@ -45,7 +45,7 @@ runLavaan <- function(object, Data) {
 		con.text <- blank.parameters(param)
 	}	
 	code <- write.lavaan.code(param, con.text)
-	fit <- sem(code, data=Data, meanstructure=TRUE)
+	fit <- sem(code, data=Data, meanstructure=TRUE, missing=miss)
 	FitIndices <- extract.lavaan.summary(fit)
 	coef <- combine.object(param, inspect(fit, "coef"))
     se <- combine.object(param, inspect(fit, "se"))

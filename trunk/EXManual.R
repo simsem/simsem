@@ -48,8 +48,11 @@ VX <- simVector(indicator.var, 1)
 CFA.Model <- simSetCFA(LX = LX, PH = PH, TD = TD) #, VX = VX, MX=MX)
 
 SimData <- simData(200, CFA.Model)
+
 SimModel <- simModel(CFA.Model)
+SimMissing <- simMissing(pmMCAR=0.1, numImps=5)
 Output <- simResult(100, SimData, SimModel)
+#Output <- simResult(100, SimData, SimModel, SimMissing)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)

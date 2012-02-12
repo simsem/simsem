@@ -29,70 +29,14 @@
 * checking S3 generic/method consistency ... OK
 * checking replacement functions ... OK
 * checking foreign function calls ... OK
-* checking R code for possible problems ... NOTE
-runMI: no visible binding for global variable 'imputed.results'
-runOpenMx: no visible binding for global variable 'LY'
-runOpenMx: no visible binding for global variable 'PS'
-runOpenMx: no visible binding for global variable 'TE'
-runOpenMx: no visible binding for global variable 'TY'
-runOpenMx: no visible binding for global variable 'AL'
-runOpenMx: no visible binding for global variable 'ID'
-runOpenMx: no visible binding for global variable 'BE'
-runRep: possible error in suppressMessages(try(tempMI <-
-  runMI(data.mis, simModel, simMissing@numImps, simMissing@impMethod)),
-  silent = TRUE): unused argument(s) (silent = TRUE)
-test: no visible binding for global variable 'datac'
+* checking R code for possible problems ... OK
 * checking Rd files ... OK
 * checking Rd metadata ... OK
 * checking Rd cross-references ... OK
 * checking for missing documentation entries ... OK
-* checking for code/documentation mismatches ... WARNING
-Codoc mismatches from documentation object 'imposeMissing':
-imposeMissing
-  Code: function(data.mat, covs = 0, pmMCAR = 0, pmMAR = 0, nforms = 0,
-                 itemGroups = 0, twoMethod = 0, timePoints = 1)
-  Docs: function(data.mat, covs = NULL, pmMCAR = NULL, pmMAR = NULL,
-                 nforms = NULL, itemGroups = NULL, twoMethod = NULL)
-  Argument names in code not in docs:
-    timePoints
-  Mismatches in argument default values (first 3):
-    Name: 'covs' Code: 0 Docs: NULL
-    Name: 'pmMCAR' Code: 0 Docs: NULL
-    Name: 'pmMAR' Code: 0 Docs: NULL
-
-Codoc mismatches from documentation object 'miPool':
-miPool
-  Code: function(Result.l)
-  Docs: function(imputed.results, imps)
-  Argument names in code not in docs:
-    Result.l
-  Argument names in docs not in code:
-    imputed.results imps
-  Mismatches in argument names:
-    Position: 1 Code: Result.l Docs: imputed.results
-
-Codoc mismatches from documentation object 'runMI':
-runMI
-  Code: function(data.mat, data.model, m, miPackage = "amelia", silent
-                 = FALSE, ...)
-  Docs: function(data.mat, data.model, imps, miPackage = "amelia")
-  Argument names in code not in docs:
-    m silent ...
-  Argument names in docs not in code:
-    imps
-  Mismatches in argument names:
-    Position: 3 Code: m Docs: imps
-
-S4 class codoc mismatches from documentation object 'SimMissing-class':
-Slots for class 'SimMissing'
-  Code: covs itemGroups nforms pmMAR pmMCAR timePoints twoMethod
-  Docs: covs itemGroups nforms pmMAR pmMCAR twoMethod
-
+* checking for code/documentation mismatches ... OK
 * checking Rd \usage sections ... OK
 * checking Rd contents ... OK
 * checking for unstated dependencies in examples ... OK
 * checking examples ... OK
 * checking PDF version of manual ... OK
-WARNING: There was 1 warning, see
-  'C:/Users/Sunthud/Desktop/My Dropbox/simsem/simsem.Rcheck/00check.log'
-for details

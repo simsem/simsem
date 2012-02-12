@@ -2,9 +2,10 @@
 ## inputs: data matrix, percent missing for each type of missing, indices of covariates, other arguments to planned missing
 ## Output: data set with missing data
 
-test <- function() {
+testImposeMissing <- function() {
 
   dat1 <- matrix(rep(1,400),ncol=20)
+  datac <- data <- dat1
   
   # Imposing Missing with the following arguments produces no missing values
   imposeMissing(data)

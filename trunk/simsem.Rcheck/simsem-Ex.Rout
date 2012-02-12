@@ -27,14 +27,6 @@ Loading required package: lavaan
 This is lavaan 0.4-12
 lavaan is BETA software! Please report any bugs.
 Loading required package: MASS
-Loading required package: Amelia
-Loading required package: foreign
-## 
-## Amelia II: Multiple Imputation
-## (Version 1.5-5, built: 2011-11-29)
-## Copyright (C) 2005-2012 James Honaker, Gary King and Matthew Blackwell
-## Refer to http://gking.harvard.edu/amelia/ for more information
-##
 > 
 > assign(".oldSearch", search(), pos = 'CheckExEnv')
 > cleanEx()
@@ -748,7 +740,8 @@ Class "NullSymMatrix", by class "SymMatrix", distance 2
 > 
 > ### Name: SimMissing-class
 > ### Title: Class '"SimMissing"'
-> ### Aliases: SimMissing-class
+> ### Aliases: SimMissing-class summary,SimMissing-method
+> ###   run,SimMissing-method
 > ### Keywords: classes
 > 
 > ### ** Examples
@@ -898,9 +891,9 @@ Slots:
                                                                         
 Name:   modelType       nRep       coef         se        fit  converged
 Class:  character    numeric data.frame data.frame data.frame     vector
-                            
-Name:  paramValue       seed
-Class: data.frame    numeric
+                                                  
+Name:  paramValue       FMI1       FMI2       seed
+Class: data.frame data.frame data.frame    numeric
 > loading <- matrix(0, 6, 1)
 > loading[1:6, 1] <- NA
 > LX <- simMatrix(loading, 0.7)
@@ -922,18 +915,18 @@ baseline.pvalue             CFI             TLI             AIC             BIC
           0.000           0.000           0.022           0.009 
 ========= Parameter Estimates and Standard Errors ============
       Estimate    SE      z         p
-LY1_1    0.716 0.041 17.432 0.0000000
-LY2_1    0.693 0.044 15.905 0.0000000
-LY3_1    0.739 0.045 16.412 0.0000000
+LY1_1    0.716 0.041 17.426 0.0000000
+LY2_1    0.693 0.044 15.901 0.0000000
+LY3_1    0.739 0.045 16.404 0.0000000
 LY4_1    0.705 0.043 16.232 0.0000000
-LY5_1    0.727 0.044 16.399 0.0000000
-LY6_1    0.646 0.042 15.446 0.0000000
-TE1_1    0.463 0.037 12.540 0.0000000
-TE2_2    0.570 0.043 13.332 0.0000000
-TE3_3    0.594 0.045 13.093 0.0000000
+LY5_1    0.727 0.044 16.394 0.0000000
+LY6_1    0.646 0.042 15.439 0.0000000
+TE1_1    0.463 0.037 12.530 0.0000000
+TE2_2    0.570 0.043 13.324 0.0000000
+TE3_3    0.594 0.045 13.079 0.0000000
 TE4_4    0.557 0.042 13.181 0.0000000
-TE5_5    0.576 0.044 13.100 0.0000000
-TE6_6    0.538 0.040 13.530 0.0000000
+TE5_5    0.576 0.044 13.091 0.0000000
+TE6_6    0.538 0.040 13.518 0.0000000
 TY1      0.003 0.044  0.060 0.9522103
 TY2      0.019 0.046  0.409 0.6826837
 TY3     -0.010 0.048 -0.201 0.8409712
@@ -997,9 +990,9 @@ Slots:
                                                                         
 Name:   modelType       nRep       coef         se        fit  converged
 Class:  character    numeric data.frame data.frame data.frame     vector
-                            
-Name:  paramValue       seed
-Class: data.frame    numeric
+                                                  
+Name:  paramValue       FMI1       FMI2       seed
+Class: data.frame data.frame data.frame    numeric
 > loading <- matrix(0, 6, 1)
 > loading[1:6, 1] <- NA
 > LX <- simMatrix(loading, 0.7)
@@ -1055,7 +1048,7 @@ LY6_1        0.000     0.98
 TE1_1       -0.004     0.96
 TE2_2       -0.013     0.92
 TE3_3       -0.005     0.94
-TE4_4       -0.008     0.92
+TE4_4       -0.008     0.94
 TE5_5        0.003     0.90
 TE6_6       -0.005     0.94
 TY1          0.001     0.92
@@ -2034,91 +2027,7 @@ Known Subclasses: "SimUnif", "SimNorm"
 > 
 > ### ** Examples
 > 
-> ##---- Should be DIRECTLY executable !! ----
-> ##-- ==>  Define data, use random,
-> ##--	or do  help(data=index)  for the standard data sets.
-> 
-> ## The function is currently defined as
-> function(imputed.results,imps){
-+ 
-+ MI.param<-matrix(NA,nrow=length(imputed.results),ncol=length(imputed.results[[1]]@Estimates))
-+ MI.se<-matrix(NA,nrow=length(imputed.results),ncol=length(imputed.results[[1]]@SE))
-+ MI.fit<-matrix(NA,nrow=length(imputed.results),ncol=length(imputed.results[[1]]@Fit))
-+ 
-+ for(i in 1:length(imputed.results)){
-+ MI.param[i,]<-unlist(imputed.results[[i]]@Estimates)
-+ MI.se[i,]<-unlist(imputed.results[[i]]@SE)
-+ MI.fit[i,]<-unlist(imputed.results[[i]]@Fit)
-+   }
-+ 
-+ #Need to remove columns representing fixed parameters
-+ MI.param <- MI.param[ , colMeans( MI.param==0 ) == 0, drop=FALSE ]
-+ MI.param <- MI.param[ , colMeans( MI.param==1 ) == 0, drop=FALSE ]
-+ MI.se <- MI.se[ , colSums( MI.se==0 ) == 0, drop=FALSE ]
-+ 
-+ #compute parameter estimates
-+ Estimates <- colMeans(MI.param)
-+ 
-+ #compute between-imputation variance: variance of parameter estimates
-+ Bm <- apply(MI.param,2,var)
-+ 
-+ 
-+ 
-+ #compute within-imputation variance: average of squared estimated SEs 
-+ #Um <- colSums(MI.se^2/m)
-+ Um <- apply(MI.se^2,2,mean)
-+ 
-+ #Total variance
-+ #Tm <- Um + (Bm)*((1+m)/m+1)
-+ 
-+ #compute total variance: sum of between- and within- variance with correction
-+ SE <- Um + ((imps+1)/imps)*Bm
-+ 
-+ #compute correction factor for fraction of missing info
-+ nu <- (imps-1)*((((1+1/imps)*Bm)/SE)^-2)
-+ 
-+ #compute 2 estimates of fraction of missing information
-+ FMI.1 <- 1-(Um/SE)
-+ FMI.2 <- 1- ((nu+1)*Um)/((nu+3)*SE)
-+ FMI<-rbind(FMI.1,FMI.2)
-+ 
-+ #compute average fit index estimates (only some of these will be interpretable!)
-+ Fit.indices <- colMeans(MI.fit)
-+ 
-+ MI.res<-list(Estimates,SE,Fit.indices,FMI.1,FMI.2)
-+ names(MI.res)<-c('Estimates','SE','Fit.indices','FMI.1','FMI.2')
-+ #compute chi-square proportion (is this useful?)
-+ #(MI.fit.mat$chisq.p is a placeholder for however we'll index the p-value of chi square)
-+ #chisq <- sum(MI.fit.mat$chisq.pval<.05)/m
-+ return(MI.res)
-+   }
-function (imputed.results, imps) 
-{
-    MI.param <- matrix(NA, nrow = length(imputed.results), ncol = length(imputed.results[[1]]@Estimates))
-    MI.se <- matrix(NA, nrow = length(imputed.results), ncol = length(imputed.results[[1]]@SE))
-    MI.fit <- matrix(NA, nrow = length(imputed.results), ncol = length(imputed.results[[1]]@Fit))
-    for (i in 1:length(imputed.results)) {
-        MI.param[i, ] <- unlist(imputed.results[[i]]@Estimates)
-        MI.se[i, ] <- unlist(imputed.results[[i]]@SE)
-        MI.fit[i, ] <- unlist(imputed.results[[i]]@Fit)
-    }
-    MI.param <- MI.param[, colMeans(MI.param == 0) == 0, drop = FALSE]
-    MI.param <- MI.param[, colMeans(MI.param == 1) == 0, drop = FALSE]
-    MI.se <- MI.se[, colSums(MI.se == 0) == 0, drop = FALSE]
-    Estimates <- colMeans(MI.param)
-    Bm <- apply(MI.param, 2, var)
-    Um <- apply(MI.se^2, 2, mean)
-    SE <- Um + ((imps + 1)/imps) * Bm
-    nu <- (imps - 1) * ((((1 + 1/imps) * Bm)/SE)^-2)
-    FMI.1 <- 1 - (Um/SE)
-    FMI.2 <- 1 - ((nu + 1) * Um)/((nu + 3) * SE)
-    FMI <- rbind(FMI.1, FMI.2)
-    Fit.indices <- colMeans(MI.fit)
-    MI.res <- list(Estimates, SE, Fit.indices, FMI.1, FMI.2)
-    names(MI.res) <- c("Estimates", "SE", "Fit.indices", "FMI.1", 
-        "FMI.2")
-    return(MI.res)
-}
+> # No Example
 > 
 > 
 > 
@@ -3290,6 +3199,25 @@ LY    NA   8      3
 > 
 > 
 > cleanEx()
+> nameEx("simMissing")
+> ### * simMissing
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: simMissing
+> ### Title: Construct a SimMissing object to create data with missingness
+> ###   and analyze missing data.
+> ### Aliases: simMissing
+> 
+> ### ** Examples
+> 
+>   #Example to create simMissing object for 3 forms design at 3 timepoints with 10 imputations
+>   Missing<- simMissing(nforms=3, timePoints=3, numImps=10)
+> 
+> 
+> 
+> 
+> cleanEx()
 > nameEx("simMisspecCFA")
 > ### * simMisspecCFA
 > 
@@ -3666,9 +3594,9 @@ Slots:
                                                                         
 Name:   modelType       nRep       coef         se        fit  converged
 Class:  character    numeric data.frame data.frame data.frame     vector
-                            
-Name:  paramValue       seed
-Class: data.frame    numeric
+                                                  
+Name:  paramValue       FMI1       FMI2       seed
+Class: data.frame data.frame data.frame    numeric
 > loading <- matrix(0, 6, 1)
 > loading[1:6, 1] <- NA
 > LX <- simMatrix(loading, 0.7)
@@ -3682,18 +3610,18 @@ Class: data.frame    numeric
 > Output <- simResult(50, SimData, SimModel)
 > summaryParam(Output)
       Estimate.Average Estimate.SD Average.SE Power..Not.equal.0. Average.Param
-LY1_1     0.6987208308  0.03662475 0.04166285                1.00          0.70
-LY2_1     0.6992890235  0.03879634 0.04143943                1.00          0.70
-LY3_1     0.6911651213  0.03931740 0.04151331                1.00          0.70
-LY4_1     0.7000988977  0.04450588 0.04158715                1.00          0.70
-LY5_1     0.6874597596  0.04591153 0.04166237                1.00          0.70
-LY6_1     0.6996311395  0.03842986 0.04165609                1.00          0.70
-TE1_1     0.5058795207  0.03596587 0.03851617                1.00          0.51
-TE2_2     0.4974056235  0.04085267 0.03803219                1.00          0.51
-TE3_3     0.5054854290  0.04053321 0.03834738                1.00          0.51
-TE4_4     0.5019295667  0.04173831 0.03833704                1.00          0.51
-TE5_5     0.5133116099  0.05016361 0.03875122                1.00          0.51
-TE6_6     0.5047686442  0.04308396 0.03850665                1.00          0.51
+LY1_1     0.6987208308  0.03662475 0.04168400                1.00          0.70
+LY2_1     0.6992890235  0.03879634 0.04146384                1.00          0.70
+LY3_1     0.6911651213  0.03931740 0.04153740                1.00          0.70
+LY4_1     0.7000988977  0.04450588 0.04161300                1.00          0.70
+LY5_1     0.6874597596  0.04591153 0.04168927                1.00          0.70
+LY6_1     0.6996311395  0.03842986 0.04167709                1.00          0.70
+TE1_1     0.5058795207  0.03596587 0.03856070                1.00          0.51
+TE2_2     0.4974056235  0.04085267 0.03808465                1.00          0.51
+TE3_3     0.5054854290  0.04053321 0.03839798                1.00          0.51
+TE4_4     0.5019295667  0.04173831 0.03839310                1.00          0.51
+TE5_5     0.5133116099  0.05016361 0.03880605                1.00          0.51
+TE6_6     0.5047686442  0.04308396 0.03855205                1.00          0.51
 TY1       0.0011882815  0.04405939 0.04459888                0.08          0.00
 TY2      -0.0019316303  0.04390733 0.04442694                0.06          0.00
 TY3      -0.0010193095  0.03810069 0.04435987                0.04          0.00
@@ -3710,7 +3638,7 @@ LY6_1 -3.688605e-04     0.98
 TE1_1 -4.120479e-03     0.96
 TE2_2 -1.259438e-02     0.92
 TE3_3 -4.514571e-03     0.94
-TE4_4 -8.070433e-03     0.92
+TE4_4 -8.070433e-03     0.94
 TE5_5  3.311610e-03     0.90
 TE6_6 -5.231356e-03     0.94
 TY1    1.188281e-03     0.92
@@ -3721,18 +3649,18 @@ TY5    4.424934e-04     0.98
 TY6    2.390108e-03     0.98
 > summaryParam(Output, detail=TRUE)
       Estimate.Average Estimate.SD Average.SE Power..Not.equal.0. Average.Param
-LY1_1     0.6987208308  0.03662475 0.04166285                1.00          0.70
-LY2_1     0.6992890235  0.03879634 0.04143943                1.00          0.70
-LY3_1     0.6911651213  0.03931740 0.04151331                1.00          0.70
-LY4_1     0.7000988977  0.04450588 0.04158715                1.00          0.70
-LY5_1     0.6874597596  0.04591153 0.04166237                1.00          0.70
-LY6_1     0.6996311395  0.03842986 0.04165609                1.00          0.70
-TE1_1     0.5058795207  0.03596587 0.03851617                1.00          0.51
-TE2_2     0.4974056235  0.04085267 0.03803219                1.00          0.51
-TE3_3     0.5054854290  0.04053321 0.03834738                1.00          0.51
-TE4_4     0.5019295667  0.04173831 0.03833704                1.00          0.51
-TE5_5     0.5133116099  0.05016361 0.03875122                1.00          0.51
-TE6_6     0.5047686442  0.04308396 0.03850665                1.00          0.51
+LY1_1     0.6987208308  0.03662475 0.04168400                1.00          0.70
+LY2_1     0.6992890235  0.03879634 0.04146384                1.00          0.70
+LY3_1     0.6911651213  0.03931740 0.04153740                1.00          0.70
+LY4_1     0.7000988977  0.04450588 0.04161300                1.00          0.70
+LY5_1     0.6874597596  0.04591153 0.04168927                1.00          0.70
+LY6_1     0.6996311395  0.03842986 0.04167709                1.00          0.70
+TE1_1     0.5058795207  0.03596587 0.03856070                1.00          0.51
+TE2_2     0.4974056235  0.04085267 0.03808465                1.00          0.51
+TE3_3     0.5054854290  0.04053321 0.03839798                1.00          0.51
+TE4_4     0.5019295667  0.04173831 0.03839310                1.00          0.51
+TE5_5     0.5133116099  0.05016361 0.03880605                1.00          0.51
+TE6_6     0.5047686442  0.04308396 0.03855205                1.00          0.51
 TY1       0.0011882815  0.04405939 0.04459888                0.08          0.00
 TY2      -0.0019316303  0.04390733 0.04442694                0.06          0.00
 TY3      -0.0010193095  0.03810069 0.04435987                0.04          0.00
@@ -3740,18 +3668,18 @@ TY4       0.0007947424  0.04728266 0.04455990                0.04          0.00
 TY5       0.0004424934  0.03530702 0.04442965                0.02          0.00
 TY6       0.0023901076  0.04422891 0.04460613                0.02          0.00
        Average.Bias Coverage      Rel.Bias     Std.Bias Rel.SE.Bias
-LY1_1 -1.279169e-03     0.98 -0.0018273846 -0.034926359  0.13755986
-LY2_1 -7.109765e-04     0.98 -0.0010156807 -0.018325865  0.06812731
-LY3_1 -8.834879e-03     0.96 -0.0126212553 -0.224706603  0.05585104
-LY4_1  9.889772e-05     0.94  0.0001412825  0.002222127 -0.06558085
-LY5_1 -1.254024e-02     0.92 -0.0179146291 -0.273139233 -0.09255102
-LY6_1 -3.688605e-04     0.98 -0.0005269436 -0.009598278  0.08395119
-TE1_1 -4.120479e-03     0.96 -0.0080793712 -0.114566384  0.07090910
-TE2_2 -1.259438e-02     0.92 -0.0246948558 -0.308287706 -0.06904028
-TE3_3 -4.514571e-03     0.94 -0.0088521000 -0.111379565 -0.05392673
-TE4_4 -8.070433e-03     0.92 -0.0158243791 -0.193357942 -0.08149026
-TE5_5  3.311610e-03     0.90  0.0064933527  0.066016184 -0.22750336
-TE6_6 -5.231356e-03     0.94 -0.0102575604 -0.121422346 -0.10624159
+LY1_1 -1.279169e-03     0.98 -0.0018273846 -0.034926359  0.13813746
+LY2_1 -7.109765e-04     0.98 -0.0010156807 -0.018325865  0.06875646
+LY3_1 -8.834879e-03     0.96 -0.0126212553 -0.224706603  0.05646368
+LY4_1  9.889772e-05     0.94  0.0001412825  0.002222127 -0.06499993
+LY5_1 -1.254024e-02     0.92 -0.0179146291 -0.273139233 -0.09196523
+LY6_1 -3.688605e-04     0.98 -0.0005269436 -0.009598278  0.08449759
+TE1_1 -4.120479e-03     0.96 -0.0080793712 -0.114566384  0.07214722
+TE2_2 -1.259438e-02     0.92 -0.0246948558 -0.308287706 -0.06775628
+TE3_3 -4.514571e-03     0.94 -0.0088521000 -0.111379565 -0.05267841
+TE4_4 -8.070433e-03     0.94 -0.0158243791 -0.193357942 -0.08014715
+TE5_5  3.311610e-03     0.90  0.0064933527  0.066016184 -0.22641026
+TE6_6 -5.231356e-03     0.94 -0.0102575604 -0.121422346 -0.10518788
 TY1    1.188281e-03     0.92            NA  0.026969992  0.01224442
 TY2   -1.931630e-03     0.94            NA -0.043993344  0.01183434
 TY3   -1.019309e-03     0.96            NA -0.026753041  0.16427987
@@ -3822,7 +3750,7 @@ TY6    2.390108e-03     0.98            NA  0.054039482  0.00852871
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  43.63 0.17 43.93 NA NA 
+Time elapsed:  60.99 0.03 61.12 NA NA 
 > grDevices::dev.off()
 null device 
           1 
