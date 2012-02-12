@@ -1,32 +1,25 @@
-runRep <- function(simData, simModel, simMissing=new("NullSimMissing"), seed=123321, silent=FALSE) {
+runRep <- function(dataT, simModel, simMissing=new("NullSimMissing"), seed=123321, silent=FALSE) {
 	
 	modelType <- simModel@modelType
-                param <- NULL
-        set.seed(seed)
+    param <- NULL
+	coef <- NA
+    se <- NA
+    fit <- NA
+	FMI1 <- NULL
+	FMI2 <- NULL
+	converged <- FALSE
+	set.seed(seed)
 
          # if(!silent) cat(i, "\n")
-        dataT <- NULL  
+        data.mis <- NULL  
         # Get Data
-          if(class(simData) == "SimData") {
-            #We need just the data to run through impose missing. This saves the paramter estimates and then only uses the data
-            dataT <- run(object=simData, dataOnly=FALSE)
-            data<-dataT@data
-          } else if(is.matrix(simData)) {
-            data <- data.frame(simData)
-          } else if(is.data.frame(simData)) {
-            data <- simData
-          } else {
-            stop("The simData argument is not a SimData class, a matrix, or a data frame.")
-          }
-
-         # Impose / Impute Missing 
-		 if(!is(simMissing, "NullSimMissing")) {
-          data.mis <- imposeMissing(data, covs=simMissing@covs, pmMCAR=simMissing@pmMCAR,
-                                    pmMAR=simMissing@pmMAR, nforms=simMissing@nforms,
-                                    itemGroups=simMissing@itemGroups, twoMethod=simMissing@twoMethod)
+        if(class(dataT) == "SimDataOut") {
+            data.mis <-dataT@data
 		} else {
-			data.mis <- data
-		}
+            data.mis <- dataT
+        }
+
+
 		 temp <- NULL
           #Impute missing and run results 
            if(!is(simMissing, "NullSimMissing") && simMissing@numImps > 0) {
@@ -44,8 +37,7 @@ runRep <- function(simData, simModel, simMissing=new("NullSimMissing"), seed=123
           }
           }
           
-		  FMI1 <- NULL
-		  FMI2 <- NULL
+
           if(!is.null(temp)) {
             converged <- temp@converged			
             Labels <- make.labels(temp@param, "OpenMx") #As a quick default to use OpenMx

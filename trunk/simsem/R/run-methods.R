@@ -334,21 +334,25 @@ setMethod("run", signature="SimData", definition=function(object, n=NULL, dataOn
 			if(validate.object(param) | validate.object(misspec)) {
 				param <- reduce.matrices(param)
 				misspec <- reduce.matrices(misspec)
-				implied.CM.param <- create.implied.MACS(param)
-				implied.CM.misspec <- create.implied.MACS(misspec)
-				misfit <- average.misfit(implied.CM.misspec$M, implied.CM.misspec$CM, 
-					implied.CM.param$M, implied.CM.param$CM, count.random.object(object@misspec))
-				#param <- misspec # Pretend Misspecified as real parameters for data generation
-				if(is.null.object(object@misfitBound)) break
-				if(misfit > object@misfitBound[1] & misfit < object@misfitBound[2]) break
+				if(!is.null.object(param) && !is.null.object(misspec)) {
+					implied.CM.param <- create.implied.MACS(param)
+					implied.CM.misspec <- create.implied.MACS(misspec)
+					misfit <- average.misfit(implied.CM.misspec$M, implied.CM.misspec$CM, 
+						implied.CM.param$M, implied.CM.param$CM, count.random.object(object@misspec))
+					#param <- misspec # Pretend Misspecified as real parameters for data generation
+					if(is.null.object(object@misfitBound)) break
+					if(misfit > object@misfitBound[1] & misfit < object@misfitBound[2]) break
+				}
 			}
 		} else {
 			param <- run(object@param, equalCon=object@equalCon)
 			if(validate.object(param)) {
 				param <- reduce.matrices(param)
-				implied.CM.param <- create.implied.MACS(param)
-				implied.CM.misspec <- implied.CM.param
-				break
+				if(!is.null.object(param)) {
+					implied.CM.param <- create.implied.MACS(param)
+					implied.CM.misspec <- implied.CM.param
+					break
+				}
 			}
 		}
 		count <- count + 1

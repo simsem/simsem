@@ -12,6 +12,8 @@
 ################################## Example 1 ##############################################
 #library(simsem)
 
+#install.packages("C:/Users/Sunthud/Desktop/My Dropbox/simsem/simsem_0.0-5.tar.gz", repos=NULL, type="source")
+
 sourceDir <- function(path, trace = TRUE, ...) {
      for (nm in list.files(path, pattern = "\\.[RrSsQq]$")) {
         if(trace) cat(nm,":")           
@@ -102,7 +104,7 @@ LCA.Mis <- simMisspecCFA(LY = loading.mis)
 
 Data.Mis <- simData(300, LCA.Model, LCA.Mis)
 
-Output.Mis <- simResult(100, Data.Mis, SimModel)
+Output.Mis <- simResult(100, Data.Mis, SimModel, multicore=TRUE)
 getCutoff(Output.Mis, 0.05)
 plotCutoff(Output.Mis, 0.05)
 summaryParam(Output.Mis)
@@ -239,7 +241,7 @@ Data.Mis.Con <- simData(300, SEM.model, misspec=SEM.Mis.Model, equalCon=equal.lo
 Model.Original <- simModel(SEM.model)
 Model.Con <- simModel(SEM.model, equalCon=equal.loading)
 
-Output <- simResult(200, Data.Mis.Con, Model.Con)
+Output <- simResult(200, Data.Mis.Con, Model.Con, multicore=TRUE)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
@@ -480,3 +482,104 @@ CFA.Model <- simSetCFA(LX = LX, PH = PH, TD = TD)
 summary(run(CFA.Model))
 
 
+################################## Example 6 ##########################################
+library(simsem)
+
+u2 <- simUnif(-0.2, 0.2)
+u49 <- simUnif(0.4, 0.9)
+u36 <- simUnif(0.3, 0.6)
+n1 <- simNorm(0, 0.1)
+n21 <- simNorm(0.2, 0.1)
+n31 <- simNorm(0.3, 0.1)
+n41 <- simNorm(0.4, 0.1)
+
+loading <- matrix(0, 9, 4)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+loading[7:9, 3] <- NA
+loading[c(1, 4, 7), 4] <- NA
+loading.v <- matrix(0, 9, 4)
+loading.v[1:3, 1] <- "u49"
+loading.v[4:6, 2] <- "u49"
+loading.v[7:9, 3] <- "u49"
+loading.v[c(1, 4, 7), 4] <- "u36"
+LY <- simMatrix(loading, loading.v)
+
+faccor <- diag(4)
+faccor[1, 2] <- faccor[2, 1] <- NA
+faccor[1, 3] <- faccor[3, 1] <- NA
+faccor[2, 3] <- faccor[3, 2] <- NA
+faccor.v <- diag(4)
+faccor.v[1, 2] <- faccor.v[2, 1] <- "n41"
+faccor.v[1, 3] <- faccor.v[3, 1] <- "n21"
+faccor.v[2, 3] <- faccor.v[3, 2] <- "n31"
+PS <- symMatrix(faccor, faccor.v)
+
+TE <- symMatrix(diag(9))
+
+mtmm.model <- simSetCFA(LY=LY, PS=PS, TE=TE)
+
+error.cor.mis <- matrix(NA, 9, 9)
+diag(error.cor.mis) <- 1
+TE.mis <- symMatrix(error.cor.mis, "n1")
+loading.mis <- matrix(NA, 9, 4)
+loading.mis[is.na(loading)] <- 0
+loading.mis[,4] <- 0
+LY.mis <- simMatrix(loading.mis, "u2")
+mtmm.model.mis <- simMisspecCFA(TE = TE.mis, LY=LY.mis)
+
+SimMissing <- simMissing(pmMCAR=0.2, numImps=5)
+
+SimData <- simData(500, mtmm.model, misspec = mtmm.model.mis)
+SimModel <- simModel(mtmm.model)
+
+Output <- simResult(1000, SimData, SimModel, SimMissing)
+getCutoff(Output, 0.05)
+plotCutoff(Output, 0.05)
+summary(Output)
+
+################################## Example 7 ##########################################
+library(simsem)
+
+u2 <- simUnif(-0.2, 0.2)
+u49 <- simUnif(0.4, 0.9)
+u16 <- simUnif(0.1, 0.6)
+n1 <- simNorm(0, 0.1)
+
+loading <- matrix(0, 48, 4)
+loading[1:12, 1] <- NA
+loading[13:24, 2] <- NA
+loading[25:36, 3] <- NA
+loading[37:48, 4] <- NA
+LY <- simMatrix(loading, "u49")
+
+faccor <- matrix(NA, 4, 4)
+diag(faccor) <- 1
+PS <- symMatrix(faccor, "u16")
+
+TE <- symMatrix(diag(48))
+
+CFA.model <- simSetCFA(LY=LY, PS=PS, TE=TE)
+
+error.cor.mis <- matrix(NA, 48, 48)
+diag(error.cor.mis) <- 1
+TE.mis <- symMatrix(error.cor.mis, "n1")
+loading.mis <- matrix(NA, 48, 4)
+loading.mis[is.na(loading)] <- 0
+LY.mis <- simMatrix(loading.mis, "u2")
+CFA.model.mis <- simMisspecCFA(TE = TE.mis, LY=LY.mis)
+
+setx <- c(1:3, 13:15, 25:27, 37:39)
+set1 <- setx + 3
+set2 <- set1 + 3
+set3 <- set2 + 3
+itemGroups <- list(groupx, group1, group2, group3)
+
+SimMissing <- simMissing(nforms=3, itemGroups=itemGroups, numImps=5)
+
+SimData <- simData(1000, CFA.model, misspec = CFA.model.mis)
+SimModel <- simModel(CFA.model)
+Output <- simResult(20, SimData, SimModel, SimMissing, multicore=TRUE)
+getCutoff(Output, 0.05)
+plotCutoff(Output, 0.05)
+summary(Output)

@@ -50,8 +50,9 @@ runLavaan <- function(object, Data, miss="fiml") {
 	coef <- combine.object(param, inspect(fit, "coef"))
     se <- combine.object(param, inspect(fit, "se"))
 	#Converged <- fit@fit@converged
-	Converged = TRUE
-    if(sum(unlist(lapply(inspect(fit, "se"), sum))) == 0) Converged = FALSE
+	Converged <- inspect(fit, "converged")
+	check <- sum(unlist(lapply(inspect(fit, "se"), sum)))
+    try(if(is.na(check) || check == 0) Converged = FALSE, silent=TRUE)
     return(new("SimModelOut", param=object@param, start=object@start,
         equalCon=object@equalCon, package=object@package, coef=coef,
         fit=FitIndices, se=se, converged=Converged))

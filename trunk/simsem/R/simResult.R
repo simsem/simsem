@@ -3,23 +3,77 @@
 simResult <- function(nRep, simData, simModel, simMissing=new("NullSimMissing"), seed = 123321, silent=FALSE, multicore=FALSE, cluster=FALSE, numProc=NULL) {
 	set.seed(seed)
 	numseed <- as.list(sample(1:999999, nRep))
+	
+	modelType <- simModel@modelType
+    param <- NULL
+    set.seed(seed)
+
+    dataT <- NULL  
+    if(class(simData) == "SimData") {
+        dataT <- lapply(rep(FALSE, nRep), run, object=simData, n=NULL)
+    } else if(is.list(simData)){ 
+		if(class(simData[[1]]) == "SimDataOut") {
+			dataT <- simData
+		} else if(is.matrix(simData[[1]])) {
+			dataT <- lapply(simData, data.frame)
+		} else if(is.data.frame(simData[[1]])) {
+			dataT <- simData
+		} else {
+			stop("The list in the simData argument does not contain matrices or data frames.")
+		}
+    } else {
+        stop("The simData argument is not a SimData class or a list of data frames.")
+    }
+	
+	if(!is(simMissing, "NullSimMissing")) {
+		if(class(dataT[[1]]) == "SimDataOut") {
+			FUN <- function(dataOut, covs, pmMCAR, pmMAR, nforms, itemGroups, twoMethod) {
+				data <- slot(dataOut, "data")
+				data <- imposeMissing(data, covs=simMissing@covs, pmMCAR=simMissing@pmMCAR,
+					pmMAR=simMissing@pmMAR, nforms=simMissing@nforms,
+					itemGroups=simMissing@itemGroups, twoMethod=simMissing@twoMethod)
+				slot(dataOut, "data") <- data
+				return(dataOut)
+			}
+			data.mis <- lapply(dataT, FUN, covs=simMissing@covs, pmMCAR=simMissing@pmMCAR,
+				pmMAR=simMissing@pmMAR, nforms=simMissing@nforms,
+				itemGroups=simMissing@itemGroups, twoMethod=simMissing@twoMethod)
+		} else {
+			data.mis <- lapply(dataT, imposeMissing, covs=simMissing@covs, pmMCAR=simMissing@pmMCAR,
+				pmMAR=simMissing@pmMAR, nforms=simMissing@nforms,
+				itemGroups=simMissing@itemGroups, twoMethod=simMissing@twoMethod)
+		}
+	} else {
+		data.mis <- dataT
+	}
+
 	if(multicore) {
 		library(parallel)
 		if(is.null(numProc)) numProc <- detectCores()
 		cl <- makeCluster(rep("localhost", numProc), type="SOCK")
-			if(is(simData, "SimData")) {
-				Result.l <- parLapply(cl, numseed, runRep, simData=simData, simModel=simModel, simMissing=simMissing, silent=silent)	
-			} else if(is(simData, "list")) {
-				Result.l <- parLapply(cl, simData, runRep, simModel=simModel, simMissing=simMissing, seed=seed, silent=silent)	
-			}
+		Result.l <- clusterApplyLB(cl, data.mis, runRep, simModel=simModel, simMissing=simMissing, seed=seed, silent=silent)	
 		stopCluster(cl)
 	} else {
-		if(is(simData, "SimData")) {
-			Result.l <- lapply(numseed, runRep, simData=simData, simModel=simModel, simMissing=simMissing, silent=silent)	
-		} else if(is(simData, "list")) {
-			Result.l <- lapply(simData, runRep, simModel=simModel, simMissing=simMissing, seed=seed, silent=silent)	
-		}  
+		Result.l <- lapply(data.mis, runRep, simModel=simModel, simMissing=simMissing, seed=seed, silent=silent)	
 	}
+	
+	# if(multicore) {
+		# library(parallel)
+		# if(is.null(numProc)) numProc <- detectCores()
+		# cl <- makeCluster(rep("localhost", numProc), type="SOCK")
+			# if(is(simData, "SimData")) {
+				# Result.l <- clusterApplyLB(cl, numseed, runRep, simData=simData, simModel=simModel, simMissing=simMissing, silent=silent)	
+			# } else if(is(simData, "list")) {
+				# Result.l <- clusterApplyLB(cl, simData, runRep, simModel=simModel, simMissing=simMissing, seed=seed, silent=silent)	
+			# }
+		# stopCluster(cl)
+	# } else {
+		# if(is(simData, "SimData")) {
+			# Result.l <- lapply(numseed, runRep, simData=simData, simModel=simModel, simMissing=simMissing, silent=silent)	
+		# } else if(is(simData, "list")) {
+			# Result.l <- lapply(simData, runRep, simModel=simModel, simMissing=simMissing, seed=seed, silent=silent)	
+		# }  
+	# }
 	
 	
 	modelType <- simModel@modelType

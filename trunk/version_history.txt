@@ -74,5 +74,11 @@ simsem, Version 0.0-5.0 02/09/12
 - Change the order of the simResult function from (simData, simModel, simMissing, nRep) to (nRep, simData, simModel, simMissing). The examples and manual are changed accordingly.
 - Add the SimModelMIOut (with NullSimModelOut) class which is the child class of the SimModelOut class
 - Change the is.null.object and summaryParam functions for the SimModelMIOut class
+- Add two new examples on the introduction about missing data
+- Comment out the runOpenMx function because we will not implement OpenMx now
+- Fix bugs in reduce.matrices
+- Add SimMissing class with the run and the summary functions
+- Adjust the convergence checking in the runLavaan function according to the lavaan chagnes
+- Add the simResult function parallelizable
 
 
