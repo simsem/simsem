@@ -317,101 +317,11 @@ setMethod("run", signature(object="SimMisspec"), definition=function(object) {
 
 setMethod("run", signature="SimData", definition=function(object, n=NULL, dataOnly=TRUE) {
 	if(!require(MASS)) stop("Please install MASS package")
-	modelType <- object@modelType
 	if(is.null(n)) n <- object@n
-	param <- NULL
-	misspec <- NULL
-	implied.CM.param <- NULL
-	implied.CM.misspec <- NULL
-	misfit <- NULL
-	count <- 0
-	repeat {
-		#browser()
-		if(!is.null.object(object@misspec)) {
-			Output <- run.misspecified(object@param, object@misspec, object@equalCon, object@conBeforeMis)
-			param <- Output$param
-			misspec <- Output$misspec
-			if(validate.object(param) | validate.object(misspec)) {
-				param <- reduce.matrices(param)
-				misspec <- reduce.matrices(misspec)
-				if(!is.null.object(param) && !is.null.object(misspec)) {
-					implied.CM.param <- create.implied.MACS(param)
-					implied.CM.misspec <- create.implied.MACS(misspec)
-					misfit <- average.misfit(implied.CM.misspec$M, implied.CM.misspec$CM, 
-						implied.CM.param$M, implied.CM.param$CM, count.random.object(object@misspec))
-					#param <- misspec # Pretend Misspecified as real parameters for data generation
-					if(is.null.object(object@misfitBound)) break
-					if(misfit > object@misfitBound[1] & misfit < object@misfitBound[2]) break
-				}
-			}
-		} else {
-			param <- run(object@param, equalCon=object@equalCon)
-			if(validate.object(param)) {
-				param <- reduce.matrices(param)
-				if(!is.null.object(param)) {
-					implied.CM.param <- create.implied.MACS(param)
-					implied.CM.misspec <- implied.CM.param
-					break
-				}
-			}
-		}
-		count <- count + 1
-		if(count > object@maxDraw) stop("The model cannot make a good set of parameters within limit of maximum random sampling of parameters")
-	}
-	# if(modelType == "CFA") {
-		# factor.score <- mvrnorm(n, param@AL, param@PS)
-		# error.score <- mvrnorm(n, rep(0, length(param@TY), param@TE)
-		# intercept <- as.data.frame(matrix(param@TY, ncol=length(param@TY), byrow=TRUE))
-		# Data <- (factor.score %*% t(param@LY)) + error.score + intercept
-	# } else if (modelType == "Path") {
-		# error.score <- mvrnorm(n, param@AL, param@PS)
-		# ID <- matrix(0, nrow(param@BE), ncol(param@BE))
-		# diag(ID) <- 1
-		# data <- error.score %*% t(solve(ID - param@BE))
-	# } else if (modelType == "Path.exo") {
+	paramSet <- drawParameters(object)
+	DataOut <- createData(paramSet, n, object, dataOnly)
+	return(DataOut)
 	
-	# } else if (modelType == "SEM") {
-	
-	# } else if (modelType == "SEM.exo") {
-	
-	# }
-	Data <- mvrnorm(n, implied.CM.param$M, implied.CM.param$CM)
-	varnames <- NULL
-	if(modelType == "Path.exo") {
-		nx <- ncol(run(object@param@PH))
-		for(i in 1:nx) {
-			temp <- paste("x", i, sep="")
-			varnames <- c(varnames, temp)
-		}
-		for(i in 1:(ncol(Data) - nx)) {
-			temp <- paste("y", i, sep="")
-			varnames <- c(varnames, temp)
-		}
-	} else if(modelType == "SEM.exo") {
-		nx <- nrow(run(object@param@LX))
-		for(i in 1:nx) {
-			temp <- paste("x", i, sep="")
-			varnames <- c(varnames, temp)
-		}	
-		for(i in 1:(ncol(Data) - nx)) {
-			temp <- paste("y", i, sep="")
-			varnames <- c(varnames, temp)
-		}
-	} else {
-		for(i in 1:ncol(Data)) {
-			temp <- paste("y", i, sep="")
-			varnames <- c(varnames, temp)
-		}
-	}
-	colnames(Data) <- varnames
-	Data <- as.data.frame(Data)
-	if(dataOnly) {
-		return(Data)
-	} else {
-		if(is.null(misspec)) misspec <- new("NullRSet")
-		out <- new("SimDataOut", modelType=object@modelType, data=Data, param=create.free.parameters(object@param), 
-					paramOut=param, misspecOut=misspec, equalCon=object@equalCon)
-	}
 })
 #Arguments: 
 #	object:	SimData.c object

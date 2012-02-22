@@ -23,6 +23,7 @@ Objects can be created by \code{\link{simResult}}. It can also be called from th
 	\item{\code{paramValue}:}{Population model underlying each simulated dataset.}
 	\item{\code{FMI1}:}{Fraction Missing Method 1.}
 	\item{\code{FMI2}:}{Fraction Missing Method 2.}
+	\item{\code{stdCoef}:}{Standardized coefficients from each replication}
   }
 }
 \section{Methods}{

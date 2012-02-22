@@ -31,11 +31,13 @@ setMethod("plotPower", signature(altObject="SimResult", nullObject="vector"), de
 	
 setMethod("plotPower", signature(altObject="data.frame", nullObject="data.frame"), definition=function(altObject, nullObject, alpha, usedFit=NULL) {
 	percentile <- 1 - alpha
-	cutoff <- getCutoff(nullObject, alpha)
+	cutoff <- getCutoff(nullObject, alpha, usedFit=usedFit)
+	names(cutoff) <- usedFit
 	if(is.null(usedFit)) usedFit <- c("Chi", "AIC", "BIC", "RMSEA", "CFI", "TLI", "SRMR")
 	altObject <- as.data.frame(altObject[,usedFit])
 	nullObject <- as.data.frame(nullObject[,usedFit])
-	colnames(altObject) <- colnames(nullObject) <- usedFit
+	colnames(altObject) <- usedFit
+	colnames(nullObject) <- usedFit
 	no.NA.altObject <- !apply(altObject, 2, is.na.vector)
 	no.NA.nullObject <- !apply(nullObject, 2, is.na.vector)
 	temp.name.alt <- colnames(altObject)[no.NA.altObject]

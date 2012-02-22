@@ -987,8 +987,10 @@ setClass("SimResult",
 		paramValue="data.frame",
 		FMI1="data.frame",
 		FMI2="data.frame",
+		stdCoef="data.frame",
 		seed="numeric"),
 	prototype(
+		stdCoef=new("NullDataFrame"),
 		paramValue=new("NullDataFrame"),
 		FMI1=new("NullDataFrame"),
 		FMI2=new("NullDataFrame"))

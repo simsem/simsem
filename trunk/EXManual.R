@@ -12,7 +12,8 @@
 ################################## Example 1 ##############################################
 #library(simsem)
 
-#install.packages("C:/Users/Sunthud/Desktop/My Dropbox/simsem/simsem_0.0-5.tar.gz", repos=NULL, type="source")
+#install.packages("C:/Users/Sunthud/Desktop/My Dropbox/simsem/simsem_0.0-6.tar.gz", repos=NULL, type="source")
+#install.packages("C:/Users/student/Dropbox/simsem/simsem_0.0-6.tar.gz", repos=NULL, type="source")
 
 sourceDir <- function(path, trace = TRUE, ...) {
      for (nm in list.files(path, pattern = "\\.[RrSsQq]$")) {
@@ -22,9 +23,9 @@ sourceDir <- function(path, trace = TRUE, ...) {
      }
 }
 
-path <- "C:/Users/Sunthud/Desktop/My Dropbox/simsem/simsem/R/"
+#path <- "C:/Users/Sunthud/Desktop/My Dropbox/simsem/simsem/R/"
 #path <- "C:/Users/Sunthud/simsem_backup/simsem/R/"
-#path <- "C:/Users/student/Dropbox/simsem/simsem/R/"
+path <- "C:/Users/student/Dropbox/simsem/simsem/R/"
  source(paste(path, "AllClass.R", sep=""))
  source(paste(path, "AllGenerics.R", sep=""))
  sourceDir(path)
@@ -52,9 +53,10 @@ CFA.Model <- simSetCFA(LX = LX, PH = PH, TD = TD) #, VX = VX, MX=MX)
 SimData <- simData(200, CFA.Model)
 
 SimModel <- simModel(CFA.Model)
+
 SimMissing <- simMissing(pmMCAR=0.1, numImps=5)
-Output <- simResult(100, SimData, SimModel)
-#Output <- simResult(100, SimData, SimModel, SimMissing)
+Output <- simResult(200, SimData, SimModel)
+#Output <- simResult(100, SimData, SimModel, SimMissing, multicore=TRUE)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
@@ -141,6 +143,8 @@ Path.Mis.Model <- simMisspecPath(BE = mis.BE)
 Data <- simData(500, Path.Model)
 Data.Mis <- simData(500, Path.Model, Path.Mis.Model)
 SimModel <- simModel(Path.Model)
+
+
 #Output <- simResult(100, Data, SimModel)
 Output <- simResult(100, Data.Mis, SimModel)
 getCutoff(Output, 0.05)
@@ -178,6 +182,8 @@ Path.Mis.Model <- simMisspecPath(GA = mis.GA, exo=TRUE)
 
 Data.Mis <- simData(500, Path.Model, Path.Mis.Model)
 SimModel <- simModel(Path.Model)
+
+
 Output <- simResult(100, Data.Mis, SimModel)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
@@ -240,6 +246,7 @@ Data.Mis.Con <- simData(300, SEM.model, misspec=SEM.Mis.Model, equalCon=equal.lo
 
 Model.Original <- simModel(SEM.model)
 Model.Con <- simModel(SEM.model, equalCon=equal.loading)
+
 
 Output <- simResult(200, Data.Mis.Con, Model.Con, multicore=TRUE)
 getCutoff(Output, 0.05)
@@ -444,43 +451,6 @@ par(obj)
 
 cutoff2 <- find.cutoff(Output.NULL, 0.05, usedFit=x)
 
-##################################################### Get standardized calculator
-
-library(simsem)
-loading <- matrix(c(0.7, 0.2,
-					0.7, 0,
-					0.7, 0,
-					0.2, 0.7,
-					0, 0.7,
-					0, 0.7), 6, 2, byrow=TRUE)
-LX <- simMatrix(loading)
-latent.cor <- matrix(0.5, 2, 2)
-diag(latent.cor) <- 1
-PH <- symMatrix(latent.cor)
-error.cor <- matrix(0, 6, 6)
-diag(error.cor) <- 1
-TD <- symMatrix(error.cor)
-CFA.Model <- simSetCFA(LX = LX, PH = PH, TD = TD)
-summary(run(CFA.Model))
-# See the VTE element for the measurement error variance
-
-# Hu and Bentler Article
-library(simsem)
-loading <- matrix(0, 15, 3)
-loading[1:5, 1] <- loading[6:10, 2] <- loading[11:15, 3] <- c(0.7, 0.7, 0.75, 0.8, 0.8)
-loading[1, 3] <- loading[4, 2] <- loading[9, 3] <- 0.7
-LX <- simMatrix(loading)
-latent.cor <- matrix(1, 3, 3)
-latent.cor[1,2] <- latent.cor[2,1] <- 0.5
-latent.cor[1,3] <- latent.cor[3,1] <- 0.4
-latent.cor[3,2] <- latent.cor[2,3] <- 0.3
-PH <- symMatrix(latent.cor)
-error.cor <- matrix(0, 15, 15)
-diag(error.cor) <- 1
-TD <- symMatrix(error.cor)
-CFA.Model <- simSetCFA(LX = LX, PH = PH, TD = TD)
-summary(run(CFA.Model))
-
 
 ################################## Example 6 ##########################################
 library(simsem)
@@ -533,7 +503,7 @@ SimMissing <- simMissing(pmMCAR=0.2, numImps=5)
 SimData <- simData(500, mtmm.model, misspec = mtmm.model.mis)
 SimModel <- simModel(mtmm.model)
 
-Output <- simResult(1000, SimData, SimModel, SimMissing)
+Output <- simResult(10, SimData, SimModel, SimMissing)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summary(Output)

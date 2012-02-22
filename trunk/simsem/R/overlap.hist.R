@@ -26,7 +26,10 @@ overlap.hist <- function(a, b, colors=c("red","blue","purple"), breaks=NULL, xli
 		ahist=hist(a,plot=F)
 		bhist=hist(b,plot=F)
 		dist = ahist$breaks[2]-ahist$breaks[1]
-		breaks = seq(min(ahist$breaks,bhist$breaks),max(ahist$breaks,bhist$breaks),dist)
+		mina <- min(ahist$breaks,bhist$breaks)
+		maxa <- max(ahist$breaks,bhist$breaks)
+		bin <- ceiling((maxa - mina)/dist)
+		breaks = seq(mina, maxa,length.out = bin)
 		ahist=hist(a,breaks=breaks,plot=F)
 		bhist=hist(b,breaks=breaks,plot=F)
 	}

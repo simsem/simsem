@@ -2,59 +2,50 @@
 
 simResult <- function(nRep, simData, simModel, simMissing=new("NullSimMissing"), seed = 123321, silent=FALSE, multicore=FALSE, cluster=FALSE, numProc=NULL) {
 	set.seed(seed)
-	numseed <- as.list(sample(1:999999, nRep))
 	
 	modelType <- simModel@modelType
     param <- NULL
-    set.seed(seed)
-
-    dataT <- NULL  
+	# Careful about the seed number
+	object.l <- list()
     if(class(simData) == "SimData") {
-        dataT <- lapply(rep(FALSE, nRep), run, object=simData, n=NULL)
+		for(i in 1:nRep) {
+			object.l[[i]] <- drawParameters(simData)
+		}
     } else if(is.list(simData)){ 
 		if(class(simData[[1]]) == "SimDataOut") {
-			dataT <- simData
+			object.l <- simData
 		} else if(is.matrix(simData[[1]])) {
-			dataT <- lapply(simData, data.frame)
+			object.l <- lapply(simData, data.frame)
 		} else if(is.data.frame(simData[[1]])) {
-			dataT <- simData
+			object.l <- simData
 		} else {
 			stop("The list in the simData argument does not contain matrices or data frames.")
 		}
     } else {
         stop("The simData argument is not a SimData class or a list of data frames.")
     }
+	numseed <- as.list(round(sample(1:999999, nRep)))
 	
-	if(!is(simMissing, "NullSimMissing")) {
-		if(class(dataT[[1]]) == "SimDataOut") {
-			FUN <- function(dataOut, covs, pmMCAR, pmMAR, nforms, itemGroups, twoMethod) {
-				data <- slot(dataOut, "data")
-				data <- imposeMissing(data, covs=simMissing@covs, pmMCAR=simMissing@pmMCAR,
-					pmMAR=simMissing@pmMAR, nforms=simMissing@nforms,
-					itemGroups=simMissing@itemGroups, twoMethod=simMissing@twoMethod)
-				slot(dataOut, "data") <- data
-				return(dataOut)
-			}
-			data.mis <- lapply(dataT, FUN, covs=simMissing@covs, pmMCAR=simMissing@pmMCAR,
-				pmMAR=simMissing@pmMAR, nforms=simMissing@nforms,
-				itemGroups=simMissing@itemGroups, twoMethod=simMissing@twoMethod)
-		} else {
-			data.mis <- lapply(dataT, imposeMissing, covs=simMissing@covs, pmMCAR=simMissing@pmMCAR,
-				pmMAR=simMissing@pmMAR, nforms=simMissing@nforms,
-				itemGroups=simMissing@itemGroups, twoMethod=simMissing@twoMethod)
-		}
-	} else {
-		data.mis <- dataT
+	object2.l <- list()
+	for(i in 1:length(object.l)) {
+		object2.l[[i]] <- list()
+		object2.l[[i]][[1]] <- object.l[[i]]
+		object2.l[[i]][[2]] <- numseed[[i]]
 	}
-
+	
 	if(multicore) {
 		library(parallel)
+		sys <- .Platform$OS.type
 		if(is.null(numProc)) numProc <- detectCores()
-		cl <- makeCluster(rep("localhost", numProc), type="SOCK")
-		Result.l <- clusterApplyLB(cl, data.mis, runRep, simModel=simModel, simMissing=simMissing, seed=seed, silent=silent)	
-		stopCluster(cl)
+		if(sys == "windows") {
+			cl <- makeCluster(rep("localhost", numProc), type="SOCK")
+			Result.l <- clusterApplyLB(cl, object2.l, runRep, simData=simData, simModel=simModel, simMissing=simMissing, silent=silent)	
+			stopCluster(cl)
+		} else {
+			Result.l <- mclapply(object2.l, runRep, simData=simData, simModel=simModel, simMissing=simMissing, silent=silent, mc.cores=numProc)				
+		}
 	} else {
-		Result.l <- lapply(data.mis, runRep, simModel=simModel, simMissing=simMissing, seed=seed, silent=silent)	
+		Result.l <- lapply(object2.l, runRep, simData=simData, simModel=simModel, simMissing=simMissing, silent=silent)	
 	}
 	
 	# if(multicore) {
@@ -85,11 +76,13 @@ simResult <- function(nRep, simData, simModel, simMissing=new("NullSimMissing"),
   #Same here, we need to save FMI information
   FMI1.l <- lapply(Result.l, function(object) {object$FMI1}) 
 	FMI2.l <- lapply(Result.l, function(object) {object$FMI2})
+	std.l <- lapply(Result.l, function(object) {object$std})
 	coef <- as.data.frame(do.call(rbind, coef.l))
 	se <- as.data.frame(do.call(rbind, se.l))
 	fit <- as.data.frame(do.call(rbind, fit.l))
   FMI1 <- as.data.frame(do.call(rbind, FMI1.l))
   FMI2 <- as.data.frame(do.call(rbind, FMI2.l))
+  std <- as.data.frame(do.call(rbind, std.l))
 	converged <- as.vector(unlist(converged.l))
 	param <- new("NullDataFrame")
 	FMI1 <- new("NullDataFrame")
@@ -109,9 +102,8 @@ simResult <- function(nRep, simData, simModel, simMissing=new("NullSimMissing"),
 		if(sum(dim(FMI2)) == 0) FMI2 <- new("NullDataFrame")
 		if(nrow(unique(FMI2)) == 1) FMI2 <- unique(FMI2)
 	}
-  #SimResult needs informatin for FMI too...
 	Result <- new("SimResult", modelType=modelType, nRep=nRep, coef=coef, se=se, fit=fit, converged=converged, 
-		seed=seed, paramValue=param, FMI1=FMI1, FMI2=FMI2)
+		seed=seed, paramValue=param, FMI1=FMI1, FMI2=FMI2, stdCoef=std)
 	return <- Result
 }
 

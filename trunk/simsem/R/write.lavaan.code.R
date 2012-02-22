@@ -16,6 +16,7 @@ write.lavaan.code <- function(object, constraint) {
 				}
 				if(something && j != nrow(object@LY) && (is.na(object@LY[j + 1, i]) | object@LY[j + 1, i] != 0)) temp <- paste(temp, "+")
 			}
+			if((sum(is.na(object@LY[,i])) == 0) && (sum(object@LY[,i]) == 0)) temp <- paste(temp, "0*", rownames(object@LY)[1], sep="")
 			result <- paste(result, temp, "\n")
 		}
 	}

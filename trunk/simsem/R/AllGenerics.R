@@ -81,3 +81,7 @@ setGeneric("summaryParam", function(object, ...) {
 setGeneric("subtractObject", function(object1, object2, ...) { 
 	return(standardGeneric("subtractObject")) 
 } )
+
+setGeneric("standardize", function(object) { 
+	return(standardGeneric("standardize")) 
+} )

@@ -17,8 +17,11 @@ setMethod("summaryParam", signature(object="SimResult"), definition=function(obj
 	crit.value <- qnorm(1 - alpha/2)
 	sig <- abs(z) > crit.value
 	pow <- apply(sig, 2, mean, na.rm=TRUE)
-	result <- cbind(coef, real.se, estimated.se, pow)
-	colnames(result) <- c("Estimate Average", "Estimate SD", "Average SE", "Power (Not equal 0)")
+	stdCoef <- colMeans(object@stdCoef, na.rm=TRUE)
+	stdRealSE <- sapply(object@stdCoef, sd, na.rm=TRUE)
+	result <- cbind(coef, real.se, estimated.se, pow, stdCoef, stdRealSE)
+	
+	colnames(result) <- c("Estimate Average", "Estimate SD", "Average SE", "Power (Not equal 0)", "Std Est", "Std Est SD")
 	if(!is.null.object(object@paramValue)) {
 		nRep <- nrow(object@coef)
 		nParam <- ncol(object@coef)
@@ -92,8 +95,10 @@ setMethod("summaryParam", signature(object="SimModelOut"), definition=function(o
 	se[se==0] <- NA
 	z <- coef/se
 	p <- (1 - pnorm(abs(z))) * 2
-	result <- cbind(coef, se, z, p)
-	colnames(result) <- c("Estimate", "SE", "z", "p")
+	stdSet <- standardize(object)
+	std <- vectorize.object(stdSet, lab)
+	result <- cbind(coef, se, z, p, std)
+	colnames(result) <- c("Estimate", "SE", "z", "p", "Std Est")
 	if(!is.null.object(object@paramValue)) {
 		paramValue <- vectorize.object(object@paramValue, lab)		
 		biasParam <- vectorize.object(subtractObject(object@coef, object@paramValue), lab)
@@ -114,13 +119,15 @@ setMethod("summaryParam", signature(object="SimModelMIOut"), definition=function
 	lab <- make.labels(object@param, "OpenMx")
 	coef <- vectorize.object(object@coef, lab)
 	se <- vectorize.object(object@se, lab)
+	stdSet <- standardize(object)
+	std <- vectorize.object(stdSet, lab)
 	FMI1 <- vectorize.object(object@FMI1, lab)
 	FMI2 <- vectorize.object(object@FMI2, lab)
 	se[se==0] <- NA
 	z <- coef/se
 	p <- (1 - pnorm(abs(z))) * 2
-	result <- cbind(coef, se, z, p, FMI1, FMI2)
-	colnames(result) <- c("Estimate", "SE", "z", "p", "FMI1", "FMI2")
+	result <- cbind(coef, se, z, p, std, FMI1, FMI2)
+	colnames(result) <- c("Estimate", "SE", "z", "p", "Std Est", "FMI1", "FMI2")
 	if(!is.null.object(object@paramValue)) {
 		paramValue <- vectorize.object(object@paramValue, lab)		
 		biasParam <- vectorize.object(subtractObject(object@coef, object@paramValue), lab)

@@ -1,5 +1,4 @@
-runRep <- function(dataT, simModel, simMissing=new("NullSimMissing"), seed=123321, silent=FALSE) {
-	
+runRep <- function(object, simData, simModel, simMissing=new("NullSimMissing"), silent=FALSE) {
 	modelType <- simModel@modelType
     param <- NULL
 	coef <- NA
@@ -8,35 +7,44 @@ runRep <- function(dataT, simModel, simMissing=new("NullSimMissing"), seed=12332
 	FMI1 <- NULL
 	FMI2 <- NULL
 	converged <- FALSE
+	seed <- object[[2]]
+	obj <- object[[1]]
 	set.seed(seed)
+	dataT <- NULL
+	data.mis <- NULL 
+	if(class(obj) == "list") {
+		dataT <- createData(obj, simData@n, simData, dataOnly=FALSE)
+	} else {
+		dataT <- obj
+	} 
+    if(class(dataT) == "SimDataOut") {
+        data.mis <-dataT@data
+	} else {
+        data.mis <- dataT
+    }
 
-         # if(!silent) cat(i, "\n")
-        data.mis <- NULL  
-        # Get Data
-        if(class(dataT) == "SimDataOut") {
-            data.mis <-dataT@data
-		} else {
-            data.mis <- dataT
-        }
+	if(!is(simMissing, "NullSimMissing")) {
+		data.mis <- imposeMissing(data.mis, covs=simMissing@covs, pmMCAR=simMissing@pmMCAR,
+			pmMAR=simMissing@pmMAR, nforms=simMissing@nforms,
+			itemGroups=simMissing@itemGroups, twoMethod=simMissing@twoMethod)
+	} 
 
-
-		 temp <- NULL
+	temp <- NULL
           #Impute missing and run results 
-           if(!is(simMissing, "NullSimMissing") && simMissing@numImps > 0) {
+    if(!is(simMissing, "NullSimMissing") && simMissing@numImps > 0) {
               if(silent) {
                  invisible(capture.output(suppressMessages(try(temp <- runMI(data.mis,simModel,simMissing@numImps,simMissing@impMethod), silent=TRUE))))
               } else {
                         try(temp <- runMI(data.mis,simModel,simMissing@numImps,simMissing@impMethod))
               } 
-              } else{
+    } else{
           if(silent) {
             invisible(capture.output(suppressMessages(try(temp <- run(object=simModel, data=data.mis), silent=TRUE))))
                  #tryCatch(temp <- run(simModel, data), error=function(e) {print("Error")})
           } else {
             try(temp <- run(object=simModel, data=data.mis))
           }
-          }
-          
+    }
 
           if(!is.null(temp)) {
             converged <- temp@converged			
@@ -44,6 +52,12 @@ runRep <- function(dataT, simModel, simMissing=new("NullSimMissing"), seed=12332
             coef<- vectorize.object(temp@coef, Labels)
             se <- vectorize.object(temp@se, Labels)
             fit <- temp@fit
+			if(converged) {
+				stdSet <- standardize(temp)
+				std <- vectorize.object(stdSet, Labels)
+			} else {
+				std <- NA
+			}
 			if(is(temp, "SimModelMIOut")) {
 				#Can we make vectorize object work with simModelOutMI too?
 				FMI1 <- vectorize.object(temp@FMI1, Labels)
@@ -66,7 +80,7 @@ runRep <- function(dataT, simModel, simMissing=new("NullSimMissing"), seed=12332
 	       
 
 	#We need to output FMI also when there is missing information....
-  Result <- list(coef=coef, se=se, fit=fit, converged=converged, param=param, FMI1=FMI1, FMI2=FMI2)
+  Result <- list(coef=coef, se=se, fit=fit, converged=converged, param=param, FMI1=FMI1, FMI2=FMI2, std=std)
 	return <- Result
 }
 
