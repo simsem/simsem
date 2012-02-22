@@ -27,11 +27,12 @@ Loading required package: lavaan
 This is lavaan 0.4-12
 lavaan is BETA software! Please report any bugs.
 Loading required package: MASS
-#######################################################################################################
+ 
+###############################################################################################
 This is simsem 0.0-6
 simsem is BETA software! Please report any bugs.
 simsem was developed at the University of Kansas Center for Research Methods and Data Analysis.
-#######################################################################################################
+###############################################################################################
 > 
 > assign(".oldSearch", search(), pos = 'CheckExEnv')
 > cleanEx()
@@ -3774,7 +3775,7 @@ TY6    0.054039482  0.00852871
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  63.13 0.36 63.63 NA NA 
+Time elapsed:  64.37 0.27 65.02 NA NA 
 > grDevices::dev.off()
 null device 
           1 

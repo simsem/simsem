@@ -46,9 +46,9 @@ runLavaan <- function(object, Data, miss="fiml") {
 	}	
 	code <- write.lavaan.code(param, con.text)
 	if(modelType == "Path.exo") {
-	fit <- sem(code, data=Data, meanstructure=TRUE, missing=miss)
+	fit <- sem(code, data=Data, meanstructure=TRUE, missing=miss, fixed.x=FALSE)
 	} else {
-	fit <- sem(code, data=Data, meanstructure=TRUE, missing=miss, fixed.x=TRUE)
+	fit <- sem(code, data=Data, meanstructure=TRUE, missing=miss)
 	}
 	FitIndices <- extract.lavaan.summary(fit)
 	coef <- combine.object(param, inspect(fit, "coef"))

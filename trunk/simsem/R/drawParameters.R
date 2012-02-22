@@ -28,13 +28,15 @@ drawParameters <- function(object) {
 				if(!is.null.object(param) && !is.null.object(misspec)) {
 					implied.CM.param <- create.implied.MACS(param)
 					implied.CM.misspec <- create.implied.MACS(misspec)
-					if(is.null.object(object@misfitBound)) {
-						break
-					} else {
-						misfit <- average.misfit(implied.CM.misspec$M, implied.CM.misspec$CM, 
-							implied.CM.param$M, implied.CM.param$CM, count.random.object(object@misspec))
-						#param <- misspec # Pretend Misspecified as real parameters for data generation
-						if(!is.null(misfit) && (misfit > object@misfitBound[1] & misfit < object@misfitBound[2])) break
+					if(sum(eigen(implied.CM.misspec$CM)$values <= 0) == 0) {
+						if(is.null.object(object@misfitBound)) {
+							break
+						} else {
+							misfit <- average.misfit(implied.CM.misspec$M, implied.CM.misspec$CM, 
+								implied.CM.param$M, implied.CM.param$CM, count.random.object(object@misspec))
+							#param <- misspec # Pretend Misspecified as real parameters for data generation
+							if(!is.null(misfit) && (misfit > object@misfitBound[1] & misfit < object@misfitBound[2])) break
+						}
 					}
 				}
 			}
@@ -45,7 +47,7 @@ drawParameters <- function(object) {
 				if(!is.null.object(param)) {
 					implied.CM.param <- create.implied.MACS(param)
 					implied.CM.misspec <- implied.CM.param
-					break
+					if(sum(eigen(implied.CM.param$CM)$values <= 0) == 0) break
 				}
 			}
 		}

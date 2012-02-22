@@ -85,7 +85,9 @@ simsem, Version 0.0-6 02/09/12
 - Add standardized coefficient in the SimModelOut summary and in the SimResult attribute.
 - Fix the bug that data does not contain model misspecification when users actually specify
 - simResult will not parallelize in generating parameters but parallelize in generating data.
-- use parlapply for parallization in Windows but mclapply for other OS platforms
+- use clusterApplyLB for parallization in Windows but mclapply for other OS platforms
 - Fix minor bugs in the overlap.hist function and write.lavaan.code function
 - Change how to write code in the run-SimData method
 - Add welcome message when loading the program!
+- Fix for passing any non-positive definite data
+# Error: Unserialize example 3 with X-side

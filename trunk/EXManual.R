@@ -514,7 +514,6 @@ library(simsem)
 u2 <- simUnif(-0.2, 0.2)
 u49 <- simUnif(0.4, 0.9)
 u16 <- simUnif(0.1, 0.6)
-n1 <- simNorm(0, 0.1)
 
 loading <- matrix(0, 48, 4)
 loading[1:12, 1] <- NA
@@ -531,19 +530,16 @@ TE <- symMatrix(diag(48))
 
 CFA.model <- simSetCFA(LY=LY, PS=PS, TE=TE)
 
-error.cor.mis <- matrix(NA, 48, 48)
-diag(error.cor.mis) <- 1
-TE.mis <- symMatrix(error.cor.mis, "n1")
 loading.mis <- matrix(NA, 48, 4)
 loading.mis[is.na(loading)] <- 0
 LY.mis <- simMatrix(loading.mis, "u2")
-CFA.model.mis <- simMisspecCFA(TE = TE.mis, LY=LY.mis)
+CFA.model.mis <- simMisspecCFA(LY=LY.mis)
 
 setx <- c(1:3, 13:15, 25:27, 37:39)
 set1 <- setx + 3
 set2 <- set1 + 3
 set3 <- set2 + 3
-itemGroups <- list(groupx, group1, group2, group3)
+itemGroups <- list(setx, set1, set2, set3)
 
 SimMissing <- simMissing(nforms=3, itemGroups=itemGroups, numImps=5)
 
