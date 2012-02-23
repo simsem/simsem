@@ -81,7 +81,7 @@ simsem, Version 0.0-5.0 02/09/12
 - Adjust the convergence checking in the runLavaan function according to the lavaan chagnes
 - Add the simResult function parallelizable
 
-simsem, Version 0.0-6 02/09/12
+simsem, Version 0.0-6 02/21/12
 - Add standardized coefficient in the SimModelOut summary and in the SimResult attribute.
 - Fix the bug that data does not contain model misspecification when users actually specify
 - simResult will not parallelize in generating parameters but parallelize in generating data.
@@ -91,3 +91,8 @@ simsem, Version 0.0-6 02/09/12
 - Add welcome message when loading the program!
 - Fix for passing any non-positive definite data
 # Error: Unserialize example 3 with X-side
+
+simsem, Version 0.0-7 02/XX/12
+- Add the indicatorLab and factorLab arguments in the run-SimModel method to analyze real data
+- Fix a bug in the runRep function
+- For a complete data, listwise is used as default, instead of fiml.

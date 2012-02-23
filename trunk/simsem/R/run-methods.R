@@ -328,9 +328,14 @@ setMethod("run", signature="SimData", definition=function(object, n=NULL, dataOn
 #Description: 	The SimData object will draw samples from specified model.
 #Return: 	Data frame drawn from the specified model.
 
-setMethod("run", signature="SimModel", definition=function(object, data, simMissing=new("NullSimMissing")) {
+setMethod("run", signature="SimModel", definition=function(object, data, simMissing=new("NullSimMissing"), indicatorLab=NULL, factorLab=NULL) {
+	#find number of indicators
+	#if indicator lab is specified, find indicator labels
+	#check whether it matches between data and model; if not stop
+	
 	Output <- NULL
 	DataOut <- NULL
+	miss <- sum(is.na(data)) > 0
 	if(class(data) == "SimDataOut") {
 		DataOut <- data
 		data <- DataOut@data
@@ -341,7 +346,11 @@ setMethod("run", signature="SimModel", definition=function(object, data, simMiss
 		if(object@package == "OpenMx") {
 			Output <- runOpenMx(object, data)
 		} else if (object@package == "lavaan") {
-			Output <- runLavaan(object, data)
+			if(miss) {
+				Output <- runLavaan(object, data, miss="fiml")
+			} else {
+				Output <- runLavaan(object, data, miss="listwise")
+			}
 		}
 	}
 	#is.equal(DataOut@param, Output@param) yes --> compute bias
@@ -352,6 +361,8 @@ setMethod("run", signature="SimModel", definition=function(object, data, simMiss
 			Output@paramValue <- DataOut@paramOut
 		}
 	}
+	#Add labels in the SimModelOut --> go to SimModelOut and relabels it
+	#Provide a nicer summary --> Groups elements from the same matrix together
 	return(Output)
 })
 #Arguments: 

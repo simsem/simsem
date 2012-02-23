@@ -4,6 +4,7 @@ runRep <- function(object, simData, simModel, simMissing=new("NullSimMissing"), 
 	coef <- NA
     se <- NA
     fit <- NA
+	std <- NA
 	FMI1 <- NULL
 	FMI2 <- NULL
 	converged <- FALSE
@@ -46,41 +47,28 @@ runRep <- function(object, simData, simModel, simMissing=new("NullSimMissing"), 
           }
     }
 
-          if(!is.null(temp)) {
-            converged <- temp@converged			
-            Labels <- make.labels(temp@param, "OpenMx") #As a quick default to use OpenMx
-            coef<- vectorize.object(temp@coef, Labels)
-            se <- vectorize.object(temp@se, Labels)
-            fit <- temp@fit
-			if(converged) {
-				stdSet <- standardize(temp)
-				std <- vectorize.object(stdSet, Labels)
-			} else {
-				std <- NA
-			}
+	if(!is.null(temp)) {
+		converged <- temp@converged			
+		Labels <- make.labels(temp@param, "OpenMx") #As a quick default to use OpenMx
+		if(converged) {
+			coef<- vectorize.object(temp@coef, Labels)
+			se <- vectorize.object(temp@se, Labels)
+			fit <- temp@fit
+			stdSet <- standardize(temp)
+			std <- vectorize.object(stdSet, Labels)
 			if(is(temp, "SimModelMIOut")) {
 				#Can we make vectorize object work with simModelOutMI too?
 				FMI1 <- vectorize.object(temp@FMI1, Labels)
 				FMI2 <- vectorize.object(temp@FMI2, Labels)
 			}
-            if(!converged) {
-              coef <- NA
-              se <- NA
-              fit <- NA
-            }
-
-            if(!is.null(dataT) && !is.null.object(dataT@paramOut)) {
-              if(converged) {
-                param <- vectorize.object(dataT@paramOut, Labels)
-              } else {
-                param <- NA
-              }
-            }
-          }
-	       
-
-	#We need to output FMI also when there is missing information....
-  Result <- list(coef=coef, se=se, fit=fit, converged=converged, param=param, FMI1=FMI1, FMI2=FMI2, std=std)
+			if(!is.null(dataT) && !is.null.object(dataT@paramOut)) {
+				param <- vectorize.object(dataT@paramOut, Labels)
+			} else {
+				param <- NA
+			}
+		} 
+    }
+	Result <- list(coef=coef, se=se, fit=fit, converged=converged, param=param, FMI1=FMI1, FMI2=FMI2, std=std)
 	return <- Result
 }
 

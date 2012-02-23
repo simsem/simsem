@@ -17,4 +17,4 @@ Description: This package will generate data for structural equation modeling fr
 License: GPL (>= 2)
 LazyLoad: yes
 Packaged: 2012-02-10 04:51:44 UTC; Sunthud
-Built: R 2.14.1; ; 2012-02-22 07:33:34 UTC; windows
+Built: R 2.14.1; ; 2012-02-23 07:08:19 UTC; windows

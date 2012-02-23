@@ -23,7 +23,7 @@ Objects can be created by \code{\link{simModel}}. It can also be called by \code
 }
 \section{Methods}{
   \describe{
-    \item{run}{Analyze data. The first argument is the \code{SimModel} and the second argument is data saved in \code{data.frame} }
+    \item{run}{To analyze data. There are two required arguments: \code{object} and \code{data}. \code{object} is the \code{SimModel} object. \code{data} is data saved in \code{data.frame}. The following arguments are not required. \code{simMissing}, is the \code{SimMissing} object. \code{indicatorLab} is the labels of the \code{data} used to name the indicators in the model. If x-side is specified, the x side goes first then the y side. \code{factorLab} is the labels of the factors in the model. If x-side is specified, the x side goes first and then the y side. }
 	\item{summary}{To summarize the object}
 	}
 }
