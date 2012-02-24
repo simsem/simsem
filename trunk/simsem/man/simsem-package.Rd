@@ -12,10 +12,10 @@ This package will generate data for structural equation modeling framework. This
 \tabular{ll}{
 Package: \tab simsem\cr
 Type: \tab Package\cr
-Version: \tab 0.0.6\cr
+Version: \tab 0.0.7\cr
 Depends: \tab R(>= 2.14), methods, lavaan, MASS\cr
 Suggests: \tab parallel, Amelia, copula\cr
-Date: \tab 2011-11-15\cr
+Date: \tab 2011-02-24\cr
 License: \tab GPL (>= 2)\cr
 LazyLoad: \tab yes\cr
 }
