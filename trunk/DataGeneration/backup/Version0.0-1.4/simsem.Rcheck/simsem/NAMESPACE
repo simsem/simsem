@@ -1,4 +1,0 @@
-exportClasses(Rnorm, Runif, simDist, simMatrix, symMatrix, simVector, simMatrixSet)
-exportMethods(summary, run, summary.short, adjust.object)
-export(loading.from.alpha, runif.object, rnorm.object, matrix.object, sym.matrix.object, vector.object,
-	matrix.CFA.object, matrix.Path.object, matrix.SEM.object)

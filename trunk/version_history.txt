@@ -96,3 +96,10 @@ simsem, Version 0.0-7 02/XX/12
 - Add the indicatorLab and factorLab arguments in the run-SimModel method to analyze real data
 - Fix a bug in the runRep function
 - For a complete data, listwise is used as default, instead of fiml.
+- Add the SimDataDist class for modeling data distribution in factors, errors, or indicators (including its null class)
+- Adding sequential method to create data starting from factors and adding up until getting the values of indicators.
+- Adding extract method for extract elements of SimDataDist or matrix
+- Adding many new distributions: imBeta, SimBinom, SimCauchy, SimChisq, SimExp, SimF, SimGamma, SimGeom, SimHyper, SimLnorm, SimLogis, SimNbinom, SimPois, SimT, SimWeibull. Including classes, constructors, summary, summaryShort, and run methods
+- Adding plotDist function for plot distribution or plot SimDataDist
+- Adding make.labels method for distribution objects
+

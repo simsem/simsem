@@ -1,9 +1,0 @@
-Rnorm-class             Class "Rnorm"
-Runif-class             Class "Runif"
-loading.from.alpha      Find standardized factor loading from
-                        coefficient alpha
-rnorm.object            Create random normal distribution object
-run                     Run a particular object in simsem package.
-runif.object            Create random uniform distribution object
-simDist-class           Class "simDist"
-simsem-package          SIMulated Structural Equation Modeling data.

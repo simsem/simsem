@@ -1,6 +1,0 @@
-exportClasses(Rnorm, Runif, simDist, simMatrix, symMatrix, simVector, simMatrixSet, simConstraint, simData, simModel, simResult, simMisspecifiedSet)
-exportMethods(summary, run, summary.short, adjust.object, model.object,
-	find.cutoff, find.power, plot.cutoff, plot.power)
-export(loading.from.alpha, runif.object, rnorm.object, matrix.object, sym.matrix.object, vector.object,
-	matrix.CFA.object, matrix.Path.object, matrix.SEM.object, constraint.object, data.object, result.object,
-	misspecified.CFA.object, misspecified.Path.object, misspecified.SEM.object)
