@@ -104,9 +104,9 @@ loading.mis <- simMatrix(loading.trivial, "u1")
 
 LCA.Mis <- simMisspecCFA(LY = loading.mis)
 
-Data.Mis <- simData(300, LCA.Model, LCA.Mis)
+Data.Mis <- simData(300, LCA.Model, LCA.Mis, sequential=TRUE)
 
-Output.Mis <- simResult(100, Data.Mis, SimModel, multicore=TRUE)
+Output.Mis <- simResult(100, Data.Mis, SimModel)#, multicore=TRUE)
 getCutoff(Output.Mis, 0.05)
 plotCutoff(Output.Mis, 0.05)
 summaryParam(Output.Mis)
@@ -549,3 +549,88 @@ Output <- simResult(20, SimData, SimModel, SimMissing, multicore=TRUE)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summary(Output)
+
+############################# Example 8 #############################
+
+# MAR Missing
+
+############################# Example 9 #############################
+
+# indDist
+
+u01 <- simUnif(0, 1)
+SimDataDist <- simDataDist(u01, p=6)
+
+loading <- matrix(0, 6, 2)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+LX <- simMatrix(loading, 0.7)
+
+latent.cor <- matrix(NA, 2, 2)
+diag(latent.cor) <- 1
+PH <- symMatrix(latent.cor, 0.5)
+
+error.cor <- matrix(0, 6, 6)
+diag(error.cor) <- 1
+TD <- symMatrix(error.cor)
+
+indicator.mean <- rep(NA, 6)
+MX <- simVector(indicator.mean, 0)
+indicator.var <- rep(NA, 6)
+VX <- simVector(indicator.var, 1)
+
+CFA.Model <- simSetCFA(LX = LX, PH = PH, TD = TD) #, VX = VX, MX=MX)
+
+SimData <- simData(200, CFA.Model, indDist=SimDataDist)
+
+SimModel <- simModel(CFA.Model)
+
+
+
+SimMissing <- simMissing(pmMCAR=0.1, numImps=5)
+Output <- simResult(200, SimData, SimModel)
+#Output <- simResult(100, SimData, SimModel, SimMissing, multicore=TRUE)
+getCutoff(Output, 0.05)
+plotCutoff(Output, 0.05)
+summaryParam(Output)
+
+##################################### Example 10 #######################
+
+# facDist
+
+u01 <- simUnif(0, 1)
+SimDataDist1 <- simDataDist(u01, p=6)
+
+loading <- matrix(0, 6, 2)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+LX <- simMatrix(loading, 0.7)
+
+latent.cor <- matrix(NA, 2, 2)
+diag(latent.cor) <- 1
+PH <- symMatrix(latent.cor, 0.5)
+
+error.cor <- matrix(0, 6, 6)
+diag(error.cor) <- 1
+TD <- symMatrix(error.cor)
+
+indicator.mean <- rep(NA, 6)
+MX <- simVector(indicator.mean, 0)
+indicator.var <- rep(NA, 6)
+VX <- simVector(indicator.var, 1)
+
+CFA.Model <- simSetCFA(LX = LX, PH = PH, TD = TD) #, VX = VX, MX=MX)
+
+SimData <- simData(200, CFA.Model, errorDist=SimDataDist1, sequential=TRUE)
+
+SimModel <- simModel(CFA.Model)
+
+
+
+SimMissing <- simMissing(pmMCAR=0.1, numImps=5)
+Output <- simResult(200, SimData, SimModel)
+#Output <- simResult(100, SimData, SimModel, SimMissing, multicore=TRUE)
+getCutoff(Output, 0.05)
+plotCutoff(Output, 0.05)
+summaryParam(Output)
+

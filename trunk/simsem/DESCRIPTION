@@ -11,7 +11,7 @@ Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu), Patric
 Maintainer: Sunthud Pornprasertmanit <psunthud@ku.edu>, Patrick Miller
         <patr1ckm@ku.edu>, Alex Schoemann <schoemann@ku.edu>
 Depends: R(>= 2.14), methods, lavaan, MASS
-Suggests: parallel, Amelia
+Suggests: parallel, Amelia, copula
 Description: This package will generate data for structural equation modeling framework. This package is tailored to use those simulated data for various purposes, such as model fit evaluation.
 License: GPL (>= 2)
 LazyLoad: yes

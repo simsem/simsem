@@ -1,8 +1,14 @@
-exportClasses(SimNorm, SimUnif, VirtualDist, SimMatrix, SymMatrix, SimVector, 
-	SimSet, SimEqualCon, SimData, SimModel, SimResult, SimMisspec, SimModelOut,
+exportClasses(SimUnif, SimNorm, SimBeta, SimBinom, SimCauchy, SimChisq, SimExp,
+	SimF, SimGamma, SimGeom, SimHyper, SimLnorm, SimLogis, SimNbinom, 
+	SimPois, SimT, SimWeibull, VirtualDist,
+	SimMatrix, SymMatrix, SimVector, 
+	SimSet, SimEqualCon, SimData, SimModel, SimResult, SimDataDist, SimMisspec, SimModelOut,
 	SimDataOut, SimMissing, SimModelMIOut)
 exportMethods(summary, run, summaryShort, adjust, simModel,
-	getCutoff, getPower, plotCutoff, plotPower, summaryParam)
-export(loadingFromAlpha, imposeMissing, simUnif, simNorm, simMatrix, symMatrix, simVector,
-	simSetCFA, simSetPath, simSetSEM, simEqualCon, simData, simResult,
+	getCutoff, getPower, plotCutoff, plotPower, summaryParam, plotDist)
+export(simUnif, simNorm, simBeta, simBinom, simCauchy, simChisq, simExp,
+	simF, simGamma, simGeom, simHyper, simLnorm, simLogis, simNbinom, 
+	simPois, simT, simWeibull, 
+	loadingFromAlpha, simMatrix, symMatrix, simVector,
+	simSetCFA, simSetPath, simSetSEM, simEqualCon, simData, simResult, simDataDist,
 	simMisspecCFA, simMisspecPath, simMisspecSEM, runMI, simMissing, imposeMissing)
