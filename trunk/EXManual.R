@@ -12,8 +12,24 @@
 ################################## Example 1 ##############################################
 #library(simsem)
 
-#install.packages("C:/Users/Sunthud/Desktop/My Dropbox/simsem/simsem_0.0-6.tar.gz", repos=NULL, type="source")
-#install.packages("C:/Users/student/Dropbox/simsem/simsem_0.0-6.tar.gz", repos=NULL, type="source")
+#install.packages("C:/Users/Sunthud/Desktop/My Dropbox/simsem/simsem_0.0-7.tar.gz", repos=NULL, type="source")
+#install.packages("C:/Users/student/Dropbox/simsem/simsem_0.0-7.tar.gz", repos=NULL, type="source")
+
+myTry <- function(expr) {
+    withRestarts(
+        withCallingHandlers(expr,
+                            error = function(e) {
+                                t <- sys.calls()
+                                invokeRestart("myAbort", e, t)
+                            }),
+        myAbort = function(e, t)
+            list(error = e, traceback = t))
+}
+
+test1 <- function(a, b) test2(a, a) + test2(b,b)
+test2 <- function(a, b) (a+b)^2
+
+myTry(test1(2, "2"))
 
 sourceDir <- function(path, trace = TRUE, ...) {
      for (nm in list.files(path, pattern = "\\.[RrSsQq]$")) {
@@ -558,8 +574,18 @@ summary(Output)
 
 # indDist
 
+# Things needed to be added
+
+# MLR estimation
+# Flipping the distribution so that we have negatively skewed distribution
+
 u01 <- simUnif(0, 1)
-SimDataDist <- simDataDist(u01, p=6)
+exp2 <- simExp(2)
+t4 <- simT(4)
+beta11 <- simBeta(1, 1)
+gamma11 <- simGamma(1, 1)
+chisq3 <- simChisq(3)
+SimDataDist <- simDataDist(u01, exp2, t4, beta11, gamma11, chisq3)
 
 loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA
@@ -585,9 +611,6 @@ SimData <- simData(200, CFA.Model, indDist=SimDataDist)
 
 SimModel <- simModel(CFA.Model)
 
-
-
-SimMissing <- simMissing(pmMCAR=0.1, numImps=5)
 Output <- simResult(200, SimData, SimModel)
 #Output <- simResult(100, SimData, SimModel, SimMissing, multicore=TRUE)
 getCutoff(Output, 0.05)

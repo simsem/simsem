@@ -26,8 +26,8 @@ drawParameters <- function(object) {
 				param <- reduce.matrices(param)
 				misspec <- reduce.matrices(misspec)
 				if(!is.null.object(param) && !is.null.object(misspec)) {
-					implied.CM.param <- create.implied.MACS(param)
-					implied.CM.misspec <- create.implied.MACS(misspec)
+					implied.CM.param <- createImpliedMACS(param)
+					implied.CM.misspec <- createImpliedMACS(misspec)
 					if(sum(eigen(implied.CM.misspec$CM)$values <= 0) == 0) {
 						if(is.null.object(object@misfitBound)) {
 							break
@@ -45,7 +45,7 @@ drawParameters <- function(object) {
 			if(validate.object(param)) {
 				param <- reduce.matrices(param)
 				if(!is.null.object(param)) {
-					implied.CM.param <- create.implied.MACS(param)
+					implied.CM.param <- createImpliedMACS(param)
 					implied.CM.misspec <- implied.CM.param
 					if(sum(eigen(implied.CM.param$CM)$values <= 0) == 0) break
 				}

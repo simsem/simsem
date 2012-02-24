@@ -56,7 +56,7 @@ createData <- function(paramSet, n, object, dataOnly) {
 			}
 		} 
 	} else {
-		suff <- create.implied.MACS(usedParam)
+		suff <- createImpliedMACS(usedParam)
 		Data <- run(object@indDist, n, suff$M, suff$CM)
 	}
 	varnames <- NULL

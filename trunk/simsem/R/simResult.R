@@ -73,7 +73,6 @@ simResult <- function(nRep, simData, simModel, simMissing=new("NullSimMissing"),
 	se.l <- lapply(Result.l, function(object) {object$se}) 
 	converged.l <- lapply(Result.l, function(object) {object$converged}) 
 	param.l <- lapply(Result.l, function(object) {object$param})  
-  #Same here, we need to save FMI information
   FMI1.l <- lapply(Result.l, function(object) {object$FMI1}) 
 	FMI2.l <- lapply(Result.l, function(object) {object$FMI2})
 	std.l <- lapply(Result.l, function(object) {object$std})

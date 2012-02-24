@@ -18,8 +18,8 @@ setGeneric("count.random.object", function(object, ...) {
 	return(standardGeneric("count.random.object")) 
 } )
 
-setGeneric("create.implied.MACS", function(object) { 
-	return(standardGeneric("create.implied.MACS")) 
+setGeneric("createImpliedMACS", function(object) { 
+	return(standardGeneric("createImpliedMACS")) 
 } )
 
 setGeneric("find.OpenMx.values", function(param, start) { 

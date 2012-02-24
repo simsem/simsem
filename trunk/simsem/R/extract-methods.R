@@ -8,7 +8,7 @@
 # Date Modified: February 21, 2012
 
 setMethod("extract", signature="SimDataDist", definition=function(object, pos) {
-		return(new("SimDataDist", p=length(pos), dist=object@dist[pos], fixedMean=object@fixedMean))
+		return(new("SimDataDist", p=length(pos), dist=object@dist[pos], keepScale=object@keepScale))
 	}
 )
 

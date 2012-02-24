@@ -554,7 +554,7 @@ setClass("NullSimSet", contains="SimSet")
 #	TH:		matrix.c Measurement error correlation between X indicators and Y indicators 
 # Methods:
 #	combine.object
-#	create.implied.MACS
+#	createImpliedMACS
 #	divide.object
 #	summary
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
@@ -839,7 +839,7 @@ setClass("SimLabels",
 # Parent Class: VirtualRSet
 # Child Class:	None
 # Methods:
-#	create.implied.MACS
+#	createImpliedMACS
 #	find.OpenMx.values
 #	summary
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
@@ -857,7 +857,7 @@ setClass("SimRSet",
 # Parent Class: VirtualRSet
 # Child Class:	None
 # Methods:
-#	create.implied.MACS
+#	createImpliedMACS
 #	find.OpenMx.values
 #	summary
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)

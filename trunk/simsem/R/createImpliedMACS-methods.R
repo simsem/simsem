@@ -1,20 +1,20 @@
-# create.implied.MACS
+# createImpliedMACS
 # Methods -- simsem package
 # Create model implied means and Covariance Matrix (MACS)
-# Generic Function: create.implied.MACS(object)
+# Generic Function: createImpliedMACS(object)
 # Argument:
 #	object: 	Desired object that users wish to create implied means and covariance matrix
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 6, 2011
 
-setMethod("create.implied.MACS", signature="MatrixSet", definition=function(object) {
+setMethod("createImpliedMACS", signature="MatrixSet", definition=function(object) {
 		new.object <- reduce.matrices(object)
-		result <- create.implied.MACS(new.object)
+		result <- createImpliedMACS(new.object)
 		return(result)
 	}
 )
 #Arguments: object is the MatrixSet.c that includes both exogenous and endogenous sets of matrices
-#Description: This function will change MatrixSet.c to SimRSet.c and pass it to create.implied.MACS-SimRSet
+#Description: This function will change MatrixSet.c to SimRSet.c and pass it to createImpliedMACS-SimRSet
 #Return: 	List that contains
 #			M = vectors for implied means
 #			CM = implied covariance matrices
@@ -38,9 +38,9 @@ setMethod("create.implied.MACS", signature="MatrixSet", definition=function(obje
 
 #CFA.Model <- simSetCFA(LX = LX, PH = PH, TD = TD)
 #CFA.Model.Param <- run(CFA.Model)
-#create.implied.MACS(CFA.Model.Param)
+#createImpliedMACS(CFA.Model.Param)
 
-setMethod("create.implied.MACS", signature="SimRSet", definition=function(object) {
+setMethod("createImpliedMACS", signature="SimRSet", definition=function(object) {
 		implied.mean <- NULL
 		implied.covariance <- NULL
 		ID <- matrix(0, nrow(object@PS), nrow(object@PS))

@@ -42,7 +42,7 @@ setMethod("standardize", signature="SimModelOut", definition=function(object) {
 
 setMethod("standardize", signature="SimRSet", definition=function(object) {
 		type <- object@modelType
-		sdIndicator <- sqrt(extractDiag(create.implied.MACS(object)$CM))
+		sdIndicator <- sqrt(extractDiag(createImpliedMACS(object)$CM))
 		sdLatent <- NULL
 		if(object@modelType == "CFA") {
 			sdLatent <- sqrt(extractDiag(object@PS))
@@ -50,7 +50,7 @@ setMethod("standardize", signature="SimRSet", definition=function(object) {
 			M <- object
 			if(M@modelType == "SEM") M@modelType <- "Path"
 			if(M@modelType == "SEM.exo") M@modelType <- "Path.exo"
-			sdLatent <- sqrt(extractDiag(create.implied.MACS(M)$CM))
+			sdLatent <- sqrt(extractDiag(createImpliedMACS(M)$CM))
 		}
 		result <- new("SimRSet", modelType=type)
 

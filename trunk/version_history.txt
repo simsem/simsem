@@ -102,4 +102,4 @@ simsem, Version 0.0-7 02/XX/12
 - Adding many new distributions: imBeta, SimBinom, SimCauchy, SimChisq, SimExp, SimF, SimGamma, SimGeom, SimHyper, SimLnorm, SimLogis, SimNbinom, SimPois, SimT, SimWeibull. Including classes, constructors, summary, summaryShort, and run methods
 - Adding plotDist function for plot distribution or plot SimDataDist
 - Adding make.labels method for distribution objects
-
+- Change the name of create.implied.MACS to createImpliedMACS and make it public
