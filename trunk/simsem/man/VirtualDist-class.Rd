@@ -2,6 +2,13 @@
 \Rdversion{1.1}
 \docType{class}
 \alias{VirtualDist-class}
+\alias{SimUnif-class}
+\alias{run,SimUnif-method}
+\alias{summary,SimUnif-method}
+\alias{SimNorm-class}
+\alias{run,SimNorm-method}
+\alias{summary,SimNorm-method}
+
 \title{Class "VirtualDist"}
 \description{
 All distribution objects. (Virtual Class)

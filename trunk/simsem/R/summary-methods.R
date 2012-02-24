@@ -6,7 +6,10 @@
 #	object: The target object that is used to summarize
 # 	... : Other arguments (None is specified currently)
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: November 16, 2011
+# Date Modified: February 23, 2012
+
+################################################################################
+# Distribution object: Provide a summary of each distribution object
 
 setMethod("summary",
     signature(object = "SimNorm"),
@@ -17,10 +20,8 @@ setMethod("summary",
 		print(paste("Standard deviation is ", format(object@sd, digits=3), ".", sep=""))
     }
 )
-#Arguments: 
-#	object:	SimNorm.c that users wish to summarize
-#Description: This function will print all attributes of an object
-#Return: 	NONE. Results will print on screen only.
+# Normal Distribution
+# Argument: mean = population mean, sd = standard deviation
 
 setMethod("summary",
     signature(object = "SimUnif"),
@@ -31,10 +32,190 @@ setMethod("summary",
 		print(paste("Maximum is ", format(object@max, digits=3), ".", sep=""))
     }
 )
-#Arguments: 
-#	object:	SimUnif.c that users wish to summarize
-#Description: This function will print all attributes of an object
-#Return: 	NONE. Results will print on screen only.
+# Uniform Distribution
+# Argument: min = lower bound, max = upper bound
+
+setMethod("summary",
+    signature(object = "SimBeta"),
+    function (object)
+    {
+		print("Random Beta Distribution Object.")
+		print(paste("Shape 1 (alpha) is ", format(object@shape1, digits=3), ".", sep=""))
+		print(paste("Shape 2 (beta) is ", format(object@shape2, digits=3), ".", sep=""))
+		print(paste("Non-centrality parameter is ", format(object@ncp, digits=3), ".", sep=""))
+    }
+)
+# Beta Distribution
+# Attributes: shape1, shape2 = positive numbers of beta distributions, ncp = non-centrality parameter (shape1, shape2 > 0)
+
+setMethod("summary",
+    signature(object = "SimBinom"),
+    function (object)
+    {
+		print("Random Binomial Distribution Object.")
+		print(paste("Number of trials is ", format(object@size, digits=3), ".", sep=""))
+		print(paste("Probability of success is ", format(object@prob, digits=3), ".", sep=""))
+    }
+)
+# Binomial Distribution
+# Attributes: size = Number of trials (zero or more), prob = probability of success on each trial (0 to 1)
+
+setMethod("summary",
+    signature(object = "SimCauchy"),
+    function (object)
+    {
+		print("Random Cauchy Distribution Object.")
+		print(paste("Location parameter is ", format(object@location, digits=3), ".", sep=""))
+		print(paste("Scale parameter is ", format(object@scale, digits=3), ".", sep=""))
+    }
+)
+# Cauchy Distribution
+# Attributes: location = location parameter, scale = scale parameter (> 0)
+
+setMethod("summary",
+    signature(object = "SimChisq"),
+    function (object)
+    {
+		print("Random Chi-squared Distribution Object.")
+		print(paste("Degree of freedom is ", format(object@df, digits=3), ".", sep=""))
+		print(paste("Non-centrality parameter is ", format(object@ncp, digits=3), ".", sep=""))
+    }
+)
+# Chi-squared Distribution
+# Attributes: df = degrees of freedom (non-negative), ncp = non-centrality parameter (non-negative)
+
+setMethod("summary",
+    signature(object = "SimExp"),
+    function (object)
+    {
+		print("Random Exponential Distribution Object.")
+		print(paste("Rate parameter is ", format(object@rate, digits=3), ".", sep=""))
+    }
+)
+# Exponential Distribution
+# Attributes: rate = rate parameter
+
+setMethod("summary",
+    signature(object = "SimF"),
+    function (object)
+    {
+		print("Random F Distribution Object.")
+		print(paste("Numerator degree of freedom is ", format(object@df1, digits=3), ".", sep=""))
+		print(paste("Denominator degree of freedom is ", format(object@df2, digits=3), ".", sep=""))
+		print(paste("Non-centrality parameter is ", format(object@ncp, digits=3), ".", sep=""))
+    }
+)
+# F-distribution
+# Attributes: df1, df2 = degrees of freedom (>0), ncp = non-centrality parameter (>=0)
+
+setMethod("summary",
+    signature(object = "SimGamma"),
+    function (object)
+    {
+		print("Random Gamma Distribution Object.")
+		print(paste("Shape parameter (alpha) is ", format(object@shape, digits=3), ".", sep=""))
+		print(paste("Rate parameter (beta) is ", format(object@rate, digits=3), ".", sep=""))
+    }
+)
+# Gamma Distribution
+# Attributes: shape = Shape parameter, scale = Scale parameter
+
+setMethod("summary",
+    signature(object = "SimGeom"),
+    function (object)
+    {
+		print("Random Geometric Distribution Object.")
+		print(paste("Probability of successes is ", format(object@prob, digits=3), ".", sep=""))
+    }
+)
+# Geometric Distribution
+# Attributes: prob = probability of successes
+
+setMethod("summary",
+    signature(object = "SimHyper"),
+    function (object)
+    {
+		print("Random Hypergeometric Distribution Object.")
+		print(paste("The number of successes is ", format(object@m, digits=3), ".", sep=""))
+		print(paste("The number of failures is ", format(object@n, digits=3), ".", sep=""))
+		print(paste("The number of drawns is ", format(object@k, digits=3), ".", sep=""))
+    }
+)
+# Hypergeometric Distribution
+# Attributes: m = The number of successes, n = The number of failures, k =  The number of drawns (All are integers)
+
+setMethod("summary",
+    signature(object = "SimLnorm"),
+    function (object)
+    {
+		print("Random Log Normal Distribution Object.")
+		print(paste("Mean in log scale is ", format(object@meanlog, digits=3), ".", sep=""))
+		print(paste("Standard deviation in log scale is ", format(object@sdlog, digits=3), ".", sep=""))
+    }
+)
+# Log Normal Distribution
+# Attributes: meanlog = mean of the distribution in log scale, sdlog = standard deviation of the distribution in log scale (sdlog > 0)
+
+setMethod("summary",
+    signature(object = "SimLogis"),
+    function (object)
+    {
+		print("Random Logistic Distribution Object.")
+		print(paste("Location parameter is ", format(object@location, digits=3), ".", sep=""))
+		print(paste("Scale parameter is ", format(object@scale, digits=3), ".", sep=""))
+    }
+)
+# Logistic Distribution
+# Attributes: location = location parameter, scale = scale parameter (> 0)
+
+setMethod("summary",
+    signature(object = "SimNbinom"),
+    function (object)
+    {
+		print("Random Negative Binomial Distribution Object.")
+		print(paste("The target number of successful trials is ", format(object@size, digits=3), ".", sep=""))
+		print(paste("The probability of successes is ", format(object@prob, digits=3), ".", sep=""))
+    }
+)
+# Negative Binomial Distribution
+# Attributes: size = Target for number of sucessful trials (> 0), prob = probability of each trials (0 < p < 1)
+
+setMethod("summary",
+    signature(object = "SimPois"),
+    function (object)
+    {
+		print("Random Poisson Distribution Object.")
+		print(paste("Lambda parameter (mean and variance) is ", format(object@lambda, digits=3), ".", sep=""))
+    }
+)
+# Poisson Distribution
+# Attributes: lambda = mean and variance (> 0)
+
+setMethod("summary",
+    signature(object = "SimT"),
+    function (object)
+    {
+		print("Random t Distribution Object.")
+		print(paste("Degree of freedom is ", format(object@df, digits=3), ".", sep=""))
+		print(paste("Non-centrality parameter is ", format(object@ncp, digits=3), ".", sep=""))
+    }
+)
+# Student t Distribution
+# Attributes: df = degree of freedom (> 0), ncp = non-centrality parameter
+
+setMethod("summary",
+    signature(object = "SimWeibull"),
+    function (object)
+    {
+		print("Random Weibull Distribution Object.")
+		print(paste("Shape parameter is ", format(object@shape, digits=3), ".", sep=""))
+		print(paste("Scale parameter is ", format(object@scale, digits=3), ".", sep=""))
+    }
+)
+# Weibull Distribution
+# Attributes: shape = shape parameter, scale = scale parameter (> 0)
+
+################################################################################
 
 setMethod("summary", signature="SimMatrix", definition = function(object) {
 		print("Random Full Matrix Object.")
@@ -452,5 +633,22 @@ setMethod("summary", signature="SimMissing", definition=function(object) {
 #Arguments: 
 #	object:	SimMissing class that users wish to summarize
 #Description: This function will print all elements in the SimMissing.
+#Return: 	NONE. Results will print on screen only.
+
+
+setMethod("summary", signature="SimDataDist", definition=function(object) {
+		cat("DATA DISTRIBUTION OBJECT\n")
+ 		cat(paste("The number of variables is", object@p, "\n"))
+		cat(paste("Keep means and variances of the original scales:", object@keepScale, "\n"))
+		cat("The list of distributions:\n")
+		for(i in 1:object@p) {
+			dist <- object@dist[[i]]
+			out <- capture.output(summaryShort(dist))
+			cat(i, ". ", out, "\n", sep="")
+		}
+})
+#Arguments: 
+#	object:	SimDataDist class that users wish to summarize
+#Description: This function will print all elements in the SimDataDist.
 #Return: 	NONE. Results will print on screen only.
 

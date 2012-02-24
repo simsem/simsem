@@ -67,7 +67,9 @@ runRep <- function(object, simData, simModel, simMissing=new("NullSimMissing"), 
 				param <- NA
 			}
 		} 
-    }
+    } else {
+		if(!is.null(dataT) && !is.null.object(dataT@paramOut)) param <- NA
+	}
 	Result <- list(coef=coef, se=se, fit=fit, converged=converged, param=param, FMI1=FMI1, FMI2=FMI2, std=std)
 	return <- Result
 }

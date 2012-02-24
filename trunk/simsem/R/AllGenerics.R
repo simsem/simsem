@@ -85,3 +85,11 @@ setGeneric("subtractObject", function(object1, object2, ...) {
 setGeneric("standardize", function(object) { 
 	return(standardGeneric("standardize")) 
 } )
+
+setGeneric("extract", function(object, ...) { 
+	return(standardGeneric("extract")) 
+} )
+
+setGeneric("plotDist", function(object, ...) { 
+	return(standardGeneric("plotDist")) 
+} )

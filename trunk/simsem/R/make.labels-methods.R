@@ -6,7 +6,7 @@
 #	object: The target object that is used to create labels
 # 	... : Other arguments, such as package or whether an object is symmetric matrix
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 6, 2011
+# Date Modified: February 24, 2011
 
 setMethod("make.labels", signature="vector", definition=function(object, name, package) {
 	if(is.null.object(object)) {
@@ -95,4 +95,17 @@ setMethod("make.labels", signature="SimFreeParam", definition=function(object, p
 #	object:	freeMatrixSet.c that users wish to create labels from
 #	package:	Desired package, generally used for OpenMx
 #Description: This function will create labels of each element by the object name followed by number of elements in a matrix in every matrix or vector in the free parameter object
+#Return: 	SimLabels.c that contains labels of free parameters.
+
+setMethod("make.labels", signature="VirtualDist", definition=function(object, digit=3) {
+		indivAttr <- slotNames(object)
+		val <- sapply(indivAttr, slot, object=object)
+		val <- round(val, digit)
+		lab <- mapply(paste, indivAttr, "=", val)
+		lab <- paste(lab, collapse=", ")
+		return(lab)
+})
+#Arguments: 
+#	object:		Distribution object class that users wish to create a long label of attributes
+#Description: This function will create a description of attributes
 #Return: 	SimLabels.c that contains labels of free parameters.

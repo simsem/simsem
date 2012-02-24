@@ -1,6 +1,8 @@
-simData <- function(n, param, misspec=new("NullSimMisspec"), equalCon=new("NullSimEqualCon"), conBeforeMis=TRUE, misfitBound=new("NullVector"), maxDraw=100) {
+simData <- function(n, param, misspec=new("NullSimMisspec"), equalCon=new("NullSimEqualCon"), conBeforeMis=TRUE, misfitBound=new("NullVector"), maxDraw=100, sequential=NA, facDist=new("NullSimDataDist"), errorDist=new("NullSimDataDist"), indDist=new("NullSimDataDist")) {
 	modelType <- param@modelType
 	#browser()
+	if(!(is.na(sequential) | sequential == TRUE | sequential == FALSE)) stop("Please specify NA (to use default), TRUE, or FALSE for the sequential argument")
+	if(is.na(sequential)) sequential <- FALSE
 	if(!is.null.object(misspec)) {
 		if(modelType != misspec@modelType) stop("SimMisspec and SimSet do not have the same tag")
 	}
@@ -14,6 +16,14 @@ simData <- function(n, param, misspec=new("NullSimMisspec"), equalCon=new("NullS
 			stop("misfitBound must include only two numbers for lower and upper bound")
 		}
 	}
+	if(!is.null.object(errorDist)) {
+		if(modelType == "Path" | modelType == "Path.exo") stop("errorDist is not allowed for path analysis model. The distribution of each indicator should be specified in facDist if sequential=TRUE.")
+	}
+	if(!sequential & !is.null.object(facDist)) stop("facDist is not allowed when using model-implied method in data generation")
+	if(!sequential & !is.null.object(errorDist)) stop("errorDist is not allowed when using model-implied method in data generation")
+	if(sequential & !is.null.object(indDist)) stop("indDist is not allowed when using sequential method in data generation")
 	return(new("SimData", n=n, modelType=modelType, param=param, misspec=misspec,
-		equalCon=equalCon, conBeforeMis=conBeforeMis, misfitBound=misfitBound, maxDraw=maxDraw))
+		equalCon=equalCon, conBeforeMis=conBeforeMis, misfitBound=misfitBound, maxDraw=maxDraw,
+		sequential=sequential, facDist=facDist, errorDist=errorDist, indDist=indDist))
 }
+

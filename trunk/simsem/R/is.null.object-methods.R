@@ -5,7 +5,7 @@
 # Argument:
 #	target: 	The checked object
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: November 16, 2011
+# Date Modified: February 23, 2011
 
 setMethod("is.null.object", signature(target="vector"), definition=function(target) {
 		is(target, "NullVector") || is.nan(target) || (sum(length(target)) == 0)
@@ -101,4 +101,12 @@ setMethod("is.null.object", signature="SimMissing", definition=function(target) 
 )
 #Arguments: 	an object in the SimMissing class that users wish to check
 #Description: check whether the SimMissing class is the null object
+#Return: 	TRUE if it is null
+
+setMethod("is.null.object", signature="SimDataDist", definition=function(target) {
+		is(target, "NullSimDataDist")
+	}
+)
+#Arguments: 	an object in the SimDataDist class that users wish to check
+#Description: check whether the SimDataDist class is the null object
 #Return: 	TRUE if it is null

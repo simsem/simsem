@@ -1,18 +1,14 @@
 ###################################################################
-# SimUnif
-# Class -- simsem package
-# Object that create a random number from uniform distribution.
-# Constructor:	simUnif(min, max)
+# Distribution Classes
+# Classes -- simsem package
+# Object that create a random number from a distribution.
 # Parent Class: VirtualDist
 # Child Class:	None
-# Attributes:
-#	min: 	min bound parameter
-# 	max: 	max bound parameter
 # Methods:
 #	run
 #	summary
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 7, 2011
+# Date Modified: February 23, 2011
 
 setClass("SimUnif",
 	representation(
@@ -20,27 +16,8 @@ setClass("SimUnif",
 		max="numeric"
 	)
 )
-#Examples:
-#showClass("SimUnif")
-#u1 <- simUnif(-0.1, 0.1)
-#run(u1)
-#summary(u1)
-
-###################################################################
-# SimNorm
-# Class -- simsem package
-# Object that create a random number from normal distribution.
-# Constructor:	simNorm(M, sd)
-# Parent Class: VirtualDist
-# Child Class:	None
-# Attributes:
-#	M: 		The population mean of the normal distribution
-# 	sd: 	The population standard deviation of the normal distribution
-# Methods:
-#	run
-#	summary
-# Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 7, 2011
+# SimUnif: Uniform Distribution
+# Attributes: min = lower bound, max = upper bound (min < max)
 
 setClass("SimNorm",
 	representation(
@@ -48,11 +25,153 @@ setClass("SimNorm",
 		sd="numeric"
 	)
 )
-#Examples:
-#showClass("SimNorm")
-#n2 <- simNorm(0, 0.2)
-#run(n2)
-#summary(n2)
+# SimNorm: Normal Distribution
+# Attributes: mean = population mean, sd = population standard deviation (> 0)
+
+setClass("SimBeta",
+	representation(
+		shape1="numeric",
+		shape2="numeric",
+		ncp="numeric"
+	),
+	prototype(ncp=0)
+)
+# SimBeta: Beta Distribution
+# Attributes: shape1, shape2 = positive numbers of beta distributions, ncp = non-centrality parameter (shape1, shape2 > 0)
+
+setClass("SimBinom",
+	representation(
+		size="numeric",
+		prob="numeric"
+	)
+)
+# SimBinom: Binomial Distribution
+# Attributes: size = Number of trials (zero or more), prob = probability of success on each trial (0 to 1)
+
+setClass("SimCauchy",
+	representation(
+		location="numeric",
+		scale="numeric"
+	),
+	prototype(location=0, scale=1)
+)
+# SimCauchy: Cauchy Distribution
+# Attributes: location = location parameter, scale = scale parameter (> 0)
+
+setClass("SimChisq",
+	representation(
+		df="numeric",
+		ncp="numeric"
+	),
+	prototype(ncp=0)
+)
+# SimChisq: Chi-squared Distribution
+# Attributes: df = degrees of freedom (non-negative), ncp = non-centrality parameter (non-negative)
+
+setClass("SimExp",
+	representation(
+		rate="numeric"
+	),
+	prototype(rate=1)
+)
+# SimExp: Exponential Distribution
+# Attributes: rate = rate parameter
+
+setClass("SimF",
+	representation(
+		df1="numeric",
+		df2="numeric",
+		ncp="numeric"
+	),
+	prototype(ncp=0)
+)
+# SimF: F-distribution
+# Attributes: df1, df2 = degrees of freedom (>0), ncp = non-centrality parameter (> 0)
+
+setClass("SimGamma",
+	representation(
+		shape="numeric",
+		rate="numeric"
+	),
+	prototype(rate=1)
+)
+# SimGamma: Gamma Distribution
+# Attributes: shape = Shape parameter, scale = Scale parameter
+
+setClass("SimGeom",
+	representation(
+		prob="numeric"
+	)
+)
+# SimGeom: Geometric Distribution
+# Attributes: prob = probability of successes
+
+setClass("SimHyper",
+	representation(
+		m="numeric",
+		n="numeric",
+		k="numeric"
+	)
+)
+# SimHyper: Hypergeometric Distribution
+# Attributes: m = The number of successes, n = The number of failures, k =  The number of drawns (All are integers)
+
+setClass("SimLnorm",
+	representation(
+		meanlog="numeric",
+		sdlog="numeric"
+	),
+	prototype(meanlog=0, sdlog=1)
+)
+# SimLnorm: Log Normal Distribution
+# Attributes: meanlog = mean of the distribution in log scale, sdlog = standard deviation of the distribution in log scale (sdlog > 0)
+
+setClass("SimLogis",
+	representation(
+		location="numeric",
+		scale="numeric"
+	),
+	prototype(location=0, scale=1)
+)
+# SimLogis: Logistic Distribution
+# Attributes: location = location parameter, scale = scale parameter (> 0)
+
+setClass("SimNbinom",
+	representation(
+		size="numeric",
+		prob="numeric"
+	)
+)
+# SimNbinom: Negative Binomial Distribution
+# Attributes: size = Target for number of sucessful trials (> 0), prob = probability of each trials (0 < p < 1)
+
+setClass("SimPois",
+	representation(
+		lambda="numeric"
+	)
+)
+# SimPois: Poisson Distribution
+# Attributes: lambda = mean and variance (> 0)
+
+setClass("SimT",
+	representation(
+		df="numeric",
+		ncp="numeric"
+	),
+	prototype(ncp=0)
+)
+# SimT: Student t Distribution
+# Attributes: df = degree of freedom (> 0), ncp = non-centrality parameter
+
+setClass("SimWeibull",
+	representation(
+		shape="numeric",
+		scale="numeric"
+	),
+	prototype(scale=1)
+)
+# SimWeibull: Weibull Distribution
+# Attributes: shape = shape parameter, scale = scale parameter (> 0)
 
 ###################################################################
 # VirtualDist
@@ -64,7 +183,7 @@ setClass("SimNorm",
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 7, 2011
 
-setClassUnion("VirtualDist", c("SimUnif", "SimNorm"))
+setClassUnion("VirtualDist", c("SimUnif", "SimNorm", "SimBeta", "SimBinom", "SimCauchy", "SimChisq", "SimExp", "SimF", "SimGamma", "SimGeom", "SimHyper", "SimLnorm", "SimLogis", "SimNbinom", "SimPois", "SimT", "SimWeibull"))
 
 ###################################################################
 # SimMatrix
@@ -831,6 +950,44 @@ setClass("MisspecSet",
 )
 
 ###################################################################
+# SimDataDist
+# Class -- simsem package
+# This class will save information for the multivariate distribution of a data
+# Constructor:	simDataDist(...)
+# Parent Class: None
+# Child Class:	NullSimDataDist
+# Attributes:
+#	p:	Number of variables
+#	dist:		List of distribution objects
+# 	keepScale:	Keep mean and variance of the data (with sampling error)
+# Methods:
+#	summary
+# Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
+# Date Modified: February 23, 2011
+
+setClass("SimDataDist", 
+	representation(
+		p="numeric",
+		dist="list",
+		keepScale="logical"),
+	prototype(
+		keepScale=TRUE)
+)
+
+###################################################################
+# NullSimDataDist
+# Class -- simsem package
+# The null class of the SimDataDist
+# Constructor:	new("NullSimDataDist")
+# Parent Class: 	SimDataDist
+# Child Class:	NONE
+# Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
+# Date Modified: February 23, 2011
+
+setClass("NullSimDataDist", contains="SimDataDist")
+
+
+###################################################################
 # SimData
 # Class -- simsem package
 # This class will save information for data simulation and can create data by run function
@@ -862,13 +1019,21 @@ setClass("SimData",
 		equalCon="SimEqualCon",
 		conBeforeMis="logical",
 		misfitBound="vector",
-		maxDraw="numeric"),
+		maxDraw="numeric",
+		sequential="logical",
+		facDist="SimDataDist",
+		errorDist="SimDataDist",
+		indDist="SimDataDist"),
 	prototype(
 		misspec=new("NullSimMisspec"),
 		equalCon=new("NullSimEqualCon"),
 		conBeforeMis=TRUE,
 		misfitBound=new("NullVector"),
-		maxDraw=100)
+		maxDraw=100,
+		sequential=FALSE,
+		facDist=new("NullSimDataDist"),
+		errorDist=new("NullSimDataDist"),
+		indDist=new("NullSimDataDist"))
 )
 
 ###################################################################

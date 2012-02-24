@@ -8,6 +8,9 @@
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 6, 2011
 
+################################################################################
+# Distribution object: draw a random sample from a distribution
+
 setMethod("run",
     signature(object = "SimNorm"),
     function (object, n = 1) 
@@ -15,14 +18,8 @@ setMethod("run",
         rnorm(n,object@mean, object@sd)
     }
 )
-#Arguments: 
-#	object:	SimNorm.c object
-#	n:		Sample size. The default is 1.
-#Description: This function will random samples from normal distribution object.
-#Return: 	a number or numbers from normal distribution object
-#Example:
-#n02 <- simNorm(0, 0.2)
-#run(n02)
+# Normal Distribution
+# Argument: mean = population mean, sd = standard deviation
 
 setMethod("run",
     signature(object = "SimUnif"),
@@ -31,14 +28,160 @@ setMethod("run",
         runif(n,object@min, object@max)
     }
 )
-#Arguments: 
-#	object:	SimUnif.c object
-#	n:		Sample size. The default is 1.
-#Description: This function will random samples from uniform distribution object.
-#Return: 	a number or numbers from uniform distribution object
-#Example:
-#u01 <- simUnif(0, 1)
-#run(u01)
+# Uniform Distribution
+# Argument: min = lower bound, max = upper bound
+
+setMethod("run",
+    signature(object = "SimBeta"),
+    function (object, n = 1) 
+    {
+        rbeta(n, object@shape1, object@shape2, object@ncp)
+    }
+)
+# Beta Distribution
+# Attributes: shape1, shape2 = positive numbers of beta distributions, ncp = non-centrality parameter (shape1, shape2 > 0)
+
+setMethod("run",
+    signature(object = "SimBinom"),
+    function (object, n = 1) 
+    {
+        rbinom(n, object@size, object@prob)
+    }
+)
+# Binomial Distribution
+# Attributes: size = Number of trials (zero or more), prob = probability of success on each trial (0 to 1)
+
+setMethod("run",
+    signature(object = "SimCauchy"),
+    function (object, n = 1) 
+    {
+        rcauchy(n, object@location, object@scale)
+    }
+)
+# Cauchy Distribution
+# Attributes: location = location parameter, scale = scale parameter (> 0)
+
+setMethod("run",
+    signature(object = "SimChisq"),
+    function (object, n = 1) 
+    {
+        rchisq(n, object@df, object@ncp)
+    }
+)
+# Chi-squared Distribution
+# Attributes: df = degrees of freedom (non-negative), ncp = non-centrality parameter (non-negative)
+
+setMethod("run",
+    signature(object = "SimExp"),
+    function (object, n = 1) 
+    {
+        rexp(n, object@rate)
+    }
+)
+# Exponential Distribution
+# Attributes: rate = rate parameter
+
+setMethod("run",
+    signature(object = "SimF"),
+    function (object, n = 1) 
+    {
+        rf(n, object@df1, object@df2, object@ncp)
+    }
+)
+# F-distribution
+# Attributes: df1, df2 = degrees of freedom (>0), ncp = non-centrality parameter (>=0)
+
+setMethod("run",
+    signature(object = "SimGamma"),
+    function (object, n = 1) 
+    {
+        rgamma(n, object@shape, object@rate)
+    }
+)
+# Gamma Distribution
+# Attributes: shape = Shape parameter, scale = Scale parameter
+
+setMethod("run",
+    signature(object = "SimGeom"),
+    function (object, n = 1) 
+    {
+        rgeom(n, object@prob)
+    }
+)
+# Geometric Distribution
+# Attributes: prob = probability of successes
+
+setMethod("run",
+    signature(object = "SimHyper"),
+    function (object, n = 1) 
+    {
+        rhyper(n, object@m, object@n, object@k)
+    }
+)
+# Hypergeometric Distribution
+# Attributes: m = The number of successes, n = The number of failures, k =  The number of drawns (All are integers)
+
+setMethod("run",
+    signature(object = "SimLnorm"),
+    function (object, n = 1) 
+    {
+        rlnorm(n, object@meanlog, object@sdlog)
+    }
+)
+# Log Normal Distribution
+# Attributes: meanlog = mean of the distribution in log scale, sdlog = standard deviation of the distribution in log scale (sdlog > 0)
+
+setMethod("run",
+    signature(object = "SimLogis"),
+    function (object, n = 1) 
+    {
+        rlogis(n, object@location, object@scale)
+    }
+)
+
+# Logistic Distribution
+# Attributes: location = location parameter, scale = scale parameter (> 0)
+
+setMethod("run",
+    signature(object = "SimNbinom"),
+    function (object, n = 1) 
+    {
+        rnbinom(n, object@size, object@prob)
+    }
+)
+# Negative Binomial Distribution
+# Attributes: size = Target for number of sucessful trials (> 0), prob = probability of each trials (0 < p < 1)
+
+setMethod("run",
+    signature(object = "SimPois"),
+    function (object, n = 1) 
+    {
+        rpois(n, object@lambda)
+    }
+)
+# Poisson Distribution
+# Attributes: lambda = mean and variance (> 0)
+
+setMethod("run",
+    signature(object = "SimT"),
+    function (object, n = 1) 
+    {
+        rt(n, object@df, object@ncp)
+    }
+)
+# Student t Distribution
+# Attributes: df = degree of freedom (> 0), ncp = non-centrality parameter
+
+setMethod("run",
+    signature(object = "SimWeibull"),
+    function (object, n = 1) 
+    {
+        rweibull(n, object@shape, object@scale)
+    }
+)
+# Weibull Distribution
+# Attributes: shape = shape parameter, scale = scale parameter (> 0)
+###############################################################################
 
 setMethod("run",
     signature(object = "SimMatrix"),
@@ -388,6 +531,46 @@ setMethod("run", signature="SimMissing", definition=function(object, data) {
             itemGroups=object@itemGroups, twoMethod=object@twoMethod)	
 	}
 	return(data)
+})
+#Arguments: 
+#	object:	SimMissing object
+#	Data:	Data that used to be imputed missing value
+#Description: 	The SimData will analyze the data and return the SimModelOut.c that saves the result.
+#Return: 	SimModelOut.c that saves the result.
+
+setMethod("run", signature="SimDataDist", definition=function(object, n, m, cm) {
+	library(MASS)
+	Data <- NULL
+	# Check dim(M) dim(CM) dim(copula) are equal
+	if (is.null.object(object)) {
+		Data <- mvrnorm(n, m, cm)
+	} else {
+		library(copula)
+		r <- cov2cor(cm)
+		listR <- r[lower.tri(diag(object@p))]
+		CopNorm <- ellipCopula(family = "normal", dim = object@p, dispstr = "un", param = listR)
+		distName <- sapply(object@dist, class)
+		distName <- tolower(gsub("Sim", "", distName))
+		attribute <- list()
+		for(i in 1:length(object@dist)) {
+			temp <- list()
+			indivAttr <- slotNames(object@dist[[i]])
+			for(j in 1:length(indivAttr)) {
+				temp[[j]] <- call("=", indivAttr[[j]], slot(object@dist[[i]], indivAttr[[j]]))
+			}
+			attribute[[i]] <- temp
+		}
+		Mvdc <- mvdc(CopNorm, distName, attribute)
+		Data <- rmvdc(Mvdc, n)
+		if(object@keepScale) {
+			Data <- scale(Data)
+			fakeDat <- mvrnorm(n, m, cm)
+			fakeMean <- apply(fakeDat, 2, mean)
+			fakeSD <- apply(fakeDat, 2, sd)
+			Data <- t(apply(Data, 1, function(y, m, s) { y * s + m }, m = fakeMean, s = fakeSD))
+		}
+	}
+	return(Data)
 })
 #Arguments: 
 #	object:	SimMissing object
