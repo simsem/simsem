@@ -3,6 +3,7 @@
 \docType{class}
 \alias{SimModelOut-class}
 \alias{summary,SimModelOut-method}
+\alias{createImpliedMACS,SimModelOut-method}
 \title{Class \code{"SimModelOut"}}
 \description{
 This class will save the analysis results from a single analysis.
@@ -27,6 +28,7 @@ Objects can be created by \code{\link{run}} on the \code{\linkS4class{SimModel}}
 	\itemize{
 		\item \code{\link{summary}} To summarize the object
 		\item \code{\link{summaryParam}} To summarize only parameter estimates, standard errors, and significance
+		\item \code{\link{createImpliedMACS}} To create the model implied means and covariance matrix from the parameter estimates
 	}
 }
 \author{

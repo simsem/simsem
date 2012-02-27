@@ -12,7 +12,7 @@
 
 
 
-setMethod("simModel", signature(object="SimFreeParam"), definition=function(object, start = NULL, equalCon=new("NullSimEqualCon"), package="lavaan") {
+setMethod("simModel", signature(object="SimFreeParam"), definition=function(object, start = NULL, equalCon=new("NullSimEqualCon"), package="lavaan", estimator="ML") {
 	modelType <- object@modelType
 	if(!is.null(start)) {
 		if(modelType != start@modelType) stop("Starting Values and Parameters do not have the same tag")
@@ -22,17 +22,19 @@ setMethod("simModel", signature(object="SimFreeParam"), definition=function(obje
 	if(!is.null.object(SimEqualCon)) {
 		if(modelType != equalCon@modelType) stop("SimEqualCon and SimFreeParam do not have the same tag")
 	}
-	return(new("SimModel", modelType=modelType, param=object, start=start, equalCon=equalCon, package=package))
+	estimator <- tolower(estimator)
+	return(new("SimModel", modelType=modelType, param=object, start=start, equalCon=equalCon, package=package, estimator=estimator))
 })
 #Arguments: 
 #	object:	SimFreeParam.c that save the specification of free parameters and values of fixed parameters
 #	start:	Starting values for those free parameters. lavaan package will automatically create starting values before the analysis; however, starting values are required for OpenMx.
 # 	equalCon:		simConstrint.c that save constraints specified by users. The default is no constraint.
 #	package:	Desired analysis package
+# 	estimator:	Method of estimation
 #Description: 	This function will set up all slots needed for SimModel.c 
 #Return: 	SimModel.c with specification from the function.
 
-setMethod("simModel", signature(object="SimSet"), definition=function(object, equalCon=new("NullSimEqualCon"), package="lavaan", trial=10) {
+setMethod("simModel", signature(object="SimSet"), definition=function(object, equalCon=new("NullSimEqualCon"), package="lavaan", trial=10, estimator="ML") {
 	#browser()
 	start <- starting.values(object, trial)
 	start <- reduce.matrices(start)
@@ -42,12 +44,14 @@ setMethod("simModel", signature(object="SimSet"), definition=function(object, eq
 	if(!is.null.object(equalCon)) {
 		if(modelType != equalCon@modelType) stop("SimEqualCon and SimSet do not have the same tag")
 	}
-	return(new("SimModel", modelType=modelType, param=freeParameters, start=start, equalCon=equalCon, package=package))
+	estimator <- tolower(estimator)
+	return(new("SimModel", modelType=modelType, param=freeParameters, start=start, equalCon=equalCon, package=package, estimator=estimator))
 })
 #Arguments: 
 #	object:	SimSet.c that save the specification of free parameters and values of fixed parameters, as well as parameter values.
 # 	equalCon:		simEqualCon.c that save constraints specified by users. The default is no constraint.
 #	package:	Desired analysis package
+# 	estimator: 	Method of estimation
 #Description: 	This function will create starting.values from parameter values. If the parameters are specified as distribution object,
 #		the model will find the average of 10 samples as starting values. Then, set up all slots needed for SimModel.c 
 #Return: 	SimModel.c with specification from the function.

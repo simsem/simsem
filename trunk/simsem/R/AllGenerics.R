@@ -18,7 +18,7 @@ setGeneric("count.random.object", function(object, ...) {
 	return(standardGeneric("count.random.object")) 
 } )
 
-setGeneric("createImpliedMACS", function(object) { 
+setGeneric("createImpliedMACS", function(object, ...) { 
 	return(standardGeneric("createImpliedMACS")) 
 } )
 
@@ -92,4 +92,12 @@ setGeneric("extract", function(object, ...) {
 
 setGeneric("plotDist", function(object, ...) { 
 	return(standardGeneric("plotDist")) 
+} )
+
+setGeneric("skew", function(object, ...) { 
+	return(standardGeneric("skew")) 
+} )
+
+setGeneric("kurtosis", function(object, ...) { 
+	return(standardGeneric("kurtosis")) 
 } )

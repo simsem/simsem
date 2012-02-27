@@ -5,7 +5,7 @@
 # Argument:
 #	object: 	Desired object that users wish to create implied means and covariance matrix
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 6, 2011
+# Date Modified: February 25, 2011
 
 setMethod("createImpliedMACS", signature="MatrixSet", definition=function(object) {
 		new.object <- reduce.matrices(object)
@@ -84,4 +84,35 @@ setMethod("createImpliedMACS", signature="SimRSet", definition=function(object) 
 #			M = vectors for implied means
 #			CM = implied covariance matrices
 
+setMethod("createImpliedMACS", signature="SimModelOut", definition=function(object) {
+		result <- createImpliedMACS(object@coef)
+		return(result)
+	}
+)
+#Arguments: object is a model output object
+#Description: This function will compute model implied means and covariances by formulas from a parameter estimates
+#Return: 	List that contains
+#			M = vectors for implied means
+#			CM = implied covariance matrices
+
+setMethod("createImpliedMACS", signature="SimDataOut", definition=function(object, misspec=FALSE) {
+		result <- NULL
+		if(misspec) {
+			if(is.null.object(object@misspecOut)) {
+				stop("The data output object does not have model misspecification.")
+			} else {
+				result <- createImpliedMACS(object@misspecOut)
+			}
+		} else {
+			result <- createImpliedMACS(object@paramOut)
+		}
+		return(result)
+	}
+)
+#Arguments: object is a model output object
+#			misspec is whether users would like to create MACS from parameter with adding model misspecification or not
+#Description: This function will compute model implied means and covariances by formulas from a parameter value with additional model misspecification or not
+#Return: 	List that contains
+#			M = vectors for implied means
+#			CM = implied covariance matrices
 

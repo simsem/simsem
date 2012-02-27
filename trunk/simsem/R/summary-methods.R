@@ -646,6 +646,7 @@ setMethod("summary", signature="SimDataDist", definition=function(object) {
 			out <- capture.output(summaryShort(dist))
 			cat(i, ". ", out, "\n", sep="")
 		}
+		cat(paste("Reverse (mirror) distribution:", paste(object@reverse, collapse=" / "), "\n"))
 })
 #Arguments: 
 #	object:	SimDataDist class that users wish to summarize

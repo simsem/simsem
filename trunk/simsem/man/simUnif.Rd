@@ -4,7 +4,7 @@
     Create random uniform distribution object
 }
 \description{
-    Create random uniform distribution object. Random uniform distribution object will save mean and standard deviation parameter. This will use in specifying parameters that distributed as normal distribution.
+    Create random uniform distribution object. Random uniform distribution object will save mean and standard deviation parameter. 
 }
 \usage{
 simUnif(min, max)
@@ -23,11 +23,11 @@ simUnif(min, max)
 }
 \seealso{
 	\itemize{
-		\item \code{\linkS4class{SimUnif}} for the simResult.
-		\item \code{\linkS4class{VirtualDist}} for other distribution objects.
+		\item \code{\linkS4class{VirtualDist}} for all distribution objects.
 	}
 }
 \examples{
 u1 <- simUnif(-0.1, 0.1)
 run(u1)
+summary(u1)
 }

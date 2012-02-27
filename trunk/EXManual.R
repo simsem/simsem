@@ -26,10 +26,10 @@ myTry <- function(expr) {
             list(error = e, traceback = t))
 }
 
-test1 <- function(a, b) test2(a, a) + test2(b,b)
-test2 <- function(a, b) (a+b)^2
+#test1 <- function(a, b) test2(a, a) + test2(b,b)
+#test2 <- function(a, b) (a+b)^2
 
-myTry(test1(2, "2"))
+#myTry(test1(2, "2"))
 
 sourceDir <- function(path, trace = TRUE, ...) {
      for (nm in list.files(path, pattern = "\\.[RrSsQq]$")) {
@@ -566,94 +566,121 @@ getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summary(Output)
 
+
 ############################# Example 8 #############################
 
-# MAR Missing
+library(simsem)
 
-############################# Example 9 #############################
-
-# indDist
-
-# Things needed to be added
-
-# MLR estimation
-# Flipping the distribution so that we have negatively skewed distribution
-
-u01 <- simUnif(0, 1)
-exp2 <- simExp(2)
+u2 <- simUnif(-0.2, 0.2)
+u5 <- simUnif(-0.5, 0.5)
+t2 <- simT(2)
+t3 <- simT(3)
 t4 <- simT(4)
-beta11 <- simBeta(1, 1)
-gamma11 <- simGamma(1, 1)
-chisq3 <- simChisq(3)
-SimDataDist <- simDataDist(u01, exp2, t4, beta11, gamma11, chisq3)
+t5 <- simT(5)
+chi3 <- simChisq(3)
+chi4 <- simChisq(4)
+chi5 <- simChisq(5)
+chi6 <- simChisq(6)
 
-loading <- matrix(0, 6, 2)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
+loading <- matrix(0, 12, 3)
+loading[1:4, 1] <- NA
+loading[5:8, 2] <- NA
+loading[9:12, 3] <- NA
 LX <- simMatrix(loading, 0.7)
 
-latent.cor <- matrix(NA, 2, 2)
+latent.cor <- matrix(NA, 3, 3)
 diag(latent.cor) <- 1
-PH <- symMatrix(latent.cor, 0.5)
+PH <- symMatrix(latent.cor, "u5")
 
-error.cor <- matrix(0, 6, 6)
+error.cor <- matrix(0, 12, 12)
 diag(error.cor) <- 1
 TD <- symMatrix(error.cor)
 
-indicator.mean <- rep(NA, 6)
-MX <- simVector(indicator.mean, 0)
-indicator.var <- rep(NA, 6)
-VX <- simVector(indicator.var, 1)
+CFA.Model <- simSetCFA(LX = LX, PH = PH, TD = TD) 
 
-CFA.Model <- simSetCFA(LX = LX, PH = PH, TD = TD) #, VX = VX, MX=MX)
+loading.mis <- matrix(NA, 12, 3)
+loading.mis[is.na(loading)] <- 0
+LY.mis <- simMatrix(loading.mis, "u2")
+CFA.model.mis <- simMisspecCFA(LY=LY.mis)
 
-SimData <- simData(200, CFA.Model, indDist=SimDataDist)
-
-SimModel <- simModel(CFA.Model)
-
-Output <- simResult(200, SimData, SimModel)
-#Output <- simResult(100, SimData, SimModel, SimMissing, multicore=TRUE)
+SimDataDist <- simDataDist(t2, t3, t4, t5, chi3, chi4, chi5, chi6, chi3, chi4, chi5, chi6, reverse=c(rep(FALSE, 8), rep(TRUE, 4)))
+SimData <- simData(200, CFA.Model, misspec=CFA.model.mis, indDist=SimDataDist)
+SimModel <- simModel(CFA.Model, estimator="mlm")
+Output <- simResult(1000, SimData, SimModel)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
-summaryParam(Output)
+summary(Output)
 
-##################################### Example 10 #######################
+g21 <- simGamma(2, 1)
+n01 <- simNorm(0, 1)
+object <- simDataDist(g21)
+plotDist(object)
+object2 <- simDataDist(g21, n01)
+plotDist(object2, r=0.5)
 
-# facDist
+g21 <- simGamma(2, 1)
+n01 <- simNorm(0, 1)
+chi2 <- simChisq(2)
+obj <- simDataDist(g21, n01, chi2)
+plotDist(obj, var=c(2,3))
 
-u01 <- simUnif(0, 1)
-SimDataDist1 <- simDataDist(u01, p=6)
+##################################### Example 9 #######################
 
-loading <- matrix(0, 6, 2)
+library(simsem)
+
+u35 <- simUnif(0.3, 0.5)
+u57 <- simUnif(0.5, 0.7)
+u1 <- simUnif(-0.1, 0.1)
+u3 <- simUnif(-0.3, 0.3)
+n1 <- simNorm(0, 0.1)
+n31 <- simNorm(0.3, 0.1)
+u79 <- simUnif(0.7, 0.9)
+chi5 <- simChisq(5)
+
+path.BE <- matrix(0, 4, 4)
+path.BE[3, 1:2] <- NA
+path.BE[4, 3] <- NA
+starting.BE <- matrix("", 4, 4)
+starting.BE[3, 1:2] <- "u35"
+starting.BE[4, 3] <- "u57"
+BE <- simMatrix(path.BE, starting.BE)
+
+residual.error <- diag(4)
+residual.error[1,2] <- residual.error[2,1] <- NA
+PS <- symMatrix(residual.error, "n31")
+
+loading <- matrix(0, 12, 4)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
-LX <- simMatrix(loading, 0.7)
+loading[7:9, 3] <- NA
+loading[10:12, 4] <- NA
+LY <- simMatrix(loading, "u79")
 
-latent.cor <- matrix(NA, 2, 2)
-diag(latent.cor) <- 1
-PH <- symMatrix(latent.cor, 0.5)
+TE <- symMatrix(diag(12))
 
-error.cor <- matrix(0, 6, 6)
-diag(error.cor) <- 1
-TD <- symMatrix(error.cor)
+SEM.Model <- simSetSEM(PS = PS, BE = BE, LY=LY, TE=TE)
 
-indicator.mean <- rep(NA, 6)
-MX <- simVector(indicator.mean, 0)
-indicator.var <- rep(NA, 6)
-VX <- simVector(indicator.var, 1)
+mis.path.BE <- matrix(0, 4, 4)
+mis.path.BE[4, 1:2] <- NA
+mis.BE <- simMatrix(mis.path.BE, "u1")
 
-CFA.Model <- simSetCFA(LX = LX, PH = PH, TD = TD) #, VX = VX, MX=MX)
+mis.loading <- matrix(NA, 12, 4)
+mis.loading[is.na(loading)] <- 0
+mis.LY <- simMatrix(mis.loading, "u3")
 
-SimData <- simData(200, CFA.Model, errorDist=SimDataDist1, sequential=TRUE)
+mis.error.cor <- matrix(NA, 12, 12)
+diag(mis.error.cor) <- 0
+mis.TE <- symMatrix(mis.error.cor, "n1")
 
-SimModel <- simModel(CFA.Model)
+SEM.Mis.Model <- simMisspecSEM(BE = mis.BE, LY = mis.LY, TE = mis.TE)
+
+facDist <- simDataDist(chi5, chi5, n1, n1)
+
+dataTemplate <- simData(500, SEM.Model, SEM.Mis.Model, sequential=TRUE, facDist=facDist)
+modelTemplate <- simModel(SEM.Model, estimator="mlr")
 
 
-
-SimMissing <- simMissing(pmMCAR=0.1, numImps=5)
-Output <- simResult(200, SimData, SimModel)
-#Output <- simResult(100, SimData, SimModel, SimMissing, multicore=TRUE)
-getCutoff(Output, 0.05)
-plotCutoff(Output, 0.05)
-summaryParam(Output)
-
+simOut <- simResult(100, dataTemplate, modelTemplate, multicore=TRUE)
+getCutoff(simOut, 0.05)
+plotCutoff(simOut, 0.05)
+summaryParam(simOut)

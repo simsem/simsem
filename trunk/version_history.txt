@@ -103,3 +103,7 @@ simsem, Version 0.0-7 02/XX/12
 - Adding plotDist function for plot distribution or plot SimDataDist
 - Adding make.labels method for distribution objects
 - Change the name of create.implied.MACS to createImpliedMACS and make it public
+- Adding Examples 8 and 9 in the introduction manual for accounting for nonnormal distributed data.
+- Adding the estimator option in the SimModel object
+- Change runLavaan to put default values for all outputs first.
+- Add functiions to find skewness and excessive kurtosis from data and distribution object

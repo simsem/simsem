@@ -44,6 +44,7 @@ simResult(nRep, simData, simModel, simMissing = new("NullSimMissing"), seed = 12
 }
 \author{
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu}); 
+	Alex Schoemann (University of Kansas; \email{schoemann@ku.edu}); 
 	Patrick Miller (University of Kansas; \email{patr1ckm@ku.edu})
 }
 \seealso{

@@ -70,7 +70,9 @@
 \alias{summaryShort,SimT-method}
 \alias{summaryShort,SimUnif-method}
 \alias{summaryShort,SimWeibull-method}	
-\alias{plotDist,VirtualDist-method}	
+\alias{plotDist,VirtualDist-method}
+\alias{skew,VirtualDist-method}
+\alias{kurtosis,VirtualDist-method}
 \title{Distribution Objects}
 \description{
 List of all distribution objects.
@@ -78,23 +80,23 @@ List of all distribution objects.
 \section{Distributions}{
 	Here is the list of all distribution objects and the link to their constructors.
 	\itemize{
-		\item \code{\link{simBeta}}
-		\item \code{\link{simBinom}}
-		\item \code{\link{simCauchy}}
-		\item \code{\link{simChisq}}
-		\item \code{\link{simExp}}
-		\item \code{\link{simF}}
-		\item \code{\link{simGamma}}
-		\item \code{\link{simGeom}}
-		\item \code{\link{simHyper}}
-		\item \code{\link{simLnorm}}
-		\item \code{\link{simLogis}}
-		\item \code{\link{simNbinom}}
-		\item \code{\link{simNorm}}
-		\item \code{\link{simPois}}
-		\item \code{\link{simT}}
-		\item \code{\link{simUnif}}
-		\item \code{\link{simWeibull}}	
+		\item \code{\link{simBeta}} Beta Distribution
+		\item \code{\link{simBinom}} Binomial Distribution
+		\item \code{\link{simCauchy}} Cauchy Distribution
+		\item \code{\link{simChisq}} Chi-squared Distribution
+		\item \code{\link{simExp}} Exponential Distribution
+		\item \code{\link{simF}} F Distribution
+		\item \code{\link{simGamma}} Gamma Distribution
+		\item \code{\link{simGeom}} Geometric Distribution
+		\item \code{\link{simHyper}} Hypergeometric Distribution
+		\item \code{\link{simLnorm}} Log Normal Distribution
+		\item \code{\link{simLogis}} Logistic Distribution
+		\item \code{\link{simNbinom}} Negative Binomial Distribution
+		\item \code{\link{simNorm}} Normal Distribution
+		\item \code{\link{simPois}} Poisson Distribution
+		\item \code{\link{simT}} t Distribution
+		\item \code{\link{simUnif}} Uniform Distribution
+		\item \code{\link{simWeibull}} Weibull Distribution
 	}
 }
 \section{Methods}{
@@ -102,7 +104,9 @@ List of all distribution objects.
     \item{run}{Create a random number from the distribution }
     \item{summary}{Summarize information in the object }
     \item{summaryShort}{Summarize information in the object in a short form }
-	\item{plotDist}{Plot a distribution of the distribution object }
+	\item{plotDist}{Plot a distribution of the distribution object. Arguments: \code{xlim} is the range of plotting values, \code{reverse} is to mirror the distribution. }
+	\item{skew}{Find skewness of a distribution.}
+	\item{kurtosis}{Find excessive kurtosis of a distribution.}
 	 }
 }
 \author{
@@ -117,5 +121,11 @@ List of all distribution objects.
 }
 \examples{
 showClass("VirtualDist")
+u1 <- simUnif(0, 1)
+chi3 <- simChisq(3)
+summary(chi3)
+plotDist(chi3)
+skew(chi3)
+kurtosis(chi3)
 }
 \keyword{classes}

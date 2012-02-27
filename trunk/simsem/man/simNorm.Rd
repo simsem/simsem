@@ -4,7 +4,7 @@
     Create random normal distribution object
 }
 \description{
-    Create random normal distribution object. Random normal distribution object will save mean and standard deviation parameter. This will use in specifying parameters that distributed as normal distribution.
+    Create random normal distribution object. Random normal distribution object will save mean and standard deviation parameter. 
 }
 \usage{
 simNorm(mean, sd)
@@ -25,11 +25,11 @@ simNorm(mean, sd)
 }
 \seealso{
 	\itemize{
-		\item \code{\linkS4class{SimNorm}} for the simResult.
-		\item \code{\linkS4class{VirtualDist}} for other distribution objects.
+		\item \code{\linkS4class{VirtualDist}} for all distribution objects.
 	}
 }
 \examples{
     n02 <- simNorm(0, 0.2)
     run(n02)
+	summary(n02)
 }

@@ -7,7 +7,7 @@
 	This function will be used to create data specification and ready for data simulation.
 }
 \usage{
-simData(n, param, misspec = new("NullSimMisspec"), equalCon = new("NullSimEqualCon"), conBeforeMis = TRUE, misfitBound = new("NullVector"), maxDraw = 100)
+simData(n, param, misspec = new("NullSimMisspec"), equalCon = new("NullSimEqualCon"), conBeforeMis = TRUE, misfitBound = new("NullVector"), maxDraw = 100,  sequential=NA, facDist=new("NullSimDataDist"), errorDist=new("NullSimDataDist"), indDist=new("NullSimDataDist"))
 }
 \arguments{
   \item{n}{
@@ -32,6 +32,18 @@ simData(n, param, misspec = new("NullSimMisspec"), equalCon = new("NullSimEqualC
   \item{maxDraw}{
 	The maximum number of random drawn parameters and misspecification model until all parameters in the model are eligible 
 	(no negative error variance, standardized coefficients over 1).
+}
+   \item{sequential}{
+   If \code{TRUE}, use a sequential method to create data such that the data from factor are generated first and apply to a set of equations to obtain the data of indicators. If \code{FALSE}, create data directly from model-implied mean and covariance of indicators.
+}
+    \item{facDist}{
+	A \code{\linkS4class{SimDataDist}} for a distribution of factors. Use when \code{sequential} is \code{TRUE}.
+}
+    \item{errorDist}{
+	A \code{\linkS4class{SimDataDist}} for a distribution of measurement errors. Use when \code{sequential} is \code{TRUE}
+}
+    \item{indDist}{
+	A \code{\linkS4class{SimDataDist}} for a distribution of indicators. Use when \code{sequential} is \code{FALSE}.
 }
 }
 %%%%%%%%%%%%%% Check link %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

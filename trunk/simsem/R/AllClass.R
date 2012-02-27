@@ -960,18 +960,21 @@ setClass("MisspecSet",
 #	p:	Number of variables
 #	dist:		List of distribution objects
 # 	keepScale:	Keep mean and variance of the data (with sampling error)
+#	reverse:	Reverse (mirror) the distribution (e.g., from right skewed to left skewed). This attribute is supposed to be a vector of logical values with the length of p.
 # Methods:
 #	summary
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: February 23, 2011
+# Date Modified: February 24, 2011
 
 setClass("SimDataDist", 
 	representation(
 		p="numeric",
 		dist="list",
-		keepScale="logical"),
+		keepScale="logical",
+		reverse="vector"),
 	prototype(
-		keepScale=TRUE)
+		keepScale=TRUE,
+		reverse=FALSE)
 )
 
 ###################################################################
@@ -1095,10 +1098,12 @@ setClass("SimModel",
 		param="SimFreeParam",
 		start="SimRSet",
 		equalCon="SimEqualCon",
-		package="character"), #OpenMx, lavaan
+		package="character",
+		estimator="character"), #OpenMx, lavaan
 	prototype(
 		equalCon=new("NullSimEqualCon"),
-		package="lavaan")
+		package="lavaan",
+		estimator="ml")
 )
 
 ###################################################################

@@ -30,6 +30,7 @@ simModel(object, ...)
 		\item \emph{start:} SimRSet.c that saves all starting values in the model.
 		\item \emph{equalCon:} SimEqualCon.c that save constraints specified by users. The default is no constraint.
 		\item \emph{package:} Desired analysis package
+		\item \emph{estimator:} The default is \code{ML} estimator. Other alternatives are \code{GLS}, \code{WLS}, \code{MLM}, \code{MLF}, and \code{MLR}. Check the sem function help file in the \code{lavaan} package for further details
 	}
 }
 \author{

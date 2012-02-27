@@ -3,12 +3,13 @@
 \docType{class}
 \alias{SimDataOut-class}
 \alias{summary,SimDataOut-method}
+\alias{createImpliedMACS,SimDataOut-method}
 \title{Class \code{"SimDataOut"}}
 \description{
 This class will provide the simulated dataset and population behind the generated dataset.
 }
 \section{Objects from the Class}{
-Objects can be created by \code{\link{run}} on the \code{\linkS4class{SimData}} with \code{dataOnly=FASE}. It can also be called from the form \code{new("SimDataOut", ...)}.
+Objects can be created by \code{\link{run}} on the \code{\linkS4class{SimData}} with \code{dataOnly=FALSE}. It can also be called from the form \code{new("SimDataOut", ...)}.
 }
 \section{Slots}{
   \describe{
@@ -23,6 +24,7 @@ Objects can be created by \code{\link{run}} on the \code{\linkS4class{SimData}} 
 \section{Methods}{
 	\itemize{
 		\item{summary}{To summarize the object}
+		\item{createImpliedMACS}{To create the model implied means and covariance matrix from the parameter estimates. The \code{misspec} argument can be specified as \code{TRUE} to create the model implied means and covariance matrix from both parameters and model misspecification}
 	}
 }
 \author{

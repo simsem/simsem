@@ -1,14 +1,14 @@
-# plotCutoff
+# plotDist
 # Methods -- simsem package
-# This function will plot sampling distributions of fit indices with vertical lines of cutoffs
+# This function will plot a distribution
 # Generic Function: plotCutoff(object, ...)
 # Argument:
-#	object: 	The object (SimResult.c or data.frame.c) that contains values of fit indices in each distribution.
-#	...:		Other argments such as cutoff values
+#	object: 	The object (SimDataDist or VirtualDist) to plot a distribution
+#	...:		Other argments such as correlatin or xlim, ylim
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 9, 2011
+# Date Modified: February 25, 2011
 
-setMethod("plotDist", signature="SimDataDist", definition=function(object, r=0, var=NULL, xlim=NULL, ylim=NULL) {
+setMethod("plotDist", signature="SimDataDist", definition=function(object, xlim=NULL, ylim=NULL, r=0, var=NULL) {
 	if(is.null.object(object)) stop("The data distribution object is not specified yet.")
 	if(!is.null(var)) {
 		if(!is.vector(var)) stop("Please specify a vector (no more than two elements) of variables")
@@ -16,7 +16,7 @@ setMethod("plotDist", signature="SimDataDist", definition=function(object, r=0, 
 		object <- extract(object, var)
 	}
 	if(object@p == 1) {
-		plotDist(object@dist[[1]])
+		plotDist(object@dist[[1]], reverse=object@reverse[1], xlim=xlim)
 	} else if (object@p == 2) {
 		library(copula)
 		CopNorm <- ellipCopula(family = "normal", dim = object@p, dispstr = "un", param = r)
@@ -60,13 +60,40 @@ setMethod("plotDist", signature="SimDataDist", definition=function(object, r=0, 
 			ylim[2] <- eval(as.call(yfunmax))
 		}
 		######################### making contour
-		contour(Mvdc, dmvdc, xlim = xlim, ylim = ylim, xlab="Varible 1", ylab="Variable 2")
-	}
+		#contour(Mvdc, dmvdc, xlim = xlim, ylim = ylim, xlab="Varible 1", ylab="Variable 2")
+		
+		xis <- seq(xlim[1], xlim[2], length = 51)
+		yis <- seq(ylim[1], ylim[2], length = 51)
+		grids <- as.matrix(expand.grid(xis, yis))
+		zmat <- matrix(dmvdc(Mvdc, grids), 51, 51)
+		if(object@reverse[1]) {
+			zmat <- zmat[nrow(zmat):1, ] 
+			den <- apply(zmat, 1, sum)
+			wMeanOld <- sum(xis * den)/sum(den)
+			disLeftOld <- wMeanOld - min(xis)
+			disRightOld <- max(xis) - wMeanOld
+			den <- rev(den)
+			wMeanNew <- sum(xis * den)/sum(den)
+			xis <- seq(wMeanNew - disRightOld, wMeanNew + disLeftOld, length.out=length(xis))
+		}
+		if(object@reverse[2]) {
+			zmat <- zmat[,ncol(zmat):1] 
+			den <- apply(zmat, 2, sum)
+			wMeanOld <- sum(yis * den)/sum(den)
+			disLeftOld <- wMeanOld - min(yis)
+			disRightOld <- max(yis) - wMeanOld
+			den <- rev(den)
+			wMeanNew <- sum(yis * den)/sum(den)
+			yis <- seq(wMeanNew - disRightOld, wMeanNew + disLeftOld, length.out=length(yis))
+		}		
+		contour(xis, yis, zmat, xlab="Varible 1", ylab="Variable 2")
+		val <- list(x = xis, y = yis, z = zmat)
+		invisible(val)
+	}	
 }
 )
 
-
-setMethod("plotDist", signature="VirtualDist", definition=function(object, xlim=NULL) {
+setMethod("plotDist", signature="VirtualDist", definition=function(object, xlim=NULL, reverse=FALSE) {
 	distName <- class(object)
 	distName <- tolower(gsub("Sim", "", distName))
 	if(is.null(xlim)) {
@@ -88,6 +115,14 @@ setMethod("plotDist", signature="VirtualDist", definition=function(object, xlim=
 		fun[[j+2]] <- call("=", indivAttr[[j]], slot(object, indivAttr[[j]]))
 	}
 	yrange <- eval(as.call(fun))
+	if(reverse) {
+		wMeanOld <- sum(xrange * yrange)/sum(yrange)
+		disLeftOld <- wMeanOld - min(xrange)
+		disRightOld <- max(xrange) - wMeanOld
+		yrange <- rev(yrange)
+		wMeanNew <- sum(xrange * yrange)/sum(yrange)
+		xrange <- seq(wMeanNew - disRightOld, wMeanNew + disLeftOld, length.out=length(xrange))
+	}
 	plot(xrange, yrange, type="n", xlab="value", ylab="density")
 	lines(xrange, yrange)
 }

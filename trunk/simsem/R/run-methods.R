@@ -6,7 +6,7 @@
 #	object: object in simsem that users wish to run
 # 	... : Other arguments, such as data
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 6, 2011
+# Date Modified: February 26, 2012
 
 ################################################################################
 # Distribution object: draw a random sample from a distribution
@@ -471,18 +471,20 @@ setMethod("run", signature="SimData", definition=function(object, n=NULL, dataOn
 #Description: 	The SimData object will draw samples from specified model.
 #Return: 	Data frame drawn from the specified model.
 
-setMethod("run", signature="SimModel", definition=function(object, data, simMissing=new("NullSimMissing"), indicatorLab=NULL, factorLab=NULL) {
+setMethod("run", signature="SimModel", definition=function(object, data, simMissing=new("NullSimMissing"), estimator=NULL, indicatorLab=NULL, factorLab=NULL, auxilliary=NULL, covariate=NULL) {
 	#find number of indicators
 	#if indicator lab is specified, find indicator labels
 	#check whether it matches between data and model; if not stop
 	
 	Output <- NULL
 	DataOut <- NULL
-	miss <- sum(is.na(data)) > 0
 	if(class(data) == "SimDataOut") {
 		DataOut <- data
 		data <- DataOut@data
 	}
+	miss <- sum(is.na(data)) > 0	
+	if(is.null(estimator)) estimator <- object@estimator
+	estimator <- tolower(estimator)
 	if(!is.null.object(simMissing) && simMissing@numImps > 0) {
 		Output <- runMI(data, object, simMissing@numImps,simMissing@impMethod)
 	} else {
@@ -490,9 +492,9 @@ setMethod("run", signature="SimModel", definition=function(object, data, simMiss
 			Output <- runOpenMx(object, data)
 		} else if (object@package == "lavaan") {
 			if(miss) {
-				Output <- runLavaan(object, data, miss="fiml")
+				Output <- runLavaan(object, data, miss="fiml", estimator=estimator)
 			} else {
-				Output <- runLavaan(object, data, miss="listwise")
+				Output <- runLavaan(object, data, miss="listwise", estimator=estimator)
 			}
 		}
 	}
@@ -546,22 +548,43 @@ setMethod("run", signature="SimDataDist", definition=function(object, n, m, cm) 
 		Data <- mvrnorm(n, m, cm)
 	} else {
 		library(copula)
-		r <- cov2cor(cm)
-		listR <- r[lower.tri(diag(object@p))]
-		CopNorm <- ellipCopula(family = "normal", dim = object@p, dispstr = "un", param = listR)
-		distName <- sapply(object@dist, class)
-		distName <- tolower(gsub("Sim", "", distName))
-		attribute <- list()
-		for(i in 1:length(object@dist)) {
-			temp <- list()
-			indivAttr <- slotNames(object@dist[[i]])
-			for(j in 1:length(indivAttr)) {
-				temp[[j]] <- call("=", indivAttr[[j]], slot(object@dist[[i]], indivAttr[[j]]))
+		if(object@p > 1) {
+			r <- cov2cor(as.matrix(cm))
+			for(i in 1:object@p) {
+				if(object@reverse[i] == TRUE) {
+					r[i,] <- -1 * r[i,]
+					r[,i] <- -1 * r[,i]
+				}
 			}
-			attribute[[i]] <- temp
+			listR <- r[lower.tri(diag(object@p))]
+			CopNorm <- ellipCopula(family = "normal", dim = object@p, dispstr = "un", param = listR)
+			distName <- sapply(object@dist, class)
+			distName <- tolower(gsub("Sim", "", distName))
+			attribute <- list()
+			for(i in 1:length(object@dist)) {
+				temp <- list()
+				indivAttr <- slotNames(object@dist[[i]])
+				for(j in 1:length(indivAttr)) {
+					temp[[j]] <- call("=", indivAttr[[j]], slot(object@dist[[i]], indivAttr[[j]]))
+				}
+				attribute[[i]] <- temp
+			}
+			Mvdc <- mvdc(CopNorm, distName, attribute)
+			Data <- rmvdc(Mvdc, n)
+		} else if (object@p == 1) {
+			Data <- as.matrix(run(object@dist[[1]],n=n))
+		} else {
+			stop("Error in the run-SimDataDist.")
 		}
-		Mvdc <- mvdc(CopNorm, distName, attribute)
-		Data <- rmvdc(Mvdc, n)
+		for(i in 1:object@p) {
+			if(object@reverse[i] == TRUE) {
+				meanOld <- mean(Data[,i])
+				anchor <- max(Data[,i])
+				datNew <- anchor - Data[,i]
+				Data[,i] <- datNew - mean(datNew) + meanOld
+			}
+		}
+		if(!is.matrix(Data)) Data <- as.matrix(Data)
 		if(object@keepScale) {
 			Data <- scale(Data)
 			fakeDat <- mvrnorm(n, m, cm)
@@ -569,6 +592,7 @@ setMethod("run", signature="SimDataDist", definition=function(object, n, m, cm) 
 			fakeSD <- apply(fakeDat, 2, sd)
 			Data <- t(apply(Data, 1, function(y, m, s) { y * s + m }, m = fakeMean, s = fakeSD))
 		}
+		if(nrow(Data) == 1) Data <- t(Data)
 	}
 	return(Data)
 })

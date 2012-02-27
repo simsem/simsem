@@ -1,4 +1,4 @@
-runLavaan <- function(object, Data, miss="fiml") {
+runLavaan <- function(object, Data, miss="fiml", estimator="ML") {
 	if(!require(lavaan)) {
 		install.packages("lavaan")
 		tryCatch(library(lavaan), error=function(e) {stop("The lavaan package cannot be loaded. Please install lavaan packages manually.")})
@@ -45,18 +45,29 @@ runLavaan <- function(object, Data, miss="fiml") {
 		con.text <- blank.parameters(param)
 	}	
 	code <- write.lavaan.code(param, con.text)
+	fit <- NULL
 	if(modelType == "Path.exo") {
-	fit <- sem(code, data=Data, meanstructure=TRUE, missing=miss, fixed.x=FALSE)
+		try(fit <- sem(code, data=Data, meanstructure=TRUE, missing=miss, fixed.x=FALSE, estimator=estimator))
 	} else {
-	fit <- sem(code, data=Data, meanstructure=TRUE, missing=miss)
+		try(fit <- sem(code, data=Data, meanstructure=TRUE, missing=miss, estimator=estimator))
 	}
-	FitIndices <- extract.lavaan.summary(fit)
-	coef <- combine.object(param, inspect(fit, "coef"))
-    se <- combine.object(param, inspect(fit, "se"))
-	#Converged <- fit@fit@converged
-	Converged <- inspect(fit, "converged")
-	check <- sum(unlist(lapply(inspect(fit, "se"), sum)))
-    try(if(is.na(check) || check == 0) Converged = FALSE, silent=TRUE)
+	coef <- new("SimRSet")
+	se <- new("SimRSet")
+	name <- slotNames(param)
+	for(i in 1:length(name)) {
+		slot(coef, name[i]) <- slot(param, name[i])
+		slot(se, name[i]) <- slot(param, name[i])
+	}
+	FitIndices <- NA
+	Converged <- FALSE
+	if(!is.null(fit)) {
+		try(FitIndices <- extract.lavaan.summary(fit))
+		try(coef <- combine.object(param, inspect(fit, "coef")))
+		try(se <- combine.object(param, inspect(fit, "se")))
+		try(Converged <- inspect(fit, "converged"))
+		try(check <- sum(unlist(lapply(inspect(fit, "se"), sum))))
+		try(if(is.na(check) || check == 0) Converged = FALSE, silent=TRUE)
+	} 
     return(new("SimModelOut", param=object@param, start=object@start,
         equalCon=object@equalCon, package=object@package, coef=coef,
         fit=FitIndices, se=se, converged=Converged))

@@ -19,6 +19,7 @@ Objects can be created by \code{\link{simModel}}. It can also be called by \code
     \item{\code{start}:}{All starting values of free parameters}
     \item{\code{equalCon}:}{Equality constraints in \code{\linkS4class{SimEqualCon}} class }
     \item{\code{package}:}{Packages used in data analysis, either \code{lavaan} or \code{OpenMx}. The default is \code{lavaan} }
+    \item{\code{estimator}:}{The default is \code{ML} estimator. Other alternatives are \code{GLS}, \code{WLS}, \code{MLM}, \code{MLF}, and \code{MLR}. Check the sem function help file in the \code{lavaan} package for further details}
   }
 }
 \section{Methods}{
