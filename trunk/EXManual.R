@@ -684,3 +684,182 @@ simOut <- simResult(100, dataTemplate, modelTemplate, multicore=TRUE)
 getCutoff(simOut, 0.05)
 plotCutoff(simOut, 0.05)
 summaryParam(simOut)
+
+########################################### FIML
+
+library(simsem)
+loading <- matrix(0, 6, 2)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+LX <- simMatrix(loading, 0.7)
+
+latent.cor <- matrix(NA, 2, 2)
+diag(latent.cor) <- 1
+PH <- symMatrix(latent.cor, 0.5)
+
+error.cor <- matrix(0, 6, 6)
+diag(error.cor) <- 1
+TD <- symMatrix(error.cor)
+
+indicator.mean <- rep(NA, 6)
+MX <- simVector(indicator.mean, 0)
+indicator.var <- rep(NA, 6)
+VX <- simVector(indicator.var, 1)
+
+CFA.Model <- simSetCFA(LX = LX, PH = PH, TD = TD) #, VX = VX, MX=MX)
+
+SimData <- simData(200, CFA.Model)
+
+
+dat <- run(SimData)
+var <- rnorm(nrow(dat), 0, 1)
+dat <- data.frame(dat, var)
+miss <- (dat[,ncol(dat)] > 1) & rbinom(nrow(dat), 1, 0.5) 
+dat[miss,1] <- NA
+
+library(lavaan)
+model <- "
+f1 =~ NA*y1 + NA*y2 + NA*y3 + 0*y4 + 0*y5 + 0*y6 + 0*var
+f2 =~ 0*y1 + 0*y2 + 0*y3 + NA*y4 + NA*y5 + NA*y6 + 0*var
+f1 ~~ NA*f2
+f1 ~~ 1*f1
+f2 ~~ 1*f2
+var ~~ NA*y1
+var ~~ NA*y2
+var ~~ NA*y3
+var ~~ NA*y4
+var ~~ NA*y5
+var ~~ NA*y6
+"
+
+fit <- sem(model, data=dat, missing="fiml")
+summary(fit)
+
+model2 <- "
+y1 ~~ NA*y1
+y2 ~~ 0*y1
+y2 ~~ NA*y2
+y3 ~~ 0*y1
+y3 ~~ 0*y2
+y3 ~~ NA*y3
+y4 ~~ 0*y1
+y4 ~~ 0*y2
+y4 ~~ 0*y3
+y4 ~~ NA*y4
+y5 ~~ 0*y1
+y5 ~~ 0*y2
+y5 ~~ 0*y3
+y5 ~~ 0*y4
+y5 ~~ NA*y5
+y6 ~~ 0*y1
+y6 ~~ 0*y2
+y6 ~~ 0*y3
+y6 ~~ 0*y4
+y6 ~~ 0*y5
+y6 ~~ NA*y6
+var ~~ NA*var
+var ~~ NA*y1
+var ~~ NA*y2
+var ~~ NA*y3
+var ~~ NA*y4
+var ~~ NA*y5
+var ~~ NA*y6
+"
+
+fit <- sem(model2, data=dat, missing="fiml")
+summary(fit)
+
+############################### Single Indicator ###########################
+
+# Allow Factor Variance
+
+loading <- matrix(0, 13, 2)
+ 
+loading[1:12, 1] <- NA
+loading[13, 2] <- 1
+  
+loadingValues <- matrix(0, 13, 2)
+loadingValues[1:12, 1] <- 0.6
+loadingValues[13, 2] <- 0
+LX <- simMatrix(loading, loadingValues)
+ 
+TD <- symMatrix(diag(13))
+
+VTD <- simVector(c(rep(NA, 12), 0), c(rep(1 - 0.6^2, 12), 0)) 
+  
+latent.cor <- matrix(NA, 2, 2)
+diag(latent.cor) <- 1
+PH <- symMatrix(latent.cor, 0.5)
+  
+VPH <- simVector(c(1, NA), c(0, 1))
+  
+AL <- simVector(c(0, NA), c(0, 0)) 
+  
+TY <- simVector(c(rep(NA, 12), 0), rep(0, 13))
+  
+CFA.Full.Model <- simSetCFA(LY=LX, PS=PH, TE=TD, VTE = VTD, VPS=VPH, AL=AL, TY=TY)
+  
+SimData <- simData(200, CFA.Full.Model)
+run(SimData)
+
+# Allow Factor Loading
+
+loading <- matrix(0, 13, 2)
+ 
+loading[1:12, 1] <- NA
+loading[13, 2] <- NA
+  
+loadingValues <- matrix(0, 13, 2)
+loadingValues[1:12, 1] <- 0.6
+loadingValues[13, 2] <- 1
+LX <- simMatrix(loading, loadingValues)
+ 
+TD <- symMatrix(diag(13))
+
+VTD <- simVector(c(rep(NA, 12), 0), c(rep(1 - 0.6^2, 12), 0))
+ 
+latent.cor <- matrix(NA, 2, 2)
+diag(latent.cor) <- 1
+PH <- symMatrix(latent.cor, 0.5)
+ 
+  
+CFA.Full.Model <- simSetCFA(LY=LX, PS=PH, TE=TD, VTE = VTD)
+  
+SimData <- simData(200, CFA.Full.Model, sequential=TRUE)
+run(SimData)
+  
+# Auxiliary correlates only measurement errors
+
+
+loading <- matrix(0, 13, 1)
+ 
+loading[1:12, 1] <- NA
+  
+loadingValues <- matrix(0, 13, 1)
+loadingValues[1:12, 1] <- 0.6
+LX <- simMatrix(loading, loadingValues)
+ 
+
+VTE <- simVector(rep(NA, 13), c(rep(0.64, 12), 1))
+
+error.cor <- diag(13)
+error.cor[13, 1:12] <- NA
+error.cor[1:12, 13] <- NA  
+error.val <- diag(13)
+error.val[13, 1:12] <- c(rep(0.1, 11), 0.6)
+error.val[1:12, 13] <- c(rep(0.1, 11), 0.6)
+TD <- symMatrix(error.cor, error.val)
+  
+PH <- symMatrix(diag(1))
+ 
+  
+CFA.Full.Model <- simSetCFA(LY=LX, PS=PH, TE=TD, VTE=VTE)
+  
+SimData <- simData(200, CFA.Full.Model)
+run(SimData)
+
+# Model total variance instead
+VY <- simVector(rep(NA, 13), rep(1, 13))
+CFA.Full.Model <- simSetCFA(LY=LX, PS=PH, TE=TD, VY=VY)
+SimData <- simData(200, CFA.Full.Model, sequential=TRUE)
+run(SimData)

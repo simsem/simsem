@@ -12,7 +12,9 @@ setMethod("extract", signature="SimDataDist", definition=function(object, pos) {
 	}
 )
 
-setMethod("extract", signature="matrix", definition=function(object, row, col) {
+setMethod("extract", signature="matrix", definition=function(object, row=NULL, col=NULL) {
+	if(is.null(row)) row <- 1:nrow(object)
+	if(is.null(col)) col <- 1:ncol(object)
 	if(length(row) > 1 & length(col) > 1) {
 		return(object[row, col])
 	} else {
