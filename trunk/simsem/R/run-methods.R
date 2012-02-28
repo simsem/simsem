@@ -549,30 +549,47 @@ setMethod("run", signature="SimDataDist", definition=function(object, n, m, cm) 
 	} else {
 		library(copula)
 		if(object@p > 1) {
-			r <- cov2cor(as.matrix(cm))
-			for(i in 1:object@p) {
-				if(object@reverse[i] == TRUE) {
+			varNotZeros <- diag(cm) != 0
+			object2 <- object
+			cm2 <- cm
+			if(sum(varNotZeros) < object@p) {
+				object2 <- extract(object, which(varNotZeros))
+				cm2 <- extract(cm, which(varNotZeros), which(varNotZeros))
+			} 
+			r <- cov2cor(as.matrix(cm2))
+			for(i in 1:object2@p) {
+				if(object2@reverse[i] == TRUE) {
 					r[i,] <- -1 * r[i,]
 					r[,i] <- -1 * r[,i]
 				}
 			}
-			listR <- r[lower.tri(diag(object@p))]
-			CopNorm <- ellipCopula(family = "normal", dim = object@p, dispstr = "un", param = listR)
-			distName <- sapply(object@dist, class)
+			listR <- r[lower.tri(diag(object2@p))]
+			CopNorm <- ellipCopula(family = "normal", dim = object2@p, dispstr = "un", param = listR)
+			distName <- sapply(object2@dist, class)
 			distName <- tolower(gsub("Sim", "", distName))
 			attribute <- list()
-			for(i in 1:length(object@dist)) {
+			for(i in 1:length(object2@dist)) {
 				temp <- list()
-				indivAttr <- slotNames(object@dist[[i]])
+				indivAttr <- slotNames(object2@dist[[i]])
 				for(j in 1:length(indivAttr)) {
-					temp[[j]] <- call("=", indivAttr[[j]], slot(object@dist[[i]], indivAttr[[j]]))
+					temp[[j]] <- call("=", indivAttr[[j]], slot(object2@dist[[i]], indivAttr[[j]]))
 				}
 				attribute[[i]] <- temp
 			}
 			Mvdc <- mvdc(CopNorm, distName, attribute)
 			Data <- rmvdc(Mvdc, n)
+			if(sum(varNotZeros) < object@p) {
+				varZeros <- diag(cm) == 0
+				constant <- matrix(0, n, sum(varZeros))
+				Data <- data.frame(Data, constant)
+				Data[,c(which(varNotZeros), which(varZeros))] <- Data
+			} 
 		} else if (object@p == 1) {
-			Data <- as.matrix(run(object@dist[[1]],n=n))
+			if(cm[1, 1] == 0) {
+				Data <- rep(m[1], n)
+			} else {
+				Data <- as.matrix(run(object@dist[[1]],n=n))
+			}
 		} else {
 			stop("Error in the run-SimDataDist.")
 		}
@@ -587,6 +604,7 @@ setMethod("run", signature="SimDataDist", definition=function(object, n, m, cm) 
 		if(!is.matrix(Data)) Data <- as.matrix(Data)
 		if(object@keepScale) {
 			Data <- scale(Data)
+			Data[is.na(Data)] <- 0
 			fakeDat <- mvrnorm(n, m, cm)
 			fakeMean <- apply(fakeDat, 2, mean)
 			fakeSD <- apply(fakeDat, 2, sd)

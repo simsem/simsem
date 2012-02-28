@@ -824,8 +824,9 @@ PH <- symMatrix(latent.cor, 0.5)
  
   
 CFA.Full.Model <- simSetCFA(LY=LX, PS=PH, TE=TD, VTE = VTD)
-  
-SimData <- simData(200, CFA.Full.Model, sequential=TRUE)
+n01 <- simNorm(0, 1)
+ErrDist <- simDataDist(n01, p=13)
+SimData <- simData(200, CFA.Full.Model, sequential=TRUE, errorDist=ErrDist)
 run(SimData)
   
 # Auxiliary correlates only measurement errors

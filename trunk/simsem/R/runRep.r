@@ -48,7 +48,8 @@ runRep <- function(object, simData, simModel, simMissing=new("NullSimMissing"), 
     }
 
 	if(!is.null(temp)) {
-		converged <- temp@converged			
+		converged <- temp@converged
+		param <- NA
 		Labels <- make.labels(temp@param, "OpenMx") #As a quick default to use OpenMx
 		if(converged) {
 			coef<- vectorize.object(temp@coef, Labels)

@@ -107,3 +107,6 @@ simsem, Version 0.0-7 02/26/12
 - Adding the estimator option in the SimModel object
 - Change runLavaan to put default values for all outputs first.
 - Add functiions to find skewness and excessive kurtosis from data and distribution object
+
+simsem, Version 0.0-7.1 02/27/12
+- Fix a bug in validate.covariance, runRep, run-SimDataDist
