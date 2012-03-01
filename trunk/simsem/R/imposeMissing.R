@@ -4,7 +4,7 @@
 
 testImposeMissing <- function() {
 
-  dat1 <- matrix(rep(1,400),ncol=20)
+  dat1 <- matrix(rep(1,960),ncol=48)
   datac <- data <- dat1
   
   # Imposing Missing with the following arguments produces no missing values
@@ -54,6 +54,36 @@ imposeMissing <- function(data.mat,covs=0,pmMCAR=0,pmMAR=0,nforms=0,
 
 }
 
+# To improve the missing mechanism, we have 2 parameters instead of just one.
+# Given one arbitrarily distributed covariate, we first set a threshold for values eligible
+# to be missing, and then set a probability of these eligible values to be randomly missing.
+# Basically to percent missing = 
+newMar <- function(data,pm=NULL,cov=NULL,ignoreColumns=NULL,threshold=NULL) {
+
+  colList <- 1:dim(data)[2]
+  misCols <- colList[-c(cov,ignoreColumns)]
+  
+  # Calculate the probability of missing above the threshold,starting with the mean of the covariate.
+  # If this probability is greater than or equal to 1, lower the threshold by choosing thresholds
+  # at increasingly lower quantiles of the data.
+  if(is.null(threshold)) {threshold <- mean(data[,cov])}
+  pr.missing <- 1
+  qlist <- c(seq(.5,0,-.1))
+  i <- 0
+  while(pr.missing >= 1 && (i < length(quantiles)) ) {
+    if(i != 0) {threshold <- quantile(data[,cov],qlist[i]) }
+
+    percent.eligible <- (sum(data[,cov] > threshold)*length(misCols))/length(data)
+    pr.missing <- pm / percent.eligible
+    i <- i+1
+  }    
+   
+  mismat <- matrix(FALSE,ncol=length(colList),nrow=dim(data)[1])
+  rows.eligible <- data[,cov] > threshold
+  mismat[,misCols] <- rows.eligible
+  mismat <- apply(mismat, c(1,2), function(x){if(x && (runif(1) < pr.missing)){x <- TRUE} else {x <- FALSE}})
+  return(mismat)
+}
 
 # Function to impose MAR missing based on two covariates
 # Input: raw data, desired percent missing, indices of covariates
@@ -105,6 +135,8 @@ makeMAR <- function(data,pm=NULL,covs=NULL)
 
 }
 
+
+
 # Function to make some MCAR missin'
 # Input: Data matrix dimensions, desired percent missing, columns of covariates to not have missingness on
 # Output: Logical matrix of values to be deleted
@@ -126,7 +158,7 @@ makeMCAR <- function(dims,pm=NULL,covs=NULL)
 }
 
 
-# Function to poke holes in the data for planned missing designs. Currently, we default a 3-form design.
+# Function to poke holes in the data for planned missing designs. Currently, we default to a 3-form design.
 # Input: Data Set
 # Output: Boolean matrix of values to delete
 #
