@@ -1,4 +1,15 @@
-write.lavaan.code <- function(object, constraint) {
+# write.lavaan.code
+# function -- simsem package
+# Write a lavaan code given the matrices of parameter
+# Argument:
+#	object: parameter object
+# 	constraint: equality constraint
+#	aux: name of auxiliary variables
+# Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
+# Date Modified: February 28, 2012
+
+
+write.lavaan.code <- function(object, constraint, aux = NULL) {
 	#browser()
 	result <- NULL
 	object <- collapse.exo(object, label=TRUE)
@@ -17,6 +28,16 @@ write.lavaan.code <- function(object, constraint) {
 				if(something && j != nrow(object@LY) && (is.na(object@LY[j + 1, i]) | object@LY[j + 1, i] != 0)) temp <- paste(temp, "+")
 			}
 			if((sum(is.na(object@LY[,i])) == 0) && (sum(object@LY[,i]) == 0)) temp <- paste(temp, "0*", rownames(object@LY)[1], sep="")
+			if(!is.null(aux)) {
+				noVar <- !(is.na(diag(object@TE)) | diag(object@TE) != 0)
+				lab <- "0"
+				if(sum(noVar) > 0) {
+					LYsingle <- extract(object@LY, which(noVar), i)
+					LYsingle <- is.na(LYsingle) | LYsingle != 0
+					if(sum(LYsingle) > 0) lab <- "NA"
+				}
+				temp <- paste(temp, paste(paste(" + ", lab, "*", aux, sep=""), collapse=""))
+			}
 			result <- paste(result, temp, "\n")
 		}
 	}
@@ -34,6 +55,14 @@ write.lavaan.code <- function(object, constraint) {
 			if(!is.null(temp)) {
 				temp2 <- paste(rownames(object@BE)[i], "~")
 				result <- paste(result, temp2, temp, "\n")	
+			}
+		}
+		if(is.null.object(object@LY) && !is.null(aux)) {
+			set <- find.recursive.set(object@BE)
+			target <- colnames(object@BE)[set[[1]]]
+			for(i in 1:length(aux)) {
+				temp <- paste(aux[1], " ~ ", paste(paste("NA*", target), collapse=" + "), "\n", sep="")
+				result <- paste(result, temp)
 			}
 		}
 	}	
@@ -64,6 +93,14 @@ write.lavaan.code <- function(object, constraint) {
 		}
 		}
 		result <- paste(result, var.code, cov.code)
+		if(is.null.object(object@LY) && !is.null(aux)) {
+			set <- find.recursive.set(object@BE)
+			target <- colnames(object@BE)[-set[[1]]]
+			varCode <- paste(paste(aux, " ~~ NA*", aux, sep=""), collapse="\n")
+			result <- paste(result, varCode, "\n")
+			corCode <- paste(outer(aux, target, paste, sep=" ~~ NA*"), collapse="\n")
+			result <- paste(result, corCode, "\n")
+		}
 	}
 	if(!is.null.object(object@TE)) {
 		var.code <- NULL
@@ -85,7 +122,22 @@ write.lavaan.code <- function(object, constraint) {
 			}
 		}
 		result <- paste(result, var.code, cov.code)
-	}	
+		if(!is.null.object(object@LY) && !is.null(aux)) {
+			nonConstant <- is.na(diag(object@TE)) | diag(object@TE) != 0
+			target <- colnames(object@TE)[nonConstant]
+			varCode <- paste(paste(aux, " ~~ NA*", aux, sep=""), collapse="\n")
+			result <- paste(result, varCode, "\n")
+			corCode <- paste(outer(aux, target, paste, sep=" ~~ NA*"), collapse="\n")
+			result <- paste(result, corCode, "\n")
+		}
+	}
+	if(!is.null(aux) && length(aux) > 1) {
+		corCode <- outer(aux, aux, paste, sep=" ~~ NA*")
+		diag(corCode) <- ""
+		corCode <- corCode[lower.tri(corCode)]
+		corCode <- paste(paste(corCode, collapse="\n"), "\n")
+		result <- paste(result, corCode)
+	}
 	if(!is.null.object(object@AL)) {
 		mean.code <- NULL
 		for(i in 1:length(object@AL)) {
@@ -106,5 +158,9 @@ write.lavaan.code <- function(object, constraint) {
 		}
 		result <- paste(result, mean.code)
 	}	
+	if(!is.null(aux)) {
+		temp <- paste(paste(aux, " ~ NA*1 \n"), collapse="")
+		result <- paste(result, temp)
+	}
 	return(result)
 }

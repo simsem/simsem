@@ -4,6 +4,7 @@
 \alias{SimSet-class}
 \alias{run,SimSet-method}
 \alias{summary,SimSet-method}
+\alias{extract,SimSet-method}
 
 \title{Class \code{"SimSet"}}
 \description{
@@ -44,6 +45,7 @@ Object can be created by \code{\link{simSetCFA}}, \code{\link{simSetPath}}, or \
   \describe{
     \item{run}{Create a sample of parameters in this object. In other words, draw a sample from all random parameters which is represented in \code{\linkS4class{VirtualDist}}. }
     \item{summary}{Get the summary of model specification }
+    \item{extract}{Extract elements from a simSet. There are several additional arguments. First, if \code{yOnly} is \code{TRUE}, then the result will provide only Y side. Second, \code{y} is the index of indicators in Y side to be extracted. Third, \code{e} is the index of factors in Y side to be extracted. Fourth, \code{x} is the index of the indicators in X side to be extracted. Finally, \code{k} is the index of the factors in X side to be extracted. }
 	 }
 }
 \author{
@@ -79,4 +81,7 @@ TD <- symMatrix(error.cor)
 CFA.Model <- simSetCFA(LX = LX, PH = PH, TD = TD)
 summary(CFA.Model)
 #run(CFA.Model)
+
+CFA.Model2 <- extract(CFA.Model, y=1:3, e=1)
+summary(CFA.Model2)
 }

@@ -6,7 +6,7 @@ exportClasses(SimUnif, SimNorm, SimBeta, SimBinom, SimCauchy, SimChisq, SimExp,
 	SimDataOut, SimMissing, SimModelMIOut)
 exportMethods(summary, run, summaryShort, adjust, simModel,
 	getCutoff, getPower, plotCutoff, plotPower, summaryParam, plotDist, createImpliedMACS,
-	skew, kurtosis)
+	skew, kurtosis, extract)
 export(simUnif, simNorm, simBeta, simBinom, simCauchy, simChisq, simExp,
 	simF, simGamma, simGeom, simHyper, simLnorm, simLogis, simNbinom, 
 	simPois, simT, simWeibull, 

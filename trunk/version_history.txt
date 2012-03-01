@@ -110,3 +110,13 @@ simsem, Version 0.0-7 02/26/12
 
 simsem, Version 0.0-7.1 02/27/12
 - Fix a bug in validate.covariance, runRep, run-SimDataDist
+
+simsem, Version 0.0-8 03/01/12
+- Change the write.lavaan.code function to handling auxiliary variables
+- Make the writeLavaanNullCode function to write a null model
+- Add the indicatorLab, factorLab, and auxiliary arguments in simModel function and SimModel class
+- Make the run-SimModel method to be able to select some variables to analyze
+- Fix a bug in the imposeMissing, summary-SimSet, miPool function
+- Make runMI be able to select some variables as auxiliary variables
+- Add extract method to select a part of the SimMatrix, SimVector, and SimSet.
+- Fix the help page for simModel and add the help page for the extract method

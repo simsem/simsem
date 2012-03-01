@@ -5,6 +5,7 @@
 \alias{run,SimMatrix-method}
 \alias{summaryShort,SimMatrix-method}
 \alias{summary,SimMatrix-method}
+\alias{extract,SimMatrix-method}
 
 \title{Class \code{"SimMatrix"} (Random parameters matrix)}
 \description{
@@ -26,6 +27,7 @@ This object is created by \code{"\link[=simMatrix]{simMatrix}"} function. Object
     \item{run}{\code{signature(object = "SimMatrix")}: draws starting values from the \code{"labels"} slot and show as a matrix sample. }
     \item{summaryShort}{\code{signature(object = "SimMatrix")}: provides a short summary of all information in the object }
     \item{summary}{\code{signature(object = "SimMatrix")}: provides a thorough description of all information in the object }
+    \item{extract}{\code{signature(object = "SimMatrix")}: extract elements from a simMatrix. The additional arguments are the indicies of rows and columns to be extracted. }
 	 }
 }
 \author{
@@ -60,5 +62,8 @@ LY <- adjust(LY, "u34", c(2, 1))
 summary(LY)
 run(LY)
 summaryShort(LY)
+
+LY <- extract(LY, 1:3, 1)
+summary(LY)
 }
 \keyword{classes}

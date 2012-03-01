@@ -36,19 +36,22 @@ imposeMissing <- function(data.mat,covs=0,pmMCAR=0,pmMAR=0,nforms=0,
  if (is.vector(itemGroups) && length(itemGroups) == 1 && itemGroups==0) { itemGroups <- NULL }
  if (length(twoMethod) == 1 && twoMethod==0) {twoMethod <- NULL }
  
- 
+ if(!is.null(nforms) | !is.null(twoMethod)) { 
  # TRUE values are values to delete
  log.matpl <- planned.missing(dim(data.mat),covs,nforms=nforms,twoMethod=twoMethod,
                               itemGroups=itemGroups,timePoints=timePoints)
  data.mat[log.matpl] <- NA
-
+}
  # Impose MAR and MCAR
+ if(!is.null(pmMCAR)) {
  log.mat1 <- makeMCAR(dim(data.mat),pmMCAR,covs)
  data.mat[log.mat1] <- NA
+}
 
+if(!is.null(pmMAR)) {
  log.mat2 <- makeMAR(data.mat,pmMAR,covs)
  data.mat[log.mat2] <- NA
-
+}
 
  return(data.mat)
 

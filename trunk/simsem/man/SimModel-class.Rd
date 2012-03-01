@@ -20,6 +20,10 @@ Objects can be created by \code{\link{simModel}}. It can also be called by \code
     \item{\code{equalCon}:}{Equality constraints in \code{\linkS4class{SimEqualCon}} class }
     \item{\code{package}:}{Packages used in data analysis, either \code{lavaan} or \code{OpenMx}. The default is \code{lavaan} }
     \item{\code{estimator}:}{The default is \code{ML} estimator. Other alternatives are \code{GLS}, \code{WLS}, \code{MLM}, \code{MLF}, and \code{MLR}. Check the sem function help file in the \code{lavaan} package for further details}
+    \item{\code{auxiliary}:}{The names or the index of the auxiliary variables in the data}
+    \item{\code{indicatorLab}:}{The names of the variable in the model. The exogenous indicators should be listed first (from x1) and then endogenous indicators should be listed next (from y1).}
+    \item{\code{factorLab}:}{The names of the factors in the model. The exogenous factors should be listed first (from k1) and then endogenous factors should be listed next (from y1).}
+	
   }
 }
 \section{Methods}{

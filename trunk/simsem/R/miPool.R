@@ -37,15 +37,16 @@ miPoolVector <- function(MI.param, MI.se, imps) {
 #compute 2 estimates of fraction of missing information
   FMI.1 <- 1-(Um/TV)
   FMI.2 <- 1- ((nu+1)*Um)/((nu+3)*TV)
+  FMI.2[is.nan(FMI.2)] <- 0
   FMI<-rbind(FMI.1,FMI.2)
 
 #Get rid of estimates from fixed variables
-fixedParam <- Bm==0
+#fixedParam <- Bm==0
 
-Estimates <- subset(Estimates, !fixedParam)
-TV <- subset(TV, !fixedParam)
-FMI.1 <- subset(FMI.1, !fixedParam)
-FMI.2 <- subset(FMI.2, !fixedParam)
+#Estimates <- subset(Estimates, !fixedParam)
+#TV <- subset(TV, !fixedParam)
+#FMI.1 <- subset(FMI.1, !fixedParam)
+#FMI.2 <- subset(FMI.2, !fixedParam)
 SE <- sqrt(TV)
 MI.res<-list(Estimates,SE,FMI.1,FMI.2)
 names(MI.res)<-c('coef','se','FMI.1','FMI.2')
@@ -93,7 +94,7 @@ miPool <- function(Result.l) {
 			mparam <- sapply(Result.l, function(result, slotname1, slotname2) { slot(slot(result, slotname1), slotname2)}, slotname1 = "param", slotname2 = paramNames[i])[,1]
 			mcoef <- sapply(Result.l, function(result, slotname1, slotname2) { slot(slot(result, slotname1), slotname2)}, slotname1 = "coef", slotname2 = paramNames[i])[is.na(mparam),]
 			mse <- sapply(Result.l, function(result, slotname1, slotname2) { slot(slot(result, slotname1), slotname2)}, slotname1 = "se", slotname2 = paramNames[i])[is.na(mparam),]
-			temp <- miPoolVector(t(mcoef), t(mse), sum(is.na(mparam)))
+			temp <- miPoolVector(t(mcoef), t(mse), length(Result.l))
 			temp1 <- as.vector(slot(OutputCoef, paramNames[i]))
 			temp2 <- as.vector(slot(OutputSE, paramNames[i]))
 			temp3 <- as.vector(slot(OutputFMI1, paramNames[i]))

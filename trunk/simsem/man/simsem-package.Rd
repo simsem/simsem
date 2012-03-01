@@ -6,16 +6,16 @@
 SIMulated Structural Equation Modeling data. 
 }
 \description{
-This package will generate data for structural equation modeling framework. This package is tailored to use those simulated data for various purposes, such as model fit evaluation.
+This package can be used to generate data using the structural equation modeling framework. This package is tailored to use those simulated data for various purposes, such as model fit evaluation, power analysis, or missing data handling and planning.
 }
 \details{
 \tabular{ll}{
 Package: \tab simsem\cr
 Type: \tab Package\cr
-Version: \tab 0.0.7\cr
+Version: \tab 0.0.8\cr
 Depends: \tab R(>= 2.14), methods, lavaan, MASS\cr
 Suggests: \tab parallel, Amelia, copula\cr
-Date: \tab 2011-02-24\cr
+Date: \tab 2011-03-01\cr
 License: \tab GPL (>= 2)\cr
 LazyLoad: \tab yes\cr
 }

@@ -31,6 +31,9 @@ simModel(object, ...)
 		\item \emph{equalCon:} SimEqualCon.c that save constraints specified by users. The default is no constraint.
 		\item \emph{package:} Desired analysis package
 		\item \emph{estimator:} The default is \code{ML} estimator. Other alternatives are \code{GLS}, \code{WLS}, \code{MLM}, \code{MLF}, and \code{MLR}. Check the sem function help file in the \code{lavaan} package for further details
+		\item \emph{auxiliary:} The names or the index of the auxiliary variables in the data
+		\item \emph{indicatorLab:} The names of the variable in the model. The exogenous indicators should be listed first (from x1) and then endogenous indicators should be listed next (from y1).
+		\item \emph{factorLab:} The names of the factors in the model. The exogenous factors should be listed first (from k1) and then endogenous factors should be listed next (from y1).
 	}
 }
 \author{

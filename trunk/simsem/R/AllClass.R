@@ -1098,12 +1098,18 @@ setClass("SimModel",
 		param="SimFreeParam",
 		start="SimRSet",
 		equalCon="SimEqualCon",
-		package="character",
-		estimator="character"), #OpenMx, lavaan
+		package="character", #OpenMx, lavaan
+		estimator="character",
+		auxiliary="vector",
+		indicatorLab="vector", #X then Y
+		factorLab="vector"), # K then E
 	prototype(
 		equalCon=new("NullSimEqualCon"),
 		package="lavaan",
-		estimator="ml")
+		estimator="ml",
+		auxiliary=NULL,
+		indicatorLab=NULL,
+		factorLab=NULL)
 )
 
 ###################################################################

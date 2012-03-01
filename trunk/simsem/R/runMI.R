@@ -19,7 +19,7 @@ imputeMissing <- function(data.mat,m, ...){
 runMI<- function(data.mat,data.model, m, miPackage="amelia", silent=FALSE, ...) {
 ################### I put the silent argument here as the 'runRep' and 'simResult' have one.
 
-
+	data.model@auxiliary <- new("NullVector")
   #Currently only supports imputation by Amelia. We want to add mice, and maybe EM imputatin too...
   if(!miPackage=="amelia") stop("Currently runMI only supports imputation by amelia")
 
@@ -36,7 +36,7 @@ runMI<- function(data.mat,data.model, m, miPackage="amelia", silent=FALSE, ...) 
     }
   
 
-
+imputed.l <- lapply(imputed.l, function(data, var) { return(data[,var])}, var=data.model@indicatorLab)
     #Run models on each imputed data set using  simModel  
   if (class(data.model)=="SimModel") {
     imputed.results.l <- lapply(imputed.l, runSimMI,data.model)

@@ -33,9 +33,11 @@ myTry <- function(expr) {
 
 sourceDir <- function(path, trace = TRUE, ...) {
      for (nm in list.files(path, pattern = "\\.[RrSsQq]$")) {
-        if(trace) cat(nm,":")           
+		if(nm != "AllClass.R" & nm != "AllGenerics.R") {
+        if(trace) cat(nm,":") 
         source(file.path(path, nm), ...)
         if(trace) cat("\n")
+		}
      }
 }
 
@@ -685,6 +687,45 @@ getCutoff(simOut, 0.05)
 plotCutoff(simOut, 0.05)
 summaryParam(simOut)
 
+################################### Example 10 ######################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ########################################### FIML
 
 library(simsem)
@@ -733,7 +774,17 @@ var ~~ NA*y6
 "
 
 fit <- sem(model, data=dat, missing="fiml")
-summary(fit)
+summary(fit, fit.measures=TRUE)
+
+modelA <- "
+f1 =~ NA*y1 + NA*y2 + NA*y3 + 0*y4 + 0*y5 + 0*y6
+f2 =~ 0*y1 + 0*y2 + 0*y3 + NA*y4 + NA*y5 + NA*y6
+f1 ~~ NA*f2
+f1 ~~ 1*f1
+f2 ~~ 1*f2
+"
+fitA <- sem(modelA, data=dat, missing="fiml")
+summary(fitA)
 
 model2 <- "
 y1 ~~ NA*y1
@@ -768,6 +819,46 @@ var ~~ NA*y6
 
 fit <- sem(model2, data=dat, missing="fiml")
 summary(fit)
+
+
+
+
+
+model <- "
+y3 ~ NA*y1 + NA*y2
+y4 ~ NA*y3 
+y1 ~~ NA*y2
+"
+fit <- sem(model, data=dat, missing="fiml", fixed.x=FALSE)
+summary(fit)
+
+modelSC <- "
+y3 ~ NA*y1 + NA*y2
+y4 ~ NA*y3 
+y1 ~~ NA*y2
+z ~~ NA*y1
+z ~~ NA*y2
+z ~~ NA*y3
+z ~~ NA*y4
+z ~~ NA*z
+"
+fitSC <- sem(modelSC, data=dat, missing="fiml", fixed.x=FALSE)
+summary(fitSC)
+
+modelDV <- "
+y3 ~ NA*y1 + NA*y2
+y4 ~ NA*y3 
+y1 ~~ NA*y2
+z ~ NA*y1 + NA*y2
+z ~~ NA*y3
+z ~~ NA*y4
+z ~~ NA*z
+"
+fitDV <- sem(modelDV, data=dat, missing="fiml", fixed.x=FALSE)
+summary(fitDV)
+
+
+
 
 ############################### Single Indicator ###########################
 
@@ -864,3 +955,221 @@ VY <- simVector(rep(NA, 13), rep(1, 13))
 CFA.Full.Model <- simSetCFA(LY=LX, PS=PH, TE=TD, VY=VY)
 SimData <- simData(200, CFA.Full.Model, sequential=TRUE)
 run(SimData)
+
+
+##############################################################################
+
+############# Before Yves Comes ###############
+
+# SimModel run only a part of variables
+# Auxiliary variable
+# Example of using auxiliary variable
+
+#### Plan
+
+# Extract model that is not related to auxiliary variables --> external (SimSet) (SimRSet)
+# SimModel:FIML --> object is the real model and put the auxiliary variable
+# SimModel:MI --> use real model only
+
+# Real data --> SimModelOut --> put it in the SimData --> template model for data generation
+# Real data --> SimModelBootOut --> put it in the SimData --> template model for data generation
+
+
+
+
+################ To be discussed ############
+
+# Multiple Group
+# Categorical Data Analysis
+
+############# Waiting List ####################
+
+# Simulation with parceling
+# Sonya's parceling approach
+
+
+##################################### Auxiliary Variable ############################
+
+sourceDir(path)
+
+loading <- matrix(0, 6, 2)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+LX <- simMatrix(loading, 0.7)
+
+latent.cor <- matrix(NA, 2, 2)
+diag(latent.cor) <- 1
+PH <- symMatrix(latent.cor, 0.5)
+
+error.cor <- matrix(0, 6, 6)
+diag(error.cor) <- 1
+TD <- symMatrix(error.cor)
+
+
+loading2 <- matrix(0, 8, 2)
+loading2[1:4, 1] <- NA
+loading2[5:8, 2] <- NA
+LX2 <- simMatrix(loading2, 0.7)
+
+latent.cor2 <- matrix(NA, 2, 2)
+diag(latent.cor2) <- 1
+PH2 <- symMatrix(latent.cor2, 0.5)
+
+error.cor2 <- matrix(0, 8, 8)
+diag(error.cor2) <- 1
+TD2 <- symMatrix(error.cor2)
+
+CFA.Model2 <- simSetCFA(LX = LX2, PH = PH2, TD = TD2) #, VX = VX, MX=MX)
+CFA.Model <- extract(CFA.Model2, y=c(1:3, 5:7))
+
+SimData <- simData(200, CFA.Model2)
+
+data <- run(SimData)
+
+data[rbinom(200, 1, 0.2)==1,1] <- NA
+data[rbinom(200, 1, 0.2)==1,2] <- NA
+data[rbinom(200, 1, 0.2)==1,3] <- NA
+data[rbinom(200, 1, 0.2)==1,5] <- NA
+data[rbinom(200, 1, 0.2)==1,6] <- NA
+SimMissing <- simMissing(pmMCAR=0.1, numImps=5)
+
+SimModel <- simModel(CFA.Model, auxiliary=c(4, 8))
+
+out <- run(SimModel, data, simMissing=SimMissing)
+
+
+
+Output <- simResult(200, SimData, SimModel)
+#Output <- simResult(100, SimData, SimModel, SimMissing, multicore=TRUE)
+getCutoff(Output, 0.05)
+plotCutoff(Output, 0.05)
+summaryParam(Output)
+
+############################# Auxiliary 2 #########################################
+
+
+u35 <- simUnif(0.3, 0.5)
+u57 <- simUnif(0.5, 0.7)
+u1 <- simUnif(-0.1, 0.1)
+n31 <- simNorm(0.3, 0.1)
+
+path.BE <- matrix(0, 4, 4)
+path.BE[3, 1:2] <- NA
+path.BE[4, 3] <- NA
+starting.BE <- matrix("", 4, 4)
+starting.BE[3, 1:2] <- "u35"
+starting.BE[4, 3] <- "u57"
+BE <- simMatrix(path.BE, starting.BE)
+
+residual.error <- diag(4)
+residual.error[1,2] <- residual.error[2,1] <- NA
+PS <- symMatrix(residual.error, "n31")
+
+ME <- simVector(rep(NA, 4), 0)
+
+Path.Model <- simSetPath(PS = PS, BE = BE, ME = ME)
+
+mis.path.BE <- matrix(0, 4, 4)
+mis.path.BE[4, 1:2] <- NA
+mis.BE <- simMatrix(mis.path.BE, "u1")
+Path.Mis.Model <- simMisspecPath(BE = mis.BE)
+
+Data <- simData(500, Path.Model)
+Data.Mis <- simData(500, Path.Model, Path.Mis.Model)
+
+z <- rnorm(500, 0, 1)
+dat <- data.frame(run(Data.Mis), z) 
+SimModel <- simModel(Path.Model, auxiliary="z")
+out <- run(SimModel, dat)
+
+
+##################################### Auxiliary Variable 3 ############################
+
+sourceDir(path)
+
+loading <- matrix(0, 8, 3)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+loading[7, 3] <- NA
+LX <- simMatrix(loading, 0.7)
+LX <- adjust(LX, 1, c(7,3), FALSE)
+
+latent.cor <- matrix(NA, 3, 3)
+diag(latent.cor) <- 1
+PH <- symMatrix(latent.cor, 0.5)
+
+error.cor <- diag(8)
+error.cor[1:7, 8] <- NA
+error.cor[8, 1:7] <- NA
+TD <- symMatrix(error.cor, 0.2)
+
+VTD <- simVector(c(rep(NA, 6), 0, NA), c(rep(0.51, 6), 0, 1))
+
+CFA.Model2 <- simSetCFA(LX = LX, PH = PH, TD = TD, VTD = VTD)
+CFA.Model <- extract(CFA.Model2, y=1:7)
+
+SimData <- simData(200, CFA.Model2)
+
+data <- run(SimData)
+
+SimMissing <- simMissing(pmMCAR=0.1, covs=8, numImps=40)
+
+data <- run(SimMissing, data)
+
+SimModel <- simModel(CFA.Model, auxiliary=8)
+
+out <- run(SimModel, data) #, simMissing=SimMissing)
+out2 <- run(SimModel, data, simMissing=SimMissing)
+
+############################## Extract
+
+# Find Single Indicator or Factor with one no covariance --> Then estimate the path from factor instead of fixing as 0 --> make the covariance from the single indicator as 0.
+
+# Single Indicator need an extra DV approach
+
+# Check with rbinom, qbinom, pbinom, dbinom
+
+rordinal <- function(n, prob, start=1) {
+	if(sum(prob) != 1) stop("The sum of the probabilities is not 1")
+	result <- sample(start:(start + length(prob) - 1), n, replace=TRUE, prob=prob)
+	return(result)
+}
+
+qordinal <- function(p, prob, start=1) {
+	cumProb <- cumsum(prob)
+	result <- which(cumProb > p)[1]
+	if(p == 1) result <- length(cumProb)
+	result <- result - 1 + start
+	return(result)
+}
+
+pordinal <- function(q, prob, start=1) {
+	q <- ceiling(q - 1 + start)
+	cumProb <- cumsum(prob)
+	if(q < 1) {
+		return(0)
+	} else if (q > length(prob)) {
+		return(1)
+	} else {
+		return(cumProb[q])
+	}
+}
+
+dordinal <- function(x, prob, start=1) {
+	if(x%%1 != 0) {
+		warnings("x must be integer")
+		return(0)
+	} else {
+		q <- q - 1 + start
+		return(prob[q])
+	}
+}
+
+
+
+
+
+
+
+
+

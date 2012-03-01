@@ -274,7 +274,7 @@ setMethod("summary", signature="SimSet", definition= function(object) {
 		print.if.not.null(object@AL, "\nAL: Regression Intercept of Factor.ETA")
 		print.if.not.null(object@ME, "\nME: mean of Factor.ETA")
 		cat("--------------------------", "\n")
-		if(object@modelType == "SEM.exo" | object@modelType == "path.exo") {
+		if(object@modelType == "SEM.exo" | object@modelType == "Path.exo") {
 			cat("-- Exogeneous Variable --\n")
 			print.if.not.null(object@LX, "\nLX: Loading of Indicator.X on Factor.KSI")
 			print.if.not.null(object@VTD, "\nVTD: Variance of Measurement.Error.DELTA")

@@ -471,7 +471,7 @@ setMethod("run", signature="SimData", definition=function(object, n=NULL, dataOn
 #Description: 	The SimData object will draw samples from specified model.
 #Return: 	Data frame drawn from the specified model.
 
-setMethod("run", signature="SimModel", definition=function(object, data, simMissing=new("NullSimMissing"), estimator=NULL, indicatorLab=NULL, factorLab=NULL, auxilliary=NULL, covariate=NULL) {
+setMethod("run", signature="SimModel", definition=function(object, data, simMissing=new("NullSimMissing"), estimator=NULL) {
 	#find number of indicators
 	#if indicator lab is specified, find indicator labels
 	#check whether it matches between data and model; if not stop
@@ -482,6 +482,21 @@ setMethod("run", signature="SimModel", definition=function(object, data, simMiss
 		DataOut <- data
 		data <- DataOut@data
 	}
+	if(is.null(colnames(data))) colnames(data) <- paste("y", 1:ncol(data))
+	if(is.null.object(object@indicatorLab)) {
+		if(is.null.object(object@auxiliary)) {
+			object@indicatorLab <- colnames(data)
+		} else if (is.numeric(object@auxiliary)) {
+			if(max(object@auxiliary) > ncol(data)) stop("The maximum index in the auxiliary variable set is greater than the number of variables in the data.")
+			object@indicatorLab <- colnames(data)[-object@auxiliary]
+		} else {
+			if(length(intersect(colnames(data), object@auxiliary)) != length(object@auxiliary)) stop("Some auxiliary variables does not exist in the dataset.")
+			object@indicatorLab <- setdiff(colnames(data), object@auxiliary)
+		}
+	}
+	if(is.numeric(object@indicatorLab)) object@indicatorLab <- colnames(data)[object@indicatorLab]
+	if(is.numeric(object@auxiliary)) object@auxiliary <- colnames(data)[object@auxiliary]	
+	data <- data[,c(object@indicatorLab, object@auxiliary)]
 	miss <- sum(is.na(data)) > 0	
 	if(is.null(estimator)) estimator <- object@estimator
 	estimator <- tolower(estimator)

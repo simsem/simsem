@@ -5,6 +5,7 @@
 \alias{run,SimVector-method}
 \alias{summaryShort,SimVector-method}
 \alias{summary,SimVector-method}
+\alias{extract,SimVector-method}
 
 \title{Class \code{"SimVector"} (Random parameters vector)}
 \description{
@@ -25,6 +26,7 @@ This object is created by \code{\link{simVector}} function. Objects can be creat
     \item{run}{\code{signature(object = "SimVector")}: draws starting values from the \code{"labels"} slot and show as a vector sample. }
     \item{summaryShort}{\code{signature(object = "SimVector")}: provides a short summary of all information in the object }
     \item{summary}{\code{signature(object = "SimVector")}: provides a thorough description of all information in the object }
+
 	 }
 }
 \author{
@@ -46,6 +48,9 @@ summaryShort(AL)
 n01 <- simNorm(0, 1)
 AL <- adjust(AL, "n01", 2)
 run(AL)
+summary(AL)
+
+AL <- extract(AL, 1)
 summary(AL)
 }
 \keyword{classes}
