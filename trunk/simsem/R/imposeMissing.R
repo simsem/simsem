@@ -73,13 +73,15 @@ newMar <- function(data,pm=NULL,cov=NULL,ignoreColumns=NULL,threshold=NULL) {
   pr.missing <- 1
   qlist <- c(seq(.5,0,-.1))
   i <- 0
-  while(pr.missing >= 1 && (i < length(quantiles)) ) {
+  while(pr.missing >= 1 && (i < length(qlist)) ) {
     if(i != 0) {threshold <- quantile(data[,cov],qlist[i]) }
 
     percent.eligible <- (sum(data[,cov] > threshold)*length(misCols))/length(data)
     pr.missing <- pm / percent.eligible
     i <- i+1
-  }    
+  }
+
+  if((i >= length(qlist)) && (pr.missing > 1)) { stop("cannot attain given percent missing. Please reduce the percent missing, or include more variables. ") }  
    
   mismat <- matrix(FALSE,ncol=length(colList),nrow=dim(data)[1])
   rows.eligible <- data[,cov] > threshold
