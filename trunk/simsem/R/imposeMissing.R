@@ -24,6 +24,9 @@ testImposeMissing <- function() {
   imposeMissing(data,twoMethod=c(19,.8))
   imposeMissing(datac,cov=21,pmMCAR=.1,pmMAR=.1,nforms=3)
 
+  #OR - using testthat
+  loc <- "../inst/tests/test_missing.R"
+  test_file(loc)
 }
 
 imposeMissing <- function(data.mat,cov=0,pmMCAR=0,pmMAR=0,nforms=0,
@@ -80,14 +83,18 @@ makeMAR <- function(data,pm=NULL,cov=NULL,ignoreCols=NULL,threshold=NULL) {
     percent.eligible <- (sum(data[,cov] > threshold)*length(misCols))/length(data)
     pr.missing <- pm / percent.eligible
     i <- i+1
-  }
+  }  
 
   if((i >= length(qlist)) && (pr.missing > 1)) { stop("cannot attain given percent missing. Please reduce the percent missing, or include more variables. ") }  
-   
+
+  update <- 
+  
   mismat <- matrix(FALSE,ncol=length(colList),nrow=dim(data)[1])
   rows.eligible <- data[,cov] > threshold
   mismat[,misCols] <- rows.eligible
-  mismat <- apply(mismat, c(1,2), function(x){if(x && (runif(1) < pr.missing)){x <- TRUE} else {x <- FALSE}})
+  mismat <- apply(mismat, c(1,2),function(x){if(x && (runif(1) < pr.missing)){x <- TRUE}})
+
+
   return(mismat)
 }
 
