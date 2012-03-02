@@ -5,51 +5,53 @@
 testImposeMissing <- function() {
 
   dat1 <- matrix(rep(1,960),ncol=48)
-
+  data <- matrix(1,ncol=20,nrow=100)
+  datac <- cbind(data,rnorm(100,0,1))
   
   # Imposing Missing with the following arguments produces no missing values
   imposeMissing(data)
-  imposeMissing(data,covs=c(1,2))
+  imposeMissing(data,cov=21)
   imposeMissing(data,pmMCAR=0)
   imposeMissing(data,pmMAR=0)
   imposeMissing(data,nforms=0)
 
   #Some more usage examples
   imposeMissing(data,pmMCAR=.1)
-  imposeMissing(datac,covs=c(20,21),pmMAR=.2)
+  imposeMissing(datac,cov=21,pmMAR=.2)
   imposeMissing(data,nforms=3)
-  imposeMissing(data,nforms=3,itemGroups=list(c(1,2,3,4,5),c(6,7,8,9,10),c(11,12,13,14,15),c(16,17,18,19)))
-  imposeMissing(datac,covs=c(20,21),nforms=3)
+  imposeMissing(data,nforms=3,itemGroups=list(c(1,2,3,4,5),c(6,7,8,9,10),c(11,12,13,14,15),c(16,17,18,19,20)))
+  imposeMissing(datac,cov=21,nforms=3)
   imposeMissing(data,twoMethod=c(19,.8))
-  imposeMissing(datac,covs=c(20,21),pmMCAR=.1,pmMAR=.1,nforms=3)
+  imposeMissing(datac,cov=21,pmMCAR=.1,pmMAR=.1,nforms=3)
 
 }
 
-imposeMissing <- function(data.mat,covs=0,pmMCAR=0,pmMAR=0,nforms=0,
-                          itemGroups=0,twoMethod=0,timePoints=1){
+imposeMissing <- function(data.mat,cov=0,pmMCAR=0,pmMAR=0,nforms=0,
+                          itemGroups=0,twoMethod=0,timePoints=1,ignoreCols=0){
  
  #Need the inputs to be numeric for the missing object. Turn to Nulls for this function
- if (length(covs) == 1 && covs==0) {covs <- NULL }
+ if (length(cov) == 1 && cov==0) {cov <- NULL }
  if (pmMCAR==0) {pmMCAR <- NULL }
  if (pmMAR==0) {pmMAR <- NULL } 
  if (nforms==0) {nforms <- NULL }
  if (is.vector(itemGroups) && length(itemGroups) == 1 && itemGroups==0) { itemGroups <- NULL }
  if (length(twoMethod) == 1 && twoMethod==0) {twoMethod <- NULL }
+ if (ignoreCols==0) {ignoreCols <- NULL}
  
  if(!is.null(nforms) | !is.null(twoMethod)) { 
  # TRUE values are values to delete
- log.matpl <- planned.missing(dim(data.mat),covs,nforms=nforms,twoMethod=twoMethod,
-                              itemGroups=itemGroups,timePoints=timePoints)
+ log.matpl <- planned.missing(dim(data.mat),cov,nforms=nforms,twoMethod=twoMethod,
+                              itemGroups=itemGroups,timePoints=timePoints,ignoreCols=ignoreCols)
  data.mat[log.matpl] <- NA
 }
  # Impose MAR and MCAR
  if(!is.null(pmMCAR)) {
- log.mat1 <- makeMCAR(dim(data.mat),pmMCAR,covs)
+ log.mat1 <- makeMCAR(dim(data.mat),pmMCAR,cov,ignoreCols)
  data.mat[log.mat1] <- NA
 }
 
 if(!is.null(pmMAR)) {
- log.mat2 <- makeMAR(data.mat,pmMAR,covs)
+ log.mat2 <- makeMAR(data.mat,pmMAR,cov,ignoreCols)
  data.mat[log.mat2] <- NA
 }
 
@@ -60,10 +62,10 @@ if(!is.null(pmMAR)) {
 
 # Function to make MAR missing based on 1 covariate using the threshold method.
 # ToDo: Extend to multiple covariates
-makeMAR <- function(data,pm=NULL,cov=NULL,ignoreColumns=NULL,threshold=NULL) {
+makeMAR <- function(data,pm=NULL,cov=NULL,ignoreCols=NULL,threshold=NULL) {
 
   colList <- 1:dim(data)[2]
-  misCols <- colList[-c(cov,ignoreColumns)]
+  misCols <- colList[-c(cov,ignoreCols)]
   
   # Calculate the probability of missing above the threshold,starting with the mean of the covariate.
   # If this probability is greater than or equal to 1, lower the threshold by choosing thresholds
@@ -92,7 +94,7 @@ makeMAR <- function(data,pm=NULL,cov=NULL,ignoreColumns=NULL,threshold=NULL) {
 # Function to make some MCAR missin'
 # Input: Data matrix dimensions, desired percent missing, columns of covariates to not have missingness on
 # Output: Logical matrix of values to be deleted
-makeMCAR <- function(dims,pm=NULL,covs=NULL)
+makeMCAR <- function(dims,pm=NULL,cov=NULL,ignoreCols=NULL)
   {
     R <- matrix(FALSE,dims[1],dims[2])
 
@@ -102,8 +104,8 @@ makeMCAR <- function(dims,pm=NULL,covs=NULL)
       R <- matrix(as.logical(rbinom(n=dims[2]*dims[1],size=1,prob=pm)),dims[1],dims[2],byrow=TRUE)
     }
 
-    if (!is.null(covs) ) {
-       R[,covs] <- FALSE
+    if (!is.null(c(cov,ignoreCols)) ) {
+       R[,c(cov,ignoreCols)] <- FALSE
     }
 
     return(R)
@@ -121,12 +123,12 @@ makeMCAR <- function(dims,pm=NULL,covs=NULL)
 # TODO:
 # Warnings for illegal groupings
 # Check to see if item groupings are valid?
-planned.missing <- function(dims=c(0,0),nforms=NULL,itemGroups=NULL,twoMethod=NULL, covs=NULL, timePoints=1) {
+planned.missing <- function(dims=c(0,0),nforms=NULL,itemGroups=NULL,twoMethod=NULL, cov=NULL, timePoints=1,ignoreCols=NULL) {
    
   nitems <- dims[2]
   nobs <- dims[1]
-  excl <- covs
-  numExcl <- length(covs)
+  excl <- c(cov,ignoreCols)
+  numExcl <- length(c(cov,ignoreCols))
 
   itemList <- 1:dims[2]
   
@@ -196,8 +198,8 @@ planned.missing <- function(dims=c(0,0),nforms=NULL,itemGroups=NULL,twoMethod=NU
     # 5) Sort the column names
     # 6) Convert to back to matrix
     
-    if(length(covs) != 0) {
-      covMat <- matrix(rep(FALSE,nobs*length(covs)),ncol=length(covs))
+    if(length(cov) != 0) {
+      covMat <- matrix(rep(FALSE,nobs*length(cov)),ncol=length(cov))
       log.df <- as.data.frame(cbind(log.mat,covMat))
       colnames(log.df) <- (c(itemList,excl))
 
