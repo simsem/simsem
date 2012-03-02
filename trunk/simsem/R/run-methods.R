@@ -515,10 +515,24 @@ setMethod("run", signature="SimModel", definition=function(object, data, simMiss
 	}
 	#is.equal(DataOut@param, Output@param) yes --> compute bias
 	if(!is.null(DataOut)) {
-		check <- all.equal(DataOut@param, Output@param)
+		param <- DataOut@param
+		check <- all.equal(param, Output@param)
+		usedX <- NULL
+		usedY <- NULL
+		if(!(length(check) == 1 && check == TRUE) & !is.null.object(object@auxiliary)) {
+			usedY <- which(!(colnames(data) %in% object@auxiliary))
+			nx <- 0
+			if(object@modelType == "SEM.exo") nx <- nrow(object@param@LX)
+			if(object@modelType == "Path.exo") nx <- nrow(object@param@PH)
+			if(nx > 0) usedX <- intersect(1:nx, usedY)
+			usedY <- setdiff(usedY, usedX)
+			param <- extract(param, y=usedY, x=usedX)
+		}
+		check <- all.equal(param, Output@param)
 		if(length(check) == 1 && check == TRUE) {
-			#paramOut <- DataOut@paramOut
-			Output@paramValue <- DataOut@paramOut
+			paramOut <- DataOut@paramOut
+			if(!is.null.object(object@auxiliary)) paramOut <- extract(paramOut, y=usedY, x=usedX)
+			Output@paramValue <- paramOut
 		}
 	}
 	#Add labels in the SimModelOut --> go to SimModelOut and relabels it

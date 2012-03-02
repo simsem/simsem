@@ -63,10 +63,11 @@ TD <- symMatrix(error.cor)
 
 indicator.mean <- rep(NA, 6)
 MX <- simVector(indicator.mean, 0)
-indicator.var <- rep(NA, 6)
+indicator.var <- c(rep(NA, 5), 0)
 VX <- simVector(indicator.var, 1)
+VTE <- simVector(c(rep(NA, 5), 0), 0.80)
 
-CFA.Model <- simSetCFA(LX = LX, PH = PH, TD = TD) #, VX = VX, MX=MX)
+CFA.Model <- simSetCFA(LX = LX, PH = PH, TD = TD, VX = VX, VTD=VTE)
 
 SimData <- simData(200, CFA.Model)
 
@@ -689,7 +690,59 @@ summaryParam(simOut)
 
 ################################### Example 10 ######################################
 
+library(simsem)
 
+u57 <- simUnif(0.5, 0.7)
+u4 <- simUnif(-0.4, 0.4)
+u35 <- simUnif(0.3, 0.5)
+
+loading <- matrix(0, 7, 2)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+LX <- simMatrix(loading, "u57")
+
+latent.cor <- matrix(NA, 2, 2)
+diag(latent.cor) <- 1
+PH <- symMatrix(latent.cor, "u35")
+
+error.cor <- diag(7)
+error.cor[1:6, 7] <- NA
+error.cor[7, 1:6] <- NA
+TD <- symMatrix(error.cor, "u4")
+
+VX <- simVector(rep(NA, 7), 1)
+
+CFA.Model.Aux <- simSetCFA(LX = LX, PH = PH, TD = TD, VX = VX) 
+
+SimData <- simData(200, CFA.Model.Aux)
+
+CFA.Model <- extract(CFA.Model.Aux, y=1:6)
+
+mis.loading <- matrix(NA, 12, 4)
+mis.loading[is.na(loading)] <- 0
+mis.LY <- simMatrix(mis.loading, "u3")
+mis.error.cor <- matrix(NA, 12, 12)
+diag(mis.error.cor) <- 0
+mis.TE <- symMatrix(mis.error.cor, "n1")
+
+
+
+data <- run(SimData, dataOnly=F)
+
+SimMissing <- simMissing(pmMCAR=0.1, covs=7)
+
+data <- run(SimMissing, data)
+
+SimModel <- simModel(CFA.Model, auxiliary=7)
+
+out <- run(SimModel, data, simMissing=SimMissing)
+
+Output <- simResult(200, SimData, SimModel, SimMissing)
+getCutoff(Output, 0.05)
+plotCutoff(Output, 0.05)
+summaryParam(Output)
+
+####################################### Example 11 ############################
 
 
 
@@ -1165,11 +1218,20 @@ dordinal <- function(x, prob, start=1) {
 	}
 }
 
+######################### Modeling simParam Only ###############
 
+# What about only one example of auxiliary variable first!
+# e.g., simParamCFA(LY=LY, PS=PS, ...)
+# SimSet will add the feature of group by imposing it as an argument inside the SimSet. For example, SimSetCFA(group = 2, LY= , LY2 = , ...
 
+# Double definition VTE, VY
+# New matrix CPS, CTE, CTD, CPH
+# Change to RPS, PTE, RTD, RPH
+# Make LKY 
 
+# 
 
-
-
-
+# use it in making simVector, simMatrix
+myfun <- function(x) deparse(substitute(x)) 
+exists(x) to check whether the funciton exist
 
