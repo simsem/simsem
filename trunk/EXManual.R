@@ -689,6 +689,8 @@ library(simsem)
 u57 <- simUnif(0.5, 0.7)
 u4 <- simUnif(-0.4, 0.4)
 u35 <- simUnif(0.3, 0.5)
+u2 <- simUnif(-0.2, 0.2)
+n01 <- simNorm(0, 1)
 
 loading <- matrix(0, 7, 2)
 loading[1:3, 1] <- NA
@@ -708,30 +710,37 @@ VX <- simVector(rep(NA, 7), 1)
 
 CFA.Model.Aux <- simSetCFA(LX = LX, RPH = RPH, RTD = RTD, VX = VX) 
 
-SimData <- simData(200, CFA.Model.Aux)
+mis.loading <- matrix(0, 7, 2)
+mis.loading[1:3, 2] <- NA
+mis.loading[4:6, 1] <- NA
+mis.LY <- simMatrix(mis.loading, "u2")
+
+mis.error.cor <- matrix(NA, 7, 7)
+diag(mis.error.cor) <- 1
+mis.error.cor[1:6, 7] <- 0
+mis.error.cor[7, 1:6] <- 0
+mis.RTD <- symMatrix(error.cor, "n01")
+
+CFA.Mis.Model <- simMisspecCFA(LY = mis.LY, RTD = mis.RTD)
+
+SimData <- simData(200, CFA.Model.Aux, misspec = CFA.Mis.Model)
 
 CFA.Model <- extract(CFA.Model.Aux, y=1:6)
 
-mis.loading <- matrix(NA, 12, 4)
-mis.loading[is.na(loading)] <- 0
-mis.LY <- simMatrix(mis.loading, "u3")
-mis.error.cor <- matrix(NA, 12, 12)
-diag(mis.error.cor) <- 0
-mis.RTE <- symMatrix(mis.error.cor, "n1")
 
-
+################## Fix the impose missing why it does not work
 
 data <- run(SimData, dataOnly=F)
 
-SimMissing <- simMissing(pmMCAR=0.1, covs=7)
+SimMissing <- simMissing(pmMAR=0.1, cov=7, numImps=5)
 
 data <- run(SimMissing, data)
 
-SimModel <- simModel(CFA.Model, auxiliary=7)
+SimModel <- simModel(CFA.Model)
 
 out <- run(SimModel, data, simMissing=SimMissing)
 
-Output <- simResult(200, SimData, SimModel, SimMissing)
+Output <- simResult(100, SimData, SimModel, SimMissing)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)

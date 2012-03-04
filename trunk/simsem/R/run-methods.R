@@ -483,6 +483,9 @@ setMethod("run", signature="SimModel", definition=function(object, data, simMiss
 		data <- DataOut@data
 	}
 	if(is.null(colnames(data))) colnames(data) <- paste("y", 1:ncol(data))
+	if(is.null.object(object@auxiliary)) {
+		if(!(length(simMissing@cov) == 1 & simMissing@cov == 0)) object@auxiliary <- simMissing@cov
+	}
 	if(is.null.object(object@indicatorLab)) {
 		if(is.null.object(object@auxiliary)) {
 			object@indicatorLab <- colnames(data)
@@ -495,7 +498,8 @@ setMethod("run", signature="SimModel", definition=function(object, data, simMiss
 		}
 	}
 	if(is.numeric(object@indicatorLab)) object@indicatorLab <- colnames(data)[object@indicatorLab]
-	if(is.numeric(object@auxiliary)) object@auxiliary <- colnames(data)[object@auxiliary]	
+	if(is.numeric(object@auxiliary)) object@auxiliary <- colnames(data)[object@auxiliary]
+	if(length(intersect(object@auxiliary, object@indicatorLab)) != 0) stop("There is common variable between the variables in the model and the auxiliary variables.")
 	data <- data[,c(object@indicatorLab, object@auxiliary)]
 	miss <- sum(is.na(data)) > 0	
 	if(is.null(estimator)) estimator <- object@estimator
@@ -548,16 +552,16 @@ setMethod("run", signature="SimModel", definition=function(object, data, simMiss
 setMethod("run", signature="SimMissing", definition=function(object, data) {
 	result <- NULL
 	if(is(data, "SimDataOut")) {
-		data@data <- imposeMissing(data@data, covs=object@covs, pmMCAR=object@pmMCAR,
+		data@data <- imposeMissing(data@data, cov=object@cov, pmMCAR=object@pmMCAR,
             pmMAR=object@pmMAR, nforms=object@nforms, timePoints=object@timePoints,
             itemGroups=object@itemGroups, twoMethod=object@twoMethod)
 	} else if (is.data.frame(data)) {
-		data <- imposeMissing(data, covs=object@covs, pmMCAR=object@pmMCAR,
+		data <- imposeMissing(data, cov=object@cov, pmMCAR=object@pmMCAR,
             pmMAR=object@pmMAR, nforms=object@nforms, timePoints=object@timePoints,
             itemGroups=object@itemGroups, twoMethod=object@twoMethod)	
 	} else if (is.matrix(data)) {
 		data <- as.data.frame(data)
-		data <- imposeMissing(data, covs=object@covs, pmMCAR=object@pmMCAR,
+		data <- imposeMissing(data, cov=object@cov, pmMCAR=object@pmMCAR,
             pmMAR=object@pmMAR, nforms=object@nforms, timePoints=object@timePoints,
             itemGroups=object@itemGroups, twoMethod=object@twoMethod)	
 	}

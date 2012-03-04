@@ -43,7 +43,7 @@ loading[1:6, 1] <- NA
 LX <- simMatrix(loading, 0.7)
 RPH <- symMatrix(diag(1))
 RTD <- symMatrix(diag(6))
-CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RD)
+CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
 SimData <- simData(500, CFA.Model)
 SimModel <- simModel(CFA.Model)
 Data <- run(SimData, dataOnly=FALSE)

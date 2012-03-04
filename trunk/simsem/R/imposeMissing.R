@@ -25,12 +25,14 @@ testImposeMissing <- function() {
   imposeMissing(datac,cov=21,pmMCAR=.1,pmMAR=.1,nforms=3)
 
   #OR - using testthat
-  loc <- "../inst/tests/test_missing.R"
-  test_file(loc)
+  #loc <- "../inst/tests/test_missing.R"
+  #test_file(loc)
+  
+  #Sunthud: Comment these lines out for compiling the program
 }
 
 imposeMissing <- function(data.mat,cov=0,pmMCAR=0,pmMAR=0,nforms=0,
-                          itemGroups=0,twoMethod=0,timePoints=1,ignoreCols=0){
+                          itemGroups=0,twoMethod=0,timePoints=1,ignoreCols=0,threshold=0){
  
  #Need the inputs to be numeric for the missing object. Turn to Nulls for this function
  if (length(cov) == 1 && cov==0) {cov <- NULL }
@@ -39,7 +41,8 @@ imposeMissing <- function(data.mat,cov=0,pmMCAR=0,pmMAR=0,nforms=0,
  if (nforms==0) {nforms <- NULL }
  if (is.vector(itemGroups) && length(itemGroups) == 1 && itemGroups==0) { itemGroups <- NULL }
  if (length(twoMethod) == 1 && twoMethod==0) {twoMethod <- NULL }
- if (ignoreCols==0) {ignoreCols <- NULL}
+ if (length(ignoreCols) == 1 && ignoreCols==0) {ignoreCols <- NULL}
+ if (threshold==0) { threshold <- NULL }
  
  if(!is.null(nforms) | !is.null(twoMethod)) { 
  # TRUE values are values to delete
@@ -54,7 +57,7 @@ imposeMissing <- function(data.mat,cov=0,pmMCAR=0,pmMAR=0,nforms=0,
 }
 
 if(!is.null(pmMAR)) {
- log.mat2 <- makeMAR(data.mat,pmMAR,cov,ignoreCols)
+ log.mat2 <- makeMAR(data.mat,pmMAR,cov,ignoreCols,threshold)
  data.mat[log.mat2] <- NA
 }
 

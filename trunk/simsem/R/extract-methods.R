@@ -96,7 +96,7 @@ setMethod("extract", signature="SimSet", definition=function(object, yOnly=FALSE
 			object@TY <- extract(object@TY, y)
 			object@MY <- extract(object@MY, y)
 			object@BE <- extract(object@BE, e, e)
-			object@PS <- extract(object@PS, e, e)
+			object@RPS <- extract(object@RPS, e, e)
 			object@VPS <- extract(object@VPS, e)
 			object@VE <- extract(object@VE, e)
 			object@AL <- extract(object@AL, e)

@@ -1264,7 +1264,7 @@ setClass("SimModelMIOut", # The class provides model result.
 
 setClass("SimMissing",
     representation(
-        covs="vector",
+        cov="vector",
         pmMCAR="numeric",
         pmMAR="numeric",
         nforms="numeric",
@@ -1272,9 +1272,11 @@ setClass("SimMissing",
         twoMethod="vector",
         impMethod="vector",
         numImps="numeric",
-        timePoints="numeric"),
+        timePoints="numeric",
+		ignoreCols="numeric",
+		threshold="numeric"),
     prototype(
-        covs=0,
+        cov=0,
         pmMCAR=0,
         pmMAR=0,
         nforms=0,
@@ -1282,7 +1284,9 @@ setClass("SimMissing",
         twoMethod=0,
         impMethod="amelia",
         numImps=0,
-        timePoints=1)
+        timePoints=1,
+		ignoreCols=0,
+		threshold=0)
 )
 
 

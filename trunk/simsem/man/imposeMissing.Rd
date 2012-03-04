@@ -8,15 +8,16 @@ Function imposes missing values on a data based on the known missing data types,
 including MCAR, MAR, and planned.
 }
 \usage{
-imposeMissing(data.mat, covs = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, itemGroups = 0, twoMethod = 0, timePoints = 1)
+imposeMissing(data.mat, cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, itemGroups = 0, twoMethod = 0, timePoints = 1, ignoreCols = 0, threshold = 0)
 }
 \arguments{
   \item{data.mat}{
     Data to impose missing upon. Can be either a matrix or a data frame. 
 }
-  \item{covs}{
+  \item{cov}{
     Column indices of any normally distributed covariates used in the data set. Will not be
-    included in any removal procedure, and are required to impose MAR missing. 
+    included in any removal procedure, and are required to impose MAR missing. For other missing pattern, 
+	the covs will be the columns not to be imposed the missing values.
 }
   \item{pmMCAR}{
     Decimal percent of missingness to introduce completely at random on all variables.
@@ -41,6 +42,12 @@ imposeMissing(data.mat, covs = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, itemGroups 
  \item{timePoints}{
     Number of timepoints items were measured over. For longitudinal data, planned missing designs will be implemented within each timepoint. 
 }
+ \item{ignoreCols}{
+    The columns not imposed any missing values for any missing data patterns 
+} 
+ \item{threshold}{
+    The threshold of covariates that divide between the area to impose missing and the area not to impose missing. The default threshold is the mean of the covariate.
+}
 }
 \details{
 Without specifying any any arguments, no missingness will be
@@ -63,22 +70,25 @@ Kyle Lang (University of Kansas; \email{kylelang@ku.edu})
 \examples{
   data <- matrix(rep(rnorm(10,1,1),19),ncol=19)
   datac <- cbind(data,rnorm(10,0,1),rnorm(10,5,5))
-
-  ##################### Got some problems here ###########################
-  
+ 
   # Imposing Missing with the following arguments produces no missing values
   imposeMissing(data)
-  imposeMissing(data,covs=c(1,2))
+  imposeMissing(data,cov=c(1,2))
   imposeMissing(data,pmMCAR=0)
   imposeMissing(data,pmMAR=0)
   imposeMissing(data,nforms=0)
 
   #Some more usage examples
-  imposeMissing(data,covs=c(1,2),pmMCAR=.1)
-  imposeMissing(datac,covs=c(20,21),pmMAR=.2)
+  imposeMissing(data,cov=c(1,2),pmMCAR=.1)
+  
+  #Not ready for multiple covariates in MAR yet
+  #imposeMissing(datac,cov=c(20,21),pmMAR=.2)
+  
   imposeMissing(data,nforms=3)
   imposeMissing(data,nforms=3,itemGroups=list(c(1,2,3,4,5),c(6,7,8,9,10),c(11,12,13,14,15),c(16,17,18,19)))
-  imposeMissing(datac,covs=c(20,21),nforms=3)
+  imposeMissing(datac,cov=c(20,21),nforms=3)
   imposeMissing(data,twoMethod=c(19,.8))
-  imposeMissing(datac,covs=c(20,21),pmMCAR=.1,pmMAR=.1,nforms=3)
+
+  #Not ready for multiple covariates in MAR yet
+  #imposeMissing(datac,cov=c(20,21),pmMCAR=.1,pmMAR=.1,nforms=3)
 }
