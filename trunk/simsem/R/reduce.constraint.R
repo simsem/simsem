@@ -18,9 +18,13 @@ reduce.constraint <- function(SimEqualCon) {
 				temp.result[,3] <- temp.matrix[,2]
 				for(j in 1:length(name)) {
 					if(name[j] == "VTD") name[j] == "TD"
+					if(name[j] == "RTD") name[j] == "TD"
 					if(name[j] == "VTE") name[j] == "TE"
+					if(name[j] == "RTE") name[j] == "TE"
 					if(name[j] == "VPH") name[j] == "PH"
+					if(name[j] == "RPH") name[j] == "PH"
 					if(name[j] == "VPS") name[j] == "PS"
+					if(name[j] == "RPS") name[j] == "PS"
 				}
 			}
 		} else {

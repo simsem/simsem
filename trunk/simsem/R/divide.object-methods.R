@@ -49,31 +49,31 @@ setMethod("divide.object", signature(object="MatrixSet", constant="numeric"), de
 		#browser()
 		LY <- divide.object(object@LY, constant)
 		VTE <- divide.object(object@VTE, constant)
-		TE <- divide.object(object@TE, constant, correlation = TRUE)
+		RTE <- divide.object(object@RTE, constant, correlation = TRUE)
 		VY <- divide.object(object@VY, constant)
 		TY <- divide.object(object@TY, constant)
 		MY <- divide.object(object@MY, constant)
 		BE <- divide.object(object@BE, constant)
 		VPS <- divide.object(object@VPS, constant)
-		PS <- divide.object(object@PS, constant, correlation = TRUE)
+		RPS <- divide.object(object@RPS, constant, correlation = TRUE)
 		VE <- divide.object(object@VE, constant) 
 		AL <- divide.object(object@AL, constant)
 		ME <- divide.object(object@ME, constant) 
 		LX <- divide.object(object@LX, constant) 
 		VTD <- divide.object(object@VTD, constant)
-		TD <- divide.object(object@TD, constant, correlation = TRUE)
+		RTD <- divide.object(object@RTD, constant, correlation = TRUE)
 		VX <- divide.object(object@VX, constant)
 		TX <- divide.object(object@TX, constant)
 		MX <- divide.object(object@MX, constant)
 		GA <- divide.object(object@GA, constant)
 		VPH <- divide.object(object@VPH, constant)
-		PH <- divide.object(object@PH, constant, correlation = TRUE)
+		RPH <- divide.object(object@RPH, constant, correlation = TRUE)
 		KA <- divide.object(object@KA, constant)
-		TH <- divide.object(object@TH, constant)
-		Output <- new("MatrixSet", modelType=object@modelType, LY=LY, VTE=VTE, TE=TE, VY=VY, TY=TY, MY=MY, 
-			BE=BE, VPS=VPS, PS=PS, VE=VE, AL=AL, ME=ME,
-			LX=LX, VTD=VTD, TD=TD, VX=VX, TX=TX, MX=MX,
-			GA=GA, VPH=VPH, PH=PH, KA=KA, TH=TH)
+		RTH <- divide.object(object@RTH, constant)
+		Output <- new("MatrixSet", modelType=object@modelType, LY=LY, VTE=VTE, RTE=RTE, VY=VY, TY=TY, MY=MY, 
+			BE=BE, VPS=VPS, RPS=RPS, VE=VE, AL=AL, ME=ME,
+			LX=LX, VTD=VTD, RTD=RTD, VX=VX, TX=TX, MX=MX,
+			GA=GA, VPH=VPH, RPH=RPH, KA=KA, RTH=RTH)
 		return(Output)
 	}
 )

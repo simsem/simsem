@@ -4,14 +4,14 @@ simMisspecSEM <- function(..., exo = FALSE) {
 	Names <- names(List)
 	keywords <- NULL
 	if(exo == FALSE) {
-		keywords <- list(W$LY, W$TE, W$VTE, W$VY, W$TY, W$MY, W$BE, W$PS, W$VPS, W$VE, W$AL, W$ME)
+		keywords <- list(W$LY, W$RTE, W$VTE, W$VY, W$TY, W$MY, W$BE, W$RPS, W$VPS, W$VE, W$AL, W$ME)
 	} else {
-		keywords <- list(W$LY, W$TE, W$VTE, W$VY, W$TY, W$MY, W$BE, W$PS, W$VPS, W$VE, W$AL, W$ME, W$LX, W$TD, W$VTD, W$VX, W$TX, W$MX, W$GA, W$PH, W$VPH, W$KA, W$TH)
+		keywords <- list(W$LY, W$RTE, W$VTE, W$VY, W$TY, W$MY, W$BE, W$RPS, W$VPS, W$VE, W$AL, W$ME, W$LX, W$RTD, W$VTD, W$VX, W$TX, W$MX, W$GA, W$RPH, W$VPH, W$KA, W$RTH)
 	}
 	position <- match.keyword(Names, keywords)
 	if(length(position) != length(unique(position))) stop("Some objects were identified more than once.")
 	ifelse(contain(1, position), LY <- List[position == 1], LY <- list(new("NullSimMatrix")))
-	ifelse(contain(2, position), TE <- List[position == 2], TE <- list(new("NullSymMatrix")))
+	ifelse(contain(2, position), RTE <- List[position == 2], RTE <- list(new("NullSymMatrix")))
 	ifelse(contain(3, position), VTE <- List[position == 3], VTE <- list(new("NullSimVector")))
 	ifelse(contain(4, position), VY <- List[position == 4], VY <- list(new("NullSimVector")))
 	if(!is.null.object(VTE[[1]]) & !is.null.object(VY[[1]])) stop("Please assign either VTE or VY, not both")
@@ -19,7 +19,7 @@ simMisspecSEM <- function(..., exo = FALSE) {
 	ifelse(contain(5, position), TY <- List[position == 5], TY <- list(new("NullSimVector")))
 	if(!is.null.object(MY[[1]]) & !is.null.object(TY[[1]])) stop("Please assign either MY or TY, not both")
 	ifelse(contain(7, position), BE <- List[position == 7], BE <- list(new("NullSimMatrix")))
-	ifelse(contain(8, position), PS <- List[position == 8], PS <- list(new("NullSymMatrix")))
+	ifelse(contain(8, position), RPS <- List[position == 8], RPS <- list(new("NullSymMatrix")))
 	ifelse(contain(9, position), VPS <- List[position == 9], VPS <- list(new("NullSimVector")))
 	ifelse(contain(10, position), VE <- List[position == 10], VE <- list(new("NullSimVector")))
 	if(!is.null.object(VPS[[1]]) & !is.null.object(VE[[1]])) stop("Please assign either VPS or VE, not both")
@@ -29,7 +29,7 @@ simMisspecSEM <- function(..., exo = FALSE) {
 	Output <- NULL
 	if(exo) {
 		ifelse(contain(13, position), LX <- List[position == 13], LX <- list(new("NullSimMatrix")))
-		ifelse(contain(14, position), TD <- List[position == 14], TD <- list(new("NullSymMatrix")))
+		ifelse(contain(14, position), RTD <- List[position == 14], RTD <- list(new("NullSymMatrix")))
 		ifelse(contain(15, position), VTD <- List[position == 15], VTD <- list(new("NullSimVector")))
 		ifelse(contain(16, position), VX <- List[position == 16], VX <- list(new("NullSimVector")))
 		if(!is.null.object(VTD[[1]]) & !is.null.object(VX[[1]])) stop("Please assign either VTD or VX, not both")
@@ -37,14 +37,14 @@ simMisspecSEM <- function(..., exo = FALSE) {
 		ifelse(contain(17, position), TX <- List[position == 17], TX <- list(new("NullSimVector")))
 		if(!is.null.object(MX[[1]]) & !is.null.object(TX[[1]])) stop("Please assign either MX or TX, not both")
 		ifelse(contain(19, position), GA <- List[position == 19], GA <- list(new("NullSimMatrix")))
-		ifelse(contain(20, position), PH <- List[position == 20], PH <- list(new("NullSymMatrix")))
+		ifelse(contain(20, position), RPH <- List[position == 20], RPH <- list(new("NullSymMatrix")))
 		ifelse(contain(21, position), VPH <- List[position == 21], VPH <- list(new("NullSimVector")))
 		ifelse(contain(22, position), KA <- List[position == 22], KA <- list(new("NullSimVector")))
-		ifelse(contain(23, position), TH <- List[position == 23], TH <- list(new("NullSimMatrix")))
-		Output <- new("SimMisspec", LY=LY[[1]], TE=TE[[1]], VTE=VTE[[1]], VY=VY[[1]], MY=MY[[1]], TY=TY[[1]], BE=BE[[1]], PS=PS[[1]], VPS=VPS[[1]], VE=VE[[1]], AL=AL[[1]], ME=ME[[1]],
-					LX=LX[[1]], TD=TD[[1]], VTD=VTD[[1]], VX=VX[[1]], MX=MX[[1]], TX=TX[[1]], GA=GA[[1]], PH=PH[[1]], VPH=VPH[[1]], KA=KA[[1]], TH=TH[[1]], modelType="SEM.exo")	
+		ifelse(contain(23, position), RTH <- List[position == 23], RTH <- list(new("NullSimMatrix")))
+		Output <- new("SimMisspec", LY=LY[[1]], RTE=RTE[[1]], VTE=VTE[[1]], VY=VY[[1]], MY=MY[[1]], TY=TY[[1]], BE=BE[[1]], RPS=RPS[[1]], VPS=VPS[[1]], VE=VE[[1]], AL=AL[[1]], ME=ME[[1]],
+					LX=LX[[1]], RTD=RTD[[1]], VTD=VTD[[1]], VX=VX[[1]], MX=MX[[1]], TX=TX[[1]], GA=GA[[1]], RPH=RPH[[1]], VPH=VPH[[1]], KA=KA[[1]], RTH=RTH[[1]], modelType="SEM.exo")	
 	} else {
-		Output <- new("SimMisspec", LY=LY[[1]], TE=TE[[1]], VTE=VTE[[1]], VY=VY[[1]], MY=MY[[1]], TY=TY[[1]], BE=BE[[1]], PS=PS[[1]], VPS=VPS[[1]], VE=VE[[1]], AL=AL[[1]], ME=ME[[1]], modelType="SEM")	
+		Output <- new("SimMisspec", LY=LY[[1]], RTE=RTE[[1]], VTE=VTE[[1]], VY=VY[[1]], MY=MY[[1]], TY=TY[[1]], BE=BE[[1]], RPS=RPS[[1]], VPS=VPS[[1]], VE=VE[[1]], AL=AL[[1]], ME=ME[[1]], modelType="SEM")	
 	}
 	return(Output)
 }

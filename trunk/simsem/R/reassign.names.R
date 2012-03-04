@@ -5,13 +5,13 @@ reassign.names <- function(modelType, Name) {
 	if(modelType == "CFA") {
 		keywords <- list(W$loading, W$error, W$latent.cor, W$intercept, W$factor.mean, c(W$VTE, W$VTD), c(W$VY, W$VX), c(W$VPS, W$VPH, W$VE), c(W$MY, W$MX))
 	} else if(modelType == "Path") {
-		keywords <- list(W$BE, W$PS, W$AL, W$VPS, W$VE, W$ME)
+		keywords <- list(W$BE, W$RPS, W$AL, W$VPS, W$VE, W$ME)
 	} else if(modelType == "Path.exo") {
-		keywords <- list(W$BE, W$PS, W$VPS, W$VE, W$AL, W$ME, W$GA, W$PH, W$VPH, W$KA)
+		keywords <- list(W$BE, W$RPS, W$VPS, W$VE, W$AL, W$ME, W$GA, W$RPH, W$VPH, W$KA)
 	} else if(modelType == "SEM") {
-		keywords <- list(W$LY, W$TE, W$VTE, W$VY, W$TY, W$MY, W$BE, W$PS, W$VPS, W$VE, W$AL, W$ME)
+		keywords <- list(W$LY, W$RTE, W$VTE, W$VY, W$TY, W$MY, W$BE, W$RPS, W$VPS, W$VE, W$AL, W$ME)
 	} else if(modelType == "SEM.exo") {
-		keywords <- list(W$LY, W$TE, W$VTE, W$VY, W$TY, W$MY, W$BE, W$PS, W$VPS, W$VE, W$AL, W$ME, W$LX, W$TD, W$VTD, W$VX, W$TX, W$MX, W$GA, W$PH, W$VPH, W$KA, W$TH)
+		keywords <- list(W$LY, W$RTE, W$VTE, W$VY, W$TY, W$MY, W$BE, W$RPS, W$VPS, W$VE, W$AL, W$ME, W$LX, W$RTD, W$VTD, W$VX, W$TX, W$MX, W$GA, W$RPH, W$VPH, W$KA, W$RTH)
 	} else {
 		stop("Cannot recognize the modelType name.")
 	}

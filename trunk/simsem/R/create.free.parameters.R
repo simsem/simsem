@@ -19,7 +19,7 @@ create.free.parameters <- function(object) {
 	if(is.null.object(object@VPS) & !is.null.object(object@VE)) object@VPS <- object@VE
 	LY <- object@LY@free
 	is.measurement.Y <- !(is.null.object(LY))
-	TE <- object@TE@free
+	TE <- object@RTE@free
 	if(is.measurement.Y) {
 		VTE <- object@VTE@free
 		ifelse(is.null.object(VTE), diag(TE) <- NA, diag(TE) <- VTE)
@@ -27,7 +27,7 @@ create.free.parameters <- function(object) {
 	TY <- object@TY@free
 	if(is.measurement.Y & is.default(object@TY)) TY <- rep(NA, nrow(LY))
 	BE <- object@BE@free
-	PS <- object@PS@free 
+	PS <- object@RPS@free 
 	VPS <- object@VPS@free
 	ifelse(is.null.object(VPS), ifelse(is.measurement.Y, diag(PS) <- 1, diag(PS) <- NA), diag(PS) <- VPS)
 	AL <- object@AL@free
@@ -36,12 +36,12 @@ create.free.parameters <- function(object) {
 	}
 	#-- Exogeneous Variable --
 	LX <- object@LX@free
-	TD <- object@TD@free 
+	TD <- object@RTD@free 
 	GA <- object@GA@free
-	PH <- object@PH@free	
+	PH <- object@RPH@free	
 	KA <- object@KA@free
 	TX <- object@TX@free
-	TH <- object@TH@free
+	TH <- object@RTH@free
 	if(!is.null.object(PH)) {
 		VPH <- object@VPH@free
 		is.measurement.X <- !is.null.object(LX)

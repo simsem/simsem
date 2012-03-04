@@ -61,7 +61,7 @@ createData <- function(paramSet, n, object, dataOnly) {
 	}
 	varnames <- NULL
 	if(modelType == "Path.exo") {
-		nx <- ncol(run(object@param@PH))
+		nx <- ncol(run(object@param@GA))
 		for(i in 1:nx) {
 			temp <- paste("x", i, sep="")
 			varnames <- c(varnames, temp)

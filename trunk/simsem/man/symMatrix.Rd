@@ -29,12 +29,12 @@ symMatrix(free, param = NULL)
 \examples{
 latent.cor <- matrix(NA, 3, 3)
 diag(latent.cor) <- 1
-PH <- symMatrix(latent.cor, 0.5)
+RPH <- symMatrix(latent.cor, 0.5)
 
 u46 <- simUnif(0.4, 0.6)
 factor.cor <- matrix(NA, 4, 4)
 diag(factor.cor) <- 1
 factor.cor.start <- matrix("u46", 4, 4)
 factor.cor.start[1, 2] <- factor.cor.start[2, 1] <- "0.5"
-PS <- symMatrix(factor.cor, factor.cor.start)
+RPS <- symMatrix(factor.cor, factor.cor.start)
 }

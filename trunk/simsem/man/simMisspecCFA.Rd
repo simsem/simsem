@@ -34,6 +34,6 @@ simMisspecCFA(...)
 n01 <- simNorm(0, 0.1)
 error.cor.Mis <- matrix(NA, 6, 6)
 diag(error.cor.Mis) <- 1
-TD.Mis <- symMatrix(error.cor.Mis, "n01")
-CFA.Model.Mis <- simMisspecCFA(TD=TD.Mis)
+RTD.Mis <- symMatrix(error.cor.Mis, "n01")
+CFA.Model.Mis <- simMisspecCFA(RTD=RTD.Mis)
 }

@@ -36,11 +36,11 @@ loadingValues[4:6, 2] <- 0.7
 LX <- simMatrix(loading, loadingValues)
 latent.cor <- matrix(NA, 2, 2)
 diag(latent.cor) <- 1
-PH <- symMatrix(latent.cor, 0.5)
+RPH <- symMatrix(latent.cor, 0.5)
 error.cor <- matrix(0, 6, 6)
 diag(error.cor) <- 1
-TD <- symMatrix(error.cor)
-CFA.Model <- simSetCFA(LY = LX, PS = PH, TE = TD)
+RTD <- symMatrix(error.cor)
+CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
 param <- run(CFA.Model)
 createImpliedMACS(param)
 }

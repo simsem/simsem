@@ -17,9 +17,9 @@ Object can be created by \code{\link{simSetCFA}}, \code{\link{simSetPath}}, or \
   \describe{
     \item{\code{modelType}:}{Model type (CFA, Path, or SEM) }
     \item{\code{LY}:}{Factor loading matrix between endogenous factors and Y indicators }
-    \item{\code{TE}:}{Correlation matrix between Y measurement error }
+    \item{\code{RTE}:}{Correlation matrix between Y measurement error }
     \item{\code{VTE}:}{Variance of Y measurement error }
-    \item{\code{PS}:}{Residual correlation of endogenous factors  }
+    \item{\code{RPS}:}{Residual correlation of endogenous factors  }
     \item{\code{VPS}:}{Residual variances of endogenous factors }
     \item{\code{BE}:}{Regression effect among endogenous factors }
     \item{\code{TY}:}{Measurement intercepts of Y indicators }
@@ -29,16 +29,16 @@ Object can be created by \code{\link{simSetCFA}}, \code{\link{simSetPath}}, or \
     \item{\code{VE}:}{Total variance of endogenous factors }
     \item{\code{VY}:}{Total variance of Y indicators }
     \item{\code{LX}:}{Factor loading matrix between exogenous factors and X indicators }
-    \item{\code{TD}:}{Correlation matrix between X measurement error }
+    \item{\code{RTD}:}{Correlation matrix between X measurement error }
     \item{\code{VTD}:}{Variance of X measurement error }
-    \item{\code{PH}:}{Correlation among exogenous factors }
+    \item{\code{RPH}:}{Correlation among exogenous factors }
     \item{\code{GA}:}{Regreeion effect from exogenous factors to endogenous factors }
     \item{\code{TX}:}{Measurement intercepts of X indicators }
     \item{\code{KA}:}{Factor Mean of exogenous factors }
     \item{\code{MX}:}{Total Mean of X indicators }
     \item{\code{VPH}:}{Variance of exogenous factors }
     \item{\code{VX}:}{Total variance of X indicators }
-    \item{\code{TH}:}{Measurement error correlation between X indicators and Y indicators }
+    \item{\code{RTH}:}{Measurement error correlation between X indicators and Y indicators }
   }
 }
 \section{Methods}{
@@ -71,14 +71,14 @@ summary(LX)
 
 latent.cor <- matrix(NA, 2, 2)
 diag(latent.cor) <- 1
-PH <- symMatrix(latent.cor, 0.5)
+RPH <- symMatrix(latent.cor, 0.5)
 
 # Error Correlation Object
 error.cor <- matrix(0, 6, 6)
 diag(error.cor) <- 1
-TD <- symMatrix(error.cor)
+RTD <- symMatrix(error.cor)
 
-CFA.Model <- simSetCFA(LX = LX, PH = PH, TD = TD)
+CFA.Model <- simSetCFA(LX = LX, RPH = RPH, RTD = RTD)
 summary(CFA.Model)
 #run(CFA.Model)
 

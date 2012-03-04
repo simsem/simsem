@@ -52,9 +52,9 @@ showClass("SimResult")
 loading <- matrix(0, 6, 1)
 loading[1:6, 1] <- NA
 LX <- simMatrix(loading, 0.7)
-PH <- symMatrix(diag(1))
-TD <- symMatrix(diag(6))
-CFA.Model <- simSetCFA(LY = LX, PS = PH, TE = TD)
+RPH <- symMatrix(diag(1))
+RTD <- symMatrix(diag(6))
+CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
 SimData <- simData(500, CFA.Model)
 SimModel <- simModel(CFA.Model)
 # We make the examples running only 50 replications to save time.

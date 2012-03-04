@@ -95,20 +95,7 @@ setMethod("constrain.matrices", signature(object="VirtualRSet", SimEqualCon="Sim
 
 setMethod("constrain.matrices", signature(object="list", SimEqualCon="SimEqualCon"), definition=function(object, SimEqualCon, modelType) {
 	label.selection <- NULL
-	label.selection <- c("LY", "VTE", "TE", "VY", "TY", "MY", "BE", "VPS", "PS", "VE", "AL", "ME", "LX", "VTD", "TD", "VX", "TX", "MX", "GA", "VPH", "PH", "KA", "TH")
-	# if(modelType == "CFA") {
-		# label.selection <- c("LY", "TE", "TY", "PS", "AL", "VTE", "VY", "VPS", "MY")
-	# } else if(modelType == "Path") {
-		# label.selection <- c("BE", "PS", "AL", "VPS", "VE", "ME")	
-	# } else if(modelType == "Path.exo") {
-		# label.selection <- c("BE", "PS", "AL", "GA", "PH", "KA", "VPS", "VE", "ME", "VPH")	
-	# } else if(modelType == "SEM") {
-		# label.selection <- c("LY", "TE", "TY", "BE", "PS", "AL", "VTE", "VY", "MY", "VPS", "VE", "ME")
-	# } else if(modelType == "SEM.exo") {
-		# label.selection <- c("LY", "VTE", "TE", "VY", "TY", "MY", "BE", "VPS", "PS", "VE", "AL", "ME", "LX", "VTD", "TD", "VX", "TX", "MX", "GA", "VPH", "PH", "KA", "TH")
-	# } else {
-		# stop("Do not have an appropriate tag")
-	# }
+	label.selection <- c("LY", "VTE", "RTE", "VY", "TY", "MY", "BE", "VPS", "RPS", "VE", "AL", "ME", "LX", "VTD", "RTD", "VX", "TX", "MX", "GA", "VPH", "RPH", "KA", "RTH")
 	matrices <- object
 	constraint <- SimEqualCon@con
 	n.constraint <- length(constraint)
@@ -133,8 +120,6 @@ setMethod("constrain.matrices", signature(object="list", SimEqualCon="SimEqualCo
 			}
 		}
 	}
-	#Output <- new("SimRSet", modelType=object@modelType, PS=matrices$PS, BE=matrices$BE, AL=matrices$AL, TE=matrices$TE, LY=matrices$LY, TY=matrices$TY,
-	#	PH=matrices$PH, GA=matrices$GA, KA=matrices$KA, TD=matrices$TD, LX=matrices$LX, TX=matrices$TX, TH=matrices$TH)
 	return(matrices)
 })
 #Arguments: 

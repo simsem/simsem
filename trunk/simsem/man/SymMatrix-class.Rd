@@ -38,12 +38,12 @@ showClass("SymMatrix")
 
 latent.cor <- matrix(NA, 3, 3)
 diag(latent.cor) <- 1
-PH <- symMatrix(latent.cor, 0.5)
+RPH <- symMatrix(latent.cor, 0.5)
 
 u46 <- simUnif(0.4, 0.6)
-PH <- adjust(PH, "u46", c(3,2))
-summary(PH)
-summaryShort(PH)
-run(PH)
+RPH <- adjust(RPH, "u46", c(3,2))
+summary(RPH)
+summaryShort(RPH)
+run(RPH)
 }
 \keyword{classes}

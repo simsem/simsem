@@ -16,15 +16,15 @@ simSetPath <- function(..., exo = FALSE) {
 	Names <- names(List)
 	keywords <- NULL
 	if(exo == FALSE) {
-		keywords <- list(W$BE, W$PS, W$VPS, W$VE, W$AL, W$ME)
+		keywords <- list(W$BE, W$RPS, W$VPS, W$VE, W$AL, W$ME)
 	} else {
-		keywords <- list(W$BE, W$PS, W$VPS, W$VE, W$AL, W$ME, W$GA, W$PH, W$VPH, W$KA)
+		keywords <- list(W$BE, W$RPS, W$VPS, W$VE, W$AL, W$ME, W$GA, W$RPH, W$VPH, W$KA)
 	}
 	position <- match.keyword(Names, keywords)
 	if(length(position) != length(unique(position))) stop("Some objects were identified more than once.")
 	ifelse(contain(1, position), BE <- List[position == 1], stop("No path coefficient object between factor.ETA"))
 	ne <- ncol(run(BE[[1]]))
-	ifelse(contain(2, position), PS <- List[position == 2], stop("No residual correlation object between factor.ETA"))
+	ifelse(contain(2, position), RPS <- List[position == 2], stop("No residual correlation object between factor.ETA"))
 	ifelse(contain(3, position), VPS <- List[position == 3], VPS <- list(new("NullSimVector")))
 	ifelse(contain(4, position), VE <- List[position == 4], ifelse(is.null.object(VPS[[1]]), { VE <- list(freeVector(1, ne)); comment(VE[[1]]) <- "default"}, VE <- list(new("NullSimVector"))))
 	ifelse(contain(6, position), ME <- List[position == 6], ME <- list(new("NullSimVector")))
@@ -33,19 +33,19 @@ simSetPath <- function(..., exo = FALSE) {
 	if(exo) {
 		ifelse(contain(7, position), GA <- List[position == 7], stop("No path coefficient object from Factor.KSI to Factor.ETA"))
 		nk <- ncol(run(GA[[1]]))
-		ifelse(contain(8, position), PH <- List[position == 8], stop("No correlation object between factor.KSI"))
+		ifelse(contain(8, position), RPH <- List[position == 8], stop("No correlation object between factor.KSI"))
 		ifelse(contain(9, position), VPH <- List[position == 9], { VPH <- list(freeVector(1, nk)); comment(VPH[[1]]) <- "default"})
 		ifelse(contain(10, position), KA <- List[position == 10], { KA <- list(freeVector(0, nk)); comment(KA[[1]]) <- "default"})
-		Output <- new("SimSet", BE=BE[[1]], PS=PS[[1]], VPS=VPS[[1]], VE=VE[[1]], AL=AL[[1]], ME=ME[[1]], GA=GA[[1]], PH=PH[[1]], VPH=VPH[[1]], KA=KA[[1]], modelType="Path.exo")	
+		Output <- new("SimSet", BE=BE[[1]], RPS=RPS[[1]], VPS=VPS[[1]], VE=VE[[1]], AL=AL[[1]], ME=ME[[1]], GA=GA[[1]], RPH=RPH[[1]], VPH=VPH[[1]], KA=KA[[1]], modelType="Path.exo")	
 	} else {
-		Output <- new("SimSet", BE=BE[[1]], PS=PS[[1]], VPS=VPS[[1]], VE=VE[[1]], AL=AL[[1]], ME=ME[[1]], modelType="Path")
+		Output <- new("SimSet", BE=BE[[1]], RPS=RPS[[1]], VPS=VPS[[1]], VE=VE[[1]], AL=AL[[1]], ME=ME[[1]], modelType="Path")
 	}
 	return(Output)
 }
 
 # Details:
 #	REQUIRED: BE for regression coefficient matrix (need to be SimMatrix.c object). 
-#	REQUIRED: PS for residual correlation matrix (need to be SymMatrix.c object).
+#	REQUIRED: RPS for residual correlation matrix (need to be SymMatrix.c object).
 #	VPS for residual indicator variance (need to be SimVector.c object).
 #	VE for total indicator variance (need to be SimVector.c object).
 #	NOTE: Either total indicator variance or residual indicator variance is specified. Both cannot be simultaneously specified.
@@ -87,8 +87,8 @@ simSetPath <- function(..., exo = FALSE) {
 #BE <- simMatrix(path.BE, starting.BE)
 #residual.error <- diag(4)
 #residual.error[1,2] <- residual.error[2,1] <- NA
-#PS <- symMatrix(residual.error, "n31")
-#Path.Model <- simSetPath(PS = PS, BE = BE)
+#RPS <- symMatrix(residual.error, "n31")
+#Path.Model <- simSetPath(RPS = RPS, BE = BE)
 #u35 <- simUnif(0.3, 0.5)
 #u57 <- simUnif(0.5, 0.7)
 #u1 <- simUnif(-0.1, 0.1)
@@ -102,5 +102,5 @@ simSetPath <- function(..., exo = FALSE) {
 #exo.cor <- matrix(NA, 2, 2)
 #diag(exo.cor) <- 1
 #PH <- symMatrix(exo.cor, "n31")
-#PS <- symMatrix(diag(2))
-#Path.Exo.Model <- simSetPath(PS = PS, BE = BE, PH = PH, GA = GA, exo=TRUE)
+#RPS <- symMatrix(diag(2))
+#Path.Exo.Model <- simSetPath(RPS = RPS, BE = BE, PH = PH, GA = GA, exo=TRUE)

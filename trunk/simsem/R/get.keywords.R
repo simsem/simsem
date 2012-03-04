@@ -1,7 +1,7 @@
 get.keywords <- function() {
 	LY <- c("LY", "ly", "Ly")		#Factor Loading of Y from E
-	TE <- c("TE", "te", "Te")		#Measurement Error Correlation
-	PS <- c("PS", "ps", "Ps")		#Factor Residual Correlation
+	RTE <- c("RTE", "rte", "Rte")		#Measurement Error Correlation
+	RPS <- c("RPS", "rps", "Rps")		#Factor Residual Correlation
 	BE <- c("BE", "be", "Be")		#Path within endogeneous factors
 	VY <- c("VY", "vy", "Vy")		#Variance of indicators
 	VPS <- c("VPS", "Vps", "vps")	#Variance of factor residual
@@ -13,8 +13,8 @@ get.keywords <- function() {
 	MY <- c("MY", "My", "my")		#mean of indicators
 
 	LX <- c("LX", "Lx", "lx")		#Exo Factor Loading
-	TD <- c("TD", "td", "Td")		#Factor Measurement Error Correlation
-	PH <- c("PH", "ph", "Ph")		#Exo factor correlation
+	RTD <- c("RTD", "rtd", "Rtd")		#Factor Measurement Error Correlation
+	RPH <- c("RPH", "rph", "Rph")		#Exo factor correlation
 	GA <- c("GA", "ga", "Ga")		#Path from Exo to Endo
 	VX <- c("VX", "Vx", "vx")		#Variance of exo indicators
 	VPH <- c("VK", "vk", "Vk", "Vph", "VPH", "vph")		#Variance of exo factors
@@ -22,16 +22,16 @@ get.keywords <- function() {
 	KA <- c("KA", "Ka", "ka", "MK", "mk", "Mk")		#Exo factor mean
 	VTD <- c("VTD", "Vtd", "vtd")	#Variance of exo measurement error
 	MX <- c("MX", "mx", "Mx")		#Exo indicator mean
-	TH <- c("TH", "th", "Th")		#Correlated error of exo (row) and endo (column)
+	RTH <- c("RTH", "Rth", "Rth")		#Correlated error of exo (row) and endo (column)
 
 	loading <- c(LY, LX, "loading", "Loading", "Factor Loading")
-	error <- c(TE, TD, "error", "Error", "Error covariance")
-	latent.cor <- c(PS, PH, "latent.cor", "Latent.cor", "Latent.cov", "latent.cov", "Factor Covariance")
+	error <- c(RTE, RTD, "error", "Error", "Error covariance")
+	latent.cor <- c(RPS, RPH, "latent.cor", "Latent.cor", "Latent.cov", "latent.cov", "Factor Covariance")
 	intercept <- c(TY, TX, "intercept", "Intercept", "Measurement Intercept")
 	factor.mean <- c(ME, KA, AL, "Factor mean", "factor mean", "Factor Mean")
 
-	result <- list(LY=LY, TE=TE, PS=PS, BE=BE, VY=VY, VPS=VPS, VE=VE, TY=TY, ME=ME, VTE=VTE, AL=AL, MY=MY,
-		LX=LX, TD=TD, PH=PH, GA=GA, VX=VX, VPH=VPH, TX=TX, KA=KA, VTD=VTD, MX=MX, TH=TH, 
+	result <- list(LY=LY, RTE=RTE, RPS=RPS, BE=BE, VY=VY, VPS=VPS, VE=VE, TY=TY, ME=ME, VTE=VTE, AL=AL, MY=MY,
+		LX=LX, RTD=RTD, RPH=RPH, GA=GA, VX=VX, VPH=VPH, TX=TX, KA=KA, VTD=VTD, MX=MX, RTH=RTH, 
 		loading=loading, error=error, latent.cor=latent.cor, intercept=intercept, factor.mean=factor.mean)
 	return(result)
 }

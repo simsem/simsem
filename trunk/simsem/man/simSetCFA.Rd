@@ -18,8 +18,8 @@ simSetCFA(...)
 	NOTE: CFA object can be either specified in X or Y side.
 	\itemize{
 		\item REQUIRED: \code{LX} or \code{LY} for factor loading matrix (need to be \code{\linkS4class{SimMatrix}} object). 
-		\item REQUIRED: \code{TD} or \code{TE} for measurement error correlation matrix (need to be \code{\linkS4class{SymMatrix}} object).
-		\item REQUIRED: \code{PH} or \code{PH} for factor correlation matrix (need to be \code{\linkS4class{SymMatrix}} object).
+		\item REQUIRED: \code{RTD} or \code{RTE} for measurement error correlation matrix (need to be \code{\linkS4class{SymMatrix}} object).
+		\item REQUIRED: \code{RPH} or \code{RPS} for factor correlation matrix (need to be \code{\linkS4class{SymMatrix}} object).
 		\item \code{VTD} or \code{VTE} for measurement error variance (need to be \code{\linkS4class{SimVector}} object).
 		\item \code{VX} or \code{VY} for total indicator variance (need to be \code{\linkS4class{SimVector}} object). 
 			NOTE: Either measurement error variance or indicator variance is specified. Both cannot be simultaneously specified.
@@ -67,11 +67,11 @@ summary(LX)
 
 latent.cor <- matrix(NA, 2, 2)
 diag(latent.cor) <- 1
-PH <- symMatrix(latent.cor, 0.5)
+RPH <- symMatrix(latent.cor, 0.5)
 
 error.cor <- matrix(0, 6, 6)
 diag(error.cor) <- 1
-TD <- symMatrix(error.cor)
+RTD <- symMatrix(error.cor)
 
-CFA.Model <- simSetCFA(LX = LX, PH = PH, TD = TD)
+CFA.Model <- simSetCFA(LX = LX, RPH = RPH, RTD = RTD)
 }

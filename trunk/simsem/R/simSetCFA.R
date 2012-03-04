@@ -19,15 +19,15 @@ simSetCFA <- function(...) { #loading, latent.cor, error.cor, latent.var = NULL,
 	ifelse(contain(1, position), LY <- List[position == 1], stop("No loading object in CFA"))
 	ni <- nrow(run(LY[[1]]))
 	nk <- ncol(run(LY[[1]]))
-	ifelse(contain(2, position), TE <- List[position == 2], stop("No error correlation object in CFA"))
-	ifelse(contain(3, position), PS <- List[position == 3], stop("No latent variables correlation object in CFA"))
+	ifelse(contain(2, position), RTE <- List[position == 2], stop("No error correlation object in CFA"))
+	ifelse(contain(3, position), RPS <- List[position == 3], stop("No latent variables correlation object in CFA"))
 	ifelse(contain(4, position), VTE <- List[position == 4], VTE <- list(new("NullSimVector")))
 	ifelse(contain(5, position), VY <- List[position == 5], ifelse(is.null.object(VTE[[1]]), { VY <- list(freeVector(1, ni)); comment(VY[[1]]) <- "default"}, VY <- list(new("NullSimVector"))))
 	ifelse(contain(8, position), MY <- List[position == 8], MY <- list(new("NullSimVector")))
 	ifelse(contain(6, position), TY <- List[position == 6], ifelse(is.null.object(MY[[1]]), { TY <- list(freeVector(0, ni)); comment(TY[[1]]) <- "default"}, TY <- list(new("NullSimVector"))))
 	ifelse(contain(7, position), ME <- List[position == 7], { ME <- list(constantVector(0, nk)); comment(ME[[1]]) <- "default"})
 	ifelse(contain(9, position), VE <- List[position == 9], { VE <- list(constantVector(1, nk)); comment(VE[[1]]) <- "default"})
-	Output <- new("SimSet", LY=LY[[1]], PS=PS[[1]], TE=TE[[1]], VE=VE[[1]], VPS=VE[[1]], VTE=VTE[[1]], VY=VY[[1]], TY=TY[[1]], MY=MY[[1]], ME=ME[[1]], AL=ME[[1]], modelType="CFA")
+	Output <- new("SimSet", LY=LY[[1]], RPS=RPS[[1]], RTE=RTE[[1]], VE=VE[[1]], VPS=VE[[1]], VTE=VTE[[1]], VY=VY[[1]], TY=TY[[1]], MY=MY[[1]], ME=ME[[1]], AL=ME[[1]], modelType="CFA")
 	return(Output)
 }
 
@@ -35,7 +35,7 @@ simSetCFA <- function(...) { #loading, latent.cor, error.cor, latent.var = NULL,
 #	###CFA object can be either specified in X or Y side.
 #	REQUIRED: LX or LY for factor loading matrix (need to be SimMatrix.c object). 
 #	REQUIRED: TD or TE for measurement error correlation matrix (need to be SymMatrix.c object).
-#	REQUIRED: PH or PS for factor correlation matrix (need to be SymMatrix.c object).
+#	REQUIRED: RPH or RPS for factor correlation matrix (need to be SymMatrix.c object).
 #	VTD or VTE for measurement error variance (need to be SimVector.c object).
 #	VX or VY for total indicator variance (need to be SimVector.c object).
 #	NOTE: Either measurement error variance or indicator variance is specified. Both cannot be simultaneously specified.

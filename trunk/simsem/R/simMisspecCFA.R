@@ -6,8 +6,8 @@ simMisspecCFA <- function(...) { #loading, latent.cor, error.cor, latent.var = N
 	position <- match.keyword(Names, keywords)
 	if(length(position) != length(unique(position))) stop("Some objects were identified more than once.")
 	ifelse(contain(1, position), LY <- List[position == 1], LY <- list(new("NullSimMatrix")))
-	ifelse(contain(2, position), TE <- List[position == 2], TE <- list(new("NullSymMatrix")))
-	ifelse(contain(3, position), PS <- List[position == 3], PS <- list(new("NullSymMatrix")))
+	ifelse(contain(2, position), RTE <- List[position == 2], RTE <- list(new("NullSymMatrix")))
+	ifelse(contain(3, position), RPS <- List[position == 3], RPS <- list(new("NullSymMatrix")))
 	ifelse(contain(4, position), VTE <- List[position == 4], VTE <- list(new("NullSimVector")))
 	ifelse(contain(5, position), VY <- List[position == 5], VY <- list(new("NullSimVector")))
 	if(!is.null.object(VTE[[1]]) & !is.null.object(VY[[1]])) stop("Please assign either VTE or VY, not both")
@@ -16,6 +16,6 @@ simMisspecCFA <- function(...) { #loading, latent.cor, error.cor, latent.var = N
 	if(!is.null.object(MY[[1]]) & !is.null.object(TY[[1]])) stop("Please assign either MY or TY, not both")
 	ifelse(contain(7, position), ME <- List[position == 7], ME <- list(new("NullSimVector")))
 	ifelse(contain(9, position), VE <- List[position == 9], VE <- list(new("NullSimVector")))
-	Output <- new("SimMisspec", LY=LY[[1]], PS=PS[[1]], TE=TE[[1]], VE=VE[[1]], VPS=VE[[1]], VTE=VTE[[1]], VY=VY[[1]], TY=TY[[1]], MY=MY[[1]], ME=ME[[1]], AL=ME[[1]], modelType="CFA")
+	Output <- new("SimMisspec", LY=LY[[1]], RPS=RPS[[1]], RTE=RTE[[1]], VE=VE[[1]], VPS=VE[[1]], VTE=VTE[[1]], VY=VY[[1]], TY=TY[[1]], MY=MY[[1]], ME=ME[[1]], AL=ME[[1]], modelType="CFA")
 	return(Output)
 }

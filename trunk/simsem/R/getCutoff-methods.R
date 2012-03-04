@@ -51,11 +51,11 @@ setMethod("getCutoff", signature(object="SimResult"), definition=function(object
 #LX <- simMatrix(loading, loadingValues)
 #latent.cor <- matrix(NA, 2, 2)
 #diag(latent.cor) <- 1
-#PH <- symMatrix(latent.cor, 0.5)
+#RPH <- symMatrix(latent.cor, 0.5)
 #error.cor <- matrix(0, 6, 6)
 #diag(error.cor) <- 1
-#TD <- symMatrix(error.cor)
-#CFA.Model <- simSetCFA(LY = LX, PS = PH, TE = TD)
+#RTD <- symMatrix(error.cor)
+#CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
 #SimData <- simData(200, CFA.Model)
 #SimModel <- simModel(CFA.Model)
 #Output <- simResult(SimData, SimModel, 500)

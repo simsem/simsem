@@ -17,22 +17,22 @@ simSetSEM <- function(..., exo = FALSE) {
 	Names <- names(List)
 	keywords <- NULL
 	if(exo == FALSE) {
-		keywords <- list(W$LY, W$TE, W$VTE, W$VY, W$TY, W$MY, W$BE, W$PS, W$VPS, W$VE, W$AL, W$ME)
+		keywords <- list(W$LY, W$RTE, W$VTE, W$VY, W$TY, W$MY, W$BE, W$RPS, W$VPS, W$VE, W$AL, W$ME)
 	} else {
-		keywords <- list(W$LY, W$TE, W$VTE, W$VY, W$TY, W$MY, W$BE, W$PS, W$VPS, W$VE, W$AL, W$ME, W$LX, W$TD, W$VTD, W$VX, W$TX, W$MX, W$GA, W$PH, W$VPH, W$KA, W$TH)
+		keywords <- list(W$LY, W$RTE, W$VTE, W$VY, W$TY, W$MY, W$BE, W$RPS, W$VPS, W$VE, W$AL, W$ME, W$LX, W$RTD, W$VTD, W$VX, W$TX, W$MX, W$GA, W$RPH, W$VPH, W$KA, W$RTH)
 	}
 	position <- match.keyword(Names, keywords)
 	if(length(position) != length(unique(position))) stop("Some objects were identified more than once.")
 	ifelse(contain(1, position), LY <- List[position == 1], stop("No loading object of indicator.Y from factor.ETA in SEM"))
 	ny <- nrow(run(LY[[1]]))
 	ne <- ncol(run(LY[[1]]))
-	ifelse(contain(2, position), TE <- List[position == 2], stop("No measurement error correlation object between indicator.Y"))
+	ifelse(contain(2, position), RTE <- List[position == 2], stop("No measurement error correlation object between indicator.Y"))
 	ifelse(contain(3, position), VTE <- List[position == 3], VTE <- list(new("NullSimVector")))
 	ifelse(contain(4, position), VY <- List[position == 4], ifelse(is.null.object(VTE[[1]]), { VY <- list(freeVector(1, ny)); comment(VY[[1]]) <- "default"}, VY <- list(new("NullSimVector"))))
 	ifelse(contain(6, position), MY <- List[position == 6], MY <- list(new("NullSimVector")))
 	ifelse(contain(5, position), TY <- List[position == 5], ifelse(is.null.object(MY[[1]]), { TY <- list(freeVector(0, ny)); comment(TY[[1]]) <- "default"}, TY <- list(new("NullSimVector"))))
 	ifelse(contain(7, position), BE <- List[position == 7], stop("No path coefficient object between factor.ETA"))
-	ifelse(contain(8, position), PS <- List[position == 8], stop("No residual correlation object between factor.ETA"))
+	ifelse(contain(8, position), RPS <- List[position == 8], stop("No residual correlation object between factor.ETA"))
 	ifelse(contain(9, position), VPS <- List[position == 9], VPS <- list(new("NullSimVector")))
 	ifelse(contain(10, position), VE <- List[position == 10], ifelse(is.null.object(VPS[[1]]), { VE <- list(constantVector(1, ne)); comment(VE[[1]]) <- "default"}, VE <- list(new("NullSimVector"))))
 	ifelse(contain(12, position), ME <- List[position == 12], ME <- list(new("NullSimVector")))
@@ -42,30 +42,30 @@ simSetSEM <- function(..., exo = FALSE) {
 		ifelse(contain(13, position), LX <- List[position == 13], stop("No loading object of indicator.X from factor.KSI in SEM"))
 		nx <- nrow(run(LX[[1]]))
 		nk <- ncol(run(LX[[1]]))
-		ifelse(contain(14, position), TD <- List[position == 14], stop("No measurement error correlation object between indicator.Y"))
+		ifelse(contain(14, position), RTD <- List[position == 14], stop("No measurement error correlation object between indicator.Y"))
 		ifelse(contain(15, position), VTD <- List[position == 15], VTD <- list(new("NullSimVector")))
 		ifelse(contain(16, position), VX <- List[position == 16], ifelse(is.null.object(VTD[[1]]), { VX <- list(freeVector(1, nx)); comment(VX[[1]]) <- "default"}, VX <- list(new("NullSimVector"))))
 		ifelse(contain(18, position), MX <- List[position == 18], MX <- list(new("NullSimVector")))
 		ifelse(contain(17, position), TX <- List[position == 17], ifelse(is.null.object(MX[[1]]), { TX <- list(freeVector(0, nx)); comment(TX[[1]]) <- "default"}, TX <- list(new("NullSimVector"))))
 		
 		ifelse(contain(19, position), GA <- List[position == 19], stop("No path coefficient object from Factor.KSI to Factor.ETA"))
-		ifelse(contain(20, position), PH <- List[position == 20], stop("No correlation object between factor.KSI"))
+		ifelse(contain(20, position), RPH <- List[position == 20], stop("No correlation object between factor.KSI"))
 		ifelse(contain(21, position), VPH <- List[position == 21], { VPH <- list(constantVector(1, nk)); comment(VPH[[1]]) <- "default"})
 		ifelse(contain(22, position), KA <- List[position == 22], { KA <- list(constantVector(0, nk)); comment(KA[[1]]) <- "default"})
 		if(contain(23, position)) {
-			TH <- List[position == 23]
-			temp <- run(TH[[1]])
+			RTH <- List[position == 23]
+			temp <- run(RTH[[1]])
 			if(!((nrow(temp) == nx) & (ncol(temp) == ny))) stop("The number of rows is not equal the number of exogenous indicators or the number of columns is not equal the number of endogenous indicators.")
 		} else {
-			TH.Data <- matrix(0, nx, ny)
-			TH.Labels <- matrix(NA, nx, ny)
-			TH <- list(new("SimMatrix", free=TH.Data, param=TH.Labels))
-			comment(TH[[1]]) <- "default"
+			RTH.Data <- matrix(0, nx, ny)
+			RTH.Labels <- matrix(NA, nx, ny)
+			RTH <- list(new("SimMatrix", free=RTH.Data, param=RTH.Labels))
+			comment(RTH[[1]]) <- "default"
 		}
-		Output <- new("SimSet", LY=LY[[1]], TE=TE[[1]], VTE=VTE[[1]], VY=VY[[1]], MY=MY[[1]], TY=TY[[1]], BE=BE[[1]], PS=PS[[1]], VPS=VPS[[1]], VE=VE[[1]], AL=AL[[1]], ME=ME[[1]],
-					LX=LX[[1]], TD=TD[[1]], VTD=VTD[[1]], VX=VX[[1]], MX=MX[[1]], TX=TX[[1]], GA=GA[[1]], PH=PH[[1]], VPH=VPH[[1]], KA=KA[[1]], TH=TH[[1]], modelType="SEM.exo")	
+		Output <- new("SimSet", LY=LY[[1]], RTE=RTE[[1]], VTE=VTE[[1]], VY=VY[[1]], MY=MY[[1]], TY=TY[[1]], BE=BE[[1]], RPS=RPS[[1]], VPS=VPS[[1]], VE=VE[[1]], AL=AL[[1]], ME=ME[[1]],
+					LX=LX[[1]], RTD=RTD[[1]], VTD=VTD[[1]], VX=VX[[1]], MX=MX[[1]], TX=TX[[1]], GA=GA[[1]], RPH=RPH[[1]], VPH=VPH[[1]], KA=KA[[1]], RTH=RTH[[1]], modelType="SEM.exo")	
 	} else {
-		Output <- new("SimSet", LY=LY[[1]], TE=TE[[1]], VTE=VTE[[1]], VY=VY[[1]], MY=MY[[1]], TY=TY[[1]], BE=BE[[1]], PS=PS[[1]], VPS=VPS[[1]], VE=VE[[1]], AL=AL[[1]], ME=ME[[1]], modelType="SEM")	
+		Output <- new("SimSet", LY=LY[[1]], RTE=RTE[[1]], VTE=VTE[[1]], VY=VY[[1]], MY=MY[[1]], TY=TY[[1]], BE=BE[[1]], RPS=RPS[[1]], VPS=VPS[[1]], VE=VE[[1]], AL=AL[[1]], ME=ME[[1]], modelType="SEM")	
 	}
 	return(Output)
 }
@@ -126,14 +126,14 @@ simSetSEM <- function(..., exo = FALSE) {
 #TE <- symMatrix(diag(8))
 #factor.cor <- diag(3)
 #factor.cor[1, 2] <- factor.cor[2, 1] <- NA
-#PS <- symMatrix(factor.cor, 0.5)
+#RPS <- symMatrix(factor.cor, 0.5)
 #path <- matrix(0, 3, 3)
 #path[3, 1:2] <- NA
 #path.start <- matrix(0, 3, 3)
 #path.start[3, 1] <- "n65"
 #path.start[3, 2] <- "u35"
 #BE <- simMatrix(path, path.start)
-#SEM.model <- simSetSEM(BE=BE, LY=LY, PS=PS, TE=TE)
+#SEM.model <- simSetSEM(BE=BE, LY=LY, RPS=RPS, TE=TE)
 #loading.X <- matrix(0, 6, 2)
 #loading.X[1:3, 1] <- NA
 #loading.X[4:6, 2] <- NA
@@ -145,9 +145,9 @@ simSetSEM <- function(..., exo = FALSE) {
 #factor.K.cor <- matrix(NA, 2, 2)
 #diag(factor.K.cor) <- 1
 #PH <- symMatrix(factor.K.cor, 0.5)
-#PS <- symMatrix(as.matrix(1))
+#RPS <- symMatrix(as.matrix(1))
 #path.GA <- matrix(NA, 1, 2)
 #path.GA.start <- matrix(c("n65", "u35"), ncol=2)
 #GA <- simMatrix(path.GA, path.GA.start)
 #BE <- simMatrix(as.matrix(0))
-#SEM.Exo.model <- simSetSEM(GA=GA, BE=BE, LX=LX, LY=LY, PH=PH, PS=PS, TD=TD, TE=TE, exo=TRUE)
+#SEM.Exo.model <- simSetSEM(GA=GA, BE=BE, LX=LX, LY=LY, PH=PH, RPS=RPS, TD=TD, TE=TE, exo=TRUE)

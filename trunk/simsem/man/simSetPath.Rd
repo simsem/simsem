@@ -22,7 +22,7 @@ simSetPath(..., exo = FALSE)
 	The matrices and vectors in the endogenous side are
 	\itemize{
 		\item REQUIRED: \code{BE} for regression coefficient matrix (need to be \code{\linkS4class{SimMatrix}} object). 
-		\item REQUIRED: \code{PS} for residual correlation matrix (need to be \code{\linkS4class{SymMatrix}} object).
+		\item REQUIRED: \code{RPS} for residual correlation matrix (need to be \code{\linkS4class{SymMatrix}} object).
 		\item \code{VPS} for residual indicator variance (need to be \code{\linkS4class{SimVector}} object).
 		\item \code{VE} for total indicator variance (need to be \code{\linkS4class{SimVector}} object). NOTE: Either total indicator variance or residual indicator variance is specified. Both cannot be simultaneously specified.
 		\item \code{AL} for indicator intercept (need to be \code{\linkS4class{SimVector}} object).
@@ -35,7 +35,7 @@ simSetPath(..., exo = FALSE)
 	If users wish to include the exogenous side in their models, these options are available,
 	\itemize{
 		\item REQUIRED for \code{"exo=TRUE"}: \code{GA} for regression coefficient matrix from exogenous variable to endogenous variable (need to be \code{\linkS4class{SimMatrix}} object).  
-		\item REQUIRED for \code{"exo=TRUE"}: \code{PH} for exogenous factor correlation (need to be \code{\linkS4class{SymMatrix}} object).
+		\item REQUIRED for \code{"exo=TRUE"}: \code{RPH} for exogenous factor correlation (need to be \code{\linkS4class{SymMatrix}} object).
 		\item \code{VPH} or \code{VK} for exogenous variable variance (need to be \code{\linkS4class{SimVector}} object).
 		\item \code{KA} or \code{MK} for exogenous variable mean (need to be \code{\linkS4class{SimVector}} object). NOTE: Either total indicator variance or residual indicator variance is specified. Both cannot be simultaneously specified.
 	}
@@ -76,9 +76,9 @@ BE <- simMatrix(path.BE, starting.BE)
 
 residual.error <- diag(4)
 residual.error[1,2] <- residual.error[2,1] <- NA
-PS <- symMatrix(residual.error, "n31")
+RPS <- symMatrix(residual.error, "n31")
 
-Path.Model <- simSetPath(PS = PS, BE = BE)
+Path.Model <- simSetPath(RPS = RPS, BE = BE)
 
 u35 <- simUnif(0.3, 0.5)
 u57 <- simUnif(0.5, 0.7)
@@ -95,9 +95,9 @@ BE <- simMatrix(path.BE, "u57")
 
 exo.cor <- matrix(NA, 2, 2)
 diag(exo.cor) <- 1
-PH <- symMatrix(exo.cor, "n31")
+RPH <- symMatrix(exo.cor, "n31")
 
-PS <- symMatrix(diag(2))
+RPS <- symMatrix(diag(2))
 
-Path.Exo.Model <- simSetPath(PS = PS, BE = BE, PH = PH, GA = GA, exo=TRUE)
+Path.Exo.Model <- simSetPath(RPS = RPS, BE = BE, RPH = RPH, GA = GA, exo=TRUE)
 }

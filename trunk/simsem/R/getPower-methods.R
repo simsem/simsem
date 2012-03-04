@@ -49,9 +49,9 @@ setMethod("getPower", signature(altObject="SimResult"), definition=function(altO
 #loading.null <- matrix(0, 6, 1)
 #loading.null[1:6, 1] <- NA
 #LX.NULL <- simMatrix(loading.null, 0.7)
-#PH.NULL <- symMatrix(diag(1))
-#TD <- symMatrix(diag(6))
-#CFA.Model.NULL <- simSetCFA(LY = LX.NULL, PS = PH.NULL, TE = TD)
+#RPH.NULL <- symMatrix(diag(1))
+#RTD <- symMatrix(diag(6))
+#CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = TD)
 #SimData.NULL <- simData(500, CFA.Model.NULL)
 #SimModel <- simModel(CFA.Model.NULL)
 #Output.NULL <- simResult(SimData.NULL, SimModel, 50)
@@ -63,8 +63,8 @@ setMethod("getPower", signature(altObject="SimResult"), definition=function(altO
 #LX.ALT <- simMatrix(loading.alt, 0.7)
 #latent.cor.alt <- matrix(NA, 2, 2)
 #diag(latent.cor.alt) <- 1
-#PH.ALT <- symMatrix(latent.cor.alt, "u79")
-#CFA.Model.ALT <- simSetCFA(LY = LX.ALT, PS = PH.ALT, TE = TD)
+#RPH.ALT <- symMatrix(latent.cor.alt, "u79")
+#CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
 #SimData.ALT <- simData(500, CFA.Model.ALT)
 #Output.ALT <- simResult(SimData.ALT, SimModel, 50)
 #getPower(Output.ALT, Cut.NULL)

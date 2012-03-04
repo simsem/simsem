@@ -15,9 +15,9 @@ Object can be created by \code{\link{simMisspecCFA}}, \code{\link{simMisspecPath
   \describe{
     \item{\code{modelType}:}{Model type (CFA, Path, or SEM) }
     \item{\code{LY}:}{Factor loading matrix between endogenous factors and Y indicators }
-    \item{\code{TE}:}{Correlation matrix between Y measurement error }
+    \item{\code{RTE}:}{Correlation matrix between Y measurement error }
     \item{\code{VTE}:}{Variance of Y measurement error }
-    \item{\code{PS}:}{Residual correlation of endogenous factors  }
+    \item{\code{RPS}:}{Residual correlation of endogenous factors  }
     \item{\code{VPS}:}{Residual variances of endogenous factors }
     \item{\code{BE}:}{Regression effect among endogenous factors }
     \item{\code{TY}:}{Measurement intercepts of Y indicators }
@@ -27,16 +27,16 @@ Object can be created by \code{\link{simMisspecCFA}}, \code{\link{simMisspecPath
     \item{\code{VE}:}{Total variance of endogenous factors }
     \item{\code{VY}:}{Total variance of Y indicators }
     \item{\code{LX}:}{Factor loading matrix between exogenous factors and X indicators }
-    \item{\code{TD}:}{Correlation matrix between X measurement error }
+    \item{\code{RTD}:}{Correlation matrix between X measurement error }
     \item{\code{VTD}:}{Variance of X measurement error }
-    \item{\code{PH}:}{Correlation among exogenous factors }
+    \item{\code{RPH}:}{Correlation among exogenous factors }
     \item{\code{GA}:}{Regreeion effect from exogenous factors to endogenous factors }
     \item{\code{TX}:}{Measurement intercepts of X indicators }
     \item{\code{KA}:}{Factor Mean of exogenous factors }
     \item{\code{MX}:}{Total Mean of X indicators }
     \item{\code{VPH}:}{Variance of exogenous factors }
     \item{\code{VX}:}{Total variance of X indicators }
-    \item{\code{TH}:}{Measurement error correlation between X indicators and Y indicators }
+    \item{\code{RTH}:}{Measurement error correlation between X indicators and Y indicators }
   }
 }
 \section{Extends}{
@@ -61,7 +61,7 @@ showClass("SimMisspec")
 n01 <- simNorm(0, 0.1)
 error.cor.Mis <- matrix(NA, 6, 6)
 diag(error.cor.Mis) <- 1
-TD.Mis <- symMatrix(error.cor.Mis, "n01")
-CFA.Model.Mis <- simMisspecCFA(TD=TD.Mis)
+RTD.Mis <- symMatrix(error.cor.Mis, "n01")
+CFA.Model.Mis <- simMisspecCFA(RTD=RTD.Mis)
 }
 \keyword{classes}

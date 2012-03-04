@@ -140,31 +140,31 @@ setMethod("combine.object", signature(object1="matrix", object2="matrix"), defin
 setMethod("combine.object", signature(object1="MatrixSet", object2="MatrixSet"), definition=function(object1, object2) {
 		LY <- combine.object(object1@LY, object2@LY)
 		VTE <- combine.object(object1@VTE, object2@VTE)
-		TE <- combine.object(object1@TE, object2@TE, correlation = TRUE)
+		RTE <- combine.object(object1@RTE, object2@RTE, correlation = TRUE)
 		VY <- combine.object(object1@VY, object2@VY)
 		TY <- combine.object(object1@TY, object2@TY) 
 		MY <- combine.object(object1@MY, object2@MY)
 		BE <- combine.object(object1@BE, object2@BE)
 		VPS <- combine.object(object1@VPS, object2@VPS)
-		PS <- combine.object(object1@PS, object2@PS, correlation = TRUE)
+		RPS <- combine.object(object1@RPS, object2@RPS, correlation = TRUE)
 		VE <- combine.object(object1@VE, object2@VE) 
 		AL <- combine.object(object1@AL, object2@AL) 
 		ME <- combine.object(object1@ME, object2@ME) 
 		LX <- combine.object(object1@LX, object2@LX) 
 		VTD <- combine.object(object1@VTD, object2@VTD) 
-		TD <- combine.object(object1@TD, object2@TD, correlation = TRUE)
+		RTD <- combine.object(object1@RTD, object2@RTD, correlation = TRUE)
 		VX <- combine.object(object1@VX, object2@VX)
 		TX <- combine.object(object1@TX, object2@TX)
 		MX <- combine.object(object1@MX, object2@MX)
 		GA <- combine.object(object1@GA, object2@GA)
 		VPH <- combine.object(object1@VPH, object2@VPH)
-		PH <- combine.object(object1@PH, object2@PH, correlation = TRUE)
+		RPH <- combine.object(object1@RPH, object2@RPH, correlation = TRUE)
 		KA <- combine.object(object1@KA, object2@KA)
-		TH <- combine.object(object1@TH, object2@TH)
-		Output <- new("MatrixSet", modelType=object1@modelType, LY=LY, VTE=VTE, TE=TE, VY=VY, TY=TY, MY=MY, 
-			BE=BE, VPS=VPS, PS=PS, VE=VE, AL=AL, ME=ME,
-			LX=LX, VTD=VTD, TD=TD, VX=VX, TX=TX, MX=MX,
-			GA=GA, VPH=VPH, PH=PH, KA=KA, TH=TH)
+		RTH <- combine.object(object1@RTH, object2@RTH)
+		Output <- new("MatrixSet", modelType=object1@modelType, LY=LY, VTE=VTE, RTE=RTE, VY=VY, TY=TY, MY=MY, 
+			BE=BE, VPS=VPS, RPS=RPS, VE=VE, AL=AL, ME=ME,
+			LX=LX, VTD=VTD, RTD=RTD, VX=VX, TX=TX, MX=MX,
+			GA=GA, VPH=VPH, RPH=RPH, KA=KA, RTH=RTH)
 		return(Output)
 	}
 )
@@ -178,31 +178,31 @@ setMethod("combine.object", signature(object1="MatrixSet", object2="MatrixSet"),
 setMethod("combine.object", signature(object1="list", object2="MisspecSet"), definition=function(object1, object2) {
 		LY <- combine.object(object1$LY, object2@LY)
 		VTE <- combine.object(object1$VTE, object2@VTE)
-		TE <- combine.object(object1$TE, object2@TE, correlation = TRUE)
+		RTE <- combine.object(object1$RTE, object2@RTE, correlation = TRUE)
 		VY <- combine.object(object1$VY, object2@VY)
 		TY <- combine.object(object1$TY, object2@TY) 
 		MY <- combine.object(object1$MY, object2@MY)
 		BE <- combine.object(object1$BE, object2@BE)
 		VPS <- combine.object(object1$VPS, object2@VPS)
-		PS <- combine.object(object1$PS, object2@PS, correlation = TRUE)
+		RPS <- combine.object(object1$RPS, object2@RPS, correlation = TRUE)
 		VE <- combine.object(object1$VE, object2@VE) 
 		AL <- combine.object(object1$AL, object2@AL) 
 		ME <- combine.object(object1$ME, object2@ME) 
 		LX <- combine.object(object1$LX, object2@LX) 
 		VTD <- combine.object(object1$VTD, object2@VTD) 
-		TD <- combine.object(object1$TD, object2@TD, correlation = TRUE)
+		RTD <- combine.object(object1$RTD, object2@RTD, correlation = TRUE)
 		VX <- combine.object(object1$VX, object2@VX)
 		TX <- combine.object(object1$TX, object2@TX)
 		MX <- combine.object(object1$MX, object2@MX)
 		GA <- combine.object(object1$GA, object2@GA)
 		VPH <- combine.object(object1$VPH, object2@VPH)
-		PH <- combine.object(object1$PH, object2@PH, correlation = TRUE)
+		RPH <- combine.object(object1$RPH, object2@RPH, correlation = TRUE)
 		KA <- combine.object(object1$KA, object2@KA)
-		TH <- combine.object(object1$TH, object2@TH)
-		Output <- list(LY=LY, VTE=VTE, TE=TE, VY=VY, TY=TY, MY=MY, 
-			BE=BE, VPS=VPS, PS=PS, VE=VE, AL=AL, ME=ME,
-			LX=LX, VTD=VTD, TD=TD, VX=VX, TX=TX, MX=MX,
-			GA=GA, VPH=VPH, PH=PH, KA=KA, TH=TH)
+		RTH <- combine.object(object1$RTH, object2@RTH)
+		Output <- list(LY=LY, VTE=VTE, RTE=RTE, VY=VY, TY=TY, MY=MY, 
+			BE=BE, VPS=VPS, RPS=RPS, VE=VE, AL=AL, ME=ME,
+			LX=LX, VTD=VTD, RTD=RTD, VX=VX, TX=TX, MX=MX,
+			GA=GA, VPH=VPH, RPH=RPH, KA=KA, RTH=RTH)
 		return(Output)
 	}
 )
@@ -282,38 +282,6 @@ setMethod("combine.object", signature(object1="SimFreeParam", object2="list"), d
 		} else {
 			stop("something wrong!")
 		}
-		# if(exo == FALSE) {
-			# if(!is.null.object(object1@LY)) object1@LY[is.na(object1@LY)] <- object2$lambda[is.na(object1@LY)]
-			# if(!is.null.object(object1@PS)) object1@PS[is.na(object1@PS)] <- object2$psi[is.na(object1@PS)]
-			# if(!is.null.object(object1@TE)) object1@TE[is.na(object1@TE)] <- object2$theta[is.na(object1@TE)]
-			# if(!is.null.object(object1@TY)) object1@TY[is.na(object1@TY)] <- object2$nu[is.na(object1@TY)]
-			# if(!is.null.object(object1@AL)) object1@AL[is.na(object1@AL)] <- object2$alpha[is.na(object1@AL)]		
-			# if(!is.null.object(object1@BE)) object1@BE[is.na(object1@BE)] <- object2$beta[is.na(object1@BE)]		
-		# } else {
-			# ne <- nrow(object1@PS)
-			# nk <- nrow(object1@PH)
-			# k.list <- 1:nk
-			# e.list <- (nk+1):(nk+ne)
-			# if(!is.null.object(object1@PS)) object1@PS[is.na(object1@PS)] <- (object2$psi[e.list, e.list])[is.na(object1@PS)]
-			# if(!is.null.object(object1@AL)) object1@AL[is.na(object1@AL)] <- (object2$alpha[e.list])[is.na(object1@AL)]		
-			# if(!is.null.object(object1@BE)) object1@BE[is.na(object1@BE)] <- (object2$beta[e.list, e.list])[is.na(object1@BE)]		
-			# if(!is.null.object(object1@PH)) object1@PH[is.na(object1@PH)] <- (object2$psi[k.list, k.list])[is.na(object1@PH)]
-			# if(!is.null.object(object1@KA)) object1@KA[is.na(object1@KA)] <- (object2$alpha[e.list])[is.na(object1@KA)]		
-			# if(!is.null.object(object1@GA)) object1@GA[is.na(object1@GA)] <- (object2$beta[e.list, k.list])[is.na(object1@GA)]	
-			# if(modelType == "SEM.exo") {
-				# nx <- nrow(object1@LX)
-				# ny <- nrow(object1@LY)
-				# x.list <- 1:nx
-				# y.list <- (nx+1):(nx+ny)
-				# if(!is.null.object(object1@LY)) object1@LY[is.na(object1@LY)] <- (object2$lambda[y.list, e.list])[is.na(object1@LY)]
-				# if(!is.null.object(object1@TE)) object1@TE[is.na(object1@TE)] <- (object2$theta[y.list, y.list])[is.na(object1@TE)]
-				# if(!is.null.object(object1@TY)) object1@TY[is.na(object1@TY)] <- (object2$nu[y.list])[is.na(object1@TY)]
-				# if(!is.null.object(object1@LX)) object1@LX[is.na(object1@LX)] <- (object2$lambda[x.list, k.list])[is.na(object1@LX)]
-				# if(!is.null.object(object1@TD)) object1@TD[is.na(object1@TD)] <- (object2$theta[x.list, x.list])[is.na(object1@TD)]
-				# if(!is.null.object(object1@TX)) object1@TX[is.na(object1@TX)] <- (object2$nu[x.list])[is.na(object1@TX)]
-				# if(!is.null.object(object1@TH)) object1@TH[is.na(object1@TH)] <- (object2$theta[x.list, y.list])[is.na(object1@TH)]
-			# }
-		# }
 		return(new("SimRSet", modelType=object1@modelType, PS=object1@PS, AL=object1@AL, BE=object1@BE, PH=object1@PH, KA=object1@KA, GA=object1@GA,
 			LY=object1@LY, TE=object1@TE, TY=object1@TY, LX=object1@LX, TD=object1@TD, TX=object1@TX, TH=object1@TH))
 	}

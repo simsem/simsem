@@ -42,10 +42,10 @@ loading.X.trivial[is.na(loading.X.trivial)] <- 0
 LX.trivial <- simMatrix(loading.X.trivial, "u2")
 error.cor.X.trivial <- matrix(NA, 6, 6)
 diag(error.cor.X.trivial) <- 0
-TD.trivial <- symMatrix(error.cor.X.trivial, "n1")
+RTD.trivial <- symMatrix(error.cor.X.trivial, "n1")
 error.cor.Y.trivial <- matrix(NA, 2, 2)
 diag(error.cor.Y.trivial) <- 0
-TE.trivial <- symMatrix(error.cor.Y.trivial, "n1")
-TH.trivial <- simMatrix(matrix(NA, 6, 2), "n1")
-SEM.Mis.Model <- simMisspecSEM(LX = LX.trivial, TE = TE.trivial, TD = TD.trivial, TH = TH.trivial, exo=TRUE)
+RTE.trivial <- symMatrix(error.cor.Y.trivial, "n1")
+RTH.trivial <- simMatrix(matrix(NA, 6, 2), "n1")
+SEM.Mis.Model <- simMisspecSEM(LX = LX.trivial, RTE = RTE.trivial, RTD = RTD.trivial, RTH = RTH.trivial, exo=TRUE)
 }
