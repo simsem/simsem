@@ -91,8 +91,6 @@ makeMAR <- function(data,pm=NULL,cov=NULL,ignoreCols=NULL,threshold=NULL) {
   }  
 
   if((i >= length(qlist)) && (pr.missing > 1)) { stop("cannot attain given percent missing. Please reduce the percent missing, or include more variables. ") }  
-
-  update <- 
   
   mismat <- matrix(FALSE,ncol=length(colList),nrow=dim(data)[1])
   rows.eligible <- data[,cov] > threshold
@@ -124,7 +122,7 @@ makeMCAR <- function(dims,pm=NULL,cov=NULL,ignoreCols=NULL)
 }
 
 
-# Function to poke holes in the data for planned missing designs. Currently, we default to a 3-form design.
+# Function to poke holes in the data for planned missing designs.
 # Input: Data Set
 # Output: Boolean matrix of values to delete
 #
