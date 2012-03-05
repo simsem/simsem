@@ -49,7 +49,7 @@ simsem, Version 0.0-2.1 11/16/11
 - Bug fixes in create.free.parameters.f, simSetCFA.f, simSetPath.f, simSetSEM.f that did not free error variances and measurement intercepts when using default.
 - Change the name of constant.vector.f --> constantVector.f
 - Add freeVector.f to create vector of free parameters with starting values.
-% Existing Problem: In SEM model, total endogenous factor variances are fixed as 1 in data model but, instead, residual factor variances are fixed as 1 in the estimation. Therefore, high bias in factor loading and measurement error variances in endogenous side. Change in parameter values are needed.
+% Existing Problem: In SEM model, total endogenous factor variances are fixed as 1 in data model but, instead, residual factor variances are fixed as 1 in the estimation. Therefore, high bias in factor loading and measurement error variances in endogenous side. Change in parameter values are needed. (Fixed by the standardize method 03/05/12)
 
 
 Note
@@ -111,14 +111,15 @@ simsem, Version 0.0-7 02/26/12
 simsem, Version 0.0-7.1 02/27/12
 - Fix a bug in validate.covariance, runRep, run-SimDataDist
 
-simsem, Version 0.0-8 03/01/12
+simsem, Version 0.0-8 03/05/12
 - Change the write.lavaan.code function to handling auxiliary variables
 - Make the writeLavaanNullCode function to write a null model
 - Add the indicatorLab, factorLab, and auxiliary arguments in simModel function and SimModel class
 - Make the run-SimModel method to be able to select some variables to analyze
-- Fix a bug in the imposeMissing, summary-SimSet, miPool function
+- Fix a bug in the imposeMissing, summary-SimSet, miPool, and createData function
 - Make runMI be able to select some variables as auxiliary variables
 - Add extract method to select a part of the SimMatrix, SimVector, and SimSet.
 - Fix the help page for simModel and add the help page for the extract method
 - Change SimSet and SimMisspec correlation arguments to have leading R (PH -> RPH, PS -> RPS, TD -> RTD, TE -> RTE)
-
+- Allow setting the overall variance as 0 to mean no residual or measurement errors.
+- Changing how to handle MAR to threshold method
