@@ -43,6 +43,7 @@ imposeMissing <- function(data.mat,cov=0,pmMCAR=0,pmMAR=0,nforms=0,
  if (length(twoMethod) == 1 && twoMethod==0) {twoMethod <- NULL }
  if (length(ignoreCols) == 1 && ignoreCols==0) {ignoreCols <- NULL}
  if (threshold==0) { threshold <- NULL }
+ if (class(data.mat) == "data.frame") {data.mat <- as.matrix(data.mat)}
  
  if(!is.null(nforms) | !is.null(twoMethod)) { 
  # TRUE values are values to delete
@@ -96,7 +97,7 @@ makeMAR <- function(data,pm=NULL,cov=NULL,ignoreCols=NULL,threshold=NULL) {
   mismat <- matrix(FALSE,ncol=length(colList),nrow=dim(data)[1])
   rows.eligible <- data[,cov] > threshold
   mismat[,misCols] <- rows.eligible
-  mismat <- apply(mismat, c(1,2),function(x){if(x && (runif(1) < pr.missing)){x <- TRUE}})
+  mismat <- apply(mismat, c(1,2),function(x){if(x && (runif(1) < pr.missing)){x <- TRUE} else{x <- FALSE}})
 
 
   return(mismat)
