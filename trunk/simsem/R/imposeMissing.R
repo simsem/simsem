@@ -57,6 +57,7 @@ imposeMissing <- function(data.mat,cov=0,pmMCAR=0,pmMAR=0,nforms=0,
 }
 
 if(!is.null(pmMAR)) {
+ 
  log.mat2 <- makeMAR(data.mat,pmMAR,cov,ignoreCols,threshold)
  data.mat[log.mat2] <- NA
 }

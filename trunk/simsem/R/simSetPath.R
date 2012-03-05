@@ -63,7 +63,7 @@ simSetPath <- function(..., exo = FALSE) {
 
 #	NOTE: If users need to specify exogenous variable too.
 #	REQUIRED for exo=TRUE: GA for regression coefficient matrix from exogenous variable to endogenous variable (need to be SimMatrix.c object).  
-#	REQUIRED for exo=TRUE: PH for exogenous factor correlation (need to be SymMatrix.c object).
+#	REQUIRED for exo=TRUE: RPH for exogenous factor correlation (need to be SymMatrix.c object).
 #	VPH or VK for exogenous variable variance (need to be SimVector.c object).
 #	KA or MK for exogenous variable mean (need to be SimVector.c object).
 
@@ -101,6 +101,6 @@ simSetPath <- function(..., exo = FALSE) {
 #BE <- simMatrix(path.BE, "u57")
 #exo.cor <- matrix(NA, 2, 2)
 #diag(exo.cor) <- 1
-#PH <- symMatrix(exo.cor, "n31")
+#RPH <- symMatrix(exo.cor, "n31")
 #RPS <- symMatrix(diag(2))
-#Path.Exo.Model <- simSetPath(RPS = RPS, BE = BE, PH = PH, GA = GA, exo=TRUE)
+#Path.Exo.Model <- simSetPath(RPS = RPS, BE = BE, RPH = RPH, GA = GA, exo=TRUE)

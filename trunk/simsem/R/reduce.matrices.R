@@ -1,3 +1,11 @@
+# reduce.matrices
+# function -- simsem package
+# Reduce the set with correlation/variance objects into the set of covariance objects
+# Argument:
+#	object: matrixSet with correlation/variance objects
+# Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
+# Date Modified: March 4, 2012
+
 reduce.matrices <- function(object) {
 	if(!is(object, "MatrixSet")) stop("The object is not a MatrixSet object")
 	if(sum(object@VPS < 0) > 0) return(new("NullRSet"))

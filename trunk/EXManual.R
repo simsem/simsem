@@ -41,12 +41,12 @@ sourceDir <- function(path, trace = TRUE, ...) {
      }
 }
 
-#path <- "C:/Users/Sunthud/Desktop/My Dropbox/simsem/simsem/R/"
-#path <- "C:/Users/Sunthud/simsem_backup/simsem/R/"
-path <- "C:/Users/student/Dropbox/simsem/simsem/R/"
- source(paste(path, "AllClass.R", sep=""))
- source(paste(path, "AllGenerics.R", sep=""))
- sourceDir(path)
+#dir <- "C:/Users/Sunthud/Desktop/My Dropbox/simsem/simsem/R/"
+#dir <- "C:/Users/Sunthud/simsem_backup/simsem/R/"
+dir <- "C:/Users/student/Dropbox/simsem/simsem/R/"
+ source(paste(dir, "AllClass.R", sep=""))
+ source(paste(dir, "AllGenerics.R", sep=""))
+ sourceDir(dir)
 
 loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA
@@ -690,7 +690,7 @@ u57 <- simUnif(0.5, 0.7)
 u4 <- simUnif(-0.4, 0.4)
 u35 <- simUnif(0.3, 0.5)
 u2 <- simUnif(-0.2, 0.2)
-n01 <- simNorm(0, 1)
+#n01 <- simNorm(0, 1)
 
 loading <- matrix(0, 7, 2)
 loading[1:3, 1] <- NA
@@ -715,28 +715,27 @@ mis.loading[1:3, 2] <- NA
 mis.loading[4:6, 1] <- NA
 mis.LY <- simMatrix(mis.loading, "u2")
 
-mis.error.cor <- matrix(NA, 7, 7)
-diag(mis.error.cor) <- 1
-mis.error.cor[1:6, 7] <- 0
-mis.error.cor[7, 1:6] <- 0
-mis.RTD <- symMatrix(error.cor, "n01")
+#mis.error.cor <- matrix(NA, 7, 7)
+#diag(mis.error.cor) <- 1
+#mis.error.cor[1:6, 7] <- 0
+#mis.error.cor[7, 1:6] <- 0
+#mis.RTD <- symMatrix(mis.error.cor, "n01")
 
-CFA.Mis.Model <- simMisspecCFA(LY = mis.LY, RTD = mis.RTD)
+CFA.Mis.Model <- simMisspecCFA(LY = mis.LY)#, RTD = mis.RTD)
 
 SimData <- simData(200, CFA.Model.Aux, misspec = CFA.Mis.Model)
 
 CFA.Model <- extract(CFA.Model.Aux, y=1:6)
 
-
-################## Fix the impose missing why it does not work
-
 data <- run(SimData, dataOnly=F)
 
-SimMissing <- simMissing(pmMAR=0.1, cov=7, numImps=5)
+#Wait for Patrick to update MCAR
+SimMissing <- simMissing(pmMCAR=0.1, cov=7, numImps=5)
 
 data <- run(SimMissing, data)
 
 SimModel <- simModel(CFA.Model)
+
 
 out <- run(SimModel, data, simMissing=SimMissing)
 
@@ -747,171 +746,125 @@ summaryParam(Output)
 
 ####################################### Example 11 ############################
 
+u79 <- simUnif(0.7, 0.9)
+u5 <- simUnif(-0.5, 0.5)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-########################################### FIML
-
-library(simsem)
-loading <- matrix(0, 6, 2)
+loading <- matrix(0, 5, 3)
 loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-LX <- simMatrix(loading, 0.7)
+loading[4, 2] <- NA
+loading[5, 3] <- NA
+loadingVal <- matrix(0, 5, 3)
+loadingVal[1:3, 1] <- "u79"
+loadingVal[4, 2] <- 1
+loadingVal[5, 3] <- 1
+LY <- simMatrix(loading, loadingVal)
 
-latent.cor <- matrix(NA, 2, 2)
-diag(latent.cor) <- 1
-RPH <- symMatrix(latent.cor, 0.5)
+facCor <- diag(3)
+facCor[2, 1] <- NA
+facCor[1, 2] <- NA
+RPS <- symMatrix(facCor, "u5")
 
-error.cor <- matrix(0, 6, 6)
-diag(error.cor) <- 1
-RTD <- symMatrix(error.cor)
+path <- matrix(0, 3, 3)
+path[3, 1] <- NA
+path[3, 2] <- NA
+BE <- simMatrix(path, "u5")
 
-indicator.mean <- rep(NA, 6)
-MX <- simVector(indicator.mean, 0)
-indicator.var <- rep(NA, 6)
-VX <- simVector(indicator.var, 1)
+RTE <- symMatrix(diag(5))
 
-CFA.Model <- simSetCFA(LX = LX, RPH = RPH, RTD = RTD) #, VX = VX, MX=MX)
-
-SimData <- simData(200, CFA.Model)
+VY <- simVector(c(NA, NA, NA, 0, 0), 1)
 
 
-dat <- run(SimData)
-var <- rnorm(nrow(dat), 0, 1)
-dat <- data.frame(dat, var)
-miss <- (dat[,ncol(dat)] > 1) & rbinom(nrow(dat), 1, 0.5) 
-dat[miss,1] <- NA
+SEM.Model <- simSetSEM(LY=LY, RPS=RPS, BE=BE, RTE=RTE, VY=VY)
 
-library(lavaan)
-model <- "
-f1 =~ NA*y1 + NA*y2 + NA*y3 + 0*y4 + 0*y5 + 0*y6 + 0*var
-f2 =~ 0*y1 + 0*y2 + 0*y3 + NA*y4 + NA*y5 + NA*y6 + 0*var
-f1 ~~ NA*f2
-f1 ~~ 1*f1
-f2 ~~ 1*f2
-var ~~ NA*y1
-var ~~ NA*y2
-var ~~ NA*y3
-var ~~ NA*y4
-var ~~ NA*y5
-var ~~ NA*y6
-"
+n01 <- simNorm(0, 1)
+c5 <- simChisq(5)
+facDist <- simDataDist(n01, c5, n01)
 
-fit <- sem(model, data=dat, missing="fiml")
-summary(fit, fit.measures=TRUE)
+SimData <- simData(200, SEM.Model, sequential=TRUE, facDist=facDist)
+dat <- run(SimData, dataOnly=FALSE)
+  
+SimModel <- simModel(SEM.Model)
+out <- run(SimModel, dat)
 
-modelA <- "
-f1 =~ NA*y1 + NA*y2 + NA*y3 + 0*y4 + 0*y5 + 0*y6
-f2 =~ 0*y1 + 0*y2 + 0*y3 + NA*y4 + NA*y5 + NA*y6
-f1 ~~ NA*f2
-f1 ~~ 1*f1
-f2 ~~ 1*f2
-"
-fitA <- sem(modelA, data=dat, missing="fiml")
-summary(fitA)
 
-model2 <- "
-y1 ~~ NA*y1
-y2 ~~ 0*y1
-y2 ~~ NA*y2
-y3 ~~ 0*y1
-y3 ~~ 0*y2
-y3 ~~ NA*y3
-y4 ~~ 0*y1
-y4 ~~ 0*y2
-y4 ~~ 0*y3
-y4 ~~ NA*y4
-y5 ~~ 0*y1
-y5 ~~ 0*y2
-y5 ~~ 0*y3
-y5 ~~ 0*y4
-y5 ~~ NA*y5
-y6 ~~ 0*y1
-y6 ~~ 0*y2
-y6 ~~ 0*y3
-y6 ~~ 0*y4
-y6 ~~ 0*y5
-y6 ~~ NA*y6
-var ~~ NA*var
-var ~~ NA*y1
-var ~~ NA*y2
-var ~~ NA*y3
-var ~~ NA*y4
-var ~~ NA*y5
-var ~~ NA*y6
-"
+###########
 
-fit <- sem(model2, data=dat, missing="fiml")
-summary(fit)
+
+u79 <- simUnif(0.7, 0.9)
+u5 <- simUnif(-0.5, 0.5)
+
+loading <- matrix(0, 5, 3)
+loading[1:3, 1] <- NA
+loading[4, 2] <- 1
+loading[5, 3] <- 1
+loadingVal <- matrix(0, 5, 3)
+loadingVal[1:3, 1] <- "u79"
+LY <- simMatrix(loading, loadingVal)
+
+facCor <- diag(3)
+facCor[2, 1] <- NA
+facCor[1, 2] <- NA
+RPS <- symMatrix(facCor, "u5")
+
+VE <- simVector(c(1, NA, NA), c(0, 5, 2))
+
+ME <- simVector(c(0, NA, NA), c(0, 20, 4))
+
+TY <- simVector(c(NA, NA, NA, 0, 0), rep(0, 5))
+
+path <- matrix(0, 3, 3)
+path[3, 1] <- NA
+path[3, 2] <- NA
+BE <- simMatrix(path, "u5")
+
+RTE <- symMatrix(diag(5))
+
+VY <- simVector(c(NA, NA, NA, 0, 0), 1)
+
+SEM.Model <- simSetSEM(LY=LY, RPS=RPS, BE=BE, RTE=RTE, VY=VY, VE=VE, ME=ME, TY=TY)
+
+n01 <- simNorm(0, 1)
+c5 <- simChisq(5)
+facDist <- simDataDist(n01, c5, n01)
+
+SimData <- simData(200, SEM.Model, sequential=TRUE, facDist=facDist)
+dat <- run(SimData, dataOnly=FALSE)
+  
+SimModel <- simModel(SEM.Model)
+out <- run(SimModel, dat)
 
 
 
 
 
-model <- "
-y3 ~ NA*y1 + NA*y2
-y4 ~ NA*y3 
-y1 ~~ NA*y2
-"
-fit <- sem(model, data=dat, missing="fiml", fixed.x=FALSE)
-summary(fit)
 
-modelSC <- "
-y3 ~ NA*y1 + NA*y2
-y4 ~ NA*y3 
-y1 ~~ NA*y2
-z ~~ NA*y1
-z ~~ NA*y2
-z ~~ NA*y3
-z ~~ NA*y4
-z ~~ NA*z
-"
-fitSC <- sem(modelSC, data=dat, missing="fiml", fixed.x=FALSE)
-summary(fitSC)
 
-modelDV <- "
-y3 ~ NA*y1 + NA*y2
-y4 ~ NA*y3 
-y1 ~~ NA*y2
-z ~ NA*y1 + NA*y2
-z ~~ NA*y3
-z ~~ NA*y4
-z ~~ NA*z
-"
-fitDV <- sem(modelDV, data=dat, missing="fiml", fixed.x=FALSE)
-summary(fitDV)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -951,31 +904,6 @@ run(SimData)
 
 # Allow Factor Loading
 
-loading <- matrix(0, 13, 2)
- 
-loading[1:12, 1] <- NA
-loading[13, 2] <- NA
-  
-loadingValues <- matrix(0, 13, 2)
-loadingValues[1:12, 1] <- 0.6
-loadingValues[13, 2] <- 1
-LX <- simMatrix(loading, loadingValues)
- 
-RTD <- symMatrix(diag(13))
-
-VTD <- simVector(c(rep(NA, 12), 0), c(rep(1 - 0.6^2, 12), 0))
- 
-latent.cor <- matrix(NA, 2, 2)
-diag(latent.cor) <- 1
-RPH <- symMatrix(latent.cor, 0.5)
- 
-  
-CFA.Full.Model <- simSetCFA(LY=LX, RPS=RPH, RTE=RTD, VTE = VTD)
-n01 <- simNorm(0, 1)
-ErrDist <- simDataDist(n01, p=13)
-SimData <- simData(200, CFA.Full.Model, sequential=TRUE, errorDist=ErrDist)
-run(SimData)
-  
 # Auxiliary correlates only measurement errors
 
 

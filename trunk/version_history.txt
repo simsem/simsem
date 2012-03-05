@@ -120,3 +120,5 @@ simsem, Version 0.0-8 03/01/12
 - Make runMI be able to select some variables as auxiliary variables
 - Add extract method to select a part of the SimMatrix, SimVector, and SimSet.
 - Fix the help page for simModel and add the help page for the extract method
+- Change SimSet and SimMisspec correlation arguments to have leading R (PH -> RPH, PS -> RPS, TD -> RTD, TE -> RTE)
+

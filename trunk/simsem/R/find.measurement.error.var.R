@@ -8,5 +8,6 @@ find.measurement.error.var <- function(loading, latent.cor, indicator.var = NULL
 	factor.cov <- cor2cov(latent.cor, sqrt(factor.var))
 	factor.part <- loading %*% factor.cov %*% t(loading)
 	error.var <- indicator.var - diag(factor.part)
+	error.var[(error.var < 0) & (indicator.var == 0)] <- 0
 	return(as.vector(error.var))
 }

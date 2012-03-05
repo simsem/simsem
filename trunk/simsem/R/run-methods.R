@@ -618,7 +618,7 @@ setMethod("run", signature="SimDataDist", definition=function(object, n, m, cm) 
 				Data[,c(which(varNotZeros), which(varZeros))] <- Data
 			} 
 		} else if (object@p == 1) {
-			if(cm[1, 1] == 0) {
+			if(as.matrix(cm)[1, 1] == 0) {
 				Data <- rep(m[1], n)
 			} else {
 				Data <- as.matrix(run(object@dist[[1]],n=n))

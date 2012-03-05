@@ -67,12 +67,12 @@ create.free.parameters <- function(object) {
 #	LX <- simMatrix(loading, loadingValues)
 #	latent.cor <- matrix(NA, 2, 2)
 #	diag(latent.cor) <- 1
-#	PH <- symMatrix(latent.cor, 0.5)
+#	RPH <- symMatrix(latent.cor, 0.5)
 #	error.cor <- matrix(0, 6, 6)
 #	diag(error.cor) <- 1
-#	TD <- symMatrix(error.cor)
+#	RTD <- symMatrix(error.cor)
 #	indicator.mean <- rep(NA, 6)
 #	MX <- simVector(indicator.mean, 0)
-#	CFA.Model <- simSetCFA(LX = LX, PH = PH, TD = TD, MX = MX)
+#	CFA.Model <- simSetCFA(LX = LX, RPH = RPH, RTD = RTD, MX = MX)
 #	free <- create.free.parameters(CFA.Model)
 
