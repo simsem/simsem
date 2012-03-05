@@ -208,9 +208,9 @@ planned.missing <- function(dims=c(0,0),nforms=NULL,itemGroups=NULL,twoMethod=NU
     # 5) Sort the column names
     # 6) Convert to back to matrix
     
-    if(length(cov) != 0) {
-      covMat <- matrix(rep(FALSE,nobs*length(cov)),ncol=length(cov))
-      log.df <- as.data.frame(cbind(log.mat,covMat))
+    if(length(excl) != 0) {
+      exclMat <- matrix(rep(FALSE,nobs*length(excl)),ncol=length(excl))
+      log.df <- as.data.frame(cbind(log.mat,exclMat))
       colnames(log.df) <- (c(itemList,excl))
 
       # The column names need to be coerced to integers for the sort to work correctly, and then coerced back
