@@ -31,6 +31,8 @@ testImposeMissing <- function() {
   #Sunthud: Comment these lines out for compiling the program
 }
 
+## The wrapper function for the various functions to impose missing values.Currently, the function will delete
+## x percent of eligible values for MAR and MCAR, if you mark colums to be ignored.
 imposeMissing <- function(data.mat,cov=0,pmMCAR=0,pmMAR=0,nforms=0,
                           itemGroups=0,twoMethod=0,timePoints=1,ignoreCols=0,threshold=0){
  
@@ -106,17 +108,27 @@ makeMAR <- function(data,pm=NULL,cov=NULL,ignoreCols=NULL,threshold=NULL) {
 # Output: Logical matrix of values to be deleted
 makeMCAR <- function(dims,pm=NULL,cov=NULL,ignoreCols=NULL)
   {
+    colList <- 1:dims[2]
+
+    if (!is.null(c(cov,ignoreCols)) ) {
+      misCols <- colList[-c(cov,ignoreCols)]
+    }
+
+    
     R <- matrix(FALSE,dims[1],dims[2])
 
     if(!is.null(pm)){
-      ## Fills a pattern matrix (R) of the same dimensions as your data with a bunch of binomially distributed (p=pm) TRUEs or FALSEs
-       ## Provides an R matrix with a proportion of ones = proportion missing (all iid binomial)
-      R <- matrix(as.logical(rbinom(n=dims[2]*dims[1],size=1,prob=pm)),dims[1],dims[2],byrow=TRUE)
+      ## Fills a pattern matrix (R) of the same dimensions as your data with a bunch of binomially
+      ## distributed (p=pm) TRUEs or FALSEs
+      ## Provides an R matrix with a proportion of ones = proportion missing (all iid binomial)
+      percent.eligible <- (dims[1]*length(misCols))/(dims[1]*dims[2])
+      pr.missing <- pm / percent.eligible
+    
+      R.mis <- matrix(as.logical(rbinom(n=length(misCols)*dims[1],size=1,prob=pr.missing)),dims[1],length(misCols),byrow=TRUE)
     }
 
-    if (!is.null(c(cov,ignoreCols)) ) {
-       R[,c(cov,ignoreCols)] <- FALSE
-    }
+    R[,misCols] <- R.mis
+    
 
     return(R)
 }
