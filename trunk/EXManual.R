@@ -48,6 +48,10 @@ dir <- "C:/Users/student/Dropbox/simsem/simsem/R/"
  source(paste(dir, "AllGenerics.R", sep=""))
  sourceDir(dir)
 
+library(MASS)
+dat <- mvrnorm(200, rep(0, 6), diag(6))
+dat <- imposeMissing(dat, pmMAR=0.2, cov=6)
+ 
 loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
@@ -730,7 +734,7 @@ CFA.Model <- extract(CFA.Model.Aux, y=1:6)
 data <- run(SimData, dataOnly=F)
 
 #Wait for Patrick to update MCAR
-SimMissing <- simMissing(pmMCAR=0.1, cov=7, numImps=5)
+SimMissing <- simMissing(pmMAR=0.1, cov=7, numImps=5, threshold = 0.5)
 
 data <- run(SimMissing, data)
 
@@ -746,8 +750,12 @@ summaryParam(Output)
 
 ####################################### Example 11 ############################
 
+library(simsem)
+
 u79 <- simUnif(0.7, 0.9)
 u5 <- simUnif(-0.5, 0.5)
+n01 <- simNorm(0, 1)
+c5 <- simChisq(5)
 
 loading <- matrix(0, 5, 3)
 loading[1:3, 1] <- NA
@@ -776,22 +784,29 @@ VY <- simVector(c(NA, NA, NA, 0, 0), 1)
 
 SEM.Model <- simSetSEM(LY=LY, RPS=RPS, BE=BE, RTE=RTE, VY=VY)
 
-n01 <- simNorm(0, 1)
-c5 <- simChisq(5)
+errorCorMis <- diag(5)
+errorCorMis[1:3, 1:3] <- NA
+errorCorMis <- diag(5)
+RTE.mis <- symMatrix(errorCorMis, n01)
+
+SEM.Model.Mis <- simMisspecSEM(RTE=RTE.mis)
+
 facDist <- simDataDist(n01, c5, n01)
 
-SimData <- simData(200, SEM.Model, sequential=TRUE, facDist=facDist)
-dat <- run(SimData, dataOnly=FALSE)
-  
-SimModel <- simModel(SEM.Model)
-out <- run(SimModel, dat)
-
+SimData <- simData(200, SEM.Model, misspec=SEM.Model.Mis, sequential=TRUE, facDist=facDist)
+SimModel <- simModel(SEM.Model, estimator="mlm")
+Output <- simResult(100, SimData, SimModel)
+getCutoff(Output, 0.05)
+plotCutoff(Output, 0.05)
+summaryParam(Output)
 
 ###########
 
 
 u79 <- simUnif(0.7, 0.9)
 u5 <- simUnif(-0.5, 0.5)
+n01 <- simNorm(0, 1)
+c5 <- simChisq(5)
 
 loading <- matrix(0, 5, 3)
 loading[1:3, 1] <- NA
@@ -806,40 +821,132 @@ facCor[2, 1] <- NA
 facCor[1, 2] <- NA
 RPS <- symMatrix(facCor, "u5")
 
-VE <- simVector(c(1, NA, NA), c(0, 5, 2))
-
-ME <- simVector(c(0, NA, NA), c(0, 20, 4))
-
-TY <- simVector(c(NA, NA, NA, 0, 0), rep(0, 5))
 
 path <- matrix(0, 3, 3)
 path[3, 1] <- NA
 path[3, 2] <- NA
 BE <- simMatrix(path, "u5")
 
-RTE <- symMatrix(diag(5))
-
 VY <- simVector(c(NA, NA, NA, 0, 0), 1)
+
+VE <- simVector(c(1, NA, NA), c(0, 1, 1))
+
+ME <- simVector(c(0, NA, NA), c(0, 0, 0))
+
+TY <- simVector(c(NA, NA, NA, 0, 0), rep(0, 5))
+
+RTE <- symMatrix(diag(5))
 
 SEM.Model <- simSetSEM(LY=LY, RPS=RPS, BE=BE, RTE=RTE, VY=VY, VE=VE, ME=ME, TY=TY)
 
-n01 <- simNorm(0, 1)
-c5 <- simChisq(5)
+errorCorMis <- diag(5)
+errorCorMis[1:3, 1:3] <- NA
+errorCorMis <- diag(5)
+RTE.mis <- symMatrix(errorCorMis, n01)
+
+SEM.Model.Mis <- simMisspecSEM(RTE=RTE.mis)
+
+
 facDist <- simDataDist(n01, c5, n01)
 
-SimData <- simData(200, SEM.Model, sequential=TRUE, facDist=facDist)
-dat <- run(SimData, dataOnly=FALSE)
-  
-SimModel <- simModel(SEM.Model)
+SimData <- simData(200, SEM.Model, misspec=SEM.Model.Mis, sequential=TRUE, facDist=facDist)
+ 
+SimModel <- simModel(SEM.Model, estimator="mlm")
+
+Output <- simResult(100, SimData, SimModel)
+getCutoff(Output, 0.05)
+plotCutoff(Output, 0.05)
+summaryParam(Output)
+
+########################################## Example 12 ###################
+
+library(simsem)
+
+u35 <- simUnif(0.3, 0.5)
+u57 <- simUnif(0.5, 0.7)
+n01 <- simNorm(0, 1)
+
+loading <- matrix(0, 7, 3)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+loading[1:7, 3] <- NA
+loadingVal <- matrix(0, 7, 3)
+loadingVal[1:3, 1] <- "u57"
+loadingVal[4:6, 2] <- "u57"
+loadingVal[1:6, 3] <- "u35"
+loadingVal[7, 3] <- 1
+LY <- simMatrix(loading, loadingVal)
+
+RPS <- symMatrix(diag(3))
+
+path <- matrix(0, 3, 3)
+path[2, 1] <- NA
+BE <- simMatrix(path, "u35")
+
+RTE <- symMatrix(diag(7))
+
+VY <- simVector(c(rep(NA, 6), 0), rep(1, 7))
+
+Cov.Model <- simSetSEM(LY=LY, RPS=RPS, BE=BE, RTE=RTE, VY=VY)
+
+errorCorMis <- diag(7)
+errorCorMis[1:6, 1:6] <- NA
+errorCorMis <- diag(7)
+RTE.mis <- symMatrix(errorCorMis, n01)
+
+Cov.Model.Mis <- simMisspecSEM(RTE=RTE.mis)
+
+SimData <- simData(200, Cov.Model, misspec=Cov.Model.Mis)
+dat <- run(SimData)
+
+model <- "
+e1 =~ NA*y1 + NA*y2 + NA*y3
+e2 =~ NA*y4 + NA*y5 + NA*y6
+e2 ~ NA*e1
+e1 ~~ 1*e1
+e2 ~~ 1*e2
+y1 ~ y7
+y2 ~ y7
+y3 ~ y7
+y4 ~ y7
+y5 ~ y7
+y6 ~ y7
+
+"
+
+fit <- sem(model, data=dat, meanstructure=TRUE, fixed.x=FALSE)
+summary(fit)
+
+# This code is wrong in the write.lavaan.code!!!
+model2 <- "
+e1 =~ NA*y1 + NA*y2 + NA*y3
+e2 =~ NA*y4 + NA*y5 + NA*y6
+e3 =~ NA*y1 + NA*y2 + NA*y3 + NA*y4 + NA*y5 + NA*y6 + NA*y7
+y7 ~~ 0*y7
+e2 ~ NA*e1
+e1 ~~ 1*e1
+e2 ~~ 1*e2
+e3 ~~ 1*e3
+e1 ~~ 0*e3
+e2 ~~ 0*e3
+e1 ~~ 0*e2
+"
+fit2 <- sem(model2, data=dat, fixed.x=TRUE, meanstructure=TRUE)
+summary(fit2)
+
+SimModel <- simModel(Cov.Model)
 out <- run(SimModel, dat)
 
+Output <- simResult(100, SimData, SimModel)
+getCutoff(Output, 0.05)
+plotCutoff(Output, 0.05)
+summaryParam(Output)
 
-
-
-
-
-
-
+# Add simTransform to provide a new data to residual centering
+# Add LH matrix to make a covariate
+# Add PH, PS, TD, TE, and TH matrices
+# find.recursive.set if a row is all 0, give it to 1. And if the column is also 0 too. What should we do? Hide it in comment?
+# Then if any factors are covariate, explicitly put the PS to them!
 
 
 

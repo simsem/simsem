@@ -550,21 +550,21 @@ setMethod("run", signature="SimModel", definition=function(object, data, simMiss
 #Return: 	SimModelOut.c that saves the result.
 
 setMethod("run", signature="SimMissing", definition=function(object, data) {
-	result <- NULL
 	if(is(data, "SimDataOut")) {
-		data@data <- imposeMissing(data@data, cov=object@cov, pmMCAR=object@pmMCAR,
+		data@data <- as.data.frame(imposeMissing(data@data, cov=object@cov, pmMCAR=object@pmMCAR,
             pmMAR=object@pmMAR, nforms=object@nforms, timePoints=object@timePoints,
-            itemGroups=object@itemGroups, twoMethod=object@twoMethod)
+            itemGroups=object@itemGroups, twoMethod=object@twoMethod))
 	} else if (is.data.frame(data)) {
-		data <- imposeMissing(data, cov=object@cov, pmMCAR=object@pmMCAR,
+		data <- as.data.frame(imposeMissing(data, cov=object@cov, pmMCAR=object@pmMCAR,
             pmMAR=object@pmMAR, nforms=object@nforms, timePoints=object@timePoints,
-            itemGroups=object@itemGroups, twoMethod=object@twoMethod)	
+            itemGroups=object@itemGroups, twoMethod=object@twoMethod))	
 	} else if (is.matrix(data)) {
 		data <- as.data.frame(data)
-		data <- imposeMissing(data, cov=object@cov, pmMCAR=object@pmMCAR,
+		data <- as.data.frame(imposeMissing(data, cov=object@cov, pmMCAR=object@pmMCAR,
             pmMAR=object@pmMAR, nforms=object@nforms, timePoints=object@timePoints,
-            itemGroups=object@itemGroups, twoMethod=object@twoMethod)	
+            itemGroups=object@itemGroups, twoMethod=object@twoMethod))	
 	}
+	
 	return(data)
 })
 #Arguments: 
