@@ -123,3 +123,5 @@ simsem, Version 0.0-8 03/05/12
 - Change SimSet and SimMisspec correlation arguments to have leading R (PH -> RPH, PS -> RPS, TD -> RTD, TE -> RTE)
 - Allow setting the overall variance as 0 to mean no residual or measurement errors.
 - Changing how to handle MAR to threshold method
+- Adding two examples on auxiliary variable/MAR and single-indicator factor
+- Make the miPoolVector function public and make the manual page.

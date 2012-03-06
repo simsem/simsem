@@ -12,4 +12,4 @@ export(simUnif, simNorm, simBeta, simBinom, simCauchy, simChisq, simExp,
 	simPois, simT, simWeibull, 
 	loadingFromAlpha, simMatrix, symMatrix, simVector,
 	simSetCFA, simSetPath, simSetSEM, simEqualCon, simData, simResult, simDataDist,
-	simMisspecCFA, simMisspecPath, simMisspecSEM, runMI, simMissing, imposeMissing)
+	simMisspecCFA, simMisspecPath, simMisspecSEM, runMI, simMissing, imposeMissing, miPoolVector)

@@ -686,69 +686,7 @@ getCutoff(simOut, 0.05)
 plotCutoff(simOut, 0.05)
 summaryParam(simOut)
 
-################################### Example 10 ######################################
-
-library(simsem)
-
-u57 <- simUnif(0.5, 0.7)
-u4 <- simUnif(-0.4, 0.4)
-u35 <- simUnif(0.3, 0.5)
-u2 <- simUnif(-0.2, 0.2)
-#n01 <- simNorm(0, 1)
-
-loading <- matrix(0, 7, 2)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-LX <- simMatrix(loading, "u57")
-
-latent.cor <- matrix(NA, 2, 2)
-diag(latent.cor) <- 1
-RPH <- symMatrix(latent.cor, "u35")
-
-error.cor <- diag(7)
-error.cor[1:6, 7] <- NA
-error.cor[7, 1:6] <- NA
-RTD <- symMatrix(error.cor, "u4")
-
-VX <- simVector(rep(NA, 7), 1)
-
-CFA.Model.Aux <- simSetCFA(LX = LX, RPH = RPH, RTD = RTD, VX = VX) 
-
-mis.loading <- matrix(0, 7, 2)
-mis.loading[1:3, 2] <- NA
-mis.loading[4:6, 1] <- NA
-mis.LY <- simMatrix(mis.loading, "u2")
-
-#mis.error.cor <- matrix(NA, 7, 7)
-#diag(mis.error.cor) <- 1
-#mis.error.cor[1:6, 7] <- 0
-#mis.error.cor[7, 1:6] <- 0
-#mis.RTD <- symMatrix(mis.error.cor, "n01")
-
-CFA.Mis.Model <- simMisspecCFA(LY = mis.LY)#, RTD = mis.RTD)
-
-SimData <- simData(200, CFA.Model.Aux, misspec = CFA.Mis.Model)
-
-CFA.Model <- extract(CFA.Model.Aux, y=1:6)
-
-data <- run(SimData, dataOnly=F)
-
-#Wait for Patrick to update MCAR
-SimMissing <- simMissing(pmMAR=0.1, cov=7, numImps=5, threshold = 0.5)
-
-data <- run(SimMissing, data)
-
-SimModel <- simModel(CFA.Model)
-
-
-out <- run(SimModel, data, simMissing=SimMissing)
-
-Output <- simResult(100, SimData, SimModel, SimMissing)
-getCutoff(Output, 0.05)
-plotCutoff(Output, 0.05)
-summaryParam(Output)
-
-####################################### Example 11 ############################
+####################################### Example 10 ############################
 
 library(simsem)
 
@@ -780,7 +718,6 @@ BE <- simMatrix(path, "u5")
 RTE <- symMatrix(diag(5))
 
 VY <- simVector(c(NA, NA, NA, 0, 0), 1)
-
 
 SEM.Model <- simSetSEM(LY=LY, RPS=RPS, BE=BE, RTE=RTE, VY=VY)
 
@@ -857,6 +794,61 @@ Output <- simResult(100, SimData, SimModel)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
+
+################################### Example 11 ######################################
+
+library(simsem)
+
+u57 <- simUnif(0.5, 0.7)
+u4 <- simUnif(-0.4, 0.4)
+u35 <- simUnif(0.3, 0.5)
+u2 <- simUnif(-0.2, 0.2)
+
+loading <- matrix(0, 7, 2)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+LX <- simMatrix(loading, "u57")
+
+latent.cor <- matrix(NA, 2, 2)
+diag(latent.cor) <- 1
+RPH <- symMatrix(latent.cor, "u35")
+
+error.cor <- diag(7)
+error.cor[1:6, 7] <- NA
+error.cor[7, 1:6] <- NA
+RTD <- symMatrix(error.cor, "u4")
+
+VX <- simVector(rep(NA, 7), 1)
+
+CFA.Model.Aux <- simSetCFA(LX = LX, RPH = RPH, RTD = RTD, VX = VX) 
+
+mis.loading <- matrix(0, 7, 2)
+mis.loading[1:3, 2] <- NA
+mis.loading[4:6, 1] <- NA
+mis.LY <- simMatrix(mis.loading, "u2")
+
+CFA.Mis.Model <- simMisspecCFA(LY = mis.LY)#, RTD = mis.RTD)
+
+SimData <- simData(200, CFA.Model.Aux, misspec = CFA.Mis.Model)
+
+CFA.Model <- extract(CFA.Model.Aux, y=1:6)
+
+data <- run(SimData, dataOnly=F)
+
+SimMissing <- simMissing(pmMAR=0.1, cov=7, numImps=5, threshold = 0.5)
+
+data <- run(SimMissing, data)
+
+SimModel <- simModel(CFA.Model)
+
+
+out <- run(SimModel, data, simMissing=SimMissing)
+
+Output <- simResult(100, SimData, SimModel, SimMissing)
+getCutoff(Output, 0.05)
+plotCutoff(Output, 0.05)
+summaryParam(Output)
+
 
 ########################################## Example 12 ###################
 
