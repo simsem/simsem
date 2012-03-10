@@ -82,6 +82,22 @@ data.model <- build.example.model()
 data.object <- simData(300, data.model)
 sim.data.model <- simModel(data.model) # this one is the actual model
 
+TEcons <- matrix(0, 4, 2)
+TEcons[1,] <- c(1, 1)
+TEcons[2,] <- c(2, 2)
+TEcons[3,] <- c(3, 3)
+TEcons[4,] <- c(4, 4)
+rownames(TEcons) <- rep("TE", 4)
+
+equal.TE <- simEqualCon(TEcons, modelType="CFA")
+sim.data.model1 <- simModel(data.model)
+sim.data.model1@equalCon <- equal.TE
+sim.data.model1@param@PS[1,2]<-0
+sim.data.model1@param@PS[2,1]<-0
+
+output1<-simResult(data.object,sim.data.model, nRep=30, seed=123456, multicore=TRUE)
+output2<-simResult(data.object,sim.data.model1, nRep=30, seed=123456, multicore=TRUE)
+anova(output1,output2)
 runRep(data.object,data.model)
 
 complete.l <- list()
