@@ -42,7 +42,7 @@ function(object, ...) {
         #stop("simSEM ERROR: Two models have the same degrees of freedom and cannot be nested")
    
 	#ORDERING DOES NOT WORK RIGHT NOW. Why??
-    mods <- mods[order(nfreepar, decreasing = TRUE)]
+    mods <- mods[order(nfreepar, decreasing = FALSE)]
 
 	#Need to pull fit statistics from each model, compare each one...
 #Use apply and diff function to get differneces for each rows
@@ -55,11 +55,11 @@ function(object, ...) {
     
 
     # difference statistics. Taking the absolute value so order models entered doesn't matter
-   	Chi.delta <- abs(apply(Chi, 1, diff))
-    Df.delta     <- abs(apply(Df, 1, diff))
-    CFI.delta     <- abs(apply(CFI, 1, diff))
-    TLI.delta     <- abs(apply(TLI, 1, diff))
-    RMSEA.delta     <- abs(apply(RMSEA, 1, diff))
+   	Chi.delta <- (apply(Chi, 1, diff))
+    Df.delta     <- (apply(Df, 1, diff))
+    CFI.delta     <- (apply(CFI, 1, diff))
+    TLI.delta     <- (apply(TLI, 1, diff))
+    RMSEA.delta     <- (apply(RMSEA, 1, diff))
        
     # Power of test. 0 = not siginficant, 1 = sig. 
     Power.delta <- pchisq(Chi.delta, Df.delta, lower = FALSE) < .05
@@ -73,8 +73,10 @@ function(object, ...) {
                       "Chisq diff" = c(NA, mean(Chi.delta)),
                       "Df diff" = c(NA, mean(Df.delta)),
                       #"Pr(>Chisq)" = Pvalue.delta, Don't report mean p value, meaningless?
-					  "Power" = c(NA, mean(Power.delta))
-                       
+					  "Power" = c(NA, mean(Power.delta)),
+                      "CFI diff" = c(NA, mean(CFI.delta)),
+					  "TLI diff" = c(NA, mean(TLI.delta)),
+					  "RMSEA diff" = c(NA, mean(RMSEA.delta))
                       )
 
     
@@ -83,4 +85,6 @@ function(object, ...) {
     return(val)
 
 })
+
+anova(output1,output2)
 
