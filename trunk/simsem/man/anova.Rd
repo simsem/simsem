@@ -25,17 +25,12 @@ anova(object, ...)
 	A data frame that provides the statistics described above from all parameters.
 	For using with \code{\linkS4class{SimModelOut}}, each column means
 	\itemize{
-		\item \code{Df:} Average of degrees of freedom across all replications
-		\item \code{Chisq:} Average of the chi square statistic across all replications
-		\item \code{CFI:} Average of the CFI across all replications
-		\item \code{TLI:} Average of the TLI across all replications
-		\item \code{RMSEA:} Average of the RMSEA across all replications
-		\item \code{Chisq diff:} Average chi square difference across all replications
-		\item \code{Df diff:} Average degrees of freedom difference across all replications
+		\item \code{Chisq.diff:} Average chi square difference across all replications
+		\item \code{Df.diff:} Average degrees of freedom difference across all replications
 		\item \code{Power:} The proportion of replications where the likelihood ratio test is significant
-		\item \code{CFI diff:} Average difference of the CFI across all replications
-		\item \code{TLI diff:} Average difference of the TLI across all replications
-		\item \code{RMSEA diff:} Average difference of the RMSEA across all replications
+		\item \code{CFI.diff:} Average difference of the CFI across all replications
+		\item \code{TLI.diff:} Average difference of the TLI across all replications
+		\item \code{RMSEA.diff:} Average difference of the RMSEA across all replications
 	}	
 	For using with \code{linkS4class{SimResult}}, each column means
 	\itemize{
