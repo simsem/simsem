@@ -86,5 +86,3 @@ function(object, ...) {
 
 })
 
-anova(output1,output2)
-
