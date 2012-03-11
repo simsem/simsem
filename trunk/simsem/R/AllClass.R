@@ -401,8 +401,10 @@ setClass("NullSimVector", contains="SimVector")
 # Attributes:
 #	modelType:	Model type (CFA, Path, or SEM)
 #	LY:		SimMatrix.c of Factor loading matrix between endogenous factors and Y indicators 
+#	TE:
 #	RTE:		SymMatrix.c of Correlation matrix between Y measurement error 
 #	VTE:	SimVector.c of Variance of Y measurement error 
+#	PS:
 #	RPS:		SymMatrix.c of Residual correlation of endogenous factors  
 #	VPS:	SimVector.c of Residual variances of endogenous factors 
 #	BE:		SimMatrix.c of Regression effect among endogenous factors 
@@ -413,8 +415,10 @@ setClass("NullSimVector", contains="SimVector")
 #	VE:		SimVector.c of Total variance of endogenous factors 
 #	VY:		SimVector.c of Total variance of Y indicators 
 #	LX:		SimMatrix.c of Factor loading matrix between exogenous factors and X indicators 
+#	TD:
 #	RTD:		SymMatrix.c of Correlation matrix between X measurement error 
 #	VTD:	SimVector.c of Variance of X measurement error 
+# 	PH:
 #	RPH:		SymMatrix.c of Correlation among exogenous factors 
 #	GA:		SimMatrix.c of Regreeion effect from exogenous factors to endogenous factors 
 #	TX:		SimVector.c of Measurement intercepts of X indicators 
@@ -422,6 +426,7 @@ setClass("NullSimVector", contains="SimVector")
 #	MX:		SimVector.c of Total mean of X indicators 
 #	VPH:	SimVector.c of Variance of exogenous factors 
 #	VX:		SimVector.c of Total variance of X indicators 
+#	TH:
 #	RTH:		SimMatrix.c Measurement error correlation between X indicators and Y indicators 
 # Methods:
 #	count.random.object
@@ -437,8 +442,10 @@ setClass("SimSet",
 	representation(
 		modelType="character", #Path, Path.exo, CFA, SEM, SEM.exo
 		LY="SimMatrix",
+		TE="SymMatrix",
 		RTE="SymMatrix",
 		VTE="SimVector",
+		PS="SymMatrix",
 		RPS="SymMatrix",
 		VPS="SimVector",
 		BE="SimMatrix",
@@ -449,20 +456,25 @@ setClass("SimSet",
 		VE="SimVector",
 		VY="SimVector",
 		LX="SimMatrix",
+		TD="SymMatrix",
 		RTD="SymMatrix",
 		VTD="SimVector",
+		PH="SymMatrix",
 		RPH="SymMatrix",
+		VPH="SimVector",
 		GA="SimMatrix",
 		TX="SimVector",
 		KA="SimVector",
 		MX="SimVector",
-		VPH="SimVector",
 		VX="SimVector",
+		TH="SimMatrix",
 		RTH="SimMatrix"), #Delta on rows, epsilon on columns
 	prototype(
 		LY=new("NullSimMatrix"),
+		TE=new("NullSymMatrix"),
 		RTE=new("NullSymMatrix"),
 		VTE=new("NullSimVector"),
+		PS=new("NullSymMatrix"),
 		RPS=new("NullSymMatrix"),
 		VPS=new("NullSimVector"),
 		BE=new("NullSimMatrix"),
@@ -473,14 +485,16 @@ setClass("SimSet",
 		VE=new("NullSimVector"),
 		VY=new("NullSimVector"), 
 		LX=new("NullSimMatrix"),
+		TD=new("NullSymMatrix"),
 		RTD=new("NullSymMatrix"),
 		VTD=new("NullSimVector"),
+		PH=new("NullSymMatrix"),
 		RPH=new("NullSymMatrix"),
+		VPH=new("NullSimVector"),
 		GA=new("NullSimMatrix"),
 		TX=new("NullSimVector"),
 		KA=new("NullSimVector"),
 		MX=new("NullSimVector"),
-		VPH=new("NullSimVector"),
 		VX=new("NullSimVector"),
 		RTH=new("NullSimMatrix"))
 )
@@ -530,8 +544,10 @@ setClass("NullSimSet", contains="SimSet")
 # Attributes:
 #	modelType:	Model type (CFA, Path, or SEM)
 #	LY:		matrix.c of Factor loading matrix between endogenous factors and Y indicators 
+#	TE:
 #	RTE:		matrix.c of Correlation matrix between Y measurement error 
 #	VTE:	vector.c of Variance of Y measurement error 
+#	PS:
 #	RPS:		matrix.c of Residual correlation of endogenous factors  
 #	VPS:	vector.c of Residual variances of endogenous factors 
 #	BE:		matrix.c of Regression effect among endogenous factors 
@@ -542,8 +558,10 @@ setClass("NullSimSet", contains="SimSet")
 #	VE:		vector.c of Total variance of endogenous factors 
 #	VY:		vector.c of Total variance of Y indicators 
 #	LX:		matrix.c of Factor loading matrix between exogenous factors and X indicators 
+#	TD:
 #	RTD:		matrix.c of Correlation matrix between X measurement error 
 #	VTD:	vector.c of Variance of X measurement error 
+#	PH:
 #	RPH:		matrix.c of Correlation among exogenous factors 
 #	GA:		matrix.c of Regreeion effect from exogenous factors to endogenous factors 
 #	TX:		vector.c of Measurement intercepts of X indicators 
@@ -551,6 +569,7 @@ setClass("NullSimSet", contains="SimSet")
 #	MX:		vector.c of Total mean of X indicators 
 #	VPH:	vector.c of Variance of exogenous factors 
 #	VX:		vector.c of Total variance of X indicators 
+#	TH:
 #	RTH:		matrix.c Measurement error correlation between X indicators and Y indicators 
 # Methods:
 #	combine.object
@@ -565,7 +584,9 @@ setClass("MatrixSet",
 		modelType="character",
 		LY="matrix",
 		RTE="matrix",
+		TE="matrix",
 		VTE="vector",
+		PS="matrix",
 		RPS="matrix",
 		VPS="vector",
 		BE="matrix",
@@ -576,8 +597,10 @@ setClass("MatrixSet",
 		VE="vector",
 		VY="vector",
 		LX="matrix",
+		TD="matrix",
 		RTD="matrix",
 		VTD="vector",
+		PH="matrix",
 		RPH="matrix",
 		GA="matrix",
 		TX="vector",
@@ -585,11 +608,14 @@ setClass("MatrixSet",
 		MX="vector",
 		VPH="vector",
 		VX="vector",
+		TH="matrix",
 		RTH="matrix"),
 	prototype(
 		LY=new("NullMatrix"),
+		TE=new("NullMatrix"),
 		RTE=new("NullMatrix"),
 		VTE=new("NullVector"),
+		PS=new("NullMatrix"),
 		RPS=new("NullMatrix"),
 		VPS=new("NullVector"),
 		BE=new("NullMatrix"),
@@ -600,8 +626,10 @@ setClass("MatrixSet",
 		VE=new("NullVector"),
 		VY=new("NullVector"),
 		LX=new("NullMatrix"),
+		TD=new("NullMatrix"),
 		RTD=new("NullMatrix"),
 		VTD=new("NullVector"),
+		PH=new("NullMatrix"),
 		RPH=new("NullMatrix"),
 		GA=new("NullMatrix"),
 		TX=new("NullVector"),
@@ -609,6 +637,7 @@ setClass("MatrixSet",
 		MX=new("NullVector"),
 		VPH=new("NullVector"),
 		VX=new("NullVector"),
+		TH=new("NullMatrix"),
 		RTH=new("NullMatrix"))
 )
 #Examples:

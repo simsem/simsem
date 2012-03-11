@@ -48,10 +48,6 @@ dir <- "C:/Users/student/Dropbox/simsem/simsem/R/"
  source(paste(dir, "AllGenerics.R", sep=""))
  sourceDir(dir)
 
-library(MASS)
-dat <- mvrnorm(200, rep(0, 6), diag(6))
-dat <- imposeMissing(dat, pmMAR=0.2, cov=6)
- 
 loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
@@ -65,7 +61,7 @@ error.cor <- matrix(0, 6, 6)
 diag(error.cor) <- 1
 RTD <- symMatrix(error.cor)
 
-CFA.Model <- simSetCFA(LX = LX, RPH = RPH, RTD = RTD)
+CFA.Model <- simSetCFA(LY = LX, RPH = RPH, RTD = RTD)
 
 SimData <- simData(200, CFA.Model)
 

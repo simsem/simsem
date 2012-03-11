@@ -8,7 +8,7 @@
 #	exo:	TRUE if the model includes exogenous elements (X-side in LISREL notation). The default is FALSE (specify endogenous elements only).
 # Return: 	SimSet.c containing Path model (with "Path" or "Path.exo" tag)
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 6, 2011
+# Date Modified: March 10, 2012
 
 simSetPath <- function(..., exo = FALSE) {
 	W <- get.keywords()
@@ -16,29 +16,44 @@ simSetPath <- function(..., exo = FALSE) {
 	Names <- names(List)
 	keywords <- NULL
 	if(exo == FALSE) {
-		keywords <- list(W$BE, W$RPS, W$VPS, W$VE, W$AL, W$ME)
+		keywords <- list(W$BE, W$RPS, W$VPS, W$VE, W$AL, W$ME, W$PS) # Length = 7
 	} else {
-		keywords <- list(W$BE, W$RPS, W$VPS, W$VE, W$AL, W$ME, W$GA, W$RPH, W$VPH, W$KA)
+		keywords <- list(W$BE, W$RPS, W$VPS, W$VE, W$AL, W$ME, W$PS, W$GA, W$RPH, W$VPH, W$KA, W$PH) # Length = 12
 	}
 	position <- match.keyword(Names, keywords)
 	if(length(position) != length(unique(position))) stop("Some objects were identified more than once.")
 	ifelse(contain(1, position), BE <- List[position == 1], stop("No path coefficient object between factor.ETA"))
 	ne <- ncol(run(BE[[1]]))
-	ifelse(contain(2, position), RPS <- List[position == 2], stop("No residual correlation object between factor.ETA"))
-	ifelse(contain(3, position), VPS <- List[position == 3], VPS <- list(new("NullSimVector")))
-	ifelse(contain(4, position), VE <- List[position == 4], ifelse(is.null.object(VPS[[1]]), { VE <- list(freeVector(1, ne)); comment(VE[[1]]) <- "default"}, VE <- list(new("NullSimVector"))))
+	if(contain(7, position)) {
+		PS <- List[position == 7]
+		ifelse(contain(2, position), stop("Covariance and correlation cannot be specified at the same time!"), RPS <- list(new("NullSymMatrix")))
+		ifelse(contain(3, position), stop("Covariance and variance cannot be specified at the same time!"), VPS <- list(new("NullSimVector")))		
+		ifelse(contain(4, position), stop("Covariance and total indicator variance cannot be specified at the same time!"), VE <- list(new("NullSimVector")))		
+	} else {
+		PS <- list(new("NullSymMatrix"))
+		ifelse(contain(2, position), RPS <- List[position == 2], stop("No residual correlation object between factor.ETA"))
+		ifelse(contain(3, position), VPS <- List[position == 3], VPS <- list(new("NullSimVector")))
+		ifelse(contain(4, position), VE <- List[position == 4], ifelse(is.null.object(VPS[[1]]), { VE <- list(freeVector(1, ne)); comment(VE[[1]]) <- "default"}, VE <- list(new("NullSimVector"))))
+	}
 	ifelse(contain(6, position), ME <- List[position == 6], ME <- list(new("NullSimVector")))
 	ifelse(contain(5, position), AL <- List[position == 5], ifelse(is.null.object(ME[[1]]), { AL <- list(freeVector(0, ne)); comment(AL[[1]]) <- "default"}, AL <- list(new("NullSimVector"))))
 	Output <- NULL
 	if(exo) {
-		ifelse(contain(7, position), GA <- List[position == 7], stop("No path coefficient object from Factor.KSI to Factor.ETA"))
+		ifelse(contain(8, position), GA <- List[position == 8], stop("No path coefficient object from Factor.KSI to Factor.ETA"))
 		nk <- ncol(run(GA[[1]]))
-		ifelse(contain(8, position), RPH <- List[position == 8], stop("No correlation object between factor.KSI"))
-		ifelse(contain(9, position), VPH <- List[position == 9], { VPH <- list(freeVector(1, nk)); comment(VPH[[1]]) <- "default"})
-		ifelse(contain(10, position), KA <- List[position == 10], { KA <- list(freeVector(0, nk)); comment(KA[[1]]) <- "default"})
-		Output <- new("SimSet", BE=BE[[1]], RPS=RPS[[1]], VPS=VPS[[1]], VE=VE[[1]], AL=AL[[1]], ME=ME[[1]], GA=GA[[1]], RPH=RPH[[1]], VPH=VPH[[1]], KA=KA[[1]], modelType="Path.exo")	
+		if(contain(12, position)) {
+			PH <- List[position == 12]
+			ifelse(contain(9, position), stop("Covariance and correlation cannot be specified at the same time!"), RPH <- list(new("NullSymMatrix")))
+			ifelse(contain(10, position), stop("Covariance and variance cannot be specified at the same time!"), VPH <- list(new("NullSimVector")))				
+		} else {
+			PH <- list(new("NullSymMatrix"))
+			ifelse(contain(9, position), RPH <- List[position == 9], stop("No correlation object between factor.KSI"))
+			ifelse(contain(10, position), VPH <- List[position == 10], { VPH <- list(freeVector(1, nk)); comment(VPH[[1]]) <- "default"})
+		}
+		ifelse(contain(11, position), KA <- List[position == 11], { KA <- list(freeVector(0, nk)); comment(KA[[1]]) <- "default"})
+		Output <- new("SimSet", BE=BE[[1]], PS=PS[[1]], RPS=RPS[[1]], VPS=VPS[[1]], VE=VE[[1]], AL=AL[[1]], ME=ME[[1]], GA=GA[[1]], PH=PH[[1]], RPH=RPH[[1]], VPH=VPH[[1]], KA=KA[[1]], modelType="Path.exo")	
 	} else {
-		Output <- new("SimSet", BE=BE[[1]], RPS=RPS[[1]], VPS=VPS[[1]], VE=VE[[1]], AL=AL[[1]], ME=ME[[1]], modelType="Path")
+		Output <- new("SimSet", BE=BE[[1]], PS=PS[[1]], RPS=RPS[[1]], VPS=VPS[[1]], VE=VE[[1]], AL=AL[[1]], ME=ME[[1]], modelType="Path")
 	}
 	return(Output)
 }

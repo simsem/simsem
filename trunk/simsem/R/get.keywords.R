@@ -1,37 +1,55 @@
+# get.keywords
+# Function -- simsem package
+# List of all keywords used in the simsem package
+# Argument:
+#	No argument
+# Return: 	A list of all keywords 
+# Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
+# Date Modified: March 10, 2012
+
 get.keywords <- function() {
-	LY <- c("LY", "ly", "Ly")		#Factor Loading of Y from E
-	RTE <- c("RTE", "rte", "Rte")		#Measurement Error Correlation
-	RPS <- c("RPS", "rps", "Rps")		#Factor Residual Correlation
-	BE <- c("BE", "be", "Be")		#Path within endogeneous factors
-	VY <- c("VY", "vy", "Vy")		#Variance of indicators
-	VPS <- c("VPS", "Vps", "vps")	#Variance of factor residual
-	VE <- c("VE", "Ve", "ve")		#Variance of factors
-	TY <- c("TY", "ty", "Ty")		#Measurement Intercept
-	ME <- c("ME", "Me", "me")		#mean of Factor
-	VTE <- c("VTE", "vte", "Vte")	#Variance of measurement error
-	AL <- c("AL", "Al", "al")		#Intercept of latent residuals
-	MY <- c("MY", "My", "my")		#mean of indicators
+	LY <- "LY"		#Factor Loading of Y from E
+	TE <- "TE"		#Measurement Error Covariance
+	RTE <- "RTE"	#Measurement Error Correlation
+	PS <- "PS"		#Factor Residual Covariance
+	RPS <- "RPS"	#Factor Residual Correlation
+	BE <- "BE"		#Path within endogeneous factors
+	VY <- "VY"		#Variance of indicators
+	VPS <- "VPS"	#Variance of factor residual
+	VE <- "VE"		#Variance of factors
+	TY <- "TY"		#Measurement Intercept
+	ME <- "ME"		#mean of Factor
+	VTE <- "VTE"	#Variance of measurement error
+	AL <- "AL"		#Intercept of latent residuals
+	MY <- "MY"		#mean of indicators
 
-	LX <- c("LX", "Lx", "lx")		#Exo Factor Loading
-	RTD <- c("RTD", "rtd", "Rtd")		#Factor Measurement Error Correlation
-	RPH <- c("RPH", "rph", "Rph")		#Exo factor correlation
-	GA <- c("GA", "ga", "Ga")		#Path from Exo to Endo
-	VX <- c("VX", "Vx", "vx")		#Variance of exo indicators
-	VPH <- c("VK", "vk", "Vk", "Vph", "VPH", "vph")		#Variance of exo factors
-	TX <- c("TX", "Tx", "tx")		#Exo measurement intercept
-	KA <- c("KA", "Ka", "ka", "MK", "mk", "Mk")		#Exo factor mean
-	VTD <- c("VTD", "Vtd", "vtd")	#Variance of exo measurement error
-	MX <- c("MX", "mx", "Mx")		#Exo indicator mean
-	RTH <- c("RTH", "Rth", "Rth")		#Correlated error of exo (row) and endo (column)
+	LX <- "LX"		#Exo Factor Loading
+	TD <- "TD"		#Exo Measurement Error Covariance
+	RTD <- "RTD"	#Exo Measurement Error Correlation
+	PH <- "PH"		#Exo factor covariance
+	RPH <- "RPH"	#Exo factor correlation
+	GA <- "GA"		#Path from Exo to Endo
+	VX <- "VX"		#Variance of exo indicators
+	VPH <- c("VK", "VPH")	#Variance of exo factors
+	TX <- "TX"		#Exo measurement intercept
+	KA <- c("KA", "MK")		#Exo factor mean
+	VTD <- "VTD"	#Variance of exo measurement error
+	MX <- "MX"		#Exo indicator mean
+	TH <- "TH"		#Error Covariance between exo (row) and endo (column)
+	RTH <- "RTH"	#Error Correlation of exo (row) and endo (column)
 
-	loading <- c(LY, LX, "loading", "Loading", "Factor Loading")
-	error <- c(RTE, RTD, "error", "Error", "Error covariance")
-	latent.cor <- c(RPS, RPH, "latent.cor", "Latent.cor", "Latent.cov", "latent.cov", "Factor Covariance")
-	intercept <- c(TY, TX, "intercept", "Intercept", "Measurement Intercept")
-	factor.mean <- c(ME, KA, AL, "Factor mean", "factor mean", "Factor Mean")
+	loading <- c(LY, LX, "loading", "factor loading")
+	errorCov <- c(TE, TD, "error.cov", "errorcov", "error covariance")
+	errorCor <- c(RTE, RTD, "error.cor", "errorcor", "error correlation")
+	errorVar <- c(VTD, VTE, "error.var", "errorVar", "Variance of Measurement Error")
+	indicatorVar <- c(VX, VY, "indVar", "ind.var", "indicator.var", "indicatorVar", "Variance of Indicators")
+	indicatorMean <- c(MX, MY, "indMean", "ind.mean", "indicator.mean", "indicatorMean", "means of Indicators")
+	facCov <- c(PS, PH, "latent.cov", "latentCov", "factor.cov", "factorCov", "faccov", "factor covariance")
+	facCor <- c(RPS, RPH, "latent.cor", "latentCor", "factor.cor", "factorCor", "faccor", "factor correlation")
+	intercept <- c(TY, TX, "intercept", "measurement intercept")
+	facMean <- c(ME, KA, AL, "factor.mean", "factor mean")
+	facVar <- c(VE, VPS, VPH, "latent.var", "latentVar", "factor.var", "factorVar", "facvar", "factor variance")
 
-	result <- list(LY=LY, RTE=RTE, RPS=RPS, BE=BE, VY=VY, VPS=VPS, VE=VE, TY=TY, ME=ME, VTE=VTE, AL=AL, MY=MY,
-		LX=LX, RTD=RTD, RPH=RPH, GA=GA, VX=VX, VPH=VPH, TX=TX, KA=KA, VTD=VTD, MX=MX, RTH=RTH, 
-		loading=loading, error=error, latent.cor=latent.cor, intercept=intercept, factor.mean=factor.mean)
+	result <- list(LY=LY, TE=TE, RTE=RTE, PS=PS, RPS=RPS, BE=BE, VY=VY, VPS=VPS, VE=VE, TY=TY, ME=ME, VTE=VTE, AL=AL, MY=MY, LX=LX, TD=TD, RTD=RTD, PH=PH, RPH=RPH, GA=GA, VX=VX, VPH=VPH, TX=TX, KA=KA, VTD=VTD, MX=MX, TH=TH, RTH=RTH, loading=loading, errorCov=errorCov, errorCor=errorCor, errorVar=errorVar, indicatorVar=indicatorVar, indicatorMean=indicatorMean, facCov=facCov, facCor=facCor, intercept=intercept, facMean=facMean, facVar=facVar)
 	return(result)
 }
