@@ -59,12 +59,12 @@ simSetSEM <- function(..., exo = FALSE) {
 		nx <- nrow(run(LX[[1]]))
 		nk <- ncol(run(LX[[1]]))
 		if(contain(26, position)) {
-			TE <- List[position == 26]
+			TD <- List[position == 26]
 			ifelse(contain(16, position), stop("Error covariance and error correlation cannot be specified at the same time!"), RTD <- list(new("NullSymMatrix")))
 			ifelse(contain(17, position), stop("Error covariance and error variance cannot be specified at the same time!"), VTD <- list(new("NullSimVector")))		
 			ifelse(contain(18, position), stop("Error covariance and total indicator variance cannot be specified at the same time!"), VX <- list(new("NullSimVector")))
 		} else {
-			TE <- list(new("NullSymMatrix"))
+			TD <- list(new("NullSymMatrix"))
 			ifelse(contain(16, position), RTD <- List[position == 16], stop("No measurement error correlation object between indicator.Y"))
 			ifelse(contain(17, position), VTD <- List[position == 17], VTD <- list(new("NullSimVector")))
 			ifelse(contain(18, position), VX <- List[position == 18], ifelse(is.null.object(VTD[[1]]), { VX <- list(freeVector(1, nx)); comment(VX[[1]]) <- "default"}, VX <- list(new("NullSimVector"))))

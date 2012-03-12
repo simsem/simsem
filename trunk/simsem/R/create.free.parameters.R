@@ -6,7 +6,7 @@
 #	object: 	SimSet.c that users wish to transform it to SimFreeParam.c
 # Return: 	SimFreeParam.c that saves only free parameters and values of fixed parameters
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 6, 2011
+# Date Modified: March 10, 2012
 
 create.free.parameters <- function(object) {
 	if(!is(object, "SimSet")) stop("The attribute is not a SimSet object.")
@@ -19,17 +19,27 @@ create.free.parameters <- function(object) {
 	if(is.null.object(object@VPS) & !is.null.object(object@VE)) object@VPS <- object@VE
 	LY <- object@LY@free
 	is.measurement.Y <- !(is.null.object(LY))
-	TE <- object@RTE@free
-	if(is.measurement.Y) {
-		VTE <- object@VTE@free
-		ifelse(is.null.object(VTE), diag(TE) <- NA, diag(TE) <- VTE)
+	TE <- NULL
+	if(is.null.object(object@TE)) {
+		TE <- object@RTE@free
+		if(is.measurement.Y) {
+			VTE <- object@VTE@free
+			ifelse(is.null.object(VTE), diag(TE) <- NA, diag(TE) <- VTE)
+		}
+	} else {
+		TE <- object@TE@free
 	}
 	TY <- object@TY@free
 	if(is.measurement.Y & is.default(object@TY)) TY <- rep(NA, nrow(LY))
 	BE <- object@BE@free
-	PS <- object@RPS@free 
-	VPS <- object@VPS@free
-	ifelse(is.null.object(VPS), ifelse(is.measurement.Y, diag(PS) <- 1, diag(PS) <- NA), diag(PS) <- VPS)
+	PS <- NULL
+	if(is.null.object(object@PS)) {
+		PS <- object@RPS@free 
+		VPS <- object@VPS@free
+		ifelse(is.null.object(VPS), ifelse(is.measurement.Y, diag(PS) <- 1, diag(PS) <- NA), diag(PS) <- VPS)
+	} else {
+		PS <- object@PS@free
+	}
 	AL <- object@AL@free
 	if(is.default(object@AL)) {
 		ifelse(is.measurement.Y, AL <- rep(0, ncol(PS)), AL <- rep(NA, ncol(PS)))
@@ -37,19 +47,26 @@ create.free.parameters <- function(object) {
 	#-- Exogeneous Variable --
 	LX <- object@LX@free
 	TD <- object@RTD@free 
+	if(!is.null.object(object@TD)) TD <- object@TD@free
 	GA <- object@GA@free
 	PH <- object@RPH@free	
+	if(!is.null.object(object@PH)) PH <- object@PH@free
 	KA <- object@KA@free
 	TX <- object@TX@free
 	TH <- object@RTH@free
+	if(!is.null.object(object@TH)) TH <- object@TH@free
 	if(!is.null.object(PH)) {
-		VPH <- object@VPH@free
 		is.measurement.X <- !is.null.object(LX)
-		ifelse(is.null.object(VPH) | (sum(VPH != 1) == 0), ifelse(is.measurement.X, diag(PH) <- 1, diag(PH) <- NA), diag(PH) <- VPH)
+		if(is.null.object(object@PH)) {
+			VPH <- object@VPH@free
+			ifelse(is.null.object(VPH) | (sum(VPH != 1) == 0), ifelse(is.measurement.X, diag(PH) <- 1, diag(PH) <- NA), diag(PH) <- VPH)
+		}
 		if(is.default(object@KA)) ifelse(is.measurement.X, KA <- rep(0, ncol(PH)), KA <- rep(NA, ncol(PH)))
 		if(is.measurement.X) {
-			VTD <- object@VTD@free
-			ifelse(is.null.object(VTD), diag(TD) <- NA, diag(TD) <- VTD)
+			if(is.null.object(object@TD)) {
+				VTD <- object@VTD@free
+				ifelse(is.null.object(VTD), diag(TD) <- NA, diag(TD) <- VTD)
+			}
 			if(is.default(object@TX)) TX <- rep(NA, nrow(LX))
 		}
 	}

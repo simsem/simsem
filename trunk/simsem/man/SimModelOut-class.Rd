@@ -29,6 +29,7 @@ Objects can be created by \code{\link{run}} on the \code{\linkS4class{SimModel}}
 		\item \code{\link{summary}} To summarize the object
 		\item \code{\link{summaryParam}} To summarize only parameter estimates, standard errors, and significance
 		\item \code{\link{createImpliedMACS}} To create the model implied means and covariance matrix from the parameter estimates
+		\item \code{anova} find the averages of model fit statistics and indices for nested models, as well as the differences of model fit indices among models. This function requires at least two \code{SimModelOut} objects. See \code{\link{anova}} for further details.
 	}
 }
 \author{
@@ -40,7 +41,7 @@ Objects can be created by \code{\link{run}} on the \code{\linkS4class{SimModel}}
 	}
 }
 \examples{
-showClass("SimResult")
+showClass("SimModelOut")
 loading <- matrix(0, 6, 1)
 loading[1:6, 1] <- NA
 LX <- simMatrix(loading, 0.7)

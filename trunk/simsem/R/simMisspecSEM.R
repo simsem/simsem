@@ -57,12 +57,12 @@ simMisspecSEM <- function(..., exo = FALSE) {
 	if(exo) {
 		ifelse(contain(15, position), LX <- List[position == 15], LX <- list(new("NullSimMatrix")))
 		if(contain(26, position)) {
-			TE <- List[position == 26]
+			TD <- List[position == 26]
 			ifelse(contain(16, position), stop("Error covariance and error correlation cannot be specified at the same time!"), RTD <- list(new("NullSymMatrix")))
 			ifelse(contain(17, position), stop("Error covariance and error variance cannot be specified at the same time!"), VTD <- list(new("NullSimVector")))		
 			ifelse(contain(18, position), stop("Error covariance and total indicator variance cannot be specified at the same time!"), VX <- list(new("NullSimVector")))
 		} else {
-			TE <- list(new("NullSymMatrix"))
+			TD <- list(new("NullSymMatrix"))
 			ifelse(contain(16, position), RTD <- List[position == 16], RTD <- list(new("NullSymMatrix")))
 			ifelse(contain(17, position), VTD <- List[position == 17], VTD <- list(new("NullSimVector")))
 			ifelse(contain(18, position), VX <- List[position == 18], VX <- list(new("NullSimVector")))
@@ -85,8 +85,10 @@ simMisspecSEM <- function(..., exo = FALSE) {
 		if(contain(28, position)) {
 			ifelse(contain(25, position), stop("TH and RTH cannot be specified at the same time!"), RTH <- list(new("NullSimMatrix")))
 			TH <- List[position == 28]
+			print("If TH is specified, please make sure that the TH is explicitly specified in the simSetSEM function.")
 		} else {
 			ifelse(contain(25, position), RTH <- List[position == 25], RTH <- list(new("NullSimMatrix")))
+			TH <- list(new("NullSimMatrix"))
 		}
 		Output <- new("SimMisspec", LY=LY[[1]], TE=TE[[1]], RTE=RTE[[1]], VTE=VTE[[1]], VY=VY[[1]], MY=MY[[1]], TY=TY[[1]], BE=BE[[1]], PS=PS[[1]], RPS=RPS[[1]], VPS=VPS[[1]], VE=VE[[1]], AL=AL[[1]], ME=ME[[1]],
 					LX=LX[[1]], TD=TD[[1]], RTD=RTD[[1]], VTD=VTD[[1]], VX=VX[[1]], MX=MX[[1]], TX=TX[[1]], GA=GA[[1]], PH=PH[[1]], RPH=RPH[[1]], VPH=VPH[[1]], KA=KA[[1]], TH=TH[[1]], RTH=RTH[[1]], modelType="SEM.exo")	

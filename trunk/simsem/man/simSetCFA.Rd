@@ -5,7 +5,7 @@
 }
 \description{
 	This function will create set of matrix that belongs to confirmatory factor analysis. 
-	The requirement is to specify factor loading matrix, factor correlation matrix, and error correlation matrix.	
+	The requirement is to specify factor loading matrix, factor correlation (or covariance) matrix, and error correlation (or covariance) matrix.	
 }
 \usage{
 simSetCFA(...)
@@ -17,9 +17,11 @@ simSetCFA(...)
 \details{
 	NOTE: CFA object can be either specified in X or Y side.
 	\itemize{
-		\item REQUIRED: \code{LX} or \code{LY} for factor loading matrix (need to be \code{\linkS4class{SimMatrix}} object). 
-		\item REQUIRED: \code{RTD} or \code{RTE} for measurement error correlation matrix (need to be \code{\linkS4class{SymMatrix}} object).
-		\item REQUIRED: \code{RPH} or \code{RPS} for factor correlation matrix (need to be \code{\linkS4class{SymMatrix}} object).
+		\item \code{LX} or \code{LY} for factor loading matrix (need to be \code{\linkS4class{SimMatrix}} object). 
+		\item \code{TD} or \code{TE} for measurement error covariance matrix (need to be \code{\linkS4class{SymMatrix}} object).
+		\item \code{RTD} or \code{RTE} for measurement error correlation matrix (need to be \code{\linkS4class{SymMatrix}} object).
+		\item \code{PH} or \code{PS} for factor covariance matrix (need to be \code{\linkS4class{SymMatrix}} object).
+		\item \code{RPH} or \code{RPS} for factor correlation matrix (need to be \code{\linkS4class{SymMatrix}} object).
 		\item \code{VTD} or \code{VTE} for measurement error variance (need to be \code{\linkS4class{SimVector}} object).
 		\item \code{VX} or \code{VY} for total indicator variance (need to be \code{\linkS4class{SimVector}} object). 
 			NOTE: Either measurement error variance or indicator variance is specified. Both cannot be simultaneously specified.
@@ -30,7 +32,8 @@ simSetCFA(...)
 			NOTE: Either measurement intercept of indicator mean can be specified. Both cannot be specified simultaneously.
 		\item \code{KA}, \code{AL}, \code{MK}, or \code{ME} for factor means (need to be \code{\linkS4class{SimVector}} object).
 	}
-	DEFAULT:
+	There are three required matrices: LY (or LX), RTE (RTD, TD, or TE), and RPS (RPH, PH, or PS). 
+	If users specify the correlation/variance format (instead of the covariance format), the default specifications are
 	\enumerate{
 		\item All indicator variances are equal to 1. Measurement error variances are automatically implied from total indicator variances.
 		\item All measurement error variances are free parameters.

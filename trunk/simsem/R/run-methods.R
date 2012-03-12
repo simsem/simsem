@@ -290,7 +290,8 @@ setMethod("run", signature="NullSimVector", definition= function(object) {
 #Return: 	NullVector.c
 
 setMethod("run", signature(object="SimSet"), definition=function(object, equalCon=new("NullSimEqualCon"), makeList=FALSE) {
-		param <- list(LY = run(object@LY),
+		param <- new("MatrixSet", modelType=object@modelType,
+			LY = run(object@LY),
 			VTE = run(object@VTE),
 			TE = run(object@TE),
 			RTE = run(object@RTE),
@@ -320,7 +321,7 @@ setMethod("run", signature(object="SimSet"), definition=function(object, equalCo
 			RTH = run(object@RTH))
 		if(!is.null.object(equalCon)) {
 			if(object@modelType != equalCon@modelType) stop("Please provide same tags of SimSet and constraint")
-			param <- constrain.matrices(param, equalCon, object@modelType)
+			param <- constrain.matrices(param, equalCon)
 		}
 		out <- fillParam(param, object@modelType)
 		if(makeList) {
@@ -338,33 +339,36 @@ setMethod("run", signature(object="SimSet"), definition=function(object, equalCo
 #Return: 	MatrixSet.c that is a random sample of all objects in SimSet.c
 
 setMethod("run", signature(object="SimMisspec"), definition=function(object) {
-		LY <- run(object@LY)
-		VTE <- run(object@VTE)
-		RTE <- run(object@RTE)
-		VY <- run(object@VY)
-		TY <- run(object@TY)
-		MY <- run(object@MY)
-		BE <- run(object@BE)
-		VPS <- run(object@VPS)
-		RPS <- run(object@RPS)
-		VE <- run(object@VE)
-		AL <- run(object@AL)
-		ME <- run(object@ME)
-		LX <- run(object@LX)
-		VTD <- run(object@VTD)
-		RTD <- run(object@RTD)
-		VX <- run(object@VX)
-		TX <- run(object@TX)
-		MX <- run(object@MX)
-		GA <- run(object@GA)
-		VPH <- run(object@VPH)
-		RPH <- run(object@RPH)
-		KA <- run(object@KA)
-		RTH <- run(object@RTH)
-		return(new("MisspecSet", modelType=object@modelType, LY=LY, VTE=VTE, RTE=RTE, VY=VY, TY=TY, MY=MY, 
-		BE=BE, VPS=VPS, RPS=RPS, VE=VE, AL=AL, ME=ME,
-		LX=LX, VTD=VTD, RTD=RTD, VX=VX, TX=TX, MX=MX,
-		GA=GA, VPH=VPH, RPH=RPH, KA=KA, RTH=RTH))
+		misspec <- new("MisspecSet", modelType=object@modelType,
+			LY = run(object@LY),
+			VTE = run(object@VTE),
+			TE = run(object@TE),
+			RTE = run(object@RTE),
+			VY = run(object@VY),
+			TY = run(object@TY),
+			MY = run(object@MY),
+			BE = run(object@BE),
+			VPS = run(object@VPS),
+			PS = run(object@PS),
+			RPS = run(object@RPS),
+			VE = run(object@VE),
+			AL = run(object@AL),
+			ME = run(object@ME),
+			LX = run(object@LX),
+			VTD = run(object@VTD),
+			TD = run(object@TD),
+			RTD = run(object@RTD),
+			VX = run(object@VX),
+			TX = run(object@TX),
+			MX = run(object@MX),
+			GA = run(object@GA),
+			VPH = run(object@VPH),
+			PH = run(object@PH),
+			RPH = run(object@RPH),
+			KA = run(object@KA),
+			TH = run(object@TH),
+			RTH = run(object@RTH))
+		return(misspec)
 	}
 )
 #Arguments: 
@@ -398,7 +402,7 @@ setMethod("run", signature="SimModel", definition=function(object, data, simMiss
 	}
 	if(is.null(colnames(data))) colnames(data) <- paste("y", 1:ncol(data))
 	if(is.null.object(object@auxiliary)) {
-		if(!(length(simMissing@cov) == 1 & simMissing@cov == 0)) object@auxiliary <- simMissing@cov
+		if(!(length(simMissing@cov) == 1 && simMissing@cov == 0)) object@auxiliary <- simMissing@cov
 	}
 	if(is.null.object(object@indicatorLab)) {
 		if(is.null.object(object@auxiliary)) {
@@ -478,7 +482,6 @@ setMethod("run", signature="SimMissing", definition=function(object, data) {
             pmMAR=object@pmMAR, nforms=object@nforms, timePoints=object@timePoints,
             itemGroups=object@itemGroups, twoMethod=object@twoMethod))	
 	}
-	
 	return(data)
 })
 #Arguments: 

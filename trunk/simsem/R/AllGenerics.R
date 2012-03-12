@@ -101,3 +101,4 @@ setGeneric("skew", function(object, ...) {
 setGeneric("kurtosis", function(object, ...) { 
 	return(standardGeneric("kurtosis")) 
 } )
+

@@ -93,37 +93,37 @@ setMethod("constrain.matrices", signature(object="VirtualRSet", SimEqualCon="Sim
 #Description: 	This function will combine variance and correlation into covariance matrix labels as SimREqualCon and pass to the function that uses SimREqualCon
 #Return: VirtualRSet.c that have constraint codes.
 
-setMethod("constrain.matrices", signature(object="list", SimEqualCon="SimEqualCon"), definition=function(object, SimEqualCon, modelType) {
-	label.selection <- NULL
-	label.selection <- c("LY", "VTE", "TE", "RTE", "VY", "TY", "MY", "BE", "VPS", "PS", "RPS", "VE", "AL", "ME", "LX", "VTD", "TD", "RTD", "VX", "TX", "MX", "GA", "VPH", "PH", "RPH", "KA", "TH", "RTH")
-	matrices <- object
-	constraint <- SimEqualCon@con
-	n.constraint <- length(constraint)
-	for(j in 1:n.constraint) {
-		temp.constraint <- constraint[[j]]
-		temp.matrix <- rownames(temp.constraint)[1]
-		num <- equal.which(temp.matrix, label.selection)
-		if(num == 0) stop("Cannot recognize the matrix name in the equality constraint")
-		fixedvalue <- NA
-		if(is.mean.constraint(rownames(temp.constraint))) {
-			fixedvalue <- matrices[[temp.matrix]][temp.constraint[1, 2]]		
-		} else {
-			fixedvalue <- matrices[[temp.matrix]][temp.constraint[1, 2], temp.constraint[1, 3]]
-		}		
-		for(i in 2:nrow(temp.constraint)) {
-			temp.matrix2 <- rownames(temp.constraint)[i]
-			num <- equal.which(temp.matrix2, label.selection)
-			if(num == 0) stop("Cannot recognize the matrix name in the equality constraint")
-			if(is.mean.constraint(rownames(temp.constraint))) {
-				matrices[[temp.matrix2]][temp.constraint[i, 2]] <- fixedvalue
-			} else {
-				matrices[[temp.matrix2]][temp.constraint[i, 2], temp.constraint[i, 3]] <- fixedvalue
-				if(is.cor.matrix(matrices[[temp.matrix2]])) matrices[[temp.matrix2]][temp.constraint[i,2], temp.constraint[i,1]] <- fixedvalue
-			}
-		}
-	}
-	return(matrices)
-})
+#setMethod("constrain.matrices", signature(object="list", SimEqualCon="SimEqualCon"), definition=function(object, SimEqualCon, modelType) {
+#	label.selection <- NULL
+#	label.selection <- c("LY", "VTE", "TE", "RTE", "VY", "TY", "MY", "BE", "VPS", "PS", "RPS", "VE", "AL", "ME", "LX", "VTD", "TD", "RTD", "VX", "TX", "MX", "GA", "VPH", "PH", "RPH", "KA", "TH", "RTH")
+#	matrices <- object
+#	constraint <- SimEqualCon@con
+#	n.constraint <- length(constraint)
+#	for(j in 1:n.constraint) {
+#		temp.constraint <- constraint[[j]]
+#		temp.matrix <- rownames(temp.constraint)[1]
+#		num <- equal.which(temp.matrix, label.selection)
+#		if(num == 0) stop("Cannot recognize the matrix name in the equality constraint")
+#		fixedvalue <- NA
+#		if(is.mean.constraint(rownames(temp.constraint))) {
+#			fixedvalue <- matrices[[temp.matrix]][temp.constraint[1, 2]]		
+#		} else {
+#			fixedvalue <- matrices[[temp.matrix]][temp.constraint[1, 2], temp.constraint[1, 3]]
+#		}		
+#		for(i in 2:nrow(temp.constraint)) {
+#			temp.matrix2 <- rownames(temp.constraint)[i]
+#			num <- equal.which(temp.matrix2, label.selection)
+#			if(num == 0) stop("Cannot recognize the matrix name in the equality constraint")
+#			if(is.mean.constraint(rownames(temp.constraint))) {
+#				matrices[[temp.matrix2]][temp.constraint[i, 2]] <- fixedvalue
+#			} else {
+#				matrices[[temp.matrix2]][temp.constraint[i, 2], temp.constraint[i, 3]] <- fixedvalue
+#				if(is.cor.matrix(matrices[[temp.matrix2]])) matrices[[temp.matrix2]][temp.constraint[i,2], temp.constraint[i,1]] <- fixedvalue
+#			}
+#		}
+#	}
+#	return(matrices)
+#})
 #Arguments: 
 #	object: 		List of parameter matrices
 #	SimEqualCon:	SimEqualCon.c that save desired constraints.

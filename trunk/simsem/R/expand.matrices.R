@@ -1,3 +1,11 @@
+# expand.matrices
+# function -- simsem package
+# Expand the set of covariance matrices into the set of covariance/correlation/variance objects
+# Argument:
+#	object: SimSet that users wish to expand
+# Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
+# Date Modified: March 10, 2012
+
 expand.matrices <- function(object) {
 	if(!is(object, "SimRSet")) stop("The object is not a SimRSet object")
 	modelType <- object@modelType
@@ -12,7 +20,8 @@ expand.matrices <- function(object) {
 	RTD <- new("NullMatrix")
 	LX <- object@LX
 	TX <- object@TX
-	RTH <- object@TH
+	TH <- object@TH
+	RTH <- new("NullMatrix")
 	RPS <- cov2cor(object@PS)
 	VPS <- diag(object@PS)
 	VPH <- new("NullVector")
@@ -71,9 +80,10 @@ expand.matrices <- function(object) {
 		MY <- find.indicator.mean(LY, ME, TY)
 		VX <- find.indicator.var(LX, RPH, VTD, VPH)
 		MX <- find.indicator.mean(LX, KA, TX)
+		RTH <- solve(sqrt(diag(VTD))) %*% TH %*% solve(sqrt(diag(VTE)))		
 	}
-	return(new("MatrixSet", modelType=modelType, LY=LY, VTE=VTE, RTE=RTE, VY=VY, TY=TY, MY=MY, 
-	BE=BE, VPS=VPS, RPS=RPS, VE=VE, AL=AL, ME=ME,
-	LX=LX, VTD=VTD, RTD=RTD, VX=VX, TX=TX, MX=MX,
-	GA=GA, VPH=VPH, RPH=RPH, KA=KA, RTH=RTH))
+	return(new("MatrixSet", modelType=modelType, LY=LY, VTE=VTE, TE=object@TE, RTE=RTE, VY=VY, TY=TY, MY=MY, 
+	BE=BE, VPS=VPS, PS=object@PS, RPS=RPS, VE=VE, AL=AL, ME=ME,
+	LX=LX, VTD=VTD, TD=object@TD, RTD=RTD, VX=VX, TX=TX, MX=MX,
+	GA=GA, VPH=VPH, PH=object@PH, RPH=RPH, KA=KA, TH=object@TH, RTH=RTH))
 }

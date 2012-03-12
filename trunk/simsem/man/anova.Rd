@@ -1,7 +1,7 @@
 \name{anova}
-\alias{anova}
-\alias{anova-methods}
-\alias{anova,ANY-method}
+%\alias{anova}
+%\alias{anova-methods}
+%\alias{anova,ANY-method}
 \alias{anova,SimResult-method}
 \alias{anova,SimModelOut-method}
 \alias{anova,SimModelMIOut-method}
@@ -11,15 +11,16 @@
 \description{
 	This function will provide averages of model fit statistics and indices for nested models. It will also provide average differences of fit indices and power for likelihood ratio tests of nested models.
 }
-\usage{
-anova(object, ...)
-}
+%\usage{
+%anova(object, ...)
+%}
 \arguments{
   \item{object}{
 	\code{\linkS4class{SimResult}} object being described. Currently at least two objects must be included as arguments
 }
   \item{\dots}{
     any additional arguments, such as additional objects or for the function with result object
+}
 }
 \value{
 	A data frame that provides the statistics described above from all parameters.
@@ -45,7 +46,7 @@ anova(object, ...)
 		\item \code{CFI diff:} Average difference of the CFI across all replications
 		\item \code{TLI diff:} Average difference of the TLI across all replications
 		\item \code{RMSEA diff:} Average difference of the RMSEA across all replications
-			}
+	}
 }
 \author{
     Alexander M. Schoemann (University of Kansas; \email{schoemann@ku.edu})
@@ -55,10 +56,9 @@ anova(object, ...)
 	\code{\linkS4class{SimResult}} for the object input
 }
 \examples{
-showClass("SimResult")
-loading <- matrix(0, 6, 1)
-loading[1:6, 1] <- NA
-loading2 <- loading
+loading1 <- matrix(0, 6, 1)
+loading1[1:6, 1] <- NA
+loading2 <- loading1
 loading2[6,1] <- 0
 LX1 <- simMatrix(loading1, 0.7)
 LX2 <- simMatrix(loading2, 0.7)

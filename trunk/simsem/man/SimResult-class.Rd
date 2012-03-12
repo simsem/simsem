@@ -34,6 +34,7 @@ Objects can be created by \code{\link{simResult}}. It can also be called from th
 		\item \code{plotPower} to plot alternative hypothesis (and null hypothesis) with a priori cutoffs or alpha level.
 		\item \code{summary} to summarize the result output
 		\item \code{summaryParam} to summarize all parameter estimates
+		\item \code{anova} find the averages of model fit statistics and indices for nested models, as well as the differences of model fit indices among models. This function requires at least two \code{SimResult} objects. See \code{\link{anova}} for further details.
 	}
 }
 \author{

@@ -17,8 +17,10 @@ Object can be created by \code{\link{simSetCFA}}, \code{\link{simSetPath}}, or \
   \describe{
     \item{\code{modelType}:}{Model type (CFA, Path, or SEM) }
     \item{\code{LY}:}{Factor loading matrix between endogenous factors and Y indicators }
+    \item{\code{TE}:}{Covariance matrix between Y measurement error }
     \item{\code{RTE}:}{Correlation matrix between Y measurement error }
     \item{\code{VTE}:}{Variance of Y measurement error }
+    \item{\code{PS}:}{Residual covariance of endogenous factors  }
     \item{\code{RPS}:}{Residual correlation of endogenous factors  }
     \item{\code{VPS}:}{Residual variances of endogenous factors }
     \item{\code{BE}:}{Regression effect among endogenous factors }
@@ -29,8 +31,10 @@ Object can be created by \code{\link{simSetCFA}}, \code{\link{simSetPath}}, or \
     \item{\code{VE}:}{Total variance of endogenous factors }
     \item{\code{VY}:}{Total variance of Y indicators }
     \item{\code{LX}:}{Factor loading matrix between exogenous factors and X indicators }
+    \item{\code{TD}:}{Covariance matrix between X measurement error }
     \item{\code{RTD}:}{Correlation matrix between X measurement error }
     \item{\code{VTD}:}{Variance of X measurement error }
+    \item{\code{PH}:}{Covariance among exogenous factors }
     \item{\code{RPH}:}{Correlation among exogenous factors }
     \item{\code{GA}:}{Regreeion effect from exogenous factors to endogenous factors }
     \item{\code{TX}:}{Measurement intercepts of X indicators }
@@ -38,6 +42,7 @@ Object can be created by \code{\link{simSetCFA}}, \code{\link{simSetPath}}, or \
     \item{\code{MX}:}{Total Mean of X indicators }
     \item{\code{VPH}:}{Variance of exogenous factors }
     \item{\code{VX}:}{Total variance of X indicators }
+    \item{\code{TH}:}{Measurement error covariance between X indicators and Y indicators }
     \item{\code{RTH}:}{Measurement error correlation between X indicators and Y indicators }
   }
 }

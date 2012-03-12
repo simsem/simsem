@@ -75,7 +75,7 @@ names(MI.res)<-c('coef','se','FMI.1','FMI.2')
 # Return:
 #	output: 	SimModelMIOut that provides output and fraction missing information
 # Author: 	Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: February 8, 2012
+# Date Modified: March 11, 2012
 
 miPool <- function(Result.l) {
 	Converged <- sapply(Result.l, function(object) {object@converged})
@@ -91,9 +91,15 @@ miPool <- function(Result.l) {
 
 	for(i in 1:length(paramNames)) {
 		if(!is.null.object(slot(OutputCoef, paramNames[i]))) {
-			mparam <- sapply(Result.l, function(result, slotname1, slotname2) { slot(slot(result, slotname1), slotname2)}, slotname1 = "param", slotname2 = paramNames[i])[,1]
-			mcoef <- sapply(Result.l, function(result, slotname1, slotname2) { slot(slot(result, slotname1), slotname2)}, slotname1 = "coef", slotname2 = paramNames[i])[is.na(mparam),]
-			mse <- sapply(Result.l, function(result, slotname1, slotname2) { slot(slot(result, slotname1), slotname2)}, slotname1 = "se", slotname2 = paramNames[i])[is.na(mparam),]
+			mparam <- as.matrix(sapply(Result.l, function(result, slotname1, slotname2) { slot(slot(result, slotname1), slotname2)}, slotname1 = "param", slotname2 = paramNames[i]))
+			if(ncol(mparam) == 1) mparam <- t(mparam) # Prevent single element matrix problem
+			mparam <- mparam[,1] 
+			mcoef <- as.matrix(sapply(Result.l, function(result, slotname1, slotname2) { slot(slot(result, slotname1), slotname2)}, slotname1 = "coef", slotname2 = paramNames[i]))
+			if(ncol(mcoef) == 1) mcoef <- t(mcoef) # Prevent single element matrix problem
+			mcoef <- mcoef[is.na(mparam),]
+			mse <- as.matrix(sapply(Result.l, function(result, slotname1, slotname2) { slot(slot(result, slotname1), slotname2)}, slotname1 = "se", slotname2 = paramNames[i]))
+			if(ncol(mse) == 1) mse <- t(mse) # Prevent single element matrix problem
+			mse <- mse[is.na(mparam),]
 			temp <- miPoolVector(t(mcoef), t(mse), length(Result.l))
 			temp1 <- as.vector(slot(OutputCoef, paramNames[i]))
 			temp2 <- as.vector(slot(OutputSE, paramNames[i]))

@@ -28,6 +28,7 @@ Objects can be created by \code{\link{run}} on the \code{\linkS4class{SimModel}}
 	\itemize{
 		\item \code{\link{summary}} To summarize the object
 		\item \code{\link{summaryParam}} To summarize only parameter estimates, standard errors, and significance
+		\item \code{anova} find the averages of model fit statistics and indices for nested models, as well as the differences of model fit indices among models. This function requires at least two \code{SimModelMIOut} objects. See \code{\link{anova}} for further details.
 	}
 }
 \author{
@@ -41,5 +42,19 @@ Objects can be created by \code{\link{run}} on the \code{\linkS4class{SimModel}}
 }
 \examples{
 showClass("SimModelMIOut")
+showClass("SimResult")
+loading <- matrix(0, 6, 1)
+loading[1:6, 1] <- NA
+LX <- simMatrix(loading, 0.7)
+RPH <- symMatrix(diag(1))
+RTD <- symMatrix(diag(6))
+CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
+SimData <- simData(500, CFA.Model)
+SimModel <- simModel(CFA.Model)
+SimMissing <- simMissing(pmMCAR=0.05, numImps=5)
+Data <- run(SimData)
+Data <- run(SimMissing, Data)
+Result <- run(SimModel, Data, SimMissing)
+summary(Result)
 }
 \keyword{classes}

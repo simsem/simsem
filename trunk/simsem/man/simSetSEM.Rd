@@ -4,8 +4,7 @@
 	Create a set of matrix belongs to SEM model
 }
 \description{
-	This function will create set of matrix that belongs to full SEM model. The requirement is to specify factor residual correlation matrix, 
-	regression coefficient matrix, factor loading matrix, and measurement error correlation.	
+	This function will create set of matrix that belongs to full SEM model. The requirement is to specify factor residual correlation  or covariance matrix, regression coefficient matrix, factor loading matrix, and measurement error correlation or covariance matrix.	
 }
 \usage{
 simSetSEM(..., exo = FALSE)
@@ -21,10 +20,12 @@ simSetSEM(..., exo = FALSE)
 \details{
 	The matrices and vectors in the endogenous side are
 	\itemize{
-		\item REQUIRED: \code{LY} for factor loading matrix from endogenous factors to Y indicators (need to be \code{\linkS4class{SimMatrix}} object). 
-		\item REQUIRED: \code{RTE} for measurement error correlation matrix among Y indicators (need to be \code{\linkS4class{SymMatrix}} object).
-		\item REQUIRED: \code{BE} for regression coefficient matrix among endogenous factors (need to be \code{\linkS4class{SimMatrix}} object). 
-		\item REQUIRED: \code{RPS} for residual correlation matrix among endogenous factors (need to be \code{\linkS4class{SymMatrix}} object).
+		\item \code{LY} for factor loading matrix from endogenous factors to Y indicators (need to be \code{\linkS4class{SimMatrix}} object). 
+		\item \code{TE} for measurement error covariance matrix among Y indicators (need to be \code{\linkS4class{SymMatrix}} object).
+		\item \code{RTE} for measurement error correlation matrix among Y indicators (need to be \code{\linkS4class{SymMatrix}} object).
+		\item \code{BE} for regression coefficient matrix among endogenous factors (need to be \code{\linkS4class{SimMatrix}} object). 
+		\item \code{PS} for residual covariance matrix among endogenous factors (need to be \code{\linkS4class{SymMatrix}} object).
+		\item \code{RPS} for residual correlation matrix among endogenous factors (need to be \code{\linkS4class{SymMatrix}} object).
 		\item \code{VTE} for measurement error variance of Y indicators (need to be \code{\linkS4class{SimVector}} object).
 		\item \code{VY} for total variance of Y indicators (need to be \code{\linkS4class{SimVector}} object). NOTE: Either measurement error variance or indicator variance is specified. Both cannot be simultaneously specified.
 		\item \code{TY} for measurement intercepts of Y indicators. (need to be \code{\linkS4class{SimVector}} object).
@@ -34,20 +35,26 @@ simSetSEM(..., exo = FALSE)
 		\item \code{AL} for endogenous factor intercept (need to be \code{\linkS4class{SimVector}} object).
 		\item \code{ME} for total mean of endogenous factors (need to be \code{\linkS4class{SimVector}} object). NOTE: Either endogenous factor intercept or total mean of endogenous factor is specified. Both cannot be simultaneously specified.
 	}
-	If users need to specify exogenous variable too, these matrices and vectors are available, 
+	There are four required matrices for the specification in the endogenous side only: LY, RTE (or TE), BE, and RPS (or PS). 
+	If users need to specify exogenous variable too (\code{"exo=TRUE"}), these matrices and vectors are available: 
 	\itemize{
-		\item REQUIRED for \code{"exo=TRUE"}: \code{LX} for factor loading matrix from exogenous factors to X indicators (need to be \code{\linkS4class{SimMatrix}} object). 
-		\item REQUIRED for \code{"exo=TRUE"}: \code{RTD} for measurement error correlation matrix among X indicators (need to be \code{\linkS4class{SymMatrix}} object).
-		\item REQUIRED for \code{"exo=TRUE"}: \code{GA} for regression coefficient matrix among exogenous factors (need to be \code{\linkS4class{SimMatrix}} object). 
-		\item REQUIRED for \code{"exo=TRUE"}: \code{RPH} for residual correlation matrix among exogenous factors (need to be \code{\linkS4class{SymMatrix}} object).
+		\item \code{LX} for factor loading matrix from exogenous factors to X indicators (need to be \code{\linkS4class{SimMatrix}} object). 
+		\item \code{TD} for measurement error covariance matrix among X indicators (need to be \code{\linkS4class{SymMatrix}} object).
+		\item \code{RTD} for measurement error correlation matrix among X indicators (need to be \code{\linkS4class{SymMatrix}} object).
+		\item \code{GA} for regression coefficient matrix among exogenous factors (need to be \code{\linkS4class{SimMatrix}} object). 
+		\item \code{PH} for residual covariance matrix among exogenous factors (need to be \code{\linkS4class{SymMatrix}} object).
+		\item \code{RPH} for residual correlation matrix among exogenous factors (need to be \code{\linkS4class{SymMatrix}} object).
 		\item \code{VTD} for measurement error variance of X indicators (need to be \code{\linkS4class{SimVector}} object).
 		\item \code{VX} for total variance of X indicators (need to be \code{\linkS4class{SimVector}} object). NOTE: Either measurement error variance or indicator variance is specified. Both cannot be simultaneously specified.
 		\item \code{TX} for measurement intercepts of Y indicators. (need to be \code{\linkS4class{SimVector}} object).
 		\item \code{MX} for overall Y indicator means. (need to be \code{\linkS4class{SimVector}} object). NOTE: Either measurement intercept of indicator mean can be specified. Both cannot be specified simultaneously.
 		\item \code{VPH} or \code{VK} for total exogenous factor variance (need to be \code{\linkS4class{SimVector}} object).
 		\item \code{KA} or \code{MK} for total mean of exogenous factors (need to be \code{\linkS4class{SimVector}} object).
+		\item \code{TH} for measurement error covariance between X measurement error and Y measurement error.
+		\item \code{RTH} for measurement error correlation between X measurement error and Y measurement error.
 	}
-	DEFAULT:
+	There are eight required matrices for the specification in both exogenous and endogenous sides: LY, RTE (or TE), BE, RPS (or PS), LX, RTD (or TD), GA, and RPH (or PH). 
+	If users specify the correlation/variance format (instead of the covariance format), the default specifications are
 	\enumerate{
 		\item All indicator variances are equal to 1. Measurement error variances are automatically implied from total indicator variances.
 		\item All measurement error variances are free parameters.

@@ -112,7 +112,9 @@ makeMCAR <- function(dims,pm=NULL,cov=NULL,ignoreCols=NULL)
 
     if (!is.null(c(cov,ignoreCols)) ) {
       misCols <- colList[-c(cov,ignoreCols)]
-    }
+    } else {
+      misCols <- colList	
+	}
 
     
     R <- matrix(FALSE,dims[1],dims[2])

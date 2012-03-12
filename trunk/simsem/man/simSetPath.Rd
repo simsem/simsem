@@ -4,8 +4,7 @@
 	Create a set of matrix belongs to Path analysis model
 }
 \description{
-	This function will create set of matrix that belongs to path analysis model. 
-	The requirement is to specify indicator correlation and regression coefficient matrix.	
+	This function will create set of matrix that belongs to path analysis model. The requirement is to specify indicator correlation or covariance matrix and regression coefficient matrix.	
 }
 \usage{
 simSetPath(..., exo = FALSE)
@@ -21,8 +20,9 @@ simSetPath(..., exo = FALSE)
 \details{
 	The matrices and vectors in the endogenous side are
 	\itemize{
-		\item REQUIRED: \code{BE} for regression coefficient matrix (need to be \code{\linkS4class{SimMatrix}} object). 
-		\item REQUIRED: \code{RPS} for residual correlation matrix (need to be \code{\linkS4class{SymMatrix}} object).
+		\item \code{BE} for regression coefficient matrix (need to be \code{\linkS4class{SimMatrix}} object). 
+		\item \code{PS} for residual covariance matrix (need to be \code{\linkS4class{SymMatrix}} object).
+		\item \code{RPS} for residual correlation matrix (need to be \code{\linkS4class{SymMatrix}} object).
 		\item \code{VPS} for residual indicator variance (need to be \code{\linkS4class{SimVector}} object).
 		\item \code{VE} for total indicator variance (need to be \code{\linkS4class{SimVector}} object). NOTE: Either total indicator variance or residual indicator variance is specified. Both cannot be simultaneously specified.
 		\item \code{AL} for indicator intercept (need to be \code{\linkS4class{SimVector}} object).
@@ -32,14 +32,17 @@ simSetPath(..., exo = FALSE)
 		\item \code{AL} for indicator intercept (need to be \code{\linkS4class{SimVector}} object).
 		\item \code{ME} for indicator total mean (need to be \code{\linkS4class{SimVector}} object). NOTE: Either indicator intercept or indicator total mean is specified. Both cannot be simultaneously specified.
 	}
+	There are two required matrices for the specification in the endogenous side only: BE, and RPS (or PS). 
 	If users wish to include the exogenous side in their models, these options are available,
 	\itemize{
-		\item REQUIRED for \code{"exo=TRUE"}: \code{GA} for regression coefficient matrix from exogenous variable to endogenous variable (need to be \code{\linkS4class{SimMatrix}} object).  
-		\item REQUIRED for \code{"exo=TRUE"}: \code{RPH} for exogenous factor correlation (need to be \code{\linkS4class{SymMatrix}} object).
+		\item \code{GA} for regression coefficient matrix from exogenous variable to endogenous variable (need to be \code{\linkS4class{SimMatrix}} object).  
+		\item \code{PH} for exogenous factor covariance (need to be \code{\linkS4class{SymMatrix}} object).
+		\item \code{RPH} for exogenous factor correlation (need to be \code{\linkS4class{SymMatrix}} object).
 		\item \code{VPH} or \code{VK} for exogenous variable variance (need to be \code{\linkS4class{SimVector}} object).
 		\item \code{KA} or \code{MK} for exogenous variable mean (need to be \code{\linkS4class{SimVector}} object). NOTE: Either total indicator variance or residual indicator variance is specified. Both cannot be simultaneously specified.
 	}
-	DEFAULT:
+	There are four required matrices for the specification in both exogenous and endogenous sides: BE, RPS (or PS), GA, and RPH (or PH). 
+	If users specify the correlation/variance format (instead of the covariance format), the default specifications are
 	\enumerate{
 		\item All indicator variances are equal to 1. Residual variances are automatically implied from total indicator variances.
 		\item All residual variances are free parameters.

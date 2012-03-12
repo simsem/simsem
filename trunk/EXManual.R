@@ -12,8 +12,8 @@
 ################################## Example 1 ##############################################
 #library(simsem)
 
-#install.packages("C:/Users/Sunthud/Desktop/My Dropbox/simsem/simsem_0.0-8.tar.gz", repos=NULL, type="source")
-#install.packages("C:/Users/student/Dropbox/simsem/simsem_0.0-8.tar.gz", repos=NULL, type="source")
+#install.packages("C:/Users/Sunthud/Desktop/My Dropbox/simsem/simsem_0.0-9.tar.gz", repos=NULL, type="source")
+#install.packages("C:/Users/student/Dropbox/simsem/simsem_0.0-9.tar.gz", repos=NULL, type="source")
 
 myTry <- function(expr) {
     withRestarts(
@@ -48,7 +48,7 @@ dir <- "C:/Users/student/Dropbox/simsem/simsem/R/"
  source(paste(dir, "AllGenerics.R", sep=""))
  sourceDir(dir)
 
-loading <- matrix(0, 6, 2)
+ loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
 LX <- simMatrix(loading, 0.7)
@@ -75,6 +75,42 @@ plotCutoff(Output, 0.05)
 summaryParam(Output)
 
 #################################### Example 2 #######################
+
+library(simsem)
+
+loading <- matrix(0, 9, 3)
+loading[1:3, 1] <- c(1, NA, NA)
+loading[4:6, 2] <- c(1, NA, NA)
+loading[7:9, 3] <- c(1, NA, NA)
+loadingVal <- matrix(0, 9, 3)
+loadingVal[2:3, 1] <- c(0.6, 0.7)
+loadingVal[5:6, 2] <- c(1.1, 0.9)
+loadingVal[8:9, 3] <- c(1.2, 1.1)
+LY <- simMatrix(loading, loadingVal)
+
+facCov <- matrix(NA, 3, 3)
+facCovVal <- diag(c(0.8, 0.9, 0.4))
+facCovVal[lower.tri(facCovVal)] <- c(0.4, 0.2, 0.3)
+facCovVal[upper.tri(facCovVal)] <- c(0.4, 0.2, 0.3)
+PS <- symMatrix(facCov, facCovVal)
+
+errorCov <- diag(NA, 9)
+errorCovVal <- diag(c(0.5, 1.1, 0.8, 0.4, 0.4, 0.8, 0.8, 0.5, 0.6))
+TE <- symMatrix(errorCov, errorCovVal)
+
+AL <- simVector(rep(NA, 3), 0)
+TY <- simVector(c(0, NA, NA, 0, NA, NA, 0, NA, NA), 0)
+
+HS.Model <- simSetCFA(LY=LY, PS=PS, TE=TE, AL=AL, TY=TY)
+
+SimData <- simData(200, HS.Model)
+SimModel <- simModel(HS.Model)
+Output <- simResult(200, SimData, SimModel)
+getCutoff(Output, 0.05)
+plotCutoff(Output, 0.05)
+summaryParam(Output)
+
+########################## Example 3 ##########################################
 
 library(simsem)
 
@@ -124,7 +160,7 @@ getCutoff(Output.Mis, 0.05)
 plotCutoff(Output.Mis, 0.05)
 summaryParam(Output.Mis)
 
-################################# Example 3 ##################################
+################################# Example 4 ##################################
 library(simsem)
 
 u35 <- simUnif(0.3, 0.5)
@@ -202,7 +238,7 @@ getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
 
-############# Example 4 ################################
+############# Example 5 ################################
 library(simsem)
 
 n65 <- simNorm(0.6, 0.05)
@@ -266,7 +302,7 @@ getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
 
-# Example 4 Extension: Kernel Regression
+# Example 5 Extension: Kernel Regression
 ss <- seq(50, 300, 2)
 ss <- ss[order(ss)]
 Data <- lapply(ss, run, object=Data.Mis.Con)
@@ -304,7 +340,7 @@ abline(h = 0.8,col="darkgreen",lwd=3)
 }
 par(obj)
 
-# Example 4 with X side and stringent constraints #
+# Example 5 with X side and stringent constraints #
 library(simsem)
 
 n65 <- simNorm(0.6, 0.05)
@@ -381,7 +417,7 @@ getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
 
-################### Example 5 ##################################
+################### Example 6 ##################################
 
 library(simsem)
 
@@ -432,7 +468,7 @@ getPower(Output.ALT, cutoff2)
 plotPower(Output.ALT, cutoff2)
 plotPower(Output.ALT, cutoff2, usedFit=c("RMSEA", "SRMR", "CFI"))
 
-################### Example 5 Extenstion: Kernel Regression ########################
+################### Example 6 Extenstion: Kernel Regression ########################
 ########Null model should vary N too.
 
 ss <- seq(30, 200, 2)
@@ -465,7 +501,7 @@ par(obj)
 cutoff2 <- find.cutoff(Output.NULL, 0.05, usedFit=x)
 
 
-################################## Example 6 ##########################################
+################################## Example 7 ##########################################
 library(simsem)
 
 u2 <- simUnif(-0.2, 0.2)
@@ -521,7 +557,7 @@ getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summary(Output)
 
-################################## Example 7 ##########################################
+################################## Example 8 ##########################################
 library(simsem)
 
 u2 <- simUnif(-0.2, 0.2)
@@ -564,7 +600,7 @@ plotCutoff(Output, 0.05)
 summary(Output)
 
 
-############################# Example 8 #############################
+############################# Example 9 #############################
 
 library(simsem)
 
@@ -621,7 +657,7 @@ chi2 <- simChisq(2)
 obj <- simDataDist(g21, n01, chi2)
 plotDist(obj, var=c(2,3))
 
-##################################### Example 9 #######################
+##################################### Example 10 #######################
 
 library(simsem)
 
@@ -682,7 +718,7 @@ getCutoff(simOut, 0.05)
 plotCutoff(simOut, 0.05)
 summaryParam(simOut)
 
-####################################### Example 10 ############################
+####################################### Example 11 ############################
 
 library(simsem)
 
@@ -791,7 +827,7 @@ getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
 
-################################### Example 11 ######################################
+################################### Example 12 ######################################
 
 library(simsem)
 
@@ -846,7 +882,7 @@ plotCutoff(Output, 0.05)
 summaryParam(Output)
 
 
-########################################## Example 12 ###################
+########################################## Example 13 ###################
 
 library(simsem)
 
@@ -932,10 +968,9 @@ summaryParam(Output)
 
 # Add simTransform to provide a new data to residual centering
 # Add LH matrix to make a covariate
-# Add PH, PS, TD, TE, and TH matrices
-# find.recursive.set if a row is all 0, give it to 1. And if the column is also 0 too. What should we do? Hide it in comment?
-# Then if any factors are covariate, explicitly put the PS to them!
-
+# Make the default that if LX and TD are not specified in SEM.exo, make them as single-indicator factors.
+# find.recursive.set if a row is all 0, give it to 1. And if the column is also 0 too. What should we do? Hide it in comment? !Just check it in the lavaan code
+# Then if any factors are covariate, explicitly put the PS to them! See the previous comment
 
 
 
@@ -1261,3 +1296,76 @@ dordinal <- function(x, prob, start=1) {
 myfun <- function(x) deparse(substitute(x)) 
 exists(x) to check whether the funciton exist
 
+
+# Try
+
+
+loading.X <- matrix(0, 6, 2)
+loading.X[1:3, 1] <- NA
+loading.X[4:6, 2] <- NA
+LX <- simMatrix(loading.X, 0.7)
+
+loading.Y <- matrix(NA, 2, 1)
+LY <- simMatrix(loading.Y, 0.7)
+
+TD <- symMatrix(diag(rep(NA, 6)), 0.51)
+
+TE <- symMatrix(diag(rep(NA, 2)), 0.51)
+
+factor.K.cor <- matrix(NA, 2, 2)
+diag(factor.K.cor) <- 1
+PH <- symMatrix(factor.K.cor, 0.5)
+
+PS <- symMatrix(as.matrix(1))
+
+path.GA <- matrix(NA, 1, 2)
+GA <- simMatrix(path.GA, 0.4)
+
+BE <- simMatrix(as.matrix(0))
+
+SEM.model <- simSetSEM(GA=GA, BE=BE, LX=LX, LY=LY, PH=PH, PS=PS, TD=TD, TE=TE, exo=TRUE)
+
+u2 <- simUnif(-0.2, 0.2)
+n1 <- simNorm(0, 0.1)
+
+loading.X.trivial <- matrix(NA, 6, 2)
+loading.X.trivial[is.na(loading.X)] <- 0
+LX.trivial <- simMatrix(loading.X.trivial, "u2")
+
+error.cor.X.trivial <- matrix(NA, 6, 6)
+diag(error.cor.X.trivial) <- 0
+RTD.trivial <- symMatrix(error.cor.X.trivial, "n1")
+
+error.cor.Y.trivial <- matrix(NA, 2, 2)
+diag(error.cor.Y.trivial) <- 0
+RTE.trivial <- symMatrix(error.cor.Y.trivial, "n1")
+
+RTH.trivial <- simMatrix(matrix(NA, 6, 2), "n1")
+
+SEM.Mis.Model <- simMisspecSEM(LX = LX.trivial, TE = RTE.trivial, TD = RTD.trivial, RTH = 
+RTH.trivial, exo=TRUE)
+
+constraint1 <- matrix(1, 3, 2)
+constraint1[,1] <- 1:3
+rownames(constraint1) <- rep("LX", 3)
+constraint2 <- matrix(2, 3, 2)
+constraint2[,1] <- 4:6
+rownames(constraint2) <- rep("LX", 3)
+constraint3 <- matrix(1, 2, 2)
+constraint3[,1] <- 1:2
+rownames(constraint3) <- rep("LY", 2)
+equal.loading <- simEqualCon(constraint1, constraint2, constraint3, modelType="SEM.exo")
+
+Data.Original <- simData(300, SEM.model)
+Data.Mis <- simData(300, SEM.model, misspec=SEM.Mis.Model)
+Data.Con <- simData(300, SEM.model, equalCon=equal.loading)
+Data.Mis.Con <- simData(300, SEM.model, misspec=SEM.Mis.Model, 
+	equalCon=equal.loading)
+
+Model.Original <- simModel(SEM.model)
+Model.Con <- simModel(SEM.model, equalCon=equal.loading)
+
+Output <- simResult(100, Data.Mis.Con, Model.Con)
+getCutoff(Output, 0.05)
+plotCutoff(Output, 0.05)
+summaryParam(Output)

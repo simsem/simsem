@@ -140,31 +140,36 @@ setMethod("combine.object", signature(object1="matrix", object2="matrix"), defin
 setMethod("combine.object", signature(object1="MatrixSet", object2="MatrixSet"), definition=function(object1, object2) {
 		LY <- combine.object(object1@LY, object2@LY)
 		VTE <- combine.object(object1@VTE, object2@VTE)
+		TE <- combine.object(object1@TE, object2@TE)
 		RTE <- combine.object(object1@RTE, object2@RTE, correlation = TRUE)
 		VY <- combine.object(object1@VY, object2@VY)
 		TY <- combine.object(object1@TY, object2@TY) 
 		MY <- combine.object(object1@MY, object2@MY)
 		BE <- combine.object(object1@BE, object2@BE)
 		VPS <- combine.object(object1@VPS, object2@VPS)
+		PS <- combine.object(object1@PS, object2@PS)
 		RPS <- combine.object(object1@RPS, object2@RPS, correlation = TRUE)
 		VE <- combine.object(object1@VE, object2@VE) 
 		AL <- combine.object(object1@AL, object2@AL) 
 		ME <- combine.object(object1@ME, object2@ME) 
 		LX <- combine.object(object1@LX, object2@LX) 
 		VTD <- combine.object(object1@VTD, object2@VTD) 
+		TD <- combine.object(object1@TD, object2@TD)
 		RTD <- combine.object(object1@RTD, object2@RTD, correlation = TRUE)
 		VX <- combine.object(object1@VX, object2@VX)
 		TX <- combine.object(object1@TX, object2@TX)
 		MX <- combine.object(object1@MX, object2@MX)
 		GA <- combine.object(object1@GA, object2@GA)
 		VPH <- combine.object(object1@VPH, object2@VPH)
+		PH <- combine.object(object1@PH, object2@PH)
 		RPH <- combine.object(object1@RPH, object2@RPH, correlation = TRUE)
 		KA <- combine.object(object1@KA, object2@KA)
+		TH <- combine.object(object1@TH, object2@TH)
 		RTH <- combine.object(object1@RTH, object2@RTH)
-		Output <- new("MatrixSet", modelType=object1@modelType, LY=LY, VTE=VTE, RTE=RTE, VY=VY, TY=TY, MY=MY, 
-			BE=BE, VPS=VPS, RPS=RPS, VE=VE, AL=AL, ME=ME,
-			LX=LX, VTD=VTD, RTD=RTD, VX=VX, TX=TX, MX=MX,
-			GA=GA, VPH=VPH, RPH=RPH, KA=KA, RTH=RTH)
+		Output <- new("MatrixSet", modelType=object1@modelType, LY=LY, VTE=VTE, TE=TE, RTE=RTE, VY=VY, TY=TY, MY=MY, 
+			BE=BE, VPS=VPS, PS=PS, RPS=RPS, VE=VE, AL=AL, ME=ME,
+			LX=LX, VTD=VTD, TD=TD, RTD=RTD, VX=VX, TX=TX, MX=MX,
+			GA=GA, VPH=VPH, PH=PH, RPH=RPH, KA=KA, TH=TH, RTH=RTH)
 		return(Output)
 	}
 )
@@ -175,37 +180,37 @@ setMethod("combine.object", signature(object1="MatrixSet", object2="MatrixSet"),
 #	If both objects are correlation matrices, it will retain diagonal elements of 1. 
 #Return: Resulting matrix.c
 
-setMethod("combine.object", signature(object1="list", object2="MisspecSet"), definition=function(object1, object2) {
-		LY <- combine.object(object1$LY, object2@LY)
-		VTE <- combine.object(object1$VTE, object2@VTE)
-		RTE <- combine.object(object1$RTE, object2@RTE, correlation = TRUE)
-		VY <- combine.object(object1$VY, object2@VY)
-		TY <- combine.object(object1$TY, object2@TY) 
-		MY <- combine.object(object1$MY, object2@MY)
-		BE <- combine.object(object1$BE, object2@BE)
-		VPS <- combine.object(object1$VPS, object2@VPS)
-		RPS <- combine.object(object1$RPS, object2@RPS, correlation = TRUE)
-		VE <- combine.object(object1$VE, object2@VE) 
-		AL <- combine.object(object1$AL, object2@AL) 
-		ME <- combine.object(object1$ME, object2@ME) 
-		LX <- combine.object(object1$LX, object2@LX) 
-		VTD <- combine.object(object1$VTD, object2@VTD) 
-		RTD <- combine.object(object1$RTD, object2@RTD, correlation = TRUE)
-		VX <- combine.object(object1$VX, object2@VX)
-		TX <- combine.object(object1$TX, object2@TX)
-		MX <- combine.object(object1$MX, object2@MX)
-		GA <- combine.object(object1$GA, object2@GA)
-		VPH <- combine.object(object1$VPH, object2@VPH)
-		RPH <- combine.object(object1$RPH, object2@RPH, correlation = TRUE)
-		KA <- combine.object(object1$KA, object2@KA)
-		RTH <- combine.object(object1$RTH, object2@RTH)
-		Output <- list(LY=LY, VTE=VTE, RTE=RTE, VY=VY, TY=TY, MY=MY, 
-			BE=BE, VPS=VPS, RPS=RPS, VE=VE, AL=AL, ME=ME,
-			LX=LX, VTD=VTD, RTD=RTD, VX=VX, TX=TX, MX=MX,
-			GA=GA, VPH=VPH, RPH=RPH, KA=KA, RTH=RTH)
-		return(Output)
-	}
-)
+#setMethod("combine.object", signature(object1="list", object2="MisspecSet"), definition=function(object1, object2) {
+#		LY <- combine.object(object1$LY, object2@LY)
+#		VTE <- combine.object(object1$VTE, object2@VTE)
+#		RTE <- combine.object(object1$RTE, object2@RTE, correlation = TRUE)
+#		VY <- combine.object(object1$VY, object2@VY)
+#		TY <- combine.object(object1$TY, object2@TY) 
+#		MY <- combine.object(object1$MY, object2@MY)
+#		BE <- combine.object(object1$BE, object2@BE)
+#		VPS <- combine.object(object1$VPS, object2@VPS)
+#		RPS <- combine.object(object1$RPS, object2@RPS, correlation = TRUE)
+#		VE <- combine.object(object1$VE, object2@VE) 
+#		AL <- combine.object(object1$AL, object2@AL) 
+#		ME <- combine.object(object1$ME, object2@ME) 
+#		LX <- combine.object(object1$LX, object2@LX) 
+#		VTD <- combine.object(object1$VTD, object2@VTD) 
+#		RTD <- combine.object(object1$RTD, object2@RTD, correlation = TRUE)
+#		VX <- combine.object(object1$VX, object2@VX)
+#		TX <- combine.object(object1$TX, object2@TX)
+#		MX <- combine.object(object1$MX, object2@MX)
+#		GA <- combine.object(object1$GA, object2@GA)
+#		VPH <- combine.object(object1$VPH, object2@VPH)
+#		RPH <- combine.object(object1$RPH, object2@RPH, correlation = TRUE)
+#		KA <- combine.object(object1$KA, object2@KA)
+#		RTH <- combine.object(object1$RTH, object2@RTH)
+#		Output <- list(LY=LY, VTE=VTE, RTE=RTE, VY=VY, TY=TY, MY=MY, 
+#			BE=BE, VPS=VPS, RPS=RPS, VE=VE, AL=AL, ME=ME,
+#			LX=LX, VTD=VTD, RTD=RTD, VX=VX, TX=TX, MX=MX,
+#			GA=GA, VPH=VPH, RPH=RPH, KA=KA, RTH=RTH)
+#		return(Output)
+#	}
+#)
 #Arguments: object1 are the list of true parameter matrices. (I do not know why at that point I did not use the SimSet.
 #			object2 are the set of misspecified parameter matrices
 #Description: This function is used to combine list of true parameters with set of misspecification parameters. If any matrices 

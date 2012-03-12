@@ -127,11 +127,14 @@ simsem, Version 0.0-8 03/05/12
 - Make the miPoolVector function public and make the manual page.
 
 simsem, Version 0.0-9 03/10/12
-- Adding anova method for nested and nonnested comparison
+- Adding anova method for nested and nonnested comparison and its help page.
 - Changing code in run(SimSet), run(SimMisspec), run.misspecified to be more efficient by adding fillParam function
 - Change the get.keywords function to provide only necessary code (do not provide different inputs for different in lower or upper cases)
 - Make match.keyword code to be case-insensitive
-- Adding PS, TE, TD, PH, TH for covariance matrix in SimSet and MatrixSet classes. The reassign.names, constrain.matrices, all SimSet and SimMisspec constructors are changed accordingly.
+- Adding PS, TE, TD, PH, TH for covariance matrix in SimSet and MatrixSet classes. The reassign.names, constrain.matrices, all SimSet and SimMisspec constructors, reduce.matrices, expand.matrices, create.free.parameters are changed accordingly.
+- The help page of SimSet-class, SimMisspec-class, and all of their constructors.
+- Debug miPool.R that has a problem when a matrix or a vector contains only one element.
+- Debug imposeMissing.R that has a problem when there is no covariate.
 
 
 
