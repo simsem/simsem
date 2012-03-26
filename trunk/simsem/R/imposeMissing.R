@@ -186,7 +186,7 @@ planned.missing <- function(dims=c(0,0),nforms=NULL,itemGroups=NULL,twoMethod=NU
    # form design, this is 6) and then repeat this matrix of permuations to cover all timepoints.
 
     obsGroups <- generateIndices(nforms,1:nobs)
-    formPerms <- matrix(unlist(permn(length(obsGroups))),ncol=nforms)
+    formPerms <- matrix(unlist(permn(length(obsGroups))),ncol=nforms,byrow=TRUE)
 
     if(timePoints > dim(formPerms)[1]) {
       dimMult <- ceiling((timePoints - dim(formPerms)[1])/timePoints)+1
@@ -220,7 +220,7 @@ planned.missing <- function(dims=c(0,0),nforms=NULL,itemGroups=NULL,twoMethod=NU
     # 3) Add the columns of covariates to the end of the matrix, and convert to data frame
     # 4) Rename the colums of the data frame
     # 5) Sort the column names
-    # 6) Convert to back to matrix
+    # 6) Convert back to matrix
     
     if(length(excl) != 0) {
       exclMat <- matrix(rep(FALSE,nobs*length(excl)),ncol=length(excl))
@@ -285,7 +285,7 @@ generateIndices <- function(ngroups, groupRange, excl=NULL) {
 
 permn <- function (x, fun = NULL, ...) 
 {
-  # Taken without shame from package combinat. Put here for easy loading.
+  # Taken from package combinat. Put here for easy loading.
     if (is.numeric(x) && length(x) == 1 && x > 0 && trunc(x) == 
         x) 
         x <- seq(x)
