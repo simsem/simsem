@@ -19,6 +19,7 @@ Objects can be created by \code{\link{run}} on the \code{\linkS4class{SimData}} 
     \item{\code{paramOut}:}{Parameter values underlying the simulated data.}
     \item{\code{misspecOut}:}{Model misspecification underlying the simulated data}
     \item{\code{equalCon}:}{Equality constraints in data generation. It must be in \code{\linkS4class{SimEqualCon}} class.}
+	\item{\code{n}:}{Sample size of the created data.}
   }
 }
 \section{Methods}{

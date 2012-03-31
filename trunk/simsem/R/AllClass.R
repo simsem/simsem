@@ -1096,9 +1096,11 @@ setClass("SimDataOut",
 		#misspecExp="SimRSet",
 		paramOut="SimRSet",
 		misspecOut="SimRSet",
-		equalCon="SimEqualCon"),
+		equalCon="SimEqualCon",
+		n="numeric"),
 	prototype(
-		equalCon=new("NullSimEqualCon"))
+		equalCon=new("NullSimEqualCon"),
+		n=0)
 )
 
 ###################################################################
@@ -1193,12 +1195,14 @@ setClass("SimResult",
 		FMI1="data.frame",
 		FMI2="data.frame",
 		stdCoef="data.frame",
-		seed="numeric"),
+		seed="numeric",
+		n="numeric"),
 	prototype(
 		stdCoef=new("NullDataFrame"),
 		paramValue=new("NullDataFrame"),
 		FMI1=new("NullDataFrame"),
-		FMI2=new("NullDataFrame"))
+		FMI2=new("NullDataFrame"),
+		n=0)
 )
 
 ###################################################################
@@ -1233,11 +1237,13 @@ setClass("SimModelOut", # The class provides model result.
         fit="vector",
         se="SimRSet",
         converged="logical",
-		paramValue="SimRSet"),
+		paramValue="SimRSet",
+		n="numeric"),
     prototype(
         equalCon=new("NullSimEqualCon"),
         converged=FALSE,
-		paramValue=new("NullRSet"))
+		paramValue=new("NullRSet"),
+		n=0)
 )
 
 ###################################################################

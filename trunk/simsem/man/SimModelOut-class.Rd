@@ -22,6 +22,7 @@ Objects can be created by \code{\link{run}} on the \code{\linkS4class{SimModel}}
     \item{\code{fit}:}{Fit Indices values from each replication}
     \item{\code{converged}:}{Number of convergence replications }
 	\item{\code{paramValue}:}{The parameter values behind the analyzed data.}
+	\item{\code{n}:}{Sample size of the analyzed data.}
   }
 }
 \section{Methods}{

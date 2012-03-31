@@ -22,6 +22,7 @@ Objects can be created by \code{\link{run}} on the \code{\linkS4class{SimModel}}
 	\item{\code{paramValue}:}{The parameter values behind the analyzed data.}
 	\item{\code{FMI1}:}{The fraction missing method 1.}
 	\item{\code{FMI2}:}{The fraction missing method 2.}
+	\item{\code{n}:}{Sample size of the analyzed data.}
   }
 }
 \section{Methods}{

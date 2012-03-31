@@ -2,7 +2,7 @@
 
 simResult <- function(nRep, simData, simModel, simMissing=new("NullSimMissing"), seed = 123321, silent=FALSE, multicore=FALSE, cluster=FALSE, numProc=NULL) {
 	set.seed(seed)
-	
+	n <- 0
 	modelType <- simModel@modelType
     param <- NULL
 	# Careful about the seed number
@@ -11,13 +11,17 @@ simResult <- function(nRep, simData, simModel, simMissing=new("NullSimMissing"),
 		for(i in 1:nRep) {
 			object.l[[i]] <- drawParameters(simData)
 		}
+		n <- simData@n
     } else if(is.list(simData)){ 
 		if(class(simData[[1]]) == "SimDataOut") {
 			object.l <- simData
+			n <- simData@n
 		} else if(is.matrix(simData[[1]])) {
 			object.l <- lapply(simData, data.frame)
+			n <- nrow(simData[[1]])
 		} else if(is.data.frame(simData[[1]])) {
 			object.l <- simData
+			n <- nrow(simData[[1]])
 		} else {
 			stop("The list in the simData argument does not contain matrices or data frames.")
 		}
@@ -102,75 +106,6 @@ simResult <- function(nRep, simData, simModel, simMissing=new("NullSimMissing"),
 		if(nrow(unique(FMI2)) == 1) FMI2 <- unique(FMI2)
 	}
 	Result <- new("SimResult", modelType=modelType, nRep=nRep, coef=coef, se=se, fit=fit, converged=converged, 
-		seed=seed, paramValue=param, FMI1=FMI1, FMI2=FMI2, stdCoef=std)
+		seed=seed, paramValue=param, FMI1=FMI1, FMI2=FMI2, stdCoef=std, n=n)
 	return <- Result
 }
-
-
-
-       
-#	for(i in 1:nRep) {
-#          if(!silent) cat(i, "\n")
-#          
-        # Get Data
-#          if(class(simData) == "SimData") {
-#            data <- run(simData, dataOnly=FALSE)
-#          } else if(is.list(simData) && !is.data.frame(simData)) {
-#            data <- simData[[i]]
-#          } else {
-#            data <- simData
-#          }
-#         
-#         temp <- NULL
-#         
-#         if(!is.null(simMissing)){
-#         # Impose / Impute Missing 
-#        
-#          data.mis <- imposeMissing(data@data, covs=simMissing@covs, pmMCAR=simMissing@pmMCAR,
-#                                    pmMAR=simMissing@pmMAR, nforms=simMissing@nforms,
-#                                    itemGroups=simMissing@itemGroups, twoMethod=simMissing@twoMethod, timePoints=simMissing@timePoints)
-#               }                     
-#          
-#          temp <- NULL#Impute missing and run results NEEED TO GET PARAMETER LABELS FROM runMI
-#          
-#          if(numImps>0) {
-#              tempMI<-NULL
-#              if(silent) {
-#                 invisible(capture.output(suppressMessages(try(tempMI <- runMI(data.mis,simModel,simMissing@numImps,simMissing@impMethod)), silent=TRUE)))
-#              } else {
-#                        try(tempMI <- runMI(data.mis,simModel,simMissing@numImps,simMissing@impMethod))
-#              }
-#              temp <- new("SimResult", modelType=simModel@modelType,nRep=1, coef=as.data.frame(tempMI[[1]]),
-#                               se=as.data.frame(tempMI[[2]]), fit=as.data.frame(t(tempMI[[3]])), converged =!is.null(tempMI))
-#              } else{
-#          if(silent) {
-#            invisible(capture.output(suppressMessages(try(temp <- run(simModel, data), silent=TRUE))))
-#                 #tryCatch(temp <- run(simModel, data), error=function(e) {print("Error")})
-#          } else {
-#            try(temp <- run(simModel, data))
-#          }
-#          }
-#          
-#          
-#          if(!is.null(temp)) {
-#            converged.l[[i]] <- temp@converged	     
-#            Labels <- make.labels(temp@param, package=simModel@package) #As a quick default to use OpenMx
-#            coef.l[[i]] <- vectorize.object(temp@coef, Labels)
-#            se.l[[i]] <- vectorize.object(temp@se, Labels)
-#            fit.l[[i]] <- temp@fit
-#
-#            if(!converged.l[[i]]) {
-#              coef.l[[i]] <- NA
-#              se.l[[i]] <- NA
-#              fit.l[[i]] <- NA
-#            }
-#
-#            if(!is.null.object(temp@paramValue)) {
-#              if(converged.l[[i]]) {
-#                param.l[[i]] <- vectorize.object(temp@paramValue, Labels)
-#              } else {
-#                param.l[[i]] <- NA
-#              }
-#            }
-#          }
-#	}

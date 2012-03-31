@@ -457,6 +457,7 @@ setMethod("run", signature="SimModel", definition=function(object, data, simMiss
 			Output@paramValue <- paramOut
 		}
 	}
+	Output@n <- nrow(data)
 	#Add labels in the SimModelOut --> go to SimModelOut and relabels it
 	#Provide a nicer summary --> Groups elements from the same matrix together
 	return(Output)

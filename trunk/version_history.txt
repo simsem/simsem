@@ -139,4 +139,12 @@ simsem, Version 0.0-9 03/11/12
 simsem, Version 0.0-9.1 03/31/12
 - Fixing the bug that free the exogenous factor correlation when we actually fixed it.
 
+simsem, Version 0.0-10 03/31/12
+- Make SimDataOut, SimModelOut, and SimResult have sample size argument (n).
+- Change run, createData, simResult functions to save sample size in the returning class.
+- Add miPoolChi to pool chi-square statistics
+- Change miPool to pool chi-square statistics by the previous functions and add compute fit indices
+- Add fitMeasures function to compute fit indices
+- Explain the pooling procedure in miPool.Rd
+
 

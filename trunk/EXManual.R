@@ -592,8 +592,13 @@ itemGroups <- list(setx, set1, set2, set3)
 
 SimMissing <- simMissing(nforms=3, itemGroups=itemGroups, numImps=5)
 
-SimData <- simData(1000, CFA.model, misspec = CFA.model.mis)
+SimData <- simData(1000, CFA.model) #, misspec = CFA.model.mis)
 SimModel <- simModel(CFA.model)
+
+dat <- run(SimData)
+dat <- run(SimMissing, dat)
+out <- run(SimModel, dat, SimMissing)
+
 Output <- simResult(20, SimData, SimModel, SimMissing, multicore=TRUE)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
@@ -1369,3 +1374,32 @@ Output <- simResult(100, Data.Mis.Con, Model.Con)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
+
+
+####################################### try
+
+
+ loading <- matrix(0, 6, 2)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+LX <- simMatrix(loading, 0.7)
+
+latent.cor <- matrix(NA, 2, 2)
+diag(latent.cor) <- 1
+RPH <- symMatrix(latent.cor, 0.5)
+
+error.cor <- matrix(0, 6, 6)
+diag(error.cor) <- 1
+RTD <- symMatrix(error.cor)
+
+CFA.Model <- simSetCFA(LY = LX, RPH = RPH, RTD = RTD)
+
+SimData <- simData(200, CFA.Model)
+
+SimModel <- simModel(CFA.Model)
+
+SimMissing <- simMissing(pmMCAR=0.1, numImps=100)
+
+dat <- run(SimData)
+dat <- run(SimMissing, dat)
+out <- run(SimModel, dat, SimMissing)

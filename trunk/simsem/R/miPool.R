@@ -67,6 +67,41 @@ names(MI.res)<-c('coef','se','FMI.1','FMI.2')
 #nimps <- 4
 #miPoolVector(param, SE, nimps)
 
+# miPoolChi
+# Function -- simsem package
+# Pool Chi-square statistic based on Li, Meng, Raghunathan, & Rubin (1991) adapted from http://psychology.clas.asu.edu/files/CombiningLikelihoodRatioChi-SquareStatisticsFromaMIAnalysis.sas
+# Argument:
+#	chis: 	vector of chi-square values
+#	df:		degree of freedom
+# Author: 	Craig Enders
+#			Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
+# Date Modified: March 31, 2012
+
+miPoolChi <- function(chis, df) {
+	# From Li, Meng, Raghunathan, & Rubin (1991)
+	if(is.matrix(chis)) {
+		ifelse(ncol(chis) == 1 | nrow(chis) == 1, chis <- as.vector(chis), stop("Please put a vector of chi-square values"))
+	}
+	m <- length(chis)
+	dbar <- mean(chis)
+	sqrtd <- sqrt(chis)
+	xbarsqrtd <- mean(sqrtd)
+	# Equation 2.2
+	r <- (1 + 1/m) * (sum((sqrtd - xbarsqrtd)^2)/(m - 1))
+	# Equation 2.1
+	D <- (dbar/df - ((m + 1) * r /(m - 1)))/(1 + r)
+	if(D < 0) D <- 0
+	# Equation 2.16 and 2.17
+	aw <- df^(-(3/m)) * (m - 1) * (1 + (1/r))^2
+	p <- 1 - pf(D, df, aw)
+	result <- c(D, df, aw, p)
+	names(result) <- c("F", "df1", "df2", "p.F")
+	return(result)
+}
+#Examples:
+#miPoolChi(c(89.864, 81.116,71.500,49.022,61.986,64.422,55.256,57.890,79.416,63.944), 2)
+
+
 # miPool
 # Function -- simsem package
 # Pool MI results in SimModelOut class format
@@ -130,8 +165,18 @@ miPool <- function(Result.l) {
 	param <- Result.l[[which(Converged==TRUE)[1]]]@param
 
 	Fit <- sapply(Result.l, function(object) {object@fit})
-	OutputFit <- rowMeans(Fit[,Converged], na.rm=TRUE)
-
+	dfPool <- Fit["df", 1]
+	nullDfPool <- Fit["baseline.df", 1]
+	chiPool <- miPoolChi(Fit["Chi", Converged], dfPool)
+	nullChiPool <- miPoolChi(Fit["baseline.Chi", Converged], nullDfPool)
+	OutputFit <- fitMeasures(X2=chiPool["df1"]*chiPool["F"], df=chiPool["df1"], p=chiPool["p.F"], 
+					X2.null=nullChiPool["df1"]*nullChiPool["F"], df.null=nullChiPool["df1"], p.null=nullChiPool["p.F"], 
+					N=Result.l[[1]]@n, fit.measures="all")
+	toGetAverage <- setdiff(rownames(Fit), names(OutputFit))
+	OutputFit2 <- rowMeans(Fit[toGetAverage, Converged], na.rm=TRUE)
+	OutputFit <- c(OutputFit, OutputFit2)[rownames(Fit)]
+	names(nullChiPool) <- paste("baseline.", names(nullChiPool), sep="")
+	OutputFit <- c(OutputFit, chiPool, nullChiPool)
 	return(new("SimModelMIOut", param=param, start=start,
 			equalCon=equalCon, package=package, coef=OutputCoef,
 			fit=OutputFit, se=OutputSE, converged=conv,
