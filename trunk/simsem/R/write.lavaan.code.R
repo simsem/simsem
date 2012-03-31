@@ -88,6 +88,11 @@ write.lavaan.code <- function(object, constraint, aux = NULL) {
 						exo.set <- find.recursive.set(object@BE)[[1]]
 						if(!(is.element(i, exo.set) & is.element(j, exo.set))) cov.code <- paste(cov.code, rownames(object@PS)[i], " ~~ ", content, colnames(object@PS)[j], " \n", sep = "")
 					}
+				} else {
+					content <- paste(object@PS[i, j], "*", sep="")
+					if(is.null.object(object@BE)) {
+						cov.code <- paste(cov.code, rownames(object@PS)[i], " ~~ ", content, colnames(object@PS)[j], " \n", sep = "")
+					} 			
 				}
 			}
 		}

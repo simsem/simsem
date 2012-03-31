@@ -136,5 +136,7 @@ simsem, Version 0.0-9 03/11/12
 - Debug miPool.R that has a problem when a matrix or a vector contains only one element.
 - Debug imposeMissing.R that has a problem when there is no covariate.
 
+simsem, Version 0.0-9.1 03/31/12
+- Fixing the bug that free the exogenous factor correlation when we actually fixed it.
 
 

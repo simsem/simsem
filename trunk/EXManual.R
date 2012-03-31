@@ -200,7 +200,7 @@ getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
 
-# Example 3 with X sides #
+# Example 4 with X sides #
 library(simsem)
 
 u35 <- simUnif(0.3, 0.5)
