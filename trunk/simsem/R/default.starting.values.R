@@ -1,4 +1,4 @@
-default.startingValues <- function(object) {
+defaultStartingValues <- function(object) {
 	ifelse(isNullObject(object@LY), LY <- new("NullMatrix"), {LY <- matrix(NA, nrow(object@LY), ncol(object@LY)); LY[is.na(object@LY)] <- 0.7})
 	ifelse(isNullObject(object@TE), TE <- new("NullMatrix"), {TE <- matrix(NA, nrow(object@TE), ncol(object@TE)); TE[is.na(object@TE)] <- 0.49; TE[is.na(object@TE) & (upper.tri(TE) | lower.tri(TE))] <- 0.2})
 	ifelse(isNullObject(object@PS), PS <- new("NullMatrix"), {PS <- matrix(NA, nrow(object@PS), ncol(object@PS)); PS[is.na(object@PS)] <- 1; PS[is.na(object@PS) & (upper.tri(PS) | lower.tri(PS))] <- 0.2})

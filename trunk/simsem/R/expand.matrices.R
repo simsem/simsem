@@ -1,4 +1,4 @@
-# expand.matrices
+# expandMatrices
 # function -- simsem package
 # Expand the set of covariance matrices into the set of covariance/correlation/variance objects
 # Argument:
@@ -6,7 +6,7 @@
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: March 10, 2012
 
-expand.matrices <- function(object) {
+expandMatrices <- function(object) {
 	if(!is(object, "SimRSet")) stop("The object is not a SimRSet object")
 	modelType <- object@modelType
 	BE <- object@BE
@@ -56,7 +56,7 @@ expand.matrices <- function(object) {
 	} else if(modelType =="Path.exo") {
 		nx <- ncol(GA)
 		ny <- nrow(GA)
-		temp.BE <- combine.path.exo.endo(GA, BE)
+		temp.BE <- combinePathExoEndo(GA, BE)
 		temp.RPS <- combineLatentCorExoEndo(RPH, RPS)
 		temp.VE <- find.factor.var(temp.BE, temp.RPS, c(VPH, VPS))
 		VE <- temp.VE[(nx + 1):(nx + ny)]
@@ -70,7 +70,7 @@ expand.matrices <- function(object) {
 	} else if(modelType == "SEM.exo") {
 		nk <- ncol(GA)
 		ne <- nrow(GA)
-		temp.BE <- combine.path.exo.endo(GA, BE)
+		temp.BE <- combinePathExoEndo(GA, BE)
 		temp.RPS <- combineLatentCorExoEndo(RPH, RPS)
 		temp.VE <- find.factor.var(temp.BE, temp.RPS, c(VPH, VPS))
 		VE <- temp.VE[(nk + 1):(nk + ne)]

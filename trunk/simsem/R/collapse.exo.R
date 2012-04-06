@@ -2,16 +2,16 @@ collapseExo <- function(object, value=0, label=FALSE) {
 	if(!isNullObject(object@GA)) {
 		nk <- ncol(object@GA)
 		ne <- nrow(object@GA)
-		temp.BE <- combine.path.exo.endo(object@GA, object@BE, value)
+		temp.BE <- combinePathExoEndo(object@GA, object@BE, value)
 		temp.PS <- combineLatentCorExoEndo(object@PH, object@PS, value)
-		temp.AL <- combine.vector.exo.endo(object@KA, object@AL)
+		temp.AL <- combineVectorExoEndo(object@KA, object@AL)
 		temp.LY <- new("NullMatrix")
 		temp.TE <- new("NullMatrix")
 		temp.TY <- new("NullVector")
 		if(object@modelType == "SEM.exo") {
 			temp.LY <- combineLoadingExoEndo(object@LX, object@LY, value)
 			temp.TE <- combineMeasurementErrorExoEndo(object@TD, object@TE, object@TH)
-			temp.TY <- combine.vector.exo.endo(object@TX, object@TY)
+			temp.TY <- combineVectorExoEndo(object@TX, object@TY)
 		}
 		if(label) {
 			colnames(temp.BE) <- c(colnames(object@GA), colnames(object@BE))

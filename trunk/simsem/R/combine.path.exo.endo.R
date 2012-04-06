@@ -1,4 +1,4 @@
-combine.path.exo.endo <- function(GA, BE, value=0) {
+combinePathExoEndo <- function(GA, BE, value=0) {
 	nk <- ncol(GA)
 	ne <- nrow(GA)
 	part1 <- matrix(value, nk, nk+ne)

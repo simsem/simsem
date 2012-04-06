@@ -69,12 +69,12 @@ runLavaan <- function(object, Data, miss="fiml", estimator="ML") {
 	FitIndicesNull <- NA
 	Converged <- FALSE
 	if(!is.null(fit)) {
-		try(FitIndices <- extract.lavaan.summary(fit))
+		try(FitIndices <- extractLavaanSummary(fit))
 		if(nz > 0) {
 			############################ Run Null Model
 			codeNull <- writeLavaanNullCode(setdiff(varnames, nameAux), nameAux)
 			try(fitNull <- sem(codeNull, data=Data, meanstructure=TRUE, missing=miss, estimator=estimator, fixed.x=FALSE))
-			try(FitIndicesNull <- extract.lavaan.summary(fitNull))
+			try(FitIndicesNull <- extractLavaanSummary(fitNull))
 			if(!is.na(FitIndices) && !is.na(FitIndicesNull)) {
 				ratioNULL <- FitIndicesNull["Chi"]/FitIndicesNull["df"]
 				ratioReal <- FitIndices["Chi"]/FitIndices["df"]

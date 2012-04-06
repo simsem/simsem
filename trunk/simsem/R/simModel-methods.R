@@ -18,7 +18,7 @@ setMethod("simModel", signature(object="SimFreeParam"), definition=function(obje
 	if(!is.null(start)) {
 		if(modelType != start@modelType) stop("Starting Values and Parameters do not have the same tag")
 	} else {
-		start <- default.startingValues(object)
+		start <- defaultStartingValues(object)
 	}
 	if(!isNullObject(SimEqualCon)) {
 		if(modelType != equalCon@modelType) stop("SimEqualCon and SimFreeParam do not have the same tag")
@@ -41,7 +41,7 @@ setMethod("simModel", signature(object="SimSet"), definition=function(object, eq
 	start <- startingValues(object, trial)
 	start <- reduce.matrices(start)
 	#browser()
-	freeParameters <- create.free.parameters(object)
+	freeParameters <- createFreeParameters(object)
 	modelType <- object@modelType
 	if(!isNullObject(equalCon)) {
 		if(modelType != equalCon@modelType) stop("SimEqualCon and SimSet do not have the same tag")

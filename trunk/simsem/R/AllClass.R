@@ -829,7 +829,7 @@ setClass("NullSimREqualCon", contains="SimREqualCon",
 # SimFreeParam
 # Class -- simsem package
 # Set of vectors and matrices arrangements that will save free parameters and values of fixed parameters that will be used to model specification. 
-# Constructor:	create.free.parameters(object)
+# Constructor:	createFreeParameters(object)
 # Parent Class: VirtualRSet
 # Child Class:	None
 # Methods:
@@ -864,7 +864,7 @@ setClass("SimLabels",
 # SimRSet
 # Class -- simsem package
 # Set of vectors and matrices arrangements that will save values that will be used for various purposes. 
-# Constructor:	default.startingValues(object)
+# Constructor:	defaultStartingValues(object)
 # Parent Class: VirtualRSet
 # Child Class:	None
 # Methods:

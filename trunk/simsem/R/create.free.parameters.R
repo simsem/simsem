@@ -1,14 +1,14 @@
-# create.free.parameters
+# createFreeParameters
 # Function -- simsem package
 # Create free parameters object from model specification
-# Function: create.free.parameters(object)
+# Function: createFreeParameters(object)
 # Argument:
 #	object: 	SimSet.c that users wish to transform it to SimFreeParam.c
 # Return: 	SimFreeParam.c that saves only free parameters and values of fixed parameters
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: March 10, 2012
 
-create.free.parameters <- function(object) {
+createFreeParameters <- function(object) {
 	if(!is(object, "SimSet")) stop("The attribute is not a SimSet object.")
 	#The free parameters will be only used. This will not affect the program.
 	if(isNullObject(object@AL) & !isNullObject(object@ME)) object@AL <- object@ME
@@ -91,5 +91,5 @@ create.free.parameters <- function(object) {
 #	indicator.mean <- rep(NA, 6)
 #	MX <- simVector(indicator.mean, 0)
 #	CFA.Model <- simSetCFA(LX = LX, RPH = RPH, RTD = RTD, MX = MX)
-#	free <- create.free.parameters(CFA.Model)
+#	free <- createFreeParameters(CFA.Model)
 
