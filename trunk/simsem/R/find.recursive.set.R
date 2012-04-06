@@ -1,4 +1,4 @@
-find.recursive.set <- function(square.matrix) {
+findRecursiveSet <- function(square.matrix) {
 	result <- list()
 	ni <- nrow(square.matrix)
 	fix.variable <- rep(FALSE, ni)
@@ -6,7 +6,7 @@ find.recursive.set <- function(square.matrix) {
 	i <- 1
 	#browser()
 	while(ni.sofar < ni) {
-		temp <- find.row.zero(square.matrix, fix.variable)
+		temp <- findRowZero(square.matrix, fix.variable)
 		if(is.null(temp)) stop("The matrix is not recursive.")
 		fix.variable[temp] <- TRUE
 		result[[i]] <- temp

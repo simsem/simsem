@@ -1,6 +1,6 @@
-find.factor.var <- function(path.matrix, latent.cor.matrix, error.var) {
+findFactorVar <- function(path.matrix, latent.cor.matrix, error.var) {
 	ni <- nrow(path.matrix)
-	set <- find.recursive.set(path.matrix)
+	set <- findRecursiveSet(path.matrix)
 	real.psi <- cor2cov(latent.cor.matrix, sqrt(error.var))
 	ID <- matrix(0, ni, ni)
 	diag(ID) <- 1

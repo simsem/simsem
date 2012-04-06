@@ -1,8 +1,8 @@
-find.latent.error.var <- function(path.matrix, latent.cor.matrix, factor.var = NULL) {
+findLatentErrorVar <- function(path.matrix, latent.cor.matrix, factor.var = NULL) {
 	#browser()
 	if(sum(diag(latent.cor.matrix)) == 0) diag(latent.cor.matrix) <- 1
 	ni <- nrow(path.matrix)
-	set <- find.recursive.set(path.matrix)
+	set <- findRecursiveSet(path.matrix)
 	error.var <- rep(1, ni)
 	if(is.null(factor.var)) factor.var <- rep(1, ni)
 	error.var[set[[1]]] <- factor.var[set[[1]]]

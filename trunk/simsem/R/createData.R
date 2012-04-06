@@ -36,7 +36,7 @@ createData <- function(paramSet, n, object, dataOnly) {
 			} else {
 				stop("Incorrect model type")
 			}
-			set <- find.recursive.set(usedParam2@BE)
+			set <- findRecursiveSet(usedParam2@BE)
 			iv <- set[[1]]
 			fac <- run(extract(object@facDist, iv), n, usedParam2@AL[iv], usedParam2@PS[iv, iv])
 			for(i in 2:length(set)) {

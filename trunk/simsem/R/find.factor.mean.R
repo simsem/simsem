@@ -1,6 +1,6 @@
-find.factor.mean <- function(path.matrix, intercept = NULL) {
+findFactorMean <- function(path.matrix, intercept = NULL) {
 	ni <- nrow(path.matrix)
-	set <- find.recursive.set(path.matrix)
+	set <- findRecursiveSet(path.matrix)
 	factor.mean <- rep(0, ni)
 	if(is.null(intercept)) intercept <- rep(0, ni)
 	factor.mean[set[[1]]] <- intercept[set[[1]]]

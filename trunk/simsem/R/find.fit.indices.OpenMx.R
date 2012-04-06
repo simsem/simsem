@@ -1,4 +1,4 @@
-find.fit.indices.OpenMx <- function(indiv.result) {
+findFitIndicesOpenMx <- function(indiv.result) {
 	temp.result <- summary(indiv.result)
 	Chi <- temp.result$Chi
 	p <- temp.result$p

@@ -1,6 +1,6 @@
-find.possible.latent.cor <- function(path.matrix) {
+findPossibleLatentCor <- function(path.matrix) {
 	ni <- nrow(path.matrix)
-	set <- find.recursive.set(path.matrix)
+	set <- findRecursiveSet(path.matrix)
 	psi <- matrix(0, ni, ni)
 	diag(psi) <- 1
 	for(i in 1:length(set)) {

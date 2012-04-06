@@ -58,7 +58,7 @@ write.lavaan.code <- function(object, constraint, aux = NULL) {
 			}
 		}
 		if(isNullObject(object@LY) && !is.null(aux)) {
-			set <- find.recursive.set(object@BE)
+			set <- findRecursiveSet(object@BE)
 			target <- colnames(object@BE)[set[[1]]]
 			for(i in 1:length(aux)) {
 				temp <- paste(aux[1], " ~ ", paste(paste("NA*", target), collapse=" + "), "\n", sep="")
@@ -85,7 +85,7 @@ write.lavaan.code <- function(object, constraint, aux = NULL) {
 					if(isNullObject(object@BE)) {
 						cov.code <- paste(cov.code, rownames(object@PS)[i], " ~~ ", content, colnames(object@PS)[j], " \n", sep = "")
 					} else {
-						exo.set <- find.recursive.set(object@BE)[[1]]
+						exo.set <- findRecursiveSet(object@BE)[[1]]
 						if(!(is.element(i, exo.set) & is.element(j, exo.set))) cov.code <- paste(cov.code, rownames(object@PS)[i], " ~~ ", content, colnames(object@PS)[j], " \n", sep = "")
 					}
 				} else {
@@ -99,7 +99,7 @@ write.lavaan.code <- function(object, constraint, aux = NULL) {
 		}
 		result <- paste(result, var.code, cov.code)
 		if(isNullObject(object@LY) && !is.null(aux)) {
-			set <- find.recursive.set(object@BE)
+			set <- findRecursiveSet(object@BE)
 			target <- colnames(object@BE)[-set[[1]]]
 			varCode <- paste(paste(aux, " ~~ NA*", aux, sep=""), collapse="\n")
 			result <- paste(result, varCode, "\n")

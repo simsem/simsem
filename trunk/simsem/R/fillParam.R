@@ -35,28 +35,28 @@ fillParam <- function(param, modelType) {
 			RPS <- cov2cor(PS)
 		}
 		if(isNullObject(TE)) {
-			if(isNullObject(VTE)) VTE <- find.measurement.error.var(LY, RPS, VY, VE)
-			if(isNullObject(VY)) VY <- find.indicator.var(LY, RPS, VTE, VE)
+			if(isNullObject(VTE)) VTE <- findMeasurementErrorVar(LY, RPS, VY, VE)
+			if(isNullObject(VY)) VY <- findIndicatorVar(LY, RPS, VTE, VE)
 			TE <- cor2cov(RTE, sqrt(VTE))
 		} else {
 			VTE <- diag(TE)
 			RTE <- cov2cor(TE)
-			VY <- find.indicator.var(LY, RPS, VTE, VE)
+			VY <- findIndicatorVar(LY, RPS, VTE, VE)
 		}
-		if(isNullObject(MY)) MY <- find.indicator.mean(LY, ME, TY)
-		if(isNullObject(TY)) TY <- find.measurement.intercept(LY, ME, MY)
+		if(isNullObject(MY)) MY <- findIndicatorMean(LY, ME, TY)
+		if(isNullObject(TY)) TY <- findMeasurementIntercept(LY, ME, MY)
 	} else if(modelType == "Path") {
 		if(isNullObject(PS)) {
-			if(isNullObject(VPS)) VPS <- find.latent.error.var(BE, RPS, VE)
-			if(isNullObject(VE)) VE <- find.factor.var(BE, RPS, VPS)
+			if(isNullObject(VPS)) VPS <- findLatentErrorVar(BE, RPS, VE)
+			if(isNullObject(VE)) VE <- findFactorVar(BE, RPS, VPS)
 			PS <- cor2cov(RPS, sqrt(VPS))
 		} else {
 			VPS <- diag(PS)
 			RPS <- cov2cor(PS)
-			VE <- find.factor.var(BE, RPS, VPS)
+			VE <- findFactorVar(BE, RPS, VPS)
 		}
-		if(isNullObject(ME)) ME <- find.factor.mean(BE, AL)
-		if(isNullObject(AL)) AL <- find.latent.intercept(BE, ME)
+		if(isNullObject(ME)) ME <- findFactorMean(BE, AL)
+		if(isNullObject(AL)) AL <- findLatentIntercept(BE, ME)
 	} else if(modelType =="Path.exo") {
 		nx <- ncol(GA)
 		ny <- nrow(GA)
@@ -71,46 +71,46 @@ fillParam <- function(param, modelType) {
 		temp.BE <- combinePathExoEndo(GA, BE)
 		temp.RPS <- combineLatentCorExoEndo(RPH, RPS)
 		if(isNullObject(VPS)) {
-			temp.VPS <- find.latent.error.var(temp.BE, temp.RPS, c(VPH, VE))
+			temp.VPS <- findLatentErrorVar(temp.BE, temp.RPS, c(VPH, VE))
 			VPS <- temp.VPS[(nx + 1):(nx + ny)]
 		}
 		if(isNullObject(VE)) {
-			temp.VE <- find.factor.var(temp.BE, temp.RPS, c(VPH, VPS))
+			temp.VE <- findFactorVar(temp.BE, temp.RPS, c(VPH, VPS))
 			VE <- temp.VE[(nx + 1):(nx + ny)]
 		}
 		if(isNullObject(ME)) {
-			temp.ME <- find.factor.mean(temp.BE, c(KA, AL))
+			temp.ME <- findFactorMean(temp.BE, c(KA, AL))
 			ME <- temp.ME[(nx + 1):(nx + ny)]
 		}
 		if(isNullObject(AL)) {
-			temp.AL <- find.latent.intercept(temp.BE, c(KA, ME))
+			temp.AL <- findLatentIntercept(temp.BE, c(KA, ME))
 			AL <- temp.AL[(nx + 1):(nx + ny)]
 		}
 		if(isNullObject(PS)) PS <- cor2cov(RPS, sqrt(VPS))
 		if(isNullObject(PH)) PH <- cor2cov(RPH, sqrt(VPH))
 	} else if(modelType == "SEM") { 
 		if(isNullObject(PS)) {
-			if(isNullObject(VPS)) VPS <- find.latent.error.var(BE, RPS, VE)
-			if(isNullObject(VE)) VE <- find.factor.var(BE, RPS, VPS)
+			if(isNullObject(VPS)) VPS <- findLatentErrorVar(BE, RPS, VE)
+			if(isNullObject(VE)) VE <- findFactorVar(BE, RPS, VPS)
 			PS <- cor2cov(RPS, sqrt(VPS))
 		} else {
 			VPS <- diag(PS)
 			RPS <- cov2cor(PS)	
-			VE <- find.factor.var(BE, RPS, VPS)			
+			VE <- findFactorVar(BE, RPS, VPS)			
 		}
-		if(isNullObject(ME)) ME <- find.factor.mean(BE, AL)
-		if(isNullObject(AL)) AL <- find.latent.intercept(BE, ME)
+		if(isNullObject(ME)) ME <- findFactorMean(BE, AL)
+		if(isNullObject(AL)) AL <- findLatentIntercept(BE, ME)
 		if(isNullObject(TE)) {
-			if(isNullObject(VTE)) VTE <- find.measurement.error.var(LY, RPS, VY, VE)
-			if(isNullObject(VY)) VY <- find.indicator.var(LY, RPS, VTE, VE)
+			if(isNullObject(VTE)) VTE <- findMeasurementErrorVar(LY, RPS, VY, VE)
+			if(isNullObject(VY)) VY <- findIndicatorVar(LY, RPS, VTE, VE)
 			TE <- cor2cov(RTE, sqrt(VTE))
 		} else {
 			RTE <- cov2cor(TE)
 			VTE <- diag(TE)
-			VY <- find.indicator.var(LY, RPS, VTE, VE)
+			VY <- findIndicatorVar(LY, RPS, VTE, VE)
 		}
-		if(isNullObject(MY)) MY <- find.indicator.mean(LY, ME, TY)
-		if(isNullObject(TY)) TY <- find.measurement.intercept(LY, ME, MY)
+		if(isNullObject(MY)) MY <- findIndicatorMean(LY, ME, TY)
+		if(isNullObject(TY)) TY <- findMeasurementIntercept(LY, ME, MY)
 	} else if(modelType == "SEM.exo") {
 		nk <- ncol(GA)
 		ne <- nrow(GA)
@@ -133,29 +133,29 @@ fillParam <- function(param, modelType) {
 		temp.BE <- combinePathExoEndo(GA, BE)
 		temp.RPS <- combineLatentCorExoEndo(RPH, RPS)
 		if(isNullObject(VPS)) {
-			temp.VPS <- find.latent.error.var(temp.BE, temp.RPS, c(VPH, VE))
+			temp.VPS <- findLatentErrorVar(temp.BE, temp.RPS, c(VPH, VE))
 			VPS <- temp.VPS[(nk + 1):(nk + ne)]
 		}
 		if(isNullObject(VE)) {
-			temp.VE <- find.factor.var(temp.BE, temp.RPS, c(VPH, VPS))
+			temp.VE <- findFactorVar(temp.BE, temp.RPS, c(VPH, VPS))
 			VE <- temp.VE[(nk + 1):(nk + ne)]
 		}
 		if(isNullObject(ME)) {
-			temp.ME <- find.factor.mean(temp.BE, c(KA, AL))
+			temp.ME <- findFactorMean(temp.BE, c(KA, AL))
 			ME <- temp.ME[(nk + 1):(nk + ne)]
 		}
 		if(isNullObject(AL)) {
-			temp.AL <- find.latent.intercept(temp.BE, c(KA, ME))
+			temp.AL <- findLatentIntercept(temp.BE, c(KA, ME))
 			AL <- temp.AL[(nk + 1):(nk + ne)]
 		}
-		if(isNullObject(VTE)) VTE <- find.measurement.error.var(LY, RPS, VY, VE)
-		if(isNullObject(VY)) VY <- find.indicator.var(LY, RPS, VTE, VE)
-		if(isNullObject(MY)) MY <- find.indicator.mean(LY, ME, TY)
-		if(isNullObject(TY)) TY <- find.measurement.intercept(LY, ME, MY)
-		if(isNullObject(VTD)) VTD <- find.measurement.error.var(LX, RPH, VX, VPH)
-		if(isNullObject(VX)) VX <- find.indicator.var(LX, RPH, VTD, VPH)
-		if(isNullObject(MX)) MX <- find.indicator.mean(LX, KA, TX)
-		if(isNullObject(TX)) TX <- find.measurement.intercept(LX, KA, MX)
+		if(isNullObject(VTE)) VTE <- findMeasurementErrorVar(LY, RPS, VY, VE)
+		if(isNullObject(VY)) VY <- findIndicatorVar(LY, RPS, VTE, VE)
+		if(isNullObject(MY)) MY <- findIndicatorMean(LY, ME, TY)
+		if(isNullObject(TY)) TY <- findMeasurementIntercept(LY, ME, MY)
+		if(isNullObject(VTD)) VTD <- findMeasurementErrorVar(LX, RPH, VX, VPH)
+		if(isNullObject(VX)) VX <- findIndicatorVar(LX, RPH, VTD, VPH)
+		if(isNullObject(MX)) MX <- findIndicatorMean(LX, KA, TX)
+		if(isNullObject(TX)) TX <- findMeasurementIntercept(LX, KA, MX)
 		if(isNullObject(PS)) PS <- cor2cov(RPS, sqrt(VPS))
 		if(isNullObject(PH)) PH <- cor2cov(RPH, sqrt(VPH))
 		if(isNullObject(TE)) TE <- cor2cov(RTE, sqrt(VTE))

@@ -1,6 +1,6 @@
-find.latent.intercept <- function(path.matrix, factor.mean = NULL) {
+findLatentIntercept <- function(path.matrix, factor.mean = NULL) {
 	ni <- nrow(path.matrix)
-	set <- find.recursive.set(path.matrix)
+	set <- findRecursiveSet(path.matrix)
 	intercept <- rep(0, ni)
 	if(is.null(factor.mean)) factor.mean <- rep(0, ni)
 	intercept[set[[1]]] <- factor.mean[set[[1]]]

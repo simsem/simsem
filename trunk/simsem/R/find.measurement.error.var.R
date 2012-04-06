@@ -1,4 +1,4 @@
-find.measurement.error.var <- function(loading, latent.cor, indicator.var = NULL, factor.var = NULL) {
+findMeasurementErrorVar <- function(loading, latent.cor, indicator.var = NULL, factor.var = NULL) {
 	#browser()
 	if(sum(diag(latent.cor)) == 0) diag(latent.cor) <- 1
 	ni <- nrow(loading)
