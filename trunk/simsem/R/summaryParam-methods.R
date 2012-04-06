@@ -9,6 +9,7 @@
 # Date Modified: November 15, 2011
 
 setMethod("summaryParam", signature(object="SimResult"), definition=function(object, alpha=0.05, detail=FALSE) {
+	object <- clean(object)
 	coef <- colMeans(object@coef, na.rm=TRUE)
 	real.se <- sapply(object@coef, sd, na.rm=TRUE)
 	estimated.se <- colMeans(object@se, na.rm=TRUE)
@@ -79,6 +80,21 @@ setMethod("summaryParam", signature(object="SimResult"), definition=function(obj
 		resultFMI <- cbind(average.FMI1, sd.FMI1, average.FMI2, sd.FMI2)
 		colnames(resultFMI) <- c("Average FMI1", "SD FMI1", "Average FMI2", "SD FMI2")
 		result <- data.frame(result, resultFMI)
+	}
+	if(length(unique(object@n)) > 1) {
+		corCoefN <- cor(cbind(object@coef, object@n), use="pairwise.complete.obs")[colnames(object@coef), "object@n"]
+		corSeN <- cor(cbind(object@se, object@n), use="pairwise.complete.obs")[colnames(object@se), "object@n"]
+		result <- data.frame(result, "r_coef.n" = corCoefN, "r_se.n" = corSeN)
+	}
+	if(length(unique(object@pmMCAR)) > 1) {
+		corCoefMCAR <- cor(cbind(object@coef, object@pmMCAR), use="pairwise.complete.obs")[colnames(object@coef), "object@pmMCAR"]
+		corSeMCAR <- cor(cbind(object@se, object@pmMCAR), use="pairwise.complete.obs")[colnames(object@se), "object@pmMCAR"]
+		result <- data.frame(result, "r_coef.pmMCAR" = corCoefMCAR, "r_se.pmMCAR" = corSeMCAR)	
+	}
+	if(length(unique(object@pmMAR)) > 1) {
+		corCoefMAR <- cor(cbind(object@coef, object@pmMAR), use="pairwise.complete.obs")[colnames(object@coef), "object@pmMAR"]
+		corSeMAR <- cor(cbind(object@se, object@pmMAR), use="pairwise.complete.obs")[colnames(object@se), "object@pmMAR"]
+		result <- data.frame(result, "r_coef.pmMAR" = corCoefMAR, "r_se.pmMAR" = corSeMAR)	
 	}
 	return(as.data.frame(result))
 })

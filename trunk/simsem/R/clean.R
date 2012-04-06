@@ -1,0 +1,25 @@
+# clean
+# Function -- simsem package
+# Extract only converged replications in the simResult
+# Argument:
+#	object: simResult
+# Author: 	Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
+# Date Modified: April 4, 2012
+
+clean <- function(object) {
+	converged <- object@converged
+	object@nRep <- sum(converged)
+	object@coef <- object@coef[converged,]
+	object@se <- object@se[converged,]
+	object@fit <- object@fit[converged,]
+	object@converged <- rep(TRUE, object@nRep)
+	if(!is.null.object(object@paramValue) && (nrow(object@paramValue) > 1)) object@paramValue <- object@paramValue[converged,]
+	if(!is.null.object(object@FMI1)) object@FMI1 <- object@FMI1[converged,]
+	if(!is.null.object(object@FMI2)) object@FMI2 <- object@FMI2[converged,]
+	object@stdCoef <- object@stdCoef[converged,]
+	object@seed <- object@seed
+	if(length(object@n) > 1) object@n <- object@n[converged]
+	if(length(object@pmMCAR) > 1) object@pmMCAR <- object@pmMCAR[converged]
+	if(length(object@pmMAR) > 1) object@pmMAR <- object@pmMAR[converged]
+	return(object)
+}

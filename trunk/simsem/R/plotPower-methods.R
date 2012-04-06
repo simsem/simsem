@@ -20,6 +20,7 @@ setMethod("plotPower", signature(altObject="data.frame", nullObject="vector"), d
 #Return: 		NONE. Just plot.
 	
 setMethod("plotPower", signature(altObject="SimResult", nullObject="vector"), definition=function(altObject, nullObject, usedFit=NULL) {
+	altObject <- clean(altObject)
 	plotCutoff(altObject@fit, nullObject, usedFit=usedFit)
 })
 #Arguments: 
@@ -83,6 +84,8 @@ setMethod("plotPower", signature(altObject="data.frame", nullObject="data.frame"
 #Return: 		NONE. Just plot.
 	
 setMethod("plotPower", signature(altObject="SimResult", nullObject="SimResult"), definition=function(altObject, nullObject, alpha, usedFit=NULL) {
+	altObject <- clean(altObject)
+	nullObject <- clean(nullObject)
 	plotPower(altObject@fit, nullObject@fit, alpha, usedFit)
 })
 #Arguments: 

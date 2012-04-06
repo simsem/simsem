@@ -527,22 +527,38 @@ setMethod("summary", signature="SimModel", definition=function(object, con=FALSE
 #Description: This function will print all elements in the SimModel.c.
 #Return: 	NONE. Results will print on screen only.
 
-setMethod("summary", signature="SimResult", definition=function(object, digits=3) {
+setMethod("summary", signature="SimResult", definition=function(object, digits=3, usedFit=NULL, alpha=NULL) {
+		if(is.null(usedFit)) usedFit <- c("Chi", "AIC", "BIC", "RMSEA", "CFI", "TLI", "SRMR")
 		cat("RESULT OBJECT\n")
 		cat("Model Type\n")
 		print(object@modelType)
 		cat("========= Fit Indices Cutoffs ============\n")
-		alpha <- c(0.10, 0.05, 0.01, 0.001)
-		cutoffs <- round(sapply(alpha, getCutoff, object=object), digits)
+		if(is.null(alpha)) alpha <- c(0.10, 0.05, 0.01, 0.001)
+		cleanObj <- clean(object)
+		cutoffs <- round(sapply(alpha, getCutoff, object=cleanObj, usedFit=usedFit), digits)
+		if(ncol(as.matrix(cutoffs)) == 1) {
+			cutoffs <- t(cutoffs)
+			rownames(cutoffs) <- usedFit
+		}
 		colnames(cutoffs) <- alpha
 		names(dimnames(cutoffs)) <- c("Fit Indices", "Alpha")
 		print(cutoffs)
 		cat("========= Parameter Estimates and Standard Errors ============\n")
 		print(round(summaryParam(object), digits))
+		cat("========= Correlation between Fit Indices ============\n")
+		fit <- cleanObj@fit[,usedFit]
+		if(length(unique(object@n)) > 1) fit <- data.frame(fit, "n" = cleanObj@n)
+		if(length(unique(object@pmMCAR)) > 1) fit <- data.frame(fit, "pmMCAR" = cleanObj@pmMCAR)
+		if(length(unique(object@pmMAR)) > 1)  fit <- data.frame(fit, "pmMAR" = cleanObj@pmMAR)
+		print(round(cor(fit), digits))
+		cat("================== Replications =====================\n")		
 		cat("Number of Replications\n")
 		print(object@nRep)
 		cat("Number of Converged Replications\n")
 		print(sum(object@converged == TRUE))
+		if(length(unique(object@n)) > 1) cat("NOTE: The sample size is varying.\n")
+		if(length(unique(object@pmMCAR)) > 1) cat("NOTE: The percent of MCAR is varying.\n")
+		if(length(unique(object@pmMAR)) > 1)  cat("NOTE: The percent of MAR is varying.\n")
 	}
 )
 #Arguments: 

@@ -468,7 +468,9 @@ setMethod("run", signature="SimModel", definition=function(object, data, simMiss
 #Description: 	The SimData will analyze the data and return the SimModelOut.c that saves the result.
 #Return: 	SimModelOut.c that saves the result.
 
-setMethod("run", signature="SimMissing", definition=function(object, data) {
+setMethod("run", signature="SimMissing", definition=function(object, data, pmMCAR=NULL, pmMAR=NULL) {
+	if(!is.null(pmMCAR)) object@pmMCAR <- pmMCAR
+	if(!is.null(pmMAR)) object@pmMAR <- pmMAR
 	if(is(data, "SimDataOut")) {
 		data@data <- as.data.frame(imposeMissing(data@data, cov=object@cov, pmMCAR=object@pmMCAR,
             pmMAR=object@pmMAR, nforms=object@nforms, timePoints=object@timePoints,

@@ -34,6 +34,7 @@ setMethod("getPower", signature(altObject="data.frame"), definition=function(alt
 #Return: 		vector.c of power of each fit index
 
 setMethod("getPower", signature(altObject="SimResult"), definition=function(altObject, cutoff, revDirec=FALSE, usedFit=NULL) {
+	altObject <- clean(altObject)
 	Result <- altObject@fit
 	output <- getPower(Result, cutoff, revDirec, usedFit)
 	return(output)

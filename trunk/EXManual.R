@@ -74,6 +74,22 @@ getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
 
+Output2 <- simResult(NULL, SimData, SimModel, n=seq(50, 500, 10), pmMCAR=seq(0, 0.3, 0.05))
+
+
+
+mis <- simUnif(0, 0.5)
+n <- simUnif(100, 1000)
+Output <- simResult(1000, SimData, SimModel, n=n)
+plotCutoff(Output2, alpha=0.05, useContour=F)
+
+
+
+x <- Output2@pmMCAR
+y <- Output2@n
+z <- Output2@fit[,"CFI"]
+plot3DQtile(x, y, z, qtile=0.95, useContour=F)
+
 #################################### Example 2 #######################
 
 library(simsem)

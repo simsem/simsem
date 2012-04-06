@@ -25,6 +25,8 @@ Objects can be created by \code{\link{simResult}}. It can also be called from th
 	\item{\code{FMI2}:}{Fraction Missing Method 2.}
 	\item{\code{stdCoef}:}{Standardized coefficients from each replication}
 	\item{\code{n}:}{Sample size of the analyzed data.}
+	\item{\code{pmMCAR}:}{Percent missing completely at random.}
+	\item{\code{pmMAR}:}{Percent missing at random.}
   }
 }
 \section{Methods}{

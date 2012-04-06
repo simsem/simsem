@@ -1,5 +1,5 @@
-runRep <- function(object, simData, simModel, simMissing=new("NullSimMissing"), silent=FALSE) {
-	modelType <- simModel@modelType
+runRep <- function(object, objData, objModel, objMissing=new("NullSimMissing"), silent=FALSE) {
+	modelType <- objModel@modelType
     param <- NULL
 	coef <- NA
     se <- NA
@@ -8,12 +8,23 @@ runRep <- function(object, simData, simModel, simMissing=new("NullSimMissing"), 
 	FMI1 <- NULL
 	FMI2 <- NULL
 	converged <- FALSE
-	seed <- object[[2]]
+	seed <- object[[5]]
+	n <- object[[2]]
+	if(is.null(n)) n <- objData@n
+	pmMCAR <- object[[3]]
+	pmMAR <- object[[4]]
+	if(is.null.object(objMissing)) {
+		if(!is.null(pmMAR) | !is.null(pmMCAR)) {
+			if(is.null(pmMCAR)) pmMCAR <- 0
+			if(is.null(pmMAR)) pmMAR <- 0
+			objMissing <- simMissing(pmMCAR=pmMCAR, pmMAR=pmMAR)
+		}
+	}
 	obj <- object[[1]]
 	set.seed(seed)
 	data.mis <- NULL 
 	if(class(obj) == "list") {
-		data.mis <- createData(obj, simData@n, simData, dataOnly=FALSE)
+		data.mis <- createData(obj, n, objData, dataOnly=FALSE)
 	} else {
 		data.mis <- obj
 	} 
@@ -23,29 +34,29 @@ runRep <- function(object, simData, simModel, simMissing=new("NullSimMissing"), 
     #    data.mis <- dataT
     #}
 
-	if(!is(simMissing, "NullSimMissing")) {
-		data.mis <- run(simMissing, data.mis)
-		#data.mis <- imposeMissing(data.mis, covs=simMissing@covs, pmMCAR=simMissing@pmMCAR,
-		#	pmMAR=simMissing@pmMAR, nforms=simMissing@nforms,
-		#	itemGroups=simMissing@itemGroups, twoMethod=simMissing@twoMethod)
+	if(!is(objMissing, "NullSimMissing")) {
+		data.mis <- run(objMissing, data.mis, pmMCAR=pmMCAR, pmMAR=pmMAR)
+		#data.mis <- imposeMissing(data.mis, covs=objMissing@covs, pmMCAR=objMissing@pmMCAR,
+		#	pmMAR=objMissing@pmMAR, nforms=objMissing@nforms,
+		#	itemGroups=objMissing@itemGroups, twoMethod=objMissing@twoMethod)
 	} 
 
 	temp <- NULL
           #Impute missing and run results 
-    if(!is(simMissing, "NullSimMissing") && simMissing@numImps > 0) {
+    if(!is(objMissing, "NullSimMissing") && objMissing@numImps > 0) {
         if(silent) {
-			invisible(capture.output(suppressMessages(try(temp <- run(object=simModel, data=data.mis, simMissing=simMissing), silent=TRUE))))
-                 #invisible(capture.output(suppressMessages(try(temp <- runMI(data.mis,simModel,simMissing@numImps,simMissing@impMethod), silent=TRUE))))
+			invisible(capture.output(suppressMessages(try(temp <- run(object=objModel, data=data.mis, simMissing=objMissing), silent=TRUE))))
+                 #invisible(capture.output(suppressMessages(try(temp <- runMI(data.mis,objModel,objMissing@numImps,objMissing@impMethod), silent=TRUE))))
         } else {
-			try(temp <- run(object=simModel, data=data.mis, simMissing=simMissing), silent=TRUE)
-                  #      try(temp <- runMI(data.mis,simModel,simMissing@numImps,simMissing@impMethod))
+			try(temp <- run(object=objModel, data=data.mis, simMissing=objMissing), silent=TRUE)
+                  #      try(temp <- runMI(data.mis,objModel,objMissing@numImps,objMissing@impMethod))
         } 
     } else{
           if(silent) {
-            invisible(capture.output(suppressMessages(try(temp <- run(object=simModel, data=data.mis), silent=TRUE))))
-                 #tryCatch(temp <- run(simModel, data), error=function(e) {print("Error")})
+            invisible(capture.output(suppressMessages(try(temp <- run(object=objModel, data=data.mis), silent=TRUE))))
+                 #tryCatch(temp <- run(objModel, data), error=function(e) {print("Error")})
           } else {
-            try(temp <- run(object=simModel, data=data.mis))
+            try(temp <- run(object=objModel, data=data.mis))
           }
     }
 

@@ -88,7 +88,7 @@ setMethod("is.null.object", signature="VirtualRSet", definition=function(target)
 #Return: 	TRUE if it is NullSimMisspec.c
 
 setMethod("is.null.object", signature="data.frame", definition=function(target) {
-		is(target, "NullDataFrame")
+		(is(target, "NullDataFrame") || (nrow(target) == 0) || (ncol(target) == 0))
 	}
 )
 #Arguments: 	data.frame.c that users wish to check

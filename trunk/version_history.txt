@@ -147,4 +147,15 @@ simsem, Version 0.0-10 03/31/12
 - Add fitMeasures function to compute fit indices
 - Explain the pooling procedure in miPool.Rd
 
-
+simsem, Version 0.0-11 04/05/12
+- Add clean function to remove nonconverged replications from the simResult before computing the output.
+- Use clean function for getCutoff, getPower, plotCutoff, plotPower, summary, and summaryParam functions/methods before analyzing SimResult object
+- Add plotQtile function to plot a quantile of Y given a value of X
+- Add plot3DQtile function to plot a quantile of Z given a value of X and Y (can be either contour plot or perspective plot)
+- Add n, pmMCAR, pmMAR, objSet arguments for simResult for varying n, pmMCAR, pmMAR in the simResult and an option to specify simSet instead of specifying simData and simModel
+- Change name simData, simModel, simMissing to objData, objModel, objMissing in simResult and runRep function
+- For run-SimMissing, add pmMCAR and pmMAR arguments to post hocly overwrite the percent missing
+- Add n, pmMCAR, and pmMAR as attributes of the SimResult class
+- Specify data.frame with 0 row or 0 column as null object in data.frame class
+- Add correlation between n/pmMCAR/pmMAR and parameter estimate and standard error in summaryParam-SimResult method
+- Add correlation between fit indices and n/pmMCAR/pmMAR in summary-SimResult method

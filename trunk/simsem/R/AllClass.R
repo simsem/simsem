@@ -1196,13 +1196,17 @@ setClass("SimResult",
 		FMI2="data.frame",
 		stdCoef="data.frame",
 		seed="numeric",
-		n="numeric"),
+		n="vector",
+		pmMCAR="vector",
+		pmMAR="vector"),
 	prototype(
 		stdCoef=new("NullDataFrame"),
 		paramValue=new("NullDataFrame"),
 		FMI1=new("NullDataFrame"),
 		FMI2=new("NullDataFrame"),
-		n=0)
+		n=0,
+		pmMCAR=0,
+		pmMAR=0)
 )
 
 ###################################################################

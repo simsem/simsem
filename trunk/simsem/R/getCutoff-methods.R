@@ -30,6 +30,7 @@ setMethod("getCutoff", signature(object="data.frame"), definition=function(objec
 #Return: 		vector.c of cutoffs of each fit index
 
 setMethod("getCutoff", signature(object="SimResult"), definition=function(object, alpha, revDirec=FALSE, usedFit=NULL) {
+	object <- clean(object)
 	Result <- object@fit
 	output <- getCutoff(Result, alpha, revDirec, usedFit)
 	return(output)
