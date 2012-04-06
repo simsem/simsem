@@ -55,7 +55,7 @@ setMethod("constrainMatrices", signature(object="VirtualRSet", SimEqualCon="SimR
 		for(j in 1:n.constraint) {
 			temp.constraint <- constraint[[j]]
 			temp.matrix <- rownames(temp.constraint)[1]
-			fixedvalue <- write.lavaan.constraint(temp.constraint[1,], temp.matrix)	
+			fixedvalue <- writeLavaanConstraint(temp.constraint[1,], temp.matrix)	
 			for(i in 2:nrow(temp.constraint)) {
 				temp.matrix2 <- rownames(temp.constraint)[i]
 				num <- equalWhich(temp.matrix2, label.selection)

@@ -1,9 +1,8 @@
-type.constraint <- function(Matrix, Attribute, Names) {
+typeConstraint <- function(Matrix, Attribute, Names) {
 	result <- "equal('"
 	if(!is.na(Attribute[1])) result <- paste(result, Attribute[1], ".", sep="")
 	if(length(Attribute) == 2) {
 		result <- paste(result, names(Names)[as.numeric(Attribute[2])], " ~ 1')*", sep="")
-		#############################Right Here#############################
 	} else if(length(Attribute) == 3) {
 		Row <- as.numeric(Attribute[2])
 		Column <- as.numeric(Attribute[3])

@@ -1,5 +1,4 @@
 findRowZero <- function(square.matrix, is.row.fixed = FALSE) {
-	#browser()
 	ni <- nrow(square.matrix)
 	if(length(is.row.fixed) == 1) {
 		if(is.row.fixed == FALSE) is.row.fixed <- rep(FALSE, ni)

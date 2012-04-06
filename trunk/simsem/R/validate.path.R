@@ -1,5 +1,4 @@
-validate.path <- function(path, var.iv, var.dv) {
-	#browser()
+validatePath <- function(path, var.iv, var.dv) {
 	inv.var.iv <- 1/var.iv
 	max.path <- sqrt(var.dv) %o% sqrt(inv.var.iv)
 	abs.path <- abs(path)

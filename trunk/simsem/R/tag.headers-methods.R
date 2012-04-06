@@ -77,7 +77,6 @@ setMethod("tagHeaders", signature="VirtualRSet", definition=function(object) {
 		}
 	}
 	if(!isNullObject(object@BE)) {
-		#browser()
 		if(modelType == "Path" | modelType == "Path.exo") {
 			colnames(object@BE) <- names.y
 			rownames(object@BE) <- names.y

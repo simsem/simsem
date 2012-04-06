@@ -47,11 +47,11 @@ runLavaan <- function(object, Data, miss="fiml", estimator="ML") {
 	if(!isNullObject(object@equalCon)) {
 		equalCon <- object@equalCon
 		equalCon <- reduceConstraint(equalCon)
-		con.text <- transform.constraint(param, equalCon)
+		con.text <- transformConstraint(param, equalCon)
 	} else {
 		con.text <- blankParameters(param)
 	}	
-	code <- write.lavaan.code(param, con.text, aux = nameAux)
+	code <- writeLavaanCode(param, con.text, aux = nameAux)
 	fit <- NULL
 	if(modelType == "Path.exo" | modelType == "Path") {
 		try(fit <- sem(code, data=Data, meanstructure=TRUE, missing=miss, fixed.x=FALSE, estimator=estimator))

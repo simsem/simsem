@@ -1,10 +1,10 @@
-transform.constraint <- function(object, constraint) {
+transformConstraint <- function(object, constraint) {
 	object <- blankParameters(object)
 	if(!is.null(constraint)) {
 		con <- constraint@con
 		for(i in 1:length(con)) {
 			current <- con[[i]]
-			con.text <- type.constraint(rownames(current)[1], current[1,], slot(object, rownames(current)[1]))
+			con.text <- typeConstraint(rownames(current)[1], current[1,], slot(object, rownames(current)[1]))
 			for(j in 2:nrow(current)) {
 				Matrix <- rownames(current)[j]
 				if(Matrix == "PS" | Matrix == "PH" | Matrix == "TE" | Matrix == "TD") {

@@ -1,4 +1,4 @@
-shuffle.position <- function(square.matrix, var1, var2) {
+shufflePosition <- function(square.matrix, var1, var2) {
 	name <- colnames(square.matrix)
 	name.var1 <- name[var1]
 	name.var2 <- name[var2]

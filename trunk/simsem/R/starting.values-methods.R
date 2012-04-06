@@ -56,16 +56,13 @@ setMethod("startingValues", signature(object="SimVector"), definition=function(o
 
 setMethod("startingValues", signature(object="SimSet"), definition=function(object, trial, reduced=FALSE) {
 		result <- run(object)
-		#browser()
 		if(trial > 1) {
 			for(i in 2:trial) {
 				temp <- run(object)
 				result <- combineObject(result, temp)
 			}
-			#browser()
 			result <- divideObject(result, trial)
 		}
-		#browser()
 		result@modelType <- object@modelType
 		if(reduced == TRUE) result <- reduceMatrices(result)
 		return(result)

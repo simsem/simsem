@@ -1,6 +1,5 @@
 simData <- function(n, param, misspec=new("NullSimMisspec"), equalCon=new("NullSimEqualCon"), conBeforeMis=TRUE, misfitBound=new("NullVector"), maxDraw=100, sequential=NA, facDist=new("NullSimDataDist"), errorDist=new("NullSimDataDist"), indDist=new("NullSimDataDist")) {
 	modelType <- param@modelType
-	#browser()
 	if(!(is.na(sequential) | sequential == TRUE | sequential == FALSE)) stop("Please specify NA (to use default), TRUE, or FALSE for the sequential argument")
 	if(is.na(sequential)) sequential <- FALSE
 	if(!isNullObject(misspec)) {

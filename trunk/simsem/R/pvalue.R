@@ -1,4 +1,4 @@
-pvalue<-function(x,vector, revDirec =FALSE){
+pvalue <- function(x,vector, revDirec =FALSE){
 	if(revDirec) {
 		return(mean(x<=vector, na.rm = TRUE))
 	} else {

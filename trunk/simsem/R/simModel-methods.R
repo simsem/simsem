@@ -36,11 +36,9 @@ setMethod("simModel", signature(object="SimFreeParam"), definition=function(obje
 #Return: 	SimModel.c with specification from the function.
 
 setMethod("simModel", signature(object="SimSet"), definition=function(object, equalCon=new("NullSimEqualCon"), package="lavaan", trial=10, estimator="ML", auxiliary=new("NullVector"), indicatorLab=new("NullVector"), factorLab=new("NullVector")) {
-	#browser()
 	if(length(intersect(indicatorLab, auxiliary)) != 0) stop("There are the same variables in the analysis model and in the auxiliary variables list")
 	start <- startingValues(object, trial)
 	start <- reduceMatrices(start)
-	#browser()
 	freeParameters <- createFreeParameters(object)
 	modelType <- object@modelType
 	if(!isNullObject(equalCon)) {

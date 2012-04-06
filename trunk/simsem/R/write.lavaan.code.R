@@ -1,4 +1,4 @@
-# write.lavaan.code
+# writeLavaanCode
 # function -- simsem package
 # Write a lavaan code given the matrices of parameter
 # Argument:
@@ -9,8 +9,7 @@
 # Date Modified: February 28, 2012
 
 
-write.lavaan.code <- function(object, constraint, aux = NULL) {
-	#browser()
+writeLavaanCode <- function(object, constraint, aux = NULL) {
 	result <- NULL
 	object <- collapseExo(object, label=TRUE)
 	constraint <- collapseExo(constraint, label=TRUE, value=NA) ###################Have some zeros

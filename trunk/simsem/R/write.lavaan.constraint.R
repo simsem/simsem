@@ -1,4 +1,4 @@
-write.lavaan.constraint <- function(object, temp.matrix) {
+writeLavaanConstraint <- function(object, temp.matrix) {
 	output <- NULL
 	if(!is.na(object[1])) output <- paste("g", object[1], ".", sep="")
 	if(length(object) == 2) {

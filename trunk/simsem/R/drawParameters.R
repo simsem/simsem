@@ -17,12 +17,11 @@ drawParameters <- function(object) {
 	misfit <- NULL
 	count <- 0
 	repeat {
-		#browser()
 		if(!isNullObject(object@misspec)) {
 			Output <- runMisspec(object@param, object@misspec, object@equalCon, object@conBeforeMis)
 			param <- Output$param
 			misspec <- Output$misspec
-			if(validate.object(param) | validate.object(misspec)) {
+			if(validateObject(param) | validateObject(misspec)) {
 				param <- reduceMatrices(param)
 				misspec <- reduceMatrices(misspec)
 				if(!isNullObject(param) && !isNullObject(misspec)) {
@@ -42,7 +41,7 @@ drawParameters <- function(object) {
 			}
 		} else {
 			param <- run(object@param, equalCon=object@equalCon)
-			if(validate.object(param)) {
+			if(validateObject(param)) {
 				param <- reduceMatrices(param)
 				if(!isNullObject(param)) {
 					implied.CM.param <- createImpliedMACS(param)

@@ -1,5 +1,4 @@
-validate.covariance <- function(variance, covariance, variance2 = NULL) {
-	#browser()
+validateCovariance <- function(variance, covariance, variance2 = NULL) {
 	if(!isSymmetric(covariance)) return(FALSE)
 	if(sum(variance < 0) > 0) return(FALSE)
 	zero.row <- variance == 0

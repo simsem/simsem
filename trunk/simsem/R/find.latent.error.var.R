@@ -1,5 +1,4 @@
 findLatentErrorVar <- function(path.matrix, latent.cor.matrix, factor.var = NULL) {
-	#browser()
 	if(sum(diag(latent.cor.matrix)) == 0) diag(latent.cor.matrix) <- 1
 	ni <- nrow(path.matrix)
 	set <- findRecursiveSet(path.matrix)

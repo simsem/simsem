@@ -46,7 +46,6 @@ setMethod("divideObject", signature(object="matrix", constant="numeric"), defini
 #Return: 	Divided matrix or NullMatrix.c
 
 setMethod("divideObject", signature(object="MatrixSet", constant="numeric"), definition=function(object, constant) {
-		#browser()
 		LY <- divideObject(object@LY, constant)
 		VTE <- divideObject(object@VTE, constant)
 		RTE <- divideObject(object@RTE, constant, correlation = TRUE)
