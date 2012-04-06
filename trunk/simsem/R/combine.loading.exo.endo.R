@@ -1,4 +1,4 @@
-combine.loading.exo.endo <- function(LX, LY, value = 0) {
+combineLoadingExoEndo <- function(LX, LY, value = 0) {
 	nx <- nrow(LX)
 	ny <- nrow(LY)
 	nk <- ncol(LX)

@@ -12,8 +12,8 @@
 write.lavaan.code <- function(object, constraint, aux = NULL) {
 	#browser()
 	result <- NULL
-	object <- collapse.exo(object, label=TRUE)
-	constraint <- collapse.exo(constraint, label=TRUE, value=NA) ###################Have some zeros
+	object <- collapseExo(object, label=TRUE)
+	constraint <- collapseExo(constraint, label=TRUE, value=NA) ###################Have some zeros
 	if(!is.null.object(object@LY)) {
 		for(i in 1:ncol(object@LY)) {
 			temp <- paste(colnames(object@LY)[i], "=~")

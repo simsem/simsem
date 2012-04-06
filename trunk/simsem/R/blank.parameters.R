@@ -1,4 +1,4 @@
-blank.parameters <- function(object) {
+blankParameters <- function(object) {
 	if(!is.null.object(object@LY)) object@LY[,] <- NA
 	if(!is.null.object(object@TE)) object@TE[,] <- NA
 	if(!is.null.object(object@PS)) object@PS[,] <- NA

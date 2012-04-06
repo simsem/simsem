@@ -32,7 +32,7 @@ drawParameters <- function(object) {
 						if(is.null.object(object@misfitBound)) {
 							break
 						} else {
-							misfit <- average.misfit(implied.CM.misspec$M, implied.CM.misspec$CM, 
+							misfit <- averageMisfit(implied.CM.misspec$M, implied.CM.misspec$CM, 
 								implied.CM.param$M, implied.CM.param$CM, count.random.object(object@misspec))
 							#param <- misspec # Pretend Misspecified as real parameters for data generation
 							if(!is.null(misfit) && (misfit > object@misfitBound[1] & misfit < object@misfitBound[2])) break

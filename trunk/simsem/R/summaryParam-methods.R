@@ -105,7 +105,7 @@ setMethod("summaryParam", signature(object="SimResult"), definition=function(obj
 #Return: 		data.frame.c that contains those information of each parameter.
 
 setMethod("summaryParam", signature(object="SimModelOut"), definition=function(object, alpha=0.05) {
-	lab <- make.labels(object@param, "OpenMx")
+	lab <- makeLabels(object@param, "OpenMx")
 	coef <- vectorize.object(object@coef, lab)
 	se <- vectorize.object(object@se, lab)
 	se[se==0] <- NA
@@ -132,7 +132,7 @@ setMethod("summaryParam", signature(object="SimModelOut"), definition=function(o
 #Return: 		data.frame.c that contains those information of each parameter.
 
 setMethod("summaryParam", signature(object="SimModelMIOut"), definition=function(object, alpha=0.05) {
-	lab <- make.labels(object@param, "OpenMx")
+	lab <- makeLabels(object@param, "OpenMx")
 	coef <- vectorize.object(object@coef, lab)
 	se <- vectorize.object(object@se, lab)
 	stdSet <- standardize(object)

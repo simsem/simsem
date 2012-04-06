@@ -6,8 +6,8 @@ setGeneric("adjust", function(target, param, pos, numAsFixed=TRUE) {
 	return(standardGeneric("adjust")) 
 } )
 
-setGeneric("combine.object", function(object1, object2, ...) { 
-	return(standardGeneric("combine.object")) 
+setGeneric("combineObject", function(object1, object2, ...) { 
+	return(standardGeneric("combineObject")) 
 } )
 
 setGeneric("constrain.matrices", function(object, SimEqualCon, ...) { 
@@ -34,8 +34,8 @@ setGeneric("divide.object", function(object, constant, ...) {
 	return(standardGeneric("divide.object")) 
 } )
 
-setGeneric("make.labels", function(object, ...) { 
-	return(standardGeneric("make.labels")) 
+setGeneric("makeLabels", function(object, ...) { 
+	return(standardGeneric("makeLabels")) 
 } )
 
 setGeneric("simModel", function(object, ...) { 

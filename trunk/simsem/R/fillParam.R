@@ -69,7 +69,7 @@ fillParam <- function(param, modelType) {
 			RPH <- cov2cor(PH)
 		}
 		temp.BE <- combine.path.exo.endo(GA, BE)
-		temp.RPS <- combine.latent.cor.exo.endo(RPH, RPS)
+		temp.RPS <- combineLatentCorExoEndo(RPH, RPS)
 		if(is.null.object(VPS)) {
 			temp.VPS <- find.latent.error.var(temp.BE, temp.RPS, c(VPH, VE))
 			VPS <- temp.VPS[(nx + 1):(nx + ny)]
@@ -131,7 +131,7 @@ fillParam <- function(param, modelType) {
 			RTD <- cov2cor(TD)
 		}
 		temp.BE <- combine.path.exo.endo(GA, BE)
-		temp.RPS <- combine.latent.cor.exo.endo(RPH, RPS)
+		temp.RPS <- combineLatentCorExoEndo(RPH, RPS)
 		if(is.null.object(VPS)) {
 			temp.VPS <- find.latent.error.var(temp.BE, temp.RPS, c(VPH, VE))
 			VPS <- temp.VPS[(nk + 1):(nk + ne)]

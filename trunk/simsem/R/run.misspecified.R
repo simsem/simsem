@@ -6,7 +6,7 @@ run.misspecified <- function(object, misspec, SimEqualCon=new("NullSimEqualCon")
 	}
 	Output1 <- paramSet[[1]]
 	Mis <- run(misspec)
-	param <- combine.object(paramSet[[2]], Mis)
+	param <- combineObject(paramSet[[2]], Mis)
 	if(!is.null.object(SimEqualCon) & (conBeforeMis=FALSE)) {
 		if(object@modelType != SimEqualCon@modelType) stop("Please provide same tags of SimSet and constraint")
 		param <- constrain.matrices(param, SimEqualCon)

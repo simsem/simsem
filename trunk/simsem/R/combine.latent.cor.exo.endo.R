@@ -1,4 +1,4 @@
-combine.latent.cor.exo.endo <- function(PH, PS, value=0) {
+combineLatentCorExoEndo <- function(PH, PS, value=0) {
 	nk <- ncol(PH)
 	ne <- ncol(PS)
 	part1.2 <- matrix(value, nk, ne)

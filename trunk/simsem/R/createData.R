@@ -30,7 +30,7 @@ createData <- function(paramSet, n, object, dataOnly) {
 		} else {
 			usedParam2 <- NULL
 			if (modelType == "Path.exo" | modelType == "SEM.exo") {
-				usedParam2 <- collapse.exo(usedParam)
+				usedParam2 <- collapseExo(usedParam)
 			} else if (modelType == "Path" | modelType == "SEM") {
 				usedParam2 <- usedParam
 			} else {

@@ -60,7 +60,7 @@ setMethod("starting.values", signature(object="SimSet"), definition=function(obj
 		if(trial > 1) {
 			for(i in 2:trial) {
 				temp <- run(object)
-				result <- combine.object(result, temp)
+				result <- combineObject(result, temp)
 			}
 			#browser()
 			result <- divide.object(result, trial)

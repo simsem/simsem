@@ -63,7 +63,7 @@ runRep <- function(object, objData, objModel, objMissing=new("NullSimMissing"), 
 	if(!is.null(temp)) {
 		converged <- temp@converged
 		param <- NA
-		Labels <- make.labels(temp@param, "OpenMx") #As a quick default to use OpenMx
+		Labels <- makeLabels(temp@param, "OpenMx") #As a quick default to use OpenMx
 		if(converged) {
 			coef<- vectorize.object(temp@coef, Labels)
 			se <- vectorize.object(temp@se, Labels)

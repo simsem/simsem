@@ -14,7 +14,7 @@ runOpenMx <- function(object, Data) {
           # data <- as.data.frame(Data)
           # ni <- ncol(data)
           # param <- object@param
-          # Labels <- make.labels(param)
+          # Labels <- makeLabels(param)
           # varnames <- NULL
           # for(i in 1:ni) {
                   # temp <- paste("x", i, sep="")
@@ -29,10 +29,10 @@ runOpenMx <- function(object, Data) {
                   # Labels <- constrain.matrices(Labels, object@equalCon)
                   # start <- constrain.matrices(start, object@equalCon)
           # }
-          # param <- collapse.exo(param)
+          # param <- collapseExo(param)
           # nk <- ncol(param@PS)
-          # Labels <- collapse.exo(Labels, value = NA)
-          # start <- collapse.exo(start)
+          # Labels <- collapseExo(Labels, value = NA)
+          # start <- collapseExo(start)
           # start <- find.OpenMx.values(param, start)
           # matrixLY <- mxMatrix(type="Full", nrow=ni, ncol=nk, free=as.vector(is.na(param@LY)), values=as.vector(start@LY), labels=as.vector(Labels@LY), name="LY")#
           # matrixPS <- mxMatrix(type="Symm", nrow=nk, ncol=nk, free=as.vector(is.na(param@PS)), values=as.vector(start@PS), labels=as.vector(Labels@PS), name="PS")#

@@ -1,4 +1,4 @@
-average.misfit <- function(observed.M, observed.CM, implied.M, implied.CM, degree.of.freedom) { 
+averageMisfit <- function(observed.M, observed.CM, implied.M, implied.CM, degree.of.freedom) { 
 #Should be renamed to average discrepancy; df is changed to added information
 	result <- NULL
 	p <- length(observed.M)

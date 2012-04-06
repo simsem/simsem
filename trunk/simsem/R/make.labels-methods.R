@@ -1,14 +1,14 @@
-# make.labels
+# makeLabels
 # Methods -- simsem package
 # Make parameter names for each element in matrices or vectors for analysis in OpenMx (or other possible packages)
-# Generic Function: make.labels(object, ...)
+# Generic Function: makeLabels(object, ...)
 # Argument:
 #	object: The target object that is used to create labels
 # 	... : Other arguments, such as package or whether an object is symmetric matrix
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: February 24, 2011
 
-setMethod("make.labels", signature="vector", definition=function(object, name, package) {
+setMethod("makeLabels", signature="vector", definition=function(object, name, package) {
 	if(is.null.object(object)) {
 		return(new("NullVector"))
 	} else {
@@ -31,7 +31,7 @@ setMethod("make.labels", signature="vector", definition=function(object, name, p
 #Description: This function will create labels of each element by the vector name followed by number of elements in a vector
 #Return: 	vector.c with labels in it
 
-setMethod("make.labels", signature="matrix", definition=function(object, name, package, symmetric=FALSE) {
+setMethod("makeLabels", signature="matrix", definition=function(object, name, package, symmetric=FALSE) {
 	if(is.null.object(object)) {
 		return(new("NullMatrix"))
 	} else {
@@ -74,20 +74,20 @@ setMethod("make.labels", signature="matrix", definition=function(object, name, p
 #Description: This function will create labels of each element by the matrix name followed by number of elements in a matrix
 #Return: 	matrix.c with labels in it
 
-setMethod("make.labels", signature="SimFreeParam", definition=function(object, package) {
-	LY <- make.labels(object@LY, "LY", package)
-	TE <- make.labels(object@TE, "TE", package, symmetric=TRUE)
-	PS <- make.labels(object@PS, "PS", package, symmetric=TRUE)
-	BE <- make.labels(object@BE, "BE", package)
-	TY <- make.labels(object@TY, "TY", package)
-	AL <- make.labels(object@AL, "AL", package)
-	LX <- make.labels(object@LX, "LX", package)
-	TD <- make.labels(object@TD, "TD", package, symmetric=TRUE)
-	PH <- make.labels(object@PH, "PH", package, symmetric=TRUE)
-	GA <- make.labels(object@GA, "GA", package)
-	TX <- make.labels(object@TX, "TX", package)
-	KA <- make.labels(object@KA, "KA", package)
-	TH <- make.labels(object@TH, "TH", package)
+setMethod("makeLabels", signature="SimFreeParam", definition=function(object, package) {
+	LY <- makeLabels(object@LY, "LY", package)
+	TE <- makeLabels(object@TE, "TE", package, symmetric=TRUE)
+	PS <- makeLabels(object@PS, "PS", package, symmetric=TRUE)
+	BE <- makeLabels(object@BE, "BE", package)
+	TY <- makeLabels(object@TY, "TY", package)
+	AL <- makeLabels(object@AL, "AL", package)
+	LX <- makeLabels(object@LX, "LX", package)
+	TD <- makeLabels(object@TD, "TD", package, symmetric=TRUE)
+	PH <- makeLabels(object@PH, "PH", package, symmetric=TRUE)
+	GA <- makeLabels(object@GA, "GA", package)
+	TX <- makeLabels(object@TX, "TX", package)
+	KA <- makeLabels(object@KA, "KA", package)
+	TH <- makeLabels(object@TH, "TH", package)
 	return(new("SimLabels", LY=LY, TE=TE, BE=BE, PS=PS, AL=AL, TY=TY,
 			LX=LX, TD=TD, TX=TX, GA=GA, PH=PH, KA=KA, TH=TH, modelType=object@modelType))
 })
@@ -97,7 +97,7 @@ setMethod("make.labels", signature="SimFreeParam", definition=function(object, p
 #Description: This function will create labels of each element by the object name followed by number of elements in a matrix in every matrix or vector in the free parameter object
 #Return: 	SimLabels.c that contains labels of free parameters.
 
-setMethod("make.labels", signature="VirtualDist", definition=function(object, digit=3) {
+setMethod("makeLabels", signature="VirtualDist", definition=function(object, digit=3) {
 		indivAttr <- slotNames(object)
 		val <- sapply(indivAttr, slot, object=object)
 		val <- round(val, digit)

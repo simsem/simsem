@@ -76,7 +76,7 @@ setMethod("summaryShort",
     signature(object = "SimNorm"),
     function (object)
     {
-		lab <- make.labels(object)
+		lab <- makeLabels(object)
 		cat(paste("Random Normal Distribution Object: ", lab, ".\n", sep=""))
     }
 )
@@ -87,7 +87,7 @@ setMethod("summaryShort",
     signature(object = "SimUnif"),
     function (object) 
     {
-		lab <- make.labels(object)
+		lab <- makeLabels(object)
 		cat(paste("Random Uniform Distribution Object: ", lab, ".\n", sep=""))
     }
 )
@@ -98,7 +98,7 @@ setMethod("summaryShort",
     signature(object = "SimBeta"),
     function (object)
     {
-		lab <- make.labels(object)
+		lab <- makeLabels(object)
 		cat(paste("Random Beta Distribution Object: ", lab, ".\n", sep=""))
     }
 )
@@ -109,7 +109,7 @@ setMethod("summaryShort",
     signature(object = "SimBinom"),
     function (object)
     {
-		lab <- make.labels(object)
+		lab <- makeLabels(object)
 		cat(paste("Random Binomial Distribution Object: ", lab, ".\n", sep=""))
     }
 )
@@ -120,7 +120,7 @@ setMethod("summaryShort",
     signature(object = "SimCauchy"),
     function (object)
     {
-		lab <- make.labels(object)
+		lab <- makeLabels(object)
 		cat(paste("Random Cauchy Distribution Object: ", lab, ".\n", sep=""))
     }
 )
@@ -131,7 +131,7 @@ setMethod("summaryShort",
     signature(object = "SimChisq"),
     function (object)
     {
-		lab <- make.labels(object)
+		lab <- makeLabels(object)
 		cat(paste("Random Chi-squared Distribution Object: ", lab, ".\n", sep=""))
     }
 )
@@ -142,7 +142,7 @@ setMethod("summaryShort",
     signature(object = "SimExp"),
     function (object)
     {
-		lab <- make.labels(object)
+		lab <- makeLabels(object)
 		cat(paste("Random Exponential Distribution Object: ", lab, ".\n", sep=""))
     }
 )
@@ -153,7 +153,7 @@ setMethod("summaryShort",
     signature(object = "SimF"),
     function (object)
     {
-		lab <- make.labels(object)
+		lab <- makeLabels(object)
 		cat(paste("Random F Distribution Object: ", lab, ".\n", sep=""))
     }
 )
@@ -164,7 +164,7 @@ setMethod("summaryShort",
     signature(object = "SimGamma"),
     function (object)
     {
-		lab <- make.labels(object)
+		lab <- makeLabels(object)
 		cat(paste("Random Gamma Distribution Object: ", lab, ".\n", sep=""))
     }
 )
@@ -175,7 +175,7 @@ setMethod("summaryShort",
     signature(object = "SimGeom"),
     function (object)
     {
-		lab <- make.labels(object)
+		lab <- makeLabels(object)
 		cat(paste("Random Geometric Distribution Object: ", lab, ".\n", sep=""))
     }
 )
@@ -186,7 +186,7 @@ setMethod("summaryShort",
     signature(object = "SimHyper"),
     function (object)
     {
-		lab <- make.labels(object)
+		lab <- makeLabels(object)
 		cat(paste("Random Hypergeometric Distribution Object: ", lab, ".\n", sep=""))
     }
 )
@@ -197,7 +197,7 @@ setMethod("summaryShort",
     signature(object = "SimLnorm"),
     function (object)
     {
-		lab <- make.labels(object)
+		lab <- makeLabels(object)
 		cat(paste("Random Log Normal Distribution Object: ", lab, ".\n", sep=""))
     }
 )
@@ -208,7 +208,7 @@ setMethod("summaryShort",
     signature(object = "SimLogis"),
     function (object)
     {
-		lab <- make.labels(object)
+		lab <- makeLabels(object)
 		cat(paste("Random Logistic Distribution Object: ", lab, ".\n", sep=""))
     }
 )
@@ -219,7 +219,7 @@ setMethod("summaryShort",
     signature(object = "SimNbinom"),
     function (object)
     {
-		lab <- make.labels(object)
+		lab <- makeLabels(object)
 		cat(paste("Random Negative Binomial Distribution Object: ", lab, ".\n", sep=""))
     }
 )
@@ -230,7 +230,7 @@ setMethod("summaryShort",
     signature(object = "SimPois"),
     function (object)
     {
-		lab <- make.labels(object)
+		lab <- makeLabels(object)
 		cat(paste("Random Poisson Distribution Object: ", lab, ".\n", sep=""))
     }
 )
@@ -241,7 +241,7 @@ setMethod("summaryShort",
     signature(object = "SimT"),
     function (object)
     {
-		lab <- make.labels(object)
+		lab <- makeLabels(object)
 		cat(paste("Random t Distribution Object: ", lab, ".\n", sep=""))
     }
 )
@@ -252,7 +252,7 @@ setMethod("summaryShort",
     signature(object = "SimWeibull"),
     function (object)
     {
-		lab <- make.labels(object)
+		lab <- makeLabels(object)
 		cat(paste("Random Weibull Distribution Object: ", lab, ".\n", sep=""))
     }
 )

@@ -1,5 +1,5 @@
 transform.constraint <- function(object, constraint) {
-	object <- blank.parameters(object)
+	object <- blankParameters(object)
 	if(!is.null(constraint)) {
 		con <- constraint@con
 		for(i in 1:length(con)) {

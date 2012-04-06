@@ -57,7 +57,7 @@ expand.matrices <- function(object) {
 		nx <- ncol(GA)
 		ny <- nrow(GA)
 		temp.BE <- combine.path.exo.endo(GA, BE)
-		temp.RPS <- combine.latent.cor.exo.endo(RPH, RPS)
+		temp.RPS <- combineLatentCorExoEndo(RPH, RPS)
 		temp.VE <- find.factor.var(temp.BE, temp.RPS, c(VPH, VPS))
 		VE <- temp.VE[(nx + 1):(nx + ny)]
 		temp.ME <- find.factor.mean(temp.BE, c(KA, AL))
@@ -71,7 +71,7 @@ expand.matrices <- function(object) {
 		nk <- ncol(GA)
 		ne <- nrow(GA)
 		temp.BE <- combine.path.exo.endo(GA, BE)
-		temp.RPS <- combine.latent.cor.exo.endo(RPH, RPS)
+		temp.RPS <- combineLatentCorExoEndo(RPH, RPS)
 		temp.VE <- find.factor.var(temp.BE, temp.RPS, c(VPH, VPS))
 		VE <- temp.VE[(nk + 1):(nk + ne)]
 		temp.ME <- find.factor.mean(temp.BE, c(KA, AL))

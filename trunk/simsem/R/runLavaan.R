@@ -49,7 +49,7 @@ runLavaan <- function(object, Data, miss="fiml", estimator="ML") {
 		equalCon <- reduce.constraint(equalCon)
 		con.text <- transform.constraint(param, equalCon)
 	} else {
-		con.text <- blank.parameters(param)
+		con.text <- blankParameters(param)
 	}	
 	code <- write.lavaan.code(param, con.text, aux = nameAux)
 	fit <- NULL
@@ -93,8 +93,8 @@ runLavaan <- function(object, Data, miss="fiml", estimator="ML") {
 				FitIndices["TLI"] <- TLI
 			}
 		}
-		try(coef <- combine.object(param, inspect(fit, "coef")))
-		try(se <- combine.object(param, inspect(fit, "se")))
+		try(coef <- combineObject(param, inspect(fit, "coef")))
+		try(se <- combineObject(param, inspect(fit, "se")))
 		try(Converged <- inspect(fit, "converged"))
 		try(check <- sum(unlist(lapply(inspect(fit, "se"), sum))))
 		try(if(is.na(check) || check == 0) Converged = FALSE, silent=TRUE)

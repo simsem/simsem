@@ -198,7 +198,7 @@ setClassUnion("VirtualDist", c("SimUnif", "SimNorm", "SimBeta", "SimBinom", "Sim
 # 	param: 	All population/starting values of those free parameters
 # Methods:
 #	adjust
-#	combine.object
+#	combineObject
 #	count.random.object
 #	is.null.object
 #	run
@@ -283,7 +283,7 @@ setClass("SymMatrix",
 # 	Labels: 	All population/starting values of those free parameters
 # Methods:
 #	adjust
-#	combine.object
+#	combineObject
 #	count.random.object
 #	is.null.object
 #	run
@@ -572,7 +572,7 @@ setClass("NullSimSet", contains="SimSet")
 #	TH:
 #	RTH:		matrix.c Measurement error correlation between X indicators and Y indicators 
 # Methods:
-#	combine.object
+#	combineObject
 #	createImpliedMACS
 #	divide.object
 #	summary
@@ -834,7 +834,7 @@ setClass("NullSimREqualCon", contains="SimREqualCon",
 # Child Class:	None
 # Methods:
 #	find.OpenMx.values
-#	make.labels
+#	makeLabels
 #	simModel
 #	summary
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
@@ -848,7 +848,7 @@ setClass("SimFreeParam",
 # SimLabels
 # Class -- simsem package
 # Set of vectors and matrices arrangements that will save labels that will be used to run OpenMx. 
-# Constructor:	make.labels(SimFreeParam)
+# Constructor:	makeLabels(SimFreeParam)
 # Parent Class: VirtualRSet
 # Child Class:	None
 # Methods:
@@ -970,7 +970,7 @@ setClass("NullSimMisspec", contains = "SimMisspec")
 # Parent Class: MatrixSet
 # Child Class:	None
 # Methods:
-#	combine.object(list, MisspecSet)
+#	combineObject(list, MisspecSet)
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 7, 2011
 
