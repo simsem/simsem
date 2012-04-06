@@ -49,7 +49,7 @@ imposeMissing <- function(data.mat,cov=0,pmMCAR=0,pmMAR=0,nforms=0,
  
  if(!is.null(nforms) | !is.null(twoMethod)) { 
  # TRUE values are values to delete
- log.matpl <- planned.missing(dim(data.mat),cov,nforms=nforms,twoMethod=twoMethod,
+ log.matpl <- plannedMissing(dim(data.mat),cov,nforms=nforms,twoMethod=twoMethod,
                               itemGroups=itemGroups,timePoints=timePoints,ignoreCols=ignoreCols)
  data.mat[log.matpl] <- NA
 }
@@ -147,7 +147,7 @@ makeMCAR <- function(dims,pm=NULL,cov=NULL,ignoreCols=NULL)
 # TODO:
 # Warnings for illegal groupings
 # Check to see if item groupings are valid?
-planned.missing <- function(dims=c(0,0),nforms=NULL,itemGroups=NULL,twoMethod=NULL, cov=NULL, timePoints=1,ignoreCols=NULL) {
+plannedMissing <- function(dims=c(0,0),nforms=NULL,itemGroups=NULL,twoMethod=NULL, cov=NULL, timePoints=1,ignoreCols=NULL) {
    
   nitems <- dims[2]
   nobs <- dims[1]

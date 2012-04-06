@@ -9,8 +9,7 @@
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 6, 2011
 
-loadingFromAlpha <-
-function(alpha, ni) {
+loadingFromAlpha <- function(alpha, ni) {
 	denominator <- ni - ((ni - 1) * alpha)
 	result <- sqrt(alpha/ denominator)
 	return(result)

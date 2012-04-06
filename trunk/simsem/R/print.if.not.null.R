@@ -1,7 +1,7 @@
-# print.if.not.null
+# printIfNotNull
 # Function -- simsem package
 # Provide basic summary of each object if that object is not NULL. Mainly call from summary function from SimSet.c object.
-# Function: print.if.not.null(object, name)
+# Function: printIfNotNull(object, name)
 # Argument:
 #	object: 	Printed object (SimMatrix.c, SymMatrix.c, or SimVector.c)
 # 	name: 	Name of this object
@@ -9,7 +9,7 @@
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 6, 2011
 
-print.if.not.null <- function(object, name=NULL) {
+printIfNotNull <- function(object, name=NULL) {
 	if(!isNullObject(object)) {
 		if(!is.null(name)) cat(name, "\n")
 		summaryShort(object)	
@@ -18,4 +18,4 @@ print.if.not.null <- function(object, name=NULL) {
 
 #Example:
 #AL <- simVector(rep(NA, 5), "0")
-#print.if.not.null(AL, "Factor mean")
+#printIfNotNull(AL, "Factor mean")

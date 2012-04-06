@@ -1,5 +1,5 @@
-is.variance.constraint <- function(Name) {
-	W <- get.keywords()
+isVarianceConstraint <- function(Name) {
+	W <- getKeywords()
 	keywords <- c(W$VTE, W$VTD, W$VPH, W$VPS, W$VX, W$VY, W$VE)
 	result <- rep(0, length(Name))
 	for(i in 1:length(Name)) {

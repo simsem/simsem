@@ -67,7 +67,7 @@ setMethod("startingValues", signature(object="SimSet"), definition=function(obje
 		}
 		#browser()
 		result@modelType <- object@modelType
-		if(reduced == TRUE) result <- reduce.matrices(result)
+		if(reduced == TRUE) result <- reduceMatrices(result)
 		return(result)
 	}
 )

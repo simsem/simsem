@@ -783,7 +783,7 @@ setClass("NullSimEqualCon", contains="SimEqualCon",
 # SimREqualCon
 # Class -- simsem package
 # Set of equality constraints that users wish to specify
-# Constructor:	reduce.constraint(SimEqualCon)
+# Constructor:	reduceConstraint(SimEqualCon)
 # Parent Class: None
 # Child Class:	NullSimREqualCon
 # Attributes:

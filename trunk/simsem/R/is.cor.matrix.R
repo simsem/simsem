@@ -1,4 +1,4 @@
-is.cor.matrix <- function(matrixA) {
+isCorMatrix <- function(matrixA) {
 	if(dim(matrixA)[1] != dim(matrixA)[2]) {
 		return(FALSE)
 	} else if(sum(is.na(diag(matrixA))) > 0) {

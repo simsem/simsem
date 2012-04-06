@@ -11,7 +11,7 @@
 # Date Modified: March 10, 2012
 
 simSetPath <- function(..., exo = FALSE) {
-	W <- get.keywords()
+	W <- getKeywords()
 	List <- list(...)
 	Names <- names(List)
 	keywords <- NULL
@@ -20,7 +20,7 @@ simSetPath <- function(..., exo = FALSE) {
 	} else {
 		keywords <- list(W$BE, W$RPS, W$VPS, W$VE, W$AL, W$ME, W$PS, W$GA, W$RPH, W$VPH, W$KA, W$PH) # Length = 12
 	}
-	position <- match.keyword(Names, keywords)
+	position <- matchKeywords(Names, keywords)
 	if(length(position) != length(unique(position))) stop("Some objects were identified more than once.")
 	ifelse(contain(1, position), BE <- List[position == 1], stop("No path coefficient object between factor.ETA"))
 	ne <- ncol(run(BE[[1]]))

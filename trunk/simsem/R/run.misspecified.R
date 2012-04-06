@@ -1,4 +1,4 @@
-run.misspecified <- function(object, misspec, SimEqualCon=new("NullSimEqualCon"), conBeforeMis=FALSE) {
+runMisspec <- function(object, misspec, SimEqualCon=new("NullSimEqualCon"), conBeforeMis=FALSE) {
 	if(conBeforeMis) {
 		paramSet <- run(object, SimEqualCon, makeList=TRUE)
 	} else {

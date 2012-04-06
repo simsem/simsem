@@ -1,5 +1,5 @@
-is.mean.constraint <- function(Name) {
-	W <- get.keywords()
+isMeanConstraint <- function(Name) {
+	W <- getKeywords()
 	keywords <- c(W$TX, W$TY, W$KA, W$AL, W$MX, W$MY, W$ME)
 	result <- rep(0, length(Name))
 	for(i in 1:length(Name)) {

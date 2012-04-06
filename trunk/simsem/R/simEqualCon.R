@@ -20,8 +20,8 @@ simEqualCon <- function(..., modelType) {
 			rownames(temp.matrix2) <- names(temp.matrix)
 			temp.matrix <- temp.matrix2
 		}
-		rownames(temp.matrix) <- reassign.names(modelType, rownames(temp.matrix))
-		if(is.mean.constraint(rownames(temp.matrix)) | is.variance.constraint(rownames(temp.matrix))) {
+		rownames(temp.matrix) <- reassignNames(modelType, rownames(temp.matrix))
+		if(isMeanConstraint(rownames(temp.matrix)) | isVarianceConstraint(rownames(temp.matrix))) {
 			temp.result <- matrix(NA, nrow(temp.matrix), 2)
 			colnames(temp.result) <- c("Group", "Element")
 			rownames(temp.result) <- rownames(temp.matrix)

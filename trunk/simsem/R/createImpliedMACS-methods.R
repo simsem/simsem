@@ -8,7 +8,7 @@
 # Date Modified: February 25, 2011
 
 setMethod("createImpliedMACS", signature="MatrixSet", definition=function(object) {
-		new.object <- reduce.matrices(object)
+		new.object <- reduceMatrices(object)
 		result <- createImpliedMACS(new.object)
 		return(result)
 	}

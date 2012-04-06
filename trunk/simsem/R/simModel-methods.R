@@ -39,7 +39,7 @@ setMethod("simModel", signature(object="SimSet"), definition=function(object, eq
 	#browser()
 	if(length(intersect(indicatorLab, auxiliary)) != 0) stop("There are the same variables in the analysis model and in the auxiliary variables list")
 	start <- startingValues(object, trial)
-	start <- reduce.matrices(start)
+	start <- reduceMatrices(start)
 	#browser()
 	freeParameters <- createFreeParameters(object)
 	modelType <- object@modelType

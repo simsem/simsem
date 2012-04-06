@@ -1,4 +1,4 @@
-# get.keywords
+# getKeywords
 # Function -- simsem package
 # List of all keywords used in the simsem package
 # Argument:
@@ -7,7 +7,7 @@
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: March 10, 2012
 
-get.keywords <- function() {
+getKeywords <- function() {
 	LY <- "LY"		#Factor Loading of Y from E
 	TE <- "TE"		#Measurement Error Covariance
 	RTE <- "RTE"	#Measurement Error Correlation

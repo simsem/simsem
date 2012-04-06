@@ -39,8 +39,8 @@ setMethod("plotPower", signature(altObject="data.frame", nullObject="data.frame"
 	nullObject <- as.data.frame(nullObject[,usedFit])
 	colnames(altObject) <- usedFit
 	colnames(nullObject) <- usedFit
-	no.NA.altObject <- !apply(altObject, 2, is.na.vector)
-	no.NA.nullObject <- !apply(nullObject, 2, is.na.vector)
+	no.NA.altObject <- !apply(altObject, 2, isNAVector)
+	no.NA.nullObject <- !apply(nullObject, 2, isNAVector)
 	temp.name.alt <- colnames(altObject)[no.NA.altObject]
 	temp.name.null <- colnames(nullObject)[no.NA.nullObject]
 	altObject <- as.data.frame(altObject[,no.NA.altObject])
@@ -65,7 +65,7 @@ setMethod("plotPower", signature(altObject="data.frame", nullObject="data.frame"
 	}
 	for(i in 1:length(common.name)) {
 		swap <- sum(common.name[i] == c("CFI", "TLI")) > 0
-		overlap.hist(nullObject[,i], altObject[,i], main=common.name[i], xlab="Value", colors=c("yellow", "skyblue", "lightgreen"),
+		overlapHist(nullObject[,i], altObject[,i], main=common.name[i], xlab="Value", colors=c("yellow", "skyblue", "lightgreen"),
 			swap=swap)
 		cutoff1 <- quantile(nullObject[,i], percentile, na.rm = TRUE)
 		abline(v = cutoff[i], lty=1, lwd=3)

@@ -9,11 +9,11 @@
 # Date Modified: March 10, 2012
 
 simMisspecCFA <- function(...) { 
-	W <- get.keywords()
+	W <- getKeywords()
 	List <- list(...)
 	Names <- names(List)
 	keywords <- list(W$loading, W$errorCor, W$facCor, W$errorVar, W$indicatorVar, W$intercept, W$facMean, W$indicatorMean, W$facVar, W$errorCov, W$facCov)
-	position <- match.keyword(Names, keywords)
+	position <- matchKeywords(Names, keywords)
 	if(length(position) != length(unique(position))) stop("Some objects were identified more than once.")
 	ifelse(contain(1, position), LY <- List[position == 1], LY <- list(new("NullSimMatrix")))
 	

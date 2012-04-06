@@ -1,7 +1,7 @@
-# match.keyword
+# matchKeywords
 # Function -- simsem package
 # Search for the keywords and check whether the specified text match one in the name vector
-# Function: match.keyword(Names, keywords)
+# Function: matchKeywords(Names, keywords)
 # Argument:
 #	Names: 	Name of the searching object
 # 	Vector: 	Name of the keywords vector that would like to matched
@@ -9,7 +9,7 @@
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: March 10, 2012
 
-match.keyword <- function(Names, keywords) {
+matchKeywords <- function(Names, keywords) {
 	Length <- length(Names)
 	Result <- rep(NA, Length)
 	for(i in 1:Length) {
@@ -21,4 +21,4 @@ match.keyword <- function(Names, keywords) {
 }
 
 #Example:
-#	match.keyword("LY", c("LY", "Ly", "ly", "LX", "Lx", "lx"))
+#	matchKeywords("LY", c("LY", "Ly", "ly", "LX", "Lx", "lx"))

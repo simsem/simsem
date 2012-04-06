@@ -8,9 +8,7 @@
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: February 26, 2012
 
-setMethod("kurtosis",
-    signature(object = "vector"),
-    function(object, population=FALSE) {
+setMethod("kurtosis", signature(object = "vector"), function(object, population=FALSE) {
 	if(population) {
 		return((centralMoment(object, 4)/(centralMoment(object, 2)^2)) - 3)
 	} else {
@@ -23,9 +21,7 @@ setMethod("kurtosis",
 }
 )
 
-setMethod("kurtosis",
-    signature(object = "VirtualDist"),
-    function(object, reverse=FALSE, bin=100000) {
+setMethod("kurtosis", signature(object = "VirtualDist"), function(object, reverse=FALSE, bin=100000) {
 		distName <- class(object)
 		distName <- tolower(gsub("Sim", "", distName))
 		funmin <- list(get(paste("q", distName, sep="")), 0.000001)

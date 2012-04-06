@@ -1,7 +1,7 @@
-# reassign.names
+# reassignNames
 # Function -- simsem package
 # Match the rownames of the equality constraint, check whether it match any model matrices, and substitute with an appropriate matrix name.
-# Function: reassign.names(modelType, Name)
+# Function: reassignNames(modelType, Name)
 # Argument:
 # 	modelType:	Type of the analysis model
 #	Name: 	Row of matrices name in the equality constraint
@@ -9,8 +9,8 @@
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: March 10, 2012
 
-reassign.names <- function(modelType, Name) {
-	W <- get.keywords()
+reassignNames <- function(modelType, Name) {
+	W <- getKeywords()
 	result <- rep(NA, length(Name))
 	keywords <- NULL
 	if(modelType == "CFA") {
@@ -26,7 +26,7 @@ reassign.names <- function(modelType, Name) {
 	} else {
 		stop("Cannot recognize the modelType name.")
 	}
-	position <- match.keyword(Name, keywords)
+	position <- matchKeywords(Name, keywords)
 	if(sum(position == 0) > 0) stop(paste("Some matrices' names cannot be assigned in", modelType, "groups"))
 	for(i in 1:length(Name)) {
 		result[i] <- keywords[[position[i]]][1]

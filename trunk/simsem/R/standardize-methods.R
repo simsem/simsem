@@ -132,4 +132,4 @@ setMethod("standardize", signature="SimRSet", definition=function(object) {
 #TD <- symMatrix(error.cor)
 
 #CFA.Model <- simSetCFA(LX = LX, PH = PH, TD = TD)
-#set <- reduce.matrices(run(CFA.Model))
+#set <- reduceMatrices(run(CFA.Model))

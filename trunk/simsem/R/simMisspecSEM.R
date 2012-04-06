@@ -10,7 +10,7 @@
 # Date Modified: March 10, 2012
 
 simMisspecSEM <- function(..., exo = FALSE) {
-	W <- get.keywords()
+	W <- getKeywords()
 	List <- list(...)
 	Names <- names(List)
 	keywords <- NULL
@@ -19,7 +19,7 @@ simMisspecSEM <- function(..., exo = FALSE) {
 	} else {
 		keywords <- list(W$LY, W$RTE, W$VTE, W$VY, W$TY, W$MY, W$BE, W$RPS, W$VPS, W$VE, W$AL, W$ME, W$TE, W$PS, W$LX, W$RTD, W$VTD, W$VX, W$TX, W$MX, W$GA, W$RPH, W$VPH, W$KA, W$RTH, W$TD, W$PH, W$TH) #Length = 28
 	}
-	position <- match.keyword(Names, keywords)
+	position <- matchKeywords(Names, keywords)
 	if(length(position) != length(unique(position))) stop("Some objects were identified more than once.")
 	ifelse(contain(1, position), LY <- List[position == 1], LY <- list(new("NullSimMatrix")))
 	if(contain(13, position)) {

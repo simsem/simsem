@@ -1,4 +1,4 @@
-reduce.constraint <- function(SimEqualCon) {
+reduceConstraint <- function(SimEqualCon) {
 	modelType <- SimEqualCon@modelType
 	equalCon <- SimEqualCon@con
 	Length <- length(equalCon)
@@ -8,9 +8,9 @@ reduce.constraint <- function(SimEqualCon) {
 		temp.result <- NULL
 		temp.matrix <- equalCon[[i]]
 		name <- rownames(temp.matrix)
-		if(is.mean.constraint(name)) {
+		if(isMeanConstraint(name)) {
 			if(sum(!is.element(name, c("ME", "MX", "MY"))) > 0) temp.result <- temp.matrix
-		} else if (is.variance.constraint(name)) {
+		} else if (isVarianceConstraint(name)) {
 			if(sum(is.element(name, c("VE", "VX", "VY"))) > 0) {
 				temp.result <- matrix(0, nrow(temp.matrix), 3)
 				temp.result[,1] <- temp.matrix[,1]

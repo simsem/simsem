@@ -1,7 +1,7 @@
-# overlap.hist
+# overlapHist
 # Function -- simsem package
 # Plot overlapping histograms
-# Function: overlap.hist(a, b, colors=c("red","blue","purple"), breaks=NULL, xlim=NULL, ylim=NULL, main=NULL, xlab=NULL, swap=FALSE)
+# Function: overlapHist(a, b, colors=c("red","blue","purple"), breaks=NULL, xlim=NULL, ylim=NULL, main=NULL, xlab=NULL, swap=FALSE)
 # Argument:
 #	a:	Data for the first histogram
 #	b:	Data for the second histogram
@@ -16,7 +16,7 @@
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 9, 2011
 
-overlap.hist <- function(a, b, colors=c("red","blue","purple"), breaks=NULL, xlim=NULL, ylim=NULL, main=NULL, xlab=NULL, swap=FALSE){
+overlapHist <- function(a, b, colors=c("red","blue","purple"), breaks=NULL, xlim=NULL, ylim=NULL, main=NULL, xlab=NULL, swap=FALSE){
 	ahist=NULL
 	bhist=NULL
 	if(!(is.null(breaks))){
@@ -59,4 +59,4 @@ overlap.hist <- function(a, b, colors=c("red","blue","purple"), breaks=NULL, xli
 #Examples:
 #a <- rnorm(10000, 0, 1)
 #b <- rnorm(10000, 1, 1.5)
-#overlap.hist(a, b, main="Example")
+#overlapHist(a, b, main="Example")

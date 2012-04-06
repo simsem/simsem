@@ -35,7 +35,7 @@ setMethod("constrainMatrices", signature(object="VirtualRSet", SimEqualCon="SimR
 			temp.matrix <- rownames(temp.constraint)[1]
 			num <- equalWhich(temp.matrix, label.selection)
 			fixedvalue <- NA
-			if(is.mean.constraint(rownames(temp.constraint))) {
+			if(isMeanConstraint(rownames(temp.constraint))) {
 				fixedvalue <- matrices[[num]][temp.constraint[1, 2]]		
 			} else {
 				fixedvalue <- matrices[[num]][temp.constraint[1, 2], temp.constraint[1, 3]]
@@ -43,7 +43,7 @@ setMethod("constrainMatrices", signature(object="VirtualRSet", SimEqualCon="SimR
 			for(i in 2:nrow(temp.constraint)) {
 				temp.matrix2 <- rownames(temp.constraint)[i]
 				num <- equalWhich(temp.matrix2, label.selection)
-				if(is.mean.constraint(rownames(temp.constraint))) {
+				if(isMeanConstraint(rownames(temp.constraint))) {
 					matrices[[num]][temp.constraint[i, 2]] <- fixedvalue
 				} else {
 					matrices[[num]][temp.constraint[i, 2], temp.constraint[i, 3]] <- fixedvalue
@@ -59,7 +59,7 @@ setMethod("constrainMatrices", signature(object="VirtualRSet", SimEqualCon="SimR
 			for(i in 2:nrow(temp.constraint)) {
 				temp.matrix2 <- rownames(temp.constraint)[i]
 				num <- equalWhich(temp.matrix2, label.selection)
-				if(is.mean.constraint(rownames(temp.constraint))) {
+				if(isMeanConstraint(rownames(temp.constraint))) {
 					matrices[[num]][temp.constraint[i, 2]] <- fixedvalue
 				} else {
 					matrices[[num]][temp.constraint[i, 2], temp.constraint[i, 3]] <- fixedvalue
@@ -82,7 +82,7 @@ setMethod("constrainMatrices", signature(object="VirtualRSet", SimEqualCon="SimR
 setMethod("constrainMatrices", signature(object="VirtualRSet", SimEqualCon="SimEqualCon"), definition=function(object, SimEqualCon, package) {
 	modelType <- object@modelType
 	if(modelType != SimEqualCon@modelType) stop("SimEqualCon and VirtualRSet do not have the same tag")
-	SimREqualCon <- reduce.constraint(SimEqualCon)
+	SimREqualCon <- reduceConstraint(SimEqualCon)
 	Output <- constrainMatrices(object, SimREqualCon, package)
 	return(Output)
 })
@@ -105,7 +105,7 @@ setMethod("constrainMatrices", signature(object="VirtualRSet", SimEqualCon="SimE
 #		num <- equalWhich(temp.matrix, label.selection)
 #		if(num == 0) stop("Cannot recognize the matrix name in the equality constraint")
 #		fixedvalue <- NA
-#		if(is.mean.constraint(rownames(temp.constraint))) {
+#		if(isMeanConstraint(rownames(temp.constraint))) {
 #			fixedvalue <- matrices[[temp.matrix]][temp.constraint[1, 2]]		
 #		} else {
 #			fixedvalue <- matrices[[temp.matrix]][temp.constraint[1, 2], temp.constraint[1, 3]]
@@ -114,11 +114,11 @@ setMethod("constrainMatrices", signature(object="VirtualRSet", SimEqualCon="SimE
 #			temp.matrix2 <- rownames(temp.constraint)[i]
 #			num <- equalWhich(temp.matrix2, label.selection)
 #			if(num == 0) stop("Cannot recognize the matrix name in the equality constraint")
-#			if(is.mean.constraint(rownames(temp.constraint))) {
+#			if(isMeanConstraint(rownames(temp.constraint))) {
 #				matrices[[temp.matrix2]][temp.constraint[i, 2]] <- fixedvalue
 #			} else {
 #				matrices[[temp.matrix2]][temp.constraint[i, 2], temp.constraint[i, 3]] <- fixedvalue
-#				if(is.cor.matrix(matrices[[temp.matrix2]])) matrices[[temp.matrix2]][temp.constraint[i,2], temp.constraint[i,1]] <- fixedvalue
+#				if(isCorMatrix(matrices[[temp.matrix2]])) matrices[[temp.matrix2]][temp.constraint[i,2], temp.constraint[i,1]] <- fixedvalue
 #			}
 #		}
 #	}
@@ -142,7 +142,7 @@ setMethod("constrainMatrices", signature(object="MatrixSet", SimEqualCon="SimEqu
 		num <- equalWhich(temp.matrix, label.selection)
 		if(num == 0) stop("Cannot recognize the matrix name in the equality constraint")
 		fixedvalue <- NA
-		if(is.mean.constraint(rownames(temp.constraint))) {
+		if(isMeanConstraint(rownames(temp.constraint))) {
 			fixedvalue <- slot(matrices, temp.matrix)[temp.constraint[1, 2]]		
 		} else {
 			fixedvalue <- slot(matrices, temp.matrix)[temp.constraint[1, 2], temp.constraint[1, 3]]
@@ -151,11 +151,11 @@ setMethod("constrainMatrices", signature(object="MatrixSet", SimEqualCon="SimEqu
 			temp.matrix2 <- rownames(temp.constraint)[i]
 			num <- equalWhich(temp.matrix2, label.selection)
 			if(num == 0) stop("Cannot recognize the matrix name in the equality constraint")
-			if(is.mean.constraint(rownames(temp.constraint))) {
+			if(isMeanConstraint(rownames(temp.constraint))) {
 				slot(matrices, temp.matrix2)[temp.constraint[i, 2]] <- fixedvalue
 			} else {
 				slot(matrices, temp.matrix2)[temp.constraint[i, 2], temp.constraint[i, 3]] <- fixedvalue
-				if(is.cor.matrix(slot(matrices, temp.matrix2))) slot(matrices, temp.matrix2)[temp.constraint[i,2], temp.constraint[i,1]] <- fixedvalue
+				if(isCorMatrix(slot(matrices, temp.matrix2))) slot(matrices, temp.matrix2)[temp.constraint[i,2], temp.constraint[i,1]] <- fixedvalue
 			}
 		}
 	}

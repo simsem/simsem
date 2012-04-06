@@ -30,7 +30,7 @@ createFreeParameters <- function(object) {
 		TE <- object@TE@free
 	}
 	TY <- object@TY@free
-	if(is.measurement.Y & is.default(object@TY)) TY <- rep(NA, nrow(LY))
+	if(is.measurement.Y & isDefault(object@TY)) TY <- rep(NA, nrow(LY))
 	BE <- object@BE@free
 	PS <- NULL
 	if(isNullObject(object@PS)) {
@@ -41,7 +41,7 @@ createFreeParameters <- function(object) {
 		PS <- object@PS@free
 	}
 	AL <- object@AL@free
-	if(is.default(object@AL)) {
+	if(isDefault(object@AL)) {
 		ifelse(is.measurement.Y, AL <- rep(0, ncol(PS)), AL <- rep(NA, ncol(PS)))
 	}
 	#-- Exogeneous Variable --
@@ -61,13 +61,13 @@ createFreeParameters <- function(object) {
 			VPH <- object@VPH@free
 			ifelse(isNullObject(VPH) | (sum(VPH != 1) == 0), ifelse(is.measurement.X, diag(PH) <- 1, diag(PH) <- NA), diag(PH) <- VPH)
 		}
-		if(is.default(object@KA)) ifelse(is.measurement.X, KA <- rep(0, ncol(PH)), KA <- rep(NA, ncol(PH)))
+		if(isDefault(object@KA)) ifelse(is.measurement.X, KA <- rep(0, ncol(PH)), KA <- rep(NA, ncol(PH)))
 		if(is.measurement.X) {
 			if(isNullObject(object@TD)) {
 				VTD <- object@VTD@free
 				ifelse(isNullObject(VTD), diag(TD) <- NA, diag(TD) <- VTD)
 			}
-			if(is.default(object@TX)) TX <- rep(NA, nrow(LX))
+			if(isDefault(object@TX)) TX <- rep(NA, nrow(LX))
 		}
 	}
 	Output <- new("SimFreeParam", LY=LY, TE=TE, BE=BE, PS=PS, AL=AL, TY=TY,
