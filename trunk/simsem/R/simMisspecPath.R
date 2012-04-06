@@ -33,10 +33,10 @@ simMisspecPath <- function(..., exo = FALSE) {
 		ifelse(contain(3, position), VPS <- List[position == 3], VPS <- list(new("NullSimVector")))
 		ifelse(contain(4, position), VE <- List[position == 4], VE <- list(new("NullSimVector")))
 	}
-	if(!is.null.object(VPS[[1]]) & !is.null.object(VE[[1]])) stop("Please assign either VPS or VE, not both")
+	if(!isNullObject(VPS[[1]]) & !isNullObject(VE[[1]])) stop("Please assign either VPS or VE, not both")
 	ifelse(contain(6, position), ME <- List[position == 6], ME <- list(new("NullSimVector")))
 	ifelse(contain(5, position), AL <- List[position == 5], AL <- list(new("NullSimVector")))
-	if(!is.null.object(ME[[1]]) & !is.null.object(AL[[1]])) stop("Please assign either ME or AL, not both")
+	if(!isNullObject(ME[[1]]) & !isNullObject(AL[[1]])) stop("Please assign either ME or AL, not both")
 	Output <- NULL
 	if(exo) {
 		ifelse(contain(8, position), GA <- List[position == 8], GA <- list(new("NullSimMatrix")))

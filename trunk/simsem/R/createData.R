@@ -15,7 +15,7 @@ createData <- function(paramSet, n, object, dataOnly) {
 	param <- paramSet[["real"]]
 	misspec <- paramSet[["misspec"]]
 	usedParam <- NULL
-	if(!is.null.object(object@misspec)) {		
+	if(!isNullObject(object@misspec)) {		
 		usedParam <- misspec
 	} else {
 		usedParam <- param

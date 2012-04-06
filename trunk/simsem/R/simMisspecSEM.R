@@ -32,11 +32,11 @@ simMisspecSEM <- function(..., exo = FALSE) {
 		ifelse(contain(2, position), RTE <- List[position == 2], RTE <- list(new("NullSymMatrix")))
 		ifelse(contain(3, position), VTE <- List[position == 3], VTE <- list(new("NullSimVector")))
 		ifelse(contain(4, position), VY <- List[position == 4], VY <- list(new("NullSimVector")))
-		if(!is.null.object(VTE[[1]]) & !is.null.object(VY[[1]])) stop("Please assign either VTE or VY, not both")
+		if(!isNullObject(VTE[[1]]) & !isNullObject(VY[[1]])) stop("Please assign either VTE or VY, not both")
 	}
 	ifelse(contain(6, position), MY <- List[position == 6], MY <- list(new("NullSimVector")))
 	ifelse(contain(5, position), TY <- List[position == 5], TY <- list(new("NullSimVector")))
-	if(!is.null.object(MY[[1]]) & !is.null.object(TY[[1]])) stop("Please assign either MY or TY, not both")
+	if(!isNullObject(MY[[1]]) & !isNullObject(TY[[1]])) stop("Please assign either MY or TY, not both")
 	ifelse(contain(7, position), BE <- List[position == 7], BE <- list(new("NullSimMatrix")))
 	if(contain(14, position)) {
 		PS <- List[position == 14]
@@ -48,11 +48,11 @@ simMisspecSEM <- function(..., exo = FALSE) {
 		ifelse(contain(8, position), RPS <- List[position == 8], RPS <- list(new("NullSymMatrix")))
 		ifelse(contain(9, position), VPS <- List[position == 9], VPS <- list(new("NullSimVector")))
 		ifelse(contain(10, position), VE <- List[position == 10], VE <- list(new("NullSimVector")))
-		if(!is.null.object(VPS[[1]]) & !is.null.object(VE[[1]])) stop("Please assign either VPS or VE, not both")
+		if(!isNullObject(VPS[[1]]) & !isNullObject(VE[[1]])) stop("Please assign either VPS or VE, not both")
 	}
 	ifelse(contain(12, position), ME <- List[position == 12], ME <- list(new("NullSimVector")))
 	ifelse(contain(11, position), AL <- List[position == 11], AL <- list(new("NullSimVector")))
-	if(!is.null.object(ME[[1]]) & !is.null.object(AL[[1]])) stop("Please assign either ME or AL, not both")
+	if(!isNullObject(ME[[1]]) & !isNullObject(AL[[1]])) stop("Please assign either ME or AL, not both")
 	Output <- NULL
 	if(exo) {
 		ifelse(contain(15, position), LX <- List[position == 15], LX <- list(new("NullSimMatrix")))
@@ -66,11 +66,11 @@ simMisspecSEM <- function(..., exo = FALSE) {
 			ifelse(contain(16, position), RTD <- List[position == 16], RTD <- list(new("NullSymMatrix")))
 			ifelse(contain(17, position), VTD <- List[position == 17], VTD <- list(new("NullSimVector")))
 			ifelse(contain(18, position), VX <- List[position == 18], VX <- list(new("NullSimVector")))
-			if(!is.null.object(VTD[[1]]) & !is.null.object(VX[[1]])) stop("Please assign either VTD or VX, not both")
+			if(!isNullObject(VTD[[1]]) & !isNullObject(VX[[1]])) stop("Please assign either VTD or VX, not both")
 		}
 		ifelse(contain(20, position), MX <- List[position == 20], MX <- list(new("NullSimVector")))
 		ifelse(contain(19, position), TX <- List[position == 19], TX <- list(new("NullSimVector")))
-		if(!is.null.object(MX[[1]]) & !is.null.object(TX[[1]])) stop("Please assign either MX or TX, not both")
+		if(!isNullObject(MX[[1]]) & !isNullObject(TX[[1]])) stop("Please assign either MX or TX, not both")
 		ifelse(contain(21, position), GA <- List[position == 21], GA <- list(new("NullSimMatrix")))
 		if(contain(27, position)) {
 			PH <- List[position == 27]

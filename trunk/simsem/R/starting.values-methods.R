@@ -1,9 +1,9 @@
-# starting.values
+# startingValues
 # Methods -- simsem package
 # Description:	Find starting values of free parameters based on pre-specified starting values. If the pre-specified starting values are numbers, 
 #		the function will use that values. If they are distribution object, this function will randomly draw from the distribution 
 #		10 times and take the average of those values.
-# Generic Function: starting.values(object, trial, ...)
+# Generic Function: startingValues(object, trial, ...)
 # Argument:
 #	object: The target object that is used to find starting values
 #	trial:	Number of random drawn to find starting values of VirtualDist.c
@@ -11,8 +11,8 @@
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 6, 2011
 
-setMethod("starting.values", signature(object="SimMatrix"), definition=function(object, trial, ...) {
-		if(is.null.object(object)) return(new("NullMatrix"))
+setMethod("startingValues", signature(object="SimMatrix"), definition=function(object, trial, ...) {
+		if(isNullObject(object)) return(new("NullMatrix"))
 		Nrow <- nrow(run(object))
 		Ncol <- ncol(run(object))
 		Result <- matrix(0, Nrow, Ncol)
@@ -35,10 +35,10 @@ setMethod("starting.values", signature(object="SimMatrix"), definition=function(
 #loading[4:6, 2] <- NA
 #loadingValues <- matrix(0, 6, 2)
 #LX <- simMatrix(loading, "u89")
-#starting.values(LX, 10)
+#startingValues(LX, 10)
 
-setMethod("starting.values", signature(object="SimVector"), definition=function(object, trial, ...) {
-		if(is.null.object(object)) return(new("NullVector"))
+setMethod("startingValues", signature(object="SimVector"), definition=function(object, trial, ...) {
+		if(isNullObject(object)) return(new("NullVector"))
 		Length <- length(run(object))
 		Result <- rep(0, Length)
 		for(i in 1:trial) {
@@ -54,7 +54,7 @@ setMethod("starting.values", signature(object="SimVector"), definition=function(
 #Description: 	Draw samples from the SimVector.c, take the average, and report the starting values as a vector.
 #Return: 	vector.c of starting values
 
-setMethod("starting.values", signature(object="SimSet"), definition=function(object, trial, reduced=FALSE) {
+setMethod("startingValues", signature(object="SimSet"), definition=function(object, trial, reduced=FALSE) {
 		result <- run(object)
 		#browser()
 		if(trial > 1) {
@@ -63,7 +63,7 @@ setMethod("starting.values", signature(object="SimSet"), definition=function(obj
 				result <- combineObject(result, temp)
 			}
 			#browser()
-			result <- divide.object(result, trial)
+			result <- divideObject(result, trial)
 		}
 		#browser()
 		result@modelType <- object@modelType
@@ -91,5 +91,5 @@ setMethod("starting.values", signature(object="SimSet"), definition=function(obj
 #diag(error.cor) <- 1
 #TD <- symMatrix(error.cor)
 #CFA.Model <- simSetCFA(LX = LX, PH = PH, TD = TD)
-#result <- starting.values(CFA.Model, 10)
+#result <- startingValues(CFA.Model, 10)
 #summary(result)

@@ -1,13 +1,13 @@
-# is.null.object
+# isNullObject
 # Methods -- simsem package
 # Check whether the object is the NULL type of that class
-# Generic Function: is.null.object(target)
+# Generic Function: isNullObject(target)
 # Argument:
 #	target: 	The checked object
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: February 23, 2011
 
-setMethod("is.null.object", signature(target="vector"), definition=function(target) {
+setMethod("isNullObject", signature(target="vector"), definition=function(target) {
 		is(target, "NullVector") || is.nan(target) || (sum(length(target)) == 0)
 	}
 )
@@ -15,7 +15,7 @@ setMethod("is.null.object", signature(target="vector"), definition=function(targ
 #Description: check whether the vector.c is NullVector.c, NaN, or zero length
 #Return: 	TRUE if it is NullVector.c, NaN, or zero length
 
-setMethod("is.null.object", signature(target="matrix"), definition=function(target) {
+setMethod("isNullObject", signature(target="matrix"), definition=function(target) {
 		is(target, "NullMatrix") || is.nan(target) || (sum(dim(target)) == 0)
 	}
 )
@@ -23,7 +23,7 @@ setMethod("is.null.object", signature(target="matrix"), definition=function(targ
 #Description: check whether the matrix.c is NullMatrix.c, NaN, or 0 x 0 dimension
 #Return: 	TRUE if it is NullMatrix.c, NaN, or 0 x 0 dimension
 
-setMethod("is.null.object", signature(target="SimMatrix"), definition=function(target) {
+setMethod("isNullObject", signature(target="SimMatrix"), definition=function(target) {
 		is(target, "NullSimMatrix")
 	}
 )
@@ -31,7 +31,7 @@ setMethod("is.null.object", signature(target="SimMatrix"), definition=function(t
 #Description: check whether the SimMatrix.c is NullSimMatrix.c
 #Return: 	TRUE if it is NullSimMatrix.c
 
-setMethod("is.null.object", signature(target="SymMatrix"), definition=function(target) {
+setMethod("isNullObject", signature(target="SymMatrix"), definition=function(target) {
 		is(target, "NullSymMatrix")
 	}
 )
@@ -39,7 +39,7 @@ setMethod("is.null.object", signature(target="SymMatrix"), definition=function(t
 #Description: check whether the SymMatrix.c is NullSymMatrix.c
 #Return: 	TRUE if it is NullSymMatrix.c
 
-setMethod("is.null.object", signature(target="SimVector"), definition=function(target) {
+setMethod("isNullObject", signature(target="SimVector"), definition=function(target) {
 		is(target, "NullSimVector")
 	}
 )
@@ -47,7 +47,7 @@ setMethod("is.null.object", signature(target="SimVector"), definition=function(t
 #Description: check whether the SimVector.c is NullSimVector.c
 #Return: 	TRUE if it is NullSimVector.c
 
-setMethod("is.null.object", signature="SimSet", definition=function(target) {
+setMethod("isNullObject", signature="SimSet", definition=function(target) {
 		is(target, "NullSimSet")
 	}
 )
@@ -55,7 +55,7 @@ setMethod("is.null.object", signature="SimSet", definition=function(target) {
 #Description: check whether the SimSet.c is NullSimSet.c
 #Return: 	TRUE if it is NullSimSet.c
 
-setMethod("is.null.object", signature="SimEqualCon", definition=function(target){
+setMethod("isNullObject", signature="SimEqualCon", definition=function(target){
 		is(target, "NullSimEqualCon")
 	}
 )
@@ -63,7 +63,7 @@ setMethod("is.null.object", signature="SimEqualCon", definition=function(target)
 #Description: check whether the SimEqualCon.c is NullSimEqualCon.c
 #Return: 	TRUE if it is NullSimEqualCon.c
 
-setMethod("is.null.object", signature="SimREqualCon", definition=function(target){
+setMethod("isNullObject", signature="SimREqualCon", definition=function(target){
 		is(target, "NullSimREqualCon")
 	}
 )
@@ -71,7 +71,7 @@ setMethod("is.null.object", signature="SimREqualCon", definition=function(target
 #Description: check whether the SimREqualCon.c is NullSimREqualCon.c
 #Return: 	TRUE if it is NullSimREqualCon.c
 
-setMethod("is.null.object", signature="SimMisspec", definition=function(target) {
+setMethod("isNullObject", signature="SimMisspec", definition=function(target) {
 		is(target, "NullSimMisspec")
 	}
 )
@@ -79,7 +79,7 @@ setMethod("is.null.object", signature="SimMisspec", definition=function(target) 
 #Description: check whether the SimMisspec.c is NullSimMisspec.c
 #Return: 	TRUE if it is NullSimMisspec.c
 
-setMethod("is.null.object", signature="VirtualRSet", definition=function(target) {
+setMethod("isNullObject", signature="VirtualRSet", definition=function(target) {
 		is(target, "NullRSet")
 	}
 )
@@ -87,7 +87,7 @@ setMethod("is.null.object", signature="VirtualRSet", definition=function(target)
 #Description: check whether the SimMisspec.c is NullSimMisspec.c
 #Return: 	TRUE if it is NullSimMisspec.c
 
-setMethod("is.null.object", signature="data.frame", definition=function(target) {
+setMethod("isNullObject", signature="data.frame", definition=function(target) {
 		(is(target, "NullDataFrame") || (nrow(target) == 0) || (ncol(target) == 0))
 	}
 )
@@ -95,7 +95,7 @@ setMethod("is.null.object", signature="data.frame", definition=function(target) 
 #Description: check whether the data.frame.c is NullDataFrame.c
 #Return: 	TRUE if it is NullDataFrame.c
 
-setMethod("is.null.object", signature="SimMissing", definition=function(target) {
+setMethod("isNullObject", signature="SimMissing", definition=function(target) {
 		is(target, "NullSimMissing")
 	}
 )
@@ -103,7 +103,7 @@ setMethod("is.null.object", signature="SimMissing", definition=function(target) 
 #Description: check whether the SimMissing class is the null object
 #Return: 	TRUE if it is null
 
-setMethod("is.null.object", signature="SimDataDist", definition=function(target) {
+setMethod("isNullObject", signature="SimDataDist", definition=function(target) {
 		is(target, "NullSimDataDist")
 	}
 )

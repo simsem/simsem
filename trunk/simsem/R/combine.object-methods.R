@@ -79,8 +79,8 @@ setMethod("combineObject", signature(object1="SimVector", object2="SimVector"), 
 #Return: Resulting SimVector.c.
 
 setMethod("combineObject", signature(object1="vector", object2="vector"), definition=function(object1, object2) {
-		if(is.null.object(object1)) {
-			if(is.null.object(object2)) {
+		if(isNullObject(object1)) {
+			if(isNullObject(object2)) {
 				return(new("NullVector"))
 			} else {
 				stop("Please make sure that \n
@@ -88,7 +88,7 @@ setMethod("combineObject", signature(object1="vector", object2="vector"), defini
 					2) Any of trivially misspecified matrices are not null in the main set.")
 			}
 		} else {
-			if(is.null.object(object2)) {
+			if(isNullObject(object2)) {
 				return(object1)
 			} else {
 				ifelse(length(object1) == length(object2), return(object1 + object2), stop("Length of vectors are not equal."))
@@ -103,8 +103,8 @@ setMethod("combineObject", signature(object1="vector", object2="vector"), defini
 #Return: Resulting vector.c
 
 setMethod("combineObject", signature(object1="matrix", object2="matrix"), definition=function(object1, object2, correlation = FALSE) {
-		if(is.null.object(object1)) {
-			if(is.null.object(object2)) {
+		if(isNullObject(object1)) {
+			if(isNullObject(object2)) {
 				return(new("NullMatrix"))
 			} else {
 				stop("Please make sure that \n
@@ -112,7 +112,7 @@ setMethod("combineObject", signature(object1="matrix", object2="matrix"), defini
 					2) Any of trivially misspecified matrices are not null in the main set.")
 			}
 		} else {
-			if(is.null.object(object2)) {
+			if(isNullObject(object2)) {
 				return(object1)
 			} else {
 				if(sum(dim(object1) != dim(object2)) == 0) {
@@ -226,40 +226,40 @@ setMethod("combineObject", signature(object1="SimFreeParam", object2="list"), de
 			ne <- nrow(object1@PS)
 			name.indicator <- paste("y", 1:ny, sep="")
 			name.factor <- paste("e", 1:ne, sep="")
-			if(!is.null.object(object1@LY)) object1@LY[is.na(object1@LY)] <- (object2$lambda[name.indicator, name.factor])[is.na(object1@LY)]
-			if(!is.null.object(object1@PS)) object1@PS[is.na(object1@PS)] <- (object2$psi[name.factor, name.factor])[is.na(object1@PS)]
-			if(!is.null.object(object1@TE)) object1@TE[is.na(object1@TE)] <- (object2$theta[name.indicator, name.indicator])[is.na(object1@TE)]
-			if(!is.null.object(object1@TY)) object1@TY[is.na(object1@TY)] <- (object2$nu[name.indicator,])[is.na(object1@TY)]
-			if(!is.null.object(object1@AL)) object1@AL[is.na(object1@AL)] <- (object2$alpha[name.factor,])[is.na(object1@AL)]		
+			if(!isNullObject(object1@LY)) object1@LY[is.na(object1@LY)] <- (object2$lambda[name.indicator, name.factor])[is.na(object1@LY)]
+			if(!isNullObject(object1@PS)) object1@PS[is.na(object1@PS)] <- (object2$psi[name.factor, name.factor])[is.na(object1@PS)]
+			if(!isNullObject(object1@TE)) object1@TE[is.na(object1@TE)] <- (object2$theta[name.indicator, name.indicator])[is.na(object1@TE)]
+			if(!isNullObject(object1@TY)) object1@TY[is.na(object1@TY)] <- (object2$nu[name.indicator,])[is.na(object1@TY)]
+			if(!isNullObject(object1@AL)) object1@AL[is.na(object1@AL)] <- (object2$alpha[name.factor,])[is.na(object1@AL)]		
 		} else if (modelType == "Path") {
 			ny <- nrow(object1@PS)
 			name.indicator <- paste("y", 1:ny, sep="")
-			if(!is.null.object(object1@PS)) object1@PS[is.na(object1@PS)] <- (object2$psi[name.indicator, name.indicator])[is.na(object1@PS)]
-			if(!is.null.object(object1@AL)) object1@AL[is.na(object1@AL)] <- (object2$alpha[name.indicator,])[is.na(object1@AL)]		
-			if(!is.null.object(object1@BE)) object1@BE[is.na(object1@BE)] <- (object2$beta[name.indicator, name.indicator])[is.na(object1@BE)]		
+			if(!isNullObject(object1@PS)) object1@PS[is.na(object1@PS)] <- (object2$psi[name.indicator, name.indicator])[is.na(object1@PS)]
+			if(!isNullObject(object1@AL)) object1@AL[is.na(object1@AL)] <- (object2$alpha[name.indicator,])[is.na(object1@AL)]		
+			if(!isNullObject(object1@BE)) object1@BE[is.na(object1@BE)] <- (object2$beta[name.indicator, name.indicator])[is.na(object1@BE)]		
 		} else if (modelType == "Path.exo") {
 			ny <- nrow(object1@PS)
 			nx <- nrow(object1@PH)
 			name.indicator <- c(paste("x", 1:nx, sep=""), paste("y", 1:ny, sep=""))
 			k.list <- 1:nx
 			e.list <- (nx+1):(nx+ny)
-			if(!is.null.object(object1@PS)) object1@PS[is.na(object1@PS)] <- ((object2$psi[name.indicator, name.indicator])[e.list, e.list])[is.na(object1@PS)]
-			if(!is.null.object(object1@AL)) object1@AL[is.na(object1@AL)] <- ((object2$alpha[name.indicator,])[e.list])[is.na(object1@AL)]		
-			if(!is.null.object(object1@BE)) object1@BE[is.na(object1@BE)] <- ((object2$beta[name.indicator, name.indicator])[e.list, e.list])[is.na(object1@BE)]		
-			if(!is.null.object(object1@PH)) object1@PH[is.na(object1@PH)] <- ((object2$psi[name.indicator, name.indicator])[k.list, k.list])[is.na(object1@PH)]
-			if(!is.null.object(object1@KA)) object1@KA[is.na(object1@KA)] <- ((object2$alpha[name.indicator,])[e.list])[is.na(object1@KA)]		
-			if(!is.null.object(object1@GA)) object1@GA[is.na(object1@GA)] <- ((object2$beta[name.indicator, name.indicator])[e.list, k.list])[is.na(object1@GA)]	
+			if(!isNullObject(object1@PS)) object1@PS[is.na(object1@PS)] <- ((object2$psi[name.indicator, name.indicator])[e.list, e.list])[is.na(object1@PS)]
+			if(!isNullObject(object1@AL)) object1@AL[is.na(object1@AL)] <- ((object2$alpha[name.indicator,])[e.list])[is.na(object1@AL)]		
+			if(!isNullObject(object1@BE)) object1@BE[is.na(object1@BE)] <- ((object2$beta[name.indicator, name.indicator])[e.list, e.list])[is.na(object1@BE)]		
+			if(!isNullObject(object1@PH)) object1@PH[is.na(object1@PH)] <- ((object2$psi[name.indicator, name.indicator])[k.list, k.list])[is.na(object1@PH)]
+			if(!isNullObject(object1@KA)) object1@KA[is.na(object1@KA)] <- ((object2$alpha[name.indicator,])[e.list])[is.na(object1@KA)]		
+			if(!isNullObject(object1@GA)) object1@GA[is.na(object1@GA)] <- ((object2$beta[name.indicator, name.indicator])[e.list, k.list])[is.na(object1@GA)]	
 		} else if (modelType == "SEM") {
 			ny <- nrow(object1@LY)
 			ne <- nrow(object1@PS)
 			name.indicator <- paste("y", 1:ny, sep="")
 			name.factor <- paste("e", 1:ne, sep="")
-			if(!is.null.object(object1@LY)) object1@LY[is.na(object1@LY)] <- (object2$lambda[name.indicator, name.factor])[is.na(object1@LY)]
-			if(!is.null.object(object1@PS)) object1@PS[is.na(object1@PS)] <- (object2$psi[name.factor, name.factor])[is.na(object1@PS)]
-			if(!is.null.object(object1@TE)) object1@TE[is.na(object1@TE)] <- (object2$theta[name.indicator, name.indicator])[is.na(object1@TE)]
-			if(!is.null.object(object1@TY)) object1@TY[is.na(object1@TY)] <- (object2$nu[name.indicator,])[is.na(object1@TY)]
-			if(!is.null.object(object1@AL)) object1@AL[is.na(object1@AL)] <- (object2$alpha[name.factor,])[is.na(object1@AL)]		
-			if(!is.null.object(object1@BE)) object1@BE[is.na(object1@BE)] <- (object2$beta[name.factor, name.factor])[is.na(object1@BE)]		
+			if(!isNullObject(object1@LY)) object1@LY[is.na(object1@LY)] <- (object2$lambda[name.indicator, name.factor])[is.na(object1@LY)]
+			if(!isNullObject(object1@PS)) object1@PS[is.na(object1@PS)] <- (object2$psi[name.factor, name.factor])[is.na(object1@PS)]
+			if(!isNullObject(object1@TE)) object1@TE[is.na(object1@TE)] <- (object2$theta[name.indicator, name.indicator])[is.na(object1@TE)]
+			if(!isNullObject(object1@TY)) object1@TY[is.na(object1@TY)] <- (object2$nu[name.indicator,])[is.na(object1@TY)]
+			if(!isNullObject(object1@AL)) object1@AL[is.na(object1@AL)] <- (object2$alpha[name.factor,])[is.na(object1@AL)]		
+			if(!isNullObject(object1@BE)) object1@BE[is.na(object1@BE)] <- (object2$beta[name.factor, name.factor])[is.na(object1@BE)]		
 		} else if (modelType == "SEM.exo") {
 			ny <- nrow(object1@LY)
 			nx <- nrow(object1@LX)
@@ -269,21 +269,21 @@ setMethod("combineObject", signature(object1="SimFreeParam", object2="list"), de
 			name.factor <- c(paste("k", 1:nk, sep=""), paste("e", 1:ne, sep=""))
 			k.list <- 1:nk
 			e.list <- (nk+1):(nk+ne)
-			if(!is.null.object(object1@PS)) object1@PS[is.na(object1@PS)] <- ((object2$psi[name.factor, name.factor])[e.list, e.list])[is.na(object1@PS)]
-			if(!is.null.object(object1@AL)) object1@AL[is.na(object1@AL)] <- ((object2$alpha[name.factor,])[e.list])[is.na(object1@AL)]		
-			if(!is.null.object(object1@BE)) object1@BE[is.na(object1@BE)] <- ((object2$beta[name.factor, name.factor])[e.list, e.list])[is.na(object1@BE)]		
-			if(!is.null.object(object1@PH)) object1@PH[is.na(object1@PH)] <- ((object2$psi[name.factor, name.factor])[k.list, k.list])[is.na(object1@PH)]
-			if(!is.null.object(object1@KA)) object1@KA[is.na(object1@KA)] <- ((object2$alpha[name.factor,])[e.list])[is.na(object1@KA)]		
-			if(!is.null.object(object1@GA)) object1@GA[is.na(object1@GA)] <- ((object2$beta[name.factor, name.factor])[e.list, k.list])[is.na(object1@GA)]	
+			if(!isNullObject(object1@PS)) object1@PS[is.na(object1@PS)] <- ((object2$psi[name.factor, name.factor])[e.list, e.list])[is.na(object1@PS)]
+			if(!isNullObject(object1@AL)) object1@AL[is.na(object1@AL)] <- ((object2$alpha[name.factor,])[e.list])[is.na(object1@AL)]		
+			if(!isNullObject(object1@BE)) object1@BE[is.na(object1@BE)] <- ((object2$beta[name.factor, name.factor])[e.list, e.list])[is.na(object1@BE)]		
+			if(!isNullObject(object1@PH)) object1@PH[is.na(object1@PH)] <- ((object2$psi[name.factor, name.factor])[k.list, k.list])[is.na(object1@PH)]
+			if(!isNullObject(object1@KA)) object1@KA[is.na(object1@KA)] <- ((object2$alpha[name.factor,])[e.list])[is.na(object1@KA)]		
+			if(!isNullObject(object1@GA)) object1@GA[is.na(object1@GA)] <- ((object2$beta[name.factor, name.factor])[e.list, k.list])[is.na(object1@GA)]	
 			x.list <- 1:nx
 			y.list <- (nx+1):(nx+ny)
-			if(!is.null.object(object1@LY)) object1@LY[is.na(object1@LY)] <- ((object2$lambda[name.indicator, name.factor])[y.list, e.list])[is.na(object1@LY)]
-			if(!is.null.object(object1@TE)) object1@TE[is.na(object1@TE)] <- ((object2$theta[name.indicator, name.indicator])[y.list, y.list])[is.na(object1@TE)]
-			if(!is.null.object(object1@TY)) object1@TY[is.na(object1@TY)] <- ((object2$nu[name.indicator,])[y.list])[is.na(object1@TY)]
-			if(!is.null.object(object1@LX)) object1@LX[is.na(object1@LX)] <- ((object2$lambda[name.indicator, name.factor])[x.list, k.list])[is.na(object1@LX)]
-			if(!is.null.object(object1@TD)) object1@TD[is.na(object1@TD)] <- ((object2$theta[name.indicator, name.indicator])[x.list, x.list])[is.na(object1@TD)]
-			if(!is.null.object(object1@TX)) object1@TX[is.na(object1@TX)] <- ((object2$nu[name.indicator,])[x.list])[is.na(object1@TX)]
-			if(!is.null.object(object1@TH)) object1@TH[is.na(object1@TH)] <- ((object2$theta[name.indicator, name.indicator])[x.list, y.list])[is.na(object1@TH)]
+			if(!isNullObject(object1@LY)) object1@LY[is.na(object1@LY)] <- ((object2$lambda[name.indicator, name.factor])[y.list, e.list])[is.na(object1@LY)]
+			if(!isNullObject(object1@TE)) object1@TE[is.na(object1@TE)] <- ((object2$theta[name.indicator, name.indicator])[y.list, y.list])[is.na(object1@TE)]
+			if(!isNullObject(object1@TY)) object1@TY[is.na(object1@TY)] <- ((object2$nu[name.indicator,])[y.list])[is.na(object1@TY)]
+			if(!isNullObject(object1@LX)) object1@LX[is.na(object1@LX)] <- ((object2$lambda[name.indicator, name.factor])[x.list, k.list])[is.na(object1@LX)]
+			if(!isNullObject(object1@TD)) object1@TD[is.na(object1@TD)] <- ((object2$theta[name.indicator, name.indicator])[x.list, x.list])[is.na(object1@TD)]
+			if(!isNullObject(object1@TX)) object1@TX[is.na(object1@TX)] <- ((object2$nu[name.indicator,])[x.list])[is.na(object1@TX)]
+			if(!isNullObject(object1@TH)) object1@TH[is.na(object1@TH)] <- ((object2$theta[name.indicator, name.indicator])[x.list, y.list])[is.na(object1@TH)]
 		} else {
 			stop("something wrong!")
 		}

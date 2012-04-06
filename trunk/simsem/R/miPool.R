@@ -125,7 +125,7 @@ miPool <- function(Result.l) {
 	OutputFMI2 <- Result.l[[which(Converged==TRUE)[1]]]@se
 
 	for(i in 1:length(paramNames)) {
-		if(!is.null.object(slot(OutputCoef, paramNames[i]))) {
+		if(!isNullObject(slot(OutputCoef, paramNames[i]))) {
 			mparam <- as.matrix(sapply(Result.l, function(result, slotname1, slotname2) { slot(slot(result, slotname1), slotname2)}, slotname1 = "param", slotname2 = paramNames[i]))
 			if(ncol(mparam) == 1) mparam <- t(mparam) # Prevent single element matrix problem
 			mparam <- mparam[,1] 

@@ -148,8 +148,8 @@ simResult <- function(nRep=NULL, objData=NULL, objModel=NULL, objMissing=new("Nu
 			} 
 		} 
 	}
-	if(is.null(pmMCAR)) ifelse(is.null.object(objMissing), pmMCAR <- 0, pmMCAR <- objMissing@pmMCAR)
-	if(is.null(pmMAR)) ifelse(is.null.object(objMissing), pmMAR <- 0, pmMAR <- objMissing@pmMAR)
+	if(is.null(pmMCAR)) ifelse(isNullObject(objMissing), pmMCAR <- 0, pmMCAR <- objMissing@pmMCAR)
+	if(is.null(pmMAR)) ifelse(isNullObject(objMissing), pmMAR <- 0, pmMAR <- objMissing@pmMAR)
 	Result <- new("SimResult", modelType=modelType, nRep=nRep, coef=coef, se=se, fit=fit, converged=converged, 
 		seed=seed, paramValue=param, FMI1=FMI1, FMI2=FMI2, stdCoef=std, n=n, pmMCAR=pmMCAR, pmMAR=pmMAR)
 	return <- Result

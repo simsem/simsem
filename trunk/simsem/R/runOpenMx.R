@@ -25,15 +25,15 @@ runOpenMx <- function(object, Data) {
           # CM <- cov(data)
           # n <- nrow(data)	
           # start <- object@start
-          # if(!is.null.object(object@equalCon)) {
-                  # Labels <- constrain.matrices(Labels, object@equalCon)
-                  # start <- constrain.matrices(start, object@equalCon)
+          # if(!isNullObject(object@equalCon)) {
+                  # Labels <- constrainMatrices(Labels, object@equalCon)
+                  # start <- constrainMatrices(start, object@equalCon)
           # }
           # param <- collapseExo(param)
           # nk <- ncol(param@PS)
           # Labels <- collapseExo(Labels, value = NA)
           # start <- collapseExo(start)
-          # start <- find.OpenMx.values(param, start)
+          # start <- findOpenMxValues(param, start)
           # matrixLY <- mxMatrix(type="Full", nrow=ni, ncol=nk, free=as.vector(is.na(param@LY)), values=as.vector(start@LY), labels=as.vector(Labels@LY), name="LY")#
           # matrixPS <- mxMatrix(type="Symm", nrow=nk, ncol=nk, free=as.vector(is.na(param@PS)), values=as.vector(start@PS), labels=as.vector(Labels@PS), name="PS")#
           # matrixTE <- mxMatrix(type="Symm", nrow=ni, ncol=ni, free=as.vector(is.na(param@TE)), values=as.vector(start@TE), labels=as.vector(Labels@TE), name="TE")#

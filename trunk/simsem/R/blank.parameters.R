@@ -1,16 +1,16 @@
 blankParameters <- function(object) {
-	if(!is.null.object(object@LY)) object@LY[,] <- NA
-	if(!is.null.object(object@TE)) object@TE[,] <- NA
-	if(!is.null.object(object@PS)) object@PS[,] <- NA
-	if(!is.null.object(object@BE)) object@BE[,] <- NA
-	if(!is.null.object(object@TY)) object@TY[] <- NA
-	if(!is.null.object(object@AL)) object@AL[] <- NA
-	if(!is.null.object(object@LX)) object@LX[,] <- NA
-	if(!is.null.object(object@TD)) object@TD[,] <- NA
-	if(!is.null.object(object@PH)) object@PH[,] <- NA
-	if(!is.null.object(object@GA)) object@GA[,] <- NA
-	if(!is.null.object(object@TX)) object@TX[] <- NA
-	if(!is.null.object(object@KA)) object@KA[] <- NA
-	if(!is.null.object(object@TH)) object@TH[,] <- NA
+	if(!isNullObject(object@LY)) object@LY[,] <- NA
+	if(!isNullObject(object@TE)) object@TE[,] <- NA
+	if(!isNullObject(object@PS)) object@PS[,] <- NA
+	if(!isNullObject(object@BE)) object@BE[,] <- NA
+	if(!isNullObject(object@TY)) object@TY[] <- NA
+	if(!isNullObject(object@AL)) object@AL[] <- NA
+	if(!isNullObject(object@LX)) object@LX[,] <- NA
+	if(!isNullObject(object@TD)) object@TD[,] <- NA
+	if(!isNullObject(object@PH)) object@PH[,] <- NA
+	if(!isNullObject(object@GA)) object@GA[,] <- NA
+	if(!isNullObject(object@TX)) object@TX[] <- NA
+	if(!isNullObject(object@KA)) object@KA[] <- NA
+	if(!isNullObject(object@TH)) object@TH[,] <- NA
 	return(object)
 }

@@ -199,10 +199,10 @@ setClassUnion("VirtualDist", c("SimUnif", "SimNorm", "SimBeta", "SimBinom", "Sim
 # Methods:
 #	adjust
 #	combineObject
-#	count.random.object
-#	is.null.object
+#	countRandomObject
+#	isNullObject
 #	run
-#	starting.values
+#	startingValues
 #	summaryShort
 #	summary
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
@@ -249,8 +249,8 @@ setClass("SimMatrix",
 # 	param: 	All population/starting values of those free parameters
 # Methods:
 #	adjust
-#	count.random.object
-#	is.null.object
+#	countRandomObject
+#	isNullObject
 #	run
 #	summary
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
@@ -284,10 +284,10 @@ setClass("SymMatrix",
 # Methods:
 #	adjust
 #	combineObject
-#	count.random.object
-#	is.null.object
+#	countRandomObject
+#	isNullObject
 #	run
-#	starting.values
+#	startingValues
 #	summaryShort
 #	summary
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
@@ -429,11 +429,11 @@ setClass("NullSimVector", contains="SimVector")
 #	TH:
 #	RTH:		SimMatrix.c Measurement error correlation between X indicators and Y indicators 
 # Methods:
-#	count.random.object
-#	is.null.object
+#	countRandomObject
+#	isNullObject
 #	simModel
 #	run
-#	starting.values
+#	startingValues
 #	summary
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 7, 2011
@@ -574,7 +574,7 @@ setClass("NullSimSet", contains="SimSet")
 # Methods:
 #	combineObject
 #	createImpliedMACS
-#	divide.object
+#	divideObject
 #	summary
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 7, 2011
@@ -683,8 +683,8 @@ setClass("MatrixSet",
 #	KA:		vector.c of Factor mean of exogenous factors 
 #	TH:		matrix.c Measurement error covariance between X indicators and Y indicators 
 # Methods:
-#	constrain.matrices
-#	tag.headers
+#	constrainMatrices
+#	tagHeaders
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 7, 2011
 
@@ -735,9 +735,9 @@ setClass("VirtualRSet",
 #			name can be seen in simSetCFA, simSetPath, or simSetSEM, depending on analysis model you specify.
 #	modelType:	Analysis model (CFA, SEM, Path)
 # Methods:
-#	constrain.matrices(list, SimEqualCon)
-#	constrain.matrices(VirtualRSet, SimEqualCon)
-#	is.null.object
+#	constrainMatrices(list, SimEqualCon)
+#	constrainMatrices(VirtualRSet, SimEqualCon)
+#	isNullObject
 #	summary
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 7, 2011
@@ -794,8 +794,8 @@ setClass("NullSimEqualCon", contains="SimEqualCon",
 #			name can be seen in VirtualRSet definition.
 #	modelType:	Analysis model (CFA, SEM, Path)
 # Methods:
-#	constrain.matrices(VirtualRSet, SimREqualCon)
-#	is.null.object
+#	constrainMatrices(VirtualRSet, SimREqualCon)
+#	isNullObject
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 7, 2011
 
@@ -833,7 +833,7 @@ setClass("NullSimREqualCon", contains="SimREqualCon",
 # Parent Class: VirtualRSet
 # Child Class:	None
 # Methods:
-#	find.OpenMx.values
+#	findOpenMxValues
 #	makeLabels
 #	simModel
 #	summary
@@ -864,12 +864,12 @@ setClass("SimLabels",
 # SimRSet
 # Class -- simsem package
 # Set of vectors and matrices arrangements that will save values that will be used for various purposes. 
-# Constructor:	default.starting.values(object)
+# Constructor:	default.startingValues(object)
 # Parent Class: VirtualRSet
 # Child Class:	None
 # Methods:
 #	createImpliedMACS
-#	find.OpenMx.values
+#	findOpenMxValues
 #	summary
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 7, 2011
@@ -887,7 +887,7 @@ setClass("SimRSet",
 # Child Class:	None
 # Methods:
 #	createImpliedMACS
-#	find.OpenMx.values
+#	findOpenMxValues
 #	summary
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 7, 2011
@@ -938,7 +938,7 @@ setClass("NullRSet",
 # Parent Class: SimSet
 # Child Class:	NullSimMisspec
 # Methods:
-#	is.null.object
+#	isNullObject
 #	run
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 7, 2011

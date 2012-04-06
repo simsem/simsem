@@ -1,5 +1,5 @@
-setMethod("count.random.object", signature="SimMatrix", definition=function(object) {
-		if(is.null.object(object)) {
+setMethod("countRandomObject", signature="SimMatrix", definition=function(object) {
+		if(isNullObject(object)) {
 			return(0)
 		} else {
 			Labels <- object@param
@@ -8,8 +8,8 @@ setMethod("count.random.object", signature="SimMatrix", definition=function(obje
 	}
 )
 
-setMethod("count.random.object", signature="SymMatrix", definition=function(object) {
-		if(is.null.object(object)) {
+setMethod("countRandomObject", signature="SymMatrix", definition=function(object) {
+		if(isNullObject(object)) {
 			return(0)
 		} else {
 			Labels <- object@param
@@ -18,8 +18,8 @@ setMethod("count.random.object", signature="SymMatrix", definition=function(obje
 	}
 )
 
-setMethod("count.random.object", signature="SimVector", definition=function(object) {
-		if(is.null.object(object)) {
+setMethod("countRandomObject", signature="SimVector", definition=function(object) {
+		if(isNullObject(object)) {
 			return(0)
 		} else {
 			Labels <- object@param
@@ -28,34 +28,34 @@ setMethod("count.random.object", signature="SimVector", definition=function(obje
 	}
 )
 
-setMethod("count.random.object", signature="SimSet", definition=function(object) {
-	return(sum(c(count.random.object(object@LY),
-		count.random.object(object@RTE),
-		count.random.object(object@VTE),
-		count.random.object(object@RPS),
-		count.random.object(object@VPS),
-		count.random.object(object@BE),
-		count.random.object(object@TY),
-		count.random.object(object@AL),
-		count.random.object(object@ME),
-		count.random.object(object@MY),
-		count.random.object(object@VE),
-		count.random.object(object@VY),
-		count.random.object(object@LX),
-		count.random.object(object@RTD),
-		count.random.object(object@VTD),
-		count.random.object(object@RPH),
-		count.random.object(object@GA),
-		count.random.object(object@TX),
-		count.random.object(object@KA),
-		count.random.object(object@MX),
-		count.random.object(object@VPH),
-		count.random.object(object@VX),
-		count.random.object(object@RTH))))
+setMethod("countRandomObject", signature="SimSet", definition=function(object) {
+	return(sum(c(countRandomObject(object@LY),
+		countRandomObject(object@RTE),
+		countRandomObject(object@VTE),
+		countRandomObject(object@RPS),
+		countRandomObject(object@VPS),
+		countRandomObject(object@BE),
+		countRandomObject(object@TY),
+		countRandomObject(object@AL),
+		countRandomObject(object@ME),
+		countRandomObject(object@MY),
+		countRandomObject(object@VE),
+		countRandomObject(object@VY),
+		countRandomObject(object@LX),
+		countRandomObject(object@RTD),
+		countRandomObject(object@VTD),
+		countRandomObject(object@RPH),
+		countRandomObject(object@GA),
+		countRandomObject(object@TX),
+		countRandomObject(object@KA),
+		countRandomObject(object@MX),
+		countRandomObject(object@VPH),
+		countRandomObject(object@VX),
+		countRandomObject(object@RTH))))
 	}
 )
 
-setMethod("count.random.object", signature="matrix", definition=function(object, symmetric=FALSE) {
+setMethod("countRandomObject", signature="matrix", definition=function(object, symmetric=FALSE) {
 	if(symmetric){
 		return(sum(is.na(diag(object))) + sum(is.na(object[upper.tri(object)])))
 	} else {
@@ -63,23 +63,23 @@ setMethod("count.random.object", signature="matrix", definition=function(object,
 	}
 })
 
-setMethod("count.random.object", signature="vector", definition=function(object){
+setMethod("countRandomObject", signature="vector", definition=function(object){
 	return(sum(is.na(object)))
 })
 
-setMethod("count.random.object", signature="VirtualRSet", definition=function(object) {
-	return(sum(c(count.random.object(object@LY, symmetric=FALSE),
-		count.random.object(object@TE, symmetric=TRUE),
-		count.random.object(object@PS, symmetric=TRUE),
-		count.random.object(object@BE, symmetric=FALSE),
-		count.random.object(object@TY),
-		count.random.object(object@AL),
-		count.random.object(object@LX, symmetric=FALSE),
-		count.random.object(object@TD, symmetric=TRUE),
-		count.random.object(object@PH, symmetric=TRUE),
-		count.random.object(object@GA, symmetric=FALSE),
-		count.random.object(object@TX),
-		count.random.object(object@KA),
-		count.random.object(object@TH, symmetric=FALSE))))
+setMethod("countRandomObject", signature="VirtualRSet", definition=function(object) {
+	return(sum(c(countRandomObject(object@LY, symmetric=FALSE),
+		countRandomObject(object@TE, symmetric=TRUE),
+		countRandomObject(object@PS, symmetric=TRUE),
+		countRandomObject(object@BE, symmetric=FALSE),
+		countRandomObject(object@TY),
+		countRandomObject(object@AL),
+		countRandomObject(object@LX, symmetric=FALSE),
+		countRandomObject(object@TD, symmetric=TRUE),
+		countRandomObject(object@PH, symmetric=TRUE),
+		countRandomObject(object@GA, symmetric=FALSE),
+		countRandomObject(object@TX),
+		countRandomObject(object@KA),
+		countRandomObject(object@TH, symmetric=FALSE))))
 	}
 )

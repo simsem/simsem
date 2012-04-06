@@ -18,9 +18,9 @@ setMethod("simModel", signature(object="SimFreeParam"), definition=function(obje
 	if(!is.null(start)) {
 		if(modelType != start@modelType) stop("Starting Values and Parameters do not have the same tag")
 	} else {
-		start <- default.starting.values(object)
+		start <- default.startingValues(object)
 	}
-	if(!is.null.object(SimEqualCon)) {
+	if(!isNullObject(SimEqualCon)) {
 		if(modelType != equalCon@modelType) stop("SimEqualCon and SimFreeParam do not have the same tag")
 	}
 	estimator <- tolower(estimator)
@@ -38,12 +38,12 @@ setMethod("simModel", signature(object="SimFreeParam"), definition=function(obje
 setMethod("simModel", signature(object="SimSet"), definition=function(object, equalCon=new("NullSimEqualCon"), package="lavaan", trial=10, estimator="ML", auxiliary=new("NullVector"), indicatorLab=new("NullVector"), factorLab=new("NullVector")) {
 	#browser()
 	if(length(intersect(indicatorLab, auxiliary)) != 0) stop("There are the same variables in the analysis model and in the auxiliary variables list")
-	start <- starting.values(object, trial)
+	start <- startingValues(object, trial)
 	start <- reduce.matrices(start)
 	#browser()
 	freeParameters <- create.free.parameters(object)
 	modelType <- object@modelType
-	if(!is.null.object(equalCon)) {
+	if(!isNullObject(equalCon)) {
 		if(modelType != equalCon@modelType) stop("SimEqualCon and SimSet do not have the same tag")
 	}
 	estimator <- tolower(estimator)
@@ -54,7 +54,7 @@ setMethod("simModel", signature(object="SimSet"), definition=function(object, eq
 # 	equalCon:		simEqualCon.c that save constraints specified by users. The default is no constraint.
 #	package:	Desired analysis package
 # 	estimator: 	Method of estimation
-#Description: 	This function will create starting.values from parameter values. If the parameters are specified as distribution object,
+#Description: 	This function will create startingValues from parameter values. If the parameters are specified as distribution object,
 #		the model will find the average of 10 samples as starting values. Then, set up all slots needed for SimModel.c 
 #Return: 	SimModel.c with specification from the function.
 

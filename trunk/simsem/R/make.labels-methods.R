@@ -9,7 +9,7 @@
 # Date Modified: February 24, 2011
 
 setMethod("makeLabels", signature="vector", definition=function(object, name, package) {
-	if(is.null.object(object)) {
+	if(isNullObject(object)) {
 		return(new("NullVector"))
 	} else {
 		Length <- length(object)
@@ -32,7 +32,7 @@ setMethod("makeLabels", signature="vector", definition=function(object, name, pa
 #Return: 	vector.c with labels in it
 
 setMethod("makeLabels", signature="matrix", definition=function(object, name, package, symmetric=FALSE) {
-	if(is.null.object(object)) {
+	if(isNullObject(object)) {
 		return(new("NullMatrix"))
 	} else {
 		np <- nrow(object)

@@ -13,7 +13,7 @@ runRep <- function(object, objData, objModel, objMissing=new("NullSimMissing"), 
 	if(is.null(n)) n <- objData@n
 	pmMCAR <- object[[3]]
 	pmMAR <- object[[4]]
-	if(is.null.object(objMissing)) {
+	if(isNullObject(objMissing)) {
 		if(!is.null(pmMAR) | !is.null(pmMCAR)) {
 			if(is.null(pmMCAR)) pmMCAR <- 0
 			if(is.null(pmMAR)) pmMAR <- 0
@@ -65,18 +65,18 @@ runRep <- function(object, objData, objModel, objMissing=new("NullSimMissing"), 
 		param <- NA
 		Labels <- makeLabels(temp@param, "OpenMx") #As a quick default to use OpenMx
 		if(converged) {
-			coef<- vectorize.object(temp@coef, Labels)
-			se <- vectorize.object(temp@se, Labels)
+			coef<- vectorizeObject(temp@coef, Labels)
+			se <- vectorizeObject(temp@se, Labels)
 			fit <- temp@fit
 			stdSet <- standardize(temp)
-			std <- vectorize.object(stdSet, Labels)
+			std <- vectorizeObject(stdSet, Labels)
 			if(is(temp, "SimModelMIOut")) {
 				#Can we make vectorize object work with simModelOutMI too?
-				FMI1 <- vectorize.object(temp@FMI1, Labels)
-				FMI2 <- vectorize.object(temp@FMI2, Labels)
+				FMI1 <- vectorizeObject(temp@FMI1, Labels)
+				FMI2 <- vectorizeObject(temp@FMI2, Labels)
 			}
-			if(!is.null.object(temp@paramValue)) {
-				param <- vectorize.object(temp@paramValue, Labels)
+			if(!isNullObject(temp@paramValue)) {
+				param <- vectorizeObject(temp@paramValue, Labels)
 			} else {
 				param <- NA
 			}

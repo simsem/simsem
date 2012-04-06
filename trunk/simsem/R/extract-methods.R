@@ -13,7 +13,7 @@ setMethod("extract", signature="SimDataDist", definition=function(object, pos) {
 )
 
 setMethod("extract", signature="vector", definition=function(object, pos=NULL) {
-	if(is.null.object(object)) return(object)
+	if(isNullObject(object)) return(object)
 	if(is.null(pos)) {
 		return(object)
 	} else {
@@ -23,7 +23,7 @@ setMethod("extract", signature="vector", definition=function(object, pos=NULL) {
 )
 
 setMethod("extract", signature="matrix", definition=function(object, row=NULL, col=NULL) {
-	if(is.null.object(object)) return(object)
+	if(isNullObject(object)) return(object)
 	if(is.null(row)) row <- 1:nrow(object)
 	if(is.null(col)) col <- 1:ncol(object)
 	if(length(row) > 1 & length(col) > 1) {
@@ -36,7 +36,7 @@ setMethod("extract", signature="matrix", definition=function(object, row=NULL, c
 )
 
 setMethod("extract", signature="SimMatrix", definition=function(object, row=NULL, col=NULL) {
-	if(is.null.object(object)) return(object)
+	if(isNullObject(object)) return(object)
 	if(is.null(row)) row <- 1:nrow(object@free)
 	if(is.null(col)) col <- 1:ncol(object@free)
 	object@free <- extract(object@free, row, col)
@@ -46,7 +46,7 @@ setMethod("extract", signature="SimMatrix", definition=function(object, row=NULL
 )
 
 setMethod("extract", signature="SimVector", definition=function(object, pos=NULL) {
-	if(is.null.object(object)) return(object)
+	if(isNullObject(object)) return(object)
 	if(is.null(pos)) pos <- 1:length(object@free)
 	object@free <- object@free[pos]
 	object@param <- object@param[pos]

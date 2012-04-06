@@ -211,7 +211,7 @@ setMethod("run",
 #Return: 	matrix.c of the example of drawing a sample from SimMatrix.c
 
 setMethod("run", signature="SymMatrix", definition= function(object) {
-		if(is.null.object(object)) return(new("NullMatrix"))
+		if(isNullObject(object)) return(new("NullMatrix"))
 		Matrix <- object@free
 		Nrow <- nrow(Matrix)
 		Ncol <- ncol(Matrix)
@@ -238,7 +238,7 @@ setMethod("run", signature="SymMatrix", definition= function(object) {
 #Return: 	symmetric matrix.c of the example of drawing a sample from SymMatrix.c
 
 setMethod("run", signature="SimVector", definition= function(object) {
-		if(is.null.object(object)) return(new("NullVector"))
+		if(isNullObject(object)) return(new("NullVector"))
 		Vector <- object@free
 		Length <- length(Vector)
 		for(i in 1:Length) {
@@ -319,9 +319,9 @@ setMethod("run", signature(object="SimSet"), definition=function(object, equalCo
 			KA = run(object@KA),
 			TH = run(object@TH),
 			RTH = run(object@RTH))
-		if(!is.null.object(equalCon)) {
+		if(!isNullObject(equalCon)) {
 			if(object@modelType != equalCon@modelType) stop("Please provide same tags of SimSet and constraint")
-			param <- constrain.matrices(param, equalCon)
+			param <- constrainMatrices(param, equalCon)
 		}
 		out <- fillParam(param, object@modelType)
 		if(makeList) {
@@ -401,11 +401,11 @@ setMethod("run", signature="SimModel", definition=function(object, data, simMiss
 		data <- DataOut@data
 	}
 	if(is.null(colnames(data))) colnames(data) <- paste("y", 1:ncol(data))
-	if(is.null.object(object@auxiliary)) {
+	if(isNullObject(object@auxiliary)) {
 		if(!(length(simMissing@cov) == 1 && simMissing@cov == 0)) object@auxiliary <- simMissing@cov
 	}
-	if(is.null.object(object@indicatorLab)) {
-		if(is.null.object(object@auxiliary)) {
+	if(isNullObject(object@indicatorLab)) {
+		if(isNullObject(object@auxiliary)) {
 			object@indicatorLab <- colnames(data)
 		} else if (is.numeric(object@auxiliary)) {
 			if(max(object@auxiliary) > ncol(data)) stop("The maximum index in the auxiliary variable set is greater than the number of variables in the data.")
@@ -422,7 +422,7 @@ setMethod("run", signature="SimModel", definition=function(object, data, simMiss
 	miss <- sum(is.na(data)) > 0	
 	if(is.null(estimator)) estimator <- object@estimator
 	estimator <- tolower(estimator)
-	if(!is.null.object(simMissing) && simMissing@numImps > 0) {
+	if(!isNullObject(simMissing) && simMissing@numImps > 0) {
 		Output <- runMI(data, object, simMissing@numImps,simMissing@impMethod)
 	} else {
 		if(object@package == "OpenMx") {
@@ -441,7 +441,7 @@ setMethod("run", signature="SimModel", definition=function(object, data, simMiss
 		check <- all.equal(param, Output@param)
 		usedX <- NULL
 		usedY <- NULL
-		if(!(length(check) == 1 && check == TRUE) & !is.null.object(object@auxiliary)) {
+		if(!(length(check) == 1 && check == TRUE) & !isNullObject(object@auxiliary)) {
 			usedY <- which(!(colnames(data) %in% object@auxiliary))
 			nx <- 0
 			if(object@modelType == "SEM.exo") nx <- nrow(object@param@LX)
@@ -453,7 +453,7 @@ setMethod("run", signature="SimModel", definition=function(object, data, simMiss
 		check <- all.equal(param, Output@param)
 		if(length(check) == 1 && check == TRUE) {
 			paramOut <- DataOut@paramOut
-			if(!is.null.object(object@auxiliary)) paramOut <- extract(paramOut, y=usedY, x=usedX)
+			if(!isNullObject(object@auxiliary)) paramOut <- extract(paramOut, y=usedY, x=usedX)
 			Output@paramValue <- paramOut
 		}
 	}
@@ -497,7 +497,7 @@ setMethod("run", signature="SimDataDist", definition=function(object, n, m, cm) 
 	library(MASS)
 	Data <- NULL
 	# Check dim(M) dim(CM) dim(copula) are equal
-	if (is.null.object(object)) {
+	if (isNullObject(object)) {
 		Data <- mvrnorm(n, m, cm)
 	} else {
 		library(copula)

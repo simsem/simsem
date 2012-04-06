@@ -98,7 +98,7 @@ setMethod("createImpliedMACS", signature="SimModelOut", definition=function(obje
 setMethod("createImpliedMACS", signature="SimDataOut", definition=function(object, misspec=FALSE) {
 		result <- NULL
 		if(misspec) {
-			if(is.null.object(object@misspecOut)) {
+			if(isNullObject(object@misspecOut)) {
 				stop("The data output object does not have model misspecification.")
 			} else {
 				result <- createImpliedMACS(object@misspecOut)

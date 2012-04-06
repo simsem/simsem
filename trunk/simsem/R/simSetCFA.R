@@ -27,7 +27,7 @@ simSetCFA <- function(...) {
 		TE <- list(new("NullSymMatrix"))
 		ifelse(contain(2, position), RTE <- List[position == 2], stop("No error correlation object in CFA"))
 		ifelse(contain(4, position), VTE <- List[position == 4], VTE <- list(new("NullSimVector")))	
-		ifelse(contain(5, position), VY <- List[position == 5], ifelse(is.null.object(VTE[[1]]), { VY <- list(freeVector(1, ni)); comment(VY[[1]]) <- "default"}, VY <- list(new("NullSimVector"))))
+		ifelse(contain(5, position), VY <- List[position == 5], ifelse(isNullObject(VTE[[1]]), { VY <- list(freeVector(1, ni)); comment(VY[[1]]) <- "default"}, VY <- list(new("NullSimVector"))))
 	}
 	if(contain(11, position)) {
 		PS <- List[position == 11]
@@ -39,7 +39,7 @@ simSetCFA <- function(...) {
 		ifelse(contain(9, position), VE <- List[position == 9], { VE <- list(constantVector(1, nk)); comment(VE[[1]]) <- "default"})
 	}
 	ifelse(contain(8, position), MY <- List[position == 8], MY <- list(new("NullSimVector")))
-	ifelse(contain(6, position), TY <- List[position == 6], ifelse(is.null.object(MY[[1]]), { TY <- list(freeVector(0, ni)); comment(TY[[1]]) <- "default"}, TY <- list(new("NullSimVector"))))
+	ifelse(contain(6, position), TY <- List[position == 6], ifelse(isNullObject(MY[[1]]), { TY <- list(freeVector(0, ni)); comment(TY[[1]]) <- "default"}, TY <- list(new("NullSimVector"))))
 	ifelse(contain(7, position), ME <- List[position == 7], { ME <- list(constantVector(0, nk)); comment(ME[[1]]) <- "default"})
 	Output <- new("SimSet", LY=LY[[1]], PS=PS[[1]], RPS=RPS[[1]], TE=TE[[1]], RTE=RTE[[1]], VE=VE[[1]], VPS=VE[[1]], VTE=VTE[[1]], VY=VY[[1]], TY=TY[[1]], MY=MY[[1]], ME=ME[[1]], AL=ME[[1]], modelType="CFA")
 	return(Output)

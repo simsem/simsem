@@ -33,10 +33,10 @@ simSetPath <- function(..., exo = FALSE) {
 		PS <- list(new("NullSymMatrix"))
 		ifelse(contain(2, position), RPS <- List[position == 2], stop("No residual correlation object between factor.ETA"))
 		ifelse(contain(3, position), VPS <- List[position == 3], VPS <- list(new("NullSimVector")))
-		ifelse(contain(4, position), VE <- List[position == 4], ifelse(is.null.object(VPS[[1]]), { VE <- list(freeVector(1, ne)); comment(VE[[1]]) <- "default"}, VE <- list(new("NullSimVector"))))
+		ifelse(contain(4, position), VE <- List[position == 4], ifelse(isNullObject(VPS[[1]]), { VE <- list(freeVector(1, ne)); comment(VE[[1]]) <- "default"}, VE <- list(new("NullSimVector"))))
 	}
 	ifelse(contain(6, position), ME <- List[position == 6], ME <- list(new("NullSimVector")))
-	ifelse(contain(5, position), AL <- List[position == 5], ifelse(is.null.object(ME[[1]]), { AL <- list(freeVector(0, ne)); comment(AL[[1]]) <- "default"}, AL <- list(new("NullSimVector"))))
+	ifelse(contain(5, position), AL <- List[position == 5], ifelse(isNullObject(ME[[1]]), { AL <- list(freeVector(0, ne)); comment(AL[[1]]) <- "default"}, AL <- list(new("NullSimVector"))))
 	Output <- NULL
 	if(exo) {
 		ifelse(contain(8, position), GA <- List[position == 8], stop("No path coefficient object from Factor.KSI to Factor.ETA"))

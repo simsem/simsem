@@ -10,7 +10,7 @@
 # Date Modified: October 6, 2011
 
 print.if.not.null <- function(object, name=NULL) {
-	if(!is.null.object(object)) {
+	if(!isNullObject(object)) {
 		if(!is.null(name)) cat(name, "\n")
 		summaryShort(object)	
 	}

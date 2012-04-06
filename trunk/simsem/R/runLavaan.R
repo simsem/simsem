@@ -9,7 +9,7 @@ runLavaan <- function(object, Data, miss="fiml", estimator="ML") {
 	modelType <- object@modelType
 	varnames <- NULL
 	nz <- 0
-	if(!is.null.object(object@auxiliary)) nz <- length(object@auxiliary)
+	if(!isNullObject(object@auxiliary)) nz <- length(object@auxiliary)
 	if(modelType == "Path.exo") {
 		nx <- ncol(object@param@PH)
 		for(i in 1:nx) {
@@ -37,14 +37,14 @@ runLavaan <- function(object, Data, miss="fiml", estimator="ML") {
 		}
 	}
 	nameAux <- NULL
-	if(!is.null.object(object@auxiliary)) {
+	if(!isNullObject(object@auxiliary)) {
 		nameAux <- paste("z", 1:length(object@auxiliary), sep="")
 		varnames <- c(varnames, nameAux)
 	}
 	colnames(Data) <- varnames
-	param <- tag.headers(param)
+	param <- tagHeaders(param)
 	con.text <- NULL
-	if(!is.null.object(object@equalCon)) {
+	if(!isNullObject(object@equalCon)) {
 		equalCon <- object@equalCon
 		equalCon <- reduce.constraint(equalCon)
 		con.text <- transform.constraint(param, equalCon)

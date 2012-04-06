@@ -10,28 +10,28 @@ setGeneric("combineObject", function(object1, object2, ...) {
 	return(standardGeneric("combineObject")) 
 } )
 
-setGeneric("constrain.matrices", function(object, SimEqualCon, ...) { 
-	return(standardGeneric("constrain.matrices")) 
+setGeneric("constrainMatrices", function(object, SimEqualCon, ...) { 
+	return(standardGeneric("constrainMatrices")) 
 } )
 
-setGeneric("count.random.object", function(object, ...) { 
-	return(standardGeneric("count.random.object")) 
+setGeneric("countRandomObject", function(object, ...) { 
+	return(standardGeneric("countRandomObject")) 
 } )
 
 setGeneric("createImpliedMACS", function(object, ...) { 
 	return(standardGeneric("createImpliedMACS")) 
 } )
 
-setGeneric("find.OpenMx.values", function(param, start) { 
-	return(standardGeneric("find.OpenMx.values")) 
+setGeneric("findOpenMxValues", function(param, start) { 
+	return(standardGeneric("findOpenMxValues")) 
 } )
 
-setGeneric("is.null.object", function(target) { 
-	return(standardGeneric("is.null.object")) 
+setGeneric("isNullObject", function(target) { 
+	return(standardGeneric("isNullObject")) 
 } )
 
-setGeneric("divide.object", function(object, constant, ...) { 
-	return(standardGeneric("divide.object")) 
+setGeneric("divideObject", function(object, constant, ...) { 
+	return(standardGeneric("divideObject")) 
 } )
 
 setGeneric("makeLabels", function(object, ...) { 
@@ -42,16 +42,16 @@ setGeneric("simModel", function(object, ...) {
 	return(standardGeneric("simModel")) 
 } )
 
-setGeneric("starting.values", function(object, trial, ...) { 
-	return(standardGeneric("starting.values")) 
+setGeneric("startingValues", function(object, trial, ...) { 
+	return(standardGeneric("startingValues")) 
 } )
 
 setGeneric("summaryShort", function(object, ...) { 
 	return(standardGeneric("summaryShort")) 
 } )
 
-setGeneric("tag.headers", function(object, ...) { 
-	return(standardGeneric("tag.headers")) 
+setGeneric("tagHeaders", function(object, ...) { 
+	return(standardGeneric("tagHeaders")) 
 } )
 
 setGeneric("getCutoff", function(object, alpha, revDirec=FALSE, usedFit=NULL) { 
@@ -70,8 +70,8 @@ setGeneric("getPower", function(altObject, cutoff, revDirec = FALSE, usedFit=NUL
 	return(standardGeneric("getPower")) 
 } )
 
-setGeneric("vectorize.object", function(object, labels, ...) { 
-	return(standardGeneric("vectorize.object")) 
+setGeneric("vectorizeObject", function(object, labels, ...) { 
+	return(standardGeneric("vectorizeObject")) 
 } )
 
 setGeneric("summaryParam", function(object, ...) { 

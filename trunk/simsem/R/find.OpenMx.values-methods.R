@@ -1,7 +1,7 @@
-# find.OpenMx.values
+# findOpenMxValues
 # Methods -- simsem package
 # Rearrange starting values such that it is appropriate for OpenMx matrix specification such that free parameters are set to be TRUE/FALSE and values meaning be both fixed value or starting values
-# Generic Function: find.OpenMx.values(param, start)
+# Generic Function: findOpenMxValues(param, start)
 # Argument:
 #	param: 	Set of free parameters (NA = free parameters; numbers = fixed value with a specified number)
 # 	start: 	Parameter/Starting values
@@ -9,8 +9,8 @@
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 6, 2011
 
-setMethod("find.OpenMx.values", signature(param="vector", start="vector"), definition=function(param, start) {
-	if(is.null.object(param)) {
+setMethod("findOpenMxValues", signature(param="vector", start="vector"), definition=function(param, start) {
+	if(isNullObject(param)) {
 		return(start)
 	} else {
 		start[!is.na(param)] <- param[!is.na(param)]
@@ -22,11 +22,11 @@ setMethod("find.OpenMx.values", signature(param="vector", start="vector"), defin
 #Return: 	Resulting vector.c that includes numbers of fixed parameters and starting values of free parameters.
 #Example:
 #parameter <- c(NA, NA, 0, 0)
-#starting.values <- c(2, 5, 0, 0)
-#find.OpenMx.Values(parameter, starting.values)
+#startingValues <- c(2, 5, 0, 0)
+#findOpenMxValues(parameter, startingValues)
 
-setMethod("find.OpenMx.values", signature(param="matrix", start="matrix"), definition=function(param, start) {
-	if(is.null.object(param)) {
+setMethod("findOpenMxValues", signature(param="matrix", start="matrix"), definition=function(param, start) {
+	if(isNullObject(param)) {
 		return(start)
 	} else {
 		start[!is.na(param)] <- param[!is.na(param)]
@@ -37,20 +37,20 @@ setMethod("find.OpenMx.values", signature(param="matrix", start="matrix"), defin
 #Description: 	This function will add fixed value from parameters matrix into starting value matrix
 #Return: 	Resulting matrix.c that includes numbers of fixed parameters and starting values of free parameters.
 
-setMethod("find.OpenMx.values", signature(param="SimFreeParam", start="SimRSet"), definition=function(param, start) {
-	start@LY <- find.OpenMx.values(param@LY, start@LY)
-	start@TE <- find.OpenMx.values(param@TE, start@TE)
-	start@PS <- find.OpenMx.values(param@PS, start@PS)
-	start@BE <- find.OpenMx.values(param@BE, start@BE)
-	start@TY <- find.OpenMx.values(param@TY, start@TY)
-	start@AL <- find.OpenMx.values(param@AL, start@AL)
-	start@LX <- find.OpenMx.values(param@LX, start@LX)
-	start@TD <- find.OpenMx.values(param@TD, start@TD)
-	start@PH <- find.OpenMx.values(param@PH, start@PH)
-	start@GA <- find.OpenMx.values(param@GA, start@GA)
-	start@TX <- find.OpenMx.values(param@TX, start@TX)
-	start@KA <- find.OpenMx.values(param@KA, start@KA)
-	start@TH <- find.OpenMx.values(param@TH, start@TH)
+setMethod("findOpenMxValues", signature(param="SimFreeParam", start="SimRSet"), definition=function(param, start) {
+	start@LY <- findOpenMxValues(param@LY, start@LY)
+	start@TE <- findOpenMxValues(param@TE, start@TE)
+	start@PS <- findOpenMxValues(param@PS, start@PS)
+	start@BE <- findOpenMxValues(param@BE, start@BE)
+	start@TY <- findOpenMxValues(param@TY, start@TY)
+	start@AL <- findOpenMxValues(param@AL, start@AL)
+	start@LX <- findOpenMxValues(param@LX, start@LX)
+	start@TD <- findOpenMxValues(param@TD, start@TD)
+	start@PH <- findOpenMxValues(param@PH, start@PH)
+	start@GA <- findOpenMxValues(param@GA, start@GA)
+	start@TX <- findOpenMxValues(param@TX, start@TX)
+	start@KA <- findOpenMxValues(param@KA, start@KA)
+	start@TH <- findOpenMxValues(param@TH, start@TH)
 	return(start)
 })
 #Arguments: 	

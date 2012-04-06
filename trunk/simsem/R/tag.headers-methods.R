@@ -1,14 +1,14 @@
-# tag.headers
+# tagHeaders
 # Function -- simsem package
 # This element will add names in each element of a vector or will add row and columns names of a matrix with variable or factor names
-# Function: tag.headers(object, ...)
+# Function: tagHeaders(object, ...)
 # Argument:
 #	object: 	the tagged object
 # 	... : 		Other arguments (None is specified currently)
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 6, 2011
 
-setMethod("tag.headers", signature="VirtualRSet", definition=function(object) {
+setMethod("tagHeaders", signature="VirtualRSet", definition=function(object) {
 	ny <- NULL
 	nx <- NULL
 	nk <- NULL
@@ -59,15 +59,15 @@ setMethod("tag.headers", signature="VirtualRSet", definition=function(object) {
 			names.k <- c(names.k, temp)
 		}
 	}
-	if(!is.null.object(object@LY)) {
+	if(!isNullObject(object@LY)) {
 		colnames(object@LY) <- names.e
 		rownames(object@LY) <- names.y
 	}
-	if(!is.null.object(object@TE)) {
+	if(!isNullObject(object@TE)) {
 		colnames(object@TE) <- names.y
 		rownames(object@TE) <- names.y
 	}
-	if(!is.null.object(object@PS)) {
+	if(!isNullObject(object@PS)) {
 		if(modelType == "Path" | modelType == "Path.exo") {
 			colnames(object@PS) <- names.y
 			rownames(object@PS) <- names.y
@@ -76,7 +76,7 @@ setMethod("tag.headers", signature="VirtualRSet", definition=function(object) {
 			rownames(object@PS) <- names.e
 		}
 	}
-	if(!is.null.object(object@BE)) {
+	if(!isNullObject(object@BE)) {
 		#browser()
 		if(modelType == "Path" | modelType == "Path.exo") {
 			colnames(object@BE) <- names.y
@@ -86,25 +86,25 @@ setMethod("tag.headers", signature="VirtualRSet", definition=function(object) {
 			rownames(object@BE) <- names.e
 		}
 	}
-	if(!is.null.object(object@TY)) {
+	if(!isNullObject(object@TY)) {
 		names(object@TY) <- names.y
 	}
-	if(!is.null.object(object@AL)) {
+	if(!isNullObject(object@AL)) {
 		if(modelType == "Path" | modelType == "Path.exo") {
 			names(object@AL) <- names.y
 		} else {
 			names(object@AL) <- names.e
 		}
 	}
-	if(!is.null.object(object@LX)) {
+	if(!isNullObject(object@LX)) {
 		colnames(object@LX) <- names.k
 		rownames(object@LX) <- names.x
 	}
-	if(!is.null.object(object@TD)) {
+	if(!isNullObject(object@TD)) {
 		colnames(object@TD) <- names.x
 		rownames(object@TD) <- names.x
 	}
-	if(!is.null.object(object@PH)) {
+	if(!isNullObject(object@PH)) {
 		if(modelType == "Path" | modelType == "Path.exo") {
 			colnames(object@PH) <- names.x
 			rownames(object@PH) <- names.x
@@ -113,7 +113,7 @@ setMethod("tag.headers", signature="VirtualRSet", definition=function(object) {
 			rownames(object@PH) <- names.k
 		}
 	}
-	if(!is.null.object(object@GA)) {
+	if(!isNullObject(object@GA)) {
 		if(modelType == "Path" | modelType == "Path.exo") {
 			colnames(object@GA) <- names.x
 			rownames(object@GA) <- names.y
@@ -122,17 +122,17 @@ setMethod("tag.headers", signature="VirtualRSet", definition=function(object) {
 			rownames(object@GA) <- names.e
 		}
 	}
-	if(!is.null.object(object@TX)) {
+	if(!isNullObject(object@TX)) {
 		names(object@TX) <- names.x
 	}
-	if(!is.null.object(object@KA)) {
+	if(!isNullObject(object@KA)) {
 		if(modelType == "Path" | modelType == "Path.exo") {
 			names(object@KA) <- names.x
 		} else {
 			names(object@KA) <- names.k
 		}
 	}
-	if(!is.null.object(object@TH)) {
+	if(!isNullObject(object@TH)) {
 		colnames(object@TH) <- names.y
 		rownames(object@TH) <- names.x
 	}

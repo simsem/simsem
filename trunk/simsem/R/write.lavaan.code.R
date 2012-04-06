@@ -14,7 +14,7 @@ write.lavaan.code <- function(object, constraint, aux = NULL) {
 	result <- NULL
 	object <- collapseExo(object, label=TRUE)
 	constraint <- collapseExo(constraint, label=TRUE, value=NA) ###################Have some zeros
-	if(!is.null.object(object@LY)) {
+	if(!isNullObject(object@LY)) {
 		for(i in 1:ncol(object@LY)) {
 			temp <- paste(colnames(object@LY)[i], "=~")
 			something <- FALSE
@@ -41,7 +41,7 @@ write.lavaan.code <- function(object, constraint, aux = NULL) {
 			result <- paste(result, temp, "\n")
 		}
 	}
-	if(!is.null.object(object@BE)) {
+	if(!isNullObject(object@BE)) {
 		for(i in 1:nrow(object@BE)) {
 			temp <- NULL 
 			for(j in 1:ncol(object@BE)) {
@@ -57,7 +57,7 @@ write.lavaan.code <- function(object, constraint, aux = NULL) {
 				result <- paste(result, temp2, temp, "\n")	
 			}
 		}
-		if(is.null.object(object@LY) && !is.null(aux)) {
+		if(isNullObject(object@LY) && !is.null(aux)) {
 			set <- find.recursive.set(object@BE)
 			target <- colnames(object@BE)[set[[1]]]
 			for(i in 1:length(aux)) {
@@ -66,7 +66,7 @@ write.lavaan.code <- function(object, constraint, aux = NULL) {
 			}
 		}
 	}	
-	if(!is.null.object(object@PS)) {
+	if(!isNullObject(object@PS)) {
 		var.code <- NULL
 		for(i in 1:length(diag(object@PS))) {
 			if(!is.na(object@PS[i, i]) | !is.na(constraint@PS[i, i])) {
@@ -82,7 +82,7 @@ write.lavaan.code <- function(object, constraint, aux = NULL) {
 				if(is.na(object@PS[i, j]) | object@PS[i, j] != 0 | !is.na(constraint@PS[i, j])) {
 					content <- paste(object@PS[i, j], "*", sep="")
 					if(!is.na(constraint@PS[i, j])) content <- constraint@PS[i, j]
-					if(is.null.object(object@BE)) {
+					if(isNullObject(object@BE)) {
 						cov.code <- paste(cov.code, rownames(object@PS)[i], " ~~ ", content, colnames(object@PS)[j], " \n", sep = "")
 					} else {
 						exo.set <- find.recursive.set(object@BE)[[1]]
@@ -90,7 +90,7 @@ write.lavaan.code <- function(object, constraint, aux = NULL) {
 					}
 				} else {
 					content <- paste(object@PS[i, j], "*", sep="")
-					if(is.null.object(object@BE)) {
+					if(isNullObject(object@BE)) {
 						cov.code <- paste(cov.code, rownames(object@PS)[i], " ~~ ", content, colnames(object@PS)[j], " \n", sep = "")
 					} 			
 				}
@@ -98,7 +98,7 @@ write.lavaan.code <- function(object, constraint, aux = NULL) {
 		}
 		}
 		result <- paste(result, var.code, cov.code)
-		if(is.null.object(object@LY) && !is.null(aux)) {
+		if(isNullObject(object@LY) && !is.null(aux)) {
 			set <- find.recursive.set(object@BE)
 			target <- colnames(object@BE)[-set[[1]]]
 			varCode <- paste(paste(aux, " ~~ NA*", aux, sep=""), collapse="\n")
@@ -107,7 +107,7 @@ write.lavaan.code <- function(object, constraint, aux = NULL) {
 			result <- paste(result, corCode, "\n")
 		}
 	}
-	if(!is.null.object(object@TE)) {
+	if(!isNullObject(object@TE)) {
 		var.code <- NULL
 		for(i in 1:length(diag(object@TE))) {
 			if(!is.na(object@TE[i, i]) | !is.na(constraint@TE[i, i])) {
@@ -127,7 +127,7 @@ write.lavaan.code <- function(object, constraint, aux = NULL) {
 			}
 		}
 		result <- paste(result, var.code, cov.code)
-		if(!is.null.object(object@LY) && !is.null(aux)) {
+		if(!isNullObject(object@LY) && !is.null(aux)) {
 			nonConstant <- is.na(diag(object@TE)) | diag(object@TE) != 0
 			target <- colnames(object@TE)[nonConstant]
 			varCode <- paste(paste(aux, " ~~ NA*", aux, sep=""), collapse="\n")
@@ -143,7 +143,7 @@ write.lavaan.code <- function(object, constraint, aux = NULL) {
 		corCode <- paste(paste(corCode, collapse="\n"), "\n")
 		result <- paste(result, corCode)
 	}
-	if(!is.null.object(object@AL)) {
+	if(!isNullObject(object@AL)) {
 		mean.code <- NULL
 		for(i in 1:length(object@AL)) {
 			if(!(object@modelType == "Path" | object@modelType == "Path.exo") | !is.na(object@AL[i]) | !is.na(constraint@AL[i])) {
@@ -154,7 +154,7 @@ write.lavaan.code <- function(object, constraint, aux = NULL) {
 		}
 		result <- paste(result, mean.code)
 	}
-	if(!is.null.object(object@TY)) {
+	if(!isNullObject(object@TY)) {
 		mean.code <- NULL
 		for(i in 1:length(object@TY)) {
 			content <- paste(object@TY[i], "*", sep="")

@@ -460,28 +460,28 @@ setMethod("summary", signature="SimData", definition=function(object, detail=FAL
 		print(object@n)
 		cat("========= Parameters Set ============\n")
 		summary(object@param)
-		cat("Number of free parameters = ", count.random.object(object@param), "\n")
+		cat("Number of free parameters = ", countRandomObject(object@param), "\n")
 		cat("=====================================\n")
 		if(detail) {
 			cat("============Misspecified Set================\n")
-			ifelse(!is.null.object(object@misspec), summary(object@misspec), print("None"))
+			ifelse(!isNullObject(object@misspec), summary(object@misspec), print("None"))
 			cat("============================================\n")
 			cat("=============Constraint=====================\n")
-			ifelse(!is.null.object(object@equalCon), summary(object@SimEqualCon), print("None"))
+			ifelse(!isNullObject(object@equalCon), summary(object@SimEqualCon), print("None"))
 			cat("============================================\n")
 		} else {
 			cat("Adding Misspecification?\n")
-			ifelse(!is.null.object(object@misspec), print("Yes"), print("No"))
+			ifelse(!isNullObject(object@misspec), print("Yes"), print("No"))
 			cat("Adding Constraint?\n")
-			ifelse(!is.null.object(object@equalCon), print("Yes"), print("No"))
+			ifelse(!isNullObject(object@equalCon), print("Yes"), print("No"))
 		}
-		if(!is.null.object(object@misspec) & !is.null.object(object@equalCon)) {
+		if(!isNullObject(object@misspec) & !isNullObject(object@equalCon)) {
 			cat("Constain objects BEFORE or AFTER adding misspecification\n")
 			ifelse(object@conBeforeMis, print("Before"), print("After"))
 		}
-		if(!is.null.object(object@misspec)) {
+		if(!isNullObject(object@misspec)) {
 			cat("Misfit bound\n")
-			if(!is.null.object(object@misfitBound)) {
+			if(!isNullObject(object@misfitBound)) {
 				print(paste("min =", object@misfitBound[1]))
 				print(paste("max =", object@misfitBound[2]))
 			} else {
@@ -503,20 +503,20 @@ setMethod("summary", signature="SimModel", definition=function(object, con=FALSE
 		print(object@modelType)
 		cat("========= Parameters Set ============\n")
 		summary(object@param)
-		cat("Number of free parameters = ", count.random.object(object@param), "\n")
+		cat("Number of free parameters = ", countRandomObject(object@param), "\n")
 		cat("=====================================\n")
 		if(start) {
 			cat("============Starting Values================\n")
-			ifelse(!is.null.object(object@start), summary(object@start), print("None"))
+			ifelse(!isNullObject(object@start), summary(object@start), print("None"))
 			cat("============================================\n")		
 		}
 		if(con) {
 			cat("=============Constraint=====================\n")
-			ifelse(!is.null.object(object@equalCon), summary(object@SimEqualCon), print("None"))
+			ifelse(!isNullObject(object@equalCon), summary(object@SimEqualCon), print("None"))
 			cat("============================================\n")
 		} else {
 			cat("Adding Constraint?\n")
-			ifelse(!is.null.object(object@equalCon), print("Yes"), print("No"))
+			ifelse(!isNullObject(object@equalCon), print("Yes"), print("No"))
 		}
 		cat("Analysis Package\n")
 		print(object@package)
@@ -594,16 +594,16 @@ setMethod("summary", signature="SimDataOut", definition=function(object, detail=
 		if(detail) {
 			cat("========= Parameters Set ============\n")
 			summary(object@param)
-			cat("Number of free parameters = ", count.random.object(object@param), "\n")
+			cat("Number of free parameters = ", countRandomObject(object@param), "\n")
 			cat("=====================================\n")
 			cat("============Parameter Values================\n")
 			summary(object@paramOut)
 			cat("============================================\n")
 			cat("============Parameter Values after adding trivial misspecification=====================\n")
-			ifelse(!is.null.object(object@misspecOut), summary(object@misspecOut), print("None"))
+			ifelse(!isNullObject(object@misspecOut), summary(object@misspecOut), print("None"))
 			cat("============================================\n")
 		} else {
-			if(is.null.object(object@misspecOut)) {
+			if(isNullObject(object@misspecOut)) {
 				cat("============Parameter Values================\n")
 				summary(object@paramOut)
 				cat("============================================\n")

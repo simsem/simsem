@@ -1,7 +1,7 @@
-# constrain.matrices
+# constrainMatrices
 # Methods -- simsem package
 # Impose equality constraint in an object
-# Generic Function: constrain.matrices(object, SimEqualCon, ...)
+# Generic Function: constrainMatrices(object, SimEqualCon, ...)
 # Argument:
 #	object: Desired object that would like to be constrained, such as set of labels matrices or list of parameter matrices
 # 	SimEqualCon: SimEqualCon.c or SimREqualCon.c
@@ -9,7 +9,7 @@
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: March 10, 2012
 
-setMethod("constrain.matrices", signature(object="VirtualRSet", SimEqualCon="SimREqualCon"), definition=function(object, SimEqualCon, package) {
+setMethod("constrainMatrices", signature(object="VirtualRSet", SimEqualCon="SimREqualCon"), definition=function(object, SimEqualCon, package) {
 	modelType <- object@modelType
 	if(modelType != SimEqualCon@modelType) stop("SimEqualCon and VirtualRSet do not have the same tag")
 	label.selection <- NULL
@@ -79,11 +79,11 @@ setMethod("constrain.matrices", signature(object="VirtualRSet", SimEqualCon="Sim
 #Description: 	This function will impose constraint codes in the input object. How to impose the constraint depends on analysis package. This will impose labels for OpenMx and will impose equal statement in lavaan.
 #Return: VirtualRSet.c that have constraint codes.
 
-setMethod("constrain.matrices", signature(object="VirtualRSet", SimEqualCon="SimEqualCon"), definition=function(object, SimEqualCon, package) {
+setMethod("constrainMatrices", signature(object="VirtualRSet", SimEqualCon="SimEqualCon"), definition=function(object, SimEqualCon, package) {
 	modelType <- object@modelType
 	if(modelType != SimEqualCon@modelType) stop("SimEqualCon and VirtualRSet do not have the same tag")
 	SimREqualCon <- reduce.constraint(SimEqualCon)
-	Output <- constrain.matrices(object, SimREqualCon, package)
+	Output <- constrainMatrices(object, SimREqualCon, package)
 	return(Output)
 })
 #Arguments: 
@@ -93,7 +93,7 @@ setMethod("constrain.matrices", signature(object="VirtualRSet", SimEqualCon="Sim
 #Description: 	This function will combine variance and correlation into covariance matrix labels as SimREqualCon and pass to the function that uses SimREqualCon
 #Return: VirtualRSet.c that have constraint codes.
 
-#setMethod("constrain.matrices", signature(object="list", SimEqualCon="SimEqualCon"), definition=function(object, SimEqualCon, modelType) {
+#setMethod("constrainMatrices", signature(object="list", SimEqualCon="SimEqualCon"), definition=function(object, SimEqualCon, modelType) {
 #	label.selection <- NULL
 #	label.selection <- c("LY", "VTE", "TE", "RTE", "VY", "TY", "MY", "BE", "VPS", "PS", "RPS", "VE", "AL", "ME", "LX", "VTD", "TD", "RTD", "VX", "TX", "MX", "GA", "VPH", "PH", "RPH", "KA", "TH", "RTH")
 #	matrices <- object
@@ -130,7 +130,7 @@ setMethod("constrain.matrices", signature(object="VirtualRSet", SimEqualCon="Sim
 #Description: 	This function will impose constraint codes in the input object such that the number of the first element in the constraint will be copied to other elements in the constraint. 
 #Return: List of parameter matrices that have constraint.
 
-setMethod("constrain.matrices", signature(object="MatrixSet", SimEqualCon="SimEqualCon"), definition=function(object, SimEqualCon) {
+setMethod("constrainMatrices", signature(object="MatrixSet", SimEqualCon="SimEqualCon"), definition=function(object, SimEqualCon) {
 	label.selection <- NULL
 	label.selection <- c("LY", "VTE", "TE", "RTE", "VY", "TY", "MY", "BE", "VPS", "PS", "RPS", "VE", "AL", "ME", "LX", "VTD", "TD", "RTD", "VX", "TX", "MX", "GA", "VPH", "PH", "RPH", "KA", "TH", "RTH")
 	matrices <- object

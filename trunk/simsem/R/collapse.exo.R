@@ -1,5 +1,5 @@
 collapseExo <- function(object, value=0, label=FALSE) {
-	if(!is.null.object(object@GA)) {
+	if(!isNullObject(object@GA)) {
 		nk <- ncol(object@GA)
 		ne <- nrow(object@GA)
 		temp.BE <- combine.path.exo.endo(object@GA, object@BE, value)

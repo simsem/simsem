@@ -18,22 +18,22 @@ drawParameters <- function(object) {
 	count <- 0
 	repeat {
 		#browser()
-		if(!is.null.object(object@misspec)) {
+		if(!isNullObject(object@misspec)) {
 			Output <- run.misspecified(object@param, object@misspec, object@equalCon, object@conBeforeMis)
 			param <- Output$param
 			misspec <- Output$misspec
 			if(validate.object(param) | validate.object(misspec)) {
 				param <- reduce.matrices(param)
 				misspec <- reduce.matrices(misspec)
-				if(!is.null.object(param) && !is.null.object(misspec)) {
+				if(!isNullObject(param) && !isNullObject(misspec)) {
 					implied.CM.param <- createImpliedMACS(param)
 					implied.CM.misspec <- createImpliedMACS(misspec)
 					if(sum(eigen(implied.CM.misspec$CM)$values <= 0) == 0) {
-						if(is.null.object(object@misfitBound)) {
+						if(isNullObject(object@misfitBound)) {
 							break
 						} else {
 							misfit <- averageMisfit(implied.CM.misspec$M, implied.CM.misspec$CM, 
-								implied.CM.param$M, implied.CM.param$CM, count.random.object(object@misspec))
+								implied.CM.param$M, implied.CM.param$CM, countRandomObject(object@misspec))
 							#param <- misspec # Pretend Misspecified as real parameters for data generation
 							if(!is.null(misfit) && (misfit > object@misfitBound[1] & misfit < object@misfitBound[2])) break
 						}
@@ -44,7 +44,7 @@ drawParameters <- function(object) {
 			param <- run(object@param, equalCon=object@equalCon)
 			if(validate.object(param)) {
 				param <- reduce.matrices(param)
-				if(!is.null.object(param)) {
+				if(!isNullObject(param)) {
 					implied.CM.param <- createImpliedMACS(param)
 					implied.CM.misspec <- implied.CM.param
 					if(sum(eigen(implied.CM.param$CM)$values <= 0) == 0) break
