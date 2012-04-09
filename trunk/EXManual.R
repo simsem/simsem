@@ -12,8 +12,8 @@
 ################################## Example 1 ##############################################
 #library(simsem)
 
-#install.packages("C:/Users/Sunthud/Desktop/My Dropbox/simsem/simsem_0.0-9.tar.gz", repos=NULL, type="source")
-#install.packages("C:/Users/student/Dropbox/simsem/simsem_0.0-9.tar.gz", repos=NULL, type="source")
+#install.packages("C:/Users/Sunthud/Desktop/My Dropbox/simsem/simsem_0.0-11.tar.gz", repos=NULL, type="source")
+#install.packages("C:/Users/student/Dropbox/simsem/simsem_0.0-11.tar.gz", repos=NULL, type="source")
 
 myTry <- function(expr) {
     withRestarts(
