@@ -374,7 +374,7 @@ setMethod("summary", signature="SimFreeParam", definition=function(object) {
 		printIfNotNull(object@PS, "\nPS: Covariance of Regression.Residual.PSI")
 		printIfNotNull(object@AL, "\nAL: Regression Intercept of Factor.ETA")
 		cat("-------------------------------------------------", "\n")
-		if(object@modelType == "SEM.exo" | object@modelType == "path.exo") {
+		if(object@modelType == "SEM.exo" | object@modelType == "Path.exo") {
 			cat("-- Exogeneous Variable --\n")
 			printIfNotNull(object@LX, "\nLX: Loading of Indicator.X on Factor.KSI")
 			printIfNotNull(object@TD, "\nTD: Correlation of Measurement.Error.DELTA")

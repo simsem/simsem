@@ -1419,3 +1419,18 @@ SimMissing <- simMissing(pmMCAR=0.1, numImps=100)
 dat <- run(SimData)
 dat <- run(SimMissing, dat)
 out <- run(SimModel, dat, SimMissing)
+
+
+
+
+# Add new data
+# simParamCFA
+# simParamPath !!!!!!!!!!!!!!! Reverse simSetPath
+# simParamSEM
+# summary SimParam: Add number of parameters
+# Do we need to check for identification
+# simModel taking simParam
+# simModelOut + simMisspec --> simData; Do we need to use standardized parameters?	
+# simModelOut --> simModel for starting values
+# simModel + Data + simMisspec --> simModelOut + simMisspec --> simResult
+# Problem of fixed.x
