@@ -1,6 +1,4 @@
-
-importFrom("lavaan", 
-           anova)
+importFrom("lavaan", summary, anova)
 exportClasses(SimUnif, SimNorm, SimBeta, SimBinom, SimCauchy, SimChisq, SimExp,
 	SimF, SimGamma, SimGeom, SimHyper, SimLnorm, SimLogis, SimNbinom, 
 	SimPois, SimT, SimWeibull, VirtualDist,
