@@ -162,3 +162,18 @@ simsem, Version 0.0-11 04/05/12
 - Change the documentation of SimResult and plotCutoff for the changes.
 - Change all function names containing dots into camelCase.
 - Change to be compatible with R 2.15
+- Add simParamCFA, simParamPath, simParamSEM functions to create parameters for data analysis (no starting values for creating data).
+
+simsem, Version 0.1-0 04/11/12
+- Change order of the simData function from (n, param, ...) to (param, n, ...) and change the simData function to simData methods
+- Allow SimModelOut (instead of SimSet) as the output of the simData methods
+- Allow SimModelOut (instead of SimSet) as the output of the simModel methods
+- Add toSimSet function to change SimModelOut to SimSet
+- Add indicatorLab as the attribute of SimData, SimDataOut, SimModelOut
+- Change how to create SimParam class in the createFreeParameters function
+- Add logical argument in the imposeMissing function to impose missing by the matrix of logicals
+- Add SimFunction and NullSimFunction Classes for transforming data during the simulation
+- Add summary, isNullObject and run methods for the SimFunction class
+- Change simResult and runRep functions to account for SimFunction class
+- Add simFit function to run a Monte Carlo simulation based on the result of data analysis (SimModelOut)
+

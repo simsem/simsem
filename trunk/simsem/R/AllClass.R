@@ -1023,7 +1023,7 @@ setClass("NullSimDataDist", contains="SimDataDist")
 # SimData
 # Class -- simsem package
 # This class will save information for data simulation and can create data by run function
-# Constructor:	simData(N, SimSet, SimMisspec=new("NullSimMisspec"), SimEqualCon=new("NullSimEqualCon"), conBeforeMis=TRUE, misfitBound=new("NullVector"), maxDraw=100)
+# Constructor:	simData(SimSet, N, SimMisspec=new("NullSimMisspec"), SimEqualCon=new("NullSimEqualCon"), conBeforeMis=TRUE, misfitBound=new("NullVector"), maxDraw=100)
 # Parent Class: None
 # Child Class:	None
 # Attributes:
@@ -1055,7 +1055,8 @@ setClass("SimData",
 		sequential="logical",
 		facDist="SimDataDist",
 		errorDist="SimDataDist",
-		indDist="SimDataDist"),
+		indDist="SimDataDist",
+		indicatorLab="vector"),
 	prototype(
 		misspec=new("NullSimMisspec"),
 		equalCon=new("NullSimEqualCon"),
@@ -1065,7 +1066,8 @@ setClass("SimData",
 		sequential=FALSE,
 		facDist=new("NullSimDataDist"),
 		errorDist=new("NullSimDataDist"),
-		indDist=new("NullSimDataDist"))
+		indDist=new("NullSimDataDist"),
+		indicatorLab=new("NullVector"))
 )
 
 ###################################################################
@@ -1138,9 +1140,9 @@ setClass("SimModel",
 		equalCon=new("NullSimEqualCon"),
 		package="lavaan",
 		estimator="ml",
-		auxiliary=NULL,
-		indicatorLab=NULL,
-		factorLab=NULL)
+		auxiliary=new("NullVector"),
+		indicatorLab=new("NullVector"),
+		factorLab=new("NullVector"))
 )
 
 ###################################################################
@@ -1242,12 +1244,16 @@ setClass("SimModelOut", # The class provides model result.
         se="SimRSet",
         converged="logical",
 		paramValue="SimRSet",
-		n="numeric"),
+		n="numeric",
+		indicatorLab="vector",
+		factorLab="vector"),
     prototype(
         equalCon=new("NullSimEqualCon"),
         converged=FALSE,
 		paramValue=new("NullRSet"),
-		n=0)
+		n=0,
+		indicatorLab=new("NullVector"),
+		factorLab=new("NullVector"))
 )
 
 ###################################################################
@@ -1337,8 +1343,40 @@ setClass("SimMissing",
 # Parent Class: SimMissing
 # Child Class:	None
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu), Patrick Miller (University of Kansas; patr1ckm@ku.edu)
-# Date Modified: February 09, 2011
+# Date Modified: February 09, 2012
 
 setClass("NullSimMissing", 
 	contains="SimMissing"
+)
+
+#####################################################################
+# SimFunction
+# Class -- simsem package
+# This class will save function so that the function will not run right now and will run in the appropriate place in the future
+# Constructor:	simFunction(fun, ...)
+# Parent Class:	None
+# Child Class: NullSimFunction
+# Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
+# Date Modified: April 10, 2012
+
+setClass("SimFunction",
+	representation(
+		fun="function",
+		attribute="list",
+		callfun="call"
+	)
+)
+
+###################################################################
+# NullSimFunction
+# Class -- simsem package
+# This null class of the SimFunction class
+# Constructor:	 	new("NullSimFunction", data)
+# Parent Class: SimFunction
+# Child Class:	None
+# Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
+# Date Modified: April 10, 2012
+
+setClass("NullSimFunction", 
+	contains="SimFunction"
 )

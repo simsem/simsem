@@ -57,7 +57,7 @@ setMethod("getCutoff", signature(object="SimResult"), definition=function(object
 #diag(error.cor) <- 1
 #RTD <- symMatrix(error.cor)
 #CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
-#SimData <- simData(200, CFA.Model)
+#SimData <- simData(CFA.Model, 200)
 #SimModel <- simModel(CFA.Model)
 #Output <- simResult(SimData, SimModel, 500)
 #getCutoff(Output, 0.05)

@@ -12,8 +12,8 @@ This package can be used to generate data using the structural equation modeling
 \tabular{ll}{
 Package: \tab simsem\cr
 Type: \tab Package\cr
-Version: \tab 0.0.11\cr
-Depends: \tab R(>= 2.14), methods, lavaan, MASS\cr
+Version: \tab 0.1.0\cr
+Depends: \tab R(>= 2.15), methods, lavaan, MASS\cr
 Suggests: \tab parallel, Amelia, copula, quantreg, splines, foreign\cr
 Date: \tab 2011-03-31\cr
 License: \tab GPL (>= 2)\cr

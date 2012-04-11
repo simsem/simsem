@@ -63,7 +63,7 @@ RTD <- symMatrix(error.cor)
 
 CFA.Model <- simSetCFA(LY = LX, RPH = RPH, RTD = RTD)
 
-SimData <- simData(200, CFA.Model)
+SimData <- simData(CFA.Model, 200)
 
 SimModel <- simModel(CFA.Model)
 
@@ -119,7 +119,7 @@ TY <- simVector(c(0, NA, NA, 0, NA, NA, 0, NA, NA), 0)
 
 HS.Model <- simSetCFA(LY=LY, PS=PS, TE=TE, AL=AL, TY=TY)
 
-SimData <- simData(200, HS.Model)
+SimData <- simData(HS.Model, 200)
 SimModel <- simModel(HS.Model)
 Output <- simResult(200, SimData, SimModel)
 getCutoff(Output, 0.05)
@@ -155,7 +155,7 @@ TY <- simVector(rep(0, 4))
 
 LCA.Model <- simSetCFA(LY=LY, RPS=RPS, VPS=VPS, AL=AL, VTE=VTE, RTE=RTE, TY=TY)
 
-Data.True <- simData(300, LCA.Model)
+Data.True <- simData(LCA.Model, 300)
 SimModel <- simModel(LCA.Model)
 #Output <- simResult(100, Data.True, SimModel)
 #getCutoff(Output, 0.05)
@@ -169,7 +169,7 @@ loading.mis <- simMatrix(loading.trivial, "u1")
 
 LCA.Mis <- simMisspecCFA(LY = loading.mis)
 
-Data.Mis <- simData(300, LCA.Model, LCA.Mis, sequential=TRUE)
+Data.Mis <- simData(LCA.Model, 300, LCA.Mis, sequential=TRUE)
 
 Output.Mis <- simResult(100, Data.Mis, SimModel)#, multicore=TRUE)
 getCutoff(Output.Mis, 0.05)
@@ -205,8 +205,8 @@ mis.path.BE[4, 1:2] <- NA
 mis.BE <- simMatrix(mis.path.BE, "u1")
 Path.Mis.Model <- simMisspecPath(BE = mis.BE)
 
-Data <- simData(500, Path.Model)
-Data.Mis <- simData(500, Path.Model, Path.Mis.Model)
+Data <- simData(Path.Model, 500)
+Data.Mis <- simData(Path.Model, 500, Path.Mis.Model)
 SimModel <- simModel(Path.Model)
 
 
@@ -245,7 +245,7 @@ mis.path.GA[2, 1:2] <- NA
 mis.GA <- simMatrix(mis.path.GA, "u1")
 Path.Mis.Model <- simMisspecPath(GA = mis.GA, exo=TRUE)
 
-Data.Mis <- simData(500, Path.Model, Path.Mis.Model)
+Data.Mis <- simData(Path.Model, 500, Path.Mis.Model)
 SimModel <- simModel(Path.Model)
 
 
@@ -304,10 +304,10 @@ constraint[2,] <- c(8, 3)
 rownames(constraint) <- rep("LY", 2)
 equal.loading <- simEqualCon(constraint, modelType="SEM")
 
-Data.Original <- simData(300, SEM.model)
-Data.Mis <- simData(300, SEM.model, misspec=SEM.Mis.Model)
-Data.Con <- simData(300, SEM.model, equalCon=equal.loading)
-Data.Mis.Con <- simData(300, SEM.model, misspec=SEM.Mis.Model, equalCon=equal.loading)
+Data.Original <- simData(SEM.model, 300)
+Data.Mis <- simData(SEM.model, 300, misspec=SEM.Mis.Model)
+Data.Con <- simData(SEM.model, 300, equalCon=equal.loading)
+Data.Mis.Con <- simData(SEM.model, 300, misspec=SEM.Mis.Model, equalCon=equal.loading)
 
 Model.Original <- simModel(SEM.model)
 Model.Con <- simModel(SEM.model, equalCon=equal.loading)
@@ -419,10 +419,10 @@ constraint3[,1] <- 1:2
 rownames(constraint3) <- rep("LY", 2)
 equal.loading <- simEqualCon(constraint1, constraint2, constraint3, modelType="SEM.exo")
 
-Data.Original <- simData(300, SEM.model)
-Data.Mis <- simData(300, SEM.model, misspec=SEM.Mis.Model)
-Data.Con <- simData(300, SEM.model, equalCon=equal.loading)
-Data.Mis.Con <- simData(300, SEM.model, misspec=SEM.Mis.Model, 
+Data.Original <- simData(SEM.model, 300)
+Data.Mis <- simData(SEM.model, 300, misspec=SEM.Mis.Model)
+Data.Con <- simData(SEM.model, 300, equalCon=equal.loading)
+Data.Mis.Con <- simData(SEM.model, 300, misspec=SEM.Mis.Model, 
 	equalCon=equal.loading)
 
 Model.Original <- simModel(SEM.model)
@@ -453,7 +453,7 @@ diag(error.cor.mis) <- 1
 RTD.Mis <- symMatrix(error.cor.mis, "n1")
 CFA.Model.NULL.Mis <- simMisspecCFA(RTE = RTD.Mis)
 
-SimData.NULL <- simData(500, CFA.Model.NULL, misspec = CFA.Model.NULL.Mis)
+SimData.NULL <- simData(CFA.Model.NULL, 500, misspec = CFA.Model.NULL.Mis)
 SimModel <- simModel(CFA.Model.NULL)
 Output.NULL <- simResult(300, SimData.NULL, SimModel)
 
@@ -471,7 +471,7 @@ loading.alt.mis[is.na(loading.alt)] <- 0
 LX.alt.mis <- simMatrix(loading.alt.mis, "u2")
 CFA.Model.alt.mis <- simMisspecCFA(LY = LX.alt.mis, RTE=RTD.Mis)
 
-SimData.ALT <- simData(500, CFA.Model.ALT, misspec = CFA.Model.alt.mis)
+SimData.ALT <- simData(CFA.Model.ALT, 500, misspec = CFA.Model.alt.mis)
 Output.ALT <- simResult(300, SimData.ALT, SimModel)
 
 cutoff <- getCutoff(Output.NULL, 0.05)
@@ -565,7 +565,7 @@ mtmm.model.mis <- simMisspecCFA(RTE = RTE.mis, LY=LY.mis)
 
 SimMissing <- simMissing(pmMCAR=0.2, numImps=5)
 
-SimData <- simData(500, mtmm.model, misspec = mtmm.model.mis)
+SimData <- simData(mtmm.model, 500, misspec = mtmm.model.mis)
 SimModel <- simModel(mtmm.model)
 
 Output <- simResult(10, SimData, SimModel, SimMissing)
@@ -608,7 +608,7 @@ itemGroups <- list(setx, set1, set2, set3)
 
 SimMissing <- simMissing(nforms=3, itemGroups=itemGroups, numImps=5)
 
-SimData <- simData(1000, CFA.model) #, misspec = CFA.model.mis)
+SimData <- simData(CFA.model, 1000) #, misspec = CFA.model.mis)
 SimModel <- simModel(CFA.model)
 
 dat <- run(SimData)
@@ -658,7 +658,7 @@ LY.mis <- simMatrix(loading.mis, "u2")
 CFA.model.mis <- simMisspecCFA(LY=LY.mis)
 
 SimDataDist <- simDataDist(t2, t3, t4, t5, chi3, chi4, chi5, chi6, chi3, chi4, chi5, chi6, reverse=c(rep(FALSE, 8), rep(TRUE, 4)))
-SimData <- simData(200, CFA.Model, misspec=CFA.model.mis, indDist=SimDataDist)
+SimData <- simData(CFA.Model, 200, misspec=CFA.model.mis, indDist=SimDataDist)
 SimModel <- simModel(CFA.Model, estimator="mlm")
 Output <- simResult(1000, SimData, SimModel)
 getCutoff(Output, 0.05)
@@ -730,7 +730,7 @@ SEM.Mis.Model <- simMisspecSEM(BE = mis.BE, LY = mis.LY, RTE = mis.RTE)
 
 facDist <- simDataDist(chi5, chi5, n1, n1)
 
-dataTemplate <- simData(500, SEM.Model, SEM.Mis.Model, sequential=TRUE, facDist=facDist)
+dataTemplate <- simData(SEM.Model, 500, SEM.Mis.Model, sequential=TRUE, facDist=facDist)
 modelTemplate <- simModel(SEM.Model, estimator="mlr")
 
 
@@ -783,7 +783,7 @@ SEM.Model.Mis <- simMisspecSEM(RTE=RTE.mis)
 
 facDist <- simDataDist(n01, c5, n01)
 
-SimData <- simData(200, SEM.Model, misspec=SEM.Model.Mis, sequential=TRUE, facDist=facDist)
+SimData <- simData(SEM.Model, 200, misspec=SEM.Model.Mis, sequential=TRUE, facDist=facDist)
 SimModel <- simModel(SEM.Model, estimator="mlm")
 Output <- simResult(100, SimData, SimModel)
 getCutoff(Output, 0.05)
@@ -839,7 +839,7 @@ SEM.Model.Mis <- simMisspecSEM(RTE=RTE.mis)
 
 facDist <- simDataDist(n01, c5, n01)
 
-SimData <- simData(200, SEM.Model, misspec=SEM.Model.Mis, sequential=TRUE, facDist=facDist)
+SimData <- simData(SEM.Model, 200, misspec=SEM.Model.Mis, sequential=TRUE, facDist=facDist)
  
 SimModel <- simModel(SEM.Model, estimator="mlm")
 
@@ -882,7 +882,7 @@ mis.LY <- simMatrix(mis.loading, "u2")
 
 CFA.Mis.Model <- simMisspecCFA(LY = mis.LY)#, RTD = mis.RTD)
 
-SimData <- simData(200, CFA.Model.Aux, misspec = CFA.Mis.Model)
+SimData <- simData(CFA.Model.Aux, 200, misspec = CFA.Mis.Model)
 
 CFA.Model <- extract(CFA.Model.Aux, y=1:6)
 
@@ -941,7 +941,7 @@ RTE.mis <- symMatrix(errorCorMis, n01)
 
 Cov.Model.Mis <- simMisspecSEM(RTE=RTE.mis)
 
-SimData <- simData(200, Cov.Model, misspec=Cov.Model.Mis)
+SimData <- simData(Cov.Model, 200, misspec=Cov.Model.Mis)
 dat <- run(SimData)
 
 model <- "
@@ -1050,7 +1050,7 @@ TY <- simVector(c(rep(NA, 12), 0), rep(0, 13))
   
 CFA.Full.Model <- simSetCFA(LY=LX, RPS=RPH, RTE=RTD, VTE = VTD, VPS=VPH, AL=AL, TY=TY)
   
-SimData <- simData(200, CFA.Full.Model)
+SimData <- simData(CFA.Full.Model, 200)
 run(SimData)
 
 # Allow Factor Loading
@@ -1082,13 +1082,13 @@ RPH <- symMatrix(diag(1))
   
 CFA.Full.Model <- simSetCFA(LY=LX, RPS=RPH, RTE=RTD, VTE=VTE)
   
-SimData <- simData(200, CFA.Full.Model)
+SimData <- simData(CFA.Full.Model, 200)
 run(SimData)
 
 # Model total variance instead
 VY <- simVector(rep(NA, 13), rep(1, 13))
 CFA.Full.Model <- simSetCFA(LY=LX, RPS=RPH, RTE=RTD, VY=VY)
-SimData <- simData(200, CFA.Full.Model, sequential=TRUE)
+SimData <- simData(CFA.Full.Model, 200, sequential=TRUE)
 run(SimData)
 
 
@@ -1157,7 +1157,7 @@ RTD2 <- symMatrix(error.cor2)
 CFA.Model2 <- simSetCFA(LX = LX2, RPH = RPH2, RTD = RTD2) #, VX = VX, MX=MX)
 CFA.Model <- extract(CFA.Model2, y=c(1:3, 5:7))
 
-SimData <- simData(200, CFA.Model2)
+SimData <- simData(CFA.Model2, 200)
 
 data <- run(SimData)
 
@@ -1209,8 +1209,8 @@ mis.path.BE[4, 1:2] <- NA
 mis.BE <- simMatrix(mis.path.BE, "u1")
 Path.Mis.Model <- simMisspecPath(BE = mis.BE)
 
-Data <- simData(500, Path.Model)
-Data.Mis <- simData(500, Path.Model, Path.Mis.Model)
+Data <- simData(Path.Model, 500)
+Data.Mis <- simData(Path.Model, 500, Path.Mis.Model)
 
 z <- rnorm(500, 0, 1)
 dat <- data.frame(run(Data.Mis), z) 
@@ -1243,7 +1243,7 @@ VTD <- simVector(c(rep(NA, 6), 0, NA), c(rep(0.51, 6), 0, 1))
 CFA.Model2 <- simSetCFA(LX = LX, RPH = RPH, RTD = RTD, VTD = VTD)
 CFA.Model <- extract(CFA.Model2, y=1:7)
 
-SimData <- simData(200, CFA.Model2)
+SimData <- simData(CFA.Model2, 200)
 
 data <- run(SimData)
 
@@ -1377,10 +1377,10 @@ constraint3[,1] <- 1:2
 rownames(constraint3) <- rep("LY", 2)
 equal.loading <- simEqualCon(constraint1, constraint2, constraint3, modelType="SEM.exo")
 
-Data.Original <- simData(300, SEM.model)
-Data.Mis <- simData(300, SEM.model, misspec=SEM.Mis.Model)
-Data.Con <- simData(300, SEM.model, equalCon=equal.loading)
-Data.Mis.Con <- simData(300, SEM.model, misspec=SEM.Mis.Model, 
+Data.Original <- simData(SEM.model, 300)
+Data.Mis <- simData(SEM.model, 300, misspec=SEM.Mis.Model)
+Data.Con <- simData(SEM.model, 300, equalCon=equal.loading)
+Data.Mis.Con <- simData(SEM.model, 300, misspec=SEM.Mis.Model, 
 	equalCon=equal.loading)
 
 Model.Original <- simModel(SEM.model)
@@ -1410,7 +1410,7 @@ RTD <- symMatrix(error.cor)
 
 CFA.Model <- simSetCFA(LY = LX, RPH = RPH, RTD = RTD)
 
-SimData <- simData(200, CFA.Model)
+SimData <- simData(CFA.Model, 200)
 
 SimModel <- simModel(CFA.Model)
 
@@ -1425,12 +1425,84 @@ out <- run(SimModel, dat, SimMissing)
 
 # Add new data
 # simParamCFA
-# simParamPath !!!!!!!!!!!!!!! Reverse simSetPath
+# simParamPath 
 # simParamSEM
 # summary SimParam: Add number of parameters
 # Do we need to check for identification
 # simModel taking simParam
+# Change the order of SimData in the manual and introduction!!!!!!!!!!!!!!!!!
 # simModelOut + simMisspec --> simData; Do we need to use standardized parameters?	
 # simModelOut --> simModel for starting values
 # simModel + Data + simMisspec --> simModelOut + simMisspec --> simResult
 # Problem of fixed.x
+# Change simData.R --> simData-methods.R
+# run(SimFunction) --> Check whether simDataOut
+
+################### Example 14 Analyzing Real Data ###################################
+
+library(lavaan)
+hs <- HolzingerSwineford1939
+loading <- matrix(0, 9, 3)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+loading[7:9, 3] <- NA
+model <- simParamCFA(LY=loading)
+SimModel <- simModel(model, indicatorLab=paste("x", 1:9, sep=""))
+out <- run(SimModel, hs)
+summary(out)
+
+u2 <- simUnif(-0.2, 0.2)
+loading.trivial <- matrix(NA, 9, 3)
+loading.trivial[is.na(loading)] <- 0
+LY.trivial <- simMatrix(loading.trivial, "u2")
+mis <- simMisspecCFA(LY = LY.trivial)
+
+
+
+simFit <- function(nRep, data, model, misspec, conBeforeMis=TRUE, misfitBound=new("NullVector"), maxDraw=100, sequential=NA, facDist=new("NullSimDataDist"), errorDist=new("NullSimDataDist"), indDist=new("NullSimDataDist"), seed=123321, silent=FALSE, multicore=FALSE, cluster=FALSE, numProc=NULL) {
+	out <- run(model, data)
+	miss <- is.na(data)
+	SimData <- simData(out, misspec=misspec, conBeforeMis=conBeforeMis, misfitBound=misfitBound, maxDraw=maxDraw, sequential=sequential, facDist=facDist, errorDist=errorDist, indDist=indDist)
+	missFunction <- simFunction(imposeMissing, logical=miss)
+	simOut <- simResult(nRep, SimData, model, seed=seed, silent=silent, multicore=multicore, cluster=cluster, numProc=numProc, objFunction=missFunction)
+	return(simOut)
+}
+
+
+
+
+Output <- simFit(200, hs, SimModel, mis)
+
+
+setClass("SimFunction",
+	representation(
+		fun="function",
+		attribute="list",
+		callfun="call"
+	)
+)
+
+simFunction <- function(fun, ...) {
+	List <- list(...)
+	mc <- match.call()
+	return(new("SimFunction", fun=fun, attribute=List, callfun=mc))
+}
+
+x <- simFunction(rnorm, sd=100, mean=1)
+
+setMethod("run", signature(object="SimFunction"), definition=function(object, data) {
+	out <- list()
+	out[[1]] <- object@fun
+	out[[2]] <- data
+	outlength <- length(object@attribute)
+	for(i in 1:outlength) {
+		out[[i+2]] <- object@attribute[[i]]
+	}
+	names(out) <- c("", "", names(object@attribute))
+	eval(as.call(out))
+}
+)
+
+y <- simFunction(imposeMissing, logical=m)
+run(y, hs)
+

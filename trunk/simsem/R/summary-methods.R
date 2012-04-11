@@ -661,7 +661,6 @@ setMethod("summary", signature="SimMissing", definition=function(object) {
 #Description: This function will print all elements in the SimMissing.
 #Return: 	NONE. Results will print on screen only.
 
-
 setMethod("summary", signature="SimDataDist", definition=function(object) {
 		cat("DATA DISTRIBUTION OBJECT\n")
  		cat(paste("The number of variables is", object@p, "\n"))
@@ -679,3 +678,16 @@ setMethod("summary", signature="SimDataDist", definition=function(object) {
 #Description: This function will print all elements in the SimDataDist.
 #Return: 	NONE. Results will print on screen only.
 
+setMethod("summary", signature(object="SimFunction"), definition=function(object) {
+	cat("FUNCTION OBJECT\n")
+	x <- as.list(object@callfun)
+	cat("Function Name = ", x$fun, "\n")
+	if(length(x) > 2) {
+		cat("Addition attributes = ", paste(names(x)[3:length(x)], collapse=", "), "\n")
+	}
+}
+)
+#Arguments: 
+#	object:	SimFunction class that users wish to summarize
+#Description: This function will print all elements in the SimFunction.
+#Return: 	NONE. Results will print on screen only.

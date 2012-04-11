@@ -1,4 +1,4 @@
-simData <- function(n, param, misspec=new("NullSimMisspec"), equalCon=new("NullSimEqualCon"), conBeforeMis=TRUE, misfitBound=new("NullVector"), maxDraw=100, sequential=NA, facDist=new("NullSimDataDist"), errorDist=new("NullSimDataDist"), indDist=new("NullSimDataDist")) {
+setMethod("simData", signature(param="SimSet"), definition=function(param, n, misspec=new("NullSimMisspec"), equalCon=new("NullSimEqualCon"), conBeforeMis=TRUE, misfitBound=new("NullVector"), maxDraw=100, sequential=NA, facDist=new("NullSimDataDist"), errorDist=new("NullSimDataDist"), indDist=new("NullSimDataDist"), indicatorLab=NULL) {
 	modelType <- param@modelType
 	if(!(is.na(sequential) | sequential == TRUE | sequential == FALSE)) stop("Please specify NA (to use default), TRUE, or FALSE for the sequential argument")
 	if(is.na(sequential)) sequential <- FALSE
@@ -23,6 +23,17 @@ simData <- function(n, param, misspec=new("NullSimMisspec"), equalCon=new("NullS
 	if(sequential & !isNullObject(indDist)) stop("indDist is not allowed when using sequential method in data generation")
 	return(new("SimData", n=n, modelType=modelType, param=param, misspec=misspec,
 		equalCon=equalCon, conBeforeMis=conBeforeMis, misfitBound=misfitBound, maxDraw=maxDraw,
-		sequential=sequential, facDist=facDist, errorDist=errorDist, indDist=indDist))
+		sequential=sequential, facDist=facDist, errorDist=errorDist, indDist=indDist, indicatorLab=indicatorLab))
 }
+)
 
+setMethod("simData", signature(param="SimModelOut"), definition=function(param, misspec=new("NullSimMisspec"), conBeforeMis=TRUE, misfitBound=new("NullVector"), maxDraw=100, sequential=NA, facDist=new("NullSimDataDist"), errorDist=new("NullSimDataDist"), indDist=new("NullSimDataDist"), usedStd=TRUE) {
+	n <- param@n
+	modelType <- param@coef@modelType
+	equalCon <- param@equalCon
+	usedParam <- toSimSet(param, usedStd=usedStd)
+	indicatorLab <- param@indicatorLab
+	result <- simData(param=usedParam, n=n, misspec=misspec, equalCon=equalCon, conBeforeMis=conBeforeMis, misfitBound=misfitBound, maxDraw=maxDraw, sequential=sequential, facDist=facDist, errorDist=errorDist, indDist=indDist, indicatorLab=indicatorLab) 
+	return(result)
+}
+)

@@ -1,4 +1,4 @@
-runRep <- function(object, objData, objModel, objMissing=new("NullSimMissing"), silent=FALSE) {
+runRep <- function(object, objData, objModel, objMissing=new("NullSimMissing"), objFunction=new("NullSimFunction"), silent=FALSE) {
 	modelType <- objModel@modelType
     param <- NULL
 	coef <- NA
@@ -25,6 +25,7 @@ runRep <- function(object, objData, objModel, objMissing=new("NullSimMissing"), 
 	data.mis <- NULL 
 	if(class(obj) == "list") {
 		data.mis <- createData(obj, n, objData, dataOnly=FALSE)
+		if(!isNullObject(objData@indicatorLab)) colnames(data.mis@data) <- objData@indicatorLab
 	} else {
 		data.mis <- obj
 	} 
@@ -40,6 +41,7 @@ runRep <- function(object, objData, objModel, objMissing=new("NullSimMissing"), 
 		#	pmMAR=objMissing@pmMAR, nforms=objMissing@nforms,
 		#	itemGroups=objMissing@itemGroups, twoMethod=objMissing@twoMethod)
 	} 
+	if(!isNullObject(objFunction)) data.mis <- run(objFunction, data.mis, checkDataOut=TRUE)
 
 	temp <- NULL
           #Impute missing and run results 

@@ -80,7 +80,7 @@ LX <- simMatrix(loading, 0.7)
 RPH <- symMatrix(diag(1))
 RTD <- symMatrix(diag(6))
 CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
-SimData <- simData(500, CFA.Model)
+SimData <- simData(CFA.Model, 500)
 SimModel <- simModel(CFA.Model)
 # We make the examples running only 50 replications to save time.
 # In reality, more replications are needed.

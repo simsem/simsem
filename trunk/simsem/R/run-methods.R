@@ -381,6 +381,15 @@ setMethod("run", signature="SimData", definition=function(object, n=NULL, dataOn
 	if(is.null(n)) n <- object@n
 	paramSet <- drawParameters(object)
 	DataOut <- createData(paramSet, n, object, dataOnly)
+	if(!is.null(object@indicatorLab)) {
+		if(class(DataOut) == "SimDataOut") {
+			data <- DataOut@data
+			colnames(data) <- object@indicatorLab
+			DataOut@data <- data
+		} else {
+			colnames(DataOut) <- object@indicatorLab
+		}
+	}
 	return(DataOut)
 	
 })
@@ -418,7 +427,8 @@ setMethod("run", signature="SimModel", definition=function(object, data, simMiss
 	if(is.numeric(object@indicatorLab)) object@indicatorLab <- colnames(data)[object@indicatorLab]
 	if(is.numeric(object@auxiliary)) object@auxiliary <- colnames(data)[object@auxiliary]
 	if(length(intersect(object@auxiliary, object@indicatorLab)) != 0) stop("There is common variable between the variables in the model and the auxiliary variables.")
-	data <- data[,c(object@indicatorLab, object@auxiliary)]
+	targetCol <- c(object@indicatorLab, object@auxiliary)
+	data <- data[,targetCol]
 	miss <- sum(is.na(data)) > 0	
 	if(is.null(estimator)) estimator <- object@estimator
 	estimator <- tolower(estimator)
@@ -458,6 +468,12 @@ setMethod("run", signature="SimModel", definition=function(object, data, simMiss
 		}
 	}
 	Output@n <- nrow(data)
+	if(!isNullObject(object@indicatorLab)) {
+		Output@indicatorLab <- object@indicatorLab
+	} else {
+		Output@indicatorLab <- colnames(data)
+	}
+	Output@factorLab <- object@factorLab
 	#Add labels in the SimModelOut --> go to SimModelOut and relabels it
 	#Provide a nicer summary --> Groups elements from the same matrix together
 	return(Output)
@@ -572,3 +588,22 @@ setMethod("run", signature="SimDataDist", definition=function(object, n, m, cm) 
 #	Data:	Data that used to be imputed missing value
 #Description: 	The SimData will analyze the data and return the SimModelOut.c that saves the result.
 #Return: 	SimModelOut.c that saves the result.
+
+setMethod("run", signature(object="SimFunction"), definition=function(object, x, checkDataOut=FALSE) {
+	if(checkDataOut && (class(x) == "SimDataOut")) x <- x@data
+	out <- list()
+	out[[1]] <- object@fun
+	out[[2]] <- x
+	outlength <- length(object@attribute)
+	for(i in 1:outlength) {
+		out[[i+2]] <- object@attribute[[i]]
+	}
+	names(out) <- c("", "", names(object@attribute))
+	eval(as.call(out))
+}
+)
+#Arguments: 
+#	object:	SimFunction object
+#	x:	The first argument that users need to plugin
+#Description: 	The SimFunction will evaluate the function and return the result of the evaluation.
+#Return: 	The result from the function.

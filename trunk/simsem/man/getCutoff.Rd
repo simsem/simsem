@@ -51,7 +51,7 @@ error.cor <- matrix(0, 6, 6)
 diag(error.cor) <- 1
 RTD <- symMatrix(error.cor)
 CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
-SimData <- simData(200, CFA.Model)
+SimData <- simData(CFA.Model, 200)
 SimModel <- simModel(CFA.Model)
 # We make the examples running only 50 replications to save time.
 # In reality, more replications are needed.

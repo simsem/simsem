@@ -1,6 +1,6 @@
 
 
-simResult <- function(nRep=NULL, objData=NULL, objModel=NULL, objMissing=new("NullSimMissing"), seed = 123321, silent=FALSE, multicore=FALSE, cluster=FALSE, numProc=NULL, n=NULL, pmMCAR=NULL, pmMAR=NULL, objSet=NULL) {
+simResult <- function(nRep=NULL, objData=NULL, objModel=NULL, objMissing=new("NullSimMissing"), seed = 123321, silent=FALSE, multicore=FALSE, cluster=FALSE, numProc=NULL, n=NULL, pmMCAR=NULL, pmMAR=NULL, objSet=NULL, objFunction=new("NullSimFunction")) {
 	set.seed(seed)
 	if(is.null(nRep)) {
 		if(!is.vector(n)) stop("Please specify the number of replications")
@@ -92,13 +92,13 @@ simResult <- function(nRep=NULL, objData=NULL, objModel=NULL, objMissing=new("Nu
 		if(is.null(numProc)) numProc <- detectCores()
 		if(sys == "windows") {
 			cl <- makeCluster(rep("localhost", numProc), type="SOCK")
-			Result.l <- clusterApplyLB(cl, object2.l, runRep, objData=objData, objModel=objModel, objMissing=objMissing, silent=silent)	
+			Result.l <- clusterApplyLB(cl, object2.l, runRep, objData=objData, objModel=objModel, objMissing=objMissing, objFunction=objFunction, silent=silent)	
 			stopCluster(cl)
 		} else {
-			Result.l <- mclapply(object2.l, runRep, objData=objData, objModel=objModel, objMissing=objMissing, silent=silent, mc.cores=numProc)				
+			Result.l <- mclapply(object2.l, runRep, objData=objData, objModel=objModel, objMissing=objMissing, objFunction=objFunction, silent=silent, mc.cores=numProc)				
 		}
 	} else {
-		Result.l <- lapply(object2.l, runRep, objData=objData, objModel=objModel, objMissing=objMissing, silent=silent)	
+		Result.l <- lapply(object2.l, runRep, objData=objData, objModel=objModel, objMissing=objMissing, objFunction=objFunction, silent=silent)	
 	}
 	
 

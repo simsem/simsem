@@ -90,7 +90,7 @@ error.cor <- matrix(0, 6, 6)
 diag(error.cor) <- 1
 RTD <- symMatrix(error.cor)
 CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
-SimData <- simData(200, CFA.Model)
+SimData <- simData(CFA.Model, 200)
 summary(SimData)
 run(SimData)
 
@@ -100,7 +100,7 @@ error.cor.Mis <- matrix(NA, 6, 6)
 diag(error.cor.Mis) <- 1
 RTD.Mis <- symMatrix(error.cor.Mis, "n01")
 CFA.Model.Mis <- simMisspecCFA(RTD=RTD.Mis)
-SimData <- simData(200, CFA.Model, misspec=CFA.Model.Mis)
+SimData <- simData(CFA.Model, 200, misspec=CFA.Model.Mis)
 summary(SimData)
 run(SimData)
 }

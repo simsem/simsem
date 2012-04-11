@@ -110,3 +110,11 @@ setMethod("isNullObject", signature="SimDataDist", definition=function(target) {
 #Arguments: 	an object in the SimDataDist class that users wish to check
 #Description: check whether the SimDataDist class is the null object
 #Return: 	TRUE if it is null
+
+setMethod("isNullObject", signature="SimFunction", definition=function(target) {
+		is(target, "NullSimFunction")
+	}
+)
+#Arguments: 	an object in the SimFunction class that users wish to check
+#Description: check whether the SimFunction class is the null object
+#Return: 	TRUE if it is null

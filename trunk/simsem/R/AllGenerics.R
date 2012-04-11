@@ -102,3 +102,6 @@ setGeneric("kurtosis", function(object, ...) {
 	return(standardGeneric("kurtosis")) 
 } )
 
+setGeneric("simData", function(param, ...) { 
+	return(standardGeneric("simData")) 
+} )

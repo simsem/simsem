@@ -53,7 +53,7 @@ setMethod("getPower", signature(altObject="SimResult"), definition=function(altO
 #RPH.NULL <- symMatrix(diag(1))
 #RTD <- symMatrix(diag(6))
 #CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = TD)
-#SimData.NULL <- simData(500, CFA.Model.NULL)
+#SimData.NULL <- simData(CFA.Model.NULL, 500)
 #SimModel <- simModel(CFA.Model.NULL)
 #Output.NULL <- simResult(SimData.NULL, SimModel, 50)
 #Cut.NULL <- getCutoff(Output.NULL, 0.95)
@@ -66,7 +66,7 @@ setMethod("getPower", signature(altObject="SimResult"), definition=function(altO
 #diag(latent.cor.alt) <- 1
 #RPH.ALT <- symMatrix(latent.cor.alt, "u79")
 #CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
-#SimData.ALT <- simData(500, CFA.Model.ALT)
+#SimData.ALT <- simData(CFA.Model.ALT, 500)
 #Output.ALT <- simResult(SimData.ALT, SimModel, 50)
 #getPower(Output.ALT, Cut.NULL)
 #Rule.of.thumb <- c(RMSEA=0.05, CFI=0.95, TLI=0.95, SRMR=0.06)

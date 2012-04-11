@@ -62,7 +62,7 @@ error.cor <- matrix(0, 6, 6)
 diag(error.cor) <- 1
 RTD <- symMatrix(error.cor)
 CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
-SimData <- simData(200, CFA.Model)
+SimData <- simData(CFA.Model, 200)
 summary(SimData)
 run(SimData)
 }

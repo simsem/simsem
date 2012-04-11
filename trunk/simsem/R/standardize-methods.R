@@ -35,7 +35,7 @@ setMethod("standardize", signature="SimModelOut", definition=function(object) {
 #TD <- symMatrix(error.cor)
 
 #CFA.Model <- simSetCFA(LX = LX, PH = PH, TD = TD)
-#SimData <- simData(200, CFA.Model)
+#SimData <- simData(CFA.Model, 200)
 
 #SimModel <- simModel(CFA.Model)
 #standardize(run(SimModel, run(SimData)))

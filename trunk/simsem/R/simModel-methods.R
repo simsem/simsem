@@ -20,7 +20,7 @@ setMethod("simModel", signature(object="SimFreeParam"), definition=function(obje
 	} else {
 		start <- defaultStartingValues(object)
 	}
-	if(!isNullObject(SimEqualCon)) {
+	if(!isNullObject(equalCon)) {
 		if(modelType != equalCon@modelType) stop("SimEqualCon and SimFreeParam do not have the same tag")
 	}
 	estimator <- tolower(estimator)
@@ -72,3 +72,21 @@ setMethod("simModel", signature(object="SimSet"), definition=function(object, eq
 #TD <- symMatrix(error.cor)
 #CFA.Model <- simSetCFA(LX = LX, PH = PH, TD = TD)
 #SimModel <- simModel(CFA.Model)
+
+setMethod("simModel", signature(object="SimModelOut"), definition=function(object, start = NULL, equalCon=new("NullSimEqualCon"), package="lavaan", estimator="ML", auxiliary=new("NullVector"), indicatorLab=new("NullVector"), factorLab=new("NullVector")) {
+	param <- object@param
+	modelType <- param@modelType
+	if(is.null(start)) start <- object@coef
+	if(isNullObject(equalCon)) equalCon <- object@equalCon
+	if(isNullObject(indicatorLab)) indicatorLab <- object@indicatorLab
+	if(isNullObject(factorLab)) factorLab <- object@factorLab
+	return(simModel(object=param, start=start, equalCon=equalCon, package=package, estimator=estimator, auxiliary=auxiliary, indicatorLab=indicatorLab, factorLab=factorLab)) 
+})
+#Arguments: 
+#	object:	SimFreeParam.c that save the specification of free parameters and values of fixed parameters
+#	start:	Starting values for those free parameters. lavaan package will automatically create starting values before the analysis; however, starting values are required for OpenMx.
+# 	equalCon:		simConstrint.c that save constraints specified by users. The default is no constraint.
+#	package:	Desired analysis package
+# 	estimator:	Method of estimation
+#Description: 	This function will set up all slots needed for SimModel.c 
+#Return: 	SimModel.c with specification from the function.

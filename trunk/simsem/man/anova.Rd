@@ -66,7 +66,7 @@ RPH <- symMatrix(diag(1))
 RTD <- symMatrix(diag(6))
 CFA.Model1 <- simSetCFA(LY = LX1, RPS = RPH, RTE = RTD)
 CFA.Model2 <- simSetCFA(LY = LX2, RPS = RPH, RTE = RTD)
-SimData <- simData(500, CFA.Model1)
+SimData <- simData(CFA.Model1, 500)
 SimModel1 <- simModel(CFA.Model1)
 SimModel2 <- simModel(CFA.Model2)
 # We make the examples running only 50 replications to save time.

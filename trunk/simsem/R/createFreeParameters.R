@@ -70,8 +70,21 @@ createFreeParameters <- function(object) {
 			if(isDefault(object@TX)) TX <- rep(NA, nrow(LX))
 		}
 	}
-	Output <- new("SimFreeParam", LY=LY, TE=TE, BE=BE, PS=PS, AL=AL, TY=TY,
-			LX=LX, TD=TD, TX=TX, GA=GA, PH=PH, KA=KA, TH=TH, modelType=object@modelType)	
+	result <- NULL
+	if(object@modelType == "CFA") {
+		result <- simParamCFA(LY=LY, TY=TY, AL=AL, TE=TE, PS=PS)
+	} else if (object@modelType == "Path") {
+		result <- simParamPath(BE=BE, AL=AL, PS=PS)
+	} else if (object@modelType == "Path.exo") {
+		result <- simParamPath(BE=BE, AL=AL, PS=PS, GA=GA, KA=KA, PH=PH, exo=TRUE)
+	} else if (object@modelType == "SEM") {
+		result <- simParamSEM(LY=LY, TY=TY, BE=BE, AL=AL, TE=TE, PS=PS)	
+	} else if (object@modelType == "SEM.exo") {
+		result <- simParamSEM(LY=LY, TY=TY, BE=BE, AL=AL, TE=TE, PS=PS, LX=LX, TX=TX, GA=GA, KA=KA, TD=TD, PH=PH, TH=TH, exo=TRUE)	
+	} else {
+		stop("Something is wrong!")
+	}
+	return(result)	
 }
 
 # Example

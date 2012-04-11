@@ -51,7 +51,7 @@ LX.NULL <- simMatrix(loading.null, 0.7)
 RPH.NULL <- symMatrix(diag(1))
 RTD <- symMatrix(diag(6))
 CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
-SimData.NULL <- simData(500, CFA.Model.NULL)
+SimData.NULL <- simData(CFA.Model.NULL, 500)
 SimModel <- simModel(CFA.Model.NULL)
 # We make the examples running only 50 replications to save time.
 # In reality, more replications are needed.
@@ -67,7 +67,7 @@ latent.cor.alt <- matrix(NA, 2, 2)
 diag(latent.cor.alt) <- 1
 RPH.ALT <- symMatrix(latent.cor.alt, "u79")
 CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
-SimData.ALT <- simData(500, CFA.Model.ALT)
+SimData.ALT <- simData(CFA.Model.ALT, 500)
 Output.ALT <- simResult(50, SimData.ALT, SimModel)
 getPower(Output.ALT, Cut.NULL)
 Rule.of.thumb <- c(RMSEA=0.05, CFI=0.95, TLI=0.95, SRMR=0.06)
