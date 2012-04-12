@@ -71,7 +71,7 @@ if(!is.null(pmMAR)) {
 #	data.mat[logical] <- NA
 #}
 if(!is.null(prAttr)) {
-  log.mat3 <- attrition(data,prob=prAttr,timePoints,cov,threshold,ignoreCols)
+  log.mat3 <- attrition(data.mat,prob=prAttr,timePoints,cov,threshold,ignoreCols)
   data.mat[log.mat3] <- NA
 }
 

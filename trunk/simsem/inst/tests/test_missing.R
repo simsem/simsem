@@ -55,6 +55,10 @@ percentmis <- mean(replicate(10,sum(is.na(imposeMissing(dataCE,cov=21,nforms=3,t
                              /length(dataCE[,1:20])))
 expect_true((percentmis > .266) && (percentmis <.267))
 
+expect_error(imposeMissing(data,nforms=3,timePoints=5))
+expect_error(imposeMissing(data,nforms=25))
+expect_error(imposeMissing(data,nforms=3,itemGroups=4))
+
 context("Ignored Variables")
 test.dat <- imposeMissing(dataCE,cov=21,nforms=3,timePoints=2)
 expect_true(sum(is.na(test.dat[,c(1,2,11,12,21)])) == 0)
@@ -68,7 +72,7 @@ expect_true(sum(is.na(test.dat[,c(3,6,9,21)]))== 0)
 test.dat <- imposeMissing(dataCE,cov=21,nforms=3,ignoreCols=5)
 expect_true(sum(is.na(test.dat[,c(1,2,3,4,5,21)]))== 0)
 
-context("Additivity")
+# context("Additivity")
 
 # percentmis <- mean(replicate(10,sum(is.na(imposeMissing(dataC,covs=c(20,21),pmMCAR=.1,pmMAR=.1,nforms=3)))/length(dataC)))
 # expect_true((percentmis > .37) && (percentmis < .386))
