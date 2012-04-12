@@ -65,11 +65,11 @@ if(!is.null(pmMAR)) {
  log.mat2 <- makeMAR(data.mat,pmMAR,cov,ignoreCols,threshold)
  data.mat[log.mat2] <- NA
 }
-if(!is.null(logical)) {
-	if(!(class(logical) %in% c("matrix", "data.frame"))) stop("The logical argument must be matrix or data frame.")
-	if((dim(data.mat)[1] != dim(logical)[1]) | (dim(data.mat)[2] != dim(logical)[2])) stop("The dimension in the logical argument is not equal to the dimension in the data")
-	data.mat[logical] <- NA
-}
+#if(!is.null(logical)) {
+#	if(!(class(logical) %in% c("matrix", "data.frame"))) stop("The logical argument must be matrix or data frame.")
+#	if((dim(data.mat)[1] != dim(logical)[1]) | (dim(data.mat)[2] != dim(logical)[2])) stop("The dimension in the logical argument is not equal to the dimension in the data")
+#	data.mat[logical] <- NA
+#}
 if(!is.null(prAttr)) {
   log.mat3 <- attrition(data,prob=prAttr,timePoints,cov,threshold,ignoreCols)
   data.mat[log.mat3] <- NA
@@ -155,7 +155,7 @@ makeMCAR <- function(dims,pm=NULL,cov=NULL,ignoreCols=NULL)
 # TODO:
 # Warnings for illegal groupings
 # Check to see if item groupings are valid?
-planned.missing <- function(dims=c(0,0),nforms=NULL,itemGroups=NULL,twoMethod=NULL,
+plannedMissing <- function(dims=c(0,0),nforms=NULL,itemGroups=NULL,twoMethod=NULL,
                             cov=NULL, timePoints=1,ignoreCols=NULL) {
      
   nitems <- dims[2]
