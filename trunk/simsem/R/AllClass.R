@@ -1302,10 +1302,11 @@ setClass("SimModelMIOut", # The class provides model result.
 #  nforms = number of forms for planned missing
 #  itemGroups = list of lists of item groupings (column indices) for planned missing data designs
 #  twoMethod = vector of (item, percent missing). Functions removes the given percent of data on the column index.
+#  prAttr = Vector of probabilities for an entire case to be deleted at a given timePoint.
 #  timepoints = number of timepoints in data
 # Methods:	None for now.
 # Author: Alex Schoemann (University of Kansas; schoemann@ku.edu), Patrick Miller (University of Kansas; patr1ckm@ku.edu)
-# Date Modified: November 17, 2011
+# Date Modified: April 12, 2012
 
 setClass("SimMissing",
     representation(
@@ -1315,11 +1316,12 @@ setClass("SimMissing",
         nforms="numeric",
         itemGroups="list",
         twoMethod="vector",
+        prAttr="vector",
         impMethod="vector",
         numImps="numeric",
         timePoints="numeric",
-		ignoreCols="numeric",
-		threshold="numeric"),
+	ignoreCols="numeric",
+	threshold="numeric"),
     prototype(
         cov=0,
         pmMCAR=0,
@@ -1327,11 +1329,12 @@ setClass("SimMissing",
         nforms=0,
         itemGroups=list(0),
         twoMethod=0,
+        prAttr=0,
         impMethod="amelia",
         numImps=0,
         timePoints=1,
-		ignoreCols=0,
-		threshold=0)
+	ignoreCols=0,
+	threshold=0)
 )
 
 

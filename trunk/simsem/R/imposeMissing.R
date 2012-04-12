@@ -34,7 +34,7 @@ testImposeMissing <- function() {
 ## The wrapper function for the various functions to impose missing values.Currently, the function will delete
 ## x percent of eligible values for MAR and MCAR, if you mark colums to be ignored.
 imposeMissing <- function(data.mat,cov=0,pmMCAR=0,pmMAR=0,nforms=0,
-                          itemGroups=0,twoMethod=0,timePoints=1,ignoreCols=0,threshold=0,logical=NULL){
+                          itemGroups=0,twoMethod=0,prAttr=0, timePoints=1,ignoreCols=0,threshold=0){
  
  #Need the inputs to be numeric for the missing object. Turn to Nulls for this function
  if (length(cov) == 1 && cov==0) {cov <- NULL }
@@ -45,6 +45,7 @@ imposeMissing <- function(data.mat,cov=0,pmMCAR=0,pmMAR=0,nforms=0,
  if (length(twoMethod) == 1 && twoMethod==0) {twoMethod <- NULL }
  if (length(ignoreCols) == 1 && ignoreCols==0) {ignoreCols <- NULL}
  if (threshold==0) { threshold <- NULL }
+ if (prAttr==0) { prAttr <- NULL }
  if (class(data.mat) == "data.frame") {data.mat <- as.matrix(data.mat)}
  
  if(!is.null(nforms) | !is.null(twoMethod)) { 
@@ -69,6 +70,11 @@ if(!is.null(logical)) {
 	if((dim(data.mat)[1] != dim(logical)[1]) | (dim(data.mat)[2] != dim(logical)[2])) stop("The dimension in the logical argument is not equal to the dimension in the data")
 	data.mat[logical] <- NA
 }
+if(!is.null(prAttr)) {
+  log.mat3 <- attrition(data,prob=prAttr,timePoints,cov,threshold,ignoreCols)
+  data.mat[log.mat3] <- NA
+}
+
  return(data.mat)
 
 }
@@ -84,19 +90,18 @@ makeMAR <- function(data,pm=NULL,cov=NULL,ignoreCols=NULL,threshold=NULL) {
   # Calculate the probability of missing above the threshold,starting with the mean of the covariate.
   # If this probability is greater than or equal to 1, lower the threshold by choosing thresholds
   # at increasingly lower quantiles of the data.
-  if(is.null(threshold)) {threshold <- mean(data[,cov])}
+  if(is.null(threshold)) {  threshold <- mean(data[,cov]) }
+
   pr.missing <- 1
   qlist <- c(seq(.5,0,-.1))
   i <- 0
   while(pr.missing >= 1 && (i < length(qlist)) ) {
-    if(i != 0) {threshold <- quantile(data[,cov],qlist[i]) }
+     if(i != 0) {threshold <- quantile(cov,qlist[i]) }
 
-    percent.eligible <- (sum(data[,cov] > threshold)*length(misCols))/length(data)
-    pr.missing <- pm / percent.eligible
-    i <- i+1
-  }  
-
-  if((i >= length(qlist)) && (pr.missing > 1)) { stop("cannot attain given percent missing. Please reduce the percent missing, or include more variables. ") }  
+     percent.eligible <- (sum(data[,cov] > threshold)*length(misCols))/length(data)
+     pr.missing <- pm / percent.eligible
+     i <- i+1
+   }
   
   mismat <- matrix(FALSE,ncol=length(colList),nrow=dim(data)[1])
   rows.eligible <- data[,cov] > threshold
@@ -106,6 +111,7 @@ makeMAR <- function(data,pm=NULL,cov=NULL,ignoreCols=NULL,threshold=NULL) {
 
   return(mismat)
 }
+
 
 # Function to make some MCAR missin'
 # Input: Data matrix dimensions, desired percent missing, columns of covariates to not have missingness on
@@ -120,7 +126,6 @@ makeMCAR <- function(dims,pm=NULL,cov=NULL,ignoreCols=NULL)
       misCols <- colList	
 	}
 
-    
     R <- matrix(FALSE,dims[1],dims[2])
 
     if(!is.null(pm)){
@@ -135,7 +140,6 @@ makeMCAR <- function(dims,pm=NULL,cov=NULL,ignoreCols=NULL)
 
     R[,misCols] <- R.mis
     
-
     return(R)
 }
 
@@ -151,8 +155,9 @@ makeMCAR <- function(dims,pm=NULL,cov=NULL,ignoreCols=NULL)
 # TODO:
 # Warnings for illegal groupings
 # Check to see if item groupings are valid?
-plannedMissing <- function(dims=c(0,0),nforms=NULL,itemGroups=NULL,twoMethod=NULL, cov=NULL, timePoints=1,ignoreCols=NULL) {
-   
+planned.missing <- function(dims=c(0,0),nforms=NULL,itemGroups=NULL,twoMethod=NULL,
+                            cov=NULL, timePoints=1,ignoreCols=NULL) {
+     
   nitems <- dims[2]
   nobs <- dims[1]
   excl <- c(cov,ignoreCols)
@@ -167,12 +172,17 @@ plannedMissing <- function(dims=c(0,0),nforms=NULL,itemGroups=NULL,twoMethod=NUL
   
   itemsPerTP <- length(itemList)/timePoints
 
-  if(is.integer(itemsPerTP)) stop ("Items are not divisible by timepoints! Check the number of items and timepoints.")
+  if((itemsPerTP-round(itemsPerTP))!= 0) stop ("Items are not divisible by timepoints. Check the number of items and timepoints.")
 
   
   log.mat <- matrix(FALSE,ncol=itemsPerTP,nrow=nobs)
 
   if(!is.null(nforms) && nforms != 0) {
+    if((nforms+1) > dims[2]) stop("The number of forms cannot exceed the number of variables.")
+
+    if(!is.null(itemGroups) && (nforms != length(itemGroups))) {
+    nforms <- length(itemGroups); print("Number of forms has been set to the number of groups specified")}
+    
     if ( ((!is.null(itemGroups)) && (class(itemGroups) != "list")) ) {
       stop("itemGroups not a list")
     }
@@ -322,3 +332,71 @@ permn <- function (x, fun = NULL, ...)
     }
     out
 }
+
+# Implementing attrition using probability of attrition per TP as the parameter, and optionally, a covariate.
+# The probability argument can be a vector, allowing you to specify different probabilities for different time points.
+# If there is only one value, this will be the probability of attrition at each time time point.
+# If the length does not equal the number of time points, the pattern will repeat to cover the remaining time points.
+attrition <- function(data,prob=NULL,timePoints = 1,cov=NULL,threshold=NULL,ignoreCols=NULL) {
+  dims <- dim(data)
+ 
+  colGroups <- generateIndices(timePoints,seq_len(dims[2]),excl=c(cov,ignoreCols))
+
+  log.mat <- matrix(FALSE,nrow=dims[1],ncol=dims[2])
+
+  if(length(prob) != timePoints) { prob <- rep(prob,timePoints) }
+
+  if(is.null(cov)) {
+   excl <- NULL
+   for(i in seq_len(timePoints)) {
+     if(is.null(excl) ) {
+       attr <- runif(dims[1]) <= prob[i]
+       log.mat[attr,] <- TRUE
+       excl <- 1
+     }
+     else {
+       # Grab the first column at the ith timepoint
+       slice <- log.mat[,colGroups[[i]][1]]
+
+       # Each value that isn't true has a prob likelihood of being marked true
+       attr <- sapply(slice,function(x) { if(x != TRUE){ runif(1) <= prob[i]} else {TRUE}})
+
+       # For each row in attr marked true, mark true for all columns excluding previous timepoints.
+       log.mat[attr,unlist(colGroups[-excl])] <- TRUE
+       excl <- c(excl,i)
+     }
+
+   }
+ } else {
+    if(is.null(threshold)){ threshold <- mean(data[,cov]) }
+    rows.eligible <- data[,cov] > threshold
+
+    excl <- NULL
+    for(i in seq_len(timePoints)) {
+     if(is.null(excl) ) {
+       attr <- sapply(rows.eligible,function(x) { if(x && runif(dims[1]) <= prob[i]) {x <- TRUE} else {x <- FALSE} })
+       log.mat[attr,unlist(colGroups)] <- TRUE
+       excl <- 1
+     }
+     else {
+       # Grab the first column at the ith timepoint
+       slice <- log.mat[,colGroups[[i]][1]]
+
+       # Each value that isn't true has a prob likelihood of being marked true
+       attr <- mapply(function(x,y) { if(x == FALSE && y == TRUE){runif(1) <= prob[i]} else {FALSE}},slice,rows.eligible)
+
+       # For each row in attr marked true, mark true for all columns excluding previous timepoints.
+       log.mat[attr,unlist(colGroups[-excl])] <- TRUE
+       excl <- c(excl,i)
+     }
+   }
+  }
+  
+   
+  return(log.mat)
+}
+
+
+
+
+
