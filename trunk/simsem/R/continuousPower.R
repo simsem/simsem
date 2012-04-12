@@ -16,12 +16,12 @@ continousPower <- function(simResult, contN = TRUE, contMCAR = FALSE, contMAR = 
     
    #Clean simResult object and get a replications X parameters matrix of 0s and 1s for logistic regression 
   object <- clean(simResult)
-	crit.value <- qnorm(1 - alpha/2)
+  crit.value <- qnorm(1 - alpha/2)
   sig <- 0 + (abs(object@coef/object@se) > crit.value)
-	nrep <- dim(sig)[[1]]
+  nrep <- dim(sig)[[1]]
 
 ##Find params to get power for
-  if(!isNullObject(powerparam)) {	
+  if(!is.null(powerparam)) {	
   j <- grep(powerparam,dimnames(sig)[[2]])  # Return column indices that start with "param"
  	sig<- sig[,j]
   }
@@ -55,7 +55,7 @@ continousPower <- function(simResult, contN = TRUE, contMCAR = FALSE, contMAR = 
 	pred$MAR <- seq(min(object@pmMAR),max(object@pmMAR), by = .01)
 
 	}
-	if(!isNullObject(contParam)) {	
+	if(!is.null(contParam)) {	
 	if (!(dim(object@paramValue)[[2]] == nrep)) {
 	stop ("Number of random parameters is not the same as the number of replications, check to see if parameters varied across replications")
 	}
@@ -66,32 +66,49 @@ continousPower <- function(simResult, contN = TRUE, contMCAR = FALSE, contMAR = 
 	
 	res <- NULL
 	powVal<-data.frame(expand.grid(pred))
-	names(powVal) <-c('x1', 'x2')
+	#need to put a column of 1s in front of powVal
+	powVal <- cbind(rep(1,dim(powVal)[1]),powVal)
 	
     #Need way to handle params when power is 1 or 0... or atleast suppress warnings
 	##WHY can't I predict more values than nRep!!!!!!
+	##F it. Lets write out own predicted probaility function.
+	
+	#mod<-glm.fit(y =sig[,i], x=x, family=binomial(link = 'logit'))
+
 	
 	for (i in 1:dim(sig)[[2]]){
-	mod<-invisible(try(glm(sig[,i]~x, family=binomial(link = 'logit')),silent=TRUE))
- 	res[[dimnames(sig)[[2]][[i]]]]<-data.frame(predict(mod,newdata=powVal,type='response'))
+	mod<-invisible(try(glm(sig[,i] ~ x, family=binomial(link = 'logit')),silent=TRUE))
+ 	res[[dimnames(sig)[[2]][[i]]]]<-apply(powVal, 1, predProb, mod)
 	}
 	res <- do.call(cbind, res)
 	names(res) <- names(object@coef)
-	pow <- cbind(x,res)
-  pow[pow < desiredPower] <- NA #puts NA in for below power deisred
+	pow <- cbind(powVal[,-1],res)
+    # pow[pow < desiredPower] <- NA #puts NA in for below power deisred
   
-  powCond <- NULL
-  ##Find first column with power > desired power. Only works for 1 random parameters
-  if(dim(x)[[2]] == 1) {
-  powCond <- as.numeric((lapply(apply(pow > desiredPower, 2, which), head, 1)))
-  powCond <- x[powCond][-1]
-  names(powCond) <- names(object@coef)
-  }
+    # powCond <- NULL
+  #Find first column with power > desired power. Only works for 1 random parameters
+  # if(dim(x)[[2]] == 1) {
+  # powCond <- as.numeric((lapply(apply(pow > desiredPower, 2, which), head, 1)))
+  # powCond <- x[powCond][-1]
+  # names(powCond) <- names(object@coef)
+  # }
 
+    ##Return warnings setting to user's settings
+  options(warn=warnT)
   
   ##Currently returns power for all combinations of randm parameters for all model parameters need to make this better.
-  return(list(powCond, pow))
+  return(pow)
+  }
   
-  ##Return warnings setting to user's settings
-  options(warn=warnT)
+  ##predProb
+  ## Function to get predicted probabilities from logistic regression
+  ##arguments: newdata (a vector of values for all predictors, including the intercept), 
+  ## glmobj an object from a fitted glm run with a logit link
+
+  
+predProb <- function(newdat, glmObj) {
+	slps <- as.numeric(coef(glmObj))
+	logi <- sum(newdat*slps)
+	pp <- exp (logi) / (1 + exp(logi))
+	return(pp)
 }
