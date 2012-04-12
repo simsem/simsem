@@ -93,17 +93,17 @@ simParamSEM <- function(..., exo = FALSE) {
 #		6) If measurement intercept vector (TX or TY) is not specified, the default is to estimate all measurement intercepts.
 
 #Examples:
-loading <- matrix(0, 8, 3)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-loading[7:8, 3] <- NA
-path <- matrix(0, 3, 3)
-path[3, 1:2] <- NA
-SEM.model <- simParamSEM(BE=path, LY=loading)
-loading.X <- matrix(0, 6, 2)
-loading.X[1:3, 1] <- NA
-loading.X[4:6, 2] <- NA
-loading.Y <- matrix(NA, 2, 1)
-path.GA <- matrix(NA, 1, 2)
-BE <- as.matrix(0)
-SEM.Exo.model <- simParamSEM(GA=path.GA, BE=BE, LX=loading.X, LY=loading.Y, exo=TRUE)
+#loading <- matrix(0, 8, 3)
+#loading[1:3, 1] <- NA
+#loading[4:6, 2] <- NA
+#loading[7:8, 3] <- NA
+#path <- matrix(0, 3, 3)
+#path[3, 1:2] <- NA
+#SEM.model <- simParamSEM(BE=path, LY=loading)
+#loading.X <- matrix(0, 6, 2)
+#loading.X[1:3, 1] <- NA
+#loading.X[4:6, 2] <- NA
+#loading.Y <- matrix(NA, 2, 1)
+#path.GA <- matrix(NA, 1, 2)
+#BE <- as.matrix(0)
+#SEM.Exo.model <- simParamSEM(GA=path.GA, BE=BE, LX=loading.X, LY=loading.Y, exo=TRUE)

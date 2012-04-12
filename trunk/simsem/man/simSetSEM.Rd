@@ -1,10 +1,10 @@
 \name{simSetSEM}
 \alias{simSetSEM}
 \title{
-	Create a set of matrix belongs to SEM model
+	Create a set of matrices of parameter and parameter values to generate and analyze data that belongs to SEM model
 }
 \description{
-	This function will create set of matrix that belongs to full SEM model. The requirement is to specify factor residual correlation  or covariance matrix, regression coefficient matrix, factor loading matrix, and measurement error correlation or covariance matrix.	
+	This function will create set of matrices of free parameters and parameter values that belongs to full SEM model. The requirement is to specify factor residual correlation  or covariance matrix, regression coefficient matrix, factor loading matrix, and measurement error correlation or covariance matrix.	
 }
 \usage{
 simSetSEM(..., exo = FALSE)
@@ -67,7 +67,7 @@ simSetSEM(..., exo = FALSE)
 	}
 }
 \value{
-	\code{\linkS4class{SimSet}} object that represents the SEM object. This will be used for specifying data or simModels later.
+	\code{\linkS4class{SimSet}} object that represents the SEM object. This will be used for specifying data or analysis models later.
 }
 \author{
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})

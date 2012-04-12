@@ -176,4 +176,9 @@ simsem, Version 0.1-0 04/11/12
 - Add summary, isNullObject and run methods for the SimFunction class
 - Change simResult and runRep functions to account for SimFunction class
 - Add simFit function to run a Monte Carlo simulation based on the result of data analysis (SimModelOut)
-
+- Add continuousPower function to plot power curves
+- Add indProd function to make the products of indicators in order to make latent interaction construct
+- Add residualCovariate function to residualize variables to control the covariate
+- Fix WriteLavaanCode bug that cannot analyze the data with covariate
+- Change indicatorLab argument name to indLab 
+- Write and fix all documentations for the this version

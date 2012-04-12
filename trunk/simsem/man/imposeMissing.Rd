@@ -8,7 +8,7 @@ Function imposes missing values on a data based on the known missing data types,
 including MCAR, MAR, and planned.
 }
 \usage{
-imposeMissing(data.mat, cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, itemGroups = 0, twoMethod = 0, timePoints = 1, ignoreCols = 0, threshold = 0)
+imposeMissing(data.mat, cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, itemGroups = 0, twoMethod = 0, timePoints = 1, ignoreCols = 0, threshold = 0, logical = NULL)
 }
 \arguments{
   \item{data.mat}{
@@ -47,6 +47,9 @@ imposeMissing(data.mat, cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, itemGroups =
 } 
  \item{threshold}{
     The threshold of covariates that divide between the area to impose missing and the area not to impose missing. The default threshold is the mean of the covariate.
+}
+ \item{logical}{
+    A matrix of logical values (\code{TRUE/FALSE}). If a value in the dataset is corresponding to the \code{TRUE} in the logical matrix, the value will be missing.
 }
 }
 \details{

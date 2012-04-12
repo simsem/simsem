@@ -906,7 +906,7 @@ summaryParam(Output)
 ########################################## Example 13 ###################
 
 library(simsem)
-
+library(lavaan)
 u35 <- simUnif(0.3, 0.5)
 u57 <- simUnif(0.5, 0.7)
 n01 <- simNorm(0, 1)
@@ -942,45 +942,7 @@ RTE.mis <- symMatrix(errorCorMis, n01)
 Cov.Model.Mis <- simMisspecSEM(RTE=RTE.mis)
 
 SimData <- simData(Cov.Model, 200, misspec=Cov.Model.Mis)
-dat <- run(SimData)
-
-model <- "
-e1 =~ NA*y1 + NA*y2 + NA*y3
-e2 =~ NA*y4 + NA*y5 + NA*y6
-e2 ~ NA*e1
-e1 ~~ 1*e1
-e2 ~~ 1*e2
-y1 ~ y7
-y2 ~ y7
-y3 ~ y7
-y4 ~ y7
-y5 ~ y7
-y6 ~ y7
-
-"
-
-fit <- sem(model, data=dat, meanstructure=TRUE, fixed.x=FALSE)
-summary(fit)
-
-# This code is wrong in the write.lavaan.code!!!
-model2 <- "
-e1 =~ NA*y1 + NA*y2 + NA*y3
-e2 =~ NA*y4 + NA*y5 + NA*y6
-e3 =~ NA*y1 + NA*y2 + NA*y3 + NA*y4 + NA*y5 + NA*y6 + NA*y7
-y7 ~~ 0*y7
-e2 ~ NA*e1
-e1 ~~ 1*e1
-e2 ~~ 1*e2
-e3 ~~ 1*e3
-e1 ~~ 0*e3
-e2 ~~ 0*e3
-e1 ~~ 0*e2
-"
-fit2 <- sem(model2, data=dat, fixed.x=TRUE, meanstructure=TRUE)
-summary(fit2)
-
 SimModel <- simModel(Cov.Model)
-out <- run(SimModel, dat)
 
 Output <- simResult(100, SimData, SimModel)
 getCutoff(Output, 0.05)
@@ -994,9 +956,9 @@ summaryParam(Output)
 # Then if any factors are covariate, explicitly put the PS to them! See the previous comment
 
 
+#residualCovariate(attitude, 2:7, 1)
 
-
-
+#indProd(attitude, 1:3, 4:6, residualC=TRUE)
 
 
 
@@ -1447,7 +1409,7 @@ loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
 loading[7:9, 3] <- NA
 model <- simParamCFA(LY=loading)
-SimModel <- simModel(model, indicatorLab=paste("x", 1:9, sep=""))
+SimModel <- simModel(model, indLab=paste("x", 1:9, sep=""))
 out <- run(SimModel, hs)
 summary(out)
 
@@ -1506,3 +1468,104 @@ setMethod("run", signature(object="SimFunction"), definition=function(object, da
 y <- simFunction(imposeMissing, logical=m)
 run(y, hs)
 
+meanCentering <- function(data, var1, var2, match=TRUE, meanC=TRUE, doubleMC=TRUE, namesProd=NULL) {
+	dat1 <- data[,var1]
+	dat2 <- data[,var2]
+	if(meanC) {
+		dat1 <- scale(dat1, scale=FALSE)
+		dat2 <- scale(dat2, scale=FALSE)
+	}
+	if(match) { 
+		if(length(var1) != length(var2)) stop("If the match-paired approach is used, the number of variables in both sets must be equal.")
+		datProd <- dat1 * dat2
+		if(doubleMC) datProd <- scale(datProd, scale=FALSE)
+		if(is.null(namesProd)) {
+			colnames(datProd) <- paste(var1, var2, sep=".")
+		} else {
+			colnames(datProd) <- namesProd
+		}
+		data <- data.frame(data, datProd)
+	} else {
+		datProd <- matrix(0, nrow(data), 1)
+		for(i in 1:length(var1)) {
+			datProd <- data.frame(datProd, matrix(rep(dat1[,i], length(var2)), ncol=length(var2)) * dat2)
+		}
+		datProd <- datProd[, -1]
+		if(doubleMC) datProd <- scale(datProd, scale=FALSE)
+		if(is.null(namesProd)) {
+			temp <- NULL
+			for(i in 1:length(var1)) {
+				temp <- c(temp, paste(var1[i], var2, sep="."))
+			}
+			colnames(datProd) <- temp
+		} else {
+			colnames(datProd) <- namesProd
+		}
+		data <- data.frame(data, datProd)		
+	}
+	return(data)
+}
+
+##########################################################################
+
+
+n65 <- simNorm(0.6, 0.05)
+u35 <- simUnif(0.3, 0.5)
+u68 <- simUnif(0.6, 0.8)
+u2 <- simUnif(-0.2, 0.2)
+n1 <- simNorm(0, 0.1)
+
+loading <- matrix(0, 9, 3)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+loading[7:9, 3] <- NA
+loading.start <- matrix("", 9, 3)
+loading.start[1:3, 1] <- 0.7
+loading.start[4:6, 2] <- 0.7
+loading.start[7:9, 3] <- "u68"
+LY <- simMatrix(loading, loading.start)
+
+RTE <- symMatrix(diag(9))
+
+factor.cor <- diag(3)
+factor.cor[1, 2] <- factor.cor[2, 1] <- NA
+RPS <- symMatrix(factor.cor, 0.5)
+
+path <- matrix(0, 3, 3)
+path[3, 1:2] <- NA
+path.start <- matrix(0, 3, 3)
+path.start[3, 1] <- "n65"
+path.start[3, 2] <- "u35"
+BE <- simMatrix(path, path.start)
+
+datGen <- simSetSEM(BE=BE, LY=LY, RPS=RPS, RTE=RTE)
+
+loading.trivial <- matrix(NA, 9, 3)
+loading.trivial[is.na(loading)] <- 0
+LY.trivial <- simMatrix(loading.trivial, "u2")
+
+error.cor.trivial <- matrix(NA, 9, 9)
+diag(error.cor.trivial) <- 0
+RTE.trivial <- symMatrix(error.cor.trivial, "n1")
+
+misGen <- simMisspecSEM(LY = LY.trivial, RTE = RTE.trivial)
+
+Data.Mis <- simData(datGen, 300, misspec=misGen)
+
+loading <- matrix(0, 12, 4)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+loading[7:9, 4] <- NA
+loading[10:12, 3] <- NA
+
+path <- matrix(0, 4, 4)
+path[4, 1:3] <- NA
+
+analysis <- simParamSEM(BE=path, LY=loading)
+
+Model <- simModel(analysis)
+
+fun <- simFunction(meanCentering, var1=paste("y", 1:3, sep=""), var2=paste("y", 4:6, sep=""), namesProd=paste("y", 10:12, sep=""))
+
+Output <- simResult(20, Data.Mis, Model, objFunction=fun)
+summary(Output)

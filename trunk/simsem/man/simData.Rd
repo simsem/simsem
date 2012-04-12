@@ -1,5 +1,9 @@
 \name{simData}
 \alias{simData}
+\alias{simData-methods}
+\alias{simData,ANY-method}
+\alias{simData,SimSet-method}
+\alias{simData,SimModelOut-method}
 \title{
 	Data object
 }
@@ -7,52 +11,40 @@
 	This function will be used to create data specification and ready for data simulation.
 }
 \usage{
-simData(n, param, misspec = new("NullSimMisspec"), equalCon = new("NullSimEqualCon"), conBeforeMis = TRUE, misfitBound = new("NullVector"), maxDraw = 100,  sequential=NA, facDist=new("NullSimDataDist"), errorDist=new("NullSimDataDist"), indDist=new("NullSimDataDist"))
+simData(param, ...)
 }
 \arguments{
-  \item{n}{
-	Desired sample size
-}
   \item{param}{
-	Model specification matrices that are created by \code{\link{simSetCFA}}, \code{\link{simSetPath}}, or \code{\link{simSetSEM}}.
+	Model specification matrices that are created by \code{\link{simSetCFA}}, \code{\link{simSetPath}}, or \code{\link{simSetSEM}} or the analysis output.
 }
-  \item{misspec}{
-	Model \emph{misspecification} matrices that are created by \code{\link{simMisspecCFA}}, \code{\link{simMisspecPath}}, or \code{\link{simMisspecSEM}}.
+  \item{\dots}{
+	Other values that will be explained specifically for each class
 }
-  \item{equalCon}{
-	Equality constraints that are created by \code{\link{simEqualCon}}. This will specify equality econstraints of parameters in data generation process.
-}
-  \item{conBeforeMis}{
-	\code{TRUE} if users wish to constrain parameters before adding misspecification. 
-	\code{FALSE} if users wish to constrain parameters after adding misspecification.
-}
-  \item{misfitBound}{
-	Upper bound of population root mean squared error of approximation (RMSEA; Browne & Cudeck, 1992) that users wish their model misspecification to be
-}
-  \item{maxDraw}{
-	The maximum number of random drawn parameters and misspecification model until all parameters in the model are eligible 
-	(no negative error variance, standardized coefficients over 1).
-}
-   \item{sequential}{
-   If \code{TRUE}, use a sequential method to create data such that the data from factor are generated first and apply to a set of equations to obtain the data of indicators. If \code{FALSE}, create data directly from model-implied mean and covariance of indicators.
-}
-    \item{facDist}{
-	A \code{\linkS4class{SimDataDist}} for a distribution of factors. Use when \code{sequential} is \code{TRUE}.
-}
-    \item{errorDist}{
-	A \code{\linkS4class{SimDataDist}} for a distribution of measurement errors. Use when \code{sequential} is \code{TRUE}
-}
-    \item{indDist}{
-	A \code{\linkS4class{SimDataDist}} for a distribution of indicators. Use when \code{sequential} is \code{FALSE}.
-}
-}
-%%%%%%%%%%%%%% Check link %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\details{
-	This function will use \code{mvrnorm} function in \code{MASS} package to create data from model implied covariance matrix. 
 }
 \value{
 	\linkS4class{SimData} object that save data model specification.
 }
+\section{Details in \dots}{
+	\itemize{
+		\item \emph{n:} Desired sample size
+		\item \emph{misspec:} Model \emph{misspecification} matrices that are created by \code{\link{simMisspecCFA}}, \code{\link{simMisspecPath}}, or \code{\link{simMisspecSEM}}.
+		\item \emph{equalCon:} Equality constraints that are created by \code{\link{simEqualCon}}. This will specify equality econstraints of parameters in data generation process.
+		\item \emph{conBeforeMis:} \code{TRUE} if users wish to constrain parameters before adding misspecification. \code{FALSE} if users wish to constrain parameters after adding misspecification.
+		\item \emph{misfitBound:} Upper bound of population root mean squared error of approximation (RMSEA; Browne & Cudeck, 1992; Steiger & Lind, 1980) that users wish their model misspecification to be
+		\item \emph{maxDraw:} The maximum number of random drawn parameters and misspecification model until all parameters in the model are eligible (no negative error variance, standardized coefficients over 1).
+		\item \emph{sequential:} If \code{TRUE}, use a sequential method to create data such that the data from factor are generated first and apply to a set of equations to obtain the data of indicators. If \code{FALSE}, create data directly from model-implied mean and covariance of indicators.
+		\item \emph{facDist:} A \code{\linkS4class{SimDataDist}} for a distribution of factors. Use when \code{sequential} is \code{TRUE}.
+		\item \emph{errorDist:} A \code{\linkS4class{SimDataDist}} for a distribution of measurement errors. Use when \code{sequential} is \code{TRUE}
+		\item \emph{indDist:} A \code{\linkS4class{SimDataDist}} for a distribution of indicators. Use when \code{sequential} is \code{FALSE}.
+		\item \emph{indLab:} A vector of indicator names. If not specified, the variables names are y1, y2, ... .
+		\item \emph{usedStd:} If \code{\linkS4class{SimModelOut}} is used for data generation, standardized parameters are used for data generation if \code{usedStd=TRUE}. If \code{usedStd=FALSE}, unstandardized parameters are used.
+	}
+}
+%%%%%%%%%%%%%% Check link %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\details{
+	This function will use \code{mvrnorm} function in \code{MASS} package to create data from model implied covariance matrix if the data distribution object (\code{\linkS4class{SimDataDist}}) is not specified. It the data distribution object is specified, the Gaussian copula model is used. See \code{\linkS4class{SimDataDist}} for further details.
+}
+
 \references{
 	\itemize{
 		\item Stieger, J. H. & Lind, J. C. (1980). \emph{Statistically based tests for the number of factors}. Paper presented at the annual spring meeting of the Psychometric Society, Iowa City, IA. 
@@ -71,11 +63,11 @@ simData(n, param, misspec = new("NullSimMisspec"), equalCon = new("NullSimEqualC
 		\item \code{\link{simMisspecPath}} for specifying misspecification in Path analysis model
 		\item \code{\link{simMisspecSEM}}  for specifying misspecification in SEM model
 		\item \code{\link{simEqualCon}} for setting equality constraints.
+		\item \code{\link{simDataDist}} for data distribution object set-up for \code{facDist}, \code{errorDist}, or \code{indDist} arguments.
 	}
 
 }
 \examples{
-
 loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA

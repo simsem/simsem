@@ -12,9 +12,9 @@
 
 
 
-setMethod("simModel", signature(object="SimFreeParam"), definition=function(object, start = NULL, equalCon=new("NullSimEqualCon"), package="lavaan", estimator="ML", auxiliary=new("NullVector"), indicatorLab=new("NullVector"), factorLab=new("NullVector")) {
+setMethod("simModel", signature(object="SimFreeParam"), definition=function(object, start = NULL, equalCon=new("NullSimEqualCon"), package="lavaan", estimator="ML", auxiliary=new("NullVector"), indLab=new("NullVector"), factorLab=new("NullVector")) {
 	modelType <- object@modelType
-	if(length(intersect(indicatorLab, auxiliary)) != 0) stop("There are the same variables in the analysis model and in the auxiliary variables list")
+	if(length(intersect(indLab, auxiliary)) != 0) stop("There are the same variables in the analysis model and in the auxiliary variables list")
 	if(!is.null(start)) {
 		if(modelType != start@modelType) stop("Starting Values and Parameters do not have the same tag")
 	} else {
@@ -24,7 +24,7 @@ setMethod("simModel", signature(object="SimFreeParam"), definition=function(obje
 		if(modelType != equalCon@modelType) stop("SimEqualCon and SimFreeParam do not have the same tag")
 	}
 	estimator <- tolower(estimator)
-	return(new("SimModel", modelType=modelType, param=object, start=start, equalCon=equalCon, package=package, estimator=estimator, auxiliary=auxiliary, indicatorLab=indicatorLab, factorLab=factorLab))
+	return(new("SimModel", modelType=modelType, param=object, start=start, equalCon=equalCon, package=package, estimator=estimator, auxiliary=auxiliary, indLab=indLab, factorLab=factorLab))
 })
 #Arguments: 
 #	object:	SimFreeParam.c that save the specification of free parameters and values of fixed parameters
@@ -35,8 +35,8 @@ setMethod("simModel", signature(object="SimFreeParam"), definition=function(obje
 #Description: 	This function will set up all slots needed for SimModel.c 
 #Return: 	SimModel.c with specification from the function.
 
-setMethod("simModel", signature(object="SimSet"), definition=function(object, equalCon=new("NullSimEqualCon"), package="lavaan", trial=10, estimator="ML", auxiliary=new("NullVector"), indicatorLab=new("NullVector"), factorLab=new("NullVector")) {
-	if(length(intersect(indicatorLab, auxiliary)) != 0) stop("There are the same variables in the analysis model and in the auxiliary variables list")
+setMethod("simModel", signature(object="SimSet"), definition=function(object, equalCon=new("NullSimEqualCon"), package="lavaan", trial=10, estimator="ML", auxiliary=new("NullVector"), indLab=new("NullVector"), factorLab=new("NullVector")) {
+	if(length(intersect(indLab, auxiliary)) != 0) stop("There are the same variables in the analysis model and in the auxiliary variables list")
 	start <- startingValues(object, trial)
 	start <- reduceMatrices(start)
 	freeParameters <- createFreeParameters(object)
@@ -45,7 +45,7 @@ setMethod("simModel", signature(object="SimSet"), definition=function(object, eq
 		if(modelType != equalCon@modelType) stop("SimEqualCon and SimSet do not have the same tag")
 	}
 	estimator <- tolower(estimator)
-	return(new("SimModel", modelType=modelType, param=freeParameters, start=start, equalCon=equalCon, package=package, estimator=estimator, auxiliary=auxiliary, indicatorLab=indicatorLab, factorLab=factorLab))
+	return(new("SimModel", modelType=modelType, param=freeParameters, start=start, equalCon=equalCon, package=package, estimator=estimator, auxiliary=auxiliary, indLab=indLab, factorLab=factorLab))
 })
 #Arguments: 
 #	object:	SimSet.c that save the specification of free parameters and values of fixed parameters, as well as parameter values.
@@ -73,14 +73,14 @@ setMethod("simModel", signature(object="SimSet"), definition=function(object, eq
 #CFA.Model <- simSetCFA(LX = LX, PH = PH, TD = TD)
 #SimModel <- simModel(CFA.Model)
 
-setMethod("simModel", signature(object="SimModelOut"), definition=function(object, start = NULL, equalCon=new("NullSimEqualCon"), package="lavaan", estimator="ML", auxiliary=new("NullVector"), indicatorLab=new("NullVector"), factorLab=new("NullVector")) {
+setMethod("simModel", signature(object="SimModelOut"), definition=function(object, start = NULL, equalCon=new("NullSimEqualCon"), package="lavaan", estimator="ML", auxiliary=new("NullVector"), indLab=new("NullVector"), factorLab=new("NullVector")) {
 	param <- object@param
 	modelType <- param@modelType
 	if(is.null(start)) start <- object@coef
 	if(isNullObject(equalCon)) equalCon <- object@equalCon
-	if(isNullObject(indicatorLab)) indicatorLab <- object@indicatorLab
+	if(isNullObject(indLab)) indLab <- object@indLab
 	if(isNullObject(factorLab)) factorLab <- object@factorLab
-	return(simModel(object=param, start=start, equalCon=equalCon, package=package, estimator=estimator, auxiliary=auxiliary, indicatorLab=indicatorLab, factorLab=factorLab)) 
+	return(simModel(object=param, start=start, equalCon=equalCon, package=package, estimator=estimator, auxiliary=auxiliary, indLab=indLab, factorLab=factorLab)) 
 })
 #Arguments: 
 #	object:	SimFreeParam.c that save the specification of free parameters and values of fixed parameters

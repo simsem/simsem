@@ -4,6 +4,7 @@
 \alias{simModel,ANY-method}
 \alias{simModel,SimSet-method}
 \alias{simModel,SimFreeParam-method}
+\alias{simModel,SimModelOut-method}
 \title{
 	Create simModel from model specification and be ready for data analysis.
 }
@@ -32,7 +33,7 @@ simModel(object, ...)
 		\item \emph{package:} Desired analysis package
 		\item \emph{estimator:} The default is \code{ML} estimator. Other alternatives are \code{GLS}, \code{WLS}, \code{MLM}, \code{MLF}, and \code{MLR}. Check the sem function help file in the \code{lavaan} package for further details
 		\item \emph{auxiliary:} The names or the index of the auxiliary variables in the data
-		\item \emph{indicatorLab:} The names of the variable in the model. The exogenous indicators should be listed first (from x1) and then endogenous indicators should be listed next (from y1).
+		\item \emph{indLab:} The names of the variable in the model. The exogenous indicators should be listed first (from x1) and then endogenous indicators should be listed next (from y1).
 		\item \emph{factorLab:} The names of the factors in the model. The exogenous factors should be listed first (from k1) and then endogenous factors should be listed next (from y1).
 	}
 }
@@ -61,4 +62,14 @@ diag(error.cor) <- 1
 RTD <- symMatrix(error.cor)
 CFA.Model <- simSetCFA(LX = LX, RPH = RPH, RTD = RTD)
 SimModel <- simModel(CFA.Model)
+
+library(lavaan)
+loading <- matrix(0, 9, 3)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+loading[7:9, 3] <- NA
+HS.Model <- simParamCFA(LX = loading)
+SimModel <- simModel(HS.Model, indLab=paste("x", 1:9, sep=""))
+out <- run(SimModel, HolzingerSwineford1939)
+summary(out)
 }

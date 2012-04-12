@@ -64,7 +64,7 @@ toSimSet <- function(out, usedStd=TRUE) {
 #loading[4:6, 2] <- NA
 #loading[7:9, 3] <- NA
 #model <- simParamCFA(LY=loading)
-#SimModel <- simModel(model, indicatorLab=paste("x", 1:9, sep=""))
+#SimModel <- simModel(model, indLab=paste("x", 1:9, sep=""))
 #out <- run(SimModel, hs)
 #set <- toSimSet(out)
 

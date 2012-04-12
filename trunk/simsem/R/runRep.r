@@ -25,7 +25,7 @@ runRep <- function(object, objData, objModel, objMissing=new("NullSimMissing"), 
 	data.mis <- NULL 
 	if(class(obj) == "list") {
 		data.mis <- createData(obj, n, objData, dataOnly=FALSE)
-		if(!isNullObject(objData@indicatorLab)) colnames(data.mis@data) <- objData@indicatorLab
+		if(!isNullObject(objData@indLab)) colnames(data.mis@data) <- objData@indLab
 	} else {
 		data.mis <- obj
 	} 

@@ -35,7 +35,7 @@ runMI<- function(data.mat,data.model, m, miPackage="amelia", silent=FALSE, ...) 
     return(model)
     }
 
-imputed.l <- lapply(imputed.l, function(data, var) { return(data[,var])}, var=data.model@indicatorLab)
+imputed.l <- lapply(imputed.l, function(data, var) { return(data[,var])}, var=data.model@indLab)
     #Run models on each imputed data set using  simModel  
   if (class(data.model)=="SimModel") {
     imputed.results.l <- lapply(imputed.l, runSimMI,data.model)

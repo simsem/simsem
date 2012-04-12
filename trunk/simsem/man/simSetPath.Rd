@@ -1,10 +1,10 @@
 \name{simSetPath}
 \alias{simSetPath}
 \title{
-	Create a set of matrix belongs to Path analysis model
+	Create a set of matrices of parameter and parameter values to generate and analyze data that belongs to Path analysis model
 }
 \description{
-	This function will create set of matrix that belongs to path analysis model. The requirement is to specify indicator correlation or covariance matrix and regression coefficient matrix.	
+	This function will create set of matrices of free parameters and parameter values that belongs to path analysis model. The requirement is to specify indicator correlation or covariance matrix and regression coefficient matrix.	
 }
 \usage{
 simSetPath(..., exo = FALSE)
@@ -23,10 +23,6 @@ simSetPath(..., exo = FALSE)
 		\item \code{BE} for regression coefficient matrix (need to be \code{\linkS4class{SimMatrix}} object). 
 		\item \code{PS} for residual covariance matrix (need to be \code{\linkS4class{SymMatrix}} object).
 		\item \code{RPS} for residual correlation matrix (need to be \code{\linkS4class{SymMatrix}} object).
-		\item \code{VPS} for residual indicator variance (need to be \code{\linkS4class{SimVector}} object).
-		\item \code{VE} for total indicator variance (need to be \code{\linkS4class{SimVector}} object). NOTE: Either total indicator variance or residual indicator variance is specified. Both cannot be simultaneously specified.
-		\item \code{AL} for indicator intercept (need to be \code{\linkS4class{SimVector}} object).
-		\item \code{ME} for indicator total mean (need to be \code{\linkS4class{SimVector}} object). NOTE: Either indicator intercept or indicator total mean is specified. Both cannot be simultaneously specified.
 		\item \code{VPS} for residual indicator variance (need to be \code{\linkS4class{SimVector}} object).
 		\item \code{VE} for total indicator variance (need to be \code{\linkS4class{SimVector}} object). NOTE: Either total indicator variance or residual indicator variance is specified. Both cannot be simultaneously specified.
 		\item \code{AL} for indicator intercept (need to be \code{\linkS4class{SimVector}} object).
@@ -51,7 +47,7 @@ simSetPath(..., exo = FALSE)
 	}
 }
 \value{
-	\code{\linkS4class{SimSet}} object that represents the path analysis simModel. This will be used for specifying data or simModels later.
+	\code{\linkS4class{SimSet}} object that represents the path analysis simModel. This will be used for specifying data or analysis models later.
 }
 \author{
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})

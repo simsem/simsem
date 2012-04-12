@@ -8,7 +8,7 @@
 
 \title{Class \code{"SimSet"}}
 \description{
-	Set of vectors and matrices that saves model specification (CFA, Path analysis, or SEM)
+	Set of vectors and matrices that saves free parameters and parameter values (CFA, Path analysis, or SEM)
 }
 \section{Objects from the Class}{
 Object can be created by \code{\link{simSetCFA}}, \code{\link{simSetPath}}, or \code{\link{simSetSEM}}, for CFA, Path analysis, or SEM model, respectively. Objects can be also created by calls of the form \code{new("SimSet", ...)}.

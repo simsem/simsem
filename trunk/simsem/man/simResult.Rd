@@ -8,7 +8,7 @@ This function will create simResult by different ways. One way is to create data
 and \code{\linkS4class{SimModel}} and save it in the \code{\linkS4class{SimResult}}.
 }
 \usage{
-simResult(nRep = NULL, objData = NULL, objModel = NULL, objMissing = new("NullSimMissing"), seed = 123321, silent = FALSE, multicore = FALSE, cluster = FALSE, numProc=NULL, n=NULL, pmMCAR=NULL, pmMAR=NULL, objSet=NULL)
+simResult(nRep = NULL, objData = NULL, objModel = NULL, objMissing = new("NullSimMissing"), seed = 123321, silent = FALSE, multicore = FALSE, cluster = FALSE, numProc = NULL, n = NULL, pmMCAR = NULL, pmMAR = NULL, objSet = NULL, objFunction = new("NullSimFunction"))
 }
 \arguments{
   \item{nRep}{
@@ -49,6 +49,9 @@ simResult(nRep = NULL, objData = NULL, objModel = NULL, objMissing = new("NullSi
 }
   \item{objSet}{
 	The \code{\linkS4class{SimSet}} object for data generation and analysis model. Users can specify this argument directly and not specify \code{objData} and \code{objModel}
+}
+  \item{objFunction}{
+	The function object that will be used for data transformation inside the simulation study. See the example from \code{\link{simFunction}}
 }
 }
 \value{

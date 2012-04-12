@@ -85,13 +85,20 @@ writeLavaanCode <- function(object, constraint, aux = NULL) {
 						cov.code <- paste(cov.code, rownames(object@PS)[i], " ~~ ", content, colnames(object@PS)[j], " \n", sep = "")
 					} else {
 						exo.set <- findRecursiveSet(object@BE)[[1]]
-						if(!(is.element(i, exo.set) & is.element(j, exo.set))) cov.code <- paste(cov.code, rownames(object@PS)[i], " ~~ ", content, colnames(object@PS)[j], " \n", sep = "")
+						if(!(is.element(i, exo.set) & is.element(j, exo.set))) { 
+							cov.code <- paste(cov.code, rownames(object@PS)[i], " ~~ ", content, colnames(object@PS)[j], " \n", sep = "")
+						}
 					}
 				} else {
 					content <- paste(object@PS[i, j], "*", sep="")
 					if(isNullObject(object@BE)) {
 						cov.code <- paste(cov.code, rownames(object@PS)[i], " ~~ ", content, colnames(object@PS)[j], " \n", sep = "")
-					} 			
+					} else {
+						auxFac <- which(apply(object@BE, 1, function(x) all(!is.na(x) & (x == 0))) & apply(object@BE, 2, function(x) all(!is.na(x) & (x == 0))))
+						if(is.element(i, auxFac) | is.element(j, auxFac)) {
+							cov.code <- paste(cov.code, rownames(object@PS)[i], " ~~ 0*", colnames(object@PS)[j], " \n", sep = "")
+						}
+					}
 				}
 			}
 		}

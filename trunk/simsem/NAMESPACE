@@ -4,7 +4,7 @@ exportClasses(SimUnif, SimNorm, SimBeta, SimBinom, SimCauchy, SimChisq, SimExp,
 	SimPois, SimT, SimWeibull, VirtualDist,
 	SimMatrix, SymMatrix, SimVector, 
 	SimSet, SimEqualCon, SimData, SimModel, SimResult, SimDataDist, SimMisspec, SimModelOut,
-	SimDataOut, SimMissing, SimModelMIOut, SimFunction)
+	SimDataOut, SimMissing, SimModelMIOut, SimFunction, SimFreeParam)
 exportMethods(summary, run, summaryShort, adjust, simModel,
 	getCutoff, getPower, plotCutoff, plotPower, summaryParam, plotDist, createImpliedMACS,
 	skew, kurtosis, extract, anova, simData)
@@ -14,4 +14,4 @@ export(simUnif, simNorm, simBeta, simBinom, simCauchy, simChisq, simExp,
 	loadingFromAlpha, simMatrix, symMatrix, simVector,
 	simSetCFA, simSetPath, simSetSEM, simEqualCon, simResult, simDataDist,
 	simMisspecCFA, simMisspecPath, simMisspecSEM, runMI, simMissing, imposeMissing, miPoolVector,
-	simFit, simFunction, simParamCFA, simParamPath, simParamSEM, continuousPower)
+	simFit, simFunction, simParamCFA, simParamPath, simParamSEM, indProd, residualCovariate)

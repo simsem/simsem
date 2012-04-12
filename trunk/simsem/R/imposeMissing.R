@@ -64,10 +64,9 @@ if(!is.null(pmMAR)) {
  log.mat2 <- makeMAR(data.mat,pmMAR,cov,ignoreCols,threshold)
  data.mat[log.mat2] <- NA
 }
-
 if(!is.null(logical)) {
 	if(!(class(logical) %in% c("matrix", "data.frame"))) stop("The logical argument must be matrix or data frame.")
-	if(!all.equal(dim(data.mat), dim(logical))) stop("The dimension in the logical argument is not equal to the dimension in the data")
+	if((dim(data.mat)[1] != dim(logical)[1]) | (dim(data.mat)[2] != dim(logical)[2])) stop("The dimension in the logical argument is not equal to the dimension in the data")
 	data.mat[logical] <- NA
 }
  return(data.mat)

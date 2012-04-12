@@ -23,7 +23,9 @@ Objects can be created by \code{\link{run}} on the \code{\linkS4class{SimModel}}
     \item{\code{converged}:}{Number of convergence replications }
 	\item{\code{paramValue}:}{The parameter values behind the analyzed data.}
 	\item{\code{n}:}{Sample size of the analyzed data.}
-  }
+	\item{\code{indLab}:}{Indicator labels of the analyzed data.}
+	\item{\code{factorLab}:}{Factor labels of the analyzed data.}
+	}
 }
 \section{Methods}{
 	\itemize{

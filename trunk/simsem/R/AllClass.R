@@ -1056,7 +1056,7 @@ setClass("SimData",
 		facDist="SimDataDist",
 		errorDist="SimDataDist",
 		indDist="SimDataDist",
-		indicatorLab="vector"),
+		indLab="vector"),
 	prototype(
 		misspec=new("NullSimMisspec"),
 		equalCon=new("NullSimEqualCon"),
@@ -1067,7 +1067,7 @@ setClass("SimData",
 		facDist=new("NullSimDataDist"),
 		errorDist=new("NullSimDataDist"),
 		indDist=new("NullSimDataDist"),
-		indicatorLab=new("NullVector"))
+		indLab=new("NullVector"))
 )
 
 ###################################################################
@@ -1134,14 +1134,14 @@ setClass("SimModel",
 		package="character", #OpenMx, lavaan
 		estimator="character",
 		auxiliary="vector",
-		indicatorLab="vector", #X then Y
+		indLab="vector", #X then Y
 		factorLab="vector"), # K then E
 	prototype(
 		equalCon=new("NullSimEqualCon"),
 		package="lavaan",
 		estimator="ml",
 		auxiliary=new("NullVector"),
-		indicatorLab=new("NullVector"),
+		indLab=new("NullVector"),
 		factorLab=new("NullVector"))
 )
 
@@ -1245,14 +1245,14 @@ setClass("SimModelOut", # The class provides model result.
         converged="logical",
 		paramValue="SimRSet",
 		n="numeric",
-		indicatorLab="vector",
+		indLab="vector",
 		factorLab="vector"),
     prototype(
         equalCon=new("NullSimEqualCon"),
         converged=FALSE,
 		paramValue=new("NullRSet"),
 		n=0,
-		indicatorLab=new("NullVector"),
+		indLab=new("NullVector"),
 		factorLab=new("NullVector"))
 )
 

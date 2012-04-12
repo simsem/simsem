@@ -381,13 +381,13 @@ setMethod("run", signature="SimData", definition=function(object, n=NULL, dataOn
 	if(is.null(n)) n <- object@n
 	paramSet <- drawParameters(object)
 	DataOut <- createData(paramSet, n, object, dataOnly)
-	if(!is.null(object@indicatorLab)) {
+	if(!isNullObject(object@indLab)) {
 		if(class(DataOut) == "SimDataOut") {
 			data <- DataOut@data
-			colnames(data) <- object@indicatorLab
+			colnames(data) <- object@indLab
 			DataOut@data <- data
 		} else {
-			colnames(DataOut) <- object@indicatorLab
+			colnames(DataOut) <- object@indLab
 		}
 	}
 	return(DataOut)
@@ -413,21 +413,21 @@ setMethod("run", signature="SimModel", definition=function(object, data, simMiss
 	if(isNullObject(object@auxiliary)) {
 		if(!(length(simMissing@cov) == 1 && simMissing@cov == 0)) object@auxiliary <- simMissing@cov
 	}
-	if(isNullObject(object@indicatorLab)) {
+	if(isNullObject(object@indLab)) {
 		if(isNullObject(object@auxiliary)) {
-			object@indicatorLab <- colnames(data)
+			object@indLab <- colnames(data)
 		} else if (is.numeric(object@auxiliary)) {
 			if(max(object@auxiliary) > ncol(data)) stop("The maximum index in the auxiliary variable set is greater than the number of variables in the data.")
-			object@indicatorLab <- colnames(data)[-object@auxiliary]
+			object@indLab <- colnames(data)[-object@auxiliary]
 		} else {
 			if(length(intersect(colnames(data), object@auxiliary)) != length(object@auxiliary)) stop("Some auxiliary variables does not exist in the dataset.")
-			object@indicatorLab <- setdiff(colnames(data), object@auxiliary)
+			object@indLab <- setdiff(colnames(data), object@auxiliary)
 		}
 	}
-	if(is.numeric(object@indicatorLab)) object@indicatorLab <- colnames(data)[object@indicatorLab]
+	if(is.numeric(object@indLab)) object@indLab <- colnames(data)[object@indLab]
 	if(is.numeric(object@auxiliary)) object@auxiliary <- colnames(data)[object@auxiliary]
-	if(length(intersect(object@auxiliary, object@indicatorLab)) != 0) stop("There is common variable between the variables in the model and the auxiliary variables.")
-	targetCol <- c(object@indicatorLab, object@auxiliary)
+	if(length(intersect(object@auxiliary, object@indLab)) != 0) stop("There is common variable between the variables in the model and the auxiliary variables.")
+	targetCol <- c(object@indLab, object@auxiliary)
 	data <- data[,targetCol]
 	miss <- sum(is.na(data)) > 0	
 	if(is.null(estimator)) estimator <- object@estimator
@@ -468,10 +468,10 @@ setMethod("run", signature="SimModel", definition=function(object, data, simMiss
 		}
 	}
 	Output@n <- nrow(data)
-	if(!isNullObject(object@indicatorLab)) {
-		Output@indicatorLab <- object@indicatorLab
+	if(!isNullObject(object@indLab)) {
+		Output@indLab <- object@indLab
 	} else {
-		Output@indicatorLab <- colnames(data)
+		Output@indLab <- colnames(data)
 	}
 	Output@factorLab <- object@factorLab
 	#Add labels in the SimModelOut --> go to SimModelOut and relabels it
