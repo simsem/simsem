@@ -184,7 +184,7 @@ plannedMissing <- function(dims=c(0,0),nforms=NULL,itemGroups=NULL,twoMethod=NUL
     if((nforms+1) > dims[2]) stop("The number of forms cannot exceed the number of variables.")
 
     if(!is.null(itemGroups) && (nforms+1 != length(itemGroups))) {
-    nforms <- length(itemGroups); print("Number of forms has been set to the number of groups specified")}
+    nforms <- length(itemGroups)-1; print("Number of forms has been set to the number of groups specified")}
     
     if ( ((!is.null(itemGroups)) && (class(itemGroups) != "list")) ) {
       stop("itemGroups not a list")
