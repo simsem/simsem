@@ -23,6 +23,7 @@ testImposeMissing <- function() {
   imposeMissing(datac,cov=21,nforms=3)
   imposeMissing(data,twoMethod=c(19,.8))
   imposeMissing(datac,cov=21,pmMCAR=.1,pmMAR=.1,nforms=3)
+  imposeMissing(data,prAttr=.1,timePoints=5)
 
   #OR - using testthat
   #loc <- "../inst/tests/test_missing.R"
@@ -182,7 +183,7 @@ plannedMissing <- function(dims=c(0,0),nforms=NULL,itemGroups=NULL,twoMethod=NUL
   if(!is.null(nforms) && nforms != 0) {
     if((nforms+1) > dims[2]) stop("The number of forms cannot exceed the number of variables.")
 
-    if(!is.null(itemGroups) && (nforms != length(itemGroups))) {
+    if(!is.null(itemGroups) && (nforms+1 != length(itemGroups))) {
     nforms <- length(itemGroups); print("Number of forms has been set to the number of groups specified")}
     
     if ( ((!is.null(itemGroups)) && (class(itemGroups) != "list")) ) {
