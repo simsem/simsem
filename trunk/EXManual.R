@@ -903,7 +903,48 @@ plotCutoff(Output, 0.05)
 summaryParam(Output)
 
 
+SimMissing <- simMissing(pmMAR=0.1, cov=7, numImps=5, threshold = 0.5, covAsAux=FALSE)
+SimModel <- simModel(CFA.Model, indLab=1:6)
+
+data <- run(SimMissing, data)
+
+out <- run(SimModel, data, simMissing=SimMissing)
+
+Output <- simResult(100, SimData, SimModel, SimMissing)
+getCutoff(Output, 0.05)
+plotCutoff(Output, 0.05)
+summaryParam(Output)
+
 ########################################## Example 13 ###################
+
+library(lavaan)
+loading <- matrix(0, 9, 3)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+loading[7:9, 3] <- NA
+model <- simParamCFA(LY=loading)
+SimModel <- simModel(model, indLab=paste("x", 1:9, sep=""))
+out <- run(SimModel, HolzingerSwineford1939)
+summary(out)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 library(simsem)
 library(lavaan)
@@ -1421,90 +1462,10 @@ mis <- simMisspecCFA(LY = LY.trivial)
 
 
 
-simFit <- function(nRep, data, model, misspec, conBeforeMis=TRUE, misfitBound=new("NullVector"), maxDraw=100, sequential=NA, facDist=new("NullSimDataDist"), errorDist=new("NullSimDataDist"), indDist=new("NullSimDataDist"), seed=123321, silent=FALSE, multicore=FALSE, cluster=FALSE, numProc=NULL) {
-	out <- run(model, data)
-	miss <- is.na(data)
-	SimData <- simData(out, misspec=misspec, conBeforeMis=conBeforeMis, misfitBound=misfitBound, maxDraw=maxDraw, sequential=sequential, facDist=facDist, errorDist=errorDist, indDist=indDist)
-	missFunction <- simFunction(imposeMissing, logical=miss)
-	simOut <- simResult(nRep, SimData, model, seed=seed, silent=silent, multicore=multicore, cluster=cluster, numProc=numProc, objFunction=missFunction)
-	return(simOut)
-}
-
-
 
 
 Output <- simFit(200, hs, SimModel, mis)
 
-
-setClass("SimFunction",
-	representation(
-		fun="function",
-		attribute="list",
-		callfun="call"
-	)
-)
-
-simFunction <- function(fun, ...) {
-	List <- list(...)
-	mc <- match.call()
-	return(new("SimFunction", fun=fun, attribute=List, callfun=mc))
-}
-
-x <- simFunction(rnorm, sd=100, mean=1)
-
-setMethod("run", signature(object="SimFunction"), definition=function(object, data) {
-	out <- list()
-	out[[1]] <- object@fun
-	out[[2]] <- data
-	outlength <- length(object@attribute)
-	for(i in 1:outlength) {
-		out[[i+2]] <- object@attribute[[i]]
-	}
-	names(out) <- c("", "", names(object@attribute))
-	eval(as.call(out))
-}
-)
-
-y <- simFunction(imposeMissing, logical=m)
-run(y, hs)
-
-meanCentering <- function(data, var1, var2, match=TRUE, meanC=TRUE, doubleMC=TRUE, namesProd=NULL) {
-	dat1 <- data[,var1]
-	dat2 <- data[,var2]
-	if(meanC) {
-		dat1 <- scale(dat1, scale=FALSE)
-		dat2 <- scale(dat2, scale=FALSE)
-	}
-	if(match) { 
-		if(length(var1) != length(var2)) stop("If the match-paired approach is used, the number of variables in both sets must be equal.")
-		datProd <- dat1 * dat2
-		if(doubleMC) datProd <- scale(datProd, scale=FALSE)
-		if(is.null(namesProd)) {
-			colnames(datProd) <- paste(var1, var2, sep=".")
-		} else {
-			colnames(datProd) <- namesProd
-		}
-		data <- data.frame(data, datProd)
-	} else {
-		datProd <- matrix(0, nrow(data), 1)
-		for(i in 1:length(var1)) {
-			datProd <- data.frame(datProd, matrix(rep(dat1[,i], length(var2)), ncol=length(var2)) * dat2)
-		}
-		datProd <- datProd[, -1]
-		if(doubleMC) datProd <- scale(datProd, scale=FALSE)
-		if(is.null(namesProd)) {
-			temp <- NULL
-			for(i in 1:length(var1)) {
-				temp <- c(temp, paste(var1[i], var2, sep="."))
-			}
-			colnames(datProd) <- temp
-		} else {
-			colnames(datProd) <- namesProd
-		}
-		data <- data.frame(data, datProd)		
-	}
-	return(data)
-}
 
 ##########################################################################
 
@@ -1569,3 +1530,175 @@ fun <- simFunction(meanCentering, var1=paste("y", 1:3, sep=""), var2=paste("y", 
 
 Output <- simResult(20, Data.Mis, Model, objFunction=fun)
 summary(Output)
+
+
+########################## Terry
+require(simsem)
+
+## set factor loadings and residuals such that total indicator variance = 1
+fl <- .8
+resvar <- 1 - fl^2
+
+## manipulated parameters
+params <- c(rep(.4, 2), 0, rep(.3, 3))
+a <- as.numeric(params[1])
+b <- as.numeric(params[2])
+C <- as.numeric(params[3])
+x <- as.numeric(params[4])
+m <- as.numeric(params[5])
+y <- as.numeric(params[6])
+
+## within-time correlations at Time 1
+xm <- (a * x**2) / (1 - x * m)
+xy <- (b * xm * x**2) / (1 - x * y)
+my <- (1 / (1 - m * y)) * (b * m**2 + a * xy * y**2 + a * b * xm * (m + y + 1))
+
+#Time specific variances: need to make each one equal 1.
+x2ResVar <- 1 - (x^2)
+m2ResVar <- 1 - (a^2 + m^2 + 2*(a * xm * m))
+y2ResVar <- 1 - (b^2 + y^2 + 2*(b * my * y))
+
+xResVar <- 1 - (x^2)
+mResVar <- 1 - (a^2 + m^2)
+yResVar <- 1 - (b^2 + y^2)
+
+## make matrices for population model
+makeLambda <- function(inpMat = NULL, nFac = 0, nTimes = 0, npf = 0, val = c()) {
+	for (i in 1:(nFac * nTimes)) {
+		inpMat[((npf * (i - 1)) + 1):(((npf * (i - 1)) + npf)), i] <- val
+	}
+	return(inpMat)
+}
+loading <- matrix(0, 81, 27)
+loading <- makeLambda(loading, 3, 9, 3, NA)
+load.val <- matrix(0, 81, 27)
+load.val <- makeLambda(load.val, 3, 9, 3, fl)
+LY <- simMatrix(loading, load.val)
+
+errorLag <- function(inpMat = NULL, nVar = 0, nTime = 0, nlag = 0, val = NULL) {
+	i <- 1
+	while (i <= ((nVar * nTime) - (nlag * nVar))) {
+		inpMat[i, (i + (nlag * nVar))] <- val
+		inpMat[(i + (nlag * nVar)), i] <- val
+		i <- i + 1
+	}
+	return(inpMat)
+}
+error.na <- matrix(0, 81, 81)
+diag(error.na) <- NA
+error.na <- errorLag(error.na, 9, 9, 1, NA)
+error.na <- errorLag(error.na, 9, 9, 2, NA)
+error.cor <- matrix(0, 81, 81)
+diag(error.cor) <- 1
+error.cor <- errorLag(error.cor, 9, 9, 1, .1)
+error.cor <- errorLag(error.cor, 9, 9, 2, .01)
+TE <- symMatrix(error.na, error.cor)
+
+makePsi <- function(inpMat = NULL, nFac = 0, nTimes = 0, val = c()) {
+	if (length(val) == 1) {
+		val <- rep(val, nFac)
+	}
+	if (length(val) == nFac) {
+		for (i in 1:nTimes) {
+			inpMat[(1 + (nFac * (i - 1))), (2 + (nFac * (i - 1)))] <- val[1]
+			inpMat[(2 + (nFac * (i - 1))), (1 + (nFac * (i - 1)))] <- val[1]
+			inpMat[(1 + (nFac * (i - 1))), (3 + (nFac * (i - 1)))] <- val[2]
+			inpMat[(3 + (nFac * (i - 1))), (1 + (nFac * (i - 1)))] <- val[2]
+			inpMat[(3 + (nFac * (i - 1))), (2 + (nFac * (i - 1)))] <- val[3]
+			inpMat[(2 + (nFac * (i - 1))), (3 + (nFac * (i - 1)))] <- val[3]
+		}
+	}
+	if (length(val) != nFac) {
+		paste("Cannot evaluate: unequal val= and nFac=")
+	} else {
+		return(inpMat)
+	}
+}
+factor.na <- matrix(0, 27, 27)
+diag(factor.na) <- NA
+factor.na <- makePsi(factor.na, 3, 9, NA)
+factor.cor <- matrix(0, 27, 27)
+diag(factor.cor) <- 1
+factor.cor <- makePsi(factor.cor, 3, 9, 0)
+factor.cor <- makePsi(factor.cor, 3, 1, c(xm, xy, my))
+PS <- symMatrix(factor.na, factor.cor)
+
+makeBeta <- function(inpMat = NULL, nFac = 0, nTimes = 0, val = c(x, m, y, a, b, C)) {
+	if (length(val) == 1) {
+		val <- rep(val, 2*nFac)
+	}
+	if (length(val) == 2*nFac) {
+		for (i in 2:nTimes) {
+			inpMat[(1 + (nFac * (i - 1))), (1 + (nFac * (i - 2)))] <- val[1]
+			inpMat[(2 + (nFac * (i - 1))), (2 + (nFac * (i - 2)))] <- val[2]
+			inpMat[(3 + (nFac * (i - 1))), (3 + (nFac * (i - 2)))] <- val[3]
+			inpMat[(2 + (nFac * (i - 1))), (1 + (nFac * (i - 2)))] <- val[4]
+			inpMat[(3 + (nFac * (i - 1))), (2 + (nFac * (i - 2)))] <- val[5]
+			inpMat[(3 + (nFac * (i - 1))), (1 + (nFac * (i - 2)))] <- val[6]
+		}
+	}
+	if (length(val) != 2*nFac) {
+		paste("Cannot evaluate: unequal val= and nFac=")
+	} else {
+		return(inpMat)
+	}
+}
+path.na <- matrix(0, 27, 27)
+path.na <- makeBeta(path.na, 3, 9, NA)
+path.st <- matrix(0, 27, 27)
+path.st <- makeBeta(path.st, 3, 9, c(x, m, y, a, b, C))
+BE <- simMatrix(path.na, path.st)
+
+VPS <- simVector(c(1, 1, 1, x2ResVar, m2ResVar, y2ResVar, rep(c(xResVar, mResVar, yResVar), 7)))
+VTE <- simVector(rep(resvar, 81))
+
+pop1 <- simSetSEM(BE=BE, LY=LY, RPS=PS, RTE=TE, VPS=VPS, VTE=VTE)
+
+## make matrices for cross-sectional analysis model
+loading <- matrix(0, 9, 3)
+loading <- makeLambda(loading, 3, 1, 3, NA)
+LY0 <- simMatrix(loading)
+
+error.na <- matrix(0, 9, 9)
+diag(error.na) <- NA
+TE0 <- symMatrix(error.na)
+
+factor.na <- matrix(0, 3, 3)
+diag(factor.na) <- 1
+PS0 <- symMatrix(factor.na)
+
+path.na <- matrix(0, 3, 3)
+path.na[3, 1] <- NA
+path.na[3, 2] <- NA
+path.na[2, 1] <- NA
+BE0 <- simMatrix(path.na)
+
+lag0 <- simParamSEM(BE=path.na, LY=loading, PS=factor.na, TE=error.na)
+summary(lag0)
+
+## Set up data and model objects given to the simuation 
+
+## all 9 time points
+simDat1 <- simData(pop1, n = 100)
+SimModel1 <- simModel(pop1)
+results <- simResult(nRep=2, simDat1, SimModel1, seed=3141593, multicore=FALSE) 
+
+## only Time 5
+lag0dat <- simData(pop1, n = 100)
+lag0model <- simModel(lag0, indLab = 37:45)
+results <- simResult(nRep=2, lag0dat, lag0model, seed=3141593, multicore=FALSE) 
+
+
+## just simulate data and run a result, without objects
+dat <- run(simDat1)
+out <- run(lag0model, dat)
+summary(out)
+
+
+
+
+
+
+
+
+

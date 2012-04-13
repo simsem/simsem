@@ -9,7 +9,7 @@
 	Set of vectors and matrices that saves free parameters (CFA, Path analysis, or SEM)
 }
 \section{Objects from the Class}{
-Object can be created by \code{\link{simParamCFA}}, \code{\link{simParamPath}}, or \code{\link{simSetSEM}}, for CFA, Path analysis, or SEM model, respectively. Objects can be also created by calls of the form \code{new("SimFreeParam", ...)}.
+Object can be created by \code{\link{simParamCFA}}, \code{\link{simParamPath}}, or \code{\link{simParamSEM}}, for CFA, Path analysis, or SEM model, respectively. Objects can be also created by calls of the form \code{new("SimFreeParam", ...)}.
 }
 \section{Slots}{
   \describe{

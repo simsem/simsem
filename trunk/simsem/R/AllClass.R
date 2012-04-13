@@ -1320,8 +1320,9 @@ setClass("SimMissing",
         impMethod="vector",
         numImps="numeric",
         timePoints="numeric",
-	ignoreCols="numeric",
-	threshold="numeric"),
+		ignoreCols="numeric",
+		threshold="numeric",
+		covAsAux="logical"),
     prototype(
         cov=0,
         pmMCAR=0,
@@ -1333,8 +1334,9 @@ setClass("SimMissing",
         impMethod="amelia",
         numImps=0,
         timePoints=1,
-	ignoreCols=0,
-	threshold=0)
+		ignoreCols=0,
+		threshold=0,
+		covAsAux=TRUE)
 )
 
 

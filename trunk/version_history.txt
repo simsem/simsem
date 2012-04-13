@@ -182,3 +182,5 @@ simsem, Version 0.1-0 04/11/12
 - Fix WriteLavaanCode bug that cannot analyze the data with covariate
 - Change indicatorLab argument name to indLab 
 - Write and fix all documentations for the this version
+- Add covAsAux in the simMissing function and class to choose whether using the covariate as auxiliary variables
+

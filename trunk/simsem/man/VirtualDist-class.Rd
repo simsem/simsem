@@ -1,5 +1,4 @@
 \name{VirtualDist-class}
-\Rdversion{1.1}
 \docType{class}
 \alias{VirtualDist-class}
 \alias{SimBeta-class}
@@ -115,8 +114,23 @@ List of all distribution objects.
 \seealso{
 	List of all distribution objects.
 	\itemize{
-		\item \code{\linkS4class{SimNorm}}
-		\item \code{\linkS4class{SimUnif}}
+		\item \code{\linkS4class{SimBeta}} Beta Distribution
+		\item \code{\linkS4class{SimBinom}} Binomial Distribution
+		\item \code{\linkS4class{SimCauchy}} Cauchy Distribution
+		\item \code{\linkS4class{SimChisq}} Chi-squared Distribution
+		\item \code{\linkS4class{SimExp}} Exponential Distribution
+		\item \code{\linkS4class{SimF}} F Distribution
+		\item \code{\linkS4class{SimGamma}} Gamma Distribution
+		\item \code{\linkS4class{SimGeom}} Geometric Distribution
+		\item \code{\linkS4class{SimHyper}} Hypergeometric Distribution
+		\item \code{\linkS4class{SimLnorm}} Log Normal Distribution
+		\item \code{\linkS4class{SimLogis}} Logistic Distribution
+		\item \code{\linkS4class{SimNbinom}} Negative Binomial Distribution
+		\item \code{\linkS4class{SimNorm}} Normal Distribution
+		\item \code{\linkS4class{SimPois}} Poisson Distribution
+		\item \code{\linkS4class{SimT}} t Distribution
+		\item \code{\linkS4class{SimUnif}} Uniform Distribution
+		\item \code{\linkS4class{SimWeibull}} Weibull Distribution
 	}
 }
 \examples{

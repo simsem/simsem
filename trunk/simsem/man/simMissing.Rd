@@ -7,7 +7,7 @@ Construct a SimMissing object to create data with missingness and analyze missin
 Function creates a \linkS4class{SimMissing} object that can be passed to \link{simResult} for creating and analyzing data with missingness.
 }
 \usage{
-simMissing(cov=0, pmMCAR=0, pmMAR=0, nforms=0, itemGroups=list(0), timePoints=1, twoMethod=0, numImps=0, ignoreCols=0, threshold=0)
+simMissing(cov=0, pmMCAR=0, pmMAR=0, nforms=0, itemGroups=list(0), timePoints=1, twoMethod=0, numImps=0, ignoreCols=0, threshold=0, covAsAux=TRUE)
 }
 \arguments{
 	\item{cov}{Column indices of any normally distributed covariates used in the data set.}
@@ -21,6 +21,7 @@ simMissing(cov=0, pmMCAR=0, pmMAR=0, nforms=0, itemGroups=list(0), timePoints=1,
     \item{numImps}{The number of imputations to be used when multiply imputing missing data. Setting numImps to 0 will use FIML to handle missing data.}
 	\item{ignoreCols}{The columns not imposed any missing values for any missing data patterns} 
 	\item{threshold}{The threshold of covariates that divide between the area to impose missing and the area not to impose missing. The default threshold is the mean of the covariate.}
+	\item{covAsAux}{If \code{TRUE}, the covariate listed in the object will be used as auxiliary variables when putting in the model object. If \code{FALSE}, the covariate will be included in the analysis.}
 }
 \details{
 Without specifying any any arguments, no missingness will be

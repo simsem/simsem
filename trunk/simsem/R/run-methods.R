@@ -411,7 +411,7 @@ setMethod("run", signature="SimModel", definition=function(object, data, simMiss
 	}
 	if(is.null(colnames(data))) colnames(data) <- paste("y", 1:ncol(data))
 	if(isNullObject(object@auxiliary)) {
-		if(!(length(simMissing@cov) == 1 && simMissing@cov == 0)) object@auxiliary <- simMissing@cov
+		if(!isNullObject(simMissing) && !(length(simMissing@cov) == 1 && simMissing@cov == 0) && simMissing@covAsAux) object@auxiliary <- simMissing@cov
 	}
 	if(isNullObject(object@indLab)) {
 		if(isNullObject(object@auxiliary)) {
