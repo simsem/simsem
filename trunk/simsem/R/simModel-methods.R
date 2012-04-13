@@ -5,14 +5,14 @@
 #		It will transform the code to a specified SEM package and ready to analyze data.
 # Generic Function: simModel(object, ...)
 # Argument:
-#	object: 	SimSet.c or SimFreeParam.c that provides model specification
+#	object: 	SimSet.c or SimParam.c that provides model specification
 # 	... : 		Other arguments, such as analysis package, SimEqualCon.c
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 6, 2011
 
 
 
-setMethod("simModel", signature(object="SimFreeParam"), definition=function(object, start = NULL, equalCon=new("NullSimEqualCon"), package="lavaan", estimator="ML", auxiliary=new("NullVector"), indLab=new("NullVector"), factorLab=new("NullVector")) {
+setMethod("simModel", signature(object="SimParam"), definition=function(object, start = NULL, equalCon=new("NullSimEqualCon"), package="lavaan", estimator="ML", auxiliary=new("NullVector"), indLab=new("NullVector"), factorLab=new("NullVector")) {
 	modelType <- object@modelType
 	if(length(intersect(indLab, auxiliary)) != 0) stop("There are the same variables in the analysis model and in the auxiliary variables list")
 	if(!is.null(start)) {
@@ -21,13 +21,13 @@ setMethod("simModel", signature(object="SimFreeParam"), definition=function(obje
 		start <- defaultStartingValues(object)
 	}
 	if(!isNullObject(equalCon)) {
-		if(modelType != equalCon@modelType) stop("SimEqualCon and SimFreeParam do not have the same tag")
+		if(modelType != equalCon@modelType) stop("SimEqualCon and SimParam do not have the same tag")
 	}
 	estimator <- tolower(estimator)
 	return(new("SimModel", modelType=modelType, param=object, start=start, equalCon=equalCon, package=package, estimator=estimator, auxiliary=auxiliary, indLab=indLab, factorLab=factorLab))
 })
 #Arguments: 
-#	object:	SimFreeParam.c that save the specification of free parameters and values of fixed parameters
+#	object:	SimParam.c that save the specification of free parameters and values of fixed parameters
 #	start:	Starting values for those free parameters. lavaan package will automatically create starting values before the analysis; however, starting values are required for OpenMx.
 # 	equalCon:		simConstrint.c that save constraints specified by users. The default is no constraint.
 #	package:	Desired analysis package
@@ -83,7 +83,7 @@ setMethod("simModel", signature(object="SimModelOut"), definition=function(objec
 	return(simModel(object=param, start=start, equalCon=equalCon, package=package, estimator=estimator, auxiliary=auxiliary, indLab=indLab, factorLab=factorLab)) 
 })
 #Arguments: 
-#	object:	SimFreeParam.c that save the specification of free parameters and values of fixed parameters
+#	object:	SimParam.c that save the specification of free parameters and values of fixed parameters
 #	start:	Starting values for those free parameters. lavaan package will automatically create starting values before the analysis; however, starting values are required for OpenMx.
 # 	equalCon:		simConstrint.c that save constraints specified by users. The default is no constraint.
 #	package:	Desired analysis package

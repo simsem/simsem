@@ -33,14 +33,14 @@ simParamCFA(...)
 	}
 }
 \value{
-	\code{\linkS4class{SimFreeParam}} object that represents the CFA free parameters. This will be used for building \code{\linkS4class{SimModel}} later.
+	\code{\linkS4class{SimParam}} object that represents the CFA free parameters. This will be used for building \code{\linkS4class{SimModel}} later.
 }
 \author{
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \seealso{
 	\itemize{
-		\item See class \code{\linkS4class{SimFreeParam}} for the free parameters object details. 
+		\item See class \code{\linkS4class{SimParam}} for the free parameters object details. 
 		\item Use \code{\link{simParamPath}} to specify path analysis model and use \code{\link{simParamSEM}} to specify full structural equation modeling.
 	}
 }

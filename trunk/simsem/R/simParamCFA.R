@@ -4,7 +4,7 @@
 # Function: simParamCFA(...)
 # Argument:
 #	...:	All matrices that belongs to CFA model, see details below.
-# Return: 	SimFreeParam class containing CFA model (with "CFA" tag)
+# Return: 	SimParam class containing CFA model (with "CFA" tag)
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: April 9, 2012
 
@@ -22,7 +22,7 @@ simParamCFA <- function(...) {
 	ifelse(contain(5, position), PS <- List[position == 5][[1]], {PS <- matrix(NA, nk, nk); diag(PS) <- 1})
 	ifelse(contain(2, position), TY <- List[position == 2][[1]], TY <- rep(NA, ni))
 	ifelse(contain(3, position), AL <- List[position == 3][[1]], AL <- rep(1, nk))
-	Output <- new("SimFreeParam", LY=LY, PS=PS, TE=TE, TY=TY, AL=AL, modelType="CFA")
+	Output <- new("SimParam", LY=LY, PS=PS, TE=TE, TY=TY, AL=AL, modelType="CFA")
 	return(Output)
 }
 

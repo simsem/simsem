@@ -11,7 +11,7 @@
 # Date Modified: October 9, 2011
 
 setMethod("getPower", signature(altObject="data.frame"), definition=function(altObject, cutoff, revDirec=FALSE, usedFit=NULL) {
-	if(is.null(usedFit)) usedFit <- c("Chi", "AIC", "BIC", "RMSEA", "CFI", "TLI", "SRMR")
+	if(is.null(usedFit)) usedFit <- getKeywords()$usedFit
 	if(is.null(names(cutoff)) && length(cutoff) == 7) names(cutoff) <- usedFit
 	common.name <- Reduce(intersect, list(colnames(altObject), names(cutoff), usedFit))
 	temp <- rep(NA, length(common.name))
@@ -19,7 +19,7 @@ setMethod("getPower", signature(altObject="data.frame"), definition=function(alt
 	altObject <- as.data.frame(altObject[,common.name])
 	cutoff <- cutoff[common.name]
 	for(i in 1:length(common.name)) {
-		temp[i] <- pvalue(altObject[,i], cutoff[i], revDirec)
+		temp[i] <- pValue(altObject[,i], cutoff[i], revDirec)
 	}
 	if(contain("TLI", common.name)) temp["TLI"] <- 1 - temp["TLI"]
 	if(contain("CFI", common.name)) temp["CFI"] <- 1 - temp["CFI"]

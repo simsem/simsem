@@ -31,7 +31,7 @@ simParamPath <- function(..., exo = FALSE) {
 		ifelse(contain(3, position), PS <- List[position == 3][[1]], PS <- diag(NA, ne))
 		ifelse(contain(5, position), KA <- List[position == 5][[1]], KA <- rep(NA, nk))
 		ifelse(contain(6, position), PH <- List[position == 6][[1]], PH <- matrix(NA, nk, nk))
-		Output <- new("SimFreeParam", BE=BE, PS=PS, AL=AL, GA=GA, PH=PH, KA=KA, modelType="Path.exo")	
+		Output <- new("SimParam", BE=BE, PS=PS, AL=AL, GA=GA, PH=PH, KA=KA, modelType="Path.exo")	
 	} else {
 		ifelse(contain(1, position), BE <- List[position == 1][[1]], stop("No path coefficient object between factor.ETA"))
 		ne <- nrow(BE)
@@ -44,7 +44,7 @@ simParamPath <- function(..., exo = FALSE) {
 			set <- findRecursiveSet(BE)
 			PS[set[[1]], set[[1]]] <- NA
 		}
-		Output <- new("SimFreeParam", BE=BE, PS=PS, AL=AL, modelType="Path")
+		Output <- new("SimParam", BE=BE, PS=PS, AL=AL, modelType="Path")
 	}
 	return(Output)
 }

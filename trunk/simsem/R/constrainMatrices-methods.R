@@ -73,7 +73,7 @@ setMethod("constrainMatrices", signature(object="VirtualRSet", SimEqualCon="SimR
 	return(Output)
 })
 #Arguments: 
-#	object: 		The desired object constraints impose on. This function put VirtualRSet.c. This class is generic class including SimFreeParam.c,
+#	object: 		The desired object constraints impose on. This function put VirtualRSet.c. This class is generic class including SimParam.c,
 #					SimLabels.c, and SimRSet.c. Usually SimLabels.c is used. 
 #	SimEqualCon:	SimREqualCon.c that save desired constraints.
 #Description: 	This function will impose constraint codes in the input object. How to impose the constraint depends on analysis package. This will impose labels for OpenMx and will impose equal statement in lavaan.
@@ -87,7 +87,7 @@ setMethod("constrainMatrices", signature(object="VirtualRSet", SimEqualCon="SimE
 	return(Output)
 })
 #Arguments: 
-#	object: 		The desired object constraints impose on. This function put VirtualRSet.c. This class is generic class including SimFreeParam.c,
+#	object: 		The desired object constraints impose on. This function put VirtualRSet.c. This class is generic class including SimParam.c,
 #					SimLabels.c, and SimRSet.c. Usually SimLabels.c is used. 
 #	SimEqualCon:	SimEqualCon.c that save desired constraints.
 #Description: 	This function will combine variance and correlation into covariance matrix labels as SimREqualCon and pass to the function that uses SimREqualCon

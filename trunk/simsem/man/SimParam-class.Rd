@@ -1,15 +1,15 @@
-\name{SimFreeParam-class}
+\name{SimParam-class}
 \Rdversion{1.1}
 \docType{class}
-\alias{SimFreeParam-class}
-\alias{summary,SimFreeParam-method}
+\alias{SimParam-class}
+\alias{summary,SimParam-method}
 
-\title{Class \code{"SimFreeParam"}}
+\title{Class \code{"SimParam"}}
 \description{
 	Set of vectors and matrices that saves free parameters (CFA, Path analysis, or SEM)
 }
 \section{Objects from the Class}{
-Object can be created by \code{\link{simParamCFA}}, \code{\link{simParamPath}}, or \code{\link{simParamSEM}}, for CFA, Path analysis, or SEM model, respectively. Objects can be also created by calls of the form \code{new("SimFreeParam", ...)}.
+Object can be created by \code{\link{simParamCFA}}, \code{\link{simParamPath}}, or \code{\link{simParamSEM}}, for CFA, Path analysis, or SEM model, respectively. Objects can be also created by calls of the form \code{new("SimParam", ...)}.
 }
 \section{Slots}{
   \describe{
@@ -45,7 +45,7 @@ Object can be created by \code{\link{simParamCFA}}, \code{\link{simParamPath}}, 
 	}
 }
 \examples{
-showClass("SimFreeParam")
+showClass("SimParam")
 
 library(lavaan)
 loading <- matrix(0, 9, 3)

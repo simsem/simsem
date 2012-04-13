@@ -362,7 +362,7 @@ setMethod("summary", signature="MatrixSet", definition=function(object) {
 #Description: This function will print all matrices or vectors in the MatrixSet.c if not NULL.
 #Return: 	NONE. Results will print on screen only.
 
-setMethod("summary", signature="SimFreeParam", definition=function(object) {
+setMethod("summary", signature="SimParam", definition=function(object) {
 		cat("SET OF ESTIMATED PARAMETERS\n")
 		cat("Model Type\n")
 		print(object@modelType)		
@@ -388,8 +388,8 @@ setMethod("summary", signature="SimFreeParam", definition=function(object) {
 	}
 )
 #Arguments: 
-#	object:	SimFreeParam.c that users wish to summarize
-#Description: This function will print all matrices or vectors in the SimFreeParam.c if not NULL.
+#	object:	SimParam.c that users wish to summarize
+#Description: This function will print all matrices or vectors in the SimParam.c if not NULL.
 #Return: 	NONE. Results will print on screen only.
 
 setMethod("summary", signature="SimLabels", definition=function(object) {
@@ -528,7 +528,7 @@ setMethod("summary", signature="SimModel", definition=function(object, con=FALSE
 #Return: 	NONE. Results will print on screen only.
 
 setMethod("summary", signature="SimResult", definition=function(object, digits=3, usedFit=NULL, alpha=NULL) {
-		if(is.null(usedFit)) usedFit <- c("Chi", "AIC", "BIC", "RMSEA", "CFI", "TLI", "SRMR")
+		if(is.null(usedFit)) usedFit <- getKeywords()$usedFit
 		cat("RESULT OBJECT\n")
 		cat("Model Type\n")
 		print(object@modelType)

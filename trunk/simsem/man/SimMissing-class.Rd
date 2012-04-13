@@ -27,6 +27,7 @@ Objects can be created by \code{simMissing} function. It can also be called from
     \item{\code{impMethod}:}{Package that will be used for imputation. Currently only Amelia is supported.}
 	\item{\code{ignoreCols}:}{The columns not imposed any missing values for any missing data patterns} 
 	\item{\code{threshold}:}{The threshold of covariates that divide between the area to impose missing and the area not to impose missing. The default threshold is the mean of the covariate.}
+	\item{\code{prAttr}:}{Probability (or vector of probabilities) of an entire case being removed due to attrition at a given time point. See \code{\link{imposeMissing}} for further details.}
 	\item{\code{covAsAux}:}{If \code{TRUE}, the covariate listed in the object will be used as auxiliary variables when putting in the model object. If \code{FALSE}, the covariate will be included in the analysis.}
 	}  
 }

@@ -74,7 +74,7 @@ setMethod("makeLabels", signature="matrix", definition=function(object, name, pa
 #Description: This function will create labels of each element by the matrix name followed by number of elements in a matrix
 #Return: 	matrix.c with labels in it
 
-setMethod("makeLabels", signature="SimFreeParam", definition=function(object, package) {
+setMethod("makeLabels", signature="SimParam", definition=function(object, package) {
 	LY <- makeLabels(object@LY, "LY", package)
 	TE <- makeLabels(object@TE, "TE", package, symmetric=TRUE)
 	PS <- makeLabels(object@PS, "PS", package, symmetric=TRUE)

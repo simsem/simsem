@@ -9,7 +9,7 @@
 # Date Modified: October 9, 2011
 
 setMethod("plotCutoff", signature(object="data.frame"), definition=function(object, cutoff=NULL, revDirec = FALSE, usedFit=NULL, vector1=NULL, vector2=NULL, nameVector1=NULL, nameVector2=NULL, alpha=NULL, useContour=T) {
-	if(is.null(usedFit)) usedFit <- c("Chi", "AIC", "BIC", "RMSEA", "CFI", "TLI", "SRMR")
+	if(is.null(usedFit)) usedFit <- getKeywords()$usedFit
 	object <- as.data.frame(object[,usedFit])
 	cutoff <- cutoff[usedFit]
 	object <- as.data.frame(object[,!apply(object, 2, isNAVector)])

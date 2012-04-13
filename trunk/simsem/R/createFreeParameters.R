@@ -3,8 +3,8 @@
 # Create free parameters object from model specification
 # Function: createFreeParameters(object)
 # Argument:
-#	object: 	SimSet.c that users wish to transform it to SimFreeParam.c
-# Return: 	SimFreeParam.c that saves only free parameters and values of fixed parameters
+#	object: 	SimSet.c that users wish to transform it to SimParam.c
+# Return: 	SimParam.c that saves only free parameters and values of fixed parameters
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: March 10, 2012
 

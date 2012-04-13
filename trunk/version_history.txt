@@ -175,7 +175,7 @@ simsem, Version 0.1-0 04/11/12
 - Add SimFunction and NullSimFunction Classes for transforming data during the simulation
 - Add summary, isNullObject and run methods for the SimFunction class
 - Change simResult and runRep functions to account for SimFunction class
-- Add simFit function to run a Monte Carlo simulation based on the result of data analysis (SimModelOut)
+- Add simFit methods to run a Monte Carlo simulation based on the result of data analysis
 - Add continuousPower function to plot power curves
 - Add indProd function to make the products of indicators in order to make latent interaction construct
 - Add residualCovariate function to residualize variables to control the covariate
@@ -183,4 +183,8 @@ simsem, Version 0.1-0 04/11/12
 - Change indicatorLab argument name to indLab 
 - Write and fix all documentations for the this version
 - Add covAsAux in the simMissing function and class to choose whether using the covariate as auxiliary variables
+- Change the name of SimFreeParam class to SimParam
+- Add prAttr argument in the imposeMissing function for percent attrition
+- Change the way to specify the default fit indices by putting into getKeywords function instead of listing it all the time
+- Change pValue function to methods and add the routine to compare between the SimModelOut class and the SimResult class
 

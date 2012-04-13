@@ -34,7 +34,7 @@ setMethod("plotPower", signature(altObject="data.frame", nullObject="data.frame"
 	percentile <- 1 - alpha
 	cutoff <- getCutoff(nullObject, alpha, usedFit=usedFit)
 	names(cutoff) <- usedFit
-	if(is.null(usedFit)) usedFit <- c("Chi", "AIC", "BIC", "RMSEA", "CFI", "TLI", "SRMR")
+	if(is.null(usedFit)) usedFit <- getKeywords()$usedFit
 	altObject <- as.data.frame(altObject[,usedFit])
 	nullObject <- as.data.frame(nullObject[,usedFit])
 	colnames(altObject) <- usedFit

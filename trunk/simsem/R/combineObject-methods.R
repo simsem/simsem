@@ -217,7 +217,7 @@ setMethod("combineObject", signature(object1="MatrixSet", object2="MatrixSet"), 
 #		of misspecification parameters are not specified, it will return the true parameters (without combine objects).
 #Return: List of parameters in list.
 
-setMethod("combineObject", signature(object1="SimFreeParam", object2="list"), definition= function(object1, object2) {
+setMethod("combineObject", signature(object1="SimParam", object2="list"), definition= function(object1, object2) {
 		modelType <- object1@modelType
 		exo <- (modelType == "SEM.exo") | (modelType == "Path.exo")
 		nx <- ny <- ne <- nk <- 0
@@ -291,7 +291,7 @@ setMethod("combineObject", signature(object1="SimFreeParam", object2="list"), de
 			LY=object1@LY, TE=object1@TE, TY=object1@TY, LX=object1@LX, TD=object1@TD, TX=object1@TX, TH=object1@TH))
 	}
 )
-#Arguments: object1 are SimFreeParam.c of that saves all free parameters and values of fixed parameters
+#Arguments: object1 are SimParam.c of that saves all free parameters and values of fixed parameters
 #			object2 are lavaan estimates or standard error
 #Description: This function will find any free parameters in the object1 and search for appropriate number from object2 and plug in the free parameters.
 #Return: SimRSet.c containing parameter estimates or standard errors.

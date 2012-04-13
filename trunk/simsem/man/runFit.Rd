@@ -1,5 +1,9 @@
-\name{simFit}
-\alias{simFit}
+\name{runFit}
+\alias{runFit}
+\alias{runFit-methods}
+\alias{runFit,ANY-method}
+\alias{runFit,SimModel-method}
+\alias{runFit,SimModelOut-method}
 \title{
 	Build a result object from analyzing real data
 }
@@ -7,17 +11,17 @@
 This function will analyze real data and use the result of the analysis to simulate data. Those simulated data will be analyzed by the same model. The result of the analyses will be saved in the result object, \code{\linkS4class{SimResult}}.
 }
 \usage{
-simFit(nRep, data, model, misspec, conBeforeMis=TRUE, misfitBound=new("NullVector"), maxDraw=100, sequential=NA, facDist=new("NullSimDataDist"), errorDist=new("NullSimDataDist"), indDist=new("NullSimDataDist"), seed=123321, silent=FALSE, multicore=FALSE, cluster=FALSE, numProc=NULL)
+runFit(model, data, nRep=1000, misspec=new("NullSimMisspec"), conBeforeMis=TRUE, misfitBound=new("NullVector"), maxDraw=100, sequential=NA, facDist=new("NullSimDataDist"), errorDist=new("NullSimDataDist"), indDist=new("NullSimDataDist"), seed=123321, silent=FALSE, multicore=FALSE, cluster=FALSE, numProc=NULL)
 }
 \arguments{
-  \item{nRep}{
-	Number of replications.
+  \item{model}{
+	Model object used in analyzing the real and simulated data.
 }
   \item{data}{
 	Real data that will be used in the analysis
 }
-  \item{model}{
-	Model object used in analyzing the real and simulated data.
+  \item{nRep}{
+	Number of replications.
 }
   \item{misspec}{
 	Model \emph{misspecification} matrices that are created by \code{\link{simMisspecCFA}}, \code{\link{simMisspecPath}}, or \code{\link{simMisspecSEM}}.
@@ -84,6 +88,9 @@ loading.trivial <- matrix(NA, 9, 3)
 loading.trivial[is.na(loading)] <- 0
 LY.trivial <- simMatrix(loading.trivial, "u2")
 mis <- simMisspecCFA(LY = LY.trivial)
-Output <- simFit(20, HolzingerSwineford1939, SimModel, mis)
+Output <- runFit(SimModel, HolzingerSwineford1939, 20, mis)
 summary(Output)
+
+out <- run(SimModel, HolzingerSwineford1939)
+Output2 <- runFit(out, HolzingerSwineford1939, 20, mis)
 }

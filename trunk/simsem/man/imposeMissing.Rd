@@ -39,7 +39,7 @@ itemGroups = 0, twoMethod = 0,  prAttr = 0, timePoints = 1, ignoreCols = 0, thre
     missing on that column in the matrix to simulate a two method
     planned missing data research design. 
   }
-  \item{prAttr} {
+  \item{prAttr}{
     Probability (or vector of probabilities) of an entire case being removed due to attrition at a
     given time point. When a covariate is specified along with this argument, attrition
   will be predicted by the covariate (MAR attrition). See details.
@@ -133,7 +133,7 @@ Alexander M. Schoemann (University of Kansas; \email{schoemann@ku.edu})
   
  
   imposeMissing(data,nforms=3)
-  imposeMissing(data,nforms=3,itemGroups=list(c(1,2,3,4,5),c(6,7,8,9,10),c(11,12,13,14,15),c(16,17,18,19)))
+  #imposeMissing(data,nforms=3,itemGroups=list(c(1,2,3,4,5),c(6,7,8,9,10),c(11,12,13,14,15),c(16,17,18,19)))
   imposeMissing(datac,cov=c(20,21),nforms=3)
   imposeMissing(data,twoMethod=c(19,.8))
 

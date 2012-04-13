@@ -11,7 +11,7 @@
 # Date Modified: October 9, 2011
 
 setMethod("getCutoff", signature(object="data.frame"), definition=function(object, alpha, revDirec=FALSE, usedFit=NULL) {
-	if(is.null(usedFit)) usedFit <- c("Chi", "AIC", "BIC", "RMSEA", "CFI", "TLI", "SRMR")
+	if(is.null(usedFit)) usedFit <- getKeywords()$usedFit
 	percentile <- 1 - alpha
 	if(revDirec) percentile <- 1 - percentile
 	object <- as.data.frame(object[,usedFit])

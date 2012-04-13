@@ -34,7 +34,7 @@ testImposeMissing <- function() {
 ## The wrapper function for the various functions to impose missing values.Currently, the function will delete
 ## x percent of eligible values for MAR and MCAR, if you mark colums to be ignored.
 imposeMissing <- function(data.mat,cov=0,pmMCAR=0,pmMAR=0,nforms=0,
-                          itemGroups=0,twoMethod=0,prAttr=0, timePoints=1,ignoreCols=0,threshold=0){
+                          itemGroups=0,twoMethod=0,prAttr=0, timePoints=1,ignoreCols=0,threshold=0,logical=NULL){
  
  #Need the inputs to be numeric for the missing object. Turn to Nulls for this function
  if (length(cov) == 1 && cov==0) {cov <- NULL }
@@ -65,16 +65,18 @@ if(!is.null(pmMAR)) {
  log.mat2 <- makeMAR(data.mat,pmMAR,cov,ignoreCols,threshold)
  data.mat[log.mat2] <- NA
 }
-#if(!is.null(logical)) {
-#	if(!(class(logical) %in% c("matrix", "data.frame"))) stop("The logical argument must be matrix or data frame.")
-#	if((dim(data.mat)[1] != dim(logical)[1]) | (dim(data.mat)[2] != dim(logical)[2])) stop("The dimension in the logical argument is not equal to the dimension in the data")
-#	data.mat[logical] <- NA
-#}
+
 if(!is.null(prAttr)) {
   log.mat3 <- attrition(data.mat,prob=prAttr,timePoints,cov,threshold,ignoreCols)
   data.mat[log.mat3] <- NA
 }
 
+# SP: I need the logical argument for the runFit function. Please let me know if you have anyway better than this.
+if(!is.null(logical)) {
+	if(!(class(logical) %in% c("matrix", "data.frame"))) stop("The logical argument must be matrix or data frame.")
+	if((dim(data.mat)[1] != dim(logical)[1]) | (dim(data.mat)[2] != dim(logical)[2])) stop("The dimension in the logical argument is not equal to the dimension in the data")
+	data.mat[logical] <- NA
+}
  return(data.mat)
 
 }

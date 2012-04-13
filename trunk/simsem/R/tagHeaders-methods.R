@@ -138,7 +138,7 @@ setMethod("tagHeaders", signature="VirtualRSet", definition=function(object) {
 	return(object)
 })
 #Arguments: 
-#	object:	VirtualRSet.c that users wish to tag row and column names, including SimFreeParam.c, SimLabels.c, or SimRSet.c
+#	object:	VirtualRSet.c that users wish to tag row and column names, including SimParam.c, SimLabels.c, or SimRSet.c
 #Description: This element will add names in each element of a vector or will add row and columns names of a matrix with variable or factor names.
 #Details:	Y means indicators on Y-side. X means indicators on X-side. E means endogenous factors. K means exogenous factors.
 #Return: 	VirtualRSet.c that have row, column, or element names in them.

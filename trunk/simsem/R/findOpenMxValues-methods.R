@@ -37,7 +37,7 @@ setMethod("findOpenMxValues", signature(param="matrix", start="matrix"), definit
 #Description: 	This function will add fixed value from parameters matrix into starting value matrix
 #Return: 	Resulting matrix.c that includes numbers of fixed parameters and starting values of free parameters.
 
-setMethod("findOpenMxValues", signature(param="SimFreeParam", start="SimRSet"), definition=function(param, start) {
+setMethod("findOpenMxValues", signature(param="SimParam", start="SimRSet"), definition=function(param, start) {
 	start@LY <- findOpenMxValues(param@LY, start@LY)
 	start@TE <- findOpenMxValues(param@TE, start@TE)
 	start@PS <- findOpenMxValues(param@PS, start@PS)
@@ -54,7 +54,7 @@ setMethod("findOpenMxValues", signature(param="SimFreeParam", start="SimRSet"), 
 	return(start)
 })
 #Arguments: 	
-#	param:	SimFreeParam.c that contains specification of free parameters and all fixed value
+#	param:	SimParam.c that contains specification of free parameters and all fixed value
 #	start:	SimRSet.c containing starting values in each vector and matrix 
-#Description: 	This function will put all fixed values in SimFreeParam.c into set of starting value matrices
+#Description: 	This function will put all fixed values in SimParam.c into set of starting value matrices
 #Return: 	Resulting SimRSet.c that includes numbers of fixed parameters and starting values of free parameters.

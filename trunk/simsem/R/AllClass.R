@@ -666,7 +666,7 @@ setClass("MatrixSet",
 # This class will collapse those separation between mean and intercept into intercept only, as well as variance and correlation into covariance matrix only.
 # Constructor:	Depends on its child class
 # Parent Class: None
-# Child Class:	SimFreeParam, SimLabels, SimRSet
+# Child Class:	SimParam, SimLabels, SimRSet
 # Attributes:
 #	modelType:	Model type (CFA, Path, or SEM)
 #	LY:		matrix.c of Factor loading matrix between endogenous factors and Y indicators 
@@ -826,7 +826,7 @@ setClass("NullSimREqualCon", contains="SimREqualCon",
 )
 
 ###################################################################
-# SimFreeParam
+# SimParam
 # Class -- simsem package
 # Set of vectors and matrices arrangements that will save free parameters and values of fixed parameters that will be used to model specification. 
 # Constructor:	createFreeParameters(object)
@@ -840,7 +840,7 @@ setClass("NullSimREqualCon", contains="SimREqualCon",
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 7, 2011
 
-setClass("SimFreeParam", 
+setClass("SimParam", 
 	contains="VirtualRSet"
 )
 
@@ -848,7 +848,7 @@ setClass("SimFreeParam",
 # SimLabels
 # Class -- simsem package
 # Set of vectors and matrices arrangements that will save labels that will be used to run OpenMx. 
-# Constructor:	makeLabels(SimFreeParam)
+# Constructor:	makeLabels(SimParam)
 # Parent Class: VirtualRSet
 # Child Class:	None
 # Methods:
@@ -1093,7 +1093,7 @@ setClass("SimDataOut",
 	representation(
 		modelType="character",
 		data="data.frame",
-		param="SimFreeParam",
+		param="SimParam",
 		#paramExp="SimRSet",
 		#misspecExp="SimRSet",
 		paramOut="SimRSet",
@@ -1110,12 +1110,12 @@ setClass("SimDataOut",
 # Class -- simsem package
 # This class will save information for analysis model and be ready for data analysis.
 # Constructor:	simModel(SimSet, equalCon, package, trial)
-#				simModel(SimFreeParam, start, equalCon, package)
+#				simModel(SimParam, start, equalCon, package)
 # Parent Class: None
 # Child Class:	None
 # Attributes:
 #	modelType:			Model type (CFA, Path, or SEM)
-#	param:		SimFreeParam.c that save all free parameters and values of fixed parameters
+#	param:		SimParam.c that save all free parameters and values of fixed parameters
 #	start:	All starting values of free parameters in SimRSet.c
 #	equalCon:		SimEqualCon.c that specify equality constraint of parameters in data analysis
 #	package:		Packages used in the analysis (lavaan or OpenMx)
@@ -1128,7 +1128,7 @@ setClass("SimDataOut",
 setClass("SimModel", 
 	representation(
 		modelType="character",
-		param="SimFreeParam",
+		param="SimParam",
 		start="SimRSet",
 		equalCon="SimEqualCon",
 		package="character", #OpenMx, lavaan
@@ -1219,7 +1219,7 @@ setClass("SimResult",
 # Parent Class: None
 # Child Class:	None
 # Attributes:
-#	param:		SimFreeParam.c that save all free parameters and values of fixed parameters
+#	param:		SimParam.c that save all free parameters and values of fixed parameters
 #	start:	All starting values of free parameters in SimRSet.c
 #	equalCon:		SimEqualCon.c that specify equality constraint of parameters in data analysis
 #	package:		Packages used in the analysis (lavaan or OpenMx)
@@ -1235,7 +1235,7 @@ setClass("SimResult",
 
 setClass("SimModelOut", # The class provides model result.
     representation(
-        param="SimFreeParam",
+        param="SimParam",
         start="SimRSet",
         equalCon="SimEqualCon",
         package="character",
@@ -1264,7 +1264,7 @@ setClass("SimModelOut", # The class provides model result.
 # Parent Class: SimModelOut
 # Child Class:	None
 # Attributes:
-#	param:		SimFreeParam.c that save all free parameters and values of fixed parameters
+#	param:		SimParam.c that save all free parameters and values of fixed parameters
 #	start:	All starting values of free parameters in SimRSet.c
 #	equalCon:		SimEqualCon.c that specify equality constraint of parameters in data analysis
 #	package:		Packages used in the analysis (lavaan or OpenMx)

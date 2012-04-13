@@ -4,7 +4,7 @@
 # Argument:
 #	...:	All matrices that belongs to SEM model, see details below.
 #	exo:	TRUE if the model includes exogenous elements (X-side in LISREL notation). The default is FALSE (specify endogenous elements only).
-# Return: 	SimFreeParam class containing SEM model (with "SEM" or "SEM.exo" tag)
+# Return: 	SimParam class containing SEM model (with "SEM" or "SEM.exo" tag)
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: April 9, 2012
 
@@ -38,7 +38,7 @@ simParamSEM <- function(..., exo = FALSE) {
 		ifelse(contain(8, position), TX <- List[position == 8][[1]], TX <- rep(NA, nx))
 		ifelse(contain(11, position), TD <- List[position == 11][[1]], TD <- diag(NA, nx))
 		ifelse(contain(13, position), TH <- List[position == 13][[1]], TH <- matrix(0, nx, ny))
-		Output <- new("SimFreeParam", BE=BE, PS=PS, AL=AL, LY=LY, TY=TY, TE=TE, GA=GA, PH=PH, KA=KA, LX=LX, TX=TX, TD=TD, TH=TH, modelType="SEM.exo")	
+		Output <- new("SimParam", BE=BE, PS=PS, AL=AL, LY=LY, TY=TY, TE=TE, GA=GA, PH=PH, KA=KA, LX=LX, TX=TX, TD=TD, TH=TH, modelType="SEM.exo")	
 	} else {
 		ifelse(contain(3, position), BE <- List[position == 3][[1]], stop("No path coefficient object between factor.ETA"))
 		ne <- nrow(BE)
@@ -56,7 +56,7 @@ simParamSEM <- function(..., exo = FALSE) {
 		ny <- nrow(LY)
 		ifelse(contain(2, position), TY <- List[position == 2][[1]], TY <- rep(NA, ny))
 		ifelse(contain(5, position), TE <- List[position == 5][[1]], TE <- diag(NA, ny))
-		Output <- new("SimFreeParam", BE=BE, PS=PS, AL=AL, LY=LY, TY=TY, TE=TE, modelType="SEM")
+		Output <- new("SimParam", BE=BE, PS=PS, AL=AL, LY=LY, TY=TY, TE=TE, modelType="SEM")
 	}
 	return(Output)
 }

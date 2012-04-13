@@ -3,7 +3,7 @@
 \alias{simModel-methods}
 \alias{simModel,ANY-method}
 \alias{simModel,SimSet-method}
-\alias{simModel,SimFreeParam-method}
+\alias{simModel,SimParam-method}
 \alias{simModel,SimModelOut-method}
 \title{
 	Create simModel from model specification and be ready for data analysis.
