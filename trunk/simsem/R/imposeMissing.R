@@ -109,8 +109,9 @@ makeMAR <- function(data,pm=NULL,cov=NULL,ignoreCols=NULL,threshold=NULL) {
   mismat <- matrix(FALSE,ncol=length(colList),nrow=dim(data)[1])
   rows.eligible <- data[,cov] > threshold
   mismat[,misCols] <- rows.eligible
-  mismat <- apply(mismat, c(1,2),function(x){if(x && (runif(1) < pr.missing)){x <- TRUE} else{x <- FALSE}})
 
+  misrand <- runif(length(mismat)) < pr.missing
+  mismat <- matrix(mapply(`&&`,misrand,as.vector(mismat)),nrow=dim(data)[1])
 
   return(mismat)
 }

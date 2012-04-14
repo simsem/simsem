@@ -1,8 +1,9 @@
 setwd("/nfs/home/patr1ckm/simsem/trunk/")
 
-install.packages("simsem_0.0-4.tar.gz", repos=NULL, type="source")
+install.packages("simsem_0.0-8.tar.gz", repos=NULL, type="source")
 library(simsem)
 library(debug)
+library(Rmpi)
 
 source('AllClass.R')
 source("AllGenerics.R")
@@ -44,6 +45,48 @@ source("reduce.matrices.R")
 source("create.free.parameters.R")
 
 # Generate complete data -
+example.cfa <- function(x) {
+  loading <- matrix(0,9,3)
+  loading[1:3, 1] <- NA
+  loading[4:6, 2] <- NA
+  loading[7:9, 3] <- NA
+
+  LX <- simMatrix(loading, x)
+
+  error.cor <- diag(9)
+  RTD <- symMatrix(error.cor)
+
+  latent.cor <- matrix(NA, 3, 3)
+  diag(latent.cor) <- 1
+
+  RPH <- symMatrix(latent.cor, 0.5)
+
+  CFA.model <- simSetCFA(LX = LX, RPH=RPH, RTD = RTD)
+}
+
+bigsim <- function(x) {
+  CFA.model <- example.cfa(x)
+
+  SimData <- simData(200, CFA.model)
+  SimModel <- simModel(CFA.model)
+
+  samp <- run(SimData)
+  out.1 <- run(SimModel, run(SimData))
+
+  out.ssd <- simResult(10, SimData, SimModel, multicore=TRUE)
+
+  SimMissing <- simMissing(nforms=3, numImps=5)
+
+  out.mis <- simResult(100, SimData, SimModel, SimMissing, multicore=TRUE)
+}
+
+floadings <- seq(.5,.9,by=.025)
+
+mpi.bcast.cmd(cmd=library(simsem))
+mpi.bcast.Robj2slave(example.cfa)
+
+out.mis.l <- mpi.iapplyLB(floadings,bigsim)
+
 
 build.example.model <- function() {
   factor.loading <- matrix(NA, 4, 2)
