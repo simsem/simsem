@@ -87,9 +87,12 @@ if(!is.null(logical)) {
 # ToDo: Extend to multiple covariates
 makeMAR <- function(data,pm=NULL,cov=NULL,ignoreCols=NULL,threshold=NULL) {
 
-  colList <- 1:dim(data)[2]
-  misCols <- colList[-c(cov,ignoreCols)]
-  
+  nrow <- dim(data)[1]
+  ncol <- dim(data)[2]
+  colList <- seq_len(ncol)
+  excl <- c(cov,ignoreCols)
+  misCols <- colList[-excl]
+
   # Calculate the probability of missing above the threshold,starting with the mean of the covariate.
   # If this probability is greater than or equal to 1, lower the threshold by choosing thresholds
   # at increasingly lower quantiles of the data.
@@ -106,13 +109,19 @@ makeMAR <- function(data,pm=NULL,cov=NULL,ignoreCols=NULL,threshold=NULL) {
      i <- i+1
    }
   
-  mismat <- matrix(FALSE,ncol=length(colList),nrow=dim(data)[1])
+#  mismat <- matrix(FALSE,ncol=length(colList),nrow=nrow)
+#  rows.eligible <- data[,cov] > threshold
+#  mismat[,misCols] <- rows.eligible
+
+#  misrand <- runif(length(mismat)) < pr.missing
+#  mismat <- matrix(mapply(`&&`,misrand,as.vector(mismat)),nrow=nrow)
+
   rows.eligible <- data[,cov] > threshold
-  mismat[,misCols] <- rows.eligible
-
-  misrand <- runif(length(mismat)) < pr.missing
-  mismat <- matrix(mapply(`&&`,misrand,as.vector(mismat)),nrow=dim(data)[1])
-
+  total.elig <- rep(rows.eligible,1,each=ncol)
+  misrand <- runif(length(total.elig)) < pr.missing
+  mismat <- matrix(mapply(`&&`,misrand,total.elig),nrow=nrow,byrow=TRUE)
+  mismat[,excl] <- FALSE
+  
   return(mismat)
 }
 
