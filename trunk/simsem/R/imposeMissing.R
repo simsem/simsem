@@ -122,29 +122,24 @@ makeMAR <- function(data,pm=NULL,cov=NULL,ignoreCols=NULL,threshold=NULL) {
 # Output: Logical matrix of values to be deleted
 makeMCAR <- function(dims,pm=NULL,cov=NULL,ignoreCols=NULL)
   {
-    colList <- 1:dims[2]
+    nrow <- dims[1]
+    ncol <- dims[2]
+    colList <- seq_len(ncol)
 
-    if (!is.null(c(cov,ignoreCols)) ) {
-      misCols <- colList[-c(cov,ignoreCols)]
+    excl <- c(cov,ignoreCols)
+    if (!is.null(excl) ) {
+      misCols <- colList[-excl]
     } else {
       misCols <- colList	
 	}
 
-    R <- matrix(FALSE,dims[1],dims[2])
-
-    if(!is.null(pm)){
-      ## Fills a pattern matrix (R) of the same dimensions as your data with a bunch of binomially
-      ## distributed (p=pm) TRUEs or FALSEs
-      ## Provides an R matrix with a proportion of ones = proportion missing (all iid binomial)
-      percent.eligible <- (dims[1]*length(misCols))/(dims[1]*dims[2])
-      pr.missing <- pm / percent.eligible
+    percent.eligible <- (nrow*length(misCols))/(nrow*ncol)
+    pr.missing <- pm / percent.eligible
     
-      R.mis <- matrix(as.logical(rbinom(n=length(misCols)*dims[1],size=1,prob=pr.missing)),dims[1],length(misCols),byrow=TRUE)
-    }
-
-    R[,misCols] <- R.mis
+    R.mis <- matrix(runif(nrow*ncol) <= pr.missing,nrow=nrow)
+    R.mis[,excl] <- FALSE
     
-    return(R)
+    return(R.mis)
 }
 
 
@@ -165,9 +160,9 @@ plannedMissing <- function(dims=c(0,0),nforms=NULL,itemGroups=NULL,twoMethod=NUL
   nitems <- dims[2]
   nobs <- dims[1]
   excl <- c(cov,ignoreCols)
-  numExcl <- length(c(cov,ignoreCols))
+  numExcl <- length(excl)
 
-  itemList <- 1:dims[2]
+  itemList <- seq_len(nitems)
   
 
   if(!is.null(excl)) {
@@ -235,7 +230,7 @@ plannedMissing <- function(dims=c(0,0),nforms=NULL,itemGroups=NULL,twoMethod=NUL
     # Create the full missing matrix
     # 1) Repeat the logical matrix for each time point
     # 2) Create a logical matrix of FALSE for each covariate
-    # 3) Add the columns of covariates to the end of the matrix, and convert to data frame
+    # 3) Add the columns of ignored variables to the end of the matrix, and convert to data frame
     # 4) Rename the colums of the data frame
     # 5) Sort the column names
     # 6) Convert back to matrix
