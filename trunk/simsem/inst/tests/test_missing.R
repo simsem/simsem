@@ -72,7 +72,7 @@ percentmis <- sum(is.na(imposeMissing(dataE,nforms=3,itemGroups=list(1:10,11:20)
 expect_equal(percentmis,.5)
 
 context("Attrition")
-percentmis <- mean(replicate(10,sum(is.na(imposeMissing(data,prAttr=.1)))/length(data)))
+percentmis <- mean(replicate(100,sum(is.na(imposeMissing(data,prAttr=.1)))/length(data)))
 expect_true((percentmis > .099) && (percentmis < .101))
 
 percentmis <- mean(replicate(10,sum(is.na(imposeMissing(dataE,prAttr=.1,timePoints=5)))/length(data)))

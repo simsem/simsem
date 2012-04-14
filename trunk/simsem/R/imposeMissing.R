@@ -6,7 +6,7 @@ testImposeMissing <- function() {
 
   dat1 <- matrix(rep(1,960),ncol=48)
   data <- matrix(1,ncol=20,nrow=100)
-  datac <- cbind(data,rnorm(100,0,1))
+  datac <- cbind(matrix(1,ncol=10,nrow=10),rnorm(10,0,1))
   
   # Imposing Missing with the following arguments produces no missing values
   imposeMissing(data)
@@ -343,6 +343,7 @@ permn <- function (x, fun = NULL, ...)
 # If the length does not equal the number of time points, the pattern will repeat to cover the remaining time points.
 attrition <- function(data,prob=NULL,timePoints = 1,cov=NULL,threshold=NULL,ignoreCols=NULL) {
   dims <- dim(data)
+  nrow <- dims[1]
  
   colGroups <- generateIndices(timePoints,seq_len(dims[2]),excl=c(cov,ignoreCols))
 
@@ -354,17 +355,17 @@ attrition <- function(data,prob=NULL,timePoints = 1,cov=NULL,threshold=NULL,igno
    excl <- NULL
    for(i in seq_len(timePoints)) {
      if(is.null(excl) ) {
-       attr <- runif(dims[1]) <= prob[i]
+       attr <- runif(nrow) <= prob[i]
        log.mat[attr,] <- TRUE
        excl <- 1
      }
      else {
        # Grab the first column at the ith timepoint
        slice <- log.mat[,colGroups[[i]][1]]
-
+       
        # Each value that isn't true has a prob likelihood of being marked true
-       attr <- sapply(slice,function(x) { if(x != TRUE){ runif(1) <= prob[i]} else {TRUE}})
-
+       misrand <- runif(nrow) <= prob[i]
+       attr <- mapply(`||`,slice,misrand)
        # For each row in attr marked true, mark true for all columns excluding previous timepoints.
        log.mat[attr,unlist(colGroups[-excl])] <- TRUE
        excl <- c(excl,i)
@@ -378,16 +379,21 @@ attrition <- function(data,prob=NULL,timePoints = 1,cov=NULL,threshold=NULL,igno
     excl <- NULL
     for(i in seq_len(timePoints)) {
      if(is.null(excl) ) {
-       attr <- sapply(rows.eligible,function(x) { if(x && runif(dims[1]) <= prob[i]) {x <- TRUE} else {x <- FALSE} })
+#       attr <- sapply(rows.eligible,function(x) { if(x && runif(dims[1]) <= prob[i]) {x <- TRUE} else {x <- FALSE} })
+       misrand <- runif(length(rows.eligible)) <= prob[i]
+       attr <- mapply(`&&`,rows.eligible,misrand)
        log.mat[attr,unlist(colGroups)] <- TRUE
        excl <- 1
      }
      else {
        # Grab the first column at the ith timepoint
-       slice <- log.mat[,colGroups[[i]][1]]
+       prevRmv <- log.mat[,colGroups[[i]][1]]
 
        # Each value that isn't true has a prob likelihood of being marked true
-       attr <- mapply(function(x,y) { if(x == FALSE && y == TRUE){runif(1) <= prob[i]} else {FALSE}},slice,rows.eligible)
+       # attr <- mapply(function(x,y) { if(x == FALSE && y == TRUE){runif(1) <= prob[i]} else {FALSE}},slice,rows.eligible)
+       misrand <- runif(length(prevRmv)) <= prob[i]
+       eligible <- mapply('&&',rows.eligible,misrand)
+       attr <- mapply('||',eligible,prevRmv)
 
        # For each row in attr marked true, mark true for all columns excluding previous timepoints.
        log.mat[attr,unlist(colGroups[-excl])] <- TRUE
