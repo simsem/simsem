@@ -5,7 +5,7 @@
 # Argument:
 #	object: 	Desired object that users wish to standardize
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: February 28, 2012
+# Date Modified: April 15, 2012
 
 setMethod("extract", signature="SimDataDist", definition=function(object, pos) {
 		return(new("SimDataDist", p=length(pos), dist=object@dist[pos], keepScale=object@keepScale, reverse=object@reverse[pos]))
@@ -167,6 +167,134 @@ setMethod("extract", signature="VirtualRSet", definition=function(object, yOnly=
 				object@TH <- extract(object@TH, x, y)	
 			}
 		}	
+	}
+	return(object)
+}
+)
+
+setMethod("extract", signature="data.frame", definition=function(object, yOnly=FALSE, y=NULL, e=NULL, x=NULL, k=NULL, keepOriginalName=FALSE) {
+	columnName <- colnames(object)
+	if(is.null(columnName)) stop("The extract method for data frame needs column names.")
+	name <- substr(columnName, 1, 2)
+	position <- do.call("rbind", strsplit(substr(columnName, 3, nchar(columnName)), "_"))
+	if(yOnly) {
+		if(!is.null(y) | !is.null(e) | !is.null(x) | !is.null(k)) stop("The 'y', 'e', 'x', and 'k' arguments can be used only when the yOnly argument is FALSE.")
+		object <- object[,which(name %in% c("PS", "LY", "TY", "TE", "AL", "BE"))]
+	} else {
+		modelType <- NULL
+		if((length(grep("LY", name)) > 0) | (length(grep("LX", name)) > 0)) {
+			modelType <- "CFA"
+			if(length(grep("BE", name)) > 0) modelType <- "SEM"
+			if(length(grep("LX", name)) > 0) modelType <- "SEM.exo"
+		} else {
+			modelType <- "Path"
+			if(length(grep("GA", name)) > 0) modelType <- "Path.exo"
+		}
+		resultName <- NULL
+		newName <- NULL
+		if(modelType == "Path" | modelType == "Path.exo") {
+			if(length(columnName[name=="BE"]) > 0) {
+				resultBE <- extractMatrixNames(columnName[name=="BE"], y, y)
+				resultName <- c(resultName, resultBE[[1]])
+				newName <- c(newName, resultBE[[2]])
+			}
+			if(length(columnName[name=="PS"]) > 0) {
+				resultPS <- extractMatrixNames(columnName[name=="PS"], y, y)
+				resultName <- c(resultName, resultPS[[1]])
+				newName <- c(newName, resultPS[[2]])
+			}
+			if(length(columnName[name=="AL"]) > 0) {
+				resultAL <- extractVectorNames(columnName[name=="AL"], y)
+				resultName <- c(resultName, resultAL[[1]])
+				newName <- c(newName, resultAL[[2]])
+			}
+			if(length(columnName[name=="GA"]) > 0) {
+				resultGA <- extractMatrixNames(columnName[name=="GA"], y, x)
+				resultName <- c(resultName, resultGA[[1]])
+				newName <- c(newName, resultGA[[2]])
+			}
+			if(length(columnName[name=="PH"]) > 0) {
+				resultPH <- extractMatrixNames(columnName[name=="PH"], x, x)
+				resultName <- c(resultName, resultPH[[1]])
+				newName <- c(newName, resultPH[[2]])
+			}
+			if(length(columnName[name=="KA"]) > 0) {
+				resultKA <- extractVectorNames(columnName[name=="KA"], x)
+				resultName <- c(resultName, resultKA[[1]])
+				newName <- c(newName, resultAL[[2]])
+			}				
+		} else {
+			if(length(columnName[name=="BE"]) > 0) {
+				resultBE <- extractMatrixNames(columnName[name=="BE"], e, e)
+				resultName <- c(resultName, resultBE[[1]])
+				newName <- c(newName, resultBE[[2]])
+			}
+			if(length(columnName[name=="PS"]) > 0) {
+				resultPS <- extractMatrixNames(columnName[name=="PS"], e, e)
+				resultName <- c(resultName, resultPS[[1]])
+				newName <- c(newName, resultPS[[2]])
+			}
+			if(length(columnName[name=="AL"]) > 0) {
+				resultAL <- extractVectorNames(columnName[name=="AL"], e)
+				resultName <- c(resultName, resultAL[[1]])
+				newName <- c(newName, resultAL[[2]])
+			}
+			if(length(columnName[name=="GA"]) > 0) {
+				resultGA <- extractMatrixNames(columnName[name=="GA"], e, k)
+				resultName <- c(resultName, resultGA[[1]])
+				newName <- c(newName, resultGA[[2]])
+			}
+			if(length(columnName[name=="PH"]) > 0) {
+				resultPH <- extractMatrixNames(columnName[name=="PH"], k, k)
+				resultName <- c(resultName, resultPH[[1]])
+				newName <- c(newName, resultPH[[2]])
+			}
+			if(length(columnName[name=="KA"]) > 0) {
+				resultKA <- extractVectorNames(columnName[name=="KA"], k)
+				resultName <- c(resultName, resultKA[[1]])
+				newName <- c(newName, resultAL[[2]])
+			}				
+			if(length(columnName[name=="LY"]) > 0) {
+				resultLY <- extractMatrixNames(columnName[name=="LY"], y, e)
+				resultName <- c(resultName, resultLY[[1]])
+				newName <- c(newName, resultLY[[2]])
+			}
+			if(length(columnName[name=="TE"]) > 0) {
+				resultTE <- extractMatrixNames(columnName[name=="TE"], y, y)
+				resultName <- c(resultName, resultTE[[1]])
+				newName <- c(newName, resultTE[[2]])
+			}
+			if(length(columnName[name=="TY"]) > 0) {
+				resultTY <- extractVectorNames(columnName[name=="TY"], y)
+				resultName <- c(resultName, resultTY[[1]])
+				newName <- c(newName, resultTY[[2]])
+			}
+			if(length(columnName[name=="LX"]) > 0) {
+				resultLX <- extractMatrixNames(columnName[name=="LX"], x, k)
+				resultName <- c(resultName, resultLX[[1]])
+				newName <- c(newName, resultLX[[2]])
+			}
+			if(length(columnName[name=="TD"]) > 0) {
+				resultTD <- extractMatrixNames(columnName[name=="TD"], x, x)
+				resultName <- c(resultName, resultTD[[1]])
+				newName <- c(newName, resultTD[[2]])
+			}
+			if(length(columnName[name=="TX"]) > 0) {
+				resultTX <- extractVectorNames(columnName[name=="TX"], x)
+				resultName <- c(resultName, resultTX[[1]])
+				newName <- c(newName, resultTX[[2]])
+			}
+			if(length(columnName[name=="TH"]) > 0) {
+				resultTH <- extractMatrixNames(columnName[name=="TH"], x, y)
+				resultName <- c(resultName, resultTH[[1]])
+				newName <- c(newName, resultTH[[2]])
+			}
+		}
+		newOrder <- resultName[order(match(resultName, columnName))]
+		object <- object[,newOrder]
+		if(keepOriginalName == FALSE) {
+			colnames(object) <- newName[order(match(resultName, newOrder))]
+		}
 	}
 	return(object)
 }

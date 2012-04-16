@@ -26,7 +26,7 @@ pValue(target, dist, ...)
 }
 }
 \value{
-	p values based on the comparison. If the target is a model output object and dist is a result object, the p values of fit indices are provided, as well as two additional values: \code{andRule} and \code{orRule}. The \code{andRule} provides the probability of the number of replications that all fit indices in the replication are poorer fit than the model output object. The \code{orRule} provides the probability of the number of replications that at least one fit index in the replication is poorer than the model output object. 
+	p values based on the comparison. If the target is a model output object and dist is a result object, the p values of fit indices are provided, as well as two additional values: \code{andRule} and \code{orRule}. The \code{andRule} is based on the principle that the model is retained only when all fit indices provide good fit. The proportion is calculated from the number of replications that have all fit indices indicating a better model than the observed data. The proportion from the \code{andRule} is the most stringent rule in retaining a hypothesized model. The \code{orRule} is based on the principle that the model is retained only when at least one fit index provides good fit. The proportion is calculated from the number of replications that have at least one fit index indicating a better model than the observed data. The proportion from the \code{orRule} is the most lenient rule in retaining a hypothesized model.
 }
 \section{Details in \dots}{
 	\itemize{

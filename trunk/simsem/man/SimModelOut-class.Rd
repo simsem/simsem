@@ -4,6 +4,10 @@
 \alias{SimModelOut-class}
 \alias{summary,SimModelOut-method}
 \alias{createImpliedMACS,SimModelOut-method}
+\alias{summaryPopulation,SimModelOut-method}
+\alias{getPopulation,SimModelOut-method}
+\alias{setPopulation,SimModelOut,SimRSet-method}
+\alias{setPopulation,SimModelOut,SimSet-method}
 \title{Class \code{"SimModelOut"}}
 \description{
 This class will save the analysis results from a single analysis.
@@ -33,6 +37,9 @@ Objects can be created by \code{\link{run}} on the \code{\linkS4class{SimModel}}
 		\item \code{\link{summaryParam}} To summarize only parameter estimates, standard errors, and significance
 		\item \code{\link{createImpliedMACS}} To create the model implied means and covariance matrix from the parameter estimates
 		\item \code{anova} find the averages of model fit statistics and indices for nested models, as well as the differences of model fit indices among models. This function requires at least two \code{SimModelOut} objects. See \code{\link{anova}} for further details.
+		\item \code{\link{summaryPopulation}} to summarize the data generation population underlying the analysis.
+		\item \code{\link{getPopulation}} to extract the data generation population underlying the data used in the analysis. 
+		\item \code{\link{setPopulation}} to put the appropriate data generation model into the analysis result. If the appropriate data generation model is put (the same model as the analysis model), the covarage of population by a confidence interval will be able to be calculated by the \code{summary} function. The first argument is the result object. The second argument can be either a matrix set of parameters or \code{SimSet} of the population. See the 'modeling with covariate' in the manual for an example.	
 	}
 }
 \author{
@@ -56,5 +63,10 @@ SimModel <- simModel(CFA.Model)
 Data <- run(SimData)
 Result <- run(SimModel, Data)
 summary(Result)
+summaryParam(Result)
+summaryPopulation(Result)
+param <- getPopulation(Result)
+Result2 <- setPopulation(Result, param)
+Result3 <- setPopulation(Result, CFA.Model)
 }
 \keyword{classes}

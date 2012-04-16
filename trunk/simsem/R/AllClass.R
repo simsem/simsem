@@ -1,4 +1,4 @@
-###################################################################
+	###################################################################
 # Distribution Classes
 # Classes -- simsem package
 # Object that create a random number from a distribution.
@@ -1322,7 +1322,8 @@ setClass("SimMissing",
         timePoints="numeric",
 		ignoreCols="numeric",
 		threshold="numeric",
-		covAsAux="logical"),
+		covAsAux="logical",
+		logical="matrix"),
     prototype(
         cov=0,
         pmMCAR=0,
@@ -1336,7 +1337,8 @@ setClass("SimMissing",
         timePoints=1,
 		ignoreCols=0,
 		threshold=0,
-		covAsAux=TRUE)
+		covAsAux=TRUE,
+		logical=new("NullMatrix"))
 )
 
 

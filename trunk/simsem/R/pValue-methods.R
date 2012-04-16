@@ -52,7 +52,7 @@ setMethod("pValue", signature(target="numeric", dist="data.frame"), definition=f
 setMethod("pValue", signature(target="SimModelOut", dist="SimResult"), definition=function(target, dist, usedFit=NULL){
 	dist <- clean(dist)
 	if(is.null(usedFit)) usedFit <- getKeywords()$usedFit
-	revDirec <- usedFit %in% c("CFI", "TLI")
+	revDirec <- !(usedFit %in% c("CFI", "TLI"))
 	logicalMat <- pValue(target@fit[usedFit], dist@fit[,usedFit], revDirec, asLogical=TRUE)
 	result <- apply(logicalMat, 2, mean, na.rm=TRUE)
 	names(result) <- usedFit

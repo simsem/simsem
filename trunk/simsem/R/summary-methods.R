@@ -559,6 +559,9 @@ setMethod("summary", signature="SimResult", definition=function(object, digits=3
 		if(length(unique(object@n)) > 1) cat("NOTE: The sample size is varying.\n")
 		if(length(unique(object@pmMCAR)) > 1) cat("NOTE: The percent of MCAR is varying.\n")
 		if(length(unique(object@pmMAR)) > 1)  cat("NOTE: The percent of MAR is varying.\n")
+		if(!isNullObject(object@paramValue)) { 
+			if ((ncol(object@coef) != ncol(object@paramValue)) | ((ncol(object@coef) == ncol(object@paramValue)) && any(colnames(object@coef) != colnames(object@paramValue)))) cat("NOTE: The data generation model is not the same as the analysis model. See the summary of the population underlying data generation by the summaryPopulation function.\n")
+		}
 	}
 )
 #Arguments: 

@@ -32,7 +32,7 @@ fillParam <- function(param, modelType) {
 			PS <- cor2cov(RPS, sqrt(VE))
 		} else {
 			VE <- diag(PS)
-			RPS <- cov2cor(PS)
+			RPS <- cov2corMod(PS)
 		}
 		if(isNullObject(TE)) {
 			if(isNullObject(VTE)) VTE <- findMeasurementErrorVar(LY, RPS, VY, VE)
@@ -40,7 +40,7 @@ fillParam <- function(param, modelType) {
 			TE <- cor2cov(RTE, sqrt(VTE))
 		} else {
 			VTE <- diag(TE)
-			RTE <- cov2cor(TE)
+			RTE <- cov2corMod(TE)
 			VY <- findIndicatorVar(LY, RPS, VTE, VE)
 		}
 		if(isNullObject(MY)) MY <- findIndicatorMean(LY, ME, TY)
@@ -52,7 +52,7 @@ fillParam <- function(param, modelType) {
 			PS <- cor2cov(RPS, sqrt(VPS))
 		} else {
 			VPS <- diag(PS)
-			RPS <- cov2cor(PS)
+			RPS <- cov2corMod(PS)
 			VE <- findFactorVar(BE, RPS, VPS)
 		}
 		if(isNullObject(ME)) ME <- findFactorMean(BE, AL)
@@ -62,11 +62,11 @@ fillParam <- function(param, modelType) {
 		ny <- nrow(GA)
 		if(!isNullObject(PS)) {
 			VPS <- diag(PS)
-			RPS <- cov2cor(PS)
+			RPS <- cov2corMod(PS)
 		} 
 		if(!isNullObject(PH)) {
 			VPH <- diag(PH)
-			RPH <- cov2cor(PH)
+			RPH <- cov2corMod(PH)
 		}
 		temp.BE <- combinePathExoEndo(GA, BE)
 		temp.RPS <- combineLatentCorExoEndo(RPH, RPS)
@@ -95,7 +95,7 @@ fillParam <- function(param, modelType) {
 			PS <- cor2cov(RPS, sqrt(VPS))
 		} else {
 			VPS <- diag(PS)
-			RPS <- cov2cor(PS)	
+			RPS <- cov2corMod(PS)	
 			VE <- findFactorVar(BE, RPS, VPS)			
 		}
 		if(isNullObject(ME)) ME <- findFactorMean(BE, AL)
@@ -105,7 +105,7 @@ fillParam <- function(param, modelType) {
 			if(isNullObject(VY)) VY <- findIndicatorVar(LY, RPS, VTE, VE)
 			TE <- cor2cov(RTE, sqrt(VTE))
 		} else {
-			RTE <- cov2cor(TE)
+			RTE <- cov2corMod(TE)
 			VTE <- diag(TE)
 			VY <- findIndicatorVar(LY, RPS, VTE, VE)
 		}
@@ -116,19 +116,19 @@ fillParam <- function(param, modelType) {
 		ne <- nrow(GA)
 		if(!isNullObject(PS)) {
 			VPS <- diag(PS)
-			RPS <- cov2cor(PS)
+			RPS <- cov2corMod(PS)
 		} 
 		if(!isNullObject(PH)) {
 			VPH <- diag(PH)
-			RPH <- cov2cor(PH)
+			RPH <- cov2corMod(PH)
 		}
 		if(!isNullObject(TE)) {
 			VTE <- diag(TE)
-			RTE <- cov2cor(TE)
+			RTE <- cov2corMod(TE)
 		} 
 		if(!isNullObject(TD)) {
 			VTD <- diag(TD)
-			RTD <- cov2cor(TD)
+			RTD <- cov2corMod(TD)
 		}
 		temp.BE <- combinePathExoEndo(GA, BE)
 		temp.RPS <- combineLatentCorExoEndo(RPH, RPS)

@@ -187,4 +187,9 @@ simsem, Version 0.1-0 04/11/12
 - Add prAttr argument in the imposeMissing function for percent attrition
 - Change the way to specify the default fit indices by putting into getKeywords function instead of listing it all the time
 - Change pValue function to methods and add the routine to compare between the SimModelOut class and the SimResult class
+- Change the runRep and simResult function to save the data generation model and pass it to the result object
+- Add extract methods for data frame to extract selected indicators or factors
+- Add cov2corMod function and Change cov2cor to cov2corMod in the code to handle zero variances
+- Add summaryPopulation, getPopulation, and setPopulation methods as well as their documentations.
+- Fix a bug in the reduceMatrices function
 

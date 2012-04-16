@@ -11,13 +11,13 @@
 This function will analyze real data and use the result of the analysis to simulate data. Those simulated data will be analyzed by the same model. The result of the analyses will be saved in the result object, \code{\linkS4class{SimResult}}.
 }
 \usage{
-runFit(model, data, nRep=1000, misspec=new("NullSimMisspec"), conBeforeMis=TRUE, misfitBound=new("NullVector"), maxDraw=100, sequential=NA, facDist=new("NullSimDataDist"), errorDist=new("NullSimDataDist"), indDist=new("NullSimDataDist"), seed=123321, silent=FALSE, multicore=FALSE, cluster=FALSE, numProc=NULL)
+runFit(model, realdata, nRep=1000, misspec=new("NullSimMisspec"), conBeforeMis=TRUE, misfitBound=new("NullVector"), maxDraw=100, sequential=NA, facDist=new("NullSimDataDist"), errorDist=new("NullSimDataDist"), indDist=new("NullSimDataDist"), seed=123321, silent=FALSE, multicore=FALSE, cluster=FALSE, numProc=NULL, empiricalMissing=TRUE, missModel=new("NullSimMissing"), usedStd=TRUE)
 }
 \arguments{
   \item{model}{
 	Model object used in analyzing the real and simulated data.
 }
-  \item{data}{
+  \item{realdata}{
 	Real data that will be used in the analysis
 }
   \item{nRep}{
@@ -62,6 +62,15 @@ runFit(model, data, nRep=1000, misspec=new("NullSimMisspec"), conBeforeMis=TRUE,
   \item{numProc}{
 	Number of processors for using multiple processors. If it is \code{NULL}, the package will find the maximum number of processors.
 }
+  \item{empiricalMissing}{
+	Use the missing pattern from the real data imposing on the simulated data if \code{empiricalMissing=TRUE}. If \code{FALSE}, the missing pattern will be generated from the missing object specified in the \code{missModel} argument. If we need a complete data, the \code{missModel} argument can be specified as blank missing object, \code{simMissing()}.
+}
+  \item{missModel}{
+	A missing object used for data simulation. Only \code{numImps} attribute within the missing object is used if \code{empiricalMissing=TRUE}. All attributes are used (for generating missing data) if \code{empiricalMissing=FALSE}.
+}
+  \item{usedStd}{
+	The standardized parameters are used for data generation if \code{usedStd=TRUE}. If \code{usedStd=FALSE}, unstandardized parameters are used.
+}
 }
 \value{
 	\code{\linkS4class{SimResult}} that saves analysis results from simulated data.
@@ -93,4 +102,25 @@ summary(Output)
 
 out <- run(SimModel, HolzingerSwineford1939)
 Output2 <- runFit(out, HolzingerSwineford1939, 20, mis)
+
+# Example with multiple imputation
+library(lavaan)
+loading <- matrix(0, 11, 3)
+loading[1:3, 1] <- NA
+loading[4:7, 2] <- NA
+loading[8:11, 3] <- NA
+path <- matrix(0, 3, 3)
+path[2:3, 1] <- NA
+path[3, 2] <- NA
+errorCov <- diag(NA, 11)
+facCov <- diag(3)
+param <- simParamSEM(LY=loading, BE=path, TE=errorCov, PS=facCov)
+
+miss <- simMissing(pmMCAR=0.03, numImps=5)
+usedData <- run(miss, PoliticalDemocracy)
+
+model <- simModel(param, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
+out <- run(model, usedData, miss)
+output <- runFit(model, usedData, 5, missModel=miss)
+pValue(out, output)
 }

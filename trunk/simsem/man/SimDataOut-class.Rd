@@ -1,9 +1,10 @@
 \name{SimDataOut-class}
-\Rdversion{1.1}
 \docType{class}
 \alias{SimDataOut-class}
 \alias{summary,SimDataOut-method}
 \alias{createImpliedMACS,SimDataOut-method}
+\alias{summaryPopulation,SimDataOut-method}
+\alias{getPopulation,SimDataOut-method}
 \title{Class \code{"SimDataOut"}}
 \description{
 This class will provide the simulated dataset and population behind the generated dataset.
@@ -24,8 +25,10 @@ Objects can be created by \code{\link{run}} on the \code{\linkS4class{SimData}} 
 }
 \section{Methods}{
 	\itemize{
-		\item{summary}{To summarize the object}
-		\item{createImpliedMACS}{To create the model implied means and covariance matrix from the parameter estimates. The \code{misspec} argument can be specified as \code{TRUE} to create the model implied means and covariance matrix from both parameters and model misspecification}
+		\item{\link{summary}} to summarize the object
+		\item{\link{createImpliedMACS}} to create the model implied means and covariance matrix from the parameter estimates. The \code{misspec} argument can be specified as \code{TRUE} to create the model implied means and covariance matrix from both parameters and model misspecification
+		\item \code{\link{summaryPopulation}} to summarize the data generation population underlying the data.
+		\item \code{\link{getPopulation}} to extract the data generation population. The additional argument is \code{misspec}. If \code{TRUE}, the data generation population with model misspecification will be returned. If \code{FALSE}, the data generation population without model misspecification will be returned.
 	}
 }
 \author{
@@ -50,5 +53,7 @@ SimModel <- simModel(CFA.Model)
 Data <- run(SimData, dataOnly=FALSE)
 Result <- run(SimModel, Data)
 summary(Data)
+summaryPopulation(Data)
+mis <- getPopulation(Data, misspec=TRUE)
 }
 \keyword{classes}

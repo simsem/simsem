@@ -106,10 +106,22 @@ setGeneric("simData", function(param, ...) {
 	return(standardGeneric("simData")) 
 } )
 
-setGeneric("runFit", function(model, data, nRep=1000, misspec=new("NullSimMisspec"), conBeforeMis=TRUE, misfitBound=new("NullVector"), maxDraw=100, sequential=NA, facDist=new("NullSimDataDist"), errorDist=new("NullSimDataDist"), indDist=new("NullSimDataDist"), seed=123321, silent=FALSE, multicore=FALSE, cluster=FALSE, numProc=NULL) { 
+setGeneric("runFit", function(model, realdata, nRep=1000, misspec=new("NullSimMisspec"), conBeforeMis=TRUE, misfitBound=new("NullVector"), maxDraw=100, sequential=NA, facDist=new("NullSimDataDist"), errorDist=new("NullSimDataDist"), indDist=new("NullSimDataDist"), seed=123321, silent=FALSE, multicore=FALSE, cluster=FALSE, numProc=NULL, empiricalMissing=TRUE, missModel=new("NullSimMissing"), usedStd=TRUE) { 
 	return(standardGeneric("runFit")) 
 } )
 
 setGeneric("pValue", function(target, dist, ...) { 
 	return(standardGeneric("pValue")) 
+} )
+
+setGeneric("summaryPopulation", function(object) { 
+	return(standardGeneric("summaryPopulation")) 
+} )
+
+setGeneric("getPopulation", function(object, ...) { 
+	return(standardGeneric("getPopulation")) 
+} )
+
+setGeneric("setPopulation", function(target, population, ...) { 
+	return(standardGeneric("setPopulation")) 
 } )

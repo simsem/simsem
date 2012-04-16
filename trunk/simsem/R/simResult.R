@@ -112,12 +112,14 @@ simResult <- function(nRep=NULL, objData=NULL, objModel=NULL, objMissing=new("Nu
 	FMI1.l <- lapply(Result.l, function(object) {object$FMI1}) 
 	FMI2.l <- lapply(Result.l, function(object) {object$FMI2})
 	std.l <- lapply(Result.l, function(object) {object$std})
+	paramData.l <- lapply(Result.l, function(object) {object$paramData})  
 	coef <- as.data.frame(do.call(rbind, coef.l))
 	se <- as.data.frame(do.call(rbind, se.l))
 	fit <- as.data.frame(do.call(rbind, fit.l))
 	FMI1 <- as.data.frame(do.call(rbind, FMI1.l))
 	FMI2 <- as.data.frame(do.call(rbind, FMI2.l))
 	std <- as.data.frame(do.call(rbind, std.l))
+	paramData <- as.data.frame(do.call(rbind, paramData.l))
 	converged <- as.vector(unlist(converged.l))
 	param <- new("NullDataFrame")
 	FMI1 <- new("NullDataFrame")
@@ -150,7 +152,7 @@ simResult <- function(nRep=NULL, objData=NULL, objModel=NULL, objMissing=new("Nu
 	}
 	if(is.null(pmMCAR)) ifelse(isNullObject(objMissing), pmMCAR <- 0, pmMCAR <- objMissing@pmMCAR)
 	if(is.null(pmMAR)) ifelse(isNullObject(objMissing), pmMAR <- 0, pmMAR <- objMissing@pmMAR)
-	if(nrow(param) == 1 & ncol(param) == 1 & is.na(param)) param <- new("NullDataFrame")
+	if(nrow(param) == 1 & ncol(param) == 1 && is.na(param)) param <- paramData
 	Result <- new("SimResult", modelType=modelType, nRep=nRep, coef=coef, se=se, fit=fit, converged=converged, 
 		seed=seed, paramValue=param, FMI1=FMI1, FMI2=FMI2, stdCoef=std, n=n, pmMCAR=pmMCAR, pmMAR=pmMAR)
 	return <- Result

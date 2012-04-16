@@ -432,7 +432,7 @@ setMethod("run", signature="SimModel", definition=function(object, data, simMiss
 	miss <- sum(is.na(data)) > 0	
 	if(is.null(estimator)) estimator <- object@estimator
 	estimator <- tolower(estimator)
-	if(!isNullObject(simMissing) && simMissing@numImps > 0) {
+	if(miss && !isNullObject(simMissing) && simMissing@numImps > 0) {
 		Output <- runMI(data, object, simMissing@numImps,simMissing@impMethod)
 	} else {
 		if(object@package == "OpenMx") {
@@ -490,16 +490,19 @@ setMethod("run", signature="SimMissing", definition=function(object, data, pmMCA
 	if(is(data, "SimDataOut")) {
 		data@data <- as.data.frame(imposeMissing(data@data, cov=object@cov, pmMCAR=object@pmMCAR,
             pmMAR=object@pmMAR, nforms=object@nforms, timePoints=object@timePoints,
-            itemGroups=object@itemGroups, twoMethod=object@twoMethod))
+            itemGroups=object@itemGroups, twoMethod=object@twoMethod, prAttr=object@prAttr, ignoreCols=object@ignoreCols,
+			threshold=object@threshold, logical=object@logical))
 	} else if (is.data.frame(data)) {
 		data <- as.data.frame(imposeMissing(data, cov=object@cov, pmMCAR=object@pmMCAR,
             pmMAR=object@pmMAR, nforms=object@nforms, timePoints=object@timePoints,
-            itemGroups=object@itemGroups, twoMethod=object@twoMethod))	
+            itemGroups=object@itemGroups, twoMethod=object@twoMethod, prAttr=object@prAttr, ignoreCols=object@ignoreCols,
+			threshold=object@threshold, logical=object@logical))	
 	} else if (is.matrix(data)) {
 		data <- as.data.frame(data)
 		data <- as.data.frame(imposeMissing(data, cov=object@cov, pmMCAR=object@pmMCAR,
             pmMAR=object@pmMAR, nforms=object@nforms, timePoints=object@timePoints,
-            itemGroups=object@itemGroups, twoMethod=object@twoMethod))	
+            itemGroups=object@itemGroups, twoMethod=object@twoMethod, prAttr=object@prAttr, ignoreCols=object@ignoreCols,
+			threshold=object@threshold, logical=object@logical))	
 	}
 	return(data)
 })

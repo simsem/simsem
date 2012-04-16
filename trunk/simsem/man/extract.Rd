@@ -4,6 +4,7 @@
 \alias{extract,vector-method}
 \alias{extract,matrix-method}
 \alias{extract,VirtualRSet-method}
+\alias{extract,data.frame-method}
 \title{
 	Extract a part of an object
 }
@@ -28,6 +29,9 @@ extract(object, ...)
 	}
 	\item{\code{signature(object = "matrix")}}{
 		The additional arguments are \code{row} and \code{col}. These are the positions of row and column. This method will prevent the matrix transforming to a vector if the number of rows or columnes is 1.
+	}
+	\item{\code{signature(object = "data.frame")}}{
+		Extract elements from a data.frame. There are several additional arguments. First, if \code{yOnly} is \code{TRUE}, then the result will provide only Y side. Second, \code{y} is the index of indicators in Y side to be extracted. Third, \code{e} is the index of factors in Y side to be extracted. Fourth, \code{x} is the index of the indicators in X side to be extracted. Fifth, \code{k} is the index of the factors in X side to be extracted. Finally, \code{keepOriginalName} is to not reorder the extracted variables.
 	}
 }}
 \value{

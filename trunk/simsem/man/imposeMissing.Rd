@@ -9,7 +9,7 @@ including MCAR, MAR, planned, and attrition.
 }
 \usage{
 imposeMissing(data.mat, cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0,
-itemGroups = 0, twoMethod = 0,  prAttr = 0, timePoints = 1, ignoreCols = 0, threshold = 0, logical = NULL)
+itemGroups = 0, twoMethod = 0,  prAttr = 0, timePoints = 1, ignoreCols = 0, threshold = 0, logical = new("NullMatrix"))
 }
 \arguments{
   \item{data.mat}{

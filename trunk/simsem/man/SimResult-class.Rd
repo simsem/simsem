@@ -3,7 +3,11 @@
 \docType{class}
 \alias{SimResult-class}
 \alias{summary,SimResult-method}
-
+\alias{summaryPopulation,SimResult-method}
+\alias{getPopulation,SimResult-method}
+\alias{setPopulation,SimResult,data.frame-method}
+\alias{setPopulation,SimResult,SimSet-method}
+\alias{setPopulation,SimResult,VirtualRSet-method}
 \title{Class \code{"SimResult"}}
 \description{
 This class will save data analysis results from multiple replications and ready to find some useful statistics, such as fit indices cutoffs or power.
@@ -31,13 +35,16 @@ Objects can be created by \code{\link{simResult}}. It can also be called from th
 }
 \section{Methods}{
 	\itemize{
-		\item \code{getCutoff} to getCutoff of fit indices based on a priori alpha level.
-		\item \code{getPower} to getPower of rejection when the simResult is the alternative hypothesis and users specify cutoffs of the fit indices.
-		\item \code{plotCutoff} to plot null hypothesis sampling distributions of fit indices with an option to draw fit indices cutoffs by specifying a priori alpha level.
-		\item \code{plotPower} to plot alternative hypothesis (and null hypothesis) with a priori cutoffs or alpha level.
-		\item \code{summary} to summarize the result output
-		\item \code{summaryParam} to summarize all parameter estimates
+		\item \code{\link{getCutoff}} to getCutoff of fit indices based on a priori alpha level.
+		\item \code{\link{getPower}} to getPower of rejection when the simResult is the alternative hypothesis and users specify cutoffs of the fit indices.
+		\item \code{\link{plotCutoff}} to plot null hypothesis sampling distributions of fit indices with an option to draw fit indices cutoffs by specifying a priori alpha level.
+		\item \code{\link{plotPower}} to plot alternative hypothesis (and null hypothesis) with a priori cutoffs or alpha level.
+		\item \code{\link{summary}} to summarize the result output
+		\item \code{\link{summaryParam}} to summarize all parameter estimates
 		\item \code{anova} find the averages of model fit statistics and indices for nested models, as well as the differences of model fit indices among models. This function requires at least two \code{SimResult} objects. See \code{\link{anova}} for further details.
+		\item \code{\link{summaryPopulation}} to summarize the data generation population underlying the simulation study.
+		\item \code{\link{getPopulation}} to extract the data generation population underlying the simulation study. This method will return a data frame of the population underlying each replication.
+		\item \code{\link{setPopulation}} to put the appropriate data generation model into the result object. If the appropriate data generation model is put (the same model as the analysis model), the bias in parameter estimates and standard errors will be able to be calculated by the \code{summary} function. The first argument is the result object. The second argument can be either \code{data.frame} of the population or \code{SimSet} of the population. See the 'modeling with covariate' in the manual for an example.	
 	}
 }
 \author{
@@ -66,5 +73,10 @@ SimModel <- simModel(CFA.Model)
 Output <- simResult(50, SimData, SimModel)
 summary(Output)
 getCutoff(Output, 0.05)
+summaryParam(Output)
+summaryPopulation(Output)
+param <- getPopulation(Output)
+Output <- setPopulation(Output, param)
+Output2 <- setPopulation(Output, CFA.Model)
 }
 \keyword{classes}

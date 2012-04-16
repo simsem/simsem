@@ -916,7 +916,7 @@ plotCutoff(Output, 0.05)
 summaryParam(Output)
 
 ########################################## Example 13 ###################
-
+library(simsem)
 library(lavaan)
 loading <- matrix(0, 9, 3)
 loading[1:3, 1] <- NA
@@ -925,32 +925,60 @@ loading[7:9, 3] <- NA
 model <- simParamCFA(LY=loading)
 SimModel <- simModel(model, indLab=paste("x", 1:9, sep=""))
 out <- run(SimModel, HolzingerSwineford1939)
-summary(out)
+
+### Making result object without trivial model misspecification
+#output <- runFit(SimModel, HolzingerSwineford1939, 1000)
+#pValue(out, output)
+
+u2 <- simUnif(-0.2, 0.2)
+loading.mis <- matrix(NA, 9, 3)
+loading.mis[is.na(loading)] <- 0
+LY.mis <- simMatrix(loading.mis, "u2")
+misspec <- simMisspecCFA(LY=LY.mis)
+output2 <- runFit(SimModel, HolzingerSwineford1939, 1000, misspec=misspec)
+pValue(out, output2)
 
 
+facCov <- matrix(NA, 3, 3)
+diag(facCov) <- 1
+errorCov <- diag(NA, 9)
+intercept <- rep(NA, 9)
+facMean <- rep(0, 3)
+model <- simParamCFA(LY=loading, PS=facCov, TE=errorCov, TY=intercept, AL=facMean)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+############################### Example 14 #######################
 
 library(simsem)
 library(lavaan)
-u35 <- simUnif(0.3, 0.5)
+loading <- matrix(0, 11, 3)
+loading[1:3, 1] <- NA
+loading[4:7, 2] <- NA
+loading[8:11, 3] <- NA
+path <- matrix(0, 3, 3)
+path[2:3, 1] <- NA
+path[3, 2] <- NA
+param <- simParamSEM(LY=loading, BE=path)
+
+usedData <- imposeMissing(PoliticalDemocracy, pmMCAR=0.03)
+
+model <- simModel(param, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
+miss <- simMissing(numImps=5)
+out <- run(model, usedData, miss)
+
+u2 <- simUnif(-0.2, 0.2)
+loading.mis <- matrix(NA, 11, 3)
+loading.mis[is.na(loading)] <- 0
+LY.mis <- simMatrix(loading.mis, "u2")
+misspec <- simMisspecSEM(LY=LY.mis)
+output <- runFit(model, usedData, 200, misspec=misspec, missModel=miss)
+pValue(out, output)
+
+############################# Example 15 ############################################
+
+library(simsem)
+u35 <- simUnif(0.1, 0.3)
 u57 <- simUnif(0.5, 0.7)
-n01 <- simNorm(0, 1)
+u2 <- simUnif(-0.2, 0.2)
 
 loading <- matrix(0, 7, 3)
 loading[1:3, 1] <- NA
@@ -975,35 +1003,120 @@ VY <- simVector(c(rep(NA, 6), 0), rep(1, 7))
 
 Cov.Model <- simSetSEM(LY=LY, RPS=RPS, BE=BE, RTE=RTE, VY=VY)
 
-errorCorMis <- diag(7)
-errorCorMis[1:6, 1:6] <- NA
-errorCorMis <- diag(7)
-RTE.mis <- symMatrix(errorCorMis, n01)
+loading.mis <- matrix(NA, 7, 3)
+loading.mis[is.na(loading)] <- 0
+loading.mis[,3] <- 0
+loading.mis[7,] <- 0
+LY.mis <- simMatrix(loading.mis, "u2")
+misspec <- simMisspecSEM(LY=LY.mis)
 
-Cov.Model.Mis <- simMisspecSEM(RTE=RTE.mis)
+SimData <- simData(Cov.Model, 200, misspec=misspec)
 
-SimData <- simData(Cov.Model, 200, misspec=Cov.Model.Mis)
-SimModel <- simModel(Cov.Model)
+# First analysis model: Model without covariate
+No.Cov.Model <- extract(Cov.Model, y=1:6, e=1:2)
+model1 <- simModel(No.Cov.Model, indLab=paste("y", 1:6, sep=""))
+Output1 <- simResult(100, SimData, model1)
+param <- getPopulation(Output1)
+param <- extract(param, y=1:6, e=1:2)
+Output1 <- setPopulation(Output1, param) 
+summary(Output1)
 
-Output <- simResult(100, SimData, SimModel)
-getCutoff(Output, 0.05)
-plotCutoff(Output, 0.05)
-summaryParam(Output)
+# Second analysis model: Model accounting for covariate in the indicator level
+model2 <- simModel(Cov.Model)
+Output2 <- simResult(100, SimData, model2)
+summary(Output2)
 
-# Add simTransform to provide a new data to residual centering
-# Add LH matrix to make a covariate
-# Make the default that if LX and TD are not specified in SEM.exo, make them as single-indicator factors.
-# find.recursive.set if a row is all 0, give it to 1. And if the column is also 0 too. What should we do? Hide it in comment? !Just check it in the lavaan code
-# Then if any factors are covariate, explicitly put the PS to them! See the previous comment
+# Third analysis model: Model accounting for covariate with orthogonalization
+ortho <- simFunction(residualCovariate, targetVar=1:6, covVar=7)
+model3 <- model1
+Output3 <- simResult(100, SimData, model3, objFunction=ortho)
+param <- getPopulation(Output3)
+param <- extract(param, y=1:6, e=1:2)
+Output3 <- setPopulation(Output3, param) 
+summary(Output3)
+
+# Fourth analysis model: Model accounting for covariate in factor level
+loading <- matrix(0, 7, 3)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+loading[7, 3] <- NA
+path <- matrix(0, 3, 3)
+path[2, 1] <- NA
+path[1, 3] <- NA
+path[2, 3] <- NA
+errorCov <- diag(NA, 7)
+errorCov[7, 7] <- 0
+facCov <- diag(3)
+Fac.Cov.Model <- simParamSEM(LY=loading, BE=path, TE=errorCov, PS=facCov)
+model4 <- simModel(Fac.Cov.Model)
+Output4 <- simResult(100, SimData, model4)
+
+loadingVal <- matrix(0, 7, 3)
+loadingVal[1:3, 1] <- 0.6
+loadingVal[4:6, 2] <- 0.6
+loadingVal[7, 3] <- 1
+LY <- simMatrix(loading, loadingVal)
+pathVal <- matrix(0, 3, 3)
+pathVal[2, 1] <- 0.4
+pathVal[1, 3] <- 0.4
+pathVal[2, 3] <- 0.4
+BE <- simMatrix(path, pathVal)
+PS <- symMatrix(facCov)
+errorCovVal <- diag(0.64, 7)
+errorCovVal[7, 7] <- 0
+TE <- symMatrix(errorCov, errorCovVal)
+Fac.Cov.Model.Full <- simSetSEM(LY=LY, PS=PS, BE=BE, TE=TE)
+Output4 <- setPopulation(Output4, Fac.Cov.Model.Full) 
+summary(Output4)
+
+############################# Example 16 ############################################
+
+library(simsem)
+u35 <- simUnif(0.1, 0.3)
+u57 <- simUnif(0.5, 0.7)
+u2 <- simUnif(-0.2, 0.2)
+
+path <- matrix(0, 9, 9)
+path[4, 1] <- NA
+path[7, 4] <- NA
+path[5, 2] <- NA
+path[8, 5] <- NA
+path[6, 3] <- NA
+path[9, 6] <- NA
+path[5, 1] <- NA
+path[8, 4] <- NA
+path[6, 2] <- NA
+path[9, 5] <- NA
+pathVal <- matrix(0, 9, 9)
+pathVal[4, 1] <- "u57"
+pathVal[7, 4] <- "u57"
+pathVal[5, 2] <- "u57"
+pathVal[8, 5] <- "u57"
+pathVal[6, 3] <- "u57"
+pathVal[9, 6] <- "u57"
+pathVal[5, 1] <- "u35"
+pathVal[8, 4] <- "u35"
+pathVal[6, 2] <- "u35"
+pathVal[9, 5] <- "u35"
+BE <- simMatrix(path, pathVal)
+
+facCor <- diag(9)
+facCor[1, 2] <-  <- NA
+facCor[1, 3] <- NA
+facCor[2, 3] <- NA
 
 
-#residualCovariate(attitude, 2:7, 1)
-
-#indProd(attitude, 1:3, 4:6, residualC=TRUE)
-
-
-
-
+loading <- matrix(0, 27, 93)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+loading[7:9, 3] <- NA
+loading[10:12, 4] <- NA
+loading[13:15, 5] <- NA
+loading[16:18, 6] <- NA
+loading[19:21, 7] <- NA
+loading[22:24, 8] <- NA
+loading[25:27, 9] <- NA
+LY <- simMatrix(loading, "u57")
 
 
 

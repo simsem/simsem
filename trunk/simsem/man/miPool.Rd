@@ -32,11 +32,12 @@ Li, K. H., Meng, X. L., Raghunathan, T. E., & Rubin, D. B. (1991). Significance 
 \author{
 Alexander M. Schoemann (University of Kansas; \email{schoemann@ku.edu})
 Mijke Rhemtulla (University of Kansas; \email{mijke@ku.edu})
-Sunthud Pornprasertmanit (University of Kansas; \email{mijke@ku.edu})
+Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \seealso{
 	\itemize{
-		\item \code{\link{miPool}} for combining results in the \code{matrix} format.
+		\item \code{\link{miPoolVector}} for pooling multiple imputation results that providing in matrix or vector formats
+		\item \code{\link{miPoolChi}} for pooling multiple imputated chi-square statistics
 		\item \code{\link{runMI}} for imputing missing values by multiple imputation and analyzing the imputed datasets.
 	}
 }

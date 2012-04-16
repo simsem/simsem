@@ -67,7 +67,7 @@ runRep <- function(object, objData, objModel, objMissing=new("NullSimMissing"), 
 		param <- NA
 		Labels <- makeLabels(temp@param, "OpenMx") #As a quick default to use OpenMx
 		if(converged) {
-			coef<- vectorizeObject(temp@coef, Labels)
+			coef <- vectorizeObject(temp@coef, Labels)
 			se <- vectorizeObject(temp@se, Labels)
 			fit <- temp@fit
 			stdSet <- standardize(temp)
@@ -86,7 +86,9 @@ runRep <- function(object, objData, objModel, objMissing=new("NullSimMissing"), 
     } else {
 		if(!is.null(data.mis) && is(data.mis, "SimDataOut")) param <- NA
 	}
-	Result <- list(coef=coef, se=se, fit=fit, converged=converged, param=param, FMI1=FMI1, FMI2=FMI2, std=std)
+	LabelsDataParam <- makeLabels(createFreeParameters(objData@param), "OpenMx")
+	paramData <- vectorizeObject(object[[1]]$real, LabelsDataParam)
+	Result <- list(coef=coef, se=se, fit=fit, converged=converged, param=param, FMI1=FMI1, FMI2=FMI2, std=std, paramData=paramData)
 	return <- Result
 }
 
