@@ -48,7 +48,7 @@ dir <- "C:/Users/student/Dropbox/simsem/simsem/R/"
  source(paste(dir, "AllGenerics.R", sep=""))
  sourceDir(dir)
 
- loading <- matrix(0, 6, 2)
+loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
 LX <- simMatrix(loading, 0.7)
@@ -1077,36 +1077,24 @@ u57 <- simUnif(0.5, 0.7)
 u2 <- simUnif(-0.2, 0.2)
 
 path <- matrix(0, 9, 9)
-path[4, 1] <- NA
-path[7, 4] <- NA
-path[5, 2] <- NA
-path[8, 5] <- NA
-path[6, 3] <- NA
-path[9, 6] <- NA
-path[5, 1] <- NA
-path[8, 4] <- NA
-path[6, 2] <- NA
-path[9, 5] <- NA
+path[4, 1] <- path[7, 4] <- NA
+path[5, 2] <- path[8, 5] <- NA
+path[6, 3] <- path[9, 6] <- NA
+path[5, 1] <- path[8, 4] <- NA
+path[6, 2] <- path[9, 5] <- NA
 pathVal <- matrix(0, 9, 9)
-pathVal[4, 1] <- "u57"
-pathVal[7, 4] <- "u57"
-pathVal[5, 2] <- "u57"
-pathVal[8, 5] <- "u57"
-pathVal[6, 3] <- "u57"
-pathVal[9, 6] <- "u57"
-pathVal[5, 1] <- "u35"
-pathVal[8, 4] <- "u35"
-pathVal[6, 2] <- "u35"
-pathVal[9, 5] <- "u35"
+pathVal[4, 1] <- pathVal[7, 4] <- 0.6
+pathVal[5, 2] <- pathVal[8, 5] <- 0.6
+pathVal[6, 3] <- pathVal[9, 6] <- 0.6
+pathVal[5, 1] <- pathVal[8, 4] <- 0.4
+pathVal[6, 2] <- pathVal[9, 5] <- 0.4
 BE <- simMatrix(path, pathVal)
-
 facCor <- diag(9)
-facCor[1, 2] <-  <- NA
-facCor[1, 3] <- NA
-facCor[2, 3] <- NA
-
-
-loading <- matrix(0, 27, 93)
+facCor[1, 2] <- facCor[2, 1] <- NA
+facCor[1, 3] <- facCor[3, 1] <- NA
+facCor[2, 3] <- facCor[3, 2] <- NA
+RPS <- symMatrix(facCor, "u35")
+loading <- matrix(0, 27, 9)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
 loading[7:9, 3] <- NA
@@ -1117,12 +1105,67 @@ loading[19:21, 7] <- NA
 loading[22:24, 8] <- NA
 loading[25:27, 9] <- NA
 LY <- simMatrix(loading, "u57")
+errorCor <- diag(27)
+errorCor[1, 10] <- errorCor[10, 19] <- NA
+errorCor[2, 11] <- errorCor[11, 20] <- NA
+errorCor[3, 12] <- errorCor[12, 21] <- NA
+errorCor[4, 13] <- errorCor[13, 22] <- NA
+errorCor[5, 14] <- errorCor[14, 23] <- NA
+errorCor[6, 15] <- errorCor[15, 24] <- NA
+errorCor[7, 16] <- errorCor[16, 25] <- NA
+errorCor[8, 17] <- errorCor[17, 26] <- NA
+errorCor[9, 18] <- errorCor[18, 27] <- NA
+errorCor[1, 19] <- NA
+errorCor[2, 20] <- NA
+errorCor[3, 21] <- NA
+errorCor[4, 22] <- NA
+errorCor[5, 23] <- NA
+errorCor[6, 24] <- NA
+errorCor[7, 25] <- NA
+errorCor[8, 26] <- NA
+errorCor[9, 27] <- NA
+errorCor <- errorCor + t(errorCor)
+diag(errorCor) <- 1
+errorCorVal <- diag(27)
+errorCorVal[1, 10] <- errorCorVal[10, 19] <- 0.2
+errorCorVal[2, 11] <- errorCorVal[11, 20] <- 0.2
+errorCorVal[3, 12] <- errorCorVal[12, 21] <- 0.2
+errorCorVal[4, 13] <- errorCorVal[13, 22] <- 0.2
+errorCorVal[5, 14] <- errorCorVal[14, 23] <- 0.2
+errorCorVal[6, 15] <- errorCorVal[15, 24] <- 0.2
+errorCorVal[7, 16] <- errorCorVal[16, 25] <- 0.2
+errorCorVal[8, 17] <- errorCorVal[17, 26] <- 0.2
+errorCorVal[9, 18] <- errorCorVal[18, 27] <- 0.2
+errorCorVal[1, 19] <- 0.04
+errorCorVal[2, 20] <- 0.04
+errorCorVal[3, 21] <- 0.04
+errorCorVal[4, 22] <- 0.04
+errorCorVal[5, 23] <- 0.04
+errorCorVal[6, 24] <- 0.04
+errorCorVal[7, 25] <- 0.04
+errorCorVal[8, 26] <- 0.04
+errorCorVal[9, 27] <- 0.04
+errorCorVal <- errorCorVal + t(errorCorVal)
+diag(errorCorVal) <- 1
+TE <- symMatrix(errorCor, errorCorVal)
+longMed <- simSetSEM(BE=BE, RPS=RPS, LY=LY, TE=TE)
+
+c1 <- matrix(NA, 2, 1)
+c1[,1] <- c(4, 7)
+rownames(c1) <- rep("VPS", 2)
+con <- simEqualCon(c1, modelType="SEM")
+
+
+datModel <- simData(longMed, 200, equalCon=con)
+dat <- run(datModel, dataOnly=FALSE)
+
+# FindIndTotalVar, findIndResidualVar --> psi might be wrong! 
 
 
 
-
-
-
+#findIndTotalVar <- function(lambda, totalFactorCov, residualVarTheta, varPsi = NULL, beta=NULL) {
+#findIndResidualVar <- function(lambda, corPsi, totalVarTheta = NULL, varPsi = NULL) {
+#			implied.covariance <- solve(ID - object@BE) %*% object@PS %*% t(solve(ID - object@BE))
 
 
 

@@ -2,6 +2,8 @@
 
 simResult <- function(nRep=NULL, objData=NULL, objModel=NULL, objMissing=new("NullSimMissing"), seed = 123321, silent=FALSE, multicore=FALSE, cluster=FALSE, numProc=NULL, n=NULL, pmMCAR=NULL, pmMAR=NULL, objSet=NULL, objFunction=new("NullSimFunction")) {
 	set.seed(seed)
+	warnT <- as.numeric(options("warn"))
+	if(silent) options(warn=-1)
 	if(is.null(nRep)) {
 		if(!is.vector(n)) stop("Please specify the number of replications")
 		if(!is.null(pmMCAR) && !is.vector(pmMCAR)) stop("Please specify the number of replications")
@@ -155,5 +157,6 @@ simResult <- function(nRep=NULL, objData=NULL, objModel=NULL, objMissing=new("Nu
 	if(nrow(param) == 1 & ncol(param) == 1 && is.na(param)) param <- paramData
 	Result <- new("SimResult", modelType=modelType, nRep=nRep, coef=coef, se=se, fit=fit, converged=converged, 
 		seed=seed, paramValue=param, FMI1=FMI1, FMI2=FMI2, stdCoef=std, n=n, pmMCAR=pmMCAR, pmMAR=pmMAR)
+	if(silent) options(warn=warnT)
 	return <- Result
 }

@@ -192,4 +192,9 @@ simsem, Version 0.1-0 04/11/12
 - Add cov2corMod function and Change cov2cor to cov2corMod in the code to handle zero variances
 - Add summaryPopulation, getPopulation, and setPopulation methods as well as their documentations.
 - Fix a bug in the reduceMatrices function
+- Rename 8 files that use to find indicators/factors means/totalVar/ResidualVar/Intercept. Change attribute names to make more sense. Make all eight functions public and write the documentation accordingly.
+- MAJOR BUG: fix a problem in findIndResidualVar and findIndTotalVar that use PS instead of model-implied factor covariance in the package. Fix the fillParam function accordingly. Fix the bug in expandMatrices as well.
+- Fix a minor bug in fillParam that do not calculate VPS in CFA model.
+- Add findFactorTotalCov to find model-implied covariance from regression coefficient matrix and residual covariance matrix.
+- Make findPossibleFactorCor and findRecursiveSet public and make the documentation accordingly.
 

@@ -48,38 +48,40 @@ expandMatrices <- function(object) {
 	if(modelType == "CFA") {
 		ME <- AL
 		VE <- VPS
-		VY <- findIndicatorVar(LY, RPS, VTE, VE)
-		MY <- findIndicatorMean(LY, ME, TY)
+		VY <- findIndTotalVar(LY, object@PS, VTE)
+		MY <- findIndMean(LY, ME, TY)
 	} else if(modelType == "Path") {
-		VE <- findFactorVar(BE, RPS, VPS)
+		VE <- findFactorTotalVar(BE, RPS, VPS)
 		ME <- findFactorMean(BE, AL)
 	} else if(modelType =="Path.exo") {
 		nx <- ncol(GA)
 		ny <- nrow(GA)
 		temp.BE <- combinePathExoEndo(GA, BE)
 		temp.RPS <- combineLatentCorExoEndo(RPH, RPS)
-		temp.VE <- findFactorVar(temp.BE, temp.RPS, c(VPH, VPS))
+		temp.VE <- findFactorTotalVar(temp.BE, temp.RPS, c(VPH, VPS))
 		VE <- temp.VE[(nx + 1):(nx + ny)]
 		temp.ME <- findFactorMean(temp.BE, c(KA, AL))
 		ME <- temp.ME[(nx + 1):(nx + ny)]
 	} else if(modelType == "SEM") { 
-		VE <- findFactorVar(BE, RPS, VPS)
+		VE <- findFactorTotalVar(BE, RPS, VPS)
 		ME <- findFactorMean(BE, AL)
-		VY <- findIndicatorVar(LY, RPS, VTE, VE)
-		MY <- findIndicatorMean(LY, ME, TY)
+		facCov <- findFactorTotalCov(BE, object@PS)
+		VY <- findIndTotalVar(LY, facCov, VTE)
+		MY <- findIndMean(LY, ME, TY)
 	} else if(modelType == "SEM.exo") {
 		nk <- ncol(GA)
 		ne <- nrow(GA)
 		temp.BE <- combinePathExoEndo(GA, BE)
 		temp.RPS <- combineLatentCorExoEndo(RPH, RPS)
-		temp.VE <- findFactorVar(temp.BE, temp.RPS, c(VPH, VPS))
+		temp.VE <- findFactorTotalVar(temp.BE, temp.RPS, c(VPH, VPS))
 		VE <- temp.VE[(nk + 1):(nk + ne)]
 		temp.ME <- findFactorMean(temp.BE, c(KA, AL))
 		ME <- temp.ME[(nk + 1):(nk + ne)]
-		VY <- findIndicatorVar(LY, RPS, VTE, VE)
-		MY <- findIndicatorMean(LY, ME, TY)
-		VX <- findIndicatorVar(LX, RPH, VTD, VPH)
-		MX <- findIndicatorMean(LX, KA, TX)
+		facCov <- findFactorTotalCov(combinePathExoEndo(GA, BE), combineLatentCorExoEndo(object@PH, object@PS))
+		VY <- findIndTotalVar(LY, facCov[(nk+1):(nk+ne), (nk+1):(nk+ne)], VTE)
+		MY <- findIndMean(LY, ME, TY)
+		VX <- findIndTotalVar(LX, facCov[1:nk, 1:nk], VTD)
+		MX <- findIndMean(LX, KA, TX)
 		RTH <- solve(sqrt(diag(VTD))) %*% TH %*% solve(sqrt(diag(VTE)))		
 	}
 	return(new("MatrixSet", modelType=modelType, LY=LY, VTE=VTE, TE=object@TE, RTE=RTE, VY=VY, TY=TY, MY=MY, 
