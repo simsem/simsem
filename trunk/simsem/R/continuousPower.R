@@ -7,8 +7,10 @@
 ##  Alexander Schoemann
 ##  Last modified 04/07/2012
 
+##Doesn't work when only 1 parameter is specified. May need an if statement...
+
 continousPower <- function(simResult, contN = TRUE, contMCAR = FALSE, contMAR = FALSE, contParam = NULL, alpha = .05,
-                            powerparam = NULL, desiredPower = .80){
+                            powerparam = NULL){
                             
     #Change warning option to supress warnings
     warnT <- as.numeric(options("warn"))
@@ -23,7 +25,7 @@ continousPower <- function(simResult, contN = TRUE, contMCAR = FALSE, contMAR = 
 ##Find params to get power for
   if(!is.null(powerparam)) {	
   j <- grep(powerparam,dimnames(sig)[[2]])  # Return column indices that start with "param"
- 	sig<- sig[,j]
+ 	sig<- data.frame(sig[,j])
   }
   
 
@@ -81,7 +83,7 @@ continousPower <- function(simResult, contN = TRUE, contMCAR = FALSE, contMAR = 
  	res[[dimnames(sig)[[2]][[i]]]]<-apply(powVal, 1, predProb, mod)
 	}
 	res <- do.call(cbind, res)
-	names(res) <- names(object@coef)
+	names(res) <- names(sig)
 	pow <- cbind(powVal[,-1],res)
     # pow[pow < desiredPower] <- NA #puts NA in for below power deisred
   
@@ -96,7 +98,7 @@ continousPower <- function(simResult, contN = TRUE, contMCAR = FALSE, contMAR = 
     ##Return warnings setting to user's settings
   options(warn=warnT)
   
-  ##Currently returns power for all combinations of randm parameters for all model parameters need to make this better.
+  ##Currently returns power for all combinations of random parameters for all model parameters need to make this better.
   return(pow)
   }
   
