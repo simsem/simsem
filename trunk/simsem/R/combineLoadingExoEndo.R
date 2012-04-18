@@ -1,3 +1,13 @@
+# combineLoadingExoEndo
+# Function -- simsem package
+# Combine factor loading from X and Y sides into a single matrix
+# Argument:
+#	LX: factor loading in the X side
+#	LY:	factor loading in the Y side
+#	value:	the values filling in the leftovers (such as E --> X)
+# Return:	The combined matrix
+# Author: 	Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
+
 combineLoadingExoEndo <- function(LX, LY, value = 0) {
 	nx <- nrow(LX)
 	ny <- nrow(LY)

@@ -7,6 +7,7 @@
 # Date Modified: March 10, 2012
 
 reduceMatrices <- function(object) {
+	library(lavaan)
 	if(!is(object, "MatrixSet")) stop("The object is not a MatrixSet object")
 	if(isNullObject(object@PS)) object@PS <- cor2cov(object@RPS, sqrt(object@VPS))
 	if(object@modelType == "CFA" | object@modelType == "SEM" | object@modelType == "SEM.exo") {

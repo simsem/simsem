@@ -4,11 +4,10 @@
 # Argument:
 #	columnName: A column name that we wish to extract
 #	keep:	element of the vector that we need to keep
-# Return:	
+# Return:	A list that contains
 #	columnName:	Original column name
 #	newName:	Reordered column name
 # Author: 	Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: April 15, 2012
 
 extractVectorNames <- function(columnName, keep=NULL) {
 	name <- substr(columnName, 1, 2)

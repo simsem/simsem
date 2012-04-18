@@ -6,7 +6,6 @@
 # Return:
 #	list of parameters with and without model misspecification
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: February 21, 2012
 
 drawParameters <- function(object) {
 	modelType <- object@modelType
@@ -32,7 +31,7 @@ drawParameters <- function(object) {
 							break
 						} else {
 							misfit <- averageMisfit(implied.CM.misspec$M, implied.CM.misspec$CM, 
-								implied.CM.param$M, implied.CM.param$CM, countRandomObject(object@misspec))
+								implied.CM.param$M, implied.CM.param$CM, countFreeParameters(object@misspec))
 							#param <- misspec # Pretend Misspecified as real parameters for data generation
 							if(!is.null(misfit) && (misfit > object@misfitBound[1] & misfit < object@misfitBound[2])) break
 						}

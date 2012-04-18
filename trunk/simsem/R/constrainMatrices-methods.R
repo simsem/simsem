@@ -7,7 +7,6 @@
 # 	SimEqualCon: SimEqualCon.c or SimREqualCon.c
 # 	... : Other arguments, such as analysis package
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: March 10, 2012
 
 setMethod("constrainMatrices", signature(object="VirtualRSet", SimEqualCon="SimREqualCon"), definition=function(object, SimEqualCon, package) {
 	modelType <- object@modelType
@@ -33,7 +32,7 @@ setMethod("constrainMatrices", signature(object="VirtualRSet", SimEqualCon="SimR
 		for(j in 1:n.constraint) {
 			temp.constraint <- constraint[[j]]
 			temp.matrix <- rownames(temp.constraint)[1]
-			num <- equalWhich(temp.matrix, label.selection)
+			num <- match(temp.matrix, label.selection)
 			fixedvalue <- NA
 			if(isMeanConstraint(rownames(temp.constraint))) {
 				fixedvalue <- matrices[[num]][temp.constraint[1, 2]]		
@@ -42,7 +41,7 @@ setMethod("constrainMatrices", signature(object="VirtualRSet", SimEqualCon="SimR
 			}		
 			for(i in 2:nrow(temp.constraint)) {
 				temp.matrix2 <- rownames(temp.constraint)[i]
-				num <- equalWhich(temp.matrix2, label.selection)
+				num <- match(temp.matrix2, label.selection)
 				if(isMeanConstraint(rownames(temp.constraint))) {
 					matrices[[num]][temp.constraint[i, 2]] <- fixedvalue
 				} else {
@@ -58,7 +57,7 @@ setMethod("constrainMatrices", signature(object="VirtualRSet", SimEqualCon="SimR
 			fixedvalue <- writeLavaanConstraint(temp.constraint[1,], temp.matrix)	
 			for(i in 2:nrow(temp.constraint)) {
 				temp.matrix2 <- rownames(temp.constraint)[i]
-				num <- equalWhich(temp.matrix2, label.selection)
+				num <- match(temp.matrix2, label.selection)
 				if(isMeanConstraint(rownames(temp.constraint))) {
 					matrices[[num]][temp.constraint[i, 2]] <- fixedvalue
 				} else {
@@ -73,9 +72,9 @@ setMethod("constrainMatrices", signature(object="VirtualRSet", SimEqualCon="SimR
 	return(Output)
 })
 #Arguments: 
-#	object: 		The desired object constraints impose on. This function put VirtualRSet.c. This class is generic class including SimParam.c,
-#					SimLabels.c, and SimRSet.c. Usually SimLabels.c is used. 
+#	object: 		The desired object constraints impose on. This function put VirtualRSet.c. This class is generic class including SimParam.c, SimLabels.c, and SimRSet.c. Usually SimLabels.c is used. 
 #	SimEqualCon:	SimREqualCon.c that save desired constraints.
+#	Package:		The package template to be used
 #Description: 	This function will impose constraint codes in the input object. How to impose the constraint depends on analysis package. This will impose labels for OpenMx and will impose equal statement in lavaan.
 #Return: VirtualRSet.c that have constraint codes.
 
@@ -90,45 +89,9 @@ setMethod("constrainMatrices", signature(object="VirtualRSet", SimEqualCon="SimE
 #	object: 		The desired object constraints impose on. This function put VirtualRSet.c. This class is generic class including SimParam.c,
 #					SimLabels.c, and SimRSet.c. Usually SimLabels.c is used. 
 #	SimEqualCon:	SimEqualCon.c that save desired constraints.
+#	Package:		The package template to be used
 #Description: 	This function will combine variance and correlation into covariance matrix labels as SimREqualCon and pass to the function that uses SimREqualCon
 #Return: VirtualRSet.c that have constraint codes.
-
-#setMethod("constrainMatrices", signature(object="list", SimEqualCon="SimEqualCon"), definition=function(object, SimEqualCon, modelType) {
-#	label.selection <- NULL
-#	label.selection <- c("LY", "VTE", "TE", "RTE", "VY", "TY", "MY", "BE", "VPS", "PS", "RPS", "VE", "AL", "ME", "LX", "VTD", "TD", "RTD", "VX", "TX", "MX", "GA", "VPH", "PH", "RPH", "KA", "TH", "RTH")
-#	matrices <- object
-#	constraint <- SimEqualCon@con
-#	n.constraint <- length(constraint)
-#	for(j in 1:n.constraint) {
-#		temp.constraint <- constraint[[j]]
-#		temp.matrix <- rownames(temp.constraint)[1]
-#		num <- equalWhich(temp.matrix, label.selection)
-#		if(num == 0) stop("Cannot recognize the matrix name in the equality constraint")
-#		fixedvalue <- NA
-#		if(isMeanConstraint(rownames(temp.constraint))) {
-#			fixedvalue <- matrices[[temp.matrix]][temp.constraint[1, 2]]		
-#		} else {
-#			fixedvalue <- matrices[[temp.matrix]][temp.constraint[1, 2], temp.constraint[1, 3]]
-#		}		
-#		for(i in 2:nrow(temp.constraint)) {
-#			temp.matrix2 <- rownames(temp.constraint)[i]
-#			num <- equalWhich(temp.matrix2, label.selection)
-#			if(num == 0) stop("Cannot recognize the matrix name in the equality constraint")
-#			if(isMeanConstraint(rownames(temp.constraint))) {
-#				matrices[[temp.matrix2]][temp.constraint[i, 2]] <- fixedvalue
-#			} else {
-#				matrices[[temp.matrix2]][temp.constraint[i, 2], temp.constraint[i, 3]] <- fixedvalue
-#				if(isCorMatrix(matrices[[temp.matrix2]])) matrices[[temp.matrix2]][temp.constraint[i,2], temp.constraint[i,1]] <- fixedvalue
-#			}
-#		}
-#	}
-#	return(matrices)
-#})
-#Arguments: 
-#	object: 		List of parameter matrices
-#	SimEqualCon:	SimEqualCon.c that save desired constraints.
-#Description: 	This function will impose constraint codes in the input object such that the number of the first element in the constraint will be copied to other elements in the constraint. 
-#Return: List of parameter matrices that have constraint.
 
 setMethod("constrainMatrices", signature(object="MatrixSet", SimEqualCon="SimEqualCon"), definition=function(object, SimEqualCon) {
 	label.selection <- NULL
@@ -139,7 +102,7 @@ setMethod("constrainMatrices", signature(object="MatrixSet", SimEqualCon="SimEqu
 	for(j in 1:n.constraint) {
 		temp.constraint <- constraint[[j]]
 		temp.matrix <- rownames(temp.constraint)[1]
-		num <- equalWhich(temp.matrix, label.selection)
+		num <- match(temp.matrix, label.selection)
 		if(num == 0) stop("Cannot recognize the matrix name in the equality constraint")
 		fixedvalue <- NA
 		if(isMeanConstraint(rownames(temp.constraint))) {
@@ -149,7 +112,7 @@ setMethod("constrainMatrices", signature(object="MatrixSet", SimEqualCon="SimEqu
 		}		
 		for(i in 2:nrow(temp.constraint)) {
 			temp.matrix2 <- rownames(temp.constraint)[i]
-			num <- equalWhich(temp.matrix2, label.selection)
+			num <- match(temp.matrix2, label.selection)
 			if(num == 0) stop("Cannot recognize the matrix name in the equality constraint")
 			if(isMeanConstraint(rownames(temp.constraint))) {
 				slot(matrices, temp.matrix2)[temp.constraint[i, 2]] <- fixedvalue

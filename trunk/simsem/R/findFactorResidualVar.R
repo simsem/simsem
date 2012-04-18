@@ -11,6 +11,7 @@
 # Date Modified: April 16, 2012
 
 findFactorResidualVar <- function(beta, corPsi, totalVarPsi = NULL) {
+	library(lavaan)
 	if(sum(diag(corPsi)) == 0) diag(corPsi) <- 1
 	ni <- nrow(beta)
 	set <- findRecursiveSet(beta)

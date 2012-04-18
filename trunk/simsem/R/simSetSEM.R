@@ -23,74 +23,74 @@ simSetSEM <- function(..., exo = FALSE) {
 	}
 	position <- matchKeywords(Names, keywords)
 	if(length(position) != length(unique(position))) stop("Some objects were identified more than once.")
-	ifelse(contain(1, position), LY <- List[position == 1], stop("No loading object of indicator.Y from factor.ETA in SEM"))
+	ifelse(1 %in% position, LY <- List[position == 1], stop("No loading object of indicator.Y from factor.ETA in SEM"))
 	ny <- nrow(run(LY[[1]]))
 	ne <- ncol(run(LY[[1]]))
-	if(contain(13, position)) {
+	if(13 %in% position) {
 		TE <- List[position == 13]
-		ifelse(contain(2, position), stop("Error covariance and error correlation cannot be specified at the same time!"), RTE <- list(new("NullSymMatrix")))
-		ifelse(contain(3, position), stop("Error covariance and error variance cannot be specified at the same time!"), VTE <- list(new("NullSimVector")))		
-		ifelse(contain(4, position), stop("Error covariance and total indicator variance cannot be specified at the same time!"), VY <- list(new("NullSimVector")))
+		ifelse(2 %in% position, stop("Error covariance and error correlation cannot be specified at the same time!"), RTE <- list(new("NullSymMatrix")))
+		ifelse(3 %in% position, stop("Error covariance and error variance cannot be specified at the same time!"), VTE <- list(new("NullSimVector")))		
+		ifelse(4 %in% position, stop("Error covariance and total indicator variance cannot be specified at the same time!"), VY <- list(new("NullSimVector")))
 	} else {
 		TE <- list(new("NullSymMatrix"))
-		ifelse(contain(2, position), RTE <- List[position == 2], stop("No measurement error correlation object between indicator.Y"))
-		ifelse(contain(3, position), VTE <- List[position == 3], VTE <- list(new("NullSimVector")))
-		ifelse(contain(4, position), VY <- List[position == 4], ifelse(isNullObject(VTE[[1]]), { VY <- list(freeVector(1, ny)); comment(VY[[1]]) <- "default"}, VY <- list(new("NullSimVector"))))
+		ifelse(2 %in% position, RTE <- List[position == 2], stop("No measurement error correlation object between indicator.Y"))
+		ifelse(3 %in% position, VTE <- List[position == 3], VTE <- list(new("NullSimVector")))
+		ifelse(4 %in% position, VY <- List[position == 4], ifelse(isNullObject(VTE[[1]]), { VY <- list(freeVector(1, ny)); comment(VY[[1]]) <- "default"}, VY <- list(new("NullSimVector"))))
 	}
-	ifelse(contain(6, position), MY <- List[position == 6], MY <- list(new("NullSimVector")))
-	ifelse(contain(5, position), TY <- List[position == 5], ifelse(isNullObject(MY[[1]]), { TY <- list(freeVector(0, ny)); comment(TY[[1]]) <- "default"}, TY <- list(new("NullSimVector"))))
-	ifelse(contain(7, position), BE <- List[position == 7], stop("No path coefficient object between factor.ETA"))
-	if(contain(14, position)) {
+	ifelse(6 %in% position, MY <- List[position == 6], MY <- list(new("NullSimVector")))
+	ifelse(5 %in% position, TY <- List[position == 5], ifelse(isNullObject(MY[[1]]), { TY <- list(freeVector(0, ny)); comment(TY[[1]]) <- "default"}, TY <- list(new("NullSimVector"))))
+	ifelse(7 %in% position, BE <- List[position == 7], stop("No path coefficient object between factor.ETA"))
+	if(14 %in% position) {
 		PS <- List[position == 14]
-		ifelse(contain(8, position), stop("Covariance and correlation cannot be specified at the same time!"), RPS <- list(new("NullSymMatrix")))
-		ifelse(contain(9, position), stop("Covariance and variance cannot be specified at the same time!"), VPS <- list(new("NullSimVector")))		
-		ifelse(contain(10, position), stop("Covariance and total indicator variance cannot be specified at the same time!"), VE <- list(new("NullSimVector")))		
+		ifelse(8 %in% position, stop("Covariance and correlation cannot be specified at the same time!"), RPS <- list(new("NullSymMatrix")))
+		ifelse(9 %in% position, stop("Covariance and variance cannot be specified at the same time!"), VPS <- list(new("NullSimVector")))		
+		ifelse(10 %in% position, stop("Covariance and total indicator variance cannot be specified at the same time!"), VE <- list(new("NullSimVector")))		
 	} else {
 		PS <- list(new("NullSymMatrix"))
-		ifelse(contain(8, position), RPS <- List[position == 8], stop("No residual correlation object between factor.ETA"))
-		ifelse(contain(9, position), VPS <- List[position == 9], VPS <- list(new("NullSimVector")))
-		ifelse(contain(10, position), VE <- List[position == 10], ifelse(isNullObject(VPS[[1]]), { VE <- list(constantVector(1, ne)); comment(VE[[1]]) <- "default"}, VE <- list(new("NullSimVector"))))
+		ifelse(8 %in% position, RPS <- List[position == 8], stop("No residual correlation object between factor.ETA"))
+		ifelse(9 %in% position, VPS <- List[position == 9], VPS <- list(new("NullSimVector")))
+		ifelse(10 %in% position, VE <- List[position == 10], ifelse(isNullObject(VPS[[1]]), { VE <- list(constantVector(1, ne)); comment(VE[[1]]) <- "default"}, VE <- list(new("NullSimVector"))))
 	}
-	ifelse(contain(12, position), ME <- List[position == 12], ME <- list(new("NullSimVector")))
-	ifelse(contain(11, position), AL <- List[position == 11], ifelse(isNullObject(ME[[1]]), { AL <- list(constantVector(0, ne)); comment(AL[[1]]) <- "default"}, AL <- list(new("NullSimVector"))))
+	ifelse(12 %in% position, ME <- List[position == 12], ME <- list(new("NullSimVector")))
+	ifelse(11 %in% position, AL <- List[position == 11], ifelse(isNullObject(ME[[1]]), { AL <- list(constantVector(0, ne)); comment(AL[[1]]) <- "default"}, AL <- list(new("NullSimVector"))))
 	Output <- NULL
 	if(exo) {
-		ifelse(contain(15, position), LX <- List[position == 15], stop("No loading object of indicator.X from factor.KSI in SEM"))
+		ifelse(15 %in% position, LX <- List[position == 15], stop("No loading object of indicator.X from factor.KSI in SEM"))
 		nx <- nrow(run(LX[[1]]))
 		nk <- ncol(run(LX[[1]]))
-		if(contain(26, position)) {
+		if(26 %in% position) {
 			TD <- List[position == 26]
-			ifelse(contain(16, position), stop("Error covariance and error correlation cannot be specified at the same time!"), RTD <- list(new("NullSymMatrix")))
-			ifelse(contain(17, position), stop("Error covariance and error variance cannot be specified at the same time!"), VTD <- list(new("NullSimVector")))		
-			ifelse(contain(18, position), stop("Error covariance and total indicator variance cannot be specified at the same time!"), VX <- list(new("NullSimVector")))
+			ifelse(16 %in% position, stop("Error covariance and error correlation cannot be specified at the same time!"), RTD <- list(new("NullSymMatrix")))
+			ifelse(17 %in% position, stop("Error covariance and error variance cannot be specified at the same time!"), VTD <- list(new("NullSimVector")))		
+			ifelse(18 %in% position, stop("Error covariance and total indicator variance cannot be specified at the same time!"), VX <- list(new("NullSimVector")))
 		} else {
 			TD <- list(new("NullSymMatrix"))
-			ifelse(contain(16, position), RTD <- List[position == 16], stop("No measurement error correlation object between indicator.Y"))
-			ifelse(contain(17, position), VTD <- List[position == 17], VTD <- list(new("NullSimVector")))
-			ifelse(contain(18, position), VX <- List[position == 18], ifelse(isNullObject(VTD[[1]]), { VX <- list(freeVector(1, nx)); comment(VX[[1]]) <- "default"}, VX <- list(new("NullSimVector"))))
+			ifelse(16 %in% position, RTD <- List[position == 16], stop("No measurement error correlation object between indicator.Y"))
+			ifelse(17 %in% position, VTD <- List[position == 17], VTD <- list(new("NullSimVector")))
+			ifelse(18 %in% position, VX <- List[position == 18], ifelse(isNullObject(VTD[[1]]), { VX <- list(freeVector(1, nx)); comment(VX[[1]]) <- "default"}, VX <- list(new("NullSimVector"))))
 		}
-		ifelse(contain(20, position), MX <- List[position == 20], MX <- list(new("NullSimVector")))
-		ifelse(contain(19, position), TX <- List[position == 19], ifelse(isNullObject(MX[[1]]), { TX <- list(freeVector(0, nx)); comment(TX[[1]]) <- "default"}, TX <- list(new("NullSimVector"))))
+		ifelse(20 %in% position, MX <- List[position == 20], MX <- list(new("NullSimVector")))
+		ifelse(19 %in% position, TX <- List[position == 19], ifelse(isNullObject(MX[[1]]), { TX <- list(freeVector(0, nx)); comment(TX[[1]]) <- "default"}, TX <- list(new("NullSimVector"))))
 		
-		ifelse(contain(21, position), GA <- List[position == 21], stop("No path coefficient object from Factor.KSI to Factor.ETA"))
-		if(contain(27, position)) {
+		ifelse(21 %in% position, GA <- List[position == 21], stop("No path coefficient object from Factor.KSI to Factor.ETA"))
+		if(27 %in% position) {
 			PH <- List[position == 27]
-			ifelse(contain(22, position), stop("Covariance and correlation cannot be specified at the same time!"), RPH <- list(new("NullSymMatrix")))
-			ifelse(contain(23, position), stop("Covariance and variance cannot be specified at the same time!"), VPH <- list(new("NullSimVector")))				
+			ifelse(22 %in% position, stop("Covariance and correlation cannot be specified at the same time!"), RPH <- list(new("NullSymMatrix")))
+			ifelse(23 %in% position, stop("Covariance and variance cannot be specified at the same time!"), VPH <- list(new("NullSimVector")))				
 		} else {
 			PH <- list(new("NullSymMatrix"))
-			ifelse(contain(22, position), RPH <- List[position == 22], stop("No correlation object between factor.KSI"))
-			ifelse(contain(23, position), VPH <- List[position == 23], { VPH <- list(constantVector(1, nk)); comment(VPH[[1]]) <- "default"})
+			ifelse(22 %in% position, RPH <- List[position == 22], stop("No correlation object between factor.KSI"))
+			ifelse(23 %in% position, VPH <- List[position == 23], { VPH <- list(constantVector(1, nk)); comment(VPH[[1]]) <- "default"})
 		}
-		ifelse(contain(24, position), KA <- List[position == 24], { KA <- list(constantVector(0, nk)); comment(KA[[1]]) <- "default"})
-		if(contain(28, position)) {
-			ifelse(contain(25, position), stop("TH and RTH cannot be specified at the same time!"), RTH <- list(new("NullSimMatrix")))
+		ifelse(24 %in% position, KA <- List[position == 24], { KA <- list(constantVector(0, nk)); comment(KA[[1]]) <- "default"})
+		if(28 %in% position) {
+			ifelse(25 %in% position, stop("TH and RTH cannot be specified at the same time!"), RTH <- list(new("NullSimMatrix")))
 			TH <- List[position == 28]
 			temp <- run(TH[[1]])
 			if(!((nrow(temp) == nx) & (ncol(temp) == ny))) stop("The number of rows is not equal the number of exogenous indicators or the number of columns is not equal the number of endogenous indicators.")
 		} else {
 			TH <- list(new("NullSimMatrix"))
-			if(contain(25, position)) {
+			if(25 %in% position) {
 				RTH <- List[position == 25]
 				temp <- run(RTH[[1]])
 				if(!((nrow(temp) == nx) & (ncol(temp) == ny))) stop("The number of rows is not equal the number of exogenous indicators or the number of columns is not equal the number of endogenous indicators.")

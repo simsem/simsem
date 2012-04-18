@@ -1,4 +1,4 @@
-	###################################################################
+###################################################################
 # Distribution Classes
 # Classes -- simsem package
 # Object that create a random number from a distribution.
@@ -8,7 +8,6 @@
 #	run
 #	summary
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: February 23, 2011
 
 setClass("SimUnif",
 	representation(
@@ -181,7 +180,6 @@ setClass("SimWeibull",
 # Parent Class: None
 # Child Class: SimNorm, SimUnif
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 7, 2011
 
 setClassUnion("VirtualDist", c("SimUnif", "SimNorm", "SimBeta", "SimBinom", "SimCauchy", "SimChisq", "SimExp", "SimF", "SimGamma", "SimGeom", "SimHyper", "SimLnorm", "SimLogis", "SimNbinom", "SimPois", "SimT", "SimWeibull"))
 
@@ -196,17 +194,7 @@ setClassUnion("VirtualDist", c("SimUnif", "SimNorm", "SimBeta", "SimBinom", "Sim
 # Attributes:
 #	free: 		Free parameters as NA or values of fixed parameters
 # 	param: 	All population/starting values of those free parameters
-# Methods:
-#	adjust
-#	combineObject
-#	countRandomObject
-#	isNullObject
-#	run
-#	startingValues
-#	summaryShort
-#	summary
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 7, 2011
 
 setClass("SimMatrix", 
 	representation(
@@ -247,14 +235,7 @@ setClass("SimMatrix",
 # Attributes:
 #	free: 		Free parameters as NA or values of fixed parameters
 # 	param: 	All population/starting values of those free parameters
-# Methods:
-#	adjust
-#	countRandomObject
-#	isNullObject
-#	run
-#	summary
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 7, 2011
 
 setClass("SymMatrix",
 	contains = "SimMatrix"
@@ -281,17 +262,7 @@ setClass("SymMatrix",
 # Attributes:
 #	Data: 		Free parameters as NA or values of fixed parameters
 # 	Labels: 	All population/starting values of those free parameters
-# Methods:
-#	adjust
-#	combineObject
-#	countRandomObject
-#	isNullObject
-#	run
-#	startingValues
-#	summaryShort
-#	summary
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 7, 2011
 
 setClass("SimVector", 
 	representation(
@@ -320,11 +291,9 @@ setClass("SimVector",
 # Constructor:	new("NullVector")
 # Parent Class: vector
 # Child Class:	None
-# Attributes:	Zero length vector
-#		Does not matter because these attributes will not be used. 
+# Attributes:	Zero length vector, which does not matter because these attributes will not be used. 
 #		It will be checked whether the class is NULL only.
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 7, 2011
 
 setClass("NullVector", contains = "vector")
 
@@ -335,11 +304,9 @@ setClass("NullVector", contains = "vector")
 # Constructor:	new("NullMatrix")
 # Parent Class: matrix
 # Child Class:	None
-# Attributes:	Matrix with 0 x 0 dimension
-#		Does not matter because these attributes will not be used. 
+# Attributes:	Matrix with 0 x 0 dimension, which does not matter because these attributes will not be used. 
 #		It will be checked whether the class is NULL only.
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 7, 2011
 
 setClass("NullMatrix", contains = "matrix")
 
@@ -350,11 +317,9 @@ setClass("NullMatrix", contains = "matrix")
 # Constructor:	new("NullSimMatrix")
 # Parent Class: SimMatrix
 # Child Class:	None
-# Attributes:	SimMatrix with NaN in both attributes
-#		Does not matter because these attributes will not be used. 
+# Attributes:	SimMatrix with NaN in both attributes, which does not matter because these attributes will not be used. 
 #		It will be checked whether the class is NULL only.
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 7, 2011
 
 setClass("NullSimMatrix", contains="SimMatrix")
 
@@ -365,11 +330,9 @@ setClass("NullSimMatrix", contains="SimMatrix")
 # Constructor:	new("NullSymMatrix")
 # Parent Class: SymMatrix
 # Child Class:	None
-# Attributes:	SymMatrix with NaN in both attributes
-#		Does not matter because these attributes will not be used. 
+# Attributes:	SymMatrix with NaN in both attributes, which does not matter because these attributes will not be used. 
 #		It will be checked whether the class is NULL only.
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 7, 2011
 
 setClass("NullSymMatrix", contains="SymMatrix")
 
@@ -380,11 +343,9 @@ setClass("NullSymMatrix", contains="SymMatrix")
 # Constructor:	new("NullSimVector")
 # Parent Class: SimVector
 # Child Class:	None
-# Attributes:	SimVector with NaN in both attributes
-#		Does not matter because these attributes will not be used. 
+# Attributes:	SimVector with NaN in both attributes, which does not matter because these attributes will not be used. 
 #		It will be checked whether the class is NULL only.
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 7, 2011
 
 setClass("NullSimVector", contains="SimVector")
 
@@ -400,43 +361,35 @@ setClass("NullSimVector", contains="SimVector")
 # Child Class:	NullSimSet, SimMisspec, NullSimMisspec (2 generations)
 # Attributes:
 #	modelType:	Model type (CFA, Path, or SEM)
-#	LY:		SimMatrix.c of Factor loading matrix between endogenous factors and Y indicators 
-#	TE:
-#	RTE:		SymMatrix.c of Correlation matrix between Y measurement error 
-#	VTE:	SimVector.c of Variance of Y measurement error 
-#	PS:
-#	RPS:		SymMatrix.c of Residual correlation of endogenous factors  
-#	VPS:	SimVector.c of Residual variances of endogenous factors 
-#	BE:		SimMatrix.c of Regression effect among endogenous factors 
-#	TY:		SimVector.c of Measurement intercepts of Y indicators 
-#	AL:		SimVector.c of Factor intercepts of endogenous factors 
-#	ME:		SimVector.c of Factor means of endogenous factors 
-#	MY:		SimVector.c of Total mean of Y indicators 
-#	VE:		SimVector.c of Total variance of endogenous factors 
-#	VY:		SimVector.c of Total variance of Y indicators 
-#	LX:		SimMatrix.c of Factor loading matrix between exogenous factors and X indicators 
-#	TD:
-#	RTD:		SymMatrix.c of Correlation matrix between X measurement error 
-#	VTD:	SimVector.c of Variance of X measurement error 
-# 	PH:
-#	RPH:		SymMatrix.c of Correlation among exogenous factors 
-#	GA:		SimMatrix.c of Regreeion effect from exogenous factors to endogenous factors 
-#	TX:		SimVector.c of Measurement intercepts of X indicators 
-#	KA:		SimVector.c of Factor mean of exogenous factors 
-#	MX:		SimVector.c of Total mean of X indicators 
-#	VPH:	SimVector.c of Variance of exogenous factors 
-#	VX:		SimVector.c of Total variance of X indicators 
-#	TH:
-#	RTH:		SimMatrix.c Measurement error correlation between X indicators and Y indicators 
-# Methods:
-#	countRandomObject
-#	isNullObject
-#	simModel
-#	run
-#	startingValues
-#	summary
+#	LY:		SimMatrix class of Factor loading matrix between endogenous factors and Y indicators 
+#	TE:		SymMatrix class of covariance matrix among Y measurement error
+#	RTE:	SymMatrix class of Correlation matrix between Y measurement error 
+#	VTE:	SimVector class of Variance of Y measurement error 
+#	PS:		SymMatrix class of covariance matrix among endogenous factors
+#	RPS:	SymMatrix class of Residual correlation of endogenous factors  
+#	VPS:	SimVector class of Residual variances of endogenous factors 
+#	BE:		SimMatrix class of Regression effect among endogenous factors 
+#	TY:		SimVector class of Measurement intercepts of Y indicators 
+#	AL:		SimVector class of Factor intercepts of endogenous factors 
+#	ME:		SimVector class of Factor means of endogenous factors 
+#	MY:		SimVector class of Total mean of Y indicators 
+#	VE:		SimVector class of Total variance of endogenous factors 
+#	VY:		SimVector class of Total variance of Y indicators 
+#	LX:		SimMatrix class of Factor loading matrix between exogenous factors and X indicators 
+#	TD:		SymMatrix class of covariance matrix among X measurement errors
+#	RTD:	SymMatrix class of Correlation matrix between X measurement error 
+#	VTD:	SimVector class of Variance of X measurement error 
+# 	PH:		SymMatrix class of covariance matrix among exogenous factors
+#	RPH:	SymMatrix class of Correlation among exogenous factors 
+#	GA:		SimMatrix class of Regreeion effect from exogenous factors to endogenous factors 
+#	TX:		SimVector class of Measurement intercepts of X indicators 
+#	KA:		SimVector class of Factor mean of exogenous factors 
+#	MX:		SimVector class of Total mean of X indicators 
+#	VPH:	SimVector class of Variance of exogenous factors 
+#	VX:		SimVector class of Total variance of X indicators 
+#	TH:		SimMatrix class of measurement error covariance between measurement errors of X and Y
+#	RTH:	SimMatrix class Measurement error correlation between X indicators and Y indicators 
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 7, 2011
 
 setClass("SimSet", 
 	representation(
@@ -529,7 +482,6 @@ setClass("SimSet",
 #		It does not matter because these attributes will not be used. 
 #		It will be checked whether the class is NULL only.
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 7, 2011
 
 setClass("NullSimSet", contains="SimSet")
 
@@ -543,41 +495,35 @@ setClass("NullSimSet", contains="SimSet")
 # Child Class:	MisspecSet
 # Attributes:
 #	modelType:	Model type (CFA, Path, or SEM)
-#	LY:		matrix.c of Factor loading matrix between endogenous factors and Y indicators 
-#	TE:
-#	RTE:		matrix.c of Correlation matrix between Y measurement error 
-#	VTE:	vector.c of Variance of Y measurement error 
-#	PS:
-#	RPS:		matrix.c of Residual correlation of endogenous factors  
-#	VPS:	vector.c of Residual variances of endogenous factors 
-#	BE:		matrix.c of Regression effect among endogenous factors 
-#	TY:		vector.c of Measurement intercepts of Y indicators 
-#	AL:		vector.c of Factor intercepts of endogenous factors 
-#	ME:		vector.c of Factor means of endogenous factors 
-#	MY:		vector.c of Total mean of Y indicators 
-#	VE:		vector.c of Total variance of endogenous factors 
-#	VY:		vector.c of Total variance of Y indicators 
-#	LX:		matrix.c of Factor loading matrix between exogenous factors and X indicators 
-#	TD:
-#	RTD:		matrix.c of Correlation matrix between X measurement error 
-#	VTD:	vector.c of Variance of X measurement error 
-#	PH:
-#	RPH:		matrix.c of Correlation among exogenous factors 
-#	GA:		matrix.c of Regreeion effect from exogenous factors to endogenous factors 
-#	TX:		vector.c of Measurement intercepts of X indicators 
-#	KA:		vector.c of Factor mean of exogenous factors 
-#	MX:		vector.c of Total mean of X indicators 
-#	VPH:	vector.c of Variance of exogenous factors 
-#	VX:		vector.c of Total variance of X indicators 
-#	TH:
-#	RTH:		matrix.c Measurement error correlation between X indicators and Y indicators 
-# Methods:
-#	combineObject
-#	createImpliedMACS
-#	divideObject
-#	summary
+#	LY:		matrix class of Factor loading matrix between endogenous factors and Y indicators 
+#	TE:		matrix class of covariance matrix between Y measurement errors
+#	RTE:	matrix class of Correlation matrix between Y measurement error 
+#	VTE:	vector class of Variance of Y measurement error 
+#	PS:		matrix class of Residual covariance of endogenous factors  
+#	RPS:	matrix class of Residual correlation of endogenous factors  
+#	VPS:	vector class of Residual variances of endogenous factors 
+#	BE:		matrix class of Regression effect among endogenous factors 
+#	TY:		vector class of Measurement intercepts of Y indicators 
+#	AL:		vector class of Factor intercepts of endogenous factors 
+#	ME:		vector class of Factor means of endogenous factors 
+#	MY:		vector class of Total mean of Y indicators 
+#	VE:		vector class of Total variance of endogenous factors 
+#	VY:		vector class of Total variance of Y indicators 
+#	LX:		matrix class of Factor loading matrix between exogenous factors and X indicators 
+#	TD:		matrix class of covariance matrix between X measurement error 
+#	RTD:	matrix class of Correlation matrix between X measurement error 
+#	VTD:	vector class of Variance of X measurement error 
+#	PH:		matrix class of covariance among exogenous factors 
+#	RPH:	matrix class of Correlation among exogenous factors 
+#	GA:		matrix class of Regreeion effect from exogenous factors to endogenous factors 
+#	TX:		vector class of Measurement intercepts of X indicators 
+#	KA:		vector class of Factor mean of exogenous factors 
+#	MX:		vector class of Total mean of X indicators 
+#	VPH:	vector class of Variance of exogenous factors 
+#	VX:		vector class of Total variance of X indicators 
+#	TH:		matrix class Measurement error covariance between X indicators and Y indicators
+#	RTH:	matrix class Measurement error correlation between X indicators and Y indicators
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 7, 2011
 
 setClass("MatrixSet", 
 	representation(
@@ -669,24 +615,20 @@ setClass("MatrixSet",
 # Child Class:	SimParam, SimLabels, SimRSet
 # Attributes:
 #	modelType:	Model type (CFA, Path, or SEM)
-#	LY:		matrix.c of Factor loading matrix between endogenous factors and Y indicators 
-#	TE:		matrix.c of Covariance matrix between Y measurement error 
-#	PS:		matrix.c of Residual covariance of endogenous factors  
-#	BE:		matrix.c of Regression effect among endogenous factors 
-#	TY:		vector.c of Measurement intercepts of Y indicators 
-#	AL:		vector.c of Factor intercepts of endogenous factors 
-#	LX:		matrix.c of Factor loading matrix between exogenous factors and X indicators 
-#	TD:		matrix.c of Covariance matrix between X measurement error 
-#	PH:		matrix.c of Covariance among exogenous factors 
-#	GA:		matrix.c of Regreeion effect from exogenous factors to endogenous factors 
-#	TX:		vector.c of Measurement intercepts of X indicators 
-#	KA:		vector.c of Factor mean of exogenous factors 
-#	TH:		matrix.c Measurement error covariance between X indicators and Y indicators 
-# Methods:
-#	constrainMatrices
-#	tagHeaders
+#	LY:		matrix class of Factor loading matrix between endogenous factors and Y indicators 
+#	TE:		matrix class of Covariance matrix between Y measurement error 
+#	PS:		matrix class of Residual covariance of endogenous factors  
+#	BE:		matrix class of Regression effect among endogenous factors 
+#	TY:		vector class of Measurement intercepts of Y indicators 
+#	AL:		vector class of Factor intercepts of endogenous factors 
+#	LX:		matrix class of Factor loading matrix between exogenous factors and X indicators 
+#	TD:		matrix class of Covariance matrix between X measurement error 
+#	PH:		matrix class of Covariance among exogenous factors 
+#	GA:		matrix class of Regreeion effect from exogenous factors to endogenous factors 
+#	TX:		vector class of Measurement intercepts of X indicators 
+#	KA:		vector class of Factor mean of exogenous factors 
+#	TH:		matrix class Measurement error covariance between X indicators and Y indicators 
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 7, 2011
 
 setClass("VirtualRSet", 
 	representation(
@@ -734,14 +676,7 @@ setClass("VirtualRSet",
 #			of matrix. The rest is row and column. Row name represents the matrix that the element is in. The definition of row
 #			name can be seen in simSetCFA, simSetPath, or simSetSEM, depending on analysis model you specify.
 #	modelType:	Analysis model (CFA, SEM, Path)
-# Methods:
-#	constrainMatrices(list, SimEqualCon)
-#	constrainMatrices(VirtualRSet, SimEqualCon)
-#	isNullObject
-#	summary
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 7, 2011
-
 setClass("SimEqualCon", 
 	representation(
 		con="list",
@@ -770,7 +705,6 @@ setClass("SimEqualCon",
 #		It does not matter because these attributes will not be used. 
 #		It will be checked whether the class is NULL only.
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 7, 2011
 
 setClass("NullSimEqualCon", contains="SimEqualCon", 
 	representation(
@@ -793,11 +727,7 @@ setClass("NullSimEqualCon", contains="SimEqualCon",
 #			of matrix. The rest is row and column. Row name represents the matrix that the element is in. The definition of row
 #			name can be seen in VirtualRSet definition.
 #	modelType:	Analysis model (CFA, SEM, Path)
-# Methods:
-#	constrainMatrices(VirtualRSet, SimREqualCon)
-#	isNullObject
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 7, 2011
 
 setClass("SimREqualCon", 
 	representation(
@@ -816,7 +746,6 @@ setClass("SimREqualCon",
 #		It does not matter because these attributes will not be used. 
 #		It will be checked whether the class is NULL only.
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 7, 2011
 
 setClass("NullSimREqualCon", contains="SimREqualCon", 
 	representation(
@@ -832,13 +761,7 @@ setClass("NullSimREqualCon", contains="SimREqualCon",
 # Constructor:	createFreeParameters(object)
 # Parent Class: VirtualRSet
 # Child Class:	None
-# Methods:
-#	findOpenMxValues
-#	makeLabels
-#	simModel
-#	summary
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 7, 2011
 
 setClass("SimParam", 
 	contains="VirtualRSet"
@@ -851,10 +774,7 @@ setClass("SimParam",
 # Constructor:	makeLabels(SimParam)
 # Parent Class: VirtualRSet
 # Child Class:	None
-# Methods:
-#	summary
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 7, 2011
 
 setClass("SimLabels", 
 	contains="VirtualRSet"
@@ -867,12 +787,7 @@ setClass("SimLabels",
 # Constructor:	defaultStartingValues(object)
 # Parent Class: VirtualRSet
 # Child Class:	None
-# Methods:
-#	createImpliedMACS
-#	findOpenMxValues
-#	summary
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 7, 2011
 
 setClass("SimRSet", 
 	contains="VirtualRSet"
@@ -885,13 +800,8 @@ setClass("SimRSet",
 # Constructor:	new("NullRSet")
 # Parent Class: VirtualRSet
 # Child Class:	None
-# Methods:
-#	createImpliedMACS
-#	findOpenMxValues
-#	summary
+# Attributes: See VirtualRSet class for details
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 7, 2011
-
 
 setClass("NullRSet", 
 	contains="SimRSet",
@@ -937,11 +847,7 @@ setClass("NullRSet",
 #	simMisspecSEM(...)	for SEM
 # Parent Class: SimSet
 # Child Class:	NullSimMisspec
-# Methods:
-#	isNullObject
-#	run
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 7, 2011
 
 setClass("SimMisspec", 
 	contains = "SimSet"
@@ -958,7 +864,6 @@ setClass("SimMisspec",
 #		It does not matter because these attributes will not be used. 
 #		It will be checked whether the class is NULL only.
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 7, 2011
 
 setClass("NullSimMisspec", contains = "SimMisspec")
 
@@ -969,10 +874,7 @@ setClass("NullSimMisspec", contains = "SimMisspec")
 # Constructor:	run(SimMisspec)
 # Parent Class: MatrixSet
 # Child Class:	None
-# Methods:
-#	combineObject(list, MisspecSet)
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 7, 2011
 
 setClass("MisspecSet", 
 	contains = "MatrixSet"
@@ -990,10 +892,7 @@ setClass("MisspecSet",
 #	dist:		List of distribution objects
 # 	keepScale:	Keep mean and variance of the data (with sampling error)
 #	reverse:	Reverse (mirror) the distribution (e.g., from right skewed to left skewed). This attribute is supposed to be a vector of logical values with the length of p.
-# Methods:
-#	summary
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: February 24, 2011
 
 setClass("SimDataDist", 
 	representation(
@@ -1014,10 +913,8 @@ setClass("SimDataDist",
 # Parent Class: 	SimDataDist
 # Child Class:	NONE
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: February 23, 2011
 
 setClass("NullSimDataDist", contains="SimDataDist")
-
 
 ###################################################################
 # SimData
@@ -1028,19 +925,20 @@ setClass("NullSimDataDist", contains="SimDataDist")
 # Child Class:	None
 # Attributes:
 #	modelType:	Model type (CFA, Path, or SEM)
-#	N:		Sample size 
+#	N:			Sample size 
 #	param:		SimSet.c that save model specification
 #	misspec:	SimMisspec.c that save model misspecification
-#	equalCon:		SimEqualCon.c that specify equality constraint of parameters in data generation
-#	Constrain.Parameter.Only:	TRUE if users wish to constrain parameters before adding misspecification. 
-#								FALSE if users wish to constrain parameters after adding misspecification.
-#	misfitBound:		max bound of population RMSEA that users wish their model misspecification to be
+#	equalCon:	SimEqualCon.c that specify equality constraint of parameters in data generation
+#	conBeforeMis:	TRUE if users wish to constrain parameters before adding misspecification. 
+#					FALSE if users wish to constrain parameters after adding misspecification.
+#	misfitBound:	max bound of population RMSEA that users wish their model misspecification to be
 #	maxDraw:		The maximum number of random drawn parameters and misspecification model until all parameters in the model are eligible (no negative error variance, standardized coefficients over 1).
-# Methods:
-#	run
-#	summary
+#	sequential:	Use sequential method for data generation
+#	facDist:	Factor distribution object. If NULL, the distribution is multivariate normal distribution.
+#	errorDist:	Error distribution object. If NULL, the error distribution is multivariate normal distribution.
+#	indDist:	Indicator distribution object. If NULL, the indicator distribution is multivariate normal distribution.
+#	indLab:		Indicator labels
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 7, 2011
 
 setClass("SimData", 
 	representation(
@@ -1079,23 +977,19 @@ setClass("SimData",
 # Child Class:	None
 # Attributes:
 #	modelType:	Model type (CFA, Path, or SEM)
-#	data:	data.frame.c of a simulated data
+#	data:		data.frame.c of a simulated data
 #	param:		SimSet.c that save model specification
 #	paramOut:	SimRSet.c that saves parameters values used in data generation
 # 	misspecOut: SimRSet.c that saves model misspecification values used in data generation
-#	equalCon:		SimEqualCon.c that specify equality constraint of parameters in data generation
-# Methods:
-#	summary
+#	equalCon:	SimEqualCon.c that specify equality constraint of parameters in data generation
+#	n:			Sample size
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: November 16, 2011
 
 setClass("SimDataOut", 
 	representation(
 		modelType="character",
 		data="data.frame",
 		param="SimParam",
-		#paramExp="SimRSet",
-		#misspecExp="SimRSet",
 		paramOut="SimRSet",
 		misspecOut="SimRSet",
 		equalCon="SimEqualCon",
@@ -1114,14 +1008,15 @@ setClass("SimDataOut",
 # Parent Class: None
 # Child Class:	None
 # Attributes:
-#	modelType:			Model type (CFA, Path, or SEM)
+#	modelType:	Model type (CFA, Path, or SEM)
 #	param:		SimParam.c that save all free parameters and values of fixed parameters
-#	start:	All starting values of free parameters in SimRSet.c
-#	equalCon:		SimEqualCon.c that specify equality constraint of parameters in data analysis
-#	package:		Packages used in the analysis (lavaan or OpenMx)
-# Methods:
-#	run
-#	summary
+#	start:		All starting values of free parameters in SimRSet.c
+#	equalCon:	SimEqualCon.c that specify equality constraint of parameters in data analysis
+#	package:	Packages used in the analysis (lavaan or OpenMx)
+#	estimator:	Method of estimation. The default is ML.
+#	auxiliary:	A list of auxiliary variables
+#	indLab:		Indicator labels
+#	factorLab:	Factor labels
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 # Date Modified: October 7, 2011
 
@@ -1154,7 +1049,6 @@ setClass("SimModel",
 # Child Class:	None
 # Attributes:	null data.frame 
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: November 16, 2011
 
 setClass("NullDataFrame", 
 	contains = "data.frame"
@@ -1168,22 +1062,21 @@ setClass("NullDataFrame",
 # Parent Class: None
 # Child Class:	None
 # Attributes:
-#	modelType:			Model type (CFA, Path, or SEM)
-#	nRep:	Number of replication
-#	coef:	data.frame.c of parameter estimates of each replication
-#	se:			data.frame.c of standard error of each replication
-#	fit:			data.frame.c of fit indices of each replication
+#	modelType:	Model type (CFA, Path, or SEM)
+#	nRep:		Number of replication
+#	coef:		data.frame class of parameter estimates of each replication
+#	se:			data.frame class of standard error of each replication
+#	fit:		data.frame class of fit indices of each replication
 #	converged:	Number of convergence replications
 #	paramValue:	Parameter values of each replication
+#	FMI1:		data.frame class of Fraction missing 1
+#	FMI2:		data.frame class of Fraction missing 2
+#	stdCoef:	data.frame class of Standardized coefficients
 #	seed:		Random number seed
-# Methods:	
-#	summary
-#	getCutoff
-#	getPower
-#	plotCutoff
-#	plotPower
+#	n:			Sample size
+#	pmMCAR:		Percent missing completely at random
+#	pmMAR:		Percent missing at random
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: November 16, 2011
 
 setClass("SimResult", 
 	representation(
@@ -1220,18 +1113,19 @@ setClass("SimResult",
 # Child Class:	None
 # Attributes:
 #	param:		SimParam.c that save all free parameters and values of fixed parameters
-#	start:	All starting values of free parameters in SimRSet.c
-#	equalCon:		SimEqualCon.c that specify equality constraint of parameters in data analysis
-#	package:		Packages used in the analysis (lavaan or OpenMx)
-#	coef:	List of parameter estimates
+#	start:		All starting values of free parameters in SimRSet.c
+#	equalCon:	SimEqualCon.c that specify equality constraint of parameters in data analysis
+#	package:	Packages used in the analysis (lavaan or OpenMx)
+#	coef:		List of parameter estimates
 #	se:			Standard errors of parameter estimates
-#	fit:			Vector of fit indices
+#	fit:		Vector of fit indices
 #	converged: 	TRUE if the analysis converge
-#	paramValue:		Parameter values behind the data and model result
+#	paramValue:	Parameter values behind the data and model result
+#	n:			Sample size
+#	indLab:		Indicator labels
+#	factorLab:	Factor labels
 # Methods:	None for now.
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: November 16, 2011
-
 
 setClass("SimModelOut", # The class provides model result.
     representation(
@@ -1263,20 +1157,10 @@ setClass("SimModelOut", # The class provides model result.
 # Constructor:	 	run(SimModel, data)
 # Parent Class: SimModelOut
 # Child Class:	None
-# Attributes:
-#	param:		SimParam.c that save all free parameters and values of fixed parameters
-#	start:	All starting values of free parameters in SimRSet.c
-#	equalCon:		SimEqualCon.c that specify equality constraint of parameters in data analysis
-#	package:		Packages used in the analysis (lavaan or OpenMx)
-#	coef:	List of parameter estimates
-#	se:			Standard errors of parameter estimates
-#	fit:			Vector of fit indices
-#	converged: 	TRUE if the analysis converge
-#	paramValue:		Parameter values behind the data and model result
-# Methods:	None for now.
+# Additional Attributes:
+#	FMI1:	Fraction missing method 1
+#	FMI2:	Fraction missing method 2
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: November 16, 2011
-
 
 setClass("SimModelMIOut", # The class provides model result.
 	contains="SimModelOut",
@@ -1296,17 +1180,21 @@ setClass("SimModelMIOut", # The class provides model result.
 # Parent Class: None
 # Child Class:	None
 # Attributes:
-#  covs = list of covariates included in the data set (data will not be removed from the covariates). Needed to impose MAR
-#  pmMCAR = percent missing MCAR
-#  pmMAR = percent missing MAR
-#  nforms = number of forms for planned missing
-#  itemGroups = list of lists of item groupings (column indices) for planned missing data designs
-#  twoMethod = vector of (item, percent missing). Functions removes the given percent of data on the column index.
-#  prAttr = Vector of probabilities for an entire case to be deleted at a given timePoint.
-#  timepoints = number of timepoints in data
-# Methods:	None for now.
+#  cov: 		list of covariates included in the data set (data will not be removed from the covariates). Needed to impose MAR
+#  pmMCAR:		percent missing MCAR
+#  pmMAR:		percent missing MAR
+#  nforms:		number of forms for planned missing
+#  itemGroups:	list of lists of item groupings (column indices) for planned missing data designs
+#  twoMethod:	vector of (item, percent missing). Functions removes the given percent of data on the column index.
+#  prAttr:		Vector of probabilities for an entire case to be deleted at a given timePoint.
+#  impMethod:	Package used for imputations
+#  numImps:		Number of imputations
+#  timepoints:	number of timepoints in data
+#  ignoreCols:	The columns that not to put missingness
+#  threshold:	The threshold using for imposing missing at random
+#  covAsAux:	Using covariate as auxiliary variable if TRUE.
+#  logical:		The logical matrix to put missingness
 # Author: Alex Schoemann (University of Kansas; schoemann@ku.edu), Patrick Miller (University of Kansas; patr1ckm@ku.edu)
-# Date Modified: April 12, 2012
 
 setClass("SimMissing",
     representation(
@@ -1350,7 +1238,6 @@ setClass("SimMissing",
 # Parent Class: SimMissing
 # Child Class:	None
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu), Patrick Miller (University of Kansas; patr1ckm@ku.edu)
-# Date Modified: February 09, 2012
 
 setClass("NullSimMissing", 
 	contains="SimMissing"
@@ -1363,8 +1250,11 @@ setClass("NullSimMissing",
 # Constructor:	simFunction(fun, ...)
 # Parent Class:	None
 # Child Class: NullSimFunction
+# Attribute:
+#	fun:		Function to be run
+#	attribute:	Additional attributes for the specified function
+#	callfun:	The match.call when users build the class
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: April 10, 2012
 
 setClass("SimFunction",
 	representation(
@@ -1382,7 +1272,6 @@ setClass("SimFunction",
 # Parent Class: SimFunction
 # Child Class:	None
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: April 10, 2012
 
 setClass("NullSimFunction", 
 	contains="SimFunction"

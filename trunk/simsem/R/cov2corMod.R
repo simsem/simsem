@@ -3,8 +3,8 @@
 # The cov2cor function that takes care of the zero-variance variables
 # Argument:
 #	V: Covariance matrix
+# Return: Correlation matrix
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: April 15, 2012
 
 cov2corMod <- function(V) {
 	targetCol <- which(diag(V) != 0)

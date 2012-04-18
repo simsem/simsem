@@ -7,7 +7,6 @@
 # 	constant: divisor
 # 	... : Other arguments, such as whether the matrix is a correlation matrix
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 6, 2011
 
 setMethod("divideObject", signature(object="vector", constant="numeric"), definition=function(object, constant) {
 		if(isNullObject(object)) {

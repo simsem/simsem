@@ -14,8 +14,8 @@ setGeneric("constrainMatrices", function(object, SimEqualCon, ...) {
 	return(standardGeneric("constrainMatrices")) 
 } )
 
-setGeneric("countRandomObject", function(object, ...) { 
-	return(standardGeneric("countRandomObject")) 
+setGeneric("countFreeParameters", function(object, ...) { 
+	return(standardGeneric("countFreeParameters")) 
 } )
 
 setGeneric("createImpliedMACS", function(object, ...) { 

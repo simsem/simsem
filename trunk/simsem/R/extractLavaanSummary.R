@@ -1,4 +1,12 @@
-extractLavaanSummary <- function(Output) {
+# extractLavaanFit
+# function -- simsem package
+# Extract fit indices from the lavaan object
+# Argument:
+#	Output: lavaan object
+# Return:	Renamed vector of fit measures
+# Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
+
+extractLavaanFit <- function(Output) {
     Indices <- fitmeasures(Output)
 	result <- c(Indices["chisq"], Indices["df"], Indices["pvalue"],
 		Indices["baseline.chisq"], Indices["baseline.df"], Indices["baseline.pvalue"],

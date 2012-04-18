@@ -2,11 +2,12 @@
 # function -- simsem package
 # Create data from parameters
 # Argument:
-#	param: parameters used for creating data
-#	sequential: TRUE if users wish to create data steps by steps from latent variables
-#				FALSE if users wish to create data from means and covariances matrix of indicators only
+#	paramSet: 	list of parameters used for creating data. This list has real part and misspec part
+#	n:			Sample size
+#	object:		SimData object
+#	dataOnly:	TRUE to create data frame only. FALSE to create data output object
+# Return:	data frame or data output object
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: February 21, 2012
 
 createData <- function(paramSet, n, object, dataOnly) {
 	library(MASS)

@@ -3,11 +3,10 @@
 # Combine by summing or binding two objects together.
 # Generic Function: combineObject(object1, object2, ...)
 # Argument:
-#	Object1: The first object
-# 	Object2: The second object
+#	object1: The first object
+# 	object2: The second object
 # 	... : Other arguments (do not have now)
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 5, 2011
 
 setMethod("combineObject", signature(object1="SimMatrix", object2="SimMatrix"), definition= function(object1, object2) {
 		type <- "SimMatrix"
@@ -131,6 +130,7 @@ setMethod("combineObject", signature(object1="matrix", object2="matrix"), defini
 	}
 )
 #Arguments: object1 and object2 are matrix.c that you wish to combine
+#	correlation:	If TRUE, the diagonal elements are always fixed to 1.
 #Description: This function is used to combine two matrices. If both are null matrices, 
 #	it will return null matrices. If object2 is null matrix, it will return object1. 
 #	If both objects are not null, it will return the sum of both objects. 
@@ -179,43 +179,6 @@ setMethod("combineObject", signature(object1="MatrixSet", object2="MatrixSet"), 
 #	If both objects are not null, it will return the sum of both objects. 
 #	If both objects are correlation matrices, it will retain diagonal elements of 1. 
 #Return: Resulting matrix.c
-
-#setMethod("combineObject", signature(object1="list", object2="MisspecSet"), definition=function(object1, object2) {
-#		LY <- combineObject(object1$LY, object2@LY)
-#		VTE <- combineObject(object1$VTE, object2@VTE)
-#		RTE <- combineObject(object1$RTE, object2@RTE, correlation = TRUE)
-#		VY <- combineObject(object1$VY, object2@VY)
-#		TY <- combineObject(object1$TY, object2@TY) 
-#		MY <- combineObject(object1$MY, object2@MY)
-#		BE <- combineObject(object1$BE, object2@BE)
-#		VPS <- combineObject(object1$VPS, object2@VPS)
-#		RPS <- combineObject(object1$RPS, object2@RPS, correlation = TRUE)
-#		VE <- combineObject(object1$VE, object2@VE) 
-#		AL <- combineObject(object1$AL, object2@AL) 
-#		ME <- combineObject(object1$ME, object2@ME) 
-#		LX <- combineObject(object1$LX, object2@LX) 
-#		VTD <- combineObject(object1$VTD, object2@VTD) 
-#		RTD <- combineObject(object1$RTD, object2@RTD, correlation = TRUE)
-#		VX <- combineObject(object1$VX, object2@VX)
-#		TX <- combineObject(object1$TX, object2@TX)
-#		MX <- combineObject(object1$MX, object2@MX)
-#		GA <- combineObject(object1$GA, object2@GA)
-#		VPH <- combineObject(object1$VPH, object2@VPH)
-#		RPH <- combineObject(object1$RPH, object2@RPH, correlation = TRUE)
-#		KA <- combineObject(object1$KA, object2@KA)
-#		RTH <- combineObject(object1$RTH, object2@RTH)
-#		Output <- list(LY=LY, VTE=VTE, RTE=RTE, VY=VY, TY=TY, MY=MY, 
-#			BE=BE, VPS=VPS, RPS=RPS, VE=VE, AL=AL, ME=ME,
-#			LX=LX, VTD=VTD, RTD=RTD, VX=VX, TX=TX, MX=MX,
-#			GA=GA, VPH=VPH, RPH=RPH, KA=KA, RTH=RTH)
-#		return(Output)
-#	}
-#)
-#Arguments: object1 are the list of true parameter matrices. (I do not know why at that point I did not use the SimSet.
-#			object2 are the set of misspecified parameter matrices
-#Description: This function is used to combine list of true parameters with set of misspecification parameters. If any matrices 
-#		of misspecification parameters are not specified, it will return the true parameters (without combine objects).
-#Return: List of parameters in list.
 
 setMethod("combineObject", signature(object1="SimParam", object2="list"), definition= function(object1, object2) {
 		modelType <- object1@modelType

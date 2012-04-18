@@ -5,11 +5,10 @@
 #	columnName: A column name that we wish to extract
 #	keepRow:	Row of the matrix that we need to keep
 #	keepCol:	Column of the matrix that we need to keep
-# Return:	
+# Return:	A list that contains
 #	columnName:	Original column name
 #	newName:	Reordered column name
 # Author: 	Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: April 15, 2012
 
 extractMatrixNames <- function(columnName, keepRow=NULL, keepCol=NULL) {
 	name <- substr(columnName, 1, 2)

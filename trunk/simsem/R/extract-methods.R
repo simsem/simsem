@@ -1,16 +1,21 @@
 # extract
 # Methods -- simsem package
-# Standardize the coefficients of an object
+# Extract some elements from an object
 # Generic Function: standardize(object)
 # Argument:
-#	object: 	Desired object that users wish to standardize
+#	object: 	Desired object that users wish to extract
+# Return:	An extracted object
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: April 15, 2012
 
 setMethod("extract", signature="SimDataDist", definition=function(object, pos) {
 		return(new("SimDataDist", p=length(pos), dist=object@dist[pos], keepScale=object@keepScale, reverse=object@reverse[pos]))
 	}
 )
+#Arguments: 	
+#	object: 	SimDataDist object
+#	pos:	position of marginal distribution variables to be extracted
+#Description: 	Keep only a set of distribution variables in the data distribtion object
+#Return: 	Extracted SimDataDist object
 
 setMethod("extract", signature="vector", definition=function(object, pos=NULL) {
 	if(isNullObject(object)) return(object)
@@ -21,6 +26,11 @@ setMethod("extract", signature="vector", definition=function(object, pos=NULL) {
 	}
 }
 )
+#Arguments: 	
+#	object: 	vector to be extract
+#	pos:	position of elements to be extracted
+#Description: 	This is similar to object[pos] but this function is needed to prevent the NULL or the null object.
+#Return: 	Extracted vector
 
 setMethod("extract", signature="matrix", definition=function(object, row=NULL, col=NULL) {
 	if(isNullObject(object)) return(object)
@@ -34,6 +44,12 @@ setMethod("extract", signature="matrix", definition=function(object, row=NULL, c
 	}
 }
 )
+#Arguments: 	
+#	object: 	matrix to be extract
+#	row:		The rows to be extracted
+#	col:	The columns to be extracted
+#Description: 	This is similar to object[row, col] but this function is needed to prevent the NULL or the null object and keep matrix status of the returned object when the numbers of row or column are 1.
+#Return: 	Extracted matrix
 
 setMethod("extract", signature="SimMatrix", definition=function(object, row=NULL, col=NULL) {
 	if(isNullObject(object)) return(object)
@@ -44,6 +60,12 @@ setMethod("extract", signature="SimMatrix", definition=function(object, row=NULL
 	return(object)
 }
 )
+#Arguments: 	
+#	object: 	SimMatrix class to be extract
+#	row:		The rows to be extracted
+#	col:	The columns to be extracted
+#Description: 	This function will extract the selected row and columns from a SimMatrix object
+#Return: 	Extracted SimMatrix class
 
 setMethod("extract", signature="SimVector", definition=function(object, pos=NULL) {
 	if(isNullObject(object)) return(object)
@@ -53,6 +75,11 @@ setMethod("extract", signature="SimVector", definition=function(object, pos=NULL
 	return(object)
 }
 )
+#Arguments: 	
+#	object: 	SimVector class to be extract
+#	pos:		The position to be extracted
+#Description: 	This function will extract the selected position from a SImVector object
+#Return: 	Extracted SimVector class
 
 setMethod("extract", signature="SimSet", definition=function(object, yOnly=FALSE, y=NULL, e=NULL, x=NULL, k=NULL) {
 	if(yOnly) {
@@ -121,6 +148,15 @@ setMethod("extract", signature="SimSet", definition=function(object, yOnly=FALSE
 	return(object)
 }
 )
+#Arguments: 	
+#	object: 	SimSet class to be extracted
+#	yOnly:		Select only the endogenous side of the object only
+#	y:			The position of endogenous indicators to be extracted
+#	e:			The position of endogenous factors to be extracted
+#	x:			The position of exogenous indicators to be extracted
+#	k:			The position of exogenous factors to be extracted.
+#Description: 	This function will extract a subset of SimSet object
+#Return: 	Extracted SimSet class
 
 setMethod("extract", signature="VirtualRSet", definition=function(object, yOnly=FALSE, y=NULL, e=NULL, x=NULL, k=NULL) {
 	if(yOnly) {
@@ -171,6 +207,15 @@ setMethod("extract", signature="VirtualRSet", definition=function(object, yOnly=
 	return(object)
 }
 )
+#Arguments: 	
+#	object: 	VirtualRSet class to be extracted
+#	yOnly:		Select only the endogenous side of the object only
+#	y:			The position of endogenous indicators to be extracted
+#	e:			The position of endogenous factors to be extracted
+#	x:			The position of exogenous indicators to be extracted
+#	k:			The position of exogenous factors to be extracted.
+#Description: 	This function will extract a subset of VirtualRSet object
+#Return: 	Extracted VirtualRSet class
 
 setMethod("extract", signature="data.frame", definition=function(object, yOnly=FALSE, y=NULL, e=NULL, x=NULL, k=NULL, keepOriginalName=FALSE) {
 	columnName <- colnames(object)
@@ -299,3 +344,13 @@ setMethod("extract", signature="data.frame", definition=function(object, yOnly=F
 	return(object)
 }
 )
+#Arguments: 	
+#	object: 	data frame to be extracted
+#	yOnly:		Select only the endogenous side of the object only
+#	y:			The position of endogenous indicators to be extracted
+#	e:			The position of endogenous factors to be extracted
+#	x:			The position of exogenous indicators to be extracted
+#	k:			The position of exogenous factors to be extracted.
+#	keepOriginalName:	keep the original name of the extracted varaibles
+#Description: 	This function will extract a data frame which columns have specified indicators or factors
+#Return: 	Extracted data frame

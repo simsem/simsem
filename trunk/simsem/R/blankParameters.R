@@ -1,3 +1,11 @@
+# blankParameters
+# Function -- simsem package
+# Change all elements in the non-null objects to be all NAs.
+# Argument:
+#	object: target VirtualRSet class
+# Return:	The target object that all elements are NA
+# Author: 	Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
+
 blankParameters <- function(object) {
 	if(!isNullObject(object@LY)) object@LY[,] <- NA
 	if(!isNullObject(object@TE)) object@TE[,] <- NA

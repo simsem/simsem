@@ -23,21 +23,21 @@ simParamPath <- function(..., exo = FALSE) {
 	position <- matchKeywords(Names, keywords)
 	if(length(position) != length(unique(position))) stop("Some objects were identified more than once.")
 	if(exo) {
-		ifelse(contain(4, position), GA <- List[position == 4][[1]], stop("No path coefficient object between factor.ETA and factor.KSI"))
+		ifelse(4 %in% position, GA <- List[position == 4][[1]], stop("No path coefficient object between factor.ETA and factor.KSI"))
 		ne <- nrow(GA)
 		nk <- ncol(GA)
-		ifelse(contain(1, position), BE <- List[position == 1][[1]], BE <- matrix(0, ne, ne))
-		ifelse(contain(2, position), AL <- List[position == 2][[1]], AL <- rep(NA, ne))
-		ifelse(contain(3, position), PS <- List[position == 3][[1]], PS <- diag(NA, ne))
-		ifelse(contain(5, position), KA <- List[position == 5][[1]], KA <- rep(NA, nk))
-		ifelse(contain(6, position), PH <- List[position == 6][[1]], PH <- matrix(NA, nk, nk))
+		ifelse(1 %in% position, BE <- List[position == 1][[1]], BE <- matrix(0, ne, ne))
+		ifelse(2 %in% position, AL <- List[position == 2][[1]], AL <- rep(NA, ne))
+		ifelse(3 %in% position, PS <- List[position == 3][[1]], PS <- diag(NA, ne))
+		ifelse(5 %in% position, KA <- List[position == 5][[1]], KA <- rep(NA, nk))
+		ifelse(6 %in% position, PH <- List[position == 6][[1]], PH <- matrix(NA, nk, nk))
 		Output <- new("SimParam", BE=BE, PS=PS, AL=AL, GA=GA, PH=PH, KA=KA, modelType="Path.exo")	
 	} else {
-		ifelse(contain(1, position), BE <- List[position == 1][[1]], stop("No path coefficient object between factor.ETA"))
+		ifelse(1 %in% position, BE <- List[position == 1][[1]], stop("No path coefficient object between factor.ETA"))
 		ne <- nrow(BE)
-		ifelse(contain(2, position), AL <- List[position == 2][[1]], AL <- rep(NA, ne))
+		ifelse(2 %in% position, AL <- List[position == 2][[1]], AL <- rep(NA, ne))
 		PS <- NULL
-		if(contain(3, position)) { 
+		if(3 %in% position) { 
 			PS <- List[position == 3][[1]]
 		} else {
 			PS <- diag(NA, ne)

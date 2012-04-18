@@ -17,8 +17,8 @@ setMethod("getCutoff", signature(object="data.frame"), definition=function(objec
 	object <- as.data.frame(object[,usedFit])
 	temp <- rep(NA, ncol(object))
 	temp <- apply(object, 2, quantile, probs = percentile, na.rm = TRUE)
-	if(contain("TLI", colnames(object))) temp["TLI"] <- quantile(object[,"TLI"], 1 - percentile, na.rm = TRUE)
-	if(contain("CFI", colnames(object))) temp["CFI"] <- quantile(object[,"CFI"], 1 - percentile, na.rm = TRUE)
+	if("TLI" %in% colnames(object)) temp["TLI"] <- quantile(object[,"TLI"], 1 - percentile, na.rm = TRUE)
+	if("CFI" %in% colnames(object)) temp["CFI"] <- quantile(object[,"CFI"], 1 - percentile, na.rm = TRUE)
 	return(temp)
 })
 #Arguments: 

@@ -1,4 +1,5 @@
 fillParam <- function(param, modelType) {
+	library(lavaan)
 	LY <- param@LY
 	VTE <- param@VTE
 	TE <- param@TE

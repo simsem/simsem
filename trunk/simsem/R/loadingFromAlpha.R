@@ -1,4 +1,4 @@
-# contain
+# loadingFromAlpha
 # Function -- simsem package
 # Find standardized factor loading from coefficient alpha assuming that all items have equal loadings and error variances (parallel items)
 # Function: loadingFromAlpha(alpha, ni)

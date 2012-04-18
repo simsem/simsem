@@ -460,7 +460,7 @@ setMethod("summary", signature="SimData", definition=function(object, detail=FAL
 		print(object@n)
 		cat("========= Parameters Set ============\n")
 		summary(object@param)
-		cat("Number of free parameters = ", countRandomObject(object@param), "\n")
+		cat("Number of free parameters = ", countFreeParameters(object@param), "\n")
 		cat("=====================================\n")
 		if(detail) {
 			cat("============Misspecified Set================\n")
@@ -503,7 +503,7 @@ setMethod("summary", signature="SimModel", definition=function(object, con=FALSE
 		print(object@modelType)
 		cat("========= Parameters Set ============\n")
 		summary(object@param)
-		cat("Number of free parameters = ", countRandomObject(object@param), "\n")
+		cat("Number of free parameters = ", countFreeParameters(object@param), "\n")
 		cat("=====================================\n")
 		if(start) {
 			cat("============Starting Values================\n")
@@ -597,7 +597,7 @@ setMethod("summary", signature="SimDataOut", definition=function(object, detail=
 		if(detail) {
 			cat("========= Parameters Set ============\n")
 			summary(object@param)
-			cat("Number of free parameters = ", countRandomObject(object@param), "\n")
+			cat("Number of free parameters = ", countFreeParameters(object@param), "\n")
 			cat("=====================================\n")
 			cat("============Parameter Values================\n")
 			summary(object@paramOut)

@@ -50,7 +50,7 @@ imputed.l <- lapply(imputed.l, function(data, var) { return(data[,var])}, var=da
 
     runlavaanMI <- function(MIdata,syntax) {
      fit <- cfa(syntax, data=MIdata)
-     FitIndices <- extractLavaanSummary(fit)
+     FitIndices <- extractLavaanFit(fit)
 	   coef <- inspect(fit, "coef")
      se <- inspect(fit, "se")
 	#Converged <- fit@fit@converged

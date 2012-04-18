@@ -1,3 +1,5 @@
+# To be deleted. Equal to match function
+
 equalWhich <- function(x, vec) {
 	n.elem <- length(vec)
 	result <- 0

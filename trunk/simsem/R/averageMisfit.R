@@ -1,4 +1,16 @@
-averageMisfit <- function(observed.M, observed.CM, implied.M, implied.CM, degree.of.freedom) { 
+# averageMisfit
+# Function -- simsem package
+# The discrepancy value (chi-square value) divided by degree of freedom, which is equal to population RMSEA
+# Argument:
+#	observed.M: observed mean
+#	observed.CM:	observed covariance matrix
+#	implied.M:		model-implied mean
+#	implied.CM:		model-implied covariance
+#	df:				Degree of freedom
+# Return:	Average discrepancy value (population RMSEA)
+# Author: 	Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
+
+averageMisfit <- function(observed.M, observed.CM, implied.M, implied.CM, df) { 
 #Should be renamed to average discrepancy; df is changed to added information
 	result <- NULL
 	p <- length(observed.M)
@@ -10,8 +22,8 @@ averageMisfit <- function(observed.M, observed.CM, implied.M, implied.CM, degree
 		t.2 <- log(t.1.1)
 		dis.M <- as.matrix(observed.M - implied.M)
 		t.3 <- t(dis.M) %*% inv %*% dis.M
-		F.statistic <- t.1 - t.2 - p + t.3
-		result <- sqrt(F.statistic/degree.of.freedom)
+		discrepancy <- t.1 - t.2 - p + t.3
+		result <- sqrt(discrepancy/df)
 	}
 	return(result)
 }

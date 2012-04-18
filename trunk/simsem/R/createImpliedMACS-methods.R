@@ -4,8 +4,10 @@
 # Generic Function: createImpliedMACS(object)
 # Argument:
 #	object: 	Desired object that users wish to create implied means and covariance matrix
+# Return: 	List that contains
+#			M = vectors for implied means
+#			CM = implied covariance matrices
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: February 25, 2011
 
 setMethod("createImpliedMACS", signature="MatrixSet", definition=function(object) {
 		new.object <- reduceMatrices(object)

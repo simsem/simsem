@@ -21,73 +21,73 @@ simMisspecSEM <- function(..., exo = FALSE) {
 	}
 	position <- matchKeywords(Names, keywords)
 	if(length(position) != length(unique(position))) stop("Some objects were identified more than once.")
-	ifelse(contain(1, position), LY <- List[position == 1], LY <- list(new("NullSimMatrix")))
-	if(contain(13, position)) {
+	ifelse(1 %in% position, LY <- List[position == 1], LY <- list(new("NullSimMatrix")))
+	if(13 %in% position) {
 		TE <- List[position == 13]
-		ifelse(contain(2, position), stop("Error covariance and error correlation cannot be specified at the same time!"), RTE <- list(new("NullSymMatrix")))
-		ifelse(contain(3, position), stop("Error covariance and error variance cannot be specified at the same time!"), VTE <- list(new("NullSimVector")))		
-		ifelse(contain(4, position), stop("Error covariance and total indicator variance cannot be specified at the same time!"), VY <- list(new("NullSimVector")))
+		ifelse(2 %in% position, stop("Error covariance and error correlation cannot be specified at the same time!"), RTE <- list(new("NullSymMatrix")))
+		ifelse(3 %in% position, stop("Error covariance and error variance cannot be specified at the same time!"), VTE <- list(new("NullSimVector")))		
+		ifelse(4 %in% position, stop("Error covariance and total indicator variance cannot be specified at the same time!"), VY <- list(new("NullSimVector")))
 	} else {
 		TE <- list(new("NullSymMatrix"))
-		ifelse(contain(2, position), RTE <- List[position == 2], RTE <- list(new("NullSymMatrix")))
-		ifelse(contain(3, position), VTE <- List[position == 3], VTE <- list(new("NullSimVector")))
-		ifelse(contain(4, position), VY <- List[position == 4], VY <- list(new("NullSimVector")))
+		ifelse(2 %in% position, RTE <- List[position == 2], RTE <- list(new("NullSymMatrix")))
+		ifelse(3 %in% position, VTE <- List[position == 3], VTE <- list(new("NullSimVector")))
+		ifelse(4 %in% position, VY <- List[position == 4], VY <- list(new("NullSimVector")))
 		if(!isNullObject(VTE[[1]]) & !isNullObject(VY[[1]])) stop("Please assign either VTE or VY, not both")
 	}
-	ifelse(contain(6, position), MY <- List[position == 6], MY <- list(new("NullSimVector")))
-	ifelse(contain(5, position), TY <- List[position == 5], TY <- list(new("NullSimVector")))
+	ifelse(6 %in% position, MY <- List[position == 6], MY <- list(new("NullSimVector")))
+	ifelse(5 %in% position, TY <- List[position == 5], TY <- list(new("NullSimVector")))
 	if(!isNullObject(MY[[1]]) & !isNullObject(TY[[1]])) stop("Please assign either MY or TY, not both")
-	ifelse(contain(7, position), BE <- List[position == 7], BE <- list(new("NullSimMatrix")))
-	if(contain(14, position)) {
+	ifelse(7 %in% position, BE <- List[position == 7], BE <- list(new("NullSimMatrix")))
+	if(14 %in% position) {
 		PS <- List[position == 14]
-		ifelse(contain(8, position), stop("Covariance and correlation cannot be specified at the same time!"), RPS <- list(new("NullSymMatrix")))
-		ifelse(contain(9, position), stop("Covariance and variance cannot be specified at the same time!"), VPS <- list(new("NullSimVector")))		
-		ifelse(contain(10, position), stop("Covariance and total indicator variance cannot be specified at the same time!"), VE <- list(new("NullSimVector")))		
+		ifelse(8 %in% position, stop("Covariance and correlation cannot be specified at the same time!"), RPS <- list(new("NullSymMatrix")))
+		ifelse(9 %in% position, stop("Covariance and variance cannot be specified at the same time!"), VPS <- list(new("NullSimVector")))		
+		ifelse(10 %in% position, stop("Covariance and total indicator variance cannot be specified at the same time!"), VE <- list(new("NullSimVector")))		
 	} else {
 		PS <- list(new("NullSymMatrix"))
-		ifelse(contain(8, position), RPS <- List[position == 8], RPS <- list(new("NullSymMatrix")))
-		ifelse(contain(9, position), VPS <- List[position == 9], VPS <- list(new("NullSimVector")))
-		ifelse(contain(10, position), VE <- List[position == 10], VE <- list(new("NullSimVector")))
+		ifelse(8 %in% position, RPS <- List[position == 8], RPS <- list(new("NullSymMatrix")))
+		ifelse(9 %in% position, VPS <- List[position == 9], VPS <- list(new("NullSimVector")))
+		ifelse(10 %in% position, VE <- List[position == 10], VE <- list(new("NullSimVector")))
 		if(!isNullObject(VPS[[1]]) & !isNullObject(VE[[1]])) stop("Please assign either VPS or VE, not both")
 	}
-	ifelse(contain(12, position), ME <- List[position == 12], ME <- list(new("NullSimVector")))
-	ifelse(contain(11, position), AL <- List[position == 11], AL <- list(new("NullSimVector")))
+	ifelse(12 %in% position, ME <- List[position == 12], ME <- list(new("NullSimVector")))
+	ifelse(11 %in% position, AL <- List[position == 11], AL <- list(new("NullSimVector")))
 	if(!isNullObject(ME[[1]]) & !isNullObject(AL[[1]])) stop("Please assign either ME or AL, not both")
 	Output <- NULL
 	if(exo) {
-		ifelse(contain(15, position), LX <- List[position == 15], LX <- list(new("NullSimMatrix")))
-		if(contain(26, position)) {
+		ifelse(15 %in% position, LX <- List[position == 15], LX <- list(new("NullSimMatrix")))
+		if(26 %in% position) {
 			TD <- List[position == 26]
-			ifelse(contain(16, position), stop("Error covariance and error correlation cannot be specified at the same time!"), RTD <- list(new("NullSymMatrix")))
-			ifelse(contain(17, position), stop("Error covariance and error variance cannot be specified at the same time!"), VTD <- list(new("NullSimVector")))		
-			ifelse(contain(18, position), stop("Error covariance and total indicator variance cannot be specified at the same time!"), VX <- list(new("NullSimVector")))
+			ifelse(16 %in% position, stop("Error covariance and error correlation cannot be specified at the same time!"), RTD <- list(new("NullSymMatrix")))
+			ifelse(17 %in% position, stop("Error covariance and error variance cannot be specified at the same time!"), VTD <- list(new("NullSimVector")))		
+			ifelse(18 %in% position, stop("Error covariance and total indicator variance cannot be specified at the same time!"), VX <- list(new("NullSimVector")))
 		} else {
 			TD <- list(new("NullSymMatrix"))
-			ifelse(contain(16, position), RTD <- List[position == 16], RTD <- list(new("NullSymMatrix")))
-			ifelse(contain(17, position), VTD <- List[position == 17], VTD <- list(new("NullSimVector")))
-			ifelse(contain(18, position), VX <- List[position == 18], VX <- list(new("NullSimVector")))
+			ifelse(16 %in% position, RTD <- List[position == 16], RTD <- list(new("NullSymMatrix")))
+			ifelse(17 %in% position, VTD <- List[position == 17], VTD <- list(new("NullSimVector")))
+			ifelse(18 %in% position, VX <- List[position == 18], VX <- list(new("NullSimVector")))
 			if(!isNullObject(VTD[[1]]) & !isNullObject(VX[[1]])) stop("Please assign either VTD or VX, not both")
 		}
-		ifelse(contain(20, position), MX <- List[position == 20], MX <- list(new("NullSimVector")))
-		ifelse(contain(19, position), TX <- List[position == 19], TX <- list(new("NullSimVector")))
+		ifelse(20 %in% position, MX <- List[position == 20], MX <- list(new("NullSimVector")))
+		ifelse(19 %in% position, TX <- List[position == 19], TX <- list(new("NullSimVector")))
 		if(!isNullObject(MX[[1]]) & !isNullObject(TX[[1]])) stop("Please assign either MX or TX, not both")
-		ifelse(contain(21, position), GA <- List[position == 21], GA <- list(new("NullSimMatrix")))
-		if(contain(27, position)) {
+		ifelse(21 %in% position, GA <- List[position == 21], GA <- list(new("NullSimMatrix")))
+		if(27 %in% position) {
 			PH <- List[position == 27]
-			ifelse(contain(22, position), stop("Covariance and correlation cannot be specified at the same time!"), RPH <- list(new("NullSymMatrix")))
-			ifelse(contain(23, position), stop("Covariance and variance cannot be specified at the same time!"), VPH <- list(new("NullSimVector")))				
+			ifelse(22 %in% position, stop("Covariance and correlation cannot be specified at the same time!"), RPH <- list(new("NullSymMatrix")))
+			ifelse(23 %in% position, stop("Covariance and variance cannot be specified at the same time!"), VPH <- list(new("NullSimVector")))				
 		} else {
 			PH <- list(new("NullSymMatrix"))
-			ifelse(contain(22, position), RPH <- List[position == 22], RPH <- list(new("NullSymMatrix")))
-			ifelse(contain(23, position), VPH <- List[position == 23], VPH <- list(new("NullSimVector")))
+			ifelse(22 %in% position, RPH <- List[position == 22], RPH <- list(new("NullSymMatrix")))
+			ifelse(23 %in% position, VPH <- List[position == 23], VPH <- list(new("NullSimVector")))
 		}
-		ifelse(contain(24, position), KA <- List[position == 24], KA <- list(new("NullSimVector")))
-		if(contain(28, position)) {
-			ifelse(contain(25, position), stop("TH and RTH cannot be specified at the same time!"), RTH <- list(new("NullSimMatrix")))
+		ifelse(24 %in% position, KA <- List[position == 24], KA <- list(new("NullSimVector")))
+		if(28 %in% position) {
+			ifelse(25 %in% position, stop("TH and RTH cannot be specified at the same time!"), RTH <- list(new("NullSimMatrix")))
 			TH <- List[position == 28]
 			print("If TH is specified, please make sure that the TH is explicitly specified in the simSetSEM function.")
 		} else {
-			ifelse(contain(25, position), RTH <- List[position == 25], RTH <- list(new("NullSimMatrix")))
+			ifelse(25 %in% position, RTH <- List[position == 25], RTH <- list(new("NullSimMatrix")))
 			TH <- list(new("NullSimMatrix"))
 		}
 		Output <- new("SimMisspec", LY=LY[[1]], TE=TE[[1]], RTE=RTE[[1]], VTE=VTE[[1]], VY=VY[[1]], MY=MY[[1]], TY=TY[[1]], BE=BE[[1]], PS=PS[[1]], RPS=RPS[[1]], VPS=VPS[[1]], VE=VE[[1]], AL=AL[[1]], ME=ME[[1]],

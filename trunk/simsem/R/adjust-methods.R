@@ -3,7 +3,6 @@
 # This function will adjust an element in a target object. The specified element may be set to be
 # free parameter with number or distribution object as starting values. Alternatively, the element can be
 # fixed to be a value (such as 0).
-
 # Generic Function: adjust(target, param, pos, numAsFixed)
 # Argument:
 #	Target: The target object that you would like to adjust
@@ -14,9 +13,8 @@
 #	numAsFixed: This argument is used when the param argument was specified as number.
 #                   If TRUE (as default), the number is treated as fixed parameters.
 #                   If FALSE, the number is treated as a starting value and the element is set to be free parameter.
-
+# Return: The adjusted object
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 6, 2011
 
 setMethod("adjust", signature(target="SimMatrix"), definition=function(target, param, pos, numAsFixed=TRUE) {
 		if(is.vector(pos) && (length(pos) == 2)) pos <- matrix(pos, ncol=2)
@@ -135,6 +133,3 @@ setMethod("adjust", signature(target="SimVector"), definition=function(target, p
 #AL <- adjust(AL, "n01", 2)
 #run(AL)
 #summary(AL)
-
-#################################
-#	adjust("SimSet") is needed

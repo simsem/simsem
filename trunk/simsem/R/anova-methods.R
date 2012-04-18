@@ -1,3 +1,12 @@
+# anova 
+# Methods -- simsem package
+# To compare nested or nonnested models
+# Generic Function: anova(object, ...)
+# Argument:
+#	object: The object for comparison
+# 	... : Additional object for comparison
+# Author: Alex Schoemann (University of Kansas; schoemann@ku.edu)
+
 #anova method to compare nested models from 2 simResult objects
 #Arguments: 
 #	objects:	SimResult.c that users wish to compare

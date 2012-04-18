@@ -1,3 +1,5 @@
+# to be deleted
+
 cor2cov <- function(correlation, stdev) {
 	ni <- nrow(correlation)
 	if(!is.matrix(stdev)) {

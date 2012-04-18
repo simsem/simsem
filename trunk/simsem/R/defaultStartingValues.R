@@ -1,3 +1,12 @@
+# defaultStartingValues
+# Function -- simsem package
+# Make ad hoc starting values. Use for OpenMx package
+# Function: defaultStartingValues(object)
+# Argument:
+#	object: SimParam class containing the analysis model
+# Return: 	SimRSet class containing starting values
+# Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
+
 defaultStartingValues <- function(object) {
 	ifelse(isNullObject(object@LY), LY <- new("NullMatrix"), {LY <- matrix(NA, nrow(object@LY), ncol(object@LY)); LY[is.na(object@LY)] <- 0.7})
 	ifelse(isNullObject(object@TE), TE <- new("NullMatrix"), {TE <- matrix(NA, nrow(object@TE), ncol(object@TE)); TE[is.na(object@TE)] <- 0.49; TE[is.na(object@TE) & (upper.tri(TE) | lower.tri(TE))] <- 0.2})

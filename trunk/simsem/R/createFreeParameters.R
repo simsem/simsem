@@ -1,12 +1,11 @@
 # createFreeParameters
 # Function -- simsem package
-# Create free parameters object from model specification
+# Create free parameters object (SimParam class) from model specification (SimSet class)
 # Function: createFreeParameters(object)
 # Argument:
-#	object: 	SimSet.c that users wish to transform it to SimParam.c
-# Return: 	SimParam.c that saves only free parameters and values of fixed parameters
+#	object: SimSet class that users wish to transform it to SimParam.c
+# Return: 	SimParam class that saves only free parameters and values of fixed parameters
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: March 10, 2012
 
 createFreeParameters <- function(object) {
 	if(!is(object, "SimSet")) stop("The attribute is not a SimSet object.")

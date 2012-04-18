@@ -21,8 +21,8 @@ setMethod("getPower", signature(altObject="data.frame"), definition=function(alt
 	for(i in 1:length(common.name)) {
 		temp[i] <- pValue(altObject[,i], cutoff[i], revDirec)
 	}
-	if(contain("TLI", common.name)) temp["TLI"] <- 1 - temp["TLI"]
-	if(contain("CFI", common.name)) temp["CFI"] <- 1 - temp["CFI"]
+	if("TLI" %in% common.name) temp["TLI"] <- 1 - temp["TLI"]
+	if("CFI" %in% common.name) temp["CFI"] <- 1 - temp["CFI"]
 	return(temp)
 })
 #Arguments: 

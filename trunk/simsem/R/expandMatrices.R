@@ -2,9 +2,9 @@
 # function -- simsem package
 # Expand the set of covariance matrices into the set of covariance/correlation/variance objects
 # Argument:
-#	object: SimSet that users wish to expand
+#	object: SimRSet class that users wish to expand
+# Return:	Matrixset class containing all information from the SimRSet class
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: March 10, 2012
 
 expandMatrices <- function(object) {
 	if(!is(object, "SimRSet")) stop("The object is not a SimRSet object")

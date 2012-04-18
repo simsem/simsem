@@ -11,6 +11,7 @@
 # Date Modified: April 16, 2012
 
 findFactorTotalVar <- function(beta, corPsi, residualVarPsi) {
+	library(lavaan)
 	ni <- nrow(beta)
 	set <- findRecursiveSet(beta)
 	real.psi <- cor2cov(corPsi, sqrt(residualVarPsi))
