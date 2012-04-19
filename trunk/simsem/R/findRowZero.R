@@ -1,3 +1,13 @@
+# findRowZero
+# Function -- simsem package
+# Find rows in a matrix that all elements are zero in non-fixed subset rows and columns. This function will be used in findRecursiveSet function.
+# Argument:
+#	square.matrix: 	Any square matrix
+#	is.row.fixed:	A logical vector. The TRUE position 
+# Return:
+#	A vector of positions that contain rows of all zeros
+# Author: 	Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
+
 findRowZero <- function(square.matrix, is.row.fixed = FALSE) {
 	ni <- nrow(square.matrix)
 	if(length(is.row.fixed) == 1) {

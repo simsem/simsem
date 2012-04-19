@@ -1,5 +1,5 @@
-isNAVector <- function(vec) {
-	k <- length(vec)
-	match <- sum(is.na(vec))
-	return(k == match)
+# To be deleted
+
+isNAVector <- function(vec) all(is.na(vec)) {
+	return(length(vec) == sum(is.na(vec)))
 }

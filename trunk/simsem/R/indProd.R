@@ -10,7 +10,6 @@
 #	doubleMC:	If TRUE, mean center of the products of indicators
 #	namesProd:	The name of the final product
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: April 11, 2012
 
 indProd <- function(data, var1, var2, match=TRUE, meanC=TRUE, residualC=FALSE, doubleMC=TRUE, namesProd=NULL) {
 	if(all(is.numeric(var1))) var1 <- colnames(data)[var1]

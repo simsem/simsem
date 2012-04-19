@@ -8,7 +8,6 @@
 # Return:
 #	A vector of measurement intercepts
 # Author: 	Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: April 16, 2012
 
 findIndIntercept <- function(lambda, factorMean = NULL, indicatorMean = NULL) {
 	ni <- nrow(lambda)

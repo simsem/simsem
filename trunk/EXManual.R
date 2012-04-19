@@ -1168,15 +1168,17 @@ dat <- run(datModel, dataOnly=FALSE)
 #			implied.covariance <- solve(ID - object@BE) %*% object@PS %*% t(solve(ID - object@BE))
 
 
-# Delete combineVectorExoEndo, contain, cor2cov, equalWhich, extractDiag, extractLine
+# Delete combineVectorExoEndo, contain, cor2cov, equalWhich, extractDiag, extractLine, isNAVector
 # Rename countRandomObject to countFreeParameters
 # Rename extractLavaanSummary to extractLavaanFit
 # Rename transform.constraint to transformConstraint
+# Rename findOpenMxValues to setOpenMxObject
+# Rename findFitIndicesOpenMx to extractOpenMxFit
 # Public continuousPower, averageMisfit
 # Start with F and extract methods
 
 
-
+# For later, setOpenMxObject, findFitIndicesOpenMx
 
 
 

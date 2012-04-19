@@ -33,7 +33,7 @@ runOpenMx <- function(object, Data) {
           # nk <- ncol(param@PS)
           # Labels <- collapseExo(Labels, value = NA)
           # start <- collapseExo(start)
-          # start <- findOpenMxValues(param, start)
+          # start <- setOpenMxObject(param, start)
           # matrixLY <- mxMatrix(type="Full", nrow=ni, ncol=nk, free=as.vector(is.na(param@LY)), values=as.vector(start@LY), labels=as.vector(Labels@LY), name="LY")#
           # matrixPS <- mxMatrix(type="Symm", nrow=nk, ncol=nk, free=as.vector(is.na(param@PS)), values=as.vector(start@PS), labels=as.vector(Labels@PS), name="PS")#
           # matrixTE <- mxMatrix(type="Symm", nrow=ni, ncol=ni, free=as.vector(is.na(param@TE)), values=as.vector(start@TE), labels=as.vector(Labels@TE), name="TE")#

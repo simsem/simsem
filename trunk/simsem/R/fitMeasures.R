@@ -1,3 +1,20 @@
+# fitMeasures
+# Function -- simsem package
+# Find fit indices from the discrepancy values of the target model and null models. 
+# Argument:
+#	X2: 	Chi-square value of the target model
+#	df:		Degree of freedom of the target model
+#	p:		The p vlaue of the target model
+#	X2.null:	Chi-square value of the null model
+#	df.null:	Degree of freedom of the null model
+#	p.null:		The p value of the null model
+#	N:		Sample size
+#	fit.measures:	List of selected fit measures
+# Return:
+#	A vector of fit measures
+# Author: 	Yves Rosseel in the lavaan package 
+#			Modified by Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
+
 fitMeasures <- function(X2, df, p, X2.null, df.null, p.null, N, fit.measures="all") {
 
     fit.measures <- tolower(fit.measures)

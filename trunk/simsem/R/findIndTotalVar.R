@@ -8,7 +8,6 @@
 # Return:
 #	A vector of indicator variances
 # Author: 	Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: April 16, 2012
 
 findIndTotalVar <- function(lambda, totalFactorCov, residualVarTheta) {
 	factor.part <- lambda %*% totalFactorCov %*% t(lambda)

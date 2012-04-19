@@ -8,7 +8,6 @@
 # Return:
 #	A vector of factor total variances
 # Author: 	Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: April 16, 2012
 
 findFactorTotalVar <- function(beta, corPsi, residualVarPsi) {
 	library(lavaan)

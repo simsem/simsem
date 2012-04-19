@@ -7,7 +7,6 @@
 # Return:
 #	A vector of factor means
 # Author: 	Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: April 16, 2012
 
 findFactorMean <- function(beta, alpha = NULL) {
 	ni <- nrow(beta)

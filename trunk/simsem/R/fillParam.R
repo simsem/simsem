@@ -1,3 +1,12 @@
+# fillParam
+# Function -- simsem package
+# Fill in other objects based on the parameter values of current objects
+# Argument:
+#	param: 	MatrixSet class that some matrices have not been filled.
+#	modelType:	Model type
+# Return:	MatrixSet class that have filled the parameters
+# Author: 	Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
+
 fillParam <- function(param, modelType) {
 	library(lavaan)
 	LY <- param@LY

@@ -5,7 +5,6 @@
 #	No argument
 # Return: 	A list of all keywords 
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: March 10, 2012
 
 getKeywords <- function() {
 	LY <- "LY"		#Factor Loading of Y from E

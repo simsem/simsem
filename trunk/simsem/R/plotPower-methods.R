@@ -39,8 +39,8 @@ setMethod("plotPower", signature(altObject="data.frame", nullObject="data.frame"
 	nullObject <- as.data.frame(nullObject[,usedFit])
 	colnames(altObject) <- usedFit
 	colnames(nullObject) <- usedFit
-	no.NA.altObject <- !apply(altObject, 2, isNAVector)
-	no.NA.nullObject <- !apply(nullObject, 2, isNAVector)
+	no.NA.altObject <- !apply(altObject, 2, function(vec) all(is.na(vec)))
+	no.NA.nullObject <- !apply(nullObject, 2, function(vec) all(is.na(vec)))
 	temp.name.alt <- colnames(altObject)[no.NA.altObject]
 	temp.name.null <- colnames(nullObject)[no.NA.nullObject]
 	altObject <- as.data.frame(altObject[,no.NA.altObject])

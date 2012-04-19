@@ -4,8 +4,8 @@
 # Argument:
 #	x: vector of a variable
 # 	ord: order of the k-statistics
+# Return: k-statistics value
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: February 26, 2012
 
 kStat <- function(x, ord) {
 	# Formula from mathworld wolfram

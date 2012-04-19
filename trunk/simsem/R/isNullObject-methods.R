@@ -5,7 +5,6 @@
 # Argument:
 #	target: 	The checked object
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: February 23, 2011
 
 setMethod("isNullObject", signature(target="vector"), definition=function(target) {
 		is(target, "NullVector") || is.nan(target) || (sum(length(target)) == 0)

@@ -8,7 +8,6 @@
 # Return:
 #	A vector of measurement error covariances
 # Author: 	Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: April 16, 2012
 
 findIndResidualVar <- function(lambda, totalFactorCov, totalVarTheta = NULL) {
 	ni <- nrow(lambda)

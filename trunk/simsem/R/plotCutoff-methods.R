@@ -12,7 +12,7 @@ setMethod("plotCutoff", signature(object="data.frame"), definition=function(obje
 	if(is.null(usedFit)) usedFit <- getKeywords()$usedFit
 	object <- as.data.frame(object[,usedFit])
 	cutoff <- cutoff[usedFit]
-	object <- as.data.frame(object[,!apply(object, 2, isNAVector)])
+	object <- as.data.frame(object[,!apply(object, 2, function(vec) all(is.na(vec)))])
 	colnames(object) <- usedFit
 	if(ncol(object) == 2) {
 		obj <- par(mfrow = c(1, 2))

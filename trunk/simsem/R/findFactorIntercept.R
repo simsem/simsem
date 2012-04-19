@@ -7,7 +7,6 @@
 # Return:
 #	A matrix of factor intercept
 # Author: 	Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: April 16, 2012
 
 findFactorIntercept <- function(beta, factorMean = NULL) {
 	ni <- nrow(beta)

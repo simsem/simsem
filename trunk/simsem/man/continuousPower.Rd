@@ -1,5 +1,5 @@
 \name{continuousPower}
-
+\alias{continuousPower}
 \title{
 	Find power of model parameters when simulations have randomly varying parameters
 }
@@ -7,7 +7,8 @@
 	A function to find the power of the parameters in a model when one or more of the simulations parameters vary randomly across replications.
 }
 \usage{
-continousPower(simResult, contN = TRUE, contMCAR = FALSE, contMAR = FALSE, contParam = NULL, alpha = .05, powerparam = NULL)}
+continuousPower(simResult, contN = TRUE, contMCAR = FALSE, contMAR = FALSE, contParam = NULL, alpha = .05, powerParam = NULL)
+}
 \arguments{
   \item{simResult}{
 	\code{\linkS4class{SimResult}} that includes at least one randomly varying parameter (e.g. sample size, percent missing, model parameters)
@@ -32,13 +33,13 @@ continousPower(simResult, contN = TRUE, contMCAR = FALSE, contMAR = FALSE, contP
 }
 }
 \details{
-	A common use of simulations is to conduct power analyses, especially when using SEM (Muthén & Muthén, 2002). Here, researchers select values for each parameter and a sample size and run a simulation to determine power in those conditions (the proportion of generated datasets in which a particular parameter of interest is significantly different from zero). To evaluate power at multiple sample sizes, one simulation for each sample size must be run. By continuously varying sample size across replications, only a single simulation is needed. In this simulation, the sample size for each replication varies randomly across plausible sample sizes (e.g., sample sizes between 200 and 500). For each replication, the sample size and significance of each parameter (0 = not significant, 1 = significant) are recorded. When the simulation is complete, parameter significance is regressed on sample size using logistic regression. For a given sample size, the predicted probability from the logistic regression equation is the power to detect an effect at that sample size. This approach can be extended to other randomly varying simulation parameters such as the percentage of missing data, and model parameters.
+	A common use of simulations is to conduct power analyses, especially when using SEM (Muthen & Muthen, 2002). Here, researchers select values for each parameter and a sample size and run a simulation to determine power in those conditions (the proportion of generated datasets in which a particular parameter of interest is significantly different from zero). To evaluate power at multiple sample sizes, one simulation for each sample size must be run. By continuously varying sample size across replications, only a single simulation is needed. In this simulation, the sample size for each replication varies randomly across plausible sample sizes (e.g., sample sizes between 200 and 500). For each replication, the sample size and significance of each parameter (0 = not significant, 1 = significant) are recorded. When the simulation is complete, parameter significance is regressed on sample size using logistic regression. For a given sample size, the predicted probability from the logistic regression equation is the power to detect an effect at that sample size. This approach can be extended to other randomly varying simulation parameters such as the percentage of missing data, and model parameters.
 }
 \value{
 	Data frame containing columns representing values of the randomly varying simulation parameters, and power for model parameters of interest.
 }
 \references{
-Muthén, L. K., & Muthén, B. O. (2002). How to use a Monte Carlo study to decide on sample size and determine power. Structural Equation Modeling, 4, 599-620.
+Muthen, L. K., & Muthen, B. O. (2002). How to use a Monte Carlo study to decide on sample size and determine power. \emph{Structural Equation Modeling, 4,} 599-620.
 }
 \author{
     Alexander M. Schoemann (University of Kansas; \email{schoemann@ku.edu})
@@ -65,7 +66,7 @@ SimModel <- simModel(CFA.Model)
 Output <- simResult(NULL, SimData, SimModel, n=seq(50, 500, 25), pmMCAR=c(0, 0.1, 0.2))
 summary(Output)
 
-Cpow <- continousPower(Output, contN = TRUE, contMCAR = TRUE)
+Cpow <- continuousPower(Output, contN = TRUE, contMCAR = TRUE)
 Cpow
 
 }

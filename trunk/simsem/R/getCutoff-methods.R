@@ -7,8 +7,8 @@
 #	alpha:		a priori alpha level in finding cutoffs.
 #	revDirec:	The default is to find critical point on the side that indicates worse fit (the right side of RMSEA or the left side of CFI). If specifying as TRUE, the directions are revDirecd.
 #	usedFit:	The name of fit indices that researchers wish to getCutoffs.
+# Return: 		Cutoffs of specified fit indices
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 9, 2011
 
 setMethod("getCutoff", signature(object="data.frame"), definition=function(object, alpha, revDirec=FALSE, usedFit=NULL) {
 	if(is.null(usedFit)) usedFit <- getKeywords()$usedFit

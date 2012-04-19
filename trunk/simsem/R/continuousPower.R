@@ -9,8 +9,8 @@
 
 ##Doesn't work when only 1 parameter is specified. May need an if statement...
 
-continousPower <- function(simResult, contN = TRUE, contMCAR = FALSE, contMAR = FALSE, contParam = NULL, alpha = .05,
-                            powerparam = NULL){
+continuousPower <- function(simResult, contN = TRUE, contMCAR = FALSE, contMAR = FALSE, contParam = NULL, alpha = .05,
+                            powerParam = NULL){
                             
     #Change warning option to supress warnings
     warnT <- as.numeric(options("warn"))
@@ -23,8 +23,8 @@ continousPower <- function(simResult, contN = TRUE, contMCAR = FALSE, contMAR = 
   nrep <- dim(sig)[[1]]
 
 ##Find params to get power for
-  if(!is.null(powerparam)) {	
-  j <- grep(powerparam,dimnames(sig)[[2]])  # Return column indices that start with "param"
+  if(!is.null(powerParam)) {	
+  j <- grep(powerParam,dimnames(sig)[[2]])  # Return column indices that start with "param"
  	sig<- data.frame(sig[,j])
   }
   

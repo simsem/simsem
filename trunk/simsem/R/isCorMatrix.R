@@ -1,13 +1,11 @@
+# isCorMatrix
+# Function -- simsem package
+# Check whether a matrix is a possible correlation matrix
+# Argument:
+#	matrixA:	a matrix to be checked
+# Return: 	TRUE if it is a possible correlation matrix
+# Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
+
 isCorMatrix <- function(matrixA) {
-	if(dim(matrixA)[1] != dim(matrixA)[2]) {
-		return(FALSE)
-	} else if(sum(is.na(diag(matrixA))) > 0) {
-		return(FALSE)
-	} else {
-		result <- TRUE
-		for(i in 1:dim(matrixA)[1]) {
-			if(matrixA[i, i] != 1) result <- FALSE
-		}
-		return(result)
-	}
+	isSymmetric(matrixA) && all(!is.na(diag(matrixA))) && all(diag(matrixA) == 1) && all(matrixA <= 1) && all(matrixA >= -1)
 }

@@ -8,7 +8,6 @@
 #	revDirec:	The default is to getPower on the side that indicates worse fit (the right side of RMSEA or the left side of CFI). If specifying as TRUE, the directions are revDirecd.
 #	usedFit:	The name of fit indices that researchers wish to getPower.
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 9, 2011
 
 setMethod("getPower", signature(altObject="data.frame"), definition=function(altObject, cutoff, revDirec=FALSE, usedFit=NULL) {
 	if(is.null(usedFit)) usedFit <- getKeywords()$usedFit

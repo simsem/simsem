@@ -18,4 +18,5 @@ export(simUnif, simNorm, simBeta, simBinom, simCauchy, simChisq, simExp,
 	simMisspecCFA, simMisspecPath, simMisspecSEM, runMI, simMissing, imposeMissing, miPoolVector, miPoolChi,
 	simFunction, simParamCFA, simParamPath, simParamSEM, indProd, residualCovariate,
 	findRecursiveSet, findPossibleFactorCor, findIndIntercept, findIndResidualVar, findFactorIntercept, findFactorResidualVar, 
-	findIndTotalVar, findIndMean, findFactorTotalVar, findFactorTotalCov, findFactorMean)
+	findIndTotalVar, findIndMean, findFactorTotalVar, findFactorTotalCov, findFactorMean, 
+	continuousPower)

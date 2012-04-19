@@ -10,7 +10,6 @@
 # Return:
 #	A matrix of factor covariance
 # Author: 	Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: April 16, 2012
 
 findFactorTotalCov <- function(beta, psi=NULL, corPsi=NULL, totalVarPsi = NULL, errorVarPsi=NULL) {
 	if(is.null(psi)) {

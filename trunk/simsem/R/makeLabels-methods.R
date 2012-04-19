@@ -6,7 +6,6 @@
 #	object: The target object that is used to create labels
 # 	... : Other arguments, such as package or whether an object is symmetric matrix
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: February 24, 2011
 
 setMethod("makeLabels", signature="vector", definition=function(object, name, package) {
 	if(isNullObject(object)) {

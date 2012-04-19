@@ -6,7 +6,6 @@
 # Return:
 #	A correlation matrix with NA as possible covariances
 # Author: 	Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: April 16, 2012
 
 findPossibleFactorCor <- function(beta) {
 	ni <- nrow(beta)

@@ -7,7 +7,6 @@
 # 	ni: 		Number of items
 # Return: free SimVector.c with starting values
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: November 16, 2011
 
 freeVector <- function(start, ni) {
 	return(new("SimVector", free=rep(NA, ni), param=rep(start, ni)))

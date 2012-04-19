@@ -22,8 +22,8 @@ setGeneric("createImpliedMACS", function(object, ...) {
 	return(standardGeneric("createImpliedMACS")) 
 } )
 
-setGeneric("findOpenMxValues", function(param, start) { 
-	return(standardGeneric("findOpenMxValues")) 
+setGeneric("setOpenMxObject", function(param, start) { 
+	return(standardGeneric("setOpenMxObject")) 
 } )
 
 setGeneric("isNullObject", function(target) { 

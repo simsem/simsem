@@ -1,12 +1,11 @@
 # kurtosis
 # Methods -- simsem package
 # Find an excessive kurtosis of an object.
-# Generic Function: run(object, ...)
+# Generic Function: kurtosis(object, ...)
 # Argument:
-#	x:  an object in simsem that users wish to run
-# 	... : Other arguments, such as data
+#	object:  object to find excessive kurtosis
+# 	... : Other arguments
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: February 26, 2012
 
 setMethod("kurtosis", signature(object = "vector"), function(object, population=FALSE) {
 	if(population) {
@@ -20,6 +19,11 @@ setMethod("kurtosis", signature(object = "vector"), function(object, population=
 	}
 }
 )
+#Arguments: 	
+#	object:		A vector of data
+#	population:	Specify TRUE to use the population formula. Specify FALSE to use sample formula.
+#Description: Find a kurtosis value from all data in a vector
+#Return: 	If population = TRUE, return population kurtosis value. If population = FALSE, return sample kurtosis with test statistic.
 
 setMethod("kurtosis", signature(object = "VirtualDist"), function(object, reverse=FALSE, bin=100000) {
 		distName <- class(object)
@@ -51,4 +55,10 @@ setMethod("kurtosis", signature(object = "VirtualDist"), function(object, revers
 		}
 		return((centralMoment(xrange, 4, yrange)/(centralMoment(xrange, 2, yrange)^2)) - 3)
 	}
-)	
+)
+#Arguments: 	
+#	object:		A distribution object
+# 	reverse:	To use a mirror value of a specified distribution
+#	bin:		Number of data used in numerical approximation
+#Description: Find a kurtosis value of a distribution object
+#Return: 	Population kurtosis value

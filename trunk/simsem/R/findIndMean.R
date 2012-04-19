@@ -8,7 +8,6 @@
 # Return:
 #	A vector of indicator means
 # Author: 	Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: April 16, 2012
 
 findIndMean <- function(lambda, factorMean = NULL, tau = NULL) {
 	ni <- nrow(lambda)
