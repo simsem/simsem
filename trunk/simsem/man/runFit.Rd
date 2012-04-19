@@ -8,10 +8,10 @@
 	Build a result object from analyzing real data
 }
 \description{
-This function will analyze real data and use the result of the analysis to simulate data. Those simulated data will be analyzed by the same model. The result of the analyses will be saved in the result object, \code{\linkS4class{SimResult}}.
+This function will analyze real data and use the result of the analysis to simulate data. Those simulated data will be analyzed by the same model. The result of the analyses will be saved in the result object, \code{\linkS4class{SimResult}}. 
 }
 \usage{
-runFit(model, realdata, nRep=1000, misspec=new("NullSimMisspec"), conBeforeMis=TRUE, misfitBound=new("NullVector"), maxDraw=100, sequential=NA, facDist=new("NullSimDataDist"), errorDist=new("NullSimDataDist"), indDist=new("NullSimDataDist"), seed=123321, silent=FALSE, multicore=FALSE, cluster=FALSE, numProc=NULL, empiricalMissing=TRUE, missModel=new("NullSimMissing"), usedStd=TRUE)
+runFit(model, realdata, nRep=1000, misspec=new("NullSimMisspec"), conBeforeMis=TRUE, misfitBound=new("NullVector"), maxDraw=100, sequential=NA, facDist=new("NullSimDataDist"), errorDist=new("NullSimDataDist"), indDist=new("NullSimDataDist"), modelBoot=FALSE, seed=123321, silent=FALSE, multicore=FALSE, cluster=FALSE, numProc=NULL, empiricalMissing=TRUE, missModel=new("NullSimMissing"), usedStd=TRUE)
 }
 \arguments{
   \item{model}{
@@ -47,6 +47,9 @@ runFit(model, realdata, nRep=1000, misspec=new("NullSimMisspec"), conBeforeMis=T
   \item{indDist}{
 	A \code{\linkS4class{SimDataDist}} for a distribution of indicators. Use when \code{sequential} is \code{FALSE}.
 }
+  \item{modelBoot}{
+	Use a model-based bootstrap approach to create data. See \code{\link{simData}} for further details.
+}
   \item{seed}{
 	Seed number
 }
@@ -72,8 +75,16 @@ runFit(model, realdata, nRep=1000, misspec=new("NullSimMisspec"), conBeforeMis=T
 	The standardized parameters are used for data generation if \code{usedStd=TRUE}. If \code{usedStd=FALSE}, unstandardized parameters are used.
 }
 }
+\details{
+	This function can be used to implement the Monte Carlo approach for evaluating model fit proposed by Millsap (in press). This function will use the obtained parameter estimates as the real population parameters in a simulation study, put a trivial model misspecification in the real parameters, generate multiple simulated data, analyze those simulated data, and put it in the result object, \code{\linkS4class{SimResult}}. The fit indices distribution in the result object can be used for the model fit evaluation. The useful functions for model fit evaluation are \code{\link{plotCutoff}}, \code{\link{getCutoff}}, and \code{\link{pValue}}. If \code{modelBoot} is \code{TRUE}, the function will use the Bollen-Stine bootstrap method for data generation. See \code{\link{simData}} for further details of the Bollen-Stine bootstrap approach.
+}
 \value{
 	\code{\linkS4class{SimResult}} that saves analysis results from simulated data.
+}
+\references{
+	\itemize{
+		\item Millsap, R.E. (in press). A simulation paradigm for evaluating model fit. In M. Edwards and R. MacCallum (Eds.) \emph{Current Issues in the Theory and Application of Latent Variable Models.} New York: Routledge.
+	}
 }
 \author{
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
@@ -102,6 +113,12 @@ summary(Output)
 
 out <- run(SimModel, HolzingerSwineford1939)
 Output2 <- runFit(out, HolzingerSwineford1939, 20, mis)
+
+# Bollen-Stine Bootstrap
+Output3 <- runFit(out, HolzingerSwineford1939, 20, modelBoot=TRUE)
+
+# Bollen-Stine Bootstrap with trivial misspecification
+Output4 <- runFit(out, HolzingerSwineford1939, 20, mis, modelBoot=TRUE)
 
 # Example with multiple imputation
 library(lavaan)

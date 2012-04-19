@@ -3,7 +3,7 @@
 \alias{simsem}
 \docType{package}
 \title{
-SIMulated Structural Equation Modeling data. 
+SIMulated Structural Equation Modeling. 
 }
 \description{
 This package can be used to generate data using the structural equation modeling framework. This package is tailored to use those simulated data for various purposes, such as model fit evaluation, power analysis, or missing data handling and planning.
@@ -12,10 +12,10 @@ This package can be used to generate data using the structural equation modeling
 \tabular{ll}{
 Package: \tab simsem\cr
 Type: \tab Package\cr
-Version: \tab 0.1.0\cr
+Version: \tab 0.1.1\cr
 Depends: \tab R(>= 2.14), methods, lavaan, MASS\cr
 Suggests: \tab parallel, Amelia, copula, quantreg, splines, foreign\cr
-Date: \tab 2011-03-31\cr
+Date: \tab 2012-04-19\cr
 License: \tab GPL (>= 2)\cr
 LazyLoad: \tab yes\cr
 }

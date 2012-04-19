@@ -184,6 +184,20 @@ setClass("SimWeibull",
 setClassUnion("VirtualDist", c("SimUnif", "SimNorm", "SimBeta", "SimBinom", "SimCauchy", "SimChisq", "SimExp", "SimF", "SimGamma", "SimGeom", "SimHyper", "SimLnorm", "SimLogis", "SimNbinom", "SimPois", "SimT", "SimWeibull"))
 
 ###################################################################
+# NullDataFrame
+# Class -- simsem package
+# The null object of data.frame.c
+# Constructor:	new("NullDataFrame")
+# Parent Class: data.frame
+# Child Class:	None
+# Attributes:	null data.frame 
+# Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
+
+setClass("NullDataFrame", 
+	contains = "data.frame"
+)
+
+###################################################################
 # SimMatrix
 # Class -- simsem package
 # This object can be used to represent a matrix in SEM model. It contains free parameters, fixed values, and starting values. 
@@ -938,6 +952,8 @@ setClass("NullSimDataDist", contains="SimDataDist")
 #	errorDist:	Error distribution object. If NULL, the error distribution is multivariate normal distribution.
 #	indDist:	Indicator distribution object. If NULL, the indicator distribution is multivariate normal distribution.
 #	indLab:		Indicator labels
+#	modelBoot:	
+#	realData:	
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 
 setClass("SimData", 
@@ -954,7 +970,9 @@ setClass("SimData",
 		facDist="SimDataDist",
 		errorDist="SimDataDist",
 		indDist="SimDataDist",
-		indLab="vector"),
+		indLab="vector",
+		modelBoot="logical",
+		realData="data.frame"),
 	prototype(
 		misspec=new("NullSimMisspec"),
 		equalCon=new("NullSimEqualCon"),
@@ -965,7 +983,9 @@ setClass("SimData",
 		facDist=new("NullSimDataDist"),
 		errorDist=new("NullSimDataDist"),
 		indDist=new("NullSimDataDist"),
-		indLab=new("NullVector"))
+		indLab=new("NullVector"),
+		modelBoot=FALSE,
+		realData=new("NullDataFrame"))
 )
 
 ###################################################################
@@ -1038,20 +1058,6 @@ setClass("SimModel",
 		auxiliary=new("NullVector"),
 		indLab=new("NullVector"),
 		factorLab=new("NullVector"))
-)
-
-###################################################################
-# NullDataFrame
-# Class -- simsem package
-# The null object of data.frame.c
-# Constructor:	new("NullDataFrame")
-# Parent Class: data.frame
-# Child Class:	None
-# Attributes:	null data.frame 
-# Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-
-setClass("NullDataFrame", 
-	contains = "data.frame"
 )
 
 ###################################################################

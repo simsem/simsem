@@ -164,7 +164,7 @@ simsem, Version 0.0-11 04/05/12
 - Change to be compatible with R 2.15
 - Add simParamCFA, simParamPath, simParamSEM functions to create parameters for data analysis (no starting values for creating data).
 
-simsem, Version 0.1-0 04/11/12
+simsem, Version 0.1-0 04/19/12
 - Change order of the simData function from (n, param, ...) to (param, n, ...) and change the simData function to simData methods
 - Allow SimModelOut (instead of SimSet) as the output of the simData methods
 - Allow SimModelOut (instead of SimSet) as the output of the simModel methods
@@ -206,3 +206,8 @@ simsem, Version 0.1-0 04/11/12
 - Rename transformConstraint to writeLavaanConstraint
 - Rename typeConstraint to writeLavaanIndividualConstraint
 - Add and update code description of all files; Change some function code to make them more elegant
+
+simsem, Version 0.1-1 04/20/12
+- Add modelBoot and realData attribute in the SimData class. Change the runFit and simData to take these arguments accordingly.
+- Change the createData function to implement the Bollen-Stine bootstrap approach for data generation.
+- Change the documentation for this change accordingly

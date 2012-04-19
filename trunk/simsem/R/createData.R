@@ -22,43 +22,59 @@ createData <- function(paramSet, n, object, dataOnly) {
 		usedParam <- param
 	}
 	Data <- NULL
-	if(object@sequential) {
-		if(modelType == "CFA") {
-			fac <- run(object@facDist, n, usedParam@AL, usedParam@PS)
-			trueScore <- fac %*% t(usedParam@LY)
-			errorScore <- run(object@errorDist, n, usedParam@TY, usedParam@TE)
-			Data <- trueScore + errorScore
-		} else {
-			usedParam2 <- NULL
-			if (modelType == "Path.exo" | modelType == "SEM.exo") {
-				usedParam2 <- collapseExo(usedParam)
-			} else if (modelType == "Path" | modelType == "SEM") {
-				usedParam2 <- usedParam
-			} else {
-				stop("Incorrect model type")
-			}
-			set <- findRecursiveSet(usedParam2@BE)
-			iv <- set[[1]]
-			fac <- run(extract(object@facDist, iv), n, usedParam2@AL[iv], usedParam2@PS[iv, iv])
-			for(i in 2:length(set)) {
-				dv <- set[[i]]
-				pred <- fac %*% t(extract(usedParam2@BE, dv, iv))
-				res <- run(extract(object@facDist, dv), n, usedParam2@AL[dv], usedParam2@PS[dv, dv])
-				new <- pred + res
-				fac <- cbind(fac, new)
-				iv <- c(iv, set[[i]])
-			}
-			if (modelType == "Path" | modelType == "Path.exo") {
-				Data <- fac
-			} else {
-				trueScore <- fac %*% t(usedParam2@LY)
-				errorScore <- run(object@errorDist, n, usedParam2@TY, usedParam2@TE)
-				Data <- trueScore + errorScore
-			}
-		} 
+	if(object@modelBoot) {
+		library(lavaan)
+		originalData <- object@realData
+		if(!isNullObject(object@indLab)) originalData <- originalData[, object@indLab]
+		implied <- createImpliedMACS(usedParam)
+		S <- cov(originalData)
+		Sigma <- implied$CM
+		M <- colMeans(originalData)
+		M <- matrix(rep(M, n), nrow=n, byrow=TRUE)
+		Mu <- implied$M
+		Mu <- matrix(rep(Mu, n), nrow=n, byrow=TRUE)
+		z <- (scale(originalData, scale=FALSE) %*% (solve(sqrtSymmetricMatrix(S)) %*% sqrtSymmetricMatrix(Sigma))) + Mu
+		index <- sample(1:n, replace=TRUE)
+		Data <- z[index,]
 	} else {
-		suff <- createImpliedMACS(usedParam)
-		Data <- run(object@indDist, n, suff$M, suff$CM)
+		if(object@sequential) {
+			if(modelType == "CFA") {
+				fac <- run(object@facDist, n, usedParam@AL, usedParam@PS)
+				trueScore <- fac %*% t(usedParam@LY)
+				errorScore <- run(object@errorDist, n, usedParam@TY, usedParam@TE)
+				Data <- trueScore + errorScore
+			} else {
+				usedParam2 <- NULL
+				if (modelType == "Path.exo" | modelType == "SEM.exo") {
+					usedParam2 <- collapseExo(usedParam)
+				} else if (modelType == "Path" | modelType == "SEM") {
+					usedParam2 <- usedParam
+				} else {
+					stop("Incorrect model type")
+				}
+				set <- findRecursiveSet(usedParam2@BE)
+				iv <- set[[1]]
+				fac <- run(extract(object@facDist, iv), n, usedParam2@AL[iv], usedParam2@PS[iv, iv])
+				for(i in 2:length(set)) {
+					dv <- set[[i]]
+					pred <- fac %*% t(extract(usedParam2@BE, dv, iv))
+					res <- run(extract(object@facDist, dv), n, usedParam2@AL[dv], usedParam2@PS[dv, dv])
+					new <- pred + res
+					fac <- cbind(fac, new)
+					iv <- c(iv, set[[i]])
+				}
+				if (modelType == "Path" | modelType == "Path.exo") {
+					Data <- fac
+				} else {
+					trueScore <- fac %*% t(usedParam2@LY)
+					errorScore <- run(object@errorDist, n, usedParam2@TY, usedParam2@TE)
+					Data <- trueScore + errorScore
+				}
+			} 
+		} else {
+			suff <- createImpliedMACS(usedParam)
+			Data <- run(object@indDist, n, suff$M, suff$CM)
+		}
 	}
 	varnames <- NULL
 	if(modelType == "Path.exo") {

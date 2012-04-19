@@ -1,5 +1,5 @@
 importFrom("lavaan", summary, anova)
-importFrom("lavaan", cor2cov)
+importFrom("lavaan", cor2cov, sqrtSymmetricMatrix)
 exportClasses(SimUnif, SimNorm, SimBeta, SimBinom, SimCauchy, SimChisq, SimExp,
 	SimF, SimGamma, SimGeom, SimHyper, SimLnorm, SimLogis, SimNbinom, 
 	SimPois, SimT, SimWeibull, VirtualDist,

@@ -13,7 +13,7 @@
 # Return: SimResult object
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 
-setMethod("runFit", signature(model="SimModel"), definition=function(model, realdata, nRep=1000, misspec=new("NullSimMisspec"), conBeforeMis=TRUE, misfitBound=new("NullVector"), maxDraw=100, sequential=NA, facDist=new("NullSimDataDist"), errorDist=new("NullSimDataDist"), indDist=new("NullSimDataDist"), seed=123321, silent=FALSE, multicore=FALSE, cluster=FALSE, numProc=NULL, empiricalMissing=TRUE, missModel=new("NullSimMissing"), usedStd=TRUE) {
+setMethod("runFit", signature(model="SimModel"), definition=function(model, realdata, nRep=1000, misspec=new("NullSimMisspec"), conBeforeMis=TRUE, misfitBound=new("NullVector"), maxDraw=100, sequential=NA, facDist=new("NullSimDataDist"), errorDist=new("NullSimDataDist"), indDist=new("NullSimDataDist"), modelBoot=FALSE, seed=123321, silent=FALSE, multicore=FALSE, cluster=FALSE, numProc=NULL, empiricalMissing=TRUE, missModel=new("NullSimMissing"), usedStd=TRUE) {
 	out <- run(model, realdata)
 	if(empiricalMissing) {
 		miss <- new("NullMatrix")
@@ -28,7 +28,7 @@ setMethod("runFit", signature(model="SimModel"), definition=function(model, real
 			missModel <- simMissing(numImps=missModel@numImps, logical=miss)
 		}
 	}
-	SimData <- simData(out, misspec=misspec, conBeforeMis=conBeforeMis, misfitBound=misfitBound, maxDraw=maxDraw, sequential=sequential, facDist=facDist, errorDist=errorDist, indDist=indDist, usedStd=usedStd)
+	SimData <- simData(out, misspec=misspec, conBeforeMis=conBeforeMis, misfitBound=misfitBound, maxDraw=maxDraw, sequential=sequential, facDist=facDist, errorDist=errorDist, indDist=indDist, usedStd=usedStd, realData=realdata)
 	simOut <- simResult(nRep, SimData, model, objMissing=missModel, seed=seed, silent=silent, multicore=multicore, cluster=cluster, numProc=numProc)
 	return(simOut)
 }
@@ -50,8 +50,8 @@ setMethod("runFit", signature(model="SimModel"), definition=function(model, real
 #Output <- runFit(SimModel, HolzingerSwineford1939, 20, mis)
 #summary(Output)
 
-setMethod("runFit", signature(model="SimModelOut"), definition=function(model, realdata=new("NullDataFrame"), nRep=1000, misspec=new("NullSimMisspec"), conBeforeMis=TRUE, misfitBound=new("NullVector"), maxDraw=100, sequential=NA, facDist=new("NullSimDataDist"), errorDist=new("NullSimDataDist"), indDist=new("NullSimDataDist"), seed=123321, silent=FALSE, multicore=FALSE, cluster=FALSE, numProc=NULL, empiricalMissing=TRUE, missModel=new("NullSimMissing"), usedStd=TRUE) {
-	SimData <- simData(model, misspec=misspec, conBeforeMis=conBeforeMis, misfitBound=misfitBound, maxDraw=maxDraw, sequential=sequential, facDist=facDist, errorDist=errorDist, indDist=indDist, usedStd=usedStd)
+setMethod("runFit", signature(model="SimModelOut"), definition=function(model, realdata=new("NullDataFrame"), nRep=1000, misspec=new("NullSimMisspec"), conBeforeMis=TRUE, misfitBound=new("NullVector"), maxDraw=100, sequential=NA, facDist=new("NullSimDataDist"), errorDist=new("NullSimDataDist"), indDist=new("NullSimDataDist"), modelBoot=FALSE, seed=123321, silent=FALSE, multicore=FALSE, cluster=FALSE, numProc=NULL, empiricalMissing=TRUE, missModel=new("NullSimMissing"), usedStd=TRUE) {
+	SimData <- simData(model, misspec=misspec, conBeforeMis=conBeforeMis, misfitBound=misfitBound, maxDraw=maxDraw, sequential=sequential, facDist=facDist, errorDist=errorDist, indDist=indDist, usedStd=usedStd, modelBoot=modelBoot, realData=realdata)
 	if(empiricalMissing) {
 		miss <- new("NullMatrix")
 		if(!isNullObject(realdata)) {

@@ -26,6 +26,8 @@ Objects can be created by \code{\link{simData}}. Also, it can be called by \code
     \item{\code{errorDist}:}{A \code{\linkS4class{SimDataDist}} for a distribution of measurement errors. Use when \code{sequential} is \code{TRUE}.}
     \item{\code{indDist}:}{A \code{\linkS4class{SimDataDist}} for a distribution of indicators. Use when \code{sequential} is \code{FALSE}.}
 	\item{\code{indLab}:}{A vector of indicator names. If not specified, the variables names are y1, y2, ... .}
+	\item{\code{modelBoot}:}{If \code{TRUE}, use a model-based bootstrap for data generation. See details for further information. This argument need a dataset in the \code{realData} argument.}
+	\item{\code{realData}:}{The real dataset that the model based bootstrap will follow the distribution.}
   }
 }
 \section{Methods}{

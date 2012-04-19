@@ -660,7 +660,12 @@ CFA.model.mis <- simMisspecCFA(LY=LY.mis)
 SimDataDist <- simDataDist(t2, t3, t4, t5, chi3, chi4, chi5, chi6, chi3, chi4, chi5, chi6, reverse=c(rep(FALSE, 8), rep(TRUE, 4)))
 SimData <- simData(CFA.Model, 200, misspec=CFA.model.mis, indDist=SimDataDist)
 SimModel <- simModel(CFA.Model, estimator="mlm")
-Output <- simResult(1000, SimData, SimModel)
+
+dat <- run(SimData)
+SimData2 <- simData(CFA.Model, 200, misspec=CFA.model.mis, indDist=SimDataDist, modelBoot=TRUE, realData=dat)
+
+
+Output <- simResult(1000, SimData2, SimModel)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summary(Output)
