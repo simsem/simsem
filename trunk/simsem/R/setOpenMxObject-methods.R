@@ -7,7 +7,6 @@
 # 	start: 	Parameter/Starting values
 # 	... : Other arguments (do not have now)
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 6, 2011
 
 setMethod("setOpenMxObject", signature(param="vector", start="vector"), definition=function(param, start) {
 	if(isNullObject(param)) {

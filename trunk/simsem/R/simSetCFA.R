@@ -6,7 +6,6 @@
 #	...:	All matrices that belongs to CFA model, see details below.
 # Return: 	SimSet.c containing CFA model (with "CFA" tag)
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: March 10, 2012
 
 simSetCFA <- function(...) { 
 	W <- getKeywords()

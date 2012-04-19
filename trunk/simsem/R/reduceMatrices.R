@@ -4,7 +4,6 @@
 # Argument:
 #	object: MatrixSet with correlation/variance objects
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: March 10, 2012
 
 reduceMatrices <- function(object) {
 	library(lavaan)

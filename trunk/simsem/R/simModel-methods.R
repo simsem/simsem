@@ -8,9 +8,6 @@
 #	object: 	SimSet.c or SimParam.c that provides model specification
 # 	... : 		Other arguments, such as analysis package, SimEqualCon.c
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 6, 2011
-
-
 
 setMethod("simModel", signature(object="SimParam"), definition=function(object, start = NULL, equalCon=new("NullSimEqualCon"), package="lavaan", estimator="ML", auxiliary=new("NullVector"), indLab=new("NullVector"), factorLab=new("NullVector")) {
 	modelType <- object@modelType
@@ -32,6 +29,9 @@ setMethod("simModel", signature(object="SimParam"), definition=function(object, 
 # 	equalCon:		simConstrint.c that save constraints specified by users. The default is no constraint.
 #	package:	Desired analysis package
 # 	estimator:	Method of estimation
+#	auxiliary:	A vector of names or positions of auxiliary variables	
+#	indLab:		A vector of names or positions of analysis variables	
+#	factorLab:	A vector of factor names
 #Description: 	This function will set up all slots needed for SimModel.c 
 #Return: 	SimModel.c with specification from the function.
 
@@ -51,7 +51,11 @@ setMethod("simModel", signature(object="SimSet"), definition=function(object, eq
 #	object:	SimSet.c that save the specification of free parameters and values of fixed parameters, as well as parameter values.
 # 	equalCon:		simEqualCon.c that save constraints specified by users. The default is no constraint.
 #	package:	Desired analysis package
+#	trial:		A number of times using for sampling starting values
 # 	estimator: 	Method of estimation
+#	auxiliary:	A vector of names or positions of auxiliary variables	
+#	indLab:		A vector of names or positions of analysis variables	
+#	factorLab:	A vector of factor names
 #Description: 	This function will create startingValues from parameter values. If the parameters are specified as distribution object,
 #		the model will find the average of 10 samples as starting values. Then, set up all slots needed for SimModel.c 
 #Return: 	SimModel.c with specification from the function.

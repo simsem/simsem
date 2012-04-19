@@ -26,7 +26,7 @@ drawParameters <- function(object) {
 				if(!isNullObject(param) && !isNullObject(misspec)) {
 					implied.CM.param <- createImpliedMACS(param)
 					implied.CM.misspec <- createImpliedMACS(misspec)
-					if(sum(eigen(implied.CM.misspec$CM)$values <= 0) == 0) {
+					if(all(is.finite(implied.CM.misspec$CM)) && sum(eigen(implied.CM.misspec$CM)$values <= 0) == 0) {
 						if(isNullObject(object@misfitBound)) {
 							break
 						} else {

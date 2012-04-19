@@ -2,7 +2,6 @@
 ##  input: data frames of raw data with missing data, model specification (either a simmodel object or lavaan script), number of imputations wanted)
 ##  Output: list of results with: parameter estimates, standard errors fit indices, and two types of fraction of missing information
 ##  Patrick Miller & Alexander Schoemann
-##  Last modified 11/17/2011
 
 #Conveniance function to run impuations on data and only return list of data
 imputeMissing <- function(data.mat,m, ...){

@@ -6,7 +6,6 @@
 #	object: 	The object that users wish to find summary of the parameters.
 #	...:			Other arguments (None is identified now)
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: November 15, 2011
 
 setMethod("summaryParam", signature(object="SimResult"), definition=function(object, alpha=0.05, detail=FALSE) {
 	object <- clean(object)
@@ -101,6 +100,7 @@ setMethod("summaryParam", signature(object="SimResult"), definition=function(obj
 #Arguments: 
 #	object:		SimResult.c of alternative hypothesis that users wish to find summary of parameters and standard errors
 #	alpha:		A priori alpha level
+#	detail:		For further details about standardized biased and so on
 #Description: 	This function will find mean of estimates, sd of estimates, mean of standard errors, and power of rejection (null hypothesis of population = 0) from a priori alpha level.
 #Return: 		data.frame.c that contains those information of each parameter.
 
@@ -128,6 +128,7 @@ setMethod("summaryParam", signature(object="SimModelOut"), definition=function(o
 })
 #Arguments: 
 #	object:		SimModelOut.c of alternative hypothesis that users wish to find summary of parameters and standard errors
+#	alpha:		The alpha level to find a confidence interval
 #Description: 	This function will find estimates, standard error, Wald statistic, and p value (null hypothesis of population = 0).
 #Return: 		data.frame.c that contains those information of each parameter.
 
@@ -157,5 +158,6 @@ setMethod("summaryParam", signature(object="SimModelMIOut"), definition=function
 })
 #Arguments: 
 #	object:		SimModelOut.c of alternative hypothesis that users wish to find summary of parameters and standard errors
+#	alpha:		The alpha level to find a confidence interval
 #Description: 	This function will find estimates, standard error, Wald statistic, and p value (null hypothesis of population = 0).
 #Return: 		data.frame.c that contains those information of each parameter.

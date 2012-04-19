@@ -6,7 +6,6 @@
 #	fun:	The function that users need to call
 #	...:	Addition arguments for the function
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: April 11, 2012
 
 simFunction <- function(fun, ...) {
 	List <- list(...)

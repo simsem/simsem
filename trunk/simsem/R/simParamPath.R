@@ -8,7 +8,6 @@
 #	exo:	TRUE if the model includes exogenous elements (X-side in LISREL notation). The default is FALSE (specify endogenous elements only).
 # Return: 	SimSet.c containing Path model (with "Path" or "Path.exo" tag)
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: March 10, 2012
 
 simParamPath <- function(..., exo = FALSE) {
 	W <- getKeywords()

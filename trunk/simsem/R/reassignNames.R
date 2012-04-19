@@ -7,7 +7,6 @@
 #	Name: 	Row of matrices name in the equality constraint
 # Return: 	Row of matrices name with an appropriate name of model matrices
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: March 10, 2012
 
 reassignNames <- function(modelType, Name) {
 	W <- getKeywords()

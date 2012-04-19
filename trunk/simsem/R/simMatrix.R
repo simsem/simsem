@@ -2,14 +2,12 @@
 # Function -- simsem package
 # Description: Create SimMatrix.c object that save free parameters and starting values, as well as fixed values. 
 #		This will be used for model specification later, such as for factor loading matrix or regression coefficient free.
-# Function: simMatrix(free, param = NULL)
 # Argument:
 #	free:		Matrix of free parameters. Use NA to specify free parameters. Use number as fixed value (including zero)
 #	param:	Starting values. Can be either one element or matrix with the same dimension as free parameter matrix. 
 #						Each element can be numbers (in either numeric or character format) or the name of distribution object VirtualDist.c.
 # Return: 	SimMatrix.c object that will be used for model specification later.
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 6, 2011
 
 simMatrix <- function(free, param = NULL) {
 	Nrow <- nrow(free)

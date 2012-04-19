@@ -7,7 +7,6 @@
 #	nullObject:	The object of null hypothesis. It can be vector of cutoffs or raw data of fit indices of null hypothesis.
 #	...:			Other arguments such as which fit indices will be used.
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 9, 2011
 
 setMethod("plotPower", signature(altObject="data.frame", nullObject="vector"), definition=function(altObject, nullObject, usedFit=NULL) {
 	plotCutoff(altObject, nullObject, usedFit=usedFit)

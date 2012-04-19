@@ -2,9 +2,17 @@
 # Function -- simsem package
 # Build a persepctive plot or contour plot of a quantile of predicted values
 # Argument:
-#	object: simResult
+#	x: 	Values of x (e.g., a vector of sample size)
+#	y:	Values of y (e.g., a vector of precent missing)
+#	z:	A dependent variable
+#	df:	Degree of freedom in spline method
+#	qtile:	Quantile used to plot a graph
+#	useContour:	Use contour plot if TRUE. Use perspective plot if FALSE.
+#	xlab:	X labels
+#	ylab:	Y labels
+#	zlab:	Z labels
+#	main:	The main header of the graph
 # Author: 	Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: April 5, 2012
 
 plot3DQtile <- function(x, y, z, df=0, qtile=0.5, useContour=TRUE, xlab=NULL, ylab=NULL, zlab=NULL, main=NULL) {
 	library(quantreg)

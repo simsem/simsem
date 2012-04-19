@@ -1,12 +1,11 @@
 # skew
 # Methods -- simsem package
-# Find a skewness of an object.
-# Generic Function: run(object, ...)
+# Find an skewness of an object.
+# Generic Function: skew(object, ...)
 # Argument:
-#	x:  an object in simsem that users wish to run
-# 	... : Other arguments, such as data
+#	object:  object to find skewness
+# 	... : Other arguments
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: February 26, 2012
 
 setMethod("skew",
     signature(object = "vector"),
@@ -22,6 +21,11 @@ setMethod("skew",
 		}
 	}
 )
+#Arguments: 	
+#	object:		A vector of data
+#	population:	Specify TRUE to use the population formula. Specify FALSE to use sample formula.
+#Description: Find a skewness value from all data in a vector
+#Return: 	If population = TRUE, return population skewness value. If population = FALSE, return sample skewness with test statistic.
 
 setMethod("skew",
     signature(object = "VirtualDist"),
@@ -56,3 +60,9 @@ setMethod("skew",
 		return(centralMoment(xrange, 3, yrange)/(centralMoment(xrange, 2, yrange)^(3/2)))
 	}
 )	
+#Arguments: 	
+#	object:		A distribution object
+# 	reverse:	To use a mirror value of a specified distribution
+#	bin:		Number of data used in numerical approximation
+#Description: Find a skewness value of a distribution object
+#Return: 	Population skewness value

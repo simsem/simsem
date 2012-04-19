@@ -1,3 +1,11 @@
+# reduceConstraint
+# Function -- simsem package
+# Reduce the model constraint based on SimSet to only based on SimRSet. Some symbols will be reduced to appropriate position such as VTE(3) to TE(3, 3)
+# Argument:
+# 	SimEqualCon:	Equality constraint object
+# Return: 	Reduced equality constraint object
+# Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
+
 reduceConstraint <- function(SimEqualCon) {
 	modelType <- SimEqualCon@modelType
 	equalCon <- SimEqualCon@con

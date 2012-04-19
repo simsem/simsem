@@ -6,7 +6,6 @@
 #	object: object in simsem that users wish to run
 # 	... : Other arguments, such as data
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: February 26, 2012
 
 ################################################################################
 # Distribution object: draw a random sample from a distribution
@@ -334,9 +333,10 @@ setMethod("run", signature(object="SimSet"), definition=function(object, equalCo
 #Arguments: 
 #	object:	SimSet.c object
 #	equalCon:	SimEqualCon.c that save all user-specified constraints.
+#	makeList:	Return the output as a list
 #Description: This function will draw all SimMatrix.c, SymMatrix.c, and SimVector.c and return matrix, symmetric matrix, and vector. 
 #		Also, the function will equate those elements that have equality constraint, if specified.
-#Return: 	MatrixSet.c that is a random sample of all objects in SimSet.c
+#Return: 	MatrixSet.c that is a random sample of all objects in SimSet.c or a list of parameters
 
 setMethod("run", signature(object="SimMisspec"), definition=function(object) {
 		misspec <- new("MisspecSet", modelType=object@modelType,
@@ -395,6 +395,8 @@ setMethod("run", signature="SimData", definition=function(object, n=NULL, dataOn
 })
 #Arguments: 
 #	object:	SimData.c object
+#	n:	Sample size
+#	dataOnly:	If TRUE, return a data frame. If FALSE, return a data output object.
 #Description: 	The SimData object will draw samples from specified model.
 #Return: 	Data frame drawn from the specified model.
 
@@ -481,6 +483,8 @@ setMethod("run", signature="SimModel", definition=function(object, data, simMiss
 #Arguments: 
 #	object:	SimModel.c object
 #	Data:	Data that used to be analyzed by the specified model
+#	simMissing:	Missing object for the specification of the method of missing data handling
+#	estimator:	Method of estimation
 #Description: 	The SimData will analyze the data and return the SimModelOut.c that saves the result.
 #Return: 	SimModelOut.c that saves the result.
 
@@ -509,8 +513,10 @@ setMethod("run", signature="SimMissing", definition=function(object, data, pmMCA
 #Arguments: 
 #	object:	SimMissing object
 #	Data:	Data that used to be imputed missing value
-#Description: 	The SimData will analyze the data and return the SimModelOut.c that saves the result.
-#Return: 	SimModelOut.c that saves the result.
+#	pmMCAR:	Percent missing completely at random
+#	pmMAR:	Percent missing at random
+#Description: 	This run-SimMissing will impose missing values on a dataset
+#Return: 	Data with missing values
 
 setMethod("run", signature="SimDataDist", definition=function(object, n, m, cm) {
 	library(MASS)
@@ -587,10 +593,12 @@ setMethod("run", signature="SimDataDist", definition=function(object, n, m, cm) 
 	return(Data)
 })
 #Arguments: 
-#	object:	SimMissing object
-#	Data:	Data that used to be imputed missing value
-#Description: 	The SimData will analyze the data and return the SimModelOut.c that saves the result.
-#Return: 	SimModelOut.c that saves the result.
+#	object:	Data distribution object
+#	n:		Sample size
+#	m:		Mean of data
+#	cm:		Covariance matrix of data
+#Description: 	The run-SimDataDist will create data with a specified distribution
+#Return: 	data.frame of a simulated data
 
 setMethod("run", signature(object="SimFunction"), definition=function(object, x, checkDataOut=FALSE) {
 	if(checkDataOut && (class(x) == "SimDataOut")) x <- x@data
@@ -608,5 +616,6 @@ setMethod("run", signature(object="SimFunction"), definition=function(object, x,
 #Arguments: 
 #	object:	SimFunction object
 #	x:	The first argument that users need to plugin
+#	checkDataOut:	TRUE to check whether the object is data output object. If so, extract only data part of the data output object
 #Description: 	The SimFunction will evaluate the function and return the result of the evaluation.
 #Return: 	The result from the function.

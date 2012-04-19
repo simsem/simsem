@@ -48,7 +48,7 @@ fillParam <- function(param, modelType) {
 		if(isNullObject(TE)) {
 			if(isNullObject(VTE)) VTE <- findIndResidualVar(LY, PS, VY) # PS is model-implied covariance
 			if(isNullObject(VY)) VY <- findIndTotalVar(LY, PS, VTE)
-			TE <- cor2cov(RTE, sqrt(VTE))
+			TE <- cor2cov(RTE, suppressWarnings(sqrt(VTE)))
 		} else {
 			VTE <- diag(TE)
 			RTE <- cov2corMod(TE)
@@ -115,7 +115,7 @@ fillParam <- function(param, modelType) {
 		if(isNullObject(TE)) {
 			if(isNullObject(VTE)) VTE <- findIndResidualVar(LY, facCov, VY)
 			if(isNullObject(VY)) VY <- findIndTotalVar(LY, facCov, VTE)
-			TE <- cor2cov(RTE, sqrt(VTE))
+			TE <- cor2cov(RTE, suppressWarnings(sqrt(VTE)))
 		} else {
 			RTE <- cov2corMod(TE)
 			VTE <- diag(TE)
@@ -173,8 +173,8 @@ fillParam <- function(param, modelType) {
 		if(isNullObject(VX)) VX <- findIndTotalVar(LX, facCov[1:nk, 1:nk], VTD)
 		if(isNullObject(MX)) MX <- findIndMean(LX, KA, TX)
 		if(isNullObject(TX)) TX <- findIndIntercept(LX, KA, MX)
-		if(isNullObject(TE)) TE <- cor2cov(RTE, sqrt(VTE))
-		if(isNullObject(TD)) TD <- cor2cov(RTD, sqrt(VTD))
+		if(isNullObject(TE)) TE <- cor2cov(RTE, suppressWarnings(sqrt(VTE)))
+		if(isNullObject(TD)) TD <- cor2cov(RTD, suppressWarnings(sqrt(VTD)))
 		if(isNullObject(TH)) {
 			TH <- suppressWarnings(sqrt(diag(VTD)) %*% RTH %*% sqrt(diag(VTE)))
 		} else {

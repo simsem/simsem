@@ -2,9 +2,16 @@
 # Function -- simsem package
 # Build a result object from analyzing real data
 # Argument:
-#	See documentation for details
+#	model:		Model object or model output object that will use to derive parameter (or standardized) coefficients
+#	realdata:	Real data 
+#	nRep:		Number of replications
+#	misspec:	Misspecification object
+#	empiricalMissing:	Use pattern of missing from the real data if TRUE. If FALSE, use model pattern of missing
+#	missModel:	Missing object
+#	usedStd:	If TRUE, use standardized parameters for result object. If FALSE, use unstandardized version.
+#	For others, see simData and simResult functions
+# Return: SimResult object
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: April 11, 2012
 
 setMethod("runFit", signature(model="SimModel"), definition=function(model, realdata, nRep=1000, misspec=new("NullSimMisspec"), conBeforeMis=TRUE, misfitBound=new("NullVector"), maxDraw=100, sequential=NA, facDist=new("NullSimDataDist"), errorDist=new("NullSimDataDist"), indDist=new("NullSimDataDist"), seed=123321, silent=FALSE, multicore=FALSE, cluster=FALSE, numProc=NULL, empiricalMissing=TRUE, missModel=new("NullSimMissing"), usedStd=TRUE) {
 	out <- run(model, realdata)

@@ -7,7 +7,6 @@
 #	exo:	Whether specifying the exogenous side
 # Return: 	SimMisspec class (with "SEM" or "SEM.exo" tag)
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: March 10, 2012
 
 simMisspecSEM <- function(..., exo = FALSE) {
 	W <- getKeywords()

@@ -2,9 +2,12 @@
 # Function -- simsem package
 # Build a scatterplot with overlaying line of quantiles of predicted values
 # Argument:
-#	object: simResult
+#	x: 	X values
+#	y:	Y values
+#	df:		Degree of freedom for the spline function
+#	qtile:	Quantile values to be plotted
+# 	...:	Other specification in the plot function
 # Author: 	Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: April 5, 2012
 
 plotQtile <- function(x, y, df=0, qtile=0.5, ...) {
 	library(quantreg)

@@ -7,7 +7,6 @@
 # 	Object2: The second object
 # 	... : Other arguments (do not have now)
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: November 16, 2011
 
 setMethod("subtractObject", signature(object1="SimRSet", object2="SimRSet"), definition= function(object1, object2) {
 		modelType <- object1@modelType

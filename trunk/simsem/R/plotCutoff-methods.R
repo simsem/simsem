@@ -6,7 +6,6 @@
 #	object: 	The object (SimResult.c or data.frame.c) that contains values of fit indices in each distribution.
 #	...:		Other argments such as cutoff values
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 9, 2011
 
 setMethod("plotCutoff", signature(object="data.frame"), definition=function(object, cutoff=NULL, revDirec = FALSE, usedFit=NULL, vector1=NULL, vector2=NULL, nameVector1=NULL, nameVector2=NULL, alpha=NULL, useContour=T) {
 	if(is.null(usedFit)) usedFit <- getKeywords()$usedFit

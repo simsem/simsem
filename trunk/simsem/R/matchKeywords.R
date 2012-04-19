@@ -7,7 +7,6 @@
 # 	Vector: 	Name of the keywords vector that would like to matched
 # Return: 	The position of keywords in the vector. 0 if the names does not match the specified vector.
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: March 10, 2012
 
 matchKeywords <- function(Names, keywords) {
 	Length <- length(Names)
@@ -21,4 +20,4 @@ matchKeywords <- function(Names, keywords) {
 }
 
 #Example:
-#	matchKeywords("LY", c("LY", "Ly", "ly", "LX", "Lx", "lx"))
+#	matchKeywords("LY", c("LY", "LX"))

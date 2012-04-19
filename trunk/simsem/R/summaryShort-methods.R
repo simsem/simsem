@@ -6,7 +6,6 @@
 #	object: The target object that is used to summarize
 # 	... : Other arguments (None is specified currently)
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: November 15, 2011
 
 setMethod("summaryShort", signature="ANY", definition = function(object) {
 		summary(object)

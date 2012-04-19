@@ -1,3 +1,14 @@
+# simDataDist
+# function -- simsem package
+# A constructor of data distribution object
+# Argument:
+#	...: 	Distribution objects
+# 	p: 		The number of variables
+#	keepScale:	If TRUE, transform back to retain the mean and standard deviation of a variable equal to the model implied mean and standard deviation (with sampling error)
+#	reverse:	A vector of logical valeus. If TRUE, mirror the distribution of a distribution object
+# Return:	Data distribution object
+# Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
+
 simDataDist <- function(..., p=NULL, keepScale=TRUE, reverse=FALSE) {
 	List <- list(...)
 	check <- sapply(List, is, class2="VirtualDist")

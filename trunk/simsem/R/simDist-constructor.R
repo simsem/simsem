@@ -3,7 +3,6 @@
 # Description: Create all random distribution objects.  
 # Return: 	Distribution class 
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: February 23, 2011
 
 simNorm <- function(mean, sd) {
 	if(sd <= 0) stop("Normal distribution should have standard deviation greater than 0.")

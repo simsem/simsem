@@ -6,7 +6,6 @@
 #	...:	All matrices that belongs to CFA model, see details below.
 # Return: 	SimParam class containing CFA model (with "CFA" tag)
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: April 9, 2012
 
 simParamCFA <- function(...) { 
 	W <- getKeywords()

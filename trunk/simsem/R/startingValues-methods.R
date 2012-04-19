@@ -1,15 +1,12 @@
 # startingValues
 # Methods -- simsem package
-# Description:	Find starting values of free parameters based on pre-specified starting values. If the pre-specified starting values are numbers, 
-#		the function will use that values. If they are distribution object, this function will randomly draw from the distribution 
-#		10 times and take the average of those values.
+# Description:	Find starting values of free parameters based on pre-specified starting values. If the pre-specified starting values are numbers, the function will use that values. If they are distribution object, this function will randomly draw from the distribution 10 times and take the average of those values.
 # Generic Function: startingValues(object, trial, ...)
 # Argument:
 #	object: The target object that is used to find starting values
 #	trial:	Number of random drawn to find starting values of VirtualDist.c
 # 	... : Other arguments, such as reduced for reducing X-Y set of matrices to Y set of matrices only
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 6, 2011
 
 setMethod("startingValues", signature(object="SimMatrix"), definition=function(object, trial, ...) {
 		if(isNullObject(object)) return(new("NullMatrix"))

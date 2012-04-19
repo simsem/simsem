@@ -6,7 +6,6 @@
 #	object: 	the tagged object
 # 	... : 		Other arguments (None is specified currently)
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 6, 2011
 
 setMethod("tagHeaders", signature="VirtualRSet", definition=function(object) {
 	ny <- NULL

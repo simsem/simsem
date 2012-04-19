@@ -5,7 +5,6 @@
 # Argument:
 #	object: 	Desired object that users wish to standardize
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: February 21, 2012
 
 setMethod("standardize", signature="SimModelOut", definition=function(object) {
 		est <- object@coef

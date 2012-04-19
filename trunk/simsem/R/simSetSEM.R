@@ -9,7 +9,6 @@
 #	exo:	TRUE if the model includes exogenous elements (X-side in LISREL notation). The default is FALSE (specify endogenous elements only).
 # Return: 	SimSet.c containing SEM model (with "SEM" or "SEM.exo" tag)
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: March 10, 2012
 
 simSetSEM <- function(..., exo = FALSE) {
 	W <- getKeywords()

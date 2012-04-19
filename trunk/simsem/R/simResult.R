@@ -1,3 +1,23 @@
+# simResult
+# function -- simsem package
+# A constructor of result object
+# Argument:
+#	nRep:		Number of replications. Users can specify as NULL and specify n, pmMCAR, and pmMAR as a vector instead. By this, the number of replications will be calculated from the length of n, pmMCAR, and pmMAR.
+#	objData:		Data object used in data simulation.
+#	objModel:		Model object used in analyzing the simulated data.
+#	objMissing:		Model object used in providing the information about missing values.
+#	seed:		Seed number
+#	silent:		TRUE if users do not wish to print number of replications during running the function.
+#	multicore:		Use multiple processors within a computer. Specify as TRUE to use it.
+#	cluster:		Not applicable now. Use for specify nodes in hpc in order to be parallelizable.
+#	numProc:		Number of processors for using multiple processors. If it is NULL, the package will find the maximum number of processors.
+#	n:		Sample size. This argument is not necessary except the user wish to vary sample size across replications. The sample size here can be random distribution object (VirtualDist), or a vector of sample size in integers. For the random distribution object, if the resulting value has decimal, the value will be rounded. 
+#	pmMCAR:		The percent completely missing at random. This argument is not necessary except the user wish to vary percent missing completely at random across replications. The pmMCAR here can be random distribution object (VirtualDist), or a vector of percent missing, which the values can be in between 0 and 1 only. The specification of objMissing is not needed (but is needed if users wish to specify complex missing value data generation or wish to use multiple imputation). 
+#	pmMAR:		The percent missing at random. This argument is not necessary except the user wish to vary percent missing at random across replications. The pmMAR here can be random distribution object (VirtualDist), or a vector of percent missing, which the values can be in between 0 and 1 only. The specification of objMissing is not needed (but is needed if users wish to specify complex missing value data generation or wish to use multiple imputation). 
+#	objSet:		The SimSet object for data generation and analysis model. Users can specify this argument directly and not specify objData and objModel
+#	objFunction:		The function object that will be used for data transformation inside the simulation study. See the example from simFunction
+# Return:	A missing object
+# Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu), Alex Schoemann, Patrick Miller
 
 
 simResult <- function(nRep=NULL, objData=NULL, objModel=NULL, objMissing=new("NullSimMissing"), seed = 123321, silent=FALSE, multicore=FALSE, cluster=FALSE, numProc=NULL, n=NULL, pmMCAR=NULL, pmMAR=NULL, objSet=NULL, objFunction=new("NullSimFunction")) {

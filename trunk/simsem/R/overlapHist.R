@@ -14,7 +14,6 @@
 #	swap: 	Specify TRUE to change to plot b first and then a. The default is FALSE to plot a first and then b.
 # Return: 	NONE. This function will plot only.
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 9, 2011
 
 overlapHist <- function(a, b, colors=c("red","blue","purple"), breaks=NULL, xlim=NULL, ylim=NULL, main=NULL, xlab=NULL, swap=FALSE){
 	ahist=NULL

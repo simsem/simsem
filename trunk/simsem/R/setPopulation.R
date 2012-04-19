@@ -1,11 +1,11 @@
-# getPopulation
+# setPopulation
 # Methods -- simsem package
-# Description: 	Extract the population value from an object
+# Description: 	Set population parameter values
 # Argument:
-#	object:		SimDataOut/SimModelOut/SimResult class to be extracted the population values from
-# Return: 	Depends on the input object
+#	target:		SimDataOut/SimModelOut/SimResult class to be set the population values for
+#	population:	The new population values
+# Return: 	The target object with the new population values
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: April 15, 2011
 
 setMethod("setPopulation", signature(target="SimResult", population="data.frame"), definition=function(target, population) {
 	target@paramValue <- population
@@ -24,6 +24,7 @@ setMethod("setPopulation", signature(target="SimResult", population="VirtualRSet
 	target@paramValue <- vectorizeObject(population, LabelsDataParam)
 	return(target)	
 })
+# Additional arguments:	parameter is the SimParam class that contains objects of free parameters
 
 setMethod("setPopulation", signature(target="SimModelOut", population="SimRSet"), definition=function(target, population) {
 	target@paramValue <- population

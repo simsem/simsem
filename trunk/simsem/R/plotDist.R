@@ -1,12 +1,11 @@
 # plotDist
 # Methods -- simsem package
 # This function will plot a distribution
-# Generic Function: plotCutoff(object, ...)
+# Generic Function: plotDist(object, ...)
 # Argument:
 #	object: 	The object (SimDataDist or VirtualDist) to plot a distribution
 #	...:		Other argments such as correlatin or xlim, ylim
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: February 25, 2011
 
 setMethod("plotDist", signature="SimDataDist", definition=function(object, xlim=NULL, ylim=NULL, r=0, var=NULL) {
 	if(isNullObject(object)) stop("The data distribution object is not specified yet.")
@@ -92,6 +91,14 @@ setMethod("plotDist", signature="SimDataDist", definition=function(object, xlim=
 	}	
 }
 )
+#Arguments: 
+#	object:	Data distribution object
+# 	xlim:	A vector of limit values of the X variable
+#	ylim:	A vector of limit values of the Y variable
+#	r:	The correlation among two distributions
+#	var:	The position of variables to be plotted
+#Description: 	This function plot a distribution of one or two variables
+#Return: 		NONE. Just plot.
 
 setMethod("plotDist", signature="VirtualDist", definition=function(object, xlim=NULL, reverse=FALSE) {
 	distName <- class(object)
@@ -127,3 +134,9 @@ setMethod("plotDist", signature="VirtualDist", definition=function(object, xlim=
 	lines(xrange, yrange)
 }
 )
+#Arguments: 
+#	object:	A distribution object
+# 	xlim:	A vector of limit values of the X variable
+#	reverse:	Specify TRUE to mirror a distribution
+#Description: 	This function plot a distribution of a distribution object
+#Return: 		NONE. Just plot.

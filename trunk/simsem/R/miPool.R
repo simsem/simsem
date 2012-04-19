@@ -13,7 +13,6 @@
 # Author: 	Mijke Rhumtella
 #			Alex Schoemann
 #			Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: February 8, 2012
 
 miPoolVector <- function(MI.param, MI.se, imps) {
    #compute parameter estimates
@@ -74,8 +73,7 @@ names(MI.res)<-c('coef','se','FMI.1','FMI.2')
 #	chis: 	vector of chi-square values
 #	df:		degree of freedom
 # Author: 	Craig Enders
-#			Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: March 31, 2012
+#			Modified to R by Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
 
 miPoolChi <- function(chis, df) {
 	# From Li, Meng, Raghunathan, & Rubin (1991)
@@ -110,7 +108,6 @@ miPoolChi <- function(chis, df) {
 # Return:
 #	output: 	SimModelMIOut that provides output and fraction missing information
 # Author: 	Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: March 11, 2012
 
 miPool <- function(Result.l) {
 	Converged <- sapply(Result.l, function(object) {object@converged})

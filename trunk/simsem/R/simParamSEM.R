@@ -6,7 +6,6 @@
 #	exo:	TRUE if the model includes exogenous elements (X-side in LISREL notation). The default is FALSE (specify endogenous elements only).
 # Return: 	SimParam class containing SEM model (with "SEM" or "SEM.exo" tag)
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: April 9, 2012
 
 simParamSEM <- function(..., exo = FALSE) {
 	W <- getKeywords()

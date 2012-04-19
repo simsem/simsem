@@ -6,7 +6,6 @@
 #	object: The target object that is used to summarize
 # 	... : Other arguments (None is specified currently)
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: February 23, 2012
 
 ################################################################################
 # Distribution object: Provide a summary of each distribution object
@@ -494,6 +493,7 @@ setMethod("summary", signature="SimData", definition=function(object, detail=FAL
 )
 #Arguments: 
 #	object:	SimData.c that users wish to summarize
+#	detail:	TRUE for further details
 #Description: This function will print all elements in the SimData.c.
 #Return: 	NONE. Results will print on screen only.
 
@@ -524,6 +524,8 @@ setMethod("summary", signature="SimModel", definition=function(object, con=FALSE
 )
 #Arguments: 
 #	object:	SimModel.c that users wish to summarize
+#	con:	TRUE to show the details of equality constriant
+#	start:	TRUE to show the details of starting values
 #Description: This function will print all elements in the SimModel.c.
 #Return: 	NONE. Results will print on screen only.
 
@@ -566,6 +568,9 @@ setMethod("summary", signature="SimResult", definition=function(object, digits=3
 )
 #Arguments: 
 #	object:	SimResult.c that users wish to summarize
+#	digits:	The decimals of digits in print
+#	usedFit:	The fit indices to be used on the summary
+#	alpha:	The alpha level
 #Description: This function will print all elements in the SimResult.c.
 #Return: 	NONE. Results will print on screen only.
 
@@ -583,6 +588,7 @@ setMethod("summary", signature="SimModelOut", definition=function(object, digits
 )
 #Arguments: 
 #	object:	SimModelOut.c that users wish to summarize
+#	digits:	The decimals of numbers to be printed
 #Description: This function will print all elements in the SimModelOut.c.
 #Return: 	NONE. Results will print on screen only.
 
@@ -620,6 +626,7 @@ setMethod("summary", signature="SimDataOut", definition=function(object, detail=
 )
 #Arguments: 
 #	object:	SimDataOut.c that users wish to summarize
+#	detail:	TRUE for further details
 #Description: This function will print all elements in the SimDataOut.c.
 #Return: 	NONE. Results will print on screen only.
 

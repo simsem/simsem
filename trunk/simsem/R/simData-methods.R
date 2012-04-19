@@ -1,3 +1,21 @@
+# simData
+# Methods -- simsem package
+# A constructor of data object
+# Argument:
+#	param: 		SimSet of parameter values (or SimModelOut)
+# 	n: 			Sample size
+# 	misspec : 	SimMisspec for misspecified parameter values
+#	equalCon:	Equality constraint
+#	conBeforeMis:	TRUE if users wish to constrain parameters before adding misspecification. FALSE if users wish to constrain parameters after adding misspecification
+#	misfitBound:	Upper bound of population root mean squared error of approximation (RMSEA; Browne & Cudeck, 1992; Steiger & Lind, 1980) that users wish their model misspecification to be
+#	maxDraw:	The maximum number of random drawn parameters and misspecification model until all parameters in the model are eligible (no negative error variance, standardized coefficients over 1).
+#	sequential:	If TRUE, use a sequential method to create data such that the data from factor are generated first and apply to a set of equations to obtain the data of indicators. If FALSE, create data directly from model-implied mean and covariance of indicators.
+#	facDist:	A SimDataDist for a distribution of factors. Use when sequential is TRUE
+#	errorDist:	A SimDataDist for a distribution of measurement errors. Use when sequential is TRUE
+#	indDist:	A SimDataDist for a distribution of indicators. Use when sequential is FALSE.
+#	indLab:		A vector of indicator names. If not specified, the variables names are y1, y2, ... .
+# Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
+
 setMethod("simData", signature(param="SimSet"), definition=function(param, n, misspec=new("NullSimMisspec"), equalCon=new("NullSimEqualCon"), conBeforeMis=TRUE, misfitBound=new("NullVector"), maxDraw=100, sequential=NA, facDist=new("NullSimDataDist"), errorDist=new("NullSimDataDist"), indDist=new("NullSimDataDist"), indLab=new("NullVector")) {
 	modelType <- param@modelType
 	if(!(is.na(sequential) | sequential == TRUE | sequential == FALSE)) stop("Please specify NA (to use default), TRUE, or FALSE for the sequential argument")
@@ -37,3 +55,5 @@ setMethod("simData", signature(param="SimModelOut"), definition=function(param, 
 	return(result)
 }
 )
+# Additional arguments:
+#	usedStd:	If TRUE, use standardized parameters to create new data. If FALSE, use unstandardized one.

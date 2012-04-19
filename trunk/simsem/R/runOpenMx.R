@@ -1,3 +1,12 @@
+# runOpenMx
+# function -- simsem package
+# Transform model object to OpenMx script, run the obtained data, and make model output object
+# Argument:
+#	object: 	model object
+# 	Data: 		real data
+# Return:	Model output object
+# Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
+
 runOpenMx <- function(object, Data) {
 
 	# if(length(grep("OpenMx",installed.packages()[,1])) == 0)

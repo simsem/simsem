@@ -5,7 +5,6 @@
 #	object:		SimDataOut/SimModelOut/SimResult class to be extracted the population values from
 # Return: 	Depends on the input object
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: April 15, 2011
 
 setMethod("summaryPopulation", signature(object="SimResult"), definition=function(object) {
 	object <- clean(object)

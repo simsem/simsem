@@ -6,7 +6,6 @@
 #	modelType:	The type of model we wish to make the constraint for
 # Return: 	The object in the SimEqualCon object
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: March 10, 2012
 
 simEqualCon <- function(..., modelType) {
 	List <- list(...)

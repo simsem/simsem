@@ -1,3 +1,25 @@
+# runRep
+# function -- simsem package
+# Run one replication for a simulation study using simResult function
+# Argument:
+#	object: 	A list of varying parts across replications: 1) list of real parameters and model misspecification, 2) sample size, 3) percent missing completely at random, 4) percent missing at random, 5) seed number
+# 	objData: 	Data object in the simulation
+#	objModel:	Model object in the simulation
+#	objMissing:	Missing object in the simulation
+#	objFunction:	Function object to transform data
+#	silent:		No warning or printout as much as possible
+# Return:	A list of
+#	coef:		parameter estimates
+#	se:			standard errors
+#	fit:		Model fit indices
+#	converged:	Converged?
+#	param:		Parameter values provided from model output object
+#	FMI1:		Fraction missing method 1
+#	FMI2:		Fraction missing method 2
+#	std:		Standardized coeffcient
+#	paramData:	Parameter underlying generated data
+# Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
+
 runRep <- function(object, objData, objModel, objMissing=new("NullSimMissing"), objFunction=new("NullSimFunction"), silent=FALSE) {
 	modelType <- objModel@modelType
     param <- NULL

@@ -9,7 +9,6 @@
 #						Each element can be numbers (in either numeric or character format) or the name of distribution object VirtualDist.c.
 # Return: 	SymMatrix.c object that will be used for model specification later.
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 6, 2011
 
 symMatrix <- function(free, param = NULL) {
 	if(!isSymmetric(free)) {

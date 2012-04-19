@@ -6,7 +6,6 @@
 #	...:	The matrices that users wish to specify the misspecification
 # Return: 	SimMisspec class (with "CFA" tag)
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: March 10, 2012
 
 simMisspecCFA <- function(...) { 
 	W <- getKeywords()

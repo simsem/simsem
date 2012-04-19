@@ -6,7 +6,6 @@
 #	usedStd:	TRUE for using standardized parameter. FALSE for using unstandardized parameter
 # Return: 	SimSet class 
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: April 10, 2012
 
 toSimSet <- function(out, usedStd=TRUE) { 
 	start <- out@coef

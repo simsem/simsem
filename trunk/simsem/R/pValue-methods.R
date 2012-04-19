@@ -1,11 +1,10 @@
-# runFit
-# Function -- simsem package
+# pValue
+# Methods -- simsem package
 # Find a p-value from an object
 # Argument:
 #	target: 	Values used to find p values
-#	
+# Return: p values
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: April 11, 2012
 
 setMethod("pValue", signature(target="numeric", dist="vector"), definition=function(target, dist, revDirec=FALSE){
 	if(revDirec) {
@@ -15,7 +14,12 @@ setMethod("pValue", signature(target="numeric", dist="vector"), definition=funct
 	}
 }
 )
-
+#Arguments: 
+#	target:		target number to find p value
+# 	dist:	a vector of data
+#	revDirec:	If TRUE, find the p value from the right hand side. If FALSE, find the p value from the left hand side.
+#Description: 	Find a p value of a number from a vector
+#Return: 		NONE. Just plot.
 # Example
 #	pValue(0.5, rnorm(1000, 0, 1))
 
@@ -46,6 +50,13 @@ setMethod("pValue", signature(target="numeric", dist="data.frame"), definition=f
 	}
 }
 )
+#Arguments: 
+#	target:		target vector to find p values
+# 	dist:		a data frame of data
+#	revDirec:	A vector of logicals. If TRUE, find the p value from the right hand side. If FALSE, find the p value from the left hand side.
+#	asLogical:	If TRUE, to return a logical of value that the average equal to p value
+#Description: 	Find a p value of a number from a vector
+#Return: 		A p value or a vector (or matrix) of logical values
 # Example
 #	pValue(c(0.5, 0.2), data.frame(rnorm(1000, 0, 1), runif(1000, 0, 1)))
 
@@ -61,6 +72,12 @@ setMethod("pValue", signature(target="SimModelOut", dist="SimResult"), definitio
 	c(result, andRule=andRule, orRule=orRule)
 }
 )
+#Arguments: 
+#	target:		target SimModelOut class. The fit indices will be used to find p values (Monte Carlo approach)
+# 	dist:		SimResult class to compare with
+#	usedFit:	Selected fit indices used to find a p value
+#Description: 	Find a p value of a SimModelOut object from a SimResult object
+#Return: 		p value based on each fit index and the combination rule
 #Example
 #library(lavaan)
 #loading <- matrix(0, 9, 3)

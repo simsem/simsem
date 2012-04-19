@@ -1,3 +1,14 @@
+# runLavaan
+# function -- simsem package
+# Transform model object to lavaan script, run the obtained data, and make model output object
+# Argument:
+#	object: 	model object
+# 	Data: 		real data
+#	miss: 		method of missing data handling
+#	estimator:	Method of estimation. The default is maximum likelihood (ML)
+# Return:	Model output object
+# Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
+
 runLavaan <- function(object, Data, miss="fiml", estimator="ML") {
 	if(!require(lavaan)) {
 		install.packages("lavaan")
