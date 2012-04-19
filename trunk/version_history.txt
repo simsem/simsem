@@ -197,8 +197,12 @@ simsem, Version 0.1-0 04/11/12
 - Fix a minor bug in fillParam that do not calculate VPS in CFA model.
 - Add findFactorTotalCov to find model-implied covariance from regression coefficient matrix and residual covariance matrix.
 - Make findPossibleFactorCor and findRecursiveSet public and make the documentation accordingly.
-# Delete combineVectorExoEndo, contain, cor2cov, equalWhich, extractDiag, extractLine
-# Rename countRandomObject to countFreeParameters
-# Rename extractLavaanSummary to extractLavaanFit
-# Rename transform.constraint to transformConstraint
-# Public continuousPower, averageMisfit
+- Delete combineVectorExoEndo, contain, cor2cov, equalWhich, extractDiag, extractLine, isNAVector, writeLavaanConstraint
+- Rename countRandomObject to countFreeParameters
+- Rename extractLavaanSummary to extractLavaanFit
+- Rename transform.constraint to writeLavaanConstraint
+- Rename findOpenMxValues to setOpenMxObject
+- Rename findFitIndicesOpenMx to extractOpenMxFit
+- Rename transformConstraint to writeLavaanConstraint
+- Rename typeConstraint to writeLavaanIndividualConstraint
+- Add and update code description of all files; Change some function code to make them more elegant
