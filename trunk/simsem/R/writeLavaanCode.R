@@ -6,8 +6,6 @@
 # 	constraint: equality constraint
 #	aux: name of auxiliary variables
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: February 28, 2012
-
 
 writeLavaanCode <- function(object, constraint, aux = NULL) {
 	result <- NULL

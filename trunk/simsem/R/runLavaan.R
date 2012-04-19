@@ -58,7 +58,7 @@ runLavaan <- function(object, Data, miss="fiml", estimator="ML") {
 	if(!isNullObject(object@equalCon)) {
 		equalCon <- object@equalCon
 		equalCon <- reduceConstraint(equalCon)
-		con.text <- transformConstraint(param, equalCon)
+		con.text <- writeLavaanConstraint(param, equalCon)
 	} else {
 		con.text <- blankParameters(param)
 	}	

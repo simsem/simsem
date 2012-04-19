@@ -1,4 +1,14 @@
-typeConstraint <- function(Matrix, Attribute, Names) {
+# writeLavaanIndividualConstraint
+# Function -- simsem package
+# Create a SimSet object from SimModelOut
+# Argument:
+#	Matrix:	Name of matrix
+#	Attribute:	A row in each equality constraint matrix ([group], [row], [column]) or ([group], [element])
+#	Names: 	A matrix that contains row and column names for indicator or factor labels
+# Return: 	A matrix containing lavaan code for equality constraint
+# Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
+
+writeLavaanIndividualConstraint <- function(Matrix, Attribute, Names) {
 	result <- "equal('"
 	if(!is.na(Attribute[1])) result <- paste(result, Attribute[1], ".", sep="")
 	if(length(Attribute) == 2) {

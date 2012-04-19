@@ -1,4 +1,12 @@
-validateObject <- function(object, detail = FALSE) {
+# validateObject
+# Function -- simsem package
+# Validate whether the parameter drawn is good (identified).
+# Argument:
+#	object:		A matrixSet object to be checked
+# Return: 	TRUE if the parameters draw is good
+# Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
+
+validateObject <- function(object) {
 	if(!is(object, "MatrixSet")) stop("The object is not a MatrixSet object")
 	if(validateCovariance(object@VPS, object@RPS, object@VE) == FALSE) return(FALSE)
 	if(object@modelType == "Path" | object@modelType == "Path.exo" | object@modelType == "SEM" | object@modelType == "SEM.exo") {

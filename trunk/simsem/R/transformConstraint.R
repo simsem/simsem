@@ -1,10 +1,19 @@
-transformConstraint <- function(object, constraint) {
+# writeLavaanConstraint
+# Function -- simsem package
+# Create a SimSet object from SimModelOut
+# Argument:
+#	object:	SimParam that list all free parameters
+#	usedStd:	SimEqualCon that contains all equality constraints
+# Return: 	A VirtualRSet containing lavaan script for equality constraints or NA 
+# Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
+
+writeLavaanConstraint <- function(object, constraint) {
 	object <- blankParameters(object)
 	if(!is.null(constraint)) {
 		con <- constraint@con
 		for(i in 1:length(con)) {
 			current <- con[[i]]
-			con.text <- typeConstraint(rownames(current)[1], current[1,], slot(object, rownames(current)[1]))
+			con.text <- writeLavaanIndividualConstraint(rownames(current)[1], current[1,], slot(object, rownames(current)[1]))
 			for(j in 2:nrow(current)) {
 				Matrix <- rownames(current)[j]
 				if(Matrix == "PS" | Matrix == "PH" | Matrix == "TE" | Matrix == "TD") {

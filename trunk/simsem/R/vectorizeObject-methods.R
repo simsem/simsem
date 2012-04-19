@@ -7,7 +7,6 @@
 # 	labels: The labels of each element in the object
 # 	... : Other arguments, such as whether an object is symmetric matrix
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: October 11, 2011
 
 setMethod("vectorizeObject", signature(object="vector", labels="vector"), definition= function(object, labels) {
 		result <- as.vector(object[!is.na(labels)])

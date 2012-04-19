@@ -5,7 +5,6 @@
 #	var: Name of variables in the model
 # 	aux: Name of auxiliary variable
 # Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)
-# Date Modified: February 28, 2012
 
 writeLavaanNullCode <- function(var, aux = NULL) {
 	result <- NULL
