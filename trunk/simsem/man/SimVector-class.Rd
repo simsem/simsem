@@ -6,8 +6,7 @@
 \alias{summaryShort,SimVector-method}
 \alias{summary,SimVector-method}
 \alias{extract,SimVector-method}
-
-\title{Class \code{"SimVector"} (Random parameters vector)}
+\title{Vector object: Random parameters vector}
 \description{
 This object can be used to represent a vector in SEM model. It contains free parameters, fixed values, and starting values. This object can be represented mean, intercept, or variance vectors.
 }
@@ -22,10 +21,10 @@ This object is created by \code{\link{simVector}} function. Objects can be creat
 }
 \section{Methods}{
   \describe{
-    \item{adjust}{\code{signature(target = "SimVector")}: adjust an element in the \code{"SimVector"} object }
-    \item{run}{\code{signature(object = "SimVector")}: draws starting values from the \code{"labels"} slot and show as a vector sample. }
-    \item{summaryShort}{\code{signature(object = "SimVector")}: provides a short summary of all information in the object }
-    \item{summary}{\code{signature(object = "SimVector")}: provides a thorough description of all information in the object }
+    \item{\code{\link{adjust}}}{Adjust an element in the \code{"SimVector"} object }
+    \item{\code{\link{run}}}{Draws starting values from the \code{"labels"} slot and show as a vector sample. }
+    \item{\code{\link{summaryShort}}}{Provides a short summary of all information in the object }
+    \item{\code{\link{summary}}}{Provides a thorough description of all information in the object }
 
 	 }
 }

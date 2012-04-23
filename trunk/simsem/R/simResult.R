@@ -67,15 +67,22 @@ simResult <- function(nRep=NULL, objData=NULL, objModel=NULL, objMissing=new("Nu
 	}
 	if(!is.null(objSet)) {
 		if(is.null(n)) stop("If the SimSet is specified, the sample size (n) must be specified too.")
-		ifelse(is.null(objData), objData <- simData(objSet, n[1]), stop("SimData and SimSet cannot be specified at the same time."))
-		ifelse(is.null(objModel), objModel <- simModel(objSet), stop("SimModel and SimSet cannot be specified at the same time."))
+		if(is.null(objData)) {
+			objData <- simData(objSet, n[1])
+		} else {
+			stop("SimData and SimSet cannot be specified at the same time.")
+		}
+		if(is.null(objModel)) {
+			objModel <- simModel(objSet)
+		} else {
+			stop("SimModel and SimSet cannot be specified at the same time.")
+		}
 	}
 	modelType <- objModel@modelType
     param <- NULL
 	object.l <- list()
 	if(is.null(objData)) stop("Please provide a SimData object or a list of dataset in the objData argument")
 	if(is.null(objModel)) stop("Please provide a SimModel object in the objModel argument")
-	
     if(class(objData) == "SimData") {
 		for(i in 1:nRep) {
 			object.l[[i]] <- drawParameters(objData)

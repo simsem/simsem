@@ -48,6 +48,11 @@ dir <- "C:/Users/student/Dropbox/simsem/simsem/R/"
  source(paste(dir, "AllGenerics.R", sep=""))
  sourceDir(dir)
 
+library(formatR) 
+path <- "C:/Users/student/Desktop/R"
+tidy.dir(path, recursive=TRUE)#, keep.space=TRUE)
+ 
+ 
 loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA

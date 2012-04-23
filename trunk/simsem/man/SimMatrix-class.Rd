@@ -1,13 +1,11 @@
 \name{SimMatrix-class}
-\Rdversion{1.1}
 \docType{class}
 \alias{SimMatrix-class}
 \alias{run,SimMatrix-method}
 \alias{summaryShort,SimMatrix-method}
 \alias{summary,SimMatrix-method}
 \alias{extract,SimMatrix-method}
-
-\title{Class \code{"SimMatrix"} (Random parameters matrix)}
+\title{Matrix object: Random parameters matrix}
 \description{
 This object can be used to represent a matrix in SEM model. It contains free parameters, fixed values, and starting values. This object can be represented factor loading matrix or regreesion coefficient matrix. 
 }
@@ -23,11 +21,11 @@ This object is created by \code{"\link[=simMatrix]{simMatrix}"} function. Object
 }
 \section{Methods}{
   \describe{
-    \item{adjust}{\code{signature(target = "SimMatrix")}: adjust an element in the \code{"SimMatrix"} object }
-    \item{run}{\code{signature(object = "SimMatrix")}: draws starting values from the \code{"labels"} slot and show as a matrix sample. }
-    \item{summaryShort}{\code{signature(object = "SimMatrix")}: provides a short summary of all information in the object }
-    \item{summary}{\code{signature(object = "SimMatrix")}: provides a thorough description of all information in the object }
-    \item{extract}{\code{signature(object = "SimMatrix")}: extract elements from a simMatrix. The additional arguments are the indicies of rows and columns to be extracted. }
+    \item{\code{\link{adjust}}}{Adjust an element in the \code{"SimMatrix"} object }
+    \item{\code{\link{run}}}{Draws starting values from the \code{"labels"} slot and show as a matrix sample. }
+    \item{\code{\link{summaryShort}}}{Provides a short summary of all information in the object }
+    \item{\code{summary}}{Provides a thorough description of all information in the object }
+    \item{\code{\link{extract}}}{Extract elements from a simMatrix. The additional arguments are the indicies of rows and columns to be extracted. }
 	 }
 }
 \author{

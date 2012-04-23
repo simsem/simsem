@@ -1,10 +1,9 @@
 \name{SymMatrix-class}
-\Rdversion{1.1}
 \docType{class}
 \alias{SymMatrix-class}
 \alias{run,SymMatrix-method}
 \alias{summary,SymMatrix-method}
-\title{Class \code{"SymMatrix"} (Random parameters symmetric matrix)}
+\title{Symmetric matrix object: Random parameters symmetric matrix}
 \description{
 This object can be used to represent a symmetric matrix in SEM model. It contains free parameters, fixed values, and starting values. This object can be represented factor correlation or error correlation matrix.
 }
@@ -22,9 +21,9 @@ Class \code{"\linkS4class{SimMatrix}"}, directly.
 }
 \section{Methods}{
   \describe{
-    \item{adjust}{\code{signature(target = "SymMatrix")}: adjust an element in the \code{"SymMatrix"} object }
-    \item{run}{\code{signature(object = "SymMatrix")}: draws starting values from the \code{"labels"} slot and show as a symmetric matrix sample.  }
-    \item{summary}{\code{signature(object = "SymMatrix")}: provides a thorough description of all information in the object }
+    \item{\code{\link{adjust}}}{Adjust an element in the \code{"SymMatrix"} object }
+    \item{\code{\link{run}}}{Draws starting values from the \code{"labels"} slot and show as a symmetric matrix sample.  }
+    \item{\code{summary}}{Provides a thorough description of all information in the object }
 	 }
 }
 \author{

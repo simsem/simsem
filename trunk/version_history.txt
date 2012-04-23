@@ -211,3 +211,4 @@ simsem, Version 0.1-1 04/20/12
 - Add modelBoot and realData attribute in the SimData class. Change the runFit and simData to take these arguments accordingly.
 - Change the createData function to implement the Bollen-Stine bootstrap approach for data generation.
 - Change the documentation for this change accordingly
+- Fix the simResult function bug when using the objSet argument

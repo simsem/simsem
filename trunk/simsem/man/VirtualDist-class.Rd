@@ -74,7 +74,7 @@
 \alias{kurtosis,VirtualDist-method}
 \title{Distribution Objects}
 \description{
-List of all distribution objects.
+List of all distribution objects. These distribution objects can be used to specify random parameters or specify a marginal distribution of a variable.
 }
 \section{Distributions}{
 	Here is the list of all distribution objects and the link to their constructors.
@@ -100,13 +100,16 @@ List of all distribution objects.
 }
 \section{Methods}{
   \describe{
-    \item{run}{Create a random number from the distribution }
-    \item{summary}{Summarize information in the object }
-    \item{summaryShort}{Summarize information in the object in a short form }
-	\item{plotDist}{Plot a distribution of the distribution object. Arguments: \code{xlim} is the range of plotting values, \code{reverse} is to mirror the distribution. }
-	\item{skew}{Find skewness of a distribution.}
-	\item{kurtosis}{Find excessive kurtosis of a distribution.}
+    \item{\code{\link{run}}}{Create a random number from the specified distribution. }
+    \item{\code{summary}}{Summarize information withinin the object. }
+    \item{\code{\link{summaryShort}}}{Summarize information within the object in a short form. }
+	\item{\code{\link{plotDist}}}{Plot a distribution of the distribution object. Arguments: \code{xlim} is the range of plotting values (should be a vector of two values: lower and upper bound), \code{reverse} is to mirror the distribution, such as changing chi-square distribution from positively skew to negatively skew. }
+	\item{\code{\link{skew}}}{Find a skewness of a distribution.}
+	\item{\code{\link{kurtosis}}}{Find an excessive kurtosis of a distribution.}
 	 }
+}
+\details{
+	These distribution objects can be used to specify random parameters or marginal distribution of variables in Gaussian copula. The random parameter feature is to make data generation parameters different across replications in a simualtion study. The distribution object can be specified as random parameters in \code{\link{simMatrix}}, \code{\link{symMatrix}}, \code{\link{simVector}}, and \code{\link{simResult}} (in \code{n}, \code{pmMCAR}, and \code{pmMAR}). The distribution object can also be used for specifying marginal distribution of factors, measurement errors, or indicators. See the data distribution object, \code{\link{simDataDist}}, for how to model marginal distribution of variables, which will be put in setting the data object up, \code{\link{simData}}.
 }
 \author{
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
@@ -132,14 +135,23 @@ List of all distribution objects.
 		\item \code{\linkS4class{SimUnif}} Uniform Distribution
 		\item \code{\linkS4class{SimWeibull}} Weibull Distribution
 	}
+	Here are the list of possible applications of a distribution object
+	\itemize{
+		\item \code{\link{simMatrix}} Random parameter matrix. A distribution object can be used to create random parameter.
+		\item \code{\link{symMatrix}} Random parameter symmetric matrix. A distribution object can be used to create random parameter.
+		\item \code{\link{simVector}} Random parameter vector. A distribution object can be used to create random parameter.
+		\item \code{\link{simResult}} Result object that saves the result of a simulation study. A distribution object can be used to vary sample size (\code{n}), proportion completely missing at random (\code{pmMCAR}), or proportion missing at random (\code{pmMAR}), which make those factors (e.g., sample size) different across replications.
+		\item \code{\link{simDataDist}} Data distribution object. A distribution object can be used to specify marginal distributions of variables (which can be factors, measurement errors, or indicators).
+	}
 }
 \examples{
 showClass("VirtualDist")
 u1 <- simUnif(0, 1)
 chi3 <- simChisq(3)
 summary(chi3)
-plotDist(chi3)
 skew(chi3)
 kurtosis(chi3)
+plotDist(chi3)
+plotDist(chi3, reverse=TRUE)
 }
 \keyword{classes}
