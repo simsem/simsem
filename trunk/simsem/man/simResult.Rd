@@ -8,7 +8,11 @@ This function will create simResult by different ways. One way is to create data
 and \code{\linkS4class{SimModel}} and save it in the \code{\linkS4class{SimResult}}.
 }
 \usage{
-simResult(nRep = NULL, objData = NULL, objModel = NULL, objMissing = new("NullSimMissing"), seed = 123321, silent = FALSE, multicore = FALSE, cluster = FALSE, numProc = NULL, n = NULL, pmMCAR = NULL, pmMAR = NULL, objSet = NULL, objFunction = new("NullSimFunction"))
+simResult(nRep = NULL, objData = NULL, objModel = NULL, 
+	objMissing = new("NullSimMissing"), seed = 123321, silent = FALSE, 
+	multicore = FALSE, cluster = FALSE, numProc = NULL, n = NULL, 
+	pmMCAR = NULL, pmMAR = NULL, objSet = NULL, 
+	objFunction = new("NullSimFunction"))
 }
 \arguments{
   \item{nRep}{

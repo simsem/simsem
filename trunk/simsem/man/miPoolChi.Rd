@@ -27,7 +27,7 @@ The resulting value from the pooled chi-square is F-statistic. If the denominato
 Li, K. H., Meng, X. L., Raghunathan, T. E., & Rubin, D. B. (1991). Significance levels from repeated p-values with multiply-imputed data. \emph{Statistica Sinica, 1,} 65-92.
 }
 \author{
-Craig Enders (Arizona State University; \email{schoemann@ku.edu}) originally wrote this function in SAS. Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu}) modified the function to run in R.
+Craig Enders originally wrote this function in SAS, \url{http://psychology.clas.asu.edu/files/CombiningLikelihoodRatioChi-SquareStatisticsFromaMIAnalysis.sas}. Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu}) modified the function to run in R.
 }
 \seealso{
 	\itemize{

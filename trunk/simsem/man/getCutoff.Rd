@@ -11,7 +11,7 @@
 	Extract fit indices information from the \code{\linkS4class{SimResult}} and getCutoff of fit indices given a priori alpha level
 }
 \usage{
-getCutoff(object, alpha, revDirec=FALSE, usedFit=NULL)
+getCutoff(object, alpha, revDirec = FALSE, usedFit = NULL)
 }
 \arguments{
   \item{object}{

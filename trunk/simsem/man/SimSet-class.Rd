@@ -36,7 +36,7 @@ Object can be created by \code{\link{simSetCFA}}, \code{\link{simSetPath}}, or \
     \item{\code{VTD}:}{Variance of X measurement error }
     \item{\code{PH}:}{Covariance among exogenous factors }
     \item{\code{RPH}:}{Correlation among exogenous factors }
-    \item{\code{GA}:}{Regreeion effect from exogenous factors to endogenous factors }
+    \item{\code{GA}:}{Regression effect from exogenous factors to endogenous factors }
     \item{\code{TX}:}{Measurement intercepts of X indicators }
     \item{\code{KA}:}{Factor Mean of exogenous factors }
     \item{\code{MX}:}{Total Mean of X indicators }

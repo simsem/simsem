@@ -13,7 +13,7 @@
 #library(simsem)
 
 #install.packages("C:/Users/Sunthud/Desktop/My Dropbox/simsem/simsem_0.0-11.tar.gz", repos=NULL, type="source")
-#install.packages("C:/Users/student/Dropbox/simsem/simsem_0.0-11.tar.gz", repos=NULL, type="source")
+#install.packages("C:/Users/student/Dropbox/simsem/simsem_0.1-1.tar.gz", repos=NULL, type="source")
 
 myTry <- function(expr) {
     withRestarts(
@@ -47,11 +47,6 @@ dir <- "C:/Users/student/Dropbox/simsem/simsem/R/"
  source(paste(dir, "AllClass.R", sep=""))
  source(paste(dir, "AllGenerics.R", sep=""))
  sourceDir(dir)
-
-library(formatR) 
-path <- "C:/Users/student/Desktop/R"
-tidy.dir(path, recursive=TRUE)#, keep.space=TRUE)
- 
  
 loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA
@@ -69,6 +64,42 @@ RTD <- symMatrix(error.cor)
 CFA.Model <- simSetCFA(LY = LX, RPH = RPH, RTD = RTD)
 
 SimData <- simData(CFA.Model, 200)
+
+data <- run(SimData)
+
+model <- 'f1 =~ NA*y1 + a1*y1 + a2*y2 + a3*y3
+f2 =~ NA*y4 + a4*y4 + a5*y5 + a6*y6
+f1 ~~ 1*f1
+f2 ~~ 1*f2
+y1 ~~ b1*y1
+y2 ~~ b2*y2
+y3 ~~ b3*y3
+y4 ~~ b4*y4
+y5 ~~ b5*y5
+y6 ~~ b6*y6
+relia1 := ((a1 + a2 + a3)^2)/(((a1 + a2 + a3)^2)+b1+b2+b3)'
+
+fit <- cfa(model, data=dat, estimator="WLS")
+summary(fit)
+
+model <- 'f1 =~ NA*y1 + a1*y1 + a2*y2 + a3*y3
+f1 ~~ 1*f1
+y1 ~~ b1*y1
+y2 ~~ b2*y2
+y3 ~~ b3*y3
+relia1 := ((a1 + a2 + a3)^2)/(((a1 + a2 + a3)^2)+b1+b2+b3)'
+
+
+
+
+
+
+
+
+
+
+
+
 
 SimModel <- simModel(CFA.Model)
 
@@ -1169,29 +1200,9 @@ con <- simEqualCon(c1, modelType="SEM")
 datModel <- simData(longMed, 200, equalCon=con)
 dat <- run(datModel, dataOnly=FALSE)
 
-# FindIndTotalVar, findIndResidualVar --> psi might be wrong! 
-
-
-
-#findIndTotalVar <- function(lambda, totalFactorCov, residualVarTheta, varPsi = NULL, beta=NULL) {
-#findIndResidualVar <- function(lambda, corPsi, totalVarTheta = NULL, varPsi = NULL) {
-#			implied.covariance <- solve(ID - object@BE) %*% object@PS %*% t(solve(ID - object@BE))
-
-
-# Delete combineVectorExoEndo, contain, cor2cov, equalWhich, extractDiag, extractLine, isNAVector, writeLavaanConstraint
-# Rename countRandomObject to countFreeParameters
-# Rename extractLavaanSummary to extractLavaanFit
-# Rename transform.constraint to writeLavaanConstraint
-# Rename findOpenMxValues to setOpenMxObject
-# Rename findFitIndicesOpenMx to extractOpenMxFit
-# Rename transformConstraint to writeLavaanConstraint
-# Rename typeConstraint to writeLavaanIndividualConstraint
-# Public continuousPower, averageMisfit
-# Start with F and extract methods
-
-
-# For later, setOpenMxObject, findFitIndicesOpenMx
-
+# Delete cor2cov runOpenMx
+# Rename fitMeasures to fitMeasuresChi
+# 
 
 
 

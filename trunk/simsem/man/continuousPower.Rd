@@ -7,7 +7,8 @@
 	A function to find the power of the parameters in a model when one or more of the simulations parameters vary randomly across replications.
 }
 \usage{
-continuousPower(simResult, contN = TRUE, contMCAR = FALSE, contMAR = FALSE, contParam = NULL, alpha = .05, powerParam = NULL)
+continuousPower(simResult, contN = TRUE, contMCAR = FALSE, contMAR = FALSE, 
+	contParam = NULL, alpha = .05, powerParam = NULL)
 }
 \arguments{
   \item{simResult}{

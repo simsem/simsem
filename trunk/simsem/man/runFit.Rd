@@ -11,7 +11,13 @@
 This function will analyze real data and use the result of the analysis to simulate data. Those simulated data will be analyzed by the same model. The result of the analyses will be saved in the result object, \code{\linkS4class{SimResult}}. 
 }
 \usage{
-runFit(model, realdata, nRep=1000, misspec=new("NullSimMisspec"), conBeforeMis=TRUE, misfitBound=new("NullVector"), maxDraw=100, sequential=NA, facDist=new("NullSimDataDist"), errorDist=new("NullSimDataDist"), indDist=new("NullSimDataDist"), modelBoot=FALSE, seed=123321, silent=FALSE, multicore=FALSE, cluster=FALSE, numProc=NULL, empiricalMissing=TRUE, missModel=new("NullSimMissing"), usedStd=TRUE)
+runFit(model, realdata, nRep=1000, misspec=new("NullSimMisspec"), 
+	conBeforeMis=TRUE, misfitBound=new("NullVector"), maxDraw=100, 
+	sequential=NA, facDist=new("NullSimDataDist"), 
+	errorDist=new("NullSimDataDist"), indDist=new("NullSimDataDist"), 
+	modelBoot=FALSE, seed=123321, silent=FALSE, multicore=FALSE, 
+	cluster=FALSE, numProc=NULL, empiricalMissing=TRUE, 
+	missModel=new("NullSimMissing"), usedStd=TRUE)
 }
 \arguments{
   \item{model}{
