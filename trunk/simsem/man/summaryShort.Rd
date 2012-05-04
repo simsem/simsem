@@ -4,9 +4,6 @@
 \alias{summaryShort,ANY-method}
 \alias{summaryShort,vector-method}
 \alias{summaryShort,matrix-method}
-\alias{summary,SimLabels-method}
-\alias{summary,MatrixSet-method}
-\alias{summary,SimRSet-method}
 \title{
 	Provide short summary of an object.
 }

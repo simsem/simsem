@@ -10,7 +10,7 @@
 	Make a subtraction of each element in an object. For example, subtract the parameter estimates by the paramter values
 }
 \usage{
-subtractObject(object1, object2)
+subtractObject(object1, object2, ...)
 }
 \arguments{
   \item{object1}{
@@ -18,6 +18,9 @@ subtractObject(object1, object2)
 }
   \item{object2}{
 	The second object
+}
+  \item{\dots}{
+	Additional arguments specific to each class
 }
 }
 \section{Methods}{

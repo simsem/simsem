@@ -27,5 +27,7 @@ centralMoment(x, ord, weight = NULL)
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \examples{
-centralMoment(1:5, 2)
+# This function is not public.
+
+# centralMoment(1:5, 2)
 }

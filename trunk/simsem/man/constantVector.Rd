@@ -24,5 +24,7 @@ constantVector(constant, ni)
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \examples{
-constantVector(0, 5)
+# This function is not public.
+
+# constantVector(0, 5)
 }

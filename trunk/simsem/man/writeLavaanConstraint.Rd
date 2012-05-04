@@ -18,7 +18,7 @@ writeLavaanConstraint(object, constraint)
 }
 }
 \value{
-	A \code{linkS4class{SimRSet} class with the text of lavaan constraint
+	A \code{\linkS4class{SimRSet}} class with the text of lavaan constraint
 }
 \author{
     Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu)

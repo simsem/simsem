@@ -16,11 +16,14 @@
 	Count how many free parameters in the target object
 }
 \usage{
-countFreeParameters(object)
+countFreeParameters(object, ...)
 }
 \arguments{
   \item{object}{
 	A desired object that users wish to count the number of free parameters
+}
+  \item{\dots}{
+	Additional arguments specific to each class
 }
 }
 \section{Methods}{

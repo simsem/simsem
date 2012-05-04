@@ -4,14 +4,14 @@
 	Extract only converged replications in the result object
 }
 \description{
-	Extract only converged replications in the result object (\code{\linkS4class{simResult}})
+	Extract only converged replications in the result object (\code{\linkS4class{SimResult}})
 }
 \usage{
 clean(object)
 }
 \arguments{
   \item{object}{
-	The target result object (\code{\linkS4class{simResult}})
+	The target result object (\code{\linkS4class{SimResult}})
 }
 }
 \value{

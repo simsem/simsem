@@ -6,8 +6,9 @@
 \alias{SimLabels-class}
 \alias{summary,VirtualRSet-method}
 \alias{summary,SimRSet-method}
+\alias{summary,SimLabels-method}
 
-\title{Class \code{"VirtualRSet"} and \code{"SimRSet"}}
+\title{Class \code{"VirtualRSet"}, \code{"SimLabels"} and \code{"SimRSet"}}
 \description{
 	\code{"SimRSet"} is the set of vectors and matrices arrangements that will save values that will be used for various purposes. \code{"SimLabels"} is set of vectors and matrices arrangements that will save labels that will be used for various purposes. \code{"VirtualRSet"} is the superclass of the \code{"SimRSet"}, \code{\linkS4class{SimLabels}}, and \code{\linkS4class{SimParam}}.
 }
@@ -32,6 +33,7 @@
 \section{Methods}{
   \describe{
     \item{summary}{Get the summary of model specification. }
+}
 }
 \author{
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})

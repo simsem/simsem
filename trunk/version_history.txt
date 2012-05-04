@@ -212,3 +212,9 @@ simsem, Version 0.1-1 04/20/12
 - Change the createData function to implement the Bollen-Stine bootstrap approach for data generation.
 - Change the documentation for this change accordingly
 - Fix the simResult function bug when using the objSet argument
+
+simsem, Version 0.1-2 05/03/12
+- Write documentations of almost all functions in simsem
+- Change the name of fitMeasures function to fitMeasuresChi
+- Get rid of the header of the R folders
+- Use formatR to make code look pretty

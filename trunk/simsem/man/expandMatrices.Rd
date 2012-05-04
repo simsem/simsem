@@ -15,7 +15,7 @@ expandMatrices(object)
 }
 }
 \value{
-	The \code{\linkS4class{Matrixset}} class containing all information from the target object
+	The \code{\linkS4class{MatrixSet}} class containing all information from the target object
 }
 \author{
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
