@@ -38,38 +38,50 @@ setMethod("constrainMatrices", signature(object = "MatrixSet", SimEqualCon = "Si
                 }
             }
         }
-		namesConstraint <- lapply(constraint, rownames)
-		namesConstraint <- unique(do.call(c, namesConstraint))
-		if(any(c("VTE", "RTE", "VY") %in% namesConstraint)) matrices@TE <- new("NullMatrix")
-		if("TE" %in% namesConstraint) {
-			matrices@VTE <- new("NullVector")
-			matrices@RTE <- new("NullMatrix")
-			matrices@VY <- new("NullVector")
-		}
-		if("TY" %in% namesConstraint) matrices@MY <- new("NullVector")
-		if("MY" %in% namesConstraint) matrices@TY <- new("NullVector")
-		if(any(c("VPS", "RPS", "VE") %in% namesConstraint)) matrices@PS <- new("NullMatrix")
-		if("PS" %in% namesConstraint) {
-			matrices@VPS <- new("NullVector")
-			matrices@RPS <- new("NullMatrix")
-			matrices@VE <- new("NullVector")
-		}
-		if("AL" %in% namesConstraint) matrices@ME <- new("NullVector")
-		if("ME" %in% namesConstraint) matrices@AL <- new("NullVector")
-		if(any(c("VTD", "RTD", "VX") %in% namesConstraint)) matrices@TD <- new("NullMatrix")
-		if("TD" %in% namesConstraint) {
-			matrices@VTD <- new("NullVector")
-			matrices@RTD <- new("NullMatrix")
-			matrices@VX <- new("NullVector")
-		}
-		if("TX" %in% namesConstraint) matrices@MX <- new("NullVector")
-		if("MX" %in% namesConstraint) matrices@TX <- new("NullVector")
-		if(any(c("RPH", "VPH") %in% namesConstraint)) matrices@PH <- new("NullMatrix")
-		if("PH" %in% namesConstraint) {
-			matrices@VPH <- new("NullVector")
-			matrices@RPH <- new("NullMatrix")
-		}
-		if("TH" %in% namesConstraint) matrices@RTH <- new("NullMatrix")
-		if("RTH" %in% namesConstraint) matrices@TH <- new("NullMatrix")
+        namesConstraint <- lapply(constraint, rownames)
+        namesConstraint <- unique(do.call(c, namesConstraint))
+        if (any(c("VTE", "RTE", "VY") %in% namesConstraint)) 
+            matrices@TE <- new("NullMatrix")
+        if ("TE" %in% namesConstraint) {
+            matrices@VTE <- new("NullVector")
+            matrices@RTE <- new("NullMatrix")
+            matrices@VY <- new("NullVector")
+        }
+        if ("TY" %in% namesConstraint) 
+            matrices@MY <- new("NullVector")
+        if ("MY" %in% namesConstraint) 
+            matrices@TY <- new("NullVector")
+        if (any(c("VPS", "RPS", "VE") %in% namesConstraint)) 
+            matrices@PS <- new("NullMatrix")
+        if ("PS" %in% namesConstraint) {
+            matrices@VPS <- new("NullVector")
+            matrices@RPS <- new("NullMatrix")
+            matrices@VE <- new("NullVector")
+        }
+        if ("AL" %in% namesConstraint) 
+            matrices@ME <- new("NullVector")
+        if ("ME" %in% namesConstraint) 
+            matrices@AL <- new("NullVector")
+        if (any(c("VTD", "RTD", "VX") %in% namesConstraint)) 
+            matrices@TD <- new("NullMatrix")
+        if ("TD" %in% namesConstraint) {
+            matrices@VTD <- new("NullVector")
+            matrices@RTD <- new("NullMatrix")
+            matrices@VX <- new("NullVector")
+        }
+        if ("TX" %in% namesConstraint) 
+            matrices@MX <- new("NullVector")
+        if ("MX" %in% namesConstraint) 
+            matrices@TX <- new("NullVector")
+        if (any(c("RPH", "VPH") %in% namesConstraint)) 
+            matrices@PH <- new("NullMatrix")
+        if ("PH" %in% namesConstraint) {
+            matrices@VPH <- new("NullVector")
+            matrices@RPH <- new("NullMatrix")
+        }
+        if ("TH" %in% namesConstraint) 
+            matrices@RTH <- new("NullMatrix")
+        if ("RTH" %in% namesConstraint) 
+            matrices@TH <- new("NullMatrix")
         return(matrices)
     }) 

@@ -1,7 +1,8 @@
 # simMisspecCFA: Create a set of matrices that belongs to CFA misspecification
 # model.
 
-simMisspecCFA <- function(..., conBeforeMis=TRUE, misBeforeFill=TRUE, misfitType="rmsea", misfitBound=new("NullVector"), averageNumMisspec=FALSE) {
+simMisspecCFA <- function(..., conBeforeMis = TRUE, misBeforeFill = TRUE, 
+    misfitType = "rmsea", misfitBound = new("NullVector"), averageNumMisspec = FALSE) {
     if (!isNullObject(misfitBound)) {
         if (length(misfitBound) == 2) {
             if (misfitBound[1] >= misfitBound[2]) 
@@ -54,6 +55,8 @@ simMisspecCFA <- function(..., conBeforeMis=TRUE, misBeforeFill=TRUE, misfitType
     ifelse(7 %in% position, ME <- List[position == 7], ME <- list(new("NullSimVector")))
     Output <- new("SimMisspec", LY = LY[[1]], PS = PS[[1]], RPS = RPS[[1]], TE = TE[[1]], 
         RTE = RTE[[1]], VE = VE[[1]], VPS = VE[[1]], VTE = VTE[[1]], VY = VY[[1]], 
-        TY = TY[[1]], MY = MY[[1]], ME = ME[[1]], AL = ME[[1]], modelType = "CFA", conBeforeMis=conBeforeMis, misBeforeFill=misBeforeFill, misfitType=misfitType, misfitBound=misfitBound, averageNumMisspec=averageNumMisspec)
+        TY = TY[[1]], MY = MY[[1]], ME = ME[[1]], AL = ME[[1]], modelType = "CFA", 
+        conBeforeMis = conBeforeMis, misBeforeFill = misBeforeFill, misfitType = misfitType, 
+        misfitBound = misfitBound, averageNumMisspec = averageNumMisspec)
     return(Output)
 } 

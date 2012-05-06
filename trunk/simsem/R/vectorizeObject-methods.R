@@ -51,7 +51,7 @@ setMethod("vectorizeObject", signature(object = "VirtualRSet", labels = "SimLabe
         if (!isNullObject(labels@TY)) 
             result <- c(result, vectorizeObject(object@TY, labels@TY))
         return(result)
-    }) 
+    })
 
 setMethod("vectorizeObject", signature(object = "MatrixSet", labels = "SimGenLabels"), 
     definition = function(object, labels) {
@@ -82,13 +82,13 @@ setMethod("vectorizeObject", signature(object = "MatrixSet", labels = "SimGenLab
             result <- c(result, vectorizeObject(object@TX, labels@TX))
         if (!isNullObject(labels@TY)) 
             result <- c(result, vectorizeObject(object@TY, labels@TY))
-		if (!isNullObject(labels@RPS)) 
+        if (!isNullObject(labels@RPS)) 
             result <- c(result, vectorizeObject(object@RPS, labels@RPS, symmetric = TRUE))
-		if (!isNullObject(labels@RTE)) 
+        if (!isNullObject(labels@RTE)) 
             result <- c(result, vectorizeObject(object@RTE, labels@RTE, symmetric = TRUE))
-		if (!isNullObject(labels@RPH)) 
+        if (!isNullObject(labels@RPH)) 
             result <- c(result, vectorizeObject(object@RPH, labels@RPH, symmetric = TRUE))
-		if (!isNullObject(labels@RTD)) 
+        if (!isNullObject(labels@RTD)) 
             result <- c(result, vectorizeObject(object@RTD, labels@RTD, symmetric = TRUE))
         if (!isNullObject(labels@VPS)) 
             result <- c(result, vectorizeObject(object@VPS, labels@VPS))

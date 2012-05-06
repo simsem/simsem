@@ -1,6 +1,6 @@
 # simEqualCon: The constructor of the equality constraints
 
-simEqualCon <- function(..., modelType, conBeforeFill=TRUE) {
+simEqualCon <- function(..., modelType, conBeforeFill = TRUE) {
     List <- list(...)
     Length <- length(List)
     Result <- NULL
@@ -34,5 +34,5 @@ simEqualCon <- function(..., modelType, conBeforeFill=TRUE) {
         }
         Result[[i]] <- as.matrix(temp.result)
     }
-    return(new("SimEqualCon", con = Result, modelType = modelType, conBeforeFill=conBeforeFill))
+    return(new("SimEqualCon", con = Result, modelType = modelType, conBeforeFill = conBeforeFill))
 } 

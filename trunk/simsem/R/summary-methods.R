@@ -227,15 +227,15 @@ setMethod("summary", signature = "SimMisspec", definition = function(object) {
         printIfNotNull(object@RTH, "\nRTH: Correlation of Measurement.Error.DELTA and Measurement.Error.EPSILON")
         cat("--------------------------", "\n")
     }
-	cat("Constain objects BEFORE or AFTER adding misspecification\n")
-	ifelse(object@conBeforeMis, print("Before"), print("After"))
-	cat("Misfit bound\n")
-	if (!isNullObject(object@misfitBound)) {
-		print(paste("min =", object@misfitBound[1]))
-		print(paste("max =", object@misfitBound[2]))
-	} else {
-		print("No")
-	}
+    cat("Constain objects BEFORE or AFTER adding misspecification\n")
+    ifelse(object@conBeforeMis, print("Before"), print("After"))
+    cat("Misfit bound\n")
+    if (!isNullObject(object@misfitBound)) {
+        print(paste("min =", object@misfitBound[1]))
+        print(paste("max =", object@misfitBound[2]))
+    } else {
+        print("No")
+    }
 })
 
 setMethod("summary", signature = "SimEqualCon", definition = function(object) {
@@ -400,8 +400,9 @@ setMethod("summary", signature = "SimModel", definition = function(object,
     print(object@modelType)
     cat("========= Parameters Set ============\n")
     summary(object@param)
-	nFree <- countFreeParameters(object@param)
-	if(!isNullObject(object@equalCon)) nFree <- nFree + countFreeParameters(object@equalCon)
+    nFree <- countFreeParameters(object@param)
+    if (!isNullObject(object@equalCon)) 
+        nFree <- nFree + countFreeParameters(object@equalCon)
     cat("Number of free parameters = ", nFree, "\n")
     cat("=====================================\n")
     if (start) {
@@ -583,9 +584,10 @@ setMethod("summary", signature(object = "SimFunction"), definition = function(ob
         cat("Addition attributes = ", paste(names(x)[3:length(x)], collapse = ", "), 
             "\n")
     }
-}) 
+})
 
-setMethod("summary", signature(object = "SimResultParam"), definition = function(object, digits=3, usedFit=NULL) {
+setMethod("summary", signature(object = "SimResultParam"), definition = function(object, 
+    digits = 3, usedFit = NULL) {
     if (is.null(usedFit)) 
         usedFit <- getKeywords()$usedFitPop
     cat("PARAMETER RESULT OBJECT\n")
@@ -595,18 +597,18 @@ setMethod("summary", signature(object = "SimResultParam"), definition = function
     print(round(summaryParam(object), digits))
     cat("========= Misspecification Values ============\n")
     misspecAverage <- colMeans(object@misspec, na.rm = TRUE)
-    misspecSE <- sapply(object@misspec, sd, na.rm = TRUE)   
+    misspecSE <- sapply(object@misspec, sd, na.rm = TRUE)
     mis <- data.frame(mean = misspecAverage, sd = misspecSE)
     print(round(mis, digits))
     cat("========= Fit Indices Distributions ============\n")
-    quantileValue <- c(0.05, 0.10, 0.25, 0.50, 0.75, 0.90, 0.95)
+    quantileValue <- c(0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95)
     cutoffs <- round(apply(object@fit, 2, quantile, quantileValue), digits)
     names(dimnames(cutoffs)) <- c("Fit Indices", "Quantile")
     fitAverage <- colMeans(object@fit, na.rm = TRUE)
     fitSE <- sapply(object@fit, sd, na.rm = TRUE)
-	cutoffs <- rbind(cutoffs, fitAverage, fitSE)
+    cutoffs <- rbind(cutoffs, fitAverage, fitSE)
     print(round(cutoffs, digits))
-	cat("========= Correlation between Fit Indices and Parameter Misspecification ============\n")
+    cat("========= Correlation between Fit Indices and Parameter Misspecification ============\n")
     fit <- data.frame(object@misspec, object@fit[, usedFit])
     print(round(cor(fit), digits))
 }) 

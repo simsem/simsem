@@ -218,3 +218,26 @@ simsem, Version 0.1-2 05/03/12
 - Change the name of fitMeasures function to fitMeasuresChi
 - Get rid of the header of the R folders
 - Use formatR to make code look pretty
+
+simsem, Version 0.1-3 05/06/12
+- Use cor2cov in the lavaan package
+- Fix the bugs in findFactorTotalVar, findFactorToalCov, and findFactorResidualVar functions whent using the cor2cov from lavaan
+- Add show method to prevent flooding of all objects in the screen when users typing an object name
+- Add usedFitPop in the getKeywords to set the default of the used population misfit
+- Fix the constrainMatrices function to getting rid of inaccurate object when the target object is equally constrained (such as delete RTE when TE is constrained).
+- Fix the run.SimSet method to use the misBeforeFill argument
+- Fix the runMisspec function to make six different orders of misBeforeFill, conBeforeMis, and conBeforeFill
+- Change the conBeforeMis and misFitBound arguments from the SimData class (as well as the simData and runFit functions) to SimMisspec class (as well as simMisspecCFA, simMisspecPath, and simMisspecSEM functions)
+- Add misfitType and misBeforeFill arguments in the SimMisspec class (as well as simMisspecCFA, simMisspecPath, and simMisspecSEM functions)
+- Add conBeforeFill argument in the SimEqualCon class
+- Add vectorizeObject method for the MatrixSet class
+- Add two new classes: SimGenLabels and SimResultParam
+- Add the makeLabels method for the SimSet class and provide the SimGetLabels that saves the labels in the data generation parameterization
+- Add countMACS, plotMisfit, and simResultParam function
+- Fix the bug in countFreeParameters, as well as adding the method for SimEqualCon and SimREqualCon 
+- Separate the drawParameters function into drawParameters and drawParametersMisspec functions
+- Add popMisfit methods as well as popMisfitMACS and popDiscrepancy function
+- Fix the summary method for SimModel to provide the accurate value of free parameters.
+- Change the documentation accordingly
+- Use formatR for all codes
+# To do: Connect SimResultParam to SimResult

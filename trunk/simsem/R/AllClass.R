@@ -108,7 +108,8 @@ setClass("VirtualRSet", representation(modelType = "character", LY = "matrix",
         TD = new("NullMatrix"), PH = new("NullMatrix"), GA = new("NullMatrix"), TX = new("NullVector"), 
         KA = new("NullVector"), TH = new("NullMatrix")))
 
-setClass("SimEqualCon", representation(con = "list", modelType = "character", conBeforeFill="logical"), prototype(conBeforeFill=TRUE))
+setClass("SimEqualCon", representation(con = "list", modelType = "character", 
+    conBeforeFill = "logical"), prototype(conBeforeFill = TRUE))
 
 setClass("NullSimEqualCon", contains = "SimEqualCon", representation(con = "list", 
     modelType = "character"), prototype(con = list(NA), modelType = "NA"))
@@ -132,9 +133,11 @@ setClass("NullRSet", contains = "SimRSet", representation(modelType = "character
     LX = new("NullMatrix"), TD = new("NullMatrix"), PH = new("NullMatrix"), GA = new("NullMatrix"), 
     TX = new("NullVector"), KA = new("NullVector"), TH = new("NullMatrix")))
 
-setClass("SimMisspec", contains = "SimSet", representation(conBeforeMis = "logical", misBeforeFill="logical", misfitType="character", 
-    misfitBound = "vector", averageNumMisspec="logical"), prototype(conBeforeMis=TRUE, misBeforeFill=TRUE, misfitType="rmsea", misfitBound=new("NullVector"), averageNumMisspec=FALSE))
-	
+setClass("SimMisspec", contains = "SimSet", representation(conBeforeMis = "logical", 
+    misBeforeFill = "logical", misfitType = "character", misfitBound = "vector", 
+    averageNumMisspec = "logical"), prototype(conBeforeMis = TRUE, misBeforeFill = TRUE, 
+    misfitType = "rmsea", misfitBound = new("NullVector"), averageNumMisspec = FALSE))
+
 setClass("NullSimMisspec", contains = "SimMisspec")
 
 setClass("MisspecSet", contains = "MatrixSet")
@@ -145,12 +148,12 @@ setClass("SimDataDist", representation(p = "numeric", dist = "list", keepScale =
 setClass("NullSimDataDist", contains = "SimDataDist")
 
 setClass("SimData", representation(modelType = "character", n = "numeric", 
-    param = "SimSet", misspec = "SimMisspec", equalCon = "SimEqualCon", maxDraw="numeric", sequential = "logical", facDist = "SimDataDist", 
-    errorDist = "SimDataDist", indDist = "SimDataDist", indLab = "vector", modelBoot = "logical", 
-    realData = "data.frame"), prototype(misspec = new("NullSimMisspec"), equalCon = new("NullSimEqualCon"), 
-    maxDraw=100, sequential = FALSE, 
-    facDist = new("NullSimDataDist"), errorDist = new("NullSimDataDist"), indDist = new("NullSimDataDist"), 
-    indLab = new("NullVector"), modelBoot = FALSE, realData = new("NullDataFrame")))
+    param = "SimSet", misspec = "SimMisspec", equalCon = "SimEqualCon", maxDraw = "numeric", 
+    sequential = "logical", facDist = "SimDataDist", errorDist = "SimDataDist", indDist = "SimDataDist", 
+    indLab = "vector", modelBoot = "logical", realData = "data.frame"), prototype(misspec = new("NullSimMisspec"), 
+    equalCon = new("NullSimEqualCon"), maxDraw = 100, sequential = FALSE, facDist = new("NullSimDataDist"), 
+    errorDist = new("NullSimDataDist"), indDist = new("NullSimDataDist"), indLab = new("NullVector"), 
+    modelBoot = FALSE, realData = new("NullDataFrame")))
 
 setClass("SimDataOut", representation(modelType = "character", data = "data.frame", 
     param = "SimParam", paramOut = "SimRSet", misspecOut = "SimRSet", equalCon = "SimEqualCon", 
@@ -192,7 +195,7 @@ setClass("NullSimMissing", contains = "SimMissing")
 setClass("SimFunction", representation(fun = "function", attribute = "list", 
     callfun = "call"))
 
-setClass("NullSimFunction", contains = "SimFunction") 
+setClass("NullSimFunction", contains = "SimFunction")
 
 setClass("SimDataOut", representation(modelType = "character", data = "data.frame", 
     param = "SimParam", paramOut = "SimRSet", misspecOut = "SimRSet", equalCon = "SimEqualCon", 
@@ -200,6 +203,6 @@ setClass("SimDataOut", representation(modelType = "character", data = "data.fram
 
 setClass("SimResultParam", representation(modelType = "character", nRep = "numeric", 
     param = "data.frame", misspec = "data.frame", fit = "data.frame", seed = "numeric"), 
-	prototype(misspec = new("NullDataFrame"), fit = new("NullDataFrame")))
+    prototype(misspec = new("NullDataFrame"), fit = new("NullDataFrame")))
 
-setClass("SimGenLabels", contains = "MatrixSet")
+setClass("SimGenLabels", contains = "MatrixSet") 

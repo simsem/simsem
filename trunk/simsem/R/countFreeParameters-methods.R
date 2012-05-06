@@ -59,16 +59,16 @@ setMethod("countFreeParameters", signature = "VirtualRSet", definition = functio
             symmetric = TRUE), countFreeParameters(object@PH, symmetric = TRUE), 
         countFreeParameters(object@GA, symmetric = FALSE), countFreeParameters(object@TX), 
         countFreeParameters(object@KA), countFreeParameters(object@TH, symmetric = FALSE))))
-}) 
+})
 
 setMethod("countFreeParameters", signature = "SimEqualCon", definition = function(object) {
     con <- object@con
-	conElement <- sapply(con, nrow) - 1 # Delete the first element of each constraint
-	return(0 - sum(conElement))
-}) 
+    conElement <- sapply(con, nrow) - 1  # Delete the first element of each constraint
+    return(0 - sum(conElement))
+})
 
 setMethod("countFreeParameters", signature = "SimREqualCon", definition = function(object) {
     con <- object@con
-	conElement <- sapply(con, nrow) - 1 # Delete the first element of each constraint
-	return(0 - sum(conElement))
+    conElement <- sapply(con, nrow) - 1  # Delete the first element of each constraint
+    return(0 - sum(conElement))
 }) 

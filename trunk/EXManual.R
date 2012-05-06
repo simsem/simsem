@@ -47,6 +47,9 @@ dir <- "C:/Users/student/Dropbox/simsem/simsem/R/"
  source(paste(dir, "AllClass.R", sep=""))
  source(paste(dir, "AllGenerics.R", sep=""))
  sourceDir(dir)
+
+library(formatR)
+tidy.dir(dir)
  
 loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA

@@ -153,21 +153,21 @@ setMethod("run", signature(object = "SimSet"), definition = function(object,
         RTD = run(object@RTD), VX = run(object@VX), TX = run(object@TX), MX = run(object@MX), 
         GA = run(object@GA), VPH = run(object@VPH), PH = run(object@PH), RPH = run(object@RPH), 
         KA = run(object@KA), TH = run(object@TH), RTH = run(object@RTH))
-	out <- NULL
+    out <- NULL
     if (!isNullObject(equalCon)) {
         if (object@modelType != equalCon@modelType) 
             stop("Please provide same tags of SimSet and constraint")
-		if(equalCon@conBeforeFill) {
-			param <- constrainMatrices(param, equalCon)
-			out <- fillParam(param, object@modelType)
-		} else {
-			param <- fillParam(param, object@modelType)
-			param <- constrainMatrices(param, equalCon)
-			out <- fillParam(param, object@modelType)
-		}
+        if (equalCon@conBeforeFill) {
+            param <- constrainMatrices(param, equalCon)
+            out <- fillParam(param, object@modelType)
+        } else {
+            param <- fillParam(param, object@modelType)
+            param <- constrainMatrices(param, equalCon)
+            out <- fillParam(param, object@modelType)
+        }
     } else {
-		out <- fillParam(param, object@modelType)
-	}
+        out <- fillParam(param, object@modelType)
+    }
     if (makeList) {
         return(list(out, param))
     } else {
