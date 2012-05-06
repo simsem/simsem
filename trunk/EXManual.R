@@ -67,40 +67,6 @@ SimData <- simData(CFA.Model, 200)
 
 data <- run(SimData)
 
-model <- 'f1 =~ NA*y1 + a1*y1 + a2*y2 + a3*y3
-f2 =~ NA*y4 + a4*y4 + a5*y5 + a6*y6
-f1 ~~ 1*f1
-f2 ~~ 1*f2
-y1 ~~ b1*y1
-y2 ~~ b2*y2
-y3 ~~ b3*y3
-y4 ~~ b4*y4
-y5 ~~ b5*y5
-y6 ~~ b6*y6
-relia1 := ((a1 + a2 + a3)^2)/(((a1 + a2 + a3)^2)+b1+b2+b3)'
-
-fit <- cfa(model, data=dat, estimator="WLS")
-summary(fit)
-
-model <- 'f1 =~ NA*y1 + a1*y1 + a2*y2 + a3*y3
-f1 ~~ 1*f1
-y1 ~~ b1*y1
-y2 ~~ b2*y2
-y3 ~~ b3*y3
-relia1 := ((a1 + a2 + a3)^2)/(((a1 + a2 + a3)^2)+b1+b2+b3)'
-
-
-
-
-
-
-
-
-
-
-
-
-
 SimModel <- simModel(CFA.Model)
 
 #SimMissing <- simMissing(pmMCAR=0.1, numImps=5)
@@ -239,12 +205,19 @@ Path.Model <- simSetPath(RPS = RPS, BE = BE, ME = ME)
 mis.path.BE <- matrix(0, 4, 4)
 mis.path.BE[4, 1:2] <- NA
 mis.BE <- simMatrix(mis.path.BE, "u1")
-Path.Mis.Model <- simMisspecPath(BE = mis.BE)
+Path.Mis.Model <- simMisspecPath(BE = mis.BE, misfitType="rmsea") #, misfitBound=c(0.05, 0.08))
 
-Data <- simData(Path.Model, 500)
+Data <- simData(Path.Model, 500, maxDraw=1000)
 Data.Mis <- simData(Path.Model, 500, Path.Mis.Model)
-SimModel <- simModel(Path.Model)
 
+dat <- run(Data.Mis)
+x <- drawParametersMisspec(Path.Model, Path.Mis.Model)
+y <- simResultParam(1000, Path.Model, Path.Mis.Model)
+plot(y@misspec[,2], y@fit[,2])
+lines(loess.smooth(y@misspec[,2], y@fit[,2]), col="red")
+
+SimModel <- simModel(Path.Model)
+popMisfit(Path.Model, Path.Mis.Model, fit.measures="rmsea")
 
 #Output <- simResult(100, Data, SimModel)
 Output <- simResult(100, Data.Mis, SimModel)
@@ -332,24 +305,26 @@ error.cor.trivial <- matrix(NA, 8, 8)
 diag(error.cor.trivial) <- 0
 RTE.trivial <- symMatrix(error.cor.trivial, "n1")
 
-SEM.Mis.Model <- simMisspecSEM(LY = LY.trivial, RTE = RTE.trivial)
+SEM.Mis.Model <- simMisspecSEM(LY = LY.trivial, RTE = RTE.trivial, conBeforeMis=FALSE, misBeforeFill=TRUE)
 
 constraint <- matrix(0, 2, 2)
 constraint[1,] <- c(7, 3)
 constraint[2,] <- c(8, 3)
 rownames(constraint) <- rep("LY", 2)
-equal.loading <- simEqualCon(constraint, modelType="SEM")
+equal.loading <- simEqualCon(constraint, modelType="SEM", conBeforeFill=FALSE)
 
 Data.Original <- simData(SEM.model, 300)
 Data.Mis <- simData(SEM.model, 300, misspec=SEM.Mis.Model)
 Data.Con <- simData(SEM.model, 300, equalCon=equal.loading)
 Data.Mis.Con <- simData(SEM.model, 300, misspec=SEM.Mis.Model, equalCon=equal.loading)
 
+dat <- run(Data.Mis.Con)
+
 Model.Original <- simModel(SEM.model)
 Model.Con <- simModel(SEM.model, equalCon=equal.loading)
 
 
-Output <- simResult(200, Data.Mis.Con, Model.Con, multicore=TRUE)
+Output <- simResult(200, Data.Mis.Con, Model.Con) #, multicore=TRUE)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)

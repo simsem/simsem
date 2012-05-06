@@ -15,7 +15,8 @@ Objects can be created by \code{\link{simEqualCon}}. Also, it can be called of t
   \describe{
     \item{\code{con}:}{List of equality constraint. See the \code{Details} section for the description of each equality constraint. }
     \item{\code{modelType}:}{Analysis model (CFA, SEM, Path) }
-  }
+	\item{\code{conBeforeFill}:}{\code{TRUE} if users wish to apply equality constraint before applying the auto-completion on the parameters that users have not specified. \code{FALSE} if users wish to apply the auto-completion before applying equality constraint. }
+}
 }
 \section{Methods}{
   \describe{

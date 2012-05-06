@@ -3,6 +3,7 @@
 \docType{class}
 \alias{SimMisspec-class}
 \alias{run,SimMisspec-method}
+\alias{summary,SimMisspec-method}
 
 \title{Class \code{"SimMisspec"}}
 \description{
@@ -42,13 +43,19 @@ Object can be created by \code{\link{simMisspecCFA}}, \code{\link{simMisspecPath
     \item{\code{VX}:}{Total variance of X indicators }
     \item{\code{TH}:}{Measurement error covariance between X indicators and Y indicators }
     \item{\code{RTH}:}{Measurement error correlation between X indicators and Y indicators }
-  }
+    \item{\code{conBeforeMis}:}{\code{TRUE} if users wish to constrain parameters before adding misspecification. \code{FALSE} if users wish to constrain parameters after adding misspecification.}
+    \item{\code{misBeforeFill}:}{\code{TRUE} if users wish to apply misspecification before applying the auto-completion on the parameters that users have not specified. \code{FALSE} if users wish to apply the auto-completion before adding misspecification. This option is helpful when users wish to apply misspecification on the parameters that users have not specified (e.g., adding trivial misspecification on the residual variance, which users let the package to calculate it and not specify it). See \code{\link{runMisspec}} for further details.}
+    \item{\code{misfitType}:}{The type of population misfit used in the \code{misfitBound} below. The default is \code{"rmsea"}. The two other options are \code{"f0"} and \code{"srmr"}. See \code{\link{popMisfitMACS}} for further details.}
+    \item{\code{misfitBound}:}{The lower and upper bounds of the population misfit. This option must be a vector with two elements. }
+    \item{\code{averageNumMisspec}:}{If \code{TRUE}, the misfit will be divided by the number of free elements in the misspecification object. The default is \code{FALSE}.}
+	}
 }
 \section{Extends}{
 Class \code{"\linkS4class{SimSet}"}, directly.
 }
 \section{Methods}{
   \describe{
+    \item{summary}{Provide the brief description of this object. }
     \item{run}{Create a sample of parameters in this object. In other words, draw a sample from all random parameters which is represented in \code{\linkS4class{VirtualDist}}. }
 	}
 }

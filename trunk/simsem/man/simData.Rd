@@ -29,8 +29,6 @@ simData(param, ...)
 		\item \emph{n:} Desired sample size
 		\item \emph{misspec:} Model \emph{misspecification} matrices that are created by \code{\link{simMisspecCFA}}, \code{\link{simMisspecPath}}, or \code{\link{simMisspecSEM}}.
 		\item \emph{equalCon:} Equality constraints that are created by \code{\link{simEqualCon}}. This will specify equality econstraints of parameters in data generation process.
-		\item \emph{conBeforeMis:} \code{TRUE} if users wish to constrain parameters before adding misspecification. \code{FALSE} if users wish to constrain parameters after adding misspecification.
-		\item \emph{misfitBound:} Upper bound of population root mean squared error of approximation (RMSEA; Browne & Cudeck, 1992; Steiger & Lind, 1980) that users wish their model misspecification to be
 		\item \emph{maxDraw:} The maximum number of random drawn parameters and misspecification model until all parameters in the model are eligible (no negative error variance, standardized coefficients over 1).
 		\item \emph{sequential:} If \code{TRUE}, use a sequential method to create data such that the data from factor are generated first and apply to a set of equations to obtain the data of indicators. If \code{FALSE}, create data directly from model-implied mean and covariance of indicators.
 		\item \emph{facDist:} A \code{\linkS4class{SimDataDist}} for a distribution of factors. Use when \code{sequential} is \code{TRUE}.
@@ -49,8 +47,6 @@ simData(param, ...)
 \references{
 	\itemize{
 		\item Bollen, K. A., & Stine, R. A. (1992). Bootstrapping goodness-of-fit measures in structural equation models. \emph{Sociological Methods and Research, 21,} 205-229.
-		\item Browne, M. W., & Cudeck, R. (1992). Alternative ways of assessing model fit. \emph{Sociological Methods & Research, 21}, 230-258.
-		\item Stieger, J. H. & Lind, J. C. (1980). \emph{Statistically based tests for the number of factors}. Paper presented at the annual spring meeting of the Psychometric Society, Iowa City, IA. 
 		\item Yung, Y.-F., & Bentler, P. M. (1996). Bootstrapping techniques in analysis of mean and covariance structures. In G. A. Marcoulides & R. E. Schumacker (Eds.), \emph{Advanced structural equation modeling: Issues and techniques} (pp. 195-226). Mahwah, NJ: Erlbaum.
 	}
 }

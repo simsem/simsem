@@ -9,6 +9,8 @@
 \alias{countFreeParameters,matrix-method}
 \alias{countFreeParameters,vector-method}
 \alias{countFreeParameters,VirtualRSet-method}
+\alias{countFreeParameters,SimEqualCon-method}
+\alias{countFreeParameters,SimREqualCon-method}
 \title{
 	Count how many free parameters in the target object
 }
@@ -48,6 +50,12 @@ countFreeParameters(object, ...)
 	}
 	\item{signature(object="VirtualRSet")}{
 		Count the number of \code{NA} in the elements in all vectors and matrices inside the class
+	}
+	\item{signature(object="SimEqualCon")}{
+		Count the number of parameters reduced by this equality constraint
+	}
+	\item{signature(object="SimREqualCon")}{
+		Count the number of parameters reduced by this equality constraint
 	}
 }}
 \value{

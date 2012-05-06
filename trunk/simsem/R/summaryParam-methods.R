@@ -150,3 +150,10 @@ setMethod("summaryParam", signature(object = "SimModelMIOut"), definition = func
     }
     return(as.data.frame(result))
 }) 
+
+setMethod("summaryParam", signature(object = "SimResultParam"), definition = function(object) {
+    average <- colMeans(object@param, na.rm = TRUE)
+    se <- sapply(object@param, sd, na.rm = TRUE)   
+    result <- data.frame(mean = average, sd = se)
+    return(result)
+}) 

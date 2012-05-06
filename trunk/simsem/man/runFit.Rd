@@ -12,8 +12,7 @@ This function will analyze real data and use the result of the analysis to simul
 }
 \usage{
 runFit(model, realdata, nRep=1000, misspec=new("NullSimMisspec"), 
-	conBeforeMis=TRUE, misfitBound=new("NullVector"), maxDraw=100, 
-	sequential=NA, facDist=new("NullSimDataDist"), 
+	maxDraw=100, sequential=NA, facDist=new("NullSimDataDist"), 
 	errorDist=new("NullSimDataDist"), indDist=new("NullSimDataDist"), 
 	modelBoot=FALSE, seed=123321, silent=FALSE, multicore=FALSE, 
 	cluster=FALSE, numProc=NULL, empiricalMissing=TRUE, 
@@ -31,12 +30,6 @@ runFit(model, realdata, nRep=1000, misspec=new("NullSimMisspec"),
 }
   \item{misspec}{
 	Model \emph{misspecification} matrices that are created by \code{\link{simMisspecCFA}}, \code{\link{simMisspecPath}}, or \code{\link{simMisspecSEM}}.
-}
-  \item{conBeforeMis}{
-	\code{TRUE} if users wish to constrain parameters before adding misspecification. \code{FALSE} if users wish to constrain parameters after adding misspecification.
-}
-  \item{misfitBound}{
-	Upper bound of population root mean squared error of approximation (RMSEA; Browne & Cudeck, 1992; Steiger & Lind, 1980) that users wish their model misspecification to be
 }
   \item{maxDraw}{
 	The maximum number of random drawn parameters and misspecification model until all parameters in the model are eligible (no negative error variance, standardized coefficients over 1).

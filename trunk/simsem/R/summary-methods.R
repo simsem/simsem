@@ -189,6 +189,55 @@ setMethod("summary", signature = "SimSet", definition = function(object) {
     }
 })
 
+setMethod("summary", signature = "SimMisspec", definition = function(object) {
+    cat("SET OF MODEL MISSPECIFICATION MATRICES\n")
+    cat("Model Type\n")
+    print(object@modelType)
+    cat("-- Endogeneous Variable --\n")
+    printIfNotNull(object@LY, "\nLY: Loading of Indicator.Y on Factor.ETA")
+    printIfNotNull(object@TE, "\nTE: Covariance of Measurement.Error.EPSILON")
+    printIfNotNull(object@VTE, "\nVTE: Variance of Measurement.Error.EPSILON")
+    printIfNotNull(object@RTE, "\nRTE: Correlation of Measurement.Error.EPSILON")
+    printIfNotNull(object@VY, "\nVY: Variance of Indicator.Y")
+    printIfNotNull(object@TY, "\nTY: Measurement Intercept of Indicator.Y")
+    printIfNotNull(object@MY, "\nMY: mean of Indicator.Y")
+    printIfNotNull(object@BE, "\nBE: Regression Coefficient among Factor.ETA")
+    printIfNotNull(object@PS, "\nPS: Covariance of Regression.Residual.PSI")
+    printIfNotNull(object@VPS, "\nVPS: Variance of Regression.Residual.PSI")
+    printIfNotNull(object@RPS, "\nRPS: Correlation of Regression.Residual.PSI")
+    printIfNotNull(object@VE, "\nVE: Variance of Factor.ETA")
+    printIfNotNull(object@AL, "\nAL: Regression Intercept of Factor.ETA")
+    printIfNotNull(object@ME, "\nME: mean of Factor.ETA")
+    cat("--------------------------", "\n")
+    if (object@modelType == "SEM.exo" | object@modelType == "Path.exo") {
+        cat("-- Exogeneous Variable --\n")
+        printIfNotNull(object@LX, "\nLX: Loading of Indicator.X on Factor.KSI")
+        printIfNotNull(object@TD, "\nTD: Covariance of Measurement.Error.DELTA")
+        printIfNotNull(object@VTD, "\nVTD: Variance of Measurement.Error.DELTA")
+        printIfNotNull(object@RTD, "\nRTD: Correlation of Measurement.Error.DELTA")
+        printIfNotNull(object@VX, "\nVX: Variance of Indicator.X")
+        printIfNotNull(object@TX, "\nTX: Measurement Intercept of Indicator.X")
+        printIfNotNull(object@MX, "\nMX: mean of Indicator.X")
+        printIfNotNull(object@GA, "\nGA: Regression Coefficient of Factor.ETA on Factor.KSI")
+        printIfNotNull(object@PH, "\nPH: Covariance of Factor.KSI")
+        printIfNotNull(object@VPH, "\nVPH: Variance of Factor.KSI")
+        printIfNotNull(object@RPH, "\nRPH: Correlation of Factor.KSI")
+        printIfNotNull(object@KA, "\nKA: mean of Factor.KSI")
+        printIfNotNull(object@TH, "\nTH: Covariance of Measurement.Error.DELTA and Measurement.Error.EPSILON")
+        printIfNotNull(object@RTH, "\nRTH: Correlation of Measurement.Error.DELTA and Measurement.Error.EPSILON")
+        cat("--------------------------", "\n")
+    }
+	cat("Constain objects BEFORE or AFTER adding misspecification\n")
+	ifelse(object@conBeforeMis, print("Before"), print("After"))
+	cat("Misfit bound\n")
+	if (!isNullObject(object@misfitBound)) {
+		print(paste("min =", object@misfitBound[1]))
+		print(paste("max =", object@misfitBound[2]))
+	} else {
+		print("No")
+	}
+})
+
 setMethod("summary", signature = "SimEqualCon", definition = function(object) {
     cat("CONSTRAINT OBJECT\n")
     cat("Model Type\n")
@@ -340,19 +389,6 @@ setMethod("summary", signature = "SimData", definition = function(object,
         cat("Adding Constraint?\n")
         ifelse(!isNullObject(object@equalCon), print("Yes"), print("No"))
     }
-    if (!isNullObject(object@misspec) & !isNullObject(object@equalCon)) {
-        cat("Constain objects BEFORE or AFTER adding misspecification\n")
-        ifelse(object@conBeforeMis, print("Before"), print("After"))
-    }
-    if (!isNullObject(object@misspec)) {
-        cat("Misfit bound\n")
-        if (!isNullObject(object@misfitBound)) {
-            print(paste("min =", object@misfitBound[1]))
-            print(paste("max =", object@misfitBound[2]))
-        } else {
-            print("No")
-        }
-    }
     cat("Maximum Random Sampling Parameters\n")
     print(object@maxDraw)
 })
@@ -364,7 +400,9 @@ setMethod("summary", signature = "SimModel", definition = function(object,
     print(object@modelType)
     cat("========= Parameters Set ============\n")
     summary(object@param)
-    cat("Number of free parameters = ", countFreeParameters(object@param), "\n")
+	nFree <- countFreeParameters(object@param)
+	if(!isNullObject(object@equalCon)) nFree <- nFree + countFreeParameters(object@equalCon)
+    cat("Number of free parameters = ", nFree, "\n")
     cat("=====================================\n")
     if (start) {
         cat("============Starting Values================\n")
@@ -373,7 +411,7 @@ setMethod("summary", signature = "SimModel", definition = function(object,
     }
     if (con) {
         cat("=============Constraint=====================\n")
-        ifelse(!isNullObject(object@equalCon), summary(object@SimEqualCon), print("None"))
+        ifelse(!isNullObject(object@equalCon), summary(object@equalCon), print("None"))
         cat("============================================\n")
     } else {
         cat("Adding Constraint?\n")
@@ -545,4 +583,30 @@ setMethod("summary", signature(object = "SimFunction"), definition = function(ob
         cat("Addition attributes = ", paste(names(x)[3:length(x)], collapse = ", "), 
             "\n")
     }
+}) 
+
+setMethod("summary", signature(object = "SimResultParam"), definition = function(object, digits=3, usedFit=NULL) {
+    if (is.null(usedFit)) 
+        usedFit <- getKeywords()$usedFitPop
+    cat("PARAMETER RESULT OBJECT\n")
+    cat("Model Type\n")
+    print(object@modelType)
+    cat("========= Parameter Values ============\n")
+    print(round(summaryParam(object), digits))
+    cat("========= Misspecification Values ============\n")
+    misspecAverage <- colMeans(object@misspec, na.rm = TRUE)
+    misspecSE <- sapply(object@misspec, sd, na.rm = TRUE)   
+    mis <- data.frame(mean = misspecAverage, sd = misspecSE)
+    print(round(mis, digits))
+    cat("========= Fit Indices Distributions ============\n")
+    quantileValue <- c(0.05, 0.10, 0.25, 0.50, 0.75, 0.90, 0.95)
+    cutoffs <- round(apply(object@fit, 2, quantile, quantileValue), digits)
+    names(dimnames(cutoffs)) <- c("Fit Indices", "Quantile")
+    fitAverage <- colMeans(object@fit, na.rm = TRUE)
+    fitSE <- sapply(object@fit, sd, na.rm = TRUE)
+	cutoffs <- rbind(cutoffs, fitAverage, fitSE)
+    print(round(cutoffs, digits))
+	cat("========= Correlation between Fit Indices and Parameter Misspecification ============\n")
+    fit <- data.frame(object@misspec, object@fit[, usedFit])
+    print(round(cor(fit), digits))
 }) 

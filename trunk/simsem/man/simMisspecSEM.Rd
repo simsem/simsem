@@ -9,7 +9,8 @@
 	in the function. Only element indicating misspecification is added.
 }
 \usage{
-simMisspecSEM(..., exo = FALSE)
+simMisspecSEM(..., exo = FALSE, conBeforeMis=TRUE, misBeforeFill=TRUE, 
+misfitType="rmsea", misfitBound=new("NullVector"), averageNumMisspec=FALSE)
 }
 \arguments{
   \item{\dots}{
@@ -19,6 +20,21 @@ simMisspecSEM(..., exo = FALSE)
 }
   \item{exo}{
 	specify \code{TRUE} if users wish to specify both exogenous and endogenous indicators.
+}
+  \item{conBeforeMis}{
+	\code{TRUE} if users wish to constrain parameters before adding misspecification. \code{FALSE} if users wish to constrain parameters after adding misspecification.
+}
+  \item{misBeforeFill}{
+	\code{TRUE} if users wish to apply misspecification before applying the auto-completion on the parameters that users have not specified. \code{FALSE} if users wish to apply the auto-completion before adding misspecification. This option is helpful when users wish to apply misspecification on the parameters that users have not specified (e.g., adding trivial misspecification on the residual variance, which users let the package to calculate it and not specify it). See \code{\link{runMisspec}} for further details.
+}
+  \item{misfitType}{
+	The type of population misfit used in the \code{misfitBound} below. The default is \code{"rmsea"}. The two other options are \code{"f0"} and \code{"srmr"}. See \code{\link{popMisfitMACS}} for further details.
+}
+  \item{misfitBound}{
+	The lower and upper bounds of the population misfit. This option must be a vector with two elements. 
+}
+  \item{averageNumMisspec}{
+	If \code{TRUE}, the misfit will be divided by the number of free elements in the misspecification object. The default is \code{FALSE}.
 }
 }
 \value{

@@ -1,7 +1,15 @@
 # simMisspecSEM: Create a set of matrices that belongs to SEM misspecification
 # model.
 
-simMisspecSEM <- function(..., exo = FALSE) {
+simMisspecSEM <- function(..., exo = FALSE, conBeforeMis=TRUE, misBeforeFill=TRUE, misfitType="rmsea", misfitBound=new("NullVector"), averageNumMisspec=FALSE) {
+    if (!isNullObject(misfitBound)) {
+        if (length(misfitBound) == 2) {
+            if (misfitBound[1] >= misfitBound[2]) 
+                stop("The lower bound is higher than the upper bound")
+        } else {
+            stop("misfitBound must include only two numbers for lower and upper bound")
+        }
+    }
     W <- getKeywords()
     List <- list(...)
     Names <- names(List)
@@ -109,12 +117,12 @@ simMisspecSEM <- function(..., exo = FALSE) {
             RPS = RPS[[1]], VPS = VPS[[1]], VE = VE[[1]], AL = AL[[1]], ME = ME[[1]], 
             LX = LX[[1]], TD = TD[[1]], RTD = RTD[[1]], VTD = VTD[[1]], VX = VX[[1]], 
             MX = MX[[1]], TX = TX[[1]], GA = GA[[1]], PH = PH[[1]], RPH = RPH[[1]], 
-            VPH = VPH[[1]], KA = KA[[1]], TH = TH[[1]], RTH = RTH[[1]], modelType = "SEM.exo")
+            VPH = VPH[[1]], KA = KA[[1]], TH = TH[[1]], RTH = RTH[[1]], modelType = "SEM.exo", conBeforeMis=conBeforeMis, misBeforeFill=misBeforeFill, misfitType=misfitType, misfitBound=misfitBound, averageNumMisspec=averageNumMisspec)
     } else {
         Output <- new("SimMisspec", LY = LY[[1]], TE = TE[[1]], RTE = RTE[[1]], VTE = VTE[[1]], 
             VY = VY[[1]], MY = MY[[1]], TY = TY[[1]], BE = BE[[1]], PS = PS[[1]], 
             RPS = RPS[[1]], VPS = VPS[[1]], VE = VE[[1]], AL = AL[[1]], ME = ME[[1]], 
-            modelType = "SEM")
+            modelType = "SEM", conBeforeMis=conBeforeMis, misBeforeFill=misBeforeFill, misfitType=misfitType, misfitBound=misfitBound, averageNumMisspec=averageNumMisspec)
     }
     return(Output)
 } 

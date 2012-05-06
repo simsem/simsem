@@ -18,8 +18,6 @@ Objects can be created by \code{\link{simData}}. Also, it can be called by \code
     \item{\code{param}:}{Model specification that used in data generation. It must be in \code{\linkS4class{SimSet}} class.}
     \item{\code{misspec}:}{Model misspecification that used in data generation. It must be in \code{\linkS4class{SimMisspec}} class.}
     \item{\code{equalCon}:}{Equality constraints in data generation. It must be in \code{\linkS4class{SimEqualCon}} class.}
-    \item{\code{conBeforeMis}:}{\code{TRUE} if users wish to constrain parameters before adding misspecification. \code{FALSE} if users wish to constrain parameters after adding misspecification. }
-    \item{\code{misfitBound}:}{Upper bound of population RMSEA that users wish their model misspecification to be}
     \item{\code{maxDraw}:}{The maximum number of random drawn parameters and misspecification model until all parameters in the model are eligible (no negative error variance, standardized coefficients over 1).}
     \item{\code{sequential}:}{If \code{TRUE}, use a sequential method to create data such that the data from factor are generated first and apply to a set of equations to obtain the data of indicators. If \code{FALSE}, create data directly from model-implied mean and covariance of indicators.}
     \item{\code{facDist}:}{A \code{\linkS4class{SimDataDist}} for a distribution of factors. Use when \code{sequential} is \code{TRUE}.}

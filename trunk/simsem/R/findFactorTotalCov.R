@@ -9,7 +9,7 @@ findFactorTotalCov <- function(beta, psi = NULL, corPsi = NULL, totalVarPsi = NU
         library(lavaan)
         if (is.null(errorVarPsi)) 
             errorVarPsi <- findFactorResidualVar(beta, corPsi, totalVarPsi)
-        psi <- cor2cov(corPsi, sqrt(errorVarPsi))
+        psi <- cor2cov(as.matrix(corPsi), sqrt(errorVarPsi))
     }
     iden <- diag(nrow(beta))
     facTotalCov <- solve(iden - beta) %*% psi %*% t(solve(iden - beta))

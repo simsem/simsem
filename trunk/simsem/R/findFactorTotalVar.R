@@ -6,7 +6,7 @@ findFactorTotalVar <- function(beta, corPsi, residualVarPsi) {
     library(lavaan)
     ni <- nrow(beta)
     set <- findRecursiveSet(beta)
-    real.psi <- cor2cov(corPsi, sqrt(residualVarPsi))
+    real.psi <- cor2cov(as.matrix(corPsi), sqrt(residualVarPsi))
     ID <- matrix(0, ni, ni)
     diag(ID) <- 1
     iv.cov <- solve(ID - beta) %*% real.psi %*% t(solve(ID - beta))

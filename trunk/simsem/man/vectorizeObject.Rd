@@ -5,6 +5,7 @@
 \alias{vectorizeObject,vector,vector-method}
 \alias{vectorizeObject,matrix,matrix-method}
 \alias{vectorizeObject,VirtualRSet,SimLabels-method}
+\alias{vectorizeObject,MatrixSet,SimGenLabels-method}
 \title{
 	Change an object to a vector with labels
 }
@@ -34,6 +35,9 @@ vectorizeObject(object, labels, ...)
 		This function will select elements in the object that the corresponding elements in labels are not \code{NA}, give the name for it, and then transform it to vector. The additional arguement is \code{symmetric}, which is \code{TRUE} if the matrix is symmetric matrix
 	}
 	\item{signature(object="VirtualRSet", labels="SimLabels")}{
+		This function will vectorize every matrix or vector in the object and combine them together to a single vector. 
+	}
+	\item{signature(object="MatrixSet", labels="SimGenLabels")}{
 		This function will vectorize every matrix or vector in the object and combine them together to a single vector. 
 	}
 }}

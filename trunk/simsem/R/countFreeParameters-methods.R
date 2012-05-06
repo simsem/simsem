@@ -4,8 +4,8 @@ setMethod("countFreeParameters", signature = "SimMatrix", definition = function(
     if (isNullObject(object)) {
         return(0)
     } else {
-        Labels <- object@param
-        return(sum(!is.na(Labels)))
+        Labels <- object@free
+        return(sum(is.na(Labels)))
     }
 })
 
@@ -13,8 +13,8 @@ setMethod("countFreeParameters", signature = "SymMatrix", definition = function(
     if (isNullObject(object)) {
         return(0)
     } else {
-        Labels <- object@param
-        return(sum(!is.na(Labels[upper.tri(Labels, diag = TRUE)])))
+        Labels <- object@free
+        return(sum(is.na(Labels[upper.tri(Labels, diag = TRUE)])))
     }
 })
 
@@ -22,8 +22,8 @@ setMethod("countFreeParameters", signature = "SimVector", definition = function(
     if (isNullObject(object)) {
         return(0)
     } else {
-        Labels <- object@param
-        return(sum(!is.na(Labels)))
+        Labels <- object@free
+        return(sum(is.na(Labels)))
     }
 })
 
@@ -59,4 +59,16 @@ setMethod("countFreeParameters", signature = "VirtualRSet", definition = functio
             symmetric = TRUE), countFreeParameters(object@PH, symmetric = TRUE), 
         countFreeParameters(object@GA, symmetric = FALSE), countFreeParameters(object@TX), 
         countFreeParameters(object@KA), countFreeParameters(object@TH, symmetric = FALSE))))
+}) 
+
+setMethod("countFreeParameters", signature = "SimEqualCon", definition = function(object) {
+    con <- object@con
+	conElement <- sapply(con, nrow) - 1 # Delete the first element of each constraint
+	return(0 - sum(conElement))
+}) 
+
+setMethod("countFreeParameters", signature = "SimREqualCon", definition = function(object) {
+    con <- object@con
+	conElement <- sapply(con, nrow) - 1 # Delete the first element of each constraint
+	return(0 - sum(conElement))
 }) 

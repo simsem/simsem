@@ -2,42 +2,52 @@
 # misspecification) from simData object
 
 drawParameters <- function(object) {
-    modelType <- object@modelType
+	drawParametersMisspec(object@param, object@misspec, object@equalCon, object@maxDraw)
+}
+
+drawParametersMisspec <- function(objSet, objMisspec = new("NullSimMisspec"), objEqualCon = new("NullSimEqualCon"), maxDraw=100) {
     param <- NULL
     misspec <- NULL
+	misspecAdd <- NULL
     implied.CM.param <- NULL
     implied.CM.misspec <- NULL
     misfit <- NULL
     count <- 0
     repeat {
-        if (!isNullObject(object@misspec)) {
-            Output <- runMisspec(object@param, object@misspec, object@equalCon, object@conBeforeMis)
+        if (!isNullObject(objMisspec)) {
+            Output <- runMisspec(objSet, objMisspec, objEqualCon)
             param <- Output$param
             misspec <- Output$misspec
+			misspecAdd <- Output$misspecAdd
             if (validateObject(param) | validateObject(misspec)) {
                 param <- reduceMatrices(param)
                 misspec <- reduceMatrices(misspec)
                 if (!isNullObject(param) && !isNullObject(misspec)) {
                   implied.CM.param <- createImpliedMACS(param)
                   implied.CM.misspec <- createImpliedMACS(misspec)
-                  if (all(is.finite(implied.CM.misspec$CM)) && sum(eigen(implied.CM.misspec$CM)$values <= 
-                    0) == 0) {
-                    if (isNullObject(object@misfitBound)) {
+                  if (all(is.finite(implied.CM.misspec$CM)) && (sum(eigen(implied.CM.misspec$CM)$values <= 
+                    0) == 0)) {
+                    if (isNullObject(objMisspec@misfitBound)) {
                       break
                     } else {
-                      misfit <- averageMisfit(implied.CM.misspec$M, implied.CM.misspec$CM, 
-                        implied.CM.param$M, implied.CM.param$CM, countFreeParameters(object@misspec))
-                      # param <- misspec # Pretend Misspecified as real parameters for data
-                      # generation
-                      if (!is.null(misfit) && (misfit > object@misfitBound[1] & misfit < 
-                        object@misfitBound[2])) 
+						p <- length(implied.CM.param$M)
+						nElements <- p + (p * (p + 1) / 2)
+						nFree <- countFreeParameters(objSet)
+						if(!isNullObject(objEqualCon)) nFree <- nFree + countFreeParameters(objEqualCon)
+						dfParam <- nElements - nFree
+                      misfit <- popMisfitMACS(implied.CM.param$M, implied.CM.param$CM, 
+                        implied.CM.misspec$M, implied.CM.misspec$CM, fit.measures=objMisspec@misfitType, dfParam=dfParam)
+					  if(objMisspec@averageNumMisspec) misfit <- misfit/countFreeParameters(objMisspec)
+
+                      if (!is.null(misfit) && (misfit > objMisspec@misfitBound[1] & misfit < 
+                        objMisspec@misfitBound[2])) 
                         break
                     }
                   }
-                }
+                } 
             }
         } else {
-            param <- run(object@param, equalCon = object@equalCon)
+            param <- run(objSet, equalCon = objEqualCon)
             if (validateObject(param)) {
                 param <- reduceMatrices(param)
                 if (!isNullObject(param)) {
@@ -49,9 +59,8 @@ drawParameters <- function(object) {
             }
         }
         count <- count + 1
-        if (count > object@maxDraw) 
+        if (count > maxDraw) 
             stop("The model cannot make a good set of parameters within limit of maximum random sampling of parameters")
     }
-    return(list(real = param, misspec = misspec))
+    return(list(real = param, misspec = misspec, misspecAdd=misspecAdd))
 }
- 

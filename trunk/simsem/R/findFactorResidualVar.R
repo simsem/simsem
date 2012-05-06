@@ -31,7 +31,7 @@ findFactorResidualVar <- function(beta, corPsi, totalVarPsi = NULL) {
             }
         }
         if (i < (length(set) - 1)) {
-            tempPsi <- cor2cov(tempPsi, tempPsiSd)
+            tempPsi <- cor2cov(as.matrix(tempPsi), tempPsiSd)
             real.tempPsi <- matrix(0, length(iv) + length(dv), length(iv) + length(dv))
             real.tempPsi[1:length(iv), 1:length(iv)] <- ivCov
             real.tempPsi[(length(iv) + 1):(length(iv) + length(dv)), (length(iv) + 

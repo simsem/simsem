@@ -107,7 +107,7 @@ setGeneric("simData", function(param, ...) {
 })
 
 setGeneric("runFit", function(model, realdata, nRep = 1000, misspec = new("NullSimMisspec"), 
-    conBeforeMis = TRUE, misfitBound = new("NullVector"), maxDraw = 100, sequential = NA, 
+    maxDraw=100, sequential = NA, 
     facDist = new("NullSimDataDist"), errorDist = new("NullSimDataDist"), indDist = new("NullSimDataDist"), 
     modelBoot = FALSE, seed = 123321, silent = FALSE, multicore = FALSE, cluster = FALSE, 
     numProc = NULL, empiricalMissing = TRUE, missModel = new("NullSimMissing"), usedStd = TRUE) {
@@ -128,4 +128,8 @@ setGeneric("getPopulation", function(object, ...) {
 
 setGeneric("setPopulation", function(target, population, ...) {
     return(standardGeneric("setPopulation"))
+}) 
+
+setGeneric("popMisfit", function(param, misspec, dfParam=NULL, fit.measures="all", ...) {
+    return(standardGeneric("popMisfit"))
 }) 

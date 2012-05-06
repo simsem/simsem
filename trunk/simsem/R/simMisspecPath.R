@@ -1,7 +1,15 @@
 # simMisspecPath: Create a set of matrices that belongs to path analysis
 # misspecification model.
 
-simMisspecPath <- function(..., exo = FALSE) {
+simMisspecPath <- function(..., exo = FALSE, conBeforeMis=TRUE, misBeforeFill=TRUE, misfitType="rmsea", misfitBound=new("NullVector"), averageNumMisspec=FALSE) {
+    if (!isNullObject(misfitBound)) {
+        if (length(misfitBound) == 2) {
+            if (misfitBound[1] >= misfitBound[2]) 
+                stop("The lower bound is higher than the upper bound")
+        } else {
+            stop("misfitBound must include only two numbers for lower and upper bound")
+        }
+    }
     W <- getKeywords()
     List <- list(...)
     Names <- names(List)
@@ -53,10 +61,10 @@ simMisspecPath <- function(..., exo = FALSE) {
         ifelse(11 %in% position, KA <- List[position == 11], KA <- list(new("NullSimVector")))
         Output <- new("SimMisspec", BE = BE[[1]], PS = PS[[1]], RPS = RPS[[1]], VPS = VPS[[1]], 
             VE = VE[[1]], AL = AL[[1]], ME = ME[[1]], GA = GA[[1]], PH = PH[[1]], 
-            RPH = RPH[[1]], VPH = VPH[[1]], KA = KA[[1]], modelType = "Path.exo")
+            RPH = RPH[[1]], VPH = VPH[[1]], KA = KA[[1]], modelType = "Path.exo", conBeforeMis=conBeforeMis, misBeforeFill=misBeforeFill, misfitType=misfitType, misfitBound=misfitBound, averageNumMisspec=averageNumMisspec)
     } else {
         Output <- new("SimMisspec", BE = BE[[1]], PS = PS[[1]], RPS = RPS[[1]], VPS = VPS[[1]], 
-            VE = VE[[1]], AL = AL[[1]], ME = ME[[1]], modelType = "Path")
+            VE = VE[[1]], AL = AL[[1]], ME = ME[[1]], modelType = "Path", conBeforeMis=conBeforeMis, misBeforeFill=misBeforeFill, misfitType=misfitType, misfitBound=misfitBound, averageNumMisspec=averageNumMisspec)
     }
     return(Output)
 } 

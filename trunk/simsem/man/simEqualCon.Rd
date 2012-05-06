@@ -7,7 +7,7 @@
 	This function will be used to specify equality constraints. 
 }
 \usage{
-simEqualCon(..., modelType)
+simEqualCon(..., modelType, conBeforeFill=TRUE)
 }
 \arguments{
   \item{\dots}{
@@ -21,6 +21,9 @@ simEqualCon(..., modelType)
 }
   \item{modelType}{
 	Type of analysis: \code{CFA}, \code{Path}, \code{Path.exo}, \code{SEM}, or \code{SEM.exo}.
+}
+  \item{conBeforeFill}{
+	\code{TRUE} if users wish to apply equality constraint before applying the auto-completion on the parameters that users have not specified. \code{FALSE} if users wish to apply the auto-completion before applying equality constraint. This option is helpful when users wish to apply the equality constraint on the parameters that users have not specified (e.g., constraining the residual variance, which users let the package to calculate it and not specify it). See \code{\link{runMisspec}} for further details.
 }
 }
 \details{

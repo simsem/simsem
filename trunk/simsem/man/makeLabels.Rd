@@ -6,6 +6,7 @@
 \alias{makeLabels,matrix-method}
 \alias{makeLabels,SimParam-method}
 \alias{makeLabels,VirtualDist-method}
+\alias{makeLabels,SimSet-method}
 \title{
 	Make parameter names for each element in matrices or vectors or the name for the whole object
 }
@@ -36,6 +37,9 @@ makeLabels(object, ...)
 	}
 	\item{signature(object="VirtualDist")}{
 		This function will create a description of attributes. The additional argument is \code{digit}, which is the number of decimals.
+	}
+	\item{signature(object="SimSet")}{
+		The only addition argument is \code{package}, which is the style to build the labels. This function will create labels of each element by the object name followed by the numbers of rows and columns (or the number of elements) in a matrix in every matrix (or a vector) in the free parameter object.
 	}
 }}
 \value{

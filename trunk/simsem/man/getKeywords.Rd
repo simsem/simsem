@@ -52,6 +52,7 @@ getKeywords()
 		\item \code{facMean} Any factor mean vector keywords
 		\item \code{facVar} Any factor variance vector keywords
 		\item \code{usedFit} Fit indices used as the default for providing output
+		\item \code{usedFitPop} Population fit indices used as the default for providing input
 	}
 }
 \author{
