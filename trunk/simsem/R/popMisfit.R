@@ -83,17 +83,17 @@ setMethod("popMisfit", signature(param = "MatrixSet", misspec = "MatrixSet"),
 setMethod("popMisfit", signature(param = "SimSet", misspec = "SimMisspec"), 
     definition = function(param, misspec, dfParam = NULL, fit.measures = "all", equalCon = new("NullSimEqualCon")) {
         Output <- runMisspec(param, misspec, equalCon)
-        param <- Output$param
+        param2 <- Output$param
         misspec <- Output$misspec
         if (is.null(dfParam)) {
-            p <- length(createImpliedMACS(param)$M)
+            p <- length(createImpliedMACS(param2)$M)
             nElements <- p + (p * (p + 1)/2)
-            nFree <- countFreeParameters(Path.Model)
+            nFree <- countFreeParameters(param)
             if (!isNullObject(equalCon)) 
                 nFree <- nFree + countFreeParameters(equalCon)
             dfParam <- nElements - nFree
         }
-        return(popMisfit(param, misspec, dfParam = dfParam, fit.measures = fit.measures))
+        return(popMisfit(param2, misspec, dfParam = dfParam, fit.measures = fit.measures))
     })
 
 popMisfitMACS <- function(paramM, paramCM, misspecM, misspecCM, dfParam = NULL, 

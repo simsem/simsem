@@ -26,7 +26,7 @@ popDiscrepancy(paramM, paramCM, misspecM, misspecCM)
 \details{
 	The discrepancy value (\eqn{F_0}; Browne & Cudeck, 1992) is calculated by
 	
-	\deqn{ F_0 = tr\left( \tilde{\Sigma} \Sigma^{-1} \right) - \log{\left| \tilde{\Sigma} \Sigma^{-1} \right|} - p + \left( \tilde{\mu} - \mu \right)\prime \Sigma^{-1} \left( \tilde{\mu} - \mu \right).	}
+	\deqn{ F_0 = tr\left( \tilde{\Sigma} \Sigma^{-1} \right) - \log{\left| \tilde{\Sigma} \Sigma^{-1} \right|} - p + \left( \tilde{\mu} - \mu \right)^{\prime} \Sigma^{-1} \left( \tilde{\mu} - \mu \right).	}
 	
 	where \eqn{\mu} is the model-implied mean from the real parameters, \eqn{\Sigma} is the model-implied covariance matrix from the real parameters, \eqn{\tilde{\mu}} is the model-implied mean from the real and misspecified parameters, \eqn{\tilde{\Sigma}} is the model-implied covariance matrix from the real and misspecified parameter, \emph{p} is the number of indicators. 
 }

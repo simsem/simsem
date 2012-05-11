@@ -60,3 +60,16 @@ setMethod("simData", signature(param = "SimModelOut"), definition = function(par
         indDist = indDist, indLab = indLab, modelBoot = modelBoot, realData = realData)
     return(result)
 }) 
+
+
+setMethod("simData", signature(param = "SimRSet"), definition = function(param, n = NULL, 
+    misspec = new("NullSimMisspec"), equalCon = new("NullSimEqualCon"), maxDraw = 100, sequential = FALSE, facDist = new("NullSimDataDist"), 
+    errorDist = new("NullSimDataDist"), indDist = new("NullSimDataDist"), usedStd = TRUE, 
+    modelBoot = FALSE, realData = new("NullDataFrame")) {
+    if(is.null(n)) stop("Please provide the desired sample size.")
+    usedParam <- toSimSet(param)
+    result <- simData(param = usedParam, n = n, misspec = misspec, equalCon = equalCon, 
+        maxDraw = maxDraw, sequential = sequential, facDist = facDist, errorDist = errorDist, 
+        indDist = indDist, indLab = indLab, modelBoot = modelBoot, realData = realData)
+    return(result)
+}) 

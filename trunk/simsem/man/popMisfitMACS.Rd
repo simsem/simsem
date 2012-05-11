@@ -38,7 +38,7 @@ popMisfitMACS(paramM, paramCM, misspecM, misspecCM, dfParam=NULL, fit.measures="
 	
 	The standardized root mean squared residual can be calculated by
 	
-	\deqn{SRMR = \sqrt{\frac{2\sum_{i} \sum_{j \le i} \left( \frac{s_{ij}}{\sqrt{s_{ii}}\sqrt{s_{jj}}} - \frac{\hat{sigma}_{ij}}{\sqrt{\hat{sigma}_{ii}}\sqrt{\hat{sigma}_{jj}}} \right)}{p(p + 1)}}}
+	\deqn{SRMR = \sqrt{\frac{2\sum_{i} \sum_{j \le i} \left( \frac{s_{ij}}{\sqrt{s_{ii}}\sqrt{s_{jj}}} - \frac{\hat{\sigma}_{ij}}{\sqrt{\hat{\sigma}_{ii}}\sqrt{\hat{\sigma}_{jj}}} \right)}{p(p + 1)}}}
 	
 	where \eqn{s_{ij}} is the observed covariance between indicators \emph{i} and \emph{j}, \eqn{\hat{\sigma}_{ij}} is the model-implied covariance between indicators \emph{i} and \emph{j}, \emph{p} is the number of indicators.
 }

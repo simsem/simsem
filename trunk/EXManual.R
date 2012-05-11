@@ -1102,11 +1102,11 @@ path[6, 3] <- path[9, 6] <- NA
 path[5, 1] <- path[8, 4] <- NA
 path[6, 2] <- path[9, 5] <- NA
 pathVal <- matrix(0, 9, 9)
-pathVal[4, 1] <- pathVal[7, 4] <- 0.6
-pathVal[5, 2] <- pathVal[8, 5] <- 0.6
-pathVal[6, 3] <- pathVal[9, 6] <- 0.6
-pathVal[5, 1] <- pathVal[8, 4] <- 0.4
-pathVal[6, 2] <- pathVal[9, 5] <- 0.4
+pathVal[4, 1] <- pathVal[7, 4] <- "u57"
+pathVal[5, 2] <- pathVal[8, 5] <- "u57"
+pathVal[6, 3] <- pathVal[9, 6] <- "u57"
+pathVal[5, 1] <- pathVal[8, 4] <- "u35"
+pathVal[6, 2] <- pathVal[9, 5] <- "u35"
 BE <- simMatrix(path, pathVal)
 facCor <- diag(9)
 facCor[1, 2] <- facCor[2, 1] <- NA
@@ -1167,701 +1167,146 @@ errorCorVal[9, 27] <- 0.04
 errorCorVal <- errorCorVal + t(errorCorVal)
 diag(errorCorVal) <- 1
 TE <- symMatrix(errorCor, errorCorVal)
-longMed <- simSetSEM(BE=BE, RPS=RPS, LY=LY, TE=TE)
+longMed <- simSetSEM(BE=BE, RPS=RPS, LY=LY, RTE=TE)
 
 c1 <- matrix(NA, 2, 1)
 c1[,1] <- c(4, 7)
 rownames(c1) <- rep("VPS", 2)
-con <- simEqualCon(c1, modelType="SEM")
 
+c2 <- matrix(NA, 2, 1)
+c2[,1] <- c(5, 8)
+rownames(c2) <- rep("VPS", 2)
+
+c3 <- matrix(NA, 2, 1)
+c3[,1] <- c(6, 9)
+rownames(c3) <- rep("VPS", 2)
+
+c4 <- matrix(NA, 2, 2)
+c4[1,] <- c(4, 1)
+c4[2,] <- c(7, 4)
+rownames(c4) <- rep("BE", 2)
+
+c5 <- matrix(NA, 2, 2)
+c5[1,] <- c(5, 2)
+c5[2,] <- c(8, 5)
+rownames(c5) <- rep("BE", 2)
+
+c6 <- matrix(NA, 2, 2)
+c6[1,] <- c(6, 3)
+c6[2,] <- c(9, 6)
+rownames(c6) <- rep("BE", 2)
+
+c7 <- matrix(NA, 2, 2)
+c7[1,] <- c(5, 1)
+c7[2,] <- c(8, 4)
+rownames(c7) <- rep("BE", 2)
+
+c8 <- matrix(NA, 2, 2)
+c8[1,] <- c(6, 2)
+c8[2,] <- c(9, 5)
+rownames(c8) <- rep("BE", 2)
+
+c9 <- matrix(NA, 3, 2)
+c9[1,] <- c(1, 1)
+c9[2,] <- c(10, 4)
+c9[3,] <- c(19, 7)
+rownames(c9) <- rep("LY", 3)
+
+c10 <- matrix(NA, 3, 2)
+c10[1,] <- c(2, 1)
+c10[2,] <- c(11, 4)
+c10[3,] <- c(20, 7)
+rownames(c10) <- rep("LY", 3)
+
+c11 <- matrix(NA, 3, 2)
+c11[1,] <- c(3, 1)
+c11[2,] <- c(12, 4)
+c11[3,] <- c(21, 7)
+rownames(c11) <- rep("LY", 3)
+
+c12 <- matrix(NA, 3, 2)
+c12[1,] <- c(4, 2)
+c12[2,] <- c(13, 5)
+c12[3,] <- c(22, 8)
+rownames(c12) <- rep("LY", 3)
+
+c13 <- matrix(NA, 3, 2)
+c13[1,] <- c(5, 2)
+c13[2,] <- c(14, 5)
+c13[3,] <- c(23, 8)
+rownames(c13) <- rep("LY", 3)
+
+c14 <- matrix(NA, 3, 2)
+c14[1,] <- c(6, 2)
+c14[2,] <- c(15, 5)
+c14[3,] <- c(24, 8)
+rownames(c14) <- rep("LY", 3)
+
+c15 <- matrix(NA, 3, 2)
+c15[1,] <- c(7, 3)
+c15[2,] <- c(16, 6)
+c15[3,] <- c(25, 9)
+rownames(c15) <- rep("LY", 3)
+
+c16 <- matrix(NA, 3, 2)
+c16[1,] <- c(8, 3)
+c16[2,] <- c(17, 6)
+c16[3,] <- c(26, 9)
+rownames(c16) <- rep("LY", 3)
+
+c17 <- matrix(NA, 3, 2)
+c17[1,] <- c(9, 3)
+c17[2,] <- c(18, 6)
+c17[3,] <- c(27, 9)
+rownames(c17) <- rep("LY", 3)
+
+con <- simEqualCon(c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15, c16, c17, modelType="SEM", conBeforeFill=FALSE)
 
 datModel <- simData(longMed, 200, equalCon=con)
 dat <- run(datModel, dataOnly=FALSE)
-
-# Delete cor2cov runOpenMx
-# Rename fitMeasures to fitMeasuresChi
-# 
-
-
-
-
-
-############################### Single Indicator ###########################
-
-# Allow Factor Variance
-
-loading <- matrix(0, 13, 2)
- 
-loading[1:12, 1] <- NA
-loading[13, 2] <- 1
-  
-loadingValues <- matrix(0, 13, 2)
-loadingValues[1:12, 1] <- 0.6
-loadingValues[13, 2] <- 0
-LX <- simMatrix(loading, loadingValues)
- 
-RTD <- symMatrix(diag(13))
-
-VTD <- simVector(c(rep(NA, 12), 0), c(rep(1 - 0.6^2, 12), 0)) 
-  
-latent.cor <- matrix(NA, 2, 2)
-diag(latent.cor) <- 1
-RPH <- symMatrix(latent.cor, 0.5)
-  
-VPH <- simVector(c(1, NA), c(0, 1))
-  
-AL <- simVector(c(0, NA), c(0, 0)) 
-  
-TY <- simVector(c(rep(NA, 12), 0), rep(0, 13))
-  
-CFA.Full.Model <- simSetCFA(LY=LX, RPS=RPH, RTE=RTD, VTE = VTD, VPS=VPH, AL=AL, TY=TY)
-  
-SimData <- simData(CFA.Full.Model, 200)
-run(SimData)
-
-# Allow Factor Loading
-
-# Auxiliary correlates only measurement errors
-
-
-loading <- matrix(0, 13, 1)
- 
-loading[1:12, 1] <- NA
-  
-loadingValues <- matrix(0, 13, 1)
-loadingValues[1:12, 1] <- 0.6
-LX <- simMatrix(loading, loadingValues)
- 
-
-VTE <- simVector(rep(NA, 13), c(rep(0.64, 12), 1))
-
-error.cor <- diag(13)
-error.cor[13, 1:12] <- NA
-error.cor[1:12, 13] <- NA  
-error.val <- diag(13)
-error.val[13, 1:12] <- c(rep(0.1, 11), 0.6)
-error.val[1:12, 13] <- c(rep(0.1, 11), 0.6)
-RTD <- symMatrix(error.cor, error.val)
-  
-RPH <- symMatrix(diag(1))
- 
-  
-CFA.Full.Model <- simSetCFA(LY=LX, RPS=RPH, RTE=RTD, VTE=VTE)
-  
-SimData <- simData(CFA.Full.Model, 200)
-run(SimData)
-
-# Model total variance instead
-VY <- simVector(rep(NA, 13), rep(1, 13))
-CFA.Full.Model <- simSetCFA(LY=LX, RPS=RPH, RTE=RTD, VY=VY)
-SimData <- simData(CFA.Full.Model, 200, sequential=TRUE)
-run(SimData)
-
-
-##############################################################################
-
-############# Before Yves Comes ###############
-
-# SimModel run only a part of variables
-# Auxiliary variable
-# Example of using auxiliary variable
-
-#### Plan
-
-# Extract model that is not related to auxiliary variables --> external (SimSet) (SimRSet)
-# SimModel:FIML --> object is the real model and put the auxiliary variable
-# SimModel:MI --> use real model only
-
-# Real data --> SimModelOut --> put it in the SimData --> template model for data generation
-# Real data --> SimModelBootOut --> put it in the SimData --> template model for data generation
-
-
-
-
-################ To be discussed ############
-
-# Multiple Group
-# Categorical Data Analysis
-
-############# Waiting List ####################
-
-# Simulation with parceling
-# Sonya's parceling approach
-
-
-##################################### Auxiliary Variable ############################
-
-sourceDir(path)
-
-loading <- matrix(0, 6, 2)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-LX <- simMatrix(loading, 0.7)
-
-latent.cor <- matrix(NA, 2, 2)
-diag(latent.cor) <- 1
-RPH <- symMatrix(latent.cor, 0.5)
-
-error.cor <- matrix(0, 6, 6)
-diag(error.cor) <- 1
-RTD <- symMatrix(error.cor)
-
-
-loading2 <- matrix(0, 8, 2)
-loading2[1:4, 1] <- NA
-loading2[5:8, 2] <- NA
-LX2 <- simMatrix(loading2, 0.7)
-
-latent.cor2 <- matrix(NA, 2, 2)
-diag(latent.cor2) <- 1
-RPH2 <- symMatrix(latent.cor2, 0.5)
-
-error.cor2 <- matrix(0, 8, 8)
-diag(error.cor2) <- 1
-RTD2 <- symMatrix(error.cor2)
-
-CFA.Model2 <- simSetCFA(LX = LX2, RPH = RPH2, RTD = RTD2) #, VX = VX, MX=MX)
-CFA.Model <- extract(CFA.Model2, y=c(1:3, 5:7))
-
-SimData <- simData(CFA.Model2, 200)
-
-data <- run(SimData)
-
-data[rbinom(200, 1, 0.2)==1,1] <- NA
-data[rbinom(200, 1, 0.2)==1,2] <- NA
-data[rbinom(200, 1, 0.2)==1,3] <- NA
-data[rbinom(200, 1, 0.2)==1,5] <- NA
-data[rbinom(200, 1, 0.2)==1,6] <- NA
-SimMissing <- simMissing(pmMCAR=0.1, numImps=5)
-
-SimModel <- simModel(CFA.Model, auxiliary=c(4, 8))
-
-out <- run(SimModel, data, simMissing=SimMissing)
-
-
-
-Output <- simResult(200, SimData, SimModel)
-#Output <- simResult(100, SimData, SimModel, SimMissing, multicore=TRUE)
-getCutoff(Output, 0.05)
-plotCutoff(Output, 0.05)
-summaryParam(Output)
-
-############################# Auxiliary 2 #########################################
-
-
-u35 <- simUnif(0.3, 0.5)
-u57 <- simUnif(0.5, 0.7)
-u1 <- simUnif(-0.1, 0.1)
-n31 <- simNorm(0.3, 0.1)
-
-path.BE <- matrix(0, 4, 4)
-path.BE[3, 1:2] <- NA
-path.BE[4, 3] <- NA
-starting.BE <- matrix("", 4, 4)
-starting.BE[3, 1:2] <- "u35"
-starting.BE[4, 3] <- "u57"
-BE <- simMatrix(path.BE, starting.BE)
-
-residual.error <- diag(4)
-residual.error[1,2] <- residual.error[2,1] <- NA
-RPS <- symMatrix(residual.error, "n31")
-
-ME <- simVector(rep(NA, 4), 0)
-
-Path.Model <- simSetPath(RPS = RPS, BE = BE, ME = ME)
-
-mis.path.BE <- matrix(0, 4, 4)
-mis.path.BE[4, 1:2] <- NA
-mis.BE <- simMatrix(mis.path.BE, "u1")
-Path.Mis.Model <- simMisspecPath(BE = mis.BE)
-
-Data <- simData(Path.Model, 500)
-Data.Mis <- simData(Path.Model, 500, Path.Mis.Model)
-
-z <- rnorm(500, 0, 1)
-dat <- data.frame(run(Data.Mis), z) 
-SimModel <- simModel(Path.Model, auxiliary="z")
+SimModel <- simModel(longMed, equalCon=con)
 out <- run(SimModel, dat)
 
+LY2 <- matrix(0, 9, 3)
+LY2[1:3, 1] <- NA
+LY2[4:6, 2] <- NA
+LY2[7:9, 3] <- NA
+BE2 <- matrix(0, 3, 3)
+BE2[2,1] <- NA
+BE2[3,2] <- NA
+crossMed <- simParamSEM(LY=LY2, BE=BE2)
+SimModel2 <- simModel(crossMed, indLab=19:27)
+out2 <- run(SimModel2, dat)
 
-##################################### Auxiliary Variable 3 ############################
+output <- simResult(1000, datModel, SimModel)
 
-sourceDir(path)
 
-loading <- matrix(0, 8, 3)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-loading[7, 3] <- NA
-LX <- simMatrix(loading, 0.7)
-LX <- adjust(LX, 1, c(7,3), FALSE)
+mis <- seq(0.01, 0.2, 0.01)
 
-latent.cor <- matrix(NA, 3, 3)
-diag(latent.cor) <- 1
-RPH <- symMatrix(latent.cor, 0.5)
+wrap <- function(mis) {
+loading <- matrix(0, 10, 2)
+loading[1:5, 1] <- NA
+loading[6:10, 2] <- NA
+LY <- simMatrix(loading, 0.7)
 
-error.cor <- diag(8)
-error.cor[1:7, 8] <- NA
-error.cor[8, 1:7] <- NA
-RTD <- symMatrix(error.cor, 0.2)
+facCor <- matrix(NA, 2, 2)
+diag(facCor) <- 1
+PS <- symMatrix(facCor, 0.5)
 
-VTD <- simVector(c(rep(NA, 6), 0, NA), c(rep(0.51, 6), 0, 1))
+TE <- symMatrix(diag(10))
 
-CFA.Model2 <- simSetCFA(LX = LX, RPH = RPH, RTD = RTD, VTD = VTD)
-CFA.Model <- extract(CFA.Model2, y=1:7)
+realPop <- simSetCFA(LY=LY, RPS=PS, RTE=TE)
 
-SimData <- simData(CFA.Model2, 200)
+loadingMis <- matrix(0, 10, 2)
+loadingMis[1, 2] <- NA
+LYmis <- simMatrix(loadingMis, mis)
 
-data <- run(SimData)
+misPop <- simMisspecCFA(LY=LYmis)
 
-SimMissing <- simMissing(pmMCAR=0.1, covs=8, numImps=40)
-
-data <- run(SimMissing, data)
-
-SimModel <- simModel(CFA.Model, auxiliary=8)
-
-out <- run(SimModel, data) #, simMissing=SimMissing)
-out2 <- run(SimModel, data, simMissing=SimMissing)
-
-############################## Extract
-
-# Find Single Indicator or Factor with one no covariance --> Then estimate the path from factor instead of fixing as 0 --> make the covariance from the single indicator as 0.
-
-# Single Indicator need an extra DV approach
-
-# Check with rbinom, qbinom, pbinom, dbinom
-
-rordinal <- function(n, prob, start=1) {
-	if(sum(prob) != 1) stop("The sum of the probabilities is not 1")
-	result <- sample(start:(start + length(prob) - 1), n, replace=TRUE, prob=prob)
-	return(result)
+popMisfit(realPop, misPop)
 }
 
-qordinal <- function(p, prob, start=1) {
-	cumProb <- cumsum(prob)
-	result <- which(cumProb > p)[1]
-	if(p == 1) result <- length(cumProb)
-	result <- result - 1 + start
-	return(result)
-}
-
-pordinal <- function(q, prob, start=1) {
-	q <- ceiling(q - 1 + start)
-	cumProb <- cumsum(prob)
-	if(q < 1) {
-		return(0)
-	} else if (q > length(prob)) {
-		return(1)
-	} else {
-		return(cumProb[q])
-	}
-}
-
-dordinal <- function(x, prob, start=1) {
-	if(x%%1 != 0) {
-		warnings("x must be integer")
-		return(0)
-	} else {
-		q <- q - 1 + start
-		return(prob[q])
-	}
-}
-
-######################### Modeling simParam Only ###############
-
-# What about only one example of auxiliary variable first!
-# e.g., simParamCFA(LY=LY, PS=PS, ...)
-# SimSet will add the feature of group by imposing it as an argument inside the SimSet. For example, SimSetCFA(group = 2, LY= , LY2 = , ...
-
-# Double definition VTE, VY
-# New matrix CPS, CTE, CTD, CPH
-# Change to RPS, PTE, RTD, RPH
-# Make LKY 
-
-# 
-
-# use it in making simVector, simMatrix
-myfun <- function(x) deparse(substitute(x)) 
-exists(x) to check whether the funciton exist
-
-
-# Try
-
-
-loading.X <- matrix(0, 6, 2)
-loading.X[1:3, 1] <- NA
-loading.X[4:6, 2] <- NA
-LX <- simMatrix(loading.X, 0.7)
-
-loading.Y <- matrix(NA, 2, 1)
-LY <- simMatrix(loading.Y, 0.7)
-
-TD <- symMatrix(diag(rep(NA, 6)), 0.51)
-
-TE <- symMatrix(diag(rep(NA, 2)), 0.51)
-
-factor.K.cor <- matrix(NA, 2, 2)
-diag(factor.K.cor) <- 1
-PH <- symMatrix(factor.K.cor, 0.5)
-
-PS <- symMatrix(as.matrix(1))
-
-path.GA <- matrix(NA, 1, 2)
-GA <- simMatrix(path.GA, 0.4)
-
-BE <- simMatrix(as.matrix(0))
-
-SEM.model <- simSetSEM(GA=GA, BE=BE, LX=LX, LY=LY, PH=PH, PS=PS, TD=TD, TE=TE, exo=TRUE)
-
-u2 <- simUnif(-0.2, 0.2)
-n1 <- simNorm(0, 0.1)
-
-loading.X.trivial <- matrix(NA, 6, 2)
-loading.X.trivial[is.na(loading.X)] <- 0
-LX.trivial <- simMatrix(loading.X.trivial, "u2")
-
-error.cor.X.trivial <- matrix(NA, 6, 6)
-diag(error.cor.X.trivial) <- 0
-RTD.trivial <- symMatrix(error.cor.X.trivial, "n1")
-
-error.cor.Y.trivial <- matrix(NA, 2, 2)
-diag(error.cor.Y.trivial) <- 0
-RTE.trivial <- symMatrix(error.cor.Y.trivial, "n1")
-
-RTH.trivial <- simMatrix(matrix(NA, 6, 2), "n1")
-
-SEM.Mis.Model <- simMisspecSEM(LX = LX.trivial, TE = RTE.trivial, TD = RTD.trivial, RTH = 
-RTH.trivial, exo=TRUE)
-
-constraint1 <- matrix(1, 3, 2)
-constraint1[,1] <- 1:3
-rownames(constraint1) <- rep("LX", 3)
-constraint2 <- matrix(2, 3, 2)
-constraint2[,1] <- 4:6
-rownames(constraint2) <- rep("LX", 3)
-constraint3 <- matrix(1, 2, 2)
-constraint3[,1] <- 1:2
-rownames(constraint3) <- rep("LY", 2)
-equal.loading <- simEqualCon(constraint1, constraint2, constraint3, modelType="SEM.exo")
-
-Data.Original <- simData(SEM.model, 300)
-Data.Mis <- simData(SEM.model, 300, misspec=SEM.Mis.Model)
-Data.Con <- simData(SEM.model, 300, equalCon=equal.loading)
-Data.Mis.Con <- simData(SEM.model, 300, misspec=SEM.Mis.Model, 
-	equalCon=equal.loading)
-
-Model.Original <- simModel(SEM.model)
-Model.Con <- simModel(SEM.model, equalCon=equal.loading)
-
-Output <- simResult(100, Data.Mis.Con, Model.Con)
-getCutoff(Output, 0.05)
-plotCutoff(Output, 0.05)
-summaryParam(Output)
-
-
-####################################### try
-
-
- loading <- matrix(0, 6, 2)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-LX <- simMatrix(loading, 0.7)
-
-latent.cor <- matrix(NA, 2, 2)
-diag(latent.cor) <- 1
-RPH <- symMatrix(latent.cor, 0.5)
-
-error.cor <- matrix(0, 6, 6)
-diag(error.cor) <- 1
-RTD <- symMatrix(error.cor)
-
-CFA.Model <- simSetCFA(LY = LX, RPH = RPH, RTD = RTD)
-
-SimData <- simData(CFA.Model, 200)
-
-SimModel <- simModel(CFA.Model)
-
-SimMissing <- simMissing(pmMCAR=0.1, numImps=100)
-
-dat <- run(SimData)
-dat <- run(SimMissing, dat)
-out <- run(SimModel, dat, SimMissing)
-
-
-
-
-# Add new data
-# simParamCFA
-# simParamPath 
-# simParamSEM
-# summary SimParam: Add number of parameters
-# Do we need to check for identification
-# simModel taking simParam
-# Change the order of SimData in the manual and introduction!!!!!!!!!!!!!!!!!
-# simModelOut + simMisspec --> simData; Do we need to use standardized parameters?	
-# simModelOut --> simModel for starting values
-# simModel + Data + simMisspec --> simModelOut + simMisspec --> simResult
-# Problem of fixed.x
-# Change simData.R --> simData-methods.R
-# run(SimFunction) --> Check whether simDataOut
-
-################### Example 14 Analyzing Real Data ###################################
-
-library(lavaan)
-hs <- HolzingerSwineford1939
-loading <- matrix(0, 9, 3)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-loading[7:9, 3] <- NA
-model <- simParamCFA(LY=loading)
-SimModel <- simModel(model, indLab=paste("x", 1:9, sep=""))
-out <- run(SimModel, hs)
-summary(out)
-
-u2 <- simUnif(-0.2, 0.2)
-loading.trivial <- matrix(NA, 9, 3)
-loading.trivial[is.na(loading)] <- 0
-LY.trivial <- simMatrix(loading.trivial, "u2")
-mis <- simMisspecCFA(LY = LY.trivial)
-
-
-
-
-
-Output <- simFit(200, hs, SimModel, mis)
-
-
-##########################################################################
-
-
-n65 <- simNorm(0.6, 0.05)
-u35 <- simUnif(0.3, 0.5)
-u68 <- simUnif(0.6, 0.8)
-u2 <- simUnif(-0.2, 0.2)
-n1 <- simNorm(0, 0.1)
-
-loading <- matrix(0, 9, 3)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-loading[7:9, 3] <- NA
-loading.start <- matrix("", 9, 3)
-loading.start[1:3, 1] <- 0.7
-loading.start[4:6, 2] <- 0.7
-loading.start[7:9, 3] <- "u68"
-LY <- simMatrix(loading, loading.start)
-
-RTE <- symMatrix(diag(9))
-
-factor.cor <- diag(3)
-factor.cor[1, 2] <- factor.cor[2, 1] <- NA
-RPS <- symMatrix(factor.cor, 0.5)
-
-path <- matrix(0, 3, 3)
-path[3, 1:2] <- NA
-path.start <- matrix(0, 3, 3)
-path.start[3, 1] <- "n65"
-path.start[3, 2] <- "u35"
-BE <- simMatrix(path, path.start)
-
-datGen <- simSetSEM(BE=BE, LY=LY, RPS=RPS, RTE=RTE)
-
-loading.trivial <- matrix(NA, 9, 3)
-loading.trivial[is.na(loading)] <- 0
-LY.trivial <- simMatrix(loading.trivial, "u2")
-
-error.cor.trivial <- matrix(NA, 9, 9)
-diag(error.cor.trivial) <- 0
-RTE.trivial <- symMatrix(error.cor.trivial, "n1")
-
-misGen <- simMisspecSEM(LY = LY.trivial, RTE = RTE.trivial)
-
-Data.Mis <- simData(datGen, 300, misspec=misGen)
-
-loading <- matrix(0, 12, 4)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-loading[7:9, 4] <- NA
-loading[10:12, 3] <- NA
-
-path <- matrix(0, 4, 4)
-path[4, 1:3] <- NA
-
-analysis <- simParamSEM(BE=path, LY=loading)
-
-Model <- simModel(analysis)
-
-fun <- simFunction(meanCentering, var1=paste("y", 1:3, sep=""), var2=paste("y", 4:6, sep=""), namesProd=paste("y", 10:12, sep=""))
-
-Output <- simResult(20, Data.Mis, Model, objFunction=fun)
-summary(Output)
-
-
-########################## Terry
-require(simsem)
-
-## set factor loadings and residuals such that total indicator variance = 1
-fl <- .8
-resvar <- 1 - fl^2
-
-## manipulated parameters
-params <- c(rep(.4, 2), 0, rep(.3, 3))
-a <- as.numeric(params[1])
-b <- as.numeric(params[2])
-C <- as.numeric(params[3])
-x <- as.numeric(params[4])
-m <- as.numeric(params[5])
-y <- as.numeric(params[6])
-
-## within-time correlations at Time 1
-xm <- (a * x**2) / (1 - x * m)
-xy <- (b * xm * x**2) / (1 - x * y)
-my <- (1 / (1 - m * y)) * (b * m**2 + a * xy * y**2 + a * b * xm * (m + y + 1))
-
-#Time specific variances: need to make each one equal 1.
-x2ResVar <- 1 - (x^2)
-m2ResVar <- 1 - (a^2 + m^2 + 2*(a * xm * m))
-y2ResVar <- 1 - (b^2 + y^2 + 2*(b * my * y))
-
-xResVar <- 1 - (x^2)
-mResVar <- 1 - (a^2 + m^2)
-yResVar <- 1 - (b^2 + y^2)
-
-## make matrices for population model
-makeLambda <- function(inpMat = NULL, nFac = 0, nTimes = 0, npf = 0, val = c()) {
-	for (i in 1:(nFac * nTimes)) {
-		inpMat[((npf * (i - 1)) + 1):(((npf * (i - 1)) + npf)), i] <- val
-	}
-	return(inpMat)
-}
-loading <- matrix(0, 81, 27)
-loading <- makeLambda(loading, 3, 9, 3, NA)
-load.val <- matrix(0, 81, 27)
-load.val <- makeLambda(load.val, 3, 9, 3, fl)
-LY <- simMatrix(loading, load.val)
-
-errorLag <- function(inpMat = NULL, nVar = 0, nTime = 0, nlag = 0, val = NULL) {
-	i <- 1
-	while (i <= ((nVar * nTime) - (nlag * nVar))) {
-		inpMat[i, (i + (nlag * nVar))] <- val
-		inpMat[(i + (nlag * nVar)), i] <- val
-		i <- i + 1
-	}
-	return(inpMat)
-}
-error.na <- matrix(0, 81, 81)
-diag(error.na) <- NA
-error.na <- errorLag(error.na, 9, 9, 1, NA)
-error.na <- errorLag(error.na, 9, 9, 2, NA)
-error.cor <- matrix(0, 81, 81)
-diag(error.cor) <- 1
-error.cor <- errorLag(error.cor, 9, 9, 1, .1)
-error.cor <- errorLag(error.cor, 9, 9, 2, .01)
-TE <- symMatrix(error.na, error.cor)
-
-makePsi <- function(inpMat = NULL, nFac = 0, nTimes = 0, val = c()) {
-	if (length(val) == 1) {
-		val <- rep(val, nFac)
-	}
-	if (length(val) == nFac) {
-		for (i in 1:nTimes) {
-			inpMat[(1 + (nFac * (i - 1))), (2 + (nFac * (i - 1)))] <- val[1]
-			inpMat[(2 + (nFac * (i - 1))), (1 + (nFac * (i - 1)))] <- val[1]
-			inpMat[(1 + (nFac * (i - 1))), (3 + (nFac * (i - 1)))] <- val[2]
-			inpMat[(3 + (nFac * (i - 1))), (1 + (nFac * (i - 1)))] <- val[2]
-			inpMat[(3 + (nFac * (i - 1))), (2 + (nFac * (i - 1)))] <- val[3]
-			inpMat[(2 + (nFac * (i - 1))), (3 + (nFac * (i - 1)))] <- val[3]
-		}
-	}
-	if (length(val) != nFac) {
-		paste("Cannot evaluate: unequal val= and nFac=")
-	} else {
-		return(inpMat)
-	}
-}
-factor.na <- matrix(0, 27, 27)
-diag(factor.na) <- NA
-factor.na <- makePsi(factor.na, 3, 9, NA)
-factor.cor <- matrix(0, 27, 27)
-diag(factor.cor) <- 1
-factor.cor <- makePsi(factor.cor, 3, 9, 0)
-factor.cor <- makePsi(factor.cor, 3, 1, c(xm, xy, my))
-PS <- symMatrix(factor.na, factor.cor)
-
-makeBeta <- function(inpMat = NULL, nFac = 0, nTimes = 0, val = c(x, m, y, a, b, C)) {
-	if (length(val) == 1) {
-		val <- rep(val, 2*nFac)
-	}
-	if (length(val) == 2*nFac) {
-		for (i in 2:nTimes) {
-			inpMat[(1 + (nFac * (i - 1))), (1 + (nFac * (i - 2)))] <- val[1]
-			inpMat[(2 + (nFac * (i - 1))), (2 + (nFac * (i - 2)))] <- val[2]
-			inpMat[(3 + (nFac * (i - 1))), (3 + (nFac * (i - 2)))] <- val[3]
-			inpMat[(2 + (nFac * (i - 1))), (1 + (nFac * (i - 2)))] <- val[4]
-			inpMat[(3 + (nFac * (i - 1))), (2 + (nFac * (i - 2)))] <- val[5]
-			inpMat[(3 + (nFac * (i - 1))), (1 + (nFac * (i - 2)))] <- val[6]
-		}
-	}
-	if (length(val) != 2*nFac) {
-		paste("Cannot evaluate: unequal val= and nFac=")
-	} else {
-		return(inpMat)
-	}
-}
-path.na <- matrix(0, 27, 27)
-path.na <- makeBeta(path.na, 3, 9, NA)
-path.st <- matrix(0, 27, 27)
-path.st <- makeBeta(path.st, 3, 9, c(x, m, y, a, b, C))
-BE <- simMatrix(path.na, path.st)
-
-VPS <- simVector(c(1, 1, 1, x2ResVar, m2ResVar, y2ResVar, rep(c(xResVar, mResVar, yResVar), 7)))
-VTE <- simVector(rep(resvar, 81))
-
-pop1 <- simSetSEM(BE=BE, LY=LY, RPS=PS, RTE=TE, VPS=VPS, VTE=VTE)
-
-## make matrices for cross-sectional analysis model
-loading <- matrix(0, 9, 3)
-loading <- makeLambda(loading, 3, 1, 3, NA)
-LY0 <- simMatrix(loading)
-
-error.na <- matrix(0, 9, 9)
-diag(error.na) <- NA
-TE0 <- symMatrix(error.na)
-
-factor.na <- matrix(0, 3, 3)
-diag(factor.na) <- 1
-PS0 <- symMatrix(factor.na)
-
-path.na <- matrix(0, 3, 3)
-path.na[3, 1] <- NA
-path.na[3, 2] <- NA
-path.na[2, 1] <- NA
-BE0 <- simMatrix(path.na)
-
-lag0 <- simParamSEM(BE=path.na, LY=loading, PS=factor.na, TE=error.na)
-summary(lag0)
-
-## Set up data and model objects given to the simuation 
-
-## all 9 time points
-simDat1 <- simData(pop1, n = 100)
-SimModel1 <- simModel(pop1)
-results <- simResult(nRep=2, simDat1, SimModel1, seed=3141593, multicore=FALSE) 
-
-## only Time 5
-lag0dat <- simData(pop1, n = 100)
-lag0model <- simModel(lag0, indLab = 37:45)
-results <- simResult(nRep=2, lag0dat, lag0model, seed=3141593, multicore=FALSE) 
-
-
-## just simulate data and run a result, without objects
-dat <- run(simDat1)
-out <- run(lag0model, dat)
-summary(out)
-
-
-
-
-
-
+out <- sapply(mis, wrap)
 
 
 

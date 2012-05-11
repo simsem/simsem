@@ -4,6 +4,7 @@
 \alias{simData,ANY-method}
 \alias{simData,SimSet-method}
 \alias{simData,SimModelOut-method}
+\alias{simData,SimRSet-method}
 \title{
 	Data object
 }

@@ -1,22 +1,37 @@
 \name{toSimSet}
 \alias{toSimSet}
+\alias{toSimSet-methods}
+\alias{toSimSet,ANY-method}
+\alias{toSimSet,SimRSet-method}
+\alias{toSimSet,SimModelOut-method}
 \title{
 	Transform the analysis model object into the object for data generation 
 }
 \description{
-	Transform the analysis model object (\code{\linkS4class{SimModelOut}}) into the object for data generation (\code{\linkS4class{SimSet}})
+	Transform an analysis model object (\code{\linkS4class{SimModelOut}}) or reduced parameters object (\code{\linkS4class{SimRSet}}) into the object for data generation (\code{\linkS4class{SimSet}})
 }
 \usage{
-toSimSet(out, usedStd=TRUE)
+toSimSet(out, ...)
 }
 \arguments{
   \item{out}{
 	The analysis output object to be transformed (\code{\linkS4class{SimModelOut}})
 }
-  \item{usedStd}{
-	If \code{TRUE}, the standardized estimates will be used. If \code{FALSE}, the unstandardized estimates will be used. 
+  \item{\dots}{
+	An additional argument
 }
 }
+\section{Methods}{
+	\describe{
+	\item{signature(out = "SimModelOut")}{
+		This function transforms an analysis model object into the object for data generation. The additional argument is \code{usedStd}. If \code{usedStd=TRUE}, the standardized estimates will be used. If \code{usedStd=FALSE}, the unstandardized estimates will be used. 	
+	}
+	\item{signature(out = "SimRSet")}{
+		This function transforms a parameter value object (in data analysis parameterization) into the object for data generation. The additional argument is \code{param}, which is the \code{\linkS4class{SimParam}} saving the free parameters specification.
+	}
+}}
+
+
 \value{
 	The \code{\linkS4class{SimSet}} that contains parameters for data generation.
 }

@@ -134,3 +134,7 @@ setGeneric("popMisfit", function(param, misspec, dfParam = NULL, fit.measures = 
     ...) {
     return(standardGeneric("popMisfit"))
 }) 
+
+setGeneric("toSimSet", function(out, ...) {
+    return(standardGeneric("toSimSet"))
+}) 

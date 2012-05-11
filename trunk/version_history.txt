@@ -241,3 +241,8 @@ simsem, Version 0.1-3 05/06/12
 - Change the documentation accordingly
 - Use formatR for all codes
 # To do: Connect SimResultParam to SimResult
+
+simsem, Version 0.1-4 05/10/12
+- Add toSimSet and simData methods using SimRSet class, as well as change the documentation
+- Fix a minor bug in popMisfit
+- Fix the error in documentation of popMisfitMACS and popDiscrepancy

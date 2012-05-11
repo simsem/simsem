@@ -16,7 +16,7 @@ setMethod("constrainMatrices", signature(object = "MatrixSet", SimEqualCon = "Si
             if (num == 0) 
                 stop("Cannot recognize the matrix name in the equality constraint")
             fixedvalue <- NA
-            if (isMeanConstraint(rownames(temp.constraint))) {
+            if (isMeanConstraint(rownames(temp.constraint)) | isVarianceConstraint(rownames(temp.constraint))) {
                 fixedvalue <- slot(matrices, temp.matrix)[temp.constraint[1, 2]]
             } else {
                 fixedvalue <- slot(matrices, temp.matrix)[temp.constraint[1, 2], 
@@ -27,7 +27,7 @@ setMethod("constrainMatrices", signature(object = "MatrixSet", SimEqualCon = "Si
                 num <- match(temp.matrix2, label.selection)
                 if (num == 0) 
                   stop("Cannot recognize the matrix name in the equality constraint")
-                if (isMeanConstraint(rownames(temp.constraint))) {
+                if (isMeanConstraint(rownames(temp.constraint)) | isVarianceConstraint(rownames(temp.constraint))) {
                   slot(matrices, temp.matrix2)[temp.constraint[i, 2]] <- fixedvalue
                 } else {
                   slot(matrices, temp.matrix2)[temp.constraint[i, 2], temp.constraint[i, 

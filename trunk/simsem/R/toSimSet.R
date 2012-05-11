@@ -1,10 +1,15 @@
 # toSimSet: Create a SimSet object from SimModelOut
 
-toSimSet <- function(out, usedStd = TRUE) {
+setMethod("toSimSet", signature(out = "SimModelOut"), definition = function(out, usedStd=TRUE) {
     start <- out@coef
     if (usedStd) 
         start <- standardize(out)
-    param <- out@param
+	result <- toSimSet(start, out@param)
+	return(result)
+})
+
+setMethod("toSimSet", signature(out = "SimRSet"), definition = function(out, param) {
+	start <- out
     LY <- new("NullSimMatrix")
     TY <- new("NullSimVector")
     BE <- new("NullSimMatrix")
@@ -62,4 +67,4 @@ toSimSet <- function(out, usedStd = TRUE) {
         stop("Something is wrong!")
     }
     return(result)
-} 
+}) 
