@@ -1,0 +1,45 @@
+Notes on simSEM
+
+From Yves:
+
+in lavaan has simulate data function
+
+If people want the simple stuff they won't use simSEM. Not his focus to simulate data. He wants to use us
+
+Don't use infastructure from lavaan, lots of code and is stuff that Yves has done. 
+
+Need to redo lavaan with increased speed.
+
+Biggest bottleneck for speed is S4 class. Internal copying is slow. In function and object is argument then S4 arguments always copy.
+Primitives (e.g., list) not copied.  look at R.oo old package that used reference classes 
+SOLUTION: new thing in R. Reference classes around since version 2.12. They are copy by reference. New direction for classes. Rewrite lavaan using reference classes and use C++ for core computations.
+Trick use enviornments to get around it  but reference classes are the way to go. They are tricky to use.
+
+mixture of s4 fo imutable objects. For things that change during runs use reference classes or even a list (with no attributes)
+
+function = tracemem() (need to recompile R from source, say enable memory profiling) give it object name. Everytime R copies it will note it. Be as sepcific as possible. Each element in a list needs to be included.
+
+Internally never use a data frame, only use a list. Matrices as not a primitive. 
+
+Search on Rhelp, Rdev on copy by reference etc. 
+
+check out lme4Eigen in Rsourceforge. Uses C++ Eigen library in C++ for matrix computation.
+
+Method dispatching is slow. Find proper method is slow (e.g. find proper run method) is slow.
+
+Functions for users should be easy functions internally should be simple and avoid overhead and memory use!!!!
+
+Why LISREL vs. RAM notation? 
+
+Why matrix centric? In lavaan is not matrix centric.  Uses parameter table. (look at lavaanify function). With table can do many things straight out. Can compute on the table (df, identification etc.). Called an edge list (from Graph theory DAGs). Parameter table defines the model. Can have multiples. To go to matrcies add 3 extra columns. Matrix, row, and column. File in lavaan representation.lisrel (can add other metrix computations).
+in lavaan model is fit@user (do as.data.frame). Or function parTable. Can pass parameter table to lavaan instead of syntax. Equality constraints just used with lables.
+
+in lavaan has bootstrap lavaan. Type=parametric. does a simulation type of run. 
+
+No function name with a dot. Will try to look it up as a method.
+
+In lavaan can create new parameters with := operator. e.g. ab := a*b
+
+
+
+In old version of lavaan 0.3, has write.mplus.

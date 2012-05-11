@@ -1,0 +1,16 @@
+setClass("SimMissing",
+    representation(
+        covs="vector",
+        pmMCAR="numeric",
+        pmMAR="numeric",
+        nforms="numeric",
+        itemGroups="list",
+        twoMethod="vector"),
+    prototype(
+        covs=NULL,
+        pmMCAR=NULL,
+        pmMAR=NULL,
+        nforms=NULL,
+        itemGroups=NULL,
+        twoMethod=NULL)
+)

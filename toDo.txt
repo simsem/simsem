@@ -1,0 +1,11 @@
+12/2/2011 - patr1ckm
+Features:
+- Update runMI to take arbitrary lists of imputation results, not just Amelia
+- add more amelia options for users
+- add simMissing constructor
+- add as argument of simResult
+- make example 
+
+Bugs:
+- runMI not working right in conjunction with the new addition of runLavaan
+
