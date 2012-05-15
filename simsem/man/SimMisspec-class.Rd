@@ -48,6 +48,8 @@ Object can be created by \code{\link{simMisspecCFA}}, \code{\link{simMisspecPath
     \item{\code{misfitType}:}{The type of population misfit used in the \code{misfitBound} below. The default is \code{"rmsea"}. The two other options are \code{"f0"} and \code{"srmr"}. See \code{\link{popMisfitMACS}} for further details.}
     \item{\code{misfitBound}:}{The lower and upper bounds of the population misfit. This option must be a vector with two elements. }
     \item{\code{averageNumMisspec}:}{If \code{TRUE}, the misfit will be divided by the number of free elements in the misspecification object. The default is \code{FALSE}.}
+    \item{\code{optMisfit}:}{Use the optimization method to pick the misspecification set. That is, the program will draw a number of misspecification sets. Then, the different sets of misspecification will be compared together. If \code{"min"} is specified, the program will pick the misspecification set the provides the least amount of misfit. If \code{"max"} is specified, the program will pick the set that has the largets misfit. The default is \code{"none"} to not use the optimization method.}
+    \item{\code{numIter}:}{The number of different misspecification sets for comparison in the optimization method.}
 	}
 }
 \section{Extends}{

@@ -2,7 +2,7 @@
 # misspecification model.
 
 simMisspecPath <- function(..., exo = FALSE, conBeforeMis = TRUE, misBeforeFill = TRUE, 
-    misfitType = "rmsea", misfitBound = new("NullVector"), averageNumMisspec = FALSE) {
+    misfitType = "rmsea", misfitBound = new("NullVector"), averageNumMisspec = FALSE, optMisfit="none", numIter=20) {
     if (!isNullObject(misfitBound)) {
         if (length(misfitBound) == 2) {
             if (misfitBound[1] >= misfitBound[2]) 
@@ -12,6 +12,20 @@ simMisspecPath <- function(..., exo = FALSE, conBeforeMis = TRUE, misBeforeFill 
         }
     }
     W <- getKeywords()
+	
+	optMin <- W$optMin
+	optMax <- W$optMax
+	optNone <- W$optNone
+	optMisfit <- tolower(optMisfit)
+	if(optMisfit != "none") {
+		if(optMisfit %in% optNone) optMisfit <- optNone[1]
+		if(optMisfit %in% optMax) optMisfit <- optMax[1]
+		if(optMisfit %in% optMin) optMisfit <- optMin[1]		
+	}
+	if((optMisfit != "none") && !isNullObject(misfitBound)) {
+		stop("The optimized misfit approach does not work with the misfit bound approach.")		
+	}
+
     List <- list(...)
     Names <- names(List)
     keywords <- NULL
@@ -69,7 +83,7 @@ simMisspecPath <- function(..., exo = FALSE, conBeforeMis = TRUE, misBeforeFill 
         Output <- new("SimMisspec", BE = BE[[1]], PS = PS[[1]], RPS = RPS[[1]], VPS = VPS[[1]], 
             VE = VE[[1]], AL = AL[[1]], ME = ME[[1]], modelType = "Path", conBeforeMis = conBeforeMis, 
             misBeforeFill = misBeforeFill, misfitType = misfitType, misfitBound = misfitBound, 
-            averageNumMisspec = averageNumMisspec)
+            averageNumMisspec = averageNumMisspec, optMisfit=optMisfit, numIter=numIter)
     }
     return(Output)
 } 

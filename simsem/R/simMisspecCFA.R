@@ -2,7 +2,7 @@
 # model.
 
 simMisspecCFA <- function(..., conBeforeMis = TRUE, misBeforeFill = TRUE, 
-    misfitType = "rmsea", misfitBound = new("NullVector"), averageNumMisspec = FALSE) {
+    misfitType = "rmsea", misfitBound = new("NullVector"), averageNumMisspec = FALSE, optMisfit="none", numIter=20) {
     if (!isNullObject(misfitBound)) {
         if (length(misfitBound) == 2) {
             if (misfitBound[1] >= misfitBound[2]) 
@@ -11,7 +11,22 @@ simMisspecCFA <- function(..., conBeforeMis = TRUE, misBeforeFill = TRUE,
             stop("misfitBound must include only two numbers for lower and upper bound")
         }
     }
+	
     W <- getKeywords()
+	
+	optMin <- W$optMin
+	optMax <- W$optMax
+	optNone <- W$optNone
+	optMisfit <- tolower(optMisfit)
+	if(optMisfit != "none") {
+		if(optMisfit %in% optNone) optMisfit <- optNone[1]
+		if(optMisfit %in% optMax) optMisfit <- optMax[1]
+		if(optMisfit %in% optMin) optMisfit <- optMin[1]		
+	}
+	if((optMisfit != "none") && !isNullObject(misfitBound)) {
+		stop("The optimized misfit approach does not work with the misfit bound approach.")		
+	}
+
     List <- list(...)
     Names <- names(List)
     keywords <- list(W$loading, W$errorCor, W$facCor, W$errorVar, W$indicatorVar, 
@@ -57,6 +72,6 @@ simMisspecCFA <- function(..., conBeforeMis = TRUE, misBeforeFill = TRUE,
         RTE = RTE[[1]], VE = VE[[1]], VPS = VE[[1]], VTE = VTE[[1]], VY = VY[[1]], 
         TY = TY[[1]], MY = MY[[1]], ME = ME[[1]], AL = ME[[1]], modelType = "CFA", 
         conBeforeMis = conBeforeMis, misBeforeFill = misBeforeFill, misfitType = misfitType, 
-        misfitBound = misfitBound, averageNumMisspec = averageNumMisspec)
+        misfitBound = misfitBound, averageNumMisspec = averageNumMisspec, optMisfit=optMisfit, numIter=numIter)
     return(Output)
 } 

@@ -60,8 +60,16 @@ Path.Model <- simSetPath(RPS = RPS, BE = BE, ME = ME)
 mis.path.BE <- matrix(0, 4, 4)
 mis.path.BE[4, 1:2] <- NA
 mis.BE <- simMatrix(mis.path.BE, "u1")
-Path.Mis.Model <- simMisspecPath(BE = mis.BE, misfitType="rmsea") #, misfitBound=c(0.05, 0.08))
+Path.Mis.Model <- simMisspecPath(BE = mis.BE, misfitType="rmsea")
 
 # The number of replications in actual analysis should be much more than 50
 ParamObject <- simResultParam(50, Path.Model, Path.Mis.Model)
+
+# Specify the range of misfits to select the set of misspecified parameters
+Path.Mis.Model2 <- simMisspecPath(BE = mis.BE, misfitType="rmsea", misfitBound=c(0.05, 0.08))
+ParamObject2 <- simResultParam(50, Path.Model, Path.Mis.Model2)
+
+# Find the maximum misspecification for each actual parameter
+Path.Mis.Model3 <- simMisspecPath(BE = mis.BE, misfitType="rmsea", optMisfit="max", numIter=10)
+ParamObject3 <- simResultParam(50, Path.Model, Path.Mis.Model3)
 }

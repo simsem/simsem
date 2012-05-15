@@ -53,6 +53,9 @@ getKeywords()
 		\item \code{facVar} Any factor variance vector keywords
 		\item \code{usedFit} Fit indices used as the default for providing output
 		\item \code{usedFitPop} Population fit indices used as the default for providing input
+		\item \code{optMin} The method picking the minimum value of misfit across misspecification sets
+		\item \code{optMax} The method picking the maximum value of misfit across misspecification sets
+		\item \code{optNone} Not using the optimization method
 	}
 }
 \author{

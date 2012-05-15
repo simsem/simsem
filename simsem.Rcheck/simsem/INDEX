@@ -1,0 +1,281 @@
+MatrixSet-class         Class '"MatrixSet"'
+NullDataFrame-class     Null Objects
+SimData-class           Class '"SimData"'
+SimDataDist-class       Class '"SimDataDist"'
+SimDataOut-class        Class '"SimDataOut"'
+SimEqualCon-class       Class '"SimEqualCon"'
+SimFunction-class       Class '"SimFunction"'
+SimGenLabels-class      Class '"SimGenLabels"'
+SimMatrix-class         Matrix object: Random parameters matrix
+SimMissing-class        Class '"SimMissing"'
+SimMisspec-class        Class '"SimMisspec"'
+SimModel-class          Class '"SimModel"'
+SimModelMIOut-class     Class '"SimModelMIOut"'
+SimModelOut-class       Class '"SimModelOut"'
+SimParam-class          Class '"SimParam"'
+SimREqualCon-class      Class '"SimREqualCon"'
+SimResult-class         Class '"SimResult"'
+SimResultParam-class    Class '"SimResultParam"'
+SimSet-class            Class '"SimSet"'
+SimVector-class         Vector object: Random parameters vector
+SymMatrix-class         Symmetric matrix object: Random parameters
+                        symmetric matrix
+VirtualDist-class       Distribution Objects
+VirtualRSet-class       Class '"VirtualRSet"', '"SimLabels"' and
+                        '"SimRSet"'
+adjust                  Change an element in 'SimMatrix', 'SymMatrix',
+                        or 'SimVector'.
+anova,SimResult-method
+                        Provide a comparison of nested models across
+                        replications
+blankParameters         Change all elements in the non-null objects to
+                        be all NAs.
+centralMoment           Calculate central moments of a variable
+clean                   Extract only converged replications in the
+                        result object
+collapseExo             Collapse all exogenous variables and put all in
+                        endogenous side only.
+combineLatentCorExoEndo
+                        Combine exogenous factor correlation and
+                        endogenous factor correlation into a single
+                        matrix
+combineLoadingExoEndo   Combine factor loading from the exogenous and
+                        endogenous sides into a single matrix
+combineMeasurementErrorExoEndo
+                        Combine measurement error correlation from the
+                        exogenous and endogenous sides into a single
+                        matrix
+combineObject           Combine by summing or binding two objects
+                        together.
+combinePathExoEndo      Combine the regression coefficient matrices
+constantVector          Create a constant vector object
+constrainMatrices       Impose an equality constraint in an object
+continuousPower         Find power of model parameters when simulations
+                        have randomly varying parameters
+countFreeParameters     Count how many free parameters in the target
+                        object
+countMACS               Count the number of elements in the sufficient
+                        statistics
+cov2corMod              Convert a covariance matrix to a correlation
+                        matrix
+createData              Create data from model parameters
+createFreeParameters    Create a free parameters object from a model
+                        specification
+createImpliedMACS       Create model implied mean vector and covariance
+                        matrix
+defaultStartingValues   Make ad hoc starting values
+divideObject            Make a division on each element of the object
+drawParameters          Create parameter sets (with or without model
+                        misspecification) from the data object
+drawParametersMisspec   Create parameter sets (with or without model
+                        misspecification) from the parameter with or
+                        without misspecification set
+expandMatrices          Expand the set of intercept and covariance
+                        matrices into the set of intercept/mean and
+                        covariance/correlation/variance objects
+extract                 Extract a part of an object
+extractLavaanFit        Extract fit indices from the lavaan object
+extractMatrixNames      Extract a vector of parameter names based on
+                        specified rows and columns
+extractOpenMxFit        Extract the fit indices reported by the
+                        'OpenMx' result
+extractVectorNames      Extract a vector of parameter names based on
+                        specified elements
+fillParam               Fill in other objects based on the parameter
+                        values of current objects
+findFactorIntercept     Find factor intercept from regression
+                        coefficient matrix and factor total means
+findFactorMean          Find factor total means from regression
+                        coefficient matrix and factor intercept
+findFactorResidualVar   Find factor residual variances from regression
+                        coefficient matrix, factor (residual)
+                        correlations, and total factor variances
+findFactorTotalCov      Find factor total covariance from regression
+                        coefficient matrix, factor residual covariance
+findFactorTotalVar      Find factor total variances from regression
+                        coefficient matrix, factor (residual)
+                        correlations, and factor residual variances
+findIndIntercept        Find indicator intercepts from factor loading
+                        matrix, total factor mean, and indicator mean.
+findIndMean             Find indicator total means from factor loading
+                        matrix, total factor mean, and indicator
+                        intercept.
+findIndResidualVar      Find indicator residual variances from factor
+                        loading matrix, total factor covariance, and
+                        total indicator variances.
+findIndTotalVar         Find indicator total variances from factor
+                        loading matrix, total factor covariance, and
+                        indicator residual variances.
+findPossibleFactorCor   Find the appropriate position for freely
+                        estimated correlation (or covariance) given a
+                        regression coefficient matrix
+findRecursiveSet        Group variables regarding the position in
+                        mediation chain
+findRowZero             Find rows in a matrix that all elements are
+                        zero in non-fixed subset rows and columns.
+fitMeasuresChi          Find fit indices from the discrepancy values of
+                        the target model and null models.
+freeVector              Create a free parameters vector with a starting
+                        values in a vector object
+getCutoff               Find cutoff given a priori alpha level
+getKeywords             List of all keywords used in the 'simsem'
+                        package
+getPopulation           Extract the data generation population model
+                        underlying an object
+getPower                Find power in rejecting alternative models
+                        based on fit indices criteria
+imposeMissing           Impose MAR, MCAR, planned missingness, or
+                        attrition on a data set
+indProd                 Make a product of indicators using mean
+                        centering or double-mean centering
+isCorMatrix             Check whether a 'matrix' is a possible
+                        correlation matrix
+isDefault               Check whether a vector object is default
+isMeanConstraint        Check whether all rownames in a constraint
+                        matrix containing symbols of means vectors
+isNullObject            Check whether the object is the 'NULL' type of
+                        that class
+isRandom                Check whether the object contains any random
+                        parameters
+isVarianceConstraint    Check whether all rownames in a constraint
+                        matrix containing symbols of variance vectors
+kStat                   Calculate the _k_-statistic of a variable
+kurtosis                Finding excessive kurtosis
+loadingFromAlpha        Find standardized factor loading from
+                        coefficient alpha
+makeLabels              Make parameter names for each element in
+                        matrices or vectors or the name for the whole
+                        object
+matchKeywords           Search for the keywords and check whether the
+                        specified text match one in the name vector
+miPool                  Function to pool imputed results
+miPoolChi               Function to pool chi-square statistics from the
+                        result from multiple imputation
+miPoolVector            Function to pool imputed results that saved in
+                        a matrix format
+overlapHist             Plot overlapping histograms
+pValue                  Find p-values (1 - percentile)
+plot3DQtile             Build a persepctive plot or contour plot of a
+                        quantile of predicted values
+plotCutoff              Plot sampling distributions of fit indices
+plotDist                Plot a distribution of a distribution object or
+                        data distribution object
+plotMisfit              Plot the population misfit in parameter result
+                        object
+plotPower               Plot sampling distributions of fit indices that
+                        visualize power
+plotQtile               Build a scatterplot with overlaying line of
+                        quantiles of predicted values
+popDiscrepancy          Find the discrepancy value between two means
+                        and covariance matrices
+popMisfit               Calculate population misfit
+popMisfitMACS           Find population misfit by sufficient statistics
+printIfNotNull          Provide basic summary of each object if that
+                        object is not NULL.
+reassignNames           Reassign the name of equality constraint
+reduceConstraint        Reduce the model constraint to data generation
+                        parameterization to analysis model
+                        parameterization.
+reduceMatrices          Reduce the model constraint to data generation
+                        parameterization to analysis model
+                        parameterization.
+residualCovariate       Residual centered all target indicators by
+                        covariates
+run                     Run a particular object in 'simsem' package.
+runFit                  Build a result object from analyzing real data
+runLavaan               Run data by the model object by the 'lavaan'
+                        package
+runMI                   Multiply impute and analyze data using lavaan
+runMisspec              Draw actual parameters and model
+                        misspecification
+runRep                  Run one replication within a big simulation
+                        study
+setOpenMxObject         Rearrange starting values for 'OpenMx'
+setPopulation           Set the data generation population model
+                        underlying an object
+simBeta                 Create random beta distribution object
+simBinom                Create random binomial distribution object
+simCauchy               Create random Cauchy distribution object
+simChisq                Create random chi-squared distribution object
+simData                 Data object
+simDataDist             Create a data distribution object.
+simEqualCon             Equality Constraint Object
+simExp                  Create random exponential distribution object
+simF                    Create random F distribution object
+simFunction             Create function object
+simGamma                Create random gamma distribution object
+simGeom                 Create random geometric distribution object
+simHyper                Create random hypergeometric distribution
+                        object
+simLnorm                Create random log normal distribution object
+simLogis                Create random logistic distribution object
+simMatrix               Create simMatrix that save free parameters and
+                        starting values, as well as fixed values
+simMissing              Construct a SimMissing object to create data
+                        with missingness and analyze missing data.
+simMisspecCFA           Set of model misspecification for CFA model.
+simMisspecPath          Set of model misspecification for Path analysis
+                        model.
+simMisspecSEM           Set of model misspecification for SEM model.
+simModel                Create simModel from model specification and be
+                        ready for data analysis.
+simNbinom               Create random negative binomial distribution
+                        object
+simNorm                 Create random normal distribution object
+simParamCFA             Create a set of matrices of parameters for
+                        analyzing data that belongs to CFA model.
+simParamPath            Create a set of matrices of parameters for
+                        analyzing data that belongs to Path analysis
+                        model
+simParamSEM             Create a set of matrices of parameters for
+                        analyzing data that belongs to SEM model
+simPois                 Create random Poisson distribution object
+simResult               Create simResult.
+simResultParam          The constructor of the parameter result object
+simSetCFA               Create a set of matrices of parameter and
+                        parameter values to generate and analyze data
+                        that belongs to CFA model.
+simSetPath              Create a set of matrices of parameter and
+                        parameter values to generate and analyze data
+                        that belongs to Path analysis model
+simSetSEM               Create a set of matrices of parameter and
+                        parameter values to generate and analyze data
+                        that belongs to SEM model
+simT                    Create random t distribution object
+simUnif                 Create random uniform distribution object
+simVector               Create simVector that save free parameters and
+                        starting values, as well as fixed values
+simWeibull              Create random Weibull distribution object
+simsem-package          SIMulated Structural Equation Modeling.
+skew                    Finding skewness
+standardize             Standardize the parameter estimates within an
+                        object
+startingValues          Find starting values by averaging random
+                        numbers
+subtractObject          Make a subtraction of each element in an object
+summaryParam            Provide summary of parameter estimates and
+                        standard error across replications
+summaryPopulation       Summarize the data generation population model
+                        underlying an object
+summaryShort            Provide short summary of an object.
+symMatrix               Create symmetric simMatrix that save free
+                        parameters and starting values, as well as
+                        fixed values
+tagHeaders              Tag names to each element
+toSimSet                Transform the analysis model object into the
+                        object for data generation
+validateCovariance      Validate whether all elements provides a good
+                        covariance matrix
+validateObject          Validate whether the drawn parameters are good.
+validatePath            Validate whether the regression coefficient (or
+                        loading) matrix is good
+vectorizeObject         Change an object to a vector with labels
+weightedMean            Calculate the weighted mean of a variable
+writeLavaanCode         Write a lavaan code given the matrices of free
+                        parameter
+writeLavaanConstraint   Write a lavaan code for a given set of equality
+                        constraints
+writeLavaanIndividualConstraint
+                        Write a lavaan code for a given equality
+                        constraint for each parameter
+writeLavaanNullCode     Write a lavaan code for a null model

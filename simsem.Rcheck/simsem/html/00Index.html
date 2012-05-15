@@ -1,0 +1,791 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: SIMulated Structural Equation Modeling.</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+</head><body>
+<h1> SIMulated Structural Equation Modeling.
+<img class="toplogo" src="../../../doc/html/logo.jpg" alt="[R logo]">
+</h1>
+<hr>
+<div align="center">
+<a href="../../../doc/html/packages.html"><img src="../../../doc/html/left.jpg" alt="[Up]" width="30" height="30" border="0"></a>
+<a href="../../../doc/html/index.html"><img src="../../../doc/html/up.jpg" alt="[Top]" width="30" height="30" border="0"></a>
+</div><h2>Documentation for package &lsquo;simsem&rsquo; version 0.1-5</h2>
+
+<ul><li><a href="../DESCRIPTION">DESCRIPTION file</a>.</li>
+</ul>
+
+<h2>Help Pages</h2>
+
+
+<p align="center">
+<a href="# "> </a>
+<a href="#A">A</a>
+<a href="#B">B</a>
+<a href="#C">C</a>
+<a href="#D">D</a>
+<a href="#E">E</a>
+<a href="#F">F</a>
+<a href="#G">G</a>
+<a href="#I">I</a>
+<a href="#K">K</a>
+<a href="#L">L</a>
+<a href="#M">M</a>
+<a href="#N">N</a>
+<a href="#O">O</a>
+<a href="#P">P</a>
+<a href="#R">R</a>
+<a href="#S">S</a>
+<a href="#T">T</a>
+<a href="#V">V</a>
+<a href="#W">W</a>
+</p>
+
+<table width="100%">
+<tr><td width="25%"><a href="simsem-package.html">simsem-package</a></td>
+<td>SIMulated Structural Equation Modeling.</td></tr>
+</table>
+
+<h2><a name="A">-- A --</a></h2>
+
+<table width="100%">
+<tr><td width="25%"><a href="adjust.html">adjust</a></td>
+<td>Change an element in 'SimMatrix', 'SymMatrix', or 'SimVector'.</td></tr>
+<tr><td width="25%"><a href="adjust.html">adjust-method</a></td>
+<td>Change an element in 'SimMatrix', 'SymMatrix', or 'SimVector'.</td></tr>
+<tr><td width="25%"><a href="adjust.html">adjust-methods</a></td>
+<td>Change an element in 'SimMatrix', 'SymMatrix', or 'SimVector'.</td></tr>
+<tr><td width="25%"><a href="anova.html">anova-method</a></td>
+<td>Provide a comparison of nested models across replications</td></tr>
+</table>
+
+<h2><a name="B">-- B --</a></h2>
+
+<table width="100%">
+<tr><td width="25%"><a href="blankParameters.html">blankParameters</a></td>
+<td>Change all elements in the non-null objects to be all NAs.</td></tr>
+</table>
+
+<h2><a name="C">-- C --</a></h2>
+
+<table width="100%">
+<tr><td width="25%"><a href="centralMoment.html">centralMoment</a></td>
+<td>Calculate central moments of a variable</td></tr>
+<tr><td width="25%"><a href="clean.html">clean</a></td>
+<td>Extract only converged replications in the result object</td></tr>
+<tr><td width="25%"><a href="collapseExo.html">collapseExo</a></td>
+<td>Collapse all exogenous variables and put all in endogenous side only.</td></tr>
+<tr><td width="25%"><a href="combineLatentCorExoEndo.html">combineLatentCorExoEndo</a></td>
+<td>Combine exogenous factor correlation and endogenous factor correlation into a single matrix</td></tr>
+<tr><td width="25%"><a href="combineLoadingExoEndo.html">combineLoadingExoEndo</a></td>
+<td>Combine factor loading from the exogenous and endogenous sides into a single matrix</td></tr>
+<tr><td width="25%"><a href="combineMeasurementErrorExoEndo.html">combineMeasurementErrorExoEndo</a></td>
+<td>Combine measurement error correlation from the exogenous and endogenous sides into a single matrix</td></tr>
+<tr><td width="25%"><a href="combineObject.html">combineObject</a></td>
+<td>Combine by summing or binding two objects together.</td></tr>
+<tr><td width="25%"><a href="combineObject.html">combineObject-method</a></td>
+<td>Combine by summing or binding two objects together.</td></tr>
+<tr><td width="25%"><a href="combineObject.html">combineObject-methods</a></td>
+<td>Combine by summing or binding two objects together.</td></tr>
+<tr><td width="25%"><a href="combinePathExoEndo.html">combinePathExoEndo</a></td>
+<td>Combine the regression coefficient matrices</td></tr>
+<tr><td width="25%"><a href="constantVector.html">constantVector</a></td>
+<td>Create a constant vector object</td></tr>
+<tr><td width="25%"><a href="constrainMatrices.html">constrainMatrices</a></td>
+<td>Impose an equality constraint in an object</td></tr>
+<tr><td width="25%"><a href="constrainMatrices.html">constrainMatrices-method</a></td>
+<td>Impose an equality constraint in an object</td></tr>
+<tr><td width="25%"><a href="constrainMatrices.html">constrainMatrices-methods</a></td>
+<td>Impose an equality constraint in an object</td></tr>
+<tr><td width="25%"><a href="continuousPower.html">continuousPower</a></td>
+<td>Find power of model parameters when simulations have randomly varying parameters</td></tr>
+<tr><td width="25%"><a href="countFreeParameters.html">countFreeParameters</a></td>
+<td>Count how many free parameters in the target object</td></tr>
+<tr><td width="25%"><a href="countFreeParameters.html">countFreeParameters-method</a></td>
+<td>Count how many free parameters in the target object</td></tr>
+<tr><td width="25%"><a href="countFreeParameters.html">countFreeParameters-methods</a></td>
+<td>Count how many free parameters in the target object</td></tr>
+<tr><td width="25%"><a href="countMACS.html">countMACS</a></td>
+<td>Count the number of elements in the sufficient statistics</td></tr>
+<tr><td width="25%"><a href="cov2corMod.html">cov2corMod</a></td>
+<td>Convert a covariance matrix to a correlation matrix</td></tr>
+<tr><td width="25%"><a href="createData.html">createData</a></td>
+<td>Create data from model parameters</td></tr>
+<tr><td width="25%"><a href="createFreeParameters.html">createFreeParameters</a></td>
+<td>Create a free parameters object from a model specification</td></tr>
+<tr><td width="25%"><a href="createImpliedMACS.html">createImpliedMACS</a></td>
+<td>Create model implied mean vector and covariance matrix</td></tr>
+<tr><td width="25%"><a href="SimDataOut-class.html">createImpliedMACS-method</a></td>
+<td>Class '"SimDataOut"'</td></tr>
+<tr><td width="25%"><a href="SimModelOut-class.html">createImpliedMACS-method</a></td>
+<td>Class '"SimModelOut"'</td></tr>
+<tr><td width="25%"><a href="createImpliedMACS.html">createImpliedMACS-method</a></td>
+<td>Create model implied mean vector and covariance matrix</td></tr>
+<tr><td width="25%"><a href="createImpliedMACS.html">createImpliedMACS-methods</a></td>
+<td>Create model implied mean vector and covariance matrix</td></tr>
+</table>
+
+<h2><a name="D">-- D --</a></h2>
+
+<table width="100%">
+<tr><td width="25%"><a href="defaultStartingValues.html">defaultStartingValues</a></td>
+<td>Make ad hoc starting values</td></tr>
+<tr><td width="25%"><a href="divideObject.html">divideObject</a></td>
+<td>Make a division on each element of the object</td></tr>
+<tr><td width="25%"><a href="divideObject.html">divideObject-method</a></td>
+<td>Make a division on each element of the object</td></tr>
+<tr><td width="25%"><a href="divideObject.html">divideObject-methods</a></td>
+<td>Make a division on each element of the object</td></tr>
+<tr><td width="25%"><a href="drawParameters.html">drawParameters</a></td>
+<td>Create parameter sets (with or without model misspecification) from the data object</td></tr>
+<tr><td width="25%"><a href="drawParametersMisspec.html">drawParametersMisspec</a></td>
+<td>Create parameter sets (with or without model misspecification) from the parameter with or without misspecification set</td></tr>
+</table>
+
+<h2><a name="E">-- E --</a></h2>
+
+<table width="100%">
+<tr><td width="25%"><a href="expandMatrices.html">expandMatrices</a></td>
+<td>Expand the set of intercept and covariance matrices into the set of intercept/mean and covariance/correlation/variance objects</td></tr>
+<tr><td width="25%"><a href="extract.html">extract</a></td>
+<td>Extract a part of an object</td></tr>
+<tr><td width="25%"><a href="SimDataDist-class.html">extract-method</a></td>
+<td>Class '"SimDataDist"'</td></tr>
+<tr><td width="25%"><a href="SimMatrix-class.html">extract-method</a></td>
+<td>Matrix object: Random parameters matrix</td></tr>
+<tr><td width="25%"><a href="SimSet-class.html">extract-method</a></td>
+<td>Class '"SimSet"'</td></tr>
+<tr><td width="25%"><a href="SimVector-class.html">extract-method</a></td>
+<td>Vector object: Random parameters vector</td></tr>
+<tr><td width="25%"><a href="extract.html">extract-method</a></td>
+<td>Extract a part of an object</td></tr>
+<tr><td width="25%"><a href="extract.html">extract-methods</a></td>
+<td>Extract a part of an object</td></tr>
+<tr><td width="25%"><a href="extractLavaanFit.html">extractLavaanFit</a></td>
+<td>Extract fit indices from the lavaan object</td></tr>
+<tr><td width="25%"><a href="extractMatrixNames.html">extractMatrixNames</a></td>
+<td>Extract a vector of parameter names based on specified rows and columns</td></tr>
+<tr><td width="25%"><a href="extractOpenMxFit.html">extractOpenMxFit</a></td>
+<td>Extract the fit indices reported by the 'OpenMx' result</td></tr>
+<tr><td width="25%"><a href="extractVectorNames.html">extractVectorNames</a></td>
+<td>Extract a vector of parameter names based on specified elements</td></tr>
+</table>
+
+<h2><a name="F">-- F --</a></h2>
+
+<table width="100%">
+<tr><td width="25%"><a href="fillParam.html">fillParam</a></td>
+<td>Fill in other objects based on the parameter values of current objects</td></tr>
+<tr><td width="25%"><a href="findFactorIntercept.html">findFactorIntercept</a></td>
+<td>Find factor intercept from regression coefficient matrix and factor total means</td></tr>
+<tr><td width="25%"><a href="findFactorMean.html">findFactorMean</a></td>
+<td>Find factor total means from regression coefficient matrix and factor intercept</td></tr>
+<tr><td width="25%"><a href="findFactorResidualVar.html">findFactorResidualVar</a></td>
+<td>Find factor residual variances from regression coefficient matrix, factor (residual) correlations, and total factor variances</td></tr>
+<tr><td width="25%"><a href="findFactorTotalCov.html">findFactorTotalCov</a></td>
+<td>Find factor total covariance from regression coefficient matrix, factor residual covariance</td></tr>
+<tr><td width="25%"><a href="findFactorTotalVar.html">findFactorTotalVar</a></td>
+<td>Find factor total variances from regression coefficient matrix, factor (residual) correlations, and factor residual variances</td></tr>
+<tr><td width="25%"><a href="findIndIntercept.html">findIndIntercept</a></td>
+<td>Find indicator intercepts from factor loading matrix, total factor mean, and indicator mean.</td></tr>
+<tr><td width="25%"><a href="findIndMean.html">findIndMean</a></td>
+<td>Find indicator total means from factor loading matrix, total factor mean, and indicator intercept.</td></tr>
+<tr><td width="25%"><a href="findIndResidualVar.html">findIndResidualVar</a></td>
+<td>Find indicator residual variances from factor loading matrix, total factor covariance, and total indicator variances.</td></tr>
+<tr><td width="25%"><a href="findIndTotalVar.html">findIndTotalVar</a></td>
+<td>Find indicator total variances from factor loading matrix, total factor covariance, and indicator residual variances.</td></tr>
+<tr><td width="25%"><a href="findPossibleFactorCor.html">findPossibleFactorCor</a></td>
+<td>Find the appropriate position for freely estimated correlation (or covariance) given a regression coefficient matrix</td></tr>
+<tr><td width="25%"><a href="findRecursiveSet.html">findRecursiveSet</a></td>
+<td>Group variables regarding the position in mediation chain</td></tr>
+<tr><td width="25%"><a href="findRowZero.html">findRowZero</a></td>
+<td>Find rows in a matrix that all elements are zero in non-fixed subset rows and columns.</td></tr>
+<tr><td width="25%"><a href="fitMeasuresChi.html">fitMeasuresChi</a></td>
+<td>Find fit indices from the discrepancy values of the target model and null models.</td></tr>
+<tr><td width="25%"><a href="freeVector.html">freeVector</a></td>
+<td>Create a free parameters vector with a starting values in a vector object</td></tr>
+</table>
+
+<h2><a name="G">-- G --</a></h2>
+
+<table width="100%">
+<tr><td width="25%"><a href="getCutoff.html">getCutoff</a></td>
+<td>Find cutoff given a priori alpha level</td></tr>
+<tr><td width="25%"><a href="getCutoff.html">getCutoff-method</a></td>
+<td>Find cutoff given a priori alpha level</td></tr>
+<tr><td width="25%"><a href="getCutoff.html">getCutoff-methods</a></td>
+<td>Find cutoff given a priori alpha level</td></tr>
+<tr><td width="25%"><a href="getKeywords.html">getKeywords</a></td>
+<td>List of all keywords used in the 'simsem' package</td></tr>
+<tr><td width="25%"><a href="getPopulation.html">getPopulation</a></td>
+<td>Extract the data generation population model underlying an object</td></tr>
+<tr><td width="25%"><a href="SimDataOut-class.html">getPopulation-method</a></td>
+<td>Class '"SimDataOut"'</td></tr>
+<tr><td width="25%"><a href="SimModelOut-class.html">getPopulation-method</a></td>
+<td>Class '"SimModelOut"'</td></tr>
+<tr><td width="25%"><a href="SimResult-class.html">getPopulation-method</a></td>
+<td>Class '"SimResult"'</td></tr>
+<tr><td width="25%"><a href="getPopulation.html">getPopulation-method</a></td>
+<td>Extract the data generation population model underlying an object</td></tr>
+<tr><td width="25%"><a href="getPopulation.html">getPopulation-methods</a></td>
+<td>Extract the data generation population model underlying an object</td></tr>
+<tr><td width="25%"><a href="getPower.html">getPower</a></td>
+<td>Find power in rejecting alternative models based on fit indices criteria</td></tr>
+<tr><td width="25%"><a href="getPower.html">getPower-method</a></td>
+<td>Find power in rejecting alternative models based on fit indices criteria</td></tr>
+<tr><td width="25%"><a href="getPower.html">getPower-methods</a></td>
+<td>Find power in rejecting alternative models based on fit indices criteria</td></tr>
+</table>
+
+<h2><a name="I">-- I --</a></h2>
+
+<table width="100%">
+<tr><td width="25%"><a href="imposeMissing.html">imposeMissing</a></td>
+<td>Impose MAR, MCAR, planned missingness, or attrition on a data set</td></tr>
+<tr><td width="25%"><a href="indProd.html">indProd</a></td>
+<td>Make a product of indicators using mean centering or double-mean centering</td></tr>
+<tr><td width="25%"><a href="isCorMatrix.html">isCorMatrix</a></td>
+<td>Check whether a 'matrix' is a possible correlation matrix</td></tr>
+<tr><td width="25%"><a href="isDefault.html">isDefault</a></td>
+<td>Check whether a vector object is default</td></tr>
+<tr><td width="25%"><a href="isMeanConstraint.html">isMeanConstraint</a></td>
+<td>Check whether all rownames in a constraint matrix containing symbols of means vectors</td></tr>
+<tr><td width="25%"><a href="isNullObject.html">isNullObject</a></td>
+<td>Check whether the object is the 'NULL' type of that class</td></tr>
+<tr><td width="25%"><a href="isNullObject.html">isNullObject-method</a></td>
+<td>Check whether the object is the 'NULL' type of that class</td></tr>
+<tr><td width="25%"><a href="isNullObject.html">isNullObject-methods</a></td>
+<td>Check whether the object is the 'NULL' type of that class</td></tr>
+<tr><td width="25%"><a href="isRandom.html">isRandom</a></td>
+<td>Check whether the object contains any random parameters</td></tr>
+<tr><td width="25%"><a href="isRandom.html">isRandom-method</a></td>
+<td>Check whether the object contains any random parameters</td></tr>
+<tr><td width="25%"><a href="isRandom.html">isRandom-methods</a></td>
+<td>Check whether the object contains any random parameters</td></tr>
+<tr><td width="25%"><a href="isVarianceConstraint.html">isVarianceConstraint</a></td>
+<td>Check whether all rownames in a constraint matrix containing symbols of variance vectors</td></tr>
+</table>
+
+<h2><a name="K">-- K --</a></h2>
+
+<table width="100%">
+<tr><td width="25%"><a href="kStat.html">kStat</a></td>
+<td>Calculate the _k_-statistic of a variable</td></tr>
+<tr><td width="25%"><a href="kurtosis.html">kurtosis</a></td>
+<td>Finding excessive kurtosis</td></tr>
+<tr><td width="25%"><a href="VirtualDist-class.html">kurtosis-method</a></td>
+<td>Distribution Objects</td></tr>
+<tr><td width="25%"><a href="kurtosis.html">kurtosis-method</a></td>
+<td>Finding excessive kurtosis</td></tr>
+<tr><td width="25%"><a href="kurtosis.html">kurtosis-methods</a></td>
+<td>Finding excessive kurtosis</td></tr>
+</table>
+
+<h2><a name="L">-- L --</a></h2>
+
+<table width="100%">
+<tr><td width="25%"><a href="loadingFromAlpha.html">loadingFromAlpha</a></td>
+<td>Find standardized factor loading from coefficient alpha</td></tr>
+</table>
+
+<h2><a name="M">-- M --</a></h2>
+
+<table width="100%">
+<tr><td width="25%"><a href="makeLabels.html">makeLabels</a></td>
+<td>Make parameter names for each element in matrices or vectors or the name for the whole object</td></tr>
+<tr><td width="25%"><a href="makeLabels.html">makeLabels-method</a></td>
+<td>Make parameter names for each element in matrices or vectors or the name for the whole object</td></tr>
+<tr><td width="25%"><a href="makeLabels.html">makeLabels-methods</a></td>
+<td>Make parameter names for each element in matrices or vectors or the name for the whole object</td></tr>
+<tr><td width="25%"><a href="matchKeywords.html">matchKeywords</a></td>
+<td>Search for the keywords and check whether the specified text match one in the name vector</td></tr>
+<tr><td width="25%"><a href="MatrixSet-class.html">MatrixSet-class</a></td>
+<td>Class '"MatrixSet"'</td></tr>
+<tr><td width="25%"><a href="miPool.html">miPool</a></td>
+<td>Function to pool imputed results</td></tr>
+<tr><td width="25%"><a href="miPoolChi.html">miPoolChi</a></td>
+<td>Function to pool chi-square statistics from the result from multiple imputation</td></tr>
+<tr><td width="25%"><a href="miPoolVector.html">miPoolVector</a></td>
+<td>Function to pool imputed results that saved in a matrix format</td></tr>
+<tr><td width="25%"><a href="MatrixSet-class.html">MisspecSet-class</a></td>
+<td>Class '"MatrixSet"'</td></tr>
+</table>
+
+<h2><a name="N">-- N --</a></h2>
+
+<table width="100%">
+<tr><td width="25%"><a href="Null-class.html">NullDataFrame-class</a></td>
+<td>Null Objects</td></tr>
+<tr><td width="25%"><a href="Null-class.html">NullMatrix-class</a></td>
+<td>Null Objects</td></tr>
+<tr><td width="25%"><a href="Null-class.html">NullRSet-class</a></td>
+<td>Null Objects</td></tr>
+<tr><td width="25%"><a href="Null-class.html">NullSimDataDist-class</a></td>
+<td>Null Objects</td></tr>
+<tr><td width="25%"><a href="Null-class.html">NullSimEqualCon-class</a></td>
+<td>Null Objects</td></tr>
+<tr><td width="25%"><a href="Null-class.html">NullSimFunction-class</a></td>
+<td>Null Objects</td></tr>
+<tr><td width="25%"><a href="Null-class.html">NullSimMatrix-class</a></td>
+<td>Null Objects</td></tr>
+<tr><td width="25%"><a href="Null-class.html">NullSimMissing-class</a></td>
+<td>Null Objects</td></tr>
+<tr><td width="25%"><a href="Null-class.html">NullSimMisspec-class</a></td>
+<td>Null Objects</td></tr>
+<tr><td width="25%"><a href="Null-class.html">NullSimREqualCon-class</a></td>
+<td>Null Objects</td></tr>
+<tr><td width="25%"><a href="Null-class.html">NullSimSet-class</a></td>
+<td>Null Objects</td></tr>
+<tr><td width="25%"><a href="Null-class.html">NullSimVector-class</a></td>
+<td>Null Objects</td></tr>
+<tr><td width="25%"><a href="Null-class.html">NullSymMatrix-class</a></td>
+<td>Null Objects</td></tr>
+<tr><td width="25%"><a href="Null-class.html">NullVector-class</a></td>
+<td>Null Objects</td></tr>
+</table>
+
+<h2><a name="O">-- O --</a></h2>
+
+<table width="100%">
+<tr><td width="25%"><a href="overlapHist.html">overlapHist</a></td>
+<td>Plot overlapping histograms</td></tr>
+</table>
+
+<h2><a name="P">-- P --</a></h2>
+
+<table width="100%">
+<tr><td width="25%"><a href="plot3DQtile.html">plot3DQtile</a></td>
+<td>Build a persepctive plot or contour plot of a quantile of predicted values</td></tr>
+<tr><td width="25%"><a href="plotCutoff.html">plotCutoff</a></td>
+<td>Plot sampling distributions of fit indices</td></tr>
+<tr><td width="25%"><a href="plotCutoff.html">plotCutoff-method</a></td>
+<td>Plot sampling distributions of fit indices</td></tr>
+<tr><td width="25%"><a href="plotCutoff.html">plotCutoff-methods</a></td>
+<td>Plot sampling distributions of fit indices</td></tr>
+<tr><td width="25%"><a href="plotDist.html">plotDist</a></td>
+<td>Plot a distribution of a distribution object or data distribution object</td></tr>
+<tr><td width="25%"><a href="SimDataDist-class.html">plotDist-method</a></td>
+<td>Class '"SimDataDist"'</td></tr>
+<tr><td width="25%"><a href="VirtualDist-class.html">plotDist-method</a></td>
+<td>Distribution Objects</td></tr>
+<tr><td width="25%"><a href="plotDist.html">plotDist-methods</a></td>
+<td>Plot a distribution of a distribution object or data distribution object</td></tr>
+<tr><td width="25%"><a href="plotMisfit.html">plotMisfit</a></td>
+<td>Plot the population misfit in parameter result object</td></tr>
+<tr><td width="25%"><a href="plotPower.html">plotPower</a></td>
+<td>Plot sampling distributions of fit indices that visualize power</td></tr>
+<tr><td width="25%"><a href="plotPower.html">plotPower-method</a></td>
+<td>Plot sampling distributions of fit indices that visualize power</td></tr>
+<tr><td width="25%"><a href="plotPower.html">plotPower-methods</a></td>
+<td>Plot sampling distributions of fit indices that visualize power</td></tr>
+<tr><td width="25%"><a href="plotQtile.html">plotQtile</a></td>
+<td>Build a scatterplot with overlaying line of quantiles of predicted values</td></tr>
+<tr><td width="25%"><a href="popDiscrepancy.html">popDiscrepancy</a></td>
+<td>Find the discrepancy value between two means and covariance matrices</td></tr>
+<tr><td width="25%"><a href="popMisfit.html">popMisfit</a></td>
+<td>Calculate population misfit</td></tr>
+<tr><td width="25%"><a href="popMisfit.html">popMisfit-method</a></td>
+<td>Calculate population misfit</td></tr>
+<tr><td width="25%"><a href="popMisfit.html">popMisfit-methods</a></td>
+<td>Calculate population misfit</td></tr>
+<tr><td width="25%"><a href="popMisfitMACS.html">popMisfitMACS</a></td>
+<td>Find population misfit by sufficient statistics</td></tr>
+<tr><td width="25%"><a href="printIfNotNull.html">printIfNotNull</a></td>
+<td>Provide basic summary of each object if that object is not NULL.</td></tr>
+<tr><td width="25%"><a href="pValue.html">pValue</a></td>
+<td>Find p-values (1 - percentile)</td></tr>
+<tr><td width="25%"><a href="pValue.html">pValue-method</a></td>
+<td>Find p-values (1 - percentile)</td></tr>
+<tr><td width="25%"><a href="pValue.html">pValue-methods</a></td>
+<td>Find p-values (1 - percentile)</td></tr>
+</table>
+
+<h2><a name="R">-- R --</a></h2>
+
+<table width="100%">
+<tr><td width="25%"><a href="reassignNames.html">reassignNames</a></td>
+<td>Reassign the name of equality constraint</td></tr>
+<tr><td width="25%"><a href="reduceConstraint.html">reduceConstraint</a></td>
+<td>Reduce the model constraint to data generation parameterization to analysis model parameterization.</td></tr>
+<tr><td width="25%"><a href="reduceMatrices.html">reduceMatrices</a></td>
+<td>Reduce the model constraint to data generation parameterization to analysis model parameterization.</td></tr>
+<tr><td width="25%"><a href="residualCovariate.html">residualCovariate</a></td>
+<td>Residual centered all target indicators by covariates</td></tr>
+<tr><td width="25%"><a href="run.html">run</a></td>
+<td>Run a particular object in 'simsem' package.</td></tr>
+<tr><td width="25%"><a href="SimData-class.html">run-method</a></td>
+<td>Class '"SimData"'</td></tr>
+<tr><td width="25%"><a href="SimDataDist-class.html">run-method</a></td>
+<td>Class '"SimDataDist"'</td></tr>
+<tr><td width="25%"><a href="SimFunction-class.html">run-method</a></td>
+<td>Class '"SimFunction"'</td></tr>
+<tr><td width="25%"><a href="SimGenLabels-class.html">run-method</a></td>
+<td>Class '"SimGenLabels"'</td></tr>
+<tr><td width="25%"><a href="SimMatrix-class.html">run-method</a></td>
+<td>Matrix object: Random parameters matrix</td></tr>
+<tr><td width="25%"><a href="SimMissing-class.html">run-method</a></td>
+<td>Class '"SimMissing"'</td></tr>
+<tr><td width="25%"><a href="SimMisspec-class.html">run-method</a></td>
+<td>Class '"SimMisspec"'</td></tr>
+<tr><td width="25%"><a href="SimModel-class.html">run-method</a></td>
+<td>Class '"SimModel"'</td></tr>
+<tr><td width="25%"><a href="SimSet-class.html">run-method</a></td>
+<td>Class '"SimSet"'</td></tr>
+<tr><td width="25%"><a href="SimVector-class.html">run-method</a></td>
+<td>Vector object: Random parameters vector</td></tr>
+<tr><td width="25%"><a href="SymMatrix-class.html">run-method</a></td>
+<td>Symmetric matrix object: Random parameters symmetric matrix</td></tr>
+<tr><td width="25%"><a href="VirtualDist-class.html">run-method</a></td>
+<td>Distribution Objects</td></tr>
+<tr><td width="25%"><a href="run.html">run-method</a></td>
+<td>Run a particular object in 'simsem' package.</td></tr>
+<tr><td width="25%"><a href="run.html">run-methods</a></td>
+<td>Run a particular object in 'simsem' package.</td></tr>
+<tr><td width="25%"><a href="runFit.html">runFit</a></td>
+<td>Build a result object from analyzing real data</td></tr>
+<tr><td width="25%"><a href="runFit.html">runFit-method</a></td>
+<td>Build a result object from analyzing real data</td></tr>
+<tr><td width="25%"><a href="runFit.html">runFit-methods</a></td>
+<td>Build a result object from analyzing real data</td></tr>
+<tr><td width="25%"><a href="runLavaan.html">runLavaan</a></td>
+<td>Run data by the model object by the 'lavaan' package</td></tr>
+<tr><td width="25%"><a href="runMI.html">runMI</a></td>
+<td>Multiply impute and analyze data using lavaan</td></tr>
+<tr><td width="25%"><a href="runMisspec.html">runMisspec</a></td>
+<td>Draw actual parameters and model misspecification</td></tr>
+<tr><td width="25%"><a href="runRep.html">runRep</a></td>
+<td>Run one replication within a big simulation study</td></tr>
+</table>
+
+<h2><a name="S">-- S --</a></h2>
+
+<table width="100%">
+<tr><td width="25%"><a href="setOpenMxObject.html">setOpenMxObject</a></td>
+<td>Rearrange starting values for 'OpenMx'</td></tr>
+<tr><td width="25%"><a href="setOpenMxObject.html">setOpenMxObject-method</a></td>
+<td>Rearrange starting values for 'OpenMx'</td></tr>
+<tr><td width="25%"><a href="setOpenMxObject.html">setOpenMxObject-methods</a></td>
+<td>Rearrange starting values for 'OpenMx'</td></tr>
+<tr><td width="25%"><a href="setPopulation.html">setPopulation</a></td>
+<td>Set the data generation population model underlying an object</td></tr>
+<tr><td width="25%"><a href="SimModelOut-class.html">setPopulation-method</a></td>
+<td>Class '"SimModelOut"'</td></tr>
+<tr><td width="25%"><a href="SimResult-class.html">setPopulation-method</a></td>
+<td>Class '"SimResult"'</td></tr>
+<tr><td width="25%"><a href="setPopulation.html">setPopulation-method</a></td>
+<td>Set the data generation population model underlying an object</td></tr>
+<tr><td width="25%"><a href="setPopulation.html">setPopulation-methods</a></td>
+<td>Set the data generation population model underlying an object</td></tr>
+<tr><td width="25%"><a href="simBeta.html">simBeta</a></td>
+<td>Create random beta distribution object</td></tr>
+<tr><td width="25%"><a href="VirtualDist-class.html">SimBeta-class</a></td>
+<td>Distribution Objects</td></tr>
+<tr><td width="25%"><a href="simBinom.html">simBinom</a></td>
+<td>Create random binomial distribution object</td></tr>
+<tr><td width="25%"><a href="VirtualDist-class.html">SimBinom-class</a></td>
+<td>Distribution Objects</td></tr>
+<tr><td width="25%"><a href="simCauchy.html">simCauchy</a></td>
+<td>Create random Cauchy distribution object</td></tr>
+<tr><td width="25%"><a href="VirtualDist-class.html">SimCauchy-class</a></td>
+<td>Distribution Objects</td></tr>
+<tr><td width="25%"><a href="simChisq.html">simChisq</a></td>
+<td>Create random chi-squared distribution object</td></tr>
+<tr><td width="25%"><a href="VirtualDist-class.html">SimChisq-class</a></td>
+<td>Distribution Objects</td></tr>
+<tr><td width="25%"><a href="simData.html">simData</a></td>
+<td>Data object</td></tr>
+<tr><td width="25%"><a href="SimData-class.html">SimData-class</a></td>
+<td>Class '"SimData"'</td></tr>
+<tr><td width="25%"><a href="simData.html">simData-method</a></td>
+<td>Data object</td></tr>
+<tr><td width="25%"><a href="simData.html">simData-methods</a></td>
+<td>Data object</td></tr>
+<tr><td width="25%"><a href="simDataDist.html">simDataDist</a></td>
+<td>Create a data distribution object.</td></tr>
+<tr><td width="25%"><a href="SimDataDist-class.html">SimDataDist-class</a></td>
+<td>Class '"SimDataDist"'</td></tr>
+<tr><td width="25%"><a href="SimDataOut-class.html">SimDataOut-class</a></td>
+<td>Class '"SimDataOut"'</td></tr>
+<tr><td width="25%"><a href="simEqualCon.html">simEqualCon</a></td>
+<td>Equality Constraint Object</td></tr>
+<tr><td width="25%"><a href="SimEqualCon-class.html">SimEqualCon-class</a></td>
+<td>Class '"SimEqualCon"'</td></tr>
+<tr><td width="25%"><a href="simExp.html">simExp</a></td>
+<td>Create random exponential distribution object</td></tr>
+<tr><td width="25%"><a href="VirtualDist-class.html">SimExp-class</a></td>
+<td>Distribution Objects</td></tr>
+<tr><td width="25%"><a href="simF.html">simF</a></td>
+<td>Create random F distribution object</td></tr>
+<tr><td width="25%"><a href="VirtualDist-class.html">SimF-class</a></td>
+<td>Distribution Objects</td></tr>
+<tr><td width="25%"><a href="simFunction.html">simFunction</a></td>
+<td>Create function object</td></tr>
+<tr><td width="25%"><a href="SimFunction-class.html">SimFunction-class</a></td>
+<td>Class '"SimFunction"'</td></tr>
+<tr><td width="25%"><a href="simGamma.html">simGamma</a></td>
+<td>Create random gamma distribution object</td></tr>
+<tr><td width="25%"><a href="VirtualDist-class.html">SimGamma-class</a></td>
+<td>Distribution Objects</td></tr>
+<tr><td width="25%"><a href="SimGenLabels-class.html">SimGenLabels-class</a></td>
+<td>Class '"SimGenLabels"'</td></tr>
+<tr><td width="25%"><a href="simGeom.html">simGeom</a></td>
+<td>Create random geometric distribution object</td></tr>
+<tr><td width="25%"><a href="VirtualDist-class.html">SimGeom-class</a></td>
+<td>Distribution Objects</td></tr>
+<tr><td width="25%"><a href="simHyper.html">simHyper</a></td>
+<td>Create random hypergeometric distribution object</td></tr>
+<tr><td width="25%"><a href="VirtualDist-class.html">SimHyper-class</a></td>
+<td>Distribution Objects</td></tr>
+<tr><td width="25%"><a href="VirtualRSet-class.html">SimLabels-class</a></td>
+<td>Class '"VirtualRSet"', '"SimLabels"' and '"SimRSet"'</td></tr>
+<tr><td width="25%"><a href="simLnorm.html">simLnorm</a></td>
+<td>Create random log normal distribution object</td></tr>
+<tr><td width="25%"><a href="VirtualDist-class.html">SimLnorm-class</a></td>
+<td>Distribution Objects</td></tr>
+<tr><td width="25%"><a href="simLogis.html">simLogis</a></td>
+<td>Create random logistic distribution object</td></tr>
+<tr><td width="25%"><a href="VirtualDist-class.html">SimLogis-class</a></td>
+<td>Distribution Objects</td></tr>
+<tr><td width="25%"><a href="simMatrix.html">simMatrix</a></td>
+<td>Create simMatrix that save free parameters and starting values, as well as fixed values</td></tr>
+<tr><td width="25%"><a href="SimMatrix-class.html">SimMatrix-class</a></td>
+<td>Matrix object: Random parameters matrix</td></tr>
+<tr><td width="25%"><a href="simMissing.html">simMissing</a></td>
+<td>Construct a SimMissing object to create data with missingness and analyze missing data.</td></tr>
+<tr><td width="25%"><a href="SimMissing-class.html">SimMissing-class</a></td>
+<td>Class '"SimMissing"'</td></tr>
+<tr><td width="25%"><a href="SimMisspec-class.html">SimMisspec-class</a></td>
+<td>Class '"SimMisspec"'</td></tr>
+<tr><td width="25%"><a href="simMisspecCFA.html">simMisspecCFA</a></td>
+<td>Set of model misspecification for CFA model.</td></tr>
+<tr><td width="25%"><a href="simMisspecPath.html">simMisspecPath</a></td>
+<td>Set of model misspecification for Path analysis model.</td></tr>
+<tr><td width="25%"><a href="simMisspecSEM.html">simMisspecSEM</a></td>
+<td>Set of model misspecification for SEM model.</td></tr>
+<tr><td width="25%"><a href="simModel.html">simModel</a></td>
+<td>Create simModel from model specification and be ready for data analysis.</td></tr>
+<tr><td width="25%"><a href="SimModel-class.html">SimModel-class</a></td>
+<td>Class '"SimModel"'</td></tr>
+<tr><td width="25%"><a href="simModel.html">simModel-method</a></td>
+<td>Create simModel from model specification and be ready for data analysis.</td></tr>
+<tr><td width="25%"><a href="simModel.html">simModel-methods</a></td>
+<td>Create simModel from model specification and be ready for data analysis.</td></tr>
+<tr><td width="25%"><a href="SimModelMIOut-class.html">SimModelMIOut-class</a></td>
+<td>Class '"SimModelMIOut"'</td></tr>
+<tr><td width="25%"><a href="SimModelOut-class.html">SimModelOut-class</a></td>
+<td>Class '"SimModelOut"'</td></tr>
+<tr><td width="25%"><a href="simNbinom.html">simNbinom</a></td>
+<td>Create random negative binomial distribution object</td></tr>
+<tr><td width="25%"><a href="VirtualDist-class.html">SimNbinom-class</a></td>
+<td>Distribution Objects</td></tr>
+<tr><td width="25%"><a href="simNorm.html">simNorm</a></td>
+<td>Create random normal distribution object</td></tr>
+<tr><td width="25%"><a href="VirtualDist-class.html">SimNorm-class</a></td>
+<td>Distribution Objects</td></tr>
+<tr><td width="25%"><a href="SimParam-class.html">SimParam-class</a></td>
+<td>Class '"SimParam"'</td></tr>
+<tr><td width="25%"><a href="simParamCFA.html">simParamCFA</a></td>
+<td>Create a set of matrices of parameters for analyzing data that belongs to CFA model.</td></tr>
+<tr><td width="25%"><a href="simParamPath.html">simParamPath</a></td>
+<td>Create a set of matrices of parameters for analyzing data that belongs to Path analysis model</td></tr>
+<tr><td width="25%"><a href="simParamSEM.html">simParamSEM</a></td>
+<td>Create a set of matrices of parameters for analyzing data that belongs to SEM model</td></tr>
+<tr><td width="25%"><a href="simPois.html">simPois</a></td>
+<td>Create random Poisson distribution object</td></tr>
+<tr><td width="25%"><a href="VirtualDist-class.html">SimPois-class</a></td>
+<td>Distribution Objects</td></tr>
+<tr><td width="25%"><a href="SimREqualCon-class.html">SimREqualCon-class</a></td>
+<td>Class '"SimREqualCon"'</td></tr>
+<tr><td width="25%"><a href="simResult.html">simResult</a></td>
+<td>Create simResult.</td></tr>
+<tr><td width="25%"><a href="SimResult-class.html">SimResult-class</a></td>
+<td>Class '"SimResult"'</td></tr>
+<tr><td width="25%"><a href="simResultParam.html">simResultParam</a></td>
+<td>The constructor of the parameter result object</td></tr>
+<tr><td width="25%"><a href="SimResultParam-class.html">SimResultParam-class</a></td>
+<td>Class '"SimResultParam"'</td></tr>
+<tr><td width="25%"><a href="VirtualRSet-class.html">SimRSet-class</a></td>
+<td>Class '"VirtualRSet"', '"SimLabels"' and '"SimRSet"'</td></tr>
+<tr><td width="25%"><a href="simsem-package.html">simsem</a></td>
+<td>SIMulated Structural Equation Modeling.</td></tr>
+<tr><td width="25%"><a href="SimSet-class.html">SimSet-class</a></td>
+<td>Class '"SimSet"'</td></tr>
+<tr><td width="25%"><a href="simSetCFA.html">simSetCFA</a></td>
+<td>Create a set of matrices of parameter and parameter values to generate and analyze data that belongs to CFA model.</td></tr>
+<tr><td width="25%"><a href="simSetPath.html">simSetPath</a></td>
+<td>Create a set of matrices of parameter and parameter values to generate and analyze data that belongs to Path analysis model</td></tr>
+<tr><td width="25%"><a href="simSetSEM.html">simSetSEM</a></td>
+<td>Create a set of matrices of parameter and parameter values to generate and analyze data that belongs to SEM model</td></tr>
+<tr><td width="25%"><a href="simT.html">simT</a></td>
+<td>Create random t distribution object</td></tr>
+<tr><td width="25%"><a href="VirtualDist-class.html">SimT-class</a></td>
+<td>Distribution Objects</td></tr>
+<tr><td width="25%"><a href="simUnif.html">simUnif</a></td>
+<td>Create random uniform distribution object</td></tr>
+<tr><td width="25%"><a href="VirtualDist-class.html">SimUnif-class</a></td>
+<td>Distribution Objects</td></tr>
+<tr><td width="25%"><a href="simVector.html">simVector</a></td>
+<td>Create simVector that save free parameters and starting values, as well as fixed values</td></tr>
+<tr><td width="25%"><a href="SimVector-class.html">SimVector-class</a></td>
+<td>Vector object: Random parameters vector</td></tr>
+<tr><td width="25%"><a href="simWeibull.html">simWeibull</a></td>
+<td>Create random Weibull distribution object</td></tr>
+<tr><td width="25%"><a href="VirtualDist-class.html">SimWeibull-class</a></td>
+<td>Distribution Objects</td></tr>
+<tr><td width="25%"><a href="skew.html">skew</a></td>
+<td>Finding skewness</td></tr>
+<tr><td width="25%"><a href="VirtualDist-class.html">skew-method</a></td>
+<td>Distribution Objects</td></tr>
+<tr><td width="25%"><a href="skew.html">skew-method</a></td>
+<td>Finding skewness</td></tr>
+<tr><td width="25%"><a href="skew.html">skew-methods</a></td>
+<td>Finding skewness</td></tr>
+<tr><td width="25%"><a href="standardize.html">standardize</a></td>
+<td>Standardize the parameter estimates within an object</td></tr>
+<tr><td width="25%"><a href="standardize.html">standardize-method</a></td>
+<td>Standardize the parameter estimates within an object</td></tr>
+<tr><td width="25%"><a href="standardize.html">standardize-methods</a></td>
+<td>Standardize the parameter estimates within an object</td></tr>
+<tr><td width="25%"><a href="startingValues.html">startingValues</a></td>
+<td>Find starting values by averaging random numbers</td></tr>
+<tr><td width="25%"><a href="startingValues.html">startingValues-method</a></td>
+<td>Find starting values by averaging random numbers</td></tr>
+<tr><td width="25%"><a href="startingValues.html">startingValues-methods</a></td>
+<td>Find starting values by averaging random numbers</td></tr>
+<tr><td width="25%"><a href="subtractObject.html">subtractObject</a></td>
+<td>Make a subtraction of each element in an object</td></tr>
+<tr><td width="25%"><a href="subtractObject.html">subtractObject-method</a></td>
+<td>Make a subtraction of each element in an object</td></tr>
+<tr><td width="25%"><a href="subtractObject.html">subtractObject-methods</a></td>
+<td>Make a subtraction of each element in an object</td></tr>
+<tr><td width="25%"><a href="MatrixSet-class.html">summary-method</a></td>
+<td>Class '"MatrixSet"'</td></tr>
+<tr><td width="25%"><a href="SimData-class.html">summary-method</a></td>
+<td>Class '"SimData"'</td></tr>
+<tr><td width="25%"><a href="SimDataDist-class.html">summary-method</a></td>
+<td>Class '"SimDataDist"'</td></tr>
+<tr><td width="25%"><a href="SimDataOut-class.html">summary-method</a></td>
+<td>Class '"SimDataOut"'</td></tr>
+<tr><td width="25%"><a href="SimEqualCon-class.html">summary-method</a></td>
+<td>Class '"SimEqualCon"'</td></tr>
+<tr><td width="25%"><a href="SimFunction-class.html">summary-method</a></td>
+<td>Class '"SimFunction"'</td></tr>
+<tr><td width="25%"><a href="SimMatrix-class.html">summary-method</a></td>
+<td>Matrix object: Random parameters matrix</td></tr>
+<tr><td width="25%"><a href="SimMissing-class.html">summary-method</a></td>
+<td>Class '"SimMissing"'</td></tr>
+<tr><td width="25%"><a href="SimMisspec-class.html">summary-method</a></td>
+<td>Class '"SimMisspec"'</td></tr>
+<tr><td width="25%"><a href="SimModel-class.html">summary-method</a></td>
+<td>Class '"SimModel"'</td></tr>
+<tr><td width="25%"><a href="SimModelOut-class.html">summary-method</a></td>
+<td>Class '"SimModelOut"'</td></tr>
+<tr><td width="25%"><a href="SimParam-class.html">summary-method</a></td>
+<td>Class '"SimParam"'</td></tr>
+<tr><td width="25%"><a href="SimREqualCon-class.html">summary-method</a></td>
+<td>Class '"SimREqualCon"'</td></tr>
+<tr><td width="25%"><a href="SimResult-class.html">summary-method</a></td>
+<td>Class '"SimResult"'</td></tr>
+<tr><td width="25%"><a href="SimResultParam-class.html">summary-method</a></td>
+<td>Class '"SimResultParam"'</td></tr>
+<tr><td width="25%"><a href="SimSet-class.html">summary-method</a></td>
+<td>Class '"SimSet"'</td></tr>
+<tr><td width="25%"><a href="SimVector-class.html">summary-method</a></td>
+<td>Vector object: Random parameters vector</td></tr>
+<tr><td width="25%"><a href="SymMatrix-class.html">summary-method</a></td>
+<td>Symmetric matrix object: Random parameters symmetric matrix</td></tr>
+<tr><td width="25%"><a href="VirtualDist-class.html">summary-method</a></td>
+<td>Distribution Objects</td></tr>
+<tr><td width="25%"><a href="VirtualRSet-class.html">summary-method</a></td>
+<td>Class '"VirtualRSet"', '"SimLabels"' and '"SimRSet"'</td></tr>
+<tr><td width="25%"><a href="summaryParam.html">summaryParam</a></td>
+<td>Provide summary of parameter estimates and standard error across replications</td></tr>
+<tr><td width="25%"><a href="SimResultParam-class.html">summaryParam-method</a></td>
+<td>Class '"SimResultParam"'</td></tr>
+<tr><td width="25%"><a href="summaryParam.html">summaryParam-method</a></td>
+<td>Provide summary of parameter estimates and standard error across replications</td></tr>
+<tr><td width="25%"><a href="summaryParam.html">summaryParam-methods</a></td>
+<td>Provide summary of parameter estimates and standard error across replications</td></tr>
+<tr><td width="25%"><a href="summaryPopulation.html">summaryPopulation</a></td>
+<td>Summarize the data generation population model underlying an object</td></tr>
+<tr><td width="25%"><a href="SimDataOut-class.html">summaryPopulation-method</a></td>
+<td>Class '"SimDataOut"'</td></tr>
+<tr><td width="25%"><a href="SimModelOut-class.html">summaryPopulation-method</a></td>
+<td>Class '"SimModelOut"'</td></tr>
+<tr><td width="25%"><a href="SimResult-class.html">summaryPopulation-method</a></td>
+<td>Class '"SimResult"'</td></tr>
+<tr><td width="25%"><a href="summaryPopulation.html">summaryPopulation-method</a></td>
+<td>Summarize the data generation population model underlying an object</td></tr>
+<tr><td width="25%"><a href="summaryPopulation.html">summaryPopulation-methods</a></td>
+<td>Summarize the data generation population model underlying an object</td></tr>
+<tr><td width="25%"><a href="summaryShort.html">summaryShort</a></td>
+<td>Provide short summary of an object.</td></tr>
+<tr><td width="25%"><a href="SimMatrix-class.html">summaryShort-method</a></td>
+<td>Matrix object: Random parameters matrix</td></tr>
+<tr><td width="25%"><a href="SimVector-class.html">summaryShort-method</a></td>
+<td>Vector object: Random parameters vector</td></tr>
+<tr><td width="25%"><a href="VirtualDist-class.html">summaryShort-method</a></td>
+<td>Distribution Objects</td></tr>
+<tr><td width="25%"><a href="summaryShort.html">summaryShort-method</a></td>
+<td>Provide short summary of an object.</td></tr>
+<tr><td width="25%"><a href="summaryShort.html">summaryShort-methods</a></td>
+<td>Provide short summary of an object.</td></tr>
+<tr><td width="25%"><a href="symMatrix.html">symMatrix</a></td>
+<td>Create symmetric simMatrix that save free parameters and starting values, as well as fixed values</td></tr>
+<tr><td width="25%"><a href="SymMatrix-class.html">SymMatrix-class</a></td>
+<td>Symmetric matrix object: Random parameters symmetric matrix</td></tr>
+</table>
+
+<h2><a name="T">-- T --</a></h2>
+
+<table width="100%">
+<tr><td width="25%"><a href="tagHeaders.html">tagHeaders</a></td>
+<td>Tag names to each element</td></tr>
+<tr><td width="25%"><a href="tagHeaders.html">tagHeaders-method</a></td>
+<td>Tag names to each element</td></tr>
+<tr><td width="25%"><a href="tagHeaders.html">tagHeaders-methods</a></td>
+<td>Tag names to each element</td></tr>
+<tr><td width="25%"><a href="toSimSet.html">toSimSet</a></td>
+<td>Transform the analysis model object into the object for data generation</td></tr>
+<tr><td width="25%"><a href="toSimSet.html">toSimSet-method</a></td>
+<td>Transform the analysis model object into the object for data generation</td></tr>
+<tr><td width="25%"><a href="toSimSet.html">toSimSet-methods</a></td>
+<td>Transform the analysis model object into the object for data generation</td></tr>
+</table>
+
+<h2><a name="V">-- V --</a></h2>
+
+<table width="100%">
+<tr><td width="25%"><a href="validateCovariance.html">validateCovariance</a></td>
+<td>Validate whether all elements provides a good covariance matrix</td></tr>
+<tr><td width="25%"><a href="validateObject.html">validateObject</a></td>
+<td>Validate whether the drawn parameters are good.</td></tr>
+<tr><td width="25%"><a href="validatePath.html">validatePath</a></td>
+<td>Validate whether the regression coefficient (or loading) matrix is good</td></tr>
+<tr><td width="25%"><a href="vectorizeObject.html">vectorizeObject</a></td>
+<td>Change an object to a vector with labels</td></tr>
+<tr><td width="25%"><a href="vectorizeObject.html">vectorizeObject-method</a></td>
+<td>Change an object to a vector with labels</td></tr>
+<tr><td width="25%"><a href="vectorizeObject.html">vectorizeObject-methods</a></td>
+<td>Change an object to a vector with labels</td></tr>
+<tr><td width="25%"><a href="VirtualDist-class.html">VirtualDist-class</a></td>
+<td>Distribution Objects</td></tr>
+<tr><td width="25%"><a href="VirtualRSet-class.html">VirtualRSet-class</a></td>
+<td>Class '"VirtualRSet"', '"SimLabels"' and '"SimRSet"'</td></tr>
+</table>
+
+<h2><a name="W">-- W --</a></h2>
+
+<table width="100%">
+<tr><td width="25%"><a href="weightedMean.html">weightedMean</a></td>
+<td>Calculate the weighted mean of a variable</td></tr>
+<tr><td width="25%"><a href="writeLavaanCode.html">writeLavaanCode</a></td>
+<td>Write a lavaan code given the matrices of free parameter</td></tr>
+<tr><td width="25%"><a href="writeLavaanConstraint.html">writeLavaanConstraint</a></td>
+<td>Write a lavaan code for a given set of equality constraints</td></tr>
+<tr><td width="25%"><a href="writeLavaanIndividualConstraint.html">writeLavaanIndividualConstraint</a></td>
+<td>Write a lavaan code for a given equality constraint for each parameter</td></tr>
+<tr><td width="25%"><a href="writeLavaanNullCode.html">writeLavaanNullCode</a></td>
+<td>Write a lavaan code for a null model</td></tr>
+</table>
+</body></html>

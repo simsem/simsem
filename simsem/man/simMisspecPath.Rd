@@ -10,7 +10,7 @@
 }
 \usage{
 simMisspecPath(..., exo = FALSE, conBeforeMis=TRUE, misBeforeFill=TRUE, 
-misfitType="rmsea", misfitBound=new("NullVector"), averageNumMisspec=FALSE)
+misfitType="rmsea", misfitBound=new("NullVector"), averageNumMisspec=FALSE, optMisfit="none", numIter=20)
 }
 \arguments{
   \item{\dots}{
@@ -35,6 +35,12 @@ misfitType="rmsea", misfitBound=new("NullVector"), averageNumMisspec=FALSE)
 }
   \item{averageNumMisspec}{
 	If \code{TRUE}, the misfit will be divided by the number of free elements in the misspecification object. The default is \code{FALSE}.
+}
+  \item{optMisfit}{
+	Use the optimization method to pick the misspecification set. That is, the program will draw a number of misspecification sets. Then, the different sets of misspecification will be compared together. If \code{"min"} is specified, the program will pick the misspecification set the provides the least amount of misfit. If \code{"max"} is specified, the program will pick the set that has the largets misfit. The default is \code{"none"} to not use the optimization method.
+}
+  \item{numIter}{
+	The number of different misspecification sets for comparison in the optimization method.
 }
 }
 \value{
