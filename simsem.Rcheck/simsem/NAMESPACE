@@ -1,0 +1,22 @@
+importFrom("lavaan", summary, anova)
+importFrom("lavaan", cor2cov, sqrtSymmetricMatrix)
+exportClasses(SimUnif, SimNorm, SimBeta, SimBinom, SimCauchy, SimChisq, SimExp,
+	SimF, SimGamma, SimGeom, SimHyper, SimLnorm, SimLogis, SimNbinom, 
+	SimPois, SimT, SimWeibull, VirtualDist,
+	SimMatrix, SymMatrix, SimVector, 
+	SimSet, SimEqualCon, SimData, SimModel, SimResult, SimDataDist, SimMisspec, SimModelOut,
+	SimDataOut, SimMissing, SimModelMIOut, SimFunction, SimParam)
+exportMethods(summary, run, summaryShort, adjust, simModel,
+	getCutoff, getPower, plotCutoff, plotPower, summaryParam, plotDist, createImpliedMACS,
+	skew, kurtosis, extract, anova, simData, pValue, runFit, 
+	summaryPopulation, getPopulation, setPopulation, popMisfit)
+export(simUnif, simNorm, simBeta, simBinom, simCauchy, simChisq, simExp,
+	simF, simGamma, simGeom, simHyper, simLnorm, simLogis, simNbinom, 
+	simPois, simT, simWeibull, 
+	loadingFromAlpha, simMatrix, symMatrix, simVector,
+	simSetCFA, simSetPath, simSetSEM, simEqualCon, simResult, simDataDist,
+	simMisspecCFA, simMisspecPath, simMisspecSEM, runMI, simMissing, imposeMissing, miPoolVector, miPoolChi,
+	simFunction, simParamCFA, simParamPath, simParamSEM, indProd, residualCovariate,
+	findRecursiveSet, findPossibleFactorCor, findIndIntercept, findIndResidualVar, findFactorIntercept, findFactorResidualVar, 
+	findIndTotalVar, findIndMean, findFactorTotalVar, findFactorTotalCov, findFactorMean, 
+	continuousPower, plotMisfit, simResultParam, popMisfitMACS, popDiscrepancy)

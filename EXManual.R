@@ -208,16 +208,16 @@ Path.Model <- simSetPath(RPS = RPS, BE = BE, ME = ME)
 mis.path.BE <- matrix(0, 4, 4)
 mis.path.BE[4, 1:2] <- NA
 mis.BE <- simMatrix(mis.path.BE, "u1")
-Path.Mis.Model <- simMisspecPath(BE = mis.BE, misfitType="rmsea") #, misfitBound=c(0.05, 0.08))
+Path.Mis.Model <- simMisspecPath(BE = mis.BE, misfitType="rmsea", optMisfit="max", numIter=10) #, misfitBound=c(0.05, 0.08))
 
 Data <- simData(Path.Model, 500, maxDraw=1000)
 Data.Mis <- simData(Path.Model, 500, Path.Mis.Model)
 
-dat <- run(Data.Mis)
-x <- drawParametersMisspec(Path.Model, Path.Mis.Model)
-y <- simResultParam(1000, Path.Model, Path.Mis.Model)
-plot(y@misspec[,2], y@fit[,2])
-lines(loess.smooth(y@misspec[,2], y@fit[,2]), col="red")
+# dat <- run(Data.Mis)
+# x <- drawParametersMisspec(Path.Model, Path.Mis.Model)
+# y <- simResultParam(1000, Path.Model, Path.Mis.Model)
+# plot(y@misspec[,2], y@fit[,2])
+# lines(loess.smooth(y@misspec[,2], y@fit[,2]), col="red")
 
 SimModel <- simModel(Path.Model)
 popMisfit(Path.Model, Path.Mis.Model, fit.measures="rmsea")

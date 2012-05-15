@@ -246,3 +246,11 @@ simsem, Version 0.1-4 05/10/12
 - Add toSimSet and simData methods using SimRSet class, as well as change the documentation
 - Fix a minor bug in popMisfit
 - Fix the error in documentation of popMisfitMACS and popDiscrepancy
+
+simsem, Version 0.1-5 05/14/12
+- Add the optMisfit and numIter attributes in the SimMisspec class to account for the optimization method for selecting the set of misspecified parameters
+- Change simMisspecCFA, simMisspecPath, and simMisspecSEM to account for the new attributes
+- Change the runMisspec function to account for the optimization method to find a set of misspecification
+- Add isRandom function to check whether an object has a random parameter
+- Optimize the simResult function to draw parameter only once if there is no random parameter
+- Fix the bug on the validatePath function

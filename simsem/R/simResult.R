@@ -81,9 +81,16 @@ simResult <- function(nRep = NULL, objData = NULL, objModel = NULL, objMissing =
     if (is.null(objModel)) 
         stop("Please provide a SimModel object in the objModel argument")
     if (class(objData) == "SimData") {
-        for (i in 1:nRep) {
-            object.l[[i]] <- drawParameters(objData)
-        }
+		if(isRandom(objData)) {
+			for (i in 1:nRep) {
+				object.l[[i]] <- drawParameters(objData)
+			}
+		} else {
+			fixedParam <- drawParameters(objData)
+			for (i in 1:nRep) {
+				object.l[[i]] <- fixedParam
+			}		
+		}
     } else if (is.list(objData)) {
         if (class(objData[[1]]) == "SimDataOut") {
             object.l <- objData

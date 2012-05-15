@@ -135,8 +135,8 @@ setClass("NullRSet", contains = "SimRSet", representation(modelType = "character
 
 setClass("SimMisspec", contains = "SimSet", representation(conBeforeMis = "logical", 
     misBeforeFill = "logical", misfitType = "character", misfitBound = "vector", 
-    averageNumMisspec = "logical"), prototype(conBeforeMis = TRUE, misBeforeFill = TRUE, 
-    misfitType = "rmsea", misfitBound = new("NullVector"), averageNumMisspec = FALSE))
+    averageNumMisspec = "logical", optMisfit="character", numIter="numeric"), prototype(conBeforeMis = TRUE, misBeforeFill = TRUE, 
+    misfitType = "rmsea", misfitBound = new("NullVector"), averageNumMisspec = FALSE, optMisfit="none", numIter=20))
 
 setClass("NullSimMisspec", contains = "SimMisspec")
 
