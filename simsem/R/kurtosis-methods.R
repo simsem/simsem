@@ -12,8 +12,7 @@ setMethod("kurtosis", signature(object = "vector"), function(object, population 
     }
 })
 
-setMethod("kurtosis", signature(object = "VirtualDist"), function(object, 
-    reverse = FALSE, bin = 1e+05) {
+setMethod("kurtosis", signature(object = "VirtualDist"), function(object, reverse = FALSE, bin = 1e+05) {
     distName <- class(object)
     distName <- tolower(gsub("Sim", "", distName))
     funmin <- list(get(paste("q", distName, sep = "")), 1e-06)
@@ -41,6 +40,5 @@ setMethod("kurtosis", signature(object = "VirtualDist"), function(object,
         wMeanNew <- sum(xrange * yrange)/sum(yrange)
         xrange <- seq(wMeanNew - disRightOld, wMeanNew + disLeftOld, length.out = length(xrange))
     }
-    return((centralMoment(xrange, 4, yrange)/(centralMoment(xrange, 2, yrange)^2)) - 
-        3)
+    return((centralMoment(xrange, 4, yrange)/(centralMoment(xrange, 2, yrange)^2)) - 3)
 }) 

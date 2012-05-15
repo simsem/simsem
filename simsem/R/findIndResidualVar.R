@@ -1,5 +1,4 @@
-# findIndResidualVar: Find the residual variances of indicators if factor
-# loading, total factor covariance, and total indicator variances are specified
+# findIndResidualVar: Find the residual variances of indicators if factor loading, total factor covariance, and total indicator variances are specified
 
 findIndResidualVar <- function(lambda, totalFactorCov, totalVarTheta = NULL) {
     ni <- nrow(lambda)

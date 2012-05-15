@@ -1,11 +1,7 @@
-# startingValues: Find starting values of free parameters based on
-# pre-specified starting values. If the pre-specified starting values are
-# numbers, the function will use that values. If they are distribution object,
-# this function will randomly draw from the distribution 10 times and take the
-# average of those values.
+# startingValues: Find starting values of free parameters based on pre-specified starting values. If the pre-specified starting values are numbers, the function will use that values. If they
+# are distribution object, this function will randomly draw from the distribution 10 times and take the average of those values.
 
-setMethod("startingValues", signature(object = "SimMatrix"), definition = function(object, 
-    trial, ...) {
+setMethod("startingValues", signature(object = "SimMatrix"), definition = function(object, trial, ...) {
     if (isNullObject(object)) 
         return(new("NullMatrix"))
     Nrow <- nrow(run(object))
@@ -19,8 +15,7 @@ setMethod("startingValues", signature(object = "SimMatrix"), definition = functi
 })
 
 
-setMethod("startingValues", signature(object = "SimVector"), definition = function(object, 
-    trial, ...) {
+setMethod("startingValues", signature(object = "SimVector"), definition = function(object, trial, ...) {
     if (isNullObject(object)) 
         return(new("NullVector"))
     Length <- length(run(object))
@@ -32,8 +27,7 @@ setMethod("startingValues", signature(object = "SimVector"), definition = functi
     return(Result/trial)
 })
 
-setMethod("startingValues", signature(object = "SimSet"), definition = function(object, 
-    trial, reduced = FALSE) {
+setMethod("startingValues", signature(object = "SimSet"), definition = function(object, trial, reduced = FALSE) {
     result <- run(object)
     if (trial > 1) {
         for (i in 2:trial) {

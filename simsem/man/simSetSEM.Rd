@@ -80,7 +80,9 @@ simSetSEM(..., exo = FALSE)
 	}
 }
 \examples{
+u35 <- simUnif(0.3, 0.5)
 u68 <- simUnif(0.6, 0.8)
+n65 <- simNorm(0.6, 0.05)
 loading <- matrix(0, 8, 3)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA

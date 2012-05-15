@@ -12,8 +12,7 @@ setMethod("skew", signature(object = "vector"), function(object, population = FA
     }
 })
 
-setMethod("skew", signature(object = "VirtualDist"), function(object, 
-    reverse = FALSE, bin = 1e+05) {
+setMethod("skew", signature(object = "VirtualDist"), function(object, reverse = FALSE, bin = 1e+05) {
     distName <- class(object)
     distName <- tolower(gsub("Sim", "", distName))
     funmin <- list(get(paste("q", distName, sep = "")), 1e-06)

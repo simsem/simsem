@@ -1,8 +1,6 @@
-# getCutoff: This function will find a cutoff of each fit index based on a
-# priori alpha level from sampling distributions of fit indices
+# getCutoff: This function will find a cutoff of each fit index based on a priori alpha level from sampling distributions of fit indices
 
-setMethod("getCutoff", signature(object = "data.frame"), definition = function(object, 
-    alpha, revDirec = FALSE, usedFit = NULL) {
+setMethod("getCutoff", signature(object = "data.frame"), definition = function(object, alpha, revDirec = FALSE, usedFit = NULL) {
     if (is.null(usedFit)) 
         usedFit <- getKeywords()$usedFit
     percentile <- 1 - alpha
@@ -18,16 +16,14 @@ setMethod("getCutoff", signature(object = "data.frame"), definition = function(o
     return(temp)
 })
 
-setMethod("getCutoff", signature(object = "SimResult"), definition = function(object, 
-    alpha, revDirec = FALSE, usedFit = NULL) {
+setMethod("getCutoff", signature(object = "SimResult"), definition = function(object, alpha, revDirec = FALSE, usedFit = NULL) {
     object <- clean(object)
     Result <- object@fit
     output <- getCutoff(Result, alpha, revDirec, usedFit)
     return(output)
 })
 
-setMethod("getCutoff", signature(object = "matrix"), definition = function(object, 
-    alpha, revDirec = FALSE, usedFit = NULL) {
+setMethod("getCutoff", signature(object = "matrix"), definition = function(object, alpha, revDirec = FALSE, usedFit = NULL) {
     object <- as.data.frame(object)
     output <- getCutoff(object, alpha, revDirec, usedFit)
     return(output)

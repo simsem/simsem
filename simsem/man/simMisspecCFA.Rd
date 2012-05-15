@@ -10,7 +10,8 @@
 }
 \usage{
 simMisspecCFA(..., conBeforeMis=TRUE, misBeforeFill=TRUE, 
-misfitType="rmsea", misfitBound=new("NullVector"), averageNumMisspec=FALSE, optMisfit="none", numIter=20)
+misfitType="rmsea", misfitBound=new("NullVector"), averageNumMisspec=FALSE, 
+optMisfit="none", numIter=20)
 }
 \arguments{
   \item{\dots}{

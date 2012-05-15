@@ -29,7 +29,7 @@ lavaan is BETA software! Please report any bugs.
 Loading required package: MASS
  
 ###############################################################################################
-This is simsem 0.1-5
+This is simsem 0.1-6
 simsem is BETA software! Please report any bugs.
 simsem was developed at the University of Kansas Center for Research Methods and Data Analysis.
 ###############################################################################################
@@ -1001,8 +1001,6 @@ Known Subclasses: "NullSimFunction"
 > 
 > # Real simulation will need more than just 10 replications
 > Output <- simResult(10, Data.Mis, Model, objFunction=fun)
-Warning in cor2cov(RTE, suppressWarnings(sqrt(VTE))) :
-  sds had 0 or NA entries; non-finite result is doubtful
 Error in solve.default(E) : 
   system is computationally singular: reciprocal condition number = 2.80345e-26
 
@@ -1236,7 +1234,7 @@ Class "SimMatrix" [package "simsem"]
 
 Slots:
                     
-Name:    free  param
+Name:    free  value
 Class: matrix matrix
 
 Known Subclasses: 
@@ -1291,13 +1289,13 @@ Class "NullSymMatrix", by class "SymMatrix", distance 2
 [5,]    0   NA
 [6,]    0   NA
 [1] "Parameter/Starting Values:"
-     [,1]  [,2] 
-[1,] "n65" ""   
-[2,] "n65" ""   
-[3,] "n65" ""   
-[4,] ""    "n65"
-[5,] ""    "n65"
-[6,] ""    "n65"
+     [,1]                  [,2]                 
+[1,] "rnorm(1, 0.6, 0.05)" ""                   
+[2,] "rnorm(1, 0.6, 0.05)" ""                   
+[3,] "rnorm(1, 0.6, 0.05)" ""                   
+[4,] ""                    "rnorm(1, 0.6, 0.05)"
+[5,] ""                    "rnorm(1, 0.6, 0.05)"
+[6,] ""                    "rnorm(1, 0.6, 0.05)"
 > run(LY)
           [,1]      [,2]
 [1,] 0.5686773 0.0000000
@@ -1320,13 +1318,13 @@ Class "NullSymMatrix", by class "SymMatrix", distance 2
 [5,]    0   NA
 [6,]    0   NA
 [1] "Parameter/Starting Values:"
-     [,1]  [,2] 
-[1,] "n65" ""   
-[2,] "u34" ""   
-[3,] "n65" ""   
-[4,] ""    "n65"
-[5,] ""    "n65"
-[6,] ""    "n65"
+     [,1]                  [,2]                 
+[1,] "rnorm(1, 0.6, 0.05)" ""                   
+[2,] "runif(1, 0.3, 0.4)"  ""                   
+[3,] "rnorm(1, 0.6, 0.05)" ""                   
+[4,] ""                    "rnorm(1, 0.6, 0.05)"
+[5,] ""                    "rnorm(1, 0.6, 0.05)"
+[6,] ""                    "rnorm(1, 0.6, 0.05)"
 > run(LY)
           [,1]      [,2]
 [1,] 0.6243715 0.0000000
@@ -1336,13 +1334,13 @@ Class "NullSymMatrix", by class "SymMatrix", distance 2
 [5,] 0.0000000 0.6381797
 [6,] 0.0000000 0.5600495
 > summaryShort(LY)
-     [,1]     [,2]    
-[1,] "NA:n65" "0"     
-[2,] "NA:u34" "0"     
-[3,] "NA:n65" "0"     
-[4,] "0"      "NA:n65"
-[5,] "0"      "NA:n65"
-[6,] "0"      "NA:n65"
+     [,1]                     [,2]                    
+[1,] "NA:rnorm(1, 0.6, 0.05)" "0"                     
+[2,] "NA:runif(1, 0.3, 0.4)"  "0"                     
+[3,] "NA:rnorm(1, 0.6, 0.05)" "0"                     
+[4,] "0"                      "NA:rnorm(1, 0.6, 0.05)"
+[5,] "0"                      "NA:rnorm(1, 0.6, 0.05)"
+[6,] "0"                      "NA:rnorm(1, 0.6, 0.05)"
 > 
 > LY <- extract(LY, 1:3, 1)
 > summary(LY)
@@ -1353,10 +1351,10 @@ Class "NullSymMatrix", by class "SymMatrix", distance 2
 [2,]   NA
 [3,]   NA
 [1] "Parameter/Starting Values:"
-     [,1] 
-[1,] "n65"
-[2,] "u34"
-[3,] "n65"
+     [,1]                 
+[1,] "rnorm(1, 0.6, 0.05)"
+[2,] "runif(1, 0.3, 0.4)" 
+[3,] "rnorm(1, 0.6, 0.05)"
 > 
 > 
 > 
@@ -2335,7 +2333,7 @@ Class "SimVector" [package "simsem"]
 
 Slots:
                     
-Name:    free  param
+Name:    free  value
 Class: vector vector
 
 Known Subclasses: "NullSimVector"
@@ -2363,7 +2361,7 @@ Known Subclasses: "NullSimVector"
 [1] "Free/Fixed Parameters:"
 [1] NA NA
 [1] "Parameter/Starting Values:"
-[1] "5"   "n01"
+[1] "5"              "rnorm(1, 0, 1)"
 > 
 > AL <- extract(AL, 1)
 > summary(AL)
@@ -2393,7 +2391,7 @@ Class "SymMatrix" [package "simsem"]
 
 Slots:
                     
-Name:    free  param
+Name:    free  value
 Class: matrix matrix
 
 Extends: "SimMatrix"
@@ -2414,15 +2412,15 @@ Known Subclasses: "NullSymMatrix"
 [2,]   NA    1   NA
 [3,]   NA   NA    1
 [1] "Parameter/Starting Values:"
-     [,1]  [,2]  [,3] 
-[1,] ""    "0.5" "0.5"
-[2,] "0.5" ""    "u46"
-[3,] "0.5" "u46" ""   
+     [,1]  [,2]                 [,3]                
+[1,] ""    "0.5"                "0.5"               
+[2,] "0.5" ""                   "runif(1, 0.4, 0.6)"
+[3,] "0.5" "runif(1, 0.4, 0.6)" ""                  
 > summaryShort(RPH)
-     [,1]     [,2]     [,3]    
-[1,] "1"      "NA:0.5" "NA:0.5"
-[2,] "NA:0.5" "1"      "NA:u46"
-[3,] "NA:0.5" "NA:u46" "1"     
+     [,1]     [,2]                    [,3]                   
+[1,] "1"      "NA:0.5"                "NA:0.5"               
+[2,] "NA:0.5" "1"                     "NA:runif(1, 0.4, 0.6)"
+[3,] "NA:0.5" "NA:runif(1, 0.4, 0.6)" "1"                    
 > run(RPH)
      [,1]      [,2]      [,3]
 [1,]  1.0 0.5000000 0.5000000
@@ -2464,8 +2462,17 @@ Known Subclasses: "NullSymMatrix"
 > ###   summaryShort,SimLogis-method summaryShort,SimNbinom-method
 > ###   summaryShort,SimNorm-method summaryShort,SimPois-method
 > ###   summaryShort,SimT-method summaryShort,SimUnif-method
-> ###   summaryShort,SimWeibull-method plotDist,VirtualDist-method
-> ###   skew,VirtualDist-method kurtosis,VirtualDist-method
+> ###   summaryShort,SimWeibull-method toFunction,SimBeta-method
+> ###   toFunction,SimBinom-method toFunction,SimCauchy-method
+> ###   toFunction,SimChisq-method toFunction,SimExp-method
+> ###   toFunction,SimF-method toFunction,SimGamma-method
+> ###   toFunction,SimGeom-method toFunction,SimHyper-method
+> ###   toFunction,SimLnorm-method toFunction,SimLogis-method
+> ###   toFunction,SimNbinom-method toFunction,SimNorm-method
+> ###   toFunction,SimPois-method toFunction,SimT-method
+> ###   toFunction,SimUnif-method toFunction,SimWeibull-method
+> ###   plotDist,VirtualDist-method skew,VirtualDist-method
+> ###   kurtosis,VirtualDist-method
 > ### Keywords: classes
 > 
 > ### ** Examples
@@ -2569,13 +2576,13 @@ Known Subclasses: "SimUnif", "SimNorm", "SimBeta", "SimBinom", "SimCauchy", "Sim
 [5,]    0   NA
 [6,]    0   NA
 [1] "Parameter/Starting Values:"
-     [,1]  [,2] 
-[1,] "0.7" ""   
-[2,] "u34" ""   
-[3,] "0.7" ""   
-[4,] ""    "0.7"
-[5,] ""    "0.7"
-[6,] ""    "0.7"
+     [,1]                 [,2] 
+[1,] "0.7"                ""   
+[2,] "runif(1, 0.3, 0.4)" ""   
+[3,] "0.7"                ""   
+[4,] ""                   "0.7"
+[5,] ""                   "0.7"
+[6,] ""                   "0.7"
 > run(LX)
           [,1] [,2]
 [1,] 0.7000000  0.0
@@ -2635,7 +2642,7 @@ Known Subclasses: "SimUnif", "SimNorm", "SimBeta", "SimBinom", "SimCauchy", "Sim
 [1] "Free/Fixed Parameters:"
 [1] NA NA
 [1] "Parameter/Starting Values:"
-[1] "5"   "n01"
+[1] "5"              "rnorm(1, 0, 1)"
 > 
 > 
 > 
@@ -2711,6 +2718,23 @@ Known Subclasses: "SimUnif", "SimNorm", "SimBeta", "SimBinom", "SimCauchy", "Sim
 > # This function is not public.
 > 
 > # centralMoment(1:5, 2)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("checkInputValue")
+> ### * checkInputValue
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: checkInputValue
+> ### Title: Check the value argument in the matrix, symmetric matrix, or
+> ###   vector objects
+> ### Aliases: checkInputValue checkInputValueVector
+> 
+> ### ** Examples
+> 
+> # No example
 > 
 > 
 > 
@@ -21534,8 +21558,6 @@ LY    NA   8      3
 > 
 > # Real simulation will need more than just 10 replications
 > Output <- simResult(10, Data.Mis, Model, objFunction=fun)
-Warning in cor2cov(RTE, suppressWarnings(sqrt(VTE))) :
-  sds had 0 or NA entries; non-finite result is doubtful
 Error in solve.default(E) : 
   system is computationally singular: reciprocal condition number = 2.80345e-26
 
@@ -21832,13 +21854,13 @@ NOTE: The data generation model is not the same as the analysis model. See the s
 [5,]    0   NA
 [6,]    0   NA
 [1] "Parameter/Starting Values:"
-     [,1]  [,2] 
-[1,] "n65" ""   
-[2,] "n65" ""   
-[3,] "n65" ""   
-[4,] ""    "n65"
-[5,] ""    "n65"
-[6,] ""    "n65"
+     [,1]                  [,2]                 
+[1,] "rnorm(1, 0.6, 0.05)" ""                   
+[2,] "rnorm(1, 0.6, 0.05)" ""                   
+[3,] "rnorm(1, 0.6, 0.05)" ""                   
+[4,] ""                    "rnorm(1, 0.6, 0.05)"
+[5,] ""                    "rnorm(1, 0.6, 0.05)"
+[6,] ""                    "rnorm(1, 0.6, 0.05)"
 > run(LY)
           [,1]      [,2]
 [1,] 0.5686773 0.0000000
@@ -22662,7 +22684,9 @@ NOTE: The percent of MCAR is varying.
 > 
 > ### ** Examples
 > 
+> u35 <- simUnif(0.3, 0.5)
 > u68 <- simUnif(0.6, 0.8)
+> n65 <- simNorm(0.6, 0.05)
 > loading <- matrix(0, 8, 3)
 > loading[1:3, 1] <- NA
 > loading[4:6, 2] <- NA
@@ -23135,13 +23159,13 @@ TY6    0.054039482  0.008528707
 > loadingValues <- matrix(0, 6, 2)
 > LX <- simMatrix(loading, "u89")
 > summaryShort(LX)
-     [,1]     [,2]    
-[1,] "NA:u89" "0"     
-[2,] "NA:u89" "0"     
-[3,] "NA:u89" "0"     
-[4,] "0"      "NA:u89"
-[5,] "0"      "NA:u89"
-[6,] "0"      "NA:u89"
+     [,1]                    [,2]                   
+[1,] "NA:runif(1, 0.8, 0.9)" "0"                    
+[2,] "NA:runif(1, 0.8, 0.9)" "0"                    
+[3,] "NA:runif(1, 0.8, 0.9)" "0"                    
+[4,] "0"                     "NA:runif(1, 0.8, 0.9)"
+[5,] "0"                     "NA:runif(1, 0.8, 0.9)"
+[6,] "0"                     "NA:runif(1, 0.8, 0.9)"
 > 
 > 
 > 
@@ -23185,6 +23209,25 @@ TY6    0.054039482  0.008528707
 > ### ** Examples
 > 
 > # No example
+> 
+> 
+> 
+> cleanEx()
+> nameEx("toFunction")
+> ### * toFunction
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: toFunction
+> ### Title: Export the distribution object to a function command in text
+> ###   that can be evaluated directly.
+> ### Aliases: toFunction toFunction-methods toFunction,ANY-method
+> 
+> ### ** Examples
+> 
+> u2 <- simUnif(-0.2, 0.2)
+> toFunction(u2)
+[1] "runif(1, -0.2, 0.2)"
 > 
 > 
 > 
@@ -23372,7 +23415,7 @@ TY6    0.054039482  0.008528707
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  283.7 0.92 285.53 NA NA 
+Time elapsed:  281.06 1.01 282.39 NA NA 
 > grDevices::dev.off()
 null device 
           1 

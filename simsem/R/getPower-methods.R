@@ -1,8 +1,6 @@
-# getPower: This function will find a power of each fit index based on
-# specified cutoffs of each fit index
+# getPower: This function will find a power of each fit index based on specified cutoffs of each fit index
 
-setMethod("getPower", signature(altObject = "data.frame"), definition = function(altObject, 
-    cutoff, revDirec = FALSE, usedFit = NULL) {
+setMethod("getPower", signature(altObject = "data.frame"), definition = function(altObject, cutoff, revDirec = FALSE, usedFit = NULL) {
     if (is.null(usedFit)) 
         usedFit <- getKeywords()$usedFit
     if (is.null(names(cutoff)) && length(cutoff) == 7) 
@@ -22,16 +20,14 @@ setMethod("getPower", signature(altObject = "data.frame"), definition = function
     return(temp)
 })
 
-setMethod("getPower", signature(altObject = "SimResult"), definition = function(altObject, 
-    cutoff, revDirec = FALSE, usedFit = NULL) {
+setMethod("getPower", signature(altObject = "SimResult"), definition = function(altObject, cutoff, revDirec = FALSE, usedFit = NULL) {
     altObject <- clean(altObject)
     Result <- altObject@fit
     output <- getPower(Result, cutoff, revDirec, usedFit)
     return(output)
 })
 
-setMethod("getPower", signature(altObject = "matrix"), definition = function(altObject, 
-    cutoff, revDirec = FALSE, usedFit = NULL) {
+setMethod("getPower", signature(altObject = "matrix"), definition = function(altObject, cutoff, revDirec = FALSE, usedFit = NULL) {
     object <- as.data.frame(altObject)
     output <- getPower(object, cutoff, revDirec, usedFit)
     return(output)

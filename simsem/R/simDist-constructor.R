@@ -1,5 +1,4 @@
-# Constructor of the distribution objects: Create all random distribution
-# objects.
+# Constructor of the distribution objects: Create all random distribution objects.
 
 simNorm <- function(mean, sd) {
     if (sd <= 0) 

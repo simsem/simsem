@@ -6,18 +6,14 @@ writeLavaanConstraint <- function(object, constraint) {
         con <- constraint@con
         for (i in 1:length(con)) {
             current <- con[[i]]
-            con.text <- writeLavaanIndividualConstraint(rownames(current)[1], current[1, 
-                ], slot(object, rownames(current)[1]))
+            con.text <- writeLavaanIndividualConstraint(rownames(current)[1], current[1, ], slot(object, rownames(current)[1]))
             for (j in 2:nrow(current)) {
                 Matrix <- rownames(current)[j]
-                if (Matrix == "PS" | Matrix == "PH" | Matrix == "TE" | Matrix == 
-                  "TD") {
-                  elements <- c(as.numeric(current[j, 2]), as.numeric(current[j, 
-                    3]))
+                if (Matrix == "PS" | Matrix == "PH" | Matrix == "TE" | Matrix == "TD") {
+                  elements <- c(as.numeric(current[j, 2]), as.numeric(current[j, 3]))
                   slot(object, Matrix)[max(elements), min(elements)] <- con.text
                 } else {
-                  slot(object, Matrix)[as.numeric(current[j, 2]), as.numeric(current[j, 
-                    3])] <- con.text
+                  slot(object, Matrix)[as.numeric(current[j, 2]), as.numeric(current[j, 3])] <- con.text
                 }
             }
         }

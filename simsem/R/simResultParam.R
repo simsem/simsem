@@ -1,7 +1,6 @@
 # simResultParam: Simulate the parameters for all replications.
 
-simResultParam <- function(nRep, object, misspec = new("NullSimMisspec"), 
-    SimEqualCon = new("NullSimEqualCon"), seed = 123321, maxDraw = 100) {
+simResultParam <- function(nRep, object, misspec = new("NullSimMisspec"), SimEqualCon = new("NullSimEqualCon"), seed = 123321, maxDraw = 100) {
     result.l <- NULL
     nFree <- countFreeParameters(object)
     if (!isNullObject(SimEqualCon)) 
@@ -11,8 +10,7 @@ simResultParam <- function(nRep, object, misspec = new("NullSimMisspec"),
     set.seed(seed)
     numMisspec <- countFreeParameters(misspec)
     for (i in 1:nRep) {
-        result.l[[i]] <- drawParametersMisspec(object, misspec, objEqualCon = SimEqualCon, 
-            maxDraw = maxDraw)
+        result.l[[i]] <- drawParametersMisspec(object, misspec, objEqualCon = SimEqualCon, maxDraw = maxDraw)
     }
     param.l <- sapply(result.l, function(object, paramTemplate) {
         result <- object$real
@@ -31,6 +29,5 @@ simResultParam <- function(nRep, object, misspec = new("NullSimMisspec"),
     paramResult <- as.data.frame(t(param.l))
     misspecResult <- as.data.frame(t(misspec.l))
     fitResult <- as.data.frame(t(fit.l))
-    return(new("SimResultParam", modelType = object@modelType, nRep = nRep, param = paramResult, 
-        misspec = misspecResult, fit = fitResult, seed = seed))
+    return(new("SimResultParam", modelType = object@modelType, nRep = nRep, param = paramResult, misspec = misspecResult, fit = fitResult, seed = seed))
 } 

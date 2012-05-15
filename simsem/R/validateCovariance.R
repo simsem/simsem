@@ -1,5 +1,4 @@
-# validateCovariance: Validate whether all elements provides a good covariance
-# matrix
+# validateCovariance: Validate whether all elements provides a good covariance matrix
 
 validateCovariance <- function(resVar, correlation, totalVar = NULL) {
     if (!isSymmetric(correlation)) 

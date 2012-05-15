@@ -743,8 +743,17 @@ flush(stderr()); flush(stdout())
 ###   summaryShort,SimLogis-method summaryShort,SimNbinom-method
 ###   summaryShort,SimNorm-method summaryShort,SimPois-method
 ###   summaryShort,SimT-method summaryShort,SimUnif-method
-###   summaryShort,SimWeibull-method plotDist,VirtualDist-method
-###   skew,VirtualDist-method kurtosis,VirtualDist-method
+###   summaryShort,SimWeibull-method toFunction,SimBeta-method
+###   toFunction,SimBinom-method toFunction,SimCauchy-method
+###   toFunction,SimChisq-method toFunction,SimExp-method
+###   toFunction,SimF-method toFunction,SimGamma-method
+###   toFunction,SimGeom-method toFunction,SimHyper-method
+###   toFunction,SimLnorm-method toFunction,SimLogis-method
+###   toFunction,SimNbinom-method toFunction,SimNorm-method
+###   toFunction,SimPois-method toFunction,SimT-method
+###   toFunction,SimUnif-method toFunction,SimWeibull-method
+###   plotDist,VirtualDist-method skew,VirtualDist-method
+###   kurtosis,VirtualDist-method
 ### Keywords: classes
 
 ### ** Examples
@@ -888,6 +897,23 @@ flush(stderr()); flush(stdout())
 # This function is not public.
 
 # centralMoment(1:5, 2)
+
+
+
+cleanEx()
+nameEx("checkInputValue")
+### * checkInputValue
+
+flush(stderr()); flush(stdout())
+
+### Name: checkInputValue
+### Title: Check the value argument in the matrix, symmetric matrix, or
+###   vector objects
+### Aliases: checkInputValue checkInputValueVector
+
+### ** Examples
+
+# No example
 
 
 
@@ -3680,7 +3706,9 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
+u35 <- simUnif(0.3, 0.5)
 u68 <- simUnif(0.6, 0.8)
+n65 <- simNorm(0.6, 0.05)
 loading <- matrix(0, 8, 3)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
@@ -4075,6 +4103,24 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 # No example
+
+
+
+cleanEx()
+nameEx("toFunction")
+### * toFunction
+
+flush(stderr()); flush(stdout())
+
+### Name: toFunction
+### Title: Export the distribution object to a function command in text
+###   that can be evaluated directly.
+### Aliases: toFunction toFunction-methods toFunction,ANY-method
+
+### ** Examples
+
+u2 <- simUnif(-0.2, 0.2)
+toFunction(u2)
 
 
 

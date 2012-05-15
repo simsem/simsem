@@ -1,5 +1,4 @@
-# matchKeywords: Search for the keywords and check whether the specified text
-# match one in the name vector
+# matchKeywords: Search for the keywords and check whether the specified text match one in the name vector
 
 matchKeywords <- function(Names, keywords) {
     Length <- length(Names)

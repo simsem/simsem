@@ -2,7 +2,7 @@ setGeneric("run", function(object, ...) {
     return(standardGeneric("run"))
 })
 
-setGeneric("adjust", function(target, param, pos, numAsFixed = TRUE) {
+setGeneric("adjust", function(target, value, pos, numAsFixed = TRUE) {
     return(standardGeneric("adjust"))
 })
 
@@ -106,11 +106,9 @@ setGeneric("simData", function(param, ...) {
     return(standardGeneric("simData"))
 })
 
-setGeneric("runFit", function(model, realdata, nRep = 1000, misspec = new("NullSimMisspec"), 
-    maxDraw = 100, sequential = NA, facDist = new("NullSimDataDist"), errorDist = new("NullSimDataDist"), 
-    indDist = new("NullSimDataDist"), modelBoot = FALSE, seed = 123321, silent = FALSE, 
-    multicore = FALSE, cluster = FALSE, numProc = NULL, empiricalMissing = TRUE, 
-    missModel = new("NullSimMissing"), usedStd = TRUE) {
+setGeneric("runFit", function(model, realdata, nRep = 1000, misspec = new("NullSimMisspec"), maxDraw = 100, sequential = NA, facDist = new("NullSimDataDist"), errorDist = new("NullSimDataDist"), 
+    indDist = new("NullSimDataDist"), modelBoot = FALSE, seed = 123321, silent = FALSE, multicore = FALSE, cluster = FALSE, numProc = NULL, empiricalMissing = TRUE, missModel = new("NullSimMissing"), 
+    usedStd = TRUE) {
     return(standardGeneric("runFit"))
 })
 
@@ -130,15 +128,18 @@ setGeneric("setPopulation", function(target, population, ...) {
     return(standardGeneric("setPopulation"))
 })
 
-setGeneric("popMisfit", function(param, misspec, dfParam = NULL, fit.measures = "all", 
-    ...) {
+setGeneric("popMisfit", function(param, misspec, dfParam = NULL, fit.measures = "all", ...) {
     return(standardGeneric("popMisfit"))
-}) 
+})
 
 setGeneric("toSimSet", function(out, ...) {
     return(standardGeneric("toSimSet"))
-}) 
+})
 
 setGeneric("isRandom", function(object) {
     return(standardGeneric("isRandom"))
+})
+
+setGeneric("toFunction", function(x) {
+    return(standardGeneric("toFunction"))
 }) 

@@ -1,6 +1,4 @@
-# simSetPath: This function will create set of matrix that belongs to path
-# analysis model. The requirement is to specify indicator correlation and
-# regression coefficient matrix.
+# simSetPath: This function will create set of matrix that belongs to path analysis model. The requirement is to specify indicator correlation and regression coefficient matrix.
 
 simParamPath <- function(..., exo = FALSE) {
     W <- getKeywords()
@@ -19,15 +17,12 @@ simParamPath <- function(..., exo = FALSE) {
         ifelse(4 %in% position, GA <- List[position == 4][[1]], stop("No path coefficient object between factor.ETA and factor.KSI"))
         ne <- nrow(GA)
         nk <- ncol(GA)
-        ifelse(1 %in% position, BE <- List[position == 1][[1]], BE <- matrix(0, ne, 
-            ne))
+        ifelse(1 %in% position, BE <- List[position == 1][[1]], BE <- matrix(0, ne, ne))
         ifelse(2 %in% position, AL <- List[position == 2][[1]], AL <- rep(NA, ne))
         ifelse(3 %in% position, PS <- List[position == 3][[1]], PS <- diag(NA, ne))
         ifelse(5 %in% position, KA <- List[position == 5][[1]], KA <- rep(NA, nk))
-        ifelse(6 %in% position, PH <- List[position == 6][[1]], PH <- matrix(NA, 
-            nk, nk))
-        Output <- new("SimParam", BE = BE, PS = PS, AL = AL, GA = GA, PH = PH, KA = KA, 
-            modelType = "Path.exo")
+        ifelse(6 %in% position, PH <- List[position == 6][[1]], PH <- matrix(NA, nk, nk))
+        Output <- new("SimParam", BE = BE, PS = PS, AL = AL, GA = GA, PH = PH, KA = KA, modelType = "Path.exo")
     } else {
         ifelse(1 %in% position, BE <- List[position == 1][[1]], stop("No path coefficient object between factor.ETA"))
         ne <- nrow(BE)

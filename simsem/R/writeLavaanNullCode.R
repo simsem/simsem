@@ -3,8 +3,7 @@
 writeLavaanNullCode <- function(var, aux = NULL) {
     result <- NULL
     varAll <- c(var, aux)
-    varCode <- paste(paste(paste(varAll, " ~~ NA*", varAll, sep = ""), collapse = "\n"), 
-        "\n")
+    varCode <- paste(paste(paste(varAll, " ~~ NA*", varAll, sep = ""), collapse = "\n"), "\n")
     corCode <- outer(var, var, paste, sep = " ~~ 0*")
     diag(corCode) <- ""
     corCode <- corCode[lower.tri(corCode)]

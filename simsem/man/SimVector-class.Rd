@@ -16,7 +16,7 @@ This object is created by \code{\link{simVector}} function. Objects can be creat
 \section{Slots}{
   \describe{
     \item{\code{free}:}{Object of class \code{"vector"} draws starting values from the \code{"labels"} slot and show as a vector sample. }
-    \item{\code{param}:}{Object of class \code{"vector"} provides a thorough description of all information in the object }
+    \item{\code{value}:}{Object of class \code{"vector"} provides a thorough description of all information in the object }
   }
 }
 \section{Methods}{

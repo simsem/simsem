@@ -4,8 +4,7 @@ simDataDist <- function(..., p = NULL, keepScale = TRUE, reverse = FALSE) {
     List <- list(...)
     check <- sapply(List, is, class2 = "VirtualDist")
     if (sum(check == FALSE) > 0) {
-        stop(paste("The object(s) listed in the", paste(which(!check), collapse = ", "), 
-            "is/are not a distribution object"))
+        stop(paste("The object(s) listed in the", paste(which(!check), collapse = ", "), "is/are not a distribution object"))
     } else {
         if (is.null(p)) 
             p <- length(List)

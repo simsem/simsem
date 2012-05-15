@@ -1,28 +1,32 @@
-# simVector: Create SimVector.c object that save free parameters and starting
-# values, as well as fixed values. This will be used for model specification
-# later, such as for factor mean vector or measurement error variance vector.
+# simVector: Create SimVector.c object that save free parameters and starting values, as well as fixed values. This will be used for model specification later, such as for factor mean vector or
+# measurement error variance vector.
 
-simVector <- function(free, param = NULL) {
-    Length <- length(free)
-    lab <- rep("", Length)
-    if (is.null(param)) {
-        return(new("SimVector", free = free, param = lab))
-    } else {
-        if (length(param) > 1) {
-            if (length(param) == Length) {
-                for (i in 1:Length) {
-                  if (is.na(free[i])) 
-                    lab[i] <- param[i]
-                }
-            } else {
-                stop("The length of desired vector and label are not equal")
-            }
+simVector <- function(free = NULL, value = NULL) {
+    if (is.null(value)) {
+        if (any(is.na(free))) {
+            stop("There are free parameters but no parameter/starting values are specified.")
         } else {
-            for (i in 1:Length) {
-                if (is.na(free[i])) 
-                  lab[i] <- param
+            return(new("SimVector", free = free, value = rep("", length(free))))
+        }
+    } else {
+        if (is.null(free)) {
+            if (is.vector(value)) {
+                free <- rep(0, length(value))
+                free[!((value == 0) | (value == ""))] <- NA
+            } else {
+                stop("If the vector of free parameters is not specified, the parameter value should be specified as a vector")
             }
         }
-        return(new("SimVector", free = free, param = lab))
+        lab <- rep("", length(free))
+        if (any(is.na(free))) {
+            if (length(value) > 1) {
+                if (length(free) != length(value)) 
+                  stop("Two specified vectors do not have the same dimensions.")
+                lab[is.na(free)] <- checkInputValueVector(value[is.na(free)])
+            } else {
+                lab[is.na(free)] <- checkInputValue(value)
+            }
+        }
+        return(new("SimVector", free = free, value = lab))
     }
 } 

@@ -14,13 +14,13 @@
 	Alternatively, the element can be fixed to be a value (such as 0).
 }
 \usage{
-adjust(target, param, pos, numAsFixed)
+adjust(target, value, pos, numAsFixed)
 }
 \arguments{
   \item{target}{
 	Target \code{\linkS4class{SimMatrix}}, \code{\linkS4class{SymMatrix}}, or \code{\linkS4class{SimVector}} that you would like to adjust.
 }
-  \item{param}{
+  \item{value}{
 	The name of \link[=VirtualDist-class]{distribution object} that you would like to specify (put as \strong{character} with single or double quotation) 
 	or number that represents fixed values or starting values.
 }

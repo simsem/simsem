@@ -1,5 +1,4 @@
-# summaryShort: Provide short summary if it is available. Otherwise, it is an
-# alias for summary.
+# summaryShort: Provide short summary if it is available. Otherwise, it is an alias for summary.
 
 setMethod("summaryShort", signature = "ANY", definition = function(object) {
     summary(object)
@@ -7,7 +6,7 @@ setMethod("summaryShort", signature = "ANY", definition = function(object) {
 
 setMethod("summaryShort", signature = "SimMatrix", definition = function(object) {
     Data <- object@free
-    Labels <- object@param
+    Labels <- object@value
     Labels[!is.na(Data)] <- as.character(Data[!is.na(Data)])
     Labels[is.na(Data)] <- paste("NA:", Labels[is.na(Data)], sep = "")
     print(Labels)
@@ -15,7 +14,7 @@ setMethod("summaryShort", signature = "SimMatrix", definition = function(object)
 
 setMethod("summaryShort", signature = "SimVector", definition = function(object) {
     Data <- object@free
-    Labels <- object@param
+    Labels <- object@value
     Labels[!is.na(Data)] <- as.character(Data[!is.na(Data)])
     Labels[is.na(Data)] <- paste("NA:", Labels[is.na(Data)], sep = "")
     print(Labels)

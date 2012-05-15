@@ -1,5 +1,4 @@
-# simParamCFA: Create a set of free parameter matrices that belongs to CFA
-# model.
+# simParamCFA: Create a set of free parameter matrices that belongs to CFA model.
 
 simParamCFA <- function(...) {
     W <- getKeywords()

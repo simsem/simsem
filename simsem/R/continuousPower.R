@@ -1,17 +1,14 @@
-# Function to calculate power with continously varying parametersWill calculate
-# power over continuously varying n, percent missing, or parameters
+# Function to calculate power with continously varying parametersWill calculate power over continuously varying n, percent missing, or parameters
 
 ## Doesn't work when only 1 parameter is specified. May need an if statement...
 
-continuousPower <- function(simResult, contN = TRUE, contMCAR = FALSE, 
-    contMAR = FALSE, contParam = NULL, alpha = 0.05, powerParam = NULL) {
+continuousPower <- function(simResult, contN = TRUE, contMCAR = FALSE, contMAR = FALSE, contParam = NULL, alpha = 0.05, powerParam = NULL) {
     
     # Change warning option to supress warnings
     warnT <- as.numeric(options("warn"))
     options(warn = -1)
     
-    # Clean simResult object and get a replications X parameters matrix of 0s and
-    # 1s for logistic regression
+    # Clean simResult object and get a replications X parameters matrix of 0s and 1s for logistic regression
     object <- clean(simResult)
     crit.value <- qnorm(1 - alpha/2)
     sig <- 0 + (abs(object@coef/object@se) > crit.value)
@@ -66,16 +63,13 @@ continuousPower <- function(simResult, contN = TRUE, contMCAR = FALSE,
     # need to put a column of 1s in front of powVal
     powVal <- cbind(rep(1, dim(powVal)[1]), powVal)
     
-    # Need way to handle params when power is 1 or 0... or atleast suppress
-    # warnings WHY can't I predict more values than nRep!!!!!! F it. Lets write out
-    # own predicted probaility function.
+    # Need way to handle params when power is 1 or 0... or atleast suppress warnings WHY can't I predict more values than nRep!!!!!! F it. Lets write out own predicted probaility function.
     
     # mod<-glm.fit(y =sig[,i], x=x, family=binomial(link = 'logit'))
     
     
     for (i in 1:dim(sig)[[2]]) {
-        mod <- invisible(try(glm(sig[, i] ~ x, family = binomial(link = "logit")), 
-            silent = TRUE))
+        mod <- invisible(try(glm(sig[, i] ~ x, family = binomial(link = "logit")), silent = TRUE))
         res[[dimnames(sig)[[2]][[i]]]] <- apply(powVal, 1, predProb, mod)
     }
     res <- do.call(cbind, res)
@@ -86,8 +80,7 @@ continuousPower <- function(simResult, contN = TRUE, contMCAR = FALSE,
     
     # powCond <- NULL
     
-    # Find first column with power > desired power. Only works for 1 random
-    # parameters
+    # Find first column with power > desired power. Only works for 1 random parameters
     
     # if(dim(x)[[2]] == 1) {
     
@@ -102,15 +95,13 @@ continuousPower <- function(simResult, contN = TRUE, contMCAR = FALSE,
     ## Return warnings setting to user's settings
     options(warn = warnT)
     
-    ## Currently returns power for all combinations of random parameters for all
-    ## model parameters need to make this better.
+    ## Currently returns power for all combinations of random parameters for all model parameters need to make this better.
     return(pow)
 }
 
 ## predProb: Function to get predicted probabilities from logistic regression
 
-## arguments: newdata (a vector of values for all predictors, including the
-## intercept)
+## arguments: newdata (a vector of values for all predictors, including the intercept)
 
 ## glmobj an object from a fitted glm run with a logit link
 

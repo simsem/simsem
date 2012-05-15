@@ -15,7 +15,7 @@ This object is created by \code{"\link[=simMatrix]{simMatrix}"} function. Object
 \section{Slots}{
   \describe{
     \item{\code{free}:}{ indicates which elements of the matrix are free or fixed. \code{"NA"} means the element is freely estimated. Numbers (including 0) means the element is fixed to be the indicated number.}
-    \item{\code{param}:}{ indicates the starting values of each element in the matrix. The starting values could be numbers or the name of \code{"\link[=VirtualDist-class]{distribution objects}"}}
+    \item{\code{value}:}{ indicates the starting values of each element in the matrix. The starting values could be numbers or the name of \code{"\link[=VirtualDist-class]{distribution objects}"}}
 
   }
 }

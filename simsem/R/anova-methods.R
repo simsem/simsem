@@ -22,8 +22,7 @@ setMethod("anova", signature(object = "SimResult"), function(object, ...) {
     if (any(!duplicated(nseed)[2:length(mods)])) 
         stop("simSEM ERROR: Models are based on different data and cannont be compared, check you random seed")
     
-    # put them in order (using number of free parameters) nfreepar <-
-    # sapply(lapply(mods, logLik), attr, 'df')
+    # put them in order (using number of free parameters) nfreepar <- sapply(lapply(mods, logLik), attr, 'df')
     nfreepar <- mods[[1]]@fit$df[1]
     for (i in 2:length(mods)) {
         nfreepar <- c(nfreepar, mods[[i]]@fit$df[1])
@@ -38,8 +37,7 @@ setMethod("anova", signature(object = "SimResult"), function(object, ...) {
     
     # right now we stop things and give a warning.
     
-    # stop('simSEM ERROR: Two models have the same degrees of freedom and cannot be
-    # nested')
+    # stop('simSEM ERROR: Two models have the same degrees of freedom and cannot be nested')
     
     # ORDERING DOES NOT WORK RIGHT NOW. Why??
     mods <- mods[order(nfreepar, decreasing = FALSE)]
@@ -57,8 +55,7 @@ setMethod("anova", signature(object = "SimResult"), function(object, ...) {
     AIC <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")$AIC)), ncol = length(mods))
     BIC <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")$BIC)), ncol = length(mods))
     
-    # difference statistics. Taking the absolute value so order models entered
-    # doesn't matter
+    # difference statistics. Taking the absolute value so order models entered doesn't matter
     Chi.delta <- (apply(Chi, 1, diff))
     Df.delta <- (apply(Df, 1, diff))
     CFI.delta <- (apply(CFI, 1, diff))
@@ -70,23 +67,17 @@ setMethod("anova", signature(object = "SimResult"), function(object, ...) {
     # Power of test. 0 = not siginficant, 1 = sig.
     Power.delta <- pchisq(Chi.delta, Df.delta, lower = FALSE) < 0.05
     
-    # Need to think about what we want out of this. Maybe just mean differences
-    # across models? Lets do that for now
-    val <- data.frame(Df = colMeans(Df), Chisq = colMeans(Chi), CFI = colMeans(CFI), 
-        TLI = colMeans(TLI), RMSEA = colMeans(RMSEA), AIC = colMeans(AIC), BIC = colMeans(BIC), 
-        c(NA, mean(Chi.delta)), c(NA, mean(Df.delta)), c(NA, mean(Power.delta)), 
-        c(NA, mean(CFI.delta)), c(NA, mean(TLI.delta)), c(NA, mean(RMSEA.delta)), 
-        c(NA, mean(AIC.delta)), c(NA, mean(BIC.delta)))
-    colnames(val) <- c("df", "chisq", "CFI", "TLI", "RMSEA", "AIC", "BIC", "Chisq diff", 
-        "Df diff", "Power", "CFI diff", "TLI diff", "RMSEA diff", "AIC diff", "BIC diff")
+    # Need to think about what we want out of this. Maybe just mean differences across models? Lets do that for now
+    val <- data.frame(Df = colMeans(Df), Chisq = colMeans(Chi), CFI = colMeans(CFI), TLI = colMeans(TLI), RMSEA = colMeans(RMSEA), AIC = colMeans(AIC), BIC = colMeans(BIC), c(NA, mean(Chi.delta)), 
+        c(NA, mean(Df.delta)), c(NA, mean(Power.delta)), c(NA, mean(CFI.delta)), c(NA, mean(TLI.delta)), c(NA, mean(RMSEA.delta)), c(NA, mean(AIC.delta)), c(NA, mean(BIC.delta)))
+    colnames(val) <- c("df", "chisq", "CFI", "TLI", "RMSEA", "AIC", "BIC", "Chisq diff", "Df diff", "Power", "CFI diff", "TLI diff", "RMSEA diff", "AIC diff", "BIC diff")
     class(val) <- c("anova", class(val))
     return(val)
     
 })
 
 # this is based on the anova function in the lmer/lavaan package
-setMethod("anova", signature(object = "SimModelOut"), function(object, 
-    ...) {
+setMethod("anova", signature(object = "SimModelOut"), function(object, ...) {
     
     mcall <- match.call(expand.dots = TRUE)
     dots <- list(...)
@@ -109,8 +100,7 @@ setMethod("anova", signature(object = "SimModelOut"), function(object,
     if (any(!duplicated(nseed)[2:length(mods)])) 
         stop("simSEM ERROR: Models are based on different data and cannont be compared, check you random seed")
     
-    # put them in order (using number of free parameters) nfreepar <-
-    # sapply(lapply(mods, logLik), attr, 'df')
+    # put them in order (using number of free parameters) nfreepar <- sapply(lapply(mods, logLik), attr, 'df')
     nfreepar <- mods[[1]]@fit$df[1]
     for (i in 2:length(mods)) {
         nfreepar <- c(nfreepar, mods[[i]]@fit$df[1])
@@ -125,8 +115,7 @@ setMethod("anova", signature(object = "SimModelOut"), function(object,
     
     # right now we stop things and give a warning.
     
-    # stop('simSEM ERROR: Two models have the same degrees of freedom and cannot be
-    # nested')
+    # stop('simSEM ERROR: Two models have the same degrees of freedom and cannot be nested')
     
     # ORDERING DOES NOT WORK RIGHT NOW. Why??
     mods <- mods[order(nfreepar, decreasing = FALSE)]
@@ -143,8 +132,7 @@ setMethod("anova", signature(object = "SimModelOut"), function(object,
     RMSEA <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")$RMSEA)), ncol = length(mods))
     
     
-    # difference statistics. Taking the absolute value so order models entered
-    # doesn't matter
+    # difference statistics. Taking the absolute value so order models entered doesn't matter
     Chi.delta <- (apply(Chi, 1, diff))
     Df.delta <- (apply(Df, 1, diff))
     CFI.delta <- (apply(CFI, 1, diff))
@@ -154,11 +142,9 @@ setMethod("anova", signature(object = "SimModelOut"), function(object,
     # Power of test. 0 = not siginficant, 1 = sig.
     Power.delta <- pchisq(Chi.delta, Df.delta, lower = FALSE) < 0.05
     
-    # Need to think about what we want out of this. Maybe just mean differences
-    # across models? Lets do that for now
-    val <- data.frame(Chisq.diff = c(NA, mean(Chi.delta)), Df.diff = c(NA, mean(Df.delta)), 
-        Power = c(NA, mean(Power.delta)), CFI.diff = c(NA, mean(CFI.delta)), TLI.diff = c(NA, 
-            mean(TLI.delta)), RMSEA.diff = c(NA, mean(RMSEA.delta)))
+    # Need to think about what we want out of this. Maybe just mean differences across models? Lets do that for now
+    val <- data.frame(Chisq.diff = c(NA, mean(Chi.delta)), Df.diff = c(NA, mean(Df.delta)), Power = c(NA, mean(Power.delta)), CFI.diff = c(NA, mean(CFI.delta)), TLI.diff = c(NA, mean(TLI.delta)), 
+        RMSEA.diff = c(NA, mean(RMSEA.delta)))
     #' Pr(>Chisq)' = Pvalue.delta, Don't report mean p value, meaningless?
     
     

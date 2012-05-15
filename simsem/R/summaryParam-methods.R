@@ -1,8 +1,6 @@
-# summaryParam: This function will summarize the obtained parameter estimates
-# and standard error.
+# summaryParam: This function will summarize the obtained parameter estimates and standard error.
 
-setMethod("summaryParam", signature(object = "SimResult"), definition = function(object, 
-    alpha = 0.05, detail = FALSE) {
+setMethod("summaryParam", signature(object = "SimResult"), definition = function(object, alpha = 0.05, detail = FALSE) {
     object <- clean(object)
     coef <- colMeans(object@coef, na.rm = TRUE)
     real.se <- sapply(object@coef, sd, na.rm = TRUE)
@@ -16,10 +14,8 @@ setMethod("summaryParam", signature(object = "SimResult"), definition = function
     stdRealSE <- sapply(object@stdCoef, sd, na.rm = TRUE)
     result <- cbind(coef, real.se, estimated.se, pow, stdCoef, stdRealSE)
     
-    colnames(result) <- c("Estimate Average", "Estimate SD", "Average SE", "Power (Not equal 0)", 
-        "Std Est", "Std Est SD")
-    if (!isNullObject(object@paramValue) && (ncol(object@coef) == ncol(object@paramValue)) && 
-        all(colnames(object@coef) == colnames(object@paramValue))) {
+    colnames(result) <- c("Estimate Average", "Estimate SD", "Average SE", "Power (Not equal 0)", "Std Est", "Std Est SD")
+    if (!isNullObject(object@paramValue) && (ncol(object@coef) == ncol(object@paramValue)) && all(colnames(object@coef) == colnames(object@paramValue))) {
         nRep <- nrow(object@coef)
         nParam <- ncol(object@coef)
         paramValue <- object@paramValue
@@ -38,8 +34,7 @@ setMethod("summaryParam", signature(object = "SimResult"), definition = function
         sd.bias <- apply(biasParam, 2, sd, na.rm = TRUE)
         perc.cover[estimated.se == 0] <- NA
         result2 <- cbind(average.param, sd.param, average.bias, sd.bias, perc.cover)
-        colnames(result2) <- c("Average Param", "SD Param", "Average Bias", "SD Bias", 
-            "Coverage")
+        colnames(result2) <- c("Average Param", "SD Param", "Average Bias", "SD Bias", "Coverage")
         if (nrow(object@paramValue) == 1) 
             result2 <- result2[, c(1, 3, 5)]
         result <- data.frame(result, result2)
@@ -76,31 +71,24 @@ setMethod("summaryParam", signature(object = "SimResult"), definition = function
         result <- data.frame(result, resultFMI)
     }
     if (length(unique(object@n)) > 1) {
-        corCoefN <- cor(cbind(object@coef, object@n), use = "pairwise.complete.obs")[colnames(object@coef), 
-            "object@n"]
-        corSeN <- cor(cbind(object@se, object@n), use = "pairwise.complete.obs")[colnames(object@se), 
-            "object@n"]
+        corCoefN <- cor(cbind(object@coef, object@n), use = "pairwise.complete.obs")[colnames(object@coef), "object@n"]
+        corSeN <- cor(cbind(object@se, object@n), use = "pairwise.complete.obs")[colnames(object@se), "object@n"]
         result <- data.frame(result, r_coef.n = corCoefN, r_se.n = corSeN)
     }
     if (length(unique(object@pmMCAR)) > 1) {
-        corCoefMCAR <- cor(cbind(object@coef, object@pmMCAR), use = "pairwise.complete.obs")[colnames(object@coef), 
-            "object@pmMCAR"]
-        corSeMCAR <- cor(cbind(object@se, object@pmMCAR), use = "pairwise.complete.obs")[colnames(object@se), 
-            "object@pmMCAR"]
+        corCoefMCAR <- cor(cbind(object@coef, object@pmMCAR), use = "pairwise.complete.obs")[colnames(object@coef), "object@pmMCAR"]
+        corSeMCAR <- cor(cbind(object@se, object@pmMCAR), use = "pairwise.complete.obs")[colnames(object@se), "object@pmMCAR"]
         result <- data.frame(result, r_coef.pmMCAR = corCoefMCAR, r_se.pmMCAR = corSeMCAR)
     }
     if (length(unique(object@pmMAR)) > 1) {
-        corCoefMAR <- cor(cbind(object@coef, object@pmMAR), use = "pairwise.complete.obs")[colnames(object@coef), 
-            "object@pmMAR"]
-        corSeMAR <- cor(cbind(object@se, object@pmMAR), use = "pairwise.complete.obs")[colnames(object@se), 
-            "object@pmMAR"]
+        corCoefMAR <- cor(cbind(object@coef, object@pmMAR), use = "pairwise.complete.obs")[colnames(object@coef), "object@pmMAR"]
+        corSeMAR <- cor(cbind(object@se, object@pmMAR), use = "pairwise.complete.obs")[colnames(object@se), "object@pmMAR"]
         result <- data.frame(result, r_coef.pmMAR = corCoefMAR, r_se.pmMAR = corSeMAR)
     }
     return(as.data.frame(result))
 })
 
-setMethod("summaryParam", signature(object = "SimModelOut"), definition = function(object, 
-    alpha = 0.05) {
+setMethod("summaryParam", signature(object = "SimModelOut"), definition = function(object, alpha = 0.05) {
     lab <- makeLabels(object@param, "OpenMx")
     coef <- vectorizeObject(object@coef, lab)
     se <- vectorizeObject(object@se, lab)
@@ -113,8 +101,7 @@ setMethod("summaryParam", signature(object = "SimModelOut"), definition = functi
     colnames(result) <- c("Estimate", "SE", "z", "p", "Std Est")
     if (!isNullObject(object@paramValue)) {
         paramValue <- vectorizeObject(object@paramValue, lab)
-        biasParam <- vectorizeObject(subtractObject(object@coef, object@paramValue), 
-            lab)
+        biasParam <- vectorizeObject(subtractObject(object@coef, object@paramValue), lab)
         crit <- qnorm(1 - alpha/2)
         lowerBound <- coef - crit * se
         upperBound <- coef + crit * se
@@ -124,8 +111,7 @@ setMethod("summaryParam", signature(object = "SimModelOut"), definition = functi
     return(as.data.frame(result))
 })
 
-setMethod("summaryParam", signature(object = "SimModelMIOut"), definition = function(object, 
-    alpha = 0.05) {
+setMethod("summaryParam", signature(object = "SimModelMIOut"), definition = function(object, alpha = 0.05) {
     lab <- makeLabels(object@param, "OpenMx")
     coef <- vectorizeObject(object@coef, lab)
     se <- vectorizeObject(object@se, lab)
@@ -140,8 +126,7 @@ setMethod("summaryParam", signature(object = "SimModelMIOut"), definition = func
     colnames(result) <- c("Estimate", "SE", "z", "p", "Std Est", "FMI1", "FMI2")
     if (!isNullObject(object@paramValue)) {
         paramValue <- vectorizeObject(object@paramValue, lab)
-        biasParam <- vectorizeObject(subtractObject(object@coef, object@paramValue), 
-            lab)
+        biasParam <- vectorizeObject(subtractObject(object@coef, object@paramValue), lab)
         crit <- qnorm(1 - alpha/2)
         lowerBound <- coef - crit * se
         upperBound <- coef + crit * se

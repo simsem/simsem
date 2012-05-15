@@ -31,6 +31,8 @@ anova,SimResult-method
 blankParameters         Change all elements in the non-null objects to
                         be all NAs.
 centralMoment           Calculate central moments of a variable
+checkInputValue         Check the value argument in the matrix,
+                        symmetric matrix, or vector objects
 clean                   Extract only converged replications in the
                         result object
 collapseExo             Collapse all exogenous variables and put all in
@@ -262,6 +264,8 @@ symMatrix               Create symmetric simMatrix that save free
                         parameters and starting values, as well as
                         fixed values
 tagHeaders              Tag names to each element
+toFunction              Export the distribution object to a function
+                        command in text that can be evaluated directly.
 toSimSet                Transform the analysis model object into the
                         object for data generation
 validateCovariance      Validate whether all elements provides a good

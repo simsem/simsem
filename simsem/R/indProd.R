@@ -1,8 +1,6 @@
-# indProd: Make a product of indicators using mean centering or double-mean
-# centering
+# indProd: Make a product of indicators using mean centering or double-mean centering
 
-indProd <- function(data, var1, var2, match = TRUE, meanC = TRUE, residualC = FALSE, 
-    doubleMC = TRUE, namesProd = NULL) {
+indProd <- function(data, var1, var2, match = TRUE, meanC = TRUE, residualC = FALSE, doubleMC = TRUE, namesProd = NULL) {
     if (all(is.numeric(var1))) 
         var1 <- colnames(data)[var1]
     if (all(is.numeric(var2))) 
@@ -20,9 +18,7 @@ indProd <- function(data, var1, var2, match = TRUE, meanC = TRUE, residualC = FA
         if (residualC) {
             colnames(datProd) <- paste("interactionProduct", 1:ncol(datProd), sep = "")
             temp <- data.frame(datProd, dat1, dat2)
-            express <- paste("cbind(", paste(colnames(datProd), collapse = ", "), 
-                ") ~ ", paste(c(colnames(dat1), colnames(dat2)), collapse = " + "), 
-                sep = "")
+            express <- paste("cbind(", paste(colnames(datProd), collapse = ", "), ") ~ ", paste(c(colnames(dat1), colnames(dat2)), collapse = " + "), sep = "")
             datProd <- lm(express, data = temp)$residuals
         }
         if (doubleMC) 
@@ -36,16 +32,13 @@ indProd <- function(data, var1, var2, match = TRUE, meanC = TRUE, residualC = FA
     } else {
         datProd <- matrix(0, nrow(data), 1)
         for (i in 1:length(var1)) {
-            datProd <- data.frame(datProd, matrix(rep(dat1[, i], length(var2)), ncol = length(var2)) * 
-                dat2)
+            datProd <- data.frame(datProd, matrix(rep(dat1[, i], length(var2)), ncol = length(var2)) * dat2)
         }
         datProd <- datProd[, -1]
         if (residualC) {
             colnames(datProd) <- paste("interactionProduct", 1:ncol(datProd), sep = "")
             temp <- data.frame(datProd, dat1, dat2)
-            express <- paste("cbind(", paste(colnames(datProd), collapse = ", "), 
-                ") ~ ", paste(c(colnames(dat1), colnames(dat2)), collapse = " + "), 
-                sep = "")
+            express <- paste("cbind(", paste(colnames(datProd), collapse = ", "), ") ~ ", paste(c(colnames(dat1), colnames(dat2)), collapse = " + "), sep = "")
             datProd <- lm(express, data = temp)$residuals
         }
         if (doubleMC) 

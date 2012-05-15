@@ -1,5 +1,4 @@
-# findIndIntercept: Find the measurement intercept if factor loading, total
-# factor covariance, and total indicator variances are specified
+# findIndIntercept: Find the measurement intercept if factor loading, total factor covariance, and total indicator variances are specified
 
 findIndIntercept <- function(lambda, factorMean = NULL, indicatorMean = NULL) {
     ni <- nrow(lambda)

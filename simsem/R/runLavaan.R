@@ -1,5 +1,4 @@
-# runLavaan: Transform model object to lavaan script, run the obtained data,
-# and make model output object
+# runLavaan: Transform model object to lavaan script, run the obtained data, and make model output object
 
 runLavaan <- function(object, Data, miss = "fiml", estimator = "ML") {
     if (!require(lavaan)) {
@@ -60,8 +59,7 @@ runLavaan <- function(object, Data, miss = "fiml", estimator = "ML") {
     code <- writeLavaanCode(param, con.text, aux = nameAux)
     fit <- NULL
     if (modelType == "Path.exo" | modelType == "Path") {
-        try(fit <- sem(code, data = Data, meanstructure = TRUE, missing = miss, fixed.x = FALSE, 
-            estimator = estimator))
+        try(fit <- sem(code, data = Data, meanstructure = TRUE, missing = miss, fixed.x = FALSE, estimator = estimator))
     } else {
         try(fit <- sem(code, data = Data, meanstructure = TRUE, missing = miss, estimator = estimator))
     }
@@ -80,8 +78,7 @@ runLavaan <- function(object, Data, miss = "fiml", estimator = "ML") {
         if (nz > 0) {
             ############################ Run Null Model
             codeNull <- writeLavaanNullCode(setdiff(varnames, nameAux), nameAux)
-            try(fitNull <- sem(codeNull, data = Data, meanstructure = TRUE, missing = miss, 
-                estimator = estimator, fixed.x = FALSE))
+            try(fitNull <- sem(codeNull, data = Data, meanstructure = TRUE, missing = miss, estimator = estimator, fixed.x = FALSE))
             try(FitIndicesNull <- extractLavaanFit(fitNull))
             if (!is.na(FitIndices) && !is.na(FitIndicesNull)) {
                 ratioNULL <- FitIndicesNull["Chi"]/FitIndicesNull["df"]
@@ -111,6 +108,5 @@ runLavaan <- function(object, Data, miss = "fiml", estimator = "ML") {
         try(if (is.na(check) || check == 0) 
             Converged = FALSE, silent = TRUE)
     }
-    return(new("SimModelOut", param = object@param, start = object@start, equalCon = object@equalCon, 
-        package = object@package, coef = coef, fit = FitIndices, se = se, converged = Converged))
+    return(new("SimModelOut", param = object@param, start = object@start, equalCon = object@equalCon, package = object@package, coef = coef, fit = FitIndices, se = se, converged = Converged))
 } 

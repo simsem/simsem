@@ -1,5 +1,4 @@
-# collapseExo: Collapse all exogenous variables and put all in endogenous side
-# only.
+# collapseExo: Collapse all exogenous variables and put all in endogenous side only.
 
 collapseExo <- function(object, value = 0, label = FALSE) {
     if (!isNullObject(object@GA)) {
@@ -43,8 +42,7 @@ collapseExo <- function(object, value = 0, label = FALSE) {
                 names(temp.TY) <- NULL
             }
         }
-        return(new(is(object)[1], BE = temp.BE, PS = temp.PS, AL = temp.AL, LY = temp.LY, 
-            TE = temp.TE, TY = temp.TY, modelType = object@modelType))
+        return(new(is(object)[1], BE = temp.BE, PS = temp.PS, AL = temp.AL, LY = temp.LY, TE = temp.TE, TY = temp.TY, modelType = object@modelType))
     } else {
         return(object)
     }

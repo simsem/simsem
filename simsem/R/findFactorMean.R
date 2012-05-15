@@ -1,5 +1,4 @@
-# findFactorMean: Find the factor mean if regression coefficients and factor
-# intercept are specified.
+# findFactorMean: Find the factor mean if regression coefficients and factor intercept are specified.
 
 findFactorMean <- function(beta, alpha = NULL) {
     ni <- nrow(beta)
