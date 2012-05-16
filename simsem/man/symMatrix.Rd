@@ -37,4 +37,9 @@ diag(factor.cor) <- 1
 factor.cor.start <- matrix("u46", 4, 4)
 factor.cor.start[1, 2] <- factor.cor.start[2, 1] <- "0.5"
 RPS <- symMatrix(factor.cor, factor.cor.start)
+
+start <- diag(4)
+start[1, 2] <- 0.5
+start[2, 1] <- 0.5
+ST <- symMatrix(value=start)
 }

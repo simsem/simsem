@@ -37,4 +37,7 @@ AL <- simVector(factor.mean, 0)
 n02 <- simNorm(0, 0.2)
 factor.start <- rep("n02", 4)
 KA <- simVector(factor.mean, factor.start)
+
+start <- c(2, 0, 0, 1)
+VE <- simVector(value=start)
 }

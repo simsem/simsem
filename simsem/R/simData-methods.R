@@ -24,9 +24,8 @@ setMethod("simData", signature(param = "SimSet"), definition = function(param, n
             realData <- realData[, indLab]
         if (sum(is.na(realData)) > 0) 
             stop("The model-based bootstrap is not available for data with missingness.")
-        if (is.null(n)) 
-            n <- nrow(realData)
     }
+	if (is.null(n)) n <- nrow(realData)
     if (!isNullObject(errorDist)) {
         if (modelType == "Path" | modelType == "Path.exo") 
             stop("errorDist is not allowed for path analysis model. The distribution of each indicator should be specified in facDist if sequential=TRUE.")

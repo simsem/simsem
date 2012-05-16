@@ -8,7 +8,7 @@
 runSim <- function(cond) { #n, mis, nRep, seed
 library(simsem)
 seed <- unlist(cond[4])
-n <- unlist(cond[1])
+x <- unlist(cond[1])
 mis <- unlist(cond[2])
 nRep <- unlist(cond[3])
 trivialMis <- 0.3
@@ -82,7 +82,7 @@ loadingMis4 <- matrix(0, 9, 3)
 loadingMis4[4:9, 1] <- NA
 loadingMis4[c(1:3, 7:9),2] <- NA
 loadingMis4[1:6,3] <- NA
-LYMis4 <- simMatrix(loadingMis4, "u3")
+LYMis4 <- simMatrix(loadingMis4, toFunction(u3))
 misspec4 <- simMisspecCFA(LY=LYMis4, misBeforeFill=FALSE)
 
 n3 <- simNorm(0, trivialMis/2)
@@ -90,7 +90,7 @@ loadingMis5 <- matrix(0, 9, 3)
 loadingMis5[4:9, 1] <- NA
 loadingMis5[c(1:3, 7:9),2] <- NA
 loadingMis5[1:6,3] <- NA
-LYMis5 <- simMatrix(loadingMis5, "n3")
+LYMis5 <- simMatrix(loadingMis5, toFunction(n3))
 misspec5 <- simMisspecCFA(LY=LYMis5, misBeforeFill=FALSE)
 
 u3 <- simUnif(-trivialMis, trivialMis)
@@ -98,7 +98,7 @@ loadingMis6 <- matrix(0, 9, 3)
 loadingMis6[4:9, 1] <- NA
 loadingMis6[c(1:3, 7:9),2] <- NA
 loadingMis6[1:6,3] <- NA
-LYMis6 <- simMatrix(loadingMis6, "u3")
+LYMis6 <- simMatrix(loadingMis6, toFunction(u3))
 misspec6 <- simMisspecCFA(LY=LYMis6, optMisfit="max", numIter=100, misBeforeFill=FALSE)
 
 misList <- list(misspec1, misspec2, misspec3, misspec4, misspec5, misspec6)
@@ -117,9 +117,6 @@ names(result) <- paste(name[,1], name[,2], sep="")
 return(result)
 }
 
-trivialMis <- 0.3
-u3 <- simUnif(-trivialMis, trivialMis)
-n3 <- simNorm(0, trivialMis/2)
 
 m <- 789987
 set.seed(m)

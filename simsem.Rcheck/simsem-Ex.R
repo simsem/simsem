@@ -3219,6 +3219,11 @@ LY <- simMatrix(loading, "n65")
 summary(LY)
 run(LY)
 
+start <- matrix(0, 6, 2)
+start[1:3, 1] <- 0.7
+start[4:6, 2] <- 0.7
+ST <- simMatrix(value=start)
+
 
 
 cleanEx()
@@ -3818,6 +3823,9 @@ n02 <- simNorm(0, 0.2)
 factor.start <- rep("n02", 4)
 KA <- simVector(factor.mean, factor.start)
 
+start <- c(2, 0, 0, 1)
+VE <- simVector(value=start)
+
 
 
 cleanEx()
@@ -4086,6 +4094,11 @@ diag(factor.cor) <- 1
 factor.cor.start <- matrix("u46", 4, 4)
 factor.cor.start[1, 2] <- factor.cor.start[2, 1] <- "0.5"
 RPS <- symMatrix(factor.cor, factor.cor.start)
+
+start <- diag(4)
+start[1, 2] <- 0.5
+start[2, 1] <- 0.5
+ST <- symMatrix(value=start)
 
 
 

@@ -47,4 +47,9 @@ n65 <- simNorm(0.6, 0.05)
 LY <- simMatrix(loading, "n65")
 summary(LY)
 run(LY)
+
+start <- matrix(0, 6, 2)
+start[1:3, 1] <- 0.7
+start[4:6, 2] <- 0.7
+ST <- simMatrix(value=start)
 }
