@@ -1,0 +1,16 @@
+paramTab
+
+popParamTab
+
+outParamTab
+
+type, ng, ny, ne, lambda, psi, beta, theta, nu, alpha
+list(id, LHS, op, RHS, user, free, group, label, coef, misCoef, equalId, labelStd, std, misStd, equalStdId, exo, uncoFree) <--> matrix(GLIST) ngroup, lambda, psi, beta, theta, nu, alpha
+
+
+
+run to draw sample
+check whether it is good
+implied
+summary
+
