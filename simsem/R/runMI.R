@@ -1,13 +1,5 @@
 ## Functon to impute missing data, run Lavaan on each one
 
-# Conveniance function to run impuations on data and only return list of data
-imputeMissing <- function(data.mat, m, ...) {
-    # pull out only the imputations
-    require(Amelia)
-    temp.am <- amelia(data.mat, m, p2s = 0, ...)
-    return(temp.am$imputations)
-    
-}  # end imputeMissing
 
 ## Currently outputs a list of parameter estimates, standard errors, fit indices and fraction missing information
 
@@ -15,12 +7,13 @@ imputeMissing <- function(data.mat, m, ...) {
 
 runMI <- function(data.mat, data.model, m, miPackage = "amelia", silent = FALSE, ...) {
     ################### I put the silent argument here as the 'runRep' and 'simResult' have one.
+	require(Amelia)
     data.model@auxiliary <- new("NullVector")
     # Currently only supports imputation by Amelia. We want to add mice, and maybe EM imputatin too...
     if (!miPackage == "amelia") 
         stop("Currently runMI only supports imputation by amelia")
-    # Impute missing data
-    imputed.l <- imputeMissing(data.mat, m, ...)
+    # Impute missing data no longer creates two copies of imputed data
+    temp.am <- amelia(data.mat, m, p2s = 0, ...)
     # nRep <- m
     args <- list(...)
     ## Return list of simModelOut objects, to be combined.
@@ -28,7 +21,7 @@ runMI <- function(data.mat, data.model, m, miPackage = "amelia", silent = FALSE,
         model <- run(object = simModel, data = MIdata)
         return(model)
     }
-    imputed.l <- lapply(imputed.l, function(data, var) {
+    imputed.l <- lapply(temp.am$imputations, function(data, var) {
         return(data[, var])
     }, var = data.model@indLab)
     # Run models on each imputed data set using simModel
