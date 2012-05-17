@@ -1248,10 +1248,10 @@ rownames(c17) <- rep("LY", 3)
 
 con <- simEqualCon(c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15, c16, c17, modelType="SEM", conBeforeFill=FALSE)
 
+
 datModel <- simData(longMed, 200, equalCon=con)
-dat <- run(datModel, dataOnly=FALSE)
 SimModel <- simModel(longMed, equalCon=con)
-out <- run(SimModel, dat)
+output <- simResult(1000, datModel, SimModel)
 
 LY2 <- matrix(0, 9, 3)
 LY2[1:3, 1] <- NA
@@ -1262,37 +1262,12 @@ BE2[2,1] <- NA
 BE2[3,2] <- NA
 crossMed <- simParamSEM(LY=LY2, BE=BE2)
 SimModel2 <- simModel(crossMed, indLab=19:27)
-out2 <- run(SimModel2, dat)
+output2 <- simResult(100, datModel, SimModel2)
 
-output <- simResult(1000, datModel, SimModel)
-
-
-mis <- seq(0.01, 0.2, 0.01)
-
-wrap <- function(mis) {
-loading <- matrix(0, 10, 2)
-loading[1:5, 1] <- NA
-loading[6:10, 2] <- NA
-LY <- simMatrix(loading, 0.7)
-
-facCor <- matrix(NA, 2, 2)
-diag(facCor) <- 1
-PS <- symMatrix(facCor, 0.5)
-
-TE <- symMatrix(diag(10))
-
-realPop <- simSetCFA(LY=LY, RPS=PS, RTE=TE)
-
-loadingMis <- matrix(0, 10, 2)
-loadingMis[1, 2] <- NA
-LYmis <- simMatrix(loadingMis, mis)
-
-misPop <- simMisspecCFA(LY=LYmis)
-
-popMisfit(realPop, misPop)
-}
-
-out <- sapply(mis, wrap)
-
-
+n05 <- simNorm(0, 0.05)
+pathMis <- matrix(0, 9, 9)
+pathMis[6, 1] <- pathMis[9, 4] <- NA
+BEMis <- simMatrix(pathMis, "n05")
+longMedMis <- simMisspecSEM(BE=BEMis, misBeforeFill=FALSE, misBeforeCon=FALSE)
+datModel <- simData(longMed, 200, misspec=longMedMis, equalCon=con)
 
