@@ -29,7 +29,7 @@ lavaan is BETA software! Please report any bugs.
 Loading required package: MASS
  
 ###############################################################################################
-This is simsem 0.1-6
+This is simsem 0.2-0
 simsem is BETA software! Please report any bugs.
 simsem was developed at the University of Kansas Center for Research Methods and Data Analysis.
 ###############################################################################################
@@ -2917,7 +2917,7 @@ Known Subclasses: "SimUnif", "SimNorm", "SimBeta", "SimBinom", "SimCauchy", "Sim
 > CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
 > SimData <- simData(CFA.Model, 500)
 > SimModel <- simModel(CFA.Model)
-> # We use only 50 replications to save time.
+> # We will use only 50 replications to save time.
 > # In reality, more replications are needed.
 > 
 > # Specify both sample size and percent missing completely at random
@@ -23428,7 +23428,7 @@ TY6    0.054039482  0.008528707
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  279.81 1.04 281.13 NA NA 
+Time elapsed:  281.35 0.73 282.64 NA NA 
 > grDevices::dev.off()
 null device 
           1 

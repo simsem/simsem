@@ -1,4 +1,3 @@
-simsem-package	simsem-package
 adjust	adjust
 adjust,ANY-method	adjust
 adjust,SimMatrix-method	adjust
@@ -341,7 +340,6 @@ SimResult-class	SimResult-class
 simResultParam	simResultParam
 SimResultParam-class	SimResultParam-class
 SimRSet-class	VirtualRSet-class
-simsem	simsem-package
 SimSet-class	SimSet-class
 simSetCFA	simSetCFA
 simSetPath	simSetPath

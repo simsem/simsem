@@ -248,7 +248,6 @@ simUnif                 Create random uniform distribution object
 simVector               Create simVector that save free parameters and
                         starting values, as well as fixed values
 simWeibull              Create random Weibull distribution object
-simsem-package          SIMulated Structural Equation Modeling.
 skew                    Finding skewness
 standardize             Standardize the parameter estimates within an
                         object
