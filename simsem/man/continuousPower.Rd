@@ -4,11 +4,10 @@
 	Find power of model parameters when simulations have randomly varying parameters
 }
 \description{
-	A function to find the power of the parameters in a model when one or more of the simulations parameters vary randomly across replications.
+	A function to find the power of  parameters in a model when one or more of the simulations parameters vary randomly across replications.
 }
 \usage{
-continuousPower(simResult, contN = TRUE, contMCAR = FALSE, contMAR = FALSE, 
-	contParam = NULL, alpha = .05, powerParam = NULL)
+continuousPower(simResult, contN = TRUE, contMCAR = FALSE, contMAR = FALSE, contParam = NULL, alpha = .05, powerParam = NULL)
 }
 \arguments{
   \item{simResult}{
@@ -47,7 +46,7 @@ Muthen, L. K., & Muthen, B. O. (2002). How to use a Monte Carlo study to decide 
 }
 \seealso{
 	\itemize{
-		\item \code{\linkS4class{SimResult}} to see how to create simResult with randomly varying parameters.
+		\item \code{\linkS4class{SimResult}} to see how to create a simResult object with randomly varying parameters.
 	}
 }
 \examples{
@@ -60,7 +59,7 @@ RTD <- symMatrix(diag(6))
 CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
 SimData <- simData(CFA.Model, 500)
 SimModel <- simModel(CFA.Model)
-# We use only 50 replications to save time.
+# We will use only 50 replications to save time.
 # In reality, more replications are needed.
 
 # Specify both sample size and percent missing completely at random
