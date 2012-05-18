@@ -107,17 +107,17 @@ loading.trivial <- matrix(NA, 9, 3)
 loading.trivial[is.na(loading)] <- 0
 LY.trivial <- simMatrix(loading.trivial, "u2")
 mis <- simMisspecCFA(LY = LY.trivial)
-Output <- runFit(SimModel, HolzingerSwineford1939, 20, mis)
+Output <- runFit(SimModel, HolzingerSwineford1939, 5, mis)
 summary(Output)
 
 out <- run(SimModel, HolzingerSwineford1939)
-Output2 <- runFit(out, HolzingerSwineford1939, 20, mis)
+Output2 <- runFit(out, HolzingerSwineford1939, 5, mis)
 
 # Bollen-Stine Bootstrap
-Output3 <- runFit(out, HolzingerSwineford1939, 20, modelBoot=TRUE)
+Output3 <- runFit(out, HolzingerSwineford1939, 5, modelBoot=TRUE)
 
 # Bollen-Stine Bootstrap with trivial misspecification
-Output4 <- runFit(out, HolzingerSwineford1939, 20, mis, modelBoot=TRUE)
+Output4 <- runFit(out, HolzingerSwineford1939, 5, mis, modelBoot=TRUE)
 
 # Example with multiple imputation
 library(lavaan)

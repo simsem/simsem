@@ -53,8 +53,8 @@ RTD <- symMatrix(error.cor)
 CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
 SimData <- simData(CFA.Model, 200)
 SimModel <- simModel(CFA.Model)
-# We make the examples running only 50 replications to save time.
+# We make the examples running only 5 replications to save time.
 # In reality, more replications are needed.
-Output <- simResult(50, SimData, SimModel)
+Output <- simResult(5, SimData, SimModel)
 getCutoff(Output, 0.05)
 }
