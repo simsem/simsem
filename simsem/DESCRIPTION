@@ -3,7 +3,10 @@ Type: Package
 Title: SIMulated Structural Equation Modeling.
 Version: 0.2-0
 Date: 2012-05-17
-Author: Sunthud Pornprasertmanit (University of Kansas; psunthud@ku.edu), Patrick Miller
+Authors@R: c(person("Sunthud", "Pornprasertmanit", role = c("aut", "cre"), email = "psunthud@ku.edu"), 
+		person("Patrick", "Miller", role = c("aut", "cre"), email="patr1ckm@ku.edu"), 
+		person("Alexander", "Schoemann", role = c("aut", "cre"), email="schoemann@ku.edu") )
+Author: Sunthud Pornprasertmanit <psunthud@ku.edu>, Patrick Miller
         <patr1ckm@ku.edu>, Alexander Schoemann <schoemann@ku.edu>
 Maintainer: Sunthud Pornprasertmanit <psunthud@ku.edu>, Patrick Miller
         <patr1ckm@ku.edu>, Alexander Schoemann <schoemann@ku.edu>
