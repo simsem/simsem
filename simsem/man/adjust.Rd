@@ -10,31 +10,30 @@
 }
 \description{
 	This function will adjust an element in \code{\linkS4class{SimMatrix}}, \code{\linkS4class{SymMatrix}}, or \code{\linkS4class{SimVector}}. 
-	The specified element may be set to be free parameter with number or distribution object as starting values. 
-	Alternatively, the element can be fixed to be a value (such as 0).
+	The specified element may be set to be a free parameter with a specified number or distribution object as a starting value. 
+	Alternatively, the element can be altered to be a fixed element with a specified value (such as 0).
 }
 \usage{
 adjust(target, value, pos, numAsFixed)
 }
 \arguments{
   \item{target}{
-	Target \code{\linkS4class{SimMatrix}}, \code{\linkS4class{SymMatrix}}, or \code{\linkS4class{SimVector}} that you would like to adjust.
+	The target \code{\linkS4class{SimMatrix}}, \code{\linkS4class{SymMatrix}}, or \code{\linkS4class{SimVector}} that contains the element you would like to change.
 }
   \item{value}{
-	The name of \link[=VirtualDist-class]{distribution object} that you would like to specify (put as \strong{character} with single or double quotation) 
-	or number that represents fixed values or starting values.
+        The \link[=VirtualDist-class]{distribution object} (put as \strong{character} with single or double quotation) or number that you would like to specify as the new fixed parameter or starting value.
 }
   \item{pos}{
-	The position of element that you would like to adjust, such as \code{"c(1,2)"} for the element in Row 1 and Column 2 in the specified matrix.
+	The position of the element that you would like to adjust, such as \code{"c(1,2)"} for the element in Row 1 and Column 2 of the specified matrix.
 }
   \item{numAsFixed}{ 
-	This argument is used when the \code{VirtualDist} argument was specified as number. 
-	If \code{TRUE} (as default), the number is treated as fixed parameters. 
-	If \code{FALSE}, the number is treated as a starting value and the element is set to be free parameter.
+	This argument is used when the value argument was specified as a number. 
+	If \code{TRUE} (as default), the number is treated as a fixed parameter. 
+	If \code{FALSE}, the number is treated as a starting value and the element is set to be a free parameter.
 }
 }
 \value{
-	Return the input \code{\linkS4class{SimMatrix}}, \code{\linkS4class{SymMatrix}}, or \code{\linkS4class{SimVector}} with adjusted element.
+	Return the specified \code{\linkS4class{SimMatrix}}, \code{\linkS4class{SymMatrix}}, or \code{\linkS4class{SimVector}} with the target element set to its new value.
 }
 \note{
 	For \code{\linkS4class{SymMatrix}} class, above- and below-diagonal elements will be adjusted simultaneously. 
