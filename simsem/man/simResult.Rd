@@ -82,9 +82,9 @@ RTD <- symMatrix(diag(6))
 CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
 SimData <- simData(CFA.Model, 500)
 SimModel <- simModel(CFA.Model)
-# We make the examples running only 50 replications to save time.
+# We make the examples running only 5 replications to save time.
 # In reality, more replications are needed.
-Output <- simResult(50, SimData, SimModel)
+Output <- simResult(5, SimData, SimModel)
 summary(Output)
 
 # Specify Sample Size by n
@@ -96,18 +96,18 @@ RTD <- symMatrix(diag(6))
 CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
 SimData <- simData(CFA.Model, 500)
 SimModel <- simModel(CFA.Model)
-# We make the examples running only 50 replications to save time.
+# We make the examples running only 5 replications to save time.
 # In reality, more replications are needed.
-Output <- simResult(NULL, SimData, SimModel, n=seq(50, 500, 10))
+Output <- simResult(NULL, SimData, SimModel, n=seq(50, 100, 10))
 summary(Output)
 
 # Specify both sample size and percent missing completely at random
-Output <- simResult(NULL, SimData, SimModel, n=seq(50, 500, 25), pmMCAR=c(0, 0.1, 0.2))
+Output <- simResult(NULL, SimData, SimModel, n=seq(50, 100, 10), pmMCAR=c(0, 0.1, 0.2))
 summary(Output)
 
 # Use distribution object on sample size and percent completely at random
 n <- simUnif(100, 500)
 pmMCAR <- simUnif(0, 0.1)
-Output <- simResult(50, SimData, SimModel, n=n, pmMCAR=pmMCAR)
+Output <- simResult(5, SimData, SimModel, n=n, pmMCAR=pmMCAR)
 
 }

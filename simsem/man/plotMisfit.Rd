@@ -53,8 +53,8 @@ mis.path.BE[4, 1:2] <- NA
 mis.BE <- simMatrix(mis.path.BE, "u1")
 Path.Mis.Model <- simMisspecPath(BE = mis.BE, misfitType="rmsea") #, misfitBound=c(0.05, 0.08))
 
-# The number of replications in actual analysis should be much more than 50
-ParamObject <- simResultParam(50, Path.Model, Path.Mis.Model)
+# The number of replications in actual analysis should be much more than 5
+ParamObject <- simResultParam(20, Path.Model, Path.Mis.Model)
 plotMisfit(ParamObject)
 
 plotMisfit(ParamObject, misParam=1:2)

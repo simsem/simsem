@@ -546,9 +546,9 @@ RTD <- symMatrix(diag(6))
 CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
 SimData <- simData(CFA.Model, 500)
 SimModel <- simModel(CFA.Model)
-# We make the examples running only 50 replications to save time.
+# We make the examples running only 5 replications to save time.
 # In reality, more replications are needed.
-Output <- simResult(50, SimData, SimModel)
+Output <- simResult(5, SimData, SimModel)
 summary(Output)
 getCutoff(Output, 0.05)
 summaryParam(Output)
@@ -601,8 +601,8 @@ mis.path.BE[4, 1:2] <- NA
 mis.BE <- simMatrix(mis.path.BE, "u1")
 Path.Mis.Model <- simMisspecPath(BE = mis.BE, misfitType="rmsea") #, misfitBound=c(0.05, 0.08))
 
-# The number of replications in actual analysis should be much more than 50
-ParamObject <- simResultParam(50, Path.Model, Path.Mis.Model)
+# The number of replications in actual analysis should be much more than 5
+ParamObject <- simResultParam(5, Path.Model, Path.Mis.Model)
 summary(ParamObject)
 
 
@@ -857,11 +857,11 @@ CFA.Model2 <- simSetCFA(LY = LX2, RPS = RPH, RTE = RTD)
 SimData <- simData(CFA.Model1, 500)
 SimModel1 <- simModel(CFA.Model1)
 SimModel2 <- simModel(CFA.Model2)
-# We make the examples running only 50 replications to save time.
+# We make the examples running only 5 replications to save time.
 # In reality, more replications are needed.
 # Need to make sure that both simResult calls have the same seed!
-Output1 <- simResult(50, SimData, SimModel1, seed=123567)
-Output2 <- simResult(50, SimData, SimModel2, seed=123567)
+Output1 <- simResult(5, SimData, SimModel1, seed=123567)
+Output2 <- simResult(5, SimData, SimModel2, seed=123567)
 anova(Output1, Output2)
 
 
@@ -1096,11 +1096,11 @@ RTD <- symMatrix(diag(6))
 CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
 SimData <- simData(CFA.Model, 500)
 SimModel <- simModel(CFA.Model)
-# We use only 50 replications to save time.
+# We will use only 5 replications to save time.
 # In reality, more replications are needed.
 
 # Specify both sample size and percent missing completely at random
-Output <- simResult(NULL, SimData, SimModel, n=seq(50, 500, 25), pmMCAR=c(0, 0.1, 0.2))
+Output <- simResult(NULL, SimData, SimModel, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2))
 summary(Output)
 
 Cpow <- continuousPower(Output, contN = TRUE, contMCAR = TRUE)
@@ -1786,9 +1786,9 @@ RTD <- symMatrix(error.cor)
 CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
 SimData <- simData(CFA.Model, 200)
 SimModel <- simModel(CFA.Model)
-# We make the examples running only 50 replications to save time.
+# We make the examples running only 5 replications to save time.
 # In reality, more replications are needed.
-Output <- simResult(50, SimData, SimModel)
+Output <- simResult(5, SimData, SimModel)
 getCutoff(Output, 0.05)
 
 
@@ -1850,9 +1850,9 @@ RTD <- symMatrix(diag(6))
 CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
 SimData.NULL <- simData(CFA.Model.NULL, 500)
 SimModel <- simModel(CFA.Model.NULL)
-# We make the examples running only 50 replications to save time.
+# We make the examples running only 5 replications to save time.
 # In reality, more replications are needed.
-Output.NULL <- simResult(50, SimData.NULL, SimModel)
+Output.NULL <- simResult(5, SimData.NULL, SimModel)
 Cut.NULL <- getCutoff(Output.NULL, 0.95)
 
 u79 <- simUnif(0.7, 0.9)
@@ -1865,7 +1865,7 @@ diag(latent.cor.alt) <- 1
 RPH.ALT <- symMatrix(latent.cor.alt, "u79")
 CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
 SimData.ALT <- simData(CFA.Model.ALT, 500)
-Output.ALT <- simResult(50, SimData.ALT, SimModel)
+Output.ALT <- simResult(5, SimData.ALT, SimModel)
 getPower(Output.ALT, Cut.NULL)
 Rule.of.thumb <- c(RMSEA=0.05, CFI=0.95, TLI=0.95, SRMR=0.06)
 getPower(Output.ALT, Rule.of.thumb, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
@@ -2286,17 +2286,17 @@ RTD <- symMatrix(error.cor)
 CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
 SimData <- simData(CFA.Model, 200)
 SimModel <- simModel(CFA.Model)
-# We make the examples running only 50 replications to save time.
+# We make the examples running only 5 replications to save time.
 # In reality, more replications are needed.
-Output <- simResult(50, SimData, SimModel)
+Output <- simResult(5, SimData, SimModel)
 plotCutoff(Output, 0.05, usedFit=c("RMSEA", "SRMR", "CFI", "TLI"))
 
 # Varying N
-Output2 <- simResult(NULL, SimData, SimModel, n=51:100)
+Output2 <- simResult(NULL, SimData, SimModel, n=seq(50, 100, 10))
 plotCutoff(Output2, 0.05)
 
 # Varying N and pmMCAR
-Output3 <- simResult(NULL, SimData, SimModel, n=51:100, pmMCAR=c(0, 0.05, 0.1, 0.15))
+Output3 <- simResult(NULL, SimData, SimModel, n=seq(50, 100, 10), pmMCAR=c(0, 0.05, 0.1, 0.15))
 plotCutoff(Output3, 0.05)
 
 
@@ -2361,8 +2361,8 @@ mis.path.BE[4, 1:2] <- NA
 mis.BE <- simMatrix(mis.path.BE, "u1")
 Path.Mis.Model <- simMisspecPath(BE = mis.BE, misfitType="rmsea") #, misfitBound=c(0.05, 0.08))
 
-# The number of replications in actual analysis should be much more than 50
-ParamObject <- simResultParam(50, Path.Model, Path.Mis.Model)
+# The number of replications in actual analysis should be much more than 5
+ParamObject <- simResultParam(20, Path.Model, Path.Mis.Model)
 plotMisfit(ParamObject)
 
 plotMisfit(ParamObject, misParam=1:2)
@@ -2393,9 +2393,9 @@ RTD <- symMatrix(diag(6))
 CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
 SimData.NULL <- simData(CFA.Model.NULL, 500)
 SimModel <- simModel(CFA.Model.NULL)
-# We make the examples running only 50 replications to save time.
+# We make the examples running only 5 replications to save time.
 # In reality, more replications are needed.
-Output.NULL <- simResult(50, SimData.NULL, SimModel)
+Output.NULL <- simResult(5, SimData.NULL, SimModel)
 Cut.NULL <- getCutoff(Output.NULL, 0.95)
 
 u79 <- simUnif(0.7, 0.9)
@@ -2408,7 +2408,7 @@ diag(latent.cor.alt) <- 1
 RPH.ALT <- symMatrix(latent.cor.alt, "u79")
 CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
 SimData.ALT <- simData(CFA.Model.ALT, 500)
-Output.ALT <- simResult(50, SimData.ALT, SimModel)
+Output.ALT <- simResult(5, SimData.ALT, SimModel)
 getPower(Output.ALT, Cut.NULL)
 Rule.of.thumb <- c(RMSEA=0.05, CFI=0.95, TLI=0.95, SRMR=0.06)
 plotPower(Output.ALT, Output.NULL, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
@@ -2647,17 +2647,17 @@ loading.trivial <- matrix(NA, 9, 3)
 loading.trivial[is.na(loading)] <- 0
 LY.trivial <- simMatrix(loading.trivial, "u2")
 mis <- simMisspecCFA(LY = LY.trivial)
-Output <- runFit(SimModel, HolzingerSwineford1939, 20, mis)
+Output <- runFit(SimModel, HolzingerSwineford1939, 5, mis)
 summary(Output)
 
 out <- run(SimModel, HolzingerSwineford1939)
-Output2 <- runFit(out, HolzingerSwineford1939, 20, mis)
+Output2 <- runFit(out, HolzingerSwineford1939, 5, mis)
 
 # Bollen-Stine Bootstrap
-Output3 <- runFit(out, HolzingerSwineford1939, 20, modelBoot=TRUE)
+Output3 <- runFit(out, HolzingerSwineford1939, 5, modelBoot=TRUE)
 
 # Bollen-Stine Bootstrap with trivial misspecification
-Output4 <- runFit(out, HolzingerSwineford1939, 20, mis, modelBoot=TRUE)
+Output4 <- runFit(out, HolzingerSwineford1939, 5, mis, modelBoot=TRUE)
 
 # Example with multiple imputation
 library(lavaan)
@@ -2939,9 +2939,9 @@ RTD <- symMatrix(diag(6))
 CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
 SimData <- simData(CFA.Model, 500)
 SimModel <- simModel(CFA.Model)
-# We make the examples running only 50 replications to save time.
+# We make the examples running only 5 replications to save time.
 # In reality, more replications are needed.
-Output <- simResult(50, SimData, SimModel)
+Output <- simResult(5, SimData, SimModel)
 #summary(Output)
 
 
@@ -3527,9 +3527,9 @@ RTD <- symMatrix(diag(6))
 CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
 SimData <- simData(CFA.Model, 500)
 SimModel <- simModel(CFA.Model)
-# We make the examples running only 50 replications to save time.
+# We make the examples running only 5 replications to save time.
 # In reality, more replications are needed.
-Output <- simResult(50, SimData, SimModel)
+Output <- simResult(5, SimData, SimModel)
 summary(Output)
 
 # Specify Sample Size by n
@@ -3541,19 +3541,19 @@ RTD <- symMatrix(diag(6))
 CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
 SimData <- simData(CFA.Model, 500)
 SimModel <- simModel(CFA.Model)
-# We make the examples running only 50 replications to save time.
+# We make the examples running only 5 replications to save time.
 # In reality, more replications are needed.
-Output <- simResult(NULL, SimData, SimModel, n=seq(50, 500, 10))
+Output <- simResult(NULL, SimData, SimModel, n=seq(50, 100, 10))
 summary(Output)
 
 # Specify both sample size and percent missing completely at random
-Output <- simResult(NULL, SimData, SimModel, n=seq(50, 500, 25), pmMCAR=c(0, 0.1, 0.2))
+Output <- simResult(NULL, SimData, SimModel, n=seq(50, 100, 10), pmMCAR=c(0, 0.1, 0.2))
 summary(Output)
 
 # Use distribution object on sample size and percent completely at random
 n <- simUnif(100, 500)
 pmMCAR <- simUnif(0, 0.1)
-Output <- simResult(50, SimData, SimModel, n=n, pmMCAR=pmMCAR)
+Output <- simResult(5, SimData, SimModel, n=n, pmMCAR=pmMCAR)
 
 
 
@@ -3596,16 +3596,16 @@ mis.path.BE[4, 1:2] <- NA
 mis.BE <- simMatrix(mis.path.BE, "u1")
 Path.Mis.Model <- simMisspecPath(BE = mis.BE, misfitType="rmsea")
 
-# The number of replications in actual analysis should be much more than 50
-ParamObject <- simResultParam(50, Path.Model, Path.Mis.Model)
+# The number of replications in actual analysis should be much more than 5
+ParamObject <- simResultParam(5, Path.Model, Path.Mis.Model)
 
 # Specify the range of misfits to select the set of misspecified parameters
 Path.Mis.Model2 <- simMisspecPath(BE = mis.BE, misfitType="rmsea", misfitBound=c(0.05, 0.08))
-ParamObject2 <- simResultParam(50, Path.Model, Path.Mis.Model2)
+ParamObject2 <- simResultParam(5, Path.Model, Path.Mis.Model2)
 
 # Find the maximum misspecification for each actual parameter
 Path.Mis.Model3 <- simMisspecPath(BE = mis.BE, misfitType="rmsea", optMisfit="max", numIter=10)
-ParamObject3 <- simResultParam(50, Path.Model, Path.Mis.Model3)
+ParamObject3 <- simResultParam(5, Path.Model, Path.Mis.Model3)
 
 
 
@@ -4022,9 +4022,9 @@ RTD <- symMatrix(diag(6))
 CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
 SimData <- simData(CFA.Model, 500)
 SimModel <- simModel(CFA.Model)
-# We make the examples running only 50 replications to save time.
+# We make the examples running only 5 replications to save time.
 # In reality, more replications are needed.
-Output <- simResult(50, SimData, SimModel)
+Output <- simResult(5, SimData, SimModel)
 summaryParam(Output)
 summaryParam(Output, detail=TRUE)
 

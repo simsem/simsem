@@ -59,16 +59,16 @@ RTD <- symMatrix(error.cor)
 CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
 SimData <- simData(CFA.Model, 200)
 SimModel <- simModel(CFA.Model)
-# We make the examples running only 50 replications to save time.
+# We make the examples running only 5 replications to save time.
 # In reality, more replications are needed.
-Output <- simResult(50, SimData, SimModel)
+Output <- simResult(5, SimData, SimModel)
 plotCutoff(Output, 0.05, usedFit=c("RMSEA", "SRMR", "CFI", "TLI"))
 
 # Varying N
-Output2 <- simResult(NULL, SimData, SimModel, n=51:100)
+Output2 <- simResult(NULL, SimData, SimModel, n=seq(50, 100, 10))
 plotCutoff(Output2, 0.05)
 
 # Varying N and pmMCAR
-Output3 <- simResult(NULL, SimData, SimModel, n=51:100, pmMCAR=c(0, 0.05, 0.1, 0.15))
+Output3 <- simResult(NULL, SimData, SimModel, n=seq(50, 100, 10), pmMCAR=c(0, 0.05, 0.1, 0.15))
 plotCutoff(Output3, 0.05)
 }

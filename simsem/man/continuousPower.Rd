@@ -59,11 +59,11 @@ RTD <- symMatrix(diag(6))
 CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
 SimData <- simData(CFA.Model, 500)
 SimModel <- simModel(CFA.Model)
-# We will use only 50 replications to save time.
+# We will use only 5 replications to save time.
 # In reality, more replications are needed.
 
 # Specify both sample size and percent missing completely at random
-Output <- simResult(NULL, SimData, SimModel, n=seq(50, 500, 25), pmMCAR=c(0, 0.1, 0.2))
+Output <- simResult(NULL, SimData, SimModel, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2))
 summary(Output)
 
 Cpow <- continuousPower(Output, contN = TRUE, contMCAR = TRUE)

@@ -53,9 +53,9 @@ RTD <- symMatrix(diag(6))
 CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
 SimData.NULL <- simData(CFA.Model.NULL, 500)
 SimModel <- simModel(CFA.Model.NULL)
-# We make the examples running only 50 replications to save time.
+# We make the examples running only 5 replications to save time.
 # In reality, more replications are needed.
-Output.NULL <- simResult(50, SimData.NULL, SimModel)
+Output.NULL <- simResult(5, SimData.NULL, SimModel)
 Cut.NULL <- getCutoff(Output.NULL, 0.95)
 
 u79 <- simUnif(0.7, 0.9)
@@ -68,7 +68,7 @@ diag(latent.cor.alt) <- 1
 RPH.ALT <- symMatrix(latent.cor.alt, "u79")
 CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
 SimData.ALT <- simData(CFA.Model.ALT, 500)
-Output.ALT <- simResult(50, SimData.ALT, SimModel)
+Output.ALT <- simResult(5, SimData.ALT, SimModel)
 getPower(Output.ALT, Cut.NULL)
 Rule.of.thumb <- c(RMSEA=0.05, CFI=0.95, TLI=0.95, SRMR=0.06)
 plotPower(Output.ALT, Output.NULL, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))

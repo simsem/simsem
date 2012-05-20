@@ -69,10 +69,10 @@ CFA.Model2 <- simSetCFA(LY = LX2, RPS = RPH, RTE = RTD)
 SimData <- simData(CFA.Model1, 500)
 SimModel1 <- simModel(CFA.Model1)
 SimModel2 <- simModel(CFA.Model2)
-# We make the examples running only 50 replications to save time.
+# We make the examples running only 5 replications to save time.
 # In reality, more replications are needed.
 # Need to make sure that both simResult calls have the same seed!
-Output1 <- simResult(50, SimData, SimModel1, seed=123567)
-Output2 <- simResult(50, SimData, SimModel2, seed=123567)
+Output1 <- simResult(5, SimData, SimModel1, seed=123567)
+Output2 <- simResult(5, SimData, SimModel2, seed=123567)
 anova(Output1, Output2)
 }
