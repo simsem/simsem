@@ -1,7 +1,6 @@
 # plotCutoff: This function will plot sampling distributions of fit indices with vertical lines of cutoffs
 
-setMethod("plotCutoff", signature(object = "data.frame"), definition = function(object, cutoff = NULL, revDirec = FALSE, usedFit = NULL, vector1 = NULL, vector2 = NULL, nameVector1 = NULL, 
-    nameVector2 = NULL, alpha = NULL, useContour = T) {
+setMethod("plotCutoff", signature(object = "data.frame"), definition = function(object, cutoff = NULL, revDirec = FALSE, usedFit = NULL, vector1 = NULL, vector2 = NULL, nameVector1 = NULL, nameVector2 = NULL, alpha = NULL, useContour = T) {
     if (is.null(usedFit)) 
         usedFit <- getKeywords()$usedFit
     object <- as.data.frame(object[, usedFit])
@@ -43,16 +42,18 @@ setMethod("plotCutoff", signature(object = "data.frame"), definition = function(
 })
 
 setMethod("plotCutoff", signature(object = "SimResult"), definition = function(object, alpha = NULL, revDirec = FALSE, usedFit = NULL, useContour = T) {
+    object <- clean(object)
     cutoff <- NULL
     Data <- as.data.frame(object@fit)
-    if (!is.null(alpha)) {
-        if (revDirec) 
-            alpha <- 1 - alpha
-        cutoff <- getCutoff(Data, alpha)
-    }
+
     condition <- c(length(object@pmMCAR) > 1, length(object@pmMAR) > 1, length(object@n) > 1)
     condValue <- cbind(object@pmMCAR, object@pmMAR, object@n)
     colnames(condValue) <- c("Percent MCAR", "Percent MAR", "N")
+	if (!is.null(alpha)) {
+        if (revDirec) 
+            alpha <- 1 - alpha
+		if(all(!condition)) cutoff <- getCutoff(Data, alpha)
+    }
     if (sum(condition) == 0) {
         plotCutoff(Data, cutoff, revDirec, usedFit)
     } else if (sum(condition) == 1) {

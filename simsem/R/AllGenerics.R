@@ -54,7 +54,7 @@ setGeneric("tagHeaders", function(object, ...) {
     return(standardGeneric("tagHeaders"))
 })
 
-setGeneric("getCutoff", function(object, alpha, revDirec = FALSE, usedFit = NULL) {
+setGeneric("getCutoff", function(object, alpha, revDirec = FALSE, usedFit = NULL, ...) {
     return(standardGeneric("getCutoff"))
 })
 
