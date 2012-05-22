@@ -165,7 +165,7 @@ pow<-continuousPower(Output.pow, powerParam = 'PS2_1')
 pow[pow[,2]>.8 & pow[,2]<.84,][1,] #power of .80004 is sample size of 1436
 
 #plot power
-plot(pow[,1], pow[,2], type='l',ylab="Power", xlab="Sample", lwd=2, ylim=c(0,1), cex.lab=1.5, cex.axis=1.25)
+plot(pow[,1], pow[,2], type='l',ylab="Power", xlab="Sample Size", lwd=2, ylim=c(0,1), cex.lab=1.5, cex.axis=1.25)
 
 
 #Test power traditional way
