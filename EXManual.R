@@ -475,14 +475,14 @@ SimData.ALT <- simData(CFA.Model.ALT, 500, misspec = CFA.Model.alt.mis)
 Output.ALT <- simResult(300, SimData.ALT, SimModel)
 
 cutoff <- getCutoff(Output.NULL, 0.05)
-getPower(Output.ALT, cutoff)
-plotPower(Output.ALT, Output.NULL, 0.05)
-plotPower(Output.ALT, Output.NULL, 0.05, usedFit=c("RMSEA", "SRMR", "CFI"))
+getPowerFit(Output.ALT, cutoff)
+plotPowerFit(Output.ALT, Output.NULL, 0.05)
+plotPowerFit(Output.ALT, Output.NULL, 0.05, usedFit=c("RMSEA", "SRMR", "CFI"))
 
 cutoff2 <- c(RMSEA = 0.05, CFI = 0.95, TLI = 0.95, SRMR = 0.06)
-getPower(Output.ALT, cutoff2)
-plotPower(Output.ALT, cutoff2)
-plotPower(Output.ALT, cutoff2, usedFit=c("RMSEA", "SRMR", "CFI"))
+getPowerFit(Output.ALT, cutoff2)
+plotPowerFit(Output.ALT, cutoff2)
+plotPowerFit(Output.ALT, cutoff2, usedFit=c("RMSEA", "SRMR", "CFI"))
 
 ################### Example 6 Extenstion: Kernel Regression ########################
 ########Null model should vary N too.
@@ -1290,18 +1290,18 @@ CFA.Model <- simSetCFA(LX = LX, RPH = RPH, RTD = RTD)
 
 SimData <- simData(CFA.Model, 500)
 SimModel <- simModel(CFA.Model)
-Output <- simResult(NULL, SimData, SimModel, n=50:1000)
+Output <- simResult(NULL, SimData, SimModel, n=50:500)
 summary(Output)
 plotCutoff(Output, 0.05)
-getCutoff(Output, 0.05)	
+getCutoff(Output, 0.05, n = 200)	
 
-Cpow <- continuousPower(Output, contN = TRUE)
+Cpow <- getPower(Output, contN = TRUE)
 
 # Fix plotCutoff
-# Fix plotPower
 # Fix plotPowerFit
-# Fix getPower
+# Fix plotPowerFitFit
 # Fix getPowerFit
+# Fix getPowerFitFit
 # Fix why the population RMSEA is so high compared to sample
 # Comparing nested model and nonnested model by simulation method
 

@@ -1075,41 +1075,6 @@ flush(stderr()); flush(stdout())
 
 
 cleanEx()
-nameEx("continuousPower")
-### * continuousPower
-
-flush(stderr()); flush(stdout())
-
-### Name: continuousPower
-### Title: Find power of model parameters when simulations have randomly
-###   varying parameters
-### Aliases: continuousPower
-
-### ** Examples
-
-# Specify Sample Size by n
-loading <- matrix(0, 6, 1)
-loading[1:6, 1] <- NA
-LX <- simMatrix(loading, 0.7)
-RPH <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
-SimData <- simData(CFA.Model, 500)
-SimModel <- simModel(CFA.Model)
-# We will use only 5 replications to save time.
-# In reality, more replications are needed.
-
-# Specify both sample size and percent missing completely at random
-Output <- simResult(NULL, SimData, SimModel, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2))
-summary(Output)
-
-Cpow <- continuousPower(Output, contN = TRUE, contMCAR = TRUE)
-Cpow
-
-
-
-
-cleanEx()
 nameEx("countFreeParameters")
 ### * countFreeParameters
 
@@ -1758,6 +1723,22 @@ flush(stderr()); flush(stdout())
 
 
 cleanEx()
+nameEx("getCondQtile")
+### * getCondQtile
+
+flush(stderr()); flush(stdout())
+
+### Name: getCondQtile
+### Title: Get a quantile of a variable given values of predictors
+### Aliases: getCondQtile
+
+### ** Examples
+
+# No example
+
+
+
+cleanEx()
 nameEx("getCutoff")
 ### * getCutoff
 
@@ -1790,6 +1771,10 @@ SimModel <- simModel(CFA.Model)
 # In reality, more replications are needed.
 Output <- simResult(5, SimData, SimModel)
 getCutoff(Output, 0.05)
+
+# Finding the cutoff when the sample size is varied.
+Output2 <- simResult(NULL, SimData, SimModel, n=seq(50, 100, 10))
+getCutoff(Output2, 0.05, nVal = 75)
 
 
 
@@ -1835,10 +1820,45 @@ nameEx("getPower")
 flush(stderr()); flush(stdout())
 
 ### Name: getPower
+### Title: Find power of model parameters when simulations have randomly
+###   varying parameters
+### Aliases: getPower
+
+### ** Examples
+
+# Specify Sample Size by n
+loading <- matrix(0, 6, 1)
+loading[1:6, 1] <- NA
+LX <- simMatrix(loading, 0.7)
+RPH <- symMatrix(diag(1))
+RTD <- symMatrix(diag(6))
+CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
+SimData <- simData(CFA.Model, 500)
+SimModel <- simModel(CFA.Model)
+# We will use only 5 replications to save time.
+# In reality, more replications are needed.
+
+# Specify both sample size and percent missing completely at random
+Output <- simResult(NULL, SimData, SimModel, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2))
+summary(Output)
+
+Cpow <- getPower(Output, contN = TRUE, contMCAR = TRUE)
+Cpow
+
+
+
+
+cleanEx()
+nameEx("getPowerFit")
+### * getPowerFit
+
+flush(stderr()); flush(stdout())
+
+### Name: getPowerFit
 ### Title: Find power in rejecting alternative models based on fit indices
 ###   criteria
-### Aliases: getPower getPower-methods getPower,data.frame-method
-###   getPower,matrix-method getPower,SimResult-method
+### Aliases: getPowerFit getPowerFit-methods getPowerFit,data.frame-method
+###   getPowerFit,matrix-method getPowerFit,SimResult-method
 
 ### ** Examples
 
@@ -1866,9 +1886,9 @@ RPH.ALT <- symMatrix(latent.cor.alt, "u79")
 CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
 SimData.ALT <- simData(CFA.Model.ALT, 500)
 Output.ALT <- simResult(5, SimData.ALT, SimModel)
-getPower(Output.ALT, Cut.NULL)
+getPowerFit(Output.ALT, Cut.NULL)
 Rule.of.thumb <- c(RMSEA=0.05, CFI=0.95, TLI=0.95, SRMR=0.06)
-getPower(Output.ALT, Rule.of.thumb, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+getPowerFit(Output.ALT, Rule.of.thumb, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
 
 
 
@@ -2370,18 +2390,18 @@ plotMisfit(ParamObject, misParam=1:2)
 
 
 cleanEx()
-nameEx("plotPower")
-### * plotPower
+nameEx("plotPowerFit")
+### * plotPowerFit
 
 flush(stderr()); flush(stdout())
 
-### Name: plotPower
+### Name: plotPowerFit
 ### Title: Plot sampling distributions of fit indices that visualize power
-### Aliases: plotPower plotPower-methods
-###   plotPower,data.frame,data.frame-method
-###   plotPower,data.frame,vector-method
-###   plotPower,SimResult,SimResult-method
-###   plotPower,SimResult,vector-method
+### Aliases: plotPowerFit plotPowerFit-methods
+###   plotPowerFit,data.frame,data.frame-method
+###   plotPowerFit,data.frame,vector-method
+###   plotPowerFit,SimResult,SimResult-method
+###   plotPowerFit,SimResult,vector-method
 
 ### ** Examples
 
@@ -2409,9 +2429,9 @@ RPH.ALT <- symMatrix(latent.cor.alt, "u79")
 CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
 SimData.ALT <- simData(CFA.Model.ALT, 500)
 Output.ALT <- simResult(5, SimData.ALT, SimModel)
-getPower(Output.ALT, Cut.NULL)
+getPowerFit(Output.ALT, Cut.NULL)
 Rule.of.thumb <- c(RMSEA=0.05, CFI=0.95, TLI=0.95, SRMR=0.06)
-plotPower(Output.ALT, Output.NULL, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+plotPowerFit(Output.ALT, Output.NULL, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
 
 
 

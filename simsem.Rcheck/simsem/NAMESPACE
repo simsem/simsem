@@ -7,7 +7,7 @@ exportClasses(SimUnif, SimNorm, SimBeta, SimBinom, SimCauchy, SimChisq, SimExp,
 	SimSet, SimEqualCon, SimData, SimModel, SimResult, SimDataDist, SimMisspec, SimModelOut,
 	SimDataOut, SimMissing, SimModelMIOut, SimFunction, SimParam)
 exportMethods(summary, run, summaryShort, adjust, simModel,
-	getCutoff, getPower, plotCutoff, plotPower, summaryParam, plotDist, createImpliedMACS,
+	getCutoff, getPowerFit, plotCutoff, plotPowerFit, summaryParam, plotDist, createImpliedMACS,
 	skew, kurtosis, extract, anova, simData, pValue, runFit, 
 	summaryPopulation, getPopulation, setPopulation, popMisfit, toFunction)
 export(simUnif, simNorm, simBeta, simBinom, simCauchy, simChisq, simExp,
@@ -19,4 +19,4 @@ export(simUnif, simNorm, simBeta, simBinom, simCauchy, simChisq, simExp,
 	simFunction, simParamCFA, simParamPath, simParamSEM, indProd, residualCovariate,
 	findRecursiveSet, findPossibleFactorCor, findIndIntercept, findIndResidualVar, findFactorIntercept, findFactorResidualVar, 
 	findIndTotalVar, findIndMean, findFactorTotalVar, findFactorTotalCov, findFactorMean, 
-	continuousPower, plotMisfit, simResultParam, popMisfitMACS, popDiscrepancy)
+	getPower, plotMisfit, simResultParam, popMisfitMACS, popDiscrepancy)

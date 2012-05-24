@@ -62,12 +62,12 @@ setGeneric("plotCutoff", function(object, ...) {
     return(standardGeneric("plotCutoff"))
 })
 
-setGeneric("plotPower", function(altObject, nullObject, ...) {
-    return(standardGeneric("plotPower"))
+setGeneric("plotPowerFit", function(altObject, nullObject, ...) {
+    return(standardGeneric("plotPowerFit"))
 })
 
-setGeneric("getPower", function(altObject, cutoff, revDirec = FALSE, usedFit = NULL) {
-    return(standardGeneric("getPower"))
+setGeneric("getPowerFit", function(altObject, cutoff, revDirec = FALSE, usedFit = NULL) {
+    return(standardGeneric("getPowerFit"))
 })
 
 setGeneric("vectorizeObject", function(object, labels, ...) {

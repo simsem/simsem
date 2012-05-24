@@ -36,9 +36,9 @@ Objects can be created by \code{\link{simResult}}. It can also be called from th
 \section{Methods}{
 	\itemize{
 		\item \code{\link{getCutoff}} to getCutoff of fit indices based on a priori alpha level.
-		\item \code{\link{getPower}} to getPower of rejection when the simResult is the alternative hypothesis and users specify cutoffs of the fit indices.
+		\item \code{\link{getPowerFit}} to getPowerFit of rejection when the simResult is the alternative hypothesis and users specify cutoffs of the fit indices.
 		\item \code{\link{plotCutoff}} to plot null hypothesis sampling distributions of fit indices with an option to draw fit indices cutoffs by specifying a priori alpha level.
-		\item \code{\link{plotPower}} to plot alternative hypothesis (and null hypothesis) with a priori cutoffs or alpha level.
+		\item \code{\link{plotPowerFit}} to plot alternative hypothesis (and null hypothesis) with a priori cutoffs or alpha level.
 		\item \code{\link{summary}} to summarize the result output
 		\item \code{\link{summaryParam}} to summarize all parameter estimates
 		\item \code{anova} find the averages of model fit statistics and indices for nested models, as well as the differences of model fit indices among models. This function requires at least two \code{SimResult} objects. See \code{\link{anova}} for further details.

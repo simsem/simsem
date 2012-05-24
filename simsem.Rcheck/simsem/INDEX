@@ -52,8 +52,6 @@ combineObject           Combine by summing or binding two objects
 combinePathExoEndo      Combine the regression coefficient matrices
 constantVector          Create a constant vector object
 constrainMatrices       Impose an equality constraint in an object
-continuousPower         Find power of model parameters when simulations
-                        have randomly varying parameters
 countFreeParameters     Count how many free parameters in the target
                         object
 countMACS               Count the number of elements in the sufficient
@@ -119,12 +117,16 @@ fitMeasuresChi          Find fit indices from the discrepancy values of
                         the target model and null models.
 freeVector              Create a free parameters vector with a starting
                         values in a vector object
+getCondQtile            Get a quantile of a variable given values of
+                        predictors
 getCutoff               Find cutoff given a priori alpha level
 getKeywords             List of all keywords used in the 'simsem'
                         package
 getPopulation           Extract the data generation population model
                         underlying an object
-getPower                Find power in rejecting alternative models
+getPower                Find power of model parameters when simulations
+                        have randomly varying parameters
+getPowerFit             Find power in rejecting alternative models
                         based on fit indices criteria
 imposeMissing           Impose MAR, MCAR, planned missingness, or
                         attrition on a data set
@@ -164,7 +166,7 @@ plotDist                Plot a distribution of a distribution object or
                         data distribution object
 plotMisfit              Plot the population misfit in parameter result
                         object
-plotPower               Plot sampling distributions of fit indices that
+plotPowerFit            Plot sampling distributions of fit indices that
                         visualize power
 plotQtile               Build a scatterplot with overlaying line of
                         quantiles of predicted values

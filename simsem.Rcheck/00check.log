@@ -4,9 +4,9 @@
 * using session charset: ISO8859-1
 * checking for file 'simsem/DESCRIPTION' ... OK
 * checking extension type ... Package
-* this is package 'simsem' version '0.2-0'
+* this is package 'simsem' version '0.2-1'
 * checking CRAN incoming feasibility ... NOTE
-New submission
+Days since last update: 6
 * checking package namespace information ... OK
 * checking package dependencies ... OK
 * checking if this is a source package ... OK

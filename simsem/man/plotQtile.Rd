@@ -7,7 +7,7 @@
 	Build a scatterplot with overlaying line of quantiles of predicted values
 }
 \usage{
-plotQtile(x, y, df=0, qtile=0.5, ...)
+plotQtile(x, y, df=0, qtile=NULL, ...)
 }
 \arguments{
   \item{x}{
