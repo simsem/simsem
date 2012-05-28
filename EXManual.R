@@ -41,6 +41,11 @@ sourceDir <- function(path, trace = TRUE, ...) {
      }
 }
 
+# dir2 <- "C:/Users/student/Desktop/lavaan/R/"
+ # source(paste(dir2, "00Class.R", sep=""))
+ # source(paste(dir2, "00Generic.R", sep=""))
+ # sourceDir(dir2)
+
 #get
 #assign
 #dir <- "C:/Users/Sunthud/Desktop/My Dropbox/simsem/simsem/R/"
@@ -50,9 +55,13 @@ dir <- "C:/Users/student/Dropbox/simsem/simsem/R/"
  source(paste(dir, "AllGenerics.R", sep=""))
  sourceDir(dir)
 
+
+
+
 library(formatR)
 tidy.dir(dir)
- 
+
+library(simsem)
 loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
@@ -738,8 +747,9 @@ facDist <- simDataDist(chi5, chi5, n1, n1)
 dataTemplate <- simData(SEM.Model, 500, SEM.Mis.Model, sequential=TRUE, facDist=facDist)
 modelTemplate <- simModel(SEM.Model, estimator="mlr")
 
+dat <- run(dataTemplate)
 
-simOut <- simResult(100, dataTemplate, modelTemplate, multicore=TRUE)
+simOut <- simResult(100, dataTemplate, modelTemplate) #, multicore=TRUE)
 getCutoff(simOut, 0.05)
 plotCutoff(simOut, 0.05)
 summaryParam(simOut)
@@ -1273,6 +1283,7 @@ datModel <- simData(longMed, 200, misspec=longMedMis, equalCon=con)
 
 ############################## Example 17 ###########################
 
+library(simsem)
 loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
@@ -1290,18 +1301,126 @@ CFA.Model <- simSetCFA(LX = LX, RPH = RPH, RTD = RTD)
 
 SimData <- simData(CFA.Model, 500)
 SimModel <- simModel(CFA.Model)
-Output <- simResult(NULL, SimData, SimModel, n=50:500)
+Output <- simResult(NULL, SimData, SimModel, n=50:1000)
+summary(Output)
+plotCutoff(Output, 0.05)
+getCutoff(Output, 0.05, nVal = 200)	
+
+Cpow <- getPower(Output)
+Cpow2 <- getPower(Output, nVal = 200)
+findPower(Cpow, "N", 0.80)
+plotPower(Output, powerParam=c("LY1_1", "PS2_1"))
+
+
+#Output <- simResult(1000, SimData, SimModel, n=simUnif(50, 1000))
+
+############################## Example 18 ###########################
+
+library(simsem)
+
+loading <- matrix(0, 5, 3)
+loading[1,1] <- 1
+loading[2:5,2] <- 1
+loading[2:5,3] <- 0:3
+LY <- simMatrix(loading)
+
+facMean <- rep(NA, 3)
+facMeanVal <- c(0.5, 5, 2)
+AL <- simVector(facMean, facMeanVal)
+
+facVar <- rep(NA, 3)
+facVarVal <- c(0.25, 1, 0.25)
+VPS <- simVector(facVar, facVarVal)
+
+facCor <- diag(3)
+facCor[2,3] <- NA
+facCor[3,2] <- NA
+RPS <- symMatrix(facCor, 0.5)
+
+VTE <- simVector(c(0, rep(NA, 4)), 1.2)
+
+RTE <- symMatrix(diag(5))
+
+TY <- simVector(rep(0, 5))
+
+path <- matrix(0, 3, 3)
+path[2,1] <- NA
+path[3,1] <- NA
+pathVal <- matrix(0, 3, 3)
+pathVal[2,1] <- 0.5
+pathVal[3,1] <- 0.1
+BE <- simMatrix(path, pathVal)
+
+LCA.Model <- simSetSEM(LY=LY, RPS=RPS, VPS=VPS, AL=AL, VTE=VTE, RTE=RTE, TY=TY, BE=BE)
+
+u1 <- simUnif(-0.1, 0.1)
+
+loading.trivial <- matrix(0, 5, 3)
+loading.trivial[3:4, 3] <- NA
+loading.mis <- simMatrix(loading.trivial, "u1")
+
+LCA.Mis <- simMisspecSEM(LY = loading.mis)
+
+group <- simBinom(1, 0.5)
+n01 <- simNorm(0, 1)
+facDist <- simDataDist(group, n01, n01, keepScale=c(FALSE, TRUE, TRUE))
+
+datTemplate <- simData(LCA.Model, 300, LCA.Mis, sequential=TRUE, facDist=facDist)
+model <- simModel(LCA.Model)
+
+Output <- simResult(NULL, datTemplate, model, n=seq(50, 500, 5), pmMCAR=seq(0, 0.4, 0.1))
+
+plotCutoff(Output, 0.05)
+getCutoff(Output, 0.05, nVal = 200, pmMCARval=0)
+getCutoff(Output, 0.05, nVal = 300, pmMCARval=0.33)	
+
+Cpow <- getPower(Output)
+Cpow2 <- getPower(Output, nVal = 200, pmMCARval=0.35)
+findPower(Cpow, "N", 0.80)
+findPower(Cpow, "MCAR", 0.80)
+plotPower(Output, powerParam=c("BE2_1", "BE3_1"))
+
+
+
+
+#Output <- simResult(1000, datTemplate, model, n=simUnif(50, 500), pmMCAR=simUnif(0, 0.5))
+
+###################################### Example 19 #################################
+
+library(simsem)
+u39 <- simUnif(0.3, 0.9)
+u09 <- simUnif(0, 0.9)
+loading <- matrix(0, 10, 2)
+loading[1:6, 1] <- NA
+loading[7:10, 2] <- NA
+LY <- simMatrix(loading, "u39")
+
+RPS <- symMatrix(diag(2))
+
+RTE <- symMatrix(diag(10))
+
+path <- matrix(0, 2, 2)
+path[2, 1] <- NA
+BE <- simMatrix(path, "u09")
+
+latentReg <- simSetSEM(LY = LY, RPS = RPS, RTE = RTE, BE = BE)
+
+SimData <- simData(latentReg, 500)
+SimModel <- simModel(latentReg)
+Output <- simResult(NULL, SimData, SimModel, n=25:500)
 summary(Output)
 plotCutoff(Output, 0.05)
 getCutoff(Output, 0.05, n = 200)	
 
-Cpow <- getPower(Output, contN = TRUE)
+Cpow <- getPower(Output, contParam="BE2_1")
+Cpow2 <- getPower(Output, contParam="BE2_1", nVal = 200, paramVal=seq(0.1, 0.9, 0.1))
 
-# Fix plotCutoff
-# Fix plotPowerFit
-# Fix plotPowerFitFit
-# Fix getPowerFit
-# Fix getPowerFitFit
-# Fix why the population RMSEA is so high compared to sample
-# Comparing nested model and nonnested model by simulation method
+targetVal <- list("BE2_1" = seq(0.1, 0.9, 0.1), "LY1_1" = c(0.5, 0.7))
+Cpow3 <- getPower(Output, contParam=c("BE2_1", "LY1_1"), nVal = 200, paramVal=targetVal)
 
+findPower(Cpow, 1, 0.80)
+findPower(Cpow, 2, 0.80)
+
+plotPower(Output, powerParam=c("BE2_1", "LY10_2"), contParam="BE2_1")
+
+###################################### Example 20 ################################# 

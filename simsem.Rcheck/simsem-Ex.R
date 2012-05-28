@@ -1075,6 +1075,44 @@ flush(stderr()); flush(stdout())
 
 
 cleanEx()
+nameEx("continuousPower")
+### * continuousPower
+
+flush(stderr()); flush(stdout())
+
+### Name: continuousPower
+### Title: Find power of model parameters when simulations have randomly
+###   varying parameters
+### Aliases: continuousPower
+
+### ** Examples
+
+# Specify Sample Size by n
+loading <- matrix(0, 6, 1)
+loading[1:6, 1] <- NA
+LX <- simMatrix(loading, 0.7)
+RPH <- symMatrix(diag(1))
+RTD <- symMatrix(diag(6))
+CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
+SimData <- simData(CFA.Model, 500)
+SimModel <- simModel(CFA.Model)
+# We will use only 5 replications to save time.
+# In reality, more replications are needed.
+
+# Specify both sample size and percent missing completely at random
+Output <- simResult(NULL, SimData, SimModel, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2))
+summary(Output)
+
+Cpow <- continuousPower(Output, contN = TRUE, contMCAR = TRUE)
+Cpow
+
+Cpow2 <- continuousPower(Output, contN = TRUE, contMCAR = TRUE, pred=list(N = 200, pmMCAR = 0.3))
+Cpow2
+
+
+
+
+cleanEx()
 nameEx("countFreeParameters")
 ### * countFreeParameters
 
@@ -1648,6 +1686,36 @@ findPossibleFactorCor(path)
 
 
 cleanEx()
+nameEx("findPower")
+### * findPower
+
+flush(stderr()); flush(stdout())
+
+### Name: findPower
+### Title: Find a value of independent variables that provides a given
+###   value of power.
+### Aliases: findPower
+
+### ** Examples
+
+# Specify Sample Size by n
+loading <- matrix(0, 6, 1)
+loading[1:6, 1] <- NA
+LX <- simMatrix(loading, 0.4)
+RPH <- symMatrix(diag(1))
+RTD <- symMatrix(diag(6))
+CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
+SimData <- simData(CFA.Model, 500)
+SimModel <- simModel(CFA.Model)
+
+# Specify both sample size and percent missing completely at random
+Output <- simResult(NULL, SimData, SimModel, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2))
+pow <- getPower(Output)
+findPower(pow, "N", 0.80)
+
+
+
+cleanEx()
 nameEx("findRecursiveSet")
 ### * findRecursiveSet
 
@@ -1679,6 +1747,23 @@ flush(stderr()); flush(stdout())
 ### Title: Find rows in a matrix that all elements are zero in non-fixed
 ###   subset rows and columns.
 ### Aliases: findRowZero
+
+### ** Examples
+
+# No example
+
+
+
+cleanEx()
+nameEx("findTargetPower")
+### * findTargetPower
+
+flush(stderr()); flush(stdout())
+
+### Name: findTargetPower
+### Title: Find a value of varying parameters that provides a given value
+###   of power.
+### Aliases: findTargetPower
 
 ### ** Examples
 
@@ -1820,8 +1905,7 @@ nameEx("getPower")
 flush(stderr()); flush(stdout())
 
 ### Name: getPower
-### Title: Find power of model parameters when simulations have randomly
-###   varying parameters
+### Title: Find power of model parameters
 ### Aliases: getPower
 
 ### ** Examples
@@ -1842,8 +1926,9 @@ SimModel <- simModel(CFA.Model)
 Output <- simResult(NULL, SimData, SimModel, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2))
 summary(Output)
 
-Cpow <- getPower(Output, contN = TRUE, contMCAR = TRUE)
-Cpow
+getPower(Output)
+
+getPower(Output, nVal=c(100, 200), pmMCARval=c(0, 0.1, 0.2))
 
 
 
@@ -2390,6 +2475,36 @@ plotMisfit(ParamObject, misParam=1:2)
 
 
 cleanEx()
+nameEx("plotPower")
+### * plotPower
+
+flush(stderr()); flush(stdout())
+
+### Name: plotPower
+### Title: Make a power plot of a parameter given varying parameters
+### Aliases: plotPower
+
+### ** Examples
+
+# Specify Sample Size by n
+loading <- matrix(0, 6, 1)
+loading[1:6, 1] <- NA
+LX <- simMatrix(loading, 0.4)
+RPH <- symMatrix(diag(1))
+RTD <- symMatrix(diag(6))
+CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
+SimData <- simData(CFA.Model, 500)
+SimModel <- simModel(CFA.Model)
+# We will use only 5 replications to save time.
+# In reality, more replications are needed.
+
+# Specify both sample size and percent missing completely at random
+Output <- simResult(NULL, SimData, SimModel, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2))
+plotPower(Output, "LY1_1", contMCAR=FALSE)
+
+
+
+cleanEx()
 nameEx("plotPowerFit")
 ### * plotPowerFit
 
@@ -2535,6 +2650,22 @@ m2 <- c(0.1, -0.1, 0.05)
 S1 <- matrix(c(1, 0.6, 0.5, 0.6, 1, 0.4, 0.5, 0.4, 1), 3, 3)
 S2 <- matrix(c(1, 0.55, 0.55, 0.55, 1, 0.55, 0.55, 0.55, 1), 3, 3)
 popMisfitMACS(m1, S1, m2, S2)
+
+
+
+cleanEx()
+nameEx("predProb")
+### * predProb
+
+flush(stderr()); flush(stdout())
+
+### Name: predProb
+### Title: Function to get predicted probabilities from logistic regression
+### Aliases: predProb
+
+### ** Examples
+
+# No example
 
 
 

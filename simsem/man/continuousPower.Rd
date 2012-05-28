@@ -7,7 +7,8 @@
 	A function to find the power of  parameters in a model when one or more of the simulations parameters vary randomly across replications.
 }
 \usage{
-continuousPower(simResult, contN = TRUE, contMCAR = FALSE, contMAR = FALSE, contParam = NULL, alpha = .05, powerParam = NULL)
+continuousPower(simResult, contN = TRUE, contMCAR = FALSE, contMAR = FALSE, 
+	contParam = NULL, alpha = .05, powerParam = NULL, pred = NULL)
 }
 \arguments{
   \item{simResult}{
@@ -31,6 +32,9 @@ continuousPower(simResult, contN = TRUE, contMCAR = FALSE, contMAR = FALSE, cont
 \item{powerParam}{
 	Vector of parameters names that the user wishes to find power for. This can be a vector of names (e.g., "LY1_1", "LY2_2"), or the name of a matrix (e.g. "PS"), if the name of a matrix is used power for all parameters in that matrix will be returned. If parameters are not specified, power for all parameters in the model will be returned.
 }
+\item{pred}{
+	A list of varying parameter values that users wish to find statistical power from.
+}
 }
 \details{
 	A common use of simulations is to conduct power analyses, especially when using SEM (Muthen & Muthen, 2002). Here, researchers select values for each parameter and a sample size and run a simulation to determine power in those conditions (the proportion of generated datasets in which a particular parameter of interest is significantly different from zero). To evaluate power at multiple sample sizes, one simulation for each sample size must be run. By continuously varying sample size across replications, only a single simulation is needed. In this simulation, the sample size for each replication varies randomly across plausible sample sizes (e.g., sample sizes between 200 and 500). For each replication, the sample size and significance of each parameter (0 = not significant, 1 = significant) are recorded. When the simulation is complete, parameter significance is regressed on sample size using logistic regression. For a given sample size, the predicted probability from the logistic regression equation is the power to detect an effect at that sample size. This approach can be extended to other randomly varying simulation parameters such as the percentage of missing data, and model parameters.
@@ -42,7 +46,7 @@ continuousPower(simResult, contN = TRUE, contMCAR = FALSE, contMAR = FALSE, cont
 Muthen, L. K., & Muthen, B. O. (2002). How to use a Monte Carlo study to decide on sample size and determine power. \emph{Structural Equation Modeling, 4,} 599-620.
 }
 \author{
-    Alexander M. Schoemann (University of Kansas; \email{schoemann@ku.edu})
+    Alexander M. Schoemann (University of Kansas; \email{schoemann@ku.edu}), Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \seealso{
 	\itemize{
@@ -68,5 +72,8 @@ summary(Output)
 
 Cpow <- continuousPower(Output, contN = TRUE, contMCAR = TRUE)
 Cpow
+
+Cpow2 <- continuousPower(Output, contN = TRUE, contMCAR = TRUE, pred=list(N = 200, pmMCAR = 0.3))
+Cpow2
 
 }

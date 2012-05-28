@@ -31,6 +31,7 @@ constrainMatrices	constrainMatrices
 constrainMatrices,ANY,ANY-method	constrainMatrices
 constrainMatrices,MatrixSet,SimEqualCon-method	constrainMatrices
 constrainMatrices-methods	constrainMatrices
+continuousPower	continuousPower
 countFreeParameters	countFreeParameters
 countFreeParameters,ANY-method	countFreeParameters
 countFreeParameters,matrix-method	countFreeParameters
@@ -88,8 +89,10 @@ findIndMean	findIndMean
 findIndResidualVar	findIndResidualVar
 findIndTotalVar	findIndTotalVar
 findPossibleFactorCor	findPossibleFactorCor
+findPower	findPower
 findRecursiveSet	findRecursiveSet
 findRowZero	findRowZero
+findTargetPower	findTargetPower
 fitMeasuresChi	fitMeasuresChi
 freeVector	freeVector
 getCondQtile	getCondQtile
@@ -185,6 +188,7 @@ plotDist,SimDataDist-method	SimDataDist-class
 plotDist,VirtualDist-method	VirtualDist-class
 plotDist-methods	plotDist
 plotMisfit	plotMisfit
+plotPower	plotPower
 plotPowerFit	plotPowerFit
 plotPowerFit,data.frame,data.frame-method	plotPowerFit
 plotPowerFit,data.frame,vector-method	plotPowerFit
@@ -202,6 +206,7 @@ popMisfit,SimRSet,SimRSet-method	popMisfit
 popMisfit,SimSet,SimMisspec-method	popMisfit
 popMisfit-methods	popMisfit
 popMisfitMACS	popMisfitMACS
+predProb	predProb
 printIfNotNull	printIfNotNull
 pValue	pValue
 pValue,ANY-method	pValue

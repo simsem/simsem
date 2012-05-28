@@ -52,6 +52,8 @@ combineObject           Combine by summing or binding two objects
 combinePathExoEndo      Combine the regression coefficient matrices
 constantVector          Create a constant vector object
 constrainMatrices       Impose an equality constraint in an object
+continuousPower         Find power of model parameters when simulations
+                        have randomly varying parameters
 countFreeParameters     Count how many free parameters in the target
                         object
 countMACS               Count the number of elements in the sufficient
@@ -109,10 +111,14 @@ findIndTotalVar         Find indicator total variances from factor
 findPossibleFactorCor   Find the appropriate position for freely
                         estimated correlation (or covariance) given a
                         regression coefficient matrix
+findPower               Find a value of independent variables that
+                        provides a given value of power.
 findRecursiveSet        Group variables regarding the position in
                         mediation chain
 findRowZero             Find rows in a matrix that all elements are
                         zero in non-fixed subset rows and columns.
+findTargetPower         Find a value of varying parameters that
+                        provides a given value of power.
 fitMeasuresChi          Find fit indices from the discrepancy values of
                         the target model and null models.
 freeVector              Create a free parameters vector with a starting
@@ -124,8 +130,7 @@ getKeywords             List of all keywords used in the 'simsem'
                         package
 getPopulation           Extract the data generation population model
                         underlying an object
-getPower                Find power of model parameters when simulations
-                        have randomly varying parameters
+getPower                Find power of model parameters
 getPowerFit             Find power in rejecting alternative models
                         based on fit indices criteria
 imposeMissing           Impose MAR, MCAR, planned missingness, or
@@ -166,6 +171,8 @@ plotDist                Plot a distribution of a distribution object or
                         data distribution object
 plotMisfit              Plot the population misfit in parameter result
                         object
+plotPower               Make a power plot of a parameter given varying
+                        parameters
 plotPowerFit            Plot sampling distributions of fit indices that
                         visualize power
 plotQtile               Build a scatterplot with overlaying line of
@@ -174,6 +181,8 @@ popDiscrepancy          Find the discrepancy value between two means
                         and covariance matrices
 popMisfit               Calculate population misfit
 popMisfitMACS           Find population misfit by sufficient statistics
+predProb                Function to get predicted probabilities from
+                        logistic regression
 printIfNotNull          Provide basic summary of each object if that
                         object is not NULL.
 reassignNames           Reassign the name of equality constraint

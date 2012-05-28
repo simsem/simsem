@@ -143,3 +143,4 @@ setGeneric("isRandom", function(object) {
 setGeneric("toFunction", function(x) {
     return(standardGeneric("toFunction"))
 }) 
+

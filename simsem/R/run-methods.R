@@ -350,16 +350,18 @@ setMethod("run", signature = "SimDataDist", definition = function(object, n, m, 
         }
         if (!is.matrix(Data)) 
             Data <- as.matrix(Data)
-        if (object@keepScale) {
-            Data <- scale(Data)
-            Data[is.na(Data)] <- 0
-            fakeDat <- mvrnorm(n, m, cm)
-            fakeMean <- apply(fakeDat, 2, mean)
-            fakeSD <- apply(fakeDat, 2, sd)
-            Data <- t(apply(Data, 1, function(y, m, s) {
-                y * s + m
-            }, m = fakeMean, s = fakeSD))
-        }
+		Data <- scale(Data)
+		obtainedMean <- attr(Data, "scaled:center")
+		obtainedSD <- attr(Data, "scaled:scale")			
+		Data[is.na(Data)] <- 0
+		fakeDat <- mvrnorm(n, m, cm)
+		fakeMean <- apply(fakeDat, 2, mean)
+		fakeSD <- apply(fakeDat, 2, sd)
+		obtainedMean[object@keepScale] <- fakeMean[object@keepScale]
+		obtainedSD[object@keepScale] <- fakeSD[object@keepScale]
+		Data <- t(apply(Data, 1, function(y, m, s) {
+			y * s + m
+		}, m = obtainedMean, s = obtainedSD))
         if (nrow(Data) == 1) 
             Data <- t(Data)
     }

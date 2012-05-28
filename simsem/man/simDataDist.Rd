@@ -18,10 +18,10 @@ simDataDist(..., p=NULL, keepScale=TRUE, reverse=FALSE)
 	Number of variables. If only one distribution object is listed, the \code{p} will make the same distribution objects for all variables.
 }
   \item{keepScale}{
-	If TRUE, transform back to retain the mean and standard deviation of a variable equal to the model implied mean and standard deviation (with sampling error)
+	A vector representing whether each variable is transformed its mean and standard deviation or not. If TRUE, transform back to retain the mean and standard deviation of a variable equal to the model implied mean and standard deviation (with sampling error)
 }
   \item{reverse}{
-	A vector representing of mirrorring each variable or not. If \code{TRUE}, reverse the distribution of a variable (e.g., from positive skewed to negative skewed. If one logical value is specified, it will apply to all variables.
+	A vector representing whether each variable is mirrored or not. If \code{TRUE}, reverse the distribution of a variable (e.g., from positive skewed to negative skewed. If one logical value is specified, it will apply to all variables.
 }
 }
 \value{

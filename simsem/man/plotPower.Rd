@@ -1,75 +1,70 @@
 \name{plotPower}
 \alias{plotPower}
-\alias{plotPower-methods}
-\alias{plotPower,data.frame,data.frame-method}
-\alias{plotPower,data.frame,vector-method}
-\alias{plotPower,SimResult,SimResult-method}
-\alias{plotPower,SimResult,vector-method}
 \title{
-Plot sampling distributions of fit indices that visualize power
+	Make a power plot of a parameter given varying parameters
 }
 \description{
-This function will plot sampling distributions of fit indices that visualize power in either a histogram or overlapping histograms.
+	Make a power plot of a parameter given varying parameters (e.g., sample size, percent missing completely at random, or random parameters in the model)
 }
 \usage{
-plotPower(altObject, nullObject, ...)
+plotPower(object, powerParam, alpha = 0.05, contParam = NULL, contN = TRUE, 
+	contMCAR = TRUE, contMAR = TRUE, useContour=TRUE)
 }
 \arguments{
-  \item{altObject}{
-	The object (\code{\linkS4class{SimResult}} or \code{data.frame}) that saves fit indices for alternative hypothesis
+  \item{object}{
+	\code{\linkS4class{SimResult}} that includes at least one randomly varying parameter (e.g. sample size, percent missing, model parameters)
 }
-  \item{nullObject}{
-	The object that represents null hypothesis. It can be \code{vector} of cutoffs (that might be calculated from \code{\link{getCutoff}} 
-	or an object that save raw data of fit indices for null hypothesis (\code{\linkS4class{SimResult}} or \code{data.frame}).
+  \item{powerParam}{
+	Vector of parameters names that the user wishes to find power for. This can be a vector of names (e.g., "LY1_1", "LY2_2").
 }
-  \item{\dots}{
-	Other arguments specific to different types of object you pass in the function.
+  \item{alpha}{
+	Alpha level to use for power analysis.
 }
+\item{contParam}{
+	Vector of parameters names that vary over replications that users wish to use in the plot.
+}
+\item{contN}{
+	Include the varying sample size in the power plot if available
+}
+\item{contMCAR}{
+	Include the varying MCAR (missing completely at random percentage) in the power plot if available
+}
+\item{contMAR}{
+	Include the varying MAR (missing at random percentage) in the power plot if available
+}
+\item{useContour}{
+	This argument is used when users specify to plot two varying parameters. If \code{TRUE}, the contour plot is used. If \code{FALSE}, perspective plot is used.
+}
+}
+\details{
+	Predicting whether each replication is significant or not by varying parameters using logistic regression (without interaction). Then, plot the logistic curves predicting the probability of significance against the target varying parameters.
 }
 \value{
-NONE. Only plot the fit indices distributions.
+	Not return any value. This function will plot a graph only.
 }
 \author{
-    Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
-}
-\section{Details in \dots}{
-	\itemize{
-		\item \code{alpha}:	A priori alpha level to getCutoffs of fit indices (do not specify when you have \code{cutoff})
-		\item \code{usedFit}:	The name of fit indices that researchers wish to plot
-	}
+    Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu}), Alexander M. Schoemann (University of Kansas; \email{schoemann@ku.edu})
 }
 \seealso{
 	\itemize{
-		\item \code{\linkS4class{SimResult}} for simResult that used in this function.
-		\item \code{\link{getCutoff}} to find values of cutoffs based on null hypothesis sampling distributions only
+		\item \code{\linkS4class{SimResult}} to see how to create a simResult object with randomly varying parameters.
+		\item \code{\link{getPower}} to obtain a statistical power given varying parameters values.
 	}
 }
 \examples{
-loading.null <- matrix(0, 6, 1)
-loading.null[1:6, 1] <- NA
-LX.NULL <- simMatrix(loading.null, 0.7)
-RPH.NULL <- symMatrix(diag(1))
+# Specify Sample Size by n
+loading <- matrix(0, 6, 1)
+loading[1:6, 1] <- NA
+LX <- simMatrix(loading, 0.4)
+RPH <- symMatrix(diag(1))
 RTD <- symMatrix(diag(6))
-CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
-SimData.NULL <- simData(CFA.Model.NULL, 500)
-SimModel <- simModel(CFA.Model.NULL)
-# We make the examples running only 5 replications to save time.
+CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
+SimData <- simData(CFA.Model, 500)
+SimModel <- simModel(CFA.Model)
+# We will use only 5 replications to save time.
 # In reality, more replications are needed.
-Output.NULL <- simResult(5, SimData.NULL, SimModel)
-Cut.NULL <- getCutoff(Output.NULL, 0.95)
 
-u79 <- simUnif(0.7, 0.9)
-loading.alt <- matrix(0, 6, 2)
-loading.alt[1:3, 1] <- NA
-loading.alt[4:6, 2] <- NA
-LX.ALT <- simMatrix(loading.alt, 0.7)
-latent.cor.alt <- matrix(NA, 2, 2)
-diag(latent.cor.alt) <- 1
-RPH.ALT <- symMatrix(latent.cor.alt, "u79")
-CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
-SimData.ALT <- simData(CFA.Model.ALT, 500)
-Output.ALT <- simResult(5, SimData.ALT, SimModel)
-getPower(Output.ALT, Cut.NULL)
-Rule.of.thumb <- c(RMSEA=0.05, CFI=0.95, TLI=0.95, SRMR=0.06)
-plotPower(Output.ALT, Output.NULL, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+# Specify both sample size and percent missing completely at random
+Output <- simResult(NULL, SimData, SimModel, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2))
+plotPower(Output, "LY1_1", contMCAR=FALSE)
 }

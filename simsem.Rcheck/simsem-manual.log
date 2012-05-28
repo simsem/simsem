@@ -1,7 +1,7 @@
-This is pdfTeX, Version 3.1415926-1.40.11 (MiKTeX 2.9) (preloaded format=pdflatex 2011.7.1)  24 MAY 2012 11:20
+This is pdfTeX, Version 3.1415926-1.40.11 (MiKTeX 2.9) (preloaded format=pdflatex 2011.7.1)  28 MAY 2012 18:29
 entering extended mode
-**C:/Users/Sunthud/AppData/Local/Temp/RtmpWEzhMj/Rd2pdf1c601b6f473d/Rd2.tex
-(C:/Users/Sunthud/AppData/Local/Temp/RtmpWEzhMj/Rd2pdf1c601b6f473d/Rd2.tex
+**C:/Users/Sunthud/AppData/Local/Temp/Rtmp2JJOOS/Rd2pdf167c2f0463ef/Rd2.tex
+(C:/Users/Sunthud/AppData/Local/Temp/Rtmp2JJOOS/Rd2pdf167c2f0463ef/Rd2.tex
 LaTeX2e <2009/09/24>
 Babel <v3.8l> and hyphenation patterns for english, afrikaans, ancientgreek, ar
 abic, armenian, assamese, basque, bengali, bokmal, bulgarian, catalan, coptic, 
@@ -601,7 +601,7 @@ File: latin1.def 2008/03/30 v1.1d Input encoding file
 \@indexfile=\write3
 
 Writing index file Rd2.idx
-(C:\Users\Sunthud\AppData\Local\Temp\RtmpWEzhMj\Rd2pdf1c601b6f473d\Rd2.aux)
+(C:\Users\Sunthud\AppData\Local\Temp\Rtmp2JJOOS\Rd2pdf167c2f0463ef\Rd2.aux)
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 8.
 LaTeX Font Info:    ... okay on input line 8.
 LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 8.
@@ -656,8 +656,8 @@ LaTeX Info: Redefining \ref on input line 8.
 LaTeX Info: Redefining \pageref on input line 8.
 LaTeX Info: Redefining \nameref on input line 8.
 
-(C:\Users\Sunthud\AppData\Local\Temp\RtmpWEzhMj\Rd2pdf1c601b6f473d\Rd2.out)
-(C:\Users\Sunthud\AppData\Local\Temp\RtmpWEzhMj\Rd2pdf1c601b6f473d\Rd2.out)
+(C:\Users\Sunthud\AppData\Local\Temp\Rtmp2JJOOS\Rd2pdf167c2f0463ef\Rd2.out)
+(C:\Users\Sunthud\AppData\Local\Temp\Rtmp2JJOOS\Rd2pdf167c2f0463ef\Rd2.out)
 \@outlinefile=\write4
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <24.88> not available
 (Font)              Font shape `T1/ptm/b/n' tried instead on input line 9.
@@ -677,7 +677,7 @@ LaTeX Font Info:    Try loading font information for T1+phv on input line 31.
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\t1phv.fd"
 File: t1phv.fd 2001/06/04 scalable font definitions for T1/phv.
 )
-(C:\Users\Sunthud\AppData\Local\Temp\RtmpWEzhMj\Rd2pdf1c601b6f473d\Rd2.toc
+(C:\Users\Sunthud\AppData\Local\Temp\Rtmp2JJOOS\Rd2pdf167c2f0463ef\Rd2.toc
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 1.
 LaTeX Font Info:    External font `cmex10' loaded for size
@@ -759,12 +759,20 @@ Overfull \hbox (5.2467pt too wide) in paragraph at lines 712--713
 [15] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [16]
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+Overfull \hbox (0.78088pt too wide) in paragraph at lines 810--810
+ []\T1/fi4/m/n/9 Output <- simResult(NULL, SimData, SimModel, n=seq(100, 200, 2
+0), pmMCAR=c(0, 0.1, 0.2))[] 
+ []
+
+
+Overfull \hbox (41.28088pt too wide) in paragraph at lines 816--816
+ []\T1/fi4/m/n/9 Cpow2 <- continuousPower(Output, contN = TRUE, contMCAR = TRUE
+, pred=list(N = 200, pmMCAR = 0.3))[] 
+ []
+
+[17] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
-File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [17]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [18]
@@ -780,20 +788,15 @@ File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [21]
-Overfull \hbox (28.25673pt too wide) in paragraph at lines 1107--1108
-[]\T1/ptm/m/n/10 Divide all ma-tri-ces and vec-tors in the [][]\T1/fi4/m/n/10 M
-atrixSet[][][] 
- []
-
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [22]
-Overfull \hbox (184.78088pt too wide) in paragraph at lines 1165--1165
- []\T1/fi4/m/n/10 drawParametersMisspec(objSet, objMisspec = new("NullSimMisspe
-c"), objEqualCon = new("NullSimEqualCon"), maxDraw=100)[] 
+Overfull \hbox (28.25673pt too wide) in paragraph at lines 1201--1202
+[]\T1/ptm/m/n/10 Divide all ma-tri-ces and vec-tors in the [][]\T1/fi4/m/n/10 M
+atrixSet[][][] 
  []
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
@@ -801,8 +804,13 @@ File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [23]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [24]
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+)
+Overfull \hbox (184.78088pt too wide) in paragraph at lines 1259--1259
+ []\T1/fi4/m/n/10 drawParametersMisspec(objSet, objMisspec = new("NullSimMisspe
+c"), objEqualCon = new("NullSimEqualCon"), maxDraw=100)[] 
+ []
+
+[24] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
@@ -813,13 +821,16 @@ File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [26]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-)
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
-File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [27]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [28]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+)
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [29]
@@ -828,19 +839,16 @@ File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [30]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+) [31] [32]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
-Overfull \hbox (29.78088pt too wide) in paragraph at lines 1689--1689
+Overfull \hbox (29.78088pt too wide) in paragraph at lines 1783--1783
  []\T1/fi4/m/n/10 findFactorTotalCov(beta, psi=NULL, corPsi=NULL, totalVarPsi =
  NULL, errorVarPsi=NULL)[] 
  []
 
-[31] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
-File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [32]
 [33] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
-File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-)
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [34]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
@@ -860,55 +868,80 @@ File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [39]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-)
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
-File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [40]
+Overfull \hbox (57.6082pt too wide) in paragraph at lines 2256--2257
+[][][]\T1/fi4/m/n/10 continuousPower[][][] \T1/ptm/m/n/10 to find the power of 
+pa-ram-e-ter es-ti-mates for the re-sult ob-ject (\T1/fi4/m/n/10 linkS4class{Si
+mResult}\T1/ptm/m/n/10 )
+ []
+
+
+Overfull \hbox (0.78088pt too wide) in paragraph at lines 2275--2275
+ []\T1/fi4/m/n/9 Output <- simResult(NULL, SimData, SimModel, n=seq(100, 200, 2
+0), pmMCAR=c(0, 0.1, 0.2))[] 
+ []
+
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [41]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [42] [43]
+)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+) [42]
+Overfull \hbox (57.6082pt too wide) in paragraph at lines 2405--2406
+[][][]\T1/fi4/m/n/10 continuousPower[][][] \T1/ptm/m/n/10 to find the power of 
+pa-ram-e-ter es-ti-mates for the re-sult ob-ject (\T1/fi4/m/n/10 linkS4class{Si
+mResult}\T1/ptm/m/n/10 )
+ []
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+) [43]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [44]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+) [45]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+) [46]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+) [47] [48]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
-Overfull \hbox (15.01047pt too wide) in paragraph at lines 2525--2526
+Overfull \hbox (15.01047pt too wide) in paragraph at lines 2743--2744
 \T1/ptm/m/n/10 ject can be \T1/fi4/m/n/10 linkS4class{SimModelOut}\T1/ptm/m/n/1
 0 , \T1/fi4/m/n/10 linkS4class{SimDataOut}\T1/ptm/m/n/10 , or \T1/fi4/m/n/10 li
 nkS4class{SimResult}\T1/ptm/m/n/10 . 
  []
 
 
-Overfull \hbox (1.49042pt too wide) in paragraph at lines 2537--2538
+Overfull \hbox (1.49042pt too wide) in paragraph at lines 2755--2756
 \T1/ptm/m/n/10 from, which can be \T1/fi4/m/n/10 linkS4class{SimModelOut}\T1/pt
 m/m/n/10 , \T1/fi4/m/n/10 linkS4class{SimDataOut}\T1/ptm/m/n/10 ,
  []
 
-[45] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+[49] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-)
-Overfull \hbox (194.78088pt too wide) in paragraph at lines 2578--2578
- []\T1/fi4/m/n/10 getPower(simResult, contN = TRUE, contMCAR = FALSE, contMAR =
- FALSE, contParam = NULL, alpha = .05, powerParam = NULL)[] 
- []
-
-[46]
-Overfull \hbox (0.78088pt too wide) in paragraph at lines 2648--2648
+) [50]
+Overfull \hbox (0.78088pt too wide) in paragraph at lines 2870--2870
  []\T1/fi4/m/n/9 Output <- simResult(NULL, SimData, SimModel, n=seq(100, 200, 2
 0), pmMCAR=c(0, 0.1, 0.2))[] 
  []
 
-[47] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
-File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [48]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [49] [50]
-Overfull \hbox (86.28088pt too wide) in paragraph at lines 2890--2890
+) [51]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+) [52] [53]
+[54]
+Overfull \hbox (86.28088pt too wide) in paragraph at lines 3113--3113
  []  \T1/fi4/m/n/9 imposeMissing(data,nforms=3,itemGroups=list(c(1,2,3,4,5),c(6
 ,7,8,9,10),c(11,12,13,14,15),c(16,17,18,19)))[] 
  []
@@ -916,27 +949,12 @@ Overfull \hbox (86.28088pt too wide) in paragraph at lines 2890--2890
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
-Overfull \hbox (139.78088pt too wide) in paragraph at lines 2906--2906
+Overfull \hbox (139.78088pt too wide) in paragraph at lines 3129--3129
  []\T1/fi4/m/n/10 indProd(data, var1, var2, match = TRUE, meanC = TRUE, residua
 lC = FALSE, doubleMC = TRUE, namesProd = NULL)[] 
  []
 
-[51] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
-File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [52]
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
-File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [53]
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
-File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-)
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
-File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [54]
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
-File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [55]
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+[55] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
@@ -956,57 +974,58 @@ File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [59]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [60] [61]
+) [60]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
-Overfull \hbox (25.73807pt too wide) in paragraph at lines 3618--3621
-\T1/ptm/m/n/10 sity of Kansas; \T1/fi4/m/n/10 <mijke@ku.edu>\T1/ptm/m/n/10 ) Su
-n-thud Porn-prasert-manit (Uni-ver-sity of Kansas; \T1/fi4/m/n/10 <psunthud@ku.
-edu>\T1/ptm/m/n/10 ) 
- []
-
-[62] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-)
-Overfull \hbox (10.35016pt too wide) in paragraph at lines 3677--3678
-\T1/fi4/m/n/10 CombiningLikelihoodRatioChi-[]SquareStatisticsFromaMIAnalysis . 
-sas$[][]\T1/ptm/m/n/10 . Sun-thud Porn-prasert-
- []
-
-[63]
-Overfull \hbox (32.28088pt too wide) in paragraph at lines 3696--3696
- []\T1/fi4/m/n/9 miPoolChi(c(89.864, 81.116, 71.500, 49.022, 61.986, 64.422, 55
-.256, 57.890, 79.416, 63.944), 2)[] 
- []
-
+) [61]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+) [62]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+) [63]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [64]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [65]
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
-File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-)
-Overfull \hbox (161.0796pt too wide) in paragraph at lines 3878--3879
-[]\T1/ptm/m/n/10 Chris Miller pro-vided this code on [][]$\T1/fi4/m/n/10 http :
- / / chrisamiller . com / science / 2010 / 07 / 20 / transparent-[]overlapping-
-[]histograms-[]in-[]r/$[][]\T1/ptm/m/n/10 .
+Overfull \hbox (25.73807pt too wide) in paragraph at lines 3841--3844
+\T1/ptm/m/n/10 sity of Kansas; \T1/fi4/m/n/10 <mijke@ku.edu>\T1/ptm/m/n/10 ) Su
+n-thud Porn-prasert-manit (Uni-ver-sity of Kansas; \T1/fi4/m/n/10 <psunthud@ku.
+edu>\T1/ptm/m/n/10 ) 
  []
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [66]
+Overfull \hbox (10.35016pt too wide) in paragraph at lines 3900--3901
+\T1/fi4/m/n/10 CombiningLikelihoodRatioChi-[]SquareStatisticsFromaMIAnalysis . 
+sas$[][]\T1/ptm/m/n/10 . Sun-thud Porn-prasert-
+ []
+
+
+Overfull \hbox (32.28088pt too wide) in paragraph at lines 3919--3919
+ []\T1/fi4/m/n/9 miPoolChi(c(89.864, 81.116, 71.500, 49.022, 61.986, 64.422, 55
+.256, 57.890, 79.416, 63.944), 2)[] 
+ []
+
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [67]
+) [67] [68]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [68] [69]
-Overfull \hbox (32.28088pt too wide) in paragraph at lines 4100--4100
- []\T1/fi4/m/n/9 Output3 <- simResult(NULL, SimData, SimModel, n=seq(50, 100, 1
-0), pmMCAR=c(0, 0.05, 0.1, 0.15))[] 
+)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+) [69]
+Overfull \hbox (161.0796pt too wide) in paragraph at lines 4101--4102
+[]\T1/ptm/m/n/10 Chris Miller pro-vided this code on [][]$\T1/fi4/m/n/10 http :
+ / / chrisamiller . com / science / 2010 / 07 / 20 / transparent-[]overlapping-
+[]histograms-[]in-[]r/$[][]\T1/ptm/m/n/10 .
  []
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
@@ -1015,59 +1034,84 @@ File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [71]
-Overfull \hbox (32.28088pt too wide) in paragraph at lines 4218--4218
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+) [72] [73]
+Overfull \hbox (32.28088pt too wide) in paragraph at lines 4323--4323
+ []\T1/fi4/m/n/9 Output3 <- simResult(NULL, SimData, SimModel, n=seq(50, 100, 1
+0), pmMCAR=c(0, 0.05, 0.1, 0.15))[] 
+ []
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+) [74]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+) [75]
+Overfull \hbox (32.28088pt too wide) in paragraph at lines 4441--4441
  []\T1/fi4/m/n/9 Path.Mis.Model <- simMisspecPath(BE = mis.BE, misfitType="rmse
 a") #, misfitBound=c(0.05, 0.08))[] 
  []
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [72]
-Overfull \hbox (14.28088pt too wide) in paragraph at lines 4316--4316
+) [76]
+Overfull \hbox (0.78088pt too wide) in paragraph at lines 4530--4530
+ []\T1/fi4/m/n/9 Output <- simResult(NULL, SimData, SimModel, n=seq(100, 200, 2
+0), pmMCAR=c(0, 0.1, 0.2))[] 
+ []
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+) [77]
+Overfull \hbox (14.28088pt too wide) in paragraph at lines 4623--4623
  []\T1/fi4/m/n/9 plotPowerFit(Output.ALT, Output.NULL, alpha=0.05, usedFit=c("R
 MSEA", "CFI", "TLI", "SRMR"))[] 
  []
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [73]
+) [78]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [74]
+) [79]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
-Overfull \hbox (32.01903pt too wide) in paragraph at lines 4456--4457
+Overfull \hbox (32.01903pt too wide) in paragraph at lines 4763--4764
 []\T1/ptm/m/n/10 The type of pop-u-la-tion mis-fit mea-sures: \T1/fi4/m/n/10 "F
 0"\T1/ptm/m/n/10 , \T1/fi4/m/n/10 "rmsea"\T1/ptm/m/n/10 , or \T1/fi4/m/n/10 "sr
 mr"\T1/ptm/m/n/10 . See [][]\T1/fi4/m/n/10 popMisfitMACS[][][]
  []
 
-[75]
-Overfull \hbox (32.28088pt too wide) in paragraph at lines 4520--4520
+[80]
+Overfull \hbox (32.28088pt too wide) in paragraph at lines 4827--4827
  []\T1/fi4/m/n/9 Path.Mis.Model <- simMisspecPath(BE = mis.BE, misfitType="rmse
 a") #, misfitBound=c(0.05, 0.08))[] 
  []
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-)
-Overfull \hbox (29.78088pt too wide) in paragraph at lines 4534--4534
+) [81]
+Overfull \hbox (29.78088pt too wide) in paragraph at lines 4841--4841
  []\T1/fi4/m/n/10 popMisfitMACS(paramM, paramCM, misspecM, misspecCM, dfParam=N
 ULL, fit.measures="all")[] 
  []
 
-[76]
-Overfull \hbox (37.7943pt too wide) in paragraph at lines 4566--4567
+
+Overfull \hbox (37.7943pt too wide) in paragraph at lines 4873--4874
 []\T1/ptm/m/n/10 where $\OML/cmm/m/it/10 F[]$ \T1/ptm/m/n/10 is the dis-crep-an
 cy value be-tween two means vec-tors and co-vari-ance ma-tri-ces (see [][]\T1/f
 i4/m/n/10 popDiscrepancy[][][]\T1/ptm/m/n/10 )
  []
 
+[82] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+)
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [77]
-Overfull \hbox (84.67953pt too wide) in paragraph at lines 4612--4613
+) [83]
+Overfull \hbox (84.67953pt too wide) in paragraph at lines 4966--4967
 []\T1/ptm/m/n/10 The tar-get ob-ject to be printed, which can be \T1/fi4/m/n/10
  linkS4class{SimMatrix}\T1/ptm/m/n/10 , \T1/fi4/m/n/10 linkS4class{SymMatrix}\T
 1/ptm/m/n/10 ,
@@ -1075,90 +1119,90 @@ Overfull \hbox (84.67953pt too wide) in paragraph at lines 4612--4613
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [78]
-Overfull \hbox (17.96799pt too wide) in paragraph at lines 4680--4681
+) [84]
+Overfull \hbox (17.96799pt too wide) in paragraph at lines 5034--5035
 []\T1/ptm/m/it/10 asLogical: \T1/ptm/m/n/10 Model \T1/ptm/m/it/10 mis-spec-i-fi
 -ca-tion \T1/ptm/m/n/10 ma-tri-ces that are cre-ated by [][]\T1/fi4/m/n/10 simM
 isspecCFA[][][]\T1/ptm/m/n/10 , [][]\T1/fi4/m/n/10 simMisspecPath[][][]\T1/ptm/
 m/n/10 ,
  []
 
-[79] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+[85] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [80]
+) [86]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [81]
+) [87]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [82] [83]
+) [88] [89]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
-Overfull \hbox (27.75847pt too wide) in paragraph at lines 5023--5024
+Overfull \hbox (27.75847pt too wide) in paragraph at lines 5377--5378
 []\T1/ptm/m/n/10 Model \T1/ptm/m/it/10 mis-spec-i-fi-ca-tion \T1/ptm/m/n/10 ma-
 tri-ces that are cre-ated by [][]\T1/fi4/m/n/10 simMisspecCFA[][][]\T1/ptm/m/n/
 10 , [][]\T1/fi4/m/n/10 simMisspecPath[][][]\T1/ptm/m/n/10 ,
  []
 
 
-Overfull \hbox (0.96834pt too wide) in paragraph at lines 5035--5036
+Overfull \hbox (0.96834pt too wide) in paragraph at lines 5389--5390
 []\T1/ptm/m/n/10 A [][]\T1/fi4/m/n/10 SimDataDist[][][] \T1/ptm/m/n/10 for a di
 s-tri-bu-tion of mea-sure-ment er-rors. Use when \T1/fi4/m/n/10 sequential
  []
 
-[84] [85] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+[90] [91] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
-[86] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+[92] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [87]
-[88] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+) [93]
+[94] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
-Overfull \hbox (91.78088pt too wide) in paragraph at lines 5320--5321
+Overfull \hbox (91.78088pt too wide) in paragraph at lines 5674--5675
 []\T1/fi4/m/n/10 SimMisspec@misBeforeFill=TRUE & SimMisspec@conBeforeMis=TRUE &
  SimEqualCon@conBeforeFill=TRUE
  []
 
 
-Overfull \hbox (96.78088pt too wide) in paragraph at lines 5321--5322
+Overfull \hbox (96.78088pt too wide) in paragraph at lines 5675--5676
 []\T1/fi4/m/n/10 SimMisspec@misBeforeFill=FALSE & SimMisspec@conBeforeMis=TRUE 
 & SimEqualCon@conBeforeFill=TRUE
  []
 
 
-Overfull \hbox (101.78088pt too wide) in paragraph at lines 5322--5323
+Overfull \hbox (101.78088pt too wide) in paragraph at lines 5676--5677
 []\T1/fi4/m/n/10 SimMisspec@misBeforeFill=FALSE & SimMisspec@conBeforeMis=TRUE 
 & SimEqualCon@conBeforeFill=FALSE
  []
 
 
-Overfull \hbox (106.78088pt too wide) in paragraph at lines 5323--5324
+Overfull \hbox (106.78088pt too wide) in paragraph at lines 5677--5678
 []\T1/fi4/m/n/10 SimMisspec@misBeforeFill=FALSE & SimMisspec@conBeforeMis=FALSE
  & SimEqualCon@conBeforeFill=FALSE
  []
 
 
-Overfull \hbox (8.27637pt too wide) in paragraph at lines 5323--5324
+Overfull \hbox (8.27637pt too wide) in paragraph at lines 5677--5678
 \T1/ptm/m/n/10 The auto-completeion is ap-plied first, then the mis-spec-i-fi-c
 a-tion is added with ad-just-ing paramters
  []
 
-[89]
-Overfull \hbox (96.78088pt too wide) in paragraph at lines 5324--5325
+[95]
+Overfull \hbox (96.78088pt too wide) in paragraph at lines 5678--5679
 []\T1/fi4/m/n/10 SimMisspec@misBeforeFill=TRUE & SimMisspec@conBeforeMis=FALSE 
 & SimEqualCon@conBeforeFill=TRUE
  []
 
 
-Overfull \hbox (101.78088pt too wide) in paragraph at lines 5325--5326
+Overfull \hbox (101.78088pt too wide) in paragraph at lines 5679--5680
 []\T1/fi4/m/n/10 SimMisspec@misBeforeFill=TRUE & SimMisspec@conBeforeMis=FALSE 
 & SimEqualCon@conBeforeFill=FALSE
  []
@@ -1166,15 +1210,15 @@ Overfull \hbox (101.78088pt too wide) in paragraph at lines 5325--5326
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
-Overfull \hbox (189.78088pt too wide) in paragraph at lines 5354--5354
+Overfull \hbox (189.78088pt too wide) in paragraph at lines 5708--5708
  []\T1/fi4/m/n/10 runRep(object, objData, objModel, objMissing=new("NullSimMiss
 ing"), objFunction=new("NullSimFunction"), silent=FALSE)[] 
  []
 
-[90] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+[96] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [91]
-Overfull \hbox (23.42723pt too wide) in paragraph at lines 5451--5452
+) [97]
+Overfull \hbox (23.42723pt too wide) in paragraph at lines 5805--5806
 []\T1/ptm/m/n/10 This func-tion will put all fixed val-ues in [][]\T1/fi4/m/n/1
 0 SimParam[][][]
  []
@@ -1182,91 +1226,91 @@ Overfull \hbox (23.42723pt too wide) in paragraph at lines 5451--5452
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
-Overfull \hbox (25.19049pt too wide) in paragraph at lines 5488--5489
+Overfull \hbox (25.19049pt too wide) in paragraph at lines 5842--5843
 \T1/fi4/m/n/10 target \T1/ptm/m/n/10 ar-gu-ment can be \T1/fi4/m/n/10 linkS4cla
 ss{SimModelOut} \T1/ptm/m/n/10 or \T1/fi4/m/n/10 linkS4class{SimResult}\T1/ptm/
 m/n/10 . 
  []
 
-[92] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+[98] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [93]
+) [99]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [94]
+) [100]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [95]
+) [101]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
-Overfull \hbox (10.27795pt too wide) in paragraph at lines 5765--5766
+Overfull \hbox (10.27795pt too wide) in paragraph at lines 6119--6120
 []\T1/ptm/m/it/10 misspec: \T1/ptm/m/n/10 Model \T1/ptm/m/it/10 mis-spec-i-fi-c
 a-tion \T1/ptm/m/n/10 ma-tri-ces that are cre-ated by [][]\T1/fi4/m/n/10 simMis
 specCFA[][][]\T1/ptm/m/n/10 , [][]\T1/fi4/m/n/10 simMisspecPath[][][]\T1/ptm/m/
 n/10 ,
  []
 
-[96] [97] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+[102] [103] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
-[98] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+[104] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [99]
+) [105]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
-Overfull \hbox (55.86832pt too wide) in paragraph at lines 6007--6008
+Overfull \hbox (55.86832pt too wide) in paragraph at lines 6361--6362
 []\T1/ptm/m/n/10 Objects can be cre-ated by [][]\T1/fi4/m/n/10 simDataDist[][][
 ] \T1/ptm/m/n/10 func-tion. It can also be called from the form \T1/fi4/m/n/10 
 new("SimDataDist", ...)\T1/ptm/m/n/10 . 
  []
 
-[100] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+[106] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [101]
-Overfull \hbox (2.19832pt too wide) in paragraph at lines 6102--6103
+) [107]
+Overfull \hbox (2.19832pt too wide) in paragraph at lines 6456--6457
 [][][]\T1/fi4/m/n/10 getPopulation[][][] \T1/ptm/m/n/10 to ex-tract the data ge
 n-er-a-tion pop-u-la-tion. The ad-di-tional ar-gu-ment is \T1/fi4/m/n/10 misspe
 c\T1/ptm/m/n/10 .
  []
 
-[102] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+[108] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
-Overfull \hbox (8.46712pt too wide) in paragraph at lines 6168--6169
+Overfull \hbox (8.46712pt too wide) in paragraph at lines 6522--6523
 []\T1/fi4/m/n/10 TRUE \T1/ptm/m/n/10 if users wish to ap-ply equal-ity con-stra
 int be-fore ap-ply-ing the auto-completion
  []
 
-[103] [104] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+[109] [110] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
-Overfull \hbox (14.37872pt too wide) in paragraph at lines 6253--6254
+Overfull \hbox (14.37872pt too wide) in paragraph at lines 6607--6608
 []\T1/ptm/m/n/10 Objects can be cre-ated by [][]\T1/fi4/m/n/10 simEqualCon[][][
 ]\T1/ptm/m/n/10 . Also, it can be called of the form \T1/fi4/m/n/10 new("SimEqu
 alCon", ...)\T1/ptm/m/n/10 . 
  []
 
 
-Overfull \hbox (4.52708pt too wide) in paragraph at lines 6261--6262
+Overfull \hbox (4.52708pt too wide) in paragraph at lines 6615--6616
 []\T1/fi4/m/n/10 TRUE \T1/ptm/m/n/10 if users wish to ap-ply equal-ity con-stra
 int be-fore ap-ply-ing the auto-completion
  []
 
-[105] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+[111] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [106]
+) [112]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [107] [108]
-Overfull \hbox (162.78088pt too wide) in paragraph at lines 6507--6507
+) [113] [114]
+Overfull \hbox (162.78088pt too wide) in paragraph at lines 6861--6861
  []\T1/fi4/m/n/9 fun <- simFunction(indProd, var1=paste("y", 1:3, sep=""), var2
 =paste("y", 4:6, sep=""), namesProd=paste("y", 10:12, sep=""))[] 
  []
@@ -1274,14 +1318,14 @@ Overfull \hbox (162.78088pt too wide) in paragraph at lines 6507--6507
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
-Overfull \hbox (20.63861pt too wide) in paragraph at lines 6525--6526
+Overfull \hbox (20.63861pt too wide) in paragraph at lines 6879--6880
 []\T1/ptm/m/n/10 Objects can be cre-ated by [][]\T1/fi4/m/n/10 simFunction[][][
 ]\T1/ptm/m/n/10 . It can also be called from the form \T1/fi4/m/n/10 new("SimFu
 nction", ...)\T1/ptm/m/n/10 . 
  []
 
-[109] [110]
-Overfull \hbox (162.78088pt too wide) in paragraph at lines 6622--6622
+[115] [116]
+Overfull \hbox (162.78088pt too wide) in paragraph at lines 6976--6976
  []\T1/fi4/m/n/9 fun <- simFunction(indProd, var1=paste("y", 1:3, sep=""), var2
 =paste("y", 4:6, sep=""), namesProd=paste("y", 10:12, sep=""))[] 
  []
@@ -1291,55 +1335,55 @@ File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [111]
-Overfull \hbox (66.31819pt too wide) in paragraph at lines 6694--6695
+) [117]
+Overfull \hbox (66.31819pt too wide) in paragraph at lines 7048--7049
 []\T1/ptm/m/n/10 Object can be cre-ated by [][]\T1/fi4/m/n/10 makeLabels[][][]\
 T1/ptm/m/n/10 , Ob-jects can be also cre-ated by calls of the form \T1/fi4/m/n/
 10 new("SimGenLabels", ...)\T1/ptm/m/n/10 . 
  []
 
-[112] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+[118] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [113]
+) [119]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [114]
+) [120]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [115]
+) [121]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [116]
+) [122]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [117]
+) [123]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
-Overfull \hbox (519.78088pt too wide) in paragraph at lines 7125--7125
+Overfull \hbox (519.78088pt too wide) in paragraph at lines 7479--7479
  []\T1/fi4/m/n/10 simMissing(cov=0, pmMCAR=0, pmMAR=0, nforms=0, itemGroups=lis
 t(0), timePoints=1, twoMethod=0, prAttr=0, numImps=0, ignoreCols=0, threshold=0
 , covAsAux=TRUE, logical=new("NullMatrix"))[] 
  []
 
-[118]
-Overfull \hbox (24.38837pt too wide) in paragraph at lines 7158--7161
+[124]
+Overfull \hbox (24.38837pt too wide) in paragraph at lines 7512--7515
 \T1/ptm/m/n/10 of Kansas; \T1/fi4/m/n/10 <patr1ckm@ku.edu>\T1/ptm/m/n/10 ) Sun-
 thud Porn-prasert-manit (Uni-ver-sity of Kansas; \T1/fi4/m/n/10 <psunthud@ku.ed
 u>\T1/ptm/m/n/10 ) 
  []
 
 
-Overfull \hbox (0.78088pt too wide) in paragraph at lines 7175--7175
+Overfull \hbox (0.78088pt too wide) in paragraph at lines 7529--7529
  []\T1/fi4/m/n/9 #Example of imposing 10% MCAR missing in all variables with no
  imputations (FIML method)[] 
  []
 
-[119]
-Overfull \hbox (14.28088pt too wide) in paragraph at lines 7198--7198
+[125]
+Overfull \hbox (14.28088pt too wide) in paragraph at lines 7552--7552
  []\T1/fi4/m/n/9 #Example to create simMissing object for 3 forms design at 3 t
 imepoints with 10 imputations[] 
  []
@@ -1347,37 +1391,37 @@ imepoints with 10 imputations[]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
-Overfull \hbox (45.86832pt too wide) in paragraph at lines 7214--7215
+Overfull \hbox (45.86832pt too wide) in paragraph at lines 7568--7569
 []\T1/ptm/m/n/10 Objects can be cre-ated by \T1/fi4/m/n/10 simMissing \T1/ptm/m
 /n/10 func-tion. It can also be called from the form \T1/fi4/m/n/10 new("SimMis
 sing", ...)\T1/ptm/m/n/10 . 
  []
 
-[120] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+[126] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
-Overfull \hbox (6.4974pt too wide) in paragraph at lines 7279--7280
+Overfull \hbox (6.4974pt too wide) in paragraph at lines 7633--7634
 []\T1/ptm/m/n/10 Misspecification model added on true model speci-fic-tion. Thi
 s class con-tains [][]\T1/fi4/m/n/10 SimVector[][][]\T1/ptm/m/n/10 , [][]\T1/fi
 4/m/n/10 SimMatrix[][][]\T1/ptm/m/n/10 ,
  []
 
 
-Overfull \hbox (55.0669pt too wide) in paragraph at lines 7283--7284
+Overfull \hbox (55.0669pt too wide) in paragraph at lines 7637--7638
 \T1/ptm/m/n/10 anal-y-sis, or SEM model, re-spec-tively. Ob-jects can be also c
 re-ated by calls of the form \T1/fi4/m/n/10 new("SimMisspec", ...)\T1/ptm/m/n/1
 0 . 
  []
 
-[121]
-Overfull \hbox (2.23877pt too wide) in paragraph at lines 7320--7321
+[127]
+Overfull \hbox (2.23877pt too wide) in paragraph at lines 7674--7675
 []\T1/ptm/m/n/10 The type of pop-u-la-tion mis-fit used in the \T1/fi4/m/n/10 m
 isfitBound \T1/ptm/m/n/10 be-low. The de-fault is \T1/fi4/m/n/10 "rmsea"\T1/ptm
 /m/n/10 .
  []
 
-[122]
-Overfull \hbox (37.59773pt too wide) in paragraph at lines 7351--7352
+[128]
+Overfull \hbox (37.59773pt too wide) in paragraph at lines 7705--7706
 []\T1/ptm/m/n/10 Create an ob-ject this class by CFA, Path Anal-y-sis, or SEM m
 odel by [][]\T1/fi4/m/n/10 simMisspecCFA[][][]\T1/ptm/m/n/10 , [][]\T1/fi4/m/n/
 10 simMisspecPath[][][]\T1/ptm/m/n/10 ,
@@ -1385,41 +1429,41 @@ odel by [][]\T1/fi4/m/n/10 simMisspecCFA[][][]\T1/ptm/m/n/10 , [][]\T1/fi4/m/n/
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [123]
-Overfull \hbox (1.16711pt too wide) in paragraph at lines 7392--7393
+) [129]
+Overfull \hbox (1.16711pt too wide) in paragraph at lines 7746--7747
 []\T1/fi4/m/n/10 TRUE \T1/ptm/m/n/10 if users wish to con-strain pa-ram-e-ters 
 be-fore adding mis-spec-i-fi-ca-tion. \T1/fi4/m/n/10 FALSE
  []
 
-[124] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+[130] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
-Overfull \hbox (1.16711pt too wide) in paragraph at lines 7471--7472
+Overfull \hbox (1.16711pt too wide) in paragraph at lines 7825--7826
 []\T1/fi4/m/n/10 TRUE \T1/ptm/m/n/10 if users wish to con-strain pa-ram-e-ters 
 be-fore adding mis-spec-i-fi-ca-tion. \T1/fi4/m/n/10 FALSE
  []
 
-[125] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+[131] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [126]
-Overfull \hbox (1.16711pt too wide) in paragraph at lines 7550--7551
+) [132]
+Overfull \hbox (1.16711pt too wide) in paragraph at lines 7904--7905
 []\T1/fi4/m/n/10 TRUE \T1/ptm/m/n/10 if users wish to con-strain pa-ram-e-ters 
 be-fore adding mis-spec-i-fi-ca-tion. \T1/fi4/m/n/10 FALSE
  []
 
-[127]
-Overfull \hbox (117.78088pt too wide) in paragraph at lines 7606--7606
+[133]
+Overfull \hbox (117.78088pt too wide) in paragraph at lines 7960--7960
  []\T1/fi4/m/n/9 SEM.Mis.Model <- simMisspecSEM(LX = LX.trivial, RTE = RTE.triv
 ial, RTD = RTD.trivial, RTH = RTH.trivial, exo=TRUE)[] 
  []
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [128]
+) [134]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [129]
-Overfull \hbox (16.42868pt too wide) in paragraph at lines 7736--7737
+) [135]
+Overfull \hbox (16.42868pt too wide) in paragraph at lines 8090--8091
 \T1/ptm/m/n/10 ob-ject. \T1/fi4/m/n/10 data \T1/ptm/m/n/10 is data saved in \T1
 /fi4/m/n/10 data.frame\T1/ptm/m/n/10 . The fol-low-ing ar-gu-ments are not re-q
 uired. \T1/fi4/m/n/10 simMissing\T1/ptm/m/n/10 ,
@@ -1427,31 +1471,31 @@ uired. \T1/fi4/m/n/10 simMissing\T1/ptm/m/n/10 ,
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [130]
-Overfull \hbox (3.16756pt too wide) in paragraph at lines 7815--7816
+) [136]
+Overfull \hbox (3.16756pt too wide) in paragraph at lines 8169--8170
 \T1/ptm/m/n/10 fer-ences of model fit in-dices among mod-els. This func-tion re
 -quires at least two \T1/fi4/m/n/10 SimModelMIOut
  []
 
-[131] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+[137] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
-Overfull \hbox (48.55852pt too wide) in paragraph at lines 7869--7870
+Overfull \hbox (48.55852pt too wide) in paragraph at lines 8223--8224
 []\T1/ptm/m/n/10 Objects can be cre-ated by [][]\T1/fi4/m/n/10 run[][][] \T1/pt
 m/m/n/10 on the [][]\T1/fi4/m/n/10 SimModel[][][]\T1/ptm/m/n/10 . It can also b
 e called from the form \T1/fi4/m/n/10 new("SimModelOut", ...)\T1/ptm/m/n/10 . 
  []
 
-[132] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+[138] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [133]
+) [139]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [134]
+) [140]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [135]
-Overfull \hbox (17.59773pt too wide) in paragraph at lines 8092--8093
+) [141]
+Overfull \hbox (17.59773pt too wide) in paragraph at lines 8446--8447
 []\T1/ptm/m/n/10 Create an ob-ject this class by CFA, Path Anal-y-sis, or SEM m
 odel by [][]\T1/fi4/m/n/10 simParamCFA[][][]\T1/ptm/m/n/10 , [][]\T1/fi4/m/n/10
  simParamPath[][][]\T1/ptm/m/n/10 ,
@@ -1459,47 +1503,47 @@ odel by [][]\T1/fi4/m/n/10 simParamCFA[][][]\T1/ptm/m/n/10 , [][]\T1/fi4/m/n/10
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [136]
+) [142]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [137] [138]
+) [143] [144]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [139] [140]
+) [145] [146]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [141]
+) [147]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [142] [143]
-[144] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+) [148] [149]
+[150] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
-Overfull \hbox (0.63861pt too wide) in paragraph at lines 8637--8638
+Overfull \hbox (0.63861pt too wide) in paragraph at lines 8991--8992
 []\T1/ptm/m/n/10 Objects can be cre-ated by [][]\T1/fi4/m/n/10 simResult[][][]\
 T1/ptm/m/n/10 . It can also be called from the form \T1/fi4/m/n/10 new("SimResu
 lt", ...)\T1/ptm/m/n/10 . 
  []
 
-[145] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+[151] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
-Overfull \hbox (219.78088pt too wide) in paragraph at lines 8728--8728
+Overfull \hbox (219.78088pt too wide) in paragraph at lines 9082--9082
  []\T1/fi4/m/n/10 simResultParam(nRep, object, misspec=new("NullSimMisspec"), S
 imEqualCon = new("NullSimEqualCon"), seed=123321, maxDraw=100)[] 
  []
 
-[146] [147]
-Overfull \hbox (23.28088pt too wide) in paragraph at lines 8795--8795
+[152] [153]
+Overfull \hbox (23.28088pt too wide) in paragraph at lines 9149--9149
  []\T1/fi4/m/n/9 Path.Mis.Model2 <- simMisspecPath(BE = mis.BE, misfitType="rms
 ea", misfitBound=c(0.05, 0.08))[] 
  []
 
 
-Overfull \hbox (32.28088pt too wide) in paragraph at lines 8799--8799
+Overfull \hbox (32.28088pt too wide) in paragraph at lines 9153--9153
  []\T1/fi4/m/n/9 Path.Mis.Model3 <- simMisspecPath(BE = mis.BE, misfitType="rms
 ea", optMisfit="max", numIter=10)[] 
  []
@@ -1507,100 +1551,60 @@ ea", optMisfit="max", numIter=10)[]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
-Overfull \hbox (96.31819pt too wide) in paragraph at lines 8814--8815
+Overfull \hbox (96.31819pt too wide) in paragraph at lines 9168--9169
 []\T1/ptm/m/n/10 Object can be cre-ated by [][]\T1/fi4/m/n/10 simResultParam[][
 ][]\T1/ptm/m/n/10 , Ob-jects can be also cre-ated by calls of the form \T1/fi4/
 m/n/10 new("SimResultParam", ...)\T1/ptm/m/n/10 . 
  []
 
-[148]
-Overfull \hbox (32.28088pt too wide) in paragraph at lines 8886--8886
+[154]
+Overfull \hbox (32.28088pt too wide) in paragraph at lines 9240--9240
  []\T1/fi4/m/n/9 Path.Mis.Model <- simMisspecPath(BE = mis.BE, misfitType="rmse
 a") #, misfitBound=c(0.05, 0.08))[] 
  []
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [149] [150]
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
-File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [151] [152]
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
-File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [153] [154]
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
-File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [155] [156]
-[157]
-Overfull \hbox (54.78088pt too wide) in paragraph at lines 9381--9381
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+) [157] [158]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+) [159] [160]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+) [161] [162]
+[163]
+Overfull \hbox (54.78088pt too wide) in paragraph at lines 9735--9735
  []\T1/fi4/m/n/9 SEM.Exo.model <- simSetSEM(GA=GA, BE=BE, LX=LX, LY=LY, RPH=RPH
 , RPS=RPS, RTD=RTD, RTE=RTE, exo=TRUE)[] 
  []
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [158]
+) [164]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [159]
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
-File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [160]
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
-File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-)
-Overfull \hbox (63.32788pt too wide) in paragraph at lines 9551--9552
-[]\T1/ptm/m/n/10 This ob-ject is cre-ated by [][]\T1/fi4/m/n/10 simVector[][][]
- \T1/ptm/m/n/10 func-tion. Ob-jects can be cre-ated by calls of the form \T1/fi
-4/m/n/10 new("SimVector", ...)\T1/ptm/m/n/10 . 
- []
-
-[161] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
-File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-)
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
-File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [162]
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
-File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [163]
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
-File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [164] [165]
+) [165]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [166]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [167]
-Overfull \hbox (2.46945pt too wide) in paragraph at lines 10007--10012
-[]\T1/fi4/m/n/10 Std.Bias: \T1/ptm/m/n/10 Stan-dard-ized Bias, which is (\T1/fi
-4/m/n/10 Estimate.Average \T1/ptm/m/n/10 - \T1/fi4/m/n/10 Average.Param\T1/ptm/
-m/n/10 )/\T1/fi4/m/n/10 Estimate.SD
+)
+Overfull \hbox (63.32788pt too wide) in paragraph at lines 9905--9906
+[]\T1/ptm/m/n/10 This ob-ject is cre-ated by [][]\T1/fi4/m/n/10 simVector[][][]
+ \T1/ptm/m/n/10 func-tion. Ob-jects can be cre-ated by calls of the form \T1/fi
+4/m/n/10 new("SimVector", ...)\T1/ptm/m/n/10 . 
  []
 
-
-Overfull \hbox (24.57841pt too wide) in paragraph at lines 10012--10016
-[]\T1/fi4/m/n/10 Rel.SE.Bias: \T1/ptm/m/n/10 Rel-a-tive Bias in stan-dard er-ro
-r, which is (\T1/fi4/m/n/10 Average.SE \T1/ptm/m/n/10 - \T1/fi4/m/n/10 Estimate
-.SD\T1/ptm/m/n/10 )/\T1/fi4/m/n/10 Estimate.SD
- []
-
-[168] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+[167] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
-Overfull \hbox (25.01047pt too wide) in paragraph at lines 10063--10064
-\T1/ptm/m/n/10 ob-ject can be \T1/fi4/m/n/10 linkS4class{SimModelOut}\T1/ptm/m/
-n/10 , \T1/fi4/m/n/10 linkS4class{SimDataOut}\T1/ptm/m/n/10 , or \T1/fi4/m/n/10
- linkS4class{SimResult}\T1/ptm/m/n/10 . 
- []
-
-
-Overfull \hbox (1.49042pt too wide) in paragraph at lines 10075--10076
-\T1/ptm/m/n/10 from, which can be \T1/fi4/m/n/10 linkS4class{SimModelOut}\T1/pt
-m/m/n/10 , \T1/fi4/m/n/10 linkS4class{SimDataOut}\T1/ptm/m/n/10 ,
- []
-
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+) [168]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [169]
@@ -1612,35 +1616,50 @@ File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [172]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-)
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
-File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [173]
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+Overfull \hbox (2.46945pt too wide) in paragraph at lines 10361--10366
+[]\T1/fi4/m/n/10 Std.Bias: \T1/ptm/m/n/10 Stan-dard-ized Bias, which is (\T1/fi
+4/m/n/10 Estimate.Average \T1/ptm/m/n/10 - \T1/fi4/m/n/10 Average.Param\T1/ptm/
+m/n/10 )/\T1/fi4/m/n/10 Estimate.SD
+ []
+
+
+Overfull \hbox (24.57841pt too wide) in paragraph at lines 10366--10370
+[]\T1/fi4/m/n/10 Rel.SE.Bias: \T1/ptm/m/n/10 Rel-a-tive Bias in stan-dard er-ro
+r, which is (\T1/fi4/m/n/10 Average.SE \T1/ptm/m/n/10 - \T1/fi4/m/n/10 Estimate
+.SD\T1/ptm/m/n/10 )/\T1/fi4/m/n/10 Estimate.SD
+ []
+
+[174] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [174]
+)
+Overfull \hbox (25.01047pt too wide) in paragraph at lines 10417--10418
+\T1/ptm/m/n/10 ob-ject can be \T1/fi4/m/n/10 linkS4class{SimModelOut}\T1/ptm/m/
+n/10 , \T1/fi4/m/n/10 linkS4class{SimDataOut}\T1/ptm/m/n/10 , or \T1/fi4/m/n/10
+ linkS4class{SimResult}\T1/ptm/m/n/10 . 
+ []
+
+
+Overfull \hbox (1.49042pt too wide) in paragraph at lines 10429--10430
+\T1/ptm/m/n/10 from, which can be \T1/fi4/m/n/10 linkS4class{SimModelOut}\T1/pt
+m/m/n/10 , \T1/fi4/m/n/10 linkS4class{SimDataOut}\T1/ptm/m/n/10 ,
+ []
+
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [175]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+) [176] [177]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+) [178]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [176]
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
-File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-)
-Overfull \hbox (1.54648pt too wide) in paragraph at lines 10599--10600
-[]\T1/ptm/m/n/10 This func-tion will vec-tor-ize ev-ery ma-
- []
-
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
-File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [177] [178]
-[179] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
-File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-)
+) [179]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [180]
@@ -1653,8 +1672,33 @@ File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [182]
-(C:\Users\Sunthud\AppData\Local\Temp\RtmpWEzhMj\Rd2pdf1c601b6f473d\Rd2.ind
-[183]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+)
+Overfull \hbox (1.54648pt too wide) in paragraph at lines 10953--10954
+[]\T1/ptm/m/n/10 This func-tion will vec-tor-ize ev-ery ma-
+ []
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+) [183] [184]
+[185] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+) [186]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+) [187]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+) [188]
+(C:\Users\Sunthud\AppData\Local\Temp\Rtmp2JJOOS\Rd2pdf167c2f0463ef\Rd2.ind
+[189]
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <12> not available
 (Font)              Font shape `T1/ptm/b/n' tried instead on input line 3.
 
@@ -1683,94 +1727,94 @@ Overfull \hbox (40.8567pt too wide) in paragraph at lines 90--92
  []
 
 
-Overfull \hbox (0.8567pt too wide) in paragraph at lines 99--101
+Overfull \hbox (0.8567pt too wide) in paragraph at lines 103--105
 []\T1/fi4/m/it/10 countFreeParameters,SimEqualCon-method 
  []
 
 
-Overfull \hbox (5.8567pt too wide) in paragraph at lines 103--105
+Overfull \hbox (5.8567pt too wide) in paragraph at lines 107--109
 []\T1/fi4/m/it/10 countFreeParameters,SimREqualCon-method 
  []
 
-[184
+[190
 
 ]
-Overfull \hbox (0.8567pt too wide) in paragraph at lines 113--115
+Overfull \hbox (0.8567pt too wide) in paragraph at lines 117--119
 []\T1/fi4/m/it/10 countFreeParameters,VirtualRSet-method 
  []
 
-[185] [186]
-Overfull \hbox (15.8567pt too wide) in paragraph at lines 441--443
+[191] [192]
+Overfull \hbox (15.8567pt too wide) in paragraph at lines 457--459
 []\T1/fi4/m/it/10 plotPowerFit,data.frame,data.frame-method 
  []
 
 
-Overfull \hbox (5.8567pt too wide) in paragraph at lines 445--447
+Overfull \hbox (5.8567pt too wide) in paragraph at lines 461--463
 []\T1/fi4/m/it/10 plotPowerFit,SimResult,SimResult-method 
  []
 
-[187]
-Overfull \hbox (5.8567pt too wide) in paragraph at lines 596--598
+[193]
+Overfull \hbox (5.8567pt too wide) in paragraph at lines 613--615
 []\T1/fi4/m/it/10 setOpenMxObject,SimParam,SimRSet-method 
  []
 
 
-Overfull \hbox (10.8567pt too wide) in paragraph at lines 607--609
+Overfull \hbox (10.8567pt too wide) in paragraph at lines 624--626
 []\T1/fi4/m/it/10 setPopulation,SimModelOut,SimRSet-method 
  []
 
 
-Overfull \hbox (5.8567pt too wide) in paragraph at lines 609--611
+Overfull \hbox (5.8567pt too wide) in paragraph at lines 626--628
 []\T1/fi4/m/it/10 setPopulation,SimModelOut,SimSet-method 
  []
 
 
-Overfull \hbox (15.8567pt too wide) in paragraph at lines 611--613
+Overfull \hbox (15.8567pt too wide) in paragraph at lines 628--630
 []\T1/fi4/m/it/10 setPopulation,SimResult,data.frame-method 
  []
 
 
-Overfull \hbox (20.8567pt too wide) in paragraph at lines 615--617
+Overfull \hbox (20.8567pt too wide) in paragraph at lines 632--634
 []\T1/fi4/m/it/10 setPopulation,SimResult,VirtualRSet-method 
  []
 
-[188] [189] [190] [191]
-Overfull \hbox (35.8567pt too wide) in paragraph at lines 1288--1290
+[194] [195] [196] [197]
+Overfull \hbox (35.8567pt too wide) in paragraph at lines 1303--1305
 []\T1/fi4/m/it/10 vectorizeObject,MatrixSet,SimGenLabels-method 
  []
 
 
-Overfull \hbox (30.8567pt too wide) in paragraph at lines 1292--1294
+Overfull \hbox (30.8567pt too wide) in paragraph at lines 1307--1309
 []\T1/fi4/m/it/10 vectorizeObject,VirtualRSet,SimLabels-method 
  []
 
-[192
+[198
 
 ])
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 11002.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 11002.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 11356.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 11356.
 
-(C:\Users\Sunthud\AppData\Local\Temp\RtmpWEzhMj\Rd2pdf1c601b6f473d\Rd2.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 11002.
+(C:\Users\Sunthud\AppData\Local\Temp\Rtmp2JJOOS\Rd2pdf167c2f0463ef\Rd2.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 11356.
 
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 11002
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 11356
 .
 Package rerunfilecheck Info: File `Rd2.out' has not changed.
-(rerunfilecheck)             Checksum: 232FBBC4C5A5494D53F416B506725D1E;10275.
+(rerunfilecheck)             Checksum: D123C6A7AEC0FD53DC7D9FB382D8BA3C;10562.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 11002.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 11356.
  ) 
 Here is how much of TeX's memory you used:
- 8750 strings out of 494053
- 145196 string characters out of 3146180
- 191852 words of memory out of 3000000
- 9506 multiletter control sequences out of 15000+200000
+ 8819 strings out of 494053
+ 146566 string characters out of 3146180
+ 193686 words of memory out of 3000000
+ 9511 multiletter control sequences out of 15000+200000
  43888 words of font info for 52 fonts, out of 3000000 for 9000
  715 hyphenation exceptions out of 8191
- 38i,6n,34p,1287b,588s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 38i,6n,34p,1426b,590s stack positions out of 5000i,500n,10000p,200000b,50000s
 pdfTeX warning (dest): name{Rfn.summary} has been referenced but does not exi
 st, replaced by a fixed one
 
@@ -1789,9 +1833,9 @@ onts/type1/urw/helvetic/uhvr8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/typ
 e1/urw/times/utmb8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/time
 s/utmr8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.pf
 b><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Rd2.pdf (192 pages, 1196412 bytes).
+Output written on Rd2.pdf (198 pages, 1226825 bytes).
 PDF statistics:
- 5663 PDF objects out of 6186 (max. 8388607)
- 2098 named destinations out of 2487 (max. 500000)
- 1369 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 5809 PDF objects out of 6186 (max. 8388607)
+ 2152 named destinations out of 2487 (max. 500000)
+ 1409 words of extra memory for PDF output out of 10000 (max. 10000000)
 

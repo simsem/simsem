@@ -1,7 +1,7 @@
 # extract: Extract some elements from an object
 
 setMethod("extract", signature = "SimDataDist", definition = function(object, pos) {
-    return(new("SimDataDist", p = length(pos), dist = object@dist[pos], keepScale = object@keepScale, reverse = object@reverse[pos]))
+    return(new("SimDataDist", p = length(pos), dist = object@dist[pos], keepScale = object@keepScale[pos], reverse = object@reverse[pos]))
 })
 
 setMethod("extract", signature = "vector", definition = function(object, pos = NULL) {

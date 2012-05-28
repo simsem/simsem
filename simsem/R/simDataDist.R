@@ -12,6 +12,10 @@ simDataDist <- function(..., p = NULL, keepScale = TRUE, reverse = FALSE) {
             reverse <- rep(reverse, p)
         if (length(reverse) != p) 
             stop("Please specify the reverse option as TRUE or FALSE or the vector of TRUE/FALSE with the length of the number of the marginal distributions.")
+        if (length(keepScale) == 1) 
+            keepScale <- rep(keepScale, p)
+        if (length(keepScale) != p) 
+            stop("Please specify the keepScale option as TRUE or FALSE or the vector of TRUE/FALSE with the length of the number of the marginal distributions.")
         if (length(List) != p) {
             times <- ceiling(p/length(List))
             List <- rep(List, times)

@@ -105,7 +105,7 @@ setClass("NullSimMisspec", contains = "SimMisspec")
 
 setClass("MisspecSet", contains = "MatrixSet")
 
-setClass("SimDataDist", representation(p = "numeric", dist = "list", keepScale = "logical", reverse = "vector"), prototype(keepScale = TRUE, reverse = FALSE))
+setClass("SimDataDist", representation(p = "numeric", dist = "list", keepScale = "vector", reverse = "vector"))
 
 setClass("NullSimDataDist", contains = "SimDataDist")
 
