@@ -9,7 +9,8 @@ path[2:3, 1] <- NA
 path[3, 2] <- NA
 param <- simParamSEM(LY=loading, BE=path)
 
-usedData <- imposeMissing(PoliticalDemocracy, pmMCAR=0.03)
+missreal <- simMissing(pmMCAR=0.03)
+usedData <- run(missreal, PoliticalDemocracy)
 
 model <- simModel(param, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
 miss <- simMissing(numImps=5)
@@ -20,5 +21,6 @@ loading.mis <- matrix(NA, 11, 3)
 loading.mis[is.na(loading)] <- 0
 LY.mis <- simMatrix(loading.mis, "u2")
 misspec <- simMisspecSEM(LY=LY.mis)
-output <- runFit(model, usedData, 200, misspec=misspec, missModel=miss)
+output <- runFit(model, usedData, 1000, misspec=misspec, missModel=miss)
+plotCutoff(output, 0.05)
 pValue(out, output)

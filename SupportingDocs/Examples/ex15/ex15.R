@@ -38,7 +38,7 @@ SimData <- simData(Cov.Model, 200, misspec=misspec)
 # First analysis model: Model without covariate
 No.Cov.Model <- extract(Cov.Model, y=1:6, e=1:2)
 model1 <- simModel(No.Cov.Model, indLab=paste("y", 1:6, sep=""))
-Output1 <- simResult(100, SimData, model1)
+Output1 <- simResult(1000, SimData, model1)
 param <- getPopulation(Output1)
 param <- extract(param, y=1:6, e=1:2)
 Output1 <- setPopulation(Output1, param) 
@@ -46,13 +46,13 @@ summary(Output1)
 
 # Second analysis model: Model accounting for covariate in the indicator level
 model2 <- simModel(Cov.Model)
-Output2 <- simResult(100, SimData, model2)
+Output2 <- simResult(1000, SimData, model2)
 summary(Output2)
 
 # Third analysis model: Model accounting for covariate with orthogonalization
 ortho <- simFunction(residualCovariate, targetVar=1:6, covVar=7)
 model3 <- model1
-Output3 <- simResult(100, SimData, model3, objFunction=ortho)
+Output3 <- simResult(1000, SimData, model3, objFunction=ortho)
 param <- getPopulation(Output3)
 param <- extract(param, y=1:6, e=1:2)
 Output3 <- setPopulation(Output3, param) 
@@ -72,7 +72,7 @@ errorCov[7, 7] <- 0
 facCov <- diag(3)
 Fac.Cov.Model <- simParamSEM(LY=loading, BE=path, TE=errorCov, PS=facCov)
 model4 <- simModel(Fac.Cov.Model)
-Output4 <- simResult(100, SimData, model4)
+Output4 <- simResult(1000, SimData, model4)
 
 loadingVal <- matrix(0, 7, 3)
 loadingVal[1:3, 1] <- 0.6

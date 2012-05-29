@@ -18,4 +18,5 @@ loading.mis[is.na(loading)] <- 0
 LY.mis <- simMatrix(loading.mis, "u2")
 misspec <- simMisspecCFA(LY=LY.mis)
 output2 <- runFit(SimModel, HolzingerSwineford1939, 1000, misspec=misspec)
+plotCutoff(output2, 0.05)
 pValue(out, output2)
