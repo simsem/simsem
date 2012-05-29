@@ -34,7 +34,7 @@ SimMissing <- simMissing(nforms=3, itemGroups=itemGroups, numImps=5)
 
 SimData <- simData(CFA.model, 1000, misspec = CFA.model.mis)
 SimModel <- simModel(CFA.model)
-Output <- simResult(100, SimData, SimModel, SimMissing)
+Output <- simResult(1000, SimData, SimModel, SimMissing)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summary(Output)
