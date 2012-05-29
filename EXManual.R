@@ -15,6 +15,10 @@
 #install.packages("C:/Users/Sunthud/Desktop/My Dropbox/simsem/simsem_0.0-11.tar.gz", repos=NULL, type="source")
 #install.packages("C:/Users/student/Dropbox/simsem/simsem_0.1-1.tar.gz", repos=NULL, type="source")
 
+library(tools)
+dirMan <- "C:/Users/student/Dropbox/simsem/simsem/man/runMI.Rd"
+showNonASCIIfile(dirMan)
+
 myTry <- function(expr) {
     withRestarts(
         withCallingHandlers(expr,
