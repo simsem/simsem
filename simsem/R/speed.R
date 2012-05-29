@@ -17,49 +17,49 @@ s <- function(dir) {
 
 dir <- "/nfs/home/patr1ckm/repos/simsem/simsem/R/"
 
-a <- system.time(replicate(1000,run(simUnif(0.3,0.5))))
-b <- system.time(replicate(1000,eval(parse(text="runif(1,0.3,0.5)"))))
-c <- system.time(replicate(1000,runif(1,0.3,0.5)))
-d <- system.time(replicate(1000,eval(expression(runif(1,0.3,0.5)))))
+## a <- system.time(replicate(1000,run(simUnif(0.3,0.5))))
+## b <- system.time(replicate(1000,eval(parse(text="runif(1,0.3,0.5)"))))
+## c <- system.time(replicate(1000,runif(1,0.3,0.5)))
+## d <- system.time(replicate(1000,eval(expression(runif(1,0.3,0.5)))))
 
 
-##
+## ##
 
 
-loading <- matrix(0, 6, 2)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-LY <- simMatrix(loading, 0.7)
+## loading <- matrix(0, 6, 2)
+## loading[1:3, 1] <- NA
+## loading[4:6, 2] <- NA
+## LY <- simMatrix(loading, 0.7)
 
-latent.cor <- matrix(NA, 2, 2)
-diag(latent.cor) <- 1
-RPS <- symMatrix(latent.cor, 0.5)
+## latent.cor <- matrix(NA, 2, 2)
+## diag(latent.cor) <- 1
+## RPS <- symMatrix(latent.cor, 0.5)
 
-error.cor <- matrix(0, 6, 6)
-diag(error.cor) <- 1
-RTE <- symMatrix(error.cor)
+## error.cor <- matrix(0, 6, 6)
+## diag(error.cor) <- 1
+## RTE <- symMatrix(error.cor)
 
-CFA.Model <- simSetCFA(LY = LY, RPS = RPS, RTE = RTE)
+## CFA.Model <- simSetCFA(LY = LY, RPS = RPS, RTE = RTE)
 
-SimData <- simData(CFA.Model, 200)
+## SimData <- simData(CFA.Model, 200)
 
-data <- run(SimData)
+## data <- run(SimData)
 
-SimModel <- simModel(CFA.Model)
+## SimModel <- simModel(CFA.Model)
 
-##
+## ##
 
-t1 <- system.time(a <- simResult(100, SimData, SimModel))
-t2 <- system.time(b <- simResultB(5, SimData, SimModel,flag=TRUE))
-t3 <- system.time(c <- simResultB(5, SimData, SimModel,flag=FALSE))
-ex <- function() {simResultB(5, SimData, SimModel, flag=TRUE)}
+## t1 <- system.time(a <- simResult(100, SimData, SimModel))
+## t2 <- system.time(b <- simResultB(5, SimData, SimModel,flag=TRUE))
+## t3 <- system.time(c <- simResultB(5, SimData, SimModel,flag=FALSE))
+## ex <- function() {simResultB(5, SimData, SimModel, flag=TRUE)}
 
 #code <- " e1 =~ NA*y1 + NA*y2 + NA*y3 \n e2 =~ NA*y4 + NA*y5 + NA*y6 \n e1 ~~ 1*e1 \ne2 ~~ 1*e2 \n e2 ~~ NA*e1 \n
 # e1 ~ 0*1 \ne2 ~ 0*1 \n y1 ~ NA*1 \ny2 ~ NA*1 \ny3 ~ NA*1 \ny4 ~ NA*1 \ny5 ~ NA*1 \ny6 ~ NA*1 \n"
 #pt <- lavaanify(code)
 
-load("/nfs/home/patr1ckm/R/MuckingAround/pt.Rdata")
-pt <- a
+## load("/nfs/home/patr1ckm/R/MuckingAround/pt.Rdata")
+## pt <- a
 
 
 ## Let's get the simResult Chain in here and start messing around with it - reducing haphazardly to the necessities because we can and because it would be helpful.
