@@ -3,9 +3,45 @@
 ## constraint - constraint object: SimEqualCon
 ## aux = names of the index of the auxiliary variables in the data
 
-buildPT <- function(paramSet,constraint,aux=NULL) {
+# To get code to work
+a <- models(4)
+a.set <- simSetSEM(LY=a$LY,RPS=a$RPS,RTE=a$RTE,BE=a$BE)
+paramSet <- list(LY=a$LY,RPS=a$RPS,RTE=a$RTE,BE=a$BE)
+ad <- simData(a.set)
+acm <- simModel(a.set,a$con)
+param <- tagHeaders(acm@param)
+
+runLavaan(acm,run(ad,200))
+
+## The necessary steps to building the analysis model:
+## 1. Check to see if user specification is valid (current simSet)
+## 2. Reduce correlation matrices to covariance / Transform any X-side notation to Y-Side
+## 3. Calculate starting values (?)
+## 4. Determine free parameters
+## 5. make labels
+## 6. impose constraints
+## 7. Specify package
+## 8. Estimator
+## 9. Specify auxiliary variables (?)
+## Final data type: List with
+## [[1]] -> par Table (df)
+## [[2]] -> package (char)
+## [[3]] -> estimator (char)
+## [[4]] -> Auxiliary (v)
+
+
+HS.model <- "f1 =~ x1 + x2 + x3 \n f2 =~ x4 + x5 +x6 \n f3 =~ x7 + x8 + x9"
+fit <- cfa(HS.model, data=HolzingerSwineford1939)
+parTable(fit)
+
+
+
+buildPT <- function(paramSet,constraint,aux=NULL,modelType) {
   paramSet <- getFree(paramSet)
-  con <-
+  con <- reduceConstraint(constraint)
+  
+  # This is repeated in simModel? B
+  
   ## paramSet <- collapseExo(paramSet, label = TRUE)
     ## constraint <- collapseExo(constraint, label = TRUE, value = NA)  ###################Have some zeros
     if (!isNullObject(paramSet$LY)) {
@@ -331,7 +367,134 @@ getFree <- function(...) {
   return(lapply(mats, function(obj) { return(obj@free) }))
 }
 
-# Takes an object of class SimEqualCon and returns ??
-parseCon <- function(con) {
-  type <- dimnames(constraint@con[[1]])[[1]][1]
-  loc <- 
+  # Takes a list of free parameter matrices and the model type and labels
+  # the rows and columns
+paramLabels <- function(paramSet,modelType) {
+    ny <- NULL
+    nx <- NULL
+    nk <- NULL
+    ne <- NULL
+
+    if (modelType == "CFA") {
+        ne <- ncol(paramSet$LY)
+        ny <- nrow(paramSet$LY)
+    } else if (modelType == "Path") {
+        ny <- nrow(paramSet$PS)
+    } else if (modelType == "Path.exo") {
+        nx <- ncol(paramSet$GA)
+        ny <- nrow(paramSet$PS)
+    } else if (modelType == "SEM") {
+        ne <- ncol(paramSet$LY)
+        ny <- nrow(paramSet$LY)
+    } else if (modelType == "SEM.exo") {
+        ne <- ncol(paramSet$LY)
+        ny <- nrow(paramSet$LY)
+        nk <- ncol(paramSet$LX)
+        nx <- nrow(paramSet$LX)
+    }
+    names.y <- NULL
+    names.x <- NULL
+    names.e <- NULL
+    names.k <- NULL
+    if (!is.null(ny)) {
+        for (i in 1:ny) {
+            temp <- paste("y", i, sep = "")
+            names.y <- c(names.y, temp)
+        }
+    }
+    if (!is.null(nx)) {
+        for (i in 1:nx) {
+            temp <- paste("x", i, sep = "")
+            names.x <- c(names.x, temp)
+        }
+    }
+    if (!is.null(ne)) {
+        for (i in 1:ne) {
+            temp <- paste("e", i, sep = "")
+            names.e <- c(names.e, temp)
+        }
+    }
+    if (!is.null(nk)) {
+        for (i in 1:nk) {
+            temp <- paste("k", i, sep = "")
+            names.k <- c(names.k, temp)
+        }
+    }
+    if (!is.null(paramSet$LY)) {
+        colnames(paramSet$LY) <- names.e
+        rownames(paramSet$LY) <- names.y
+    }
+    if (!is.null(paramSet$TE)) {
+        colnames(paramSet$TE) <- names.y
+        rownames(paramSet$TE) <- names.y
+    }
+    if (!is.null(paramSet$PS)) {
+        if (modelType == "Path" | modelType == "Path.exo") {
+            colnames(paramSet$PS) <- names.y
+            rownames(paramSet$PS) <- names.y
+        } else {
+            colnames(paramSet$PS) <- names.e
+            rownames(paramSet$PS) <- names.e
+        }
+    }
+    if (!is.null(paramSet$BE)) {
+        if (modelType == "Path" | modelType == "Path.exo") {
+            colnames(paramSet$BE) <- names.y
+            rownames(paramSet$BE) <- names.y
+        } else {
+            colnames(paramSet$BE) <- names.e
+            rownames(paramSet$BE) <- names.e
+        }
+    }
+    if (!is.null(paramSet$TY)) {
+        names(paramSet$TY) <- names.y
+    }
+    if (!is.null(paramSet$AL)) {
+        if (modelType == "Path" | modelType == "Path.exo") {
+            names(paramSet$AL) <- names.y
+        } else {
+            names(paramSet$AL) <- names.e
+        }
+    }
+    if (!is.null(paramSet$LX)) {
+        colnames(paramSet$LX) <- names.k
+        rownames(paramSet$LX) <- names.x
+    }
+    if (!is.null(paramSet$TD)) {
+        colnames(paramSet$TD) <- names.x
+        rownames(paramSet$TD) <- names.x
+    }
+    if (!is.null(paramSet$PH)) {
+        if (modelType == "Path" | modelType == "Path.exo") {
+            colnames(paramSet$PH) <- names.x
+            rownames(paramSet$PH) <- names.x
+        } else {
+            colnames(paramSet$PH) <- names.k
+            rownames(paramSet$PH) <- names.k
+        }
+    }
+    if (!is.null(paramSet$GA)) {
+        if (modelType == "Path" | modelType == "Path.exo") {
+            colnames(paramSet$GA) <- names.x
+            rownames(paramSet$GA) <- names.y
+        } else {
+            colnames(paramSet$GA) <- names.k
+            rownames(paramSet$GA) <- names.e
+        }
+    }
+    if (!is.null(paramSet$TX)) {
+        names(paramSet$TX) <- names.x
+    }
+    if (!is.null(paramSet$KA)) {
+        if (modelType == "Path" | modelType == "Path.exo") {
+            names(paramSet$KA) <- names.x
+        } else {
+            names(paramSet$KA) <- names.k
+        }
+    }
+    if (!is.null(paramSet$TH)) {
+        colnames(paramSet$TH) <- names.y
+        rownames(paramSet$TH) <- names.x
+    }
+    return(paramSet)
+  }
