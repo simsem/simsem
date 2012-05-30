@@ -5,7 +5,7 @@
 \alias{getCutoff,matrix-method}
 \alias{getCutoff,SimResult-method}
 \title{
-	Find cutoff given a priori alpha level
+	Find fit indices cutoff given a priori alpha level
 }
 \description{
 	Extract fit indices information from the \code{\linkS4class{SimResult}} and getCutoff of fit indices given a priori alpha level

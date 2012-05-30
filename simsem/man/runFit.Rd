@@ -5,7 +5,7 @@
 \alias{runFit,SimModel-method}
 \alias{runFit,SimModelOut-method}
 \title{
-	Build a result object from analyzing real data
+	Build a Monte Carlo simulation that the data-generation parameters are from the result of analyzing real data
 }
 \description{
 This function will analyze real data and use the result of the analysis to simulate data. Those simulated data will be analyzed by the same model. The result of the analyses will be saved in the result object, \code{\linkS4class{SimResult}}. 

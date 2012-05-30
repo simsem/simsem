@@ -6,7 +6,7 @@
 \alias{plotPowerFit,SimResult,SimResult-method}
 \alias{plotPowerFit,SimResult,vector-method}
 \title{
-Plot sampling distributions of fit indices that visualize power
+Plot sampling distributions of fit indices that visualize power of rejecting datasets underlying misspecified models
 }
 \description{
 This function will plot sampling distributions of fit indices that visualize power in either a histogram or overlapping histograms.

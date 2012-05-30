@@ -6,7 +6,7 @@
 \alias{simData,SimModelOut-method}
 \alias{simData,SimRSet-method}
 \title{
-	Data object
+	Create a Data object
 }
 \description{
 	This function will be used to create data specification and ready for data simulation.
