@@ -9,9 +9,8 @@ SimModel <- simModel(model, indLab=paste("x", 1:9, sep=""))
 out <- run(SimModel, HolzingerSwineford1939)
 
 ### Making result object without trivial model misspecification
-# output <- runFit(SimModel, HolzingerSwineford1939, 1000)
-# plotCutoff(output, 0.05)
-# pValue(out, output)
+#output <- runFit(SimModel, HolzingerSwineford1939, 1000)
+#pValue(out, output)
 
 u2 <- simUnif(-0.2, 0.2)
 loading.mis <- matrix(NA, 9, 3)

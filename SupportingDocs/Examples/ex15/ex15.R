@@ -43,15 +43,11 @@ param <- getPopulation(Output1)
 param <- extract(param, y=1:6, e=1:2)
 Output1 <- setPopulation(Output1, param) 
 summary(Output1)
-getCutoff(Output1, 0.05)
-plotCutoff(Output1, 0.05)
 
 # Second analysis model: Model accounting for covariate in the indicator level
 model2 <- simModel(Cov.Model)
 Output2 <- simResult(1000, SimData, model2)
 summary(Output2)
-getCutoff(Output2, 0.05)
-plotCutoff(Output2, 0.05)
 
 # Third analysis model: Model accounting for covariate with orthogonalization
 ortho <- simFunction(residualCovariate, targetVar=1:6, covVar=7)
@@ -61,8 +57,6 @@ param <- getPopulation(Output3)
 param <- extract(param, y=1:6, e=1:2)
 Output3 <- setPopulation(Output3, param) 
 summary(Output3)
-getCutoff(Output3, 0.05)
-plotCutoff(Output3, 0.05)
 
 # Fourth analysis model: Model accounting for covariate in factor level
 loading <- matrix(0, 7, 3)
@@ -97,5 +91,3 @@ TE <- symMatrix(errorCov, errorCovVal)
 Fac.Cov.Model.Full <- simSetSEM(LY=LY, PS=PS, BE=BE, TE=TE)
 Output4 <- setPopulation(Output4, Fac.Cov.Model.Full) 
 summary(Output4)
-getCutoff(Output4, 0.05)
-plotCutoff(Output4, 0.05)

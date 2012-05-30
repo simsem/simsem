@@ -173,9 +173,6 @@ con <- simEqualCon(c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, 
 datModel <- simData(longMed, 200, equalCon=con)
 SimModel <- simModel(longMed, equalCon=con)
 output <- simResult(1000, datModel, SimModel)
-getCutoff(output, 0.05)
-plotCutoff(output, 0.05)
-summary(output)
 
 LY2 <- matrix(0, 9, 3)
 LY2[1:3, 1] <- NA
@@ -185,8 +182,5 @@ BE2 <- matrix(0, 3, 3)
 BE2[2,1] <- NA
 BE2[3,2] <- NA
 crossMed <- simParamSEM(LY=LY2, BE=BE2)
-SimModel2 <- simModel(crossMed, indLab=19:27) 
-output2 <- simResult(1000, datModel, SimModel2)
-getCutoff(output2, 0.05)
-plotCutoff(output2, 0.05)
-summary(output2)
+SimModel2 <- simModel(crossMed, indLab=19:27)
+output2 <- simResult(100, datModel, SimModel2)
