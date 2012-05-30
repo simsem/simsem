@@ -1,31 +1,35 @@
-
+## Builds a parameter table.
+## paramSet - list of simMatrix
+## constraint - constraint object: SimEqualCon
+## aux = names of the index of the auxiliary variables in the data
 
 buildPT <- function(paramSet,constraint,aux=NULL) {
-
-  object <- collapseExo(object, label = TRUE)
-    constraint <- collapseExo(constraint, label = TRUE, value = NA)  ###################Have some zeros
-    if (!isNullObject(object@LY)) {
-        for (i in 1:ncol(object@LY)) {
-            temp <- paste(colnames(object@LY)[i], "=~")
+  paramSet <- getFree(paramSet)
+  con <-
+  ## paramSet <- collapseExo(paramSet, label = TRUE)
+    ## constraint <- collapseExo(constraint, label = TRUE, value = NA)  ###################Have some zeros
+    if (!isNullObject(paramSet$LY)) {
+        for (i in 1:ncol(paramSet$LY)) {
+            temp <- paste(colnames(paramSet$LY)[i], "=~")
             something <- FALSE
-            for (j in 1:nrow(object@LY)) {
-                if (is.na(object@LY[j, i]) | object@LY[j, i] != 0 | !is.na(constraint@LY[j, i])) {
-                  content <- paste(object@LY[j, i], "*", sep = "")
+            for (j in 1:nrow(paramSet$LY)) {
+                if (is.na(paramSet$LY[j, i]) | paramSet$LY[j, i] != 0 | !is.na(constraint@LY[j, i])) {
+                  content <- paste(paramSet$LY[j, i], "*", sep = "")
                   if (!is.na(constraint@LY[j, i])) 
                     content <- constraint@LY[j, i]
-                  temp <- paste(temp, " ", content, rownames(object@LY)[j], sep = "")
+                  temp <- paste(temp, " ", content, rownames(paramSet$LY)[j], sep = "")
                   something <- TRUE
                 }
-                if (something && j != nrow(object@LY) && (is.na(object@LY[j + 1, i]) | object@LY[j + 1, i] != 0)) 
+                if (something && j != nrow(paramSet$LY) && (is.na(paramSet$LY[j + 1, i]) | paramSet$LY[j + 1, i] != 0)) 
                   temp <- paste(temp, "+")
             }
-            if ((sum(is.na(object@LY[, i])) == 0) && (sum(object@LY[, i]) == 0)) 
-                temp <- paste(temp, "0*", rownames(object@LY)[1], sep = "")
+            if ((sum(is.na(paramSet$LY[, i])) == 0) && (sum(paramSet$LY[, i]) == 0)) 
+                temp <- paste(temp, "0*", rownames(paramSet$LY)[1], sep = "")
             if (!is.null(aux)) {
-                noVar <- !(is.na(diag(object@TE)) | diag(object@TE) != 0)
+                noVar <- !(is.na(diag(paramSet$TE)) | diag(paramSet$TE) != 0)
                 lab <- "0"
                 if (sum(noVar) > 0) {
-                  LYsingle <- extract(object@LY, which(noVar), i)
+                  LYsingle <- extract(paramSet$LY, which(noVar), i)
                   LYsingle <- is.na(LYsingle) | LYsingle != 0
                   if (sum(LYsingle) > 0) 
                     lab <- "NA"
@@ -35,67 +39,67 @@ buildPT <- function(paramSet,constraint,aux=NULL) {
             result <- paste(result, temp, "\n")
         }
     }
-    if (!isNullObject(object@BE)) {
-        for (i in 1:nrow(object@BE)) {
+    if (!isNullObject(paramSet$BE)) {
+        for (i in 1:nrow(paramSet$BE)) {
             temp <- NULL
-            for (j in 1:ncol(object@BE)) {
-                if (is.na(object@BE[i, j]) | object@BE[i, j] != 0 | !is.na(constraint@BE[i, j])) {
-                  content <- paste(object@BE[i, j], "*", sep = "")
+            for (j in 1:ncol(paramSet$BE)) {
+                if (is.na(paramSet$BE[i, j]) | paramSet$BE[i, j] != 0 | !is.na(constraint@BE[i, j])) {
+                  content <- paste(paramSet$BE[i, j], "*", sep = "")
                   if (!is.na(constraint@BE[i, j])) 
                     content <- constraint@BE[i, j]
-                  temp <- paste(temp, " ", content, colnames(object@BE)[j], sep = "")
+                  temp <- paste(temp, " ", content, colnames(paramSet$BE)[j], sep = "")
                 }
-                if (!is.null(temp) && j != ncol(object@BE) && (is.na(object@BE[i, j + 1]) | object@BE[i, j + 1] != 0)) 
+                if (!is.null(temp) && j != ncol(paramSet$BE) && (is.na(paramSet$BE[i, j + 1]) | paramSet$BE[i, j + 1] != 0)) 
                   temp <- paste(temp, "+")
             }
             if (!is.null(temp)) {
-                temp2 <- paste(rownames(object@BE)[i], "~")
+                temp2 <- paste(rownames(paramSet$BE)[i], "~")
                 result <- paste(result, temp2, temp, "\n")
             }
         }
-        if (isNullObject(object@LY) && !is.null(aux)) {
-            set <- findRecursiveSet(object@BE)
-            target <- colnames(object@BE)[set[[1]]]
+        if (isNullObject(paramSet$LY) && !is.null(aux)) {
+            set <- findRecursiveSet(paramSet$BE)
+            target <- colnames(paramSet$BE)[set[[1]]]
             for (i in 1:length(aux)) {
                 temp <- paste(aux[1], " ~ ", paste(paste("NA*", target), collapse = " + "), "\n", sep = "")
                 result <- paste(result, temp)
             }
         }
     }
-    if (!isNullObject(object@PS)) {
+    if (!isNullObject(paramSet$PS)) {
         var.code <- NULL
-        for (i in 1:length(diag(object@PS))) {
-            if (!is.na(object@PS[i, i]) | !is.na(constraint@PS[i, i])) {
-                content <- paste(object@PS[i, i], "*", sep = "")
+        for (i in 1:length(diag(paramSet$PS))) {
+            if (!is.na(paramSet$PS[i, i]) | !is.na(constraint@PS[i, i])) {
+                content <- paste(paramSet$PS[i, i], "*", sep = "")
                 if (!is.na(constraint@PS[i, i])) 
                   content <- constraint@PS[i, i]
-                var.code <- paste(var.code, colnames(object@PS)[i], " ~~ ", content, colnames(object@PS)[i], " \n", sep = "")
+                var.code <- paste(var.code, colnames(paramSet$PS)[i], " ~~ ", content, colnames(paramSet$PS)[i], " \n", sep = "")
             }
         }
         cov.code <- NULL
-        if (nrow(object@PS) > 1) {
-            for (i in 2:nrow(object@PS)) {
+        if (nrow(paramSet$PS) > 1) {
+            for (i in 2:nrow(paramSet$PS)) {
                 for (j in 1:(i - 1)) {
-                  if (is.na(object@PS[i, j]) | object@PS[i, j] != 0 | !is.na(constraint@PS[i, j])) {
-                    content <- paste(object@PS[i, j], "*", sep = "")
+                  if (is.na(paramSet$PS[i, j]) | paramSet$PS[i, j] != 0 | !is.na(constraint@PS[i, j])) {
+                    content <- paste(paramSet$PS[i, j], "*", sep = "")
                     if (!is.na(constraint@PS[i, j])) 
                       content <- constraint@PS[i, j]
-                    if (isNullObject(object@BE)) {
-                      cov.code <- paste(cov.code, rownames(object@PS)[i], " ~~ ", content, colnames(object@PS)[j], " \n", sep = "")
+                    if (isNullObject(paramSet$BE)) {
+                      cov.code <- paste(cov.code, rownames(paramSet$PS)[i], " ~~ ", content, colnames(paramSet$PS)[j], " \n", sep = "")
                     } else {
-                      exo.set <- findRecursiveSet(object@BE)[[1]]
+                      exo.set <- findRecursiveSet(paramSet$BE)[[1]]
                       if (!(is.element(i, exo.set) & is.element(j, exo.set))) {
-                        cov.code <- paste(cov.code, rownames(object@PS)[i], " ~~ ", content, colnames(object@PS)[j], " \n", sep = "")
+                        cov.code <- paste(cov.code, rownames(paramSet$PS)[i], " ~~ ", content, colnames(paramSet$PS)[j], " \n", sep = "")
                       }
                     }
                   } else {
-                    content <- paste(object@PS[i, j], "*", sep = "")
-                    if (isNullObject(object@BE)) {
-                      cov.code <- paste(cov.code, rownames(object@PS)[i], " ~~ ", content, colnames(object@PS)[j], " \n", sep = "")
+                    content <- paste(paramSet$PS[i, j], "*", sep = "")
+                    if (isNullObject(paramSet$BE)) {
+                      cov.code <- paste(cov.code, rownames(paramSet$PS)[i], " ~~ ", content, colnames(paramSet$PS)[j], " \n", sep = "")
                     } else {
-                      auxFac <- which(apply(object@BE, 1, function(x) all(!is.na(x) & (x == 0))) & apply(object@BE, 2, function(x) all(!is.na(x) & (x == 0))))
+                      auxFac <- which(apply(paramSet$BE, 1, function(x) all(!is.na(x) & (x == 0))) & apply(paramSet$BE, 2, function(x) all(!is.na(x) & (x == 0))))
                       if (is.element(i, auxFac) | is.element(j, auxFac)) {
-                        cov.code <- paste(cov.code, rownames(object@PS)[i], " ~~ 0*", colnames(object@PS)[j], " \n", sep = "")
+                        cov.code <- paste(cov.code, rownames(paramSet$PS)[i], " ~~ 0*", colnames(paramSet$PS)[j], " \n", sep = "")
                       }
                     }
                   }
@@ -103,40 +107,40 @@ buildPT <- function(paramSet,constraint,aux=NULL) {
             }
         }
         result <- paste(result, var.code, cov.code)
-        if (isNullObject(object@LY) && !is.null(aux)) {
-            set <- findRecursiveSet(object@BE)
-            target <- colnames(object@BE)[-set[[1]]]
+        if (isNullObject(paramSet$LY) && !is.null(aux)) {
+            set <- findRecursiveSet(paramSet$BE)
+            target <- colnames(paramSet$BE)[-set[[1]]]
             varCode <- paste(paste(aux, " ~~ NA*", aux, sep = ""), collapse = "\n")
             result <- paste(result, varCode, "\n")
             corCode <- paste(outer(aux, target, paste, sep = " ~~ NA*"), collapse = "\n")
             result <- paste(result, corCode, "\n")
         }
     }
-    if (!isNullObject(object@TE)) {
+    if (!isNullObject(paramSet$TE)) {
         var.code <- NULL
-        for (i in 1:length(diag(object@TE))) {
-            if (!is.na(object@TE[i, i]) | !is.na(constraint@TE[i, i])) {
-                content <- paste(object@TE[i, i], "*", sep = "")
+        for (i in 1:length(diag(paramSet$TE))) {
+            if (!is.na(paramSet$TE[i, i]) | !is.na(constraint@TE[i, i])) {
+                content <- paste(paramSet$TE[i, i], "*", sep = "")
                 if (!is.na(constraint@TE[i, i])) 
                   content <- constraint@TE[i, i]
-                var.code <- paste(var.code, colnames(object@TE)[i], " ~~ ", content, colnames(object@TE)[i], " \n", sep = "")
+                var.code <- paste(var.code, colnames(paramSet$TE)[i], " ~~ ", content, colnames(paramSet$TE)[i], " \n", sep = "")
             }
         }
         cov.code <- NULL
-        for (i in 2:nrow(object@TE)) {
+        for (i in 2:nrow(paramSet$TE)) {
             for (j in 1:(i - 1)) {
-                if (is.na(object@TE[i, j]) | object@TE[i, j] != 0 | !is.na(constraint@TE[i, j])) {
-                  content <- paste(object@TE[i, j], "*", sep = "")
+                if (is.na(paramSet$TE[i, j]) | paramSet$TE[i, j] != 0 | !is.na(constraint@TE[i, j])) {
+                  content <- paste(paramSet$TE[i, j], "*", sep = "")
                   if (!is.na(constraint@TE[i, j])) 
                     content <- constraint@TE[i, j]
-                  cov.code <- paste(cov.code, rownames(object@TE)[i], " ~~ ", content, colnames(object@TE)[j], " \n", sep = "")
+                  cov.code <- paste(cov.code, rownames(paramSet$TE)[i], " ~~ ", content, colnames(paramSet$TE)[j], " \n", sep = "")
                 }
             }
         }
         result <- paste(result, var.code, cov.code)
-        if (!isNullObject(object@LY) && !is.null(aux)) {
-            nonConstant <- is.na(diag(object@TE)) | diag(object@TE) != 0
-            target <- colnames(object@TE)[nonConstant]
+        if (!isNullObject(paramSet$LY) && !is.null(aux)) {
+            nonConstant <- is.na(diag(paramSet$TE)) | diag(paramSet$TE) != 0
+            target <- colnames(paramSet$TE)[nonConstant]
             varCode <- paste(paste(aux, " ~~ NA*", aux, sep = ""), collapse = "\n")
             result <- paste(result, varCode, "\n")
             corCode <- paste(outer(aux, target, paste, sep = " ~~ NA*"), collapse = "\n")
@@ -150,25 +154,25 @@ buildPT <- function(paramSet,constraint,aux=NULL) {
         corCode <- paste(paste(corCode, collapse = "\n"), "\n")
         result <- paste(result, corCode)
     }
-    if (!isNullObject(object@AL)) {
+    if (!isNullObject(paramSet$AL)) {
         mean.code <- NULL
-        for (i in 1:length(object@AL)) {
-            if (!(object@modelType == "Path" | object@modelType == "Path.exo") | !is.na(object@AL[i]) | !is.na(constraint@AL[i])) {
-                content <- paste(object@AL[i], "*", sep = "")
+        for (i in 1:length(paramSet$AL)) {
+            if (!(paramSet$modelType == "Path" | paramSet$modelType == "Path.exo") | !is.na(paramSet$AL[i]) | !is.na(constraint@AL[i])) {
+                content <- paste(paramSet$AL[i], "*", sep = "")
                 if (!is.na(constraint@AL[i])) 
                   content <- constraint@AL[i]
-                mean.code <- paste(mean.code, names(object@AL)[i], " ~ ", content, "1 \n", sep = "")
+                mean.code <- paste(mean.code, names(paramSet$AL)[i], " ~ ", content, "1 \n", sep = "")
             }
         }
         result <- paste(result, mean.code)
     }
-    if (!isNullObject(object@TY)) {
+    if (!isNullObject(paramSet$TY)) {
         mean.code <- NULL
-        for (i in 1:length(object@TY)) {
-            content <- paste(object@TY[i], "*", sep = "")
+        for (i in 1:length(paramSet$TY)) {
+            content <- paste(paramSet$TY[i], "*", sep = "")
             if (!is.na(constraint@TY[i])) 
                 content <- constraint@TY[i]
-            mean.code <- paste(mean.code, names(object@TY)[i], " ~ ", content, "1 \n", sep = "")
+            mean.code <- paste(mean.code, names(paramSet$TY)[i], " ~ ", content, "1 \n", sep = "")
         }
         result <- paste(result, mean.code)
     }
@@ -178,3 +182,156 @@ buildPT <- function(paramSet,constraint,aux=NULL) {
     }
     return(result)
 }
+
+writeLavaanConstraint <- function(object, constraint) {
+    object <- blankParameters(object)
+    if (!is.null(constraint)) {
+        con <- constraint@con
+        for (i in 1:length(con)) {
+            current <- con[[i]]
+            con.text <- writeLavaanIndividualConstraint(rownames(current)[1], current[1, ], slot(object, rownames(current)[1]))
+            for (j in 2:nrow(current)) {
+                Matrix <- rownames(current)[j]
+                if (Matrix == "PS" | Matrix == "PH" | Matrix == "TE" | Matrix == "TD") {
+                  elements <- c(as.numeric(current[j, 2]), as.numeric(current[j, 3]))
+                  slot(object, Matrix)[max(elements), min(elements)] <- con.text
+                } else {
+                  slot(object, Matrix)[as.numeric(current[j, 2]), as.numeric(current[j, 3])] <- con.text
+                }
+            }
+        }
+    }
+    return(object)
+} 
+
+writeLavaanIndividualConstraint <- function(Matrix, Attribute, Names) {
+    result <- "equal('"
+    if (!is.na(Attribute[1])) 
+        result <- paste(result, Attribute[1], ".", sep = "")
+    if (length(Attribute) == 2) {
+        result <- paste(result, names(Names)[as.numeric(Attribute[2])], " ~ 1')*", sep = "")
+    } else if (length(Attribute) == 3) {
+        Row <- as.numeric(Attribute[2])
+        Column <- as.numeric(Attribute[3])
+        if (Matrix == "LY" | Matrix == "LX") {
+            result <- paste(result, colnames(Names)[Column], " =~ ", rownames(Names)[Row], "')*", sep = "")
+        } else if (Matrix == "PS" | Matrix == "PH" | Matrix == "TE" | Matrix == "TD" | Matrix == "TH") {
+            result <- paste(result, rownames(Names)[Row], " ~~ ", colnames(Names)[Column], "')*", sep = "")
+        } else if (Matrix == "GA" | Matrix == "BE") {
+            result <- paste(result, rownames(Names)[Row], " ~ ", colnames(Names)[Column], "')*", sep = "")
+        }
+    }
+    return(result)
+} 
+
+writeLavaanNullCode <- function(var, aux = NULL) {
+    result <- NULL
+    varAll <- c(var, aux)
+    varCode <- paste(paste(paste(varAll, " ~~ NA*", varAll, sep = ""), collapse = "\n"), "\n")
+    corCode <- outer(var, var, paste, sep = " ~~ 0*")
+    diag(corCode) <- ""
+    corCode <- corCode[lower.tri(corCode)]
+    corCode <- paste(paste(corCode, collapse = "\n"), "\n")
+    result <- paste(varCode, corCode)
+    if (!is.null(aux)) {
+        if (length(aux) > 1) {
+            corCode2 <- outer(aux, aux, paste, sep = " ~~ NA*")
+            diag(corCode2) <- ""
+            corCode2 <- corCode2[lower.tri(corCode2)]
+            corCode2 <- paste(paste(corCode2, collapse = "\n"), "\n")
+            result <- paste(result, corCode2)
+        }
+        corCode3 <- paste(outer(aux, var, paste, sep = " ~~ NA*"), collapse = "\n")
+        result <- paste(result, corCode3, "\n")
+    }
+    return(result)
+} 
+
+reduceConstraint <- function(SimEqualCon) {
+    modelType <- SimEqualCon@modelType
+    equalCon <- SimEqualCon@con
+    Length <- length(equalCon)
+    Result <- NULL
+    runnum <- 1
+    for (i in 1:Length) {
+        temp.result <- NULL
+        temp.matrix <- equalCon[[i]]
+        name <- rownames(temp.matrix)
+        if (isMeanConstraint(name)) {
+            if (sum(!is.element(name, c("ME", "MX", "MY"))) > 0) 
+                temp.result <- temp.matrix
+        } else if (isVarianceConstraint(name)) {
+            if (sum(is.element(name, c("VE", "VX", "VY"))) > 0) {
+                temp.result <- matrix(0, nrow(temp.matrix), 3)
+                temp.result[, 1] <- temp.matrix[, 1]
+                temp.result[, 2] <- temp.matrix[, 2]
+                temp.result[, 3] <- temp.matrix[, 2]
+                for (j in 1:length(name)) {
+                  if (name[j] == "VTD") 
+                    name[j] == "TD"
+                  if (name[j] == "RTD") 
+                    name[j] == "TD"
+                  if (name[j] == "VTE") 
+                    name[j] == "TE"
+                  if (name[j] == "RTE") 
+                    name[j] == "TE"
+                  if (name[j] == "VPH") 
+                    name[j] == "PH"
+                  if (name[j] == "RPH") 
+                    name[j] == "PH"
+                  if (name[j] == "VPS") 
+                    name[j] == "PS"
+                  if (name[j] == "RPS") 
+                    name[j] == "PS"
+                }
+            }
+        } else {
+            temp.result <- temp.matrix
+        }
+        if (!is.null(temp.result)) {
+            Result[[runnum]] <- as.matrix(temp.result)
+            runnum <- runnum + 1
+        }
+    }
+    if (is.null(Result)) 
+        Result <- list(NULL)
+    #return(new("SimREqualCon", con = Result, modelType = SimEqualCon@modelType))
+    return(Result)
+}
+
+isVarianceConstraint <- function(Name) {
+    W <- getKeywords()
+    keywords <- c(W$VTE, W$VTD, W$VPH, W$VPS, W$VX, W$VY, W$VE)
+    result <- Name %in% keywords
+    if (sum(result) == length(Name)) {
+        return(TRUE)
+    } else if (sum(result) == 0) {
+        return(FALSE)
+    } else {
+        stop("A constraint matrix was mixed between variance and other types of elements.")
+    }
+} 
+
+isMeanConstraint <- function(Name) {
+    W <- getKeywords()
+    keywords <- c(W$TX, W$TY, W$KA, W$AL, W$MX, W$MY, W$ME)
+    result <- Name %in% keywords
+    if (sum(result) == length(Name)) {
+        return(TRUE)
+    } else if (sum(result) == 0) {
+        return(FALSE)
+    } else {
+        stop("A constraint matrix was mixed between mean and other types of elements.")
+    }
+} 
+
+# Takes an arbitary list of SimMatrix and returns the free parameter matrices of that same list
+getFree <- function(...) {
+  mats <- unlist(list(...))
+  return(lapply(mats, function(obj) { return(obj@free) }))
+}
+
+# Takes an object of class SimEqualCon and returns ??
+parseCon <- function(con) {
+  type <- dimnames(constraint@con[[1]])[[1]][1]
+  loc <- 
