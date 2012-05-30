@@ -165,11 +165,11 @@ SimModel <- simModel(LCA.Model)
 #getCutoff(Output, 0.05)
 #plotCutoff(Output, 0.05)
 
-u1 <- simUnif(-0.1, 0.1)
+#u1 <- simUnif(-0.1, 0.1)
 
 loading.trivial <- matrix(0, 4, 2)
 loading.trivial[2:3, 2] <- NA
-loading.mis <- simMatrix(loading.trivial, "u1")
+loading.mis <- simMatrix(loading.trivial, "runif(1,-0.1,0.1)")
 
 LCA.Mis <- simMisspecCFA(LY = loading.mis)
 
@@ -183,22 +183,21 @@ summaryParam(Output.Mis)
 ################################# Example 4 ##################################
 library(simsem)
 
-u35 <- simUnif(0.3, 0.5)
-u57 <- simUnif(0.5, 0.7)
-u1 <- simUnif(-0.1, 0.1)
-n31 <- simNorm(0.3, 0.1)
-
+#u35 <- simUnif(0.3, 0.5)
+#u57 <- simUnif(0.5, 0.7)
+#u1 <- simUnif(-0.1, 0.1)
+#n31 <- simNorm(0.3, 0.1)
 path.BE <- matrix(0, 4, 4)
 path.BE[3, 1:2] <- NA
 path.BE[4, 3] <- NA
 starting.BE <- matrix("", 4, 4)
-starting.BE[3, 1:2] <- "u35"
-starting.BE[4, 3] <- "u57"
+starting.BE[3, 1:2] <- "runif(1,0.3,0.5)"
+starting.BE[4, 3] <- "runif(1,0.5,0.7)"
 BE <- simMatrix(path.BE, starting.BE)
 
 residual.error <- diag(4)
 residual.error[1,2] <- residual.error[2,1] <- NA
-RPS <- symMatrix(residual.error, "n31")
+RPS <- symMatrix(residual.error, "rnorm(1,0.3,0.1)")
 
 ME <- simVector(rep(NA, 4), 0)
 
@@ -206,7 +205,8 @@ Path.Model <- simSetPath(RPS = RPS, BE = BE, ME = ME)
 
 mis.path.BE <- matrix(0, 4, 4)
 mis.path.BE[4, 1:2] <- NA
-mis.BE <- simMatrix(mis.path.BE, "u1")
+mis.BE <- simMatrix(mis.path.BE, "runif(1,-.01,0.1)")
+
 Path.Mis.Model <- simMisspecPath(BE = mis.BE, misfitType="rmsea", optMisfit="max", numIter=10) #, misfitBound=c(0.05, 0.08))
 
 Data <- simData(Path.Model, 500, maxDraw=1000)
@@ -230,22 +230,22 @@ summaryParam(Output)
 # Example 4 with X sides #
 library(simsem)
 
-u35 <- simUnif(0.3, 0.5)
-u57 <- simUnif(0.5, 0.7)
-u1 <- simUnif(-0.1, 0.1)
-n31 <- simNorm(0.3, 0.1)
+#u35 <- simUnif(0.3, 0.5)
+#u57 <- simUnif(0.5, 0.7)
+#u1 <- simUnif(-0.1, 0.1)
+#n31 <- simNorm(0.3, 0.1)
 
 path.GA <- matrix(0, 2, 2)
 path.GA[1, 1:2] <- NA
-GA <- simMatrix(path.GA, "u35")
+GA <- simMatrix(path.GA, "runif(1,0.3,0.5)")
 
 path.BE <- matrix(0, 2, 2)
 path.BE[2, 1] <- NA
-BE <- simMatrix(path.BE, "u57")
+BE <- simMatrix(path.BE, "runif(1,0.5,0.7)")
 
 exo.cor <- matrix(NA, 2, 2)
 diag(exo.cor) <- 1
-RPH <- symMatrix(exo.cor, "n31")
+RPH <- symMatrix(exo.cor, "rnorm(1,0.3,0.1)")
 
 RPS <- symMatrix(diag(2))
 
@@ -253,7 +253,7 @@ Path.Model <- simSetPath(RPS = RPS, BE = BE, RPH = RPH, GA = GA, exo=TRUE)
 
 mis.path.GA <- matrix(0, 2, 2)
 mis.path.GA[2, 1:2] <- NA
-mis.GA <- simMatrix(mis.path.GA, "u1")
+mis.GA <- simMatrix(mis.path.GA, "runif(1,-0.1,0.1)")
 Path.Mis.Model <- simMisspecPath(GA = mis.GA, exo=TRUE)
 
 Data.Mis <- simData(Path.Model, 500, Path.Mis.Model)
@@ -268,11 +268,11 @@ summaryParam(Output)
 ############# Example 5 ################################
 library(simsem)
 
-n65 <- simNorm(0.6, 0.05)
-u35 <- simUnif(0.3, 0.5)
-u68 <- simUnif(0.6, 0.8)
-u2 <- simUnif(-0.2, 0.2)
-n1 <- simNorm(0, 0.1)
+#n65 <- simNorm(0.6, 0.05)
+#u35 <- simUnif(0.3, 0.5)
+#u68 <- simUnif(0.6, 0.8)
+#u2 <- simUnif(-0.2, 0.2)
+#n1 <- simNorm(0, 0.1)
 
 loading <- matrix(0, 8, 3)
 loading[1:3, 1] <- NA
@@ -281,7 +281,7 @@ loading[7:8, 3] <- NA
 loading.start <- matrix("", 8, 3)
 loading.start[1:3, 1] <- 0.7
 loading.start[4:6, 2] <- 0.7
-loading.start[7:8, 3] <- "u68"
+loading.start[7:8, 3] <- "rnorm(1,0.6,0.05)"
 LY <- simMatrix(loading, loading.start)
 
 RTE <- symMatrix(diag(8))
@@ -293,19 +293,19 @@ RPS <- symMatrix(factor.cor, 0.5)
 path <- matrix(0, 3, 3)
 path[3, 1:2] <- NA
 path.start <- matrix(0, 3, 3)
-path.start[3, 1] <- "n65"
-path.start[3, 2] <- "u35"
+path.start[3, 1] <- "rnorm(1,0.6,0.05)"
+path.start[3, 2] <- "runif(1,0.3,0.5)"
 BE <- simMatrix(path, path.start)
 
 SEM.model <- simSetSEM(BE=BE, LY=LY, RPS=RPS, RTE=RTE)
 
 loading.trivial <- matrix(NA, 8, 3)
 loading.trivial[is.na(loading)] <- 0
-LY.trivial <- simMatrix(loading.trivial, "u2")
+LY.trivial <- simMatrix(loading.trivial, "runif(1,-0.2,0.2)")
 
 error.cor.trivial <- matrix(NA, 8, 8)
 diag(error.cor.trivial) <- 0
-RTE.trivial <- symMatrix(error.cor.trivial, "n1")
+RTE.trivial <- symMatrix(error.cor.trivial, "rnorm(1,0,0.1)")
 
 SEM.Mis.Model <- simMisspecSEM(LY = LY.trivial, RTE = RTE.trivial, conBeforeMis=FALSE, misBeforeFill=TRUE)
 
@@ -384,7 +384,7 @@ loading.X[4:6, 2] <- NA
 LX <- simMatrix(loading.X, 0.7)
 
 loading.Y <- matrix(NA, 2, 1)
-LY <- simMatrix(loading.Y, "u68")
+LY <- simMatrix(loading.Y, "runif(1,0.6,0.8)")
 
 RTD <- symMatrix(diag(6))
 
@@ -397,7 +397,7 @@ RPH <- symMatrix(factor.K.cor, 0.5)
 RPS <- symMatrix(as.matrix(1))
 
 path.GA <- matrix(NA, 1, 2)
-path.GA.start <- matrix(c("n65", "u35"), ncol=2)
+path.GA.start <- matrix(c("rnorm(1,0.6,0.05)", "runif(1,0.3,0.5)"), ncol=2)
 GA <- simMatrix(path.GA, path.GA.start)
 
 BE <- simMatrix(as.matrix(0))
@@ -406,27 +406,27 @@ SEM.model <- simSetSEM(GA=GA, BE=BE, LX=LX, LY=LY, RPH=RPH, RPS=RPS, RTD=RTD, RT
 
 loading.X.trivial <- matrix(NA, 6, 2)
 loading.X.trivial[is.na(loading.X)] <- 0
-LX.trivial <- simMatrix(loading.X.trivial, "u2")
+LX.trivial <- simMatrix(loading.X.trivial, "runif(-0.2,0.2)")
 
 error.cor.X.trivial <- matrix(NA, 6, 6)
 diag(error.cor.X.trivial) <- 0
-RTD.trivial <- symMatrix(error.cor.X.trivial, "n1")
+RTD.trivial <- symMatrix(error.cor.X.trivial, "rnorm(1,0,.1)")
 
 error.cor.Y.trivial <- matrix(NA, 2, 2)
 diag(error.cor.Y.trivial) <- 0
-RTE.trivial <- symMatrix(error.cor.Y.trivial, "n1")
+RTE.trivial <- symMatrix(error.cor.Y.trivial, "rnorm(1,0,.1)")
 
-RTH.trivial <- simMatrix(matrix(NA, 6, 2), "n1")
+RTH.trivial <- simMatrix(matrix(NA, 6, 2), "rnorm(1,0,.1)")
 
 SEM.Mis.Model <- simMisspecSEM(LX = LX.trivial, RTE = RTE.trivial, RTD = RTD.trivial, RTH = 
 RTH.trivial, exo=TRUE)
 
 constraint1 <- matrix(1, 3, 2)
 constraint1[,1] <- 1:3
-rownames(constraint1) <- rep("LX", 3)
+rownames(constraint1) <- rep("LY", 3)
 constraint2 <- matrix(2, 3, 2)
 constraint2[,1] <- 4:6
-rownames(constraint2) <- rep("LX", 3)
+rownames(constraint2) <- rep("LY", 3)
 constraint3 <- matrix(1, 2, 2)
 constraint3[,1] <- 1:2
 rownames(constraint3) <- rep("LY", 2)
@@ -441,7 +441,7 @@ Data.Mis.Con <- simData(SEM.model, 300, misspec=SEM.Mis.Model,
 Model.Original <- simModel(SEM.model)
 Model.Con <- simModel(SEM.model, equalCon=equal.loading)
 
-Output <- simResult(100, Data.Mis.Con, Model.Con)
+Output <- simResult(10, Data.Mis.Con, Model.Con)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
@@ -463,7 +463,7 @@ CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
 
 error.cor.mis <- matrix(NA, 6, 6)
 diag(error.cor.mis) <- 1
-RTD.Mis <- symMatrix(error.cor.mis, "n1")
+RTD.Mis <- symMatrix(error.cor.mis, "rnorm(1,0,0.1)")
 CFA.Model.NULL.Mis <- simMisspecCFA(RTE = RTD.Mis)
 
 SimData.NULL <- simData(CFA.Model.NULL, 500, misspec = CFA.Model.NULL.Mis)
@@ -476,12 +476,12 @@ loading.alt[4:6, 2] <- NA
 LX.ALT <- simMatrix(loading.alt, 0.7)
 latent.cor.alt <- matrix(NA, 2, 2)
 diag(latent.cor.alt) <- 1
-RPH.ALT <- symMatrix(latent.cor.alt, "u79")
+RPH.ALT <- symMatrix(latent.cor.alt, "runif(1,0.7,0.9)")
 CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
 
 loading.alt.mis <- matrix(NA, 6, 2)
 loading.alt.mis[is.na(loading.alt)] <- 0
-LX.alt.mis <- simMatrix(loading.alt.mis, "u2")
+LX.alt.mis <- simMatrix(loading.alt.mis, "runif(1,-.2,.2)")
 CFA.Model.alt.mis <- simMisspecCFA(LY = LX.alt.mis, RTE=RTD.Mis)
 
 SimData.ALT <- simData(CFA.Model.ALT, 500, misspec = CFA.Model.alt.mis)
@@ -533,24 +533,23 @@ cutoff2 <- find.cutoff(Output.NULL, 0.05, usedFit=x)
 ################################## Example 7 ##########################################
 library(simsem)
 
-u2 <- simUnif(-0.2, 0.2)
-u49 <- simUnif(0.4, 0.9)
-u36 <- simUnif(0.3, 0.6)
-n1 <- simNorm(0, 0.1)
-n21 <- simNorm(0.2, 0.1)
-n31 <- simNorm(0.3, 0.1)
-n41 <- simNorm(0.4, 0.1)
-
+#u2 <- simUnif(-0.2, 0.2)
+#u49 <- simUnif(0.4, 0.9)
+#u36 <- simUnif(0.3, 0.6)
+#n1 <- simNorm(0, 0.1)
+#n21 <- simNorm(0.2, 0.1)
+#n31 <- simNorm(0.3, 0.1)
+#n41 <- simNorm(0.4, 0.1)
 loading <- matrix(0, 9, 4)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
 loading[7:9, 3] <- NA
 loading[c(1, 4, 7), 4] <- NA
 loading.v <- matrix(0, 9, 4)
-loading.v[1:3, 1] <- "u49"
-loading.v[4:6, 2] <- "u49"
-loading.v[7:9, 3] <- "u49"
-loading.v[c(1, 4, 7), 4] <- "u36"
+loading.v[1:3, 1] <- "runif(1,.4,.9)"
+loading.v[4:6, 2] <- "runif(1,.4,.9)"
+loading.v[7:9, 3] <- "runif(1,.4,.9)"
+loading.v[c(1, 4, 7), 4] <- "runif(1,.3,.6)"
 LY <- simMatrix(loading, loading.v)
 
 faccor <- diag(4)
@@ -558,9 +557,9 @@ faccor[1, 2] <- faccor[2, 1] <- NA
 faccor[1, 3] <- faccor[3, 1] <- NA
 faccor[2, 3] <- faccor[3, 2] <- NA
 faccor.v <- diag(4)
-faccor.v[1, 2] <- faccor.v[2, 1] <- "n41"
-faccor.v[1, 3] <- faccor.v[3, 1] <- "n21"
-faccor.v[2, 3] <- faccor.v[3, 2] <- "n31"
+faccor.v[1, 2] <- faccor.v[2, 1] <- "rnorm(1,.4,.1)"
+faccor.v[1, 3] <- faccor.v[3, 1] <- "rnorm(1,.2,.1)"
+faccor.v[2, 3] <- faccor.v[3, 2] <- "rnorm(1,.3,.1)"
 RPS <- symMatrix(faccor, faccor.v)
 
 RTE <- symMatrix(diag(9))
@@ -569,11 +568,11 @@ mtmm.model <- simSetCFA(LY=LY, RPS=RPS, RTE=RTE)
 
 error.cor.mis <- matrix(NA, 9, 9)
 diag(error.cor.mis) <- 1
-RTE.mis <- symMatrix(error.cor.mis, "n1")
+RTE.mis <- symMatrix(error.cor.mis, "rnorm(1,0,.1)")
 loading.mis <- matrix(NA, 9, 4)
 loading.mis[is.na(loading)] <- 0
 loading.mis[,4] <- 0
-LY.mis <- simMatrix(loading.mis, "u2")
+LY.mis <- simMatrix(loading.mis, "runif(1,-.2,.2)")
 mtmm.model.mis <- simMisspecCFA(RTE = RTE.mis, LY=LY.mis)
 
 SimMissing <- simMissing(pmMCAR=0.2, numImps=5)

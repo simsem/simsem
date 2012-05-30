@@ -51,6 +51,7 @@ datTemplate <- simData(LCA.Model, 300, LCA.Mis, sequential=TRUE, facDist=facDist
 model <- simModel(LCA.Model)
 
 Output <- simResult(NULL, datTemplate, model, n=seq(50, 500, 5), pmMCAR=seq(0, 0.4, 0.1))
+summary(Output)
 
 plotCutoff(Output, 0.05)
 getCutoff(Output, 0.05, nVal = 200, pmMCARval=0)

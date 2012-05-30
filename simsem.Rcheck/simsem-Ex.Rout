@@ -21939,7 +21939,7 @@ TY6    0.81730627
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  97.77 0.58 98.57 NA NA 
+Time elapsed:  99.92 0.43 100.55 NA NA 
 > grDevices::dev.off()
 null device 
           1 
