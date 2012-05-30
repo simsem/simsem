@@ -6,7 +6,7 @@
 \alias{anova,SimModelOut-method}
 \alias{anova,SimModelMIOut-method}
 \title{
-	Provide a comparison of nested models across replications
+	Provide a comparison of nested models and nonnested models across replications
 }
 \description{
 	This function will provide averages of model fit statistics and indices for nested models. It will also provide average differences of fit indices and power for likelihood ratio tests of nested models.

@@ -4,7 +4,7 @@
 \alias{plotCutoff,data.frame-method}
 \alias{plotCutoff,SimResult-method}
 \title{
-Plot sampling distributions of fit indices
+Plot sampling distributions of fit indices with fit indices cutoffs
 }
 \description{
 This function will plot sampling distributions of null hypothesis fit indices. The users may add cutoffs by specifying the \code{alpha} level.

@@ -3,7 +3,7 @@
 \alias{skew-methods}
 \alias{skew,vector-method}
 \title{
-	Finding skewness
+	Find skewness
 }
 \description{
 	Finding skewness (g1) of an object

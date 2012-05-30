@@ -4,7 +4,7 @@
 Function to pool chi-square statistics from the result from multiple imputation
 }
 \description{
-The function combines likelihood ratio chi-square statistics from an analysis  of multiply imputed data sets using the method proposed by Li, Meng, Raghunathan, and Rubin (1991, p. 74).
+The function combines likelihood ratio chi-square statistics from an analysis of multiply imputed data sets using the method proposed by Li, Meng, Raghunathan, and Rubin (1991, p. 74).
 }
 \usage{
 miPoolChi(chis, df)

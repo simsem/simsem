@@ -6,7 +6,7 @@
 \alias{simModel,SimParam-method}
 \alias{simModel,SimModelOut-method}
 \title{
-	Create simModel from model specification and be ready for data analysis.
+	Create a model object 
 }
 \description{
 	This function will take model specification from \code{\linkS4class{SimSet}} that contains free parameters, starting values, and fixed values. 
