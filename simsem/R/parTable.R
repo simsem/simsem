@@ -295,8 +295,8 @@ reduceConstraint <- function(SimEqualCon) {
     }
     if (is.null(Result)) 
         Result <- list(NULL)
-    #return(new("SimREqualCon", con = Result, modelType = SimEqualCon@modelType))
-    return(Result)
+    return(new("SimREqualCon", con = Result, modelType = SimEqualCon@modelType))
+    #return(Result)
 }
 
 isVarianceConstraint <- function(Name) {
