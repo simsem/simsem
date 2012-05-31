@@ -39,7 +39,8 @@ setClassUnion("VirtualDist", c("SimUnif", "SimNorm", "SimBeta", "SimBinom", "Sim
 
 setClass("NullDataFrame", contains = "data.frame")
 
-setClass("SimMatrix", representation(free = "matrix", value = "matrix"), prototype(free = as.matrix(NaN), value = as.matrix(NaN)))
+setClass("SimMatrix", representation(free = "matrix", popParam = "matrix", misspec = "matrix", prior = "matrix"),
+         prototype(free = as.matrix(NaN), value = as.matrix(NaN) misspec = as.matrix(NaN), prior = as.matrix(NaN))
 
 setClass("SymMatrix", contains = "SimMatrix")
 
