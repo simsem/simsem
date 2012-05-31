@@ -11,7 +11,7 @@ ad <- simData(a.set)
 acm <- simModel(a.set,a$con)
 param <- tagHeaders(acm@param)
 
-runLavaan(acm,run(ad,200))
+## runLavaan(acm,run(ad,200))
 
 ## The necessary steps to building the analysis model:
 ## 1. Check to see if user specification is valid (current simSet)
@@ -34,11 +34,11 @@ HS.model <- "f1 =~ x1 + x2 + x3 \n f2 =~ x4 + x5 +x6 \n f3 =~ x7 + x8 + x9"
 fit <- cfa(HS.model, data=HolzingerSwineford1939)
 parTable(fit)
 
+# Lets just leave the constraints and aux for now, and plan on it being a list of simMatrix.
 
-
-buildPT <- function(paramSet,constraint,aux=NULL,modelType) {
+buildPT <- function(paramSet, modelType) {
   paramSet <- getFree(paramSet)
-  con <- reduceConstraint(constraint)
+  #con <- reduceConstraint(constraint)
   
   # This is repeated in simModel? B
   
@@ -498,3 +498,18 @@ paramLabels <- function(paramSet,modelType) {
     }
     return(paramSet)
   }
+
+startingValues <-  function(paramSet, trial, reduced = FALSE) {
+    result <- run(object)
+    if (trial > 1) {
+        for (i in 2:trial) {
+            temp <- run(object)
+            result <- combineObject(result, temp)
+        }
+        result <- divideObject(result, trial)
+    }
+    result@modelType <- object@modelType
+    if (reduced == TRUE) 
+        result <- reduceMatrices(result)
+    return(result)
+})
