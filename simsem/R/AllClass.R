@@ -1,67 +1,69 @@
 # Distribution Object
 
-setClass("SimUnif", representation(min = "numeric", max = "numeric"))
+## setClass("SimUnif", representation(min = "numeric", max = "numeric"))
 
-setClass("SimNorm", representation(mean = "numeric", sd = "numeric"))
+## setClass("SimNorm", representation(mean = "numeric", sd = "numeric"))
 
-setClass("SimBeta", representation(shape1 = "numeric", shape2 = "numeric", ncp = "numeric"), prototype(ncp = 0))
+## setClass("SimBeta", representation(shape1 = "numeric", shape2 = "numeric", ncp = "numeric"), prototype(ncp = 0))
 
-setClass("SimBinom", representation(size = "numeric", prob = "numeric"))
+## setClass("SimBinom", representation(size = "numeric", prob = "numeric"))
 
-setClass("SimCauchy", representation(location = "numeric", scale = "numeric"), prototype(location = 0, scale = 1))
+## setClass("SimCauchy", representation(location = "numeric", scale = "numeric"), prototype(location = 0, scale = 1))
 
-setClass("SimChisq", representation(df = "numeric", ncp = "numeric"), prototype(ncp = 0))
+## setClass("SimChisq", representation(df = "numeric", ncp = "numeric"), prototype(ncp = 0))
 
-setClass("SimExp", representation(rate = "numeric"), prototype(rate = 1))
+## setClass("SimExp", representation(rate = "numeric"), prototype(rate = 1))
 
-setClass("SimF", representation(df1 = "numeric", df2 = "numeric", ncp = "numeric"), prototype(ncp = 0))
+## setClass("SimF", representation(df1 = "numeric", df2 = "numeric", ncp = "numeric"), prototype(ncp = 0))
 
-setClass("SimGamma", representation(shape = "numeric", rate = "numeric"), prototype(rate = 1))
+## setClass("SimGamma", representation(shape = "numeric", rate = "numeric"), prototype(rate = 1))
 
-setClass("SimGeom", representation(prob = "numeric"))
+## setClass("SimGeom", representation(prob = "numeric"))
 
-setClass("SimHyper", representation(m = "numeric", n = "numeric", k = "numeric"))
+## setClass("SimHyper", representation(m = "numeric", n = "numeric", k = "numeric"))
 
-setClass("SimLnorm", representation(meanlog = "numeric", sdlog = "numeric"), prototype(meanlog = 0, sdlog = 1))
+## setClass("SimLnorm", representation(meanlog = "numeric", sdlog = "numeric"), prototype(meanlog = 0, sdlog = 1))
 
-setClass("SimLogis", representation(location = "numeric", scale = "numeric"), prototype(location = 0, scale = 1))
+## setClass("SimLogis", representation(location = "numeric", scale = "numeric"), prototype(location = 0, scale = 1))
 
-setClass("SimNbinom", representation(size = "numeric", prob = "numeric"))
+## setClass("SimNbinom", representation(size = "numeric", prob = "numeric"))
 
-setClass("SimPois", representation(lambda = "numeric"))
+## setClass("SimPois", representation(lambda = "numeric"))
 
-setClass("SimT", representation(df = "numeric", ncp = "numeric"), prototype(ncp = 0))
+## setClass("SimT", representation(df = "numeric", ncp = "numeric"), prototype(ncp = 0))
 
-setClass("SimWeibull", representation(shape = "numeric", scale = "numeric"), prototype(scale = 1))
+## setClass("SimWeibull", representation(shape = "numeric", scale = "numeric"), prototype(scale = 1))
 
-setClassUnion("VirtualDist", c("SimUnif", "SimNorm", "SimBeta", "SimBinom", "SimCauchy", "SimChisq", "SimExp", "SimF", "SimGamma", "SimGeom", "SimHyper", "SimLnorm", "SimLogis", "SimNbinom", 
-    "SimPois", "SimT", "SimWeibull"))
+## setClassUnion("VirtualDist", c("SimUnif", "SimNorm", "SimBeta", "SimBinom", "SimCauchy", "SimChisq", "SimExp", "SimF", "SimGamma", "SimGeom", "SimHyper", "SimLnorm", "SimLogis", "SimNbinom", 
+##    "SimPois", "SimT", "SimWeibull"))
 
-setClass("NullDataFrame", contains = "data.frame")
+## setClass("NullDataFrame", contains = "data.frame")
 
 setClass("SimMatrix", representation(free = "matrix", popParam = "matrix", misspec = "matrix", prior = "matrix"),
-         prototype(free = as.matrix(NaN), value = as.matrix(NaN) misspec = as.matrix(NaN), prior = as.matrix(NaN))
+         prototype(free = as.matrix(NaN), popParam = as.matrix(NaN), misspec = as.matrix(NaN), prior = as.matrix(NaN)))
 
-setClass("SymMatrix", contains = "SimMatrix")
+#setClass("SymMatrix", contains = "SimMatrix")
 
-setClass("SimVector", representation(free = "vector", value = "vector"), prototype(free = as.vector(NaN), value = as.vector(NaN)))
+setClass("SimVector", representation(free = "vector", popParam = "vector", misspec = "vector", prior = "vector"),
+         prototype(free = as.vector(NaN), popParam = as.vector(NaN), misspec = as.vector(NaN), prior = as.vector(NaN)))
 
-setClass("NullVector", contains = "vector")
+#setClass("NullVector", contains = "vector")
 
-setClass("NullMatrix", contains = "matrix")
+#setClass("NullMatrix", contains = "matrix")
 
-setClass("NullSimMatrix", contains = "SimMatrix")
+#setClass("NullSimMatrix", contains = "SimMatrix")
 
-setClass("NullSymMatrix", contains = "SymMatrix")
+#setClass("NullSymMatrix", contains = "SymMatrix")
 
-setClass("NullSimVector", contains = "SimVector")
+#setClass("NullSimVector", contains = "SimVector")
 
 # RTH: #Delta on rows, epsilon on columns
-setClass("SimSet", representation(modelType = "character", LY = "SimMatrix", TE = "SymMatrix", RTE = "SymMatrix", VTE = "SimVector", PS = "SymMatrix", RPS = "SymMatrix", VPS = "SimVector", 
-    BE = "SimMatrix", TY = "SimVector", AL = "SimVector", ME = "SimVector", MY = "SimVector", VE = "SimVector", VY = "SimVector", LX = "SimMatrix", TD = "SymMatrix", RTD = "SymMatrix", VTD = "SimVector", 
-    PH = "SymMatrix", RPH = "SymMatrix", VPH = "SimVector", GA = "SimMatrix", TX = "SimVector", KA = "SimVector", MX = "SimVector", VX = "SimVector", TH = "SimMatrix", RTH = "SimMatrix"), prototype(LY = new("NullSimMatrix"), 
-    TE = new("NullSymMatrix"), RTE = new("NullSymMatrix"), VTE = new("NullSimVector"), PS = new("NullSymMatrix"), RPS = new("NullSymMatrix"), VPS = new("NullSimVector"), BE = new("NullSimMatrix"), 
-    TY = new("NullSimVector"), AL = new("NullSimVector"), ME = new("NullSimVector"), MY = new("NullSimVector"), VE = new("NullSimVector"), VY = new("NullSimVector"), LX = new("NullSimMatrix"), TD = new("NullSymMatrix"), 
+setClass("SimSet", representation(modelType = "character",
+                                  LY = "SimMatrix", TE = "SymMatrix", RTE = "SymMatrix",
+                                  VTE = "SimVector", PS = "SymMatrix", RPS = "SymMatrix", VPS = "SimVector",
+                                  BE = "SimMatrix", TY = "SimVector", AL = "SimVector", ME = "SimVector",
+                                  MY = "SimVector", VE = "SimVector", VY = "SimVector")
+         , prototype(LY = new("NullSimMatrix"),  TE = new("NullSymMatrix"), RTE = new("NullSymMatrix"), VTE = new("NullSimVector"), PS = new("NullSymMatrix"), RPS = new("NullSymMatrix"), VPS = new("NullSimVector"), BE = new("NullSimMatrix"),     TY = new("NullSimVector"), AL = new("NullSimVector"), ME = new("NullSimVector"), MY = new("NullSimVector"), VE = new("NullSimVector"), VY = new("NullSimVector"), LX = new("NullSimMatrix"), TD = new("NullSymMatrix"), 
     RTD = new("NullSymMatrix"), VTD = new("NullSimVector"), PH = new("NullSymMatrix"), RPH = new("NullSymMatrix"), VPH = new("NullSimVector"), GA = new("NullSimMatrix"), TX = new("NullSimVector"), 
     KA = new("NullSimVector"), MX = new("NullSimVector"), VX = new("NullSimVector"), RTH = new("NullSimMatrix")))
 
