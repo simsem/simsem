@@ -29,7 +29,7 @@
 bind <- function(free = NULL, popParam = NULL, misspec = NULL) {
   if(is.matrix(free)) {
     
-    if(!any(is.na(free))) { stop("Free matrix contains no free parameters" ) }
+    if(!any(is.na(free)) && !validConstraints(free)) { stop("Free matrix contains no free parameters or valid constraints")}
     
     if(is.character(popParam)) {
       tryCatch(eval(parse(text=popParam)), error=function(e) stop(e))
@@ -66,37 +66,60 @@ bind <- function(free = NULL, popParam = NULL, misspec = NULL) {
     
 check <- function(x) { if(x == "" || is.na(x)) {FALSE} else {TRUE}}
 
-freeParams <- function(mat) {
+# Finds valid labels, checks all combinations of label pairs to make sure at least one pair is the same.
+validConstraints <- function(mat) {
   flat <- as.vector(mat)
-  isLabel <- as.logical(sapply(flat, FUN= function(x) { tryCatch(eval(parse(text=x)),
-                                  error = function(e) 1)}))
-  combn(flat[isLabel],2)
+
+  # The basic idea is to parse and evaluate the character string in the global namespace. If the object doesn't exist,
+  # it is a constraint label.
+  # However, this is a little sketchy. For instance:
+  # If the TemporaryVariableName were x instead, if a label was x, this test would fail.
+  maybeLabel <- sapply(flat, FUN= function(TemporaryVariableName) { tryCatch(eval(parse(text=TemporaryVariableName)),
+                                  error = function(e) 1)})
+  isLabel <- tryCatch(as.logical(maybeLabel), error=function(e)
+                      stop("Invalid constraint: Label might be a function name or object in global namespace"))
+  combs <- combn(flat[isLabel],2)
+  res <- mapply(`==`,combs[1,],combs[2,])
+  return(any(res))
 }
 
-test <- function() {
-  a <- matrix(0,2,2)
-  a[,1] <- NA
-  a[,2] <- "a1"
-  bind(free=a)
-  bind(free=a, popParam=.7, misspec=.01)
-  bind(free=a, popParam="runif(1,0,1)", misspec=.01)
-  bind(free=a, popParam="runif(1,0,1)", misspec="runif(1,0,1)")
+## test <- function() {
+##   a <- matrix(0,2,2)
+##   a[,1] <- NA
+##   a[,2] <- "a1"
+##   bind(free=a)
+##   bind(free=a, popParam=.7, misspec=.01)
+##   bind(free=a, popParam="runif(1,0,1)", misspec=.01)
+##   bind(free=a, popParam="runif(1,0,1)", misspec="runif(1,0,1)")
 
-  #Error
-  bind(free=a, popParam="runif(1,0,1)", misspec="runif(1,0,1")
-  bind(free=a, popParam="runif(1,0,1", misspec="runif(1,0,1)")
-  
-  bind(free=a, popParam="a")
+##   #Error - invalid expression
+##   bind(free=a, popParam="runif(1,0,1)", misspec="runif(1,0,1")
+##   bind(free=a, popParam="runif(1,0,1", misspec="runif(1,0,1)")
 
-  #Error
-  bind(free=a, popParam=matrix(0,3,3))
-  bind(free=a, misspec=matrix(0,3,3))
+##   ## Doesn't mean anything, but doesn't throw an error?
+##   bind(free=a, popParam="a")
 
-  a <- matrix(0,2,2)
-  a[,1] <- 0
-  a[,2] <- "a1"
-  bind(free=a)
-}
+##   ## Error - different dimensions
+##   bind(free=a, popParam=matrix(0,3,3))
+##   bind(free=a, misspec=matrix(0,3,3))
+
+##   ## Equality Constraints
+##   a <- matrix(0,2,2)
+##   a[,1] <- 0
+##   a[,2] <- "a1"
+##   bind(free=a)
+
+##   b <- matrix(0,3,3)
+##   b[1:2,1] <- "b1"
+##   b[2:3,2] <- "b2"
+##   bind(free=b)
+
+##   ## Invalid label name. Throws error
+##   f <- matrix(0,3,3)
+##   f[1,1] <- "c"
+##   f[1,2] <- "c1"
+##   bind(free=f)
+## }
 
   
      
