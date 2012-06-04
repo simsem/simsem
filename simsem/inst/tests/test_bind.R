@@ -1,6 +1,7 @@
-source("../../bind.R")
-# Needs more thorough tests, but this will work for now.
-# Mostly just checks to see if the function works.
+source("../../R/bind.R")
+source("../../R/AllClass.R")
+## Needs more thorough tests, but this will work for now.
+## Mostly just checks to see if the function works.
 
 
 context("bind - SimMatrix")
@@ -17,7 +18,7 @@ expect_error(bind(free=a, popParam="runif(1,0,1)", misspec="runif(1,0,1"))
 expect_error(bind(free=a, popParam="runif(1,0,1", misspec="runif(1,0,1)"))
 
   ## Doesn't mean anything, but doesn't throw an error?
-expect_true(class(bind(free=a, popParam="a")) == "SimMatrix")
+expect_true(class(bind(free=a, popParam=1)) == "SimMatrix")
 
   ## Error - different dimensions
 expect_error(bind(free=a, popParam=matrix(0,3,3)))

@@ -40,8 +40,8 @@ bind <- function(free = NULL, popParam = NULL, misspec = NULL) {
     }    
     else if(is.matrix(popParam)) {
       if( !all(dim(free)==dim(popParam))) stop("Free matrix and popParam are not of same dimension")
-      if( !(apply(paramMat,c(1,2),FUN=check) == is.free(free))) { stop("Please assign a value for any free parameters") }
-      paramMat <- as.character(popParam)
+      if( all(!is.empty(popParam) != is.free(free))) { stop("Please assign a value for any free parameters") }
+      paramMat <- matrix(as.character(popParam),nrow=nrow(popParam),ncol=ncol(popParam))
     }
     else { paramMat <-  matrix(NaN) }
     
@@ -54,7 +54,7 @@ bind <- function(free = NULL, popParam = NULL, misspec = NULL) {
     }    
     else if(is.matrix(misspec)) {
      if( !all(dim(free)==dim(misspec))) stop("Free matrix and misspec are not of same dimension")
-     misspecMat <- as.character(misspec)
+     misspecMat <- matrix(as.character(misspec),nrow=nrow(misspec),ncol=ncol(misspec))
     }
     else { misspecMat <-  matrix(NaN) }
 
@@ -74,7 +74,7 @@ bind <- function(free = NULL, popParam = NULL, misspec = NULL) {
     }    
     else if(is.vector(popParam)) {
       if((length(free) != length(popParam)) && length(popParam) > 1) stop("Free vector and popParam are not the same length")
-      if( !(apply(paramVec,c(1,2),FUN=check) == is.free(free))) { stop("Please assign a value for any free parameters") }
+      if( all(!is.empty(popParam) == is.free(free))) { stop("Please assign a value for any free parameters") }
       paramVec <- as.character(popParam)
     }
     else { paramVec <-  vector() }
@@ -97,8 +97,12 @@ bind <- function(free = NULL, popParam = NULL, misspec = NULL) {
     stop("Please specify a free/fixed parameter matrix or vector.")
   }
 }
-   
-check <- function(x) { if(x == "" || is.na(x)) {FALSE} else {TRUE}}
+
+# Possible "empty values": "", NA, or 0
+
+is.empty <- function(dat) {
+  apply(dat, c(1,2), FUN=function(x) if(x == "" || is.na(x) || x==0) {TRUE} else {FALSE})
+}
 
 # Finds valid labels, checks all combinations of label pairs to make sure at least one pair is the same.
 validConstraints <- function(mat) {
@@ -124,7 +128,6 @@ is.label <- function(mat) {
   return(isLabel)
 }
 
-
 is.free <- function(mat) {
   if(is.character(mat)) {
     isFree <- is.na(mat) | is.label(mat)
@@ -133,6 +136,8 @@ is.free <- function(mat) {
   }
   return(isFree)
 }
+
+
   
 
 test <- function() {
