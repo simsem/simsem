@@ -26,6 +26,7 @@
 ## 
 
 bind <- function(free = NULL, popParam = NULL, misspec = NULL) {
+  ## SimMatrix
   if(is.matrix(free)) {
     
     if(any(is.character(free)) && !validConstraints(free)) { stop("At least one pair of constraint labels must be the same.")}
@@ -56,51 +57,47 @@ bind <- function(free = NULL, popParam = NULL, misspec = NULL) {
      misspecMat <- as.character(misspec)
     }
     else { misspecMat <-  matrix(NaN) }
-    
-  } else { 
-    stop("Please specify a free/fixed parameter matrix.")
-  }
-  return(new("SimMatrix",free=free,popParam=paramMat,misspec=misspecMat))
-}
 
-bindv <- function(free = NULL, popParam = NULL, misspec= NULL, vector=FALSE ) {
-   if(is.vector(free)) {
+    return(new("SimMatrix",free=free,popParam=paramMat,misspec=misspecMat))
     
+    # SimVector
+  } else if(is.vector(free)) {
+
     if(any(is.character(free)) && !validConstraints(free)) { stop("At least one pair of constraint labels must be the same.")}
     
-    if(is.character(popParam)) {
+    if(is.character(popParam) && length(popParam == 1)) {
       tryCatch(eval(parse(text=popParam)), error=function(e) stop(e))
-      paramMat <- ifelse(is.na(free),popParam,"")
+      paramVec <- ifelse(is.na(free),popParam,"")
     }
-    else if(is.numeric(popParam) && !is.vector(popParam)) {
-      paramMat <- ifelse(is.na(free),popParam,"")
+    else if(is.numeric(popParam) && length(popParam) == 1) {
+      paramVec <- ifelse(is.na(free),popParam,"")
     }    
     else if(is.vector(popParam)) {
-      if( !all(dim(free)==dim(popParam))) stop("Free vector and popParam are not of same dimension")
-      if( !(apply(paramMat,c(1,2),FUN=check) == is.na(free))) { stop("Please assign a value for any free parameters") }
-      paramMat <- as.character(popParam)
+      if((length(free) != length(popParam)) && length(popParam) > 1) stop("Free vector and popParam are not the same length")
+      if( !(apply(paramVec,c(1,2),FUN=check) == is.na(free))) { stop("Please assign a value for any free parameters") }
+      paramVec <- as.character(popParam)
     }
-    else { paramMat <-  vector(NaN) }
+    else { paramVec <-  vector() }
     
-    if(is.character(misspec)) {
+    if(is.character(misspec) && length(misspec == 1)) {
       tryCatch(eval(parse(text=misspec)), error=function(e) stop(e))
-      misspecMat <- ifelse(!is.na(free),misspec,"")
+      misspecVec <- ifelse(!is.na(free),misspec,"")
     }
-    else if(is.numeric(misspec) && !is.vector(misspec)) {
-      misspecMat <- ifelse(!is.na(free),misspec,"")
+    else if(is.numeric(misspec) && length(misspec)== 1) {
+      misspecVec <- ifelse(!is.na(free),misspec,"")
     }    
     else if(is.vector(misspec)) {
-     if( !all(dim(free)==dim(misspec))) stop("Free vector and misspec are not of same dimension")
-     misspecMat <- as.character(misspec)
+      if((length(free) != length(misspec)) && length(misspec) > 1) stop("Free vector and misspec are not the same length")
+      misspecVec <- as.character(misspec)
     }
-    else { misspecMat <-  vector(NaN) }
-    
+    else { misspecVec <-  vector() }
+
+    return(new("SimVector",free=free,popParam=paramVec,misspec=misspecVec))
   } else { 
-    stop("Please specify a free/fixed parameter vector.")
+    stop("Please specify a free/fixed parameter matrix or vector.")
   }
-  return(new("SimVector",free=free,popParam=paramMat,misspec=misspecMat))
 }
-    
+   
 check <- function(x) { if(x == "" || is.na(x)) {FALSE} else {TRUE}}
 
 # Finds valid labels, checks all combinations of label pairs to make sure at least one pair is the same.
@@ -120,16 +117,19 @@ validConstraints <- function(mat) {
   return(any(res))
 }
 
-test <- function() {
-  a <- matrix(0,2,2)
-  a[,1] <- NA
-  a[,2] <- "a1"
-  bind(free=a)
-  bind(free=a, popParam=.7, misspec=.01)
-  bind(free=a, popParam="runif(1,0,1)", misspec=.01)
-  bind(free=a, popParam="runif(1,0,1)", misspec="runif(1,0,1)")
+## test <- function() {
+##   a <- matrix(0,2,2)
+##   a[,1] <- NA
+##   a[,2] <- "a1"
+##   bind(free=a)
+##   bind(free=a, popParam=.7, misspec=.01)
+##   bind(free=a, popParam="runif(1,0,1)", misspec=.01)
+##   bind(free=a, popParam="runif(1,0,1)", misspec="runif(1,0,1)")
 
-  b <- c(NA,NA,"b1","b1")
-  bindv(free=b)
+##   b <- c(NA,NA,"b1","b1")
+##   bind(free=b)
+##   bind(free=b, popParam=.7, misspec=.01)
+##   bind(free=b, popParam="runif(1,0,1)", misspec=.01)
+##   bind(free=b, popParam="runif(1,0,1)", misspec="runif(1,0,1)")
   
-}
+## }

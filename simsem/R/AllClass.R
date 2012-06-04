@@ -57,8 +57,9 @@ setClass("SimVector",
          representation(
                         free = "vector",
                         popParam = "vector",
-                        misspec = "vector",
-                        prior = "vector")
+                        misspec = "vector"
+                        #prior = "vector"
+                        )
          )
          #prototype(free = as.vector(NaN), popParam = as.vector(NaN), misspec = as.vector(NaN), prior = as.vector(NaN)))
 
