@@ -44,8 +44,9 @@ setClass("SimMatrix",
          representation(
                         free = "matrix",
                         popParam = "matrix",
-                        misspec = "matrix",
-                        prior = "matrix")
+                        misspec = "matrix"
+                        #prior = "matrix"
+                        )
          )
          #prototype(free = matrix(), popParam = matrix(), misspec = matrix(), prior = matrix()))
 
