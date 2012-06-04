@@ -1,4 +1,7 @@
 source("../../bind.R")
+# Needs more thorough tests, but this will work for now.
+# Mostly just checks to see if the function works.
+
 
 context("bind - SimMatrix")
 a <- matrix(0,2,2)

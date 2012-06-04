@@ -126,21 +126,26 @@ is.label <- function(mat) {
 
 
 is.free <- function(mat) {
-  isFree <- is.na(mat) | is.label(mat)
+  if(is.character(mat)) {
+    isFree <- is.na(mat) | is.label(mat)
+  } else {
+    isFree <- is.na(mat)
+  }
   return(isFree)
 }
   
 
 test <- function() {
   a <- matrix(0,2,2)
-  a[,1] <- NA
+  a[1,1] <- NA
+  a[1,2] <- 0
   a[,2] <- "a1"
   bind(free=a)
   bind(free=a, popParam=.7, misspec=.01)
   bind(free=a, popParam="runif(1,0,1)", misspec=.01)
   bind(free=a, popParam="runif(1,0,1)", misspec="runif(1,0,1)")
 
-  b <- c(NA,NA,"b1","b1")
+  b <- c(NA,0,"b1","b1")
   bind(free=b)
   bind(free=b, popParam=.7, misspec=.01)
   bind(free=b, popParam="runif(1,0,1)", misspec=.01)
