@@ -136,8 +136,6 @@ is.free <- function(mat) {
   }
   return(isFree)
 }
-
-
   
 
 test <- function() {
