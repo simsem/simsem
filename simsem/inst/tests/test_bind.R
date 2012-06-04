@@ -1,3 +1,5 @@
+source("../../bind.R")
+
 context("bind - SimMatrix")
 a <- matrix(0,2,2)
 a[,1] <- NA
