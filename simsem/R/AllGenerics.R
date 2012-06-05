@@ -54,7 +54,8 @@ setGeneric("tagHeaders", function(object, ...) {
     return(standardGeneric("tagHeaders"))
 })
 
-setGeneric("getCutoff", function(object, alpha, revDirec = FALSE, usedFit = NULL, ...) {
+setGeneric("getCutoff", function(object, alpha, revDirec = FALSE, usedFit = NULL, 
+    ...) {
     return(standardGeneric("getCutoff"))
 })
 
@@ -66,7 +67,8 @@ setGeneric("plotPowerFit", function(altObject, nullObject, ...) {
     return(standardGeneric("plotPowerFit"))
 })
 
-setGeneric("getPowerFit", function(altObject, cutoff, revDirec = FALSE, usedFit = NULL) {
+setGeneric("getPowerFit", function(altObject, cutoff, revDirec = FALSE, 
+    usedFit = NULL) {
     return(standardGeneric("getPowerFit"))
 })
 
@@ -106,9 +108,11 @@ setGeneric("simData", function(param, ...) {
     return(standardGeneric("simData"))
 })
 
-setGeneric("runFit", function(model, realdata, nRep = 1000, misspec = new("NullSimMisspec"), maxDraw = 100, sequential = NA, facDist = new("NullSimDataDist"), errorDist = new("NullSimDataDist"), 
-    indDist = new("NullSimDataDist"), modelBoot = FALSE, seed = 123321, silent = FALSE, multicore = FALSE, cluster = FALSE, numProc = NULL, empiricalMissing = TRUE, missModel = new("NullSimMissing"), 
-    usedStd = TRUE) {
+setGeneric("runFit", function(model, realdata, nRep = 1000, misspec = new("NullSimMisspec"), 
+    maxDraw = 100, sequential = NA, facDist = new("NullSimDataDist"), errorDist = new("NullSimDataDist"), 
+    indDist = new("NullSimDataDist"), modelBoot = FALSE, seed = 123321, silent = FALSE, 
+    multicore = FALSE, cluster = FALSE, numProc = NULL, empiricalMissing = TRUE, 
+    missModel = new("NullSimMissing"), usedStd = TRUE) {
     return(standardGeneric("runFit"))
 })
 
@@ -128,7 +132,8 @@ setGeneric("setPopulation", function(target, population, ...) {
     return(standardGeneric("setPopulation"))
 })
 
-setGeneric("popMisfit", function(param, misspec, dfParam = NULL, fit.measures = "all", ...) {
+setGeneric("popMisfit", function(param, misspec, dfParam = NULL, fit.measures = "all", 
+    ...) {
     return(standardGeneric("popMisfit"))
 })
 
@@ -142,5 +147,5 @@ setGeneric("isRandom", function(object) {
 
 setGeneric("toFunction", function(x) {
     return(standardGeneric("toFunction"))
-}) 
-
+})
+ 

@@ -62,8 +62,8 @@ dir <- "C:/Users/student/Dropbox/simsem/simsem/R/"
 
 
 
-library(formatR)
-tidy.dir(dir)
+#library(formatR)
+#tidy.dir(dir)
 
 library(simsem)
 loading <- matrix(0, 6, 2)

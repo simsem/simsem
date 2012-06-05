@@ -1,4 +1,5 @@
-# runLavaan: Transform model object to lavaan script, run the obtained data, and make model output object
+# runLavaan: Transform model object to lavaan script, run the obtained data,
+# and make model output object
 
 runLavaan <- function(object, Data, miss = "fiml", estimator = "ML") {
     if (!require(lavaan)) {
@@ -13,7 +14,7 @@ runLavaan <- function(object, Data, miss = "fiml", estimator = "ML") {
     modelType <- object@modelType
     varnames <- NULL
     nz <- 0
-    if (!isNullObject(object@auxiliary))
+    if (!isNullObject(object@auxiliary)) 
         nz <- length(object@auxiliary)
     if (modelType == "Path.exo") {
         nx <- ncol(object@param@PH)
@@ -59,7 +60,8 @@ runLavaan <- function(object, Data, miss = "fiml", estimator = "ML") {
     code <- writeLavaanCode(param, con.text, aux = nameAux)
     fit <- NULL
     if (modelType == "Path.exo" | modelType == "Path") {
-        try(fit <- sem(code, data = Data, meanstructure = TRUE, missing = miss, fixed.x = FALSE, estimator = estimator))
+        try(fit <- sem(code, data = Data, meanstructure = TRUE, missing = miss, fixed.x = FALSE, 
+            estimator = estimator))
     } else {
         try(fit <- sem(code, data = Data, meanstructure = TRUE, missing = miss, estimator = estimator))
     }
@@ -78,20 +80,21 @@ runLavaan <- function(object, Data, miss = "fiml", estimator = "ML") {
         if (nz > 0) {
             ############################ Run Null Model
             codeNull <- writeLavaanNullCode(setdiff(varnames, nameAux), nameAux)
-            try(fitNull <- sem(codeNull, data = Data, meanstructure = TRUE, missing = miss, estimator = estimator, fixed.x = FALSE))
+            try(fitNull <- sem(codeNull, data = Data, meanstructure = TRUE, missing = miss, 
+                estimator = estimator, fixed.x = FALSE))
             try(FitIndicesNull <- extractLavaanFit(fitNull))
             if (!is.na(FitIndices) && !is.na(FitIndicesNull)) {
                 ratioNULL <- FitIndicesNull["Chi"]/FitIndicesNull["df"]
                 ratioReal <- FitIndices["Chi"]/FitIndices["df"]
                 TLI <- (ratioNULL - ratioReal)/(ratioNULL - 1)
-                if (TLI < 0)
+                if (TLI < 0) 
                   TLI <- 0
                 # Compute CFI
                 num1 <- FitIndicesNull["Chi"] - FitIndicesNull["df"]
-                if (num1 < 0)
+                if (num1 < 0) 
                   num1 <- 0
                 num2 <- FitIndices["Chi"] - FitIndices["df"]
-                if (num2 < 0)
+                if (num2 < 0) 
                   num2 <- 0
                 CFI <- (num1 - num2)/num1
                 FitIndices["baseline.Chi"] <- FitIndicesNull["Chi"]
@@ -105,8 +108,9 @@ runLavaan <- function(object, Data, miss = "fiml", estimator = "ML") {
         try(se <- combineObject(param, inspect(fit, "se")))
         try(Converged <- inspect(fit, "converged"))
         try(check <- sum(unlist(lapply(inspect(fit, "se"), sum))))
-        try(if (is.na(check) || check == 0)
+        try(if (is.na(check) || check == 0) 
             Converged = FALSE, silent = TRUE)
     }
-    return(new("SimModelOut", param = object@param, start = object@start, equalCon = object@equalCon, package = object@package, coef = coef, fit = FitIndices, se = se, converged = Converged))
+    return(new("SimModelOut", param = object@param, start = object@start, equalCon = object@equalCon, 
+        package = object@package, coef = coef, fit = FitIndices, se = se, converged = Converged))
 } 

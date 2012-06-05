@@ -1,4 +1,5 @@
-# expandMatrices: Expand the set of covariance matrices into the set of covariance/correlation/variance objects
+# expandMatrices: Expand the set of covariance matrices into the set of
+# covariance/correlation/variance objects
 
 expandMatrices <- function(object) {
     if (!is(object, "SimRSet")) 
@@ -72,13 +73,18 @@ expandMatrices <- function(object) {
         VE <- temp.VE[(nk + 1):(nk + ne)]
         temp.ME <- findFactorMean(temp.BE, c(KA, AL))
         ME <- temp.ME[(nk + 1):(nk + ne)]
-        facCov <- findFactorTotalCov(combinePathExoEndo(GA, BE), combineLatentCorExoEndo(object@PH, object@PS))
-        VY <- findIndTotalVar(LY, facCov[(nk + 1):(nk + ne), (nk + 1):(nk + ne)], VTE)
+        facCov <- findFactorTotalCov(combinePathExoEndo(GA, BE), combineLatentCorExoEndo(object@PH, 
+            object@PS))
+        VY <- findIndTotalVar(LY, facCov[(nk + 1):(nk + ne), (nk + 1):(nk + ne)], 
+            VTE)
         MY <- findIndMean(LY, ME, TY)
         VX <- findIndTotalVar(LX, facCov[1:nk, 1:nk], VTD)
         MX <- findIndMean(LX, KA, TX)
         RTH <- solve(sqrt(diag(VTD))) %*% TH %*% solve(sqrt(diag(VTE)))
     }
-    return(new("MatrixSet", modelType = modelType, LY = LY, VTE = VTE, TE = object@TE, RTE = RTE, VY = VY, TY = TY, MY = MY, BE = BE, VPS = VPS, PS = object@PS, RPS = RPS, VE = VE, AL = AL, ME = ME, 
-        LX = LX, VTD = VTD, TD = object@TD, RTD = RTD, VX = VX, TX = TX, MX = MX, GA = GA, VPH = VPH, PH = object@PH, RPH = RPH, KA = KA, TH = object@TH, RTH = RTH))
+    return(new("MatrixSet", modelType = modelType, LY = LY, VTE = VTE, TE = object@TE, 
+        RTE = RTE, VY = VY, TY = TY, MY = MY, BE = BE, VPS = VPS, PS = object@PS, 
+        RPS = RPS, VE = VE, AL = AL, ME = ME, LX = LX, VTD = VTD, TD = object@TD, 
+        RTD = RTD, VX = VX, TX = TX, MX = MX, GA = GA, VPH = VPH, PH = object@PH, 
+        RPH = RPH, KA = KA, TH = object@TH, RTH = RTH))
 } 

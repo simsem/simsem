@@ -4,12 +4,12 @@
 ## aux = names of the index of the auxiliary variables in the data
 
 # To get code to work
-a <- models(4)
-a.set <- simSetSEM(LY=a$LY,RPS=a$RPS,RTE=a$RTE,BE=a$BE)
-paramSet <- list(LY=a$LY,RPS=a$RPS,RTE=a$RTE,BE=a$BE)
-ad <- simData(a.set)
-acm <- simModel(a.set,a$con)
-param <- tagHeaders(acm@param)
+# a <- models(4)
+# a.set <- simSetSEM(LY=a$LY,RPS=a$RPS,RTE=a$RTE,BE=a$BE)
+# paramSet <- list(LY=a$LY,RPS=a$RPS,RTE=a$RTE,BE=a$BE)
+# ad <- simData(a.set)
+# acm <- simModel(a.set,a$con)
+# param <- tagHeaders(acm@param)
 
 ## runLavaan(acm,run(ad,200))
 
@@ -30,9 +30,9 @@ param <- tagHeaders(acm@param)
 ## [[4]] -> Auxiliary (v)
 
 
-HS.model <- "f1 =~ x1 + x2 + x3 \n f2 =~ x4 + x5 +x6 \n f3 =~ x7 + x8 + x9"
-fit <- cfa(HS.model, data=HolzingerSwineford1939)
-parTable(fit)
+# HS.model <- "f1 =~ x1 + x2 + x3 \n f2 =~ x4 + x5 +x6 \n f3 =~ x7 + x8 + x9"
+# fit <- cfa(HS.model, data=HolzingerSwineford1939)
+# parTable(fit)
 
 # Lets just leave the constraints and aux for now, and plan on it being a list of simMatrix.
 
@@ -499,7 +499,7 @@ paramLabels <- function(paramSet,modelType) {
     return(paramSet)
   }
 
-startingValues <-  function(paramSet, trial, reduced = FALSE) {
+startValues <-  function(paramSet, trial, reduced = FALSE) {
     result <- run(object)
     if (trial > 1) {
         for (i in 2:trial) {
@@ -512,4 +512,4 @@ startingValues <-  function(paramSet, trial, reduced = FALSE) {
     if (reduced == TRUE) 
         result <- reduceMatrices(result)
     return(result)
-})
+}

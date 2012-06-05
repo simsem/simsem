@@ -1,6 +1,7 @@
 # runRep: Run one replication for a simulation study using simResult function
 
-runRep <- function(object, objData, objModel, objMissing = new("NullSimMissing"), objFunction = new("NullSimFunction"), silent = FALSE) {
+runRep <- function(object, objData, objModel, objMissing = new("NullSimMissing"), 
+    objFunction = new("NullSimFunction"), silent = FALSE) {
     modelType <- objModel@modelType
     param <- NULL
     coef <- NA
@@ -10,7 +11,7 @@ runRep <- function(object, objData, objModel, objMissing = new("NullSimMissing")
     FMI1 <- NULL
     FMI2 <- NULL
     converged <- FALSE
-    seed <- object[[5]]
+    .Random.seed <- object[[5]]
     n <- object[[2]]
     if (is.null(n)) 
         n <- objData@n
@@ -26,7 +27,6 @@ runRep <- function(object, objData, objModel, objMissing = new("NullSimMissing")
         }
     }
     obj <- object[[1]]
-    set.seed(seed)
     data.mis <- NULL
     if (class(obj) == "list") {
         data.mis <- createData(obj, n, objData, dataOnly = FALSE)
@@ -35,12 +35,14 @@ runRep <- function(object, objData, objModel, objMissing = new("NullSimMissing")
     } else {
         data.mis <- obj
     }
-    # if(class(dataT) == 'SimDataOut') { data.mis <-dataT@data } else { data.mis <- dataT }
+    # if(class(dataT) == 'SimDataOut') { data.mis <-dataT@data } else { data.mis <-
+    # dataT }
     
     if (!is(objMissing, "NullSimMissing")) {
         data.mis <- run(objMissing, data.mis, pmMCAR = pmMCAR, pmMAR = pmMAR)
-        # data.mis <- imposeMissing(data.mis, covs=objMissing@covs, pmMCAR=objMissing@pmMCAR, pmMAR=objMissing@pmMAR, nforms=objMissing@nforms, itemGroups=objMissing@itemGroups,
-        # twoMethod=objMissing@twoMethod)
+        # data.mis <- imposeMissing(data.mis, covs=objMissing@covs,
+        # pmMCAR=objMissing@pmMCAR, pmMAR=objMissing@pmMAR, nforms=objMissing@nforms,
+        # itemGroups=objMissing@itemGroups, twoMethod=objMissing@twoMethod)
     }
     if (!isNullObject(objFunction)) 
         data.mis <- run(objFunction, data.mis, checkDataOut = TRUE)
@@ -49,15 +51,20 @@ runRep <- function(object, objData, objModel, objMissing = new("NullSimMissing")
     # Impute missing and run results
     if (!is(objMissing, "NullSimMissing") && objMissing@numImps > 0) {
         if (silent) {
-            invisible(capture.output(suppressMessages(try(temp <- run(object = objModel, data = data.mis, simMissing = objMissing), silent = TRUE))))
-            # invisible(capture.output(suppressMessages(try(temp <- runMI(data.mis,objModel,objMissing@numImps,objMissing@impMethod), silent=TRUE))))
+            invisible(capture.output(suppressMessages(try(temp <- run(object = objModel, 
+                data = data.mis, simMissing = objMissing), silent = TRUE))))
+            # invisible(capture.output(suppressMessages(try(temp <-
+            # runMI(data.mis,objModel,objMissing@numImps,objMissing@impMethod),
+            # silent=TRUE))))
         } else {
-            try(temp <- run(object = objModel, data = data.mis, simMissing = objMissing), silent = TRUE)
+            try(temp <- run(object = objModel, data = data.mis, simMissing = objMissing), 
+                silent = TRUE)
             # try(temp <- runMI(data.mis,objModel,objMissing@numImps,objMissing@impMethod))
         }
     } else {
         if (silent) {
-            invisible(capture.output(suppressMessages(try(temp <- run(object = objModel, data = data.mis), silent = TRUE))))
+            invisible(capture.output(suppressMessages(try(temp <- run(object = objModel, 
+                data = data.mis), silent = TRUE))))
             # tryCatch(temp <- run(objModel, data), error=function(e) {print('Error')})
         } else {
             try(temp <- run(object = objModel, data = data.mis))
@@ -91,7 +98,8 @@ runRep <- function(object, objData, objModel, objMissing = new("NullSimMissing")
     }
     LabelsDataParam <- makeLabels(createFreeParameters(objData@param), "OpenMx")
     paramData <- vectorizeObject(object[[1]]$real, LabelsDataParam)
-    Result <- list(coef = coef, se = se, fit = fit, converged = converged, param = param, FMI1 = FMI1, FMI2 = FMI2, std = std, paramData = paramData)
+    Result <- list(coef = coef, se = se, fit = fit, converged = converged, param = param, 
+        FMI1 = FMI1, FMI2 = FMI2, std = std, paramData = paramData)
     return <- Result
 }
  

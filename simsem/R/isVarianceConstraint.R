@@ -1,4 +1,5 @@
-# isVarianceConstraint: Check whether all rownames in a constraint matrix containing symbols of variance vectors
+# isVarianceConstraint: Check whether all rownames in a constraint matrix
+# containing symbols of variance vectors
 
 isVarianceConstraint <- function(Name) {
     W <- getKeywords()

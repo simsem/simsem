@@ -1,7 +1,10 @@
 # simData: A constructor of data object
 
-setMethod("simData", signature(param = "SimSet"), definition = function(param, n = NULL, misspec = new("NullSimMisspec"), equalCon = new("NullSimEqualCon"), maxDraw = 100, sequential = FALSE, 
-    facDist = new("NullSimDataDist"), errorDist = new("NullSimDataDist"), indDist = new("NullSimDataDist"), indLab = new("NullVector"), modelBoot = FALSE, realData = new("NullDataFrame")) {
+setMethod("simData", signature(param = "SimSet"), definition = function(param, 
+    n = NULL, misspec = new("NullSimMisspec"), equalCon = new("NullSimEqualCon"), 
+    maxDraw = 100, sequential = FALSE, facDist = new("NullSimDataDist"), errorDist = new("NullSimDataDist"), 
+    indDist = new("NullSimDataDist"), indLab = new("NullVector"), modelBoot = FALSE, 
+    realData = new("NullDataFrame")) {
     modelType <- param@modelType
     if (!(is.na(sequential) | sequential == TRUE | sequential == FALSE)) 
         stop("Please specify NA (to use default), TRUE, or FALSE for the sequential argument")
@@ -25,7 +28,8 @@ setMethod("simData", signature(param = "SimSet"), definition = function(param, n
         if (sum(is.na(realData)) > 0) 
             stop("The model-based bootstrap is not available for data with missingness.")
     }
-	if (is.null(n)) n <- nrow(realData)
+    if (is.null(n)) 
+        n <- nrow(realData)
     if (!isNullObject(errorDist)) {
         if (modelType == "Path" | modelType == "Path.exo") 
             stop("errorDist is not allowed for path analysis model. The distribution of each indicator should be specified in facDist if sequential=TRUE.")
@@ -36,29 +40,37 @@ setMethod("simData", signature(param = "SimSet"), definition = function(param, n
         stop("errorDist is not allowed when using model-implied method in data generation")
     if (sequential & !isNullObject(indDist)) 
         stop("indDist is not allowed when using sequential method in data generation")
-    return(new("SimData", n = n, modelType = modelType, param = param, misspec = misspec, equalCon = equalCon, maxDraw = maxDraw, sequential = sequential, facDist = facDist, errorDist = errorDist, 
-        indDist = indDist, indLab = indLab, modelBoot = modelBoot, realData = realData))
+    return(new("SimData", n = n, modelType = modelType, param = param, misspec = misspec, 
+        equalCon = equalCon, maxDraw = maxDraw, sequential = sequential, facDist = facDist, 
+        errorDist = errorDist, indDist = indDist, indLab = indLab, modelBoot = modelBoot, 
+        realData = realData))
 })
 
-setMethod("simData", signature(param = "SimModelOut"), definition = function(param, misspec = new("NullSimMisspec"), maxDraw = 100, sequential = FALSE, facDist = new("NullSimDataDist"), 
-    errorDist = new("NullSimDataDist"), indDist = new("NullSimDataDist"), usedStd = TRUE, modelBoot = FALSE, realData = new("NullDataFrame")) {
+setMethod("simData", signature(param = "SimModelOut"), definition = function(param, 
+    misspec = new("NullSimMisspec"), maxDraw = 100, sequential = FALSE, facDist = new("NullSimDataDist"), 
+    errorDist = new("NullSimDataDist"), indDist = new("NullSimDataDist"), usedStd = TRUE, 
+    modelBoot = FALSE, realData = new("NullDataFrame")) {
     n <- param@n
     modelType <- param@coef@modelType
     equalCon <- param@equalCon
     usedParam <- toSimSet(param, usedStd = usedStd)
     indLab <- param@indLab
-    result <- simData(param = usedParam, n = n, misspec = misspec, equalCon = equalCon, maxDraw = maxDraw, sequential = sequential, facDist = facDist, errorDist = errorDist, indDist = indDist, indLab = indLab, 
-        modelBoot = modelBoot, realData = realData)
+    result <- simData(param = usedParam, n = n, misspec = misspec, equalCon = equalCon, 
+        maxDraw = maxDraw, sequential = sequential, facDist = facDist, errorDist = errorDist, 
+        indDist = indDist, indLab = indLab, modelBoot = modelBoot, realData = realData)
     return(result)
 })
 
 
-setMethod("simData", signature(param = "SimRSet"), definition = function(param, n = NULL, misspec = new("NullSimMisspec"), equalCon = new("NullSimEqualCon"), maxDraw = 100, sequential = FALSE, 
-    facDist = new("NullSimDataDist"), errorDist = new("NullSimDataDist"), indDist = new("NullSimDataDist"), usedStd = TRUE, modelBoot = FALSE, realData = new("NullDataFrame")) {
+setMethod("simData", signature(param = "SimRSet"), definition = function(param, 
+    n = NULL, misspec = new("NullSimMisspec"), equalCon = new("NullSimEqualCon"), 
+    maxDraw = 100, sequential = FALSE, facDist = new("NullSimDataDist"), errorDist = new("NullSimDataDist"), 
+    indDist = new("NullSimDataDist"), usedStd = TRUE, modelBoot = FALSE, realData = new("NullDataFrame")) {
     if (is.null(n)) 
         stop("Please provide the desired sample size.")
     usedParam <- toSimSet(param)
-    result <- simData(param = usedParam, n = n, misspec = misspec, equalCon = equalCon, maxDraw = maxDraw, sequential = sequential, facDist = facDist, errorDist = errorDist, indDist = indDist, indLab = indLab, 
-        modelBoot = modelBoot, realData = realData)
+    result <- simData(param = usedParam, n = n, misspec = misspec, equalCon = equalCon, 
+        maxDraw = maxDraw, sequential = sequential, facDist = facDist, errorDist = errorDist, 
+        indDist = indDist, indLab = indLab, modelBoot = modelBoot, realData = realData)
     return(result)
 }) 

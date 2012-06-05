@@ -1,13 +1,17 @@
-# popMisfit: The discrepancy value (chi-square value) divided by degree of freedom, which is equal to population RMSEA
+# popMisfit: The discrepancy value (chi-square value) divided by degree of
+# freedom, which is equal to population RMSEA
 
-setMethod("popMisfit", signature(param = "matrix", misspec = "matrix"), definition = function(param, misspec, dfParam = NULL, fit.measures = "all") {
-    p <- nrow(param)
-    blankM <- rep(0, p)
-    result <- popMisfitMACS(blankM, param, blankM, misspec, dfParam = dfParam, fit.measures = fit.measures)
-    return(result)
-})
+setMethod("popMisfit", signature(param = "matrix", misspec = "matrix"), 
+    definition = function(param, misspec, dfParam = NULL, fit.measures = "all") {
+        p <- nrow(param)
+        blankM <- rep(0, p)
+        result <- popMisfitMACS(blankM, param, blankM, misspec, dfParam = dfParam, 
+            fit.measures = fit.measures)
+        return(result)
+    })
 
-setMethod("popMisfit", signature(param = "list", misspec = "list"), definition = function(param, misspec, dfParam = NULL, fit.measures = "all") {
+setMethod("popMisfit", signature(param = "list", misspec = "list"), definition = function(param, 
+    misspec, dfParam = NULL, fit.measures = "all") {
     paramCM <- NULL
     paramM <- NULL
     misspecCM <- NULL
@@ -46,47 +50,54 @@ setMethod("popMisfit", signature(param = "list", misspec = "list"), definition =
     } else {
         stop("Cannot find covariance matrix in the misspecification values")
     }
-    result <- popMisfitMACS(paramM, paramCM, misspecM, misspecCM, dfParam = dfParam, fit.measures = fit.measures)
+    result <- popMisfitMACS(paramM, paramCM, misspecM, misspecCM, dfParam = dfParam, 
+        fit.measures = fit.measures)
     return(result)
 })
 
-setMethod("popMisfit", signature(param = "SimRSet", misspec = "SimRSet"), definition = function(param, misspec, dfParam = NULL, fit.measures = "all") {
-    paramMacs <- createImpliedMACS(param)
-    misspecMacs <- createImpliedMACS(misspec)
-    if (!(all(is.finite(misspecMacs$CM)) && all(eigen(misspecMacs$CM)$values > 0))) 
-        stop("The misspecification set is not valid.")
-    if (!(all(is.finite(paramMacs$CM)) && all(eigen(paramMacs$CM)$values > 0))) 
-        stop("The real parameter set is not valid")
-    return(popMisfitMACS(paramMacs$M, paramMacs$CM, misspecMacs$M, misspecMacs$CM, dfParam = dfParam, fit.measures = fit.measures))
-})
+setMethod("popMisfit", signature(param = "SimRSet", misspec = "SimRSet"), 
+    definition = function(param, misspec, dfParam = NULL, fit.measures = "all") {
+        paramMacs <- createImpliedMACS(param)
+        misspecMacs <- createImpliedMACS(misspec)
+        if (!(all(is.finite(misspecMacs$CM)) && all(eigen(misspecMacs$CM)$values > 
+            0))) 
+            stop("The misspecification set is not valid.")
+        if (!(all(is.finite(paramMacs$CM)) && all(eigen(paramMacs$CM)$values > 0))) 
+            stop("The real parameter set is not valid")
+        return(popMisfitMACS(paramMacs$M, paramMacs$CM, misspecMacs$M, misspecMacs$CM, 
+            dfParam = dfParam, fit.measures = fit.measures))
+    })
 
-setMethod("popMisfit", signature(param = "MatrixSet", misspec = "MatrixSet"), definition = function(param, misspec, dfParam = NULL, fit.measures = "all") {
-    if (!validateObject(param)) 
-        stop("The set of actual parameters is not valid.")
-    if (!validateObject(misspec)) 
-        stop("The set of misspecified paramters is not valid.")
-    param <- reduceMatrices(param)
-    misspec <- reduceMatrices(misspec)
-    return(popMisfit(param, misspec, dfParam = dfParam, fit.measures = fit.measures))
-    
-})
+setMethod("popMisfit", signature(param = "MatrixSet", misspec = "MatrixSet"), 
+    definition = function(param, misspec, dfParam = NULL, fit.measures = "all") {
+        if (!validateObject(param)) 
+            stop("The set of actual parameters is not valid.")
+        if (!validateObject(misspec)) 
+            stop("The set of misspecified paramters is not valid.")
+        param <- reduceMatrices(param)
+        misspec <- reduceMatrices(misspec)
+        return(popMisfit(param, misspec, dfParam = dfParam, fit.measures = fit.measures))
+        
+    })
 
-setMethod("popMisfit", signature(param = "SimSet", misspec = "SimMisspec"), definition = function(param, misspec, dfParam = NULL, fit.measures = "all", equalCon = new("NullSimEqualCon")) {
-    Output <- runMisspec(param, misspec, equalCon)
-    param2 <- Output$param
-    misspec <- Output$misspec
-    if (is.null(dfParam)) {
-        p <- length(createImpliedMACS(param2)$M)
-        nElements <- p + (p * (p + 1)/2)
-        nFree <- countFreeParameters(param)
-        if (!isNullObject(equalCon)) 
-            nFree <- nFree + countFreeParameters(equalCon)
-        dfParam <- nElements - nFree
-    }
-    return(popMisfit(param2, misspec, dfParam = dfParam, fit.measures = fit.measures))
-})
+setMethod("popMisfit", signature(param = "SimSet", misspec = "SimMisspec"), 
+    definition = function(param, misspec, dfParam = NULL, fit.measures = "all", equalCon = new("NullSimEqualCon")) {
+        Output <- runMisspec(param, misspec, equalCon)
+        param2 <- Output$param
+        misspec <- Output$misspec
+        if (is.null(dfParam)) {
+            p <- length(createImpliedMACS(param2)$M)
+            nElements <- p + (p * (p + 1)/2)
+            nFree <- countFreeParameters(param)
+            if (!isNullObject(equalCon)) 
+                nFree <- nFree + countFreeParameters(equalCon)
+            dfParam <- nElements - nFree
+        }
+        return(popMisfit(param2, misspec, dfParam = dfParam, fit.measures = fit.measures))
+    })
 
-popMisfitMACS <- function(paramM, paramCM, misspecM, misspecCM, dfParam = NULL, fit.measures = "all") {
+popMisfitMACS <- function(paramM, paramCM, misspecM, misspecCM, dfParam = NULL, 
+    fit.measures = "all") {
     if (fit.measures == "all") {
         fit.measures <- getKeywords()$usedFitPop
         if (is.null(dfParam)) 
@@ -116,7 +127,8 @@ popMisfitMACS <- function(paramM, paramCM, misspecM, misspecCM, dfParam = NULL, 
     return(result)
 }
 
-# F0 in population: The discrepancy due to approximation (Browne & Cudeck, 1992)
+# F0 in population: The discrepancy due to approximation (Browne & Cudeck,
+# 1992)
 popDiscrepancy <- function(paramM, paramCM, misspecM, misspecCM) {
     p <- length(misspecM)
     inv <- solve(paramCM)

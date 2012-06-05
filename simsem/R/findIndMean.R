@@ -1,4 +1,5 @@
-# findIndMean: Find indicator means based on loading matrix, factor means, and measurement intercept.
+# findIndMean: Find indicator means based on loading matrix, factor means, and
+# measurement intercept.
 
 findIndMean <- function(lambda, factorMean = NULL, tau = NULL) {
     ni <- nrow(lambda)

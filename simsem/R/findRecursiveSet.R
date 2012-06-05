@@ -1,4 +1,5 @@
-# findRecursiveSet: Group variables together regarding the position in the mediation chain
+# findRecursiveSet: Group variables together regarding the position in the
+# mediation chain
 
 findRecursiveSet <- function(beta) {
     result <- list()

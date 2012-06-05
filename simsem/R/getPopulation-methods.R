@@ -8,7 +8,8 @@ setMethod("getPopulation", signature(object = "SimModelOut"), definition = funct
     return(object@paramValue)
 })
 
-setMethod("getPopulation", signature(object = "SimDataOut"), definition = function(object, misspec = TRUE) {
+setMethod("getPopulation", signature(object = "SimDataOut"), definition = function(object, 
+    misspec = TRUE) {
     if (misspec) {
         return(object@misspecOut)
     } else {

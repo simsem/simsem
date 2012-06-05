@@ -1,4 +1,6 @@
-# fitMeasuresChi: Find fit indices from the discrepancy values of the target model and null models. This function is modified from the fitMeasures function from the lavaan package
+# fitMeasuresChi: Find fit indices from the discrepancy values of the target
+# model and null models. This function is modified from the fitMeasures
+# function from the lavaan package
 
 fitMeasuresChi <- function(X2, df, p, X2.null, df.null, p.null, N, fit.measures = "all") {
     
@@ -39,7 +41,8 @@ fitMeasuresChi <- function(X2, df, p, X2.null, df.null, p.null, N, fit.measures 
         }
         # CFI
         if ("cfi" %in% fit.measures) {
-            indices["CFI"] <- (1 - max(c(X2 - df, 0))/max(c(X2 - df, X2.null - df.null, 0)))
+            indices["CFI"] <- (1 - max(c(X2 - df, 0))/max(c(X2 - df, X2.null - df.null, 
+                0)))
         }
         # TLI
         if ("tli" %in% fit.measures) {

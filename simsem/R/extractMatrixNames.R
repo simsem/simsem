@@ -1,8 +1,10 @@
-# extractMatricesNames: Extract a vector of parameter names based on specified rows and columns
+# extractMatricesNames: Extract a vector of parameter names based on specified
+# rows and columns
 
 extractMatrixNames <- function(columnName, keepRow = NULL, keepCol = NULL) {
     name <- substr(columnName, 1, 2)
-    position <- do.call("rbind", strsplit(substr(columnName, 3, nchar(columnName)), "_"))
+    position <- do.call("rbind", strsplit(substr(columnName, 3, nchar(columnName)), 
+        "_"))
     if (is.null(keepRow)) 
         keepRow <- unique(position[, 1])
     if (is.null(keepCol)) 
@@ -21,6 +23,7 @@ extractMatrixNames <- function(columnName, keepRow = NULL, keepCol = NULL) {
                 position[i, 2] <- j
         }
     }
-    newName <- paste(name[select], position[select, 1], "_", position[select, 2], sep = "")
+    newName <- paste(name[select], position[select, 1], "_", position[select, 2], 
+        sep = "")
     return(list(columnName, newName))
 } 

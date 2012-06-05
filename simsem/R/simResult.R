@@ -2,6 +2,8 @@
 
 simResult <- function(nRep = NULL, objData = NULL, objModel = NULL, objMissing = new("NullSimMissing"), seed = 123321, silent = FALSE, multicore = FALSE, cluster = FALSE, numProc = NULL, 
     n = NULL, pmMCAR = NULL, pmMAR = NULL, objSet = NULL, objFunction = new("NullSimFunction")) {
+	library(parallel)
+	RNGkind("L'Ecuyer-CMRG")
     set.seed(seed)
     warnT <- as.numeric(options("warn"))
     if (silent) 
@@ -106,8 +108,14 @@ simResult <- function(nRep = NULL, objData = NULL, objModel = NULL, objMissing =
     } else {
         stop("The objData argument is not a SimData class or a list of data frames.")
     }
-    numseed <- as.list(round(sample(1:999999, nRep)))
-    
+    numseed <- list()
+	s <- .Random.seed
+	origSeed <- s
+    for (i in 1:nRep){
+		numseed[[i]] <- s
+		s <- nextRNGStream(s)
+	}
+	
     object2.l <- list()
     for (i in 1:length(object.l)) {
         object2.l[[i]] <- list()

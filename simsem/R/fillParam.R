@@ -1,4 +1,5 @@
-# fillParam: Fill in other objects based on the parameter values of current objects
+# fillParam: Fill in other objects based on the parameter values of current
+# objects
 
 fillParam <- function(param, modelType) {
     library(lavaan)
@@ -177,11 +178,14 @@ fillParam <- function(param, modelType) {
             PH <- suppressWarnings(cor2cov(RPH, suppressWarnings(sqrt(VPH))))
         nk <- nrow(PH)
         ne <- nrow(PS)
-        facCov <- findFactorTotalCov(combinePathExoEndo(GA, BE), combineLatentCorExoEndo(PH, PS))
+        facCov <- findFactorTotalCov(combinePathExoEndo(GA, BE), combineLatentCorExoEndo(PH, 
+            PS))
         if (isNullObject(VTE)) 
-            VTE <- findIndResidualVar(LY, facCov[(nk + 1):(nk + ne), (nk + 1):(nk + ne)], VY)
+            VTE <- findIndResidualVar(LY, facCov[(nk + 1):(nk + ne), (nk + 1):(nk + 
+                ne)], VY)
         if (isNullObject(VY)) 
-            VY <- findIndTotalVar(LY, facCov[(nk + 1):(nk + ne), (nk + 1):(nk + ne)], VTE)
+            VY <- findIndTotalVar(LY, facCov[(nk + 1):(nk + ne), (nk + 1):(nk + ne)], 
+                VTE)
         if (isNullObject(MY)) 
             MY <- findIndMean(LY, ME, TY)
         if (isNullObject(TY)) 
@@ -204,7 +208,9 @@ fillParam <- function(param, modelType) {
             RTH <- suppressWarnings(solve(sqrt(diag(VTD))) %*% TH %*% solve(sqrt(diag(VTE))))
         }
     }
-    out <- new("MatrixSet", modelType = modelType, LY = LY, VTE = VTE, TE = TE, RTE = RTE, VY = VY, TY = TY, MY = MY, BE = BE, VPS = VPS, PS = PS, RPS = RPS, VE = VE, AL = AL, ME = ME, LX = LX, VTD = VTD, 
-        TD = TD, RTD = RTD, VX = VX, TX = TX, MX = MX, GA = GA, VPH = VPH, PH = PH, RPH = RPH, KA = KA, TH = TH, RTH = RTH)
+    out <- new("MatrixSet", modelType = modelType, LY = LY, VTE = VTE, TE = TE, RTE = RTE, 
+        VY = VY, TY = TY, MY = MY, BE = BE, VPS = VPS, PS = PS, RPS = RPS, VE = VE, 
+        AL = AL, ME = ME, LX = LX, VTD = VTD, TD = TD, RTD = RTD, VX = VX, TX = TX, 
+        MX = MX, GA = GA, VPH = VPH, PH = PH, RPH = RPH, KA = KA, TH = TH, RTH = RTH)
     return(out)
 } 

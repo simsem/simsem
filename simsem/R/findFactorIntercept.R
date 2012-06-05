@@ -1,4 +1,5 @@
-# findFactorIntercept: Find the factor intercept if regression coefficients and factor means are specified
+# findFactorIntercept: Find the factor intercept if regression coefficients and
+# factor means are specified
 
 findFactorIntercept <- function(beta, factorMean = NULL) {
     ni <- nrow(beta)

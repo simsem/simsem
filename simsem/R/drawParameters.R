@@ -1,10 +1,12 @@
-# drawParameters: Create parameter sets (with or without model misspecification) from simData object
+# drawParameters: Create parameter sets (with or without model
+# misspecification) from simData object
 
 drawParameters <- function(object) {
     drawParametersMisspec(object@param, object@misspec, object@equalCon, object@maxDraw)
 }
 
-drawParametersMisspec <- function(objSet, objMisspec = new("NullSimMisspec"), objEqualCon = new("NullSimEqualCon"), maxDraw = 100) {
+drawParametersMisspec <- function(objSet, objMisspec = new("NullSimMisspec"), 
+    objEqualCon = new("NullSimEqualCon"), maxDraw = 100) {
     param <- NULL
     misspec <- NULL
     misspecAdd <- NULL
@@ -24,7 +26,8 @@ drawParametersMisspec <- function(objSet, objMisspec = new("NullSimMisspec"), ob
                 if (!isNullObject(param) && !isNullObject(misspec)) {
                   implied.CM.param <- createImpliedMACS(param)
                   implied.CM.misspec <- createImpliedMACS(misspec)
-                  if (all(is.finite(implied.CM.misspec$CM)) && (sum(eigen(implied.CM.misspec$CM)$values <= 0) == 0)) {
+                  if (all(is.finite(implied.CM.misspec$CM)) && (sum(eigen(implied.CM.misspec$CM)$values <= 
+                    0) == 0)) {
                     if (isNullObject(objMisspec@misfitBound)) {
                       break
                     } else {
@@ -34,11 +37,14 @@ drawParametersMisspec <- function(objSet, objMisspec = new("NullSimMisspec"), ob
                       if (!isNullObject(objEqualCon)) 
                         nFree <- nFree + countFreeParameters(objEqualCon)
                       dfParam <- nElements - nFree
-                      misfit <- popMisfitMACS(implied.CM.param$M, implied.CM.param$CM, implied.CM.misspec$M, implied.CM.misspec$CM, fit.measures = objMisspec@misfitType, dfParam = dfParam)
+                      misfit <- popMisfitMACS(implied.CM.param$M, implied.CM.param$CM, 
+                        implied.CM.misspec$M, implied.CM.misspec$CM, fit.measures = objMisspec@misfitType, 
+                        dfParam = dfParam)
                       if (objMisspec@averageNumMisspec) 
                         misfit <- misfit/countFreeParameters(objMisspec)
                       
-                      if (!is.null(misfit) && (misfit > objMisspec@misfitBound[1] & misfit < objMisspec@misfitBound[2])) 
+                      if (!is.null(misfit) && (misfit > objMisspec@misfitBound[1] & 
+                        misfit < objMisspec@misfitBound[2])) 
                         break
                     }
                   }

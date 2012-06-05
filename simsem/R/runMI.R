@@ -1,15 +1,19 @@
 ## Functon to impute missing data, run Lavaan on each one
 
 
-## Currently outputs a list of parameter estimates, standard errors, fit indices and fraction missing information
+## Currently outputs a list of parameter estimates, standard errors, fit
+## indices and fraction missing information
 
 ## TO DO: Get names for each element from the lavaan object
 
-runMI <- function(data.mat, data.model, m, miPackage = "amelia", silent = FALSE, ...) {
-    ################### I put the silent argument here as the 'runRep' and 'simResult' have one.
-	require(Amelia)
+runMI <- function(data.mat, data.model, m, miPackage = "amelia", silent = FALSE, 
+    ...) {
+    ################### I put the silent argument here as the 'runRep' and
+    ################### 'simResult' have one.
+    require(Amelia)
     data.model@auxiliary <- new("NullVector")
-    # Currently only supports imputation by Amelia. We want to add mice, and maybe EM imputatin too...
+    # Currently only supports imputation by Amelia. We want to add mice, and maybe
+    # EM imputatin too...
     if (!miPackage == "amelia") 
         stop("Currently runMI only supports imputation by amelia")
     # Impute missing data no longer creates two copies of imputed data
@@ -28,9 +32,11 @@ runMI <- function(data.mat, data.model, m, miPackage = "amelia", silent = FALSE,
     if (class(data.model) == "SimModel") {
         imputed.results.l <- lapply(imputed.l, runSimMI, data.model)
     }
-    # Run models on each imputed data set using lavaan syntax Can we switch to simSEM framework?
+    # Run models on each imputed data set using lavaan syntax Can we switch to
+    # simSEM framework?
     if (is.character(data.model)) {
-        # Function to run lavaan using lapply; inputs: raw data, syntax; Output: list of parameter estimates, se and fit from each model
+        # Function to run lavaan using lapply; inputs: raw data, syntax; Output: list
+        # of parameter estimates, se and fit from each model
         
         runlavaanMI <- function(MIdata, syntax) {
             fit <- cfa(syntax, data = MIdata)
@@ -40,13 +46,15 @@ runMI <- function(data.mat, data.model, m, miPackage = "amelia", silent = FALSE,
             Converged = TRUE
             if (sum(unlist(lapply(inspect(fit, "se"), sum))) == 0) 
                 Converged = FALSE
-            return(new("SimModelOut", package = "lavaan", coef = coef, fit = FitIndices, se = se, converged = Converged))
+            return(new("SimModelOut", package = "lavaan", coef = coef, fit = FitIndices, 
+                se = se, converged = Converged))
         }
         
         imputed.results.l <- lapply(imputed.l, runlavaanMI, data.model)
     }
     
-    ## New miPool should return simResult object. Can be used with runRep runSIM or can be summarized.
+    ## New miPool should return simResult object. Can be used with runRep runSIM or
+    ## can be summarized.
     comb.results <- miPool(imputed.results.l)
     
     return(comb.results)

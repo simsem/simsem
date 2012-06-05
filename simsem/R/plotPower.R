@@ -1,19 +1,21 @@
 # plotPower: plot the power curve given one or two varying parameters
 
-plotPower <- function(object, powerParam, alpha = 0.05, contParam = NULL, contN = TRUE, contMCAR = TRUE, contMAR = TRUE, useContour=TRUE) {
+plotPower <- function(object, powerParam, alpha = 0.05, contParam = NULL, 
+    contN = TRUE, contMCAR = TRUE, contMAR = TRUE, useContour = TRUE) {
     object <- clean(object)
-	warnT <- as.numeric(options("warn"))
+    warnT <- as.numeric(options("warn"))
     options(warn = -1)
-
+    
     crit.value <- qnorm(1 - alpha/2)
     sig <- 0 + (abs(object@coef/object@se) > crit.value)
-	colnames(sig) <- colnames(object@coef)
+    colnames(sig) <- colnames(object@coef)
     nrep <- dim(sig)[[1]]
-    if (is.null(powerParam)) stop("Please specify the parameter used to plot")
-	j <- match(powerParam, dimnames(sig)[[2]])  # Return column indices that start with 'param'
-	sig <- as.matrix(sig[, j])
+    if (is.null(powerParam)) 
+        stop("Please specify the parameter used to plot")
+    j <- match(powerParam, dimnames(sig)[[2]])  # Return column indices that start with 'param'
+    sig <- as.matrix(sig[, j])
     
-	# Create matrix of predictors (randomly varying params)
+    # Create matrix of predictors (randomly varying params)
     x <- NULL
     pred <- NULL
     
@@ -46,16 +48,19 @@ plotPower <- function(object, powerParam, alpha = 0.05, contParam = NULL, contN 
         }
         j <- match(contParam, names(object@paramValue))  # Return column indices that start with 'contParam'
         x <- cbind(x, object@paramValue[, j])
-		paramVal <- list()
-		for(i in 1:length(contParam)) {
-			temp <- seq(min(object@paramValue[,contParam[i]]), max(object@paramValue[,contParam[i]]), length.out = 50)
-			paramVal[[i]] <- unique(temp)
-		}
-		names(paramVal) <- contParam
-		pred <- c(pred, paramVal)
+        paramVal <- list()
+        for (i in 1:length(contParam)) {
+            temp <- seq(min(object@paramValue[, contParam[i]]), max(object@paramValue[, 
+                contParam[i]]), length.out = 50)
+            paramVal[[i]] <- unique(temp)
+        }
+        names(paramVal) <- contParam
+        pred <- c(pred, paramVal)
     }
-	if(is.null(x)) stop("There is no varying parameter in this object.")
-	if(ncol(x) > 2) stop("The number of independent variables cannot be over 2. Please reduce 'contParam' or specify some of 'contN', 'contMCAR', and 'contMAR' as FALSE.")
+    if (is.null(x)) 
+        stop("There is no varying parameter in this object.")
+    if (ncol(x) > 2) 
+        stop("The number of independent variables cannot be over 2. Please reduce 'contParam' or specify some of 'contN', 'contMCAR', and 'contMAR' as FALSE.")
     if (ncol(sig) == 2) {
         obj <- par(mfrow = c(1, 2))
     } else if (ncol(sig) == 3) {
@@ -67,25 +72,32 @@ plotPower <- function(object, powerParam, alpha = 0.05, contParam = NULL, contN 
     } else {
         stop("Some errors occur")
     }
-	
-	for (i in 1:ncol(sig)) {
-		mod <- invisible(try(glm(sig[, i] ~ x, family = binomial(link = "logit")), silent = TRUE))
+    
+    for (i in 1:ncol(sig)) {
+        mod <- invisible(try(glm(sig[, i] ~ x, family = binomial(link = "logit")), 
+            silent = TRUE))
         if (ncol(x) == 1) {
-			predVal <- apply(data.frame(1, pred), 1, predProb, mod)
-            plot(pred[[1]], predVal, type="n", xlab = names(pred)[1], ylab = "Power", main = powerParam[i], ylim=c(0, 1))
-			lines(pred[[1]], predVal)
+            predVal <- apply(data.frame(1, pred), 1, predProb, mod)
+            plot(pred[[1]], predVal, type = "n", xlab = names(pred)[1], ylab = "Power", 
+                main = powerParam[i], ylim = c(0, 1))
+            lines(pred[[1]], predVal)
         } else if (ncol(x) == 2) {
-			FUN <- function(x, y) {
-				logi <- mod$coefficients[1] + mod$coefficients[2] * x + mod$coefficients[3] * y
-				pp <- exp(logi)/(1 + exp(logi))
-				return(pp)
-			}
-			zpred <- outer(pred[[1]], pred[[2]], FUN)
-			if (useContour) {
-				contour(pred[[1]], pred[[2]], zpred, xlab = names(pred)[1], ylab = names(pred)[2], main = powerParam[i])
-			} else {
-				persp(pred[[1]], pred[[2]], zpred, zlim=c(0,1), theta = 30, phi = 30, expand = 0.5, col = "lightblue", ltheta = 120, shade = 0.75, ticktype = "detailed", xlab = names(pred)[1], ylab = names(pred)[2], main = powerParam[i], zlab = "Power")
-			}
+            FUN <- function(x, y) {
+                logi <- mod$coefficients[1] + mod$coefficients[2] * x + mod$coefficients[3] * 
+                  y
+                pp <- exp(logi)/(1 + exp(logi))
+                return(pp)
+            }
+            zpred <- outer(pred[[1]], pred[[2]], FUN)
+            if (useContour) {
+                contour(pred[[1]], pred[[2]], zpred, xlab = names(pred)[1], ylab = names(pred)[2], 
+                  main = powerParam[i])
+            } else {
+                persp(pred[[1]], pred[[2]], zpred, zlim = c(0, 1), theta = 30, phi = 30, 
+                  expand = 0.5, col = "lightblue", ltheta = 120, shade = 0.75, ticktype = "detailed", 
+                  xlab = names(pred)[1], ylab = names(pred)[2], main = powerParam[i], 
+                  zlab = "Power")
+            }
         } else {
             stop("Something is wrong!")
         }
@@ -93,5 +105,5 @@ plotPower <- function(object, powerParam, alpha = 0.05, contParam = NULL, contN 
     if (ncol(sig) > 1) 
         par(obj)
     options(warn = warnT)
-
+    
 } 

@@ -1,4 +1,5 @@
-# createFreeParameters: Create free parameters object (SimParam class) from model specification (SimSet class)
+# createFreeParameters: Create free parameters object (SimParam class) from
+# model specification (SimSet class)
 
 createFreeParameters <- function(object) {
     if (!is(object, "SimSet")) 
@@ -36,7 +37,8 @@ createFreeParameters <- function(object) {
     if (isNullObject(object@PS)) {
         PS <- object@RPS@free
         VPS <- object@VPS@free
-        ifelse(isNullObject(VPS), ifelse(is.measurement.Y, diag(PS) <- 1, diag(PS) <- NA), diag(PS) <- VPS)
+        ifelse(isNullObject(VPS), ifelse(is.measurement.Y, diag(PS) <- 1, diag(PS) <- NA), 
+            diag(PS) <- VPS)
     } else {
         PS <- object@PS@free
     }
@@ -62,7 +64,8 @@ createFreeParameters <- function(object) {
         is.measurement.X <- !isNullObject(LX)
         if (isNullObject(object@PH)) {
             VPH <- object@VPH@free
-            ifelse(isNullObject(VPH) | (sum(VPH != 1) == 0), ifelse(is.measurement.X, diag(PH) <- 1, diag(PH) <- NA), diag(PH) <- VPH)
+            ifelse(isNullObject(VPH) | (sum(VPH != 1) == 0), ifelse(is.measurement.X, 
+                diag(PH) <- 1, diag(PH) <- NA), diag(PH) <- VPH)
         }
         if (isDefault(object@KA)) 
             ifelse(is.measurement.X, KA <- rep(0, ncol(PH)), KA <- rep(NA, ncol(PH)))
@@ -81,11 +84,13 @@ createFreeParameters <- function(object) {
     } else if (object@modelType == "Path") {
         result <- simParamPath(BE = BE, AL = AL, PS = PS)
     } else if (object@modelType == "Path.exo") {
-        result <- simParamPath(BE = BE, AL = AL, PS = PS, GA = GA, KA = KA, PH = PH, exo = TRUE)
+        result <- simParamPath(BE = BE, AL = AL, PS = PS, GA = GA, KA = KA, PH = PH, 
+            exo = TRUE)
     } else if (object@modelType == "SEM") {
         result <- simParamSEM(LY = LY, TY = TY, BE = BE, AL = AL, TE = TE, PS = PS)
     } else if (object@modelType == "SEM.exo") {
-        result <- simParamSEM(LY = LY, TY = TY, BE = BE, AL = AL, TE = TE, PS = PS, LX = LX, TX = TX, GA = GA, KA = KA, TD = TD, PH = PH, TH = TH, exo = TRUE)
+        result <- simParamSEM(LY = LY, TY = TY, BE = BE, AL = AL, TE = TE, PS = PS, 
+            LX = LX, TX = TX, GA = GA, KA = KA, TD = TD, PH = PH, TH = TH, exo = TRUE)
     } else {
         stop("Something is wrong!")
     }

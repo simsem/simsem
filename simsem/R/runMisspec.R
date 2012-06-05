@@ -1,9 +1,12 @@
-# runMisspec: Run parameters from SimSet object with the parameters from SimMisspec to be put on top of it. The final parameters will be with and without model misspecification.
+# runMisspec: Run parameters from SimSet object with the parameters from
+# SimMisspec to be put on top of it. The final parameters will be with and
+# without model misspecification.
 
 runMisspec <- function(object, misspec, SimEqualCon = new("NullSimEqualCon")) {
     Output1 <- NULL
     Output2 <- NULL
-    # Should create the misspec here: then compare with the MACS and see what is going on!
+    # Should create the misspec here: then compare with the MACS and see what is
+    # going on!
     if (misspec@optMisfit == "none") {
         Mis <- list(run(misspec))
     } else {
@@ -37,27 +40,31 @@ runMisspec <- function(object, misspec, SimEqualCon = new("NullSimEqualCon")) {
             param <- lapply(Mis, combineObject, object1 = paramSet[[1]])
             Output2 <- lapply(param, fillParam, modelType = object@modelType)
         } else if (!misspec@misBeforeFill & misspec@conBeforeMis & !SimEqualCon@conBeforeFill) {
-            # 3) fillBefore, Con, AddMis misspec@misBeforeFill=F & misspec@conBeforeMis=T SimEqualCon@conBeforeFill=F; FTF
+            # 3) fillBefore, Con, AddMis misspec@misBeforeFill=F & misspec@conBeforeMis=T
+            # SimEqualCon@conBeforeFill=F; FTF
             paramSet <- run(object, SimEqualCon, makeList = TRUE)
             Output1 <- paramSet[[1]]
             param <- lapply(Mis, combineObject, object1 = paramSet[[2]])
             Output2 <- lapply(param, fillParam, modelType = object@modelType)
         } else if (!misspec@misBeforeFill & !misspec@conBeforeMis & !SimEqualCon@conBeforeFill) {
-            # 4) fillBefore, AddMis, Con isBeforeFill=F & misspec@conBeforeMis=F SimEqualCon@conBeforeFill=F; FFF
+            # 4) fillBefore, AddMis, Con isBeforeFill=F & misspec@conBeforeMis=F
+            # SimEqualCon@conBeforeFill=F; FFF
             paramSet <- run(object, makeList = TRUE)
             Output1 <- paramSet[[1]]
             param <- lapply(Mis, combineObject, object1 = paramSet[[1]])
             param <- lapply(param, constrainMatrices, SimEqualCon = SimEqualCon)
             Output2 <- lapply(param, fillParam, modelType = object@modelType)
         } else if (misspec@misBeforeFill & !misspec@conBeforeMis & SimEqualCon@conBeforeFill) {
-            # 5) AddMis, Con, fill misspec@misBeforeFill=T & misspec@conBeforeMis=F SimEqualCon@conBeforeFill=T; TFT
+            # 5) AddMis, Con, fill misspec@misBeforeFill=T & misspec@conBeforeMis=F
+            # SimEqualCon@conBeforeFill=T; TFT
             paramSet <- run(object, makeList = TRUE)
             Output1 <- paramSet[[1]]
             param <- lapply(Mis, combineObject, object1 = paramSet[[2]])
             param <- lapply(param, constrainMatrices, SimEqualCon = SimEqualCon)
             Output2 <- lapply(param, fillParam, modelType = object@modelType)
         } else if (misspec@misBeforeFill & !misspec@conBeforeMis & !SimEqualCon@conBeforeFill) {
-            # 6) AddMis, fill, Con misspec@misBeforeFill=T & misspec@conBeforeMis=F SimEqualCon@conBeforeFill=F; TFF ; No FFT and TTF
+            # 6) AddMis, fill, Con misspec@misBeforeFill=T & misspec@conBeforeMis=F
+            # SimEqualCon@conBeforeFill=F; TFF ; No FFT and TTF
             paramSet <- run(object, makeList = TRUE)
             Output1 <- paramSet[[1]]
             param <- lapply(Mis, combineObject, object1 = paramSet[[2]])
@@ -77,7 +84,8 @@ runMisspec <- function(object, misspec, SimEqualCon = new("NullSimEqualCon")) {
         if (!isNullObject(SimEqualCon)) 
             nFree <- nFree + countFreeParameters(SimEqualCon)
         dfParam <- nElements - nFree
-        misfit <- sapply(macsMis, popMisfit, param = macsPop, dfParam = dfParam, fit.measures = misspec@misfitType)
+        misfit <- sapply(macsMis, popMisfit, param = macsPop, dfParam = dfParam, 
+            fit.measures = misspec@misfitType)
         element <- NULL
         if (misspec@optMisfit == "min") {
             element <- which(misfit == min(misfit))

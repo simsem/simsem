@@ -1,4 +1,5 @@
-# combineLatentCorExoEndof: Combine exogenous factor correlation, PH, and endogenous factor correlation, PS, into a single matrix
+# combineLatentCorExoEndof: Combine exogenous factor correlation, PH, and
+# endogenous factor correlation, PS, into a single matrix
 
 combineLatentCorExoEndo <- function(PH, PS, value = 0) {
     nk <- ncol(PH)

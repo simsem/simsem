@@ -17,7 +17,7 @@ bind <- function(free = NULL, popParam = NULL, misspec = NULL, prior) {
         lab <- matrix("", nrow(free), ncol(free))
         if (any(is.na(free))) {
             if (is.matrix(value)) {
-                if (!(nrow(value) == nrow(free)) | !(ncol(value) == ncol(free)))
+                if (!(nrow(value) == nrow(free)) | !(ncol(value) == ncol(free))) 
                   stop("Two specified matrices do not have the same dimensions.")
                 lab[is.na(free)] <- checkInputValueVector(value[is.na(free)])
             } else {
@@ -26,4 +26,4 @@ bind <- function(free = NULL, popParam = NULL, misspec = NULL, prior) {
         }
         return(new("SimMatrix", free = free, value = lab))
     }
-}
+} 

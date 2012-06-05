@@ -1,6 +1,7 @@
 # plotDist: This function will plot a distribution
 
-setMethod("plotDist", signature = "SimDataDist", definition = function(object, xlim = NULL, ylim = NULL, r = 0, var = NULL) {
+setMethod("plotDist", signature = "SimDataDist", definition = function(object, 
+    xlim = NULL, ylim = NULL, r = 0, var = NULL) {
     if (isNullObject(object)) 
         stop("The data distribution object is not specified yet.")
     if (!is.null(var)) {
@@ -14,7 +15,8 @@ setMethod("plotDist", signature = "SimDataDist", definition = function(object, x
         plotDist(object@dist[[1]], reverse = object@reverse[1], xlim = xlim)
     } else if (object@p == 2) {
         library(copula)
-        CopNorm <- ellipCopula(family = "normal", dim = object@p, dispstr = "un", param = r)
+        CopNorm <- ellipCopula(family = "normal", dim = object@p, dispstr = "un", 
+            param = r)
         distName <- sapply(object@dist, class)
         distName <- tolower(gsub("Sim", "", distName))
         attribute <- list()
@@ -34,7 +36,8 @@ setMethod("plotDist", signature = "SimDataDist", definition = function(object, x
             xfunmax <- list(get(paste("q", distName[1], sep = "")), 0.995)
             xAttr <- slotNames(object@dist[[1]])
             for (j in 1:length(xAttr)) {
-                xfunmin[[j + 2]] <- call("=", xAttr[[j]], slot(object@dist[[1]], xAttr[[j]]))
+                xfunmin[[j + 2]] <- call("=", xAttr[[j]], slot(object@dist[[1]], 
+                  xAttr[[j]]))
                 xfunmax[[j + 2]] <- xfunmin[[j + 2]]
             }
             xlim <- rep(0, 0)
@@ -47,7 +50,8 @@ setMethod("plotDist", signature = "SimDataDist", definition = function(object, x
             yfunmax <- list(get(paste("q", distName[2], sep = "")), 0.995)
             yAttr <- slotNames(object@dist[[2]])
             for (j in 1:length(yAttr)) {
-                yfunmin[[j + 2]] <- call("=", yAttr[[j]], slot(object@dist[[2]], yAttr[[j]]))
+                yfunmin[[j + 2]] <- call("=", yAttr[[j]], slot(object@dist[[2]], 
+                  yAttr[[j]]))
                 yfunmax[[j + 2]] <- yfunmin[[j + 2]]
             }
             ylim <- rep(0, 0)
@@ -84,7 +88,8 @@ setMethod("plotDist", signature = "SimDataDist", definition = function(object, x
     }
 })
 
-setMethod("plotDist", signature = "VirtualDist", definition = function(object, xlim = NULL, reverse = FALSE) {
+setMethod("plotDist", signature = "VirtualDist", definition = function(object, 
+    xlim = NULL, reverse = FALSE) {
     distName <- class(object)
     distName <- tolower(gsub("Sim", "", distName))
     if (is.null(xlim)) {
