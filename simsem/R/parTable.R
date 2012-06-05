@@ -1,15 +1,15 @@
-## Builds a parameter table.  paramSet - list of simMatrix constraint - constraint object: SimEqualCon aux = names of the index of
-## the auxiliary variables in the data
+# Builds a parameter table.  paramSet - list of simMatrix constraint - constraint object: SimEqualCon aux = names of the index of
+# the auxiliary variables in the data
 
 # To get code to work a <- models(4) a.set <- simSetSEM(LY=a$LY,RPS=a$RPS,RTE=a$RTE,BE=a$BE) paramSet <-
 # list(LY=a$LY,RPS=a$RPS,RTE=a$RTE,BE=a$BE) ad <- simData(a.set) acm <- simModel(a.set,a$con) param <- tagHeaders(acm@param)
 
-## runLavaan(acm,run(ad,200))
+# runLavaan(acm,run(ad,200))
 
-## The necessary steps to building the analysis model: 1. Check to see if user specification is valid (current simSet) 2. Reduce
-## correlation matrices to covariance / Transform any X-side notation to Y-Side 3. Calculate starting values (?)  4. Determine free
-## parameters 5. make labels 6. impose constraints 7. Specify package 8. Estimator 9. Specify auxiliary variables (?)  Final data
-## type: List with [[1]] -> par Table (df) [[2]] -> package (char) [[3]] -> estimator (char) [[4]] -> Auxiliary (v)
+# The necessary steps to building the analysis model: 1. Check to see if user specification is valid (current simSet) 2. Reduce
+# correlation matrices to covariance / Transform any X-side notation to Y-Side 3. Calculate starting values (?)  4. Determine free
+# parameters 5. make labels 6. impose constraints 7. Specify package 8. Estimator 9. Specify auxiliary variables (?)  Final data
+# type: List with [[1]] -> par Table (df) [[2]] -> package (char) [[3]] -> estimator (char) [[4]] -> Auxiliary (v)
 
 
 # HS.model <- 'f1 =~ x1 + x2 + x3 \n f2 =~ x4 + x5 +x6 \n f3 =~ x7 + x8 + x9' fit <- cfa(HS.model, data=HolzingerSwineford1939)
@@ -19,12 +19,14 @@
 
 buildPT <- function(paramSet, modelType) {
     paramSet <- getFree(paramSet)
+	aux <- NULL # SP: put it here first to get the package compilable
     # con <- reduceConstraint(constraint)
     
     # This is repeated in simModel? B
     
-    ## paramSet <- collapseExo(paramSet, label = TRUE) constraint <- collapseExo(constraint, label = TRUE, value = NA)
-    ## ###################Have some zeros
+    paramSet <- collapseExo(paramSet, label = TRUE) 
+	constraint <- collapseExo(constraint, label = TRUE, value = NA)
+    ###################Have some zeros
     if (!isNullObject(paramSet$LY)) {
         for (i in 1:ncol(paramSet$LY)) {
             temp <- paste(colnames(paramSet$LY)[i], "=~")
@@ -201,7 +203,7 @@ buildPT <- function(paramSet, modelType) {
     return(result)
 }
 
-writeLavaanConstraint <- function(object, constraint) {
+writeLavaanConstraint2 <- function(object, constraint) {
     object <- blankParameters(object)
     if (!is.null(constraint)) {
         con <- constraint@con
@@ -222,7 +224,7 @@ writeLavaanConstraint <- function(object, constraint) {
     return(object)
 }
 
-writeLavaanIndividualConstraint <- function(Matrix, Attribute, Names) {
+writeLavaanIndividualConstraint2 <- function(Matrix, Attribute, Names) { # SP: Get rid of redundant name of functions
     result <- "equal('"
     if (!is.na(Attribute[1])) 
         result <- paste(result, Attribute[1], ".", sep = "")
@@ -242,7 +244,7 @@ writeLavaanIndividualConstraint <- function(Matrix, Attribute, Names) {
     return(result)
 }
 
-writeLavaanNullCode <- function(var, aux = NULL) {
+writeLavaanNullCode2 <- function(var, aux = NULL) { # SP: Get rid of redundant name of functions
     result <- NULL
     varAll <- c(var, aux)
     varCode <- paste(paste(paste(varAll, " ~~ NA*", varAll, sep = ""), collapse = "\n"), "\n")
@@ -265,7 +267,7 @@ writeLavaanNullCode <- function(var, aux = NULL) {
     return(result)
 }
 
-reduceConstraint <- function(SimEqualCon) {
+reduceConstraint2 <- function(SimEqualCon) { # SP: Get rid of redundant name of functions
     modelType <- SimEqualCon@modelType
     equalCon <- SimEqualCon@con
     Length <- length(equalCon)
@@ -317,7 +319,7 @@ reduceConstraint <- function(SimEqualCon) {
     # return(Result)
 }
 
-isVarianceConstraint <- function(Name) {
+isVarianceConstraint2 <- function(Name) { # SP: Get rid of redundant name of functions
     W <- getKeywords()
     keywords <- c(W$VTE, W$VTD, W$VPH, W$VPS, W$VX, W$VY, W$VE)
     result <- Name %in% keywords
@@ -330,7 +332,7 @@ isVarianceConstraint <- function(Name) {
     }
 }
 
-isMeanConstraint <- function(Name) {
+isMeanConstraint2 <- function(Name) { # SP: Get rid of redundant name of functions
     W <- getKeywords()
     keywords <- c(W$TX, W$TY, W$KA, W$AL, W$MX, W$MY, W$ME)
     result <- Name %in% keywords
@@ -483,15 +485,15 @@ paramLabels <- function(paramSet, modelType) {
 }
 
 startValues <- function(paramSet, trial, reduced = FALSE) {
-    result <- run(object)
+    result <- run(paramSet)
     if (trial > 1) {
         for (i in 2:trial) {
-            temp <- run(object)
+            temp <- run(paramSet)
             result <- combineObject(result, temp)
         }
         result <- divideObject(result, trial)
     }
-    result@modelType <- object@modelType
+    result@modelType <- paramSet@modelType
     if (reduced == TRUE) 
         result <- reduceMatrices(result)
     return(result)

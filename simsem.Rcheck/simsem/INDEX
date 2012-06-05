@@ -26,8 +26,8 @@ VirtualRSet-class       Class '"VirtualRSet"', '"SimLabels"' and
 adjust                  Change an element in 'SimMatrix', 'SymMatrix',
                         or 'SimVector'.
 anova,SimResult-method
-                        Provide a comparison of nested models across
-                        replications
+                        Provide a comparison of nested models and
+                        nonnested models across replications
 blankParameters         Change all elements in the non-null objects to
                         be all NAs.
 centralMoment           Calculate central moments of a variable
@@ -125,7 +125,8 @@ freeVector              Create a free parameters vector with a starting
                         values in a vector object
 getCondQtile            Get a quantile of a variable given values of
                         predictors
-getCutoff               Find cutoff given a priori alpha level
+getCutoff               Find fit indices cutoff given a priori alpha
+                        level
 getKeywords             List of all keywords used in the 'simsem'
                         package
 getPopulation           Extract the data generation population model
@@ -166,7 +167,8 @@ overlapHist             Plot overlapping histograms
 pValue                  Find p-values (1 - percentile)
 plot3DQtile             Build a persepctive plot or contour plot of a
                         quantile of predicted values
-plotCutoff              Plot sampling distributions of fit indices
+plotCutoff              Plot sampling distributions of fit indices with
+                        fit indices cutoffs
 plotDist                Plot a distribution of a distribution object or
                         data distribution object
 plotMisfit              Plot the population misfit in parameter result
@@ -174,7 +176,8 @@ plotMisfit              Plot the population misfit in parameter result
 plotPower               Make a power plot of a parameter given varying
                         parameters
 plotPowerFit            Plot sampling distributions of fit indices that
-                        visualize power
+                        visualize power of rejecting datasets
+                        underlying misspecified models
 plotQtile               Build a scatterplot with overlaying line of
                         quantiles of predicted values
 popDiscrepancy          Find the discrepancy value between two means
@@ -195,7 +198,9 @@ reduceMatrices          Reduce the model constraint to data generation
 residualCovariate       Residual centered all target indicators by
                         covariates
 run                     Run a particular object in 'simsem' package.
-runFit                  Build a result object from analyzing real data
+runFit                  Build a Monte Carlo simulation that the
+                        data-generation parameters are from the result
+                        of analyzing real data
 runLavaan               Run data by the model object by the 'lavaan'
                         package
 runMI                   Multiply impute and analyze data using lavaan
@@ -210,7 +215,7 @@ simBeta                 Create random beta distribution object
 simBinom                Create random binomial distribution object
 simCauchy               Create random Cauchy distribution object
 simChisq                Create random chi-squared distribution object
-simData                 Data object
+simData                 Create a Data object
 simDataDist             Create a data distribution object.
 simEqualCon             Equality Constraint Object
 simExp                  Create random exponential distribution object
@@ -230,8 +235,7 @@ simMisspecCFA           Set of model misspecification for CFA model.
 simMisspecPath          Set of model misspecification for Path analysis
                         model.
 simMisspecSEM           Set of model misspecification for SEM model.
-simModel                Create simModel from model specification and be
-                        ready for data analysis.
+simModel                Create a model object
 simNbinom               Create random negative binomial distribution
                         object
 simNorm                 Create random normal distribution object
@@ -259,7 +263,7 @@ simUnif                 Create random uniform distribution object
 simVector               Create simVector that save free parameters and
                         starting values, as well as fixed values
 simWeibull              Create random Weibull distribution object
-skew                    Finding skewness
+skew                    Find skewness
 standardize             Standardize the parameter estimates within an
                         object
 startingValues          Find starting values by averaging random
