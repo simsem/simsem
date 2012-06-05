@@ -408,37 +408,38 @@ setMethod("summary", signature = "SimResult", definition = function(object, digi
     cat("Model Type\n")
     print(object@modelType)
     cleanObj <- clean(object)
-	
+    
     cat("========= Fit Indices Cutoffs ============\n")
-	condition <- c(length(object@pmMCAR) > 1, length(object@pmMAR) > 1, length(object@n) > 1)
-	if(any(condition)) {
-		if (is.null(alpha)) 
-			alpha <- 0.05
-		values <- list()
-		ifelse(condition[3], values[[3]] <- round(seq(min(object@n), max(object@n), length.out=5)), values[[3]] <- NA)
-		ifelse(condition[1], values[[1]] <- seq(min(object@pmMCAR), max(object@pmMCAR), length.out=5), values[[1]] <- NA)
-		ifelse(condition[2], values[[2]] <- seq(min(object@pmMAR), max(object@pmMAR), length.out=5), values[[2]] <- NA)
-		m <- do.call(expand.grid, values)
-		FUN <- function(vec, obj, alpha, usedFit) getCutoff(obj, alpha, revDirec = FALSE, usedFit = usedFit, nVal=vec[3], pmMCARval=vec[1], pmMARval=vec[2])
-		cutoffs <- sapply(as.data.frame(t(m)), FUN, obj=object, alpha=alpha, usedFit=usedFit)
-		mSelect <- as.matrix(m[,condition])
-		colnames(mSelect) <- c("%MCAR", "%MAR", "N")[condition]
-		result <- cbind(mSelect, t(cutoffs))
-		rownames(result) <- NULL
-		cat(paste("Alpha =", alpha, "\n"))
-		print(result)
-	} else {
-		if (is.null(alpha)) 
-			alpha <- c(0.1, 0.05, 0.01, 0.001)
-		cutoffs <- round(sapply(alpha, getCutoff, object = cleanObj, usedFit = usedFit), digits)
-		if (ncol(as.matrix(cutoffs)) == 1) {
-			cutoffs <- t(cutoffs)
-			rownames(cutoffs) <- usedFit
-		}
-		colnames(cutoffs) <- alpha
-		names(dimnames(cutoffs)) <- c("Fit Indices", "Alpha")
-		print(as.data.frame(cutoffs))
-	}
+    condition <- c(length(object@pmMCAR) > 1, length(object@pmMAR) > 1, length(object@n) > 1)
+    if (any(condition)) {
+        if (is.null(alpha)) 
+            alpha <- 0.05
+        values <- list()
+        ifelse(condition[3], values[[3]] <- round(seq(min(object@n), max(object@n), length.out = 5)), values[[3]] <- NA)
+        ifelse(condition[1], values[[1]] <- seq(min(object@pmMCAR), max(object@pmMCAR), length.out = 5), values[[1]] <- NA)
+        ifelse(condition[2], values[[2]] <- seq(min(object@pmMAR), max(object@pmMAR), length.out = 5), values[[2]] <- NA)
+        m <- do.call(expand.grid, values)
+        FUN <- function(vec, obj, alpha, usedFit) getCutoff(obj, alpha, revDirec = FALSE, usedFit = usedFit, nVal = vec[3], pmMCARval = vec[1], 
+            pmMARval = vec[2])
+        cutoffs <- sapply(as.data.frame(t(m)), FUN, obj = object, alpha = alpha, usedFit = usedFit)
+        mSelect <- as.matrix(m[, condition])
+        colnames(mSelect) <- c("%MCAR", "%MAR", "N")[condition]
+        result <- cbind(mSelect, t(cutoffs))
+        rownames(result) <- NULL
+        cat(paste("Alpha =", alpha, "\n"))
+        print(result)
+    } else {
+        if (is.null(alpha)) 
+            alpha <- c(0.1, 0.05, 0.01, 0.001)
+        cutoffs <- round(sapply(alpha, getCutoff, object = cleanObj, usedFit = usedFit), digits)
+        if (ncol(as.matrix(cutoffs)) == 1) {
+            cutoffs <- t(cutoffs)
+            rownames(cutoffs) <- usedFit
+        }
+        colnames(cutoffs) <- alpha
+        names(dimnames(cutoffs)) <- c("Fit Indices", "Alpha")
+        print(as.data.frame(cutoffs))
+    }
     cat("========= Parameter Estimates and Standard Errors ============\n")
     print(round(summaryParam(object), digits))
     cat("========= Correlation between Fit Indices ============\n")
@@ -462,7 +463,8 @@ setMethod("summary", signature = "SimResult", definition = function(object, digi
     if (length(unique(object@pmMAR)) > 1) 
         cat("NOTE: The percent of MAR is varying.\n")
     if (!isNullObject(object@paramValue)) {
-        if ((ncol(object@coef) != ncol(object@paramValue)) | ((ncol(object@coef) == ncol(object@paramValue)) && any(colnames(object@coef) != colnames(object@paramValue)))) 
+        if ((ncol(object@coef) != ncol(object@paramValue)) | ((ncol(object@coef) == ncol(object@paramValue)) && any(colnames(object@coef) != 
+            colnames(object@paramValue)))) 
             cat("NOTE: The data generation model is not the same as the analysis model. See the summary of the population underlying data generation by the summaryPopulation function.\n")
     }
 })

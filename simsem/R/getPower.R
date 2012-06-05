@@ -1,11 +1,10 @@
-# getPower: automatically find the power for all values in the range of given
-# varying parameters or for a set of given value of varying parameters
+# getPower: automatically find the power for all values in the range of given varying parameters or for a set of given value of
+# varying parameters
 
-getPower <- function(simResult, alpha = 0.05, contParam = NULL, powerParam = NULL, 
-    nVal = NULL, pmMCARval = NULL, pmMARval = NULL, paramVal = NULL) {
+getPower <- function(simResult, alpha = 0.05, contParam = NULL, powerParam = NULL, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, 
+    paramVal = NULL) {
     object <- clean(simResult)
-    condition <- c(length(object@pmMCAR) > 1, length(object@pmMAR) > 1, length(object@n) > 
-        1)
+    condition <- c(length(object@pmMCAR) > 1, length(object@pmMAR) > 1, length(object@n) > 1)
     if (any(condition)) {
         pred <- NULL
         pred$N <- nVal
@@ -28,9 +27,8 @@ getPower <- function(simResult, alpha = 0.05, contParam = NULL, powerParam = NUL
                 }
             }
         }
-        pow <- continuousPower(object, length(object@n) > 1, length(object@pmMCAR) > 
-            1, length(object@pmMAR) > 1, contParam = contParam, alpha = alpha, powerParam = powerParam, 
-            pred = pred)
+        pow <- continuousPower(object, length(object@n) > 1, length(object@pmMCAR) > 1, length(object@pmMAR) > 1, contParam = contParam, 
+            alpha = alpha, powerParam = powerParam, pred = pred)
         return(pow)
     } else {
         coef <- colMeans(object@coef, na.rm = TRUE)
@@ -46,19 +44,17 @@ getPower <- function(simResult, alpha = 0.05, contParam = NULL, powerParam = NUL
     
 }
 
-# continuousPower: Function to calculate power with continously varying
-# parameters Will calculate power over continuously varying n, percent missing,
-# or parameters
+# continuousPower: Function to calculate power with continously varying parameters Will calculate power over continuously varying n,
+# percent missing, or parameters
 
-continuousPower <- function(simResult, contN = TRUE, contMCAR = FALSE, 
-    contMAR = FALSE, contParam = NULL, alpha = 0.05, powerParam = NULL, pred = NULL) {
+continuousPower <- function(simResult, contN = TRUE, contMCAR = FALSE, contMAR = FALSE, contParam = NULL, alpha = 0.05, powerParam = NULL, 
+    pred = NULL) {
     
     # Change warning option to supress warnings
     warnT <- as.numeric(options("warn"))
     options(warn = -1)
     
-    # Clean simResult object and get a replications by parameters matrix of 0s and
-    # 1s for logistic regression
+    # Clean simResult object and get a replications by parameters matrix of 0s and 1s for logistic regression
     object <- clean(simResult)
     crit.value <- qnorm(1 - alpha/2)
     sig <- 0 + (abs(object@coef/object@se) > crit.value)
@@ -111,8 +107,7 @@ continuousPower <- function(simResult, contN = TRUE, contMCAR = FALSE,
         if (predDefault) {
             paramVal <- list()
             for (i in 1:length(contParam)) {
-                temp <- seq(min(object@paramValue[, contParam[i]]), max(object@paramValue[, 
-                  contParam[i]]), length.out = 5)
+                temp <- seq(min(object@paramValue[, contParam[i]]), max(object@paramValue[, contParam[i]]), length.out = 5)
                 paramVal[[i]] <- unique(temp)
             }
             names(paramVal) <- contParam
@@ -125,8 +120,7 @@ continuousPower <- function(simResult, contN = TRUE, contMCAR = FALSE,
     powVal <- cbind(rep(1, dim(powVal)[1]), powVal)
     x <- as.matrix(x)
     for (i in 1:dim(sig)[[2]]) {
-        mod <- invisible(try(glm(sig[, i] ~ x, family = binomial(link = "logit")), 
-            silent = TRUE))
+        mod <- invisible(try(glm(sig[, i] ~ x, family = binomial(link = "logit")), silent = TRUE))
         res[[dimnames(sig)[[2]][[i]]]] <- apply(powVal, 1, predProb, mod)
     }
     if (is.list(res)) {

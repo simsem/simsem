@@ -1,5 +1,4 @@
-# isMeanConstraint: Check whether all rownames in a constraint matrix
-# containing symbols of means vectors
+# isMeanConstraint: Check whether all rownames in a constraint matrix containing symbols of means vectors
 
 isMeanConstraint <- function(Name) {
     W <- getKeywords()

@@ -16,29 +16,24 @@ setMethod("createImpliedMACS", signature = "SimRSet", definition = function(obje
         implied.covariance <- (object@LY %*% object@PS %*% t(object@LY)) + object@TE
     } else if (object@modelType == "Path" | object@modelType == "SEM") {
         implied.mean <- solve(ID - object@BE) %*% object@AL
-        implied.covariance <- solve(ID - object@BE) %*% object@PS %*% t(solve(ID - 
-            object@BE))
+        implied.covariance <- solve(ID - object@BE) %*% object@PS %*% t(solve(ID - object@BE))
         if (object@modelType == "SEM") {
             implied.mean <- object@TY + (object@LY %*% implied.mean)
-            implied.covariance <- (object@LY %*% implied.covariance %*% t(object@LY)) + 
-                object@TE
+            implied.covariance <- (object@LY %*% implied.covariance %*% t(object@LY)) + object@TE
         }
     } else if (object@modelType == "Path.exo" | object@modelType == "SEM.exo") {
         implied.mean.1 <- as.matrix(object@KA)
         implied.mean.2 <- solve(ID - object@BE) %*% (object@AL + (object@GA %*% object@KA))
         implied.covariance.1.1 <- object@PH
         implied.covariance.1.2 <- object@PH %*% t(object@GA) %*% t(solve(ID - object@BE))
-        implied.covariance.2.2 <- solve(ID - object@BE) %*% ((object@GA %*% object@PH %*% 
-            t(object@GA)) + object@PS) %*% t(solve(ID - object@BE))
+        implied.covariance.2.2 <- solve(ID - object@BE) %*% ((object@GA %*% object@PH %*% t(object@GA)) + object@PS) %*% t(solve(ID - 
+            object@BE))
         if (object@modelType == "SEM.exo") {
             implied.mean.1 <- object@TX + (object@LX %*% implied.mean.1)
             implied.mean.2 <- object@TY + (object@LY %*% implied.mean.2)
-            implied.covariance.1.1 <- (object@LX %*% implied.covariance.1.1 %*% t(object@LX)) + 
-                object@TD
-            implied.covariance.1.2 <- (object@LX %*% implied.covariance.1.2 %*% t(object@LY)) + 
-                object@TH
-            implied.covariance.2.2 <- (object@LY %*% implied.covariance.2.2 %*% t(object@LY)) + 
-                object@TE
+            implied.covariance.1.1 <- (object@LX %*% implied.covariance.1.1 %*% t(object@LX)) + object@TD
+            implied.covariance.1.2 <- (object@LX %*% implied.covariance.1.2 %*% t(object@LY)) + object@TH
+            implied.covariance.2.2 <- (object@LY %*% implied.covariance.2.2 %*% t(object@LY)) + object@TE
         }
         implied.mean <- rbind(implied.mean.1, implied.mean.2)
         implied.covariance.2.1 <- t(implied.covariance.1.2)
@@ -54,8 +49,7 @@ setMethod("createImpliedMACS", signature = "SimModelOut", definition = function(
     return(result)
 })
 
-setMethod("createImpliedMACS", signature = "SimDataOut", definition = function(object, 
-    misspec = FALSE) {
+setMethod("createImpliedMACS", signature = "SimDataOut", definition = function(object, misspec = FALSE) {
     result <- NULL
     if (misspec) {
         if (isNullObject(object@misspecOut)) {

@@ -1,5 +1,4 @@
-# combinePathExoEndo: Combine the regression coefficient matrices (exogenous
-# --> endogenous and endogenous --> endogenous)
+# combinePathExoEndo: Combine the regression coefficient matrices (exogenous --> endogenous and endogenous --> endogenous)
 
 combinePathExoEndo <- function(GA, BE, value = 0) {
     nk <- ncol(GA)

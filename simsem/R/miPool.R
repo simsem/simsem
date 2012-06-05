@@ -28,8 +28,7 @@ miPoolVector <- function(MI.param, MI.se, imps) {
     return(MI.res)
 }
 
-# miPoolChi: Pool Chi-square statistic based on Li, Meng, Raghunathan, & Rubin
-# (1991) adapted from
+# miPoolChi: Pool Chi-square statistic based on Li, Meng, Raghunathan, & Rubin (1991) adapted from
 
 miPoolChi <- function(chis, df) {
     # From Li, Meng, Raghunathan, & Rubin (1991)
@@ -126,15 +125,13 @@ miPool <- function(Result.l) {
     nullDfPool <- Fit["baseline.df", 1]
     chiPool <- miPoolChi(Fit["Chi", Converged], dfPool)
     nullChiPool <- miPoolChi(Fit["baseline.Chi", Converged], nullDfPool)
-    OutputFit <- fitMeasuresChi(X2 = chiPool["df1"] * chiPool["F"], df = chiPool["df1"], 
-        p = chiPool["p.F"], X2.null = nullChiPool["df1"] * nullChiPool["F"], df.null = nullChiPool["df1"], 
-        p.null = nullChiPool["p.F"], N = Result.l[[1]]@n, fit.measures = "all")
+    OutputFit <- fitMeasuresChi(X2 = chiPool["df1"] * chiPool["F"], df = chiPool["df1"], p = chiPool["p.F"], X2.null = nullChiPool["df1"] * 
+        nullChiPool["F"], df.null = nullChiPool["df1"], p.null = nullChiPool["p.F"], N = Result.l[[1]]@n, fit.measures = "all")
     toGetAverage <- setdiff(rownames(Fit), names(OutputFit))
     OutputFit2 <- rowMeans(Fit[toGetAverage, Converged], na.rm = TRUE)
     OutputFit <- c(OutputFit, OutputFit2)[rownames(Fit)]
     names(nullChiPool) <- paste("baseline.", names(nullChiPool), sep = "")
     OutputFit <- c(OutputFit, chiPool, nullChiPool)
-    return(new("SimModelMIOut", param = param, start = start, equalCon = equalCon, 
-        package = package, coef = OutputCoef, fit = OutputFit, se = OutputSE, converged = conv, 
-        FMI1 = OutputFMI1, FMI2 = OutputFMI2))
+    return(new("SimModelMIOut", param = param, start = start, equalCon = equalCon, package = package, coef = OutputCoef, fit = OutputFit, 
+        se = OutputSE, converged = conv, FMI1 = OutputFMI1, FMI2 = OutputFMI2))
 } 

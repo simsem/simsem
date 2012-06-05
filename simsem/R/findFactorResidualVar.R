@@ -1,5 +1,5 @@
-# findFactorResidualVar: Find the factor residual variance if total variances,
-# correlation, and regression coefficients are specified.
+# findFactorResidualVar: Find the factor residual variance if total variances, correlation, and regression coefficients are
+# specified.
 
 findFactorResidualVar <- function(beta, corPsi, totalVarPsi = NULL) {
     library(lavaan)
@@ -34,8 +34,7 @@ findFactorResidualVar <- function(beta, corPsi, totalVarPsi = NULL) {
             tempPsi <- suppressWarnings(cor2cov(as.matrix(tempPsi), tempPsiSd))
             real.tempPsi <- matrix(0, length(iv) + length(dv), length(iv) + length(dv))
             real.tempPsi[1:length(iv), 1:length(iv)] <- ivCov
-            real.tempPsi[(length(iv) + 1):(length(iv) + length(dv)), (length(iv) + 
-                1):(length(iv) + length(dv))] <- tempPsi
+            real.tempPsi[(length(iv) + 1):(length(iv) + length(dv)), (length(iv) + 1):(length(iv) + length(dv))] <- tempPsi
             agg <- c(iv, dv)
             blank.path <- matrix(0, nrow = length(iv), ncol = length(agg))
             temp.path2 <- beta[dv, agg]

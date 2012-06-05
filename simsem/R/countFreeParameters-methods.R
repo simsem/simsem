@@ -28,18 +28,15 @@ setMethod("countFreeParameters", signature = "SimVector", definition = function(
 })
 
 setMethod("countFreeParameters", signature = "SimSet", definition = function(object) {
-    return(sum(c(countFreeParameters(object@LY), countFreeParameters(object@RTE), 
-        countFreeParameters(object@VTE), countFreeParameters(object@RPS), countFreeParameters(object@VPS), 
-        countFreeParameters(object@BE), countFreeParameters(object@TY), countFreeParameters(object@AL), 
-        countFreeParameters(object@ME), countFreeParameters(object@MY), countFreeParameters(object@VE), 
-        countFreeParameters(object@VY), countFreeParameters(object@LX), countFreeParameters(object@RTD), 
-        countFreeParameters(object@VTD), countFreeParameters(object@RPH), countFreeParameters(object@GA), 
-        countFreeParameters(object@TX), countFreeParameters(object@KA), countFreeParameters(object@MX), 
+    return(sum(c(countFreeParameters(object@LY), countFreeParameters(object@RTE), countFreeParameters(object@VTE), countFreeParameters(object@RPS), 
+        countFreeParameters(object@VPS), countFreeParameters(object@BE), countFreeParameters(object@TY), countFreeParameters(object@AL), 
+        countFreeParameters(object@ME), countFreeParameters(object@MY), countFreeParameters(object@VE), countFreeParameters(object@VY), 
+        countFreeParameters(object@LX), countFreeParameters(object@RTD), countFreeParameters(object@VTD), countFreeParameters(object@RPH), 
+        countFreeParameters(object@GA), countFreeParameters(object@TX), countFreeParameters(object@KA), countFreeParameters(object@MX), 
         countFreeParameters(object@VPH), countFreeParameters(object@VX), countFreeParameters(object@RTH))))
 })
 
-setMethod("countFreeParameters", signature = "matrix", definition = function(object, 
-    symmetric = FALSE) {
+setMethod("countFreeParameters", signature = "matrix", definition = function(object, symmetric = FALSE) {
     if (symmetric) {
         return(sum(is.na(object[upper.tri(object, diag = TRUE)])))
     } else {
@@ -52,13 +49,11 @@ setMethod("countFreeParameters", signature = "vector", definition = function(obj
 })
 
 setMethod("countFreeParameters", signature = "VirtualRSet", definition = function(object) {
-    return(sum(c(countFreeParameters(object@LY, symmetric = FALSE), countFreeParameters(object@TE, 
-        symmetric = TRUE), countFreeParameters(object@PS, symmetric = TRUE), countFreeParameters(object@BE, 
-        symmetric = FALSE), countFreeParameters(object@TY), countFreeParameters(object@AL), 
-        countFreeParameters(object@LX, symmetric = FALSE), countFreeParameters(object@TD, 
-            symmetric = TRUE), countFreeParameters(object@PH, symmetric = TRUE), 
-        countFreeParameters(object@GA, symmetric = FALSE), countFreeParameters(object@TX), 
-        countFreeParameters(object@KA), countFreeParameters(object@TH, symmetric = FALSE))))
+    return(sum(c(countFreeParameters(object@LY, symmetric = FALSE), countFreeParameters(object@TE, symmetric = TRUE), countFreeParameters(object@PS, 
+        symmetric = TRUE), countFreeParameters(object@BE, symmetric = FALSE), countFreeParameters(object@TY), countFreeParameters(object@AL), 
+        countFreeParameters(object@LX, symmetric = FALSE), countFreeParameters(object@TD, symmetric = TRUE), countFreeParameters(object@PH, 
+            symmetric = TRUE), countFreeParameters(object@GA, symmetric = FALSE), countFreeParameters(object@TX), countFreeParameters(object@KA), 
+        countFreeParameters(object@TH, symmetric = FALSE))))
 })
 
 setMethod("countFreeParameters", signature = "SimEqualCon", definition = function(object) {

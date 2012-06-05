@@ -1,13 +1,10 @@
 # extract: Extract some elements from an object
 
-setMethod("extract", signature = "SimDataDist", definition = function(object, 
-    pos) {
-    return(new("SimDataDist", p = length(pos), dist = object@dist[pos], keepScale = object@keepScale[pos], 
-        reverse = object@reverse[pos]))
+setMethod("extract", signature = "SimDataDist", definition = function(object, pos) {
+    return(new("SimDataDist", p = length(pos), dist = object@dist[pos], keepScale = object@keepScale[pos], reverse = object@reverse[pos]))
 })
 
-setMethod("extract", signature = "vector", definition = function(object, 
-    pos = NULL) {
+setMethod("extract", signature = "vector", definition = function(object, pos = NULL) {
     if (isNullObject(object)) 
         return(object)
     if (is.null(pos)) {
@@ -17,8 +14,7 @@ setMethod("extract", signature = "vector", definition = function(object,
     }
 })
 
-setMethod("extract", signature = "matrix", definition = function(object, 
-    row = NULL, col = NULL) {
+setMethod("extract", signature = "matrix", definition = function(object, row = NULL, col = NULL) {
     if (isNullObject(object)) 
         return(object)
     if (is.null(row)) 
@@ -35,8 +31,7 @@ setMethod("extract", signature = "matrix", definition = function(object,
     }
 })
 
-setMethod("extract", signature = "SimMatrix", definition = function(object, 
-    row = NULL, col = NULL) {
+setMethod("extract", signature = "SimMatrix", definition = function(object, row = NULL, col = NULL) {
     if (isNullObject(object)) 
         return(object)
     if (is.null(row)) 
@@ -48,8 +43,7 @@ setMethod("extract", signature = "SimMatrix", definition = function(object,
     return(object)
 })
 
-setMethod("extract", signature = "SimVector", definition = function(object, 
-    pos = NULL) {
+setMethod("extract", signature = "SimVector", definition = function(object, pos = NULL) {
     if (isNullObject(object)) 
         return(object)
     if (is.null(pos)) 
@@ -59,8 +53,7 @@ setMethod("extract", signature = "SimVector", definition = function(object,
     return(object)
 })
 
-setMethod("extract", signature = "SimSet", definition = function(object, 
-    yOnly = FALSE, y = NULL, e = NULL, x = NULL, k = NULL) {
+setMethod("extract", signature = "SimSet", definition = function(object, yOnly = FALSE, y = NULL, e = NULL, x = NULL, k = NULL) {
     if (yOnly) {
         if (object@modelType == "CFA") 
             stop("The yOnly option can be used only for the object in path analysis or SEM model with X side.")
@@ -135,8 +128,8 @@ setMethod("extract", signature = "SimSet", definition = function(object,
     return(object)
 })
 
-setMethod("extract", signature = "VirtualRSet", definition = function(object, 
-    yOnly = FALSE, y = NULL, e = NULL, x = NULL, k = NULL) {
+setMethod("extract", signature = "VirtualRSet", definition = function(object, yOnly = FALSE, y = NULL, e = NULL, x = NULL, 
+    k = NULL) {
     if (yOnly) {
         if (object@modelType == "CFA") 
             stop("The yOnly option can be used only for the object in path analysis or SEM model with X side.")
@@ -193,14 +186,13 @@ setMethod("extract", signature = "VirtualRSet", definition = function(object,
     return(object)
 })
 
-setMethod("extract", signature = "data.frame", definition = function(object, 
-    yOnly = FALSE, y = NULL, e = NULL, x = NULL, k = NULL, keepOriginalName = FALSE) {
+setMethod("extract", signature = "data.frame", definition = function(object, yOnly = FALSE, y = NULL, e = NULL, x = NULL, k = NULL, 
+    keepOriginalName = FALSE) {
     columnName <- colnames(object)
     if (is.null(columnName)) 
         stop("The extract method for data frame needs column names.")
     name <- substr(columnName, 1, 2)
-    position <- do.call("rbind", strsplit(substr(columnName, 3, nchar(columnName)), 
-        "_"))
+    position <- do.call("rbind", strsplit(substr(columnName, 3, nchar(columnName)), "_"))
     if (yOnly) {
         if (!is.null(y) | !is.null(e) | !is.null(x) | !is.null(k)) 
             stop("The 'y', 'e', 'x', and 'k' arguments can be used only when the yOnly argument is FALSE.")

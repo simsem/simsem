@@ -1,5 +1,5 @@
-# findPossibleFactorCor: From the set of regression coefficients, this function
-# will find the elements that is possible to free covariances or correlations
+# findPossibleFactorCor: From the set of regression coefficients, this function will find the elements that is possible to free
+# covariances or correlations
 
 findPossibleFactorCor <- function(beta) {
     ni <- nrow(beta)

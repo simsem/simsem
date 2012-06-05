@@ -1,7 +1,6 @@
 # adjust: adjust a particular element in an object
 
-setMethod("adjust", signature(target = "SimMatrix"), definition = function(target, 
-    value, pos, numAsFixed = TRUE) {
+setMethod("adjust", signature(target = "SimMatrix"), definition = function(target, value, pos, numAsFixed = TRUE) {
     if (is.vector(pos) && (length(pos) == 2)) 
         pos <- matrix(pos, ncol = 2)
     for (i in 1:nrow(pos)) {
@@ -21,8 +20,7 @@ setMethod("adjust", signature(target = "SimMatrix"), definition = function(targe
     return(target)  #new('SimMatrix', free=target@free, value=target@value))
 })
 
-setMethod("adjust", signature(target = "SymMatrix"), definition = function(target, 
-    value, pos, numAsFixed = TRUE) {
+setMethod("adjust", signature(target = "SymMatrix"), definition = function(target, value, pos, numAsFixed = TRUE) {
     if (is.vector(pos) && (length(pos) == 2)) 
         pos <- matrix(pos, ncol = 2)
     for (i in 1:nrow(pos)) {
@@ -49,8 +47,7 @@ setMethod("adjust", signature(target = "SymMatrix"), definition = function(targe
     return(target)  #new('SimMatrix', free=target@free, value=target@value))
 })
 
-setMethod("adjust", signature(target = "SimVector"), definition = function(target, 
-    value, pos, numAsFixed = TRUE) {
+setMethod("adjust", signature(target = "SimVector"), definition = function(target, value, pos, numAsFixed = TRUE) {
     for (i in 1:length(pos)) {
         if (is.numeric(value)) {
             if (numAsFixed) {

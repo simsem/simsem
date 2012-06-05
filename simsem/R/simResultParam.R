@@ -1,6 +1,7 @@
 # simResultParam: Simulate the parameters for all replications.
 
-simResultParam <- function(nRep, object, misspec = new("NullSimMisspec"), SimEqualCon = new("NullSimEqualCon"), seed = 123321, maxDraw = 100) {
+simResultParam <- function(nRep, object, misspec = new("NullSimMisspec"), SimEqualCon = new("NullSimEqualCon"), seed = 123321, 
+    maxDraw = 100) {
     result.l <- NULL
     nFree <- countFreeParameters(object)
     if (!isNullObject(SimEqualCon)) 
@@ -29,5 +30,6 @@ simResultParam <- function(nRep, object, misspec = new("NullSimMisspec"), SimEqu
     paramResult <- as.data.frame(t(param.l))
     misspecResult <- as.data.frame(t(misspec.l))
     fitResult <- as.data.frame(t(fit.l))
-    return(new("SimResultParam", modelType = object@modelType, nRep = nRep, param = paramResult, misspec = misspecResult, fit = fitResult, seed = seed))
+    return(new("SimResultParam", modelType = object@modelType, nRep = nRep, param = paramResult, misspec = misspecResult, fit = fitResult, 
+        seed = seed))
 } 

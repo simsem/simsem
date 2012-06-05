@@ -1,5 +1,4 @@
-# kStat: Calculate the k-statistic (i.e., unbiased estimator of a cumulant) of
-# a variable
+# kStat: Calculate the k-statistic (i.e., unbiased estimator of a cumulant) of a variable
 
 kStat <- function(x, ord) {
     # Formula from mathworld wolfram

@@ -8,8 +8,7 @@ residualCovariate <- function(data, targetVar, covVar) {
         cov <- colnames(data)[cov]
     if (all(is.numeric(target))) 
         target <- colnames(data)[target]
-    express <- paste("cbind(", paste(target, collapse = ", "), ") ~ ", paste(cov, 
-        collapse = " + "), sep = "")
+    express <- paste("cbind(", paste(target, collapse = ", "), ") ~ ", paste(cov, collapse = " + "), sep = "")
     data[, target] <- lm(express, data = data)$residuals
     return(data)
 } 

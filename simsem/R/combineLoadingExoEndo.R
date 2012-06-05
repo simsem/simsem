@@ -1,5 +1,4 @@
-# combineLoadingExoEndo: Combine factor loading from X and Y sides into a
-# single matrix
+# combineLoadingExoEndo: Combine factor loading from X and Y sides into a single matrix
 
 combineLoadingExoEndo <- function(LX, LY, value = 0) {
     nx <- nrow(LX)

@@ -1,5 +1,4 @@
-# plotQtile: Build a scatterplot with overlaying line of quantiles of predicted
-# values
+# plotQtile: Build a scatterplot with overlaying line of quantiles of predicted values
 
 plotQtile <- function(x, y, df = 0, qtile = NULL, ...) {
     library(quantreg)

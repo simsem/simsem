@@ -1,5 +1,4 @@
-# combineMeasurementErrorExoEndo: Combine measurement error correlation from X
-# and Y sides into a single matrix
+# combineMeasurementErrorExoEndo: Combine measurement error correlation from X and Y sides into a single matrix
 
 combineMeasurementErrorExoEndo <- function(TD, TE, TH) {
     part1 <- cbind(TD, TH)

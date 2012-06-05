@@ -1,5 +1,5 @@
-# symMatrix: Create SymMatrix.c object that save free parameters and starting values, as well as fixed values. This will be used for model specification later, such as for factor residual
-# correlation matrix or measurement error correlation matrix.
+# symMatrix: Create SymMatrix.c object that save free parameters and starting values, as well as fixed values. This will be used for
+# model specification later, such as for factor residual correlation matrix or measurement error correlation matrix.
 
 symMatrix <- function(free = NULL, value = NULL) {
     if (!is.null(free) && !isSymmetric(free)) {

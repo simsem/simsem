@@ -25,8 +25,7 @@ createData <- function(paramSet, n, object, dataOnly) {
         M <- matrix(rep(M, n), nrow = n, byrow = TRUE)
         Mu <- implied$M
         Mu <- matrix(rep(Mu, n), nrow = n, byrow = TRUE)
-        z <- (scale(originalData, scale = FALSE) %*% (solve(sqrtSymmetricMatrix(S)) %*% 
-            sqrtSymmetricMatrix(Sigma))) + Mu
+        z <- (scale(originalData, scale = FALSE) %*% (solve(sqrtSymmetricMatrix(S)) %*% sqrtSymmetricMatrix(Sigma))) + Mu
         index <- sample(1:n, replace = TRUE)
         Data <- z[index, ]
     } else {
@@ -47,13 +46,11 @@ createData <- function(paramSet, n, object, dataOnly) {
                 }
                 set <- findRecursiveSet(usedParam2@BE)
                 iv <- set[[1]]
-                fac <- run(extract(object@facDist, iv), n, usedParam2@AL[iv], usedParam2@PS[iv, 
-                  iv])
+                fac <- run(extract(object@facDist, iv), n, usedParam2@AL[iv], usedParam2@PS[iv, iv])
                 for (i in 2:length(set)) {
                   dv <- set[[i]]
                   pred <- fac %*% t(extract(usedParam2@BE, dv, iv))
-                  res <- run(extract(object@facDist, dv), n, usedParam2@AL[dv], usedParam2@PS[dv, 
-                    dv])
+                  res <- run(extract(object@facDist, dv), n, usedParam2@AL[dv], usedParam2@PS[dv, dv])
                   new <- pred + res
                   fac <- cbind(fac, new)
                   iv <- c(iv, set[[i]])
@@ -105,8 +102,8 @@ createData <- function(paramSet, n, object, dataOnly) {
     } else {
         if (is.null(misspec)) 
             misspec <- new("NullRSet")
-        out <- new("SimDataOut", modelType = object@modelType, data = Data, param = createFreeParameters(object@param), 
-            paramOut = param, misspecOut = misspec, equalCon = object@equalCon, n = n)
+        out <- new("SimDataOut", modelType = object@modelType, data = Data, param = createFreeParameters(object@param), paramOut = param, 
+            misspecOut = misspec, equalCon = object@equalCon, n = n)
         return(out)
     }
 } 

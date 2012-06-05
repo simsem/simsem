@@ -123,16 +123,12 @@ setMethod("run", signature = "NullSimVector", definition = function(object) {
     return(new("NullVector"))
 })
 
-setMethod("run", signature(object = "SimSet"), definition = function(object, 
-    equalCon = new("NullSimEqualCon"), makeList = FALSE) {
-    param <- new("MatrixSet", modelType = object@modelType, LY = run(object@LY), 
-        VTE = run(object@VTE), TE = run(object@TE), RTE = run(object@RTE), VY = run(object@VY), 
-        TY = run(object@TY), MY = run(object@MY), BE = run(object@BE), VPS = run(object@VPS), 
-        PS = run(object@PS), RPS = run(object@RPS), VE = run(object@VE), AL = run(object@AL), 
-        ME = run(object@ME), LX = run(object@LX), VTD = run(object@VTD), TD = run(object@TD), 
-        RTD = run(object@RTD), VX = run(object@VX), TX = run(object@TX), MX = run(object@MX), 
-        GA = run(object@GA), VPH = run(object@VPH), PH = run(object@PH), RPH = run(object@RPH), 
-        KA = run(object@KA), TH = run(object@TH), RTH = run(object@RTH))
+setMethod("run", signature(object = "SimSet"), definition = function(object, equalCon = new("NullSimEqualCon"), makeList = FALSE) {
+    param <- new("MatrixSet", modelType = object@modelType, LY = run(object@LY), VTE = run(object@VTE), TE = run(object@TE), RTE = run(object@RTE), 
+        VY = run(object@VY), TY = run(object@TY), MY = run(object@MY), BE = run(object@BE), VPS = run(object@VPS), PS = run(object@PS), 
+        RPS = run(object@RPS), VE = run(object@VE), AL = run(object@AL), ME = run(object@ME), LX = run(object@LX), VTD = run(object@VTD), 
+        TD = run(object@TD), RTD = run(object@RTD), VX = run(object@VX), TX = run(object@TX), MX = run(object@MX), GA = run(object@GA), 
+        VPH = run(object@VPH), PH = run(object@PH), RPH = run(object@RPH), KA = run(object@KA), TH = run(object@TH), RTH = run(object@RTH))
     out <- NULL
     if (!isNullObject(equalCon)) {
         if (object@modelType != equalCon@modelType) 
@@ -156,19 +152,15 @@ setMethod("run", signature(object = "SimSet"), definition = function(object,
 })
 
 setMethod("run", signature(object = "SimMisspec"), definition = function(object) {
-    misspec <- new("MisspecSet", modelType = object@modelType, LY = run(object@LY), 
-        VTE = run(object@VTE), TE = run(object@TE), RTE = run(object@RTE), VY = run(object@VY), 
-        TY = run(object@TY), MY = run(object@MY), BE = run(object@BE), VPS = run(object@VPS), 
-        PS = run(object@PS), RPS = run(object@RPS), VE = run(object@VE), AL = run(object@AL), 
-        ME = run(object@ME), LX = run(object@LX), VTD = run(object@VTD), TD = run(object@TD), 
-        RTD = run(object@RTD), VX = run(object@VX), TX = run(object@TX), MX = run(object@MX), 
-        GA = run(object@GA), VPH = run(object@VPH), PH = run(object@PH), RPH = run(object@RPH), 
-        KA = run(object@KA), TH = run(object@TH), RTH = run(object@RTH))
+    misspec <- new("MisspecSet", modelType = object@modelType, LY = run(object@LY), VTE = run(object@VTE), TE = run(object@TE), RTE = run(object@RTE), 
+        VY = run(object@VY), TY = run(object@TY), MY = run(object@MY), BE = run(object@BE), VPS = run(object@VPS), PS = run(object@PS), 
+        RPS = run(object@RPS), VE = run(object@VE), AL = run(object@AL), ME = run(object@ME), LX = run(object@LX), VTD = run(object@VTD), 
+        TD = run(object@TD), RTD = run(object@RTD), VX = run(object@VX), TX = run(object@TX), MX = run(object@MX), GA = run(object@GA), 
+        VPH = run(object@VPH), PH = run(object@PH), RPH = run(object@RPH), KA = run(object@KA), TH = run(object@TH), RTH = run(object@RTH))
     return(misspec)
 })
 
-setMethod("run", signature = "SimData", definition = function(object, 
-    n = NULL, dataOnly = TRUE) {
+setMethod("run", signature = "SimData", definition = function(object, n = NULL, dataOnly = TRUE) {
     if (!require(MASS)) 
         stop("Please install MASS package")
     if (is.null(n)) 
@@ -188,8 +180,7 @@ setMethod("run", signature = "SimData", definition = function(object,
     
 })
 
-setMethod("run", signature = "SimModel", definition = function(object, 
-    data, simMissing = new("NullSimMissing"), estimator = NULL) {
+setMethod("run", signature = "SimModel", definition = function(object, data, simMissing = new("NullSimMissing"), estimator = NULL) {
     Output <- NULL
     DataOut <- NULL
     if (class(data) == "SimDataOut") {
@@ -199,8 +190,7 @@ setMethod("run", signature = "SimModel", definition = function(object,
     if (is.null(colnames(data))) 
         colnames(data) <- paste("y", 1:ncol(data))
     if (isNullObject(object@auxiliary)) {
-        if (!isNullObject(simMissing) && !(length(simMissing@cov) == 1 && simMissing@cov == 
-            0) && simMissing@covAsAux) 
+        if (!isNullObject(simMissing) && !(length(simMissing@cov) == 1 && simMissing@cov == 0) && simMissing@covAsAux) 
             object@auxiliary <- simMissing@cov
     }
     if (isNullObject(object@indLab)) {
@@ -280,34 +270,29 @@ setMethod("run", signature = "SimModel", definition = function(object,
     return(Output)
 })
 
-setMethod("run", signature = "SimMissing", definition = function(object, 
-    data, pmMCAR = NULL, pmMAR = NULL) {
+setMethod("run", signature = "SimMissing", definition = function(object, data, pmMCAR = NULL, pmMAR = NULL) {
     if (!is.null(pmMCAR)) 
         object@pmMCAR <- pmMCAR
     if (!is.null(pmMAR)) 
         object@pmMAR <- pmMAR
     if (is(data, "SimDataOut")) {
-        data@data <- as.data.frame(imposeMissing(data@data, cov = object@cov, pmMCAR = object@pmMCAR, 
-            pmMAR = object@pmMAR, nforms = object@nforms, timePoints = object@timePoints, 
-            itemGroups = object@itemGroups, twoMethod = object@twoMethod, prAttr = object@prAttr, 
-            ignoreCols = object@ignoreCols, threshold = object@threshold, logical = object@logical))
+        data@data <- as.data.frame(imposeMissing(data@data, cov = object@cov, pmMCAR = object@pmMCAR, pmMAR = object@pmMAR, nforms = object@nforms, 
+            timePoints = object@timePoints, itemGroups = object@itemGroups, twoMethod = object@twoMethod, prAttr = object@prAttr, ignoreCols = object@ignoreCols, 
+            threshold = object@threshold, logical = object@logical))
     } else if (is.data.frame(data)) {
-        data <- as.data.frame(imposeMissing(data, cov = object@cov, pmMCAR = object@pmMCAR, 
-            pmMAR = object@pmMAR, nforms = object@nforms, timePoints = object@timePoints, 
-            itemGroups = object@itemGroups, twoMethod = object@twoMethod, prAttr = object@prAttr, 
-            ignoreCols = object@ignoreCols, threshold = object@threshold, logical = object@logical))
+        data <- as.data.frame(imposeMissing(data, cov = object@cov, pmMCAR = object@pmMCAR, pmMAR = object@pmMAR, nforms = object@nforms, 
+            timePoints = object@timePoints, itemGroups = object@itemGroups, twoMethod = object@twoMethod, prAttr = object@prAttr, ignoreCols = object@ignoreCols, 
+            threshold = object@threshold, logical = object@logical))
     } else if (is.matrix(data)) {
         data <- as.data.frame(data)
-        data <- as.data.frame(imposeMissing(data, cov = object@cov, pmMCAR = object@pmMCAR, 
-            pmMAR = object@pmMAR, nforms = object@nforms, timePoints = object@timePoints, 
-            itemGroups = object@itemGroups, twoMethod = object@twoMethod, prAttr = object@prAttr, 
-            ignoreCols = object@ignoreCols, threshold = object@threshold, logical = object@logical))
+        data <- as.data.frame(imposeMissing(data, cov = object@cov, pmMCAR = object@pmMCAR, pmMAR = object@pmMAR, nforms = object@nforms, 
+            timePoints = object@timePoints, itemGroups = object@itemGroups, twoMethod = object@twoMethod, prAttr = object@prAttr, ignoreCols = object@ignoreCols, 
+            threshold = object@threshold, logical = object@logical))
     }
     return(data)
 })
 
-setMethod("run", signature = "SimDataDist", definition = function(object, 
-    n, m, cm) {
+setMethod("run", signature = "SimDataDist", definition = function(object, n, m, cm) {
     library(MASS)
     Data <- NULL
     # Check dim(M) dim(CM) dim(copula) are equal
@@ -331,8 +316,7 @@ setMethod("run", signature = "SimDataDist", definition = function(object,
                 }
             }
             listR <- r[lower.tri(diag(object2@p))]
-            CopNorm <- ellipCopula(family = "normal", dim = object2@p, dispstr = "un", 
-                param = listR)
+            CopNorm <- ellipCopula(family = "normal", dim = object2@p, dispstr = "un", param = listR)
             distName <- sapply(object2@dist, class)
             distName <- tolower(gsub("Sim", "", distName))
             attribute <- list()
@@ -340,8 +324,7 @@ setMethod("run", signature = "SimDataDist", definition = function(object,
                 temp <- list()
                 indivAttr <- slotNames(object2@dist[[i]])
                 for (j in 1:length(indivAttr)) {
-                  temp[[j]] <- call("=", indivAttr[[j]], slot(object2@dist[[i]], 
-                    indivAttr[[j]]))
+                  temp[[j]] <- call("=", indivAttr[[j]], slot(object2@dist[[i]], indivAttr[[j]]))
                 }
                 attribute[[i]] <- temp
             }
@@ -390,8 +373,7 @@ setMethod("run", signature = "SimDataDist", definition = function(object,
     return(Data)
 })
 
-setMethod("run", signature(object = "SimFunction"), definition = function(object, 
-    x, checkDataOut = FALSE) {
+setMethod("run", signature(object = "SimFunction"), definition = function(object, x, checkDataOut = FALSE) {
     if (checkDataOut && (class(x) == "SimDataOut")) 
         x <- x@data
     out <- list()

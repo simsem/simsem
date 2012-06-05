@@ -1,7 +1,7 @@
 # simMisspecPath: Create a set of matrices that belongs to path analysis misspecification model.
 
-simMisspecPath <- function(..., exo = FALSE, conBeforeMis = TRUE, misBeforeFill = TRUE, misfitType = "rmsea", misfitBound = new("NullVector"), averageNumMisspec = FALSE, optMisfit = "none", 
-    numIter = 20) {
+simMisspecPath <- function(..., exo = FALSE, conBeforeMis = TRUE, misBeforeFill = TRUE, misfitType = "rmsea", misfitBound = new("NullVector"), 
+    averageNumMisspec = FALSE, optMisfit = "none", numIter = 20) {
     if (!isNullObject(misfitBound)) {
         if (length(misfitBound) == 2) {
             if (misfitBound[1] >= misfitBound[2]) 
@@ -70,11 +70,13 @@ simMisspecPath <- function(..., exo = FALSE, conBeforeMis = TRUE, misBeforeFill 
             ifelse(10 %in% position, VPH <- List[position == 10], VPH <- list(new("NullSimVector")))
         }
         ifelse(11 %in% position, KA <- List[position == 11], KA <- list(new("NullSimVector")))
-        Output <- new("SimMisspec", BE = BE[[1]], PS = PS[[1]], RPS = RPS[[1]], VPS = VPS[[1]], VE = VE[[1]], AL = AL[[1]], ME = ME[[1]], GA = GA[[1]], PH = PH[[1]], RPH = RPH[[1]], VPH = VPH[[1]], 
-            KA = KA[[1]], modelType = "Path.exo", conBeforeMis = conBeforeMis, misBeforeFill = misBeforeFill, misfitType = misfitType, misfitBound = misfitBound, averageNumMisspec = averageNumMisspec)
+        Output <- new("SimMisspec", BE = BE[[1]], PS = PS[[1]], RPS = RPS[[1]], VPS = VPS[[1]], VE = VE[[1]], AL = AL[[1]], ME = ME[[1]], 
+            GA = GA[[1]], PH = PH[[1]], RPH = RPH[[1]], VPH = VPH[[1]], KA = KA[[1]], modelType = "Path.exo", conBeforeMis = conBeforeMis, 
+            misBeforeFill = misBeforeFill, misfitType = misfitType, misfitBound = misfitBound, averageNumMisspec = averageNumMisspec)
     } else {
-        Output <- new("SimMisspec", BE = BE[[1]], PS = PS[[1]], RPS = RPS[[1]], VPS = VPS[[1]], VE = VE[[1]], AL = AL[[1]], ME = ME[[1]], modelType = "Path", conBeforeMis = conBeforeMis, misBeforeFill = misBeforeFill, 
-            misfitType = misfitType, misfitBound = misfitBound, averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, numIter = numIter)
+        Output <- new("SimMisspec", BE = BE[[1]], PS = PS[[1]], RPS = RPS[[1]], VPS = VPS[[1]], VE = VE[[1]], AL = AL[[1]], ME = ME[[1]], 
+            modelType = "Path", conBeforeMis = conBeforeMis, misBeforeFill = misBeforeFill, misfitType = misfitType, misfitBound = misfitBound, 
+            averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, numIter = numIter)
     }
     return(Output)
 } 

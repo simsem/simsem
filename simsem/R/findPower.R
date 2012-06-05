@@ -1,5 +1,5 @@
-# findPower: Find a value of a given independent variable that provides a given
-# value of power. This function can handle multiple ivs by split data.
+# findPower: Find a value of a given independent variable that provides a given value of power. This function can handle multiple
+# ivs by split data.
 
 findPower <- function(powerTable, iv, power) {
     ivCol <- grep("iv", colnames(powerTable))
@@ -33,8 +33,8 @@ findPower <- function(powerTable, iv, power) {
     return(pow)
 }
 
-# findTargetPower: Find a value of a given independent variable that provides a
-# given value of power. This function can handle only one independent variable.
+# findTargetPower: Find a value of a given independent variable that provides a given value of power. This function can handle only
+# one independent variable.
 
 findTargetPower <- function(iv, dv, power) {
     FUN <- function(dv, iv, power) {

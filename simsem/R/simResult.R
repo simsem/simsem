@@ -1,9 +1,9 @@
 # simResult: A constructor of result object
 
-simResult <- function(nRep = NULL, objData = NULL, objModel = NULL, objMissing = new("NullSimMissing"), seed = 123321, silent = FALSE, multicore = FALSE, cluster = FALSE, numProc = NULL, 
-    n = NULL, pmMCAR = NULL, pmMAR = NULL, objSet = NULL, objFunction = new("NullSimFunction")) {
-	library(parallel)
-	RNGkind("L'Ecuyer-CMRG")
+simResult <- function(nRep = NULL, objData = NULL, objModel = NULL, objMissing = new("NullSimMissing"), seed = 123321, silent = FALSE, 
+    multicore = FALSE, cluster = FALSE, numProc = NULL, n = NULL, pmMCAR = NULL, pmMAR = NULL, objSet = NULL, objFunction = new("NullSimFunction")) {
+    library(parallel)
+    RNGkind("L'Ecuyer-CMRG")
     set.seed(seed)
     warnT <- as.numeric(options("warn"))
     if (silent) 
@@ -109,13 +109,13 @@ simResult <- function(nRep = NULL, objData = NULL, objModel = NULL, objMissing =
         stop("The objData argument is not a SimData class or a list of data frames.")
     }
     numseed <- list()
-	s <- .Random.seed
-	origSeed <- s
-    for (i in 1:nRep){
-		numseed[[i]] <- s
-		s <- nextRNGStream(s)
-	}
-	
+    s <- .Random.seed
+    origSeed <- s
+    for (i in 1:nRep) {
+        numseed[[i]] <- s
+        s <- nextRNGStream(s)
+    }
+    
     object2.l <- list()
     for (i in 1:length(object.l)) {
         object2.l[[i]] <- list()
@@ -133,13 +133,16 @@ simResult <- function(nRep = NULL, objData = NULL, objModel = NULL, objMissing =
             numProc <- detectCores()
         if (sys == "windows") {
             cl <- makeCluster(rep("localhost", numProc), type = "SOCK")
-            Result.l <- clusterApplyLB(cl, object2.l, runRep, objData = objData, objModel = objModel, objMissing = objMissing, objFunction = objFunction, silent = silent)
+            Result.l <- clusterApplyLB(cl, object2.l, runRep, objData = objData, objModel = objModel, objMissing = objMissing, objFunction = objFunction, 
+                silent = silent)
             stopCluster(cl)
         } else {
-            Result.l <- mclapply(object2.l, runRep, objData = objData, objModel = objModel, objMissing = objMissing, objFunction = objFunction, silent = silent, mc.cores = numProc)
+            Result.l <- mclapply(object2.l, runRep, objData = objData, objModel = objModel, objMissing = objMissing, objFunction = objFunction, 
+                silent = silent, mc.cores = numProc)
         }
     } else {
-        Result.l <- lapply(object2.l, runRep, objData = objData, objModel = objModel, objMissing = objMissing, objFunction = objFunction, silent = silent)
+        Result.l <- lapply(object2.l, runRep, objData = objData, objModel = objModel, objMissing = objMissing, objFunction = objFunction, 
+            silent = silent)
     }
     
     
@@ -222,8 +225,8 @@ simResult <- function(nRep = NULL, objData = NULL, objModel = NULL, objMissing =
         ifelse(isNullObject(objMissing), pmMAR <- 0, pmMAR <- objMissing@pmMAR)
     if (nrow(param) == 1 & ncol(param) == 1 && is.na(param)) 
         param <- paramData
-    Result <- new("SimResult", modelType = modelType, nRep = nRep, coef = coef, se = se, fit = fit, converged = converged, seed = seed, paramValue = param, FMI1 = FMI1, FMI2 = FMI2, stdCoef = std, 
-        n = n, pmMCAR = pmMCAR, pmMAR = pmMAR)
+    Result <- new("SimResult", modelType = modelType, nRep = nRep, coef = coef, se = se, fit = fit, converged = converged, seed = seed, 
+        paramValue = param, FMI1 = FMI1, FMI2 = FMI2, stdCoef = std, n = n, pmMCAR = pmMCAR, pmMAR = pmMAR)
     if (silent) 
         options(warn = warnT)
     return <- Result

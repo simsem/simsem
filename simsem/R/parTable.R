@@ -1,49 +1,30 @@
-## Builds a parameter table.
-## paramSet - list of simMatrix
-## constraint - constraint object: SimEqualCon
-## aux = names of the index of the auxiliary variables in the data
+## Builds a parameter table.  paramSet - list of simMatrix constraint - constraint object: SimEqualCon aux = names of the index of
+## the auxiliary variables in the data
 
-# To get code to work
-# a <- models(4)
-# a.set <- simSetSEM(LY=a$LY,RPS=a$RPS,RTE=a$RTE,BE=a$BE)
-# paramSet <- list(LY=a$LY,RPS=a$RPS,RTE=a$RTE,BE=a$BE)
-# ad <- simData(a.set)
-# acm <- simModel(a.set,a$con)
-# param <- tagHeaders(acm@param)
+# To get code to work a <- models(4) a.set <- simSetSEM(LY=a$LY,RPS=a$RPS,RTE=a$RTE,BE=a$BE) paramSet <-
+# list(LY=a$LY,RPS=a$RPS,RTE=a$RTE,BE=a$BE) ad <- simData(a.set) acm <- simModel(a.set,a$con) param <- tagHeaders(acm@param)
 
 ## runLavaan(acm,run(ad,200))
 
-## The necessary steps to building the analysis model:
-## 1. Check to see if user specification is valid (current simSet)
-## 2. Reduce correlation matrices to covariance / Transform any X-side notation to Y-Side
-## 3. Calculate starting values (?)
-## 4. Determine free parameters
-## 5. make labels
-## 6. impose constraints
-## 7. Specify package
-## 8. Estimator
-## 9. Specify auxiliary variables (?)
-## Final data type: List with
-## [[1]] -> par Table (df)
-## [[2]] -> package (char)
-## [[3]] -> estimator (char)
-## [[4]] -> Auxiliary (v)
+## The necessary steps to building the analysis model: 1. Check to see if user specification is valid (current simSet) 2. Reduce
+## correlation matrices to covariance / Transform any X-side notation to Y-Side 3. Calculate starting values (?)  4. Determine free
+## parameters 5. make labels 6. impose constraints 7. Specify package 8. Estimator 9. Specify auxiliary variables (?)  Final data
+## type: List with [[1]] -> par Table (df) [[2]] -> package (char) [[3]] -> estimator (char) [[4]] -> Auxiliary (v)
 
 
-# HS.model <- "f1 =~ x1 + x2 + x3 \n f2 =~ x4 + x5 +x6 \n f3 =~ x7 + x8 + x9"
-# fit <- cfa(HS.model, data=HolzingerSwineford1939)
+# HS.model <- 'f1 =~ x1 + x2 + x3 \n f2 =~ x4 + x5 +x6 \n f3 =~ x7 + x8 + x9' fit <- cfa(HS.model, data=HolzingerSwineford1939)
 # parTable(fit)
 
 # Lets just leave the constraints and aux for now, and plan on it being a list of simMatrix.
 
 buildPT <- function(paramSet, modelType) {
-  paramSet <- getFree(paramSet)
-  #con <- reduceConstraint(constraint)
-  
-  # This is repeated in simModel? B
-  
-  ## paramSet <- collapseExo(paramSet, label = TRUE)
-    ## constraint <- collapseExo(constraint, label = TRUE, value = NA)  ###################Have some zeros
+    paramSet <- getFree(paramSet)
+    # con <- reduceConstraint(constraint)
+    
+    # This is repeated in simModel? B
+    
+    ## paramSet <- collapseExo(paramSet, label = TRUE) constraint <- collapseExo(constraint, label = TRUE, value = NA)
+    ## ###################Have some zeros
     if (!isNullObject(paramSet$LY)) {
         for (i in 1:ncol(paramSet$LY)) {
             temp <- paste(colnames(paramSet$LY)[i], "=~")
@@ -133,7 +114,8 @@ buildPT <- function(paramSet, modelType) {
                     if (isNullObject(paramSet$BE)) {
                       cov.code <- paste(cov.code, rownames(paramSet$PS)[i], " ~~ ", content, colnames(paramSet$PS)[j], " \n", sep = "")
                     } else {
-                      auxFac <- which(apply(paramSet$BE, 1, function(x) all(!is.na(x) & (x == 0))) & apply(paramSet$BE, 2, function(x) all(!is.na(x) & (x == 0))))
+                      auxFac <- which(apply(paramSet$BE, 1, function(x) all(!is.na(x) & (x == 0))) & apply(paramSet$BE, 2, function(x) all(!is.na(x) & 
+                        (x == 0))))
                       if (is.element(i, auxFac) | is.element(j, auxFac)) {
                         cov.code <- paste(cov.code, rownames(paramSet$PS)[i], " ~~ 0*", colnames(paramSet$PS)[j], " \n", sep = "")
                       }
@@ -238,7 +220,7 @@ writeLavaanConstraint <- function(object, constraint) {
         }
     }
     return(object)
-} 
+}
 
 writeLavaanIndividualConstraint <- function(Matrix, Attribute, Names) {
     result <- "equal('"
@@ -258,7 +240,7 @@ writeLavaanIndividualConstraint <- function(Matrix, Attribute, Names) {
         }
     }
     return(result)
-} 
+}
 
 writeLavaanNullCode <- function(var, aux = NULL) {
     result <- NULL
@@ -281,7 +263,7 @@ writeLavaanNullCode <- function(var, aux = NULL) {
         result <- paste(result, corCode3, "\n")
     }
     return(result)
-} 
+}
 
 reduceConstraint <- function(SimEqualCon) {
     modelType <- SimEqualCon@modelType
@@ -332,7 +314,7 @@ reduceConstraint <- function(SimEqualCon) {
     if (is.null(Result)) 
         Result <- list(NULL)
     return(new("SimREqualCon", con = Result, modelType = SimEqualCon@modelType))
-    #return(Result)
+    # return(Result)
 }
 
 isVarianceConstraint <- function(Name) {
@@ -346,7 +328,7 @@ isVarianceConstraint <- function(Name) {
     } else {
         stop("A constraint matrix was mixed between variance and other types of elements.")
     }
-} 
+}
 
 isMeanConstraint <- function(Name) {
     W <- getKeywords()
@@ -359,22 +341,23 @@ isMeanConstraint <- function(Name) {
     } else {
         stop("A constraint matrix was mixed between mean and other types of elements.")
     }
-} 
+}
 
 # Takes an arbitary list of SimMatrix and returns the free parameter matrices of that same list
 getFree <- function(...) {
-  mats <- unlist(list(...))
-  return(lapply(mats, function(obj) { return(obj@free) }))
+    mats <- unlist(list(...))
+    return(lapply(mats, function(obj) {
+        return(obj@free)
+    }))
 }
 
-  # Takes a list of free parameter matrices and the model type and labels
-  # the rows and columns
-paramLabels <- function(paramSet,modelType) {
+# Takes a list of free parameter matrices and the model type and labels the rows and columns
+paramLabels <- function(paramSet, modelType) {
     ny <- NULL
     nx <- NULL
     nk <- NULL
     ne <- NULL
-
+    
     if (modelType == "CFA") {
         ne <- ncol(paramSet$LY)
         ny <- nrow(paramSet$LY)
@@ -497,9 +480,9 @@ paramLabels <- function(paramSet,modelType) {
         rownames(paramSet$TH) <- names.x
     }
     return(paramSet)
-  }
+}
 
-startValues <-  function(paramSet, trial, reduced = FALSE) {
+startValues <- function(paramSet, trial, reduced = FALSE) {
     result <- run(object)
     if (trial > 1) {
         for (i in 2:trial) {
@@ -512,4 +495,4 @@ startValues <-  function(paramSet, trial, reduced = FALSE) {
     if (reduced == TRUE) 
         result <- reduceMatrices(result)
     return(result)
-}
+} 

@@ -1,5 +1,4 @@
-# extractVectorNames: Extract a vector of parameter names based on specified
-# elements
+# extractVectorNames: Extract a vector of parameter names based on specified elements
 
 extractVectorNames <- function(columnName, keep = NULL) {
     name <- substr(columnName, 1, 2)

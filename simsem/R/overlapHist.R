@@ -1,7 +1,7 @@
 # overlapHist: Plot overlapping histograms
 
-overlapHist <- function(a, b, colors = c("red", "blue", "purple"), breaks = NULL, 
-    xlim = NULL, ylim = NULL, main = NULL, xlab = NULL, swap = FALSE) {
+overlapHist <- function(a, b, colors = c("red", "blue", "purple"), breaks = NULL, xlim = NULL, ylim = NULL, main = NULL, xlab = NULL, 
+    swap = FALSE) {
     ahist = NULL
     bhist = NULL
     if (!(is.null(breaks))) {
