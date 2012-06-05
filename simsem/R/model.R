@@ -206,7 +206,8 @@ buildSEM <- function(paramSet) {
 
 # All parameters are built into the pt
 buildPT <- function(paramSet, facLab=NULL, indLab=NULL) {
-  
+
+  # Convert a chunk at a time - starting with LY
   if(!is.null(paramSet$LY)) {
     LY.f <- paramSet$LY@free
     LY.pop <- paramSet$LY@popParam
@@ -214,6 +215,7 @@ buildPT <- function(paramSet, facLab=NULL, indLab=NULL) {
 
     nf <- ncol(LY.f)
     ni <- nrow(LY.f)
+    tot <- nf*ni
 
     id <- 1:(ni*nf)
     if(is.null(facLab)) {
@@ -230,209 +232,135 @@ buildPT <- function(paramSet, facLab=NULL, indLab=NULL) {
       rhs <- rep(indLab,nf)
     }
 
-    # user?
-
-    group <- rep(1,length(id))
-
-    free.log <- as.vector(is.free(LY.f))
-    free.idx <- 1:sum(free.log)
-    free <- mapply(free.log,free.idx, FUN=function(x,y) {ifelse(x,y,0) })
-    
-    ustart <- as.vector(LY.f)
-
+    user <- rep(0,tot)
+    group <- rep(1,tot)
+    free <- freeIdx(LY.f,start=1)   
+    ustart <- starting(LY.f)
     exo <- rep(0,length(id))
+    eq.id <- eqIdx(LY.f,id)
+    label <- names(eq.id)
+    unco <- uncoIdx(LY.f,start=1)
+  }
 
-    label.log <- is.label(LY.f))
-    label <- 
+    
   
-    if (!isNullObject(object@LY)) {
-        for (i in 1:ncol(object@LY)) {
-            temp <- paste(colnames(object@LY)[i], "=~")
-            something <- FALSE
-            for (j in 1:nrow(object@LY)) {
-                if (is.na(object@LY[j, i]) | object@LY[j, i] != 0 | !is.na(constraint@LY[j, i])) {
-                  content <- paste(object@LY[j, i], "*", sep = "")
-                  if (!is.na(constraint@LY[j, i])) 
-                    content <- constraint@LY[j, i]
-                  temp <- paste(temp, " ", content, rownames(object@LY)[j], sep = "")
-                  something <- TRUE
-                }
-                if (something && j != nrow(object@LY) && (is.na(object@LY[j + 1, i]) | object@LY[j + 1, i] != 0)) 
-                  temp <- paste(temp, "+")
-            }
-            if ((sum(is.na(object@LY[, i])) == 0) && (sum(object@LY[, i]) == 0)) 
-                temp <- paste(temp, "0*", rownames(object@LY)[1], sep = "")
-            if (!is.null(aux)) {
-                noVar <- !(is.na(diag(object@TE)) | diag(object@TE) != 0)
-                lab <- "0"
-                if (sum(noVar) > 0) {
-                  LYsingle <- extract(object@LY, which(noVar), i)
-                  LYsingle <- is.na(LYsingle) | LYsingle != 0
-                  if (sum(LYsingle) > 0) 
-                    lab <- "NA"
-                }
-                temp <- paste(temp, paste(paste(" + ", lab, "*", aux, sep = ""), collapse = ""))
-            }
-            result <- paste(result, temp, "\n")
-        }
-    }
-    if (!isNullObject(object@BE)) {
-        for (i in 1:nrow(object@BE)) {
-            temp <- NULL
-            for (j in 1:ncol(object@BE)) {
-                if (is.na(object@BE[i, j]) | object@BE[i, j] != 0 | !is.na(constraint@BE[i, j])) {
-                  content <- paste(object@BE[i, j], "*", sep = "")
-                  if (!is.na(constraint@BE[i, j])) 
-                    content <- constraint@BE[i, j]
-                  temp <- paste(temp, " ", content, colnames(object@BE)[j], sep = "")
-                }
-                if (!is.null(temp) && j != ncol(object@BE) && (is.na(object@BE[i, j + 1]) | object@BE[i, j + 1] != 0)) 
-                  temp <- paste(temp, "+")
-            }
-            if (!is.null(temp)) {
-                temp2 <- paste(rownames(object@BE)[i], "~")
-                result <- paste(result, temp2, temp, "\n")
-            }
-        }
-        if (isNullObject(object@LY) && !is.null(aux)) {
-            set <- findRecursiveSet(object@BE)
-            target <- colnames(object@BE)[set[[1]]]
-            for (i in 1:length(aux)) {
-                temp <- paste(aux[1], " ~ ", paste(paste("NA*", target), collapse = " + "), "\n", sep = "")
-                result <- paste(result, temp)
-            }
-        }
-    }
-    if (!isNullObject(object@PS)) {
-        var.code <- NULL
-        for (i in 1:length(diag(object@PS))) {
-            if (!is.na(object@PS[i, i]) | !is.na(constraint@PS[i, i])) {
-                content <- paste(object@PS[i, i], "*", sep = "")
-                if (!is.na(constraint@PS[i, i])) 
-                  content <- constraint@PS[i, i]
-                var.code <- paste(var.code, colnames(object@PS)[i], " ~~ ", content, colnames(object@PS)[i], " \n", sep = "")
-            }
-        }
-        cov.code <- NULL
-        if (nrow(object@PS) > 1) {
-            for (i in 2:nrow(object@PS)) {
-                for (j in 1:(i - 1)) {
-                  if (is.na(object@PS[i, j]) | object@PS[i, j] != 0 | !is.na(constraint@PS[i, j])) {
-                    content <- paste(object@PS[i, j], "*", sep = "")
-                    if (!is.na(constraint@PS[i, j])) 
-                      content <- constraint@PS[i, j]
-                    if (isNullObject(object@BE)) {
-                      cov.code <- paste(cov.code, rownames(object@PS)[i], " ~~ ", content, colnames(object@PS)[j], " \n", sep = "")
-                    } else {
-                      exo.set <- findRecursiveSet(object@BE)[[1]]
-                      if (!(is.element(i, exo.set) & is.element(j, exo.set))) {
-                        cov.code <- paste(cov.code, rownames(object@PS)[i], " ~~ ", content, colnames(object@PS)[j], " \n", sep = "")
-                      }
-                    }
-                  } else {
-                    content <- paste(object@PS[i, j], "*", sep = "")
-                    if (isNullObject(object@BE)) {
-                      cov.code <- paste(cov.code, rownames(object@PS)[i], " ~~ ", content, colnames(object@PS)[j], " \n", sep = "")
-                    } else {
-                      auxFac <- which(apply(object@BE, 1, function(x) all(!is.na(x) & (x == 0))) & apply(object@BE, 2, function(x) all(!is.na(x) & (x == 0))))
-                      if (is.element(i, auxFac) | is.element(j, auxFac)) {
-                        cov.code <- paste(cov.code, rownames(object@PS)[i], " ~~ 0*", colnames(object@PS)[j], " \n", sep = "")
-                      }
-                    }
-                  }
-                }
-            }
-        }
-        result <- paste(result, var.code, cov.code)
-        if (isNullObject(object@LY) && !is.null(aux)) {
-            set <- findRecursiveSet(object@BE)
-            target <- colnames(object@BE)[-set[[1]]]
-            varCode <- paste(paste(aux, " ~~ NA*", aux, sep = ""), collapse = "\n")
-            result <- paste(result, varCode, "\n")
-            corCode <- paste(outer(aux, target, paste, sep = " ~~ NA*"), collapse = "\n")
-            result <- paste(result, corCode, "\n")
-        }
-    }
-    if (!isNullObject(object@TE)) {
-        var.code <- NULL
-        for (i in 1:length(diag(object@TE))) {
-            if (!is.na(object@TE[i, i]) | !is.na(constraint@TE[i, i])) {
-                content <- paste(object@TE[i, i], "*", sep = "")
-                if (!is.na(constraint@TE[i, i])) 
-                  content <- constraint@TE[i, i]
-                var.code <- paste(var.code, colnames(object@TE)[i], " ~~ ", content, colnames(object@TE)[i], " \n", sep = "")
-            }
-        }
-        cov.code <- NULL
-        for (i in 2:nrow(object@TE)) {
-            for (j in 1:(i - 1)) {
-                if (is.na(object@TE[i, j]) | object@TE[i, j] != 0 | !is.na(constraint@TE[i, j])) {
-                  content <- paste(object@TE[i, j], "*", sep = "")
-                  if (!is.na(constraint@TE[i, j])) 
-                    content <- constraint@TE[i, j]
-                  cov.code <- paste(cov.code, rownames(object@TE)[i], " ~~ ", content, colnames(object@TE)[j], " \n", sep = "")
-                }
-            }
-        }
-        result <- paste(result, var.code, cov.code)
-        if (!isNullObject(object@LY) && !is.null(aux)) {
-            nonConstant <- is.na(diag(object@TE)) | diag(object@TE) != 0
-            target <- colnames(object@TE)[nonConstant]
-            varCode <- paste(paste(aux, " ~~ NA*", aux, sep = ""), collapse = "\n")
-            result <- paste(result, varCode, "\n")
-            corCode <- paste(outer(aux, target, paste, sep = " ~~ NA*"), collapse = "\n")
-            result <- paste(result, corCode, "\n")
-        }
-    }
-    if (!is.null(aux) && length(aux) > 1) {
-        corCode <- outer(aux, aux, paste, sep = " ~~ NA*")
-        diag(corCode) <- ""
-        corCode <- corCode[lower.tri(corCode)]
-        corCode <- paste(paste(corCode, collapse = "\n"), "\n")
-        result <- paste(result, corCode)
-    }
-    if (!isNullObject(object@AL)) {
-        mean.code <- NULL
-        for (i in 1:length(object@AL)) {
-            if (!(object@modelType == "Path" | object@modelType == "Path.exo") | !is.na(object@AL[i]) | !is.na(constraint@AL[i])) {
-                content <- paste(object@AL[i], "*", sep = "")
-                if (!is.na(constraint@AL[i])) 
-                  content <- constraint@AL[i]
-                mean.code <- paste(mean.code, names(object@AL)[i], " ~ ", content, "1 \n", sep = "")
-            }
-        }
-        result <- paste(result, mean.code)
-    }
-    if (!isNullObject(object@TY)) {
-        mean.code <- NULL
-        for (i in 1:length(object@TY)) {
-            content <- paste(object@TY[i], "*", sep = "")
-            if (!is.na(constraint@TY[i])) 
-                content <- constraint@TY[i]
-            mean.code <- paste(mean.code, names(object@TY)[i], " ~ ", content, "1 \n", sep = "")
-        }
-        result <- paste(result, mean.code)
-    }
-    if (!is.null(aux)) {
-        temp <- paste(paste(aux, " ~ NA*1 \n"), collapse = "")
-        result <- paste(result, temp)
-    }
-    return(result)
 }
 
-freeIdx <- function(mat) {
+# Takes a matrix, and returns a logical matrix indicating what elements are labels.
+is.label <- function(mat) {
   flat <- as.vector(mat)
-  free.idx <- NULL
+
+  # The basic idea is to parse and evaluate the character string in the global namespace. If the object doesn't exist,
+  # it is a constraint label.
+  # However, this is a little sketchy. For instance:
+  # If the TemporaryVariableName were x instead, if a label was x, this test would fail.
+  maybeLabel <- sapply(flat, FUN= function(TemporaryVariableName) { tryCatch(eval(parse(text=TemporaryVariableName)),
+                                  error = function(e) 1)})
+  isLabel <- tryCatch(as.logical(maybeLabel), error=function(e)
+                      stop("Invalid constraint: Label might be a function name or object in global namespace"))
+  isLabel[is.na(isLabel)] <- FALSE
+
+  return(isLabel)
+}
+
+
+# Takes a matrix, and returns a logical matrix indicating what elements are free (either NA or label)
+is.free <- function(mat) {
+  if(is.character(mat)) {
+    isFree <- is.na(mat) | is.label(mat)
+  } else {
+    isFree <- is.na(mat)
+  }
+  return(isFree)
+}
+
+
+# Calculates the indices of free parameters by lavaan rules.
+# 1. Each unique free parameter (NA) gets a unique index
+# 2. The first constrained free parameter gets a unique index
+# 3. Constrained parameters with identical labels get identical indices
+# 4. Fixed parameters are 0
+freeIdx <- function(mat, start = 1) {
+  flat <- as.vector(mat)
+  free.idx <- rep(0,length(flat))
   isLabel <- is.label(flat)
+  avail <- seq.int(start,start+length(flat)-1,by=1)
+  conList <- NULL
   
-  for(i in 1:length(flat) {
+  for(i in seq_along(flat)) {
     if(is.na(flat[i])) {
-      free.idx <- c(free.idx,i)
+      j <- i
+      free.idx[i] <- avail[j]
     } else if(isLabel[i]) {
       label <- flat[i]
-      if(is.null(conList[label])
-        conList <- c(conList,i)
-        names(conList) <- c(names,
-      
-  
+      if(is.null(conList[label]) || is.na(conList[label])) {
+        j <- j+1
+        conList <- c(conList,avail[j])
+        names(conList)[length(conList)] <- label
+        free.idx[i] <- avail[j]
+       } else {
+         idx <- conList[label]
+         free.idx[i] <- idx
+       }
+    } else {
+      # Do nothing
+    }
+  }
+  return(free.idx)
+}
+
+# Calculates the indices for unconstrained parameters
+uncoIdx <- function(mat, start=1) {
+  flat <- as.vector(mat)
+  avail <- seq.int(start,start+length(flat)-1,by=1)
+  log <- is.na(flat) | is.label(flat)
+  uncoIdx <- rep(0,length(flat))
+
+  if(all(log)) {
+    return(avail)
+  }  else {
+    j <- 1
+    for(i in seq_along(flat)) {
+      if(log[i]) {
+        uncoIdx[i] <- avail[j]
+        j <- j+1
+      }
+    }
+  }
+  return(uncoIdx)
+}
+
+# The parameter index of labels that are the same
+eqIdx <- function(mat,id) {
+  flat <- as.vector(mat)
+  eq.idx <- rep(0,length(flat))
+  isLabel <- is.label(flat)
+  conList <- NULL
+
+  for(i in seq_along(flat)) {
+    if(isLabel[i]) {
+      label <- flat[i]
+      if(is.null(conList[label]) || is.na(conList[label])) {
+        conList <- c(conList,id[i])
+        names(conList)[length(conList)] <- label
+        eq.idx[i] <- id[i]
+        names(eq.idx)[i] <- label
+      } else {
+         idx <- conList[label]
+         eq.idx[i] <- idx
+         names(eq.idx)[i] <- label
+       }
+    } else {
+      names(eq.idx)[i] <- ""
+    }
+
+  }
+  return(eq.idx)
+}
+
+## Calculate starting values. Could potentially be made smarter by using population values.
+starting <- function(free) {
+ flat <- as.vector(free)
+ flat[is.label(flat)] <- NA
+ as.numeric(flat)
 }
