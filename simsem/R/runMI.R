@@ -5,7 +5,7 @@
 
 ## TO DO: Get names for each element from the lavaan object
 
-runMI <- function(data.mat, data.model, m, miPackage = "amelia", silent = FALSE, ...) {
+runMI <- function(data.mat, data.model, m, miPackage = "amelia", silent = FALSE, opts) {
     ################### I put the silent argument here as the 'runRep' and 'simResult' have one.
 	require(Amelia)
     data.model@auxiliary <- new("NullVector")
@@ -15,7 +15,7 @@ runMI <- function(data.mat, data.model, m, miPackage = "amelia", silent = FALSE,
     # Impute missing data no longer creates two copies of imputed data
     temp.am <- amelia(data.mat, m, p2s = 0, ...)
     # nRep <- m
-    args <- list(...)
+    args <- opts
     ## Return list of simModelOut objects, to be combined.
     runSimMI <- function(MIdata, simModel) {
         model <- run(object = simModel, data = MIdata)

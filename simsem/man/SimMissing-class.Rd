@@ -29,6 +29,7 @@ Objects can be created by \code{simMissing} function. It can also be called from
 	\item{\code{prAttr}:}{Probability (or vector of probabilities) of an entire case being removed due to attrition at a given time point. See \code{\link{imposeMissing}} for further details.}
 	\item{\code{covAsAux}:}{If \code{TRUE}, the covariate listed in the object will be used as auxiliary variables when putting in the model object. If \code{FALSE}, the covariate will be included in the analysis.}
 	\item{\code{logical}:}{A matrix of logical values (\code{TRUE/FALSE}). If a value in the dataset is corresponding to the \code{TRUE} in the logical matrix, the value will be missing.}
+	\item{\code{opts}:}{A list of additional options to be passed to the imputation method specified in \code{impMethod}.}
 }  
 }
 \section{Methods}{

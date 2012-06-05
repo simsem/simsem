@@ -130,8 +130,8 @@ setClass("SimModelOut", representation(param = "SimParam", start = "SimRSet", eq
 setClass("SimModelMIOut", contains = "SimModelOut", representation(FMI1 = "SimRSet", FMI2 = "SimRSet"), prototype(FMI1 = new("NullRSet"), FMI2 = new("NullRSet")))
 
 setClass("SimMissing", representation(cov = "vector", pmMCAR = "numeric", pmMAR = "numeric", nforms = "numeric", itemGroups = "list", twoMethod = "vector", prAttr = "vector", impMethod = "vector", 
-    numImps = "numeric", timePoints = "numeric", ignoreCols = "numeric", threshold = "numeric", covAsAux = "logical", logical = "matrix"), prototype(cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, itemGroups = list(0), 
-    twoMethod = 0, prAttr = 0, impMethod = "amelia", numImps = 0, timePoints = 1, ignoreCols = 0, threshold = 0, covAsAux = TRUE, logical = new("NullMatrix")))
+    numImps = "numeric", timePoints = "numeric", ignoreCols = "numeric", threshold = "numeric", covAsAux = "logical", logical = "matrix", opts = "list"), prototype(cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, itemGroups = list(0), 
+    twoMethod = 0, prAttr = 0, impMethod = "amelia", numImps = 0, timePoints = 1, ignoreCols = 0, threshold = 0, covAsAux = TRUE, logical = new("NullMatrix"), opts = list()))
 
 setClass("NullSimMissing", contains = "SimMissing")
 
