@@ -205,47 +205,53 @@ buildSEM <- function(paramSet) {
 } 
 
 # All parameters are built into the pt
-buildPT <- function(paramSet, facLab=NULL, indLab=NULL) {
+buildPT <- function(paramSet, facLab=NULL, indLab=NULL, ngroup=1) {
 
   # Convert a chunk at a time - starting with LY
-  if(!is.null(paramSet$LY)) {
-    LY.f <- paramSet$LY@free
-    LY.pop <- paramSet$LY@popParam
-    LY.mis <- paramSet$LY@misspec
-
-    nf <- ncol(LY.f)
-    ni <- nrow(LY.f)
-    tot <- nf*ni
-
-    id <- 1:(ni*nf)
-    if(is.null(facLab)) {
-      lhs <- sort(rep(paste("y",1:nf,sep=""),ni))
-    } else {
-      lhs <- sort(rep(facLab,ni))
-    }
-
-    op <- rep("=~",length(id))
-
-    if(is.null(indLab)) {
-      rhs <- rep(paste("x",1:ni,sep=""),nf)
-    } else {
-      rhs <- rep(indLab,nf)
-    }
-
-    user <- rep(0,tot)
-    group <- rep(1,tot)
-    free <- freeIdx(LY.f,start=1)   
-    ustart <- starting(LY.f)
-    exo <- rep(0,length(id))
-    eq.id <- eqIdx(LY.f,id)
-    label <- names(eq.id)
-    unco <- uncoIdx(LY.f,start=1)
-  }
-
-    
+  if(is.list(paramSet$LY)) {
+    dims <- dim(paramSet$LY[[1]]@free)
+    nparams <- dims[1] * dims[2]
+    ngroups <- length(paramSet$LY)
+    startIdx <- seq(1,ngroups*nparams,by=nparams)
+    mapply(paramSet$LY,group=1:ngroups,start=startIdx, FUN=parseFree,SIMPLIFY=FALSE)
+  } 
   
 }
 
+# Returns a data frame of parsed SimMatrix
+parseFree <- function(simMat,group,start,facLab=NULL,indLab=NULL) {
+  free <- simMat@free
+  nf <- ncol(free)
+  ni <- nrow(free)
+  tot <- nf*ni
+
+  id <- start:(start+(ni*nf)-1)
+
+  if(is.null(facLab)) {
+    lhs <- sort(rep(paste("y",1:nf,sep=""),ni))
+  } else {
+    lhs <- sort(rep(facLab,ni))
+  }
+
+  op <- rep("=~",length(id))
+
+  if(is.null(indLab)) {
+    rhs <- rep(paste("x",1:ni,sep=""),nf)
+  } else {
+    rhs <- rep(indLab,nf)
+  }
+
+  user <- rep(0,tot)
+  group <- rep(group,tot)
+  free <- freeIdx(free,start=start)   
+  ustart <- startingVal(free)
+  exo <- rep(0,length(id))
+  eq.id <- eqIdx(free,id)
+  label <- names(eq.id)
+  unco <- uncoIdx(free,start=start)
+  return(data.frame(id,lhs,op,rhs,user,group,free,ustart,exo,eq.id,label,unco))
+}
+  
 # Takes a matrix, and returns a logical matrix indicating what elements are labels.
 is.label <- function(mat) {
   flat <- as.vector(mat)
@@ -359,7 +365,7 @@ eqIdx <- function(mat,id) {
 }
 
 ## Calculate starting values. Could potentially be made smarter by using population values.
-starting <- function(free) {
+startingVal <- function(free) {
  flat <- as.vector(free)
  flat[is.label(flat)] <- NA
  as.numeric(flat)
