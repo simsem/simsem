@@ -1,11 +1,12 @@
 source("AllClass.R")
 source("bind.R")
+source("utils.R")
 
 
   cfa <- function() {
     loading <- matrix(0, 6, 2)
     loading[1:3, 1] <- NA
-    loading[4:6, 2] <- NA
+    loading[4:6, 2] <- "a1"
     LY <- bind(loading, 0.7)
 
     latent.cor <- matrix(NA, 2, 2)
@@ -16,11 +17,6 @@ source("bind.R")
     diag(error.cor) <- 1
     RTE <- bind(error.cor)
 
-    #CFA.Model <- buildCFA(LY = LY, RPS = RPS, RTE = RTE)
-
-    #SimData <- simData(CFA.Model, 200)
-
-    #SimModel <- simModel(CFA.Model)
     return(list(LY=LY,RPS=RPS,RTE=RTE))
   }
   # CFA with more matrices
@@ -48,9 +44,6 @@ source("bind.R")
     AL <- bind(rep(NA, 3), 0)
     TY <- bind(c(0, NA, NA, 0, NA, NA, 0, NA, NA), 0)
 
-    #HS.Model <- (LY=LY, PS=PS, TE=TE, AL=AL, TY=TY)
-    #SimData <- simData(HS.Model, 200)
-    #SimModel <- simModel(HS.Model)
     return(list(LY=LY,PS=PS,TE=TE,AL=AL,TY=TY))
   }
   # Path
@@ -68,7 +61,7 @@ source("bind.R")
     RPS <- bind(residual.error, "rnorm(1,0.3,0.1)")
 
     ME <- bind(rep(NA, 4), 0)
-    #Path.Model <- simSetPath(RPS = RPS, BE = BE, ME = ME)
+   
     return(list(BE=BE,RPS=RPS,ME=ME))
   }
   # SEM
@@ -96,7 +89,7 @@ source("bind.R")
     path.start[3, 2] <- "runif(1,0.3,0.5)"
     BE <- bind(path, path.start)
 
-    #SEM.model <- simSetSEM(BE=BE, LY=LY, RPS=RPS, RTE=RTE)
+    
     return(list(LY=LY,RTE=RTE,RPS=RPS,BE=BE))
   }
 
@@ -113,9 +106,10 @@ model(BE=path$BE, RPS=path$RPS, ME=path$ME, modelType="Path")
 model(LY=sem$LY, RTE=sem$RTE, RPS=sem$RPS, BE=sem$BE, modelType="SEM")
 # We should be able to infer the model type from the matrices given. For now I leave a modelType argument.
 # We also need special inference stuff for multiple groups.
+# Auxiliary variables?
 
 model <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL, VTE = NULL, VY = NULL,
-                  VPS = NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, modelType=NULL) {
+                  VPS = NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, modelType=NULL, indLab=NULL, facLab=NULL) {
   
   paramSet <- list(LY=LY, PS=PS, RPS=RPS, TE=TE, RTE=RTE, BE=BE, VTE=VTE, VY=VY, VPS=VPS, TY=TY, AL=AL, MY=MY,ME=ME)
   if(!is.null(modelType)) {
@@ -210,10 +204,47 @@ buildSEM <- function(paramSet) {
     return(paramSet)
 } 
 
-buildPT <- function(paramSet) {
+# All parameters are built into the pt
+buildPT <- function(paramSet, facLab=NULL, indLab=NULL) {
+  
+  if(!is.null(paramSet$LY)) {
+    LY.f <- paramSet$LY@free
+    LY.pop <- paramSet$LY@popParam
+    LY.mis <- paramSet$LY@misspec
 
-  object <- collapseExo(object, label = TRUE)
-    constraint <- collapseExo(constraint, label = TRUE, value = NA)  ###################Have some zeros
+    nf <- ncol(LY.f)
+    ni <- nrow(LY.f)
+
+    id <- 1:(ni*nf)
+    if(is.null(facLab)) {
+      lhs <- sort(rep(paste("y",1:nf,sep=""),ni))
+    } else {
+      lhs <- sort(rep(facLab,ni))
+    }
+
+    op <- rep("=~",length(id))
+
+    if(is.null(indLab)) {
+      rhs <- rep(paste("x",1:ni,sep=""),nf)
+    } else {
+      rhs <- rep(indLab,nf)
+    }
+
+    # user?
+
+    group <- rep(1,length(id))
+
+    free.log <- as.vector(is.free(LY.f))
+    free.idx <- 1:sum(free.log)
+    free <- mapply(free.log,free.idx, FUN=function(x,y) {ifelse(x,y,0) })
+    
+    ustart <- as.vector(LY.f)
+
+    exo <- rep(0,length(id))
+
+    label.log <- is.label(LY.f))
+    label <- 
+  
     if (!isNullObject(object@LY)) {
         for (i in 1:ncol(object@LY)) {
             temp <- paste(colnames(object@LY)[i], "=~")
@@ -387,4 +418,21 @@ buildPT <- function(paramSet) {
         result <- paste(result, temp)
     }
     return(result)
+}
+
+freeIdx <- function(mat) {
+  flat <- as.vector(mat)
+  free.idx <- NULL
+  isLabel <- is.label(flat)
+  
+  for(i in 1:length(flat) {
+    if(is.na(flat[i])) {
+      free.idx <- c(free.idx,i)
+    } else if(isLabel[i]) {
+      label <- flat[i]
+      if(is.null(conList[label])
+        conList <- c(conList,i)
+        names(conList) <- c(names,
+      
+  
 }
