@@ -229,7 +229,7 @@ setMethod("run", signature = "SimModel", definition = function(object,
         estimator <- object@estimator
     estimator <- tolower(estimator)
     if (miss && !isNullObject(simMissing) && simMissing@numImps > 0) {
-        Output <- runMI(data, object, simMissing@numImps, simMissing@impMethod)
+        Output <- runMI(data, object, simMissing@numImps, simMissing@impMethod, opts = simMissing@opts)
     } else {
         if (object@package == "OpenMx") {
             Output <- runOpenMx(object, data)

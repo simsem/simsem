@@ -183,6 +183,7 @@ setClass("SimModelOut", representation(param = "SimParam", start = "SimRSet",
 setClass("SimModelMIOut", contains = "SimModelOut", representation(FMI1 = "SimRSet", 
     FMI2 = "SimRSet"), prototype(FMI1 = new("NullRSet"), FMI2 = new("NullRSet")))
 
+<<<<<<< HEAD
 setClass("SimMissing", representation(cov = "vector", pmMCAR = "numeric", 
     pmMAR = "numeric", nforms = "numeric", itemGroups = "list", twoMethod = "vector", 
     prAttr = "vector", impMethod = "vector", numImps = "numeric", timePoints = "numeric", 
@@ -190,6 +191,11 @@ setClass("SimMissing", representation(cov = "vector", pmMCAR = "numeric",
     prototype(cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, itemGroups = list(0), twoMethod = 0, 
         prAttr = 0, impMethod = "amelia", numImps = 0, timePoints = 1, ignoreCols = 0, 
         threshold = 0, covAsAux = TRUE, logical = new("NullMatrix")))
+=======
+setClass("SimMissing", representation(cov = "vector", pmMCAR = "numeric", pmMAR = "numeric", nforms = "numeric", itemGroups = "list", twoMethod = "vector", prAttr = "vector", impMethod = "vector", 
+    numImps = "numeric", timePoints = "numeric", ignoreCols = "numeric", threshold = "numeric", covAsAux = "logical", logical = "matrix", opts = "list"), prototype(cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, itemGroups = list(0), 
+    twoMethod = 0, prAttr = 0, impMethod = "amelia", numImps = 0, timePoints = 1, ignoreCols = 0, threshold = 0, covAsAux = TRUE, logical = new("NullMatrix"), opts = list()))
+>>>>>>> 95fff3f381e4f0632b1ea426e330b0e1b7904bcf
 
 setClass("NullSimMissing", contains = "SimMissing")
 
