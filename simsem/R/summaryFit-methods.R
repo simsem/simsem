@@ -1,0 +1,44 @@
+# summaryFit: This function will summarize the obtained fit indices and generate a data frame.
+
+setMethod("summaryFit", signature(object = "SimResult"), definition = function(object, alpha = NULL, detail = FALSE, digits=3) {
+        cleanObj <- clean(object)
+		usedFit <- getKeywords()$usedFit
+
+	condition <- c(length(object@pmMCAR) > 1, length(object@pmMAR) > 1, length(object@n) > 1)
+	if(any(condition)) {
+		if (is.null(alpha)) 
+			alpha <- 0.05
+		values <- list()
+		ifelse(condition[3], values[[3]] <- round(seq(min(object@n), max(object@n), length.out=5)), values[[3]] <- NA)
+		ifelse(condition[1], values[[1]] <- seq(min(object@pmMCAR), max(object@pmMCAR), length.out=5), values[[1]] <- NA)
+		ifelse(condition[2], values[[2]] <- seq(min(object@pmMAR), max(object@pmMAR), length.out=5), values[[2]] <- NA)
+		m <- do.call(expand.grid, values)
+		FUN <- function(vec, obj, alpha, usedFit) getCutoff(obj, alpha, revDirec = FALSE, usedFit = usedFit, nVal=vec[3], pmMCARval=vec[1], pmMARval=vec[2])
+		cutoffs <- sapply(as.data.frame(t(m)), FUN, obj=object, alpha=alpha, usedFit=usedFit)
+		mSelect <- as.matrix(m[,condition])
+		colnames(mSelect) <- c("%MCAR", "%MAR", "N")[condition]
+		result <- cbind(mSelect, t(cutoffs))
+		rownames(result) <- NULL
+		#cat(paste("Alpha =", alpha, "\n"))
+		#print(result)
+	} else {
+		if (is.null(alpha)) 
+			alpha <- c(0.1, 0.05, 0.01, 0.001)
+		cutoffs <- round(sapply(alpha, getCutoff, object = cleanObj, usedFit = usedFit), digits)
+		if (ncol(as.matrix(cutoffs)) == 1) {
+			cutoffs <- t(cutoffs)
+			#rownames(cutoffs) <- usedFit
+		}
+		
+		fit <- as.data.frame(cleanObj@fit[,usedFit])
+		meanfit <- apply(fit, 2, mean, na.rm=TRUE)
+		meanfit <- round(meanfit, digits=digits)
+		result <- cbind(cutoffs, meanfit)
+		colnames(result) <- c(alpha, "Mean")
+		rownames(result)<-usedFit
+		names(dimnames(cutoffs)) <- c("Fit Indices", "Alpha")
+		#print(as.data.frame(cutoffs))
+	}
+		
+    return(as.data.frame(result))
+})

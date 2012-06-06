@@ -78,6 +78,10 @@ setGeneric("summaryParam", function(object, ...) {
     return(standardGeneric("summaryParam"))
 })
 
+setGeneric("summaryFit", function(object, ...) {
+    return(standardGeneric("summaryFit"))
+})
+
 setGeneric("subtractObject", function(object1, object2, ...) {
     return(standardGeneric("subtractObject"))
 })
