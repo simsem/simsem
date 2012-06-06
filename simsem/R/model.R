@@ -100,10 +100,10 @@ sem <- sem()
 
 dir <- "/nfs/home/patr1ckm/repos/simsem/simsem/R/"
 
-model(LY=cfa$LY,RPS=cfa$RPS,RTE=cfa$RTE, modelType="CFA")
+paramSet <- model(LY=cfa$LY,RPS=cfa$RPS,RTE=cfa$RTE, modelType="CFA")
 paramSet <- model(LY=cfa2$LY,PS=cfa2$PS,TE=cfa2$TE,AL=cfa2$AL,TY=cfa2$TY, modelType="CFA")
 model(BE=path$BE, RPS=path$RPS, ME=path$ME, modelType="Path")
-model(LY=sem$LY, RTE=sem$RTE, RPS=sem$RPS, BE=sem$BE, modelType="SEM")
+paramSet <- model(LY=sem$LY, RTE=sem$RTE, RPS=sem$RPS, BE=sem$BE, modelType="SEM")
 # We should be able to infer the model type from the matrices given. For now I leave a modelType argument.
 # We also need special inference stuff for multiple groups.
 # Auxiliary variables?
@@ -138,7 +138,9 @@ buildCFA <- function(paramSet) {
     if(!is.null(paramSet$VY)) stop("Error covariance and total indicator variance cannot be specified at the same time!")
   } else {
         
-    if(is.null(paramSet$RTE)) stop("No error correlation object in CFA")
+    if(is.null(paramSet$RTE)) {
+      stop("No error correlation object in CFA")
+    } else {                              
     if(is.null(paramSet$VY)) { paramSet$VY <- bind(rep(NA,ni),popParam=1) } # Set variance of indicators to be free, pop value of 1
   }
 
@@ -207,51 +209,107 @@ buildSEM <- function(paramSet) {
 # All parameters are built into the pt
 buildPT <- function(paramSet, facLab=NULL, indLab=NULL) {
 
-  #2. Convert a chunk at a time - starting with LY
+  #2. Convert a chunk at a time - starting with LY - factor loading
   pt <- NULL
   if(is.list(paramSet$LY)) {
-    if(is.null(facLab)){ylab <- paste("y",1:dim(paramSet$LY[[1]]@free)[2],sep="")} else { ylab <- facLab}
-    if(is.null(indLab)){xlab <- paste("x",1:dim(paramSet$LY[[1]]@free)[1],sep="")} else { xlab <- indLab}
+    if(is.null(facLab)){lhs <- paste("y",1:ncol(paramSet$LY[[1]]@free),sep="")} else { lhs <- facLab}
+    if(is.null(indLab)){rhs <- paste("x",1:nrow(paramSet$LY[[1]]@free),sep="")} else { rhs <- indLab}
     for(i in seq_along(paramSet$LY)) {      
       if(i == 1) { 
-        pt <- parseFree(paramSet$LY[[i]],group=i,pt=NULL,op="=~",ylab,xlab)
+        pt <- parseFree(paramSet$LY[[i]],group=i,pt=NULL,op="=~",lhs,rhs)
       } else {
-        pt <- rbind(pt, parseFree(paramSet$LY[[i]], group=i, op="=~",pt=pt,ylab, xlab))
+        pt <- rbind(pt, parseFree(paramSet$LY[[i]], group=i, op="=~",pt=pt,lhs, rhs))
       }
     }
-  } else {
-    if(is.null(facLab)){ylab <- paste("y",1:dim(paramSet$LY@free)[2],sep="")} else { ylab <- facLab}
-    if(is.null(indLab)){xlab <- paste("x",1:dim(paramSet$LY@free)[1],sep="")} else { xlab <- indLab}
-    pt <- parseFree(paramSet$LY, group=1, pt=NULL,op="=~",yLab,xLab)
+  } else if (!is.null(paramSet$LY)) {
+    if(is.null(facLab)){lhs <- paste("y",1:ncol(paramSet$LY@free),sep="")} else { lhs <- facLab}
+    if(is.null(indLab)){rhs <- paste("x",1:nrow(paramSet$LY@free),sep="")} else { rhs <- indLab}
+    pt <- parseFree(paramSet$LY, group=1, pt=NULL,op="=~",lhs,rhs)
   }
 
-  # PS
+  # PS - factor covariance
   if(is.list(paramSet$PS)) {
-    if(is.null(facLab)){ylab <- xlab <- paste("y",1:dim(paramSet$PS[[1]]@free)[2],sep="")} else { ylab <- xlab <- facLab}
+    if(is.null(facLab)){lhs <- rhs <- paste("y",1:ncol(paramSet$PS[[1]]@free),sep="")} else { lhs <- rhs <- facLab}
      for(i in seq_along(paramSet$PS)) {
-       pt <- rbind(pt, parseFree(paramSet$LY[[i]], group=i, op="~~",pt=pt,ylab,xlab))
+       pt <- rbind(pt, parseFree(paramSet$PS[[i]], group=i, op="~~",pt=pt,lhs,rhs))
      }
-  } else {
-    if(is.null(facLab)) {ylab <- xlab <- paste("y",1:dim(paramSet$PS@free)[2],sep="")} else { ylab <- xlab <- facLab}
-    pt <- rbind(pt, parseFree(paramSet$PS, group=1, pt,op="~~",ylab,xlab))
+  } else if (!is.null(paramSet$PS)) {
+    if(is.null(facLab)) {lhs <- rhs <- paste("y",1:ncol(paramSet$PS@free),sep="")} else { lhs <- rhs <- facLab}
+    pt <- rbind(pt, parseFree(paramSet$PS, group=1, pt=pt,op="~~",lhs,rhs))
+  }
+  # RPS - factor correlation (same as PS)
+  if(is.list(paramSet$RPS)) {
+    if(is.null(facLab)){lhs <- rhs <- paste("y",1:ncol(paramSet$RPS[[1]]@free),sep="")} else { lhs <- rhs <- facLab}
+     for(i in seq_along(paramSet$RPS)) {
+       pt <- rbind(pt, parseFree(paramSet$RPS[[i]], group=i, op="~~",pt=pt,lhs,rhs))
+     }
+  } else if (!is.null(paramSet$RPS)) {
+    if(is.null(facLab)) {lhs <- rhs <- paste("y",1:ncol(paramSet$RPS@free),sep="")} else { lhs <- rhs <- facLab}
+    pt <- rbind(pt, parseFree(paramSet$RPS, group=1, pt=pt,op="~~",lhs,rhs))
   }
 
-  # TE
+  # TE - Covariance of measurement error
    if(is.list(paramSet$TE)) {
-    if(is.null(facLab)){ylab <- xlab <- paste("x",1:dim(paramSet$TE[[1]]@free)[2],sep="")} else { ylab <- xlab <- indLab}
+    if(is.null(facLab)){lhs <- rhs <- paste("x",1:ncol(paramSet$TE[[1]]@free),sep="")} else { lhs <- rhs <- indLab}
      for(i in seq_along(paramSet$TE)) {
-       pt <- rbind(pt, parseFree(paramSet$LY[[i]], group=i, op="~~",pt=pt,ylab,xlab))
+       pt <- rbind(pt, parseFree(paramSet$TE[[i]], group=i, op="~~",pt=pt,lhs,rhs))
      }
-  } else {
-    if(is.null(facLab)) {ylab <- xlab <- paste("x",1:dim(paramSet$TE@free)[2],sep="")} else { ylab <- xlab <- indLab}
-    pt <- rbind(pt, parseFree(paramSet$TE, group=1, pt,op="~~",ylab,xlab))
+  } else if (!is.null(paramSet$TE)) {
+    if(is.null(facLab)) {lhs <- rhs <- paste("x",1:ncol(paramSet$TE@free),sep="")} else { lhs <- rhs <- indLab}
+    pt <- rbind(pt, parseFree(paramSet$TE, group=1, pt=pt,op="~~",lhs,rhs))
   }
-  
-  return(pt)
+  # RTE - Correlation of measurment error
+   if(is.list(paramSet$RTE)) {
+    if(is.null(facLab)){lhs <- rhs <- paste("x",1:ncol(paramSet$RTE[[1]]@free),sep="")} else { lhs <- rhs <- indLab}
+     for(i in seq_along(paramSet$RTE)) {
+       pt <- rbind(pt, parseFree(paramSet$RTE[[i]], group=i, op="~~",pt=pt,lhs,rhs))
+     }
+  } else if (!is.null(paramSet$RTE)) {
+    if(is.null(facLab)) {lhs <- rhs <- paste("x",1:ncol(paramSet$RTE@free),sep="")} else { lhs <- rhs <- indLab}
+    pt <- rbind(pt, parseFree(paramSet$RTE, group=1, pt=pt,op="~~",lhs,rhs))
+  }
+
+  # BE - Regressions among factors
+  if(is.list(paramSet$BE)) {
+    if(is.null(facLab)){lhs <- rhs <- paste("y",1:ncol(paramSet$BE[[1]]@free),sep="")} else { lhs <- rhs <- facLab}
+     for(i in seq_along(paramSet$BE)) {
+       pt <- rbind(pt, parseFree(paramSet$BE[[i]], group=i, op="~",pt=pt,lhs,rhs))
+     }
+  } else if (!is.null(paramSet$BE)) {
+    if(is.null(facLab)) {lhs <- rhs <- paste("y",1:ncol(paramSet$BE@free),sep="")} else { lhs <- rhs <- facLab}
+    pt <- rbind(pt, parseFree(paramSet$BE, group=1, pt=pt,op="~",lhs,rhs))
+  }
+
+  ## AL - factor intercept
+   if(is.list(paramSet$AL)) {
+    if(is.null(facLab)){lhs <- paste("y",1:length(paramSet$AL[[1]]@free),sep="")} else { lhs <- facLab}
+    rhs <- rep("",length(paramSet$AL[[1]]@free))
+     for(i in seq_along(paramSet$AL)) {
+       pt <- rbind(pt, parseFree(paramSet$AL[[i]], group=i, op="~1",pt=pt,lhs,rhs))
+     }
+  } else if (!is.null(paramSet$AL)) {
+    if(is.null(facLab)) {lhs <- paste("y",1:length(paramSet$AL@free),sep="")} else { lhs <- facLab}
+    rhs <- rep("",length(paramSet$AL@free))
+    pt <- rbind(pt, parseFree(paramSet$AL, group=1, pt=pt,op="~1",lhs,rhs))
+  }
+
+  # TY - indicator intercept
+   if(is.list(paramSet$TY)) {
+    if(is.null(facLab)){lhs <- paste("x",1:length(paramSet$TY[[1]]@free),sep="")} else { lhs <- indLab}
+    rhs <- rep("",length(paramSet$TY[[1]]@free))
+     for(i in seq_along(paramSet$TY)) {
+       pt <- rbind(pt, parseFree(paramSet$TY[[i]], group=i, op="~1",pt=pt,lhs,rhs = ""))
+     }
+  } else if (!is.null(paramSet$TY)) {
+    if(is.null(facLab)) {lhs <- paste("x",1:length(paramSet$TY@free),sep="")} else { lhs <- indLab}
+    rhs <- rep("",length(paramSet$TY@free))
+    pt <- rbind(pt, parseFree(paramSet$TY, group=1, pt=pt,op="~1",lhs,rhs))
+  }
+  return(pt)  
 }
 
 # Returns a data frame of parsed SimMatrix
-parseFree <- function(simMat,group,pt,op,yLab=NULL,xLab=NULL) {
+parseFree <- function(simDat,group,pt,op,lhs=NULL,rhs=NULL) {
   # Calculate starting indices from previous pt
   if(!is.null(pt)) {
     startId <- max(pt$id)+1
@@ -263,20 +321,26 @@ parseFree <- function(simMat,group,pt,op,yLab=NULL,xLab=NULL) {
     startUnco <- 1
   }
 
-  freeMat <- simMat@free
-  nf <- ncol(freeMat)
-  ni <- nrow(freeMat)
-  tot <- nf*ni
+  freeDat <- simDat@free
+  
+  if(class(simDat) == "SimVector") {
+    tot = length(simDat)
+  } else {
+      nf <- ncol(freeDat)
+      ni <- nrow(freeDat)
+      tot <- nf*ni
+    }  
+
   id <- startId:(startId+(tot)-1)
   op <- rep(op,length(id))
   user <- rep(0,tot)
   group <- rep(group,tot)
-  free <- freeIdx(freeMat,start=startFree)   
-  ustart <- startingVal(freeMat)
+  free <- freeIdx(freeDat,start=startFree)   
+  ustart <- startingVal(freeDat)
   exo <- rep(0,length(id))
-  eq.id <- eqIdx(freeMat,id)
+  eq.id <- eqIdx(freeDat,id)
   label <- names(eq.id)
-  unco <- uncoIdx(freeMat,start=startUnco)
+  unco <- uncoIdx(freeDat,start=startUnco)
   return(data.frame(id,lhs,op,rhs,user,group,free,ustart,exo,eq.id,label,unco))
 }
   
