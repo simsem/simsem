@@ -336,7 +336,7 @@ parseFree <- function(simDat,group,pt,op,lhs=NULL,rhs=NULL) {
   user <- rep(0,tot)
   group <- rep(group,tot)
   free <- freeIdx(freeDat,start=startFree)   
-  ustart <- startingVal(freeDat)
+  ustart <- startingVal(freeDat,simDat@popParam)
   exo <- rep(0,length(id))
   eq.id <- eqIdx(freeDat,id)
   label <- names(eq.id)
@@ -428,11 +428,21 @@ eqIdx <- function(mat,id) {
   return(eq.idx)
 }
 
-## Calculate starting values. Could potentially be made smarter by using population values.
-startingVal <- function(free) {
+## Calculate starting values. Could potentially be made smarter by using population values. Going to take some work
+startingVal <- function(free,popParam) {
+ flatPop <- as.vector(popParam)
  flat <- as.vector(free)
  flat[is.label(flat)] <- NA
- as.numeric(flat)
+ flat <- as.numeric(flat)
+
+ if(any(is.label(flatPop)) {
+   bool <- 
+   
+ } else {
+   flatPop <- as.numeric(flatPop)
+ }
+ flat[is.na(flat)] <- flatPop[is.na(flat)]
+ return(flat)
 }
 
 # Takes a matrix or vector, and returns a logical vector indicating what elements are labels.
@@ -453,3 +463,14 @@ is.free <- function(mat) {
   }
   return(isFree)
 }
+
+ is.empty <- function(dat) {
+   if(is.null(dim(dat))) {
+    temp <- sapply(dat, FUN=function(x) if(x == "" || is.na(x) || x==0) {TRUE} else {FALSE})
+    names(temp) <- NULL
+    return(temp)
+  }
+   apply(dat, c(1,2), FUN=function(x) if(x == "" || is.na(x) || x==0) {TRUE} else {FALSE})
+        
+}
+      
