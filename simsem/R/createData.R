@@ -102,7 +102,8 @@ createData <- function(paramSet, n, object, dataOnly) {
     } else {
         if (is.null(misspec)) 
             misspec <- new("NullRSet")
-        out <- new("SimDataOut", modelType = object@modelType, data = Data, param = createFreeParameters(object@param), paramOut = param, misspecOut = misspec, equalCon = object@equalCon, n = n)
+        out <- new("SimDataOut", modelType = object@modelType, data = Data, param = createFreeParameters(object@param), paramOut = param, 
+            misspecOut = misspec, equalCon = object@equalCon, n = n)
         return(out)
     }
 } 

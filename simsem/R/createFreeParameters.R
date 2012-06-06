@@ -85,7 +85,8 @@ createFreeParameters <- function(object) {
     } else if (object@modelType == "SEM") {
         result <- simParamSEM(LY = LY, TY = TY, BE = BE, AL = AL, TE = TE, PS = PS)
     } else if (object@modelType == "SEM.exo") {
-        result <- simParamSEM(LY = LY, TY = TY, BE = BE, AL = AL, TE = TE, PS = PS, LX = LX, TX = TX, GA = GA, KA = KA, TD = TD, PH = PH, TH = TH, exo = TRUE)
+        result <- simParamSEM(LY = LY, TY = TY, BE = BE, AL = AL, TE = TE, PS = PS, LX = LX, TX = TX, GA = GA, KA = KA, TD = TD, PH = PH, 
+            TH = TH, exo = TRUE)
     } else {
         stop("Something is wrong!")
     }

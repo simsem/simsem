@@ -1,4 +1,5 @@
-# findFactorTotalVar: Find the factor total variance if regression coefficients, factor correlation, and factor residual variances are specified.
+# findFactorTotalVar: Find the factor total variance if regression coefficients, factor correlation, and factor residual variances
+# are specified.
 
 findFactorTotalVar <- function(beta, corPsi, residualVarPsi) {
     library(lavaan)

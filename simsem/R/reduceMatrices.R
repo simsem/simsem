@@ -19,7 +19,7 @@ reduceMatrices <- function(object) {
             object@TD <- suppressWarnings(cor2cov(object@RTD, sqrt(object@VTD)))
     }
     
-    Output <- new("SimRSet", modelType = object@modelType, PS = object@PS, BE = object@BE, AL = object@AL, TE = object@TE, LY = object@LY, TY = object@TY, PH = object@PH, GA = object@GA, KA = object@KA, 
-        TD = object@TD, LX = object@LX, TX = object@TX, TH = object@TH)
+    Output <- new("SimRSet", modelType = object@modelType, PS = object@PS, BE = object@BE, AL = object@AL, TE = object@TE, LY = object@LY, 
+        TY = object@TY, PH = object@PH, GA = object@GA, KA = object@KA, TD = object@TD, LX = object@LX, TX = object@TX, TH = object@TH)
     return(Output)
 } 

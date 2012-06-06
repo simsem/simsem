@@ -1,7 +1,7 @@
 # simMisspecSEM: Create a set of matrices that belongs to SEM misspecification model.
 
-simMisspecSEM <- function(..., exo = FALSE, conBeforeMis = TRUE, misBeforeFill = TRUE, misfitType = "rmsea", misfitBound = new("NullVector"), averageNumMisspec = FALSE, optMisfit = "none", 
-    numIter = 20) {
+simMisspecSEM <- function(..., exo = FALSE, conBeforeMis = TRUE, misBeforeFill = TRUE, misfitType = "rmsea", misfitBound = new("NullVector"), 
+    averageNumMisspec = FALSE, optMisfit = "none", numIter = 20) {
     if (!isNullObject(misfitBound)) {
         if (length(misfitBound) == 2) {
             if (misfitBound[1] >= misfitBound[2]) 
@@ -33,8 +33,8 @@ simMisspecSEM <- function(..., exo = FALSE, conBeforeMis = TRUE, misBeforeFill =
     if (exo == FALSE) {
         keywords <- list(W$LY, W$RTE, W$VTE, W$VY, W$TY, W$MY, W$BE, W$RPS, W$VPS, W$VE, W$AL, W$ME, W$TE, W$PS)  #Length = 14
     } else {
-        keywords <- list(W$LY, W$RTE, W$VTE, W$VY, W$TY, W$MY, W$BE, W$RPS, W$VPS, W$VE, W$AL, W$ME, W$TE, W$PS, W$LX, W$RTD, W$VTD, W$VX, W$TX, W$MX, W$GA, W$RPH, W$VPH, W$KA, W$RTH, W$TD, W$PH, 
-            W$TH)  #Length = 28
+        keywords <- list(W$LY, W$RTE, W$VTE, W$VY, W$TY, W$MY, W$BE, W$RPS, W$VPS, W$VE, W$AL, W$ME, W$TE, W$PS, W$LX, W$RTD, W$VTD, W$VX, 
+            W$TX, W$MX, W$GA, W$RPH, W$VPH, W$KA, W$RTH, W$TD, W$PH, W$TH)  #Length = 28
     }
     position <- matchKeywords(Names, keywords)
     if (length(position) != length(unique(position))) 
@@ -114,13 +114,15 @@ simMisspecSEM <- function(..., exo = FALSE, conBeforeMis = TRUE, misBeforeFill =
             ifelse(25 %in% position, RTH <- List[position == 25], RTH <- list(new("NullSimMatrix")))
             TH <- list(new("NullSimMatrix"))
         }
-        Output <- new("SimMisspec", LY = LY[[1]], TE = TE[[1]], RTE = RTE[[1]], VTE = VTE[[1]], VY = VY[[1]], MY = MY[[1]], TY = TY[[1]], BE = BE[[1]], PS = PS[[1]], RPS = RPS[[1]], VPS = VPS[[1]], 
-            VE = VE[[1]], AL = AL[[1]], ME = ME[[1]], LX = LX[[1]], TD = TD[[1]], RTD = RTD[[1]], VTD = VTD[[1]], VX = VX[[1]], MX = MX[[1]], TX = TX[[1]], GA = GA[[1]], PH = PH[[1]], RPH = RPH[[1]], 
-            VPH = VPH[[1]], KA = KA[[1]], TH = TH[[1]], RTH = RTH[[1]], modelType = "SEM.exo", conBeforeMis = conBeforeMis, misBeforeFill = misBeforeFill, misfitType = misfitType, misfitBound = misfitBound, 
-            averageNumMisspec = averageNumMisspec)
+        Output <- new("SimMisspec", LY = LY[[1]], TE = TE[[1]], RTE = RTE[[1]], VTE = VTE[[1]], VY = VY[[1]], MY = MY[[1]], TY = TY[[1]], 
+            BE = BE[[1]], PS = PS[[1]], RPS = RPS[[1]], VPS = VPS[[1]], VE = VE[[1]], AL = AL[[1]], ME = ME[[1]], LX = LX[[1]], TD = TD[[1]], 
+            RTD = RTD[[1]], VTD = VTD[[1]], VX = VX[[1]], MX = MX[[1]], TX = TX[[1]], GA = GA[[1]], PH = PH[[1]], RPH = RPH[[1]], VPH = VPH[[1]], 
+            KA = KA[[1]], TH = TH[[1]], RTH = RTH[[1]], modelType = "SEM.exo", conBeforeMis = conBeforeMis, misBeforeFill = misBeforeFill, 
+            misfitType = misfitType, misfitBound = misfitBound, averageNumMisspec = averageNumMisspec)
     } else {
-        Output <- new("SimMisspec", LY = LY[[1]], TE = TE[[1]], RTE = RTE[[1]], VTE = VTE[[1]], VY = VY[[1]], MY = MY[[1]], TY = TY[[1]], BE = BE[[1]], PS = PS[[1]], RPS = RPS[[1]], VPS = VPS[[1]], 
-            VE = VE[[1]], AL = AL[[1]], ME = ME[[1]], modelType = "SEM", conBeforeMis = conBeforeMis, misBeforeFill = misBeforeFill, misfitType = misfitType, misfitBound = misfitBound, averageNumMisspec = averageNumMisspec, 
+        Output <- new("SimMisspec", LY = LY[[1]], TE = TE[[1]], RTE = RTE[[1]], VTE = VTE[[1]], VY = VY[[1]], MY = MY[[1]], TY = TY[[1]], 
+            BE = BE[[1]], PS = PS[[1]], RPS = RPS[[1]], VPS = VPS[[1]], VE = VE[[1]], AL = AL[[1]], ME = ME[[1]], modelType = "SEM", conBeforeMis = conBeforeMis, 
+            misBeforeFill = misBeforeFill, misfitType = misfitType, misfitBound = misfitBound, averageNumMisspec = averageNumMisspec, 
             optMisfit = optMisfit, numIter = numIter)
     }
     return(Output)

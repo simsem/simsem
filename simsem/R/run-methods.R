@@ -124,10 +124,11 @@ setMethod("run", signature = "NullSimVector", definition = function(object) {
 })
 
 setMethod("run", signature(object = "SimSet"), definition = function(object, equalCon = new("NullSimEqualCon"), makeList = FALSE) {
-    param <- new("MatrixSet", modelType = object@modelType, LY = run(object@LY), VTE = run(object@VTE), TE = run(object@TE), RTE = run(object@RTE), VY = run(object@VY), TY = run(object@TY), MY = run(object@MY), 
-        BE = run(object@BE), VPS = run(object@VPS), PS = run(object@PS), RPS = run(object@RPS), VE = run(object@VE), AL = run(object@AL), ME = run(object@ME), LX = run(object@LX), VTD = run(object@VTD), 
-        TD = run(object@TD), RTD = run(object@RTD), VX = run(object@VX), TX = run(object@TX), MX = run(object@MX), GA = run(object@GA), VPH = run(object@VPH), PH = run(object@PH), RPH = run(object@RPH), 
-        KA = run(object@KA), TH = run(object@TH), RTH = run(object@RTH))
+    param <- new("MatrixSet", modelType = object@modelType, LY = run(object@LY), VTE = run(object@VTE), TE = run(object@TE), RTE = run(object@RTE), 
+        VY = run(object@VY), TY = run(object@TY), MY = run(object@MY), BE = run(object@BE), VPS = run(object@VPS), PS = run(object@PS), 
+        RPS = run(object@RPS), VE = run(object@VE), AL = run(object@AL), ME = run(object@ME), LX = run(object@LX), VTD = run(object@VTD), 
+        TD = run(object@TD), RTD = run(object@RTD), VX = run(object@VX), TX = run(object@TX), MX = run(object@MX), GA = run(object@GA), 
+        VPH = run(object@VPH), PH = run(object@PH), RPH = run(object@RPH), KA = run(object@KA), TH = run(object@TH), RTH = run(object@RTH))
     out <- NULL
     if (!isNullObject(equalCon)) {
         if (object@modelType != equalCon@modelType) 
@@ -151,10 +152,11 @@ setMethod("run", signature(object = "SimSet"), definition = function(object, equ
 })
 
 setMethod("run", signature(object = "SimMisspec"), definition = function(object) {
-    misspec <- new("MisspecSet", modelType = object@modelType, LY = run(object@LY), VTE = run(object@VTE), TE = run(object@TE), RTE = run(object@RTE), VY = run(object@VY), TY = run(object@TY), MY = run(object@MY), 
-        BE = run(object@BE), VPS = run(object@VPS), PS = run(object@PS), RPS = run(object@RPS), VE = run(object@VE), AL = run(object@AL), ME = run(object@ME), LX = run(object@LX), VTD = run(object@VTD), 
-        TD = run(object@TD), RTD = run(object@RTD), VX = run(object@VX), TX = run(object@TX), MX = run(object@MX), GA = run(object@GA), VPH = run(object@VPH), PH = run(object@PH), RPH = run(object@RPH), 
-        KA = run(object@KA), TH = run(object@TH), RTH = run(object@RTH))
+    misspec <- new("MisspecSet", modelType = object@modelType, LY = run(object@LY), VTE = run(object@VTE), TE = run(object@TE), RTE = run(object@RTE), 
+        VY = run(object@VY), TY = run(object@TY), MY = run(object@MY), BE = run(object@BE), VPS = run(object@VPS), PS = run(object@PS), 
+        RPS = run(object@RPS), VE = run(object@VE), AL = run(object@AL), ME = run(object@ME), LX = run(object@LX), VTD = run(object@VTD), 
+        TD = run(object@TD), RTD = run(object@RTD), VX = run(object@VX), TX = run(object@TX), MX = run(object@MX), GA = run(object@GA), 
+        VPH = run(object@VPH), PH = run(object@PH), RPH = run(object@RPH), KA = run(object@KA), TH = run(object@TH), RTH = run(object@RTH))
     return(misspec)
 })
 
@@ -274,15 +276,18 @@ setMethod("run", signature = "SimMissing", definition = function(object, data, p
     if (!is.null(pmMAR)) 
         object@pmMAR <- pmMAR
     if (is(data, "SimDataOut")) {
-        data@data <- as.data.frame(imposeMissing(data@data, cov = object@cov, pmMCAR = object@pmMCAR, pmMAR = object@pmMAR, nforms = object@nforms, timePoints = object@timePoints, itemGroups = object@itemGroups, 
-            twoMethod = object@twoMethod, prAttr = object@prAttr, ignoreCols = object@ignoreCols, threshold = object@threshold, logical = object@logical))
+        data@data <- as.data.frame(imposeMissing(data@data, cov = object@cov, pmMCAR = object@pmMCAR, pmMAR = object@pmMAR, nforms = object@nforms, 
+            timePoints = object@timePoints, itemGroups = object@itemGroups, twoMethod = object@twoMethod, prAttr = object@prAttr, ignoreCols = object@ignoreCols, 
+            threshold = object@threshold, logical = object@logical))
     } else if (is.data.frame(data)) {
-        data <- as.data.frame(imposeMissing(data, cov = object@cov, pmMCAR = object@pmMCAR, pmMAR = object@pmMAR, nforms = object@nforms, timePoints = object@timePoints, itemGroups = object@itemGroups, 
-            twoMethod = object@twoMethod, prAttr = object@prAttr, ignoreCols = object@ignoreCols, threshold = object@threshold, logical = object@logical))
+        data <- as.data.frame(imposeMissing(data, cov = object@cov, pmMCAR = object@pmMCAR, pmMAR = object@pmMAR, nforms = object@nforms, 
+            timePoints = object@timePoints, itemGroups = object@itemGroups, twoMethod = object@twoMethod, prAttr = object@prAttr, ignoreCols = object@ignoreCols, 
+            threshold = object@threshold, logical = object@logical))
     } else if (is.matrix(data)) {
         data <- as.data.frame(data)
-        data <- as.data.frame(imposeMissing(data, cov = object@cov, pmMCAR = object@pmMCAR, pmMAR = object@pmMAR, nforms = object@nforms, timePoints = object@timePoints, itemGroups = object@itemGroups, 
-            twoMethod = object@twoMethod, prAttr = object@prAttr, ignoreCols = object@ignoreCols, threshold = object@threshold, logical = object@logical))
+        data <- as.data.frame(imposeMissing(data, cov = object@cov, pmMCAR = object@pmMCAR, pmMAR = object@pmMAR, nforms = object@nforms, 
+            timePoints = object@timePoints, itemGroups = object@itemGroups, twoMethod = object@twoMethod, prAttr = object@prAttr, ignoreCols = object@ignoreCols, 
+            threshold = object@threshold, logical = object@logical))
     }
     return(data)
 })
@@ -350,18 +355,18 @@ setMethod("run", signature = "SimDataDist", definition = function(object, n, m, 
         }
         if (!is.matrix(Data)) 
             Data <- as.matrix(Data)
-		Data <- scale(Data)
-		obtainedMean <- attr(Data, "scaled:center")
-		obtainedSD <- attr(Data, "scaled:scale")			
-		Data[is.na(Data)] <- 0
-		fakeDat <- mvrnorm(n, m, cm)
-		fakeMean <- apply(fakeDat, 2, mean)
-		fakeSD <- apply(fakeDat, 2, sd)
-		obtainedMean[object@keepScale] <- fakeMean[object@keepScale]
-		obtainedSD[object@keepScale] <- fakeSD[object@keepScale]
-		Data <- t(apply(Data, 1, function(y, m, s) {
-			y * s + m
-		}, m = obtainedMean, s = obtainedSD))
+        Data <- scale(Data)
+        obtainedMean <- attr(Data, "scaled:center")
+        obtainedSD <- attr(Data, "scaled:scale")
+        Data[is.na(Data)] <- 0
+        fakeDat <- mvrnorm(n, m, cm)
+        fakeMean <- apply(fakeDat, 2, mean)
+        fakeSD <- apply(fakeDat, 2, sd)
+        obtainedMean[object@keepScale] <- fakeMean[object@keepScale]
+        obtainedSD[object@keepScale] <- fakeSD[object@keepScale]
+        Data <- t(apply(Data, 1, function(y, m, s) {
+            y * s + m
+        }, m = obtainedMean, s = obtainedSD))
         if (nrow(Data) == 1) 
             Data <- t(Data)
     }

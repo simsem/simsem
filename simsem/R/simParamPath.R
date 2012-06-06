@@ -1,4 +1,5 @@
-# simSetPath: This function will create set of matrix that belongs to path analysis model. The requirement is to specify indicator correlation and regression coefficient matrix.
+# simSetPath: This function will create set of matrix that belongs to path analysis model. The requirement is to specify indicator
+# correlation and regression coefficient matrix.
 
 simParamPath <- function(..., exo = FALSE) {
     W <- getKeywords()

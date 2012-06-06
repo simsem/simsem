@@ -128,7 +128,8 @@ setMethod("extract", signature = "SimSet", definition = function(object, yOnly =
     return(object)
 })
 
-setMethod("extract", signature = "VirtualRSet", definition = function(object, yOnly = FALSE, y = NULL, e = NULL, x = NULL, k = NULL) {
+setMethod("extract", signature = "VirtualRSet", definition = function(object, yOnly = FALSE, y = NULL, e = NULL, x = NULL, 
+    k = NULL) {
     if (yOnly) {
         if (object@modelType == "CFA") 
             stop("The yOnly option can be used only for the object in path analysis or SEM model with X side.")
@@ -185,7 +186,8 @@ setMethod("extract", signature = "VirtualRSet", definition = function(object, yO
     return(object)
 })
 
-setMethod("extract", signature = "data.frame", definition = function(object, yOnly = FALSE, y = NULL, e = NULL, x = NULL, k = NULL, keepOriginalName = FALSE) {
+setMethod("extract", signature = "data.frame", definition = function(object, yOnly = FALSE, y = NULL, e = NULL, x = NULL, k = NULL, 
+    keepOriginalName = FALSE) {
     columnName <- colnames(object)
     if (is.null(columnName)) 
         stop("The extract method for data frame needs column names.")

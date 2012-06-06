@@ -1,15 +1,18 @@
 # plotPowerFit: This function will plot sampling distributions of fit indices that visualize power
 
-setMethod("plotPowerFit", signature(altObject = "data.frame", nullObject = "vector"), definition = function(altObject, nullObject, usedFit = NULL) {
+setMethod("plotPowerFit", signature(altObject = "data.frame", nullObject = "vector"), definition = function(altObject, nullObject, 
+    usedFit = NULL) {
     plotCutoff(altObject, nullObject, usedFit = usedFit)
 })
 
-setMethod("plotPowerFit", signature(altObject = "SimResult", nullObject = "vector"), definition = function(altObject, nullObject, usedFit = NULL) {
+setMethod("plotPowerFit", signature(altObject = "SimResult", nullObject = "vector"), definition = function(altObject, nullObject, 
+    usedFit = NULL) {
     altObject <- clean(altObject)
     plotCutoff(altObject@fit, nullObject, usedFit = usedFit)
 })
 
-setMethod("plotPowerFit", signature(altObject = "data.frame", nullObject = "data.frame"), definition = function(altObject, nullObject, alpha, usedFit = NULL) {
+setMethod("plotPowerFit", signature(altObject = "data.frame", nullObject = "data.frame"), definition = function(altObject, 
+    nullObject, alpha, usedFit = NULL) {
     percentile <- 1 - alpha
     cutoff <- getCutoff(nullObject, alpha, usedFit = usedFit)
     names(cutoff) <- usedFit
@@ -45,7 +48,8 @@ setMethod("plotPowerFit", signature(altObject = "data.frame", nullObject = "data
     }
     for (i in 1:length(common.name)) {
         swap <- sum(common.name[i] == c("CFI", "TLI")) > 0
-        overlapHist(nullObject[, i], altObject[, i], main = common.name[i], xlab = "Value", colors = c("yellow", "skyblue", "lightgreen"), swap = swap)
+        overlapHist(nullObject[, i], altObject[, i], main = common.name[i], xlab = "Value", colors = c("yellow", "skyblue", "lightgreen"), 
+            swap = swap)
         cutoff1 <- quantile(nullObject[, i], percentile, na.rm = TRUE)
         abline(v = cutoff[i], lty = 1, lwd = 3)
         position <- "topright"
@@ -57,7 +61,8 @@ setMethod("plotPowerFit", signature(altObject = "data.frame", nullObject = "data
         par(obj)
 })
 
-setMethod("plotPowerFit", signature(altObject = "SimResult", nullObject = "SimResult"), definition = function(altObject, nullObject, alpha, usedFit = NULL) {
+setMethod("plotPowerFit", signature(altObject = "SimResult", nullObject = "SimResult"), definition = function(altObject, nullObject, 
+    alpha, usedFit = NULL) {
     altObject <- clean(altObject)
     nullObject <- clean(nullObject)
     plotPowerFit(altObject@fit, nullObject@fit, alpha, usedFit)

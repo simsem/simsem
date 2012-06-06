@@ -1,5 +1,5 @@
-# setOpenMxObject: Rearrange starting values such that it is appropriate for OpenMx matrix specification such that free parameters are set to be TRUE/FALSE and values meaning be both fixed
-# value or starting values
+# setOpenMxObject: Rearrange starting values such that it is appropriate for OpenMx matrix specification such that free parameters
+# are set to be TRUE/FALSE and values meaning be both fixed value or starting values
 
 setMethod("setOpenMxObject", signature(param = "vector", start = "vector"), definition = function(param, start) {
     if (isNullObject(param)) {

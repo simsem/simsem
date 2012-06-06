@@ -4,7 +4,8 @@ simSetCFA <- function(...) {
     W <- getKeywords()
     List <- list(...)
     Names <- names(List)
-    keywords <- list(W$loading, W$errorCor, W$facCor, W$errorVar, W$indicatorVar, W$intercept, W$facMean, W$indicatorMean, W$facVar, W$errorCov, W$facCov)  # 11 total
+    keywords <- list(W$loading, W$errorCor, W$facCor, W$errorVar, W$indicatorVar, W$intercept, W$facMean, W$indicatorMean, W$facVar, W$errorCov, 
+        W$facCov)  # 11 total
     position <- matchKeywords(Names, keywords)
     if (length(position) != length(unique(position))) 
         stop("Some objects were identified more than once.")
@@ -46,7 +47,7 @@ simSetCFA <- function(...) {
         ME <- list(constantVector(0, nk))
         comment(ME[[1]]) <- "default"
     })
-    Output <- new("SimSet", LY = LY[[1]], PS = PS[[1]], RPS = RPS[[1]], TE = TE[[1]], RTE = RTE[[1]], VE = VE[[1]], VPS = VE[[1]], VTE = VTE[[1]], VY = VY[[1]], TY = TY[[1]], MY = MY[[1]], ME = ME[[1]], 
-        AL = ME[[1]], modelType = "CFA")
+    Output <- new("SimSet", LY = LY[[1]], PS = PS[[1]], RPS = RPS[[1]], TE = TE[[1]], RTE = RTE[[1]], VE = VE[[1]], VPS = VE[[1]], VTE = VTE[[1]], 
+        VY = VY[[1]], TY = TY[[1]], MY = MY[[1]], ME = ME[[1]], AL = ME[[1]], modelType = "CFA")
     return(Output)
 } 

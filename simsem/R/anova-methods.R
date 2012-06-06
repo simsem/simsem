@@ -68,9 +68,11 @@ setMethod("anova", signature(object = "SimResult"), function(object, ...) {
     Power.delta <- pchisq(Chi.delta, Df.delta, lower = FALSE) < 0.05
     
     # Need to think about what we want out of this. Maybe just mean differences across models? Lets do that for now
-    val <- data.frame(Df = colMeans(Df), Chisq = colMeans(Chi), CFI = colMeans(CFI), TLI = colMeans(TLI), RMSEA = colMeans(RMSEA), AIC = colMeans(AIC), BIC = colMeans(BIC), c(NA, mean(Chi.delta)), 
-        c(NA, mean(Df.delta)), c(NA, mean(Power.delta)), c(NA, mean(CFI.delta)), c(NA, mean(TLI.delta)), c(NA, mean(RMSEA.delta)), c(NA, mean(AIC.delta)), c(NA, mean(BIC.delta)))
-    colnames(val) <- c("df", "chisq", "CFI", "TLI", "RMSEA", "AIC", "BIC", "Chisq diff", "Df diff", "Power", "CFI diff", "TLI diff", "RMSEA diff", "AIC diff", "BIC diff")
+    val <- data.frame(Df = colMeans(Df), Chisq = colMeans(Chi), CFI = colMeans(CFI), TLI = colMeans(TLI), RMSEA = colMeans(RMSEA), AIC = colMeans(AIC), 
+        BIC = colMeans(BIC), c(NA, mean(Chi.delta)), c(NA, mean(Df.delta)), c(NA, mean(Power.delta)), c(NA, mean(CFI.delta)), c(NA, mean(TLI.delta)), 
+        c(NA, mean(RMSEA.delta)), c(NA, mean(AIC.delta)), c(NA, mean(BIC.delta)))
+    colnames(val) <- c("df", "chisq", "CFI", "TLI", "RMSEA", "AIC", "BIC", "Chisq diff", "Df diff", "Power", "CFI diff", "TLI diff", "RMSEA diff", 
+        "AIC diff", "BIC diff")
     class(val) <- c("anova", class(val))
     return(val)
     
@@ -143,8 +145,8 @@ setMethod("anova", signature(object = "SimModelOut"), function(object, ...) {
     Power.delta <- pchisq(Chi.delta, Df.delta, lower = FALSE) < 0.05
     
     # Need to think about what we want out of this. Maybe just mean differences across models? Lets do that for now
-    val <- data.frame(Chisq.diff = c(NA, mean(Chi.delta)), Df.diff = c(NA, mean(Df.delta)), Power = c(NA, mean(Power.delta)), CFI.diff = c(NA, mean(CFI.delta)), TLI.diff = c(NA, mean(TLI.delta)), 
-        RMSEA.diff = c(NA, mean(RMSEA.delta)))
+    val <- data.frame(Chisq.diff = c(NA, mean(Chi.delta)), Df.diff = c(NA, mean(Df.delta)), Power = c(NA, mean(Power.delta)), CFI.diff = c(NA, 
+        mean(CFI.delta)), TLI.diff = c(NA, mean(TLI.delta)), RMSEA.diff = c(NA, mean(RMSEA.delta)))
     #' Pr(>Chisq)' = Pvalue.delta, Don't report mean p value, meaningless?
     
     

@@ -1,4 +1,5 @@
-# simSetPath: This function will create set of matrix that belongs to path analysis model. The requirement is to specify indicator correlation and regression coefficient matrix.
+# simSetPath: This function will create set of matrix that belongs to path analysis model. The requirement is to specify indicator
+# correlation and regression coefficient matrix.
 
 simSetPath <- function(..., exo = FALSE) {
     W <- getKeywords()
@@ -54,10 +55,11 @@ simSetPath <- function(..., exo = FALSE) {
             KA <- list(freeVector(0, nk))
             comment(KA[[1]]) <- "default"
         })
-        Output <- new("SimSet", BE = BE[[1]], PS = PS[[1]], RPS = RPS[[1]], VPS = VPS[[1]], VE = VE[[1]], AL = AL[[1]], ME = ME[[1]], GA = GA[[1]], PH = PH[[1]], RPH = RPH[[1]], VPH = VPH[[1]], KA = KA[[1]], 
-            modelType = "Path.exo")
+        Output <- new("SimSet", BE = BE[[1]], PS = PS[[1]], RPS = RPS[[1]], VPS = VPS[[1]], VE = VE[[1]], AL = AL[[1]], ME = ME[[1]], 
+            GA = GA[[1]], PH = PH[[1]], RPH = RPH[[1]], VPH = VPH[[1]], KA = KA[[1]], modelType = "Path.exo")
     } else {
-        Output <- new("SimSet", BE = BE[[1]], PS = PS[[1]], RPS = RPS[[1]], VPS = VPS[[1]], VE = VE[[1]], AL = AL[[1]], ME = ME[[1]], modelType = "Path")
+        Output <- new("SimSet", BE = BE[[1]], PS = PS[[1]], RPS = RPS[[1]], VPS = VPS[[1]], VE = VE[[1]], AL = AL[[1]], ME = ME[[1]], 
+            modelType = "Path")
     }
     return(Output)
 } 

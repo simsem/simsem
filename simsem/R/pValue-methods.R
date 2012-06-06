@@ -8,7 +8,8 @@ setMethod("pValue", signature(target = "numeric", dist = "vector"), definition =
     }
 })
 
-setMethod("pValue", signature(target = "numeric", dist = "data.frame"), definition = function(target, dist, revDirec = NULL, asLogical = FALSE) {
+setMethod("pValue", signature(target = "numeric", dist = "data.frame"), definition = function(target, dist, revDirec = NULL, 
+    asLogical = FALSE) {
     if (length(target) != ncol(dist)) 
         stop("The length of target and the number of columns of dist are not equal")
     numVar <- length(target)

@@ -21,16 +21,17 @@ setMethod("standardize", signature = "SimRSet", definition = function(object) {
         sdLatent <- sqrt(diag(diag(createImpliedMACS(M)$CM)))
     }
     result <- object
-	for(i in 2:length(slotNames(object))) {
-		if(!isNullObject(slot(result, slotNames(object)[i]))) {
-			slot(result, slotNames(object)[i])[] <- NA
-		}
+    for (i in 2:length(slotNames(object))) {
+        if (!isNullObject(slot(result, slotNames(object)[i]))) {
+            slot(result, slotNames(object)[i])[] <- NA
+        }
     }
-	invSdLatent <- NULL
-	invSdIndicator <- NULL
-	try(invSdLatent <- solve(sdLatent), silent=TRUE)
-	try(invSdIndicator <- solve(sdIndicator), silent=TRUE)
-	if(is.null(invSdLatent) || is.null(invSdIndicator)) return(result)
+    invSdLatent <- NULL
+    invSdIndicator <- NULL
+    try(invSdLatent <- solve(sdLatent), silent = TRUE)
+    try(invSdIndicator <- solve(sdIndicator), silent = TRUE)
+    if (is.null(invSdLatent) || is.null(invSdIndicator)) 
+        return(result)
     if (type == "CFA") {
         result@TY <- invSdIndicator %*% object@TY
         result@LY <- invSdIndicator %*% object@LY %*% sdLatent
@@ -46,8 +47,8 @@ setMethod("standardize", signature = "SimRSet", definition = function(object) {
         nx <- ncol(object@GA)
         sdX <- sdIndicator[1:nx, 1:nx]
         sdY <- sdIndicator[(nx + 1):(nx + ny), (nx + 1):(nx + ny)]
-		invSdX <- invSdIndicator[1:nx, 1:nx]
-		invSdY <- invSdIndicator[(nx + 1):(nx + ny), (nx + 1):(nx + ny)]
+        invSdX <- invSdIndicator[1:nx, 1:nx]
+        invSdY <- invSdIndicator[(nx + 1):(nx + ny), (nx + 1):(nx + ny)]
         result@AL <- invSdY %*% object@AL
         result@PS <- invSdY %*% object@PS %*% invSdY
         result@BE <- invSdY %*% object@BE %*% sdY
@@ -70,10 +71,10 @@ setMethod("standardize", signature = "SimRSet", definition = function(object) {
         sdY <- sdIndicator[(nx + 1):(nx + ny), (nx + 1):(nx + ny)]
         sdK <- sdLatent[1:nk, 1:nk]
         sdE <- sdLatent[(nk + 1):(nk + ne), (nk + 1):(nk + ne)]
-		invSdX <- invSdIndicator[1:nx, 1:nx]
-		invSdY <- invSdIndicator[(nx + 1):(nx + ny), (nx + 1):(nx + ny)]
-		invSdK <- invSdLatent[1:nk, 1:nk]
-		invSdE <- invSdLatent[(nk + 1):(nk + ne), (nk + 1):(nk + ne)]
+        invSdX <- invSdIndicator[1:nx, 1:nx]
+        invSdY <- invSdIndicator[(nx + 1):(nx + ny), (nx + 1):(nx + ny)]
+        invSdK <- invSdLatent[1:nk, 1:nk]
+        invSdE <- invSdLatent[(nk + 1):(nk + ne), (nk + 1):(nk + ne)]
         result@AL <- invSdE %*% object@AL
         result@PS <- invSdE %*% object@PS %*% invSdE
         result@BE <- invSdE %*% object@BE %*% sdE

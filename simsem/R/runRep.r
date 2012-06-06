@@ -10,7 +10,7 @@ runRep <- function(object, objData, objModel, objMissing = new("NullSimMissing")
     FMI1 <- NULL
     FMI2 <- NULL
     converged <- FALSE
-    seed <- object[[5]]
+    .Random.seed <- object[[5]]
     n <- object[[2]]
     if (is.null(n)) 
         n <- objData@n
@@ -26,7 +26,6 @@ runRep <- function(object, objData, objModel, objMissing = new("NullSimMissing")
         }
     }
     obj <- object[[1]]
-    set.seed(seed)
     data.mis <- NULL
     if (class(obj) == "list") {
         data.mis <- createData(obj, n, objData, dataOnly = FALSE)
@@ -39,8 +38,8 @@ runRep <- function(object, objData, objModel, objMissing = new("NullSimMissing")
     
     if (!is(objMissing, "NullSimMissing")) {
         data.mis <- run(objMissing, data.mis, pmMCAR = pmMCAR, pmMAR = pmMAR)
-        # data.mis <- imposeMissing(data.mis, covs=objMissing@covs, pmMCAR=objMissing@pmMCAR, pmMAR=objMissing@pmMAR, nforms=objMissing@nforms, itemGroups=objMissing@itemGroups,
-        # twoMethod=objMissing@twoMethod)
+        # data.mis <- imposeMissing(data.mis, covs=objMissing@covs, pmMCAR=objMissing@pmMCAR, pmMAR=objMissing@pmMAR,
+        # nforms=objMissing@nforms, itemGroups=objMissing@itemGroups, twoMethod=objMissing@twoMethod)
     }
     if (!isNullObject(objFunction)) 
         data.mis <- run(objFunction, data.mis, checkDataOut = TRUE)
@@ -50,7 +49,8 @@ runRep <- function(object, objData, objModel, objMissing = new("NullSimMissing")
     if (!is(objMissing, "NullSimMissing") && objMissing@numImps > 0) {
         if (silent) {
             invisible(capture.output(suppressMessages(try(temp <- run(object = objModel, data = data.mis, simMissing = objMissing), silent = TRUE))))
-            # invisible(capture.output(suppressMessages(try(temp <- runMI(data.mis,objModel,objMissing@numImps,objMissing@impMethod), silent=TRUE))))
+            # invisible(capture.output(suppressMessages(try(temp <- runMI(data.mis,objModel,objMissing@numImps,objMissing@impMethod),
+            # silent=TRUE))))
         } else {
             try(temp <- run(object = objModel, data = data.mis, simMissing = objMissing), silent = TRUE)
             # try(temp <- runMI(data.mis,objModel,objMissing@numImps,objMissing@impMethod))

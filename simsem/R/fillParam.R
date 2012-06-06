@@ -204,7 +204,8 @@ fillParam <- function(param, modelType) {
             RTH <- suppressWarnings(solve(sqrt(diag(VTD))) %*% TH %*% solve(sqrt(diag(VTE))))
         }
     }
-    out <- new("MatrixSet", modelType = modelType, LY = LY, VTE = VTE, TE = TE, RTE = RTE, VY = VY, TY = TY, MY = MY, BE = BE, VPS = VPS, PS = PS, RPS = RPS, VE = VE, AL = AL, ME = ME, LX = LX, VTD = VTD, 
-        TD = TD, RTD = RTD, VX = VX, TX = TX, MX = MX, GA = GA, VPH = VPH, PH = PH, RPH = RPH, KA = KA, TH = TH, RTH = RTH)
+    out <- new("MatrixSet", modelType = modelType, LY = LY, VTE = VTE, TE = TE, RTE = RTE, VY = VY, TY = TY, MY = MY, BE = BE, VPS = VPS, 
+        PS = PS, RPS = RPS, VE = VE, AL = AL, ME = ME, LX = LX, VTD = VTD, TD = TD, RTD = RTD, VX = VX, TX = TX, MX = MX, GA = GA, VPH = VPH, 
+        PH = PH, RPH = RPH, KA = KA, TH = TH, RTH = RTH)
     return(out)
 } 

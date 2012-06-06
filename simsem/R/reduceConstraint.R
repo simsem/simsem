@@ -1,4 +1,5 @@
-# reduceConstraint: Reduce the model constraint based on SimSet to only based on SimRSet. Some symbols will be reduced to appropriate position such as VTE(3) to TE(3, 3)
+# reduceConstraint: Reduce the model constraint based on SimSet to only based on SimRSet. Some symbols will be reduced to
+# appropriate position such as VTE(3) to TE(3, 3)
 
 reduceConstraint <- function(SimEqualCon) {
     modelType <- SimEqualCon@modelType

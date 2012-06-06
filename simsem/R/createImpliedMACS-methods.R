@@ -26,7 +26,8 @@ setMethod("createImpliedMACS", signature = "SimRSet", definition = function(obje
         implied.mean.2 <- solve(ID - object@BE) %*% (object@AL + (object@GA %*% object@KA))
         implied.covariance.1.1 <- object@PH
         implied.covariance.1.2 <- object@PH %*% t(object@GA) %*% t(solve(ID - object@BE))
-        implied.covariance.2.2 <- solve(ID - object@BE) %*% ((object@GA %*% object@PH %*% t(object@GA)) + object@PS) %*% t(solve(ID - object@BE))
+        implied.covariance.2.2 <- solve(ID - object@BE) %*% ((object@GA %*% object@PH %*% t(object@GA)) + object@PS) %*% t(solve(ID - 
+            object@BE))
         if (object@modelType == "SEM.exo") {
             implied.mean.1 <- object@TX + (object@LX %*% implied.mean.1)
             implied.mean.2 <- object@TY + (object@LY %*% implied.mean.2)

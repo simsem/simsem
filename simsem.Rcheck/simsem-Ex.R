@@ -419,7 +419,6 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 showClass("SimModelMIOut")
-showClass("SimResult")
 loading <- matrix(0, 6, 1)
 loading[1:6, 1] <- NA
 LX <- simMatrix(loading, 0.7)
@@ -838,7 +837,8 @@ nameEx("anova")
 flush(stderr()); flush(stdout())
 
 ### Name: anova
-### Title: Provide a comparison of nested models across replications
+### Title: Provide a comparison of nested models and nonnested models
+###   across replications
 ### Aliases: anova,SimResult-method anova,SimModelOut-method
 ###   anova,SimModelMIOut-method
 
@@ -1830,7 +1830,7 @@ nameEx("getCutoff")
 flush(stderr()); flush(stdout())
 
 ### Name: getCutoff
-### Title: Find cutoff given a priori alpha level
+### Title: Find fit indices cutoff given a priori alpha level
 ### Aliases: getCutoff getCutoff-methods getCutoff,data.frame-method
 ###   getCutoff,matrix-method getCutoff,SimResult-method
 
@@ -2369,7 +2369,8 @@ nameEx("plotCutoff")
 flush(stderr()); flush(stdout())
 
 ### Name: plotCutoff
-### Title: Plot sampling distributions of fit indices
+### Title: Plot sampling distributions of fit indices with fit indices
+###   cutoffs
 ### Aliases: plotCutoff plotCutoff-methods plotCutoff,data.frame-method
 ###   plotCutoff,SimResult-method
 
@@ -2512,6 +2513,7 @@ flush(stderr()); flush(stdout())
 
 ### Name: plotPowerFit
 ### Title: Plot sampling distributions of fit indices that visualize power
+###   of rejecting datasets underlying misspecified models
 ### Aliases: plotPowerFit plotPowerFit-methods
 ###   plotPowerFit,data.frame,data.frame-method
 ###   plotPowerFit,data.frame,vector-method
@@ -2780,7 +2782,8 @@ nameEx("runFit")
 flush(stderr()); flush(stdout())
 
 ### Name: runFit
-### Title: Build a result object from analyzing real data
+### Title: Build a Monte Carlo simulation that the data-generation
+###   parameters are from the result of analyzing real data
 ### Aliases: runFit runFit-methods runFit,ANY-method runFit,SimModel-method
 ###   runFit,SimModelOut-method
 
@@ -3033,7 +3036,7 @@ nameEx("simData")
 flush(stderr()); flush(stdout())
 
 ### Name: simData
-### Title: Data object
+### Title: Create a Data object
 ### Aliases: simData simData-methods simData,ANY-method
 ###   simData,SimSet-method simData,SimModelOut-method
 ###   simData,SimRSet-method
@@ -3494,8 +3497,7 @@ nameEx("simModel")
 flush(stderr()); flush(stdout())
 
 ### Name: simModel
-### Title: Create simModel from model specification and be ready for data
-###   analysis.
+### Title: Create a model object
 ### Aliases: simModel simModel-methods simModel,ANY-method
 ###   simModel,SimSet-method simModel,SimParam-method
 ###   simModel,SimModelOut-method
@@ -4004,7 +4006,7 @@ nameEx("skew")
 flush(stderr()); flush(stdout())
 
 ### Name: skew
-### Title: Finding skewness
+### Title: Find skewness
 ### Aliases: skew skew-methods skew,vector-method
 
 ### ** Examples

@@ -68,7 +68,8 @@ setMethod("makeLabels", signature = "SimParam", definition = function(object, pa
     TX <- makeLabels(object@TX, "TX", package)
     KA <- makeLabels(object@KA, "KA", package)
     TH <- makeLabels(object@TH, "TH", package)
-    return(new("SimLabels", LY = LY, TE = TE, BE = BE, PS = PS, AL = AL, TY = TY, LX = LX, TD = TD, TX = TX, GA = GA, PH = PH, KA = KA, TH = TH, modelType = object@modelType))
+    return(new("SimLabels", LY = LY, TE = TE, BE = BE, PS = PS, AL = AL, TY = TY, LX = LX, TD = TD, TX = TX, GA = GA, PH = PH, KA = KA, 
+        TH = TH, modelType = object@modelType))
 })
 
 setMethod("makeLabels", signature = "VirtualDist", definition = function(object, digit = 3) {
@@ -109,7 +110,8 @@ setMethod("makeLabels", signature = "SimSet", definition = function(object, pack
     ifelse(!isNullObject(object@KA), KA <- makeLabels(object@KA@free, "KA", package), KA <- new("NullVector"))
     ifelse(!isNullObject(object@TH), TH <- makeLabels(object@TH@free, "TH", package), TH <- new("NullMatrix"))
     ifelse(!isNullObject(object@RTH), RTH <- makeLabels(object@RTH@free, "RTH", package), RTH <- new("NullMatrix"))
-    return(new("SimGenLabels", LY = LY, TE = TE, RTE = RTE, VTE = VTE, VY = VY, BE = BE, PS = PS, RPS = RPS, VPS = VPS, VE = VE, AL = AL, ME = ME, TY = TY, MY = MY, LX = LX, TD = TD, RTD = RTD, VTD = VTD, 
-        VX = VX, TX = TX, MX = MX, GA = GA, PH = PH, RPH = RPH, VPH = VPH, KA = KA, TH = TH, RTH = RTH, modelType = object@modelType))
+    return(new("SimGenLabels", LY = LY, TE = TE, RTE = RTE, VTE = VTE, VY = VY, BE = BE, PS = PS, RPS = RPS, VPS = VPS, VE = VE, AL = AL, 
+        ME = ME, TY = TY, MY = MY, LX = LX, TD = TD, RTD = RTD, VTD = VTD, VX = VX, TX = TX, MX = MX, GA = GA, PH = PH, RPH = RPH, VPH = VPH, 
+        KA = KA, TH = TH, RTH = RTH, modelType = object@modelType))
 })
  

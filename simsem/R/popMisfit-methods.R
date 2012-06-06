@@ -1,6 +1,7 @@
 # popMisfit: The discrepancy value (chi-square value) divided by degree of freedom, which is equal to population RMSEA
 
-setMethod("popMisfit", signature(param = "matrix", misspec = "matrix"), definition = function(param, misspec, dfParam = NULL, fit.measures = "all") {
+setMethod("popMisfit", signature(param = "matrix", misspec = "matrix"), definition = function(param, misspec, dfParam = NULL, 
+    fit.measures = "all") {
     p <- nrow(param)
     blankM <- rep(0, p)
     result <- popMisfitMACS(blankM, param, blankM, misspec, dfParam = dfParam, fit.measures = fit.measures)
@@ -50,7 +51,8 @@ setMethod("popMisfit", signature(param = "list", misspec = "list"), definition =
     return(result)
 })
 
-setMethod("popMisfit", signature(param = "SimRSet", misspec = "SimRSet"), definition = function(param, misspec, dfParam = NULL, fit.measures = "all") {
+setMethod("popMisfit", signature(param = "SimRSet", misspec = "SimRSet"), definition = function(param, misspec, dfParam = NULL, 
+    fit.measures = "all") {
     paramMacs <- createImpliedMACS(param)
     misspecMacs <- createImpliedMACS(misspec)
     if (!(all(is.finite(misspecMacs$CM)) && all(eigen(misspecMacs$CM)$values > 0))) 
@@ -60,7 +62,8 @@ setMethod("popMisfit", signature(param = "SimRSet", misspec = "SimRSet"), defini
     return(popMisfitMACS(paramMacs$M, paramMacs$CM, misspecMacs$M, misspecMacs$CM, dfParam = dfParam, fit.measures = fit.measures))
 })
 
-setMethod("popMisfit", signature(param = "MatrixSet", misspec = "MatrixSet"), definition = function(param, misspec, dfParam = NULL, fit.measures = "all") {
+setMethod("popMisfit", signature(param = "MatrixSet", misspec = "MatrixSet"), definition = function(param, misspec, dfParam = NULL, 
+    fit.measures = "all") {
     if (!validateObject(param)) 
         stop("The set of actual parameters is not valid.")
     if (!validateObject(misspec)) 
@@ -71,7 +74,8 @@ setMethod("popMisfit", signature(param = "MatrixSet", misspec = "MatrixSet"), de
     
 })
 
-setMethod("popMisfit", signature(param = "SimSet", misspec = "SimMisspec"), definition = function(param, misspec, dfParam = NULL, fit.measures = "all", equalCon = new("NullSimEqualCon")) {
+setMethod("popMisfit", signature(param = "SimSet", misspec = "SimMisspec"), definition = function(param, misspec, dfParam = NULL, 
+    fit.measures = "all", equalCon = new("NullSimEqualCon")) {
     Output <- runMisspec(param, misspec, equalCon)
     param2 <- Output$param
     misspec <- Output$misspec

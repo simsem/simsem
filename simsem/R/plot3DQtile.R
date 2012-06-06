@@ -22,6 +22,7 @@ plot3DQtile <- function(x, y, z, df = 0, qtile = 0.5, useContour = TRUE, xlab = 
     if (useContour) {
         contour(xseq, yseq, zpred, xlab = xlab, ylab = ylab, main = main)
     } else {
-        persp(xseq, yseq, zpred, theta = 30, phi = 30, expand = 0.5, col = "lightblue", ltheta = 120, shade = 0.75, ticktype = "detailed", xlab = xlab, ylab = ylab, main = main, zlab = zlab)
+        persp(xseq, yseq, zpred, theta = 30, phi = 30, expand = 0.5, col = "lightblue", ltheta = 120, shade = 0.75, ticktype = "detailed", 
+            xlab = xlab, ylab = ylab, main = main, zlab = zlab)
     }
 } 

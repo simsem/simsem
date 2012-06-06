@@ -28,7 +28,7 @@ simResult(nRep = NULL, objData = NULL, objModel = NULL,
 	Model object used in providing the information about missing values.
 }
   \item{seed}{
-	Seed number
+	Seed number. This package will use this seed number to generate the L'Ecuyer (1999) method to make nonoverlapping seed values across replications from the \code{\link[parallel]{nextRNGStream}} function.
 }
   \item{silent}{
 	TRUE if users do not wish to print number of replications during running the function.
@@ -61,10 +61,14 @@ simResult(nRep = NULL, objData = NULL, objModel = NULL,
 \value{
 	\code{\linkS4class{SimResult}} that saves analysis result from simulate data.
 }
+\references{
+L'Ecuyer, P. (1999) Good parameters and implementations for combined multiple recursive random number generators. \emph{Operations Research, 47}, 159-164.
+}
 \author{
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu}); 
 	Alex Schoemann (University of Kansas; \email{schoemann@ku.edu}); 
-	Patrick Miller (University of Kansas; \email{patr1ckm@ku.edu})
+	Patrick Miller (University of Kansas; \email{patr1ckm@ku.edu});
+	The L'Ecuyer seed number generation is adapted from the code provided by Paul Johnson in \url{http://winstat.quant.ku.edu/svn/hpcexample/trunk/Ex66-ParallelSeedPrototype/}.
 }
 \seealso{
 	\itemize{
