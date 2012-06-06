@@ -269,6 +269,8 @@ standardize             Standardize the parameter estimates within an
 startingValues          Find starting values by averaging random
                         numbers
 subtractObject          Make a subtraction of each element in an object
+summaryFit              Provide summary of model fit across
+                        replications
 summaryParam            Provide summary of parameter estimates and
                         standard error across replications
 summaryPopulation       Summarize the data generation population model

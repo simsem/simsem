@@ -416,6 +416,10 @@ summary,SimVector-method	SimVector-class
 summary,SimWeibull-method	VirtualDist-class
 summary,SymMatrix-method	SymMatrix-class
 summary,VirtualRSet-method	VirtualRSet-class
+summaryFit	summaryFit
+summaryFit,ANY-method	summaryFit
+summaryFit,SimResult-method	summaryFit
+summaryFit-methods	summaryFit
 summaryParam	summaryParam
 summaryParam,ANY-method	summaryParam
 summaryParam,SimModelMIOut-method	summaryParam

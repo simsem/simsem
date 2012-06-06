@@ -1,7 +1,7 @@
-This is pdfTeX, Version 3.1415926-1.40.11 (MiKTeX 2.9) (preloaded format=pdflatex 2011.7.1)  5 JUN 2012 15:44
+This is pdfTeX, Version 3.1415926-1.40.11 (MiKTeX 2.9) (preloaded format=pdflatex 2011.7.1)  6 JUN 2012 17:30
 entering extended mode
-**C:/Users/Sunthud/AppData/Local/Temp/Rtmp4GzdO8/Rd2pdf17c456c233b0/Rd2.tex
-(C:/Users/Sunthud/AppData/Local/Temp/Rtmp4GzdO8/Rd2pdf17c456c233b0/Rd2.tex
+**C:/Users/Sunthud/AppData/Local/Temp/RtmpaSzzv7/Rd2pdfe74531c41b0/Rd2.tex
+(C:/Users/Sunthud/AppData/Local/Temp/RtmpaSzzv7/Rd2pdfe74531c41b0/Rd2.tex
 LaTeX2e <2009/09/24>
 Babel <v3.8l> and hyphenation patterns for english, afrikaans, ancientgreek, ar
 abic, armenian, assamese, basque, bengali, bokmal, bulgarian, catalan, coptic, 
@@ -601,7 +601,7 @@ File: latin1.def 2008/03/30 v1.1d Input encoding file
 \@indexfile=\write3
 
 Writing index file Rd2.idx
-(C:\Users\Sunthud\AppData\Local\Temp\Rtmp4GzdO8\Rd2pdf17c456c233b0\Rd2.aux)
+(C:\Users\Sunthud\AppData\Local\Temp\RtmpaSzzv7\Rd2pdfe74531c41b0\Rd2.aux)
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 8.
 LaTeX Font Info:    ... okay on input line 8.
 LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 8.
@@ -656,8 +656,8 @@ LaTeX Info: Redefining \ref on input line 8.
 LaTeX Info: Redefining \pageref on input line 8.
 LaTeX Info: Redefining \nameref on input line 8.
 
-(C:\Users\Sunthud\AppData\Local\Temp\Rtmp4GzdO8\Rd2pdf17c456c233b0\Rd2.out)
-(C:\Users\Sunthud\AppData\Local\Temp\Rtmp4GzdO8\Rd2pdf17c456c233b0\Rd2.out)
+(C:\Users\Sunthud\AppData\Local\Temp\RtmpaSzzv7\Rd2pdfe74531c41b0\Rd2.out)
+(C:\Users\Sunthud\AppData\Local\Temp\RtmpaSzzv7\Rd2pdfe74531c41b0\Rd2.out)
 \@outlinefile=\write4
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <24.88> not available
 (Font)              Font shape `T1/ptm/b/n' tried instead on input line 9.
@@ -677,7 +677,7 @@ LaTeX Font Info:    Try loading font information for T1+phv on input line 31.
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\t1phv.fd"
 File: t1phv.fd 2001/06/04 scalable font definitions for T1/phv.
 )
-(C:\Users\Sunthud\AppData\Local\Temp\Rtmp4GzdO8\Rd2pdf17c456c233b0\Rd2.toc
+(C:\Users\Sunthud\AppData\Local\Temp\RtmpaSzzv7\Rd2pdfe74531c41b0\Rd2.toc
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 1.
 LaTeX Font Info:    External font `cmex10' loaded for size
@@ -1037,9 +1037,9 @@ File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [72] [73]
-Overfull \hbox (32.28088pt too wide) in paragraph at lines 4323--4323
- []\T1/fi4/m/n/9 Output3 <- simResult(NULL, SimData, SimModel, n=seq(50, 100, 1
-0), pmMCAR=c(0, 0.05, 0.1, 0.15))[] 
+Overfull \hbox (36.78088pt too wide) in paragraph at lines 4323--4323
+ []\T1/fi4/m/n/9 Output3 <- simResult(NULL, SimData, SimModel, n=seq(450, 500, 
+10), pmMCAR=c(0, 0.05, 0.1, 0.15))[] 
  []
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
@@ -1623,49 +1623,49 @@ File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [173]
-Overfull \hbox (2.46945pt too wide) in paragraph at lines 10367--10372
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+) [174]
+Overfull \hbox (2.46945pt too wide) in paragraph at lines 10440--10445
 []\T1/fi4/m/n/10 Std.Bias: \T1/ptm/m/n/10 Stan-dard-ized Bias, which is (\T1/fi
 4/m/n/10 Estimate.Average \T1/ptm/m/n/10 - \T1/fi4/m/n/10 Average.Param\T1/ptm/
 m/n/10 )/\T1/fi4/m/n/10 Estimate.SD
  []
 
 
-Overfull \hbox (24.57841pt too wide) in paragraph at lines 10372--10376
+Overfull \hbox (24.57841pt too wide) in paragraph at lines 10445--10449
 []\T1/fi4/m/n/10 Rel.SE.Bias: \T1/ptm/m/n/10 Rel-a-tive Bias in stan-dard er-ro
 r, which is (\T1/fi4/m/n/10 Average.SE \T1/ptm/m/n/10 - \T1/fi4/m/n/10 Estimate
 .SD\T1/ptm/m/n/10 )/\T1/fi4/m/n/10 Estimate.SD
  []
 
-[174] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+[175] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
-Overfull \hbox (25.01047pt too wide) in paragraph at lines 10423--10424
+Overfull \hbox (25.01047pt too wide) in paragraph at lines 10496--10497
 \T1/ptm/m/n/10 ob-ject can be \T1/fi4/m/n/10 linkS4class{SimModelOut}\T1/ptm/m/
 n/10 , \T1/fi4/m/n/10 linkS4class{SimDataOut}\T1/ptm/m/n/10 , or \T1/fi4/m/n/10
  linkS4class{SimResult}\T1/ptm/m/n/10 . 
  []
 
 
-Overfull \hbox (1.49042pt too wide) in paragraph at lines 10435--10436
+Overfull \hbox (1.49042pt too wide) in paragraph at lines 10508--10509
 \T1/ptm/m/n/10 from, which can be \T1/fi4/m/n/10 linkS4class{SimModelOut}\T1/pt
 m/m/n/10 , \T1/fi4/m/n/10 linkS4class{SimDataOut}\T1/ptm/m/n/10 ,
  []
 
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
-File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [175]
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
-File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [176] [177]
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
-File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [178]
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+[176] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+) [177] [178]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [179]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+)
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [180]
@@ -1674,37 +1674,40 @@ File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [181]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-)
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
-File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [182]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
-Overfull \hbox (1.54648pt too wide) in paragraph at lines 10959--10960
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+) [183]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+)
+Overfull \hbox (1.54648pt too wide) in paragraph at lines 11032--11033
 []\T1/ptm/m/n/10 This func-tion will vec-tor-ize ev-ery ma-
  []
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [183] [184]
-[185] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+) [184] [185]
+[186] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
-File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [186]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [187]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+) [188]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [188]
-(C:\Users\Sunthud\AppData\Local\Temp\Rtmp4GzdO8\Rd2pdf17c456c233b0\Rd2.ind
-[189]
+) [189]
+(C:\Users\Sunthud\AppData\Local\Temp\RtmpaSzzv7\Rd2pdfe74531c41b0\Rd2.ind
+[190]
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <12> not available
 (Font)              Font shape `T1/ptm/b/n' tried instead on input line 3.
 
@@ -1742,14 +1745,14 @@ Overfull \hbox (5.8567pt too wide) in paragraph at lines 109--111
 []\T1/fi4/m/it/10 countFreeParameters,SimREqualCon-method 
  []
 
-[190
+[191
 
 ]
 Overfull \hbox (0.8567pt too wide) in paragraph at lines 119--121
 []\T1/fi4/m/it/10 countFreeParameters,VirtualRSet-method 
  []
 
-[191] [192]
+[192] [193]
 Overfull \hbox (15.8567pt too wide) in paragraph at lines 460--462
 []\T1/fi4/m/it/10 plotPowerFit,data.frame,data.frame-method 
  []
@@ -1759,7 +1762,7 @@ Overfull \hbox (5.8567pt too wide) in paragraph at lines 464--466
 []\T1/fi4/m/it/10 plotPowerFit,SimResult,SimResult-method 
  []
 
-[193]
+[194]
 Overfull \hbox (5.8567pt too wide) in paragraph at lines 616--618
 []\T1/fi4/m/it/10 setOpenMxObject,SimParam,SimRSet-method 
  []
@@ -1784,43 +1787,43 @@ Overfull \hbox (20.8567pt too wide) in paragraph at lines 635--637
 []\T1/fi4/m/it/10 setPopulation,SimResult,VirtualRSet-method 
  []
 
-[194] [195] [196] [197]
-Overfull \hbox (35.8567pt too wide) in paragraph at lines 1306--1308
+[195] [196] [197] [198]
+Overfull \hbox (35.8567pt too wide) in paragraph at lines 1314--1316
 []\T1/fi4/m/it/10 vectorizeObject,MatrixSet,SimGenLabels-method 
  []
 
 
-Overfull \hbox (30.8567pt too wide) in paragraph at lines 1310--1312
+Overfull \hbox (30.8567pt too wide) in paragraph at lines 1318--1320
 []\T1/fi4/m/it/10 vectorizeObject,VirtualRSet,SimLabels-method 
  []
 
-[198
+[199
 
 ])
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 11362.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 11362.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 11435.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 11435.
 
-(C:\Users\Sunthud\AppData\Local\Temp\Rtmp4GzdO8\Rd2pdf17c456c233b0\Rd2.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 11362.
+(C:\Users\Sunthud\AppData\Local\Temp\RtmpaSzzv7\Rd2pdfe74531c41b0\Rd2.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 11435.
 
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 11362
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 11435
 .
 Package rerunfilecheck Info: File `Rd2.out' has not changed.
-(rerunfilecheck)             Checksum: D123C6A7AEC0FD53DC7D9FB382D8BA3C;10562.
+(rerunfilecheck)             Checksum: E35F3EC2155BCF653FFDD892CED6ABD7;10617.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 11362.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 11435.
  ) 
 Here is how much of TeX's memory you used:
- 8822 strings out of 494053
- 146606 string characters out of 3146180
- 194958 words of memory out of 3000000
- 9511 multiletter control sequences out of 15000+200000
+ 8838 strings out of 494053
+ 146948 string characters out of 3146180
+ 194062 words of memory out of 3000000
+ 9512 multiletter control sequences out of 15000+200000
  43888 words of font info for 52 fonts, out of 3000000 for 9000
  715 hyphenation exceptions out of 8191
- 38i,6n,34p,1426b,590s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 38i,6n,34p,1425b,590s stack positions out of 5000i,500n,10000p,200000b,50000s
 pdfTeX warning (dest): name{Rfn.nextRNGStream} has been referenced but does n
 ot exist, replaced by a fixed one
 
@@ -1845,9 +1848,9 @@ onts/type1/urw/helvetic/uhvr8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/typ
 e1/urw/times/utmb8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/time
 s/utmr8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.pf
 b><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Rd2.pdf (198 pages, 1229313 bytes).
+Output written on Rd2.pdf (199 pages, 1235069 bytes).
 PDF statistics:
- 5820 PDF objects out of 6186 (max. 8388607)
- 2155 named destinations out of 2487 (max. 500000)
- 1409 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 5852 PDF objects out of 6186 (max. 8388607)
+ 2168 named destinations out of 2487 (max. 500000)
+ 1417 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -65,10 +65,10 @@ Output <- simResult(5, SimData, SimModel)
 plotCutoff(Output, 0.05, usedFit=c("RMSEA", "SRMR", "CFI", "TLI"))
 
 # Varying N
-Output2 <- simResult(NULL, SimData, SimModel, n=seq(50, 100, 10))
+Output2 <- simResult(NULL, SimData, SimModel, n=seq(450, 500, 10))
 plotCutoff(Output2, 0.05)
 
 # Varying N and pmMCAR
-Output3 <- simResult(NULL, SimData, SimModel, n=seq(50, 100, 10), pmMCAR=c(0, 0.05, 0.1, 0.15))
+Output3 <- simResult(NULL, SimData, SimModel, n=seq(450, 500, 10), pmMCAR=c(0, 0.05, 0.1, 0.15))
 plotCutoff(Output3, 0.05)
 }

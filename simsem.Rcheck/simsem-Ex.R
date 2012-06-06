@@ -2398,11 +2398,11 @@ Output <- simResult(5, SimData, SimModel)
 plotCutoff(Output, 0.05, usedFit=c("RMSEA", "SRMR", "CFI", "TLI"))
 
 # Varying N
-Output2 <- simResult(NULL, SimData, SimModel, n=seq(50, 100, 10))
+Output2 <- simResult(NULL, SimData, SimModel, n=seq(450, 500, 10))
 plotCutoff(Output2, 0.05)
 
 # Varying N and pmMCAR
-Output3 <- simResult(NULL, SimData, SimModel, n=seq(50, 100, 10), pmMCAR=c(0, 0.05, 0.1, 0.15))
+Output3 <- simResult(NULL, SimData, SimModel, n=seq(450, 500, 10), pmMCAR=c(0, 0.05, 0.1, 0.15))
 plotCutoff(Output3, 0.05)
 
 
@@ -4148,6 +4148,36 @@ flush(stderr()); flush(stdout())
 #CFA.Model <- simSetCFA(LX = LX, PH = PH, TD = TD)
 #result <- startingValues(CFA.Model, 10)
 #summary(result)
+
+
+
+cleanEx()
+nameEx("summaryFit")
+### * summaryFit
+
+flush(stderr()); flush(stdout())
+
+### Name: summaryFit
+### Title: Provide summary of model fit across replications
+### Aliases: summaryFit summaryFit-methods summaryFit,ANY-method
+###   summaryFit,SimResult-method
+
+### ** Examples
+
+showClass("SimResult")
+loading <- matrix(0, 6, 1)
+loading[1:6, 1] <- NA
+LX <- simMatrix(loading, 0.7)
+RPH <- symMatrix(diag(1))
+RTD <- symMatrix(diag(6))
+CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
+SimData <- simData(CFA.Model, 500)
+SimModel <- simModel(CFA.Model)
+# We make the examples running only 5 replications to save time.
+# In reality, more replications are needed.
+Output <- simResult(5, SimData, SimModel)
+summaryFit(Output)
+summaryFit(Output, detail=TRUE)
 
 
 

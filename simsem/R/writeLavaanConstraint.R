@@ -12,6 +12,8 @@ writeLavaanConstraint <- function(object, constraint) {
                 if (Matrix == "PS" | Matrix == "PH" | Matrix == "TE" | Matrix == "TD") {
                   elements <- c(as.numeric(current[j, 2]), as.numeric(current[j, 3]))
                   slot(object, Matrix)[max(elements), min(elements)] <- con.text
+				} else if (Matrix == "AL" | Matrix == "TY" | Matrix == "TX" | Matrix == "KA") {
+				  slot(object, Matrix)[as.numeric(current[j, 2])] <- con.text
                 } else {
                   slot(object, Matrix)[as.numeric(current[j, 2]), as.numeric(current[j, 3])] <- con.text
                 }

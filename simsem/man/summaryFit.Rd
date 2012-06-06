@@ -1,9 +1,8 @@
-\name{summaryParam}
-\alias{summaryParam}
-\alias{summaryParam-methods}
-\alias{summaryParam,ANY-method}
-\alias{summaryParam,SimResult-method}
-
+\name{summaryFit}
+\alias{summaryFit}
+\alias{summaryFit-methods}
+\alias{summaryFit,ANY-method}
+\alias{summaryFit,SimResult-method}
 \title{
 	Provide summary of model fit across replications
 }
@@ -25,13 +24,6 @@ summaryFit(object,...)
 	A data frame that provides fit statistics cutoffs and means
 	
 	When \code{linkS4class{SimResult}} has fixed simulation parameters the first colmns are fit index cutoffs for values of alpha and the last column is the mean fit across all replications. Rows are
-	Chi     13.046   15.367   18.476   22.591    8.148
-AIC   3200.737 3218.214 3255.511 3265.471 3129.529
-BIC   3263.405 3280.882 3318.179 3328.139 3192.197
-RMSEA    0.056    0.068    0.081    0.095    0.019
-CFI      0.983    0.974    0.965    0.955    0.995
-TLI      0.967    0.952    0.934    0.915    1.000
-SRMR    
 	\itemize{
 		\item {Chi} Chi-square fit statistic
 		\item {AIC} Akaike Information Criterion
@@ -64,6 +56,6 @@ SimModel <- simModel(CFA.Model)
 # We make the examples running only 5 replications to save time.
 # In reality, more replications are needed.
 Output <- simResult(5, SimData, SimModel)
-summaryParam(Output)
-summaryParam(Output, detail=TRUE)
+summaryFit(Output)
+summaryFit(Output, detail=TRUE)
 }

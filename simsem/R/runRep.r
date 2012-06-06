@@ -10,7 +10,9 @@ runRep <- function(object, objData, objModel, objMissing = new("NullSimMissing")
     FMI1 <- NULL
     FMI2 <- NULL
     converged <- FALSE
-    .Random.seed <- object[[5]]
+	library(parallel)
+    RNGkind("L'Ecuyer-CMRG")
+	assign(".Random.seed", object[[5]], envir = .GlobalEnv)
     n <- object[[2]]
     if (is.null(n)) 
         n <- objData@n
