@@ -324,7 +324,7 @@ parseFree <- function(simDat,group,pt,op,lhs=NULL,rhs=NULL) {
   freeDat <- simDat@free
   
   if(class(simDat) == "SimVector") {
-    tot = length(simDat)
+    tot = length(freeDat)
   } else {
       nf <- ncol(freeDat)
       ni <- nrow(freeDat)
