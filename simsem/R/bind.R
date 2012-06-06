@@ -114,17 +114,8 @@ validConstraints <- function(mat) {
 
 is.label <- function(mat) {
   flat <- as.vector(mat)
-
-  # The basic idea is to parse and evaluate the character string in the global namespace. If the object doesn't exist,
-  # it is a constraint label.
-  # However, this is a little sketchy. For instance:
-  # If the TemporaryVariableName were x instead, if a label was x, this test would fail.
-  maybeLabel <- sapply(flat, FUN= function(TemporaryVariableName) { tryCatch(eval(parse(text=TemporaryVariableName)),
-                                  error = function(e) 1)})
-  isLabel <- tryCatch(as.logical(maybeLabel), error=function(e)
-                      stop("Invalid constraint: Label might be a function name or object in global namespace"))
-  isLabel[is.na(isLabel)] <- FALSE
-
+  flat[is.na(flat)] <- 0
+  isLabel <- sapply(flat, FUN= function(x) {suppressWarnings(is.na(as.numeric(x))) })
   return(isLabel)
 }
 

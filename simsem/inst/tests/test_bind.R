@@ -37,11 +37,6 @@ expect_true(class(bind(free=b)) == "SimMatrix")
 
 expect_true(class(bind(free=matrix(0,2,2))) == "SimMatrix")
 
-  ## Invalid label name. Throws error
-  f <- matrix(0,3,3)
-  f[1,1] <- "c"
-  f[1,2] <- "c1"
-expect_error(bind(free=f))
 
 ###################################
 
@@ -74,6 +69,3 @@ expect_true(class(bind(free=b)) == "SimVector")
 
 expect_true(class(bind(free=c(0,2,2))) == "SimVector")
 
-  ## Invalid label name. Throws error
-  f <- c(0,"c","c1",3,3)
-expect_error(bind(free=f))

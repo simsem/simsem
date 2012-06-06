@@ -101,7 +101,7 @@ sem <- sem()
 dir <- "/nfs/home/patr1ckm/repos/simsem/simsem/R/"
 
 model(LY=cfa$LY,RPS=cfa$RPS,RTE=cfa$RTE, modelType="CFA")
-model(LY=cfa2$LY,PS=cfa2$PS,TE=cfa2$TE,AL=cfa2$AL,TY=cfa2$TY, modelType="CFA")
+paramSet <- model(LY=cfa2$LY,PS=cfa2$PS,TE=cfa2$TE,AL=cfa2$AL,TY=cfa2$TY, modelType="CFA")
 model(BE=path$BE, RPS=path$RPS, ME=path$ME, modelType="Path")
 model(LY=sem$LY, RTE=sem$RTE, RPS=sem$RPS, BE=sem$BE, modelType="SEM")
 # We should be able to infer the model type from the matrices given. For now I leave a modelType argument.
@@ -205,82 +205,81 @@ buildSEM <- function(paramSet) {
 } 
 
 # All parameters are built into the pt
-buildPT <- function(paramSet, facLab=NULL, indLab=NULL, ngroup=1) {
+buildPT <- function(paramSet, facLab=NULL, indLab=NULL) {
 
-  # Convert a chunk at a time - starting with LY
+  #2. Convert a chunk at a time - starting with LY
+  pt <- NULL
   if(is.list(paramSet$LY)) {
-    dims <- dim(paramSet$LY[[1]]@free)
-    nparams <- dims[1] * dims[2]
-    ngroups <- length(paramSet$LY)
-    startIdx <- seq(1,ngroups*nparams,by=nparams)
-    mapply(paramSet$LY,group=1:ngroups,start=startIdx, FUN=parseFree,SIMPLIFY=FALSE)
-  } 
+    if(is.null(facLab)){ylab <- paste("y",1:dim(paramSet$LY[[1]]@free)[2],sep="")} else { ylab <- facLab}
+    if(is.null(indLab)){xlab <- paste("x",1:dim(paramSet$LY[[1]]@free)[1],sep="")} else { xlab <- indLab}
+    for(i in seq_along(paramSet$LY)) {      
+      if(i == 1) { 
+        pt <- parseFree(paramSet$LY[[i]],group=i,pt=NULL,op="=~",ylab,xlab)
+      } else {
+        pt <- rbind(pt, parseFree(paramSet$LY[[i]], group=i, op="=~",pt=pt,ylab, xlab))
+      }
+    }
+  } else {
+    if(is.null(facLab)){ylab <- paste("y",1:dim(paramSet$LY@free)[2],sep="")} else { ylab <- facLab}
+    if(is.null(indLab)){xlab <- paste("x",1:dim(paramSet$LY@free)[1],sep="")} else { xlab <- indLab}
+    pt <- parseFree(paramSet$LY, group=1, pt=NULL,op="=~",yLab,xLab)
+  }
+
+  # PS
+  if(is.list(paramSet$PS)) {
+    if(is.null(facLab)){ylab <- xlab <- paste("y",1:dim(paramSet$PS[[1]]@free)[2],sep="")} else { ylab <- xlab <- facLab}
+     for(i in seq_along(paramSet$PS)) {
+       pt <- rbind(pt, parseFree(paramSet$LY[[i]], group=i, op="~~",pt=pt,ylab,xlab))
+     }
+  } else {
+    if(is.null(facLab)) {ylab <- xlab <- paste("y",1:dim(paramSet$PS@free)[2],sep="")} else { ylab <- xlab <- facLab}
+    pt <- rbind(pt, parseFree(paramSet$PS, group=1, pt,op="~~",ylab,xlab))
+  }
+
+  # TE
+   if(is.list(paramSet$TE)) {
+    if(is.null(facLab)){ylab <- xlab <- paste("x",1:dim(paramSet$TE[[1]]@free)[2],sep="")} else { ylab <- xlab <- indLab}
+     for(i in seq_along(paramSet$TE)) {
+       pt <- rbind(pt, parseFree(paramSet$LY[[i]], group=i, op="~~",pt=pt,ylab,xlab))
+     }
+  } else {
+    if(is.null(facLab)) {ylab <- xlab <- paste("x",1:dim(paramSet$TE@free)[2],sep="")} else { ylab <- xlab <- indLab}
+    pt <- rbind(pt, parseFree(paramSet$TE, group=1, pt,op="~~",ylab,xlab))
+  }
   
+  return(pt)
 }
 
 # Returns a data frame of parsed SimMatrix
-parseFree <- function(simMat,group,start,facLab=NULL,indLab=NULL) {
-  free <- simMat@free
-  nf <- ncol(free)
-  ni <- nrow(free)
+parseFree <- function(simMat,group,pt,op,yLab=NULL,xLab=NULL) {
+  # Calculate starting indices from previous pt
+  if(!is.null(pt)) {
+    startId <- max(pt$id)+1
+    startFree <- max(pt$free)+1
+    startUnco <- max(pt$unco)+1
+  } else {
+    startId <- 1
+    startFree <- 1
+    startUnco <- 1
+  }
+
+  freeMat <- simMat@free
+  nf <- ncol(freeMat)
+  ni <- nrow(freeMat)
   tot <- nf*ni
-
-  id <- start:(start+(ni*nf)-1)
-
-  if(is.null(facLab)) {
-    lhs <- sort(rep(paste("y",1:nf,sep=""),ni))
-  } else {
-    lhs <- sort(rep(facLab,ni))
-  }
-
-  op <- rep("=~",length(id))
-
-  if(is.null(indLab)) {
-    rhs <- rep(paste("x",1:ni,sep=""),nf)
-  } else {
-    rhs <- rep(indLab,nf)
-  }
-
+  id <- startId:(startId+(tot)-1)
+  op <- rep(op,length(id))
   user <- rep(0,tot)
   group <- rep(group,tot)
-  free <- freeIdx(free,start=start)   
-  ustart <- startingVal(free)
+  free <- freeIdx(freeMat,start=startFree)   
+  ustart <- startingVal(freeMat)
   exo <- rep(0,length(id))
-  eq.id <- eqIdx(free,id)
+  eq.id <- eqIdx(freeMat,id)
   label <- names(eq.id)
-  unco <- uncoIdx(free,start=start)
+  unco <- uncoIdx(freeMat,start=startUnco)
   return(data.frame(id,lhs,op,rhs,user,group,free,ustart,exo,eq.id,label,unco))
 }
   
-# Takes a matrix, and returns a logical matrix indicating what elements are labels.
-is.label <- function(mat) {
-  flat <- as.vector(mat)
-
-  # The basic idea is to parse and evaluate the character string in the global namespace. If the object doesn't exist,
-  # it is a constraint label.
-  # However, this is a little sketchy. For instance:
-  # If the TemporaryVariableName were x instead, if a label was x, this test would fail.
-  maybeLabel <- sapply(flat, FUN= function(TemporaryVariableName) { tryCatch(eval(parse(text=TemporaryVariableName)),
-                                  error = function(e) 1)})
-  isLabel <- tryCatch(as.logical(maybeLabel), error=function(e)
-                      stop("Invalid constraint: Label might be a function name or object in global namespace"))
-  isLabel[is.na(isLabel)] <- FALSE
-
-  return(isLabel)
-}
-
-
-# Takes a matrix, and returns a logical matrix indicating what elements are free (either NA or label)
-is.free <- function(mat) {
-  if(is.character(mat)) {
-    isFree <- is.na(mat) | is.label(mat)
-  } else {
-    isFree <- is.na(mat)
-  }
-  return(isFree)
-}
-
-
 # Calculates the indices of free parameters by lavaan rules.
 # 1. Each unique free parameter (NA) gets a unique index
 # 2. The first constrained free parameter gets a unique index
@@ -292,11 +291,12 @@ freeIdx <- function(mat, start = 1) {
   isLabel <- is.label(flat)
   avail <- seq.int(start,start+length(flat)-1,by=1)
   conList <- NULL
-  
+
+  j <- 1
   for(i in seq_along(flat)) {
     if(is.na(flat[i])) {
-      j <- i
       free.idx[i] <- avail[j]
+      j <- j+1
     } else if(isLabel[i]) {
       label <- flat[i]
       if(is.null(conList[label]) || is.na(conList[label])) {
@@ -369,4 +369,23 @@ startingVal <- function(free) {
  flat <- as.vector(free)
  flat[is.label(flat)] <- NA
  as.numeric(flat)
+}
+
+# Takes a matrix or vector, and returns a logical vector indicating what elements are labels.
+is.label <- function(mat) {
+  flat <- as.vector(mat)
+  flat[is.na(flat)] <- 0
+  isLabel <- sapply(flat, FUN= function(x) {suppressWarnings(is.na(as.numeric(x))) })
+  return(isLabel)
+}
+
+
+# Takes a matrix, and returns a logical matrix indicating what elements are free (either NA or label)
+is.free <- function(mat) {
+  if(is.character(mat)) {
+    isFree <- is.na(mat) | is.label(mat)
+  } else {
+    isFree <- is.na(mat)
+  }
+  return(isFree)
 }
