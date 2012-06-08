@@ -93,6 +93,30 @@ sem <- function() {
   return(list(LY=LY,RTE=RTE,RPS=RPS,BE=BE))
 }
 
+holz <- function() {
+  loading <- matrix(0,9,3)
+  loading[2:3,1] <- NA
+  loading[5:6,2] <- NA
+  loading[8:9,3] <- NA
+  loading[1,1] <- 1
+  loading[4,2] <- 1
+  loading[7,3] <- 1
+  LY <- bind(loading)
+
+  factor.cor <- diag(3)
+  diag(factor.cor) <- NA
+  factor.cor[lower.tri(factor.cor)] <- NA
+  RPS <- bind(factor.cor)
+
+  rte <- diag(9)
+  diag(rte) <- NA
+  RTE <- bind(rte)
+
+  pt1 <- model(LY=LY,RPS=RPS,RTE=RTE,modelType="CFA")
+  
+  fit <- lavaan(pt1,data=HolzingerSwineford1939)
+}
+
 cfa <- cfa()
 cfa2 <- cfa2()
 path <- path()
@@ -104,8 +128,8 @@ pt <- model(LY=cfa$LY,RPS=cfa$RPS,RTE=cfa$RTE, modelType="CFA")
 pt <- model(LY=cfa2$LY,PS=cfa2$PS,TE=cfa2$TE,AL=cfa2$AL,TY=cfa2$TY, modelType="CFA")
 pt <- model(BE=path$BE, RPS=path$RPS, ME=path$ME, modelType="Path")
 pt <- model(LY=sem$LY, RTE=sem$RTE, RPS=sem$RPS, BE=sem$BE, modelType="SEM")
-pt <- model(LY=list(cfa2$LY,cfa2$LY),PS=list(cfa2$PS,cfa2$PS),TE=cfa2$TE,AL=cfa2$AL,TY=cfa2$TY,modelType="CFA")
-pt <- model(LY=cfa2$LY,PS=cfa2$PS,TE=cfa2$TE,AL=cfa2$AL,TY=cfa2$TY, modelType="CFA",ngroups=2)
+pt2 <- model(LY=list(cfa2$LY,cfa2$LY),PS=list(cfa2$PS,cfa2$PS),TE=cfa2$TE,AL=cfa2$AL,TY=cfa2$TY,modelType="CFA")
+pt1 <- model(LY=cfa2$LY,PS=cfa2$PS,TE=cfa2$TE,AL=cfa2$AL,TY=cfa2$TY, modelType="CFA",ngroups=2)
 
 paramSet <- list(LY=list(cfa2$LY,cfa2$LY), PS=list(cfa2$PS,cfa2$PS), RPS=NULL,
                    TE=cfa2$TE, RTE=NULL, BE=NULL, VTE=NULL, VY=NULL, VPS=NULL, TY=cfa2$TY, AL=cfa2$AL, MY=NULL,ME=NULL)
@@ -171,6 +195,7 @@ model <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NUL
   } else { stop("Must specify model type") }
   
   pt <- buildPT(paramSet)
+ 
   return(pt)
 }
 
@@ -458,7 +483,11 @@ buildPT <- function(paramSet, facLab=NULL, indLab=NULL) {
      }
     pt <- rbind(pt, parseFree(paramSet$TY, group=1, pt=pt,op="~1",lhs,rhs))
   }
-  return(pt)  
+  pt <- as.list(pt)
+  LIST <- list(id=pt$id, lhs = as.character(pt$lhs),op = as.character(pt$op), rhs=as.character(pt$rhs),
+               user=pt$user, group=as.integer(pt$group), free=as.integer(pt$free), ustart=pt$ustart, exo=pt$exo,
+               label=as.character(pt$label), eq.id=pt$eq.id, unco=as.integer(pt$unco))
+  return(LIST)  
 }
 
 ## Returns a data frame of parsed SimMatrix/SimVector
@@ -581,12 +610,15 @@ eqIdx <- function(mat,id) {
 
 ## Calculate starting values. Needs work, but no time to finish yet.
 startingVal <- function(free,popParam) {
- flatPop <- as.vector(popParam)
+  
  flat <- as.vector(free)
  flat[is.label(flat)] <- NA
  flat <- as.numeric(flat)
- suppressWarnings(flatPop <- as.numeric(flatPop))
- flat[is.na(flat)] <- flatPop[is.na(flat)]
+ if(all(!is.nan(popParam))) { # Check if popParam was specified
+    flatPop <- as.vector(popParam)
+    suppressWarnings(flatPop <- as.numeric(flatPop))
+    flat[is.na(flat)] <- flatPop[is.na(flat)]
+  }
  return(flat)
 }
 
