@@ -108,6 +108,7 @@ simResult <- function(nRep = NULL, objData = NULL, objModel = NULL, objMissing =
     } else {
         stop("The objData argument is not a SimData class or a list of data frames.")
     }
+    set.seed(seed)
     numseed <- list()
     s <- .Random.seed
     origSeed <- s

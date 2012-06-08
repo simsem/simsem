@@ -1,7 +1,16 @@
 # clean: Extract only converged replications in the result object
 
-clean <- function(object) {
-    converged <- object@converged
+clean <- function(...) {
+	object.l <- list(...)
+	converged <- sapply(object.l, slot, name="converged")
+	allConverged <- apply(converged, 1, all)
+	object.l <- lapply(object.l, cleanSimResult, converged=allConverged)
+	if(length(object.l) == 1) object.l <- object.l[[1]]
+	return(object.l)
+} 
+
+cleanSimResult <- function(object, converged=NULL) {
+    if(is.null(converged)) converged <- object@converged
     object@nRep <- sum(converged)
     object@coef <- object@coef[converged, ]
     object@se <- object@se[converged, ]

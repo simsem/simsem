@@ -1,21 +1,21 @@
 \name{clean}
 \alias{clean}
 \title{
-	Extract only converged replications in the result object
+	Extract only converged replications in the result objects
 }
 \description{
-	Extract only converged replications in the result object (\code{\linkS4class{SimResult}})
+	Extract only the replications that are converegent in all supplied result objects (\code{\linkS4class{SimResult}})
 }
 \usage{
-clean(object)
+clean(...)
 }
 \arguments{
-  \item{object}{
-	The target result object (\code{\linkS4class{SimResult}})
+  \item{\dots}{
+	The target result objects (\code{\linkS4class{SimResult}})
 }
 }
 \value{
-	The cleaned result object
+	The cleaned result objects
 }
 \author{
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
