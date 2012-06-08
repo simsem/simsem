@@ -17,6 +17,7 @@
 ##        1. If the free parameters are specified and if only 1 value or distribution is passed to popParam, all free parameters have the same value or distribution.
 ##        2. If the free parameters are specified, and if only 1 distribution is passed to misspec, all fixed parameters get that distribution or value.
 ##        3. If equality constraints are specified, labels can't be objects already in the environment or function names.
+##        4. Any numeric value in popParam or misspec (including 0) will be considered to be a parameter value for data generation. Empty values should be either "" or NA
 ##        
 ## Validity checks:
 ## 1. Input matrices have the same dimensions or vectors have same length
@@ -98,11 +99,22 @@ bind <- function(free = NULL, popParam = NULL, misspec = NULL) {
   }
 }
 
-# Possible "empty values": "", NA, or 0
-
-is.empty <- function(dat) {
-  apply(dat, c(1,2), FUN=function(x) if(x == "" || is.na(x) || x==0) {TRUE} else {FALSE})
+combine <- function(dat) {
+  if(
+    
 }
+
+# Possible "empty values": "", or NA
+is.empty <- function(dat) {
+   if(is.null(dim(dat))) {
+    temp <- sapply(dat, FUN=function(x) if(x == "" || is.na(x)) {TRUE} else {FALSE})
+    names(temp) <- NULL
+    return(temp)
+  }
+   apply(dat, c(1,2), FUN=function(x) if(x == "" || is.na(x)) {TRUE} else {FALSE})
+        
+}
+
 
 # Finds valid labels, checks all combinations of label pairs to make sure at least one pair is the same.
 validConstraints <- function(mat) {

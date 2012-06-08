@@ -77,12 +77,8 @@ setClass("SimVector",
 
 setClass("SimSem",
    representation(
-                  pt = "data.frame",
-                  VY = "SimVector",
-                  VE = "SimVector",
-                  ME = "SimVector",
-                  MY = "SimVector",
-                  GLIST = "list"
+                  pt = "list",
+                  dgen = "list"
                   )
          )
           

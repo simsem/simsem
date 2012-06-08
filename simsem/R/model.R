@@ -10,11 +10,11 @@ cfa <- function() {
 
   latent.cor <- matrix(NA, 2, 2)
   diag(latent.cor) <- 1
-  RPS <- bind(latent.cor, 0.5)
+  RPS <- bind(latent.cor, 0.5,"runif(1,0,1)")
 
   error.cor <- matrix(0, 6, 6)
-  diag(error.cor) <- 1
-  RTE <- bind(error.cor)
+  diag(error.cor) <- NA
+  RTE <- bind(error.cor,popParam=1,misspec="runif(1,0,1)")
 
   return(list(LY=LY,RPS=RPS,RTE=RTE))
 }
@@ -122,20 +122,16 @@ cfa2 <- cfa2()
 path <- path()
 sem <- sem()
 
-dir <- "/nfs/home/patr1ckm/repos/simsem/simsem/R/"
+tcfa <- model(LY=cfa$LY,RPS=cfa$RPS,RTE=cfa$RTE, modelType="CFA")
+tcfa2 <- model(LY=cfa2$LY,PS=cfa2$PS,TE=cfa2$TE,AL=cfa2$AL,TY=cfa2$TY, modelType="CFA")
+tpath <- model(BE=path$BE, RPS=path$RPS, ME=path$ME, modelType="Path")
+tsem <- model(LY=sem$LY, RTE=sem$RTE, RPS=sem$RPS, BE=sem$BE, modelType="SEM")
+tcfamg <- model(LY=list(cfa2$LY,cfa2$LY),PS=list(cfa2$PS,cfa2$PS),TE=cfa2$TE,AL=cfa2$AL,TY=cfa2$TY,modelType="CFA")
+tcfamg3 <- model(LY=cfa2$LY,PS=cfa2$PS,TE=cfa2$TE,AL=cfa2$AL,TY=cfa2$TY, modelType="CFA",ngroups=3)
 
-pt <- model(LY=cfa$LY,RPS=cfa$RPS,RTE=cfa$RTE, modelType="CFA")
-pt <- model(LY=cfa2$LY,PS=cfa2$PS,TE=cfa2$TE,AL=cfa2$AL,TY=cfa2$TY, modelType="CFA")
-pt <- model(BE=path$BE, RPS=path$RPS, ME=path$ME, modelType="Path")
-pt <- model(LY=sem$LY, RTE=sem$RTE, RPS=sem$RPS, BE=sem$BE, modelType="SEM")
-pt2 <- model(LY=list(cfa2$LY,cfa2$LY),PS=list(cfa2$PS,cfa2$PS),TE=cfa2$TE,AL=cfa2$AL,TY=cfa2$TY,modelType="CFA")
-pt1 <- model(LY=cfa2$LY,PS=cfa2$PS,TE=cfa2$TE,AL=cfa2$AL,TY=cfa2$TY, modelType="CFA",ngroups=2)
 
-paramSet <- list(LY=list(cfa2$LY,cfa2$LY), PS=list(cfa2$PS,cfa2$PS), RPS=NULL,
-                   TE=cfa2$TE, RTE=NULL, BE=NULL, VTE=NULL, VY=NULL, VPS=NULL, TY=cfa2$TY, AL=cfa2$AL, MY=NULL,ME=NULL)
-paramSet <- list(LY=cfa$LY, PS=NULL, RPS=cfa$RPS, TE=NULL, RTE=cfa$RTE,
-                 BE=NULL, VTE=NULL, VY=NULL, VPS=NULL, TY=NULL, AL=NULL, MY=NULL,ME=NULL)
-
+## Takes model specification matrices of type SimMatrix (or lists of these matrices for multiple groups).
+## Returns a SimSem object that contains templates for data generation and analyis.
 model <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL, VTE = NULL, VY = NULL,
                   VPS = NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, modelType=NULL, indLab=NULL, facLab=NULL, ngroups=1) {
   
@@ -195,9 +191,11 @@ model <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NUL
   } else { stop("Must specify model type") }
   
   pt <- buildPT(paramSet)
- 
-  return(pt)
+  
+  return(new("SimSem",pt=pt,dgen=combine(paramSet)))
 }
+
+
 
 ## Takes a list of simMatrix/simVector (sg) and a model type and completes necessary matrices and checks
 ## the validity of the model specification.
@@ -228,7 +226,8 @@ buildModel <- function(paramSet,modelType) {
   }
   
   if(is.null(paramSet$TY)) { paramSet$TY <- bind(free=rep(NA,ni),popParam=0) } # Set measurement intercept to be free, pop value of 0
-  if(is.null(paramSet$ME)) { paramSet$ME <- bind(free=rep(0,nk)) } # Set means of indicators to be fixed to 0
+  if(is.null(paramSet$ME)) { paramSet$ME <- bind(free=rep(0,nk)) } # Set means of factors to be fixed to 0
+  if(is.null(paramSet$AL)) { paramSet$AL <- bind(free=rep(0,nk)) } # Set factor intercepts to be fixed to 0
   
 } else if (modelType == "Path" ) {
   
@@ -242,7 +241,7 @@ buildModel <- function(paramSet,modelType) {
     if(is.null(paramSet$RPS)) stop("No residual correlation object between factor.ETA")
     if(is.null(paramSet$VE)) { paramSet$VE <- bind(free=rep(NA,ne),popParam = 1) } ## Set latent variance to be free, pop value = 1
   }
-  if(is.null(paramSet$AL)) { AL <- bind(rep(NA,ne),popParam=0) } ## Set factor means to be free, pop value = 0
+  if(is.null(paramSet$AL)) { AL <- bind(rep(NA,ne),popParam=0) } ## Set factor intercepts to be free, pop value = 0
   
 } else if (modelType == "SEM") {
   
@@ -271,7 +270,8 @@ buildModel <- function(paramSet,modelType) {
     if(is.null(paramSet$RPS)) stop("No measurement error correlation object between indicator.Y")
     if(is.null(paramSet$VE)) { paramSet$VE <- bind(rep(1,ne)) } ## Set factor variance to be fixed at 1
   }
-  if(is.null(paramSet$AL)) { AL <- bind(rep(0,ne)) } ## Set factor means to be fixed at 0
+  if(is.null(paramSet$ME)) { ME <- bind(rep(0,ne)) } ## Set factor means to be fixed at 0
+  if(is.null(paramSet$AL)) { AL <- bind(rep(0,ne)) } ## Set factor intercepts to be fixed at 0
 } else { stop("modelType not recognized. Possible options are: \"CFA\", \"SEM\", or \"Path\"") }
 
   return(paramSet)
@@ -647,33 +647,37 @@ psetTrans <- function(x) {
   return(paramSet)
 }
 
+## Takes a paramSet, and reduces each SimMatrix to just one character or numeric matrix for data generation or list of this matrix (for mg)
+combine <- function(paramSet) {
+  if(any(sapply(paramSet,is.list))) {
+    ng <- max(sapply(paramSet,length))
 
-## Takes a matrix or vector, and returns a logical vector indicating what elements are labels.
-is.label <- function(mat) {
-  flat <- as.vector(mat)
-  flat[is.na(flat)] <- 0
-  isLabel <- sapply(flat, FUN= function(x) {suppressWarnings(is.na(as.numeric(x))) })
-  return(isLabel)
-}
-
-
-## Takes a matrix, and returns a logical matrix indicating what elements are free (either NA or label)
-is.free <- function(mat) {
-  if(is.character(mat)) {
-    isFree <- is.na(mat) | is.label(mat)
+    for(i in seq_along(paramSet)) {
+      if(!is.null(paramSet[[i]])) {
+        for(j in 1:ng) {
+          pop <- paramSet[[i]][[j]]@popParam
+          mis <- paramSet[[i]][[j]]@misspec
+          if(all(!is.nan(mis)) && (length(mis) != 0)) {
+            pop[is.empty(pop)] <- mis[!is.empty(pop)]
+          }
+          paramSet[[i]][[j]] <- pop             
+        }
+      }
+    }
   } else {
-    isFree <- is.na(mat)
+    for(i in seq_along(paramSet)) {
+      if(!is.null(paramSet[[i]])) {
+        pop <- paramSet[[i]]@popParam
+        mis <- paramSet[[i]]@misspec
+        if(all(!is.nan(mis)) && (length(mis) != 0)) {
+            pop[is.empty(pop)] <- mis[is.empty(pop)]
+          }
+        paramSet[[i]] <- pop
+      }
+    }
   }
-  return(isFree)
+
+  return(paramSet)
 }
 
-is.empty <- function(dat) {
-   if(is.null(dim(dat))) {
-    temp <- sapply(dat, FUN=function(x) if(x == "" || is.na(x) || x==0) {TRUE} else {FALSE})
-    names(temp) <- NULL
-    return(temp)
-  }
-   apply(dat, c(1,2), FUN=function(x) if(x == "" || is.na(x) || x==0) {TRUE} else {FALSE})
-        
-}
       
