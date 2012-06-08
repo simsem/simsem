@@ -105,6 +105,12 @@ pt <- model(LY=cfa2$LY,PS=cfa2$PS,TE=cfa2$TE,AL=cfa2$AL,TY=cfa2$TY, modelType="C
 pt <- model(BE=path$BE, RPS=path$RPS, ME=path$ME, modelType="Path")
 pt <- model(LY=sem$LY, RTE=sem$RTE, RPS=sem$RPS, BE=sem$BE, modelType="SEM")
 pt <- model(LY=list(cfa2$LY,cfa2$LY),PS=list(cfa2$PS,cfa2$PS),TE=cfa2$TE,AL=cfa2$AL,TY=cfa2$TY,modelType="CFA")
+pt <- model(LY=cfa2$LY,PS=cfa2$PS,TE=cfa2$TE,AL=cfa2$AL,TY=cfa2$TY, modelType="CFA",ngroups=2)
+
+paramSet <- list(LY=list(cfa2$LY,cfa2$LY), PS=list(cfa2$PS,cfa2$PS), RPS=NULL,
+                   TE=cfa2$TE, RTE=NULL, BE=NULL, VTE=NULL, VY=NULL, VPS=NULL, TY=cfa2$TY, AL=cfa2$AL, MY=NULL,ME=NULL)
+paramSet <- list(LY=cfa$LY, PS=NULL, RPS=cfa$RPS, TE=NULL, RTE=cfa$RTE,
+                 BE=NULL, VTE=NULL, VY=NULL, VPS=NULL, TY=NULL, AL=NULL, MY=NULL,ME=NULL)
 
 model <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL, VTE = NULL, VY = NULL,
                   VPS = NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, modelType=NULL, indLab=NULL, facLab=NULL, ngroups=1) {
@@ -119,28 +125,28 @@ model <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NUL
     n <- length(mg)
     matNames <- names(paramSet)
     
-    if(length(mg) != 0) {
+    if(length(mg) > 0 || ngroups > 1) {
 
-      if(ngroups > 1 && (length(sg) == length(paramSet)) ) {
+      if(ngroups > 1 && (length(sg) == sum(!sapply(paramSet,is.null))) ) { # ngroups specified, but no mats are lists
        paramSet <- buildModel(paramSet,modelType)
-       for(i in seq_along(paramSet[sgidx])) {
+       # Recompute SG indices
+       sgidx <- which(sapply(paramSet,FUN=function(x) {class(x) == "SimMatrix" || class(x) == "SimVector"}))
+       for(i in seq_along(sgidx)) {
+         temp <- NULL
           if(class(paramSet[sgidx][[i]]) == "SimMatrix") {
             temp <- paramSet[sgidx][[i]]
-            paramSet[sgidx][[i]] <- replicate(n,new("SimMatrix",free=temp@free,popParam=temp@popParam,misspec=temp@misspec))
+            paramSet[sgidx][[i]] <- replicate(ngroups,new("SimMatrix",free=temp@free,popParam=temp@popParam,misspec=temp@misspec))
           } else {
             temp <- paramSet[sgidx][[i]]
-            paramSet[sgidx][[i]] <- replicate(n,new("SimVector",free=temp@free,popParam=temp@popParam,misspec=temp@misspec))
+            paramSet[sgidx][[i]] <- replicate(ngroups,new("SimVector",free=temp@free,popParam=temp@popParam,misspec=temp@misspec))
           }
         }
-      } else if (n == length(paramSet)) {
-        # Do nothing
-      } else if (length(c(mg,sg)) != length(paramSet)) {
-        #stop("Arguments must either be lists or of type SimMatrix or SimVector")
-      } else {
+      } else { # 1 or more matrices is a list
         
         if(!length(unique(sapply(paramSet[mgidx],length))) == 1) stop("Multiple group lists have differing lengths")
 
-        for(i in seq_along(paramSet[sgidx])) {
+        for(i in seq_along(sgidx)) {
+          temp <- NULL
           if(class(paramSet[sgidx][[i]]) == "SimMatrix") {
             temp <- paramSet[sgidx][[i]]
             paramSet[sgidx][[i]] <- replicate(n,new("SimMatrix",free=temp@free,popParam=temp@popParam,misspec=temp@misspec))
@@ -151,14 +157,15 @@ model <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NUL
         }
 
         temp <- list()
-        # Check Models
+        # Check Models. temp is a list of paramSets of a single group.
         for(i in 1:n) {
           temp[[i]] <- buildModel(lapply(paramSet,"[[",i),modelType)
         }
+        # Transform temp back to a paramSet that contains lists of named matrices.
         paramSet <- psetTrans(temp)
       
       }
-    } else {
+    } else { # ngroups = 1, and no matrices are lists
      paramSet <- buildModel(paramSet,modelType)
    }
   } else { stop("Must specify model type") }
@@ -245,7 +252,8 @@ buildModel <- function(paramSet,modelType) {
   return(paramSet)
 }
 
-## Takes a list of simMatrix/simVector (mg) and builds a table of parameters to be used for analysis with lavaan.
+## Takes a list of named simMatrix/simVector objects (paramSet) that are optionally also lists.
+## Returns a table of parameters to be used for analysis with lavaan.
 buildPT <- function(paramSet, facLab=NULL, indLab=NULL) {
 
   ##2. Convert a chunk at a time - starting with LY - factor loading
@@ -402,7 +410,7 @@ buildPT <- function(paramSet, facLab=NULL, indLab=NULL) {
 
   ## AL - factor intercept
  if(is.list(paramSet$AL)) {
-    nf <- length(paramSet[[1]]$AL@free)
+    nf <- length(paramSet$AL[[1]]@free)
     if(is.null(facLab)){
       lhs <- paste("y",1:nf,sep="")
       rhs <- rep("",times=nf)
@@ -582,22 +590,29 @@ startingVal <- function(free,popParam) {
  return(flat)
 }
 
+## Some stupid data transformation to get me out of the hole I dug myself in.
+## Goes from list of paramSet to the original specification of a paramSet that contains lists of named matrices.
 psetTrans <- function(x) {
   expand <- unlist(x)
   matNames <- names(expand)
-  ind <- sapply(matNames,grep,matNames)
+  ind <- sapply(matNames,grep,matNames) # calculate matrix of list indices with a common name. nrows = ngroups
   numMat <- length(unique(matNames))
   ind <- ind[,1:numMat]
 
   newlist <- list()
+  ## For each common index, assign to a list with the correct matrix name
   for(i in 1:numMat) {
     temp <- list()
-    for(j in seq_along(ind[,i])) {
+    for(j in ind[,i]) {
       temp <- c(temp,expand[[j]])
     }
     newlist[[matNames[i]]] <- temp
   }
-  return(newlist)
+  ## Return full paramSet.
+  paramSet <- list(LY=newlist$LY, PS=newlist$PS, RPS=newlist$RPS, TE=newlist$TE, RTE=newlist$RTE,
+                   BE=newlist$BE, VTE=newlist$VTE, VY=newlist$VY, VPS=newlist$VPS, TY=newlist$TY, AL=newlist$AL,
+                   MY=newlist$MY, ME=newlist$ME)
+  return(paramSet)
 }
 
 
