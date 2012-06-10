@@ -9,6 +9,7 @@ setMethod("getCutoff", signature(object = "data.frame"), definition = function(o
     if (revDirec) 
         percentile <- 1 - percentile
     object <- as.data.frame(object[, usedFit])
+	colnames(object) <- usedFit
     temp <- rep(NA, ncol(object))
     temp <- apply(object, 2, getCondQtile, qtile = percentile, df = df, x = predictor, xval = predictorVal)
     if ("TLI" %in% colnames(object)) 

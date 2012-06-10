@@ -144,3 +144,6 @@ setGeneric("toFunction", function(x) {
     return(standardGeneric("toFunction"))
 })
  
+setGeneric("getPowerFitNested", function(altNested, altParent, cutoff, revDirec = FALSE, usedFit = NULL, ...) {
+    return(standardGeneric("getPowerFitNested"))
+})

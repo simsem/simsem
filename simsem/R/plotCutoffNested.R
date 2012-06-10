@@ -9,7 +9,6 @@ plotCutoffNested <- function(nested, parent, alpha=NULL, cutoff = NULL, usedFit 
 	if(!all.equal(unique(nested@pmMCAR), unique(parent@pmMCAR))) stop("Models are based on different values of the percent completely missing at random")
 	if(!all.equal(unique(nested@pmMAR), unique(parent@pmMAR))) stop("Models are based on different values of the percent missing at random")
 
-    cutoff <- NULL
     Data <- as.data.frame(nested@fit - parent@fit)
     
     condition <- c(length(nested@pmMCAR) > 1, length(nested@pmMAR) > 1, length(nested@n) > 1)
@@ -17,7 +16,7 @@ plotCutoffNested <- function(nested, parent, alpha=NULL, cutoff = NULL, usedFit 
     colnames(condValue) <- c("Percent MCAR", "Percent MAR", "N")
     if (!is.null(alpha)) {
         if (all(!condition)) 
-            cutoff <- getCutoff(Data, alpha)
+            if(is.null(cutoff)) cutoff <- getCutoff(Data, alpha)
     }
     if (sum(condition) == 0) {
         plotCutoff(Data, cutoff, FALSE, usedFit)

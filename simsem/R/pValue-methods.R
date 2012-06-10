@@ -3,9 +3,9 @@
 setMethod("pValue", signature(target = "numeric", dist = "vector"), definition = function(target, dist, revDirec = FALSE, x = NULL, xval = NULL, condCutoff=TRUE, df = 0) {
 	if(is.null(x)) {
 		if (revDirec) {
-			return(mean(target <= dist, na.rm = TRUE))
+			return(mean(target >= dist, na.rm = TRUE)) # Appropriate for pValue of CFI
 		} else {
-			return(mean(target >= dist, na.rm = TRUE))
+			return(mean(target <= dist, na.rm = TRUE)) # Appropriate for pValue of RMSEA
 		}
 	} else {
 		# Assume that the target value is appropriate for the specific 'xval' only. Thus, the conditional quantile method is used.
@@ -48,26 +48,30 @@ pValueCondCutoff <- function(target, dist, revDirec = FALSE, x = NULL, xval = NU
 	perc <- predict(mod, xval, interval = "none")
 	perc <- whichMonotonic(perc, percVal)
 	result <- interpolate(perc, target)
-	if(revDirec) {
-		if(suppressWarnings(is.na(as.numeric(result)))) {
-			ntext <- nchar(result)
-			val <- as.numeric(substr(result, 3, nchar(result)))
-			comp <- substr(result, 1, 1)
-			if(comp == ">") {
-				comp <- "<"
-			} else if (comp == "<") {
-				comp <- ">"
-			} else {
-				stop("Something is wrong")
-			}
-			result <- paste(comp, 1 - val)
-		} else {
-			result <- 1 - result
-		}
+	if(!revDirec) {
+		result <- revText(result)
 	}
 	return(result)
 }
 
+revText <- function(result) {
+	if(suppressWarnings(is.na(as.numeric(result)))) {
+		ntext <- nchar(result)
+		val <- as.numeric(substr(result, 3, nchar(result)))
+		comp <- substr(result, 1, 1)
+		if(comp == ">") {
+			comp <- "<"
+		} else if (comp == "<") {
+			comp <- ">"
+		} else {
+			stop("Something is wrong")
+		}
+		result <- paste(comp, 1 - val)
+	} else {
+		result <- 1 - as.numeric(result)
+	}
+	return(result)
+}
 
 whichMonotonic <- function(vec, ord, anchor=NULL) {
 	vec <- as.vector(vec)
@@ -111,20 +115,27 @@ interpolate <- function(vec, val) {
 }
 
 pValueVariedCutoff <- function(cutoff, obtainedValue, revDirec = FALSE, x = NULL, xval = NULL) {
+	# Change warning option to supress warnings
+    warnT <- as.numeric(options("warn"))
+    options(warn = -1)
+	
 	sig <- NULL
 	if (revDirec) {
-		sig <- target <= dist
+		sig <- cutoff >= obtainedValue # sig for CFI
 	} else {
-		sig <- target >= dist
+		sig <- cutoff <= obtainedValue # sig for RMSEA
 	}
 	if(is.null(x)) {
-		return(mean(sig, na.rm=TRUE))
+		result <- mean(sig, na.rm=TRUE)
 	} else {
 		x <- as.matrix(x)
 		mod <- invisible(try(glm(sig ~ x, family = binomial(link = "logit")), silent = TRUE))
 		result <- predProb(c(1, xval), mod)
-		return(result)
 	}
+	## Return warnings setting to user's settings
+    options(warn = warnT)
+	
+	return(result)
 }
 
 setMethod("pValue", signature(target = "vector", dist = "vector"), definition = function(target, dist, revDirec = FALSE, x = NULL, xval = NULL) {
@@ -145,9 +156,9 @@ setMethod("pValue", signature(target = "numeric", dist = "data.frame"), definiti
         result <- NULL
         for (i in 1:numVar) {
             if (revDirec[i]) {
-                result <- cbind(result, target[i] <= dist[, i])
-            } else {
                 result <- cbind(result, target[i] >= dist[, i])
+            } else {
+                result <- cbind(result, target[i] <= dist[, i])
             }
         }
         return(result)
@@ -164,7 +175,7 @@ setMethod("pValue", signature(target = "SimModelOut", dist = "SimResult"), defin
     dist <- clean(dist)
     if (is.null(usedFit)) 
         usedFit <- getKeywords()$usedFit
-    revDirec <- !(usedFit %in% c("CFI", "TLI")) # CFA --> FALSE, RMSEA --> TRUE
+    revDirec <- (usedFit %in% c("CFI", "TLI")) # CFA --> FALSE, RMSEA --> TRUE
 	
 	if (is.null(nVal) || is.na(nVal)) 
         nVal <- NULL

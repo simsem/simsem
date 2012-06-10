@@ -76,6 +76,8 @@ setMethod("anova", signature(object = "SimResult"), function(object, ...) {
     class(val) <- c("anova", class(val))
     return(val)
     
+	# Return List
+	# If n, pmMCAR, pmMAR are varying, return the additional arguments in the list that provide the conditional median of the varying parameter.
 })
 
 # this is based on the anova function in the lmer/lavaan package

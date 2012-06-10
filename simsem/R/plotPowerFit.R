@@ -1,12 +1,5 @@
 # plotPowerFit: This function will plot sampling distributions of fit indices that visualize power
 
-
-#(altobject, nullobject, powerParam, alpha = 0.05, contParam = NULL, contN = TRUE, contMCAR = TRUE, contMAR = TRUE, useContour = TRUE)
-# nullobject can be either vector or result object
-
-#For one varying object should have overlapping scatterplot
-
-
 plotPowerFit <- function(altObject, nullObject = NULL, cutoff = NULL, usedFit = NULL, alpha = 0.05, contN = TRUE, contMCAR = TRUE, contMAR = TRUE, useContour = TRUE, logistic = TRUE) {
 	if(is.null(nullObject)) {
 		altObject <- clean(altObject)
@@ -33,14 +26,14 @@ plotPowerFit <- function(altObject, nullObject = NULL, cutoff = NULL, usedFit = 
         if (!length(altObject@n) == nrep) {
             stop("Number of random sample sizes is not the same as the number of replications, check to see if N varied across replications")
         }
-        x <- cbind(x, altObject@n)
+        x <- cbind(x, N = altObject@n)
         pred$N <- min(altObject@n):max(altObject@n)
     }
     if ((length(altObject@pmMCAR) > 1) && contMCAR) {
         if (!length(altObject@pmMCAR) == nrep) {
             stop("Number of random pmMCARs is not the same as the number of replications, check to see if pmMCAR varied across replications")
         }
-        x <- cbind(x, altObject@pmMCAR)
+        x <- cbind(x, pmMCAR = altObject@pmMCAR)
         pred$MCAR <- seq(min(altObject@pmMCAR), max(altObject@pmMCAR), by = 0.01)
         
     }
@@ -48,10 +41,15 @@ plotPowerFit <- function(altObject, nullObject = NULL, cutoff = NULL, usedFit = 
         if (!length(altObject@pmMAR) == nrep) {
             stop("Number of random pmMARs is not the same as the number of replications, check to see if pmMAR varied across replications")
         }
-        x <- cbind(x, altObject@pmMAR)
+        x <- cbind(x, pmMAR = altObject@pmMAR)
         pred$MAR <- seq(min(altObject@pmMAR), max(altObject@pmMAR), by = 0.01)
         
     }
+	if(!is.null(nullObject)) nullObject <- nullObject@fit
+	plotPowerFitDf(altObject@fit, nullObject = nullObject, cutoff = cutoff, usedFit = usedFit, alpha = alpha, x = x, xval = pred, useContour = useContour, logistic = logistic)
+}
+
+plotPowerFitDf <- function(altObject, nullObject = NULL, cutoff = NULL, usedFit = NULL, alpha = 0.05, x = NULL, xval = NULL, useContour = TRUE, logistic = TRUE) {
 	if(is.null(x)) {
 		if(is.null(nullObject)) {
 			plotCutoff(altObject, cutoff, usedFit = usedFit)
@@ -60,23 +58,23 @@ plotPowerFit <- function(altObject, nullObject = NULL, cutoff = NULL, usedFit = 
 			# Plot overlapping histogram; Optional for specifying cutoff or derived cutoff
 		}
 	} else if(ncol(x) == 1) {
-		if(logistic & !is.null(cutoff)) {
-			plotLogisticFit(altObject, nullObject=nullObject, cutoff=cutoff, usedFit=usedFit, x=x, alpha=alpha, useContour=useContour)
+		if(logistic & (!is.null(nullObject) | !is.null(cutoff))) {
+			plotLogisticFit(altObject, nullObject=nullObject, cutoff=cutoff, usedFit=usedFit, x=x, xval=xval, alpha=alpha, useContour=useContour)
 		} else {
 			plotScatter(altObject, nullObject=nullObject, cutoff=cutoff, usedFit = usedFit, x=x, alpha=alpha)
 		# Plot scatterplot if only one continuous; Optional for putting horizontal cutoff
 		# If the cutoff exists, the power plot can be used.
 		}
 	} else if(ncol(x) == 2) {
-		if(logistic & !is.null(cutoff)) {
-			plotLogisticFit(altObject, nullObject=nullObject, cutoff=cutoff, usedFit=usedFit, x=x, alpha=alpha, useContour=useContour)
+		if(logistic & (!is.null(nullObject) | !is.null(cutoff))) {
+			plotLogisticFit(altObject, nullObject=nullObject, cutoff=cutoff, usedFit=usedFit, x=x, xval=xval, alpha=alpha, useContour=useContour)
 		} else {
 			stop("Cannot make scatter plot with two or more varying variables")
 		}
 		# If the cutoff exists, the power 2/3D plot can be used.
 	} else {
 		stop("The varying parameter used cannot be over two dimensions.")
-	} 
+	}
 }
 
 plotOverHist <- function(altObject, nullObject, cutoff=NULL, usedFit=NULL, alpha=alpha) {
@@ -89,8 +87,8 @@ plotOverHist <- function(altObject, nullObject, cutoff=NULL, usedFit=NULL, alpha
 	}
 	usedFit <- intersect(usedFit, names(cutoff))
 	cutoff <- cutoff[usedFit]
-    altObject <- as.data.frame(altObject@fit[, usedFit])
-    nullObject <- as.data.frame(nullObject@fit[, usedFit])
+    altObject <- as.data.frame(altObject[, usedFit])
+    nullObject <- as.data.frame(nullObject[, usedFit])
     colnames(altObject) <- usedFit
     colnames(nullObject) <- usedFit
     no.NA.altObject <- !apply(altObject, 2, function(vec) all(is.na(vec)))
@@ -132,51 +130,68 @@ plotOverHist <- function(altObject, nullObject, cutoff=NULL, usedFit=NULL, alpha
         par(obj)
 }
 
-plotLogisticFit <- function(altObject, nullObject=NULL, cutoff=NULL, usedFit=NULL, x, alpha=0.05, useContour=TRUE) {
+plotLogisticFit <- function(altObject, nullObject=NULL, cutoff=NULL, usedFit=NULL, x, xval, alpha=0.05, useContour=TRUE, df=0) {
 	if(is.null(nullObject) & is.null(cutoff)) stop("Please specify the nullObject or cutoff argument")
 	if (is.null(usedFit)) 
         usedFit <- getKeywords()$usedFit
+	if (!is.null(cutoff)) {
+		usedFit <- intersect(usedFit, names(cutoff))
+		cutoff <- cutoff[usedFit]
+    }
 	if(is.null(cutoff)) {
-		nullFit <- as.data.frame(cutoff@fit[,usedFit])
+		nullFit <- as.data.frame(nullObject[,usedFit])
+		colnames(nullFit) <- usedFit
 		temp <- rep(NA, length(usedFit))
-		cutoff <- t(sapply(as.list(data.frame(t(x))), getCutoff, object=nullFit, alpha = alpha, revDirec = FALSE, usedFit = usedFit, predictor = x, df = df))
+		cutoff <- sapply(as.list(data.frame(t(x))), getCutoff, object=nullFit, alpha = alpha, revDirec = FALSE, usedFit = usedFit, predictor = x, df = df)
+		if(is.matrix(cutoff)) {
+			cutoff <- t(cutoff)
+		} else {
+			cutoff <- as.matrix(cutoff)
+		}
 	}
-	usedFit <- intersect(usedFit, names(cutoff))
-	cutoff <- cutoff[usedFit]
 	if(is.matrix(cutoff)) {
-		sig <- altObject@fit[,usedFit] > cutoff
+		sig <- as.matrix(altObject[,usedFit] > cutoff)
+		colnames(sig) <- usedFit
 	} else {
-		sig <- mapply(function(dat, x) dat > x, dat=altObject@fit[,usedFit], x=as.list(cutoff))
+		sig <- mapply(function(dat, x) dat > x, dat=altObject[,usedFit], x=as.list(cutoff))
 	}
 	reverse <- colnames(sig) %in% c("TLI", "CFI")
 	if(any(reverse)) {
 		sig[,reverse] <- !sig[,reverse]
 	}
-	plotPowerSig(sig, x = x, mainName = usedFit, useContour = useContour)
+	plotPowerSig(sig, x = x, xval=xval, mainName = usedFit, useContour = useContour)
 }
 
-plotScatter <- function(altObject, nullObject=NULL, cutoff=NULL, usedFit = NULL, x, alpha=0.05) {
+plotScatter <- function(altObject, nullObject=NULL, cutoff=NULL, usedFit = NULL, x, alpha=0.05, df=0) {
 	if (is.null(usedFit)) 
         usedFit <- getKeywords()$usedFit
-	usedFit <- intersect(usedFit, names(cutoff))
-	cutoff <- cutoff[usedFit]
-	if(is.null(cutoff) && !is.null(nullObject)) {
-		nullFit <- as.data.frame(cutoff@fit[,usedFit])
-		temp <- rep(NA, length(usedFit))
-		cutoff <- t(sapply(as.list(data.frame(t(x))), getCutoff, object=nullFit, alpha = alpha, revDirec = FALSE, usedFit = usedFit, predictor = x, df = df))
+	if (!is.null(cutoff)) {
+		usedFit <- intersect(usedFit, names(cutoff))
+		cutoff <- cutoff[usedFit]
 	}
-	if (ncol(usedFit) == 2) {
+	if(is.null(cutoff) && !is.null(nullObject)) {
+		nullFit <- as.data.frame(nullObject[,usedFit])
+		colnames(nullFit) <- usedFit
+		temp <- rep(NA, length(usedFit))
+		cutoff <- sapply(as.list(data.frame(t(x))), getCutoff, object=nullFit, alpha = alpha, revDirec = FALSE, usedFit = usedFit, predictor = x, df = df)
+		if(is.matrix(cutoff)) {
+			cutoff <- t(cutoff)
+		} else {
+			cutoff <- as.matrix(cutoff)
+		}
+	}
+	if (length(usedFit) == 2) {
         obj <- par(mfrow = c(1, 2))
-    } else if (ncol(usedFit) == 3) {
+    } else if (length(usedFit) == 3) {
         obj <- par(mfrow = c(1, 3))
-    } else if (ncol(usedFit) > 3) {
-        obj <- par(mfrow = c(2, ceiling(ncol(usedFit)/2)))
-    } else if (ncol(usedFit) == 1) {
+    } else if (length(usedFit) > 3) {
+        obj <- par(mfrow = c(2, ceiling(length(usedFit)/2)))
+    } else if (length(usedFit) == 1) {
         # Intentionally leaving as blank
     } else {
         stop("Some errors occur")
     }
-	for (i in 1:ncol(usedFit)) {
+	for (i in 1:length(usedFit)) {
 		temp <- NULL
 		if(!is.null(cutoff)) {
 			if(is.matrix(cutoff)) {
@@ -186,10 +201,10 @@ plotScatter <- function(altObject, nullObject=NULL, cutoff=NULL, usedFit = NULL,
 			}
 		}
 		nullVec <- NULL
-		if(!is.null(nullObject)) nullVec <- nullObject@fit[,usedFit[i]]
-        plotIndividualScatter(altObject@fit[,usedFit[i]], nullVec=nullVec, cutoff=temp, x, main = usedFit[i])
+		if(!is.null(nullObject)) nullVec <- nullObject[,usedFit[i]]
+        plotIndividualScatter(altObject[,usedFit[i]], nullVec=nullVec, cutoff=temp, x, main = usedFit[i])
     }
-	if (ncol(object) > 1) 
+	if (length(usedFit) > 1) 
         par(obj)
 }
 
@@ -197,13 +212,13 @@ plotIndividualScatter <- function(altVec, nullVec=NULL, cutoff=NULL, x, main = N
 	maxAll <- max(c(altVec, nullVec))
 	minAll <- min(c(altVec, nullVec))
 	plot(c(min(x),max(x)), c(minAll, maxAll), type="n", main=main, xlab=colnames(x), ylab="Value")
-	points(x, altVec, col="green")
+	points(x, altVec, col="skyblue")
 	if(!is.null(nullVec)) points(x, nullVec, col="black")
 	if(is.null(cutoff)) {
 		# Intetionally leave as blank
 	} else if(length(cutoff) == 1) {
-		abline(h=cutoff)
+		abline(h=cutoff, col="red", lwd=2)
 	} else {
-		lines(x, cutoff, col="red")
+		lines(x, cutoff, col="red", lwd=2)
 	}
 }

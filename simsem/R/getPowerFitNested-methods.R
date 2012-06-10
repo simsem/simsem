@@ -1,36 +1,22 @@
 # getPowerFit: This function will find a power of each fit index based on specified cutoffs of each fit index
 
-setMethod("getPowerFit", signature(altObject = "data.frame", cutoff = "vector"), definition = function(altObject, cutoff, revDirec = FALSE, usedFit = NULL, predictor = NULL, predictorVal = NULL, condCutoff=TRUE, df = 0) {
-    if (is.null(usedFit)) 
-        usedFit <- getKeywords()$usedFit
-    if (is.null(names(cutoff)) && length(cutoff) == 7) 
-        names(cutoff) <- usedFit
-    common.name <- Reduce(intersect, list(colnames(altObject), names(cutoff), usedFit))
-    temp <- rep(NA, length(common.name))
-    names(temp) <- common.name
-    altObject <- as.data.frame(altObject[, common.name])
-    cutoff <- cutoff[common.name]
-    for (i in 1:length(common.name)) {
-        temp[i] <- pValue(target = cutoff[i], dist=as.vector(altObject[, i]), revDirec = revDirec, x = predictor, xval = predictorVal, df=df, condCutoff=condCutoff)
-    }
-    if ("TLI" %in% common.name) 
-        temp["TLI"] <- revText(temp["TLI"])
-    if ("CFI" %in% common.name) 
-        temp["CFI"] <- revText(temp["CFI"])
-    return(temp)
-})
-
-setMethod("getPowerFit", signature(altObject = "SimResult", cutoff = "vector"), definition = function(altObject, cutoff, revDirec = FALSE, usedFit = NULL, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, condCutoff=TRUE, df = 0) {
+setMethod("getPowerFitNested", signature(altNested = "SimResult", altParent = "SimResult", cutoff = "vector"), definition = function(altNested, altParent, cutoff, revDirec = FALSE, usedFit = NULL, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, condCutoff=TRUE, df = 0) {
     if (is.null(nVal) || is.na(nVal)) 
         nVal <- NULL
     if (is.null(pmMCARval) || is.na(pmMCARval)) 
         pmMCARval <- NULL
     if (is.null(pmMARval) || is.na(pmMARval)) 
         pmMARval <- NULL
-    altObject <- clean(altObject)
-    Data <- as.data.frame(altObject@fit)
-    condition <- c(length(altObject@pmMCAR) > 1, length(altObject@pmMAR) > 1, length(altObject@n) > 1)
-    condValue <- cbind(altObject@pmMCAR, altObject@pmMAR, altObject@n)
+    mod <- clean(altNested, altParent)
+	altNested <- mod[[1]]
+	altParent <- mod[[2]]
+	if(!all.equal(unique(altNested@paramValue), unique(altParent@paramValue))) stop("Models are based on different data and cannot be compared, check your random seed")
+	if(!all.equal(unique(altNested@n), unique(altParent@n))) stop("Models are based on different values of sample sizes")
+	if(!all.equal(unique(altNested@pmMCAR), unique(altParent@pmMCAR))) stop("Models are based on different values of the percent completely missing at random")
+	if(!all.equal(unique(altNested@pmMAR), unique(altParent@pmMAR))) stop("Models are based on different values of the percent missing at random")
+    Data <- as.data.frame((altNested@fit - altParent@fit)) 
+    condition <- c(length(altNested@pmMCAR) > 1, length(altNested@pmMAR) > 1, length(altNested@n) > 1)
+    condValue <- cbind(altNested@pmMCAR, altNested@pmMAR, altNested@n)
     colnames(condValue) <- c("Percent MCAR", "Percent MAR", "N")
     condValue <- condValue[, condition]
     if (is.null(condValue) || length(condValue) == 0) 
@@ -55,29 +41,27 @@ setMethod("getPowerFit", signature(altObject = "SimResult", cutoff = "vector"), 
     return(output)
 })
 
-setMethod("getPowerFit", signature(altObject = "matrix", cutoff = "vector"), definition = function(altObject, cutoff, revDirec = FALSE, usedFit = NULL, predictor = NULL, predictorVal = NULL, df = 0) {
-    object <- as.data.frame(altObject)
-    output <- getPowerFit(object, cutoff, revDirec, usedFit, predictor=predictor, predictorVal=predictorVal, df=df)
-    return(output)
-}) 
-
-setMethod("getPowerFit", signature(altObject = "SimResult", cutoff = "missing"), definition = function(altObject, cutoff=NULL, nullObject, revDirec = FALSE, usedFit = NULL, alpha = 0.05, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, df = 0) {
+setMethod("getPowerFitNested", signature(altNested = "SimResult", altParent = "SimResult", cutoff = "missing"), definition = function(altNested, altParent, cutoff=NULL, nullNested, nullParent, revDirec = FALSE, usedFit = NULL, alpha = 0.05, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, df = 0) {
     if (is.null(usedFit)) 
         usedFit <- getKeywords()$usedFit
-	mod <- clean(altObject, nullObject)
-	altObject <- mod[[1]]
-	nullObject <- mod[[2]]
-	if(!all.equal(unique(altObject@n), unique(nullObject@n))) stop("Models are based on different values of sample sizes")
-	if(!all.equal(unique(altObject@pmMCAR), unique(nullObject@pmMCAR))) stop("Models are based on different values of the percent completely missing at random")
-	if(!all.equal(unique(altObject@pmMAR), unique(nullObject@pmMAR))) stop("Models are based on different values of the percent missing at random")
+	mod <- clean(altNested, altParent, nullNested, nullParent)
+	altNested <- mod[[1]]
+	altParent <- mod[[2]]
+	nullNested <- mod[[3]]
+	nullParent <- mod[[4]]
+	if(!all.equal(unique(altNested@paramValue), unique(altParent@paramValue))) stop("'altNested' and 'altParent' are based on different data and cannot be compared, check your random seed")
+	if(!all.equal(unique(nullNested@paramValue), unique(nullParent@paramValue))) stop("'nullNested' and 'nullParent' are based on different data and cannot be compared, check your random seed")
+	if(!multipleAllEqual(unique(altNested@n), unique(altParent@n), unique(nullNested@n), unique(nullParent@n))) stop("Models are based on different values of sample sizes")
+	if(!multipleAllEqual(unique(altNested@pmMCAR), unique(altParent@pmMCAR), unique(nullNested@pmMCAR), unique(nullParent@pmMCAR))) stop("Models are based on different values of the percent completely missing at random")
+	if(!multipleAllEqual(unique(altNested@pmMAR), unique(altParent@pmMAR), unique(nullNested@pmMAR), unique(nullParent@pmMAR))) stop("Models are based on different values of the percent missing at random")
 	if (is.null(nVal) || is.na(nVal)) 
         nVal <- NULL
     if (is.null(pmMCARval) || is.na(pmMCARval)) 
         pmMCARval <- NULL
     if (is.null(pmMARval) || is.na(pmMARval)) 
         pmMARval <- NULL
-    condition <- c(length(altObject@pmMCAR) > 1, length(altObject@pmMAR) > 1, length(altObject@n) > 1)
-    condValue <- cbind(altObject@pmMCAR, altObject@pmMAR, altObject@n)
+    condition <- c(length(altNested@pmMCAR) > 1, length(altNested@pmMAR) > 1, length(altNested@n) > 1)
+    condValue <- cbind(altNested@pmMCAR, altNested@pmMAR, altNested@n)
     colnames(condValue) <- c("Percent MCAR", "Percent MAR", "N")
     condValue <- condValue[, condition]
     if (is.null(condValue) || length(condValue) == 0) 
@@ -99,12 +83,12 @@ setMethod("getPowerFit", signature(altObject = "SimResult", cutoff = "missing"),
 	
 	usedDirec <- (usedFit %in% c("CFI", "TLI")) # CFA --> TRUE, RMSEA --> FALSE
 	if(revDirec) usedDirec <- !usedDirec	
-	usedDist <- as.data.frame(altObject@fit[,usedFit])
-	nullFit <- as.data.frame(nullObject@fit[,usedFit])
+	usedDist <- as.data.frame((altNested@fit - altParent@fit)[,usedFit]) 
+	nullFit <- as.data.frame((nullNested@fit - nullParent@fit)[,usedFit]) 
 	temp <- rep(NA, length(usedFit))
 	if(is.null(condValue)) {
-		usedCutoff <- getCutoff(nullObject, alpha=alpha, usedFit=usedFit)
-		temp <- pValue(usedCutoff, as.data.frame(usedDist), revDirec=usedDirec)
+		usedCutoff <- getCutoff(nullFit, alpha=alpha, usedFit=usedFit)
+		temp <- pValue(usedCutoff, usedDist, revDirec=usedDirec)
 	} else {
 		varyingCutoff <- sapply(as.list(data.frame(t(condValue))), getCutoff, object=nullFit, alpha = alpha, revDirec = revDirec, usedFit = usedFit, predictor = condValue, df = df)
 		for(i in 1:length(temp)) {
@@ -114,3 +98,14 @@ setMethod("getPowerFit", signature(altObject = "SimResult", cutoff = "missing"),
 	names(temp) <- usedFit
     return(temp)
 })
+
+multipleAllEqual <- function(...) {
+	obj <- list(...)
+	for(i in 2:length(obj)) {
+		for(j in 1:(i - 1)) {
+			temp <- isTRUE(all.equal(obj[[i]], obj[[j]]))
+			if(!temp) return(FALSE)
+		}
+	}
+	return(TRUE)
+}

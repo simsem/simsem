@@ -53,11 +53,11 @@ plotPower <- function(object, powerParam, alpha = 0.05, contParam = NULL, contN 
         names(paramVal) <- contParam
         pred <- c(pred, paramVal)
     }
-	plotPowerSig(sig, x, powerParam, useContour=useContour)
+	plotPowerSig(sig, x, xval=pred, mainName=powerParam, useContour=useContour)
     
 } 
 
-plotPowerSig <- function(sig, x = NULL, mainName = NULL, useContour = TRUE) {
+plotPowerSig <- function(sig, x = NULL, xval=NULL, mainName = NULL, useContour = TRUE) {
     warnT <- as.numeric(options("warn"))
     options(warn = -1)
     if (is.null(x)) 
@@ -75,25 +75,24 @@ plotPowerSig <- function(sig, x = NULL, mainName = NULL, useContour = TRUE) {
     } else {
         stop("Some errors occur")
     }
-    
     for (i in 1:ncol(sig)) {
         mod <- invisible(try(glm(sig[, i] ~ x, family = binomial(link = "logit")), silent = TRUE))
-        if (ncol(x) == 1) {
-            predVal <- apply(data.frame(1, pred), 1, predProb, mod)
-            plot(pred[[1]], predVal, type = "n", xlab = names(pred)[1], ylab = "Power", main = mainName[i], ylim = c(0, 1))
-            lines(pred[[1]], predVal)
+        if (ncol(x) == 1) { 
+            predVal <- apply(data.frame(1, xval), 1, predProb, mod)
+            plot(xval[[1]], predVal, type = "n", xlab = names(xval)[1], ylab = "Power", main = mainName[i], ylim = c(0, 1))
+            lines(xval[[1]], predVal)
         } else if (ncol(x) == 2) {
             FUN <- function(x, y) {
                 logi <- mod$coefficients[1] + mod$coefficients[2] * x + mod$coefficients[3] * y
                 pp <- exp(logi)/(1 + exp(logi))
                 return(pp)
             }
-            zpred <- outer(pred[[1]], pred[[2]], FUN)
+            zpred <- outer(xval[[1]], xval[[2]], FUN)
             if (useContour) {
-                contour(pred[[1]], pred[[2]], zpred, xlab = names(pred)[1], ylab = names(pred)[2], main = mainName[i])
+                contour(xval[[1]], xval[[2]], zpred, xlab = names(xval)[1], ylab = names(xval)[2], main = mainName[i])
             } else {
-                persp(pred[[1]], pred[[2]], zpred, zlim = c(0, 1), theta = 30, phi = 30, expand = 0.5, col = "lightblue", ltheta = 120, 
-                  shade = 0.75, ticktype = "detailed", xlab = names(pred)[1], ylab = names(pred)[2], main = mainName[i], zlab = "Power")
+                persp(xval[[1]], xval[[2]], zpred, zlim = c(0, 1), theta = 30, phi = 30, expand = 0.5, col = "lightblue", ltheta = 120, 
+                  shade = 0.75, ticktype = "detailed", xlab = names(xval)[1], ylab = names(xval)[2], main = mainName[i], zlab = "Power")
             }
         } else {
             stop("Something is wrong!")
