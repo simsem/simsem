@@ -138,8 +138,8 @@ setClass("SimResult", representation(modelType = "character", nRep = "numeric", 
     FMI2 = new("NullDataFrame"), n = 0, pmMCAR = 0, pmMAR = 0))
 
 setClass("SimModelOut", representation(param = "SimParam", start = "SimRSet", equalCon = "SimEqualCon", package = "character", 
-    coef = "SimRSet", fit = "vector", se = "SimRSet", converged = "logical", paramValue = "SimRSet", n = "numeric", indLab = "vector", 
-    factorLab = "vector"), prototype(equalCon = new("NullSimEqualCon"), converged = FALSE, paramValue = new("NullRSet"), n = 0, indLab = new("NullVector"), 
+    coef = "SimRSet", fit = "vector", se = "SimRSet", converged = "logical", paramValue = "SimRSet", n = "numeric", pMiss = "vector", indLab = "vector", 
+    factorLab = "vector"), prototype(equalCon = new("NullSimEqualCon"), converged = FALSE, paramValue = new("NullRSet"), n = 0, pMiss = new("NullVector"), indLab = new("NullVector"), 
     factorLab = new("NullVector")))
 
 setClass("SimModelMIOut", contains = "SimModelOut", representation(FMI1 = "SimRSet", FMI2 = "SimRSet"), prototype(FMI1 = new("NullRSet"), 

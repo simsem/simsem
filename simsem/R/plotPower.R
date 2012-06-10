@@ -2,8 +2,6 @@
 
 plotPower <- function(object, powerParam, alpha = 0.05, contParam = NULL, contN = TRUE, contMCAR = TRUE, contMAR = TRUE, useContour = TRUE) {
     object <- clean(object)
-    warnT <- as.numeric(options("warn"))
-    options(warn = -1)
     
     crit.value <- qnorm(1 - alpha/2)
     sig <- 0 + (abs(object@coef/object@se) > crit.value)
@@ -55,6 +53,13 @@ plotPower <- function(object, powerParam, alpha = 0.05, contParam = NULL, contN 
         names(paramVal) <- contParam
         pred <- c(pred, paramVal)
     }
+	plotPowerSig(sig, x, powerParam, useContour=useContour)
+    
+} 
+
+plotPowerSig <- function(sig, x = NULL, mainName = NULL, useContour = TRUE) {
+    warnT <- as.numeric(options("warn"))
+    options(warn = -1)
     if (is.null(x)) 
         stop("There is no varying parameter in this object.")
     if (ncol(x) > 2) 
@@ -75,7 +80,7 @@ plotPower <- function(object, powerParam, alpha = 0.05, contParam = NULL, contN 
         mod <- invisible(try(glm(sig[, i] ~ x, family = binomial(link = "logit")), silent = TRUE))
         if (ncol(x) == 1) {
             predVal <- apply(data.frame(1, pred), 1, predProb, mod)
-            plot(pred[[1]], predVal, type = "n", xlab = names(pred)[1], ylab = "Power", main = powerParam[i], ylim = c(0, 1))
+            plot(pred[[1]], predVal, type = "n", xlab = names(pred)[1], ylab = "Power", main = mainName[i], ylim = c(0, 1))
             lines(pred[[1]], predVal)
         } else if (ncol(x) == 2) {
             FUN <- function(x, y) {
@@ -85,10 +90,10 @@ plotPower <- function(object, powerParam, alpha = 0.05, contParam = NULL, contN 
             }
             zpred <- outer(pred[[1]], pred[[2]], FUN)
             if (useContour) {
-                contour(pred[[1]], pred[[2]], zpred, xlab = names(pred)[1], ylab = names(pred)[2], main = powerParam[i])
+                contour(pred[[1]], pred[[2]], zpred, xlab = names(pred)[1], ylab = names(pred)[2], main = mainName[i])
             } else {
                 persp(pred[[1]], pred[[2]], zpred, zlim = c(0, 1), theta = 30, phi = 30, expand = 0.5, col = "lightblue", ltheta = 120, 
-                  shade = 0.75, ticktype = "detailed", xlab = names(pred)[1], ylab = names(pred)[2], main = powerParam[i], zlab = "Power")
+                  shade = 0.75, ticktype = "detailed", xlab = names(pred)[1], ylab = names(pred)[2], main = mainName[i], zlab = "Power")
             }
         } else {
             stop("Something is wrong!")
@@ -97,5 +102,4 @@ plotPower <- function(object, powerParam, alpha = 0.05, contParam = NULL, contN 
     if (ncol(sig) > 1) 
         par(obj)
     options(warn = warnT)
-    
-} 
+}

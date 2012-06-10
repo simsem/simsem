@@ -258,6 +258,9 @@ setMethod("run", signature = "SimModel", definition = function(object, data, sim
         }
     }
     Output@n <- nrow(data)
+	pMiss <- apply(is.na(data), 2, mean)
+	names(pMiss) <- NULL
+	Output@pMiss <- pMiss
     if (!isNullObject(object@indLab)) {
         Output@indLab <- object@indLab
     } else {
