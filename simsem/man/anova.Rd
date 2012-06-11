@@ -33,23 +33,16 @@
 		\item \code{TLI.diff:} Average difference of the TLI across all replications
 		\item \code{RMSEA.diff:} Average difference of the RMSEA across all replications
 	}	
-	For using with \code{linkS4class{SimResult}}, each column means
+	For using with \code{linkS4class{SimResult}}, the result is a list with two or three elements:
 	\itemize{
-		\item \code{Df:} Average of degrees of freedom across all replications
-		\item \code{Chisq:} Average of the chi square statistic across all replications
-		\item \code{CFI:} Average of the CFI across all replications
-		\item \code{TLI:} Average of the TLI across all replications
-		\item \code{RMSEA:} Average of the RMSEA across all replications
-		\item \code{Chisq diff:} Average chi square difference across all replications
-		\item \code{Df diff:} Average degrees of freedom difference across all replications
-		\item \code{Power:} The proportion of replications where the likelihood ratio test is significant
-		\item \code{CFI diff:} Average difference of the CFI across all replications
-		\item \code{TLI diff:} Average difference of the TLI across all replications
-		\item \code{RMSEA diff:} Average difference of the RMSEA across all replications
+		\item \code{summary:} Average of fit indices across all replications
+		\item \code{diff:} Average of the differences in fit indices across all replications
+		\item \code{varyParam:} The statistical power of chi-square difference test given values of varying parameters (such as sample size or percent missing) 
 	}
 }
 \author{
-    Alexander M. Schoemann (University of Kansas; \email{schoemann@ku.edu})
+    Alexander M. Schoemann (University of Kansas; \email{schoemann@ku.edu}), 
+	Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 
 \seealso{
@@ -75,4 +68,8 @@ SimModel2 <- simModel(CFA.Model2)
 Output1 <- simResult(5, SimData, SimModel1, seed=123567)
 Output2 <- simResult(5, SimData, SimModel2, seed=123567)
 anova(Output1, Output2)
+
+Output1b <- simResult(NULL, SimData, SimModel1, seed=123567, n=seq(50, 500, 50))
+Output2b <- simResult(NULL, SimData, SimModel2, seed=123567, n=seq(50, 500, 50))
+anova(Output1b, Output2b)
 }

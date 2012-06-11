@@ -29,7 +29,7 @@ lavaan is BETA software! Please report any bugs.
 Loading required package: MASS
  
 ###############################################################################################
-This is simsem 0.2-3
+This is simsem 0.2-4
 simsem is BETA software! Please report any bugs.
 simsem was developed at the University of Kansas Center for Research Methods and Data Analysis.
 ###############################################################################################
@@ -1001,10 +1001,8 @@ Known Subclasses: "NullSimFunction"
 > 
 > # Real simulation will need more than just 10 replications
 > Output <- simResult(10, Data.Mis, Model, objFunction=fun)
-Warning in lavaan(model = code, meanstructure = TRUE, data = Data, missing = miss,  :
-  lavaan WARNING: model has NOT converged!
 Error in solve.default(E) : 
-  system is computationally singular: reciprocal condition number = 8.38518e-17
+  system is computationally singular: reciprocal condition number = 3.63803e-24
 Warning in estimateVCOV(lavaanModel, samplestats = lavaanSampleStats, options = lavaanOptions,  :
   lavaan WARNING: could not compute standard errors!
 
@@ -1014,109 +1012,109 @@ Model Type
 [1] "SEM"
 ========= Fit Indices Cutoffs ============
            0.1     0.05     0.01    0.001     Mean
-Chi    197.998  204.167  209.103  210.213  141.854
-AIC   9232.838 9251.948 9267.235 9270.675 9094.977
-BIC   9388.397 9407.506 9422.794 9426.233 9250.535
-RMSEA    0.102    0.104    0.106    0.106    0.079
-CFI      0.905    0.885    0.870    0.867    0.929
-TLI      0.869    0.842    0.821    0.816    0.902
-SRMR     0.058    0.060    0.061    0.062    0.049
+Chi    165.535  174.818  182.245  183.916  129.663
+AIC   9388.284 9427.209 9458.348 9465.355 9038.505
+BIC   9543.843 9582.767 9613.907 9620.914 9194.064
+RMSEA    0.090    0.094    0.097    0.097    0.074
+CFI      0.913    0.897    0.884    0.882    0.939
+TLI      0.880    0.858    0.841    0.837    0.916
+SRMR     0.054    0.055    0.057    0.057    0.047
 ========= Parameter Estimates and Standard Errors ============
         Estimate Average Estimate SD Average SE Power (Not equal 0) Std Est
-LY1_1              0.697       0.098      0.053               1.000   0.711
-LY2_1              0.748       0.145      0.054               1.000   0.741
-LY3_1              0.688       0.206      0.055               1.000   0.679
-LY4_2              0.695       0.130      0.054               1.000   0.690
-LY5_2              0.716       0.153      0.053               1.000   0.726
-LY6_2              0.692       0.149      0.053               1.000   0.716
-LY10_3             0.624       0.185      0.089               1.000   0.609
-LY11_3             0.665       0.242      0.096               1.000   0.614
-LY12_3             0.522       0.194      0.081               1.000   0.492
-LY7_4              0.279       0.111      0.059               0.778   0.708
-LY8_4              0.287       0.108      0.063               0.778   0.768
-LY9_4              0.302       0.143      0.061               0.778   0.750
-BE4_1              1.773       1.121      1.026               0.778   0.538
-BE4_2              1.581       1.339      1.050               0.778   0.458
-BE4_3              0.070       0.196      0.230               0.000   0.012
-PS2_1              0.653       0.115      0.048               1.000   0.653
-PS3_1             -0.038       0.145      0.079               0.222  -0.038
-PS3_2             -0.031       0.111      0.078               0.111  -0.031
-TE1_1              0.467       0.131      0.048               1.000   0.487
-TE2_2              0.442       0.202      0.052               0.889   0.434
-TE3_3              0.521       0.328      0.056               1.000   0.502
-TE4_4              0.513       0.142      0.052               1.000   0.512
-TE5_5              0.452       0.266      0.053               0.889   0.447
-TE6_6              0.433       0.221      0.051               0.889   0.468
-TE7_7              0.499       0.197      0.049               1.000   0.485
-TE8_8              0.382       0.113      0.041               1.000   0.404
-TE9_9              0.432       0.128      0.046               1.000   0.432
-TE10_10            0.623       0.194      0.109               0.889   0.607
-TE11_11            0.661       0.307      0.129               0.889   0.593
-TE12_12            0.797       0.145      0.094               1.000   0.738
-TY1               -0.008       0.032      0.057               0.000  -0.009
-TY2               -0.015       0.062      0.058               0.000  -0.016
-TY3               -0.007       0.054      0.059               0.000  -0.007
-TY4                0.008       0.079      0.058               0.222   0.007
-TY5                0.010       0.062      0.057               0.000   0.011
-TY6               -0.003       0.066      0.056               0.000  -0.004
-TY7                0.033       0.060      0.059               0.111   0.033
-TY8                0.013       0.051      0.057               0.000   0.013
-TY9               -0.005       0.045      0.058               0.000  -0.006
-TY10               0.000       0.000      0.059               0.000   0.000
-TY11               0.000       0.000      0.062               0.000   0.000
-TY12               0.000       0.000      0.060               0.000   0.000
+LY1_1              0.703       0.092      0.053               1.000   0.714
+LY2_1              0.743       0.166      0.055               1.000   0.726
+LY3_1              0.698       0.218      0.054               1.000   0.702
+LY4_2              0.657       0.131      0.056               1.000   0.659
+LY5_2              0.724       0.209      0.054               1.000   0.721
+LY6_2              0.721       0.154      0.056               1.000   0.735
+LY10_3             0.516       0.120      0.088               1.000   0.523
+LY11_3             0.577       0.249      0.099               0.889   0.535
+LY12_3             0.570       0.243      0.094               1.000   0.550
+LY7_4              0.316       0.111      0.051               1.000   0.768
+LY8_4              0.314       0.085      0.052               1.000   0.763
+LY9_4              0.327       0.122      0.051               1.000   0.755
+BE4_1              1.436       0.712      0.391               0.889   0.529
+BE4_2              1.237       0.724      0.346               0.889   0.448
+BE4_3             -0.002       0.146      0.186               0.000  -0.013
+PS2_1              0.605       0.121      0.052               1.000   0.605
+PS3_1              0.041       0.137      0.084               0.222   0.041
+PS3_2              0.043       0.156      0.082               0.111   0.043
+TE1_1              0.466       0.102      0.048               1.000   0.484
+TE2_2              0.463       0.197      0.053               1.000   0.453
+TE3_3              0.460       0.306      0.051               1.000   0.463
+TE4_4              0.547       0.151      0.054               1.000   0.551
+TE5_5              0.429       0.228      0.052               0.889   0.453
+TE6_6              0.422       0.229      0.056               0.889   0.439
+TE7_7              0.384       0.180      0.041               1.000   0.397
+TE8_8              0.419       0.122      0.043               1.000   0.411
+TE9_9              0.441       0.181      0.046               1.000   0.420
+TE10_10            0.696       0.140      0.092               1.000   0.716
+TE11_11            0.758       0.253      0.120               1.000   0.676
+TE12_12            0.684       0.245      0.120               0.889   0.658
+TY1               -0.011       0.060      0.057               0.000  -0.013
+TY2                0.019       0.072      0.059               0.000   0.018
+TY3               -0.013       0.043      0.057               0.000  -0.013
+TY4               -0.012       0.077      0.058               0.222  -0.011
+TY5               -0.043       0.037      0.057               0.000  -0.045
+TY6               -0.038       0.074      0.057               0.111  -0.038
+TY7               -0.023       0.076      0.057               0.111  -0.021
+TY8               -0.020       0.068      0.058               0.111  -0.018
+TY9               -0.009       0.059      0.059               0.111  -0.008
+TY10               0.000       0.000      0.057               0.000   0.000
+TY11               0.000       0.000      0.061               0.000   0.000
+TY12               0.000       0.000      0.059               0.000   0.000
         Std Est SD
-LY1_1        0.096
-LY2_1        0.140
-LY3_1        0.205
-LY4_2        0.118
-LY5_2        0.170
-LY6_2        0.148
-LY10_3       0.157
-LY11_3       0.183
-LY12_3       0.149
-LY7_4        0.124
-LY8_4        0.085
-LY9_4        0.081
-BE4_1        0.130
-BE4_2        0.116
-BE4_3        0.052
-PS2_1        0.115
-PS3_1        0.145
-PS3_2        0.111
-TE1_1        0.136
-TE2_2        0.205
-TE3_3        0.308
-TE4_4        0.155
-TE5_5        0.244
-TE6_6        0.239
-TE7_7        0.190
-TE8_8        0.130
-TE9_9        0.122
-TE10_10      0.202
-TE11_11      0.254
-TE12_12      0.143
-TY1          0.032
-TY2          0.063
-TY3          0.052
-TY4          0.080
-TY5          0.063
-TY6          0.068
-TY7          0.059
-TY8          0.053
-TY9          0.047
+LY1_1        0.080
+LY2_1        0.146
+LY3_1        0.222
+LY4_2        0.129
+LY5_2        0.173
+LY6_2        0.153
+LY10_3       0.111
+LY11_3       0.206
+LY12_3       0.208
+LY7_4        0.125
+LY8_4        0.088
+LY9_4        0.108
+BE4_1        0.195
+BE4_2        0.198
+BE4_3        0.060
+PS2_1        0.121
+PS3_1        0.137
+PS3_2        0.156
+TE1_1        0.115
+TE2_2        0.211
+TE3_3        0.315
+TE4_4        0.160
+TE5_5        0.253
+TE6_6        0.234
+TE7_7        0.195
+TE8_8        0.129
+TE9_9        0.167
+TE10_10      0.115
+TE11_11      0.207
+TE12_12      0.234
+TY1          0.061
+TY2          0.072
+TY3          0.043
+TY4          0.079
+TY5          0.039
+TY6          0.075
+TY7          0.079
+TY8          0.067
+TY9          0.059
 TY10         0.000
 TY11         0.000
 TY12         0.000
 ========= Correlation between Fit Indices ============
          Chi    AIC    BIC  RMSEA    CFI    TLI   SRMR
-Chi    1.000  0.006  0.006  0.997 -0.917 -0.917  0.757
-AIC    0.006  1.000  1.000  0.023 -0.265 -0.265 -0.025
-BIC    0.006  1.000  1.000  0.023 -0.265 -0.265 -0.025
-RMSEA  0.997  0.023  0.023  1.000 -0.908 -0.908  0.766
-CFI   -0.917 -0.265 -0.265 -0.908  1.000  1.000 -0.685
-TLI   -0.917 -0.265 -0.265 -0.908  1.000  1.000 -0.685
-SRMR   0.757 -0.025 -0.025  0.766 -0.685 -0.685  1.000
+Chi    1.000  0.049  0.049  0.997 -0.916 -0.916  0.757
+AIC    0.049  1.000  1.000  0.010 -0.298 -0.298  0.328
+BIC    0.049  1.000  1.000  0.010 -0.298 -0.298  0.328
+RMSEA  0.997  0.010  0.010  1.000 -0.902 -0.902  0.751
+CFI   -0.916 -0.298 -0.298 -0.902  1.000  1.000 -0.733
+TLI   -0.916 -0.298 -0.298 -0.902  1.000  1.000 -0.733
+SRMR   0.757  0.328  0.328  0.751 -0.733 -0.733  1.000
 ================== Replications =====================
 Number of Replications
 [1] 10
@@ -1544,9 +1542,9 @@ Class:     SimRSet     SimRSet    SimParam     SimRSet SimEqualCon   character
                                                                               
 Name:         coef         fit          se   converged  paramValue           n
 Class:     SimRSet      vector     SimRSet     logical     SimRSet     numeric
-                              
-Name:       indLab   factorLab
-Class:      vector      vector
+                                          
+Name:        pMiss      indLab   factorLab
+Class:      vector      vector      vector
 
 Extends: "SimModelOut"
 > loading <- matrix(0, 6, 1)
@@ -1655,8 +1653,11 @@ Slots:
 Name:        param       start    equalCon     package        coef         fit
 Class:    SimParam     SimRSet SimEqualCon   character     SimRSet      vector
                                                                               
-Name:           se   converged  paramValue           n      indLab   factorLab
+Name:           se   converged  paramValue           n       pMiss      indLab
 Class:     SimRSet     logical     SimRSet     numeric      vector      vector
+                  
+Name:    factorLab
+Class:      vector
 
 Known Subclasses: "SimModelMIOut"
 > loading <- matrix(0, 6, 1)
@@ -2690,12 +2691,58 @@ Known Subclasses: "SimUnif", "SimNorm", "SimBeta", "SimBinom", "SimCauchy", "Sim
 > Output1 <- simResult(5, SimData, SimModel1, seed=123567)
 > Output2 <- simResult(5, SimData, SimModel2, seed=123567)
 > anova(Output1, Output2)
-     df   chisq     CFI     TLI    RMSEA    AIC    BIC Chisq diff Df diff Power
-[1,]  9   6.892 0.99966 1.00336 0.004294 7431.0 7506.9                         
-[2,] 10 282.423 0.74848 0.62272 0.233110 7704.5 7776.2     275.53       1     1
-     CFI diff TLI diff RMSEA diff AIC diff BIC diff
-[1,]                                               
-[2,] -0.25118 -0.38063    0.22882   273.53   269.32
+$summary
+  df      chisq       CFI       TLI      RMSEA      AIC      BIC
+1  9   6.891728 0.9996613 1.0033576 0.00429422 7430.999 7506.862
+2 10 282.423285 0.7484832 0.6227248 0.23310981 7704.530 7776.179
+
+$diff
+ Chisq diff     Df diff       Power    CFI diff    TLI diff  RMSEA diff 
+275.5315569   1.0000000   1.0000000  -0.2511781  -0.3806327   0.2288156 
+   AIC diff    BIC diff 
+273.5315569 269.3169488 
+
+$varyParam
+NULL
+
+> 
+> Output1b <- simResult(NULL, SimData, SimModel1, seed=123567, n=seq(50, 500, 50))
+> Output2b <- simResult(NULL, SimData, SimModel2, seed=123567, n=seq(50, 500, 50))
+> anova(Output1b, Output2b)
+$summary
+  df     chisq       CFI       TLI      RMSEA      AIC      BIC
+1  9   8.90679 0.9922451 0.9918760 0.02684797 4151.095 4212.700
+2 10 148.78517 0.7756391 0.6634587 0.22162940 4288.974 4347.156
+
+$diff
+ Chisq diff     Df diff       Power    CFI diff    TLI diff  RMSEA diff 
+139.8783790   1.0000000   1.0000000  -0.2166060  -0.3284173   0.1947814 
+   AIC diff    BIC diff 
+137.8783790 134.4559148 
+
+$varyParam
+     N power.1
+1   50       1
+2   74       1
+3   97       1
+4  121       1
+5  145       1
+6  168       1
+7  192       1
+8  216       1
+9  239       1
+10 263       1
+11 287       1
+12 311       1
+13 334       1
+14 358       1
+15 382       1
+16 405       1
+17 429       1
+18 453       1
+19 476       1
+20 500       1
+
 > 
 > 
 > 
@@ -2760,8 +2807,24 @@ detaching 'package:parallel'
 > flush(stderr()); flush(stdout())
 > 
 > ### Name: clean
-> ### Title: Extract only converged replications in the result object
+> ### Title: Extract only converged replications in the result objects
 > ### Aliases: clean
+> 
+> ### ** Examples
+> 
+> # No example
+> 
+> 
+> 
+> cleanEx()
+> nameEx("cleanSimResult")
+> ### * cleanSimResult
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: cleanSimResult
+> ### Title: Extract only converged replications in the result object
+> ### Aliases: cleanSimResult
 > 
 > ### ** Examples
 > 
@@ -10368,6 +10431,63 @@ The following object(s) are masked from 'package:base':
 
 detaching 'package:quantreg', 'package:SparseM', 'package:parallel'
 
+> nameEx("getCutoffNested")
+> ### * getCutoffNested
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: getCutoffNested
+> ### Title: Find fit indices cutoff for nested model comparison given a
+> ###   priori alpha level
+> ### Aliases: getCutoffNested
+> 
+> ### ** Examples
+> 
+> n1 <- simNorm(0, 0.1)
+> u79 <- simUnif(0.7, 0.9)
+> 
+> loading.null <- matrix(0, 6, 1)
+> loading.null[1:6, 1] <- NA
+> LX.NULL <- simMatrix(loading.null, 0.7)
+> RPH.NULL <- symMatrix(diag(1))
+> RTD <- symMatrix(diag(6))
+> CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
+> 
+> error.cor.mis <- matrix(NA, 6, 6)
+> diag(error.cor.mis) <- 1
+> RTD.Mis <- symMatrix(error.cor.mis, "n1")
+> CFA.Model.NULL.Mis <- simMisspecCFA(RTE = RTD.Mis)
+> 
+> loading.alt <- matrix(0, 6, 2)
+> loading.alt[1:3, 1] <- NA
+> loading.alt[4:6, 2] <- NA
+> LX.ALT <- simMatrix(loading.alt, 0.7)
+> latent.cor.alt <- matrix(NA, 2, 2)
+> diag(latent.cor.alt) <- 1
+> RPH.ALT <- symMatrix(latent.cor.alt, "u79")
+> CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
+> 
+> SimData.NULL <- simData(CFA.Model.NULL, 500)
+> 
+> SimModel.NULL <- simModel(CFA.Model.NULL)
+> SimModel.ALT <- simModel(CFA.Model.ALT)
+> 
+> # The actual number of replications should be greater than 10.
+> Output.NULL.NULL <- simResult(10, SimData.NULL, SimModel.NULL)
+> Output.NULL.ALT <- simResult(10, SimData.NULL, SimModel.ALT)
+> 
+> getCutoffNested(Output.NULL.NULL, Output.NULL.ALT)
+         Chi          AIC          BIC        RMSEA          CFI          TLI 
+ 3.006125348  1.006125348 -3.208482751  0.007460932 -0.001593456 -0.002639796 
+        SRMR 
+ 0.001976509 
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:parallel'
+
 > nameEx("getKeywords")
 > ### * getKeywords
 > 
@@ -17001,8 +17121,10 @@ detaching 'package:quantreg', 'package:SparseM', 'package:parallel'
 > ### Name: getPowerFit
 > ### Title: Find power in rejecting alternative models based on fit indices
 > ###   criteria
-> ### Aliases: getPowerFit getPowerFit-methods getPowerFit,data.frame-method
-> ###   getPowerFit,matrix-method getPowerFit,SimResult-method
+> ### Aliases: getPowerFit getPowerFit-methods
+> ###   getPowerFit,data.frame,vector-method getPowerFit,matrix,vector-method
+> ###   getPowerFit,SimResult,vector-method
+> ###   getPowerFit,SimResult,missing-method
 > 
 > ### ** Examples
 > 
@@ -17030,13 +17152,108 @@ detaching 'package:quantreg', 'package:SparseM', 'package:parallel'
 > CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
 > SimData.ALT <- simData(CFA.Model.ALT, 500)
 > Output.ALT <- simResult(5, SimData.ALT, SimModel)
-> getPowerFit(Output.ALT, Cut.NULL)
+> getPowerFit(Output.ALT, cutoff=Cut.NULL)
   Chi   CFI   TLI   AIC   BIC RMSEA  SRMR 
     1     1     1     1     1     1     1 
 > Rule.of.thumb <- c(RMSEA=0.05, CFI=0.95, TLI=0.95, SRMR=0.06)
-> getPowerFit(Output.ALT, Rule.of.thumb, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+> getPowerFit(Output.ALT, cutoff=Rule.of.thumb, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
   CFI   TLI RMSEA  SRMR 
-    1     1     1     0 
+  0.6   0.8   1.0   0.0 
+> 
+> Output.NULL2 <- simResult(NULL, SimData.NULL, SimModel, n=seq(50, 500, 50))
+> Output.ALT2 <- simResult(NULL, SimData.ALT, SimModel, n=seq(50, 500, 50))
+> getPowerFit(Output.ALT2, nullObject=Output.NULL2, nVal=250)
+Loading required package: SparseM
+
+Attaching package: 'SparseM'
+
+The following object(s) are masked from 'package:base':
+
+    backsolve
+
+      Chi       AIC       BIC     RMSEA       CFI       TLI      SRMR 
+0.8969579 1.0000000 1.0000000 0.7765111 0.7765111 0.7765111 0.7765111 
+> 
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:quantreg', 'package:SparseM', 'package:parallel'
+
+> nameEx("getPowerFitNested")
+> ### * getPowerFitNested
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: getPowerFitNested
+> ### Title: Find power in rejecting nested models based on the differences
+> ###   in fit indices
+> ### Aliases: getPowerFitNested getPowerFitNested-methods
+> ###   getPowerFitNested,SimResult,SimResult,vector-method
+> ###   getPowerFitNested,SimResult,SimResult,missing-method
+> 
+> ### ** Examples
+> 
+> u2 <- simUnif(-0.2, 0.2)
+> n1 <- simNorm(0, 0.1)
+> u79 <- simUnif(0.7, 0.9)
+> 
+> loading.null <- matrix(0, 6, 1)
+> loading.null[1:6, 1] <- NA
+> LX.NULL <- simMatrix(loading.null, 0.7)
+> RPH.NULL <- symMatrix(diag(1))
+> RTD <- symMatrix(diag(6))
+> CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
+> 
+> error.cor.mis <- matrix(NA, 6, 6)
+> diag(error.cor.mis) <- 1
+> RTD.Mis <- symMatrix(error.cor.mis, "rnorm(1,0,0.1)")
+> CFA.Model.NULL.Mis <- simMisspecCFA(RTE = RTD.Mis)
+> 
+> loading.alt <- matrix(0, 6, 2)
+> loading.alt[1:3, 1] <- NA
+> loading.alt[4:6, 2] <- NA
+> LX.ALT <- simMatrix(loading.alt, 0.7)
+> latent.cor.alt <- matrix(NA, 2, 2)
+> diag(latent.cor.alt) <- 1
+> RPH.ALT <- symMatrix(latent.cor.alt, 0.7)
+> CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
+> 
+> # loading.alt.mis <- matrix(NA, 6, 2)
+> # loading.alt.mis[is.na(loading.alt)] <- 0
+> # LX.alt.mis <- simMatrix(loading.alt.mis, "runif(1,-.2,.2)")
+> # CFA.Model.alt.mis <- simMisspecCFA(LY = LX.alt.mis, RTE=RTD.Mis)
+> 
+> SimData.NULL <- simData(CFA.Model.NULL, 500)
+> SimData.ALT <- simData(CFA.Model.ALT, 500)
+> 
+> SimModel.NULL <- simModel(CFA.Model.NULL)
+> SimModel.ALT <- simModel(CFA.Model.ALT)
+> 
+> Output.NULL.NULL <- simResult(10, SimData.NULL, SimModel.NULL)
+> Output.ALT.NULL <- simResult(10, SimData.ALT, SimModel.NULL)
+> Output.NULL.ALT <- simResult(10, SimData.NULL, SimModel.ALT)
+> Output.ALT.ALT <- simResult(10, SimData.ALT, SimModel.ALT)
+> 
+> getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT)
+  Chi   AIC   BIC RMSEA   CFI   TLI  SRMR 
+    1     1     1     1     1     1     1 
+> getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, cutoff=c(Chi=3.84, CFI=-0.10))
+Chi CFI 
+1.0 0.4 
+> 
+> Output.NULL.NULL2 <- simResult(NULL, SimData.NULL, SimModel.NULL, n=seq(50, 500, 50))
+> Output.ALT.NULL2 <- simResult(NULL, SimData.ALT, SimModel.NULL, n=seq(50, 500, 50))
+> Output.NULL.ALT2 <- simResult(NULL, SimData.NULL, SimModel.ALT, n=seq(50, 500, 50))
+> Output.ALT.ALT2 <- simResult(NULL, SimData.ALT, SimModel.ALT, n=seq(50, 500, 50))
+> 
+> getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT, nVal = 250)
+  Chi   AIC   BIC RMSEA   CFI   TLI  SRMR 
+    1     1     1     1     1     1     1 
+> getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, cutoff=c(Chi=3.84, CFI=-0.10), nVal = 250)
+Chi CFI 
+1.0 0.4 
 > 
 > 
 > 
@@ -17460,6 +17677,23 @@ detaching 'package:parallel'
 > 
 > 
 > cleanEx()
+> nameEx("interpolate")
+> ### * interpolate
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: interpolate
+> ### Title: Find the value of one vector relative to a value of another
+> ###   vector by interpolation
+> ### Aliases: interpolate
+> 
+> ### ** Examples
+> 
+> # No Example
+> 
+> 
+> 
+> cleanEx()
 > nameEx("isCorMatrix")
 > ### * isCorMatrix
 > 
@@ -17733,6 +17967,25 @@ $FMI.2
 > 
 > 
 > cleanEx()
+> nameEx("multipleAllEqual")
+> ### * multipleAllEqual
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: multipleAllEqual
+> ### Title: Test whether all objects are equal
+> ### Aliases: multipleAllEqual
+> 
+> ### ** Examples
+> 
+> multipleAllEqual(1:5, 1:5, seq(2, 10, 2)/2)
+[1] TRUE
+> multipleAllEqual(1:5, 1:6, seq(2, 10, 2)/2)
+[1] FALSE
+> 
+> 
+> 
+> cleanEx()
 > nameEx("overlapHist")
 > ### * overlapHist
 > 
@@ -17768,11 +18021,11 @@ $FMI.2
 > 
 > # Compare number with a vector
 > pValue(0.5, rnorm(1000, 0, 1))
-[1] 0.685
+[1] 0.315
 > 
 > # Compare numbers with a data frame
 > pValue(c(0.5, 0.2), data.frame(rnorm(1000, 0, 1), runif(1000, 0, 1)))
-[1] 0.691 0.186
+[1] 0.309 0.814
 > 
 > # Compare an analysis result with a result of simulation study
 > library(lavaan)
@@ -17791,7 +18044,7 @@ $FMI.2
 > Output2 <- runFit(out, HolzingerSwineford1939, 20, mis)
 > pValue(out, Output2)
     Chi     AIC     BIC   RMSEA     CFI     TLI    SRMR andRule  orRule 
-   0.20    0.00    0.00    0.20    0.25    0.25    0.30    0.00    0.30 
+   0.20    0.00    0.00    0.20    0.15    0.15    0.20    0.00    0.25 
 > 
 > 
 > 
@@ -17799,6 +18052,40 @@ $FMI.2
 
 detaching 'package:parallel'
 
+> nameEx("pValueCondCutoff")
+> ### * pValueCondCutoff
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: pValueCondCutoff
+> ### Title: Find a p value when the target is conditional (valid) on a
+> ###   specific value of a predictor
+> ### Aliases: pValueCondCutoff
+> 
+> ### ** Examples
+> 
+> # No example
+> 
+> 
+> 
+> cleanEx()
+> nameEx("pValueVariedCutoff")
+> ### * pValueVariedCutoff
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: pValueVariedCutoff
+> ### Title: Find a p value when the cutoff is specified as a vector given
+> ###   the values of predictors
+> ### Aliases: pValueVariedCutoff
+> 
+> ### ** Examples
+> 
+> # No example
+> 
+> 
+> 
+> cleanEx()
 > nameEx("plot3DQtile")
 > ### * plot3DQtile
 > 
@@ -17873,6 +18160,59 @@ The following object(s) are masked from 'package:base':
 detaching 'package:splines', 'package:quantreg', 'package:SparseM',
   'package:parallel'
 
+> nameEx("plotCutoffNested")
+> ### * plotCutoffNested
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: plotCutoffNested
+> ### Title: Plot sampling distributions of the differences in fit indices
+> ###   between nested models with fit indices cutoffs
+> ### Aliases: plotCutoffNested
+> 
+> ### ** Examples
+> 
+> n1 <- simNorm(0, 0.1)
+> u79 <- simUnif(0.7, 0.9)
+> 
+> loading.null <- matrix(0, 6, 1)
+> loading.null[1:6, 1] <- NA
+> LX.NULL <- simMatrix(loading.null, 0.7)
+> RPH.NULL <- symMatrix(diag(1))
+> RTD <- symMatrix(diag(6))
+> CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
+> 
+> error.cor.mis <- matrix(NA, 6, 6)
+> diag(error.cor.mis) <- 1
+> RTD.Mis <- symMatrix(error.cor.mis, "n1")
+> CFA.Model.NULL.Mis <- simMisspecCFA(RTE = RTD.Mis)
+> 
+> loading.alt <- matrix(0, 6, 2)
+> loading.alt[1:3, 1] <- NA
+> loading.alt[4:6, 2] <- NA
+> LX.ALT <- simMatrix(loading.alt, 0.7)
+> latent.cor.alt <- matrix(NA, 2, 2)
+> diag(latent.cor.alt) <- 1
+> RPH.ALT <- symMatrix(latent.cor.alt, "u79")
+> CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
+> 
+> SimData.NULL <- simData(CFA.Model.NULL, 500)
+> 
+> SimModel.NULL <- simModel(CFA.Model.NULL)
+> SimModel.ALT <- simModel(CFA.Model.ALT)
+> 
+> # The actual number of replications should be greater than 10.
+> Output.NULL.NULL <- simResult(10, SimData.NULL, SimModel.NULL)
+> Output.NULL.ALT <- simResult(10, SimData.NULL, SimModel.ALT)
+> 
+> plotCutoffNested(Output.NULL.NULL, Output.NULL.ALT, alpha=0.05)
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:parallel'
+
 > nameEx("plotDist")
 > ### * plotDist
 > 
@@ -17899,6 +18239,40 @@ Loading required package: pspline
 
 detaching 'package:copula', 'package:pspline'
 
+> nameEx("plotIndividualScatter")
+> ### * plotIndividualScatter
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: plotIndividualScatter
+> ### Title: Plot an overlaying scatter plot visualizing the power of
+> ###   rejecting misspecified models
+> ### Aliases: plotIndividualScatter
+> 
+> ### ** Examples
+> 
+> # No example
+> 
+> 
+> 
+> cleanEx()
+> nameEx("plotLogisticFit")
+> ### * plotLogisticFit
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: plotLogisticFit
+> ### Title: Plot multiple logistic curves for predicting whether rejecting a
+> ###   misspecified model
+> ### Aliases: plotLogisticFit
+> 
+> ### ** Examples
+> 
+> # No example
+> 
+> 
+> 
+> cleanEx()
 > nameEx("plotMisfit")
 > ### * plotMisfit
 > 
@@ -17945,6 +18319,22 @@ detaching 'package:copula', 'package:pspline'
 > 
 > 
 > cleanEx()
+> nameEx("plotOverHist")
+> ### * plotOverHist
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: plotOverHist
+> ### Title: Plot multiple overlapping histograms
+> ### Aliases: plotOverHist
+> 
+> ### ** Examples
+> 
+> # No example
+> 
+> 
+> 
+> cleanEx()
 > nameEx("plotPower")
 > ### * plotPower
 > 
@@ -17986,11 +18376,7 @@ detaching 'package:parallel'
 > ### Name: plotPowerFit
 > ### Title: Plot sampling distributions of fit indices that visualize power
 > ###   of rejecting datasets underlying misspecified models
-> ### Aliases: plotPowerFit plotPowerFit-methods
-> ###   plotPowerFit,data.frame,data.frame-method
-> ###   plotPowerFit,data.frame,vector-method
-> ###   plotPowerFit,SimResult,SimResult-method
-> ###   plotPowerFit,SimResult,vector-method
+> ### Aliases: plotPowerFit
 > 
 > ### ** Examples
 > 
@@ -18005,31 +18391,155 @@ detaching 'package:parallel'
 > # We make the examples running only 5 replications to save time.
 > # In reality, more replications are needed.
 > Output.NULL <- simResult(5, SimData.NULL, SimModel)
-> Cut.NULL <- getCutoff(Output.NULL, 0.95)
 > 
-> u79 <- simUnif(0.7, 0.9)
 > loading.alt <- matrix(0, 6, 2)
 > loading.alt[1:3, 1] <- NA
 > loading.alt[4:6, 2] <- NA
 > LX.ALT <- simMatrix(loading.alt, 0.7)
 > latent.cor.alt <- matrix(NA, 2, 2)
 > diag(latent.cor.alt) <- 1
-> RPH.ALT <- symMatrix(latent.cor.alt, "u79")
+> RPH.ALT <- symMatrix(latent.cor.alt, 0.5)
 > CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
 > SimData.ALT <- simData(CFA.Model.ALT, 500)
 > Output.ALT <- simResult(5, SimData.ALT, SimModel)
-> getPowerFit(Output.ALT, Cut.NULL)
-  Chi   CFI   TLI   AIC   BIC RMSEA  SRMR 
-    1     1     1     1     1     1     1 
+> plotPowerFit(Output.ALT, nullObject=Output.NULL, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
 > Rule.of.thumb <- c(RMSEA=0.05, CFI=0.95, TLI=0.95, SRMR=0.06)
-> plotPowerFit(Output.ALT, Output.NULL, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+> plotPowerFit(Output.ALT, cutoff=Rule.of.thumb, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+> 
+> Output.NULL2 <- simResult(NULL, SimData.NULL, SimModel, n=seq(50, 250, 25))
+> Output.ALT2 <- simResult(NULL, SimData.ALT, SimModel, n=seq(50, 250, 25))
+> 
+> plotPowerFit(Output.ALT2, nullObject=Output.NULL2, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+Loading required package: SparseM
+
+Attaching package: 'SparseM'
+
+The following object(s) are masked from 'package:base':
+
+    backsolve
+
+> plotPowerFit(Output.ALT2, cutoff=Rule.of.thumb, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
 > 
 > 
 > 
 > cleanEx()
 
-detaching 'package:parallel'
+detaching 'package:quantreg', 'package:SparseM', 'package:parallel'
 
+> nameEx("plotPowerFitDf")
+> ### * plotPowerFitDf
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: plotPowerFitDf
+> ### Title: Plot sampling distributions of fit indices that visualize power
+> ###   of rejecting datasets underlying misspecified models
+> ### Aliases: plotPowerFitDf
+> 
+> ### ** Examples
+> 
+> # No example
+> 
+> 
+> 
+> cleanEx()
+> nameEx("plotPowerFitNested")
+> ### * plotPowerFitNested
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: plotPowerFitNested
+> ### Title: Plot power of rejecting a nested model in a nested model
+> ###   comparison by each fit index
+> ### Aliases: plotPowerFitNested
+> 
+> ### ** Examples
+> 
+> u2 <- simUnif(-0.2, 0.2)
+> n1 <- simNorm(0, 0.1)
+> u79 <- simUnif(0.7, 0.9)
+> 
+> loading.null <- matrix(0, 6, 1)
+> loading.null[1:6, 1] <- NA
+> LX.NULL <- simMatrix(loading.null, 0.7)
+> RPH.NULL <- symMatrix(diag(1))
+> RTD <- symMatrix(diag(6))
+> CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
+> 
+> error.cor.mis <- matrix(NA, 6, 6)
+> diag(error.cor.mis) <- 1
+> RTD.Mis <- symMatrix(error.cor.mis, "rnorm(1,0,0.1)")
+> CFA.Model.NULL.Mis <- simMisspecCFA(RTE = RTD.Mis)
+> 
+> loading.alt <- matrix(0, 6, 2)
+> loading.alt[1:3, 1] <- NA
+> loading.alt[4:6, 2] <- NA
+> LX.ALT <- simMatrix(loading.alt, 0.7)
+> latent.cor.alt <- matrix(NA, 2, 2)
+> diag(latent.cor.alt) <- 1
+> RPH.ALT <- symMatrix(latent.cor.alt, 0.7)
+> CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
+> 
+> # loading.alt.mis <- matrix(NA, 6, 2)
+> # loading.alt.mis[is.na(loading.alt)] <- 0
+> # LX.alt.mis <- simMatrix(loading.alt.mis, "runif(1,-.2,.2)")
+> # CFA.Model.alt.mis <- simMisspecCFA(LY = LX.alt.mis, RTE=RTD.Mis)
+> 
+> SimData.NULL <- simData(CFA.Model.NULL, 500)
+> SimData.ALT <- simData(CFA.Model.ALT, 500)
+> 
+> SimModel.NULL <- simModel(CFA.Model.NULL)
+> SimModel.ALT <- simModel(CFA.Model.ALT)
+> 
+> Output.NULL.NULL <- simResult(10, SimData.NULL, SimModel.NULL)
+> Output.ALT.NULL <- simResult(10, SimData.ALT, SimModel.NULL)
+> Output.NULL.ALT <- simResult(10, SimData.NULL, SimModel.ALT)
+> Output.ALT.ALT <- simResult(10, SimData.ALT, SimModel.ALT)
+> 
+> plotPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT)
+> plotPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT, usedFit="CFI")
+> 
+> Output.NULL.NULL2 <- simResult(NULL, SimData.NULL, SimModel.NULL, n=seq(50, 500, 50))
+> Output.ALT.NULL2 <- simResult(NULL, SimData.ALT, SimModel.NULL, n=seq(50, 500, 50))
+> Output.NULL.ALT2 <- simResult(NULL, SimData.NULL, SimModel.ALT, n=seq(50, 500, 50))
+> Output.ALT.ALT2 <- simResult(NULL, SimData.ALT, SimModel.ALT, n=seq(50, 500, 50))
+> 
+> plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNested=Output.NULL.NULL2, nullParent=Output.NULL.ALT2)
+Loading required package: SparseM
+
+Attaching package: 'SparseM'
+
+The following object(s) are masked from 'package:base':
+
+    backsolve
+
+> 
+> plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNested=Output.NULL.NULL2, nullParent=Output.NULL.ALT2, logistic=FALSE)
+> 
+> plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, cutoff=c(CFI=-0.1), logistic=FALSE)
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:quantreg', 'package:SparseM', 'package:parallel'
+
+> nameEx("plotPowerSig")
+> ### * plotPowerSig
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: plotPowerSig
+> ### Title: Plot multiple logistic curves given a significance result matrix
+> ### Aliases: plotPowerSig
+> 
+> ### ** Examples
+> 
+> # No example
+> 
+> 
+> 
+> cleanEx()
 > nameEx("plotQtile")
 > ### * plotQtile
 > 
@@ -18039,6 +18549,23 @@ detaching 'package:parallel'
 > ### Title: Build a scatterplot with overlaying line of quantiles of
 > ###   predicted values
 > ### Aliases: plotQtile
+> 
+> ### ** Examples
+> 
+> # No example
+> 
+> 
+> 
+> cleanEx()
+> nameEx("plotScatter")
+> ### * plotScatter
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: plotScatter
+> ### Title: Plot overlaying scatter plots visualizing the power of rejecting
+> ###   misspecified models
+> ### Aliases: plotScatter
 > 
 > ### ** Examples
 > 
@@ -18240,6 +18767,25 @@ detaching 'package:parallel'
 > 
 > 
 > cleanEx()
+> nameEx("revText")
+> ### * revText
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: revText
+> ### Title: Reverse the proportion value by subtracting it from 1
+> ### Aliases: revText
+> 
+> ### ** Examples
+> 
+> # This is a private function.
+> 
+> # revText(.96)
+> # revText("> .60")
+> 
+> 
+> 
+> cleanEx()
 > nameEx("run")
 > ### * run
 > 
@@ -18292,85 +18838,85 @@ Model Type
 [1] "CFA"
 ========= Fit Indices Cutoffs ============
            0.1     0.05     0.01    0.001     Mean
-Chi     69.817   71.008   71.960   72.175   61.716
-AIC   6976.118 6982.044 6986.785 6987.851 6920.385
-BIC   7087.331 7093.257 7097.998 7099.065 7031.598
-RMSEA    0.080    0.081    0.081    0.082    0.072
-CFI      0.951    0.950    0.948    0.948    0.958
-TLI      0.927    0.924    0.922    0.922    0.937
-SRMR     0.054    0.056    0.057    0.057    0.048
+Chi     61.041   61.440   61.759   61.830   55.767
+AIC   6974.728 6985.713 6994.501 6996.478 6920.463
+BIC   7085.941 7096.926 7105.714 7107.692 7031.676
+RMSEA    0.072    0.072    0.072    0.072    0.066
+CFI      0.955    0.953    0.951    0.950    0.964
+TLI      0.933    0.929    0.926    0.926    0.946
+SRMR     0.048    0.049    0.049    0.049    0.044
 ========= Parameter Estimates and Standard Errors ============
       Estimate.Average Estimate.SD Average.SE Power..Not.equal.0. Std.Est
-LY1_1            0.774       0.096      0.065                 1.0   0.765
-LY2_1            0.414       0.128      0.063                 1.0   0.414
-LY3_1            0.619       0.118      0.064                 1.0   0.607
-LY4_2            0.870       0.119      0.050                 1.0   0.844
-LY5_2            0.874       0.068      0.050                 1.0   0.847
-LY6_2            0.830       0.052      0.049                 1.0   0.833
-LY7_3            0.568       0.137      0.063                 1.0   0.569
-LY8_3            0.731       0.129      0.067                 1.0   0.722
-LY9_3            0.672       0.157      0.067                 1.0   0.663
-PS2_1            0.614       0.066      0.055                 1.0   0.614
-PS3_1            0.418       0.170      0.071                 1.0   0.418
-PS3_2            0.262       0.164      0.066                 0.8   0.262
-TE1_1            0.417       0.125      0.074                 1.0   0.410
-TE2_2            0.799       0.057      0.071                 1.0   0.818
-TE3_3            0.634       0.032      0.071                 1.0   0.625
-TE4_4            0.290       0.061      0.038                 1.0   0.284
-TE5_5            0.300       0.066      0.039                 1.0   0.282
-TE6_6            0.305       0.052      0.036                 1.0   0.306
-TE7_7            0.649       0.107      0.069                 1.0   0.665
-TE8_8            0.473       0.128      0.079                 1.0   0.470
-TE9_9            0.557       0.224      0.080                 1.0   0.543
-TY1              3.519       0.119      0.087                 1.0   3.482
-TY2              4.806       0.096      0.085                 1.0   4.867
-TY3              1.412       0.099      0.087                 1.0   1.395
-TY4              1.778       0.056      0.078                 1.0   1.737
-TY5              2.590       0.160      0.078                 1.0   2.518
-TY6              1.179       0.124      0.076                 1.0   1.187
-TY7              3.224       0.022      0.085                 1.0   3.256
-TY8              4.653       0.180      0.089                 1.0   4.617
-TY9              4.634       0.096      0.089                 1.0   4.574
+LY1_1            0.803       0.085      0.068                 1.0   0.784
+LY2_1            0.411       0.120      0.063                 1.0   0.415
+LY3_1            0.621       0.122      0.065                 1.0   0.606
+LY4_2            0.850       0.124      0.050                 1.0   0.831
+LY5_2            0.902       0.091      0.051                 1.0   0.859
+LY6_2            0.833       0.035      0.050                 1.0   0.829
+LY7_3            0.551       0.113      0.062                 1.0   0.562
+LY8_3            0.730       0.085      0.065                 1.0   0.735
+LY9_3            0.687       0.112      0.067                 1.0   0.672
+PS2_1            0.574       0.083      0.056                 1.0   0.574
+PS3_1            0.387       0.182      0.071                 1.0   0.387
+PS3_2            0.299       0.164      0.066                 0.8   0.299
+TE1_1            0.398       0.132      0.082                 0.8   0.380
+TE2_2            0.790       0.072      0.070                 1.0   0.818
+TE3_3            0.642       0.044      0.073                 1.0   0.627
+TE4_4            0.308       0.059      0.038                 1.0   0.306
+TE5_5            0.283       0.067      0.039                 1.0   0.260
+TE6_6            0.315       0.049      0.037                 1.0   0.312
+TE7_7            0.638       0.064      0.065                 1.0   0.677
+TE8_8            0.445       0.091      0.075                 1.0   0.455
+TE9_9            0.561       0.152      0.077                 1.0   0.540
+TY1              3.483       0.136      0.090                 1.0   3.403
+TY2              4.813       0.081      0.085                 1.0   4.904
+TY3              1.402       0.113      0.088                 1.0   1.380
+TY4              1.786       0.094      0.077                 1.0   1.761
+TY5              2.553       0.114      0.079                 1.0   2.444
+TY6              1.158       0.129      0.076                 1.0   1.154
+TY7              3.243       0.035      0.083                 1.0   3.336
+TY8              4.642       0.193      0.087                 1.0   4.689
+TY9              4.613       0.068      0.089                 1.0   4.525
       Std.Est.SD Average.Param Average.Bias Coverage
-LY1_1      0.086         0.772        0.002      1.0
-LY2_1      0.115         0.424       -0.010      0.8
-LY3_1      0.084         0.581        0.038      0.6
-LY4_2      0.065         0.852        0.019      0.8
-LY5_2      0.032         0.855        0.018      1.0
-LY6_2      0.024         0.838       -0.008      0.8
-LY7_3      0.115         0.570       -0.002      0.6
-LY8_3      0.108         0.723        0.008      0.8
-LY9_3      0.147         0.665        0.007      0.8
-PS2_1      0.066         0.459        0.155      0.4
-PS3_1      0.170         0.471       -0.053      0.2
-PS3_2      0.164         0.283       -0.021      0.4
-TE1_1      0.130         0.404        0.013      0.8
-TE2_2      0.083         0.821       -0.021      1.0
-TE3_3      0.099         0.662       -0.028      1.0
-TE4_4      0.105         0.275        0.016      0.6
-TE5_5      0.055         0.269        0.031      0.8
-TE6_6      0.041         0.298        0.007      0.8
-TE7_7      0.136         0.676       -0.027      0.8
-TE8_8      0.151         0.477       -0.004      1.0
-TE9_9      0.208         0.558        0.000      0.4
-TY1        0.176         3.463        0.056      1.0
-TY2        0.348         4.756        0.051      0.8
-TY3        0.064         1.412        0.000      0.8
-TY4        0.117         1.782       -0.005      1.0
-TY5        0.173         2.514        0.076      0.8
-TY6        0.156         1.160        0.019      0.8
-TY7        0.169         3.279       -0.055      1.0
-TY8        0.344         4.744       -0.092      0.6
-TY9        0.124         4.669       -0.036      1.0
+LY1_1      0.083         0.772        0.031      1.0
+LY2_1      0.114         0.424       -0.013      0.8
+LY3_1      0.085         0.581        0.039      0.6
+LY4_2      0.068         0.852       -0.001      0.8
+LY5_2      0.041         0.855        0.047      0.6
+LY6_2      0.022         0.838       -0.005      1.0
+LY7_3      0.090         0.570       -0.019      0.4
+LY8_3      0.073         0.723        0.006      0.8
+LY9_3      0.101         0.665        0.022      0.8
+PS2_1      0.083         0.459        0.116      0.4
+PS3_1      0.182         0.471       -0.083      0.4
+PS3_2      0.164         0.283        0.016      0.6
+TE1_1      0.127         0.404       -0.006      0.8
+TE2_2      0.081         0.821       -0.031      1.0
+TE3_3      0.100         0.662       -0.021      1.0
+TE4_4      0.107         0.275        0.034      0.8
+TE5_5      0.070         0.269        0.014      0.8
+TE6_6      0.036         0.298        0.018      1.0
+TE7_7      0.104         0.676       -0.038      1.0
+TE8_8      0.107         0.477       -0.033      1.0
+TE9_9      0.145         0.558        0.003      0.6
+TY1        0.146         3.463        0.020      1.0
+TY2        0.326         4.756        0.057      0.8
+TY3        0.095         1.412       -0.010      0.8
+TY4        0.170         1.782        0.004      1.0
+TY5        0.172         2.514        0.039      0.8
+TY6        0.130         1.160       -0.002      0.8
+TY7        0.183         3.279       -0.035      1.0
+TY8        0.264         4.744       -0.102      0.4
+TY9        0.159         4.669       -0.056      1.0
 ========= Correlation between Fit Indices ============
          Chi    AIC    BIC  RMSEA    CFI    TLI   SRMR
-Chi    1.000 -0.496 -0.496  0.999 -0.922 -0.922  0.276
-AIC   -0.496  1.000  1.000 -0.519  0.413  0.413  0.520
-BIC   -0.496  1.000  1.000 -0.519  0.413  0.413  0.520
-RMSEA  0.999 -0.519 -0.519  1.000 -0.921 -0.921  0.281
-CFI   -0.922  0.413  0.413 -0.921  1.000  1.000 -0.242
-TLI   -0.922  0.413  0.413 -0.921  1.000  1.000 -0.242
-SRMR   0.276  0.520  0.520  0.281 -0.242 -0.242  1.000
+Chi    1.000 -0.914 -0.914  0.999 -0.826 -0.826  0.388
+AIC   -0.914  1.000  1.000 -0.911  0.640  0.640 -0.145
+BIC   -0.914  1.000  1.000 -0.911  0.640  0.640 -0.145
+RMSEA  0.999 -0.911 -0.911  1.000 -0.812 -0.812  0.411
+CFI   -0.826  0.640  0.640 -0.812  1.000  1.000 -0.396
+TLI   -0.826  0.640  0.640 -0.812  1.000  1.000 -0.396
+SRMR   0.388 -0.145 -0.145  0.411 -0.396 -0.396  1.000
 ================== Replications =====================
 Number of Replications
 [1] 5
@@ -18414,7 +18960,7 @@ Loading required package: foreign
 ## 
 -- Imputation 1 --
 
- 1  2  3  4  5  6  7  8  9 
+ 1  2  3  4  5  6  7  8  9 10 
 
 -- Imputation 2 --
 
@@ -18422,15 +18968,15 @@ Loading required package: foreign
 
 -- Imputation 3 --
 
- 1  2  3  4  5  6  7  8  9 
+ 1  2  3  4  5  6  7  8 
 
 -- Imputation 4 --
 
- 1  2  3  4  5  6 
+ 1  2  3  4  5  6  7 
 
 -- Imputation 5 --
 
- 1  2  3  4  5  6  7 
+ 1  2  3  4  5  6  7  8  9 
 
 > output <- runFit(model, usedData, 5, missModel=miss)
 -- Imputation 1 --
@@ -18439,15 +18985,15 @@ Loading required package: foreign
 
 -- Imputation 2 --
 
- 1  2  3  4  5  6  7  8 
+ 1  2  3  4  5  6  7  8  9 
 
 -- Imputation 3 --
 
- 1  2  3  4  5  6  7  8  9 
+ 1  2  3  4  5  6  7 
 
 -- Imputation 4 --
 
- 1  2  3  4  5  6  7  8 
+ 1  2  3  4  5  6 
 
 -- Imputation 5 --
 
@@ -18455,63 +19001,23 @@ Loading required package: foreign
 
 -- Imputation 1 --
 
- 1  2  3  4  5  6  7  8  9 10 11 12 13 14 
+ 1  2  3  4  5  6  7  8  9 10 11 12 13 
 
 -- Imputation 2 --
-
- 1  2  3  4  5  6  7  8 
-
--- Imputation 3 --
-
- 1  2  3  4  5  6 
-
--- Imputation 4 --
-
- 1  2  3  4  5  6  7  8  9 
-
--- Imputation 5 --
-
- 1  2  3  4  5  6  7  8 
-
--- Imputation 1 --
 
  1  2  3  4  5  6  7  8  9 10 
 
--- Imputation 2 --
-
- 1  2  3  4  5  6  7  8 
-
 -- Imputation 3 --
 
- 1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 
+ 1  2  3  4  5  6  7  8  9 10 11 
 
 -- Imputation 4 --
 
  1  2  3  4  5  6  7 
 
 -- Imputation 5 --
-
- 1  2  3  4  5  6  7 
-
--- Imputation 1 --
 
  1  2  3  4  5  6  7  8  9 
-
--- Imputation 2 --
-
- 1  2  3  4  5  6  7  8 
-
--- Imputation 3 --
-
- 1  2  3  4  5  6  7 
-
--- Imputation 4 --
-
- 1  2  3  4  5  6  7 
-
--- Imputation 5 --
-
- 1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 
 
 -- Imputation 1 --
 
@@ -18519,19 +19025,59 @@ Loading required package: foreign
 
 -- Imputation 2 --
 
- 1  2  3  4  5  6  7  8  9 
+ 1  2  3  4  5  6  7  8 
 
 -- Imputation 3 --
 
- 1  2  3  4  5  6  7 
+ 1  2  3  4  5  6  7  8  9 10 11 
 
 -- Imputation 4 --
 
- 1  2  3  4  5  6  7  8 
+ 1  2  3  4  5  6  7  8  9 10 
+
+-- Imputation 5 --
+
+ 1  2  3  4  5 
+
+-- Imputation 1 --
+
+ 1  2  3  4  5  6 
+
+-- Imputation 2 --
+
+ 1  2  3  4  5  6 
+
+-- Imputation 3 --
+
+ 1  2  3  4  5  6 
+
+-- Imputation 4 --
+
+ 1  2  3  4  5  6  7 
 
 -- Imputation 5 --
 
  1  2  3  4  5  6 
+
+-- Imputation 1 --
+
+ 1  2  3  4  5 
+
+-- Imputation 2 --
+
+ 1  2  3  4  5  6  7 
+
+-- Imputation 3 --
+
+ 1  2  3  4  5  6  7  8  9 10 
+
+-- Imputation 4 --
+
+ 1  2  3  4  5  6  7 
+
+-- Imputation 5 --
+
+ 1  2  3  4  5  6  7  8  9 10 
 
 > pValue(out, output)
     Chi     AIC     BIC   RMSEA     CFI     TLI    SRMR andRule  orRule 
@@ -19936,10 +20482,8 @@ LY    NA   8      3
 > 
 > # Real simulation will need more than just 10 replications
 > Output <- simResult(10, Data.Mis, Model, objFunction=fun)
-Warning in lavaan(model = code, meanstructure = TRUE, data = Data, missing = miss,  :
-  lavaan WARNING: model has NOT converged!
 Error in solve.default(E) : 
-  system is computationally singular: reciprocal condition number = 8.38518e-17
+  system is computationally singular: reciprocal condition number = 3.63803e-24
 Warning in estimateVCOV(lavaanModel, samplestats = lavaanSampleStats, options = lavaanOptions,  :
   lavaan WARNING: could not compute standard errors!
 
@@ -19949,109 +20493,109 @@ Model Type
 [1] "SEM"
 ========= Fit Indices Cutoffs ============
            0.1     0.05     0.01    0.001     Mean
-Chi    197.998  204.167  209.103  210.213  141.854
-AIC   9232.838 9251.948 9267.235 9270.675 9094.977
-BIC   9388.397 9407.506 9422.794 9426.233 9250.535
-RMSEA    0.102    0.104    0.106    0.106    0.079
-CFI      0.905    0.885    0.870    0.867    0.929
-TLI      0.869    0.842    0.821    0.816    0.902
-SRMR     0.058    0.060    0.061    0.062    0.049
+Chi    165.535  174.818  182.245  183.916  129.663
+AIC   9388.284 9427.209 9458.348 9465.355 9038.505
+BIC   9543.843 9582.767 9613.907 9620.914 9194.064
+RMSEA    0.090    0.094    0.097    0.097    0.074
+CFI      0.913    0.897    0.884    0.882    0.939
+TLI      0.880    0.858    0.841    0.837    0.916
+SRMR     0.054    0.055    0.057    0.057    0.047
 ========= Parameter Estimates and Standard Errors ============
         Estimate Average Estimate SD Average SE Power (Not equal 0) Std Est
-LY1_1              0.697       0.098      0.053               1.000   0.711
-LY2_1              0.748       0.145      0.054               1.000   0.741
-LY3_1              0.688       0.206      0.055               1.000   0.679
-LY4_2              0.695       0.130      0.054               1.000   0.690
-LY5_2              0.716       0.153      0.053               1.000   0.726
-LY6_2              0.692       0.149      0.053               1.000   0.716
-LY10_3             0.624       0.185      0.089               1.000   0.609
-LY11_3             0.665       0.242      0.096               1.000   0.614
-LY12_3             0.522       0.194      0.081               1.000   0.492
-LY7_4              0.279       0.111      0.059               0.778   0.708
-LY8_4              0.287       0.108      0.063               0.778   0.768
-LY9_4              0.302       0.143      0.061               0.778   0.750
-BE4_1              1.773       1.121      1.026               0.778   0.538
-BE4_2              1.581       1.339      1.050               0.778   0.458
-BE4_3              0.070       0.196      0.230               0.000   0.012
-PS2_1              0.653       0.115      0.048               1.000   0.653
-PS3_1             -0.038       0.145      0.079               0.222  -0.038
-PS3_2             -0.031       0.111      0.078               0.111  -0.031
-TE1_1              0.467       0.131      0.048               1.000   0.487
-TE2_2              0.442       0.202      0.052               0.889   0.434
-TE3_3              0.521       0.328      0.056               1.000   0.502
-TE4_4              0.513       0.142      0.052               1.000   0.512
-TE5_5              0.452       0.266      0.053               0.889   0.447
-TE6_6              0.433       0.221      0.051               0.889   0.468
-TE7_7              0.499       0.197      0.049               1.000   0.485
-TE8_8              0.382       0.113      0.041               1.000   0.404
-TE9_9              0.432       0.128      0.046               1.000   0.432
-TE10_10            0.623       0.194      0.109               0.889   0.607
-TE11_11            0.661       0.307      0.129               0.889   0.593
-TE12_12            0.797       0.145      0.094               1.000   0.738
-TY1               -0.008       0.032      0.057               0.000  -0.009
-TY2               -0.015       0.062      0.058               0.000  -0.016
-TY3               -0.007       0.054      0.059               0.000  -0.007
-TY4                0.008       0.079      0.058               0.222   0.007
-TY5                0.010       0.062      0.057               0.000   0.011
-TY6               -0.003       0.066      0.056               0.000  -0.004
-TY7                0.033       0.060      0.059               0.111   0.033
-TY8                0.013       0.051      0.057               0.000   0.013
-TY9               -0.005       0.045      0.058               0.000  -0.006
-TY10               0.000       0.000      0.059               0.000   0.000
-TY11               0.000       0.000      0.062               0.000   0.000
-TY12               0.000       0.000      0.060               0.000   0.000
+LY1_1              0.703       0.092      0.053               1.000   0.714
+LY2_1              0.743       0.166      0.055               1.000   0.726
+LY3_1              0.698       0.218      0.054               1.000   0.702
+LY4_2              0.657       0.131      0.056               1.000   0.659
+LY5_2              0.724       0.209      0.054               1.000   0.721
+LY6_2              0.721       0.154      0.056               1.000   0.735
+LY10_3             0.516       0.120      0.088               1.000   0.523
+LY11_3             0.577       0.249      0.099               0.889   0.535
+LY12_3             0.570       0.243      0.094               1.000   0.550
+LY7_4              0.316       0.111      0.051               1.000   0.768
+LY8_4              0.314       0.085      0.052               1.000   0.763
+LY9_4              0.327       0.122      0.051               1.000   0.755
+BE4_1              1.436       0.712      0.391               0.889   0.529
+BE4_2              1.237       0.724      0.346               0.889   0.448
+BE4_3             -0.002       0.146      0.186               0.000  -0.013
+PS2_1              0.605       0.121      0.052               1.000   0.605
+PS3_1              0.041       0.137      0.084               0.222   0.041
+PS3_2              0.043       0.156      0.082               0.111   0.043
+TE1_1              0.466       0.102      0.048               1.000   0.484
+TE2_2              0.463       0.197      0.053               1.000   0.453
+TE3_3              0.460       0.306      0.051               1.000   0.463
+TE4_4              0.547       0.151      0.054               1.000   0.551
+TE5_5              0.429       0.228      0.052               0.889   0.453
+TE6_6              0.422       0.229      0.056               0.889   0.439
+TE7_7              0.384       0.180      0.041               1.000   0.397
+TE8_8              0.419       0.122      0.043               1.000   0.411
+TE9_9              0.441       0.181      0.046               1.000   0.420
+TE10_10            0.696       0.140      0.092               1.000   0.716
+TE11_11            0.758       0.253      0.120               1.000   0.676
+TE12_12            0.684       0.245      0.120               0.889   0.658
+TY1               -0.011       0.060      0.057               0.000  -0.013
+TY2                0.019       0.072      0.059               0.000   0.018
+TY3               -0.013       0.043      0.057               0.000  -0.013
+TY4               -0.012       0.077      0.058               0.222  -0.011
+TY5               -0.043       0.037      0.057               0.000  -0.045
+TY6               -0.038       0.074      0.057               0.111  -0.038
+TY7               -0.023       0.076      0.057               0.111  -0.021
+TY8               -0.020       0.068      0.058               0.111  -0.018
+TY9               -0.009       0.059      0.059               0.111  -0.008
+TY10               0.000       0.000      0.057               0.000   0.000
+TY11               0.000       0.000      0.061               0.000   0.000
+TY12               0.000       0.000      0.059               0.000   0.000
         Std Est SD
-LY1_1        0.096
-LY2_1        0.140
-LY3_1        0.205
-LY4_2        0.118
-LY5_2        0.170
-LY6_2        0.148
-LY10_3       0.157
-LY11_3       0.183
-LY12_3       0.149
-LY7_4        0.124
-LY8_4        0.085
-LY9_4        0.081
-BE4_1        0.130
-BE4_2        0.116
-BE4_3        0.052
-PS2_1        0.115
-PS3_1        0.145
-PS3_2        0.111
-TE1_1        0.136
-TE2_2        0.205
-TE3_3        0.308
-TE4_4        0.155
-TE5_5        0.244
-TE6_6        0.239
-TE7_7        0.190
-TE8_8        0.130
-TE9_9        0.122
-TE10_10      0.202
-TE11_11      0.254
-TE12_12      0.143
-TY1          0.032
-TY2          0.063
-TY3          0.052
-TY4          0.080
-TY5          0.063
-TY6          0.068
-TY7          0.059
-TY8          0.053
-TY9          0.047
+LY1_1        0.080
+LY2_1        0.146
+LY3_1        0.222
+LY4_2        0.129
+LY5_2        0.173
+LY6_2        0.153
+LY10_3       0.111
+LY11_3       0.206
+LY12_3       0.208
+LY7_4        0.125
+LY8_4        0.088
+LY9_4        0.108
+BE4_1        0.195
+BE4_2        0.198
+BE4_3        0.060
+PS2_1        0.121
+PS3_1        0.137
+PS3_2        0.156
+TE1_1        0.115
+TE2_2        0.211
+TE3_3        0.315
+TE4_4        0.160
+TE5_5        0.253
+TE6_6        0.234
+TE7_7        0.195
+TE8_8        0.129
+TE9_9        0.167
+TE10_10      0.115
+TE11_11      0.207
+TE12_12      0.234
+TY1          0.061
+TY2          0.072
+TY3          0.043
+TY4          0.079
+TY5          0.039
+TY6          0.075
+TY7          0.079
+TY8          0.067
+TY9          0.059
 TY10         0.000
 TY11         0.000
 TY12         0.000
 ========= Correlation between Fit Indices ============
          Chi    AIC    BIC  RMSEA    CFI    TLI   SRMR
-Chi    1.000  0.006  0.006  0.997 -0.917 -0.917  0.757
-AIC    0.006  1.000  1.000  0.023 -0.265 -0.265 -0.025
-BIC    0.006  1.000  1.000  0.023 -0.265 -0.265 -0.025
-RMSEA  0.997  0.023  0.023  1.000 -0.908 -0.908  0.766
-CFI   -0.917 -0.265 -0.265 -0.908  1.000  1.000 -0.685
-TLI   -0.917 -0.265 -0.265 -0.908  1.000  1.000 -0.685
-SRMR   0.757 -0.025 -0.025  0.766 -0.685 -0.685  1.000
+Chi    1.000  0.049  0.049  0.997 -0.916 -0.916  0.757
+AIC    0.049  1.000  1.000  0.010 -0.298 -0.298  0.328
+BIC    0.049  1.000  1.000  0.010 -0.298 -0.298  0.328
+RMSEA  0.997  0.010  0.010  1.000 -0.902 -0.902  0.751
+CFI   -0.916 -0.298 -0.298 -0.902  1.000  1.000 -0.733
+TLI   -0.916 -0.298 -0.298 -0.902  1.000  1.000 -0.733
+SRMR   0.757  0.328  0.328  0.751 -0.733 -0.733  1.000
 ================== Replications =====================
 Number of Replications
 [1] 10
@@ -21954,6 +22498,25 @@ detaching 'package:parallel'
 > 
 > 
 > cleanEx()
+> nameEx("whichMonotonic")
+> ### * whichMonotonic
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: whichMonotonic
+> ### Title: Extract a part of a vector that is monotonically increasing or
+> ###   decreasing
+> ### Aliases: whichMonotonic
+> 
+> ### ** Examples
+> 
+> # This is a private function.
+> 
+> # whichMonotonic(c(3, 4, 1, 2, 3, 5, 2, 1))
+> 
+> 
+> 
+> cleanEx()
 > nameEx("writeLavaanCode")
 > ### * writeLavaanCode
 > 
@@ -22021,7 +22584,7 @@ detaching 'package:parallel'
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  114.53 0.39 115.19 NA NA 
+Time elapsed:  137.23 0.67 138.14 NA NA 
 > grDevices::dev.off()
 null device 
           1 

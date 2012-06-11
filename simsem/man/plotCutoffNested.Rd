@@ -7,7 +7,8 @@
 	This function will plot sampling distributions of the differences in fit indices between nested models if the nested model is true. The users may add cutoffs by specifying the \code{alpha} level.
 }
 \usage{
-plotCutoffNested(nested, parent, alpha=NULL, cutoff = NULL, usedFit = NULL, useContour = T)
+plotCutoffNested(nested, parent, alpha = 0.05, cutoff = NULL, 
+usedFit = NULL, useContour = T)
 }
 \arguments{
   \item{nested}{

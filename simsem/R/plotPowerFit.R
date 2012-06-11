@@ -1,4 +1,4 @@
-# plotPowerFit: This function will plot sampling distributions of fit indices that visualize power
+# plotPowerFit: This function will plot sampling distributions of fit indices that visualize power in detecting misspecified models
 
 plotPowerFit <- function(altObject, nullObject = NULL, cutoff = NULL, usedFit = NULL, alpha = 0.05, contN = TRUE, contMCAR = TRUE, contMAR = TRUE, useContour = TRUE, logistic = TRUE) {
 	if(is.null(nullObject)) {
@@ -49,6 +49,8 @@ plotPowerFit <- function(altObject, nullObject = NULL, cutoff = NULL, usedFit = 
 	plotPowerFitDf(altObject@fit, nullObject = nullObject, cutoff = cutoff, usedFit = usedFit, alpha = alpha, x = x, xval = pred, useContour = useContour, logistic = logistic)
 }
 
+# plotPowerFitDf: This function will plot sampling distributions of fit indices that visualize power in detecting misspecified models where the inputs are data.frame
+
 plotPowerFitDf <- function(altObject, nullObject = NULL, cutoff = NULL, usedFit = NULL, alpha = 0.05, x = NULL, xval = NULL, useContour = TRUE, logistic = TRUE) {
 	if(is.null(x)) {
 		if(is.null(nullObject)) {
@@ -76,6 +78,8 @@ plotPowerFitDf <- function(altObject, nullObject = NULL, cutoff = NULL, usedFit 
 		stop("The varying parameter used cannot be over two dimensions.")
 	}
 }
+
+# plotOverHist: Plot overlapping distributions with specified cutoffs
 
 plotOverHist <- function(altObject, nullObject, cutoff=NULL, usedFit=NULL, alpha=alpha) {
 	percentile <- 1 - alpha
@@ -130,7 +134,11 @@ plotOverHist <- function(altObject, nullObject, cutoff=NULL, usedFit=NULL, alpha
         par(obj)
 }
 
+# plotLogisticFit: Plot the logistic curves of predicting the rejection/retention of a hypothesized model
+
 plotLogisticFit <- function(altObject, nullObject=NULL, cutoff=NULL, usedFit=NULL, x, xval, alpha=0.05, useContour=TRUE, df=0) {
+    warnT <- as.numeric(options("warn"))
+    options(warn = -1)
 	if(is.null(nullObject) & is.null(cutoff)) stop("Please specify the nullObject or cutoff argument")
 	if (is.null(usedFit)) 
         usedFit <- getKeywords()$usedFit
@@ -160,7 +168,10 @@ plotLogisticFit <- function(altObject, nullObject=NULL, cutoff=NULL, usedFit=NUL
 		sig[,reverse] <- !sig[,reverse]
 	}
 	plotPowerSig(sig, x = x, xval=xval, mainName = usedFit, useContour = useContour)
+	options(warn = warnT)
 }
+
+# plotScatter: Plot the overlapping scatterplots showing the distribution of fit indices given the values of varying parameters
 
 plotScatter <- function(altObject, nullObject=NULL, cutoff=NULL, usedFit = NULL, x, alpha=0.05, df=0) {
 	if (is.null(usedFit)) 
@@ -207,6 +218,8 @@ plotScatter <- function(altObject, nullObject=NULL, cutoff=NULL, usedFit = NULL,
 	if (length(usedFit) > 1) 
         par(obj)
 }
+
+# plotIndividualScatter: Plot each overlapping scatterplot showing the distribution of fit indices given the values of varying parameters
 
 plotIndividualScatter <- function(altVec, nullVec=NULL, cutoff=NULL, x, main = NULL) {
 	maxAll <- max(c(altVec, nullVec))

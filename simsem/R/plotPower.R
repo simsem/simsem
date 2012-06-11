@@ -57,6 +57,8 @@ plotPower <- function(object, powerParam, alpha = 0.05, contParam = NULL, contN 
     
 } 
 
+# plotPowerSig: plot the power curve given one or two varying parameters when a data frame of significance or not is specified
+
 plotPowerSig <- function(sig, x = NULL, xval=NULL, mainName = NULL, useContour = TRUE) {
     warnT <- as.numeric(options("warn"))
     options(warn = -1)

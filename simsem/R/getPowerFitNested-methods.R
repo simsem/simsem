@@ -1,4 +1,4 @@
-# getPowerFit: This function will find a power of each fit index based on specified cutoffs of each fit index
+# getPowerFitNested: This function will find a power of each fit index in nested model comparison based on specified cutoffs of each fit index
 
 setMethod("getPowerFitNested", signature(altNested = "SimResult", altParent = "SimResult", cutoff = "vector"), definition = function(altNested, altParent, cutoff, revDirec = FALSE, usedFit = NULL, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, condCutoff=TRUE, df = 0) {
     if (is.null(nVal) || is.na(nVal)) 
@@ -99,8 +99,14 @@ setMethod("getPowerFitNested", signature(altNested = "SimResult", altParent = "S
     return(temp)
 })
 
+# multipleAllEqual: Check whether all objects are equal by using all.equal function
+
 multipleAllEqual <- function(...) {
 	obj <- list(...)
+	multipleAllEqualList(obj)
+}
+
+multipleAllEqualList <- function(obj) {
 	for(i in 2:length(obj)) {
 		for(j in 1:(i - 1)) {
 			temp <- isTRUE(all.equal(obj[[i]], obj[[j]]))

@@ -10,7 +10,7 @@
 <div align="center">
 <a href="../../../doc/html/packages.html"><img src="../../../doc/html/left.jpg" alt="[Up]" width="30" height="30" border="0"></a>
 <a href="../../../doc/html/index.html"><img src="../../../doc/html/up.jpg" alt="[Top]" width="30" height="30" border="0"></a>
-</div><h2>Documentation for package &lsquo;simsem&rsquo; version 0.2-3</h2>
+</div><h2>Documentation for package &lsquo;simsem&rsquo; version 0.2-4</h2>
 
 <ul><li><a href="../DESCRIPTION">DESCRIPTION file</a>.</li>
 </ul>
@@ -71,6 +71,8 @@
 <tr><td width="25%"><a href="checkInputValue.html">checkInputValueVector</a></td>
 <td>Check the value argument in the matrix, symmetric matrix, or vector objects</td></tr>
 <tr><td width="25%"><a href="clean.html">clean</a></td>
+<td>Extract only converged replications in the result objects</td></tr>
+<tr><td width="25%"><a href="cleanSimResult.html">cleanSimResult</a></td>
 <td>Extract only converged replications in the result object</td></tr>
 <tr><td width="25%"><a href="collapseExo.html">collapseExo</a></td>
 <td>Collapse all exogenous variables and put all in endogenous side only.</td></tr>
@@ -220,6 +222,8 @@
 <td>Find fit indices cutoff given a priori alpha level</td></tr>
 <tr><td width="25%"><a href="getCutoff.html">getCutoff-methods</a></td>
 <td>Find fit indices cutoff given a priori alpha level</td></tr>
+<tr><td width="25%"><a href="getCutoffNested.html">getCutoffNested</a></td>
+<td>Find fit indices cutoff for nested model comparison given a priori alpha level</td></tr>
 <tr><td width="25%"><a href="getKeywords.html">getKeywords</a></td>
 <td>List of all keywords used in the 'simsem' package</td></tr>
 <tr><td width="25%"><a href="getPopulation.html">getPopulation</a></td>
@@ -242,6 +246,12 @@
 <td>Find power in rejecting alternative models based on fit indices criteria</td></tr>
 <tr><td width="25%"><a href="getPowerFit.html">getPowerFit-methods</a></td>
 <td>Find power in rejecting alternative models based on fit indices criteria</td></tr>
+<tr><td width="25%"><a href="getPowerFitNested.html">getPowerFitNested</a></td>
+<td>Find power in rejecting nested models based on the differences in fit indices</td></tr>
+<tr><td width="25%"><a href="getPowerFitNested.html">getPowerFitNested-method</a></td>
+<td>Find power in rejecting nested models based on the differences in fit indices</td></tr>
+<tr><td width="25%"><a href="getPowerFitNested.html">getPowerFitNested-methods</a></td>
+<td>Find power in rejecting nested models based on the differences in fit indices</td></tr>
 </table>
 
 <h2><a name="I">-- I --</a></h2>
@@ -251,6 +261,8 @@
 <td>Impose MAR, MCAR, planned missingness, or attrition on a data set</td></tr>
 <tr><td width="25%"><a href="indProd.html">indProd</a></td>
 <td>Make a product of indicators using mean centering or double-mean centering</td></tr>
+<tr><td width="25%"><a href="interpolate.html">interpolate</a></td>
+<td>Find the value of one vector relative to a value of another vector by interpolation</td></tr>
 <tr><td width="25%"><a href="isCorMatrix.html">isCorMatrix</a></td>
 <td>Check whether a 'matrix' is a possible correlation matrix</td></tr>
 <tr><td width="25%"><a href="isDefault.html">isDefault</a></td>
@@ -316,6 +328,8 @@
 <td>Function to pool imputed results that saved in a matrix format</td></tr>
 <tr><td width="25%"><a href="MatrixSet-class.html">MisspecSet-class</a></td>
 <td>Class '"MatrixSet"'</td></tr>
+<tr><td width="25%"><a href="multipleAllEqual.html">multipleAllEqual</a></td>
+<td>Test whether all objects are equal</td></tr>
 </table>
 
 <h2><a name="N">-- N --</a></h2>
@@ -369,6 +383,8 @@
 <td>Plot sampling distributions of fit indices with fit indices cutoffs</td></tr>
 <tr><td width="25%"><a href="plotCutoff.html">plotCutoff-methods</a></td>
 <td>Plot sampling distributions of fit indices with fit indices cutoffs</td></tr>
+<tr><td width="25%"><a href="plotCutoffNested.html">plotCutoffNested</a></td>
+<td>Plot sampling distributions of the differences in fit indices between nested models with fit indices cutoffs</td></tr>
 <tr><td width="25%"><a href="plotDist.html">plotDist</a></td>
 <td>Plot a distribution of a distribution object or data distribution object</td></tr>
 <tr><td width="25%"><a href="SimDataDist-class.html">plotDist-method</a></td>
@@ -377,18 +393,28 @@
 <td>Distribution Objects</td></tr>
 <tr><td width="25%"><a href="plotDist.html">plotDist-methods</a></td>
 <td>Plot a distribution of a distribution object or data distribution object</td></tr>
+<tr><td width="25%"><a href="plotIndividualScatter.html">plotIndividualScatter</a></td>
+<td>Plot an overlaying scatter plot visualizing the power of rejecting misspecified models</td></tr>
+<tr><td width="25%"><a href="plotLogisticFit.html">plotLogisticFit</a></td>
+<td>Plot multiple logistic curves for predicting whether rejecting a misspecified model</td></tr>
 <tr><td width="25%"><a href="plotMisfit.html">plotMisfit</a></td>
 <td>Plot the population misfit in parameter result object</td></tr>
+<tr><td width="25%"><a href="plotOverHist.html">plotOverHist</a></td>
+<td>Plot multiple overlapping histograms</td></tr>
 <tr><td width="25%"><a href="plotPower.html">plotPower</a></td>
 <td>Make a power plot of a parameter given varying parameters</td></tr>
 <tr><td width="25%"><a href="plotPowerFit.html">plotPowerFit</a></td>
 <td>Plot sampling distributions of fit indices that visualize power of rejecting datasets underlying misspecified models</td></tr>
-<tr><td width="25%"><a href="plotPowerFit.html">plotPowerFit-method</a></td>
+<tr><td width="25%"><a href="plotPowerFitDf.html">plotPowerFitDf</a></td>
 <td>Plot sampling distributions of fit indices that visualize power of rejecting datasets underlying misspecified models</td></tr>
-<tr><td width="25%"><a href="plotPowerFit.html">plotPowerFit-methods</a></td>
-<td>Plot sampling distributions of fit indices that visualize power of rejecting datasets underlying misspecified models</td></tr>
+<tr><td width="25%"><a href="plotPowerFitNested.html">plotPowerFitNested</a></td>
+<td>Plot power of rejecting a nested model in a nested model comparison by each fit index</td></tr>
+<tr><td width="25%"><a href="plotPowerSig.html">plotPowerSig</a></td>
+<td>Plot multiple logistic curves given a significance result matrix</td></tr>
 <tr><td width="25%"><a href="plotQtile.html">plotQtile</a></td>
 <td>Build a scatterplot with overlaying line of quantiles of predicted values</td></tr>
+<tr><td width="25%"><a href="plotScatter.html">plotScatter</a></td>
+<td>Plot overlaying scatter plots visualizing the power of rejecting misspecified models</td></tr>
 <tr><td width="25%"><a href="popDiscrepancy.html">popDiscrepancy</a></td>
 <td>Find the discrepancy value between two means and covariance matrices</td></tr>
 <tr><td width="25%"><a href="popMisfit.html">popMisfit</a></td>
@@ -409,6 +435,10 @@
 <td>Find p-values (1 - percentile)</td></tr>
 <tr><td width="25%"><a href="pValue.html">pValue-methods</a></td>
 <td>Find p-values (1 - percentile)</td></tr>
+<tr><td width="25%"><a href="pValueCondCutoff.html">pValueCondCutoff</a></td>
+<td>Find a p value when the target is conditional (valid) on a specific value of a predictor</td></tr>
+<tr><td width="25%"><a href="pValueVariedCutoff.html">pValueVariedCutoff</a></td>
+<td>Find a p value when the cutoff is specified as a vector given the values of predictors</td></tr>
 </table>
 
 <h2><a name="R">-- R --</a></h2>
@@ -422,6 +452,8 @@
 <td>Reduce the model constraint to data generation parameterization to analysis model parameterization.</td></tr>
 <tr><td width="25%"><a href="residualCovariate.html">residualCovariate</a></td>
 <td>Residual centered all target indicators by covariates</td></tr>
+<tr><td width="25%"><a href="revText.html">revText</a></td>
+<td>Reverse the proportion value by subtracting it from 1</td></tr>
 <tr><td width="25%"><a href="run.html">run</a></td>
 <td>Run a particular object in 'simsem' package.</td></tr>
 <tr><td width="25%"><a href="SimData-class.html">run-method</a></td>
@@ -802,6 +834,8 @@
 <table width="100%">
 <tr><td width="25%"><a href="weightedMean.html">weightedMean</a></td>
 <td>Calculate the weighted mean of a variable</td></tr>
+<tr><td width="25%"><a href="whichMonotonic.html">whichMonotonic</a></td>
+<td>Extract a part of a vector that is monotonically increasing or decreasing</td></tr>
 <tr><td width="25%"><a href="writeLavaanCode.html">writeLavaanCode</a></td>
 <td>Write a lavaan code given the matrices of free parameter</td></tr>
 <tr><td width="25%"><a href="writeLavaanConstraint.html">writeLavaanConstraint</a></td>

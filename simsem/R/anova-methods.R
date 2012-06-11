@@ -1,8 +1,11 @@
 # this is based on the anova function in the lmer/lavaan package
+
 setMethod("anova", signature(object = "SimResult"), function(object, ...) {
     
     mcall <- match.call(expand.dots = TRUE)
-    dots <- list(...)
+	mod <- clean(object, ...)
+	object <- mod[[1]]
+	dots <- mod[2:length(mod)]
     modp <- if (length(dots)) 
         sapply(dots, is, "SimResult") else logical(0)
     
@@ -42,6 +45,38 @@ setMethod("anova", signature(object = "SimResult"), function(object, ...) {
     # ORDERING DOES NOT WORK RIGHT NOW. Why??
     mods <- mods[order(nfreepar, decreasing = FALSE)]
     
+	
+	if(!multipleAllEqualList(lapply(mods, function(x, name) unique(slot(x, name)), name="n"))) stop("Models are based on different values of sample sizes")
+	if(!multipleAllEqualList(lapply(mods, function(x, name) unique(slot(x, name)), name="pmMCAR"))) stop("Models are based on different values of the percent completely missing at random")
+	if(!multipleAllEqualList(lapply(mods, function(x, name) unique(slot(x, name)), name="pmMAR"))) stop("Models are based on different values of the percent missing at random")
+	
+	nrep <- dim(object@fit)[[1]]
+	x <- NULL
+    pred <- NULL
+    
+    if (length(object@n) > 1) {
+        if (!length(object@n) == nrep) {
+            stop("Number of random sample sizes is not the same as the number of replications, check to see if N varied across replications")
+        }
+        x <- cbind(x, object@n)
+        pred$N <- unique(round(seq(min(object@n), max(object@n), length.out=20)))
+    }
+    if (length(object@pmMCAR) > 1) {
+        if (!length(object@pmMCAR) == nrep) {
+            stop("Number of random pmMCARs is not the same as the number of replications, check to see if pmMCAR varied across replications")
+        }
+        x <- cbind(x, object@pmMCAR)
+        pred$MCAR <- seq(min(object@pmMCAR), max(object@pmMCAR), length.out=20)
+        
+    }
+    if (length(object@pmMAR) > 1) {
+        if (!length(object@pmMAR) == nrep) {
+            stop("Number of random pmMARs is not the same as the number of replications, check to see if pmMAR varied across replications")
+        }
+        x <- cbind(x, object@pmMAR)
+        pred$MAR <- seq(min(object@pmMAR), max(object@pmMAR), length.out=20)
+        
+    }
     # Need to pull fit statistics from each model, compare each one...
     
     # Use apply and diff function to get differneces for each rows
@@ -68,13 +103,33 @@ setMethod("anova", signature(object = "SimResult"), function(object, ...) {
     Power.delta <- pchisq(Chi.delta, Df.delta, lower = FALSE) < 0.05
     
     # Need to think about what we want out of this. Maybe just mean differences across models? Lets do that for now
-    val <- data.frame(Df = colMeans(Df), Chisq = colMeans(Chi), CFI = colMeans(CFI), TLI = colMeans(TLI), RMSEA = colMeans(RMSEA), AIC = colMeans(AIC), 
-        BIC = colMeans(BIC), c(NA, mean(Chi.delta)), c(NA, mean(Df.delta)), c(NA, mean(Power.delta)), c(NA, mean(CFI.delta)), c(NA, mean(TLI.delta)), 
-        c(NA, mean(RMSEA.delta)), c(NA, mean(AIC.delta)), c(NA, mean(BIC.delta)))
-    colnames(val) <- c("df", "chisq", "CFI", "TLI", "RMSEA", "AIC", "BIC", "Chisq diff", "Df diff", "Power", "CFI diff", "TLI diff", "RMSEA diff", 
+    val <- data.frame(Df = colMeans(Df), Chisq = colMeans(Chi), CFI = colMeans(CFI), TLI = colMeans(TLI), RMSEA = colMeans(RMSEA), AIC = colMeans(AIC), BIC = colMeans(BIC))
+	
+	diff <- c(mean(Chi.delta), mean(Df.delta), mean(Power.delta), mean(CFI.delta), mean(TLI.delta), 
+        mean(RMSEA.delta), mean(AIC.delta), mean(BIC.delta))
+    colnames(val) <- c("df", "chisq", "CFI", "TLI", "RMSEA", "AIC", "BIC")
+	names(diff) <- c("Chisq diff", "Df diff", "Power", "CFI diff", "TLI diff", "RMSEA diff", 
         "AIC diff", "BIC diff")
-    class(val) <- c("anova", class(val))
-    return(val)
+
+	varyResult <- NULL
+		
+	if(!is.null(x)) {
+	Chi.delta <- as.matrix(Chi.delta)
+	Df.delta <- as.matrix(Df.delta)
+	temp <- list()	
+	# Varying parameters
+	ivVal <- expand.grid(pred)
+	powVal <- as.list(data.frame(t(ivVal)))
+	for(i in 1:ncol(Chi.delta)) {
+		temp[[i]] <- sapply(powVal, pValueVariedCutoff, cutoff=rep(qchisq(0.95, df=Df.delta[1, i])), obtainedValue = Chi.delta[,i], revDirec=FALSE, x = x)
+	}
+	temp <- data.frame(temp)
+	varyResult <- data.frame(ivVal, temp)
+	colnames(varyResult) <- c(names(pred), paste("power.", 1:ncol(temp), sep=""))
+	rownames(varyResult) <- NULL
+	} 
+	result <- list(summary = val, diff = diff, varyParam = varyResult)
+    return(result)
     
 	# Return List
 	# If n, pmMCAR, pmMAR are varying, return the additional arguments in the list that provide the conditional median of the varying parameter.

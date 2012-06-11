@@ -1,6 +1,6 @@
 # plotCutoffNested: plot the cutoff from the difference in fit indices from two models
 
-plotCutoffNested <- function(nested, parent, alpha=NULL, cutoff = NULL, usedFit = NULL, useContour = T) {
+plotCutoffNested <- function(nested, parent, alpha=0.05, cutoff = NULL, usedFit = NULL, useContour = T) {
 	mod <- clean(nested, parent)
 	nested <- mod[[1]]
 	parent <- mod[[2]]

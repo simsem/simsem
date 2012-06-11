@@ -43,7 +43,7 @@ getCutoffNested(nested, parent, alpha = 0.05, usedFit = NULL, nVal = NULL, pmMCA
 }
 \seealso{
 	\code{\linkS4class{SimResult}} for a detail of simResult
-	\code{\linkS4class{getCutoff}} for a detail of finding cutoffs for absolute fit
+	\code{\link{getCutoff}} for a detail of finding cutoffs for absolute fit
 }
 \examples{
 n1 <- simNorm(0, 0.1)

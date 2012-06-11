@@ -1,4 +1,4 @@
-# clean: Extract only converged replications in the result object
+# clean: Extract only simultaneous converged replications in the result objects
 
 clean <- function(...) {
 	object.l <- list(...)
@@ -9,6 +9,7 @@ clean <- function(...) {
 	return(object.l)
 } 
 
+# cleanSimResult: Extract only converged replications in a result object
 cleanSimResult <- function(object, converged=NULL) {
     if(is.null(converged)) converged <- object@converged
     object@nRep <- sum(converged)
