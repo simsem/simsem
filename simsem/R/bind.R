@@ -99,10 +99,7 @@ bind <- function(free = NULL, popParam = NULL, misspec = NULL) {
   }
 }
 
-combine <- function(dat) {
-  if(
-    
-}
+
 
 # Possible "empty values": "", or NA
 is.empty <- function(dat) {
@@ -113,14 +110,20 @@ is.empty <- function(dat) {
   }
    apply(dat, c(1,2), FUN=function(x) if(x == "" || is.na(x)) {TRUE} else {FALSE})
         
-}
+ }
 
 
 # Finds valid labels, checks all combinations of label pairs to make sure at least one pair is the same.
+# Assumes that matrix has at least one character label.
 validConstraints <- function(mat) {
+  if(class(mat) == "SimMatrix" || class(mat) == "SimVector") {
+    mat <- mat@free
+  }
+
   labels <- is.label(mat)
   combs <- combn(labels[labels],2)
   res <- combs[1,] & combs[2,]
+  
   return(any(res))
 }
 

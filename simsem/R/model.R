@@ -112,22 +112,22 @@ holz <- function() {
   diag(rte) <- NA
   RTE <- bind(rte)
 
-  pt1 <- model(LY=LY,RPS=RPS,RTE=RTE,modelType="CFA")
+  template <- model(LY=LY,RPS=RPS,RTE=RTE,modelType="CFA")
   
-  fit <- lavaan(pt1,data=HolzingerSwineford1939)
+  fit <- lavaan(template@pt,data=HolzingerSwineford1939)
 }
 
 cfa <- cfa()
-cfa2 <- cfa2()
-path <- path()
-sem <- sem()
+## cfa2 <- cfa2()
+## path <- path()
+## sem <- sem()
 
-tcfa <- model(LY=cfa$LY,RPS=cfa$RPS,RTE=cfa$RTE, modelType="CFA")
-tcfa2 <- model(LY=cfa2$LY,PS=cfa2$PS,TE=cfa2$TE,AL=cfa2$AL,TY=cfa2$TY, modelType="CFA")
-tpath <- model(BE=path$BE, RPS=path$RPS, ME=path$ME, modelType="Path")
-tsem <- model(LY=sem$LY, RTE=sem$RTE, RPS=sem$RPS, BE=sem$BE, modelType="SEM")
-tcfamg <- model(LY=list(cfa2$LY,cfa2$LY),PS=list(cfa2$PS,cfa2$PS),TE=cfa2$TE,AL=cfa2$AL,TY=cfa2$TY,modelType="CFA")
-tcfamg3 <- model(LY=cfa2$LY,PS=cfa2$PS,TE=cfa2$TE,AL=cfa2$AL,TY=cfa2$TY, modelType="CFA",ngroups=3)
+ tcfa <- model(LY=cfa$LY,RPS=cfa$RPS,RTE=cfa$RTE, modelType="CFA")
+## tcfa2 <- model(LY=cfa2$LY,PS=cfa2$PS,TE=cfa2$TE,AL=cfa2$AL,TY=cfa2$TY, modelType="CFA")
+## tpath <- model(BE=path$BE, RPS=path$RPS, ME=path$ME, modelType="Path")
+## tsem <- model(LY=sem$LY, RTE=sem$RTE, RPS=sem$RPS, BE=sem$BE, modelType="SEM")
+## tcfamg <- model(LY=list(cfa2$LY,cfa2$LY),PS=list(cfa2$PS,cfa2$PS),TE=cfa2$TE,AL=cfa2$AL,TY=cfa2$TY,modelType="CFA")
+## tcfamg3 <- model(LY=cfa2$LY,PS=cfa2$PS,TE=cfa2$TE,AL=cfa2$AL,TY=cfa2$TY, modelType="CFA",ngroups=3)
 
 
 ## Takes model specification matrices of type SimMatrix (or lists of these matrices for multiple groups).
@@ -192,7 +192,7 @@ model <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NUL
   
   pt <- buildPT(paramSet)
   
-  return(new("SimSem",pt=pt,dgen=combine(paramSet)))
+  return(new("SimSem",pt=pt,dgen=paramSet,modelType=modelType))
 }
 
 

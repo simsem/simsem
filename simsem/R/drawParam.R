@@ -2,10 +2,11 @@ source("AllClass.R")
 source("bind.R")
 source("model.R")
 source("find.R")
+source("validate.R")
 
-# defaults?
+# There has to be a better way of specifying what order things are generated. Constraint, Auto-completion, misspecification
 
-drawParam <- function(model, conBeforeMis, misBeforeFill, misfitType, misfitBounds, averageNumMisspec, optMisfit, numIter) {
+drawParam <- function(model, conBeforeMis, misBeforeFill, conBeforeFill, misfitType, misfitBounds, averageNumMisspec, optMisfit, numIter) {
   paramSet <- model@dgen
   param <- NULL
   misspec <- NULL
@@ -16,11 +17,8 @@ drawParam <- function(model, conBeforeMis, misBeforeFill, misfitType, misfitBoun
   count <- 0
   repeat {
     if (!isNullObject(objMisspec)) {
-      Output <- runMisspec(objSet, objMisspec, objEqualCon)
-      param <- Output$param
-      misspec <- Output$misspec
-      misspecAdd <- Output$misspecAdd
-      if (validateObject(param) | validateObject(misspec)) {
+      
+      if (validateObject(param)) {
         param <- reduceMatrices(param)
         misspec <- reduceMatrices(misspec)
         if (!isNullObject(param) && !isNullObject(misspec)) {
@@ -66,113 +64,54 @@ drawParam <- function(model, conBeforeMis, misBeforeFill, misfitType, misfitBoun
   return(list(real = param, misspec = misspec, misspecAdd = misspecAdd))
 }
 
-# Take character population generation matrices, and return a list the same matrices with only numerical values. These are the raw (pre-processed) population parameters.
-rawDrawSet <- function(paramSet, conBeforeFill, makeList = FALSE) {
-  out <- NULL
-  rawParam <- lapply(paramSet,rawDraw,constraint=TRUE)
-    if ( # constraints exist) {
-        if (object@modelType != equalCon@modelType) 
-            stop("Please provide same tags of SimSet and constraint")
-        if (equalCon@conBeforeFill) {
-            param <- constrainMatrices(param, equalCon)
-            out <- fillParam(param, object@modelType)
-        } else {
-            param <- fillParam(param, object@modelType)
-            param <- constrainMatrices(param, equalCon)
-            out <- fillParam(param, object@modelType)
-        }
-    } else {
-        out <- fillParam(param, object@modelType)
-    }
-    if (makeList) {
-        return(list(out, param))
-    } else {
-        return(out)
-    }
-}
-
-rawDraw <- function(simDat,constraint=TRUE) {
-  if(class(simDat) == "SimMatrix" || class(simDat) == "SimVector") {
-    free <- as.vector(simDat@free)
-    popParam <- as.vector(simDat@popParam)
-    rawDat <- suppressWarnings(as.numeric(as.vector(simDat@free)))
-    
-    if(constraint) {
-      conList <- NULL
-      isLabel <- is.label(free)
-      for(i in seq_along(free)) {
-        if(isLabel[i]) {
-          label <- free[i]
-          if(is.null(conList[label]) || is.na(conList[label])) { #if label isn't in constraint list
-            rawDat[i] <- eval(parse(text = popParam[i])) # draw
-            conList <- c(conList,rawDat[i]) #Add value to constraint list          
-            names(conList)[length(conList)] <- label # Add label to constraint list 
-          } else { 
-            rawDat[i] <- conList[label]
-          }
-        } else if(is.na(rawDat[i])) { # Is not a label, but is NA
-          rawDat[i] <- eval(parse(text = popParam[i])) # draw
-        } else { }  # Is not a label or is not NA. Do nothing.
-      }
-    } else { # Don't apply constraints
-      for(i in seq_along(free)) {
-        if(is.na(rawDat[i])) {
-          rawDat[i] <- eval(parse(text = popParam[i]))
-        }
-      }
-    }
-    if(class(simDat) == "SimMatrix") {
-      return(matrix(rawDat,nrow=nrow(simDat@free),ncol=ncol(simDat@free)))
-    } else {
-      return(rawDat)
-    }         
-  } else { return(NULL) } # Was not a SimMatrix or SimVector
+# Take character population generation matrices, and return a list the same matrices with only numerical values.
+# [[1]] = Parameters with no misspecification
+# [[2]] = Parameters with misspecification
+rawDrawSet <- function(paramSet, conBeforeFill, modelType) {
+    rawParamMis <- lapply(paramSet,rawDraw)
+    matrix(suppressWarnings(as.numeric(LY@free)),nrow=nrow(LY@free),ncol=ncol(LY@free))-rawParamMis
+    param <- fillParam(rawParam, modelType)
+  return(param)
+  ##   if (makeList) {
+##         return(list(out, param))
+##     } else {
+##         return(out)
+##     }
 }
 
 
 
-fillParam <- function(paramSet, modelType) {
-    library(lavaan)
-    LY <- param@LY
-    VTE <- param@VTE
-    TE <- param@TE
-    RTE <- param@RTE
-    VY <- param@VY
-    TY <- param@TY
-    MY <- param@MY
-    BE <- param@BE
-    VPS <- param@VPS
-    PS <- param@PS
-    RPS <- param@RPS
-    VE <- param@VE
-    AL <- param@AL
-    ME <- param@ME
-    LX <- param@LX
-    VTD <- param@VTD
-    TD <- param@TD
-    RTD <- param@RTD
-    VX <- param@VX
-    TX <- param@TX
-    MX <- param@MX
-    GA <- param@GA
-    VPH <- param@VPH
-    PH <- param@PH
-    RPH <- param@RPH
-    KA <- param@KA
-    TH <- param@TH
-    RTH <- param@RTH
+
+# Auto-completition of parameters
+fillParam <- function(rawParamSet, modelType) {
+    require(lavaan)
+    LY <- rawParamSet$LY
+    VTE <- rawParamSet$VTE
+    TE <- rawParamSet$TE
+    RTE <- rawParamSet$RTE
+    VY <- rawParamSet$VY
+    TY <- rawParamSet$TY
+    MY <- rawParamSet$MY
+    BE <- rawParamSet$BE
+    VPS <- rawParamSet$VPS
+    PS <- rawParamSet$PS
+    RPS <- rawParamSet$RPS
+    VE <- rawParamSet$VE
+    AL <- rawParamSet$AL
+    ME <- rawParamSet$ME
+
     if (modelType == "CFA") {
-        if (isNullObject(PS)) {
+        if (is.null(PS)) {
             PS <- suppressWarnings(cor2cov(RPS, sqrt(VE)))
         } else {
             VE <- diag(PS)
             VPS <- diag(PS)
             RPS <- cov2corMod(PS)
         }
-        if (isNullObject(TE)) {
-            if (isNullObject(VTE)) 
+        if (is.null(TE)) {
+            if (is.null(VTE)) 
                 VTE <- findIndResidualVar(LY, PS, VY)  # PS is model-implied covariance
-            if (isNullObject(VY)) 
+            if (is.null(VY)) 
                 VY <- findIndTotalVar(LY, PS, VTE)
             TE <- suppressWarnings(cor2cov(RTE, suppressWarnings(sqrt(VTE))))
         } else {
@@ -180,15 +119,16 @@ fillParam <- function(paramSet, modelType) {
             RTE <- cov2corMod(TE)
             VY <- findIndTotalVar(LY, PS, VTE)
         }
-        if (isNullObject(MY)) 
+        if (is.null(MY)) 
             MY <- findIndMean(LY, ME, TY)
-        if (isNullObject(TY)) 
+        if (is.null(TY)) 
             TY <- findIndIntercept(LY, ME, MY)
+        
     } else if (modelType == "Path") {
-        if (isNullObject(PS)) {
-            if (isNullObject(VPS)) 
+        if (is.null(PS)) {
+            if (is.null(VPS)) 
                 VPS <- findFactorResidualVar(BE, RPS, VE)
-            if (isNullObject(VE)) 
+            if (is.null(VE)) 
                 VE <- findFactorTotalVar(BE, RPS, VPS)
             PS <- suppressWarnings(cor2cov(RPS, suppressWarnings(sqrt(VPS))))
         } else {
@@ -196,48 +136,16 @@ fillParam <- function(paramSet, modelType) {
             RPS <- cov2corMod(PS)
             VE <- findFactorTotalVar(BE, RPS, VPS)
         }
-        if (isNullObject(ME)) 
+        if (is.null(ME)) 
             ME <- findFactorMean(BE, AL)
-        if (isNullObject(AL)) 
+        if (is.null(AL)) 
             AL <- findFactorIntercept(BE, ME)
-    } else if (modelType == "Path.exo") {
-        nx <- ncol(GA)
-        ny <- nrow(GA)
-        if (!isNullObject(PS)) {
-            VPS <- diag(PS)
-            RPS <- cov2corMod(PS)
-        }
-        if (!isNullObject(PH)) {
-            VPH <- diag(PH)
-            RPH <- cov2corMod(PH)
-        }
-        temp.BE <- combinePathExoEndo(GA, BE)
-        temp.RPS <- combineLatentCorExoEndo(RPH, RPS)
-        if (isNullObject(VPS)) {
-            temp.VPS <- findFactorResidualVar(temp.BE, temp.RPS, c(VPH, VE))
-            VPS <- temp.VPS[(nx + 1):(nx + ny)]
-        }
-        if (isNullObject(VE)) {
-            temp.VE <- findFactorTotalVar(temp.BE, temp.RPS, c(VPH, VPS))
-            VE <- temp.VE[(nx + 1):(nx + ny)]
-        }
-        if (isNullObject(ME)) {
-            temp.ME <- findFactorMean(temp.BE, c(KA, AL))
-            ME <- temp.ME[(nx + 1):(nx + ny)]
-        }
-        if (isNullObject(AL)) {
-            temp.AL <- findFactorIntercept(temp.BE, c(KA, ME))
-            AL <- temp.AL[(nx + 1):(nx + ny)]
-        }
-        if (isNullObject(PS)) 
-            PS <- suppressWarnings(cor2cov(RPS, suppressWarnings(sqrt(VPS))))
-        if (isNullObject(PH)) 
-            PH <- suppressWarnings(cor2cov(RPH, suppressWarnings(sqrt(VPH))))
+        
     } else if (modelType == "SEM") {
-        if (isNullObject(PS)) {
-            if (isNullObject(VPS)) 
+        if (is.null(PS)) {
+            if (is.null(VPS)) 
                 VPS <- findFactorResidualVar(BE, RPS, VE)
-            if (isNullObject(VE)) 
+            if (is.null(VE)) 
                 VE <- findFactorTotalVar(BE, RPS, VPS)
             PS <- suppressWarnings(cor2cov(RPS, suppressWarnings(sqrt(VPS))))
         } else {
@@ -245,15 +153,15 @@ fillParam <- function(paramSet, modelType) {
             RPS <- cov2corMod(PS)
             VE <- findFactorTotalVar(BE, RPS, VPS)
         }
-        if (isNullObject(ME)) 
+        if (is.null(ME)) 
             ME <- findFactorMean(BE, AL)
-        if (isNullObject(AL)) 
+        if (is.null(AL)) 
             AL <- findFactorIntercept(BE, ME)
         facCov <- findFactorTotalCov(BE, PS)
-        if (isNullObject(TE)) {
-            if (isNullObject(VTE)) 
+        if (is.null(TE)) {
+            if (is.null(VTE)) 
                 VTE <- findIndResidualVar(LY, facCov, VY)
-            if (isNullObject(VY)) 
+            if (is.null(VY)) 
                 VY <- findIndTotalVar(LY, facCov, VTE)
             TE <- suppressWarnings(cor2cov(RTE, suppressWarnings(sqrt(VTE))))
         } else {
@@ -261,94 +169,33 @@ fillParam <- function(paramSet, modelType) {
             VTE <- diag(TE)
             VY <- findIndTotalVar(LY, facCov, VTE)
         }
-        if (isNullObject(MY)) 
+        if (is.null(MY)) 
             MY <- findIndMean(LY, ME, TY)
-        if (isNullObject(TY)) 
+        if (is.null(TY)) 
             TY <- findIndIntercept(LY, ME, MY)
-    } else if (modelType == "SEM.exo") {
-        nk <- ncol(GA)
-        ne <- nrow(GA)
-        if (!isNullObject(PS)) {
-            VPS <- diag(PS)
-            RPS <- cov2corMod(PS)
-        }
-        if (!isNullObject(PH)) {
-            VPH <- diag(PH)
-            RPH <- cov2corMod(PH)
-        }
-        if (!isNullObject(TE)) {
-            VTE <- diag(TE)
-            RTE <- cov2corMod(TE)
-        }
-        if (!isNullObject(TD)) {
-            VTD <- diag(TD)
-            RTD <- cov2corMod(TD)
-        }
-        temp.BE <- combinePathExoEndo(GA, BE)
-        temp.RPS <- combineLatentCorExoEndo(RPH, RPS)
-        if (isNullObject(VPS)) {
-            temp.VPS <- findFactorResidualVar(temp.BE, temp.RPS, c(VPH, VE))
-            VPS <- temp.VPS[(nk + 1):(nk + ne)]
-        }
-        if (isNullObject(VE)) {
-            temp.VE <- findFactorTotalVar(temp.BE, temp.RPS, c(VPH, VPS))
-            VE <- temp.VE[(nk + 1):(nk + ne)]
-        }
-        if (isNullObject(ME)) {
-            temp.ME <- findFactorMean(temp.BE, c(KA, AL))
-            ME <- temp.ME[(nk + 1):(nk + ne)]
-        }
-        if (isNullObject(AL)) {
-            temp.AL <- findFactorIntercept(temp.BE, c(KA, ME))
-            AL <- temp.AL[(nk + 1):(nk + ne)]
-        }
-        if (isNullObject(PS)) 
-            PS <- suppressWarnings(cor2cov(RPS, suppressWarnings(sqrt(VPS))))
-        if (isNullObject(PH)) 
-            PH <- suppressWarnings(cor2cov(RPH, suppressWarnings(sqrt(VPH))))
-        nk <- nrow(PH)
-        ne <- nrow(PS)
-        facCov <- findFactorTotalCov(combinePathExoEndo(GA, BE), combineLatentCorExoEndo(PH, PS))
-        if (isNullObject(VTE)) 
-            VTE <- findIndResidualVar(LY, facCov[(nk + 1):(nk + ne), (nk + 1):(nk + ne)], VY)
-        if (isNullObject(VY)) 
-            VY <- findIndTotalVar(LY, facCov[(nk + 1):(nk + ne), (nk + 1):(nk + ne)], VTE)
-        if (isNullObject(MY)) 
-            MY <- findIndMean(LY, ME, TY)
-        if (isNullObject(TY)) 
-            TY <- findIndIntercept(LY, ME, MY)
-        if (isNullObject(VTD)) 
-            VTD <- findIndResidualVar(LX, facCov[1:nk, 1:nk], VX)
-        if (isNullObject(VX)) 
-            VX <- findIndTotalVar(LX, facCov[1:nk, 1:nk], VTD)
-        if (isNullObject(MX)) 
-            MX <- findIndMean(LX, KA, TX)
-        if (isNullObject(TX)) 
-            TX <- findIndIntercept(LX, KA, MX)
-        if (isNullObject(TE)) 
-            TE <- suppressWarnings(cor2cov(RTE, suppressWarnings(sqrt(VTE))))
-        if (isNullObject(TD)) 
-            TD <- suppressWarnings(cor2cov(RTD, suppressWarnings(sqrt(VTD))))
-        if (isNullObject(TH)) {
-            TH <- suppressWarnings(sqrt(diag(VTD)) %*% RTH %*% sqrt(diag(VTE)))
-        } else {
-            RTH <- suppressWarnings(solve(sqrt(diag(VTD))) %*% TH %*% solve(sqrt(diag(VTE))))
-        }
     }
-    out <- new("MatrixSet", modelType = modelType, LY = LY, VTE = VTE, TE = TE, RTE = RTE, VY = VY, TY = TY, MY = MY, BE = BE, VPS = VPS, PS = PS, RPS = RPS, VE = VE, AL = AL, ME = ME, LX = LX, VTD = VTD, 
-        TD = TD, RTD = RTD, VX = VX, TX = TX, MX = MX, GA = GA, VPH = VPH, PH = PH, RPH = RPH, KA = KA, TH = TH, RTH = RTH)
-    return(out)
+    fullParamSet <- list(LY = LY, VTE = VTE, TE = TE, RTE = RTE, VY = VY, TY = TY, MY = MY,
+               BE = BE, VPS = VPS, PS = PS, RPS = RPS, VE = VE, AL = AL, ME = ME)
+    return(fullParamSet)
 }
 
 runMisspec <- function(object, misspec, SimEqualCon = new("NullSimEqualCon")) {
     Output1 <- NULL
     Output2 <- NULL
+    rawParamLS <- list()
     # Should create the misspec here: then compare with the MACS and see what is going on!
     if (misspec@optMisfit == "none") {
-        Mis <- list(run(misspec))
+        rawParam <- lapply(paramSet,rawDraw)
     } else {
-        Mis <- lapply(1:misspec@numIter, function(obj, m) run(m), m = misspec)
+       for(i in 1:numIter) {
+         rawParamLS[[i]] <- lapply(paramSet,rawDraw)
+       }
     }
+    
+    
+    #[[1]] = misspecification added
+    #[[2]] = misspecification seperate
+
     if (isNullObject(SimEqualCon)) {
         if (misspec@misBeforeFill) {
             paramSet <- run(object, makeList = TRUE)
@@ -362,8 +209,7 @@ runMisspec <- function(object, misspec, SimEqualCon = new("NullSimEqualCon")) {
             Output2 <- lapply(param, fillParam, modelType = object@modelType)
         }
     } else {
-        if (object@modelType != SimEqualCon@modelType) 
-            stop("Please provide same tags of SimSet and constraint")
+        
         if (misspec@misBeforeFill & misspec@conBeforeMis & SimEqualCon@conBeforeFill) {
             # 2) Con, AddMis, fill
             paramSet <- run(object, SimEqualCon, makeList = TRUE)
@@ -514,3 +360,75 @@ popDiscrepancy <- function(paramM, paramCM, misspecM, misspecCM) {
     discrepancy <- t.1 - t.2 - p + t.3
     return(discrepancy)
 }
+
+## Takes one SimMatrix and returns a matrix with numerical values for population parameters.
+## If constraint = TRUE, then constraints are applied simultaneously.
+## if missAdd = TRUE, then misspecification is added.
+## if mRaw = TRUE, then a list is returned with the raw misspecification separate
+rawDraw <- function(simDat,constraint=TRUE,miss=TRUE,mRaw=TRUE) {
+  if(class(simDat) == "SimMatrix" || class(simDat) == "SimVector") {
+    free <- as.vector(simDat@free)
+    popParam <- as.vector(simDat@popParam)
+    misspec <- as.vector(simDat@misspec)
+    rawDat <- missRaw <- suppressWarnings(as.numeric(as.vector(simDat@free)))
+    missRaw[is.na(missRaw)] <- 0
+    
+    
+    if(constraint && miss) {
+      conList <- NULL
+      isLabel <- is.label(free)
+      for(i in seq_along(free)) {
+        if(isLabel[i]) {
+          label <- free[i]
+          if(is.null(conList[label]) || is.na(conList[label])) { #if label isn't in constraint list
+            rawDat[i] <- eval(parse(text = popParam[i])) # draw
+            conList <- c(conList,rawDat[i]) #Add value to constraint list          
+            names(conList)[length(conList)] <- label # Add label to constraint list 
+          } else { 
+            rawDat[i] <- conList[label]
+          }
+        } else if(is.na(rawDat[i])) { # Is not a label, but is NA
+            rawDat[i] <- eval(parse(text = popParam[i])) # normal draw
+        } else if(miss==TRUE && !is.nan(misspec) && length(misspec) > 0){ # Is not free - check for misspecification
+            missRaw[i] <- eval(parse(text=misspec[i])) # Combine the original parameter with the misspecification
+            rawDat[i] <- rawDat[i] + missRaw[i]# else {}        
+          }
+      }
+    } else if(miss){ # Don't apply constraints but apply misspecification
+      for(i in seq_along(free)) {
+        if(is.na(rawDat[i])) {
+            rawDat[i] <- eval(parse(text = popParam[i]))
+          } else if(miss==TRUE && !is.nan(misspec) && length(misspec) > 0){ # Is not free - check for misspecification
+          missRaw[i] <- eval(parse(text=misspec[i])) # Combine the original parameter with the misspecification
+          rawDat[i] <- rawDat[i] + missRaw[i] 
+        }
+      }
+    } else { # Don't apply constraints or misspecification
+      for(i in seq_along(free)) {
+        if(is.na(rawDat[i])) {
+            rawDat[i] <- eval(parse(text = popParam[i]))
+          }
+      }
+    }
+    
+    if(class(simDat) == "SimMatrix") {
+      rawDat <- matrix(rawDat,nrow=nrow(simDat@free),ncol=ncol(simDat@free))
+      missRaw <- matrix(missRaw,nrow=nrow(simDat@free),ncol=ncol(simDat@free))
+    }
+    if(mRaw && miss) {
+      return(list(rawDat,missRaw))
+    } else {
+      return(rawDat)
+    }       
+  } else { return(NULL) } # Was not a SimMatrix or SimVector
+}
+  
+
+# cov2corMod: The cov2cor function that takes care of the zero-variance variables
+
+cov2corMod <- function(V) {
+    targetCol <- which(diag(V) != 0)
+    V[targetCol, targetCol] <- cov2cor(V[targetCol, targetCol])
+    return(V)
+} 
+
