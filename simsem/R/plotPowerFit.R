@@ -5,8 +5,8 @@ plotPowerFit <- function(altObject, nullObject = NULL, cutoff = NULL, usedFit = 
 		altObject <- clean(altObject)
     } else {
 		mod <- clean(altObject, nullObject)
-		mod[[1]] <- altObject
-		mod[[2]] <- nullObject
+		altObject <- mod[[1]]
+		nullObject <- mod[[2]]
 		if(!all.equal(unique(altObject@n), unique(nullObject@n))) stop("Models are based on different values of sample sizes")
 		if(!all.equal(unique(altObject@pmMCAR), unique(nullObject@pmMCAR))) stop("Models are based on different values of the percent completely missing at random")
 		if(!all.equal(unique(altObject@pmMAR), unique(nullObject@pmMAR))) stop("Models are based on different values of the percent missing at random")
@@ -150,10 +150,8 @@ plotLogisticFit <- function(altObject, nullObject=NULL, cutoff=NULL, usedFit=NUL
 		nullFit <- as.data.frame(nullObject[,usedFit])
 		colnames(nullFit) <- usedFit
 		temp <- rep(NA, length(usedFit))
-		cutoff <- sapply(as.list(data.frame(t(x))), getCutoff, object=nullFit, alpha = alpha, revDirec = FALSE, usedFit = usedFit, predictor = x, df = df)
-		if(is.matrix(cutoff)) {
-			cutoff <- t(cutoff)
-		} else {
+		cutoff <- getCutoff(object=nullFit, alpha = alpha, revDirec = FALSE, usedFit = usedFit, predictor = x, df = df, predictorVal="all")
+		if(!is.matrix(cutoff)) {
 			cutoff <- as.matrix(cutoff)
 		}
 	}
@@ -173,7 +171,7 @@ plotLogisticFit <- function(altObject, nullObject=NULL, cutoff=NULL, usedFit=NUL
 
 # plotScatter: Plot the overlapping scatterplots showing the distribution of fit indices given the values of varying parameters
 
-plotScatter <- function(altObject, nullObject=NULL, cutoff=NULL, usedFit = NULL, x, alpha=0.05, df=0) {
+plotScatter <- function(altObject, nullObject=NULL, cutoff=NULL, usedFit = NULL, x, alpha=0.05, df=5) {
 	if (is.null(usedFit)) 
         usedFit <- getKeywords()$usedFit
 	if (!is.null(cutoff)) {
@@ -184,10 +182,9 @@ plotScatter <- function(altObject, nullObject=NULL, cutoff=NULL, usedFit = NULL,
 		nullFit <- as.data.frame(nullObject[,usedFit])
 		colnames(nullFit) <- usedFit
 		temp <- rep(NA, length(usedFit))
-		cutoff <- sapply(as.list(data.frame(t(x))), getCutoff, object=nullFit, alpha = alpha, revDirec = FALSE, usedFit = usedFit, predictor = x, df = df)
-		if(is.matrix(cutoff)) {
-			cutoff <- t(cutoff)
-		} else {
+		cutoff <- getCutoff(object=nullFit, alpha = alpha, revDirec = FALSE, usedFit = usedFit, predictor = x, df = df, predictorVal="all")
+		#cutoff <- sapply(as.list(data.frame(t(x))), getCutoff, object=nullFit, alpha = alpha, revDirec = FALSE, usedFit = usedFit, predictor = x, df = df)
+		if(!is.matrix(cutoff)) {
 			cutoff <- as.matrix(cutoff)
 		}
 	}
@@ -222,8 +219,8 @@ plotScatter <- function(altObject, nullObject=NULL, cutoff=NULL, usedFit = NULL,
 # plotIndividualScatter: Plot each overlapping scatterplot showing the distribution of fit indices given the values of varying parameters
 
 plotIndividualScatter <- function(altVec, nullVec=NULL, cutoff=NULL, x, main = NULL) {
-	maxAll <- max(c(altVec, nullVec))
-	minAll <- min(c(altVec, nullVec))
+	maxAll <- max(c(altVec, nullVec), na.rm=TRUE)
+	minAll <- min(c(altVec, nullVec), na.rm=TRUE)
 	plot(c(min(x),max(x)), c(minAll, maxAll), type="n", main=main, xlab=colnames(x), ylab="Value")
 	points(x, altVec, col="skyblue")
 	if(!is.null(nullVec)) points(x, nullVec, col="black")

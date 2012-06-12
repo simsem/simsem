@@ -31,5 +31,6 @@ cleanSimResult <- function(object, converged=NULL) {
         object@pmMCAR <- object@pmMCAR[converged]
     if (length(object@pmMAR) > 1) 
         object@pmMAR <- object@pmMAR[converged]
+	object@converged <- converged
     return(object)
 } 

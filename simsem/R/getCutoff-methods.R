@@ -10,12 +10,13 @@ setMethod("getCutoff", signature(object = "data.frame"), definition = function(o
         percentile <- 1 - percentile
     object <- as.data.frame(object[, usedFit])
 	colnames(object) <- usedFit
-    temp <- rep(NA, ncol(object))
-    temp <- apply(object, 2, getCondQtile, qtile = percentile, df = df, x = predictor, xval = predictorVal)
+    temp <- list()
+    temp <- lapply(object, getCondQtile, qtile = percentile, df = df, x = predictor, xval = predictorVal)
     if ("TLI" %in% colnames(object)) 
-        temp["TLI"] <- getCondQtile(object[, "TLI"], x = predictor, xval = predictorVal, qtile = 1 - percentile, df = df)
+        temp$TLI <- getCondQtile(object[, "TLI"], x = predictor, xval = predictorVal, qtile = 1 - percentile, df = df)
     if ("CFI" %in% colnames(object)) 
-        temp["CFI"] <- getCondQtile(object[, "CFI"], x = predictor, xval = predictorVal, qtile = 1 - percentile, df = df)
+        temp$CFI <- getCondQtile(object[, "CFI"], x = predictor, xval = predictorVal, qtile = 1 - percentile, df = df)
+	temp <- data.frame(temp)
     return(temp)
 })
 
