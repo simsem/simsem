@@ -1,12 +1,10 @@
-source("AllClass.R")
-source("bind.R")
 source("model.R")
 source("find.R")
 source("validate.R")
 
 # There has to be a better way of specifying what order things are generated. Constraint, Auto-completion, misspecification
 
-drawParam <- function(model, conBeforeMis, misBeforeFill, conBeforeFill, misfitType, misfitBounds, averageNumMisspec, optMisfit, numIter) {
+drawParam <- function(model, misfitType, misfitBounds, averageNumMisspec, optMisfit, numIter) {
   paramSet <- model@dgen
   param <- NULL
   misspec <- NULL
@@ -80,6 +78,60 @@ rawDrawSet <- function(paramSet, conBeforeFill, modelType) {
 }
 
 
+
+
+
+runMisspec <- function(paramSet, modelType) {
+  
+    rawParamLS <- list()
+    
+    if (misspec@optMisfit == "none") {
+      rawParam <- lapply(paramSet,rawDraw)
+      fullParamls <- list()
+      fullParams <- fillParam(lapply(rawParam,"[[",1),modelType=modelType)
+      fullMiss <- fillParam(lapply(rawParam,"[[",2),modelType=modelType)
+    } else {
+       for(i in 1:numIter) {
+         rawParamLS[[i]] <- lapply(paramSet,rawDraw)
+       }
+       fullParams <- list()
+       fullMiss <- list()
+       for(i in 1:length(rawParamLS)) {
+         fullParams[[i]] <- fillParam(lapply(rawParamLS[[i]],"[[",1),modelType=modelType)
+         fullMiss[[i]] <- fillParam(lapply(rawParamLS[[i]],"[[",2),modelType=modelType)
+       }
+       
+     }
+        
+    #fullParams = Constraints / Misspecification -> Auto completition of parameters -> Full Parameter Set (optionally list)
+    #fullMiss = Constraints / Misspecification -> Auto completion of parameters -> misspecification only
+
+    if (class(fullMiss[[1]]) == "list") {
+        macsMis <- lapply(Output2, createImpliedMACS)
+        macsPop <- createImpliedMACS(Output1)
+        p <- length(macsPop$M)
+        nElements <- p + (p * (p + 1)/2)
+        nFree <- countFreeParameters(object)
+        if (!isNullObject(SimEqualCon)) 
+            nFree <- nFree + countFreeParameters(SimEqualCon)
+        dfParam <- nElements - nFree
+        misfit <- sapply(macsMis, popMisfit, param = macsPop, dfParam = dfParam, fit.measures = misspec@misfitType)
+        element <- NULL
+        if (misspec@optMisfit == "min") {
+            element <- which(misfit == min(misfit))
+        } else if (misspec@optMisfit == "max") {
+            element <- which(misfit == max(misfit))
+        } else {
+            stop("Something is wrong in the runMisspec function!")
+        }
+        Output2 <- Output2[[element]]
+        Mis <- Mis[[element]]
+    } else {
+        Output2 <- Output2[[1]]
+        Mis <- Mis[[1]]
+    }
+    return(list(param = Output1, misspec = Output2, misspecAdd = Mis))
+}
 
 
 # Auto-completition of parameters
@@ -179,108 +231,6 @@ fillParam <- function(rawParamSet, modelType) {
     return(fullParamSet)
 }
 
-runMisspec <- function(object, misspec, SimEqualCon = new("NullSimEqualCon")) {
-    Output1 <- NULL
-    Output2 <- NULL
-    rawParamLS <- list()
-    # Should create the misspec here: then compare with the MACS and see what is going on!
-    if (misspec@optMisfit == "none") {
-        rawParam <- lapply(paramSet,rawDraw)
-    } else {
-       for(i in 1:numIter) {
-         rawParamLS[[i]] <- lapply(paramSet,rawDraw)
-       }
-    }
-    
-    
-    #[[1]] = misspecification added
-    #[[2]] = misspecification seperate
-
-    if (isNullObject(SimEqualCon)) {
-        if (misspec@misBeforeFill) {
-            paramSet <- run(object, makeList = TRUE)
-            Output1 <- paramSet[[1]]
-            param <- lapply(Mis, combineObject, object1 = paramSet[[2]])
-            Output2 <- lapply(param, fillParam, modelType = object@modelType)
-        } else {
-            paramSet <- run(object, makeList = TRUE)
-            Output1 <- paramSet[[1]]
-            param <- lapply(Mis, combineObject, object1 = paramSet[[1]])
-            Output2 <- lapply(param, fillParam, modelType = object@modelType)
-        }
-    } else {
-        
-        if (misspec@misBeforeFill & misspec@conBeforeMis & SimEqualCon@conBeforeFill) {
-            # 2) Con, AddMis, fill
-            paramSet <- run(object, SimEqualCon, makeList = TRUE)
-            Output1 <- paramSet[[1]]
-            param <- lapply(Mis, combineObject, object1 = paramSet[[2]])
-            Output2 <- lapply(param, fillParam, modelType = object@modelType)
-        } else if (!misspec@misBeforeFill & misspec@conBeforeMis & SimEqualCon@conBeforeFill) {
-            # 1) Con, fillBefore, AddMis
-            paramSet <- run(object, SimEqualCon, makeList = TRUE)
-            Output1 <- paramSet[[1]]
-            param <- lapply(Mis, combineObject, object1 = paramSet[[1]])
-            Output2 <- lapply(param, fillParam, modelType = object@modelType)
-        } else if (!misspec@misBeforeFill & misspec@conBeforeMis & !SimEqualCon@conBeforeFill) {
-            # 3) fillBefore, Con, AddMis misspec@misBeforeFill=F & misspec@conBeforeMis=T SimEqualCon@conBeforeFill=F; FTF
-            paramSet <- run(object, SimEqualCon, makeList = TRUE)
-            Output1 <- paramSet[[1]]
-            param <- lapply(Mis, combineObject, object1 = paramSet[[2]])
-            Output2 <- lapply(param, fillParam, modelType = object@modelType)
-        } else if (!misspec@misBeforeFill & !misspec@conBeforeMis & !SimEqualCon@conBeforeFill) {
-            # 4) fillBefore, AddMis, Con isBeforeFill=F & misspec@conBeforeMis=F SimEqualCon@conBeforeFill=F; FFF
-            paramSet <- run(object, makeList = TRUE)
-            Output1 <- paramSet[[1]]
-            param <- lapply(Mis, combineObject, object1 = paramSet[[1]])
-            param <- lapply(param, constrainMatrices, SimEqualCon = SimEqualCon)
-            Output2 <- lapply(param, fillParam, modelType = object@modelType)
-        } else if (misspec@misBeforeFill & !misspec@conBeforeMis & SimEqualCon@conBeforeFill) {
-            # 5) AddMis, Con, fill misspec@misBeforeFill=T & misspec@conBeforeMis=F SimEqualCon@conBeforeFill=T; TFT
-            paramSet <- run(object, makeList = TRUE)
-            Output1 <- paramSet[[1]]
-            param <- lapply(Mis, combineObject, object1 = paramSet[[2]])
-            param <- lapply(param, constrainMatrices, SimEqualCon = SimEqualCon)
-            Output2 <- lapply(param, fillParam, modelType = object@modelType)
-        } else if (misspec@misBeforeFill & !misspec@conBeforeMis & !SimEqualCon@conBeforeFill) {
-            # 6) AddMis, fill, Con misspec@misBeforeFill=T & misspec@conBeforeMis=F SimEqualCon@conBeforeFill=F; TFF ; No FFT and TTF
-            paramSet <- run(object, makeList = TRUE)
-            Output1 <- paramSet[[1]]
-            param <- lapply(Mis, combineObject, object1 = paramSet[[2]])
-            param <- lapply(param, fillParam, modelType = object@modelType)
-            param <- lapply(param, constrainMatrices, SimEqualCon = SimEqualCon)
-            Output2 <- lapply(param, fillParam, modelType = object@modelType)
-          } else {
-            stop("The specifications of 'misBeforeFill' and 'conBeforeMis' in the SimMisspec object and the 'conBeforeFill' in the SimEqualCon are not consistent. Change one of those specifications.")
-        }
-    }
-    if (length(Output2) > 1) {
-        macsMis <- lapply(Output2, createImpliedMACS)
-        macsPop <- createImpliedMACS(Output1)
-        p <- length(macsPop$M)
-        nElements <- p + (p * (p + 1)/2)
-        nFree <- countFreeParameters(object)
-        if (!isNullObject(SimEqualCon)) 
-            nFree <- nFree + countFreeParameters(SimEqualCon)
-        dfParam <- nElements - nFree
-        misfit <- sapply(macsMis, popMisfit, param = macsPop, dfParam = dfParam, fit.measures = misspec@misfitType)
-        element <- NULL
-        if (misspec@optMisfit == "min") {
-            element <- which(misfit == min(misfit))
-        } else if (misspec@optMisfit == "max") {
-            element <- which(misfit == max(misfit))
-        } else {
-            stop("Something is wrong in the runMisspec function!")
-        }
-        Output2 <- Output2[[element]]
-        Mis <- Mis[[element]]
-    } else {
-        Output2 <- Output2[[1]]
-        Mis <- Mis[[1]]
-    }
-    return(list(param = Output1, misspec = Output2, misspecAdd = Mis))
-}
-
 reduceMatrices <- function(paramSet) {
   require(lavaan)
  
@@ -313,7 +263,7 @@ createImpliedMACS <- function(reducedParamSet) {
         }
     } 
     return(list(M = as.vector(implied.mean), CM = implied.covariance))
-})
+}
 
 popMisfitMACS <- function(paramM, paramCM, misspecM, misspecCM, dfParam = NULL, fit.measures = "all") {
     if (fit.measures == "all") {

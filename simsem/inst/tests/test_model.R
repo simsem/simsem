@@ -18,6 +18,10 @@ error.cor <- matrix(0, 6, 6)
 diag(error.cor) <- 1
 RTE <- bind(error.cor)
 
+# Needs model type
+expect_error(model(LY=LY,RPS=RPS,RTE=RTE))
+pt <- model(LY=LY,RPS=RPS,RTE=RTE,modelType="CFA")
+
 
 context("CFA2")
 

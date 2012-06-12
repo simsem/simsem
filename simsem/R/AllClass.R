@@ -78,7 +78,7 @@ setClass("SimVector",
 setClass("SimSem",
    representation(
                   pt = "list",
-                  dgen = "list"
+                  dgen = "list",
                   modelType = "character"
                   )
          )
