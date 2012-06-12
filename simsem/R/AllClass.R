@@ -44,13 +44,14 @@ setClass("SimMatrix",
          representation(
                         free = "matrix",
                         popParam = "matrix",
-                        misspec = "matrix"
+                        misspec = "matrix",
+                        symmetric = "logical"
                         #prior = "matrix"
                         )
          )
          #prototype(free = matrix(), popParam = matrix(), misspec = matrix(), prior = matrix()))
 
-setClass("SymMatrix", contains = "SimMatrix")
+#setClass("SymMatrix", contains = "SimMatrix")
 
 # Empty defaults to vector of length 0
 setClass("SimVector",

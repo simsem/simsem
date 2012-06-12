@@ -17,12 +17,38 @@ expect_true(class(bind(free=a, popParam="runif(1,0,1)", misspec="runif(1,0,1)"))
 expect_error(bind(free=a, popParam="runif(1,0,1)", misspec="runif(1,0,1"))
 expect_error(bind(free=a, popParam="runif(1,0,1", misspec="runif(1,0,1)"))
 
+
   ## Doesn't mean anything, but doesn't throw an error?
 expect_true(class(bind(free=a, popParam=1)) == "SimMatrix")
 
   ## Error - different dimensions
 expect_error(bind(free=a, popParam=matrix(0,3,3)))
 expect_error(bind(free=a, misspec=matrix(0,3,3)))
+
+context("Symmetric Tests")
+a <- matrix(NA,3,3)
+a[upper.tri(a)] <- 0
+expect_error(bind(free=a, symmetric=TRUE))
+
+a[lower.tri(a)] <- 0
+expect_true(class(bind(free=a, symmetric=TRUE)) == "SimMatrix")
+expect_true(class(bind(free=a,popParam=.7,symmetric=TRUE)) == "SimMatrix")
+expect_true(class(bind(free=a,misspec=.7,symmetric=TRUE)) == "SimMatrix")
+
+a[upper.tri(a)] <- a[lower.tri(a)] <- "a1"
+expect_true(class(bind(free=a, symmetric=TRUE)) == "SimMatrix")
+expect_true(class(bind(free=a, popParam=.7, symmetric=TRUE)) == "SimMatrix")
+
+a[lower.tri(a)] <- NA
+expect_error(bind(a,.7,symmetric=TRUE))
+
+a[lower.tri(a)] <- a[upper.tri(a)]
+b <- matrix(0,3,3)
+b[1,2] <- 7
+expect_error(bind(a,b,symmetric=TRUE))
+expect_error(bind(a,.7,b,symmetric=TRUE))
+
+
 
 context("Equality Constraints")
   a <- matrix(0,2,2)
@@ -68,4 +94,6 @@ b <- c(0,0,"b1","b1",0,0,"b2","b2")
 expect_true(class(bind(free=b)) == "SimVector")
 
 expect_true(class(bind(free=c(0,2,2))) == "SimVector")
+
+expect_error(bind(a,symmetric=TRUE))
 

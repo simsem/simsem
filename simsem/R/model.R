@@ -124,9 +124,9 @@ holz <- function() {
 
 ## tcfa <- model(LY=cfa$LY,RPS=cfa$RPS,RTE=cfa$RTE, modelType="CFA")
 ## tcf
-## a2 <- model(LY=cfa2$LY,PS=cfa2$PS,TE=cfa2$TE,AL=cfa2$AL,TY=cfa2$TY, modelType="CFA") 
-## tpath <- model(BE=path$BE, RPS=path$RPS, ME=path$ME, modelType="Path")
-## tsem <- model(LY=sem$LY, RTE=sem$RTE, RPS=sem$RPS, BE=sem$BE, modelType="SEM")
+##  a2 <- model(LY=cfa2$LY,PS=cfa2$PS,TE=cfa2$TE,AL=cfa2$AL,TY=cfa2$TY, modelType="CFA") 
+##  tpath <- model(BE=path$BE, RPS=path$RPS, ME=path$ME, modelType="Path")
+##  tsem <- model(LY=sem$LY, RTE=sem$RTE, RPS=sem$RPS, BE=sem$BE, modelType="SEM")
 ## tcfamg <- model(LY=list(cfa2$LY,cfa2$LY),PS=list(cfa2$PS,cfa2$PS),TE=cfa2$TE,AL=cfa2$AL,TY=cfa2$TY,modelType="CFA")
 ## tcfamg3 <- model(LY=cfa2$LY,PS=cfa2$PS,TE=cfa2$TE,AL=cfa2$AL,TY=cfa2$TY, modelType="CFA",ngroups=3)
 

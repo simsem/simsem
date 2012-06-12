@@ -26,11 +26,12 @@
 ## 4. If both free and popParam are specified, all free parameters have a population value
 ## 5. If labels are included in free (specifying equality constraints), these labels are valid and at least one pair of the labels is the same.
 
-bind <- function(free = NULL, popParam = NULL, misspec = NULL) {
+bind <- function(free = NULL, popParam = NULL, misspec = NULL, symmetric=FALSE) {
   ## SimMatrix
   if(is.matrix(free)) {
     
     if(any(is.character(free)) && !validConstraints(free)) { stop("At least one pair of constraint labels must be the same.")}
+    if(symmetric) { stopifnot(isSymmetric(free)) }
     
     if(is.character(popParam)) {
       tryCatch(eval(parse(text=popParam)), error=function(e) stop(e))
@@ -40,9 +41,11 @@ bind <- function(free = NULL, popParam = NULL, misspec = NULL) {
       paramMat <- ifelse(is.free(free),popParam,"")
     }    
     else if(is.matrix(popParam)) {
+      if(symmetric) { stopifnot(isSymmetric(popParam)) }                   
       if( !all(dim(free)==dim(popParam))) stop("Free matrix and popParam are not of same dimension")
       if( all(!is.empty(popParam) != is.free(free))) { stop("Please assign a value for any free parameters") }
       paramMat <- matrix(as.character(popParam),nrow=nrow(popParam),ncol=ncol(popParam))
+
     }
     else { paramMat <-  matrix(NaN) }
     
@@ -54,17 +57,20 @@ bind <- function(free = NULL, popParam = NULL, misspec = NULL) {
       misspecMat <- ifelse(!is.free(free),misspec,"")
     }    
     else if(is.matrix(misspec)) {
-     if( !all(dim(free)==dim(misspec))) stop("Free matrix and misspec are not of same dimension")
+      if(symmetric) { stopifnot(isSymmetric(misspec)) }                   
+      if( !all(dim(free)==dim(misspec))) stop("Free matrix and misspec are not of same dimension")
      misspecMat <- matrix(as.character(misspec),nrow=nrow(misspec),ncol=ncol(misspec))
+     
     }
     else { misspecMat <-  matrix(NaN) }
 
-    return(new("SimMatrix",free=free,popParam=paramMat,misspec=misspecMat))
+    return(new("SimMatrix",free=free,popParam=paramMat,misspec=misspecMat,symmetric=symmetric))
     
     # SimVector
   } else if(is.vector(free)) {
 
     if(any(is.character(free)) && !validConstraints(free)) { stop("At least one pair of constraint labels must be the same.")}
+    if(symmetric) { stop("A vector cannot be symmetric") }
     
     if(is.character(popParam) && length(popParam == 1)) {
       tryCatch(eval(parse(text=popParam)), error=function(e) stop(e))

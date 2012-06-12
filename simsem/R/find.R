@@ -30,7 +30,7 @@ findFactorIntercept <- function(beta, factorMean = NULL) {
 # findFactorResidualVar: Find the factor residual variance if total variances, correlation, and regression coefficients are specified.
 
 findFactorResidualVar <- function(beta, corPsi, totalVarPsi = NULL) {
-    library(lavaan)
+    require(lavaan)
     if (sum(diag(corPsi)) == 0) 
         diag(corPsi) <- 1
     ni <- nrow(beta)
