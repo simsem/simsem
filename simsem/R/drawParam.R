@@ -6,6 +6,7 @@ source("validate.R")
 
 drawParam <- function(model, misfitType, misfitBounds, averageNumMisspec, optMisfit, numIter) {
   paramSet <- model@dgen
+  free <- max(model@pt$free)
   param <- NULL
   misspec <- NULL
   misspecAdd <- NULL
@@ -62,75 +63,58 @@ drawParam <- function(model, misfitType, misfitBounds, averageNumMisspec, optMis
   return(list(real = param, misspec = misspec, misspecAdd = misspecAdd))
 }
 
-# Take character population generation matrices, and return a list the same matrices with only numerical values.
-# [[1]] = Parameters with no misspecification
-# [[2]] = Parameters with misspecification
-rawDrawSet <- function(paramSet, conBeforeFill, modelType) {
-    rawParamMis <- lapply(paramSet,rawDraw)
-    matrix(suppressWarnings(as.numeric(LY@free)),nrow=nrow(LY@free),ncol=ncol(LY@free))-rawParamMis
-    param <- fillParam(rawParam, modelType)
-  return(param)
-  ##   if (makeList) {
-##         return(list(out, param))
-##     } else {
-##         return(out)
-##     }
-}
-
-
-
-
-
-runMisspec <- function(paramSet, modelType) {
+runMisspec <- function(paramSet, modelType, numFree, optMisfit = "none", numIter=1) {
   
-    rawParamLS <- list()
-    
-    if (misspec@optMisfit == "none") {
-      rawParam <- lapply(paramSet,rawDraw)
-      fullParamls <- list()
-      fullParams <- fillParam(lapply(rawParam,"[[",1),modelType=modelType)
-      fullMiss <- fillParam(lapply(rawParam,"[[",2),modelType=modelType)
-    } else {
-       for(i in 1:numIter) {
-         rawParamLS[[i]] <- lapply(paramSet,rawDraw)
-       }
-       fullParams <- list()
-       fullMiss <- list()
-       for(i in 1:length(rawParamLS)) {
-         fullParams[[i]] <- fillParam(lapply(rawParamLS[[i]],"[[",1),modelType=modelType)
-         fullMiss[[i]] <- fillParam(lapply(rawParamLS[[i]],"[[",2),modelType=modelType)
-       }
-       
-     }
-        
-    #fullParams = Constraints / Misspecification -> Auto completition of parameters -> Full Parameter Set (optionally list)
-    #fullMiss = Constraints / Misspecification -> Auto completion of parameters -> misspecification only
-
-    if (class(fullMiss[[1]]) == "list") {
-        macsMis <- lapply(Output2, createImpliedMACS)
-        macsPop <- createImpliedMACS(Output1)
-        p <- length(macsPop$M)
-        nElements <- p + (p * (p + 1)/2)
-        nFree <- countFreeParameters(object)
-        if (!isNullObject(SimEqualCon)) 
-            nFree <- nFree + countFreeParameters(SimEqualCon)
-        dfParam <- nElements - nFree
-        misfit <- sapply(macsMis, popMisfit, param = macsPop, dfParam = dfParam, fit.measures = misspec@misfitType)
-        element <- NULL
-        if (misspec@optMisfit == "min") {
-            element <- which(misfit == min(misfit))
-        } else if (misspec@optMisfit == "max") {
-            element <- which(misfit == max(misfit))
-        } else {
-            stop("Something is wrong in the runMisspec function!")
-        }
-        Output2 <- Output2[[element]]
-        Mis <- Mis[[element]]
-    } else {
-        Output2 <- Output2[[1]]
-        Mis <- Mis[[1]]
+  rawParamLS <- list()
+  
+  if (optMisfit == "none") {
+    rawParam <- lapply(paramSet,rawDraw)
+    fullParamls <- list()
+    fullParams <- fillParam(lapply(rawParam,"[[",1),modelType=modelType)
+    fullMiss <- fillParam(lapply(rawParam,"[[",2),modelType=modelType)
+  } else {
+    rawParam <- lapply(paramSet,rawDraw,miss=FALSE,mRaw=FALSE)
+    missParam <- list()
+    for(i in 1:numIter) {
+      temp <- lapply(paramSet,rawDraw,missOnly=TRUE)
+      addMis <- mapply("+",rawParam,temp)  # We only want to draw the raw params once, so we add the rawParameter values to each misspecified draw
+      missParam[[i]] <- lapply(addMis, FUN=function(x) {if(length(x) == 0) {x <- NULL} else x})
     }
-    return(list(param = Output1, misspec = Output2, misspecAdd = Mis))
+    fullParams <- fillParam(rawParam,modelType=modelType)
+    fullMiss <- list()
+    for(i in 1:length(rawParam)) {
+      fullMiss[[i]] <- fillParam(missParam[[i]],modelType=modelType)
+    }
+    
+  }
+  
+  ## fullParams = Constraints / Misspecification -> Auto completition of parameters -> 1 Full Parameter Set
+  ## fullMiss = Constraints / Misspecification -> Auto completion of parameters -> Misspecification only, list if optMisfit = TRUE
+
+  if (class(fullMiss[[1]]) == "list") {
+    macsMis <- lapply(fullMiss, createImpliedMACS,modelType)
+    macsPop <- createImpliedMACS(fullParams,modelType)
+    p <- length(macsPop$M)
+    nElements <- p + (p * (p + 1)/2)
+
+    dfParam <- nElements - numFree
+    misfit <- sapply(macsMis, popMisfit, param = macsPop, dfParam = dfParam, fit.measures = "all")
+    misfit <- misfit[!sapply(misfit,is.null)]
+    element <- NULL
+    if (optMisfit == "min") {
+      element <- which.min(sapply(misfit,"[[",1))
+    } else if (optMisfit == "max") {
+      element <- which.max(sapply(misfit,"[[",1))
+    } else {
+      stop("Something is wrong in the runMisspec function!")
+    }
+    finalMis <- fullMiss[[element]]
+    ## Mis <- Mis[[element]]
+  } else {
+    finalMis <- fullMiss
+    ##  Mis <- Mis[[1]]
+  }
+  return(list(param = fullParams, misspec = finalMis))
 }
 
 
@@ -246,18 +230,18 @@ reduceMatrices <- function(paramSet) {
   return(reducedParamSet)
 }
 
-createImpliedMACS <- function(reducedParamSet) {
+createImpliedMACS <- function(reducedParamSet,modelType) {
     implied.mean <- NULL
     implied.covariance <- NULL
     ID <- matrix(0, nrow(reducedParamSet$PS), nrow(reducedParamSet$PS))
     diag(ID) <- 1
-    if (reducedParamSet$modelType == "CFA") {
+    if (modelType == "CFA") {
         implied.mean <- reducedParamSet$LY %*% reducedParamSet$AL + reducedParamSet$TY
         implied.covariance <- (reducedParamSet$LY %*% reducedParamSet$PS %*% t(reducedParamSet$LY)) + reducedParamSet$TE
-    } else if (reducedParamSet$modelType == "Path" | reducedParamSet$modelType == "SEM") {
+    } else if (modelType == "Path" | modelType == "SEM") {
         implied.mean <- solve(ID - reducedParamSet$BE) %*% reducedParamSet$AL
         implied.covariance <- solve(ID - reducedParamSet$BE) %*% reducedParamSet$PS %*% t(solve(ID - reducedParamSet$BE))
-        if (reducedParamSet$modelType == "SEM") {
+        if (modelType == "SEM") {
             implied.mean <- reducedParamSet$TY + (reducedParamSet$LY %*% implied.mean)
             implied.covariance <- (reducedParamSet$LY %*% implied.covariance %*% t(reducedParamSet$LY)) + reducedParamSet$TE
         }
@@ -265,33 +249,80 @@ createImpliedMACS <- function(reducedParamSet) {
     return(list(M = as.vector(implied.mean), CM = implied.covariance))
 }
 
+popMisfit <- function(param, misspec, dfParam = NULL, fit.measures = "all") {
+    paramCM <- NULL
+    paramM <- NULL
+    misspecCM <- NULL
+    misspecM <- NULL
+    if (is(param[[1]], "matrix")) {
+        paramCM <- param[[1]]
+        p <- nrow(paramCM)
+        paramM <- rep(0, p)
+        if (is(param[[2]], "vector")) {
+            paramM <- param[[2]]
+        }
+    } else if (is(param[[2]], "matrix")) {
+        paramCM <- param[[2]]
+        if (is(param[[1]], "vector")) {
+            paramM <- param[[1]]
+        } else {
+            stop("Cannot find the mean vector of the parameter values.")
+        }
+    } else {
+        stop("Cannot find covariance matrix in the parameter values")
+    }
+    if (is(misspec[[1]], "matrix")) {
+        misspecCM <- misspec[[1]]
+        p <- nrow(misspecCM)
+        misspecM <- rep(0, p)
+        if (is(misspec[[2]], "vector")) {
+            misspecM <- misspec[[2]]
+        }
+    } else if (is(misspec[[2]], "matrix")) {
+        misspecCM <- misspec[[2]]
+        if (is(param[[1]], "vector")) {
+            misspecM <- misspec[[1]]
+        } else {
+            stop("Cannot find the mean vector of the misspecification values.")
+        }
+    } else {
+        stop("Cannot find covariance matrix in the misspecification values")
+    }
+    result <- popMisfitMACS(paramM, paramCM, misspecM, misspecCM, dfParam = dfParam, fit.measures = fit.measures)
+    return(result)
+}
+
 popMisfitMACS <- function(paramM, paramCM, misspecM, misspecCM, dfParam = NULL, fit.measures = "all") {
     if (fit.measures == "all") {
-        fit.measures <- getKeywords()$usedFitPop
+        fit.measures <- c("f0","rmsea","srmr")
         if (is.null(dfParam)) 
             fit.measures <- fit.measures[c(1, 3)]
     }
     p <- length(paramM)
     fit.measures <- tolower(fit.measures)
     f0 <- popDiscrepancy(paramM, paramCM, misspecM, misspecCM)
-    rmsea <- NULL
-    srmr <- NULL
-    result <- NULL
-    if (any(fit.measures %in% "f0")) {
+    if(!is.null(f0)) {
+      
+      rmsea <- NULL
+      srmr <- NULL
+      result <- NULL
+      if (any(fit.measures %in% "f0")) {
         result <- c(result, f0)
-    }
-    if (any(fit.measures %in% "rmsea")) {
+      }
+      if (any(fit.measures %in% "rmsea")) {
         rmsea <- sqrt(f0/dfParam)
         result <- c(result, rmsea)
-    }
-    if (any(fit.measures %in% "srmr")) {
+      }
+      if (any(fit.measures %in% "srmr")) {
         disSquared <- (cov2cor(misspecCM) - cov2cor(paramCM))^2
         numerator <- 2 * sum(disSquared[lower.tri(disSquared, diag = TRUE)])
         srmr <- sqrt(numerator/(p * (p + 1)))
         result <- c(result, srmr)
-    }
-    result <- as.vector(result)
-    names(result) <- fit.measures
+      }
+      result <- as.vector(result)
+      names(result) <- fit.measures
+    } else {result <- NULL}
+    
     return(result)
 }
 
@@ -315,13 +346,14 @@ popDiscrepancy <- function(paramM, paramCM, misspecM, misspecCM) {
 ## If constraint = TRUE, then constraints are applied simultaneously.
 ## if missAdd = TRUE, then misspecification is added.
 ## if mRaw = TRUE, then a list is returned with the raw misspecification separate
-rawDraw <- function(simDat,constraint=TRUE,miss=TRUE,mRaw=TRUE) {
+## if rawOnly = TRUE, then only the misspecification is returned
+rawDraw <- function(simDat,constraint=TRUE,miss=TRUE,mRaw=TRUE, missOnly=FALSE) {
   if(class(simDat) == "SimMatrix" || class(simDat) == "SimVector") {
     free <- as.vector(simDat@free)
     popParam <- as.vector(simDat@popParam)
     misspec <- as.vector(simDat@misspec)
-    rawDat <- missRaw <- suppressWarnings(as.numeric(as.vector(simDat@free)))
-    missRaw[is.na(missRaw)] <- 0
+    rawDat <- missRaw <- suppressWarnings(as.numeric(as.vector(free)))
+    if(missOnly) { missRaw <- rep(0,length(free)) } else {    missRaw[is.na(missRaw)] <- 0}
     
     
     if(constraint && miss) {
@@ -365,11 +397,13 @@ rawDraw <- function(simDat,constraint=TRUE,miss=TRUE,mRaw=TRUE) {
       rawDat <- matrix(rawDat,nrow=nrow(simDat@free),ncol=ncol(simDat@free))
       missRaw <- matrix(missRaw,nrow=nrow(simDat@free),ncol=ncol(simDat@free))
     }
-    if(mRaw && miss) {
+    if(mRaw && miss && !missOnly) {
       return(list(rawDat,missRaw))
+    } else if (missOnly) {
+      return(missRaw)
     } else {
       return(rawDat)
-    }       
+    }
   } else { return(NULL) } # Was not a SimMatrix or SimVector
 }
   

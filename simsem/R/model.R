@@ -117,12 +117,12 @@ holz <- function() {
   fit <- lavaan(template@pt,data=HolzingerSwineford1939)
 }
 
- cfa <- cfa()
+## cfa <- cfa()
 ## cfa2 <- cfa2()
 ## path <- path()
 ## sem <- sem()
 
-  tcfa <- model(LY=cfa$LY,RPS=cfa$RPS,RTE=cfa$RTE, modelType="CFA")
+## tcfa <- model(LY=cfa$LY,RPS=cfa$RPS,RTE=cfa$RTE, modelType="CFA")
 ## tcf
 ## a2 <- model(LY=cfa2$LY,PS=cfa2$PS,TE=cfa2$TE,AL=cfa2$AL,TY=cfa2$TY, modelType="CFA") 
 ## tpath <- model(BE=path$BE, RPS=path$RPS, ME=path$ME, modelType="Path")
