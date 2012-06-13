@@ -183,15 +183,15 @@ buildPT <- function(paramSet, facLab=NULL, indLab=NULL) {
     pt <- parseFree(paramSet$LY, group=1, pt=NULL,op="=~",lhs,rhs)
   }
 
-  ## PS - factor covariance
+  ## PS - factor covariance: Symmetric
   if(is.list(paramSet$PS)) {
     nf <- ncol(paramSet$PS[[1]]@free)
     if(is.null(facLab)){
-      lhs <- rep(paste("y",1:nf,sep=""),each=nf)
-      rhs <- rep(paste("y",1:nf,sep=""),times=nf)
+      lhs <- paste0("y",rep(1:nf,nf:1))
+      rhs <- paste0("y",unlist(lapply(1:nf,function(k) (1:nf)[k:nf])))
     } else {
-      lhs <- rep(facLab,each=nf)
-      rhs <- rep(facLab,times=nf)
+      lhs <- rep(facLab,nf:1)
+      rhs <- unlist(lapply(1:nf,function(k) facLab[k:nf]))
     }
     for(i in seq_along(paramSet$PS)) {
       pt <- rbind(pt, parseFree(paramSet$PS[[i]], group=i, op="~~",pt=pt,lhs,rhs))
@@ -199,24 +199,24 @@ buildPT <- function(paramSet, facLab=NULL, indLab=NULL) {
   } else if (!is.null(paramSet$PS)) {
     nf <- ncol(paramSet$PS@free)
     if(is.null(facLab)){
-      lhs <- rep(paste("y",1:nf,sep=""),each=nf)
-      rhs <- rep(paste("y",1:nf,sep=""),times=nf)
+      lhs <- paste0("y",rep(1:nf,nf:1))
+      rhs <- paste0("y",unlist(lapply(1:nf,function(k) (1:nf)[k:nf])))
     } else {
-      lhs <- rep(facLab,each=nf)
-      rhs <- rep(facLab,times=nf)
+      lhs <- rep(facLab,nf:1)
+      rhs <- unlist(lapply(1:nf,function(k) facLab[k:nf]))
     }
     pt <- rbind(pt, parseFree(paramSet$PS, group=1, pt=pt,op="~~",lhs,rhs))
   }
 
-  ## RPS - factor correlation (same as PS)
+  ## RPS - factor correlation (same as PS): Symmetric
  if(is.list(paramSet$RPS)) {
     nf <- ncol(paramSet$RPS[[1]]@free)
     if(is.null(facLab)){
-      lhs <- rep(paste("y",1:nf,sep=""),each=nf)
-      rhs <- rep(paste("y",1:nf,sep=""),times=nf)
+      lhs <- paste0("y",rep(1:nf,nf:1))
+      rhs <- paste0("y",unlist(lapply(1:nf,function(k) (1:nf)[k:nf])))
     } else {
-      lhs <- rep(facLab,each=nf)
-      rhs <- rep(facLab,times=nf)
+      lhs <- rep(facLab,nf:1)
+      rhs <- unlist(lapply(1:nf,function(k) facLab[k:nf]))
     }
     for(i in seq_along(paramSet$RPS)) {
       pt <- rbind(pt, parseFree(paramSet$RPS[[i]], group=i, op="~~",pt=pt,lhs,rhs))
@@ -224,63 +224,63 @@ buildPT <- function(paramSet, facLab=NULL, indLab=NULL) {
   } else if (!is.null(paramSet$RPS)) {
     nf <- ncol(paramSet$RPS@free)
     if(is.null(facLab)){
-      lhs <- rep(paste("y",1:nf,sep=""),each=nf)
-      rhs <- rep(paste("y",1:nf,sep=""),times=nf)
+      lhs <- paste0("y",rep(1:nf,nf:1))
+      rhs <- paste0("y",unlist(lapply(1:nf,function(k) (1:nf)[k:nf])))
     } else {
-      lhs <- rep(facLab,each=nf)
-      rhs <- rep(facLab,times=nf)
+      lhs <- rep(facLab,nf:1)
+      rhs <- unlist(lapply(1:nf,function(k) facLab[k:nf]))
     }
     pt <- rbind(pt, parseFree(paramSet$RPS, group=1, pt=pt,op="~~",lhs,rhs))
   }
 
   
-  ## TE - Covariance of measurement error
+  ## TE - Covariance of measurement error: Symmetric
   if(is.list(paramSet$TE)) {
     ni <- ncol(paramSet$TE[[1]]@free)
-    if(is.null(facLab)){
-      lhs <- rep(paste("x",1:ni,sep=""),each=ni)
-      rhs <- rep(paste("x",1:ni,sep=""),times=ni)
+    if(is.null(indLab)){
+      lhs <- paste0("x",rep(1:ni,ni:1))
+      rhs <- paste0("x",unlist(lapply(1:ni,function(k) (1:ni)[k:ni])))
     } else {
-      lhs <- rep(indLab,each=ni)
-      rhs <- rep(indLab,times=ni)
+      lhs <- rep(indLab,ni:1)
+      rhs <- unlist(lapply(1:ni,function(k) indLab[k:ni]))
     }
     for(i in seq_along(paramSet$TE)) {
       pt <- rbind(pt, parseFree(paramSet$TE[[i]], group=i, op="~~",pt=pt,lhs,rhs))
     }
   } else if (!is.null(paramSet$TE)) {
-     ni <- ncol(paramSet$TE@free)
-    if(is.null(facLab)){
-      lhs <- rep(paste("x",1:ni,sep=""),each=ni)
-      rhs <- rep(paste("x",1:ni,sep=""),times=ni)
+    ni <- ncol(paramSet$TE@free)
+    if(is.null(indLab)){
+      lhs <- paste0("x",rep(1:ni,ni:1))
+      rhs <- paste0("x",unlist(lapply(1:ni,function(k) (1:ni)[k:ni])))
     } else {
-      lhs <- rep(indLab,each=ni)
-      rhs <- rep(indLab,times=ni)
+      lhs <- rep(indLab,ni:1)
+      rhs <- unlist(lapply(1:ni,function(k) indLab[k:ni]))
     }
     pt <- rbind(pt, parseFree(paramSet$TE, group=1, pt=pt,op="~~",lhs,rhs))
   }
   
-  ## RTE - Correlation of measurment error
+  ## RTE - Correlation of measurment error: Symmetric
   if(is.list(paramSet$RTE)) {
     ni <- ncol(paramSet$RTE[[1]]@free)
-    if(is.null(facLab)){
-      lhs <- rep(paste("x",1:ni,sep=""),each=ni)
-      rhs <- rep(paste("x",1:ni,sep=""),times=ni)
+    if(is.null(indLab)){
+      lhs <- paste0("x",rep(1:ni,ni:1))
+      rhs <- paste0("x",unlist(lapply(1:ni,function(k) (1:ni)[k:ni])))
     } else {
-      lhs <- rep(indLab,each=ni)
-      rhs <- rep(indLab,times=ni)
+      lhs <- rep(indLab,ni:1)
+      rhs <- unlist(lapply(1:ni,function(k) indLab[k:ni]))
     }
     for(i in seq_along(paramSet$RTE)) {
       pt <- rbind(pt, parseFree(paramSet$RTE[[i]], group=i, op="~~",pt=pt,lhs,rhs))
     }
   } else if (!is.null(paramSet$RTE)) {
      ni <- ncol(paramSet$RTE@free)
-    if(is.null(facLab)){
-      lhs <- rep(paste("x",1:ni,sep=""),each=ni)
-      rhs <- rep(paste("x",1:ni,sep=""),times=ni)
-    } else {
-      lhs <- rep(indLab,each=ni)
-      rhs <- rep(indLab,times=ni)
-    }
+     if(is.null(indLab)){
+       lhs <- paste0("x",rep(1:ni,ni:1))
+       rhs <- paste0("x",unlist(lapply(1:ni,function(k) (1:ni)[k:ni])))
+     } else {
+       lhs <- rep(indLab,ni:1)
+       rhs <- unlist(lapply(1:ni,function(k) indLab[k:ni]))
+     }
     pt <- rbind(pt, parseFree(paramSet$RTE, group=1, pt=pt,op="~~",lhs,rhs))
   }
   
@@ -382,17 +382,20 @@ parseFree <- function(simDat,group,pt,op,lhs=NULL,rhs=NULL) {
   }
 
   freeDat <- simDat@free
+  numElem <- NULL
   
   if(class(simDat) == "SimVector") {
-    tot = length(freeDat)
+    numElem <- length(freeDat)
+  } else if (simDat@symmetric) { # Just get lower tri
+    numElem <- nrow(freeDat)*(nrow(freeDat)+1)/2
   } else {
-    tot <- nrow(freeDat)*ncol(freeDat)
-  }  
+    numElem <- nrow(freeDat)*ncol(freeDat)
+  }
 
-  id <- startId:(startId+(tot)-1)
+  id <- startId:(startId+(numElem)-1)
   op <- rep(op,length(id))
-  user <- rep(0,tot)
-  group <- rep(group,tot)
+  user <- rep(0,numElem)
+  group <- rep(group,numElem)
   free <- freeIdx(freeDat,start=startFree)   
   ustart <- startingVal(freeDat,simDat@popParam)
   exo <- rep(0,length(id))
@@ -408,10 +411,16 @@ parseFree <- function(simDat,group,pt,op,lhs=NULL,rhs=NULL) {
 ## 3. Constrained parameters with identical labels get identical indices
 ## 4. Fixed parameters are 0
 freeIdx <- function(mat, start = 1) {
-  flat <- as.vector(mat)
+  if(is.matrix(mat) && isSymmetric(mat)) {
+    flat <- as.vector(mat[lower.tri(mat,diag=TRUE)])
+  } else {
+    flat <- as.vector(mat)
+  }
+  
   free.idx <- rep(0,length(flat))
-  isLabel <- is.label(flat)
   avail <- seq.int(start,start+length(flat)-1,by=1)
+  isLabel <- is.label(flat)
+  
   conList <- NULL
 
   j <- 1
@@ -439,7 +448,13 @@ freeIdx <- function(mat, start = 1) {
 
 ## Calculates the indices for unconstrained parameters
 uncoIdx <- function(mat, start=1) {
-  flat <- as.vector(mat)
+
+  if(is.matrix(mat) && isSymmetric(mat)) {
+    flat <- as.vector(mat[lower.tri(mat,diag=TRUE)])
+  } else {
+    flat <- as.vector(mat)
+  }
+  
   avail <- seq.int(start,start+length(flat)-1,by=1)
   log <- is.na(flat) | is.label(flat)
   uncoIdx <- rep(0,length(flat))
@@ -460,7 +475,12 @@ uncoIdx <- function(mat, start=1) {
 
 ## The parameter index of labels that are the same
 eqIdx <- function(mat,id) {
-  flat <- as.vector(mat)
+
+  if(is.matrix(mat) && isSymmetric(mat)) {
+    flat <- as.vector(mat[lower.tri(mat,diag=TRUE)])
+  } else {
+    flat <- as.vector(mat)
+  }
   eq.idx <- rep(0,length(flat))
   isLabel <- is.label(flat)
   conList <- NULL
@@ -488,16 +508,28 @@ eqIdx <- function(mat,id) {
 
 ## Calculate starting values. Needs work, but no time to finish yet.
 startingVal <- function(free,popParam) {
-  
- flat <- as.vector(free)
- flat[is.label(flat)] <- NA
- flat <- as.numeric(flat)
- if(all(!is.nan(popParam))) { # Check if popParam was specified
-    flatPop <- as.vector(popParam)
-    suppressWarnings(flatPop <- as.numeric(flatPop))
-    flat[is.na(flat)] <- flatPop[is.na(flat)]
+  if(is.matrix(free) && isSymmetric(free)) {
+    flat <- as.vector(free[lower.tri(free,diag=TRUE)])
+    flat[is.label(flat)] <- NA
+    flat <- as.numeric(flat)
+    
+    if(all(!is.nan(popParam))) { # Check if popParam was specified
+      flatPop <- as.vector(popParam[lower.tri(popParam,diag=TRUE)])
+      suppressWarnings(flatPop <- as.numeric(flatPop))
+      flat[is.na(flat)] <- flatPop[is.na(flat)]
+    }
+  } else {
+    flat <- as.vector(free)
+    flat[is.label(flat)] <- NA
+    flat <- as.numeric(flat)
+    
+    if(all(!is.nan(popParam))) { # Check if popParam was specified
+      flatPop <- as.vector(popParam)
+      suppressWarnings(flatPop <- as.numeric(flatPop))
+      flat[is.na(flat)] <- flatPop[is.na(flat)]
+    }
   }
- return(flat)
+  flat
 }
 
 ## Some stupid data transformation to get me out of the hole I dug myself in.
@@ -526,36 +558,36 @@ psetTrans <- function(x) {
 }
 
 ## Takes a paramSet, and reduces each SimMatrix to just one character or numeric matrix for data generation or list of this matrix (for mg)
-combine <- function(paramSet) {
-  if(any(sapply(paramSet,is.list))) {
-    ng <- max(sapply(paramSet,length))
+## combine <- function(paramSet) {
+##   if(any(sapply(paramSet,is.list))) {
+##     ng <- max(sapply(paramSet,length))
 
-    for(i in seq_along(paramSet)) {
-      if(!is.null(paramSet[[i]])) {
-        for(j in 1:ng) {
-          pop <- paramSet[[i]][[j]]@popParam
-          mis <- paramSet[[i]][[j]]@misspec
-          if(all(!is.nan(mis)) && (length(mis) != 0)) {
-            pop[is.empty(pop)] <- mis[!is.empty(pop)]
-          }
-          paramSet[[i]][[j]] <- pop             
-        }
-      }
-    }
-  } else {
-    for(i in seq_along(paramSet)) {
-      if(!is.null(paramSet[[i]])) {
-        pop <- paramSet[[i]]@popParam
-        mis <- paramSet[[i]]@misspec
-        if(all(!is.nan(mis)) && (length(mis) != 0)) {
-            pop[is.empty(pop)] <- mis[is.empty(pop)]
-          }
-        paramSet[[i]] <- pop
-      }
-    }
-  }
+##     for(i in seq_along(paramSet)) {
+##       if(!is.null(paramSet[[i]])) {
+##         for(j in 1:ng) {
+##           pop <- paramSet[[i]][[j]]@popParam
+##           mis <- paramSet[[i]][[j]]@misspec
+##           if(all(!is.nan(mis)) && (length(mis) != 0)) {
+##             pop[is.empty(pop)] <- mis[!is.empty(pop)]
+##           }
+##           paramSet[[i]][[j]] <- pop             
+##         }
+##       }
+##     }
+##   } else {
+##     for(i in seq_along(paramSet)) {
+##       if(!is.null(paramSet[[i]])) {
+##         pop <- paramSet[[i]]@popParam
+##         mis <- paramSet[[i]]@misspec
+##         if(all(!is.nan(mis)) && (length(mis) != 0)) {
+##             pop[is.empty(pop)] <- mis[is.empty(pop)]
+##           }
+##         paramSet[[i]] <- pop
+##       }
+##     }
+##   }
 
-  return(paramSet)
-}
+##   return(paramSet)
+## }
 
       

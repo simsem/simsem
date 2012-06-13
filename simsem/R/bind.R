@@ -105,6 +105,10 @@ bind <- function(free = NULL, popParam = NULL, misspec = NULL, symmetric=FALSE) 
   }
 }
 
+binds <- function(free = NULL, popParam = NULL, misspec = NULL, symmetric=TRUE) {
+  return(bind(free=free, popParam=popParam, misspec=misspec, symmetric=symmetric))
+}
+
 
 
 # Possible "empty values": "", or NA
