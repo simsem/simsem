@@ -1,136 +1,3 @@
-source("AllClass.R")
-source("bind.R")
-
-
-cfa <- function() {
-  loading <- matrix(0, 6, 2)
-  loading[1:3, 1] <- NA
-  loading[4:6, 2] <- "a1"
-  LY <- bind(loading, 0.7)
-
-  latent.cor <- matrix(NA, 2, 2)
-  diag(latent.cor) <- 1
-  RPS <- bind(latent.cor, 0.5,"runif(1,0,1)")
-
-  error.cor <- matrix(0, 6, 6)
-  diag(error.cor) <- NA
-  RTE <- bind(error.cor,popParam=1,misspec="runif(1,0,1)")
-
-  return(list(LY=LY,RPS=RPS,RTE=RTE))
-}
-
-## CFA with more matrices
-cfa2 <- function() {
-  loading <- matrix(0, 9, 3)
-  loading[1:3, 1] <- c(1, NA, NA)
-  loading[4:6, 2] <- c(1, NA, NA)
-  loading[7:9, 3] <- c(1, NA, NA)
-  loadingVal <- matrix(0, 9, 3)
-  loadingVal[2:3, 1] <- c(0.6, 0.7)
-  loadingVal[5:6, 2] <- c(1.1, 0.9)
-  loadingVal[8:9, 3] <- c(1.2, 1.1)
-  LY <- bind(loading, loadingVal)
-
-  facCov <- matrix(NA, 3, 3)
-  facCovVal <- diag(c(0.8, 0.9, 0.4))
-  facCovVal[lower.tri(facCovVal)] <- c(0.4, 0.2, 0.3)
-  facCovVal[upper.tri(facCovVal)] <- c(0.4, 0.2, 0.3)
-  PS <- bind(facCov, facCovVal)
-
-  errorCov <- diag(NA, 9)
-  errorCovVal <- diag(c(0.5, 1.1, 0.8, 0.4, 0.4, 0.8, 0.8, 0.5, 0.6))
-  TE <- bind(errorCov, errorCovVal)
-
-  AL <- bind(rep(NA, 3), 0)
-  TY <- bind(c(0, NA, NA, 0, NA, NA, 0, NA, NA), 0)
-
-  return(list(LY=LY,PS=PS,TE=TE,AL=AL,TY=TY))
-}
-                                        # Path
-path <- function() {
-  path.BE <- matrix(0, 4, 4)
-  path.BE[3, 1:2] <- NA
-  path.BE[4, 3] <- NA
-  starting.BE <- matrix("", 4, 4)
-  starting.BE[3, 1:2] <- "runif(1,0.3,0.5)"
-  starting.BE[4, 3] <- "runif(1,0.5,0.7)"
-  BE <- bind(path.BE, starting.BE)
-
-  residual.error <- diag(4)
-  residual.error[1,2] <- residual.error[2,1] <- NA
-  RPS <- bind(residual.error, "rnorm(1,0.3,0.1)")
-
-  ME <- bind(rep(NA, 4), 0)
-  
-  return(list(BE=BE,RPS=RPS,ME=ME))
-}
-                                        # SEM
-sem <- function() {
-  loading <- matrix(0, 8, 3)
-  loading[1:3, 1] <- NA
-  loading[4:6, 2] <- NA
-  loading[7:8, 3] <- NA
-  loading.start <- matrix("", 8, 3)
-  loading.start[1:3, 1] <- 0.7
-  loading.start[4:6, 2] <- 0.7
-  loading.start[7:8, 3] <- "rnorm(1,0.6,0.05)"
-  LY <- bind(loading, loading.start)
-
-  RTE <- bind(diag(8))
-
-  factor.cor <- diag(3)
-  factor.cor[1, 2] <- factor.cor[2, 1] <- NA
-  RPS <- bind(factor.cor, 0.5)
-
-  path <- matrix(0, 3, 3)
-  path[3, 1:2] <- NA
-  path.start <- matrix(0, 3, 3)
-  path.start[3, 1] <- "rnorm(1,0.6,0.05)"
-  path.start[3, 2] <- "runif(1,0.3,0.5)"
-  BE <- bind(path, path.start)
-
-  
-  return(list(LY=LY,RTE=RTE,RPS=RPS,BE=BE))
-}
-
-holz <- function() {
-  loading <- matrix(0,9,3)
-  loading[2:3,1] <- NA
-  loading[5:6,2] <- NA
-  loading[8:9,3] <- NA
-  loading[1,1] <- 1
-  loading[4,2] <- 1
-  loading[7,3] <- 1
-  LY <- bind(loading)
-
-  factor.cor <- diag(3)
-  diag(factor.cor) <- NA
-  factor.cor[lower.tri(factor.cor)] <- NA
-  RPS <- bind(factor.cor)
-
-  rte <- diag(9)
-  diag(rte) <- NA
-  RTE <- bind(rte)
-
-  template <- model(LY=LY,RPS=RPS,RTE=RTE,modelType="CFA")
-  
-  fit <- lavaan(template@pt,data=HolzingerSwineford1939)
-}
-
-## cfa <- cfa()
-## cfa2 <- cfa2()
-## path <- path()
-## sem <- sem()
-
-## tcfa <- model(LY=cfa$LY,RPS=cfa$RPS,RTE=cfa$RTE, modelType="CFA")
-## tcf
-##  a2 <- model(LY=cfa2$LY,PS=cfa2$PS,TE=cfa2$TE,AL=cfa2$AL,TY=cfa2$TY, modelType="CFA") 
-##  tpath <- model(BE=path$BE, RPS=path$RPS, ME=path$ME, modelType="Path")
-##  tsem <- model(LY=sem$LY, RTE=sem$RTE, RPS=sem$RPS, BE=sem$BE, modelType="SEM")
-## tcfamg <- model(LY=list(cfa2$LY,cfa2$LY),PS=list(cfa2$PS,cfa2$PS),TE=cfa2$TE,AL=cfa2$AL,TY=cfa2$TY,modelType="CFA")
-## tcfamg3 <- model(LY=cfa2$LY,PS=cfa2$PS,TE=cfa2$TE,AL=cfa2$AL,TY=cfa2$TY, modelType="CFA",ngroups=3)
-
-
 ## Takes model specification matrices of type SimMatrix (or lists of these matrices for multiple groups).
 ## Returns a SimSem object that contains templates for data generation and analyis.
 model <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL, VTE = NULL, VY = NULL,
@@ -210,19 +77,23 @@ buildModel <- function(paramSet,modelType) {
   nk <- ncol(paramSet$LY@free)
   
   if (!is.null(paramSet$TE)) {
+    stopifnot(paramSet$TE@symmetric)
     if(!is.null(paramSet$RTE)) stop("Error covariance and error correlation cannot be specified at the same time!")
     if(!is.null(paramSet$VTE)) stop("Error covariance and error variance cannot be specified at the same time!")
     if(!is.null(paramSet$VY)) stop("Error covariance and total indicator variance cannot be specified at the same time!")
   } else {
     if(is.null(paramSet$RTE)) stop("No error correlation object in CFA")
+    stopifnot(paramSet$RTE@symmetric)
     if(is.null(paramSet$VY)) { paramSet$VY <- bind(rep(NA,ni),popParam=1) } ## Set variance of indicators to be free, pop value of 1
   }
 
   if(!is.null(paramSet$PS)) {
+    stopifnot(paramSet$PS@symmetric)
     if(!is.null(paramSet$RPS)) stop("Factor covariance and factor correlation cannot be specified at the same time!")
     if(!is.null(paramSet$VE)) stop("Factor covariance and factor variance cannot be specified at the same time!")
   } else {
     if(is.null(paramSet$RPS)) stop("No latent variables correlation object in CFA")
+    stopifnot(paramSet$RPS@symmetric)
     if(is.null(paramSet$VE)) { paramSet$VE <- bind(free=rep(1,nk)) } # Set the latent variances to be fixed to 1  
   }
   
@@ -235,11 +106,13 @@ buildModel <- function(paramSet,modelType) {
   if(is.null(paramSet$BE)) stop("No path coefficient object between factor.ETA")
   ne <- ncol(paramSet$BE@free)
   if(!is.null(paramSet$PS)) {
+    stopifnot(paramSet$PS@symmetric)
     if(!is.null(paramSet$RPS)) stop("Covariance and correlation cannot be specified at the same time!")
     if(!is.null(paramSet$VPS)) stop("Covariance and variance cannot be specified at the same time!")
     if(!is.null(paramSet$VE)) stop("Covariance and total indicator variance cannot be specified at the same time!")
   } else {
     if(is.null(paramSet$RPS)) stop("No residual correlation object between factor.ETA")
+    stopifnot(paramSet$RPS@symmetric)
     if(is.null(paramSet$VE)) { paramSet$VE <- bind(free=rep(NA,ne),popParam = 1) } ## Set latent variance to be free, pop value = 1
   }
   if(is.null(paramSet$AL)) { AL <- bind(rep(NA,ne),popParam=0) } ## Set factor intercepts to be free, pop value = 0
@@ -251,11 +124,13 @@ buildModel <- function(paramSet,modelType) {
   ne <- ncol(paramSet$LY@free)
 
   if(!is.null(paramSet$TE)) {
+    stopifnot(paramSet$TE@symmetric)
     if(!is.null(paramSet$RTE)) stop("Error covariance and error correlation cannot be specified at the same time!")
     if(!is.null(paramSet$VTE)) stop("Error covariance and error variance cannot be specified at the same time!")
     if(!is.null(paramSet$VY)) stop("Error covariance and total indicator variance cannot be specified at the same time!")
   } else {
     if(is.null(paramSet$RTE)) stop("No measurement error correlation object between indicator.Y")
+    stopifnot(paramSet$RTE@symmetric)
     if(is.null(paramSet$VY)) { paramSet$VY <- bind(rep(NA,ny),popParam=1) } ## Set indicator variance to be free, pop value at 1
   }
 
@@ -264,11 +139,13 @@ buildModel <- function(paramSet,modelType) {
   if(is.null(paramSet$BE)) stop("No path coefficient object between factor.ETA")
 
   if(!is.null(paramSet$PS)) {
+    stopifnot(paramSet$PS@symmetric)
     if(!is.null(paramSet$RPS)) stop("Error covariance and error correlation cannot be specified at the same time!")
     if(!is.null(paramSet$VPS)) stop("Error covariance and error variance cannot be specified at the same time!")
     if(!is.null(paramSet$VE)) stop("Error covariance and total indicator variance cannot be specified at the same time!")
   } else {
     if(is.null(paramSet$RPS)) stop("No measurement error correlation object between indicator.Y")
+    stopifnot(paramSet$RPS@symmetric)
     if(is.null(paramSet$VE)) { paramSet$VE <- bind(rep(1,ne)) } ## Set factor variance to be fixed at 1
   }
   if(is.null(paramSet$ME)) { ME <- bind(rep(0,ne)) } ## Set factor means to be fixed at 0

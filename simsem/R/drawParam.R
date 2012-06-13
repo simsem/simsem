@@ -1,8 +1,4 @@
-source("model.R")
-source("find.R")
-source("validate.R")
 
-# There has to be a better way of specifying what order things are generated. Constraint, Auto-completion, misspecification
 
 drawParam <- function(model, misfitType=NULL, misfitBound=NULL, averageNumMisspec=NULL, maxDraw=20, optMisfit=NULL, numIter=1) {
   paramSet <- model@dgen
@@ -75,7 +71,7 @@ drawOnce <- function(paramSet, modelType, numFree, misspec, optMisfit = "none", 
       fullParams <- fillParam(lapply(rawParam,"[[",1),modelType=modelType)
       fullMiss <- fillParam(lapply(rawParam,"[[",2),modelType=modelType)
     } else {
-      rawParam <- lapply(paramSet,rawDraw,miss=FALSE,mRaw=FALSE)
+      rawParam <- lapply(paramSet,rawDraw,misSpec=FALSE)
       missParam <- list()
       for(i in 1:numIter) {
         temp <- lapply(paramSet,rawDraw,missOnly=TRUE)
@@ -348,65 +344,79 @@ popDiscrepancy <- function(paramM, paramCM, misspecM, misspecCM) {
 
 ## Takes one SimMatrix and returns a matrix with numerical values for population parameters.
 ## If constraint = TRUE, then constraints are applied simultaneously.
-## if missAdd = TRUE, then misspecification is added.
-## if mRaw = TRUE, then a list is returned with the raw misspecification separate
-## if missOnly = TRUE, then only the misspecification is returned
-rawDraw <- function(simDat,constraint=TRUE,miss=TRUE,mRaw=TRUE, missOnly=FALSE) {
+## if misSpec = TRUE, then a list is returned with [[1]] parameters with no misspec and [[2]] same parameters + misspec (if any)
+## if missOnly = TRUE, then only the parameters + misspecification is returned
+## If a matrix is symmetric, it is arbitrarily chosen that parameters on the upper tri
+## are set equal to the parameters on the lower tri.
+rawDraw <- function(simDat,constraint=TRUE,misSpec=TRUE,parMisOnly=FALSE,misOnly=FALSE) {
   if(class(simDat) == "SimMatrix" || class(simDat) == "SimVector") {
     free <- as.vector(simDat@free)
     popParam <- as.vector(simDat@popParam)
     misspec <- as.vector(simDat@misspec)
-    rawDat <- missRaw <- suppressWarnings(as.numeric(as.vector(free)))
-    if(missOnly) { missRaw <- rep(0,length(free)) } else { missRaw[is.na(missRaw)] <- 0}
+
+    ## param will contain population parameters, fixed and freed only.
+    ## paramMis will contain param + any misspecification
+    ## missRaw will contain ONLY the misspecification
+    param <- paramMis <- suppressWarnings(as.numeric(as.vector(free)))
+    missRaw <- rep(0,length(free))
     
     
-    if(constraint && miss) {
+    if(constraint && misSpec) {
       conList <- NULL
       isLabel <- is.label(free)
       for(i in seq_along(free)) {
         if(isLabel[i]) {
           label <- free[i]
           if(is.null(conList[label]) || is.na(conList[label])) { #if label isn't in constraint list
-            rawDat[i] <- eval(parse(text = popParam[i])) # draw
-            conList <- c(conList,rawDat[i]) #Add value to constraint list          
+            param[i] <- paramMis[i] <- eval(parse(text = popParam[i])) # draw
+            conList <- c(conList,param[i]) #Add value to constraint list          
             names(conList)[length(conList)] <- label # Add label to constraint list 
           } else { 
-            rawDat[i] <- conList[label]
+            param[i] <- paramMis[i] <- conList[label]
           }
-        } else if(is.na(rawDat[i])) { # Is not a label, but is NA
-            rawDat[i] <- eval(parse(text = popParam[i])) # normal draw
-        } else if(miss==TRUE && !is.nan(misspec) && length(misspec) > 0){ # Is not free - check for misspecification
-            missRaw[i] <- eval(parse(text=misspec[i])) # Combine the original parameter with the misspecification
-            rawDat[i] <- rawDat[i] + missRaw[i]# else {}        
-          }
+        } else if(is.na(param[i])) { # Is not a label, but is NA
+            param[i] <- paramMis[i] <- eval(parse(text = popParam[i])) # normal draw
+        } else if(!is.nan(misspec) && length(misspec) > 0){ # Is not free - check for misspecification
+          missRaw[i] <- eval(parse(text=misspec[i]))
+          paramMis[i] <- param[i] + missRaw[i]
+          } # else {}        
       }
-    } else if(miss){ # Don't apply constraints but apply misspecification
+    } else if(misSpec){ # Don't apply constraints but apply misspecification
       for(i in seq_along(free)) {
-        if(is.na(rawDat[i])) {
-            rawDat[i] <- eval(parse(text = popParam[i]))
-          } else if(miss==TRUE && !is.nan(misspec) && length(misspec) > 0){ # Is not free - check for misspecification
-            missRaw[i] <- eval(parse(text=misspec[i])) # Combine the original parameter with the misspecification
-            rawDat[i] <- rawDat[i] + missRaw[i] 
+        if(is.na(param[i])) {
+            param[i] <- paramMis[i] <- eval(parse(text = popParam[i]))
+          } else if(!is.nan(misspec) && length(misspec) > 0){ # Is not free - check for misspecification            
+            missRaw[i] <- eval(parse(text=misspec[i]))
+            paramMis[i] <- param[i] + missRaw[i]
         }
       }
     } else { # Don't apply constraints or misspecification
       for(i in seq_along(free)) {
-        if(is.na(rawDat[i])) {
-            rawDat[i] <- eval(parse(text = popParam[i]))
+        if(is.na(param[i])) {
+            param[i] <- eval(parse(text = popParam[i]))
           }
       }
     }
     
     if(class(simDat) == "SimMatrix") {
-      rawDat <- matrix(rawDat,nrow=nrow(simDat@free),ncol=ncol(simDat@free))
-      missRaw <- matrix(missRaw,nrow=nrow(simDat@free),ncol=ncol(simDat@free))
+        param <- matrix(param,nrow=nrow(simDat@free),ncol=ncol(simDat@free))
+        paramMis <- matrix(paramMis,nrow=nrow(simDat@free),ncol=ncol(simDat@free))
+        missRaw <- matrix(missRaw,nrow=nrow(simDat@free),ncol=ncol(simDat@free))
+        if(simDat@symmetric) {
+          param[upper.tri(param)] <- t(param)[upper.tri(param)]
+          paramMis[upper.tri(paramMis)] <- t(paramMis)[upper.tri(paramMis)]
+          missRaw[upper.tri(missRaw)] <- t(missRaw)[upper.tri(missRaw)]
+        }
     }
-    if(mRaw && miss && !missOnly) {
-      return(list(rawDat,missRaw))
-    } else if (missOnly) {
+    # This is not the full set of options.
+    if(misSpec && !parMisOnly && !misOnly) {
+      return(list(param=param,paramMis=paramMis))
+    } else if (parMisOnly) {
+      return(paramMis)
+    } else if(misOnly) {
       return(missRaw)
     } else {
-      return(rawDat)
+      return(param=param)
     }
   } else { return(NULL) } # Was not a SimMatrix or SimVector
 }
