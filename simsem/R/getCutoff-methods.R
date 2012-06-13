@@ -30,11 +30,6 @@ setMethod("getCutoff", signature(object = "SimResult"), definition = function(ob
         pmMARval <- NULL
     object <- clean(object)
     Data <- as.data.frame(object@fit)
-    if (!is.null(alpha)) {
-        if (revDirec) 
-            alpha <- 1 - alpha
-        cutoff <- getCutoff(Data, alpha)
-    }
     condition <- c(length(object@pmMCAR) > 1, length(object@pmMAR) > 1, length(object@n) > 1)
     condValue <- cbind(object@pmMCAR, object@pmMAR, object@n)
     colnames(condValue) <- c("Percent MCAR", "Percent MAR", "N")
@@ -55,7 +50,6 @@ setMethod("getCutoff", signature(object = "SimResult"), definition = function(ob
             predictorVal[2] <- pmMARval)
     }
     predictorVal <- predictorVal[condition]
-    
     
     output <- getCutoff(Data, alpha, revDirec, usedFit, predictor = condValue, predictorVal = predictorVal, df = df)
     return(output)

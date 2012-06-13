@@ -1466,11 +1466,12 @@ Output.ALT <- simResult(NULL, SimData.ALT, SimModel, n=25:500)
 cutoff <- getCutoff(Output.NULL, alpha=0.05, nVal=250)
 plotCutoff(Output.NULL, alpha=0.05)
 getPowerFit(Output.ALT, nullObject=Output.NULL, alpha=0.05, nVal=250)
+getPowerFit(Output.ALT, cutoff=cutoff, nVal=250, condCutoff=TRUE)
 plotPowerFit(Output.ALT, Output.NULL, alpha=0.05)
 plotPowerFit(Output.ALT, Output.NULL, alpha=0.05, logistic=FALSE)
 
 cutoff2 <- c(RMSEA = 0.05, CFI = 0.95, TLI = 0.95, SRMR = 0.06)
-getPowerFit(Output.ALT, cutoff=cutoff2, nVal=250)
+getPowerFit(Output.ALT, cutoff=cutoff2, nVal=250, condCutoff=FALSE)
 plotPowerFit(Output.ALT, cutoff=cutoff2)
 plotPowerFit(Output.ALT, cutoff=cutoff2, logistic=FALSE)
 
@@ -1502,13 +1503,15 @@ BE.null.mis <- simMatrix(path.null.mis, "n05")
 path.model.null.mis <- simMisspecPath(BE = BE.null.mis)
 
 path.alt <- matrix(0, 5, 5)
-path.alt[2:4, 1] <- NA
-path.alt[5, 2:4] <- NA
+path.alt[2:3, 1] <- NA
+path.alt[4, 2:3] <- NA
+path.alt[5, 4] <- NA
 BE.alt <- simMatrix(path.alt, 0.4)
 path.model.alt <- simSetPath(RPS = RPS, BE = BE.alt)
 
 path.alt.mis <- matrix(0, 5, 5)
-path.alt.mis[5, 1] <- NA
+path.alt.mis[4:5, 1] <- NA
+path.alt.mis[5, 2:3] <- NA
 BE.alt.mis <- simMatrix(path.alt.mis, "n05")
 
 path.model.alt.mis <- simMisspecPath(BE = BE.alt.mis)
@@ -1521,16 +1524,15 @@ SimModel <- simModel(path.model.null)
 Output.NULL <- simResult(NULL, SimData.NULL, SimModel, n=25:500, pmMCAR=seq(0, 0.3, 0.1))
 Output.ALT <- simResult(NULL, SimData.ALT, SimModel, n=25:500, pmMCAR=seq(0, 0.3, 0.1))
 
-cutoff <- getCutoff(Output.NULL, alpha=0.05, nVal=250)
+cutoff <- getCutoff(Output.NULL, alpha=0.05, nVal=250, pmMCARval = 0.2)
 plotCutoff(Output.NULL, alpha=0.05)
-getPowerFit(Output.ALT, nullObject=Output.NULL, alpha=0.05, nVal=250)
+getPowerFit(Output.ALT, nullObject=Output.NULL, alpha=0.05, nVal=250, pmMCARval = 0.2)
+getPowerFit(Output.ALT, cutoff=cutoff, nVal=250, pmMCARval = 0.2, condCutoff=TRUE)
 plotPowerFit(Output.ALT, Output.NULL, alpha=0.05)
-plotPowerFit(Output.ALT, Output.NULL, alpha=0.05, logistic=FALSE)
 
 cutoff2 <- c(RMSEA = 0.05, CFI = 0.95, TLI = 0.95, SRMR = 0.06)
-getPowerFit(Output.ALT, cutoff=cutoff2, nVal=250)
+getPowerFit(Output.ALT, cutoff=cutoff2, nVal=250, pmMCARval = 0.2, condCutoff=FALSE)
 plotPowerFit(Output.ALT, cutoff=cutoff2)
-plotPowerFit(Output.ALT, cutoff=cutoff2, logistic=FALSE)
 
 ###################################### Example 22 Specifying misspecification ################################# 
 ###################################### Example 23 nested model comparison and power ################################# 

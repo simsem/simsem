@@ -35,9 +35,112 @@
 * checking Rd metadata ... OK
 * checking Rd cross-references ... OK
 * checking for missing documentation entries ... OK
-* checking for code/documentation mismatches ... OK
+* checking for code/documentation mismatches ... WARNING
+Codoc mismatches from documentation object 'plotScatter':
+plotScatter
+  Code: function(altObject, nullObject = NULL, cutoff = NULL, usedFit =
+                 NULL, x, alpha = 0.05, df = 5)
+  Docs: function(altObject, nullObject = NULL, cutoff = NULL, usedFit =
+                 NULL, x, alpha = 0.05, df = 0)
+  Mismatches in argument default values:
+    Name: 'df' Code: 5 Docs: 0
+
 * checking Rd \usage sections ... OK
 * checking Rd contents ... OK
 * checking for unstated dependencies in examples ... OK
-* checking examples ... OK
-* checking PDF version of manual ... OK
+* checking examples ... ERROR
+Running examples in 'simsem-Ex.R' failed
+The error most likely occurred in:
+
+> ### Name: SimFunction-class
+> ### Title: Class '"SimFunction"'
+> ### Aliases: SimFunction-class summary,SimFunction-method
+> ###   run,SimFunction-method
+> ### Keywords: classes
+> 
+> ### ** Examples
+> 
+> showClass("SimFunction")
+Class "SimFunction" [package "simsem"]
+
+Slots:
+                                    
+Name:        fun attribute   callfun
+Class:  function      list      call
+
+Known Subclasses: "NullSimFunction"
+> 
+> n65 <- simNorm(0.6, 0.05)
+> u35 <- simUnif(0.3, 0.5)
+> u68 <- simUnif(0.6, 0.8)
+> u2 <- simUnif(-0.2, 0.2)
+> n1 <- simNorm(0, 0.1)
+> 
+> loading <- matrix(0, 9, 3)
+> loading[1:3, 1] <- NA
+> loading[4:6, 2] <- NA
+> loading[7:9, 3] <- NA
+> loading.start <- matrix("", 9, 3)
+> loading.start[1:3, 1] <- 0.7
+> loading.start[4:6, 2] <- 0.7
+> loading.start[7:9, 3] <- "u68"
+> LY <- simMatrix(loading, loading.start)
+> 
+> RTE <- symMatrix(diag(9))
+> 
+> factor.cor <- diag(3)
+> factor.cor[1, 2] <- factor.cor[2, 1] <- NA
+> RPS <- symMatrix(factor.cor, 0.5)
+> 
+> path <- matrix(0, 3, 3)
+> path[3, 1:2] <- NA
+> path.start <- matrix(0, 3, 3)
+> path.start[3, 1] <- "n65"
+> path.start[3, 2] <- "u35"
+> BE <- simMatrix(path, path.start)
+> 
+> datGen <- simSetSEM(BE=BE, LY=LY, RPS=RPS, RTE=RTE)
+> 
+> loading.trivial <- matrix(NA, 9, 3)
+> loading.trivial[is.na(loading)] <- 0
+> LY.trivial <- simMatrix(loading.trivial, "u2")
+> 
+> error.cor.trivial <- matrix(NA, 9, 9)
+> diag(error.cor.trivial) <- 0
+> RTE.trivial <- symMatrix(error.cor.trivial, "n1")
+> 
+> misGen <- simMisspecSEM(LY = LY.trivial, RTE = RTE.trivial)
+> 
+> Data.Mis <- simData(datGen, 300, misspec=misGen)
+> 
+> loading <- matrix(0, 12, 4)
+> loading[1:3, 1] <- NA
+> loading[4:6, 2] <- NA
+> loading[7:9, 4] <- NA
+> loading[10:12, 3] <- NA
+> 
+> path <- matrix(0, 4, 4)
+> path[4, 1:3] <- NA
+> 
+> analysis <- simParamSEM(BE=path, LY=loading)
+> 
+> Model <- simModel(analysis)
+> 
+> fun <- simFunction(indProd, var1=paste("y", 1:3, sep=""), var2=paste("y", 4:6, sep=""), namesProd=paste("y", 10:12, sep=""))
+> 
+> # Real simulation will need more than just 10 replications
+> Output <- simResult(10, Data.Mis, Model, objFunction=fun)
+Error in solve.default(E) : 
+  system is computationally singular: reciprocal condition number = 3.63803e-24
+Warning in estimateVCOV(lavaanModel, samplestats = lavaanSampleStats, options = lavaanOptions,  :
+  lavaan WARNING: could not compute standard errors!
+
+> summary(Output)
+RESULT OBJECT
+Model Type
+[1] "SEM"
+========= Fit Indices Cutoffs ============
+Error in round(sapply(alpha, getCutoff, object = cleanObj, usedFit = usedFit),  : 
+  Non-numeric argument to mathematical function
+Calls: summary ... .local -> print -> summaryFit -> summaryFit -> .local
+Execution halted

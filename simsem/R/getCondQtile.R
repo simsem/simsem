@@ -9,7 +9,6 @@ getCondQtile <- function(y, x = NULL, xval = NULL, df = 0, qtile = 0.5) {
         p <- ncol(x)
         name <- paste("x", 1:p, sep = "")
         colnames(x) <- name
-        names(xval) <- name
         if (df == 0) {
             name2 <- name
         } else {
@@ -19,11 +18,11 @@ getCondQtile <- function(y, x = NULL, xval = NULL, df = 0, qtile = 0.5) {
         firstord <- paste(name2, collapse = " + ")
         FUN <- function(x, y) paste(x, " * ", y, sep = "")
         secondord <- outer(name2, name2, FUN)[lower.tri(diag(length(name2)))]
-        secondord <- paste(secondord, collapse = " + ")
-        if (secondord == "") {
+        secondord2 <- paste(secondord, collapse = " + ")
+        if (secondord2 == "") {
             express <- paste("y ~ ", firstord, sep = "")
         } else {
-            express <- paste("y ~ ", firstord, " + ", secondord, sep = "")
+            express <- paste("y ~ ", firstord, " + ", secondord2, sep = "")
         }
         dat <- data.frame(y = y, x)
         library(quantreg)
@@ -31,9 +30,10 @@ getCondQtile <- function(y, x = NULL, xval = NULL, df = 0, qtile = 0.5) {
 		if(xval == "all") {
 			result <- predict(mod, as.data.frame(x), interval="none")
 		} else {
+			names(xval) <- name
 			xvalSecondord <- outer(as.vector(xval), as.vector(xval), "*")[lower.tri(diag(length(xval)))]
 			predictorVal <- c(1, xval, xvalSecondord)
-			if(length(xvalSecondord) == 0) pred <- data.frame(xval) else pred <- data.frame(xval, xvalSecondord)
+			pred <- data.frame(t(xval)) 
 			colnames(pred) <- colnames(x)
 			result <- predict(mod, pred, interval="none")
 		}

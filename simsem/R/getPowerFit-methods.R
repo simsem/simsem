@@ -11,7 +11,7 @@ setMethod("getPowerFit", signature(altObject = "data.frame", cutoff = "vector"),
     altObject <- as.data.frame(altObject[, common.name])
     cutoff <- cutoff[common.name]
     for (i in 1:length(common.name)) {
-        temp[i] <- pValue(target = cutoff[i], dist=as.vector(altObject[, i]), revDirec = revDirec, x = predictor, xval = predictorVal, df=df, condCutoff=condCutoff)
+        temp[i] <- pValue(target = as.numeric(cutoff[i]), dist=as.vector(altObject[, i]), revDirec = revDirec, x = predictor, xval = predictorVal, df=df, condCutoff=condCutoff)
     }
     if ("TLI" %in% common.name) 
         temp["TLI"] <- revText(temp["TLI"])
@@ -106,9 +106,10 @@ setMethod("getPowerFit", signature(altObject = "SimResult", cutoff = "missing"),
 		usedCutoff <- getCutoff(nullObject, alpha=alpha, usedFit=usedFit)
 		temp <- pValue(usedCutoff, as.data.frame(usedDist), revDirec=usedDirec)
 	} else {
-		varyingCutoff <- sapply(as.list(data.frame(t(condValue))), getCutoff, object=nullFit, alpha = alpha, revDirec = revDirec, usedFit = usedFit, predictor = condValue, df = df)
+		varyingCutoff <- getCutoff(object=nullFit, alpha = alpha, revDirec = FALSE, usedFit = usedFit, predictor = condValue, df = df, predictorVal="all")
+		#varyingCutoff <- sapply(as.list(data.frame(t(condValue))), getCutoff, object=nullFit, alpha = alpha, revDirec = revDirec, usedFit = usedFit, predictor = condValue, df = df)
 		for(i in 1:length(temp)) {
-			temp[i] <- pValueVariedCutoff(varyingCutoff[i,], usedDist[,i], revDirec = usedDirec[i], x = condValue, xval = predictorVal)
+			temp[i] <- pValueVariedCutoff(varyingCutoff[,i], usedDist[,i], revDirec = usedDirec[i], x = condValue, xval = predictorVal)
 		}	
 	}
 	names(temp) <- usedFit

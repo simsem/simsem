@@ -183,7 +183,6 @@ plotScatter <- function(altObject, nullObject=NULL, cutoff=NULL, usedFit = NULL,
 		colnames(nullFit) <- usedFit
 		temp <- rep(NA, length(usedFit))
 		cutoff <- getCutoff(object=nullFit, alpha = alpha, revDirec = FALSE, usedFit = usedFit, predictor = x, df = df, predictorVal="all")
-		#cutoff <- sapply(as.list(data.frame(t(x))), getCutoff, object=nullFit, alpha = alpha, revDirec = FALSE, usedFit = usedFit, predictor = x, df = df)
 		if(!is.matrix(cutoff)) {
 			cutoff <- as.matrix(cutoff)
 		}

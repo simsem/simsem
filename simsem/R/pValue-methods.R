@@ -129,7 +129,7 @@ pValueCondCutoff <- function(target, dist, revDirec = FALSE, x = NULL, xval = NU
 	percVal <- 1:49/50
 	mod <- rq(express, data = dat, tau = percVal)
 	xval <- data.frame(t(as.matrix(xval)))
-	names(xval) <- firstord
+	colnames(xval) <- name2
 	perc <- predict(mod, xval, interval = "none")
 	perc <- whichMonotonic(perc, percVal)
 	result <- interpolate(perc, target)

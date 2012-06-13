@@ -1,43 +1,55 @@
 library(simsem)
 
-n1 <- simNorm(0, 0.1)
+n05 <- simNorm(0, 0.05)
 
-loading.null <- matrix(0, 8, 2)
-loading.null[1:5, 1] <- NA
-loading.null[6:8, 2] <- NA
-LX.NULL <- simMatrix(loading.null, 0.7)
-latent.cor.null <- matrix(NA, 2, 2)
-diag(latent.cor.null) <- 1
-RPH <- symMatrix(latent.cor.null, 0.5)
-RTD <- symMatrix(diag(8))
-CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH, RTE = RTD)
+path.null <- matrix(0, 5, 5)
+path.null[2, 1] <- NA
+path.null[3, 2] <- NA
+path.null[4, 3] <- NA
+path.null[5, 4] <- NA
+BE.null <- simMatrix(path.null, 0.4)
 
-error.cor.mis <- matrix(NA, 8, 8)
-diag(error.cor.mis) <- 1
-RTD.Mis <- symMatrix(error.cor.mis, "n1")
-CFA.Model.Mis <- simMisspecCFA(RTE = RTD.Mis)
+residual <- diag(5)
+RPS <- symMatrix(residual)
 
-loading.alt <- matrix(0, 8, 2)
-loading.alt[1:4, 1] <- NA
-loading.alt[5:8, 2] <- NA
-LX.ALT <- simMatrix(loading.alt, 0.7)
-CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH, RTE = RTD)
+path.model.null <- simSetPath(RPS = RPS, BE = BE.null)
 
-SimData.NULL <- simData(CFA.Model.NULL, 500, misspec=CFA.Model.Mis)
-SimData.ALT <- simData(CFA.Model.ALT, 500, misspec=CFA.Model.Mis)
+path.null.mis <- matrix(0, 5, 5)
+path.null.mis[3:5, 1] <- NA
+path.null.mis[4:5, 2] <- NA
+path.null.mis[5, 3] <- NA
+BE.null.mis <- simMatrix(path.null.mis, "n05")
 
-SimModel <- simModel(CFA.Model.NULL)
+path.model.null.mis <- simMisspecPath(BE = BE.null.mis)
 
-Output.NULL <- simResult(NULL, SimData.NULL, SimModel, n=25:500)
-Output.ALT <- simResult(NULL, SimData.ALT, SimModel, n=25:500)
+path.alt <- matrix(0, 5, 5)
+path.alt[2:3, 1] <- NA
+path.alt[4, 2:3] <- NA
+path.alt[5, 4] <- NA
+BE.alt <- simMatrix(path.alt, 0.4)
+path.model.alt <- simSetPath(RPS = RPS, BE = BE.alt)
 
-cutoff <- getCutoff(Output.NULL, alpha=0.05, nVal=250)
+path.alt.mis <- matrix(0, 5, 5)
+path.alt.mis[4:5, 1] <- NA
+path.alt.mis[5, 2:3] <- NA
+BE.alt.mis <- simMatrix(path.alt.mis, "n05")
+
+path.model.alt.mis <- simMisspecPath(BE = BE.alt.mis)
+
+SimData.NULL <- simData(path.model.null, 500, misspec=path.model.null.mis)
+SimData.ALT <- simData(path.model.alt, 500, misspec=path.model.alt.mis)
+
+SimModel <- simModel(path.model.null)
+
+Output.NULL <- simResult(NULL, SimData.NULL, SimModel, n=25:500, pmMCAR=seq(0, 0.3, 0.1))
+Output.ALT <- simResult(NULL, SimData.ALT, SimModel, n=25:500, pmMCAR=seq(0, 0.3, 0.1))
+
+cutoff <- getCutoff(Output.NULL, alpha=0.05, nVal=250, pmMCARval = 0.2)
 plotCutoff(Output.NULL, alpha=0.05)
-getPowerFit(Output.ALT, nullObject=Output.NULL, alpha=0.05, nVal=250)
+getPowerFit(Output.ALT, nullObject=Output.NULL, alpha=0.05, nVal=250, pmMCARval = 0.2)
+getPowerFit(Output.ALT, cutoff=cutoff, nVal=250, pmMCARval = 0.2, condCutoff=TRUE)
 plotPowerFit(Output.ALT, Output.NULL, alpha=0.05)
-plotPowerFit(Output.ALT, Output.NULL, alpha=0.05, logistic=FALSE)
 
 cutoff2 <- c(RMSEA = 0.05, CFI = 0.95, TLI = 0.95, SRMR = 0.06)
-getPowerFit(Output.ALT, cutoff=cutoff2, nVal=250)
+getPowerFit(Output.ALT, cutoff=cutoff2, nVal=250, pmMCARval = 0.2, condCutoff=FALSE)
 plotPowerFit(Output.ALT, cutoff=cutoff2)
-plotPowerFit(Output.ALT, cutoff=cutoff2, logistic=FALSE)

@@ -17,10 +17,8 @@ setMethod("summaryFit", signature(object = "SimResult"), definition = function(o
 		cutoffs <- sapply(as.data.frame(t(m)), FUN, obj=object, alpha=alpha, usedFit=usedFit)
 		mSelect <- as.matrix(m[,condition])
 		colnames(mSelect) <- c("%MCAR", "%MAR", "N")[condition]
-		result <- cbind(mSelect, t(cutoffs))
+		result <- data.frame(mSelect, t(cutoffs))
 		rownames(result) <- NULL
-		#cat(paste("Alpha =", alpha, "\n"))
-		#print(result)
 	} else {
 		if (is.null(alpha)) 
 			alpha <- c(0.1, 0.05, 0.01, 0.001)
