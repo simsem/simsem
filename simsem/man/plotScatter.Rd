@@ -7,7 +7,7 @@ Plot overlaying scatter plots visualizing the power of rejecting misspecified mo
 This function will find the fit indices cutoff values if not specified and then plot the fit indices value against the value of predictors. The plot will include the fit indices value of the alternative models, the fit indices value of the null model (if specified), and the fit indices cutoffs.  
 }
 \usage{
-plotScatter(altObject, nullObject=NULL, cutoff=NULL, usedFit = NULL, x, alpha=0.05, df=0)
+plotScatter(altObject, nullObject=NULL, cutoff=NULL, usedFit = NULL, x, alpha=0.05, df=5)
 }
 \arguments{
   \item{altObject}{

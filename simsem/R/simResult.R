@@ -8,6 +8,7 @@ simResult <- function(nRep = NULL, objData = NULL, objModel = NULL, objMissing =
     warnT <- as.numeric(options("warn"))
     if (silent) 
         options(warn = -1)
+	if (is.null(nRep) && is.list(objData)) nRep <- length(objData)
     if (is.null(nRep)) {
         if (!is.vector(n)) 
             stop("Please specify the number of replications")
@@ -126,7 +127,9 @@ simResult <- function(nRep = NULL, objData = NULL, objModel = NULL, objMissing =
         object2.l[[i]][[4]] <- pmMAR[i]
         object2.l[[i]][[5]] <- numseed[[i]]
     }
-    
+    objData2 <- NULL
+	if(class(objData) == "SimData") objData2 <- objData
+	
     if (multicore) {
         library(parallel)
         sys <- .Platform$OS.type
@@ -134,16 +137,15 @@ simResult <- function(nRep = NULL, objData = NULL, objModel = NULL, objMissing =
             numProc <- detectCores()
         if (sys == "windows") {
             cl <- makeCluster(rep("localhost", numProc), type = "SOCK")
-            Result.l <- clusterApplyLB(cl, object2.l, runRep, objData = objData, objModel = objModel, objMissing = objMissing, objFunction = objFunction, 
+            Result.l <- clusterApplyLB(cl, object2.l, runRep, objData = objData2, objModel = objModel, objMissing = objMissing, objFunction = objFunction, 
                 silent = silent)
             stopCluster(cl)
         } else {
-            Result.l <- mclapply(object2.l, runRep, objData = objData, objModel = objModel, objMissing = objMissing, objFunction = objFunction, 
+            Result.l <- mclapply(object2.l, runRep, objData = objData2, objModel = objModel, objMissing = objMissing, objFunction = objFunction, 
                 silent = silent, mc.cores = numProc)
         }
     } else {
-        Result.l <- lapply(object2.l, runRep, objData = objData, objModel = objModel, objMissing = objMissing, objFunction = objFunction, 
-            silent = silent)
+        Result.l <- lapply(object2.l, runRep, objData = objData2, objModel = objModel, objMissing = objMissing, objFunction = objFunction, silent = silent)
     }
     
     

@@ -22,7 +22,8 @@ setMethod("summaryFit", signature(object = "SimResult"), definition = function(o
 	} else {
 		if (is.null(alpha)) 
 			alpha <- c(0.1, 0.05, 0.01, 0.001)
-		cutoffs <- round(sapply(alpha, getCutoff, object = cleanObj, usedFit = usedFit), digits)
+		cutoffs <- sapply(alpha, getCutoff, object = cleanObj, usedFit = usedFit)
+		cutoffs <- round(matrix(as.numeric(cutoffs), length(usedFit), length(alpha)), digits)
 		if (ncol(as.matrix(cutoffs)) == 1) {
 			cutoffs <- t(cutoffs)
 			#rownames(cutoffs) <- usedFit
@@ -34,9 +35,9 @@ setMethod("summaryFit", signature(object = "SimResult"), definition = function(o
 		result <- cbind(cutoffs, meanfit)
 		colnames(result) <- c(alpha, "Mean")
 		rownames(result)<-usedFit
-		names(dimnames(cutoffs)) <- c("Fit Indices", "Alpha")
+		names(dimnames(result)) <- c("Fit Indices", "Alpha")
 		#print(as.data.frame(cutoffs))
 	}
 		
-    return(as.data.frame(result))
+    return(result)
 })

@@ -87,7 +87,8 @@ setMethod("getPowerFitNested", signature(altNested = "SimResult", altParent = "S
 	nullFit <- as.data.frame((nullNested@fit - nullParent@fit)[,usedFit]) 
 	temp <- rep(NA, length(usedFit))
 	if(is.null(condValue)) {
-		usedCutoff <- getCutoff(nullFit, alpha=alpha, usedFit=usedFit)
+		usedCutoff <- as.vector(t(getCutoff(nullFit, alpha=alpha, usedFit=usedFit)))
+		names(usedCutoff) <- usedFit
 		temp <- pValue(usedCutoff, usedDist, revDirec=usedDirec)
 	} else {
 		varyingCutoff <- sapply(as.list(data.frame(t(condValue))), getCutoff, object=nullFit, alpha = alpha, revDirec = revDirec, usedFit = usedFit, predictor = condValue, df = df)

@@ -27,6 +27,7 @@ path.alt[2:3, 1] <- NA
 path.alt[4, 2:3] <- NA
 path.alt[5, 4] <- NA
 BE.alt <- simMatrix(path.alt, 0.4)
+
 path.model.alt <- simSetPath(RPS = RPS, BE = BE.alt)
 
 path.alt.mis <- matrix(0, 5, 5)
