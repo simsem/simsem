@@ -1,11 +1,13 @@
+## Arguments: misfitBound should be a vector with upper and lower bounds
 
-# Takes a simsem object, and returns population parameter values for data generation.
+## Takes a simsem object, and returns population parameter values for data generation.
 ## The format is a list with the following elements:
 ## [[1]] $param - Population parameter values for data generation
 ## [[2]] $paramMis - Population parameter values with misspecification
 ## [[3]] $mis - Misspecification only
 ## Currently, there is no accessibility for optMisfit from drawParam
-drawParam <- function(model, misfitType=NULL, misfitBound=NULL, averageNumMisspec=NULL, maxDraw=20, optMisfit=NULL, numIter=1) {
+## Possible misfitTypes are "f0", "rmsea", "srmr"
+drawParam <- function(model, maxDraw=20, misfitBounds=NULL, misfitType=NULL,averageNumMisspec=FALSE, optMisfit=NULL, numIter=1) {
   paramSet <- model@dgen
   free <- max(model@pt$free)
   modelType <- model@modelType
@@ -19,7 +21,11 @@ drawParam <- function(model, misfitType=NULL, misfitBound=NULL, averageNumMisspe
   count <- 0
   repeat {
     if (misCheck) {
-      paramsMis <- drawOnce(paramSet = paramSet,modelType = modelType, misspec=misCheck, numFree=free)
+      if(!is.null(optMisfit)) {
+        paramsMis <- drawOnce(paramSet = paramSet,modelType = modelType, misspec=misCheck, numFree=free, optMisfit=optMisfit, numIter=numIter, misfitType=misfitType)
+      } else {
+        paramsMis <- drawOnce(paramSet = paramSet,modelType = modelType, misspec=misCheck, numFree=free)
+      }      
       param <- paramsMis$param
       misspec <- paramsMis$misParam
       misOnly <- mapply("-",misspec,param)
@@ -30,7 +36,7 @@ drawParam <- function(model, misfitType=NULL, misfitBound=NULL, averageNumMisspe
           implied.CM.param <- createImpliedMACS(param,modelType)
           implied.CM.misspec <- createImpliedMACS(misspec,modelType)
           if (all(is.finite(implied.CM.misspec$CM)) && (sum(eigen(implied.CM.misspec$CM)$values <= 0) == 0)) {
-            if (is.null(misfitBound)) {
+            if (is.null(misfitBounds)) {
               break
             } else {
               p <- length(implied.CM.param$M)
@@ -38,9 +44,9 @@ drawParam <- function(model, misfitType=NULL, misfitBound=NULL, averageNumMisspe
               nFree <- free
               dfParam <- nElements - nFree
               misfit <- popMisfitMACS(implied.CM.param$M, implied.CM.param$CM, implied.CM.misspec$M, implied.CM.misspec$CM,
-                                      fit.measures = objMisspec@misfitType, dfParam = dfParam)
-              if (averageNumMisspec) 
-                misfit <- misfit/countFreeParameters(objMisspec)
+                                      fit.measures = misfitType, dfParam = dfParam)
+              if (averageNumMisspec)
+                misfit <- misfit/free
               
               if (!is.null(misfit) && (misfit > misfitBounds[1] & misfit < misfitBounds[2])) 
                 break
@@ -75,7 +81,7 @@ drawParam <- function(model, misfitType=NULL, misfitBound=NULL, averageNumMisspe
 ## [[1]] - param (list of matrices with parameter values)
 ## [[2]] - paramMis (param + misspec)
 ## [[3]] - mis (misspec only)
-drawOnce <- function(paramSet, modelType, numFree, misspec, optMisfit = "none", numIter=1) {
+drawOnce <- function(paramSet, modelType, numFree, misspec, optMisfit = "none", numIter=1, misfitType="f0") {
 
   if(misspec) {    
     if (optMisfit == "none") {
@@ -92,7 +98,7 @@ drawOnce <- function(paramSet, modelType, numFree, misspec, optMisfit = "none", 
       }
       fullParams <- fillParam(rawParam,modelType=modelType)
       fullMiss <- list()
-      for(i in 1:length(rawParam)) {
+      for(i in 1:length(missParam)) {
         fullMiss[[i]] <- fillParam(missParam[[i]],modelType=modelType)
       }
       
@@ -108,15 +114,17 @@ drawOnce <- function(paramSet, modelType, numFree, misspec, optMisfit = "none", 
       nElements <- p + (p * (p + 1)/2)
 
       dfParam <- nElements - numFree
-      misfit <- sapply(macsMis, popMisfit, param = macsPop, dfParam = dfParam, fit.measures = "all")
-      misfit <- misfit[!sapply(misfit,is.null)]
+      misfit <- sapply(macsMis, popMisfit, param = macsPop, dfParam = dfParam, fit.measures = misfitType)
+
       element <- NULL
+      fit.measures <- c("f0","rmsea","srmr")
+      
       if (optMisfit == "min") {
         element <- which.min(sapply(misfit,"[[",1))
       } else if (optMisfit == "max") {
         element <- which.max(sapply(misfit,"[[",1))
       } else {
-        stop("Something is wrong in the runMisspec function!")
+        stop("optMisfit must be either \"max\" or \"min\"")
       }
       finalMis <- fullMiss[[element]]
       ## Mis <- Mis[[element]]

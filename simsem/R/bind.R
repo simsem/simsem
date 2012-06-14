@@ -32,46 +32,56 @@ bind <- function(free = NULL, popParam = NULL, misspec = NULL, symmetric=FALSE) 
     
     if(any(is.character(free)) && !validConstraints(free)) { stop("At least one pair of constraint labels must be the same.")}
     if(symmetric) { stopifnot(isSymmetric(free)) }
-    
+
+    ## PopParam
+    # Must be either character or numeric
     if(is.character(popParam)) {
       tryCatch(eval(parse(text=popParam)), error=function(e) stop(e))
-      paramMat <- ifelse(is.free(free),popParam,"")
+      if(!is.matrix(popParam)) {
+        paramMat <- ifelse(is.free(free),popParam,"")
+      }
     }
     else if(is.numeric(popParam) && !is.matrix(popParam)) {
       paramMat <- ifelse(is.free(free),popParam,"")
-    }    
-    else if(is.matrix(popParam)) {
+    }
+
+    # Can optionally also be a matrix
+    if(is.matrix(popParam)) {
       if(symmetric) { stopifnot(isSymmetric(popParam)) }                   
       if( !all(dim(free)==dim(popParam))) stop("Free matrix and popParam are not of same dimension")
       if( all(!is.empty(popParam) != is.free(free))) { stop("Please assign a value for any free parameters") }
       paramMat <- matrix(as.character(popParam),nrow=nrow(popParam),ncol=ncol(popParam))
 
     }
-    else { paramMat <-  matrix(NaN) }
-    
+
+    if(is.null(popParam)){ paramMat <-  matrix(NaN) }
+
+    # Misspec - same tests as above, almost.
     if(is.character(misspec)) {
       tryCatch(eval(parse(text=misspec)), error=function(e) stop(e))
-      misspecMat <- ifelse(!is.free(free),misspec,"")
+      if(!is.matrix(misspec)) misspecMat <- ifelse(!is.free(free),misspec,"")
     }
     else if(is.numeric(misspec) && !is.matrix(misspec)) {
       misspecMat <- ifelse(!is.free(free),misspec,"")
     }    
-    else if(is.matrix(misspec)) {
+
+    if(is.matrix(misspec)) {
       if(symmetric) { stopifnot(isSymmetric(misspec)) }                   
       if( !all(dim(free)==dim(misspec))) stop("Free matrix and misspec are not of same dimension")
      misspecMat <- matrix(as.character(misspec),nrow=nrow(misspec),ncol=ncol(misspec))
      
     }
-    else { misspecMat <-  matrix(NaN) }
+    if(is.null(misspec)) { misspecMat <-  matrix(NaN) }
 
     return(new("SimMatrix",free=free,popParam=paramMat,misspec=misspecMat,symmetric=symmetric))
     
-    # SimVector
+    ## SimVector
   } else if(is.vector(free)) {
 
     if(any(is.character(free)) && !validConstraints(free)) { stop("At least one pair of constraint labels must be the same.")}
     if(symmetric) { stop("A vector cannot be symmetric") }
-    
+
+    # popParam
     if(is.character(popParam) && length(popParam == 1)) {
       tryCatch(eval(parse(text=popParam)), error=function(e) stop(e))
       paramVec <- ifelse(is.free(free),popParam,"")
@@ -85,8 +95,9 @@ bind <- function(free = NULL, popParam = NULL, misspec = NULL, symmetric=FALSE) 
       paramVec <- as.character(popParam)
     }
     else { paramVec <-  vector() }
-    
-    if(is.character(misspec) && length(misspec == 1)) {
+
+    # Misspec
+    if(is.character(misspec) && length(misspec)==1) {
       tryCatch(eval(parse(text=misspec)), error=function(e) stop(e))
       misspecVec <- ifelse(!is.free(free),misspec,"")
     }
