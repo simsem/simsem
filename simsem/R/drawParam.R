@@ -1,6 +1,6 @@
 ## Arguments: misfitBound should be a vector with upper and lower bounds
 
-## Takes a simsem object, and returns population parameter values for data generation.
+## Takes a simsem template, and returns population parameter values for data generation.
 ## The format is a list with the following elements:
 ## [[1]] $param - Population parameter values for data generation
 ## [[2]] $paramMis - Population parameter values with misspecification

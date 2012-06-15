@@ -23,7 +23,7 @@ model <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NUL
          temp <- NULL
           if(class(paramSet[sgidx][[i]]) == "SimMatrix") {
             temp <- paramSet[sgidx][[i]]
-            paramSet[sgidx][[i]] <- replicate(ngroups,new("SimMatrix",free=temp@free,popParam=temp@popParam,misspec=temp@misspec))
+            paramSet[sgidx][[i]] <- replicate(ngroups,new("SimMatrix",free=temp@free,popParam=temp@popParam,misspec=temp@misspec,symmetric=temp@symmetric))
           } else {
             temp <- paramSet[sgidx][[i]]
             paramSet[sgidx][[i]] <- replicate(ngroups,new("SimVector",free=temp@free,popParam=temp@popParam,misspec=temp@misspec))
@@ -37,7 +37,7 @@ model <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NUL
           temp <- NULL
           if(class(paramSet[sgidx][[i]]) == "SimMatrix") {
             temp <- paramSet[sgidx][[i]]
-            paramSet[sgidx][[i]] <- replicate(n,new("SimMatrix",free=temp@free,popParam=temp@popParam,misspec=temp@misspec))
+            paramSet[sgidx][[i]] <- replicate(n,new("SimMatrix",free=temp@free,popParam=temp@popParam,misspec=temp@misspec,symmetric=temp@symmetric))
           } else {
             temp <- paramSet[sgidx][[i]]
             paramSet[sgidx][[i]] <- replicate(n,new("SimVector",free=temp@free,popParam=temp@popParam,misspec=temp@misspec))

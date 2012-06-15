@@ -101,8 +101,11 @@ createData <- function(paramSet,
             }
         } else {
             macs <- createImpliedMACS(usedParam,modelType=modelType)
-            Data <- dataGen(indDist, n, macs$M, macs$CM)
-            #Data <- mvrnorm(n, macs$M, macs$CM)
+            if(!is.null(indDist)) {
+              Data <- dataGen(indDist, n, macs$M, macs$CM)
+            } else {
+              Data <- mvrnorm(n, macs$M, macs$CM)
+            }
           }
       }
    
