@@ -53,14 +53,15 @@ model <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NUL
            pt <- mapply(pt,buildPT(psl[[i]], pt=pt, group=i,facLab=NULL, indLab=NULL),FUN=c,SIMPLIFY=FALSE)
          }
        }
+
+      return(new("SimSem",pt=pt,dgen=psl,modelType=modelType))
       
     } else { # ngroups = 1, and no matrices are lists
      paramSet <- buildModel(paramSet,modelType)
      pt <- buildPT(paramSet)
+     return(new("SimSem",pt=pt,dgen=paramSet,modelType=modelType))
    }
-  } else { stop("Must specify model type") }
-  
-  return(new("SimSem",pt=pt,dgen=paramSet,modelType=modelType))
+  } else { stop("Must specify model type") } 
 }
 
 

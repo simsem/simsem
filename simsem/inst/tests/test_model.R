@@ -27,7 +27,7 @@ RTE <- bind(error.cor,symmetric=TRUE)
 
 # Needs model type
 expect_error(model(LY=LY,RPS=RPS,RTE=RTE))
-pt <- model(LY=LY,RPS=RPS,RTE=RTE,modelType="CFA")
+cfat <- model(LY=LY,RPS=RPS,RTE=RTE,modelType="CFA")
 
 ## # a useful test data structure
 ## paramSet <- list(LY=LY,RPS=RPS,PS=NULL,TE=NULL,RTE=RTE,BE=NULL,VTE=NULL,VY=NULL,

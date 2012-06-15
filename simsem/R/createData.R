@@ -39,7 +39,7 @@ createData <- function(paramSet,
     stop("errorDist is not allowed when using model-implied method in data generation")
   if (sequential & !is.null(indDist)) 
     stop("indDist is not allowed when using sequential method in data generation")
-  classes <- sapply(list(facDist,indDist,errorDist),class)
+  #classes <- sapply(list(facDist,indDist,errorDist),class) could be a check soon
    
     Data <- NULL
     param <- paramSet$param
@@ -108,10 +108,12 @@ createData <- function(paramSet,
             }
           }
       }
-   
-    varnames <- NULL
-    colnames(Data) <- varnames
-    Data <- as.data.frame(Data)
+  varnames <- NULL
+  if(!is.null(indLab)) { varnames <- indLab } else { varnames <- paste0("x",1:ncol(Data)) }
+
+  colnames(Data) <- varnames
+  Data <- as.data.frame(Data)
+  
   ##  if (dataOnly) {
   ##         return(Data)
   ##     } else {

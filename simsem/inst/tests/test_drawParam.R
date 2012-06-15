@@ -9,6 +9,8 @@ source("../../R/simDist-constructor.R")
 
 ## Tests that check correct calculated parameter values?
 ## Tests that check matrices correctly reduced?
+## - Check all model Types
+## - Check mg for all model types
 
 
 cfaT <- function() {
@@ -134,6 +136,9 @@ path <- path()
 sem <- sem()
 
 tcfa <- model(LY=cfa$LY,RPS=cfa$RPS,RTE=cfa$RTE, modelType="CFA")
+tcfamg <- model(LY=cfa$LY,RPS=cfa$RPS,RTE=cfa$RTE, modelType="CFA",ngroups=2)
+tcfamg2 <- model(LY=list(cfa$LY,cfa$LY),RPS=list(cfa$RPS,cfa$RPS),RTE=cfa$RTE, modelType="CFA")
+
 ## tcf
 tcfa2 <- model(LY=cfa2$LY,PS=cfa2$PS,TE=cfa2$TE,AL=cfa2$AL,TY=cfa2$TY, modelType="CFA") 
 tpath <- model(BE=path$BE, RPS=path$RPS, ME=path$ME, modelType="Path")
@@ -151,6 +156,9 @@ drawParam(tcfa2)
 drawParam(tpath)
 drawParam(tsem)
 
+drawParam(tcfamg)
+drawParam(tcfamg2)
+
 ## What should the scale be for misfitBounds?
 drawParam(tcfa,misfitType="all") # does nothing
 drawParam(tcfa,misfitBounds=c(.001,.1),maxDraw=100,misfitType="srmr")
@@ -166,3 +174,5 @@ dat <- createData(p,100,"CFA")
 indDist <- simDataDist(simNorm(10,2),p=6)
 
 dat <- createData(p,100,"CFA",indDist=indDist)
+
+dat <- generate(tcfa,100)

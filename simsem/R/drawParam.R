@@ -8,9 +8,23 @@
 ## Currently, there is no accessibility for optMisfit from drawParam
 ## Possible misfitTypes are "f0", "rmsea", "srmr"
 drawParam <- function(model, maxDraw=20, misfitBounds=NULL, misfitType=NULL,averageNumMisspec=FALSE, optMisfit=NULL, numIter=1) {
-  paramSet <- model@dgen
-  free <- max(model@pt$free)
   modelType <- model@modelType
+  free <- max(model@pt$free)
+  param <- NULL
+  if("SimMatrix" %in% sapply(model@dgen,class)) { # Single group
+    param <- drawParameters(model@dgen, free, modelType, maxDraw=maxDraw, misfitBounds=misfitBounds,
+                   misfitType=misfitType, averageNumMisspec=averageNumMisspec, optMisfit=optMisfit, numIter=numIter)
+  } else { # multiple group
+    param <- lapply(model@dgen, drawParameters, free, modelType, maxDraw=maxDraw, misfitBounds=misfitBounds,
+                   misfitType=misfitType, averageNumMisspec=averageNumMisspec, optMisfit=optMisfit, numIter=numIter)
+  }
+
+  return(param)
+}
+                   
+  
+drawParameters <- function(dgen,free,modelType, maxDraw=20, misfitBounds=NULL, misfitType=NULL,averageNumMisspec=FALSE, optMisfit=NULL, numIter=1) {
+
   param <- NULL
   misCheck <- any(sapply(paramSet,FUN=function(x) {
     if(!is.null(x) && length(x@misspec)!=0 && !any(is.nan(x@misspec)))
