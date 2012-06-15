@@ -4,6 +4,8 @@ source("../../R/drawParam.R")
 source("../../R/bind.R")
 source("../../R/find.R")
 source("../../R/validate.R")
+source("../../R/createData.R")
+source("../../R/simDist-constructor.R")
 
 ## Tests that check correct calculated parameter values?
 ## Tests that check matrices correctly reduced?
@@ -157,3 +159,8 @@ drawParam(tcfa,misfitBounds=c(0,1),maxDraw=100,misfitType="f0")
 drawParam(tcfa,misfitBounds=c(0,1),
           maxDraw=100,misfitType="rmsea",averageNumMisspec=TRUE)
 drawParam(tcfa,misfitType="rmsea",optMisfit="max",numIter=20)
+
+p <- drawParam(tcfa)
+
+dat <- createData(p,100,"CFA")
+indDist <- simDataDist(simNorm(10,2),p=6)

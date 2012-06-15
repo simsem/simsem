@@ -1,41 +1,41 @@
 # Distribution Object
 
-## setClass("SimUnif", representation(min = "numeric", max = "numeric"))
+setClass("SimUnif", representation(min = "numeric", max = "numeric"))
 
-## setClass("SimNorm", representation(mean = "numeric", sd = "numeric"))
+setClass("SimNorm", representation(mean = "numeric", sd = "numeric"))
 
-## setClass("SimBeta", representation(shape1 = "numeric", shape2 = "numeric", ncp = "numeric"), prototype(ncp = 0))
+setClass("SimBeta", representation(shape1 = "numeric", shape2 = "numeric", ncp = "numeric"), prototype(ncp = 0))
 
-## setClass("SimBinom", representation(size = "numeric", prob = "numeric"))
+setClass("SimBinom", representation(size = "numeric", prob = "numeric"))
 
-## setClass("SimCauchy", representation(location = "numeric", scale = "numeric"), prototype(location = 0, scale = 1))
+setClass("SimCauchy", representation(location = "numeric", scale = "numeric"), prototype(location = 0, scale = 1))
 
-## setClass("SimChisq", representation(df = "numeric", ncp = "numeric"), prototype(ncp = 0))
+setClass("SimChisq", representation(df = "numeric", ncp = "numeric"), prototype(ncp = 0))
 
-## setClass("SimExp", representation(rate = "numeric"), prototype(rate = 1))
+setClass("SimExp", representation(rate = "numeric"), prototype(rate = 1))
 
-## setClass("SimF", representation(df1 = "numeric", df2 = "numeric", ncp = "numeric"), prototype(ncp = 0))
+setClass("SimF", representation(df1 = "numeric", df2 = "numeric", ncp = "numeric"), prototype(ncp = 0))
 
-## setClass("SimGamma", representation(shape = "numeric", rate = "numeric"), prototype(rate = 1))
+setClass("SimGamma", representation(shape = "numeric", rate = "numeric"), prototype(rate = 1))
 
-## setClass("SimGeom", representation(prob = "numeric"))
+setClass("SimGeom", representation(prob = "numeric"))
 
-## setClass("SimHyper", representation(m = "numeric", n = "numeric", k = "numeric"))
+setClass("SimHyper", representation(m = "numeric", n = "numeric", k = "numeric"))
 
-## setClass("SimLnorm", representation(meanlog = "numeric", sdlog = "numeric"), prototype(meanlog = 0, sdlog = 1))
+setClass("SimLnorm", representation(meanlog = "numeric", sdlog = "numeric"), prototype(meanlog = 0, sdlog = 1))
 
-## setClass("SimLogis", representation(location = "numeric", scale = "numeric"), prototype(location = 0, scale = 1))
+setClass("SimLogis", representation(location = "numeric", scale = "numeric"), prototype(location = 0, scale = 1))
 
-## setClass("SimNbinom", representation(size = "numeric", prob = "numeric"))
+setClass("SimNbinom", representation(size = "numeric", prob = "numeric"))
 
-## setClass("SimPois", representation(lambda = "numeric"))
+setClass("SimPois", representation(lambda = "numeric"))
 
-## setClass("SimT", representation(df = "numeric", ncp = "numeric"), prototype(ncp = 0))
+setClass("SimT", representation(df = "numeric", ncp = "numeric"), prototype(ncp = 0))
 
-## setClass("SimWeibull", representation(shape = "numeric", scale = "numeric"), prototype(scale = 1))
+setClass("SimWeibull", representation(shape = "numeric", scale = "numeric"), prototype(scale = 1))
 
-## setClassUnion("VirtualDist", c("SimUnif", "SimNorm", "SimBeta", "SimBinom", "SimCauchy", "SimChisq", "SimExp", "SimF", "SimGamma", "SimGeom", "SimHyper", "SimLnorm", "SimLogis", "SimNbinom", 
-##    "SimPois", "SimT", "SimWeibull"))
+setClassUnion("VirtualDist", c("SimUnif", "SimNorm", "SimBeta", "SimBinom", "SimCauchy", "SimChisq", "SimExp", "SimF", "SimGamma", "SimGeom", "SimHyper", "SimLnorm", "SimLogis", "SimNbinom", 
+   "SimPois", "SimT", "SimWeibull"))
 
 ## setClass("NullDataFrame", contains = "data.frame")
 
@@ -135,7 +135,7 @@ setClass("SimSem",
 
 ## setClass("MisspecSet", contains = "MatrixSet")
 
-## setClass("SimDataDist", representation(p = "numeric", dist = "list", keepScale = "logical", reverse = "vector"), prototype(keepScale = TRUE, reverse = FALSE))
+ setClass("SimDataDist", representation(p = "numeric", dist = "list", keepScale = "logical", reverse = "vector"), prototype(keepScale = TRUE, reverse = FALSE))
 
 ## setClass("NullSimDataDist", contains = "SimDataDist")
 

@@ -25,13 +25,14 @@ drawParam <- function(model, maxDraw=20, misfitBounds=NULL, misfitType=NULL,aver
         paramsMis <- drawOnce(paramSet = paramSet,modelType = modelType, misspec=misCheck, numFree=free, optMisfit=optMisfit, numIter=numIter, misfitType=misfitType)
       } else {
         paramsMis <- drawOnce(paramSet = paramSet,modelType = modelType, misspec=misCheck, numFree=free)
-      }      
+      }
       param <- paramsMis$param
       misspec <- paramsMis$misParam
       misOnly <- mapply("-",misspec,param)
       if (validateObject(param, modelType)) {
         param <- reduceMatrices(param,modelType)
         misspec <- reduceMatrices(misspec,modelType)
+        misOnly <- reduceMatrices(misOnly,modelType)
         if (!is.null(param) && !is.null(misspec)) {
           implied.CM.param <- createImpliedMACS(param,modelType)
           implied.CM.misspec <- createImpliedMACS(misspec,modelType)
