@@ -78,6 +78,10 @@ setGeneric("summaryFit", function(object, ...) {
     return(standardGeneric("summaryFit"))
 })
 
+setGeneric("summaryMisspec", function(object, ...) {
+    return(standardGeneric("summaryMisspec"))
+})
+
 setGeneric("subtractObject", function(object1, object2, ...) {
     return(standardGeneric("subtractObject"))
 })
@@ -106,7 +110,7 @@ setGeneric("simData", function(param, ...) {
     return(standardGeneric("simData"))
 })
 
-setGeneric("runFit", function(model, realdata, nRep = 1000, misspec = new("NullSimMisspec"), maxDraw = 100, sequential = NA, 
+setGeneric("runFit", function(model, data, nRep = 1000, misspec = new("NullSimMisspec"), maxDraw = 100, sequential = NA, 
     facDist = new("NullSimDataDist"), errorDist = new("NullSimDataDist"), indDist = new("NullSimDataDist"), modelBoot = FALSE, seed = 123321, 
     silent = FALSE, multicore = FALSE, cluster = FALSE, numProc = NULL, empiricalMissing = TRUE, missModel = new("NullSimMissing"), usedStd = TRUE) {
     return(standardGeneric("runFit"))
@@ -146,4 +150,8 @@ setGeneric("toFunction", function(x) {
  
 setGeneric("getPowerFitNested", function(altNested, altParent, cutoff, revDirec = FALSE, usedFit = NULL, ...) {
     return(standardGeneric("getPowerFitNested"))
+})
+
+setGeneric("runFitParam", function(model, nRep = 1000, misspec = new("NullSimMisspec"), maxDraw = 100, seed = 123321, usedStd = TRUE, ...) {
+    return(standardGeneric("runFitParam"))
 })

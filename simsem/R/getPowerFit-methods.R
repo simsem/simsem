@@ -103,7 +103,8 @@ setMethod("getPowerFit", signature(altObject = "SimResult", cutoff = "missing"),
 	nullFit <- as.data.frame(nullObject@fit[,usedFit])
 	temp <- rep(NA, length(usedFit))
 	if(is.null(condValue)) {
-		usedCutoff <- getCutoff(nullObject, alpha=alpha, usedFit=usedFit)
+		usedCutoff <- as.vector(t(getCutoff(nullObject, alpha=alpha, usedFit=usedFit)))
+		names(usedCutoff) <- usedFit
 		temp <- pValue(usedCutoff, as.data.frame(usedDist), revDirec=usedDirec)
 	} else {
 		varyingCutoff <- getCutoff(object=nullFit, alpha = alpha, revDirec = FALSE, usedFit = usedFit, predictor = condValue, df = df, predictorVal="all")

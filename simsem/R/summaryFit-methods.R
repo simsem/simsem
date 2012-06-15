@@ -1,6 +1,6 @@
 # summaryFit: This function will summarize the obtained fit indices and generate a data frame.
 
-setMethod("summaryFit", signature(object = "SimResult"), definition = function(object, alpha = NULL, detail = FALSE, digits=3) {
+setMethod("summaryFit", signature(object = "SimResult"), definition = function(object, alpha = NULL, detail = FALSE) {
         cleanObj <- clean(object)
 		usedFit <- getKeywords()$usedFit
 
@@ -23,7 +23,7 @@ setMethod("summaryFit", signature(object = "SimResult"), definition = function(o
 		if (is.null(alpha)) 
 			alpha <- c(0.1, 0.05, 0.01, 0.001)
 		cutoffs <- sapply(alpha, getCutoff, object = cleanObj, usedFit = usedFit)
-		cutoffs <- round(matrix(as.numeric(cutoffs), length(usedFit), length(alpha)), digits)
+		cutoffs <- matrix(as.numeric(cutoffs), length(usedFit), length(alpha))
 		if (ncol(as.matrix(cutoffs)) == 1) {
 			cutoffs <- t(cutoffs)
 			#rownames(cutoffs) <- usedFit
@@ -31,7 +31,6 @@ setMethod("summaryFit", signature(object = "SimResult"), definition = function(o
 		
 		fit <- as.data.frame(cleanObj@fit[,usedFit])
 		meanfit <- apply(fit, 2, mean, na.rm=TRUE)
-		meanfit <- round(meanfit, digits=digits)
 		result <- cbind(cutoffs, meanfit)
 		colnames(result) <- c(alpha, "Mean")
 		rownames(result)<-usedFit
@@ -40,4 +39,19 @@ setMethod("summaryFit", signature(object = "SimResult"), definition = function(o
 	}
 		
     return(result)
+})
+
+
+setMethod("summaryFit", signature(object = "SimResultParam"), definition = function(object, digits=3) {
+	if(isNullObject(object@fit)) {
+		stop("This object does not have any model misspecification.")
+	} else {
+		quantileValue <- c(0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95)
+		result <- round(apply(object@fit, 2, quantile, quantileValue), digits)
+		names(dimnames(result)) <- c("Fit Indices", "Quantile")
+		fitAverage <- colMeans(object@fit, na.rm = TRUE)
+		fitSE <- sapply(object@fit, sd, na.rm = TRUE)
+		result <- rbind(result, fitAverage, fitSE)
+		return(result)
+	}
 })
