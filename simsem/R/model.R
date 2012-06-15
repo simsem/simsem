@@ -5,6 +5,7 @@ model <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NUL
   
   paramSet <- list(LY=LY, PS=PS, RPS=RPS, TE=TE, RTE=RTE, BE=BE, VTE=VTE, VY=VY, VPS=VPS, TY=TY, AL=AL, MY=MY,ME=ME)
   if(!is.null(modelType)) {
+
     mg <- NULL
     mgidx <- which(sapply(paramSet,is.list))
     mg <- names(mgidx)
@@ -17,22 +18,13 @@ model <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NUL
 
       if(ngroups > 1 && (length(sg) == sum(!sapply(paramSet,is.null))) ) { # ngroups specified, but no mats are lists
        paramSet <- buildModel(paramSet,modelType)
-       # Recompute SG indices
-       sgidx <- which(sapply(paramSet,FUN=function(x) {class(x) == "SimMatrix" || class(x) == "SimVector"}))
-       for(i in seq_along(sgidx)) {
-         temp <- NULL
-          if(class(paramSet[sgidx][[i]]) == "SimMatrix") {
-            temp <- paramSet[sgidx][[i]]
-            paramSet[sgidx][[i]] <- replicate(ngroups,new("SimMatrix",free=temp@free,popParam=temp@popParam,misspec=temp@misspec,symmetric=temp@symmetric))
-          } else {
-            temp <- paramSet[sgidx][[i]]
-            paramSet[sgidx][[i]] <- replicate(ngroups,new("SimVector",free=temp@free,popParam=temp@popParam,misspec=temp@misspec))
-          }
-        }
+       psl <- rep(list(paramSet),ngroups)
+             
       } else { # 1 or more matrices is a list
         
         if(!length(unique(sapply(paramSet[mgidx],length))) == 1) stop("Multiple group lists have differing lengths")
 
+        # Repeat single matrices
         for(i in seq_along(sgidx)) {
           temp <- NULL
           if(class(paramSet[sgidx][[i]]) == "SimMatrix") {
@@ -44,21 +36,29 @@ model <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NUL
           }
         }
 
-        temp <- list()
-        # Check Models. temp is a list of paramSets of a single group.
-        for(i in 1:n) {
-          temp[[i]] <- buildModel(lapply(paramSet,"[[",i),modelType)
-        }
-        # Transform temp back to a paramSet that contains lists of named matrices.
-        paramSet <- psetTrans(temp)
+        # Transform to paramSet to list of parameter sets
+        psl <- list()
+        for(i in 1:n) { psl[[i]] <- lapply(paramSet,"[[",i) } 
+        
+        psl <- lapply(psl,buildModel,modelType="CFA")
       
       }
+      # Create pt for MG
+      pt <- NULL
+       
+       for(i in seq_along(psl)) {
+         if (i == 1) {
+           pt <- buildPT(psl[[i]], pt=pt, group=i,facLab=NULL, indLab=NULL)
+         } else {
+           pt <- mapply(pt,buildPT(psl[[i]], pt=pt, group=i,facLab=NULL, indLab=NULL),FUN=c,SIMPLIFY=FALSE)
+         }
+       }
+      
     } else { # ngroups = 1, and no matrices are lists
      paramSet <- buildModel(paramSet,modelType)
+     pt <- buildPT(paramSet)
    }
   } else { stop("Must specify model type") }
-  
-  pt <- buildPT(paramSet)
   
   return(new("SimSem",pt=pt,dgen=paramSet,modelType=modelType))
 }
@@ -157,46 +157,21 @@ buildModel <- function(paramSet,modelType) {
 
 ## Takes a list of named simMatrix/simVector objects (paramSet) that are optionally also lists.
 ## Returns a table of parameters to be used for analysis with lavaan.
-buildPT <- function(paramSet, facLab=NULL, indLab=NULL) {
+## This time, PT will only take a sg paramSet. And while I'm at it, I'm taking out the df stuff.
 
-  ##2. Convert a chunk at a time - starting with LY - factor loading
-  pt <- NULL
+buildPT <- function(paramSet, pt=NULL, group=1,facLab=NULL, indLab=NULL) {
+
+  ## Convert a chunk at a time - starting with LY - factor loading
   
-  if(is.list(paramSet$LY)) {
-    nf <- ncol(paramSet$LY[[1]]@free)
-    ni <- nrow(paramSet$LY[[1]]@free)
-                 
-    if(is.null(facLab)){lhs <- rep(paste("y",1:nf,sep=""),each=ni)} else { lhs <- rep(facLab,each=ni)}
-    if(is.null(indLab)){rhs <- rep(paste("x",1:ni,sep=""),times=nf)} else { rhs <- rep(indLab,times=nf)}
-    for(i in seq_along(paramSet$LY)) {      
-      if(i == 1) { 
-        pt <- parseFree(paramSet$LY[[i]],group=i,pt=NULL,op="=~",lhs,rhs)
-      } else {
-        pt <- rbind(pt, parseFree(paramSet$LY[[i]], group=i, op="=~",pt=pt,lhs, rhs))
-      }
-    }
-  } else if (!is.null(paramSet$LY)) {
+  if (!is.null(paramSet$LY)) {
     nf <- ncol(paramSet$LY@free)
     ni <- nrow(paramSet$LY@free)
     if(is.null(facLab)){lhs <- rep(paste("y",1:nf,sep=""),each=ni) } else { lhs <- rep(facLab,each=ni)}
     if(is.null(indLab)){rhs <- rep(paste("x",1:ni,sep=""),times=nf) } else { rhs <- rep(indLab,times=nf)}
-    pt <- parseFree(paramSet$LY, group=1, pt=NULL,op="=~",lhs,rhs)
+    pt <- parseFree(paramSet$LY, group=group, pt=pt,op="=~",lhs,rhs)
   }
 
-  ## PS - factor covariance: Symmetric
-  if(is.list(paramSet$PS)) {
-    nf <- ncol(paramSet$PS[[1]]@free)
-    if(is.null(facLab)){
-      lhs <- paste0("y",rep(1:nf,nf:1))
-      rhs <- paste0("y",unlist(lapply(1:nf,function(k) (1:nf)[k:nf])))
-    } else {
-      lhs <- rep(facLab,nf:1)
-      rhs <- unlist(lapply(1:nf,function(k) facLab[k:nf]))
-    }
-    for(i in seq_along(paramSet$PS)) {
-      pt <- rbind(pt, parseFree(paramSet$PS[[i]], group=i, op="~~",pt=pt,lhs,rhs))
-    }
-  } else if (!is.null(paramSet$PS)) {
+  if (!is.null(paramSet$PS)) {
     nf <- ncol(paramSet$PS@free)
     if(is.null(facLab)){
       lhs <- paste0("y",rep(1:nf,nf:1))
@@ -205,23 +180,11 @@ buildPT <- function(paramSet, facLab=NULL, indLab=NULL) {
       lhs <- rep(facLab,nf:1)
       rhs <- unlist(lapply(1:nf,function(k) facLab[k:nf]))
     }
-    pt <- rbind(pt, parseFree(paramSet$PS, group=1, pt=pt,op="~~",lhs,rhs))
+    pt <- mapply(pt, parseFree(paramSet$PS, group=group, pt=pt,op="~~",lhs,rhs),FUN=c,SIMPLIFY=FALSE)
   }
 
   ## RPS - factor correlation (same as PS): Symmetric
- if(is.list(paramSet$RPS)) {
-    nf <- ncol(paramSet$RPS[[1]]@free)
-    if(is.null(facLab)){
-      lhs <- paste0("y",rep(1:nf,nf:1))
-      rhs <- paste0("y",unlist(lapply(1:nf,function(k) (1:nf)[k:nf])))
-    } else {
-      lhs <- rep(facLab,nf:1)
-      rhs <- unlist(lapply(1:nf,function(k) facLab[k:nf]))
-    }
-    for(i in seq_along(paramSet$RPS)) {
-      pt <- rbind(pt, parseFree(paramSet$RPS[[i]], group=i, op="~~",pt=pt,lhs,rhs))
-    }
-  } else if (!is.null(paramSet$RPS)) {
+  if (!is.null(paramSet$RPS)) {
     nf <- ncol(paramSet$RPS@free)
     if(is.null(facLab)){
       lhs <- paste0("y",rep(1:nf,nf:1))
@@ -230,24 +193,12 @@ buildPT <- function(paramSet, facLab=NULL, indLab=NULL) {
       lhs <- rep(facLab,nf:1)
       rhs <- unlist(lapply(1:nf,function(k) facLab[k:nf]))
     }
-    pt <- rbind(pt, parseFree(paramSet$RPS, group=1, pt=pt,op="~~",lhs,rhs))
+    pt <- mapply(pt, parseFree(paramSet$RPS, group=group, pt=pt,op="~~",lhs,rhs),FUN=c,SIMPLIFY=FALSE)
   }
 
   
   ## TE - Covariance of measurement error: Symmetric
-  if(is.list(paramSet$TE)) {
-    ni <- ncol(paramSet$TE[[1]]@free)
-    if(is.null(indLab)){
-      lhs <- paste0("x",rep(1:ni,ni:1))
-      rhs <- paste0("x",unlist(lapply(1:ni,function(k) (1:ni)[k:ni])))
-    } else {
-      lhs <- rep(indLab,ni:1)
-      rhs <- unlist(lapply(1:ni,function(k) indLab[k:ni]))
-    }
-    for(i in seq_along(paramSet$TE)) {
-      pt <- rbind(pt, parseFree(paramSet$TE[[i]], group=i, op="~~",pt=pt,lhs,rhs))
-    }
-  } else if (!is.null(paramSet$TE)) {
+   if (!is.null(paramSet$TE)) {
     ni <- ncol(paramSet$TE@free)
     if(is.null(indLab)){
       lhs <- paste0("x",rep(1:ni,ni:1))
@@ -256,23 +207,11 @@ buildPT <- function(paramSet, facLab=NULL, indLab=NULL) {
       lhs <- rep(indLab,ni:1)
       rhs <- unlist(lapply(1:ni,function(k) indLab[k:ni]))
     }
-    pt <- rbind(pt, parseFree(paramSet$TE, group=1, pt=pt,op="~~",lhs,rhs))
+    pt <- mapply(pt, parseFree(paramSet$TE, group=group, pt=pt,op="~~",lhs,rhs),FUN=c,SIMPLIFY=FALSE)
   }
   
   ## RTE - Correlation of measurment error: Symmetric
-  if(is.list(paramSet$RTE)) {
-    ni <- ncol(paramSet$RTE[[1]]@free)
-    if(is.null(indLab)){
-      lhs <- paste0("x",rep(1:ni,ni:1))
-      rhs <- paste0("x",unlist(lapply(1:ni,function(k) (1:ni)[k:ni])))
-    } else {
-      lhs <- rep(indLab,ni:1)
-      rhs <- unlist(lapply(1:ni,function(k) indLab[k:ni]))
-    }
-    for(i in seq_along(paramSet$RTE)) {
-      pt <- rbind(pt, parseFree(paramSet$RTE[[i]], group=i, op="~~",pt=pt,lhs,rhs))
-    }
-  } else if (!is.null(paramSet$RTE)) {
+ if (!is.null(paramSet$RTE)) {
      ni <- ncol(paramSet$RTE@free)
      if(is.null(indLab)){
        lhs <- paste0("x",rep(1:ni,ni:1))
@@ -281,24 +220,12 @@ buildPT <- function(paramSet, facLab=NULL, indLab=NULL) {
        lhs <- rep(indLab,ni:1)
        rhs <- unlist(lapply(1:ni,function(k) indLab[k:ni]))
      }
-    pt <- rbind(pt, parseFree(paramSet$RTE, group=1, pt=pt,op="~~",lhs,rhs))
+    pt <- mapply(pt, parseFree(paramSet$RTE, group=group, pt=pt,op="~~",lhs,rhs),FUN=c,SIMPLIFY=FALSE)
   }
   
 
   ## BE - Regressions among factors
-  if(is.list(paramSet$BE)) {
-    nf <- ncol(paramSet$BE[[1]]@free)
-    if(is.null(facLab)){
-      lhs <- rep(paste("y",1:nf,sep=""),each=nf)
-      rhs <- rep(paste("y",1:nf,sep=""),times=nf)
-    } else {
-      lhs <- rep(facLab,each=nf)
-      rhs <- rep(facLab,times=nf)
-    }
-    for(i in seq_along(paramSet$BE)) {
-      pt <- rbind(pt, parseFree(paramSet$BE[[i]], group=i, op="~",pt=pt,lhs,rhs))
-    }
-  } else if (!is.null(paramSet$BE)) {
+  if (!is.null(paramSet$BE)) {
     nf <- ncol(paramSet$BE@free)
     if(is.null(facLab)){
       lhs <- rep(paste("y",1:nf,sep=""),each=nf)
@@ -307,25 +234,12 @@ buildPT <- function(paramSet, facLab=NULL, indLab=NULL) {
       lhs <- rep(facLab,each=nf)
       rhs <- rep(facLab,times=nf)
     }
-    pt <- rbind(pt, parseFree(paramSet$BE, group=1, pt=pt,op="~",lhs,rhs))
+    pt <- mapply(pt, parseFree(paramSet$BE, group=group, pt=pt,op="~",lhs,rhs),FUN=c,SIMPLIFY=FALSE)
   }
   
 
   ## AL - factor intercept
- if(is.list(paramSet$AL)) {
-    nf <- length(paramSet$AL[[1]]@free)
-    if(is.null(facLab)){
-      lhs <- paste("y",1:nf,sep="")
-      rhs <- rep("",times=nf)
-    } else {
-      lhs <- facLab
-      rhs <- rep("",times=nf)
-    }
-    for(i in seq_along(paramSet$AL)) {
-      pt <- rbind(pt, parseFree(paramSet$AL[[i]], group=i, op="~1",pt=pt,lhs,rhs))
-    }
-    
-  } else if (!is.null(paramSet$AL)) {
+ if (!is.null(paramSet$AL)) {
     nf <- length(paramSet$AL@free)
     if(is.null(facLab)){
       lhs <- paste("y",1:nf,sep="")
@@ -334,23 +248,11 @@ buildPT <- function(paramSet, facLab=NULL, indLab=NULL) {
       lhs <- facLab
       rhs <- rep("",times=nf)
     }
-    pt <- rbind(pt, parseFree(paramSet$AL, group=1, pt=pt,op="~1",lhs,rhs))
+    pt <- mapply(pt, parseFree(paramSet$AL, group=group, pt=pt,op="~1",lhs,rhs),FUN=c,SIMPLIFY=FALSE)
   }    
 
   ## TY - indicator intercept
- if(is.list(paramSet$TY)) {
-    ni <- length(paramSet$TY[[1]]@free)
-    if(is.null(indLab)){
-      lhs <- paste("x",1:ni,sep="")
-      rhs <- rep("",times=ni)
-    } else {
-      lhs <- indLab
-      rhs <- rep("",times=ni)
-    }
-    for(i in seq_along(paramSet$TY)) {
-      pt <- rbind(pt, parseFree(paramSet$TY[[i]], group=i, op="~1",pt=pt,lhs,rhs))
-    }
-  } else if (!is.null(paramSet$TY)) {
+  if (!is.null(paramSet$TY)) {
      ni <- length(paramSet$TY@free)
      if(is.null(indLab)){
        lhs <- paste("x",1:ni,sep="")
@@ -359,16 +261,12 @@ buildPT <- function(paramSet, facLab=NULL, indLab=NULL) {
        lhs <- indLab
        rhs <- rep("",times=ni)
      }
-    pt <- rbind(pt, parseFree(paramSet$TY, group=1, pt=pt,op="~1",lhs,rhs))
+    pt <- mapply(pt, parseFree(paramSet$TY, group=group, pt=pt,op="~1",lhs,rhs),FUN=c,SIMPLIFY=FALSE)
   }
-  pt <- as.list(pt)
-  LIST <- list(id=pt$id, lhs = as.character(pt$lhs),op = as.character(pt$op), rhs=as.character(pt$rhs),
-               user=pt$user, group=as.integer(pt$group), free=as.integer(pt$free), ustart=pt$ustart, exo=pt$exo,
-               label=as.character(pt$label), eq.id=pt$eq.id, unco=as.integer(pt$unco))
-  return(LIST)  
+  return(pt)  
 }
 
-## Returns a data frame of parsed SimMatrix/SimVector
+## Returns a pt (list) of parsed SimMatrix/SimVector
 parseFree <- function(simDat,group,pt,op,lhs=NULL,rhs=NULL) {
   ## Calculate starting indices from previous pt
   if(!is.null(pt)) {
@@ -401,8 +299,10 @@ parseFree <- function(simDat,group,pt,op,lhs=NULL,rhs=NULL) {
   exo <- rep(0,length(id))
   eq.id <- eqIdx(freeDat,id)
   label <- names(eq.id)
+  eq.id <- as.vector(eq.id)
   unco <- uncoIdx(freeDat,start=startUnco)
-  return(data.frame(id,lhs,op,rhs,user,group,free,ustart,exo,eq.id,label,unco))
+  return(list(id=id,lhs=as.character(lhs),op=as.character(op),rhs=as.character(rhs),user=user,group=as.integer(group),
+              free=as.integer(free),ustart=ustart,exo=exo,eq.id=eq.id,label=as.character(label),unco=as.integer(unco)))
 }
 
 ##  Calculates the indices of free parameters by lavaan rules.
@@ -532,8 +432,7 @@ startingVal <- function(free,popParam) {
   flat
 }
 
-## Some stupid data transformation to get me out of the hole I dug myself in.
-## Goes from list of paramSet to the original specification of a paramSet that contains lists of named matrices.
+## Data Transformation: paramSet with optional lists of named matrices to list of paramSets.
 psetTrans <- function(x) {
   expand <- unlist(x)
   matNames <- names(expand)

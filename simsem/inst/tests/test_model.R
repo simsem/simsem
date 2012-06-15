@@ -14,7 +14,7 @@ context("CFA")
 
 loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
+loading[4:6, 2] <- "a1"
 LY <- bind(loading, 0.7)
 
 latent.cor <- matrix(NA, 2, 2)
@@ -28,6 +28,13 @@ RTE <- bind(error.cor,symmetric=TRUE)
 # Needs model type
 expect_error(model(LY=LY,RPS=RPS,RTE=RTE))
 pt <- model(LY=LY,RPS=RPS,RTE=RTE,modelType="CFA")
+
+## # a useful test data structure
+## paramSet <- list(LY=LY,RPS=RPS,PS=NULL,TE=NULL,RTE=RTE,BE=NULL,VTE=NULL,VY=NULL,
+##                  VPS=NULL,TY=NULL,AL=NULL,MY=NULL,ME=NULL)
+
+## paramSet2 <- list(LY=c(LY,LY),RPS=c(RPS,RPS),PS=NULL,TE=NULL,RTE=RTE,BE=NULL,VTE=NULL,VY=NULL,
+##                  VPS=NULL,TY=NULL,AL=NULL,MY=NULL,ME=NULL)
 
 
 context("CFA2")
