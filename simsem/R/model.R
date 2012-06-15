@@ -162,7 +162,7 @@ buildModel <- function(paramSet,modelType) {
 
 buildPT <- function(paramSet, pt=NULL, group=1,facLab=NULL, indLab=NULL) {
 
-  ## Convert a chunk at a time - starting with LY - factor loading
+  ## Convert a chunk at a time - starting with LY - factor loading. At least LY,PS/RPS must be specified.
   
   if (!is.null(paramSet$LY)) {
     nf <- ncol(paramSet$LY@free)
@@ -172,6 +172,7 @@ buildPT <- function(paramSet, pt=NULL, group=1,facLab=NULL, indLab=NULL) {
     pt <- parseFree(paramSet$LY, group=group, pt=pt,op="=~",lhs,rhs)
   }
 
+  ## PS - factor covariance: Symmetric
   if (!is.null(paramSet$PS)) {
     nf <- ncol(paramSet$PS@free)
     if(is.null(facLab)){
@@ -181,7 +182,11 @@ buildPT <- function(paramSet, pt=NULL, group=1,facLab=NULL, indLab=NULL) {
       lhs <- rep(facLab,nf:1)
       rhs <- unlist(lapply(1:nf,function(k) facLab[k:nf]))
     }
-    pt <- mapply(pt, parseFree(paramSet$PS, group=group, pt=pt,op="~~",lhs,rhs),FUN=c,SIMPLIFY=FALSE)
+    if(!is.null(pt)) {
+      pt <- mapply(pt, parseFree(paramSet$PS, group=group, pt=pt,op="~~",lhs,rhs),FUN=c,SIMPLIFY=FALSE)
+    } else {
+      pt <- parseFree(paramSet$PS, group=group, pt=pt,op="~~",lhs,rhs)
+    }
   }
 
   ## RPS - factor correlation (same as PS): Symmetric
@@ -194,7 +199,11 @@ buildPT <- function(paramSet, pt=NULL, group=1,facLab=NULL, indLab=NULL) {
       lhs <- rep(facLab,nf:1)
       rhs <- unlist(lapply(1:nf,function(k) facLab[k:nf]))
     }
-    pt <- mapply(pt, parseFree(paramSet$RPS, group=group, pt=pt,op="~~",lhs,rhs),FUN=c,SIMPLIFY=FALSE)
+    if(!is.null(pt)) {
+      pt <- mapply(pt, parseFree(paramSet$RPS, group=group, pt=pt,op="~~",lhs,rhs),FUN=c,SIMPLIFY=FALSE)
+    } else {
+      pt <- parseFree(paramSet$RPS, group=group, pt=pt,op="~~",lhs,rhs)
+    }
   }
 
   

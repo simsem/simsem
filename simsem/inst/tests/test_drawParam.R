@@ -6,12 +6,14 @@ source("../../R/find.R")
 source("../../R/validate.R")
 source("../../R/createData.R")
 source("../../R/simDist-constructor.R")
+source("../../R/generate.R")
 
 ## Tests that check correct calculated parameter values?
 ## Tests that check matrices correctly reduced?
 ## - Check all model Types
 ## - Check mg for all model types
-
+## - Check non-normal data distribution
+## - Check misspecification
 
 cfaT <- function() {
   loading <- matrix(0, 6, 2)
@@ -86,10 +88,12 @@ sem <- function() {
   loading.start <- matrix("", 8, 3)
   loading.start[1:3, 1] <- 0.7
   loading.start[4:6, 2] <- 0.7
-  loading.start[7:8, 3] <- "rnorm(1,0.6,0.05)"
+  loading.start[7:8, 3] <- "rnorm(1,0.6,0.08)"
   LY <- bind(loading, loading.start)
 
-  RTE <- bind(diag(8),symmetric=TRUE)
+  rte <- diag(8)
+  diag(rte) <- NA
+  RTE <- bind(rte,1,symmetric=TRUE)
 
   factor.cor <- diag(3)
   factor.cor[1, 2] <- factor.cor[2, 1] <- NA
@@ -176,3 +180,16 @@ indDist <- simDataDist(simNorm(10,2),p=6)
 dat <- createData(p,100,"CFA",indDist=indDist)
 
 dat <- generate(tcfa,100)
+out <- analyze(tcfa,dat)
+
+dat2 <- generate(tcfamg,1000)
+out <- analyze(tcfamg,dat2)
+
+dat3 <- generate(tcfamg2,500)
+out <- analyze(tcfamg2,dat3)
+
+dat4 <- generate(tpath,400)
+outPath <- analyze(tpath, generate(tpath,400))
+
+dat5 <- generate(tsem,400)
+outSem <- analyze(tsem,dat5)

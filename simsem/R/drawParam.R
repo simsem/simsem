@@ -26,7 +26,7 @@ drawParam <- function(model, maxDraw=20, misfitBounds=NULL, misfitType=NULL,aver
 drawParameters <- function(dgen,free,modelType, maxDraw=20, misfitBounds=NULL, misfitType=NULL,averageNumMisspec=FALSE, optMisfit=NULL, numIter=1) {
 
   param <- NULL
-  misCheck <- any(sapply(paramSet,FUN=function(x) {
+  misCheck <- any(sapply(dgen,FUN=function(x) {
     if(!is.null(x) && length(x@misspec)!=0 && !any(is.nan(x@misspec)))
       {TRUE} else {FALSE}  }))
   implied.CM.param <- NULL
@@ -36,9 +36,9 @@ drawParameters <- function(dgen,free,modelType, maxDraw=20, misfitBounds=NULL, m
   repeat {
     if (misCheck) {
       if(!is.null(optMisfit)) {
-        paramsMis <- drawOnce(paramSet = paramSet,modelType = modelType, misspec=misCheck, numFree=free, optMisfit=optMisfit, numIter=numIter, misfitType=misfitType)
+        paramsMis <- drawOnce(paramSet = dgen,modelType = modelType, misspec=misCheck, numFree=free, optMisfit=optMisfit, numIter=numIter, misfitType=misfitType)
       } else {
-        paramsMis <- drawOnce(paramSet = paramSet,modelType = modelType, misspec=misCheck, numFree=free)
+        paramsMis <- drawOnce(paramSet = dgen,modelType = modelType, misspec=misCheck, numFree=free)
       }
       param <- paramsMis$param
       misspec <- paramsMis$misParam
@@ -70,7 +70,7 @@ drawParameters <- function(dgen,free,modelType, maxDraw=20, misfitBounds=NULL, m
         }
       }
     } else {
-      params <- drawOnce(paramSet = paramSet,modelType = modelType, misspec=FALSE, numFree=free)
+      params <- drawOnce(paramSet = dgen,modelType = modelType, misspec=FALSE, numFree=free)
       misspec <- NULL
       misOnly <- NULL
       if (validateObject(params$param,modelType)) {
