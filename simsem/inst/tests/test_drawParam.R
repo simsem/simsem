@@ -139,12 +139,12 @@ tcfa2 <- model(LY=cfa2$LY,PS=cfa2$PS,TE=cfa2$TE,AL=cfa2$AL,TY=cfa2$TY, modelType
 tpath <- model(BE=path$BE, RPS=path$RPS, ME=path$ME, modelType="Path")
 tsem <- model(LY=sem$LY, RTE=sem$RTE, RPS=sem$RPS, BE=sem$BE, modelType="SEM")
 
-cfa1d <- drawOnce(tcfa@dgen,modelType="CFA",misspec=TRUE,numFree=max(tcfa@pt$free))
-cfad <- drawOnce(tcfa2@dgen,modelType="CFA",misspec=FALSE,numFree=max(tcfa2@pt$free))
-pathd <- drawOnce(tpath@dgen,modelType="Path",misspec=FALSE,numFree=max(tpath@pt$free))
-semd <- drawOnce(tsem@dgen,modelType="Sem",misspec=FALSE,numFree=max(tsem@pt$free))
-cfa1do <- drawOnce(tcfa@dgen,modelType="CFA",misspec=TRUE,numFree=max(tcfa@pt$free),
-                  optMisfit="max",numIter=20)
+## cfa1d <- drawOnce(tcfa@dgen,modelType="CFA",misspec=TRUE,numFree=max(tcfa@pt$free))
+## cfad <- drawOnce(tcfa2@dgen,modelType="CFA",misspec=FALSE,numFree=max(tcfa2@pt$free))
+## pathd <- drawOnce(tpath@dgen,modelType="Path",misspec=FALSE,numFree=max(tpath@pt$free))
+## semd <- drawOnce(tsem@dgen,modelType="Sem",misspec=FALSE,numFree=max(tsem@pt$free))
+## cfa1do <- drawOnce(tcfa@dgen,modelType="CFA",misspec=TRUE,numFree=max(tcfa@pt$free),
+##                   optMisfit="max",numIter=20)
 
 drawParam(tcfa)
 drawParam(tcfa2)
@@ -164,3 +164,5 @@ p <- drawParam(tcfa)
 
 dat <- createData(p,100,"CFA")
 indDist <- simDataDist(simNorm(10,2),p=6)
+
+dat <- createData(p,100,"CFA",indDist=indDist)

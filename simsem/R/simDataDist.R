@@ -20,3 +20,8 @@ simDataDist <- function(..., p = NULL, keepScale = TRUE, reverse = FALSE) {
         return(new("SimDataDist", p = p, dist = List, keepScale = keepScale, reverse = reverse))
     }
 } 
+
+
+bindDist <- function(..., p = NULL, keepScale = TRUE, reverse = FALSE) {
+   simDataDist(..., p = NULL, keepScale = TRUE, reverse = FALSE)
+ }
