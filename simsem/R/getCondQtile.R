@@ -27,7 +27,7 @@ getCondQtile <- function(y, x = NULL, xval = NULL, df = 0, qtile = 0.5) {
         dat <- data.frame(y = y, x)
         library(quantreg)
         mod <- rq(express, data = dat, tau = qtile)
-		if(xval == "all") {
+		if(length(xval) == 1 && xval == "all") {
 			result <- predict(mod, as.data.frame(x), interval="none")
 		} else {
 			names(xval) <- name
