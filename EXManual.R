@@ -1859,6 +1859,7 @@ plotPowerFitNested(outDatParentModNested, outDatParentModParent, nullNested=outD
 ###################################### Example 25 nested model comparison and power continuous N and pmMCAR ######################
 
 # Equal first-order effect
+library(simsem)
 
 path <- matrix(0, 5, 5)
 path[2, 1] <- NA
