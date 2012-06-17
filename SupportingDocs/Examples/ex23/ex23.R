@@ -51,7 +51,6 @@ con2[3,] <- c(9, 3)
 rownames(con2) <- rep("LY", 3)
 equalCon <- simEqualCon(con1, con2, modelType="CFA")
 
-# Trivial misspecification
 loadingMis <- matrix(0, 9, 3)
 loadingMis[2:3, 1] <- NA
 loadingMis[5:6, 2] <- NA

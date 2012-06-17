@@ -7,8 +7,9 @@ loading[7:9, 3] <- NA
 model <- simParamCFA(LY=loading)
 analyzeModel <- simModel(model, indLab=paste("x", 1:9, sep=""))
 out <- run(analyzeModel, HolzingerSwineford1939)
+summary(out)
 
-simOut1 <- runFit(model=analyzeModel, realdata=HolzingerSwineford1939, nRep=1000)
+simOut1 <- runFit(model=analyzeModel, data=HolzingerSwineford1939, nRep=1000)
 getCutoff(simOut1, alpha=0.05)
 pValue(out, simOut1)
 
@@ -17,7 +18,7 @@ loadingMis2[1,2] <- NA
 loadingMis2[4,3] <- NA
 LYMis2 <- simMatrix(loadingMis2, 0.3)
 misspec2 <- simMisspecCFA(LY=LYMis2, misBeforeFill=FALSE)
-simOut2 <- runFit(model=analyzeModel, realdata=HolzingerSwineford1939, nRep=1000, misspec=misspec2) 
+simOut2 <- runFit(model=analyzeModel, data=HolzingerSwineford1939, nRep=1000, misspec=misspec2) 
 getCutoff(simOut2, alpha=0.05)
 pValue(out, simOut2)
 
@@ -26,7 +27,7 @@ loadingMis3[6,1] <- NA
 loadingMis3[9,2] <- NA
 LYMis3 <- simMatrix(loadingMis3, 0.3)
 misspec3 <- simMisspecCFA(LY=LYMis3, misBeforeFill=FALSE)
-simOut3 <- runFit(model=analyzeModel, realdata=HolzingerSwineford1939, nRep=1000, misspec=misspec3) 
+simOut3 <- runFit(model=analyzeModel, data=HolzingerSwineford1939, nRep=1000, misspec=misspec3) 
 getCutoff(simOut3, alpha=0.05)
 pValue(out, simOut3)
 
@@ -37,7 +38,7 @@ loadingMis4[c(1:3, 7:9),2] <- NA
 loadingMis4[1:6,3] <- NA
 LYMis4 <- simMatrix(loadingMis4, "u3")
 misspec4 <- simMisspecCFA(LY=LYMis4, misBeforeFill=FALSE)
-simOut4 <- runFit(model=analyzeModel, realdata=HolzingerSwineford1939, nRep=1000, misspec=misspec4) 
+simOut4 <- runFit(model=analyzeModel, data=HolzingerSwineford1939, nRep=1000, misspec=misspec4) 
 getCutoff(simOut4, alpha=0.05)
 pValue(out, simOut4)
 
@@ -48,7 +49,7 @@ loadingMis5[c(1:3, 7:9),2] <- NA
 loadingMis5[1:6,3] <- NA
 LYMis5 <- simMatrix(loadingMis5, "n3")
 misspec5 <- simMisspecCFA(LY=LYMis5, misBeforeFill=FALSE)
-simOut5 <- runFit(model=analyzeModel, realdata=HolzingerSwineford1939, nRep=1000, misspec=misspec5) 
+simOut5 <- runFit(model=analyzeModel, data=HolzingerSwineford1939, nRep=1000, misspec=misspec5) 
 getCutoff(simOut5, alpha=0.05)
 pValue(out, simOut5)
 
@@ -59,7 +60,7 @@ loadingMis6[c(1:3, 7:9),2] <- NA
 loadingMis6[1:6,3] <- NA
 LYMis6 <- simMatrix(loadingMis6, "u3")
 misspec6 <- simMisspecCFA(LY=LYMis6, optMisfit="max", numIter=100, misBeforeFill=FALSE)
-simOut6 <- runFit(model=analyzeModel, realdata=HolzingerSwineford1939, nRep=1000, misspec=misspec6) 
+simOut6 <- runFit(model=analyzeModel, data=HolzingerSwineford1939, nRep=1000, misspec=misspec6) 
 getCutoff(simOut6, alpha=0.05)
 pValue(out, simOut6)
 
@@ -70,8 +71,7 @@ loadingMis7[c(1:3, 7:9),2] <- NA
 loadingMis7[1:6,3] <- NA
 LYMis7 <- simMatrix(loadingMis7, "u1")
 misspec7 <- simMisspecCFA(LY=LYMis7, misfitBound=c(0.02, 0.05), numIter=200, misBeforeFill=FALSE)
-
-simOut7 <- runFit(model=analyzeModel, realdata=HolzingerSwineford1939, nRep=1000, misspec=misspec7) 
+simOut7 <- runFit(model=analyzeModel, data=HolzingerSwineford1939, nRep=1000, misspec=misspec7) 
 getCutoff(simOut7, alpha=0.05)
 pValue(out, simOut7)
 
@@ -83,7 +83,7 @@ loadingMisAlt[7, 2] <- NA
 loadingMisAlt[1, 3] <- NA
 LYMisAlt <- simMatrix(loadingMisAlt, "u69")
 misspecAlt <- simMisspecCFA(LY=LYMisAlt, optMisfit="min", numIter=100, misBeforeFill=FALSE)
-simOutAlt <- runFit(model=analyzeModel, realdata=HolzingerSwineford1939, nRep=1000, misspec=misspecAlt) 
+simOutAlt <- runFit(model=analyzeModel, data=HolzingerSwineford1939, nRep=1000, misspec=misspecAlt) 
 getPowerFit(simOutAlt, nullObject=simOut1) 
 getPowerFit(simOutAlt, nullObject=simOut2) 
 getPowerFit(simOutAlt, nullObject=simOut3) 
@@ -91,8 +91,6 @@ getPowerFit(simOutAlt, nullObject=simOut4)
 getPowerFit(simOutAlt, nullObject=simOut5) 
 getPowerFit(simOutAlt, nullObject=simOut6) 
 getPowerFit(simOutAlt, nullObject=simOut7) 
-
-# Population Misfit Investigation
 
 param1 <- runFitParam(analyzeModel, data=HolzingerSwineford1939)
 param2 <- runFitParam(analyzeModel, data=HolzingerSwineford1939, misspec=misspec2)

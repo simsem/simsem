@@ -108,7 +108,6 @@ setMethod("getPowerFit", signature(altObject = "SimResult", cutoff = "missing"),
 		temp <- pValue(usedCutoff, as.data.frame(usedDist), revDirec=usedDirec)
 	} else {
 		varyingCutoff <- getCutoff(object=nullFit, alpha = alpha, revDirec = FALSE, usedFit = usedFit, predictor = condValue, df = df, predictorVal="all")
-		#varyingCutoff <- sapply(as.list(data.frame(t(condValue))), getCutoff, object=nullFit, alpha = alpha, revDirec = revDirec, usedFit = usedFit, predictor = condValue, df = df)
 		for(i in 1:length(temp)) {
 			temp[i] <- pValueVariedCutoff(varyingCutoff[,i], usedDist[,i], revDirec = usedDirec[i], x = condValue, xval = predictorVal)
 		}	

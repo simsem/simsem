@@ -81,7 +81,7 @@ plotPowerFitDf <- function(altObject, nullObject = NULL, cutoff = NULL, usedFit 
 
 # plotOverHist: Plot overlapping distributions with specified cutoffs
 
-plotOverHist <- function(altObject, nullObject, cutoff=NULL, usedFit=NULL, alpha=alpha) {
+plotOverHist <- function(altObject, nullObject, cutoff=NULL, usedFit=NULL, alpha=0.05, cutoff2=NULL, cutoff3=NULL, cutoff4=NULL) {
 	percentile <- 1 - alpha
 	if (is.null(usedFit)) 
         usedFit <- getKeywords()$usedFit
@@ -108,6 +108,9 @@ plotOverHist <- function(altObject, nullObject, cutoff=NULL, usedFit=NULL, alpha
     nullObject <- as.data.frame(nullObject[, common.name])
     colnames(altObject) <- colnames(nullObject) <- common.name
     cutoff <- cutoff[common.name]
+	if(!is.null(cutoff2)) cutoff2 <- cutoff2[common.name]
+	if(!is.null(cutoff3)) cutoff3 <- cutoff3[common.name]
+	if(!is.null(cutoff4)) cutoff4 <- cutoff4[common.name]
     if (length(common.name) == 2) {
         obj <- par(mfrow = c(1, 2))
     } else if (length(common.name) == 3) {
@@ -123,8 +126,10 @@ plotOverHist <- function(altObject, nullObject, cutoff=NULL, usedFit=NULL, alpha
         swap <- sum(common.name[i] == c("CFI", "TLI")) > 0
         overlapHist(nullObject[, i], altObject[, i], main = common.name[i], xlab = "Value", colors = c("yellow", "skyblue", "lightgreen"), 
             swap = swap)
-        cutoff1 <- quantile(nullObject[, i], percentile, na.rm = TRUE)
-        abline(v = cutoff[i], lty = 1, lwd = 3)
+        abline(v = cutoff[i], lty = 1, lwd = 3, col="red")
+		if(!is.null(cutoff2)) abline(v = cutoff2[i], lty = 1, lwd = 3, col="red")
+		if(!is.null(cutoff3)) abline(v = cutoff3[i], lty = 1, lwd = 3, col="blue")
+		if(!is.null(cutoff4)) abline(v = cutoff4[i], lty = 1, lwd = 3, col="blue")
         position <- "topright"
         if (swap) 
             position <- "topleft"

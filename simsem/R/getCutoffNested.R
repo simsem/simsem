@@ -17,9 +17,6 @@ getCutoffNested <- function(nested, parent, alpha = 0.05, usedFit = NULL, nVal =
     if (is.null(pmMARval) || is.na(pmMARval)) 
         pmMARval <- NULL
     Data <- as.data.frame((nested@fit - parent@fit))
-    if (!is.null(alpha)) {
-        cutoff <- getCutoff(Data, alpha)
-    }
     condition <- c(length(nested@pmMCAR) > 1, length(nested@pmMAR) > 1, length(nested@n) > 1)
     condValue <- cbind(nested@pmMCAR, nested@pmMAR, nested@n)
     colnames(condValue) <- c("Percent MCAR", "Percent MAR", "N")

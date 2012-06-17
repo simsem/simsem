@@ -3,7 +3,7 @@
 setMethod("runFit", signature(model = "SimModel"), definition = function(model, data, nRep = 1000, misspec = new("NullSimMisspec"), 
     maxDraw = 100, sequential = NA, facDist = new("NullSimDataDist"), errorDist = new("NullSimDataDist"), indDist = new("NullSimDataDist"), 
     modelBoot = FALSE, seed = 123321, silent = FALSE, multicore = FALSE, cluster = FALSE, numProc = NULL, empiricalMissing = TRUE, missModel = new("NullSimMissing"), 
-    usedStd = TRUE) {
+    usedStd = TRUE, analyzeModel=NULL) {
     out <- run(model, data)
     if (empiricalMissing) {
         miss <- new("NullMatrix")
@@ -20,7 +20,8 @@ setMethod("runFit", signature(model = "SimModel"), definition = function(model, 
     }
     SimData <- simData(out, misspec = misspec, maxDraw = maxDraw, sequential = sequential, facDist = facDist, errorDist = errorDist, indDist = indDist, 
         usedStd = usedStd, modelBoot = modelBoot, realData = data)
-    simOut <- simResult(nRep, SimData, model, objMissing = missModel, seed = seed, silent = silent, multicore = multicore, cluster = cluster, 
+	if(is.null(analyzeModel)) analyzeModel <- model
+    simOut <- simResult(nRep, SimData, analyzeModel, objMissing = missModel, seed = seed, silent = silent, multicore = multicore, cluster = cluster, 
         numProc = numProc)
     return(simOut)
 })
@@ -28,7 +29,7 @@ setMethod("runFit", signature(model = "SimModel"), definition = function(model, 
 setMethod("runFit", signature(model = "SimModelOut"), definition = function(model, data = new("NullDataFrame"), nRep = 1000, 
     misspec = new("NullSimMisspec"), maxDraw = 100, sequential = NA, facDist = new("NullSimDataDist"), errorDist = new("NullSimDataDist"), 
     indDist = new("NullSimDataDist"), modelBoot = FALSE, seed = 123321, silent = FALSE, multicore = FALSE, cluster = FALSE, numProc = NULL, 
-    empiricalMissing = TRUE, missModel = new("NullSimMissing"), usedStd = TRUE) {
+    empiricalMissing = TRUE, missModel = new("NullSimMissing"), usedStd = TRUE, analyzeModel=NULL) {
     SimData <- simData(model, misspec = misspec, maxDraw = maxDraw, sequential = sequential, facDist = facDist, errorDist = errorDist, 
         indDist = indDist, usedStd = usedStd, modelBoot = modelBoot, realData = data)
     if (empiricalMissing) {
@@ -46,7 +47,7 @@ setMethod("runFit", signature(model = "SimModelOut"), definition = function(mode
             }
         }
     }
-    analyzeModel <- simModel(model@param, equalCon = model@equalCon, indLab = model@indLab)
+	if(is.null(analyzeModel)) analyzeModel <- simModel(model@param, equalCon = model@equalCon, indLab = model@indLab)
     simOut <- simResult(nRep, SimData, analyzeModel, objMissing = missModel, seed = seed, silent = silent, multicore = multicore, cluster = cluster, 
         numProc = numProc)
     return(simOut)

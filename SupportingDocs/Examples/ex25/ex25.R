@@ -46,6 +46,8 @@ plotCutoffNested(outDatNestedModNested, outDatNestedModParent, alpha=0.05)
 outDatParentModNested <- simResult(NULL, datParent, modNested, n=50:500, pmMCAR=seq(0, 0.3, 0.1))
 outDatParentModParent <- simResult(NULL, datParent, modParent, n=50:500, pmMCAR=seq(0, 0.3, 0.1))
 
+anova(outDatParentModNested, outDatParentModParent)
+
 getPowerFitNested(outDatParentModNested, outDatParentModParent, nullNested=outDatNestedModNested, nullParent=outDatNestedModParent, nVal=250, pmMCARval=0.2)
 getPowerFitNested(outDatParentModNested, outDatParentModParent, cutoff=cutoff, nVal=250, pmMCARval=0.2)
 

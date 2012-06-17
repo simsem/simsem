@@ -1,11 +1,12 @@
 # plotCutoff: This function will plot sampling distributions of fit indices with vertical lines of cutoffs
 
 setMethod("plotCutoff", signature(object = "data.frame"), definition = function(object, cutoff = NULL, revDirec = FALSE, usedFit = NULL, 
-    vector1 = NULL, vector2 = NULL, nameVector1 = NULL, nameVector2 = NULL, alpha = NULL, useContour = T) {
+    vector1 = NULL, vector2 = NULL, nameVector1 = NULL, nameVector2 = NULL, alpha = NULL, useContour = T, cutoff2=NULL) {
     if (is.null(usedFit)) 
         usedFit <- getKeywords()$usedFit
     object <- as.data.frame(object[, usedFit])
     cutoff <- cutoff[usedFit]
+	if(!is.null(cutoff2)) cutoff2 <- cutoff2[usedFit]
     object <- as.data.frame(object[, !apply(object, 2, function(vec) all(is.na(vec)))])
     colnames(object) <- usedFit
     if (ncol(object) == 2) {
@@ -30,6 +31,7 @@ setMethod("plotCutoff", signature(object = "data.frame"), definition = function(
             hist(object[, i], main = colnames(object)[i], breaks = 10, col = "yellow", xlab = "Value")
             if (!is.null(cutoff)) 
                 abline(v = cutoff[i], col = "red", lwd = 3)
+			if(!is.null(cutoff2)) abline(v = cutoff2[i], col = "red", lwd = 3)
         } else if (!is.null(vector1) & is.null(vector2)) {
             plotQtile(vector1, object[, i], xlab = nameVector1, ylab = "Value", main = colnames(object)[i], qtile = val, df = 5)
         } else if (!is.null(vector1) & !is.null(vector2)) {

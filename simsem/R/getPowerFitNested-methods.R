@@ -44,11 +44,12 @@ setMethod("getPowerFitNested", signature(altNested = "SimResult", altParent = "S
 setMethod("getPowerFitNested", signature(altNested = "SimResult", altParent = "SimResult", cutoff = "missing"), definition = function(altNested, altParent, cutoff=NULL, nullNested, nullParent, revDirec = FALSE, usedFit = NULL, alpha = 0.05, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, df = 0) {
     if (is.null(usedFit)) 
         usedFit <- getKeywords()$usedFit
-	mod <- clean(altNested, altParent, nullNested, nullParent)
-	altNested <- mod[[1]]
-	altParent <- mod[[2]]
-	nullNested <- mod[[3]]
-	nullParent <- mod[[4]]
+	mod1 <- clean(altNested, altParent)
+	altNested <- mod1[[1]]
+	altParent <- mod1[[2]]
+	mod2 <- clean(nullNested, nullParent)
+	nullNested <- mod2[[1]]
+	nullParent <- mod2[[2]]
 	if(!all.equal(unique(altNested@paramValue), unique(altParent@paramValue))) stop("'altNested' and 'altParent' are based on different data and cannot be compared, check your random seed")
 	if(!all.equal(unique(nullNested@paramValue), unique(nullParent@paramValue))) stop("'nullNested' and 'nullParent' are based on different data and cannot be compared, check your random seed")
 	if(!multipleAllEqual(unique(altNested@n), unique(altParent@n), unique(nullNested@n), unique(nullParent@n))) stop("Models are based on different values of sample sizes")
@@ -91,9 +92,9 @@ setMethod("getPowerFitNested", signature(altNested = "SimResult", altParent = "S
 		names(usedCutoff) <- usedFit
 		temp <- pValue(usedCutoff, usedDist, revDirec=usedDirec)
 	} else {
-		varyingCutoff <- sapply(as.list(data.frame(t(condValue))), getCutoff, object=nullFit, alpha = alpha, revDirec = revDirec, usedFit = usedFit, predictor = condValue, df = df)
+		varyingCutoff <- getCutoff(object=nullFit, alpha = alpha, revDirec = FALSE, usedFit = usedFit, predictor = condValue, df = df, predictorVal="all")
 		for(i in 1:length(temp)) {
-			temp[i] <- pValueVariedCutoff(varyingCutoff[i,], usedDist[,i], revDirec = usedDirec[i], x = condValue, xval = predictorVal)
+			temp[i] <- pValueVariedCutoff(varyingCutoff[,i], usedDist[,i], revDirec = usedDirec[i], x = condValue, xval = predictorVal)
 		}	
 	}
 	names(temp) <- usedFit

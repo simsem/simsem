@@ -112,7 +112,7 @@ setGeneric("simData", function(param, ...) {
 
 setGeneric("runFit", function(model, data, nRep = 1000, misspec = new("NullSimMisspec"), maxDraw = 100, sequential = NA, 
     facDist = new("NullSimDataDist"), errorDist = new("NullSimDataDist"), indDist = new("NullSimDataDist"), modelBoot = FALSE, seed = 123321, 
-    silent = FALSE, multicore = FALSE, cluster = FALSE, numProc = NULL, empiricalMissing = TRUE, missModel = new("NullSimMissing"), usedStd = TRUE) {
+    silent = FALSE, multicore = FALSE, cluster = FALSE, numProc = NULL, empiricalMissing = TRUE, missModel = new("NullSimMissing"), usedStd = TRUE, analyzeModel=NULL) {
     return(standardGeneric("runFit"))
 })
 
@@ -148,10 +148,14 @@ setGeneric("toFunction", function(x) {
     return(standardGeneric("toFunction"))
 })
  
-setGeneric("getPowerFitNested", function(altNested, altParent, cutoff, revDirec = FALSE, usedFit = NULL, ...) {
+setGeneric("getPowerFitNested", function(altNested, altParent, cutoff, ...) {
     return(standardGeneric("getPowerFitNested"))
 })
 
 setGeneric("runFitParam", function(model, nRep = 1000, misspec = new("NullSimMisspec"), maxDraw = 100, seed = 123321, usedStd = TRUE, ...) {
     return(standardGeneric("runFitParam"))
+})
+
+setGeneric("getPowerFitNonNested", function(dat2Mod1, dat2Mod2, cutoff, ...) {
+    return(standardGeneric("getPowerFitNonNested"))
 })

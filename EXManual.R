@@ -1550,7 +1550,7 @@ model <- simParamCFA(LY=loading)
 analyzeModel <- simModel(model, indLab=paste("x", 1:9, sep=""))
 out <- run(analyzeModel, HolzingerSwineford1939)
 
-simOut1 <- runFit(model=analyzeModel, realdata=HolzingerSwineford1939, nRep=1000)
+simOut1 <- runFit(model=analyzeModel, data=HolzingerSwineford1939, nRep=1000)
 getCutoff(simOut1, alpha=0.05)
 pValue(out, simOut1)
 
@@ -1559,7 +1559,7 @@ loadingMis2[1,2] <- NA
 loadingMis2[4,3] <- NA
 LYMis2 <- simMatrix(loadingMis2, 0.3)
 misspec2 <- simMisspecCFA(LY=LYMis2, misBeforeFill=FALSE)
-simOut2 <- runFit(model=analyzeModel, realdata=HolzingerSwineford1939, nRep=1000, misspec=misspec2) 
+simOut2 <- runFit(model=analyzeModel, data=HolzingerSwineford1939, nRep=1000, misspec=misspec2) 
 getCutoff(simOut2, alpha=0.05)
 pValue(out, simOut2)
 
@@ -1568,7 +1568,7 @@ loadingMis3[6,1] <- NA
 loadingMis3[9,2] <- NA
 LYMis3 <- simMatrix(loadingMis3, 0.3)
 misspec3 <- simMisspecCFA(LY=LYMis3, misBeforeFill=FALSE)
-simOut3 <- runFit(model=analyzeModel, realdata=HolzingerSwineford1939, nRep=1000, misspec=misspec3) 
+simOut3 <- runFit(model=analyzeModel, data=HolzingerSwineford1939, nRep=1000, misspec=misspec3) 
 getCutoff(simOut3, alpha=0.05)
 pValue(out, simOut3)
 
@@ -1579,7 +1579,7 @@ loadingMis4[c(1:3, 7:9),2] <- NA
 loadingMis4[1:6,3] <- NA
 LYMis4 <- simMatrix(loadingMis4, "u3")
 misspec4 <- simMisspecCFA(LY=LYMis4, misBeforeFill=FALSE)
-simOut4 <- runFit(model=analyzeModel, realdata=HolzingerSwineford1939, nRep=1000, misspec=misspec4) 
+simOut4 <- runFit(model=analyzeModel, data=HolzingerSwineford1939, nRep=1000, misspec=misspec4) 
 getCutoff(simOut4, alpha=0.05)
 pValue(out, simOut4)
 
@@ -1590,7 +1590,7 @@ loadingMis5[c(1:3, 7:9),2] <- NA
 loadingMis5[1:6,3] <- NA
 LYMis5 <- simMatrix(loadingMis5, "n3")
 misspec5 <- simMisspecCFA(LY=LYMis5, misBeforeFill=FALSE)
-simOut5 <- runFit(model=analyzeModel, realdata=HolzingerSwineford1939, nRep=1000, misspec=misspec5) 
+simOut5 <- runFit(model=analyzeModel, data=HolzingerSwineford1939, nRep=1000, misspec=misspec5) 
 getCutoff(simOut5, alpha=0.05)
 pValue(out, simOut5)
 
@@ -1601,7 +1601,7 @@ loadingMis6[c(1:3, 7:9),2] <- NA
 loadingMis6[1:6,3] <- NA
 LYMis6 <- simMatrix(loadingMis6, "u3")
 misspec6 <- simMisspecCFA(LY=LYMis6, optMisfit="max", numIter=100, misBeforeFill=FALSE)
-simOut6 <- runFit(model=analyzeModel, realdata=HolzingerSwineford1939, nRep=1000, misspec=misspec6) 
+simOut6 <- runFit(model=analyzeModel, data=HolzingerSwineford1939, nRep=1000, misspec=misspec6) 
 getCutoff(simOut6, alpha=0.05)
 pValue(out, simOut6)
 
@@ -1613,7 +1613,7 @@ loadingMis7[1:6,3] <- NA
 LYMis7 <- simMatrix(loadingMis7, "u1")
 misspec7 <- simMisspecCFA(LY=LYMis7, misfitBound=c(0.02, 0.05), numIter=200, misBeforeFill=FALSE)
 
-simOut7 <- runFit(model=analyzeModel, realdata=HolzingerSwineford1939, nRep=1000, misspec=misspec7) 
+simOut7 <- runFit(model=analyzeModel, data=HolzingerSwineford1939, nRep=1000, misspec=misspec7) 
 getCutoff(simOut7, alpha=0.05)
 pValue(out, simOut7)
 
@@ -1625,7 +1625,7 @@ loadingMisAlt[7, 2] <- NA
 loadingMisAlt[1, 3] <- NA
 LYMisAlt <- simMatrix(loadingMisAlt, "u69")
 misspecAlt <- simMisspecCFA(LY=LYMisAlt, optMisfit="min", numIter=100, misBeforeFill=FALSE)
-simOutAlt <- runFit(model=analyzeModel, realdata=HolzingerSwineford1939, nRep=1000, misspec=misspecAlt) 
+simOutAlt <- runFit(model=analyzeModel, data=HolzingerSwineford1939, nRep=1000, misspec=misspecAlt) 
 getPowerFit(simOutAlt, nullObject=simOut1) 
 getPowerFit(simOutAlt, nullObject=simOut2) 
 getPowerFit(simOutAlt, nullObject=simOut3) 
@@ -1907,6 +1907,8 @@ plotCutoffNested(outDatNestedModNested, outDatNestedModParent, alpha=0.05)
 outDatParentModNested <- simResult(NULL, datParent, modNested, n=50:500, pmMCAR=seq(0, 0.3, 0.1))
 outDatParentModParent <- simResult(NULL, datParent, modParent, n=50:500, pmMCAR=seq(0, 0.3, 0.1))
 
+anova(outDatParentModNested, outDatParentModParent)
+
 getPowerFitNested(outDatParentModNested, outDatParentModParent, nullNested=outDatNestedModNested, nullParent=outDatNestedModParent, nVal=250, pmMCARval=0.2)
 getPowerFitNested(outDatParentModNested, outDatParentModParent, cutoff=cutoff, nVal=250, pmMCARval=0.2)
 
@@ -1923,11 +1925,237 @@ plotPowerFitNested(outDatParentModNested, outDatParentModParent, cutoff=cutoff2,
 ##################################### Time slot in SimResult and SimResultParam ################################
 ##################################### Add the nonconvergence paramValue ########################################
 ###################################### Example 26 Nested Model by the real data ###################################
+
+library(simsem)
+library(lavaan)
+
+LY <- matrix(1, 4, 2)
+LY[,2] <- 0:3
+
+PS <- matrix(NA, 2, 2)
+
+TY <- rep(0, 4)
+
+AL <- rep(NA, 2)
+
+TE <- diag(NA, 4)
+
+linearModel <- simParamCFA(LY=LY, PS=PS, TY=TY, AL=AL, TE=TE)
+
+LY2 <- matrix(1, 4, 2)
+LY2[,2] <- c(0, NA, NA, 3)
+
+unconstrainModel <- simParamCFA(LY=LY2, PS=PS, TY=TY, AL=AL, TE=TE)
+
+nested <- simModel(linearModel, indLab=paste("t", 1:4, sep=""))
+parent <- simModel(unconstrainModel, indLab=paste("t", 1:4, sep=""))
+
+outNested <- run(nested, Demo.growth)
+outParent <- run(parent, Demo.growth)
+
+loadingMis <- matrix(0, 4, 2)
+loadingMis[2:3, 2] <- NA
+LYmis <- simMatrix(loadingMis, "runif(1, -0.1, 0.1)")
+
+
+linearMis <- simMisspecCFA(LY=LYmis)
+
+simNestedNested <- runFit(model=nested, data=Demo.growth, nRep=1000, misspec=linearMis)
+simNestedParent <- runFit(model=nested, data=Demo.growth, nRep=1000, misspec=linearMis, analyzeModel=parent)
+simParentNested <- runFit(model=parent, data=Demo.growth, nRep=1000, analyzeModel=nested)
+simParentParent <- runFit(model=parent, data=Demo.growth, nRep=1000)
+
+getCutoff(simNestedNested, simNestedParent, alpha=0.05)
+pValue(out, simOut1)
+
+pValueNested <- function(target, nested, parent, usedFit = NULL, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, df = 0) {
+    mod <- clean(nested, parent)
+	nested <- mod[[1]]
+	parent <- mod[[2]]
+    if (is.null(usedFit)) 
+        usedFit <- getKeywords()$usedFit
+    revDirec <- (usedFit %in% c("CFI", "TLI")) # CFA --> FALSE, RMSEA --> TRUE
+	
+	if(!all.equal(unique(nested@paramValue), unique(parent@paramValue))) stop("Models are based on different data and cannot be compared, check your random seed")
+	if(!all.equal(unique(nested@n), unique(parent@n))) stop("Models are based on different values of sample sizes")
+	if(!all.equal(unique(nested@pmMCAR), unique(parent@pmMCAR))) stop("Models are based on different values of the percent completely missing at random")
+	if(!all.equal(unique(nested@pmMAR), unique(parent@pmMAR))) stop("Models are based on different values of the percent missing at random")
+	
+	if (is.null(nVal) || is.na(nVal)) 
+        nVal <- NULL
+    if (is.null(pmMCARval) || is.na(pmMCARval)) 
+        pmMCARval <- NULL
+    if (is.null(pmMARval) || is.na(pmMARval)) 
+        pmMARval <- NULL
+    Data <- as.data.frame((nested@fit - parent@fit)[,usedFit]) 
+    condition <- c(length(nested@pmMCAR) > 1, length(nested@pmMAR) > 1, length(nested@n) > 1)
+    condValue <- cbind(nested@pmMCAR, nested@pmMAR, nested@n)
+    colnames(condValue) <- c("Percent MCAR", "Percent MAR", "N")
+    condValue <- condValue[, condition]
+    if (is.null(condValue) || length(condValue) == 0) 
+        condValue <- NULL
+    predictorVal <- rep(NA, 3)
+    if (condition[3]) {
+        ifelse(is.null(nVal), predictorVal[3] <- target@n, 
+            predictorVal[3] <- nVal)
+    }
+    if (condition[1]) {
+        ifelse(is.null(pmMCARval), predictorVal[1] <- mean(target@pMiss), 
+            predictorVal[1] <- pmMCARval)
+    }
+    if (condition[2]) {
+        ifelse(is.null(pmMARval), stop("Please specify the percent of missing at random, 'pmMARval', because the percent of missing at random in the result object is varying"), 
+            predictorVal[2] <- pmMARval)
+    }
+    predictorVal <- predictorVal[condition]
+    cutoff <- target@fit[usedFit]
+	if(any(condition)) {
+		result <- pValue(cutoff, Data, revDirec, x = condValue, xval = predictorVal, df = df, asLogical = FALSE)
+		names(result) <- usedFit
+		return(result)
+	} else {
+		logicalMat <- pValue(cutoff, Data, revDirec, asLogical = TRUE)
+		result <- apply(logicalMat, 2, mean, na.rm = TRUE)
+		names(result) <- usedFit
+		andRule <- mean(apply(logicalMat, 1, all), na.rm = TRUE)
+		orRule <- mean(apply(logicalMat, 1, any), na.rm = TRUE)
+		return(c(result, andRule = andRule, orRule = orRule))
+	}
+}
+
 ###################################### Example 27 nonnested model comparison and power ################################# 
+
+library(simsem)
+
+# Kris Preacher Paper
+
+# Model 1
+
+path <- matrix(0, 6, 6)
+path[2, 1] <- NA
+path[3, 2] <- NA
+path[4, 3] <- NA
+path[5, 4] <- NA
+path[6, 5] <- NA
+BE <- simMatrix(path, 0.5)
+
+RPS <- symMatrix(diag(6))
+
+model1 <- simSetPath(BE=BE, RPS=RPS)
+
+loading <- matrix(NA, 6, 1)
+loading[1, 1] <- 1
+LY <- simMatrix(loading, 1)
+
+PS <- symMatrix(as.matrix(NA), 1)
+
+TE <- symMatrix(diag(NA, 6), diag(0.5, 6))
+
+model2 <- simSetCFA(LY=LY, PS=PS, TE=TE)
+
+con1 <- matrix(c(2, 1, 3, 1), 2, 2, byrow=TRUE)
+rownames(con1) <- rep("LY", 2)
+con <- simEqualCon(con1, modelType="CFA")
+
+data1 <- simData(model1, 200)
+data2 <- simData(model2, 200, equalCon=con)
+
+analyze1 <- simModel(model1)
+analyze2 <- simModel(model2, equalCon=con)
+
+
+out11 <- simResult(1000, data1, analyze1)
+out21 <- simResult(1000, data2, analyze1)
+out12 <- simResult(1000, data1, analyze2)
+out22 <- simResult(1000, data2, analyze2)
+
+
+dat1 <- run(data1)
+dat2 <- run(data2)
+result11 <- run(analyze1, dat1)
+result12 <- run(analyze2, dat1)
+result21 <- run(analyze1, dat2)
+result22 <- run(analyze2, dat2)
+
+
+logLikFit(result11, result12, out11, out12, out21, out22)
+logLikFit(result21, result22, out11, out12, out21, out22) 
+
+getCutoffNonNested(out11, out12, out21, out22)
+
+getPowerFitNonNested(out21, out22, dat1Mod1=out11, dat1Mod2=out12)
+getPowerFitNonNested(out21, out22, cutoff=c(AIC=0, BIC=0))
+
+
+
+plotCutoffNonNested <- function(dat1Mod1, dat1Mod2, dat2Mod1=NULL, dat2Mod2=NULL, alpha=.05, onetailed=FALSE) {
+	# Maximum only one varying parameter
+	# If two varying parameter is selected, AIC is automatically used.
+}
+
+plotPowerFitNonNested <- function(dat1Mod1, dat1Mod2, dat2Mod1=NULL, dat2Mod2=NULL, alpha=.05, onetailed=FALSE) {
+	# The same function as the plotCutoffNonNested for scatterplot
+	# If logistic regression is used, AIC is automatically used.
+}
+
+
+############## Subexample 2 #####################
+
+path <- matrix(0, 3, 3)
+path[2, 1] <- NA
+path[3, 2] <- NA
+BE <- simMatrix(path, 0.5)
+RPS <- symMatrix(diag(3))
+model1 <- simSetPath(BE=BE, RPS=RPS)
+
+path2 <- matrix(0, 3, 3)
+path2[3, 1] <- NA
+path2[2, 3] <- NA
+BE2 <- simMatrix(path2, 0.5)
+model2 <- simSetPath(BE=BE2, RPS=RPS)
+
+data1 <- simData(model1, 60)
+data2 <- simData(model2, 60)
+
+analyze1 <- simModel(model1)
+analyze2 <- simModel(model2)
+
+
+out11 <- simResult(1000, data1, analyze1)
+out21 <- simResult(1000, data2, analyze1)
+out12 <- simResult(1000, data1, analyze2)
+out22 <- simResult(1000, data2, analyze2)
+
+
+dat1 <- run(data1)
+dat2 <- run(data2)
+result11 <- run(analyze1, dat1)
+result12 <- run(analyze2, dat1)
+result21 <- run(analyze1, dat2)
+result22 <- run(analyze2, dat2)
+
+
+logLikFit(result11, result12, out11, out12, out21, out22)
+logLikFit(result21, result22, out11, out12, out21, out22) 
+
+getCutoffNonNested(out11, out12, out21, out22)
+
+getPowerFitNonNested(out21, out22, dat1Mod1=out11, dat1Mod2=out12)
+getPowerFitNonNested(out21, out22, cutoff=c(AIC=0, BIC=0))
+
+plotCutoffNonNested(out11, out12, onetailed=TRUE)
+plotCutoffNonNested(out22, out21, onetailed=TRUE)
+plotCutoffNonNested(out11, out12, out21, out22)
+plotCutoffNonNested(out11, out12, out21, out22, onetailed=TRUE)
+
+plotPowerFitNonNested(out21, out22, out11, out12)
+
+	# Compute the power in one and two tailed
+
 ###################################### Example 28 nonnested model comparison and power continuous N ################################# 
 ###################################### Example 29 nonnested model comparison and power continuous N and pmMCAR ####################
 ###################################### Example 30 Nonnested model by the real data ####################
-
+###################################### Double bootstrap, Bollen-Stine boot, double bollen-stine boot
 
 
 library(simsem)
