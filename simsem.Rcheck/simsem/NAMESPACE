@@ -9,7 +9,7 @@ exportMethods(summary, run, summaryShort, adjust, simModel,
 	getCutoff, getPowerFit, plotCutoff, summaryParam, plotDist, createImpliedMACS,
 	skew, kurtosis, extract, anova, simData, pValue, runFit, 
 	summaryPopulation, getPopulation, setPopulation, popMisfit, toFunction, summaryFit,
-	getPowerFitNested)
+	getPowerFitNested, summaryMisspec, runFitParam, getPowerFitNonNested)
 export(simUnif, simNorm, simBeta, simBinom, simCauchy, simChisq, simExp,
 	simF, simGamma, simGeom, simHyper, simLnorm, simLogis, simNbinom, 
 	simPois, simT, simWeibull, 
@@ -20,4 +20,5 @@ export(simUnif, simNorm, simBeta, simBinom, simCauchy, simChisq, simExp,
 	findRecursiveSet, findPossibleFactorCor, findIndIntercept, findIndResidualVar, findFactorIntercept, findFactorResidualVar, 
 	findIndTotalVar, findIndMean, findFactorTotalVar, findFactorTotalCov, findFactorMean, 
 	getPower, plotPower, findPower, plotMisfit, simResultParam, popMisfitMACS, popDiscrepancy, continuousPower,
-	plotPowerFit, plotPowerFitNested, plotCutoffNested, getCutoffNested, multipleAllEqual)
+	plotPowerFit, plotPowerFitNested, plotCutoffNested, getCutoffNested, multipleAllEqual,
+	getCutoffNonNested, plotCutoffNonNested, plotPowerFitNonNested, likRatioFit, pValueNested, pValueNonNested)

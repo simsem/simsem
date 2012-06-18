@@ -10,7 +10,7 @@
 	Find the proportion of the difference in fit indices that indicate worse fit than a specified (or internally derived) cutoffs. 
 }
 \usage{
-getPowerFitNested(altNested, altParent, cutoff, revDirec = FALSE, usedFit = NULL, ...)
+getPowerFitNested(altNested, altParent, cutoff, ...)
 }
 \arguments{
   \item{altNested}{
@@ -22,13 +22,6 @@ getPowerFitNested(altNested, altParent, cutoff, revDirec = FALSE, usedFit = NULL
   \item{cutoff}{
 	A vector of priori cutoffs for fit indices.
 }
-  \item{revDirec}{
-	The default is to count the proportion of fit indices that indicates lower fit to the model, such as 
-	how many RMSEA in the alternative model that is worse than cutoffs. The direction can be reversed by setting as \code{TRUE}.
-}
-  \item{usedFit}{
-	Vector of names of fit indices that researchers wish to get power from. The default is to get the powers of all fit indices.  
-  }
   \item{\dots}{
 	Additional arguments 
   }
@@ -36,7 +29,7 @@ getPowerFitNested(altNested, altParent, cutoff, revDirec = FALSE, usedFit = NULL
 \section{Methods}{
 	\describe{
 	\item{signature(altNested="SimResult", altParent="SimResult", cutoff="vector")}{
-		This method will find the the differences in fit indices from \code{altNested} and \code{altParent} that provides worse fit than the \code{cutoff}. The additional arguments are \code{nVal}, \code{pmMCARval}, \code{pmMARval}, \code{condCutoff}, and \code{df}, which are needed when using varying sample sizes or percent missing across replications in \code{\linkS4class{SimResult}}. The \code{nVal} is the sample size value that researchers wish to find the fit indices cutoffs from. The \code{pmMCARval} is the percent missing completely at random value that researchers wish to find the fit indices cutoffs from. The \code{pmMARval} is the percent missing at random value that researchers wish to find the fit indices cutoffs from. The \code{condCutoff} is a logical. If \code{TRUE}, the cutoff is applicable only a given set of \code{nVal}, \code{pmMCARval}, and \code{pmMARval}. If \code{FALSE}, the cutoff is applicable in any values of sample size and percent missing. The \code{df} is the degree of freedom used in spline method in predicting the fit indices by the predictors. If \code{df} is 0, the spline method will not be applied.
+		This method will find the the differences in fit indices from \code{altNested} and \code{altParent} that provides worse fit than the \code{cutoff}. The additional arguments are \code{revDirec}, \code{usedFit}, \code{nVal}, \code{pmMCARval}, \code{pmMARval}, \code{condCutoff}, and \code{df}, which are needed when using varying sample sizes or percent missing across replications in \code{\linkS4class{SimResult}}. The \code{revDirec} is whether to reverse a direction. The default is to count the proportion of fit indices that indicates lower fit to the model, such as how many RMSEA in the alternative model that is worse than cutoffs. The direction can be reversed by setting as \code{TRUE}. The \code{usedFit} is the vector of names of fit indices that researchers wish to get power from. The default is to get the powers of all fit indices. The \code{nVal} is the sample size value that researchers wish to find the fit indices cutoffs from. The \code{pmMCARval} is the percent missing completely at random value that researchers wish to find the fit indices cutoffs from. The \code{pmMARval} is the percent missing at random value that researchers wish to find the fit indices cutoffs from. The \code{condCutoff} is a logical. If \code{TRUE}, the cutoff is applicable only a given set of \code{nVal}, \code{pmMCARval}, and \code{pmMARval}. If \code{FALSE}, the cutoff is applicable in any values of sample size and percent missing. The \code{df} is the degree of freedom used in spline method in predicting the fit indices by the predictors. If \code{df} is 0, the spline method will not be applied.
 	}
 	\item{signature(altNested="SimResult", altParent="SimResult", cutoff="missing")}{
 		The details are similar to the method for \code{altNested="SimResult"}, \code{altParent="SimResult"}, and \code{cutoff="vector"}. The \code{cutoff} argument must not be specified. Rather, the \code{nullNested} and \code{nullParent}, which are additional arguments of this method, are required. The \code{nullNested} is the \code{\linkS4class{SimResult}} that saves the simulation result of the nested model when the nested model is \code{TRUE}. The \code{nullParent} is the \code{\linkS4class{SimResult}} that saves the simulation result of the parent model when the nested model is \code{TRUE}.

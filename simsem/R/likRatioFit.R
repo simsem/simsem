@@ -1,10 +1,10 @@
 # logLikFit: Get a log likelihood ratio based on the fit indices
 
-logLikFit <- function(out1, out2, dat1Mod1, dat1Mod2, dat2Mod1, dat2Mod2, usedFit=NULL, prior=1) {
+likRatioFit <- function(outMod1, outMod2, dat1Mod1, dat1Mod2, dat2Mod1, dat2Mod2, usedFit=NULL, prior=1) {
 	if (is.null(usedFit)) 
         usedFit <- getKeywords()$usedFit
 
-	observedFit <- as.data.frame(rbind(out1@fit, out2@fit)[,usedFit])
+	observedFit <- as.data.frame(rbind(outMod1@fit, outMod2@fit)[,usedFit])
 	
 	mod1 <- clean(dat1Mod1, dat1Mod2, dat2Mod1, dat2Mod2)
 	dat1Mod1 <- mod1[[1]]
@@ -20,11 +20,11 @@ logLikFit <- function(out1, out2, dat1Mod1, dat1Mod2, dat2Mod1, dat2Mod2, usedFi
 	histDat1 <- mapply(find2Dhist, vec1 = dat1Mod1Fit, vec2 = dat1Mod2Fit, SIMPLIFY=FALSE)
 	histDat2 <- mapply(find2Dhist, vec1 = dat2Mod1Fit, vec2 = dat2Mod2Fit, SIMPLIFY=FALSE)
 	
-	logLikDat1 <- mapply(findphist, observedFit, histDat1)
-	logLikDat2 <- mapply(findphist, observedFit, histDat2)
-	logLikDat1[logLikDat1 == 0] <- 0.0000001
-	logLikDat2[logLikDat2 == 0] <- 0.0000001
-	(logLikDat1/logLikDat2) * prior
+	likDat1 <- mapply(findphist, observedFit, histDat1)
+	likDat2 <- mapply(findphist, observedFit, histDat2)
+	likDat1[likDat1 == 0] <- 0.0000001
+	likDat2[likDat2 == 0] <- 0.0000001
+	(likDat1/likDat2) * prior
 }
 
 findphist <- function(value, hist) {

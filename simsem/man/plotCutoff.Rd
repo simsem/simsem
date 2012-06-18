@@ -30,6 +30,7 @@ NONE. Only plot the fit indices distributions.
 \section{Details in \dots}{
 	\itemize{
 		\item \code{cutoff}: A priori cutoffs for fit indices, saved in a vector
+		\item \code{cutoff2}: Another set of priori cutoffs for fit indices, saved in a vector
 		\item \code{alpha}:	A priori alpha level to getCutoffs of fit indices (do not specify when you have \code{cutoff})
 		\item \code{revDirec}:	The default is to find critical point on the side that indicates worse fit (the right side of RMSEA or the left side of CFI). If specifying as TRUE, the directions are reversed.
 		\item \code{usedFit}:	The name of fit indices that researchers wish to plot

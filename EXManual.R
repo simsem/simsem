@@ -1966,62 +1966,9 @@ simParentNested <- runFit(model=parent, data=Demo.growth, nRep=1000, analyzeMode
 simParentParent <- runFit(model=parent, data=Demo.growth, nRep=1000)
 
 getCutoff(simNestedNested, simNestedParent, alpha=0.05)
-pValue(out, simOut1)
+pValueNested(outNested, outParent, simNestedNested, simNestedParent)
 
-pValueNested <- function(target, nested, parent, usedFit = NULL, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, df = 0) {
-    mod <- clean(nested, parent)
-	nested <- mod[[1]]
-	parent <- mod[[2]]
-    if (is.null(usedFit)) 
-        usedFit <- getKeywords()$usedFit
-    revDirec <- (usedFit %in% c("CFI", "TLI")) # CFA --> FALSE, RMSEA --> TRUE
-	
-	if(!all.equal(unique(nested@paramValue), unique(parent@paramValue))) stop("Models are based on different data and cannot be compared, check your random seed")
-	if(!all.equal(unique(nested@n), unique(parent@n))) stop("Models are based on different values of sample sizes")
-	if(!all.equal(unique(nested@pmMCAR), unique(parent@pmMCAR))) stop("Models are based on different values of the percent completely missing at random")
-	if(!all.equal(unique(nested@pmMAR), unique(parent@pmMAR))) stop("Models are based on different values of the percent missing at random")
-	
-	if (is.null(nVal) || is.na(nVal)) 
-        nVal <- NULL
-    if (is.null(pmMCARval) || is.na(pmMCARval)) 
-        pmMCARval <- NULL
-    if (is.null(pmMARval) || is.na(pmMARval)) 
-        pmMARval <- NULL
-    Data <- as.data.frame((nested@fit - parent@fit)[,usedFit]) 
-    condition <- c(length(nested@pmMCAR) > 1, length(nested@pmMAR) > 1, length(nested@n) > 1)
-    condValue <- cbind(nested@pmMCAR, nested@pmMAR, nested@n)
-    colnames(condValue) <- c("Percent MCAR", "Percent MAR", "N")
-    condValue <- condValue[, condition]
-    if (is.null(condValue) || length(condValue) == 0) 
-        condValue <- NULL
-    predictorVal <- rep(NA, 3)
-    if (condition[3]) {
-        ifelse(is.null(nVal), predictorVal[3] <- target@n, 
-            predictorVal[3] <- nVal)
-    }
-    if (condition[1]) {
-        ifelse(is.null(pmMCARval), predictorVal[1] <- mean(target@pMiss), 
-            predictorVal[1] <- pmMCARval)
-    }
-    if (condition[2]) {
-        ifelse(is.null(pmMARval), stop("Please specify the percent of missing at random, 'pmMARval', because the percent of missing at random in the result object is varying"), 
-            predictorVal[2] <- pmMARval)
-    }
-    predictorVal <- predictorVal[condition]
-    cutoff <- target@fit[usedFit]
-	if(any(condition)) {
-		result <- pValue(cutoff, Data, revDirec, x = condValue, xval = predictorVal, df = df, asLogical = FALSE)
-		names(result) <- usedFit
-		return(result)
-	} else {
-		logicalMat <- pValue(cutoff, Data, revDirec, asLogical = TRUE)
-		result <- apply(logicalMat, 2, mean, na.rm = TRUE)
-		names(result) <- usedFit
-		andRule <- mean(apply(logicalMat, 1, all), na.rm = TRUE)
-		orRule <- mean(apply(logicalMat, 1, any), na.rm = TRUE)
-		return(c(result, andRule = andRule, orRule = orRule))
-	}
-}
+
 
 ###################################### Example 27 nonnested model comparison and power ################################# 
 
@@ -2078,8 +2025,8 @@ result21 <- run(analyze1, dat2)
 result22 <- run(analyze2, dat2)
 
 
-logLikFit(result11, result12, out11, out12, out21, out22)
-logLikFit(result21, result22, out11, out12, out21, out22) 
+likRatioFit(result11, result12, out11, out12, out21, out22)
+likRatioFit(result21, result22, out11, out12, out21, out22) 
 
 getCutoffNonNested(out11, out12, out21, out22)
 
@@ -2135,8 +2082,8 @@ result21 <- run(analyze1, dat2)
 result22 <- run(analyze2, dat2)
 
 
-logLikFit(result11, result12, out11, out12, out21, out22)
-logLikFit(result21, result22, out11, out12, out21, out22) 
+likRatioFit(result11, result12, out11, out12, out21, out22)
+likRatioFit(result21, result22, out11, out12, out21, out22) 
 
 getCutoffNonNested(out11, out12, out21, out22)
 
@@ -2150,11 +2097,47 @@ plotCutoffNonNested(out11, out12, out21, out22, onetailed=TRUE)
 
 plotPowerFitNonNested(out21, out22, out11, out12)
 
+pValueNonNested(result11, result12, out11, out12, out21, out22)
 	# Compute the power in one and two tailed
 
 ###################################### Example 28 nonnested model comparison and power continuous N ################################# 
 ###################################### Example 29 nonnested model comparison and power continuous N and pmMCAR ####################
 ###################################### Example 30 Nonnested model by the real data ####################
+
+library(simsem)
+library(lavaan)
+loading <- matrix(0, 11, 3)
+loading[1:3, 1] <- NA
+loading[4:7, 2] <- NA
+loading[8:11, 3] <- NA
+path.A <- matrix(0, 3, 3)
+path.A[2:3, 1] <- NA
+path.A[3, 2] <- NA
+param.A <- simParamSEM(LY=loading, BE=path.A)
+
+model.A <- simModel(param.A, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
+out.A <- run(model.A, PoliticalDemocracy)
+
+path.B <- matrix(0, 3, 3)
+path.B[1:2, 3] <- NA
+path.B[1, 2] <- NA
+param.B <- simParamSEM(LY=loading, BE=path.B)
+
+model.B <- simModel(param.B, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
+out.B <- run(model.B, PoliticalDemocracy)
+
+u2 <- simUnif(-0.2, 0.2)
+loading.mis <- matrix(NA, 11, 3)
+loading.mis[is.na(loading)] <- 0
+LY.mis <- simMatrix(loading.mis, "u2")
+misspec <- simMisspecSEM(LY=LY.mis)
+
+output.A.A <- runFit(model.A, PoliticalDemocracy, 10, misspec=misspec)
+output.A.B <- runFit(model.A, PoliticalDemocracy, 10, misspec=misspec, analyzeModel=model.B)
+output.B.A <- runFit(model.B, PoliticalDemocracy, 10, misspec=misspec, analyzeModel=model.A)
+output.B.B <- runFit(model.B, PoliticalDemocracy, 10, misspec=misspec)
+pValueNonNested(out.A, out.B, output.A.A, output.A.B, output.B.A, output.B.B)
+
 ###################################### Double bootstrap, Bollen-Stine boot, double bollen-stine boot
 
 

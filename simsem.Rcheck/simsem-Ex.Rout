@@ -29,7 +29,7 @@ lavaan is BETA software! Please report any bugs.
 Loading required package: MASS
  
 ###############################################################################################
-This is simsem 0.2-5
+This is simsem 0.2-6
 simsem is BETA software! Please report any bugs.
 simsem was developed at the University of Kansas Center for Research Methods and Data Analysis.
 ###############################################################################################
@@ -1013,13 +1013,13 @@ Model Type
 ========= Fit Indices Cutoffs ============
            Alpha
 Fit Indices      0.1     0.05     0.01    0.001     Mean
-      Chi    167.856  175.979  182.477  183.939  129.663
-      AIC   9398.015 9432.074 9459.321 9465.452 9038.505
-      BIC   9553.574 9587.633 9614.880 9621.011 9194.064
-      RMSEA    0.091    0.094    0.097    0.097    0.074
-      CFI      0.909    0.895    0.884    0.882    0.939
-      TLI      0.875    0.856    0.840    0.837    0.916
-      SRMR     0.054    0.056    0.057    0.057    0.047
+      Chi   1.68e+02 1.76e+02 1.82e+02 1.84e+02 1.30e+02
+      AIC   9.40e+03 9.43e+03 9.46e+03 9.47e+03 9.04e+03
+      BIC   9.55e+03 9.59e+03 9.61e+03 9.62e+03 9.19e+03
+      RMSEA 9.11e-02 9.42e-02 9.66e-02 9.72e-02 7.42e-02
+      CFI   9.09e-01 8.95e-01 8.84e-01 8.82e-01 9.39e-01
+      TLI   8.75e-01 8.56e-01 8.40e-01 8.37e-01 9.16e-01
+      SRMR  5.42e-02 5.57e-02 5.68e-02 5.71e-02 4.70e-02
 ========= Parameter Estimates and Standard Errors ============
         Estimate Average Estimate SD Average SE Power (Not equal 0) Std Est
 LY1_1              0.703       0.092      0.053               1.000   0.714
@@ -1949,13 +1949,13 @@ Model Type
 ========= Fit Indices Cutoffs ============
            Alpha
 Fit Indices      0.1     0.05     0.01    0.001     Mean
-      Chi     16.590   17.486   18.202   18.363   12.298
-      AIC   7507.979 7511.517 7514.347 7514.983 7448.769
-      BIC   7583.842 7587.380 7590.210 7590.846 7524.632
-      RMSEA    0.041    0.043    0.045    0.046    0.024
-      CFI      0.992    0.991    0.990    0.990    0.996
-      TLI      0.987    0.986    0.984    0.984    0.995
-      SRMR     0.018    0.019    0.019    0.020    0.015
+      Chi   1.66e+01 1.75e+01 1.82e+01 1.84e+01 1.23e+01
+      AIC   7.51e+03 7.51e+03 7.51e+03 7.51e+03 7.45e+03
+      BIC   7.58e+03 7.59e+03 7.59e+03 7.59e+03 7.52e+03
+      RMSEA 4.06e-02 4.31e-02 4.52e-02 4.56e-02 2.41e-02
+      CFI   9.92e-01 9.91e-01 9.90e-01 9.90e-01 9.96e-01
+      TLI   9.87e-01 9.86e-01 9.84e-01 9.84e-01 9.95e-01
+      SRMR  1.85e-02 1.90e-02 1.95e-02 1.96e-02 1.53e-02
 ========= Parameter Estimates and Standard Errors ============
       Estimate.Average Estimate.SD Average.SE Power..Not.equal.0. Std.Est
 LY1_1            0.696       0.056      0.042                   1   0.698
@@ -2121,40 +2121,40 @@ Model Type
 [1] "Path"
 ========= Parameter Values ============
        mean    sd
-BE3_1 0.421 0.054
-BE3_2 0.442 0.057
-BE4_3 0.605 0.028
+BE3_1 0.391 0.056
+BE3_2 0.410 0.059
+BE4_3 0.593 0.052
 PS1_1 1.000 0.000
-PS2_1 0.297 0.075
+PS2_1 0.266 0.146
 PS2_2 1.000 0.000
-PS3_3 0.508 0.122
-PS4_4 0.633 0.034
+PS3_3 0.588 0.114
+PS4_4 0.646 0.061
 AL1   0.000 0.000
 AL2   0.000 0.000
 AL3   0.000 0.000
 AL4   0.000 0.000
 ========= Misspecification Values ============
        mean    sd
-BE4_1 0.025 0.034
-BE4_2 0.000 0.086
+BE4_1 0.023 0.023
+BE4_2 0.043 0.079
 ========= Fit Indices Distributions ============
               f0 rmsea  srmr
-5%         0.010 0.071 0.023
-10%        0.011 0.075 0.025
+5%         0.005 0.044 0.016
+10%        0.007 0.055 0.020
 25%        0.015 0.086 0.029
-50%        0.015 0.088 0.034
-75%        0.019 0.097 0.036
-90%        0.022 0.106 0.037
-95%        0.024 0.109 0.038
-fitAverage 0.017 0.090 0.032
-fitSE      0.006 0.016 0.007
+50%        0.019 0.097 0.036
+75%        0.025 0.111 0.038
+90%        0.031 0.124 0.041
+95%        0.033 0.128 0.042
+fitAverage 0.019 0.092 0.032
+fitSE      0.012 0.037 0.012
 ========= Correlation between Fit Indices and Parameter Misspecification ============
        BE4_1  BE4_2     f0  rmsea   srmr
-BE4_1  1.000 -0.211 -0.625 -0.630 -0.696
-BE4_2 -0.211  1.000  0.626  0.577  0.453
-f0    -0.625  0.626  1.000  0.996  0.854
-rmsea -0.630  0.577  0.996  1.000  0.886
-srmr  -0.696  0.453  0.854  0.886  1.000
+BE4_1  1.000 -0.838 -0.229 -0.135 -0.100
+BE4_2 -0.838  1.000  0.510  0.423  0.464
+f0    -0.229  0.510  1.000  0.981  0.942
+rmsea -0.135  0.423  0.981  1.000  0.976
+srmr  -0.100  0.464  0.942  0.976  1.000
 > 
 > 
 > 
@@ -3016,533 +3016,57 @@ The following object(s) are masked from 'package:base':
 
     backsolve
 
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-   X.MCAR   N      Chi      AIC      BIC      RMSEA       CFI       TLI
-1    0.00 100  14.4156 1641.963 1688.856 0.07757148 0.9734548 0.9557579
-2    0.05 100 15.25473 1538.194 1585.087 0.08184781 0.9637724 0.9396207
-3    0.10 100 16.09386 1434.424 1481.317 0.08612415 0.9540901 0.9234835
-4    0.15 100 16.93299 1330.655 1377.548 0.09040048 0.9444078 0.9073463
-5    0.20 100 17.77212 1226.886 1273.779 0.09467682 0.9347254  0.891209
-6    0.00 125  16.8561 1975.167 2025.366 0.08211583   0.97139 0.9523166
-7    0.05 125 16.94376 1869.469 1919.622  0.0830976 0.9650933 0.9418222
-8    0.10 125 17.03141 1763.772 1813.877 0.08407937 0.9587966 0.9313277
-9    0.15 125 17.11907 1658.074 1708.133 0.08506115 0.9524999 0.9208332
-10   0.20 125 17.20672 1552.377 1602.389 0.08604292 0.9462033 0.9103388
-11   0.00 150 19.29661  2308.37 2361.876 0.08666017 0.9693252 0.9488753
-12   0.05 150 18.63279 2200.745 2254.157 0.08434738 0.9664142 0.9440236
-13   0.10 150 17.96897 2093.119 2146.437  0.0820346 0.9635032 0.9391719
-14   0.15 150 17.30515 1985.493 2038.718 0.07972181 0.9605921 0.9343202
-15   0.20 150 16.64133 1877.868 1930.999 0.07740903 0.9576811 0.9294685
-16   0.00 175 21.73711 2641.574 2698.386 0.09120451 0.9672604  0.945434
-17   0.05 175 20.32182  2532.02 2588.692 0.08559717  0.967735 0.9462251
-18   0.10 175 18.90652 2422.466 2478.997 0.07998983 0.9682097 0.9470161
-19   0.15 175 17.49123 2312.912 2369.303 0.07438248 0.9686843 0.9478072
-20   0.20 175 16.07594 2203.358 2259.609 0.06877514  0.969159 0.9485983
-21   0.00 200 24.17762 2974.778 3034.896 0.09574886 0.9651956 0.9419927
-22   0.05 200 22.01085 2863.295 2923.227 0.08684696 0.9690559 0.9484265
-23   0.10 200 19.84408 2751.813 2811.557 0.07794505 0.9729162 0.9548603
-24   0.15 200 17.67731 2640.331 2699.888 0.06904315 0.9767765 0.9612942
-25   0.20 200 15.51054 2528.849 2588.219 0.06014124 0.9806368  0.967728
-         SRMR
-1  0.03803574
-2  0.04494578
-3  0.05185581
-4  0.05876585
-5  0.06567588
-6  0.03641581
-7  0.04163114
-8  0.04684647
-9   0.0520618
-10 0.05727713
-11 0.03479589
-12 0.03831651
-13 0.04183713
-14 0.04535776
-15 0.04887838
-16 0.03317596
-17 0.03500187
-18 0.03682779
-19 0.03865371
-20 0.04047963
-21 0.03155603
-22 0.03168724
-23 0.03181845
-24 0.03194966
-25 0.03208088
+   X.MCAR   N  Chi  AIC  BIC  RMSEA   CFI   TLI   SRMR
+1    0.00 100 14.4 1642 1689 0.0776 0.973 0.956  0.038
+2    0.05 100 15.3 1538 1585 0.0818 0.964  0.94 0.0449
+3    0.10 100 16.1 1434 1481 0.0861 0.954 0.923 0.0519
+4    0.15 100 16.9 1331 1378 0.0904 0.944 0.907 0.0588
+5    0.20 100 17.8 1227 1274 0.0947 0.935 0.891 0.0657
+6    0.00 125 16.9 1975 2025 0.0821 0.971 0.952 0.0364
+7    0.05 125 16.9 1869 1920 0.0831 0.965 0.942 0.0416
+8    0.10 125   17 1764 1814 0.0841 0.959 0.931 0.0468
+9    0.15 125 17.1 1658 1708 0.0851 0.952 0.921 0.0521
+10   0.20 125 17.2 1552 1602  0.086 0.946  0.91 0.0573
+11   0.00 150 19.3 2308 2362 0.0867 0.969 0.949 0.0348
+12   0.05 150 18.6 2201 2254 0.0843 0.966 0.944 0.0383
+13   0.10 150   18 2093 2146  0.082 0.964 0.939 0.0418
+14   0.15 150 17.3 1985 2039 0.0797 0.961 0.934 0.0454
+15   0.20 150 16.6 1878 1931 0.0774 0.958 0.929 0.0489
+16   0.00 175 21.7 2642 2698 0.0912 0.967 0.945 0.0332
+17   0.05 175 20.3 2532 2589 0.0856 0.968 0.946  0.035
+18   0.10 175 18.9 2422 2479   0.08 0.968 0.947 0.0368
+19   0.15 175 17.5 2313 2369 0.0744 0.969 0.948 0.0387
+20   0.20 175 16.1 2203 2260 0.0688 0.969 0.949 0.0405
+21   0.00 200 24.2 2975 3035 0.0957 0.965 0.942 0.0316
+22   0.05 200   22 2863 2923 0.0868 0.969 0.948 0.0317
+23   0.10 200 19.8 2752 2812 0.0779 0.973 0.955 0.0318
+24   0.15 200 17.7 2640 2700  0.069 0.977 0.961 0.0319
+25   0.20 200 15.5 2529 2588 0.0601 0.981 0.968 0.0321
 ========= Parameter Estimates and Standard Errors ============
       Estimate.Average Estimate.SD Average.SE Power..Not.equal.0. Std.Est
 LY1_1            0.702       0.061      0.082               1.000   0.713
@@ -10350,6 +9874,22 @@ $CM
 > 
 > 
 > cleanEx()
+> nameEx("find2Dhist")
+> ### * find2Dhist
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: find2Dhist
+> ### Title: Fit the 2D Kernel Density Estimate
+> ### Aliases: find2Dhist
+> 
+> ### ** Examples
+> 
+> # No example
+> 
+> 
+> 
+> cleanEx()
 > nameEx("findFactorIntercept")
 > ### * findFactorIntercept
 > 
@@ -10763,6 +10303,23 @@ detaching 'package:parallel'
 > 
 > 
 > cleanEx()
+> nameEx("findphist")
+> ### * findphist
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: findphist
+> ### Title: Find the density (likelihood) of a pair value in 2D Kernel
+> ###   Density Estimate
+> ### Aliases: findphist
+> 
+> ### ** Examples
+> 
+> # No example
+> 
+> 
+> 
+> cleanEx()
 > nameEx("fitMeasuresChi")
 > ### * fitMeasuresChi
 > 
@@ -10934,6 +10491,93 @@ detaching 'package:quantreg', 'package:SparseM', 'package:parallel'
 
 detaching 'package:parallel'
 
+> nameEx("getCutoffNonNested")
+> ### * getCutoffNonNested
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: getCutoffNonNested
+> ### Title: Find fit indices cutoff for non-nested model comparison given a
+> ###   priori alpha level
+> ### Aliases: getCutoffNonNested
+> 
+> ### ** Examples
+> 
+> n1 <- simNorm(0, 0.1)
+> u79 <- simUnif(0.7, 0.9)
+> 
+> loading.A <- matrix(0, 8, 2)
+> loading.A[1:3, 1] <- NA
+> loading.A[4:8, 2] <- NA
+> LX.A <- simMatrix(loading.A, 0.7)
+> latent.cor <- matrix(NA, 2, 2)
+> diag(latent.cor) <- 1
+> RPH <- symMatrix(latent.cor, "u79")
+> RTD <- symMatrix(diag(8))
+> CFA.Model.A <- simSetCFA(LY = LX.A, RPS = RPH, RTE = RTD)
+> 
+> error.cor.mis <- matrix(NA, 8, 8)
+> diag(error.cor.mis) <- 1
+> RTD.Mis <- symMatrix(error.cor.mis, "n1")
+> CFA.Model.A.Mis <- simMisspecCFA(RTE = RTD.Mis)
+> 
+> loading.B <- matrix(0, 8, 2)
+> loading.B[1:4, 1] <- NA
+> loading.B[5:8, 2] <- NA
+> LX.B <- simMatrix(loading.B, 0.7)
+> CFA.Model.B <- simSetCFA(LY = LX.B, RPS = RPH, RTE = RTD)
+> 
+> SimData.A <- simData(CFA.Model.A, 500)
+> SimData.B <- simData(CFA.Model.B, 500)
+> 
+> SimModel.A <- simModel(CFA.Model.A)
+> SimModel.B <- simModel(CFA.Model.B)
+> 
+> # The actual number of replications should be greater than 10.
+> Output.A.A <- simResult(10, SimData.A, SimModel.A)
+> Output.A.B <- simResult(10, SimData.A, SimModel.B)
+> Output.B.A <- simResult(10, SimData.B, SimModel.A)
+> Output.B.B <- simResult(10, SimData.B, SimModel.B)
+> 
+> getCutoffNonNested(Output.A.A, Output.A.B, Output.B.A, Output.B.B)
+$model1
+            Chi       AIC       BIC       RMSEA         CFI        TLI
+lower -90.24493 -90.24493 -90.24493 -0.08813607 0.008350268 0.01230566
+upper -11.30679 -11.30679 -11.30679 -0.01629337 0.071919168 0.10598614
+              SRMR
+lower -0.031009061
+upper -0.004045886
+
+$model2
+           Chi      AIC      BIC      RMSEA         CFI         TLI        SRMR
+lower 16.86415 16.86415 16.86415 0.02435730 -0.06692788 -0.09863056 0.006255355
+upper 88.72769 88.72769 88.72769 0.07369985 -0.01235005 -0.01820007 0.032586582
+
+> getCutoffNonNested(Output.A.A, Output.A.B)
+$model1
+            Chi       AIC       BIC       RMSEA         CFI        TLI
+lower -90.24493 -90.24493 -90.24493 -0.08813607 0.008350268 0.01230566
+upper -11.30679 -11.30679 -11.30679 -0.01629337 0.071919168 0.10598614
+              SRMR
+lower -0.031009061
+upper -0.004045886
+
+> getCutoffNonNested(Output.B.B, Output.B.A)
+$model1
+            Chi       AIC       BIC       RMSEA        CFI        TLI
+lower -88.72769 -88.72769 -88.72769 -0.07369985 0.01235005 0.01820007
+upper -16.86415 -16.86415 -16.86415 -0.02435730 0.06692788 0.09863056
+              SRMR
+lower -0.032586582
+upper -0.006255355
+
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:parallel'
+
 > nameEx("getKeywords")
 > ### * getKeywords
 > 
@@ -11007,533 +10651,57 @@ The following object(s) are masked from 'package:base':
 
     backsolve
 
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
 Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-   X.MCAR   N      Chi      AIC      BIC      RMSEA       CFI       TLI
-1    0.00 100  14.4156 1641.963 1688.856 0.07757148 0.9734548 0.9557579
-2    0.05 100 15.25473 1538.194 1585.087 0.08184781 0.9637724 0.9396207
-3    0.10 100 16.09386 1434.424 1481.317 0.08612415 0.9540901 0.9234835
-4    0.15 100 16.93299 1330.655 1377.548 0.09040048 0.9444078 0.9073463
-5    0.20 100 17.77212 1226.886 1273.779 0.09467682 0.9347254  0.891209
-6    0.00 125  16.8561 1975.167 2025.366 0.08211583   0.97139 0.9523166
-7    0.05 125 16.94376 1869.469 1919.622  0.0830976 0.9650933 0.9418222
-8    0.10 125 17.03141 1763.772 1813.877 0.08407937 0.9587966 0.9313277
-9    0.15 125 17.11907 1658.074 1708.133 0.08506115 0.9524999 0.9208332
-10   0.20 125 17.20672 1552.377 1602.389 0.08604292 0.9462033 0.9103388
-11   0.00 150 19.29661  2308.37 2361.876 0.08666017 0.9693252 0.9488753
-12   0.05 150 18.63279 2200.745 2254.157 0.08434738 0.9664142 0.9440236
-13   0.10 150 17.96897 2093.119 2146.437  0.0820346 0.9635032 0.9391719
-14   0.15 150 17.30515 1985.493 2038.718 0.07972181 0.9605921 0.9343202
-15   0.20 150 16.64133 1877.868 1930.999 0.07740903 0.9576811 0.9294685
-16   0.00 175 21.73711 2641.574 2698.386 0.09120451 0.9672604  0.945434
-17   0.05 175 20.32182  2532.02 2588.692 0.08559717  0.967735 0.9462251
-18   0.10 175 18.90652 2422.466 2478.997 0.07998983 0.9682097 0.9470161
-19   0.15 175 17.49123 2312.912 2369.303 0.07438248 0.9686843 0.9478072
-20   0.20 175 16.07594 2203.358 2259.609 0.06877514  0.969159 0.9485983
-21   0.00 200 24.17762 2974.778 3034.896 0.09574886 0.9651956 0.9419927
-22   0.05 200 22.01085 2863.295 2923.227 0.08684696 0.9690559 0.9484265
-23   0.10 200 19.84408 2751.813 2811.557 0.07794505 0.9729162 0.9548603
-24   0.15 200 17.67731 2640.331 2699.888 0.06904315 0.9767765 0.9612942
-25   0.20 200 15.51054 2528.849 2588.219 0.06014124 0.9806368  0.967728
-         SRMR
-1  0.03803574
-2  0.04494578
-3  0.05185581
-4  0.05876585
-5  0.06567588
-6  0.03641581
-7  0.04163114
-8  0.04684647
-9   0.0520618
-10 0.05727713
-11 0.03479589
-12 0.03831651
-13 0.04183713
-14 0.04535776
-15 0.04887838
-16 0.03317596
-17 0.03500187
-18 0.03682779
-19 0.03865371
-20 0.04047963
-21 0.03155603
-22 0.03168724
-23 0.03181845
-24 0.03194966
-25 0.03208088
+   X.MCAR   N  Chi  AIC  BIC  RMSEA   CFI   TLI   SRMR
+1    0.00 100 14.4 1642 1689 0.0776 0.973 0.956  0.038
+2    0.05 100 15.3 1538 1585 0.0818 0.964  0.94 0.0449
+3    0.10 100 16.1 1434 1481 0.0861 0.954 0.923 0.0519
+4    0.15 100 16.9 1331 1378 0.0904 0.944 0.907 0.0588
+5    0.20 100 17.8 1227 1274 0.0947 0.935 0.891 0.0657
+6    0.00 125 16.9 1975 2025 0.0821 0.971 0.952 0.0364
+7    0.05 125 16.9 1869 1920 0.0831 0.965 0.942 0.0416
+8    0.10 125   17 1764 1814 0.0841 0.959 0.931 0.0468
+9    0.15 125 17.1 1658 1708 0.0851 0.952 0.921 0.0521
+10   0.20 125 17.2 1552 1602  0.086 0.946  0.91 0.0573
+11   0.00 150 19.3 2308 2362 0.0867 0.969 0.949 0.0348
+12   0.05 150 18.6 2201 2254 0.0843 0.966 0.944 0.0383
+13   0.10 150   18 2093 2146  0.082 0.964 0.939 0.0418
+14   0.15 150 17.3 1985 2039 0.0797 0.961 0.934 0.0454
+15   0.20 150 16.6 1878 1931 0.0774 0.958 0.929 0.0489
+16   0.00 175 21.7 2642 2698 0.0912 0.967 0.945 0.0332
+17   0.05 175 20.3 2532 2589 0.0856 0.968 0.946  0.035
+18   0.10 175 18.9 2422 2479   0.08 0.968 0.947 0.0368
+19   0.15 175 17.5 2313 2369 0.0744 0.969 0.948 0.0387
+20   0.20 175 16.1 2203 2260 0.0688 0.969 0.949 0.0405
+21   0.00 200 24.2 2975 3035 0.0957 0.965 0.942 0.0316
+22   0.05 200   22 2863 2923 0.0868 0.969 0.948 0.0317
+23   0.10 200 19.8 2752 2812 0.0779 0.973 0.955 0.0318
+24   0.15 200 17.7 2640 2700  0.069 0.977 0.961 0.0319
+25   0.20 200 15.5 2529 2588 0.0601 0.981 0.968 0.0321
 ========= Parameter Estimates and Standard Errors ============
       Estimate.Average Estimate.SD Average.SE Power..Not.equal.0. Std.Est
 LY1_1            0.702       0.061      0.082               1.000   0.713
@@ -18157,6 +17325,75 @@ Chi CFI
 
 detaching 'package:parallel'
 
+> nameEx("getPowerFitNonNested")
+> ### * getPowerFitNonNested
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: getPowerFitNonNested
+> ### Title: Find power in rejecting non-nested models based on the
+> ###   differences in fit indices
+> ### Aliases: getPowerFitNonNested getPowerFitNonNested-methods
+> ###   getPowerFitNonNested,SimResult,SimResult,vector-method
+> ###   getPowerFitNonNested,SimResult,SimResult,missing-method
+> 
+> ### ** Examples
+> 
+> n1 <- simNorm(0, 0.1)
+> u79 <- simUnif(0.7, 0.9)
+> 
+> loading.A <- matrix(0, 8, 2)
+> loading.A[1:3, 1] <- NA
+> loading.A[4:8, 2] <- NA
+> LX.A <- simMatrix(loading.A, 0.7)
+> latent.cor <- matrix(NA, 2, 2)
+> diag(latent.cor) <- 1
+> RPH <- symMatrix(latent.cor, "u79")
+> RTD <- symMatrix(diag(8))
+> CFA.Model.A <- simSetCFA(LY = LX.A, RPS = RPH, RTE = RTD)
+> 
+> error.cor.mis <- matrix(NA, 8, 8)
+> diag(error.cor.mis) <- 1
+> RTD.Mis <- symMatrix(error.cor.mis, "n1")
+> CFA.Model.A.Mis <- simMisspecCFA(RTE = RTD.Mis)
+> 
+> loading.B <- matrix(0, 8, 2)
+> loading.B[1:4, 1] <- NA
+> loading.B[5:8, 2] <- NA
+> LX.B <- simMatrix(loading.B, 0.7)
+> CFA.Model.B <- simSetCFA(LY = LX.B, RPS = RPH, RTE = RTD)
+> 
+> SimData.A <- simData(CFA.Model.A, 500)
+> SimData.B <- simData(CFA.Model.B, 500)
+> 
+> SimModel.A <- simModel(CFA.Model.A)
+> SimModel.B <- simModel(CFA.Model.B)
+> 
+> # The actual number of replications should be greater than 10.
+> Output.A.A <- simResult(10, SimData.A, SimModel.A)
+> Output.A.B <- simResult(10, SimData.A, SimModel.B)
+> Output.B.A <- simResult(10, SimData.B, SimModel.A)
+> Output.B.B <- simResult(10, SimData.B, SimModel.B)
+> 
+> getPowerFitNonNested(Output.B.A, Output.B.B, dat1Mod1=Output.A.A, dat1Mod2=Output.A.B)
+$reject1FromNull2
+  Chi   AIC   BIC RMSEA   CFI   TLI  SRMR 
+    1     1     1     1     1     1     1 
+
+$reject2FromNull1
+  Chi   AIC   BIC RMSEA   CFI   TLI  SRMR 
+    1     1     1     1     1     1     1 
+
+> getPowerFitNonNested(Output.B.A, Output.B.B, cutoff=c(AIC=0, BIC=0))
+AIC BIC 
+  1   1 
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:parallel'
+
 > nameEx("imposeMissing")
 > ### * imposeMissing
 > 
@@ -18735,6 +17972,109 @@ Excess Kur (g2)              se               z               p
 > 
 > 
 > cleanEx()
+> nameEx("likRatioFit")
+> ### * likRatioFit
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: likRatioFit
+> ### Title: Find the likelihood ratio (or Bayes factor) based on the
+> ###   bivariate distribution of fit indices
+> ### Aliases: likRatioFit
+> 
+> ### ** Examples
+> 
+> library(lavaan)
+> loading <- matrix(0, 11, 3)
+> loading[1:3, 1] <- NA
+> loading[4:7, 2] <- NA
+> loading[8:11, 3] <- NA
+> path.A <- matrix(0, 3, 3)
+> path.A[2:3, 1] <- NA
+> path.A[3, 2] <- NA
+> param.A <- simParamSEM(LY=loading, BE=path.A)
+> 
+> model.A <- simModel(param.A, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
+> out.A <- run(model.A, PoliticalDemocracy)
+> 
+> path.B <- matrix(0, 3, 3)
+> path.B[1:2, 3] <- NA
+> path.B[1, 2] <- NA
+> param.B <- simParamSEM(LY=loading, BE=path.B)
+> 
+> model.B <- simModel(param.B, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
+> out.B <- run(model.B, PoliticalDemocracy)
+> 
+> u2 <- simUnif(-0.2, 0.2)
+> loading.mis <- matrix(NA, 11, 3)
+> loading.mis[is.na(loading)] <- 0
+> LY.mis <- simMatrix(loading.mis, "u2")
+> misspec <- simMisspecSEM(LY=LY.mis)
+> 
+> output.A.A <- runFit(model.A, PoliticalDemocracy, 10, misspec=misspec)
+> output.A.B <- runFit(model.A, PoliticalDemocracy, 10, misspec=misspec, analyzeModel=model.B)
+> output.B.A <- runFit(model.B, PoliticalDemocracy, 10, misspec=misspec, analyzeModel=model.A)
+Error in solve.default(E) : 
+  system is computationally singular: reciprocal condition number = 3.49503e-21
+Warning in estimateVCOV(lavaanModel, samplestats = lavaanSampleStats, options = lavaanOptions,  :
+  lavaan WARNING: could not compute standard errors!
+
+Warning in lavaan(model = code, meanstructure = TRUE, data = Data, missing = miss,  :
+  lavaan WARNING: model has NOT converged!
+Error in solve.default(E) : 
+  system is computationally singular: reciprocal condition number = 1.5375e-25
+Warning in estimateVCOV(lavaanModel, samplestats = lavaanSampleStats, options = lavaanOptions,  :
+  lavaan WARNING: could not compute standard errors!
+
+Warning in lavaan(model = code, meanstructure = TRUE, data = Data, missing = miss,  :
+  lavaan WARNING: model has NOT converged!
+Error in solve.default(E) : 
+  system is computationally singular: reciprocal condition number = 6.65305e-25
+Warning in estimateVCOV(lavaanModel, samplestats = lavaanSampleStats, options = lavaanOptions,  :
+  lavaan WARNING: could not compute standard errors!
+
+Warning in lavaan(model = code, meanstructure = TRUE, data = Data, missing = miss,  :
+  lavaan WARNING: model has NOT converged!
+Error in solve.default(E) : 
+  system is computationally singular: reciprocal condition number = 8.85117e-26
+Warning in estimateVCOV(lavaanModel, samplestats = lavaanSampleStats, options = lavaanOptions,  :
+  lavaan WARNING: could not compute standard errors!
+
+> output.B.B <- runFit(model.B, PoliticalDemocracy, 10, misspec=misspec)
+Error in solve.default(E) : 
+  system is computationally singular: reciprocal condition number = 2.57175e-21
+Warning in estimateVCOV(lavaanModel, samplestats = lavaanSampleStats, options = lavaanOptions,  :
+  lavaan WARNING: could not compute standard errors!
+
+Warning in lavaan(model = code, meanstructure = TRUE, data = Data, missing = miss,  :
+  lavaan WARNING: model has NOT converged!
+Error in solve.default(E) : 
+  system is computationally singular: reciprocal condition number = 3.64101e-26
+Warning in estimateVCOV(lavaanModel, samplestats = lavaanSampleStats, options = lavaanOptions,  :
+  lavaan WARNING: could not compute standard errors!
+
+Error in solve.default(E) : 
+  system is computationally singular: reciprocal condition number = 4.11411e-26
+Warning in estimateVCOV(lavaanModel, samplestats = lavaanSampleStats, options = lavaanOptions,  :
+  lavaan WARNING: could not compute standard errors!
+
+Error in solve.default(E) : 
+  system is computationally singular: reciprocal condition number = 4.84601e-25
+Warning in estimateVCOV(lavaanModel, samplestats = lavaanSampleStats, options = lavaanOptions,  :
+  lavaan WARNING: could not compute standard errors!
+
+> likRatioFit(out.A, out.B, output.A.A, output.A.B, output.B.A, output.B.B)
+KernSmooth 2.23 loaded
+Copyright M. P. Wand 1997-2009
+      Chi       AIC       BIC     RMSEA       CFI       TLI      SRMR 
+11.202764  2.665082  2.665082  2.470111  2.231091  1.926759 78.484750 
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:KernSmooth', 'package:parallel'
+
 > nameEx("loadingFromAlpha")
 > ### * loadingFromAlpha
 > 
@@ -18965,6 +18305,163 @@ detaching 'package:parallel'
 > 
 > 
 > cleanEx()
+> nameEx("pValueNested")
+> ### * pValueNested
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: pValueNested
+> ### Title: Find p-values (1 - percentile) for a nested model comparison
+> ### Aliases: pValueNested
+> 
+> ### ** Examples
+> 
+> library(lavaan)
+> 
+> LY <- matrix(1, 4, 2)
+> LY[,2] <- 0:3
+> PS <- matrix(NA, 2, 2)
+> TY <- rep(0, 4)
+> AL <- rep(NA, 2)
+> TE <- diag(NA, 4)
+> linearModel <- simParamCFA(LY=LY, PS=PS, TY=TY, AL=AL, TE=TE)
+> 
+> LY2 <- matrix(1, 4, 2)
+> LY2[,2] <- c(0, NA, NA, 3)
+> unconstrainModel <- simParamCFA(LY=LY2, PS=PS, TY=TY, AL=AL, TE=TE)
+> 
+> nested <- simModel(linearModel, indLab=paste("t", 1:4, sep=""))
+> parent <- simModel(unconstrainModel, indLab=paste("t", 1:4, sep=""))
+> 
+> outNested <- run(nested, Demo.growth)
+> outParent <- run(parent, Demo.growth)
+> 
+> loadingMis <- matrix(0, 4, 2)
+> loadingMis[2:3, 2] <- NA
+> LYmis <- simMatrix(loadingMis, "runif(1, -0.1, 0.1)")
+> linearMis <- simMisspecCFA(LY=LYmis)
+> 
+> simNestedNested <- runFit(model=nested, data=Demo.growth, nRep=10, misspec=linearMis)
+> simNestedParent <- runFit(model=nested, data=Demo.growth, nRep=10, misspec=linearMis, analyzeModel=parent)
+> 
+> pValueNested(outNested, outParent, simNestedNested, simNestedParent)
+    Chi     AIC     BIC   RMSEA     CFI     TLI    SRMR andRule  orRule 
+    0.9     0.9     0.9     0.9     0.9     0.9     0.8     0.8     0.9 
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:parallel'
+
+> nameEx("pValueNonNested")
+> ### * pValueNonNested
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: pValueNonNested
+> ### Title: Find p-values (1 - percentile) for a non-nested model comparison
+> ### Aliases: pValueNonNested
+> 
+> ### ** Examples
+> 
+> library(lavaan)
+> loading <- matrix(0, 11, 3)
+> loading[1:3, 1] <- NA
+> loading[4:7, 2] <- NA
+> loading[8:11, 3] <- NA
+> path.A <- matrix(0, 3, 3)
+> path.A[2:3, 1] <- NA
+> path.A[3, 2] <- NA
+> param.A <- simParamSEM(LY=loading, BE=path.A)
+> 
+> model.A <- simModel(param.A, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
+> out.A <- run(model.A, PoliticalDemocracy)
+> 
+> path.B <- matrix(0, 3, 3)
+> path.B[1:2, 3] <- NA
+> path.B[1, 2] <- NA
+> param.B <- simParamSEM(LY=loading, BE=path.B)
+> 
+> model.B <- simModel(param.B, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
+> out.B <- run(model.B, PoliticalDemocracy)
+> 
+> u2 <- simUnif(-0.2, 0.2)
+> loading.mis <- matrix(NA, 11, 3)
+> loading.mis[is.na(loading)] <- 0
+> LY.mis <- simMatrix(loading.mis, "u2")
+> misspec <- simMisspecSEM(LY=LY.mis)
+> 
+> output.A.A <- runFit(model.A, PoliticalDemocracy, 10, misspec=misspec)
+> output.A.B <- runFit(model.A, PoliticalDemocracy, 10, misspec=misspec, analyzeModel=model.B)
+> output.B.A <- runFit(model.B, PoliticalDemocracy, 10, misspec=misspec, analyzeModel=model.A)
+Error in solve.default(E) : 
+  system is computationally singular: reciprocal condition number = 3.49503e-21
+Warning in estimateVCOV(lavaanModel, samplestats = lavaanSampleStats, options = lavaanOptions,  :
+  lavaan WARNING: could not compute standard errors!
+
+Warning in lavaan(model = code, meanstructure = TRUE, data = Data, missing = miss,  :
+  lavaan WARNING: model has NOT converged!
+Error in solve.default(E) : 
+  system is computationally singular: reciprocal condition number = 1.5375e-25
+Warning in estimateVCOV(lavaanModel, samplestats = lavaanSampleStats, options = lavaanOptions,  :
+  lavaan WARNING: could not compute standard errors!
+
+Warning in lavaan(model = code, meanstructure = TRUE, data = Data, missing = miss,  :
+  lavaan WARNING: model has NOT converged!
+Error in solve.default(E) : 
+  system is computationally singular: reciprocal condition number = 6.65305e-25
+Warning in estimateVCOV(lavaanModel, samplestats = lavaanSampleStats, options = lavaanOptions,  :
+  lavaan WARNING: could not compute standard errors!
+
+Warning in lavaan(model = code, meanstructure = TRUE, data = Data, missing = miss,  :
+  lavaan WARNING: model has NOT converged!
+Error in solve.default(E) : 
+  system is computationally singular: reciprocal condition number = 8.85117e-26
+Warning in estimateVCOV(lavaanModel, samplestats = lavaanSampleStats, options = lavaanOptions,  :
+  lavaan WARNING: could not compute standard errors!
+
+> output.B.B <- runFit(model.B, PoliticalDemocracy, 10, misspec=misspec)
+Error in solve.default(E) : 
+  system is computationally singular: reciprocal condition number = 2.57175e-21
+Warning in estimateVCOV(lavaanModel, samplestats = lavaanSampleStats, options = lavaanOptions,  :
+  lavaan WARNING: could not compute standard errors!
+
+Warning in lavaan(model = code, meanstructure = TRUE, data = Data, missing = miss,  :
+  lavaan WARNING: model has NOT converged!
+Error in solve.default(E) : 
+  system is computationally singular: reciprocal condition number = 3.64101e-26
+Warning in estimateVCOV(lavaanModel, samplestats = lavaanSampleStats, options = lavaanOptions,  :
+  lavaan WARNING: could not compute standard errors!
+
+Error in solve.default(E) : 
+  system is computationally singular: reciprocal condition number = 4.11411e-26
+Warning in estimateVCOV(lavaanModel, samplestats = lavaanSampleStats, options = lavaanOptions,  :
+  lavaan WARNING: could not compute standard errors!
+
+Error in solve.default(E) : 
+  system is computationally singular: reciprocal condition number = 4.84601e-25
+Warning in estimateVCOV(lavaanModel, samplestats = lavaanSampleStats, options = lavaanOptions,  :
+  lavaan WARNING: could not compute standard errors!
+
+> pValueNonNested(out.A, out.B, output.A.A, output.A.B, output.B.A, output.B.B)
+$pValueMod1
+    Chi     AIC     BIC   RMSEA     CFI     TLI    SRMR andRule  orRule 
+    0.6     0.6     0.6     0.6     0.6     0.6     0.6     1.0     0.2 
+
+$pValueMod2
+      Chi       AIC       BIC     RMSEA       CFI       TLI      SRMR   andRule 
+0.6666667 0.6666667 0.6666667 0.6666667 0.6666667 0.6666667 0.6666667 0.0000000 
+   orRule 
+0.6666667 
+
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:parallel'
+
 > nameEx("pValueVariedCutoff")
 > ### * pValueVariedCutoff
 > 
@@ -19102,6 +18599,64 @@ detaching 'package:splines', 'package:quantreg', 'package:SparseM',
 > Output.NULL.ALT <- simResult(10, SimData.NULL, SimModel.ALT)
 > 
 > plotCutoffNested(Output.NULL.NULL, Output.NULL.ALT, alpha=0.05)
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:parallel'
+
+> nameEx("plotCutoffNonNested")
+> ### * plotCutoffNonNested
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: plotCutoffNonNested
+> ### Title: Plot sampling distributions of the differences in fit indices
+> ###   between non-nested models with fit indices cutoffs
+> ### Aliases: plotCutoffNonNested
+> 
+> ### ** Examples
+> 
+> n1 <- simNorm(0, 0.1)
+> u79 <- simUnif(0.7, 0.9)
+> 
+> loading.A <- matrix(0, 8, 2)
+> loading.A[1:3, 1] <- NA
+> loading.A[4:8, 2] <- NA
+> LX.A <- simMatrix(loading.A, 0.7)
+> latent.cor <- matrix(NA, 2, 2)
+> diag(latent.cor) <- 1
+> RPH <- symMatrix(latent.cor, "u79")
+> RTD <- symMatrix(diag(8))
+> CFA.Model.A <- simSetCFA(LY = LX.A, RPS = RPH, RTE = RTD)
+> 
+> error.cor.mis <- matrix(NA, 8, 8)
+> diag(error.cor.mis) <- 1
+> RTD.Mis <- symMatrix(error.cor.mis, "n1")
+> CFA.Model.A.Mis <- simMisspecCFA(RTE = RTD.Mis)
+> 
+> loading.B <- matrix(0, 8, 2)
+> loading.B[1:4, 1] <- NA
+> loading.B[5:8, 2] <- NA
+> LX.B <- simMatrix(loading.B, 0.7)
+> CFA.Model.B <- simSetCFA(LY = LX.B, RPS = RPH, RTE = RTD)
+> 
+> SimData.A <- simData(CFA.Model.A, 500)
+> SimData.B <- simData(CFA.Model.B, 500)
+> 
+> SimModel.A <- simModel(CFA.Model.A)
+> SimModel.B <- simModel(CFA.Model.B)
+> 
+> # The actual number of replications should be greater than 10.
+> Output.A.A <- simResult(10, SimData.A, SimModel.A)
+> Output.A.B <- simResult(10, SimData.A, SimModel.B)
+> Output.B.A <- simResult(10, SimData.B, SimModel.A)
+> Output.B.B <- simResult(10, SimData.B, SimModel.B)
+> 
+> plotCutoffNonNested(Output.A.A, Output.A.B, Output.B.A, Output.B.B)
+> plotCutoffNonNested(Output.A.A, Output.A.B)
+> plotCutoffNonNested(Output.A.A, Output.A.B, onetailed=TRUE)
 > 
 > 
 > 
@@ -19421,6 +18976,63 @@ The following object(s) are masked from 'package:base':
 detaching 'package:splines', 'package:quantreg', 'package:SparseM',
   'package:parallel'
 
+> nameEx("plotPowerFitNonNested")
+> ### * plotPowerFitNonNested
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: plotPowerFitNonNested
+> ### Title: Plot power of rejecting a non-nested model based on a difference
+> ###   in fit index
+> ### Aliases: plotPowerFitNonNested
+> 
+> ### ** Examples
+> 
+> n1 <- simNorm(0, 0.1)
+> u79 <- simUnif(0.7, 0.9)
+> 
+> loading.A <- matrix(0, 8, 2)
+> loading.A[1:3, 1] <- NA
+> loading.A[4:8, 2] <- NA
+> LX.A <- simMatrix(loading.A, 0.7)
+> latent.cor <- matrix(NA, 2, 2)
+> diag(latent.cor) <- 1
+> RPH <- symMatrix(latent.cor, "u79")
+> RTD <- symMatrix(diag(8))
+> CFA.Model.A <- simSetCFA(LY = LX.A, RPS = RPH, RTE = RTD)
+> 
+> error.cor.mis <- matrix(NA, 8, 8)
+> diag(error.cor.mis) <- 1
+> RTD.Mis <- symMatrix(error.cor.mis, "n1")
+> CFA.Model.A.Mis <- simMisspecCFA(RTE = RTD.Mis)
+> 
+> loading.B <- matrix(0, 8, 2)
+> loading.B[1:4, 1] <- NA
+> loading.B[5:8, 2] <- NA
+> LX.B <- simMatrix(loading.B, 0.7)
+> CFA.Model.B <- simSetCFA(LY = LX.B, RPS = RPH, RTE = RTD)
+> 
+> SimData.A <- simData(CFA.Model.A, 500)
+> SimData.B <- simData(CFA.Model.B, 500)
+> 
+> SimModel.A <- simModel(CFA.Model.A)
+> SimModel.B <- simModel(CFA.Model.B)
+> 
+> # The actual number of replications should be greater than 10.
+> Output.A.A <- simResult(10, SimData.A, SimModel.A)
+> Output.A.B <- simResult(10, SimData.A, SimModel.B)
+> Output.B.A <- simResult(10, SimData.B, SimModel.A)
+> Output.B.B <- simResult(10, SimData.B, SimModel.B)
+> 
+> plotPowerFitNonNested(Output.B.A, Output.B.B, dat1Mod1=Output.A.A, dat1Mod2=Output.A.B)
+> plotPowerFitNonNested(Output.B.A, Output.B.B, cutoff=c(AIC=0, BIC=0))
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:parallel'
+
 > nameEx("plotPowerSig")
 > ### * plotPowerSig
 > 
@@ -19736,13 +19348,13 @@ Model Type
 ========= Fit Indices Cutoffs ============
            Alpha
 Fit Indices      0.1     0.05     0.01    0.001     Mean
-      Chi     61.041   61.440   61.759   61.830   55.767
-      AIC   6974.728 6985.713 6994.501 6996.478 6920.463
-      BIC   7085.941 7096.926 7105.714 7107.692 7031.676
-      RMSEA    0.072    0.072    0.072    0.072    0.066
-      CFI      0.955    0.953    0.951    0.950    0.964
-      TLI      0.933    0.929    0.926    0.926    0.946
-      SRMR     0.048    0.049    0.049    0.049    0.044
+      Chi   6.10e+01 6.14e+01 6.18e+01 6.18e+01 5.58e+01
+      AIC   6.97e+03 6.99e+03 6.99e+03 7.00e+03 6.92e+03
+      BIC   7.09e+03 7.10e+03 7.11e+03 7.11e+03 7.03e+03
+      RMSEA 7.16e-02 7.20e-02 7.23e-02 7.24e-02 6.60e-02
+      CFI   9.55e-01 9.53e-01 9.51e-01 9.50e-01 9.64e-01
+      TLI   9.33e-01 9.29e-01 9.26e-01 9.26e-01 9.46e-01
+      SRMR  4.82e-02 4.88e-02 4.93e-02 4.94e-02 4.45e-02
 ========= Parameter Estimates and Standard Errors ============
       Estimate.Average Estimate.SD Average.SE Power..Not.equal.0. Std.Est
 LY1_1            0.803       0.085      0.068                 1.0   0.784
@@ -19987,6 +19599,173 @@ Loading required package: foreign
 
 detaching 'package:Amelia', 'package:foreign', 'package:parallel'
 
+> nameEx("runFitParam")
+> ### * runFitParam
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: runFitParam
+> ### Title: Build a parameter result object that the data-generation
+> ###   parameters are from the result of analyzing real data
+> ### Aliases: runFitParam runFitParam-methods runFitParam,ANY-method
+> ###   runFitParam,SimModel-method runFitParam,SimModelOut-method
+> 
+> ### ** Examples
+> 
+> library(lavaan)
+> loading <- matrix(0, 9, 3)
+> loading[1:3, 1] <- NA
+> loading[4:6, 2] <- NA
+> loading[7:9, 3] <- NA
+> model <- simParamCFA(LY=loading)
+> SimModel <- simModel(model, indLab=paste("x", 1:9, sep=""))
+> u2 <- simUnif(-0.2, 0.2)
+> loading.trivial <- matrix(NA, 9, 3)
+> loading.trivial[is.na(loading)] <- 0
+> LY.trivial <- simMatrix(loading.trivial, "u2")
+> mis <- simMisspecCFA(LY = LY.trivial)
+> Output <- runFitParam(SimModel, data=HolzingerSwineford1939, nRep=5, misspec=mis)
+> summary(Output)
+PARAMETER RESULT OBJECT
+Model Type
+[1] "CFA"
+========= Parameter Values ============
+       mean sd
+LY1_1 0.772  0
+LY2_1 0.424  0
+LY3_1 0.581  0
+LY4_2 0.852  0
+LY5_2 0.855  0
+LY6_2 0.838  0
+LY7_3 0.570  0
+LY8_3 0.723  0
+LY9_3 0.665  0
+PS2_1 0.459  0
+PS3_1 0.471  0
+PS3_2 0.283  0
+TE1_1 0.404  0
+TE2_2 0.821  0
+TE3_3 0.662  0
+TE4_4 0.275  0
+TE5_5 0.269  0
+TE6_6 0.298  0
+TE7_7 0.676  0
+TE8_8 0.477  0
+TE9_9 0.558  0
+TY1   3.463  0
+TY2   4.756  0
+TY3   1.412  0
+TY4   1.782  0
+TY5   2.514  0
+TY6   1.160  0
+TY7   3.279  0
+TY8   4.744  0
+TY9   4.669  0
+========= Misspecification Values ============
+        mean    sd
+LY4_1 -0.052 0.104
+LY5_1 -0.015 0.132
+LY6_1 -0.009 0.114
+LY7_1  0.076 0.077
+LY8_1  0.005 0.145
+LY9_1  0.001 0.093
+LY1_2  0.049 0.144
+LY2_2 -0.035 0.147
+LY3_2 -0.073 0.088
+LY7_2  0.045 0.127
+LY8_2 -0.046 0.137
+LY9_2 -0.053 0.161
+LY1_3  0.022 0.030
+LY2_3 -0.038 0.135
+LY3_3 -0.051 0.157
+LY4_3 -0.090 0.162
+LY5_3 -0.013 0.111
+LY6_3  0.052 0.087
+========= Fit Indices Distributions ============
+              f0 rmsea  srmr
+5%         0.564 0.125 0.070
+10%        0.592 0.128 0.075
+25%        0.675 0.137 0.089
+50%        1.109 0.176 0.094
+75%        1.114 0.176 0.120
+90%        1.158 0.179 0.126
+95%        1.173 0.180 0.128
+fitAverage 0.924 0.158 0.099
+fitSE      0.297 0.027 0.026
+========= Correlation between Fit Indices and Parameter Misspecification ============
+       LY4_1  LY5_1  LY6_1  LY7_1  LY8_1  LY9_1  LY1_2  LY2_2  LY3_2  LY7_2
+LY4_1  1.000 -0.005  0.549 -0.204 -0.059 -0.061  0.568 -0.025  0.043 -0.347
+LY5_1 -0.005  1.000 -0.750  0.962  0.952  0.876 -0.495 -0.451  0.864 -0.655
+LY6_1  0.549 -0.750  1.000 -0.764 -0.856 -0.855  0.700  0.644 -0.618  0.113
+LY7_1 -0.204  0.962 -0.764  1.000  0.873  0.786 -0.621 -0.293  0.793 -0.620
+LY8_1 -0.059  0.952 -0.856  0.873  1.000  0.967 -0.505 -0.679  0.827 -0.464
+LY9_1 -0.061  0.876 -0.855  0.786  0.967  1.000 -0.604 -0.819  0.662 -0.253
+LY1_2  0.568 -0.495  0.700 -0.621 -0.505 -0.604  1.000  0.420 -0.072 -0.195
+LY2_2 -0.025 -0.451  0.644 -0.293 -0.679 -0.819  0.420  1.000 -0.255 -0.235
+LY3_2  0.043  0.864 -0.618  0.793  0.827  0.662 -0.072 -0.255  1.000 -0.812
+LY7_2 -0.347 -0.655  0.113 -0.620 -0.464 -0.253 -0.195 -0.235 -0.812  1.000
+LY8_2 -0.813  0.144 -0.729  0.236  0.317  0.437 -0.758 -0.526 -0.072  0.564
+LY9_2 -0.415  0.058 -0.328  0.168  0.106  0.299 -0.860 -0.373 -0.419  0.585
+LY1_3 -0.378 -0.861  0.460 -0.720 -0.824 -0.702 -0.004  0.367 -0.927  0.815
+LY2_3 -0.959  0.238 -0.688  0.435  0.265  0.275 -0.763 -0.093  0.081  0.235
+LY3_3 -0.128 -0.157 -0.067 -0.121 -0.070  0.168 -0.623 -0.421 -0.611  0.716
+LY4_3  0.590 -0.459  0.677 -0.510 -0.493 -0.335  0.124  0.053 -0.701  0.375
+LY5_3  0.207  0.711 -0.171  0.766  0.466  0.341 -0.287  0.201  0.563 -0.805
+LY6_3  0.444  0.206 -0.029  0.106  0.248  0.435 -0.403 -0.576 -0.212  0.229
+f0    -0.474 -0.628  0.291 -0.435 -0.649 -0.519 -0.325  0.336 -0.851  0.729
+rmsea -0.484 -0.613  0.285 -0.414 -0.642 -0.518 -0.335  0.353 -0.837  0.707
+srmr  -0.807 -0.563 -0.080 -0.411 -0.443 -0.384 -0.156  0.151 -0.501  0.709
+       LY8_2  LY9_2  LY1_3  LY2_3  LY3_3  LY4_3  LY5_3  LY6_3     f0  rmsea
+LY4_1 -0.813 -0.415 -0.378 -0.959 -0.128  0.590  0.207  0.444 -0.474 -0.484
+LY5_1  0.144  0.058 -0.861  0.238 -0.157 -0.459  0.711  0.206 -0.628 -0.613
+LY6_1 -0.729 -0.328  0.460 -0.688 -0.067  0.677 -0.171 -0.029  0.291  0.285
+LY7_1  0.236  0.168 -0.720  0.435 -0.121 -0.510  0.766  0.106 -0.435 -0.414
+LY8_1  0.317  0.106 -0.824  0.265 -0.070 -0.493  0.466  0.248 -0.649 -0.642
+LY9_1  0.437  0.299 -0.702  0.275  0.168 -0.335  0.341  0.435 -0.519 -0.518
+LY1_2 -0.758 -0.860 -0.004 -0.763 -0.623  0.124 -0.287 -0.403 -0.325 -0.335
+LY2_2 -0.526 -0.373  0.367 -0.093 -0.421  0.053  0.201 -0.576  0.336  0.353
+LY3_2 -0.072 -0.419 -0.927  0.081 -0.611 -0.701  0.563 -0.212 -0.851 -0.837
+LY7_2  0.564  0.585  0.815  0.235  0.716  0.375 -0.805  0.229  0.729  0.707
+LY8_2  1.000  0.692  0.259  0.845  0.511 -0.358 -0.339  0.064  0.371  0.367
+LY9_2  0.692  1.000  0.395  0.549  0.924  0.319 -0.024  0.604  0.643  0.641
+LY1_3  0.259  0.395  1.000  0.216  0.474  0.392 -0.607 -0.096  0.927  0.918
+LY2_3  0.845  0.549  0.216  1.000  0.225 -0.564  0.011 -0.257  0.407  0.421
+LY3_3  0.511  0.924  0.474  0.225  1.000  0.605 -0.210  0.763  0.630  0.618
+LY4_3 -0.358  0.319  0.392 -0.564  0.605  1.000 -0.087  0.698  0.398  0.384
+LY5_3 -0.339 -0.024 -0.607  0.011 -0.210 -0.087  1.000  0.149 -0.327 -0.300
+LY6_3  0.064  0.604 -0.096 -0.257  0.763  0.698  0.149  1.000  0.060  0.048
+f0     0.371  0.643  0.927  0.407  0.630  0.398 -0.327  0.060  1.000  0.999
+rmsea  0.367  0.641  0.918  0.421  0.618  0.384 -0.300  0.048  0.999  1.000
+srmr   0.638  0.284  0.767  0.628  0.195 -0.257 -0.683 -0.466  0.677  0.672
+        srmr
+LY4_1 -0.807
+LY5_1 -0.563
+LY6_1 -0.080
+LY7_1 -0.411
+LY8_1 -0.443
+LY9_1 -0.384
+LY1_2 -0.156
+LY2_2  0.151
+LY3_2 -0.501
+LY7_2  0.709
+LY8_2  0.638
+LY9_2  0.284
+LY1_3  0.767
+LY2_3  0.628
+LY3_3  0.195
+LY4_3 -0.257
+LY5_3 -0.683
+LY6_3 -0.466
+f0     0.677
+rmsea  0.672
+srmr   1.000
+> 
+> out <- run(SimModel, HolzingerSwineford1939)
+> Output2 <- runFitParam(out, nRep=5, misspec=mis)
+> 
+> 
+> 
+> cleanEx()
 > nameEx("runLavaan")
 > ### * runLavaan
 > 
@@ -21392,13 +21171,13 @@ Model Type
 ========= Fit Indices Cutoffs ============
            Alpha
 Fit Indices      0.1     0.05     0.01    0.001     Mean
-      Chi    167.856  175.979  182.477  183.939  129.663
-      AIC   9398.015 9432.074 9459.321 9465.452 9038.505
-      BIC   9553.574 9587.633 9614.880 9621.011 9194.064
-      RMSEA    0.091    0.094    0.097    0.097    0.074
-      CFI      0.909    0.895    0.884    0.882    0.939
-      TLI      0.875    0.856    0.840    0.837    0.916
-      SRMR     0.054    0.056    0.057    0.057    0.047
+      Chi   1.68e+02 1.76e+02 1.82e+02 1.84e+02 1.30e+02
+      AIC   9.40e+03 9.43e+03 9.46e+03 9.47e+03 9.04e+03
+      BIC   9.55e+03 9.59e+03 9.61e+03 9.62e+03 9.19e+03
+      RMSEA 9.11e-02 9.42e-02 9.66e-02 9.72e-02 7.42e-02
+      CFI   9.09e-01 8.95e-01 8.84e-01 8.82e-01 9.39e-01
+      TLI   8.75e-01 8.56e-01 8.40e-01 8.37e-01 9.16e-01
+      SRMR  5.42e-02 5.57e-02 5.68e-02 5.71e-02 4.70e-02
 ========= Parameter Estimates and Standard Errors ============
         Estimate Average Estimate SD Average SE Power (Not equal 0) Std Est
 LY1_1              0.703       0.092      0.053               1.000   0.714
@@ -22097,13 +21876,13 @@ Model Type
 ========= Fit Indices Cutoffs ============
            Alpha
 Fit Indices      0.1     0.05     0.01    0.001     Mean
-      Chi     16.590   17.486   18.202   18.363   12.298
-      AIC   7507.979 7511.517 7514.347 7514.983 7448.769
-      BIC   7583.842 7587.380 7590.210 7590.846 7524.632
-      RMSEA    0.041    0.043    0.045    0.046    0.024
-      CFI      0.992    0.991    0.990    0.990    0.996
-      TLI      0.987    0.986    0.984    0.984    0.995
-      SRMR     0.018    0.019    0.019    0.020    0.015
+      Chi   1.66e+01 1.75e+01 1.82e+01 1.84e+01 1.23e+01
+      AIC   7.51e+03 7.51e+03 7.51e+03 7.51e+03 7.45e+03
+      BIC   7.58e+03 7.59e+03 7.59e+03 7.59e+03 7.52e+03
+      RMSEA 4.06e-02 4.31e-02 4.52e-02 4.56e-02 2.41e-02
+      CFI   9.92e-01 9.91e-01 9.90e-01 9.90e-01 9.96e-01
+      TLI   9.87e-01 9.86e-01 9.84e-01 9.84e-01 9.95e-01
+      SRMR  1.85e-02 1.90e-02 1.95e-02 1.96e-02 1.53e-02
 ========= Parameter Estimates and Standard Errors ============
       Estimate.Average Estimate.SD Average.SE Power..Not.equal.0. Std.Est
 LY1_1            0.696       0.056      0.042                   1   0.698
@@ -22183,12 +21962,12 @@ The following object(s) are masked from 'package:base':
 
     backsolve
 
-    N      Chi      AIC      BIC     RMSEA       CFI       TLI       SRMR
-1  50 39.66394 772.8433 808.1088 0.2462791 0.7448392  0.574732 0.09040805
-2  62 34.10981 950.9056 989.0904 0.2091128 0.8003029 0.6671715 0.07682606
-3  75 28.09284 1143.806 1185.154 0.1688492 0.8603886 0.7673143 0.06211224
-4  88 22.07587 1336.707 1381.217 0.1285857 0.9204743 0.8674571 0.04739842
-5 100 16.52174 1514.769 1562.199 0.0914193  0.975938 0.9598966 0.03381643
+    N  Chi  AIC  BIC  RMSEA   CFI   TLI   SRMR
+1  50 39.7  773  808  0.246 0.745 0.575 0.0904
+2  62 34.1  951  989  0.209   0.8 0.667 0.0768
+3  75 28.1 1144 1185  0.169  0.86 0.767 0.0621
+4  88 22.1 1337 1381  0.129  0.92 0.867 0.0474
+5 100 16.5 1515 1562 0.0914 0.976  0.96 0.0338
 ========= Parameter Estimates and Standard Errors ============
       Estimate.Average Estimate.SD Average.SE Power..Not.equal.0. Std.Est
 LY1_1            0.664       0.153      0.109               1.000   0.666
@@ -22252,608 +22031,132 @@ RESULT OBJECT
 Model Type
 [1] "CFA"
 ========= Fit Indices Cutoffs ============
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-Warning in if (xval == "all") { :
-  the condition has length > 1 and only the first element will be used
-   X.MCAR   N      Chi      AIC      BIC        RMSEA       CFI       TLI
-1    0.00  50 39.66394 761.8911 808.1088    0.2462791 0.7448392  0.574732
-2    0.05  50 36.18253 750.5107 790.8277    0.2334718 0.7642605  0.606325
-3    0.10  50 32.70112 739.1303 773.5467    0.2206646 0.7836819  0.637918
-4    0.15  50  29.2197 727.7499 756.2657    0.2078573 0.8031032  0.669511
-5    0.20  50 25.73829 716.3695 738.9847    0.1950501 0.8225246  0.701104
-6    0.00  62 34.10981 953.0961 989.0904    0.2091128 0.8003029 0.6671715
-7    0.05  62  30.9399 927.0518 963.7543    0.1938941 0.8165068 0.6943333
-8    0.10  62 27.76999 901.0075 938.4183    0.1786754 0.8327108  0.721495
-9    0.15  62 24.60008 874.9632 913.0822    0.1634567 0.8489147 0.7486567
-10   0.20  62 21.43017 848.9189 887.7462     0.148238 0.8651187 0.7758185
-11   0.00  75 28.09284 1160.235 1185.154    0.1688492 0.8603886 0.7673143
-12   0.05  75 25.26039 1118.305 1151.091    0.1510182  0.873107 0.7896755
-13   0.10  75 22.42794 1076.374 1117.029    0.1331871 0.8858254 0.8120367
-14   0.15  75 19.59548 1034.444 1082.967    0.1153561 0.8985439 0.8343979
-15   0.20  75 16.76303  992.514 1048.904   0.09752503 0.9112623 0.8567591
-16   0.00  88 22.07587 1367.374 1381.217    0.1285857 0.9204743 0.8674571
-17   0.05  88 19.58088 1309.557 1338.429    0.1081422 0.9297072 0.8850178
-18   0.10  88 17.08588 1251.741  1295.64   0.08769883 0.9389401 0.9025784
-19   0.15  88 14.59089 1193.925 1252.851   0.06725542  0.948173 0.9201391
-20   0.20  88  12.0959 1136.109 1210.063   0.04681201 0.9574059 0.9376998
-21   0.00 100 16.52174 1558.579 1562.199    0.0914193  0.975938 0.9598966
-22   0.05 100 14.33825 1486.098 1511.355   0.06856448 0.9819535  0.973026
-23   0.10 100 12.15476 1413.618 1460.512   0.04570965  0.987969 0.9861554
-24   0.15 100 9.971266 1341.138 1409.668   0.02285483 0.9939845 0.9992848
-25   0.20 100 7.787774 1268.658 1358.824 2.428613e-17         1  1.012414
-         SRMR
-1  0.09040805
-2  0.09267762
-3  0.09494718
-4  0.09721675
-5  0.09948631
-6  0.07682606
-7  0.07882453
-8    0.080823
-9  0.08282146
-10 0.08481993
-11 0.06211224
-12 0.06381702
-13 0.06552179
-14 0.06722657
-15 0.06893134
-16 0.04739842
-17 0.04880951
-18 0.05022059
-19 0.05163168
-20 0.05304276
-21 0.03381643
-22 0.03495642
-23 0.03609641
-24 0.03723639
-25 0.03837638
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+Warning in rq.fit.br(x, y, tau = tau, ...) : Solution may be nonunique
+   X.MCAR   N  Chi  AIC  BIC    RMSEA   CFI   TLI   SRMR
+1    0.00  50 39.7  762  808    0.246 0.745 0.575 0.0904
+2    0.05  50 36.2  751  791    0.233 0.764 0.606 0.0927
+3    0.10  50 32.7  739  774    0.221 0.784 0.638 0.0949
+4    0.15  50 29.2  728  756    0.208 0.803  0.67 0.0972
+5    0.20  50 25.7  716  739    0.195 0.823 0.701 0.0995
+6    0.00  62 34.1  953  989    0.209   0.8 0.667 0.0768
+7    0.05  62 30.9  927  964    0.194 0.817 0.694 0.0788
+8    0.10  62 27.8  901  938    0.179 0.833 0.721 0.0808
+9    0.15  62 24.6  875  913    0.163 0.849 0.749 0.0828
+10   0.20  62 21.4  849  888    0.148 0.865 0.776 0.0848
+11   0.00  75 28.1 1160 1185    0.169  0.86 0.767 0.0621
+12   0.05  75 25.3 1118 1151    0.151 0.873  0.79 0.0638
+13   0.10  75 22.4 1076 1117    0.133 0.886 0.812 0.0655
+14   0.15  75 19.6 1034 1083    0.115 0.899 0.834 0.0672
+15   0.20  75 16.8  993 1049   0.0975 0.911 0.857 0.0689
+16   0.00  88 22.1 1367 1381    0.129  0.92 0.867 0.0474
+17   0.05  88 19.6 1310 1338    0.108  0.93 0.885 0.0488
+18   0.10  88 17.1 1252 1296   0.0877 0.939 0.903 0.0502
+19   0.15  88 14.6 1194 1253   0.0673 0.948  0.92 0.0516
+20   0.20  88 12.1 1136 1210   0.0468 0.957 0.938  0.053
+21   0.00 100 16.5 1559 1562   0.0914 0.976  0.96 0.0338
+22   0.05 100 14.3 1486 1511   0.0686 0.982 0.973  0.035
+23   0.10 100 12.2 1414 1461   0.0457 0.988 0.986 0.0361
+24   0.15 100 9.97 1341 1410   0.0229 0.994 0.999 0.0372
+25   0.20 100 7.79 1269 1359 2.43e-17     1  1.01 0.0384
 ========= Parameter Estimates and Standard Errors ============
       Estimate.Average Estimate.SD Average.SE Power..Not.equal.0. Std.Est
 LY1_1            0.655       0.120      0.114               1.000   0.674
@@ -23278,6 +22581,22 @@ skew (g1)        se         z         p
 > 
 > 
 > cleanEx()
+> nameEx("sortList")
+> ### * sortList
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: sortList
+> ### Title: Sort two objects in a list
+> ### Aliases: sortList
+> 
+> ### ** Examples
+> 
+> # No example
+> 
+> 
+> 
+> cleanEx()
 > nameEx("standardize")
 > ### * standardize
 > 
@@ -23422,23 +22741,10 @@ skew (g1)        se         z         p
 > ### Name: summaryFit
 > ### Title: Provide summary of model fit across replications
 > ### Aliases: summaryFit summaryFit-methods summaryFit,ANY-method
-> ###   summaryFit,SimResult-method
+> ###   summaryFit,SimResult-method summaryFit,SimResultParam-method
 > 
 > ### ** Examples
 > 
-> showClass("SimResult")
-Class "SimResult" [package "simsem"]
-
-Slots:
-                                                                        
-Name:   modelType       nRep       coef         se        fit  converged
-Class:  character    numeric data.frame data.frame data.frame     vector
-                                                                        
-Name:  paramValue       FMI1       FMI2    stdCoef       seed          n
-Class: data.frame data.frame data.frame data.frame    numeric     vector
-                            
-Name:      pmMCAR      pmMAR
-Class:     vector     vector
 > loading <- matrix(0, 6, 1)
 > loading[1:6, 1] <- NA
 > LX <- simMatrix(loading, 0.7)
@@ -23452,24 +22758,24 @@ Class:     vector     vector
 > Output <- simResult(5, SimData, SimModel)
 > summaryFit(Output)
            Alpha
-Fit Indices      0.1     0.05     0.01    0.001     Mean
-      Chi     16.590   17.486   18.202   18.363   12.298
-      AIC   7507.979 7511.517 7514.347 7514.983 7448.769
-      BIC   7583.842 7587.380 7590.210 7590.846 7524.632
-      RMSEA    0.041    0.043    0.045    0.046    0.024
-      CFI      0.992    0.991    0.990    0.990    0.996
-      TLI      0.987    0.986    0.984    0.984    0.995
-      SRMR     0.018    0.019    0.019    0.020    0.015
+Fit Indices          0.1         0.05         0.01        0.001         Mean
+      Chi   1.658982e+01 1.748556e+01 1.820214e+01 1.836338e+01 1.229758e+01
+      AIC   7.507979e+03 7.511517e+03 7.514347e+03 7.514983e+03 7.448769e+03
+      BIC   7.583842e+03 7.587380e+03 7.590210e+03 7.590846e+03 7.524632e+03
+      RMSEA 4.059817e-02 4.312852e-02 4.515279e-02 4.560825e-02 2.407053e-02
+      CFI   9.923631e-01 9.913239e-01 9.904926e-01 9.903056e-01 9.962657e-01
+      TLI   9.872718e-01 9.855399e-01 9.841543e-01 9.838426e-01 9.946571e-01
+      SRMR  1.845382e-02 1.901709e-02 1.946770e-02 1.956908e-02 1.529650e-02
 > summaryFit(Output, detail=TRUE)
            Alpha
-Fit Indices      0.1     0.05     0.01    0.001     Mean
-      Chi     16.590   17.486   18.202   18.363   12.298
-      AIC   7507.979 7511.517 7514.347 7514.983 7448.769
-      BIC   7583.842 7587.380 7590.210 7590.846 7524.632
-      RMSEA    0.041    0.043    0.045    0.046    0.024
-      CFI      0.992    0.991    0.990    0.990    0.996
-      TLI      0.987    0.986    0.984    0.984    0.995
-      SRMR     0.018    0.019    0.019    0.020    0.015
+Fit Indices          0.1         0.05         0.01        0.001         Mean
+      Chi   1.658982e+01 1.748556e+01 1.820214e+01 1.836338e+01 1.229758e+01
+      AIC   7.507979e+03 7.511517e+03 7.514347e+03 7.514983e+03 7.448769e+03
+      BIC   7.583842e+03 7.587380e+03 7.590210e+03 7.590846e+03 7.524632e+03
+      RMSEA 4.059817e-02 4.312852e-02 4.515279e-02 4.560825e-02 2.407053e-02
+      CFI   9.923631e-01 9.913239e-01 9.904926e-01 9.903056e-01 9.962657e-01
+      TLI   9.872718e-01 9.855399e-01 9.841543e-01 9.838426e-01 9.946571e-01
+      SRMR  1.845382e-02 1.901709e-02 1.946770e-02 1.956908e-02 1.529650e-02
 > 
 > 
 > 
@@ -23477,6 +22783,56 @@ Fit Indices      0.1     0.05     0.01    0.001     Mean
 
 detaching 'package:parallel'
 
+> nameEx("summaryMisspec")
+> ### * summaryMisspec
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: summaryMisspec
+> ### Title: Provide summary of model misspecification imposed across
+> ###   replications
+> ### Aliases: summaryMisspec summaryMisspec-methods
+> ###   summaryMisspec,ANY-method summaryMisspec,SimResultParam-method
+> 
+> ### ** Examples
+> 
+> u35 <- simUnif(0.3, 0.5)
+> u57 <- simUnif(0.5, 0.7)
+> u1 <- simUnif(-0.1, 0.1)
+> n31 <- simNorm(0.3, 0.1)
+> 
+> path.BE <- matrix(0, 4, 4)
+> path.BE[3, 1:2] <- NA
+> path.BE[4, 3] <- NA
+> starting.BE <- matrix("", 4, 4)
+> starting.BE[3, 1:2] <- "u35"
+> starting.BE[4, 3] <- "u57"
+> BE <- simMatrix(path.BE, starting.BE)
+> 
+> residual.error <- diag(4)
+> residual.error[1,2] <- residual.error[2,1] <- NA
+> RPS <- symMatrix(residual.error, "n31")
+> 
+> ME <- simVector(rep(NA, 4), 0)
+> 
+> Path.Model <- simSetPath(RPS = RPS, BE = BE, ME = ME)
+> 
+> mis.path.BE <- matrix(0, 4, 4)
+> mis.path.BE[4, 1:2] <- NA
+> mis.BE <- simMatrix(mis.path.BE, "u1")
+> Path.Mis.Model <- simMisspecPath(BE = mis.BE, misfitType="rmsea")
+> 
+> # The number of replications in actual analysis should be much more than 5
+> ParamObject <- simResultParam(5, Path.Model, Path.Mis.Model)
+> 
+> summaryMisspec(ParamObject)
+            mean         sd
+BE4_1 0.02332835 0.02344691
+BE4_2 0.04287967 0.07869762
+> 
+> 
+> 
+> cleanEx()
 > nameEx("summaryParam")
 > ### * summaryParam
 > 
@@ -23763,6 +23119,22 @@ detaching 'package:parallel'
 > 
 > 
 > cleanEx()
+> nameEx("twoTailedPValue")
+> ### * twoTailedPValue
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: twoTailedPValue
+> ### Title: Find two-tailed _p_ value from one-tailed _p_ value
+> ### Aliases: twoTailedPValue
+> 
+> ### ** Examples
+> 
+> # No example
+> 
+> 
+> 
+> cleanEx()
 > nameEx("validateCovariance")
 > ### * validateCovariance
 > 
@@ -23936,7 +23308,7 @@ detaching 'package:parallel'
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  136.61 0.53 137.2 NA NA 
+Time elapsed:  215.21 0.67 216.54 NA NA 
 > grDevices::dev.off()
 null device 
           1 

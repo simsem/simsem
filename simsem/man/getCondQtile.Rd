@@ -17,7 +17,7 @@ getCondQtile(y, x=NULL, xval=NULL, df = 0, qtile = 0.5)
 	The predictors variables. If \code{NULL}, the unconditional quantile of the \code{y} is provided.
 }
   \item{xval}{
-	The vector of predictors' values that users wish to find the conditional quantile from.
+	The vector of predictors' values that users wish to find the conditional quantile from. If \code{"all"} is specified, the function will provide the conditional quantile of every value in \code{x}.
 }
   \item{df}{
 	The degree of freedom used in spline method in predicting the fit indices by the predictors. If \code{df} is 0, the spline method will not be applied. 

@@ -158,16 +158,6 @@ setMethod("anova", signature(object = "SimModelOut"), function(object, ...) {
     }
     
     
-    if (any(duplicated(nfreepar))) 
-        stop("simSEM ERROR: Two models have the same degrees of freedom and cannot be nested")
-    ## FIXME: what to do here?
-    
-    # what, same number of free parameters?
-    
-    # right now we stop things and give a warning.
-    
-    # stop('simSEM ERROR: Two models have the same degrees of freedom and cannot be nested')
-    
     # ORDERING DOES NOT WORK RIGHT NOW. Why??
     mods <- mods[order(nfreepar, decreasing = FALSE)]
     
@@ -181,27 +171,32 @@ setMethod("anova", signature(object = "SimModelOut"), function(object, ...) {
     CFI <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")["CFI"])), ncol = length(mods))
     TLI <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")["TLI"])), ncol = length(mods))
     RMSEA <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")["RMSEA"])), ncol = length(mods))
-    
-    
+    AIC <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")["AIC"])), ncol = length(mods))
+    BIC <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")["BIC"])), ncol = length(mods))
+   
     # difference statistics. Taking the absolute value so order models entered doesn't matter
     Chi.delta <- (apply(Chi, 1, diff))
     Df.delta <- (apply(Df, 1, diff))
     CFI.delta <- (apply(CFI, 1, diff))
     TLI.delta <- (apply(TLI, 1, diff))
     RMSEA.delta <- (apply(RMSEA, 1, diff))
+    AIC.delta <- (apply(AIC, 1, diff))
+    BIC.delta <- (apply(BIC, 1, diff))
     
-    # Power of test. 0 = not siginficant, 1 = sig.
-    pValue <- pchisq(Chi.delta, Df.delta, lower = FALSE)
     
+	pValue <- NULL
+    if (!any(duplicated(nfreepar))) pValue <- pchisq(Chi.delta, Df.delta, lower = FALSE)
+    
+	val <- data.frame(Df = colMeans(Df), Chisq = colMeans(Chi), CFI = colMeans(CFI), TLI = colMeans(TLI), RMSEA = colMeans(RMSEA), AIC = colMeans(AIC), BIC = colMeans(BIC))
+	
+		
     # Need to think about what we want out of this. Maybe just mean differences across models? Lets do that for now
-    val <- data.frame(Chisq.diff = c(NA, mean(Chi.delta)), Df.diff = c(NA, mean(Df.delta)), pValue = c(NA, mean(pValue)), CFI.diff = c(NA, 
-        mean(CFI.delta)), TLI.diff = c(NA, mean(TLI.delta)), RMSEA.diff = c(NA, mean(RMSEA.delta)))
+    diff <- data.frame(Chisq.diff = c(NA, Chi.delta), Df.diff = c(NA, Df.delta), pValue = c(NA, pValue), CFI.diff = c(NA, 
+        CFI.delta), TLI.diff = c(NA, TLI.delta), RMSEA.diff = c(NA, RMSEA.delta), AIC.diff = c(NA, AIC.delta), BIC.diff = c(NA, BIC.delta))
     #' Pr(>Chisq)' = Pvalue.delta, Don't report mean p value, meaningless?
     
-    
-    class(val) <- c("anova", class(val))
-    
-    return(val)
+    result <- list(summary = val, diff = diff)
+    return(result)
     
 })
  

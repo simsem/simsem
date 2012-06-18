@@ -67,9 +67,9 @@ setMethod("getPowerFit", signature(altObject = "SimResult", cutoff = "missing"),
 	mod <- clean(altObject, nullObject)
 	altObject <- mod[[1]]
 	nullObject <- mod[[2]]
-	if(!all.equal(unique(altObject@n), unique(nullObject@n))) stop("Models are based on different values of sample sizes")
-	if(!all.equal(unique(altObject@pmMCAR), unique(nullObject@pmMCAR))) stop("Models are based on different values of the percent completely missing at random")
-	if(!all.equal(unique(altObject@pmMAR), unique(nullObject@pmMAR))) stop("Models are based on different values of the percent missing at random")
+	if(!isTRUE(all.equal(unique(altObject@n), unique(nullObject@n)))) stop("Models are based on different values of sample sizes")
+	if(!isTRUE(all.equal(unique(altObject@pmMCAR), unique(nullObject@pmMCAR)))) stop("Models are based on different values of the percent completely missing at random")
+	if(!isTRUE(all.equal(unique(altObject@pmMAR), unique(nullObject@pmMAR)))) stop("Models are based on different values of the percent missing at random")
 	if (is.null(nVal) || is.na(nVal)) 
         nVal <- NULL
     if (is.null(pmMCARval) || is.na(pmMCARval)) 

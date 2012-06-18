@@ -6,10 +6,10 @@ getCutoffNested <- function(nested, parent, alpha = 0.05, usedFit = NULL, nVal =
 	mod <- clean(nested, parent)
 	nested <- mod[[1]]
 	parent <- mod[[2]]
-	if(!all.equal(unique(nested@paramValue), unique(parent@paramValue))) stop("Models are based on different data and cannot be compared, check your random seed")
-	if(!all.equal(unique(nested@n), unique(parent@n))) stop("Models are based on different values of sample sizes")
-	if(!all.equal(unique(nested@pmMCAR), unique(parent@pmMCAR))) stop("Models are based on different values of the percent completely missing at random")
-	if(!all.equal(unique(nested@pmMAR), unique(parent@pmMAR))) stop("Models are based on different values of the percent missing at random")
+	if(!isTRUE(all.equal(unique(nested@paramValue), unique(parent@paramValue)))) stop("Models are based on different data and cannot be compared, check your random seed")
+	if(!isTRUE(all.equal(unique(nested@n), unique(parent@n)))) stop("Models are based on different values of sample sizes")
+	if(!isTRUE(all.equal(unique(nested@pmMCAR), unique(parent@pmMCAR)))) stop("Models are based on different values of the percent completely missing at random")
+	if(!isTRUE(all.equal(unique(nested@pmMAR), unique(parent@pmMAR)))) stop("Models are based on different values of the percent missing at random")
 	if (is.null(nVal) || is.na(nVal)) 
         nVal <- NULL
     if (is.null(pmMCARval) || is.na(pmMCARval)) 

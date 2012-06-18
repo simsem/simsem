@@ -26,12 +26,8 @@
 	A data frame that provides the statistics described above from all parameters.
 	For using with \code{\linkS4class{SimModelOut}}, each column means
 	\itemize{
-		\item \code{Chisq.diff:} Average chi square difference across all replications
-		\item \code{Df.diff:} Average degrees of freedom difference across all replications
-		\item \code{Power:} The proportion of replications where the likelihood ratio test is significant
-		\item \code{CFI.diff:} Average difference of the CFI across all replications
-		\item \code{TLI.diff:} Average difference of the TLI across all replications
-		\item \code{RMSEA.diff:} Average difference of the RMSEA across all replications
+		\item \code{summary:} The fit indices of each output
+		\item \code{diff:} The differences in fit indices among outputs 
 	}	
 	For using with \code{linkS4class{SimResult}}, the result is a list with two or three elements:
 	\itemize{

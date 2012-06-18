@@ -234,7 +234,7 @@ setMethod("run", signature = "SimModel", definition = function(object, data, sim
     # is.equal(DataOut@param, Output@param) yes --> compute bias
     if (!is.null(DataOut)) {
         param <- DataOut@param
-        check <- all.equal(param, Output@param)
+        check <- isTRUE(all.equal(param, Output@param))
         usedX <- NULL
         usedY <- NULL
         if (!(length(check) == 1 && check == TRUE) & !isNullObject(object@auxiliary)) {
@@ -249,7 +249,7 @@ setMethod("run", signature = "SimModel", definition = function(object, data, sim
             usedY <- setdiff(usedY, usedX)
             param <- extract(param, y = usedY, x = usedX)
         }
-        check <- all.equal(param, Output@param)
+        check <- isTRUE(all.equal(param, Output@param))
         if (length(check) == 1 && check == TRUE) {
             paramOut <- DataOut@paramOut
             if (!isNullObject(object@auxiliary)) 

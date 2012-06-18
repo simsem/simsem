@@ -6,7 +6,7 @@ setMethod("isRandom", signature(object = "SimMatrix"), definition = function(obj
     } else {
         obj1 <- run(object)
         obj2 <- run(object)
-        compare <- all.equal(obj1, obj2)
+        compare <- isTRUE(all.equal(obj1, obj2))
         if ((length(compare) == 1) && (compare == TRUE)) {
             return(FALSE)
         } else {
@@ -21,7 +21,7 @@ setMethod("isRandom", signature(object = "SimVector"), definition = function(obj
     } else {
         obj1 <- run(object)
         obj2 <- run(object)
-        compare <- all.equal(obj1, obj2)
+        compare <- isTRUE(all.equal(obj1, obj2))
         if ((length(compare) == 1) && (compare == TRUE)) {
             return(FALSE)
         } else {

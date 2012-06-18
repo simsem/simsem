@@ -10,10 +10,10 @@ setMethod("getPowerFitNested", signature(altNested = "SimResult", altParent = "S
     mod <- clean(altNested, altParent)
 	altNested <- mod[[1]]
 	altParent <- mod[[2]]
-	if(!all.equal(unique(altNested@paramValue), unique(altParent@paramValue))) stop("Models are based on different data and cannot be compared, check your random seed")
-	if(!all.equal(unique(altNested@n), unique(altParent@n))) stop("Models are based on different values of sample sizes")
-	if(!all.equal(unique(altNested@pmMCAR), unique(altParent@pmMCAR))) stop("Models are based on different values of the percent completely missing at random")
-	if(!all.equal(unique(altNested@pmMAR), unique(altParent@pmMAR))) stop("Models are based on different values of the percent missing at random")
+	if(!isTRUE(all.equal(unique(altNested@paramValue), unique(altParent@paramValue)))) stop("Models are based on different data and cannot be compared, check your random seed")
+	if(!isTRUE(all.equal(unique(altNested@n), unique(altParent@n)))) stop("Models are based on different values of sample sizes")
+	if(!isTRUE(all.equal(unique(altNested@pmMCAR), unique(altParent@pmMCAR)))) stop("Models are based on different values of the percent completely missing at random")
+	if(!isTRUE(all.equal(unique(altNested@pmMAR), unique(altParent@pmMAR)))) stop("Models are based on different values of the percent missing at random")
     Data <- as.data.frame((altNested@fit - altParent@fit)) 
     condition <- c(length(altNested@pmMCAR) > 1, length(altNested@pmMAR) > 1, length(altNested@n) > 1)
     condValue <- cbind(altNested@pmMCAR, altNested@pmMAR, altNested@n)
@@ -50,8 +50,8 @@ setMethod("getPowerFitNested", signature(altNested = "SimResult", altParent = "S
 	mod2 <- clean(nullNested, nullParent)
 	nullNested <- mod2[[1]]
 	nullParent <- mod2[[2]]
-	if(!all.equal(unique(altNested@paramValue), unique(altParent@paramValue))) stop("'altNested' and 'altParent' are based on different data and cannot be compared, check your random seed")
-	if(!all.equal(unique(nullNested@paramValue), unique(nullParent@paramValue))) stop("'nullNested' and 'nullParent' are based on different data and cannot be compared, check your random seed")
+	if(!isTRUE(all.equal(unique(altNested@paramValue), unique(altParent@paramValue)))) stop("'altNested' and 'altParent' are based on different data and cannot be compared, check your random seed")
+	if(!isTRUE(all.equal(unique(nullNested@paramValue), unique(nullParent@paramValue)))) stop("'nullNested' and 'nullParent' are based on different data and cannot be compared, check your random seed")
 	if(!multipleAllEqual(unique(altNested@n), unique(altParent@n), unique(nullNested@n), unique(nullParent@n))) stop("Models are based on different values of sample sizes")
 	if(!multipleAllEqual(unique(altNested@pmMCAR), unique(altParent@pmMCAR), unique(nullNested@pmMCAR), unique(nullParent@pmMCAR))) stop("Models are based on different values of the percent completely missing at random")
 	if(!multipleAllEqual(unique(altNested@pmMAR), unique(altParent@pmMAR), unique(nullNested@pmMAR), unique(nullParent@pmMAR))) stop("Models are based on different values of the percent missing at random")

@@ -5,10 +5,6 @@ setMethod("getPowerFitNonNested", signature(dat2Mod1 = "SimResult", dat2Mod2 = "
 })
 
 setMethod("getPowerFitNonNested", signature(dat2Mod1 = "SimResult", dat2Mod2 = "SimResult", cutoff = "missing"), definition = function(dat2Mod1, dat2Mod2, cutoff=NULL, dat1Mod1, dat1Mod2, usedFit = NULL, alpha = 0.05, revDirec = FALSE, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, df = 0, onetailed=FALSE) {
-	# dat1Mod1 <- out11
-	# dat1Mod2 <- out12
-	# dat2Mod1 <- out21
-	# dat2Mod2 <- out22
 	
     if (is.null(usedFit)) 
         usedFit <- getKeywords()$usedFit
@@ -18,8 +14,8 @@ setMethod("getPowerFitNonNested", signature(dat2Mod1 = "SimResult", dat2Mod2 = "
 	mod2 <- clean(dat1Mod1, dat1Mod2)
 	dat1Mod1 <- mod2[[1]]
 	dat1Mod2 <- mod2[[2]]
-	if(!all.equal(unique(dat2Mod1@paramValue), unique(dat2Mod2@paramValue))) stop("'dat2Mod1' and 'dat2Mod2' are based on different data and cannot be compared, check your random seed")
-	if(!all.equal(unique(dat1Mod1@paramValue), unique(dat1Mod2@paramValue))) stop("'dat1Mod1' and 'dat1Mod2' are based on different data and cannot be compared, check your random seed")
+	if(!isTRUE(all.equal(unique(dat2Mod1@paramValue), unique(dat2Mod2@paramValue)))) stop("'dat2Mod1' and 'dat2Mod2' are based on different data and cannot be compared, check your random seed")
+	if(!isTRUE(all.equal(unique(dat1Mod1@paramValue), unique(dat1Mod2@paramValue)))) stop("'dat1Mod1' and 'dat1Mod2' are based on different data and cannot be compared, check your random seed")
 	if(!multipleAllEqual(unique(dat2Mod1@n), unique(dat2Mod2@n), unique(dat1Mod1@n), unique(dat1Mod2@n))) stop("Models are based on different values of sample sizes")
 	if(!multipleAllEqual(unique(dat2Mod1@pmMCAR), unique(dat2Mod2@pmMCAR), unique(dat1Mod1@pmMCAR), unique(dat1Mod2@pmMCAR))) stop("Models are based on different values of the percent completely missing at random")
 	if(!multipleAllEqual(unique(dat2Mod1@pmMAR), unique(dat2Mod2@pmMAR), unique(dat1Mod1@pmMAR), unique(dat1Mod2@pmMAR))) stop("Models are based on different values of the percent missing at random")

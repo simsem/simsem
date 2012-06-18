@@ -80,6 +80,7 @@ extractMatrixNames	extractMatrixNames
 extractOpenMxFit	extractOpenMxFit
 extractVectorNames	extractVectorNames
 fillParam	fillParam
+find2Dhist	find2Dhist
 findFactorIntercept	findFactorIntercept
 findFactorMean	findFactorMean
 findFactorResidualVar	findFactorResidualVar
@@ -89,6 +90,7 @@ findIndIntercept	findIndIntercept
 findIndMean	findIndMean
 findIndResidualVar	findIndResidualVar
 findIndTotalVar	findIndTotalVar
+findphist	findphist
 findPossibleFactorCor	findPossibleFactorCor
 findPower	findPower
 findRecursiveSet	findRecursiveSet
@@ -103,6 +105,7 @@ getCutoff,matrix-method	getCutoff
 getCutoff,SimResult-method	getCutoff
 getCutoff-methods	getCutoff
 getCutoffNested	getCutoffNested
+getCutoffNonNested	getCutoffNonNested
 getKeywords	getKeywords
 getPopulation	getPopulation
 getPopulation,ANY-method	getPopulation
@@ -121,6 +124,10 @@ getPowerFitNested	getPowerFitNested
 getPowerFitNested,SimResult,SimResult,missing-method	getPowerFitNested
 getPowerFitNested,SimResult,SimResult,vector-method	getPowerFitNested
 getPowerFitNested-methods	getPowerFitNested
+getPowerFitNonNested	getPowerFitNonNested
+getPowerFitNonNested,SimResult,SimResult,missing-method	getPowerFitNonNested
+getPowerFitNonNested,SimResult,SimResult,vector-method	getPowerFitNonNested
+getPowerFitNonNested-methods	getPowerFitNonNested
 imposeMissing	imposeMissing
 indProd	indProd
 interpolate	interpolate
@@ -156,6 +163,7 @@ kurtosis	kurtosis
 kurtosis,vector-method	kurtosis
 kurtosis,VirtualDist-method	VirtualDist-class
 kurtosis-methods	kurtosis
+likRatioFit	likRatioFit
 loadingFromAlpha	loadingFromAlpha
 makeLabels	makeLabels
 makeLabels,ANY-method	makeLabels
@@ -193,6 +201,7 @@ plotCutoff,data.frame-method	plotCutoff
 plotCutoff,SimResult-method	plotCutoff
 plotCutoff-methods	plotCutoff
 plotCutoffNested	plotCutoffNested
+plotCutoffNonNested	plotCutoffNonNested
 plotDist	plotDist
 plotDist,SimDataDist-method	SimDataDist-class
 plotDist,VirtualDist-method	VirtualDist-class
@@ -205,6 +214,7 @@ plotPower	plotPower
 plotPowerFit	plotPowerFit
 plotPowerFitDf	plotPowerFitDf
 plotPowerFitNested	plotPowerFitNested
+plotPowerFitNonNested	plotPowerFitNonNested
 plotPowerSig	plotPowerSig
 plotQtile	plotQtile
 plotScatter	plotScatter
@@ -227,6 +237,8 @@ pValue,numeric,vector-method	pValue
 pValue,SimModelOut,SimResult-method	pValue
 pValue-methods	pValue
 pValueCondCutoff	pValueCondCutoff
+pValueNested	pValueNested
+pValueNonNested	pValueNonNested
 pValueVariedCutoff	pValueVariedCutoff
 reassignNames	reassignNames
 reduceConstraint	reduceConstraint
@@ -272,6 +284,11 @@ runFit,ANY-method	runFit
 runFit,SimModel-method	runFit
 runFit,SimModelOut-method	runFit
 runFit-methods	runFit
+runFitParam	runFitParam
+runFitParam,ANY-method	runFitParam
+runFitParam,SimModel-method	runFitParam
+runFitParam,SimModelOut-method	runFitParam
+runFitParam-methods	runFitParam
 runLavaan	runLavaan
 runMI	runMI
 runMisspec	runMisspec
@@ -377,6 +394,7 @@ skew	skew
 skew,vector-method	skew
 skew,VirtualDist-method	VirtualDist-class
 skew-methods	skew
+sortList	sortList
 standardize	standardize
 standardize,ANY-method	standardize
 standardize,SimModelOut-method	standardize
@@ -434,7 +452,12 @@ summary,VirtualRSet-method	VirtualRSet-class
 summaryFit	summaryFit
 summaryFit,ANY-method	summaryFit
 summaryFit,SimResult-method	summaryFit
+summaryFit,SimResultParam-method	summaryFit
 summaryFit-methods	summaryFit
+summaryMisspec	summaryMisspec
+summaryMisspec,ANY-method	summaryMisspec
+summaryMisspec,SimResultParam-method	summaryMisspec
+summaryMisspec-methods	summaryMisspec
 summaryParam	summaryParam
 summaryParam,ANY-method	summaryParam
 summaryParam,SimModelMIOut-method	summaryParam
@@ -503,6 +526,7 @@ toSimSet,ANY-method	toSimSet
 toSimSet,SimModelOut-method	toSimSet
 toSimSet,SimRSet-method	toSimSet
 toSimSet-methods	toSimSet
+twoTailedPValue	twoTailedPValue
 validateCovariance	validateCovariance
 validateObject	validateObject
 validatePath	validatePath

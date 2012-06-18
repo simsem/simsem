@@ -8,10 +8,10 @@ pValueNested <- function(outNested, outParent, simNested, simParent, usedFit = N
         usedFit <- getKeywords()$usedFit
     revDirec <- (usedFit %in% c("CFI", "TLI")) # CFA --> FALSE, RMSEA --> TRUE
 	
-	if(!all.equal(unique(simNested@paramValue), unique(simParent@paramValue))) stop("Models are based on different data and cannot be compared, check your random seed")
-	if(!all.equal(unique(simNested@n), unique(simParent@n))) stop("Models are based on different values of sample sizes")
-	if(!all.equal(unique(simNested@pmMCAR), unique(simParent@pmMCAR))) stop("Models are based on different values of the percent completely missing at random")
-	if(!all.equal(unique(simNested@pmMAR), unique(simParent@pmMAR))) stop("Models are based on different values of the percent missing at random")
+	if(!isTRUE(all.equal(unique(simNested@paramValue), unique(simParent@paramValue)))) stop("Models are based on different data and cannot be compared, check your random seed")
+	if(!isTRUE(all.equal(unique(simNested@n), unique(simParent@n)))) stop("Models are based on different values of sample sizes")
+	if(!isTRUE(all.equal(unique(simNested@pmMCAR), unique(simParent@pmMCAR)))) stop("Models are based on different values of the percent completely missing at random")
+	if(!isTRUE(all.equal(unique(simNested@pmMAR), unique(simParent@pmMAR)))) stop("Models are based on different values of the percent missing at random")
 	
 	if (is.null(nVal) || is.na(nVal)) 
         nVal <- NULL

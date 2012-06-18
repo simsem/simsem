@@ -7,7 +7,8 @@ Plot multiple overlapping histograms
 Plot multiple overlapping histograms and find the cutoff values if not specified
 }
 \usage{
-plotOverHist(altObject, nullObject, cutoff=NULL, usedFit=NULL, alpha=alpha)
+plotOverHist(altObject, nullObject, cutoff=NULL, usedFit=NULL, alpha=0.05, 
+cutoff2=NULL, cutoff3=NULL, cutoff4=NULL)
 }
 \arguments{
   \item{altObject}{
@@ -24,6 +25,15 @@ plotOverHist(altObject, nullObject, cutoff=NULL, usedFit=NULL, alpha=alpha)
 }
   \item{alpha}{
 	A priori alpha level
+}
+  \item{cutoff2}{
+	Another vector of priori cutoffs for fit indices.
+}
+  \item{cutoff3}{
+	A vector of priori cutoffs for fit indices for the \code{altObject}.
+}
+  \item{cutoff4}{
+	Another vector of priori cutoffs for fit indices for the \code{altObject}.
 }
 }
 \value{
