@@ -11,7 +11,7 @@ model <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NUL
     mg <- names(mgidx)
     sgidx <- which(sapply(paramSet,FUN=function(x) {class(x) == "SimMatrix" || class(x) == "SimVector"}))
     sg <- names(sgidx)
-    n <- length(mg)
+    n <- max(sapply(paramSet,length))
     matNames <- names(paramSet)
     
     if(length(mg) > 0 || ngroups > 1) {
@@ -99,7 +99,7 @@ buildModel <- function(paramSet,modelType) {
   }
   
   if(is.null(paramSet$TY)) { paramSet$TY <- bind(free=rep(NA,ni),popParam=0) } # Set measurement intercept to be free, pop value of 0
-  if(is.null(paramSet$ME)) { paramSet$ME <- bind(free=rep(0,nk)) } # Set means of factors to be fixed to 0
+  #if(is.null(paramSet$ME)) { paramSet$ME <- bind(free=rep(0,nk)) } # Set means of factors to be fixed to 0
   if(is.null(paramSet$AL)) { paramSet$AL <- bind(free=rep(0,nk)) } # Set factor intercepts to be fixed to 0
   
 } else if (modelType == "Path" ) {
@@ -150,7 +150,7 @@ buildModel <- function(paramSet,modelType) {
     if(is.null(paramSet$VE)) { paramSet$VE <- bind(rep(1,ne)) } ## Set factor variance to be fixed at 1
   }
   if(is.null(paramSet$ME)) { ME <- bind(rep(0,ne)) } ## Set factor means to be fixed at 0
-  if(is.null(paramSet$AL)) { AL <- bind(rep(0,ne)) } ## Set factor intercepts to be fixed at 0
+  #if(is.null(paramSet$AL)) { AL <- bind(rep(0,ne)) } ## Set factor intercepts to be fixed at 0
 } else { stop("modelType not recognized. Possible options are: \"CFA\", \"SEM\", or \"Path\"") }
 
   return(paramSet)
@@ -340,11 +340,11 @@ freeIdx <- function(mat, start = 1) {
       j <- j+1
     } else if(isLabel[i]) {
       label <- flat[i]
-      if(is.null(conList[label]) || is.na(conList[label])) {
-        j <- j+1
+      if(is.null(conList[label]) || is.na(conList[label])) {       
         conList <- c(conList,avail[j])
         names(conList)[length(conList)] <- label
         free.idx[i] <- avail[j]
+        j <- j+1
       } else {
         idx <- conList[label]
         free.idx[i] <- idx
@@ -381,7 +381,7 @@ uncoIdx <- function(mat, start=1) {
     }
   }
   return(uncoIdx)
-}
+} 
 
 ## The parameter index of labels that are the same
 eqIdx <- function(mat,id) {
@@ -440,4 +440,30 @@ startingVal <- function(free,popParam) {
     }
   }
   flat
+}
+
+# Adjusts pt for between group constraints (if they exist). Adjusting here is not very elegant, but quicker than a complete re-work of everything.
+btwGroupCons <- function(pt) {
+
+  ngroups <- max(pt$group)
+  labelids <- which(pt$eq.id != 0)
+  labels <- pt$label[labelids]
+  paramsPerGroup <- max(pt$id)/ngroups
+  updatedRows <- NULL
+  usedFreeId <- NULL  
+
+  for(i in seq_along(unique(labels))) {
+    ident <- labelids[labels==unique(labels)[i]]
+    pt$eq.id[ident] <- rep(pt$eq.id[ident][1],length(pt$eq.id[ident]))
+    free <- pt$free[ident][1]
+    pt$free[ident] <- rep(free,length(pt$free[ident]))
+    if(length(ident) != 1) {
+      updatedRows <- append(updatedRows,ident)
+      usedFreeId <- append(usedFreeId,free)
+    }
+  }
+  
+  elRows <- pt$id[which(pt$free != 0)] # Rows that are free
+  elRows <- elRows[-match(updated,elRows)] # Remove rows that have been updated
+  pt$free[elRows] <- (1:(length(elRows)+length(usedFreeId)))[-usedFreeId] #Remove used free ids from available list of ids
 }

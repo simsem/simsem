@@ -178,16 +178,16 @@ setClass("SimMissing",
          representation(
                         cov = "vector", pmMCAR = "numeric", pmMAR = "numeric",
                         nforms = "numeric", itemGroups = "list", twoMethod = "vector",
-                        prAttr = "vector", impMethod = "vector", numImps = "numeric",
+                        prAttr = "vector", package = "vector", numImps = "numeric",
                         timePoints = "numeric", ignoreCols = "numeric", threshold = "numeric",
-                        covAsAux = "logical", logical = "matrix"
-                        ),
-         prototype(cov = 0, pmMCAR = 0, pmMAR = 0,
-                   nforms = 0, itemGroups = list(0), twoMethod = 0,
-                   prAttr = 0, impMethod = "amelia", numImps = 0,
-                   timePoints = 1, ignoreCols = 0, threshold = 0,
-                   covAsAux = TRUE
-                   )
+                        covAsAux = "logical", logical = "matrix", args="list"
+                        )
+        ##  prototype(cov = 0, pmMCAR = 0, pmMAR = 0,
+##                    nforms = 0, itemGroups = list(0), twoMethod = 0,
+##                    prAttr = 0, impMethod = "amelia", numImps = 0,
+##                    timePoints = 1, ignoreCols = 0, threshold = 0,
+##                    covAsAux = TRUE
+##                    )
          )
 
 ## setClass("NullSimMissing", contains = "SimMissing")

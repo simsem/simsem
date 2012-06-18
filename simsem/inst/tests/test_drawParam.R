@@ -7,6 +7,7 @@ source("../../R/validate.R")
 source("../../R/createData.R")
 source("../../R/simDist-constructor.R")
 source("../../R/generate.R")
+source("../../R/analyze.R")
 
 ## Tests that check correct calculated parameter values?
 ## Tests that check matrices correctly reduced?
@@ -18,7 +19,8 @@ source("../../R/generate.R")
 cfaT <- function() {
   loading <- matrix(0, 6, 2)
   loading[1:3, 1] <- NA
-  loading[4:6, 2] <- "a1"
+  loading[4:5, 2] <- "a1"
+  loading[6,2] <- "a2"
   lmis <- matrix("",6,2)
   lmis[4:5,2] <- "runif(1,.01,.02)"
   LY <- bind(loading, "runif(1,.6,.8)",lmis)
@@ -132,6 +134,16 @@ holz <- function() {
   template <- model(LY=LY,RPS=RPS,RTE=RTE,modelType="CFA")
   
   fit <- lavaan(template@pt,data=HolzingerSwineford1939)
+}
+
+holzmg <- function() {
+
+  HS.model <-
+  'visual =~ x1 + 0.5*x2 + c(0.6,0.8)*x3
+   textual =~ x4 + start(c(1.2,0.6))*x5 + x6
+   speed =~ x7 + x8 + c(a, a)*x9'
+
+
 }
 
 cfa <- cfaT()

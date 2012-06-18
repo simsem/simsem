@@ -1,13 +1,13 @@
 ## Higher level wrapper function for createData and drawParameters. Takes a SimSem analysis/data generation template, and returns a raw data set,
 ## optionally with the drawn parameter values.
 
-generate <- function(model, n, maxDraw=20,misfitBounds=NULL, misfitType=NULL,
-                     averageNumMisspec=FALSE, optMisfit=NULL, numIter=1,
+generate <- function(model, n, maxDraw=50,misfitBounds=NULL, misfitType=NULL,
+                     averageNumMisspec=FALSE, optMisfit=NULL, optDraws=50,
                      indDist=NULL, sequential=FALSE,
                      facDist=NULL, errorDist=NULL, indLab=NULL, modelBoot=FALSE, realData=NULL, params=FALSE) {
 
   modelType <- model@modelType
-  indLab <- unique(model@pt$rhs[pt$op=="=~"])
+  indLab <- unique(model@pt$rhs[model@pt$op=="=~"])
   free <- max(model@pt$free)
   ngroups <- max(model@pt$group)
 

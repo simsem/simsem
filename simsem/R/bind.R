@@ -29,8 +29,7 @@
 bind <- function(free = NULL, popParam = NULL, misspec = NULL, symmetric=FALSE) {
   ## SimMatrix
   if(is.matrix(free)) {
-    
-    if(any(is.character(free)) && !validConstraints(free)) { stop("At least one pair of constraint labels must be the same.")}
+        
     if(symmetric) { stopifnot(isSymmetric(free)) }
 
     ## PopParam
@@ -77,8 +76,7 @@ bind <- function(free = NULL, popParam = NULL, misspec = NULL, symmetric=FALSE) 
     
     ## SimVector
   } else if(is.vector(free)) {
-
-    if(any(is.character(free)) && !validConstraints(free)) { stop("At least one pair of constraint labels must be the same.")}
+    
     if(symmetric) { stop("A vector cannot be symmetric") }
 
     # popParam
