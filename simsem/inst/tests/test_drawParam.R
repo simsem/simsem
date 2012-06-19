@@ -17,6 +17,7 @@ source("../../R/analyze.R")
 ## - Check misspecification
 
 cfaT <- function() {
+  
   loading <- matrix(0, 6, 2)
   loading[1:3, 1] <- NA
   loading[4:5, 2] <- "a1"
@@ -24,6 +25,9 @@ cfaT <- function() {
   lmis <- matrix("",6,2)
   lmis[4:5,2] <- "runif(1,.01,.02)"
   LY <- bind(loading, "runif(1,.6,.8)",lmis)
+
+  loading[1,1] <- "a3"
+  LY2 <- bind(loading, "runif(1,.6,.8)",lmis)
 
   latent.cor <- matrix(NA, 2, 2)
   diag(latent.cor) <- 1
@@ -33,7 +37,7 @@ cfaT <- function() {
   diag(error.cor) <- NA
   RTE <- bind(error.cor,popParam=1,"runif(1,0.01,0.015)",symmetric=TRUE)
 
-  return(list(LY=LY,RPS=RPS,RTE=RTE))
+  return(list(LY=LY,LY2=LY2,RPS=RPS,RTE=RTE))
 }
 
 ## CFA with more matrices
@@ -151,8 +155,8 @@ cfa2 <- cfa2()
 path <- path()
 sem <- sem()
 
-tcfa <- model(LY=cfa$LY,RPS=cfa$RPS,RTE=cfa$RTE, modelType="CFA")
-tcfamg <- model(LY=cfa$LY,RPS=cfa$RPS,RTE=cfa$RTE, modelType="CFA",ngroups=2)
+tcfa <- model(LY=list(cfa$LY,RPS=cfa$RPS,RTE=cfa$RTE, modelType="CFA")
+tcfamg <- model(LY=c(cfa$LY,cfa$LY2),RPS=cfa$RPS,RTE=cfa$RTE, modelType="CFA")
 tcfamg2 <- model(LY=list(cfa$LY,cfa$LY),RPS=list(cfa$RPS,cfa$RPS),RTE=cfa$RTE, modelType="CFA")
 
 ## tcf

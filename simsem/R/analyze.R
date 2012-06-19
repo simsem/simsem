@@ -12,7 +12,7 @@ analyze <- function(model, data, package="lavaan", simMissing=NULL,auxiliary=NUL
         colnames(data) <- paste0("x", 1:ncol(data))
     if (is.null(auxiliary)) {
         if (!is.null(simMissing) && !(length(simMissing@cov) == 1 && simMissing@cov == 0) && simMissing@covAsAux) 
-            auxiliary <- simMissing@cov
+            auxiliy <- simMissing@cov
     }
     if (is.null(indLab)) {
         if (is.null(auxiliary)) {
@@ -52,41 +52,41 @@ analyze <- function(model, data, package="lavaan", simMissing=NULL,auxiliary=NUL
   }
 
 
-    # is.equal(DataOut@param, Output@param) yes --> compute bias
-    if (!is.null(DataOut)) {
-        param <- DataOut@param
-        check <- all.equal(param, Output@param)
-        usedX <- NULL
-        usedY <- NULL
-        if (!(length(check) == 1 && check == TRUE) & !is.null(auxiliary)) {
-            usedY <- which(!(colnames(data) %in% auxiliary))
-            nx <- 0
-            if (modelType == "SEM.exo") 
-                nx <- nrow(param@LX)
-            if (modelType == "Path.exo") 
-                nx <- nrow(param@PH)
-            if (nx > 0) 
-                usedX <- intersect(1:nx, usedY)
-            usedY <- setdiff(usedY, usedX)
-            param <- extract(param, y = usedY, x = usedX)
-        }
-        check <- all.equal(param, Output@param)
-        if (length(check) == 1 && check == TRUE) {
-            paramOut <- DataOut@paramOut
-            if (!is.null(auxiliary)) 
-                paramOut <- extract(paramOut, y = usedY, x = usedX)
-            Output@paramValue <- paramOut
-        }
-    }
-    Output@n <- nrow(data)
-    if (!is.nully(indLab)) {
-        Output@indLab <- indLab
-    } else {
-        Output@indLab <- colnames(data)
-    }
-    Output@factorLab <- factorLab
-    # Add labels in the SimModelOut --> go to SimModelOut and relabels it
+##     # is.equal(DataOut@param, Output@param) yes --> compute bias
+##     if (!is.null(DataOut)) {
+##         param <- DataOut@param
+##         check <- all.equal(param, Output@param)
+##         usedX <- NULL
+##         usedY <- NULL
+##         if (!(length(check) == 1 && check == TRUE) & !is.null(auxiliary)) {
+##             usedY <- which(!(colnames(data) %in% auxiliary))
+##             nx <- 0
+##             if (modelType == "SEM.exo") 
+##                 nx <- nrow(param@LX)
+##             if (modelType == "Path.exo") 
+##                 nx <- nrow(param@PH)
+##             if (nx > 0) 
+##                 usedX <- intersect(1:nx, usedY)
+##             usedY <- setdiff(usedY, usedX)
+##             param <- extract(param, y = usedY, x = usedX)
+##         }
+##         check <- all.equal(param, Output@param)
+##         if (length(check) == 1 && check == TRUE) {
+##             paramOut <- DataOut@paramOut
+##             if (!is.null(auxiliary)) 
+##                 paramOut <- extract(paramOut, y = usedY, x = usedX)
+##             Output@paramValue <- paramOut
+##         }
+##     }
+##     Output@n <- nrow(data)
+##     if (!is.nully(indLab)) {
+##         Output@indLab <- indLab
+##     } else {
+##         Output@indLab <- colnames(data)
+##     }
+##     Output@factorLab <- factorLab
+##     # Add labels in the SimModelOut --> go to SimModelOut and relabels it
     
-    # Provide a nicer summary --> Groups elements from the same matrix together
-    return(Output)
-})
+##     # Provide a nicer summary --> Groups elements from the same matrix together
+##     return(Output)
+## })

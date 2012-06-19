@@ -1,12 +1,12 @@
 
-validateObject <- function(paramSet,modelType) {
+validateObject <- function(paramSet) {
     if (validateCovariance(paramSet$VPS, paramSet$RPS, paramSet$VE) == FALSE) 
         return(FALSE)
-    if (modelType == "Path" | modelType == "SEM") {
+    if (!is.null(paramSet$BE)) { # Path or SEM
         if (validatePath(paramSet$BE, paramSet$VE, paramSet$VE) == FALSE) 
             return(FALSE)
     }
-    if (modelType == "CFA" | modelType == "SEM") {
+    if (!is.null(paramSet$LY)) { # SEM or CFA
         if (validateCovariance(paramSet$VTE, paramSet$RTE, paramSet$VY) == FALSE) 
             return(FALSE)
         if (validatePath(paramSet$LY, paramSet$VE, paramSet$VY) == FALSE) 

@@ -1,7 +1,7 @@
 ## Takes model specification matrices of type SimMatrix (or lists of these matrices for multiple groups).
 ## Returns a SimSem object that contains templates for data generation and analyis.
 model <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL, VTE = NULL, VY = NULL,
-                  VPS = NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, modelType=NULL, indLab=NULL, facLab=NULL, ngroups=1) {
+                  VPS = NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, modelType, indLab=NULL, facLab=NULL, ngroups=1) {
   
   paramSet <- list(LY=LY, PS=PS, RPS=RPS, TE=TE, RTE=RTE, BE=BE, VTE=VTE, VY=VY, VPS=VPS, TY=TY, AL=AL, MY=MY,ME=ME)
   if(!is.null(modelType)) {
@@ -53,6 +53,9 @@ model <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NUL
            pt <- mapply(pt,buildPT(psl[[i]], pt=pt, group=i,facLab=NULL, indLab=NULL),FUN=c,SIMPLIFY=FALSE)
          }
        }
+
+      # Adjust indices for between group constraints
+      pt <- btwGroupCons(pt)
 
       return(new("SimSem",pt=pt,dgen=psl,modelType=modelType))
       
@@ -442,7 +445,7 @@ startingVal <- function(free,popParam) {
   flat
 }
 
-# Adjusts pt for between group constraints (if they exist). Adjusting here is not very elegant, but quicker than a complete re-work of everything.
+# Adjusts pt for between group constraints (if they exist). Adjusting here is not very elegant and should probably be reworked into everything else.
 btwGroupCons <- function(pt) {
 
   ngroups <- max(pt$group)
@@ -464,6 +467,7 @@ btwGroupCons <- function(pt) {
   }
   
   elRows <- pt$id[which(pt$free != 0)] # Rows that are free
-  elRows <- elRows[-match(updated,elRows)] # Remove rows that have been updated
+  elRows <- elRows[-match(updatedRows,elRows)] # Remove rows that have been updated
   pt$free[elRows] <- (1:(length(elRows)+length(usedFreeId)))[-usedFreeId] #Remove used free ids from available list of ids
+  return(pt)
 }
