@@ -23,73 +23,73 @@
 ## }
 
 ## Fuck it, let's push everything down
-drawParameters <- function(dgen,free, maxDraw=20, misfitBounds=NULL, misfitType=NULL,averageNumMisspec=FALSE, optMisfit=NULL, numIter=1) {
+## drawParameters <- function(dgen,free, maxDraw=20, misfitBounds=NULL, misfitType=NULL,averageNumMisspec=FALSE, optMisfit=NULL, numIter=1) {
 
-  param <- NULL
-  misCheck <- any(sapply(dgen,FUN=function(x) {
-    if(!is.null(x) && length(x@misspec)!=0 && !any(is.nan(x@misspec)))
-      {TRUE} else {FALSE}  }))
+##   param <- NULL
+##   misCheck <- any(sapply(dgen,FUN=function(x) {
+##     if(!is.null(x) && length(x@misspec)!=0 && !any(is.nan(x@misspec)))
+##       {TRUE} else {FALSE}  }))
 
-  implied.CM.param <- NULL
-  implied.CM.misspec <- NULL
-  misfit <- NULL
-  count <- 0
-  repeat {
-    if (misCheck) {
-      if(!is.null(optMisfit)) {
-        paramsMis <- drawSet(paramSet = dgen, misspec=misCheck, numFree=free, optMisfit=optMisfit, numIter=numIter, misfitType=misfitType)
-      } else {
-        paramsMis <- drawSet(paramSet = dgen, misspec=misCheck, numFree=free)
-      }
-      param <- paramsMis$param
-      misspec <- paramsMis$misParam
-      misOnly <- mapply("-",misspec,param)
-      if (validateObject(param)) {
-        param <- reduceMatrices(param)
-        misspec <- reduceMatrices(misspec)
-        misOnly <- reduceMatrices(misOnly)
-        if (!is.null(param) && !is.null(misspec)) {
-          implied.CM.param <- createImpliedMACS(param)
-          implied.CM.misspec <- createImpliedMACS(misspec)
-          if (all(is.finite(implied.CM.misspec$CM)) && (sum(eigen(implied.CM.misspec$CM)$values <= 0) == 0)) {
-            if (is.null(misfitBounds)) {
-              break
-            } else {
-              p <- length(implied.CM.param$M)
-              nElements <- p + (p * (p + 1)/2)
-              nFree <- free
-              dfParam <- nElements - nFree
-              misfit <- popMisfitMACS(implied.CM.param$M, implied.CM.param$CM, implied.CM.misspec$M, implied.CM.misspec$CM,
-                                      fit.measures = misfitType, dfParam = dfParam)
-              if (averageNumMisspec)
-                misfit <- misfit/free
+##   implied.CM.param <- NULL
+##   implied.CM.misspec <- NULL
+##   misfit <- NULL
+##   count <- 0
+##   repeat {
+##     if (misCheck) {
+##       if(!is.null(optMisfit)) {
+##         paramsMis <- drawSet(paramSet = dgen, misspec=misCheck, numFree=free, optMisfit=optMisfit, numIter=numIter, misfitType=misfitType)
+##       } else {
+##         paramsMis <- drawSet(paramSet = dgen, misspec=misCheck, numFree=free)
+##       }
+##       param <- paramsMis$param
+##       misspec <- paramsMis$misParam
+##       misOnly <- mapply("-",misspec,param)
+##       if (validateObject(param)) {
+##         param <- reduceMatrices(param)
+##         misspec <- reduceMatrices(misspec)
+##         misOnly <- reduceMatrices(misOnly)
+##         if (!is.null(param) && !is.null(misspec)) {
+##           implied.CM.param <- createImpliedMACS(param)
+##           implied.CM.misspec <- createImpliedMACS(misspec)
+##           if (all(is.finite(implied.CM.misspec$CM)) && (sum(eigen(implied.CM.misspec$CM)$values <= 0) == 0)) {
+##             if (is.null(misfitBounds)) {
+##               break
+##             } else {
+##               p <- length(implied.CM.param$M)
+##               nElements <- p + (p * (p + 1)/2)
+##               nFree <- free
+##               dfParam <- nElements - nFree
+##               misfit <- popMisfitMACS(implied.CM.param$M, implied.CM.param$CM, implied.CM.misspec$M, implied.CM.misspec$CM,
+##                                       fit.measures = misfitType, dfParam = dfParam)
+##               if (averageNumMisspec)
+##                 misfit <- misfit/free
               
-              if (!is.null(misfit) && (misfit > misfitBounds[1] & misfit < misfitBounds[2])) 
-                break
-            }
-          }
-        }
-      }
-    } else {
-      params <- drawSet(paramSet = dgen, misspec=FALSE, numFree=free)
-      misspec <- NULL
-      misOnly <- NULL
-      if (validateObject(params$param)) {
-        param <- reduceMatrices(params$param)
-        if (!is.null(param)) {
-          implied.CM.param <- createImpliedMACS(param)
+##               if (!is.null(misfit) && (misfit > misfitBounds[1] & misfit < misfitBounds[2])) 
+##                 break
+##             }
+##           }
+##         }
+##       }
+##     } else {
+##       params <- drawSet(paramSet = dgen, misspec=FALSE, numFree=free)
+##       misspec <- NULL
+##       misOnly <- NULL
+##       if (validateObject(params$param)) {
+##         param <- reduceMatrices(params$param)
+##         if (!is.null(param)) {
+##           implied.CM.param <- createImpliedMACS(param)
           
-          if (sum(eigen(implied.CM.param$CM)$values <= 0) == 0) 
-            break
-        }
-      }
-    }
-    count <- count + 1
-    if (count > maxDraw) 
-      stop("The model cannot make a good set of parameters within limit of maximum random sampling of parameters")
-  }
-  list(param=param,misParam=misspec,mis=misOnly)
-}
+##           if (sum(eigen(implied.CM.param$CM)$values <= 0) == 0) 
+##             break
+##         }
+##       }
+##     }
+##     count <- count + 1
+##     if (count > maxDraw) 
+##       stop("The model cannot make a good set of parameters within limit of maximum random sampling of parameters")
+##   }
+##   list(param=param,misParam=misspec,mis=misOnly)
+## }
 
 ## Makes one draw of population parameters, but may make more draws of
 ## misspecification params if optMisfit is specified, can be min or max.
@@ -97,14 +97,15 @@ drawParameters <- function(dgen,free, maxDraw=20, misfitBounds=NULL, misfitType=
 ## [[1]] - param (list of matrices with parameter values)
 ## [[2]] - paramMis (param + misspec)
 ## [[3]] - mis (misspec only)
-drawSet <- function(paramSet, maxDraw, numFree, misspec, misfitBounds=NULL, averageNumMisspec=FALSE, optMisfit = NULL, numIter=1, misfitType="f0") {
 
-  draw <- 1
-  while(draw < maxDraw) {
-    # If paramSet isn't a list (is a single group), make it a list
+drawParam <- function(paramSet, maxDraw, numFree, misspec, misfitBounds=NULL, averageNumMisspec=FALSE, optMisfit = NULL, numIter=1, misfitType="f0") {
   if(!is.list(paramSet[[1]])) {
     paramSet <- list(paramSet)
   }
+  
+  draw <- 1
+  while(draw < maxDraw) {  
+   
     ngroups <- length(paramSet)
     groupLoop <- seq_len(ngroups)
     
@@ -113,14 +114,16 @@ drawSet <- function(paramSet, maxDraw, numFree, misspec, misfitBounds=NULL, aver
       rpls <- list() # list of drawn parameter sets (raw)
       fullpls <- list() # list of drawn parameter sets (filled)
       fullmpls <- list() # list of drawn parameter sets with misspec (filled)
+      fullmls <- list() # list of parameter sets with misspec only (filled)
       
-      if(is.null(optMisfit)) {
-        for(i in groupLoop) {
-          rpls[[i]] <- lapply(paramSet[[i]],rawDraw)
-          fullpls[[i]] <- fillParam(lapply(rpls[[i]],"[[",1))
-          fullmpls[[i]] <- fillParam(lapply(rpls[[i]],"[[",2))
-        }
-      } else { # if misfit needs to be optimized  
+      for(i in groupLoop) {
+        rpls[[i]] <- lapply(paramSet[[i]],rawDraw)
+        fullpls[[i]] <- fillParam(lapply(rpls[[i]],"[[",1))
+        fullmpls[[i]] <- fillParam(lapply(rpls[[i]],"[[",2))
+        fullmls[[i]] <- mapply("-",fullpls[[i]],fullmpls[[i]])
+      }
+             
+      if(!is.null(optMisfit)) { #  if misfit needs to be optimized
         
         for(i in groupLoop) {
           rpls[[i]] <- lapply(paramSet[[i]],rawDraw,misSpec=FALSE)
@@ -128,15 +131,16 @@ drawSet <- function(paramSet, maxDraw, numFree, misspec, misfitBounds=NULL, aver
         rplsfill <- lapply(rpls,fillParam) # fill after drawing misspec
         macsPopls <- lapply(rplsfill,createImpliedMACS)
         
-        if(is.finite(unlist(lapply(macsPopls,"[[",2))) &&
-           (sum(unlist(lapply(lapply(lapply(macsPopls,"[[",2),eigen),"[[",1)) <= 0)) &&
-           all(sapply(rplsfill,validateObject))) {
+        if(!(all(is.finite(unlist(lapply(macsPopls,"[[",2)))) &&
+             (sum(unlist(lapply(lapply(lapply(macsPopls,"[[",2),eigen),"[[",1)) <= 0) == 0) &&
+             all(sapply(rplsfill,validateObject)))) {
           ## Checks:
           ## 1. all covariances are finite
           ## 2. Eigenvalues are less than zero
           ## 3. Paths and variances are valid
           
           next
+          draw <- draw+1
           # because pop matrix is invalid, move on to next draw
         }
         
@@ -193,64 +197,138 @@ drawSet <- function(paramSet, maxDraw, numFree, misspec, misfitBounds=NULL, aver
         
         finalPopParam <- rpls
         finalMisParam <- mls[[iter]]
-      } # End optimization
-    
-  }
-    if(misspec) {    
-      if (optMisfit == "none") {
-        rawParam <- lapply(paramSet,rawDraw)
-        fullParams <- fillParam(lapply(rawParam,"[[",1))
-        fullMiss <- fillParam(lapply(rawParam,"[[",2))
-      } else {
-        rawParam <- lapply(paramSet,rawDraw,misSpec=FALSE)
-        missParam <- list()
-        for(i in 1:numIter) {
-          temp <- lapply(paramSet,rawDraw,misOnly=TRUE)
-          addMis <- mapply("+",rawParam,temp)  # We only want to draw the raw params once, so we add the rawParameter values to each misspecified draw
-          missParam[[i]] <- lapply(addMis, FUN=function(x) {if(length(x) == 0) {x <- NULL} else x}) # Make empty matrices NULL instead of numeric(0)
-        }
-        fullParams <- fillParam(rawParam)
-        fullMiss <- list()
-        for(i in 1:length(missParam)) {
-          fullMiss[[i]] <- fillParam(missParam[[i]])
-        }
+        return(list(param=rpls,misspec=mls[[iter]]))
+      } # End optimization, return control to normal misspec checks / draws
+      
+      if (all(sapply(fullpls,validateObject))) {
+        redpls <- lapply(fullpls,reduceMatrices)
+        redmpls <- lapply(fullmpls,reduceMatrices)
+        redmls <- lapply(fullmls,reduceMatrices)
         
+        #if (!is.null(param) && !is.null(misspec)) {
+        macsPopls <- lapply(redpls,createImpliedMACS)
+        macsMisls <- lapply(redmpls, createImpliedMACS)
+
+        ## Checks:
+        ## 1. all covariances are finite
+        ## 2. Eigenvalues are less than zero
+        ## 3. Paths and variances are valid
+        if(!(all(is.finite(unlist(lapply(macsPopls,"[[",2)))) &&
+             (sum(unlist(lapply(lapply(lapply(macsPopls,"[[",2),eigen),"[[",1)) <= 0) == 0) &&
+             all(is.finite(unlist(lapply(macsMisls,"[[",2)))) &&
+             (sum(unlist(lapply(lapply(lapply(macsMisls,"[[",2),eigen),"[[",1)) <=0) == 0) )) {
+          cat("FAIL")
+          draw <- draw + 1
+          next
+          ## because pop matrix is invalid or pop+misspec, move on to next draw
+        }
+          
+        if (is.null(misfitBounds)) {
+          break
+        } else {
+          p <- length(macsPopls[[1]]$M)
+          nElements <- (p + (p * (p + 1)/2))*ngroups
+          nFree <- free
+          dfParam <- nElements - nFree
+          misfit <- popMisfitMACS(paramM = lapply(macsPopls,"[[",1),
+                                  paramCM = lapply(macsPopls,"[[",2),
+                                  misspecM = lapply(macsMisls, "[[",1),
+                                  misspecCM = lapply(macsMisls,"[[",2),
+                                  fit.measures = misfitType, dfParam = dfParam)
+          if (averageNumMisspec)
+            misfit <- misfit/free
+          
+          if (!is.null(misfit) && (misfit > misfitBounds[1] & misfit < misfitBounds[2])) 
+                break
+        }
+      } else {  # one or more parameter sets in fullpls is not valid
+        draw <- draw + 1
+        next
       }
       
-      ## fullParams = Constraints / Misspecification -> Auto completition of parameters -> 1 Full Parameter Set
-      ## fullMiss = Constraints / Misspecification -> Auto completion of parameters -> Misspecification only, list if optMisfit = TRUE
-
-      if (class(fullMiss[[1]]) == "list") {
-        macsMis <- lapply(fullMiss, createImpliedMACS)
-        macsPop <- createImpliedMACS(fullParams)
-        p <- length(macsPop$M)
-        nElements <- p + (p * (p + 1)/2)
-
-        dfParam <- nElements - numFree
-        misfit <- sapply(macsMis, popMisfit, param = macsPop, dfParam = dfParam, fit.measures = misfitType)
-
-        element <- NULL
-        fit.measures <- c("f0","rmsea","srmr")
-        
-        if (optMisfit == "min") {
-          element <- which.min(sapply(misfit,"[[",1))
-        } else if (optMisfit == "max") {
-          element <- which.max(sapply(misfit,"[[",1))
-        } else {
-          stop("optMisfit must be either \"max\" or \"min\"")
-        }
-        finalMis <- fullMiss[[element]]
-        ## Mis <- Mis[[element]]
-      } else {
-        finalMis <- fullMiss
-        ##  Mis <- Mis[[1]]
+    } else { # no misspecification present
+      
+      fullpls <- list() # list of drawn parameter sets (filled)
+       for(i in groupLoop) {
+        fullpls[[i]] <- fillParam(lapply(paramSet[[i]],rawDraw,misSpec=FALSE))
       }
-      return(list(param = fullParams, misParam = finalMis))
-    } else {
-      return(list(param = fillParam(lapply(paramSet,rawDraw,misSpec=FALSE)), misspec=NULL))
+      if(all(sapply(fullpls,validateObject))) {
+        redpls <- lapply(fullpls,reduceMatrices)
+        macsPopls <- lapply(redpls,createImpliedMACS)
+        if(!(all(is.finite(unlist(lapply(macsPopls,"[[",2)))) &&
+           (sum(unlist(lapply(lapply(lapply(macsPopls,"[[",2),eigen),"[[",1)) <= 0) == 0))) {
+          next
+        }
+      } else {
+        draw <- draw + 1
+        next
+      }
+      return(param = redpls,misspec=NULL,misOnly=NULL)
     }
-  
+    
+  }
+  if( draw < maxDraw) {
+    return(list(param = redpls, misspec = redmpls, misOnly = redmls))
+  } else {
+    stop("Cannot make a good set of parameters within the maximum number of draws")
+  }
 }
+  
+    ## if(misspec) {    
+##       if (optMisfit == "none") {
+##         rawParam <- lapply(paramSet,rawDraw)
+##         fullParams <- fillParam(lapply(rawParam,"[[",1))
+##         fullMiss <- fillParam(lapply(rawParam,"[[",2))
+##       } else {
+##         rawParam <- lapply(paramSet,rawDraw,misSpec=FALSE)
+##         missParam <- list()
+##         for(i in 1:numIter) {
+##           temp <- lapply(paramSet,rawDraw,misOnly=TRUE)
+##           addMis <- mapply("+",rawParam,temp)  # We only want to draw the raw params once, so we add the rawParameter values to each misspecified draw
+##           missParam[[i]] <- lapply(addMis, FUN=function(x) {if(length(x) == 0) {x <- NULL} else x}) # Make empty matrices NULL instead of numeric(0)
+##         }
+##         fullParams <- fillParam(rawParam)
+##         fullMiss <- list()
+##         for(i in 1:length(missParam)) {
+##           fullMiss[[i]] <- fillParam(missParam[[i]])
+##         }
+        
+##       }
+      
+##       ## fullParams = Constraints / Misspecification -> Auto completition of parameters -> 1 Full Parameter Set
+##       ## fullMiss = Constraints / Misspecification -> Auto completion of parameters -> Misspecification only, list if optMisfit = TRUE
+
+##       if (class(fullMiss[[1]]) == "list") {
+##         macsMis <- lapply(fullMiss, createImpliedMACS)
+##         macsPop <- createImpliedMACS(fullParams)
+##         p <- length(macsPop$M)
+##         nElements <- p + (p * (p + 1)/2)
+
+##         dfParam <- nElements - numFree
+##         misfit <- sapply(macsMis, popMisfit, param = macsPop, dfParam = dfParam, fit.measures = misfitType)
+
+##         element <- NULL
+##         fit.measures <- c("f0","rmsea","srmr")
+        
+##         if (optMisfit == "min") {
+##           element <- which.min(sapply(misfit,"[[",1))
+##         } else if (optMisfit == "max") {
+##           element <- which.max(sapply(misfit,"[[",1))
+##         } else {
+##           stop("optMisfit must be either \"max\" or \"min\"")
+##         }
+##         finalMis <- fullMiss[[element]]
+##         ## Mis <- Mis[[element]]
+##       } else {
+##         finalMis <- fullMiss
+##         ##  Mis <- Mis[[1]]
+##       }
+##       return(list(param = fullParams, misParam = finalMis))
+##     } else {
+##       return(list(param = fillParam(lapply(paramSet,rawDraw,misSpec=FALSE)), misspec=NULL))
+##     }
+  
+## }                                       
 
 ## Takes one SimMatrix and returns a matrix with numerical values for population parameters.
 ## If constraint = TRUE, then constraints are applied simultaneously.
