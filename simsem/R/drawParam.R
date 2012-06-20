@@ -7,9 +7,14 @@
 ## [[3]] $mis - Misspecification only
 
 
-#drawParam <- function(paramSet, maxDraw, numFree, misspec, misfitBounds=NULL, averageNumMisspec=FALSE, optMisfit = NULL, numIter=1, misfitType="f0")
+draw <- function(model, maxDraw=50, misfitBounds=NULL, averageNumMisspec=FALSE, optMisfit = NULL, optDraws=20, misfitType="f0",misfitOut=FALSE) {
+  stopifnot(class(model) == "SimSem")
+  drawParam(model@dgen, maxDraw = maxDraw, numFree=max(model@pt$free), misfitBounds=misfitBounds, averageNumMisspec=averageNumMisspec,
+            optMisfit=optMisfit, optDraws=optDraws, misfitType=misfitType, misfitOut=misfitOut)
+}
+  
 
-drawParam <- function(paramSet, maxDraw=50, numFree, misfitBounds=NULL, averageNumMisspec=FALSE, optMisfit = NULL, numIter=20, misfitType="f0",misfitOut=FALSE) {
+drawParam <- function(paramSet, maxDraw=50, numFree, misfitBounds=NULL, averageNumMisspec=FALSE, optMisfit = NULL, optDraws=20, misfitType="f0",misfitOut=FALSE) {
   if(!is.list(paramSet[[1]])) {
     paramSet <- list(paramSet)
   }
@@ -64,10 +69,10 @@ drawParam <- function(paramSet, maxDraw=50, numFree, misfitBounds=NULL, averageN
           # because pop matrix is invalid, move on to next draw
         }
         
-        mls <- list() # list of misspec draws numIterations by groups. length(mls) = numIter, length(mls[[1]]) = numgroups
+        mls <- list() # list of misspec draws numIterations by groups. length(mls) = optDraws, length(mls[[1]]) = numgroups
         macsMisls <- list() # list of misspec macs, numIterations by groups
                
-        for (i in seq_len(numIter)) {
+        for (i in seq_len(optDraws)) {
           misspecDraws <- list()
           macsMis <- list()
           temp <- list()
@@ -88,12 +93,12 @@ drawParam <- function(paramSet, maxDraw=50, numFree, misfitBounds=NULL, averageN
         nElements <- (p + (p*(p+1)/2))*ngroups
         dfParam <- nElements - numFree
 
-        misfit <- matrix(0,numIter,4) # need to change for srmr
+        misfit <- matrix(0,optDraws,4) # need to change for srmr
         colnames(misfit) <- c("f0","rmsea","srmr","iter")
         
         ## For each iteration, send ith draw for each group to calculate the population discrepancy, misspec vs. nonmisspec params.
         
-        for(i in seq_len(numIter)) {
+        for(i in seq_len(optDraws)) {
           paramM <- lapply(macsPopls,FUN="[[",1)
           paramCM <- lapply(macsPopls,FUN="[[",2)
           misspecM <- lapply(macsMisls[[i]],FUN="[[",1)
@@ -190,15 +195,23 @@ drawParam <- function(paramSet, maxDraw=50, numFree, misfitBounds=NULL, averageN
         if(draw > maxDraw) { stop("Cannot obtain valid parameter set within maximum number of draws.") }
         next
       }
-       return(list(param = redpls,misspec=NULL,misOnly=NULL))
+      final <- list()
+      for(i in groupLoop) {
+        final[[i]] <- list(param=redpls[[i]], misspec=NULL, misOnly=NULL)
+      }
+      return(final)
     }
     
   }
   if( draw < maxDraw) {
+    final <- list()
+    for(i in groupLoop) {
+      final[[i]] <- list(param=redpls[[i]], misspec=redmpls[[i]], misOnly=redmls[[i]])
+    }
     if(misfitOut) {
-      return(list(param = redpls, misspec = redmpls, misOnly = redmls, misfit=misfit))
-    } else {
-      return(list(param = redpls, misspec = redmpls, misOnly = redmls))
+      return(list(final, misfit=misfit))
+    } else {        
+      return(final)
     }
   } else {
     stop(paste0("Cannot make a good set of parameters with given constraints within the maximum number of draws.\n",misfitType,": ",round(misfit,6)))
