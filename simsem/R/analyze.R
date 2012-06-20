@@ -1,6 +1,6 @@
 
 
-analyze <- function(model, data, package="lavaan", simMissing=NULL,auxiliary=NULL,...) {
+analyze <- function(model, data, package="lavaan", simMissing=NULL,indLab=NULL,auxiliary=NULL,...) {
     Output <- NULL
     DataOut <- NULL
     args <- list(...)
@@ -36,9 +36,7 @@ analyze <- function(model, data, package="lavaan", simMissing=NULL,auxiliary=NUL
 ##     targetCol <- c(indLab, auxiliary)
 ##     data <- data[, targetCol]
     miss <- sum(is.na(data)) > 0
-    ## if (is.null(estimator)) 
-##         estimator <- estimator
-##     estimator <- tolower(estimator)
+
     ## if (miss && !is.null(simMissing) && simMissing@numImps > 0) {
 ##         Output <- runMI(data, object, simMissing@numImps, simMissing@impMethod)
 ##     } else {

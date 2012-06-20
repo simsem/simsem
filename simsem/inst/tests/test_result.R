@@ -9,14 +9,17 @@ loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
 LX <- simMatrix(loading, 0.7)
+LY <- bind(loading,0.7)
 
 latent.cor <- matrix(NA, 2, 2)
 diag(latent.cor) <- 1
 RPH <- symMatrix(latent.cor, 0.5)
+RPS <- binds(latent.cor, 0.5)
 
 error.cor <- matrix(0, 6, 6)
 diag(error.cor) <- 1
 RTD <- symMatrix(error.cor)
+RTE <- binds(error.cor,0.5)
 
 CFA.Model <- simSetCFA(LY = LX, RPH = RPH, RTD = RTD)
 
@@ -26,11 +29,16 @@ data <- run(SimData)
 
 SimModel <- simModel(CFA.Model)
 
+tcfa <- model(LY=LY,RPS=RPS,RTE=RTE,modelType="CFA")
+
 ## SimMissing <- simMissing(pmMCAR=0.1, numImps=5)
 context("Simple Simulation")
 a <- system.time(
-Output <- simResult(200, SimData, SimModel))
+Output <- simResult(100, SimData, SimModel))
+b <- system.time(replicate(100,analyze(tcfa,generate(tcfa,200))))
+
 cat(paste(a[[1]],"\n",sep=""))
+
 
 
 ## Output <- simResult(100, SimData, SimModel, SimMissing, multicore=TRUE)
