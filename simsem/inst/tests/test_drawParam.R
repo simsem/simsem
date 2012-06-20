@@ -11,10 +11,11 @@ source("../../R/analyze.R")
 
 ## Tests that check correct calculated parameter values?
 ## Tests that check matrices correctly reduced?
-## - Check all model Types
+## - Check sg for all model Types
 ## - Check mg for all model types
 ## - Check non-normal data distribution
 ## - Check misspecification
+## So far: examples to show that combinations of arguments work. Very little assurance of correctness.
 
 cfaT <- function() {
   
@@ -155,7 +156,7 @@ cfa2 <- cfa2()
 path <- path()
 sem <- sem()
 
-tcfa <- model(LY=list(cfa$LY,RPS=cfa$RPS,RTE=cfa$RTE, modelType="CFA")
+tcfa <- model(LY=cfa$LY,RPS=cfa$RPS,RTE=cfa$RTE, modelType="CFA")
 tcfamg <- model(LY=c(cfa$LY,cfa$LY2),RPS=cfa$RPS,RTE=cfa$RTE, modelType="CFA")
 tcfamg2 <- model(LY=list(cfa$LY,cfa$LY),RPS=list(cfa$RPS,cfa$RPS),RTE=cfa$RTE, modelType="CFA")
 
@@ -164,29 +165,50 @@ tcfa2 <- model(LY=cfa2$LY,PS=cfa2$PS,TE=cfa2$TE,AL=cfa2$AL,TY=cfa2$TY, modelType
 tpath <- model(BE=path$BE, RPS=path$RPS, ME=path$ME, modelType="Path")
 tsem <- model(LY=sem$LY, RTE=sem$RTE, RPS=sem$RPS, BE=sem$BE, modelType="SEM")
 
-## cfa1d <- drawOnce(tcfa@dgen,modelType="CFA",misspec=TRUE,numFree=max(tcfa@pt$free))
-## cfad <- drawOnce(tcfa2@dgen,modelType="CFA",misspec=FALSE,numFree=max(tcfa2@pt$free))
-## pathd <- drawOnce(tpath@dgen,modelType="Path",misspec=FALSE,numFree=max(tpath@pt$free))
-## semd <- drawOnce(tsem@dgen,modelType="Sem",misspec=FALSE,numFree=max(tsem@pt$free))
-## cfa1do <- drawOnce(tcfa@dgen,modelType="CFA",misspec=TRUE,numFree=max(tcfa@pt$free),
-##                   optMisfit="max",numIter=20)
 
-drawParam(tcfa)
-drawParam(tcfa2)
-drawParam(tpath)
-drawParam(tsem)
+## drawParam(tcfa)
+## drawParam(tcfa2)
+## drawParam(tpath)
+## drawParam(tsem)
 
-drawParam(tcfamg)
-drawParam(tcfamg2)
+context("multiple group")
+drawParam(tcfamg@dgen)
+# Options with multiple group that actually work
+p1 <- drawParam(tcfamg@dgen,maxDraw=20,numFree=max(tcfamg@pt$free))
+p2 <- drawParam(tcfamg@dgen,maxDraw=20,numFree=max(tcfamg@pt$free),misfitBounds=c(.0001,.01))
+expect_error(p3 <- drawParam(tcfamg@dgen,maxDraw=3,numFree=max(tcfamg@pt$free),misfitBounds=c(.0001,.01),misfitType="rmsea"))
+p4 <- drawParam(tcfamg@dgen,maxDraw=3,numFree=max(tcfamg@pt$free),misfitBounds=c(.01,.03),misfitType="rmsea")
+p5 <- drawParam(tcfamg@dgen,maxDraw=3,numFree=max(tcfamg@pt$free),misfitBounds=c(.0001,.01),misfitType="srmr")
+p6 <- drawParam(tcfamg@dgen,maxDraw=3,numFree=max(tcfamg@pt$free),misfitBounds=c(.0001,.01),averageNumMisspec=TRUE)
+p7 <- drawParam(tcfamg@dgen,maxDraw=3,numFree=max(tcfamg@pt$free),optMisfit="max",numIter=3)
+p8 <- drawParam(tcfamg@dgen,maxDraw=3,numFree=max(tcfamg@pt$free),optMisfit="min",numIter=3)
+p9 <- drawParam(tcfamg@dgen,maxDraw=3,numFree=max(tcfamg@pt$free),optMisfit="min",numIter=20,misfitType="rmsea")
+p10 <- drawParam(tcfamg@dgen,maxDraw=3,numFree=max(tcfamg@pt$free),optMisfit="max",numIter=20,misfitType="rmsea")
+p11 <- drawParam(tcfamg@dgen,maxDraw=3,numFree=max(tcfamg@pt$free),optMisfit="max",numIter=20,misfitType="srmr")
+expect_error(p12 <- drawParam(tcfamg@dgen,maxDraw=2,numFree=max(tcfamg@pt$free),misfitBounds=c(.05,.08),optMisfit="max",numIter=2,misfitType="rmsea"))
+expect_error(p13 <- drawParam(tcfamg@dgen,maxDraw=5,numFree=max(tcfamg@pt$free),misfitBounds=c(.0001,.0005),optMisfit="max",numIter=20,misfitType="f0"))
+p14 <- drawParam(tcfamg@dgen,maxDraw=5,numFree=max(tcfamg@pt$free),misfitBounds=c(.0001,.001),averageNumMisspec=TRUE,optMisfit="max",numIter=20)
 
-## What should the scale be for misfitBounds?
-drawParam(tcfa,misfitType="all") # does nothing
-drawParam(tcfa,misfitBounds=c(.001,.1),maxDraw=100,misfitType="srmr")
-drawParam(tcfa,misfitBounds=c(.001,.1),maxDraw=100,misfitType="rmsea")
-drawParam(tcfa,misfitBounds=c(0,1),maxDraw=100,misfitType="f0")
-drawParam(tcfa,misfitBounds=c(0,1),
-          maxDraw=100,misfitType="rmsea",averageNumMisspec=TRUE)
-drawParam(tcfa,misfitType="rmsea",optMisfit="max",numIter=20)
+# single group tests
+psg1 <- drawParam(tcfa@dgen,maxDraw=20,numFree=max(tcfa@pt$free))
+psg2 <- drawParam(tcfa@dgen,maxDraw=20,numFree=max(tcfa@pt$free),misfitBounds=c(.0001,.01))
+expect_error(psg3 <- drawParam(tcfa@dgen,maxDraw=3,numFree=max(tcfa@pt$free),misfitBounds=c(.0001,.01),misfitType="rmsea"))
+psg4 <- drawParam(tcfa@dgen,maxDraw=3,numFree=max(tcfa@pt$free),misfitBounds=c(.01,.03),misfitType="rmsea")
+psg5 <- drawParam(tcfa@dgen,maxDraw=3,numFree=max(tcfa@pt$free),misfitBounds=c(.0001,.02),misfitType="srmr")
+psg6 <- drawParam(tcfa@dgen,maxDraw=3,numFree=max(tcfa@pt$free),misfitBounds=c(.0001,.01),averageNumMisspec=TRUE)
+psg7 <- drawParam(tcfa@dgen,maxDraw=3,numFree=max(tcfa@pt$free),optMisfit="max",numIter=3)
+psg8 <- drawParam(tcfa@dgen,maxDraw=3,numFree=max(tcfa@pt$free),optMisfit="min",numIter=3)
+psg9 <- drawParam(tcfa@dgen,maxDraw=3,numFree=max(tcfa@pt$free),optMisfit="min",numIter=20,misfitType="rmsea")
+psg10 <- drawParam(tcfa@dgen,maxDraw=3,numFree=max(tcfa@pt$free),optMisfit="max",numIter=20,misfitType="rmsea")
+psg11 <- drawParam(tcfa@dgen,maxDraw=3,numFree=max(tcfa@pt$free),optMisfit="max",numIter=20,misfitType="srmr")
+expect_error(psg12 <- drawParam(tcfa@dgen,maxDraw=2,numFree=max(tcfa@pt$free),misfitBounds=c(.05,.08),optMisfit="max",numIter=2,misfitType="rmsea"))
+expect_error(psg13 <- drawParam(tcfa@dgen,maxDraw=5,numFree=max(tcfa@pt$free),misfitBounds=c(.0001,.0005),optMisfit="max",numIter=20,misfitType="f0"))
+psg14 <- drawParam(tcfa@dgen,maxDraw=5,numFree=max(tcfa@pt$free),misfitBounds=c(.0001,.001),averageNumMisspec=TRUE,optMisfit="max",numIter=20)
+
+# Other model Types
+pcfa2 <- drawParam(tcfa2@dgen,maxDraw=20,numFree=max(tcfa2@pt$free))
+ppath <- drawParam(tpath@dgen,maxDraw=20,numFree=max(tpath@pt$free))
+psem <- drawParam(tsem@dgen,maxDraw=20,numFree=max(tpath@pt$free))
 
 p <- drawParam(tcfa)
 
