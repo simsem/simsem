@@ -178,9 +178,9 @@ setClass("SimMissing",
          representation(
                         cov = "vector", pmMCAR = "numeric", pmMAR = "numeric",
                         nforms = "numeric", itemGroups = "list", twoMethod = "vector",
-                        prAttr = "vector", package = "vector", numImps = "numeric",
+                        prAttr = "vector", package = "character",
                         timePoints = "numeric", ignoreCols = "numeric", threshold = "numeric",
-                        covAsAux = "logical", logical = "matrix", args="list"
+                        covAsAux = "logical", logical = "logical", args="list"
                         )
         ##  prototype(cov = 0, pmMCAR = 0, pmMAR = 0,
 ##                    nforms = 0, itemGroups = list(0), twoMethod = 0,

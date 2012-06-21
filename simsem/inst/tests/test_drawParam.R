@@ -219,17 +219,4 @@ indDist <- simDataDist(simNorm(10,2),p=6)
 
 dat <- createData(p,100,"CFA",indDist=indDist)
 
-dat <- generate(tcfa,100)
-out <- analyze(tcfa,dat)
 
-dat2 <- generate(tcfamg,1000)
-out <- analyze(tcfamg,dat2)
-
-dat3 <- generate(tcfamg2,500)
-out <- analyze(tcfamg2,dat3)
-
-dat4 <- generate(tpath,400)
-outPath <- analyze(tpath, generate(tpath,400))
-
-dat5 <- generate(tsem,400)
-outSem <- analyze(tsem,dat5)

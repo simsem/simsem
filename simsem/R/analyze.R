@@ -1,54 +1,65 @@
 
 
 analyze <- function(model, data, package="lavaan", simMissing=NULL,indLab=NULL,auxiliary=NULL,...) {
-    Output <- NULL
-    DataOut <- NULL
-    args <- list(...)
-##  if (class(data) == "SimDataOut") {
-##         DataOut <- data
-##         data <- DataOut@data
-##     }
-    if (is.null(colnames(data))) 
-        colnames(data) <- paste0("x", 1:ncol(data))
-    if (is.null(auxiliary)) {
-        if (!is.null(simMissing) && !(length(simMissing@cov) == 1 && simMissing@cov == 0) && simMissing@covAsAux) 
-            auxiliy <- simMissing@cov
-    }
-    if (is.null(indLab)) {
-        if (is.null(auxiliary)) {
-            indLab <- colnames(data)
-        } else if (is.numeric(auxiliary)) {
-            if (max(auxiliary) > ncol(data)) 
-                stop("The maximum index in the auxiliary variable set is greater than the number of variables in the data.")
-            indLab <- colnames(data)[-auxiliary]
-        } else {
-            if (length(intersect(colnames(data), auxiliary)) != length(auxiliary)) 
-                stop("Some auxiliary variables does not exist in the dataset.")
-            indLab <- setdiff(colnames(data), auxiliary)
-        }
-    }
-   ##  if (is.numeric(indLab)) 
-##         indLab <- colnames(data)[indLab]
-##     if (is.numeric(auxiliary)) 
-##         auxiliary <- colnames(data)[auxiliary]
-##     if (length(intersect(auxiliary, indLab)) != 0) 
-##         stop("There is common variable between the variables in the model and the auxiliary variables.")
-##     targetCol <- c(indLab, auxiliary)
-##     data <- data[, targetCol]
-    miss <- sum(is.na(data)) > 0
-
-    ## if (miss && !is.null(simMissing) && simMissing@numImps > 0) {
-##         Output <- runMI(data, object, simMissing@numImps, simMissing@impMethod)
-##     } else {
-        if (package == "OpenMx") {
-            Output <- runOpenMx(object, data)
-        } else if (package == "lavaan") {
-            fit <- lavaan(model@pt, data=data, group="group", model.type=model@modelType,...)
-        }
-
-    return(fit)
+  Output <- NULL
+  DataOut <- NULL
+  args <- list(...)
+  ##  if (class(data) == "SimDataOut") {
+  ##         DataOut <- data
+  ##         data <- DataOut@data
+  ##     }
+  if (is.null(colnames(data))) 
+    colnames(data) <- paste0("x", 1:ncol(data))
+  if (is.null(auxiliary)) {
+    if (!is.null(simMissing) && !(length(simMissing@cov) == 1 && simMissing@cov == 0) && simMissing@covAsAux) 
+      auxiliy <- simMissing@cov
   }
+  if (is.null(indLab)) {
+    if (is.null(auxiliary)) {
+      indLab <- colnames(data)
+    } else if (is.numeric(auxiliary)) {
+      if (max(auxiliary) > ncol(data)) 
+        stop("The maximum index in the auxiliary variable set is greater than the number of variables in the data.")
+      indLab <- colnames(data)[-auxiliary]
+    } else {
+      if (length(intersect(colnames(data), auxiliary)) != length(auxiliary)) 
+        stop("Some auxiliary variables does not exist in the dataset.")
+      indLab <- setdiff(colnames(data), auxiliary)
+    }
+  }
+  ##  if (is.numeric(indLab)) 
+  ##         indLab <- colnames(data)[indLab]
+  ##     if (is.numeric(auxiliary)) 
+  ##         auxiliary <- colnames(data)[auxiliary]
+  ##     if (length(intersect(auxiliary, indLab)) != 0) 
+  ##         stop("There is common variable between the variables in the model and the auxiliary variables.")
+  ##     targetCol <- c(indLab, auxiliary)
+  ##     data <- data[, targetCol]
+                                        #    miss <- sum(is.na(data)) > 0
 
+ ##  if (!is.null(simMissing) && simMissing@package == "Amelia") {
+##     Output <- runMI(data, object, simMissing@args)
+##   } else {
+    if (package == "OpenMx") {
+      Output <- runOpenMx(object, data)
+    } else if (package == "lavaan") {
+      Output <- lavaan(model@pt, data=data, group="group", model.type=model@modelType,...)
+    }
+
+    return(Output)
+  }
+}
+
+# To be used internally
+anal <- function(model, data, package="lavaan", ...) {
+  args <- list(...)
+  if (package == "OpenMx") {
+      Output <- runOpenMx(object, data)
+    } else if (package == "lavaan") {
+      Output <- lavaan(model@pt, data=data, group="group", model.type=model@modelType,...)
+    }
+  return(Output)
+}
 
 ##     # is.equal(DataOut@param, Output@param) yes --> compute bias
 ##     if (!is.null(DataOut)) {
