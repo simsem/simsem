@@ -14,24 +14,25 @@ context("CFA")
 
 loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA
-loading[4:6, 2] <- "a1"
-LY <- bind(loading, 0.7)
+loading[4:6, 2] <- NA
+LY <- bind(loading, 0.5)
 
 latent.cor <- matrix(NA, 2, 2)
 diag(latent.cor) <- 1
-RPS <- bind(latent.cor, 0.5,symmetric=TRUE)
+RPS <- bind(latent.cor, .5,symmetric=TRUE)
 
 error.cor <- matrix(0, 6, 6)
-diag(error.cor) <- 1
-RTE <- bind(error.cor,symmetric=TRUE)
+diag(error.cor) <- NA
+RTE <- bind(error.cor,1,symmetric=TRUE)
 
 # Needs model type
 expect_error(model(LY=LY,RPS=RPS,RTE=RTE))
-cfat <- model(LY=LY,RPS=RPS,RTE=RTE,modelType="CFA")
+cfat <- model(LY=LY,RPS=RPS,RTE=RTE,modelType="CFA",smartStart=TRUE)
+cfat <- model(LY=LY,RPS=RPS,RTE=RTE,modelType="CFA",smartStart=FALSE) #doesn't make much difference for easy models...
 
 ## # a useful test data structure
-## paramSet <- list(LY=LY,RPS=RPS,PS=NULL,TE=NULL,RTE=RTE,BE=NULL,VTE=NULL,VY=NULL,
-##                  VPS=NULL,TY=NULL,AL=NULL,MY=NULL,ME=NULL)
+ paramSet <- list(LY=LY,RPS=RPS,PS=NULL,TE=NULL,RTE=RTE,BE=NULL,VTE=NULL,VY=NULL,
+                  VPS=NULL,TY=NULL,AL=NULL,MY=NULL,ME=NULL)
 
 ## paramSet2 <- list(LY=c(LY,LY),RPS=c(RPS,RPS),PS=NULL,TE=NULL,RTE=RTE,BE=NULL,VTE=NULL,VY=NULL,
 ##                  VPS=NULL,TY=NULL,AL=NULL,MY=NULL,ME=NULL)

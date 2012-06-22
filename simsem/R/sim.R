@@ -3,7 +3,7 @@
                   pmMCAR = NULL, pmMAR = NULL,
                   facDist = NULL, indDist = NULL, errDist = NULL, sequential = FALSE, 
                   modelBoot = NULL, maxDraw = 50, misfitType = NULL, misfitBound = NULL, averageNumMisspec = NULL, optMisfit=NULL, optIter = 50, 
-                  auxiliary = NULL, 
+                  aux = NULL, 
                   seed = 123321, silent = FALSE, multicore = FALSE, cluster = FALSE, numProc = NULL,  
                   paramOnly = FALSE, dataOnly=FALSE, ...) { 
 
@@ -31,14 +31,15 @@
         nRep <- nrow(out)
     }
 
-    # Set up data generation template
+    # Set up data generation template. 
     dgen <- NULL
     if(!is.null(generate) && class(generate) == "SimSem") {
-      dgen <- generate@dgen
-    } else {
-      dgen <- model@dgen
+      model@dgen <- generate@dgen
     }
-    model <- model@pt
+    ## else {
+    ##       dgen <- model@dgen
+    ##     }
+
     
     if (!is.null(n)) {
         if (is(n, "VirtualDist")) {
@@ -75,23 +76,24 @@
     param <- NULL
     drawnParams <- list()
     simConds <- list()
-  
+
+    numseed <- as.list(round(sample(1:999999, nRep)))
     if (!is.null(rawData)) {
-      if (any(is.random(dgen@popParam))) {
-        for (i in 1:nRep) {
-          drawnParams[[i]] <- drawParam(model@dgen, maxDraw = maxDraw, numFree=max(model@pt$free), misfitBounds=misfitBounds, averageNumMisspec=averageNumMisspec,
-                                        optMisfit=optMisfit, optDraws=optDraws, misfitType=misfitType)
-        }
-      } else {
-        fixedParam <- drawParam(model@dgen, maxDraw = maxDraw, numFree=max(model@pt$free), misfitBounds=misfitBounds, averageNumMisspec=averageNumMisspec,
-                                optMisfit=optMisfit, optDraws=optDraws, misfitType=misfitType)
-        for (i in 1:nRep) {
-          drawnParams[[i]] <- fixedParam
-        }
-      }
+##       if (any(sapply(dgen,fun=function(paramSet) { sapply(paramSet, fun=function(mat) {is.random(mat@popParam)}) }))) {
+##         for (i in 1:nRep) {
+##           drawnParams[[i]] <- drawParam(model@dgen, maxDraw = maxDraw, numFree=max(model@pt$free), misfitBounds=misfitBounds, averageNumMisspec=averageNumMisspec,
+##                                         optMisfit=optMisfit, optDraws=optDraws, misfitType=misfitType)
+##         }
+##       } else {
+##         fixedParam <- drawParam(model@dgen, maxDraw = maxDraw, numFree=max(model@pt$free), misfitBounds=misfitBounds, averageNumMisspec=averageNumMisspec,
+##                                 optMisfit=optMisfit, optDraws=optDraws, misfitType=misfitType)
+##         for (i in 1:nRep) {
+##           drawnParams[[i]] <- fixedParam
+##         }
+##       }
        for (i in 1:length(drawnParams)) {
         simConds[[i]] <- list()
-        simConds[[i]][[1]] <- drawnParams[[i]]
+        simConds[[i]][[1]] <- NULL
         simConds[[i]][[2]] <- n[i]
         simConds[[i]][[3]] <- pmMCAR[i]
         simConds[[i]][[4]] <- pmMAR[i]
@@ -99,17 +101,17 @@
       }
       
     } else if (is.list(rawData)) {
-      if (class(rawData[[1]]) == "SimDataOut") { # Not sure about this line
-        
-        if (!is.null(n) && ((n > rawData@n) %in% TRUE)) 
+
+      if (is.data.frame(rawData[[1]])) {            
+        if (!is.null(n) && ((n > nrow(rawData[[1]])) %in% TRUE)) 
           stop("The specified n is greater than the number of cases provided.")
       } else if (is.matrix(rawData[[1]])) {
         rawData <- lapply(rawData, data.frame)
         if (!is.null(n) && ((n > nrow(rawData[[1]])) %in% TRUE)) 
           stop("The specified n is greater than the number of cases provided.")
-      } else if (is.data.frame(rawData[[1]])) {            
-        if (!is.null(n) && ((n > nrow(rawData[[1]])) %in% TRUE)) 
-          stop("The specified n is greater than the number of cases provided.")
+      ## } else if (class(rawData[[1]]) == "SimDataOut") {         
+##         if (!is.null(n) && ((n > rawData@n) %in% TRUE)) 
+##           stop("The specified n is greater than the number of cases provided.")
       } else {
         stop("The list in the rawData argument does not contain matrices or data frames.")
       }
@@ -125,7 +127,7 @@
     } else {
       stop("The rawData argument is not a SimData class or a list of data frames.")
     }
-    numseed <- as.list(round(sample(1:999999, nRep)))
+    
  
     
     if (multicore) {
@@ -138,15 +140,21 @@
              miss = NULL, fun=NULL, 
                   facDist = NULL, indDist = NULL, errDist = NULL, sequential = FALSE,
             Result.l <- clusterApplyLB(cl, simConds, runRep, miss = miss, fun = fun, silent = silent,
-                                       facDist = facDist, indDist = indDist, errDist=errDist, sequential=sequential, realData=realData)
+                                       facDist = facDist, indDist = indDist, errDist=errDist, sequential=sequential, realData=realData,
+                                       maxDraw = maxDraw, misfitBounds=misfitBounds, averageNumMisspec=averageNumMisspec,
+                                       optMisfit=optMisfit, optDraws=optDraws, misfitType=misfitType)
             stopCluster(cl)
         } else {
             Result.l <- mclapply(simConds, runRep, model, miss = miss, fun = fun,  silent = silent,
-                                 facDist = facDist, indDist = indDist, errDist=errDist, sequential=sequential, realData=realData, mc.cores = numProc)
+                                 facDist = facDist, indDist = indDist, errDist=errDist, sequential=sequential, realData=realData,
+                                 maxDraw = maxDraw, misfitBounds=misfitBounds, averageNumMisspec=averageNumMisspec,
+                                 optMisfit=optMisfit, optDraws=optDraws, misfitType=misfitType, mc.cores = numProc)
         }
     } else {
         Result.l <- lapply(simConds, runRep, model, miss = miss, fun = fun, silent = silent,
-                           facDist = facDist, indDist = indDist, errDist=errDist, sequential=sequential, realData=realData)
+                           facDist = facDist, indDist = indDist, errDist=errDist, sequential=sequential, realData=realData,
+                           maxDraw = maxDraw, misfitBounds=misfitBounds, averageNumMisspec=averageNumMisspec,
+                           optMisfit=optMisfit, optDraws=optDraws, misfitType=misfitType)
     }
     
     
@@ -240,7 +248,8 @@
 
 ## runRep <- function(simConds, , objModel, objMissing = new("NullSimMissing"), objFunction = new("NullSimFunction"), silent = FALSE) {
 ## }
-runRep <- function(simConds, model, miss = NULL, fun=NULL, facDist = NULL, indDist = NULL, errDist = NULL, sequential = FALSE, realData=NULL, silent = FALSE)
+runRep <- function(simConds, model, miss = NULL, fun=NULL, facDist = NULL, indDist = NULL, errDist = NULL, sequential = FALSE, realData=NULL, silent = FALSE,
+                   modelBoot = NULL, maxDraw = 50, misfitType = NULL, misfitBound = NULL, averageNumMisspec = NULL, optMisfit=NULL, optIter = 50) {
     param <- NULL
     coef <- NA
     se <- NA
@@ -267,45 +276,71 @@ runRep <- function(simConds, model, miss = NULL, fun=NULL, facDist = NULL, indDi
     data <- simConds[[1]] # either a paramSet or raw data
     set.seed(seed)
     if (class(dat) == "list") { # Drawn Parameters
-        data <- createData(paramSet = dat, indDist = indDist, sequential=sequential, facDist = facDist, errorDist=errorDist,
-                           indLab = indLab, modelBoot=modelBoot, realData=realData)
+      ##data <- createData(paramSet = dat, indDist = indDist, sequential=sequential, facDist = facDist, errorDist=errorDist,
+      ##                   indLab = indLab, modelBoot=modelBoot, realData=realData)
+      ##  datal <- mapply(FUN=createData,draws,indDist,facDist,errorDist,
+      ##                   MoreArgs=list(n=n, sequential=sequential, modelBoot=modelBoot,realData=realData), SIMPLIFY=FALSE)
+      ##         data <- do.call("rbind",datal)
+      ##         data <- cbind(data,group=rep(1:ngroups,each=n))
+      genout <- generate(model=model, maxDraw=maxDraw, misfitBounds=misfitBounds, misfitType=misfitType, averageNumMisspec=averageNumMisspec,
+                       optMisfit=optMisfit, optDraws=optDraws, indDist=indDist, sequential=sequential, facDist=facDist, errorDist=errorDist,
+                       indLab=indLab, modelBoot=modelBoot, realData=realData, params=TRUE)
+      data <- genout[[1]]
+      psl <- genout[[2]] # Indexing: Group -> param/misParam/misOnly -> paramSet (reduced)
+      if(!is.null(psl[[1]]$misParam)) {
+        param <- lapply(psl,"[[",2) # Group -> misParam -> paramSet
+      } else {
+        param <- lapply(psl,"[[",1) # Group -> param -> paramSet
+      }
     } 
     # if(class(dataT) == 'SimDataOut') { data.mis <-dataT@data } else { data.mis <- dataT }
     
     if (is.null(miss)) {
         
-         data <- imposeMissing(data, cov=miss@cov, pmMCAR=pmMCAR, pmMAR=pmMAR, nforms=miss@nforms, itemGroups=miss@itemGroups,
-                                   twoMethod=miss@twoMethod, prAttr=miss@prAttr, timePoints=miss@timePoints, logical=miss@logical, ignoreCols=miss@ignoreCols,
-                                   threshold=miss@threshold)
+      data <- imposeMissing(data, cov=miss@cov, pmMCAR=pmMCAR, pmMAR=pmMAR, nforms=miss@nforms, itemGroups=miss@itemGroups,
+                            twoMethod=miss@twoMethod, prAttr=miss@prAttr, timePoints=miss@timePoints, logical=miss@logical, ignoreCols=miss@ignoreCols,
+                            threshold=miss@threshold)
     }
     if (!is.null(fun)) {
-      data <- fun(data)
+      data <- fun(data) # args??
       #data.mis <- run(objFunction, data.mis, checkDataOut = TRUE)
     }
     
-    temp <- NULL
+    out <- NULL
     # Impute missing and run results
-    if (!is.null(miss)) && miss@numImps > 0) {
+    if (!is.null(miss) && miss@numImps > 0) {
         if (silent) {
-            invisible(capture.output(suppressMessages(try(temp <- run(simConds = objModel, data = data.mis, simMissing = miss), silent = TRUE))))
-            # invisible(capture.output(suppressMessages(try(temp <- runMI(data.mis,objModel,miss@numImps,miss@impMethod), silent=TRUE))))
+          invisible(capture.output(suppressMessages(try(out <- analyze(model, data, simMissing=miss),silent=TRUE))))
+            #invisible(capture.output(suppressMessages(try(temp <- run(simConds = objModel, data = data.mis, simMissing = miss), silent = TRUE))))
+            #invisible(capture.output(suppressMessages(try(temp <- runMI(data.mis,objModel,miss@numImps,miss@impMethod), silent=TRUE))))
         } else {
-            try(temp <- run(simConds = objModel, data = data.mis, simMissing = miss), silent = TRUE)
+          try(out <- analyze(model, data, simMissing=miss))
+            #try(temp <- run(simConds = objModel, data = data.mis, simMissing = miss), silent = TRUE)
             # try(temp <- runMI(data.mis,objModel,miss@numImps,miss@impMethod))
         }
     } else {
         if (silent) {
-            invisible(capture.output(suppressMessages(try(temp <- run(simConds = objModel, data = data.mis), silent = TRUE))))
+            invisible(capture.output(suppressMessages(try(out <- anal(model,data),silent=TRUE))))
             # tryCatch(temp <- run(objModel, data), error=function(e) {print('Error')})
         } else {
-            try(temp <- run(simConds = objModel, data = data.mis))
+            try(out <- anal(model,data))
         }
     }
     
-    if (!is.null(temp)) {
-        converged <- temp@converged
-        param <- NA
-        Labels <- makeLabels(temp@param, "OpenMx")  #As a quick default to use OpenMx
+    if (!is.null(out)) {
+        try(FitIndices <- extractLavaanFit(out))
+        try(coef <- inspect(out,"coef"))
+        try(se <- inspect(out,"se"))
+        try(converged <- inspect(fit, "converged"))
+        try(check <- sum(unlist(lapply(se, sum))))
+        try(if(is.na(check) || check==0) {converged <- FALSE},silent=TRUE)
+      }
+
+    names <- param[[1]]
+    for(i in 1:length(param)) {
+      mapply(param[[i]],names,FUN=makeLabels,MoreArgs="OpenMx",SIMPLIFY=FALSE)
+    }
+    
         if (converged) {
             coef <- vectorizeObject(temp@coef, Labels)
             se <- vectorizeObject(temp@se, Labels)
@@ -323,19 +358,82 @@ runRep <- function(simConds, model, miss = NULL, fun=NULL, facDist = NULL, indDi
                 param <- NA
             }
         }
-    } else {
+    #} else {
         if (!is.null(data.mis) && is(data.mis, "SimDataOut")) 
             param <- NA
-    }
+    #}
     LabelsDataParam <- makeLabels(createFreeParameters(objData@param), "OpenMx")
     paramData <- vectorizeObject(simConds[[1]]$real, LabelsDataParam)
     Result <- list(coef = coef, se = se, fit = fit, converged = converged, param = param, FMI1 = FMI1, FMI2 = FMI2, std = std, paramData = paramData)
     return <- Result
 }
 
+extractLavaanFit <- function(Output) {
+    Indices <- fitmeasures(Output)
+    result <- c(Indices["chisq"], Indices["df"], Indices["pvalue"], Indices["baseline.chisq"], Indices["baseline.df"], Indices["baseline.pvalue"],
+                Indices["cfi"], Indices["tli"], Indices["aic"], Indices["bic"], Indices["rmsea"], Indices["rmsea.ci.lower"], Indices["rmsea.ci.upper"], Indices["srmr"])
+    old.name <- c("chisq", "cfi", "tli", "aic", "bic", "rmsea", "srmr")
+    new.name <- c("Chi", "CFI", "TLI", "AIC", "BIC", "RMSEA", "SRMR")
+    name <- names(result)
+    for (i in 1:length(old.name)) {
+        name <- gsub(old.name[i], new.name[i], name)
+    }
+    names(result) <- name
+    return(result)
+}
 
 is.random <- function(dat) {
-  dat[is.empty(dat)] <- "0" # an arbitrary numeric value
+  dat[is.empty(dat)] <- "0" # Since we are trying to detect characters, we need to assign an arbitrary numeric value to ""
   isRandom <- sapply(dat, FUN=function(x) {x <- suppressWarnings(is.na(as.numeric(x))) })
   return(isRandom)
+}
+
+makeLabels <- function(dat, name, package, symmetric=FALSE) {
+
+  if (is.null(dat)) {
+    return(NULL)
+  } else if(is.vector(dat)) {
+    Length <- length(dat)
+    if (package == "OpenMx") {
+      for (i in 1:Length) {
+        ifelse(is.na(dat[i]), dat[i] <- paste(name, i, sep = ""), dat[i] <- NA)
+      }
+      return(dat)
+    } else if (package == "lavaan") {
+      dat[] <- ""
+      return(dat)
+    }
+  } else if(is.matrix(dat)) {
+    np <- nrow(dat)
+    nq <- ncol(dat)
+    if (package == "OpenMx") {
+      if (symmetric) {
+        for (i in 1:np) {
+          for (j in 1:i) {
+            if (is.na(dat[i, j])) {
+              dat[i, j] <- paste(name, i, "_", j, sep = "")
+            } else {
+              dat[i, j] <- NA
+            }
+            if (i != j) 
+              dat[j, i] <- dat[i, j]
+          }
+        }
+      } else {
+        for (i in 1:np) {
+          for (j in 1:nq) {
+            if (is.na(dat[i, j])) {
+              dat[i, j] <- paste(name, i, "_", j, sep = "")
+            } else {
+              dat[i, j] <- NA
+            }
+          }
+        }
+      }
+    } else if (package == "lavaan") {
+      dat[, ] <- ""
+    }
+    return(dat)
+  }
+  
 }

@@ -35,29 +35,21 @@ analyze <- function(model, data, package="lavaan", simMissing=NULL,indLab=NULL,a
   ##         stop("There is common variable between the variables in the model and the auxiliary variables.")
   ##     targetCol <- c(indLab, auxiliary)
   ##     data <- data[, targetCol]
-                                        #    miss <- sum(is.na(data)) > 0
+  ##    miss <- sum(is.na(data)) > 0
 
- ##  if (!is.null(simMissing) && simMissing@package == "Amelia") {
-##     Output <- runMI(data, object, simMissing@args)
-##   } else {
-    if (package == "OpenMx") {
-      Output <- runOpenMx(object, data)
-    } else if (package == "lavaan") {
-      Output <- lavaan(model@pt, data=data, group="group", model.type=model@modelType,...)
-    }
+  if (!is.null(simMissing) && simMissing@package == "Amelia") {
+    Output <- runMI(data, object, simMissing@args)
+  } else {
+    Output <- lavaan(model@pt, data=data, group="group", model.type=model@modelType,...)
+  }
 
     return(Output)
-  }
 }
 
 # To be used internally
 anal <- function(model, data, package="lavaan", ...) {
   args <- list(...)
-  if (package == "OpenMx") {
-      Output <- runOpenMx(object, data)
-    } else if (package == "lavaan") {
-      Output <- lavaan(model@pt, data=data, group="group", model.type=model@modelType,...)
-    }
+  Output <- lavaan(model@pt, data=data, group="group", model.type=model@modelType,...)    
   return(Output)
 }
 

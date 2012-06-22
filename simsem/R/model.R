@@ -1,7 +1,7 @@
 ## Takes model specification matrices of type SimMatrix (or lists of these matrices for multiple groups).
 ## Returns a SimSem object that contains templates for data generation and analyis.
 model <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL, VTE = NULL, VY = NULL,
-                  VPS = NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, modelType, indLab=NULL, facLab=NULL, ngroups=1) {
+                  VPS = NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, modelType, indLab=NULL, facLab=NULL, ngroups=1, smartStart=TRUE) {
   
   paramSet <- list(LY=LY, PS=PS, RPS=RPS, TE=TE, RTE=RTE, BE=BE, VTE=VTE, VY=VY, VPS=VPS, TY=TY, AL=AL, MY=MY,ME=ME)
   if(!is.null(modelType)) {
@@ -48,20 +48,22 @@ model <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NUL
        
        for(i in seq_along(psl)) {
          if (i == 1) {
-           pt <- buildPT(psl[[i]], pt=pt, group=i,facLab=NULL, indLab=NULL)
+           pt <- buildPT(psl[[i]], pt=pt, group=i,facLab=NULL, indLab=NULL,smart=smartStart)
          } else {
-           pt <- mapply(pt,buildPT(psl[[i]], pt=pt, group=i,facLab=NULL, indLab=NULL),FUN=c,SIMPLIFY=FALSE)
+           pt <- mapply(pt,buildPT(psl[[i]], pt=pt, group=i,facLab=NULL, indLab=NULL,smart=smartStart),FUN=c,SIMPLIFY=FALSE)
          }
        }
 
       # Adjust indices for between group constraints
       pt <- btwGroupCons(pt)
+      #nullpt <- nullpt(psl[[1]], ngroups=n)
 
       return(new("SimSem",pt=pt,dgen=psl,modelType=modelType))
       
     } else { # ngroups = 1, and no matrices are lists
      paramSet <- buildModel(paramSet,modelType)
-     pt <- buildPT(paramSet)
+     pt <- buildPT(paramSet,smart=smartStart)
+     #nullpt <- nullpt(paramSet)
      return(new("SimSem",pt=pt,dgen=paramSet,modelType=modelType))
    }
   } else { stop("Must specify model type") } 
@@ -163,7 +165,7 @@ buildModel <- function(paramSet,modelType) {
 ## Returns a table of parameters to be used for analysis with lavaan.
 ## This time, PT will only take a sg paramSet. And while I'm at it, I'm taking out the df stuff.
 
-buildPT <- function(paramSet, pt=NULL, group=1,facLab=NULL, indLab=NULL) {
+buildPT <- function(paramSet, pt=NULL, group=1,facLab=NULL, indLab=NULL, smart=TRUE) {
 
   ## Convert a chunk at a time - starting with LY - factor loading. At least LY,PS/RPS must be specified.
   
@@ -172,7 +174,7 @@ buildPT <- function(paramSet, pt=NULL, group=1,facLab=NULL, indLab=NULL) {
     ni <- nrow(paramSet$LY@free)
     if(is.null(facLab)){lhs <- rep(paste("y",1:nf,sep=""),each=ni) } else { lhs <- rep(facLab,each=ni)}
     if(is.null(indLab)){rhs <- rep(paste("x",1:ni,sep=""),times=nf) } else { rhs <- rep(indLab,times=nf)}
-    pt <- parseFree(paramSet$LY, group=group, pt=pt,op="=~",lhs,rhs)
+    pt <- parseFree(paramSet$LY, group=group, pt=pt,op="=~",lhs,rhs,smart=smart)
   }
 
   ## PS - factor covariance: Symmetric
@@ -186,9 +188,9 @@ buildPT <- function(paramSet, pt=NULL, group=1,facLab=NULL, indLab=NULL) {
       rhs <- unlist(lapply(1:nf,function(k) facLab[k:nf]))
     }
     if(!is.null(pt)) {
-      pt <- mapply(pt, parseFree(paramSet$PS, group=group, pt=pt,op="~~",lhs,rhs),FUN=c,SIMPLIFY=FALSE)
+      pt <- mapply(pt, parseFree(paramSet$PS, group=group, pt=pt,op="~~",lhs,rhs,smart=smart),FUN=c,SIMPLIFY=FALSE)
     } else {
-      pt <- parseFree(paramSet$PS, group=group, pt=pt,op="~~",lhs,rhs)
+      pt <- parseFree(paramSet$PS, group=group, pt=pt,op="~~",lhs,rhs,smart=smart)
     }
   }
 
@@ -203,9 +205,9 @@ buildPT <- function(paramSet, pt=NULL, group=1,facLab=NULL, indLab=NULL) {
       rhs <- unlist(lapply(1:nf,function(k) facLab[k:nf]))
     }
     if(!is.null(pt)) {
-      pt <- mapply(pt, parseFree(paramSet$RPS, group=group, pt=pt,op="~~",lhs,rhs),FUN=c,SIMPLIFY=FALSE)
+      pt <- mapply(pt, parseFree(paramSet$RPS, group=group, pt=pt,op="~~",lhs,rhs,smart=smart),FUN=c,SIMPLIFY=FALSE)
     } else {
-      pt <- parseFree(paramSet$RPS, group=group, pt=pt,op="~~",lhs,rhs)
+      pt <- parseFree(paramSet$RPS, group=group, pt=pt,op="~~",lhs,rhs,smart=smart)
     }
   }
 
@@ -220,7 +222,7 @@ buildPT <- function(paramSet, pt=NULL, group=1,facLab=NULL, indLab=NULL) {
       lhs <- rep(indLab,ni:1)
       rhs <- unlist(lapply(1:ni,function(k) indLab[k:ni]))
     }
-    pt <- mapply(pt, parseFree(paramSet$TE, group=group, pt=pt,op="~~",lhs,rhs),FUN=c,SIMPLIFY=FALSE)
+    pt <- mapply(pt, parseFree(paramSet$TE, group=group, pt=pt,op="~~",lhs,rhs,smart=smart),FUN=c,SIMPLIFY=FALSE)
   }
   
   ## RTE - Correlation of measurment error: Symmetric
@@ -233,7 +235,7 @@ buildPT <- function(paramSet, pt=NULL, group=1,facLab=NULL, indLab=NULL) {
        lhs <- rep(indLab,ni:1)
        rhs <- unlist(lapply(1:ni,function(k) indLab[k:ni]))
      }
-    pt <- mapply(pt, parseFree(paramSet$RTE, group=group, pt=pt,op="~~",lhs,rhs),FUN=c,SIMPLIFY=FALSE)
+    pt <- mapply(pt, parseFree(paramSet$RTE, group=group, pt=pt,op="~~",lhs,rhs,smart=smart),FUN=c,SIMPLIFY=FALSE)
   }
   
 
@@ -247,7 +249,7 @@ buildPT <- function(paramSet, pt=NULL, group=1,facLab=NULL, indLab=NULL) {
       lhs <- rep(facLab,each=nf)
       rhs <- rep(facLab,times=nf)
     }
-    pt <- mapply(pt, parseFree(paramSet$BE, group=group, pt=pt,op="~",lhs,rhs),FUN=c,SIMPLIFY=FALSE)
+    pt <- mapply(pt, parseFree(paramSet$BE, group=group, pt=pt,op="~",lhs,rhs,smart=smart),FUN=c,SIMPLIFY=FALSE)
   }
   
 
@@ -261,7 +263,7 @@ buildPT <- function(paramSet, pt=NULL, group=1,facLab=NULL, indLab=NULL) {
       lhs <- facLab
       rhs <- rep("",times=nf)
     }
-    pt <- mapply(pt, parseFree(paramSet$AL, group=group, pt=pt,op="~1",lhs,rhs),FUN=c,SIMPLIFY=FALSE)
+    pt <- mapply(pt, parseFree(paramSet$AL, group=group, pt=pt,op="~1",lhs,rhs,smart=smart),FUN=c,SIMPLIFY=FALSE)
   }    
 
   ## TY - indicator intercept
@@ -274,13 +276,68 @@ buildPT <- function(paramSet, pt=NULL, group=1,facLab=NULL, indLab=NULL) {
        lhs <- indLab
        rhs <- rep("",times=ni)
      }
-    pt <- mapply(pt, parseFree(paramSet$TY, group=group, pt=pt,op="~1",lhs,rhs),FUN=c,SIMPLIFY=FALSE)
+    pt <- mapply(pt, parseFree(paramSet$TY, group=group, pt=pt,op="~1",lhs,rhs,smart=smart),FUN=c,SIMPLIFY=FALSE)
   }
   return(pt)  
 }
 
+# Currently, does not handle auxiliary variables
+## nullpt <- function(paramSet, ngroups=1, facLab = NULL, indLab=NULL, aux=NULL) {
+
+##   ni <- NULL # number of variables in data set
+##   if(!is.null(paramSet$LY)) { # SEM or CFA
+##     ni <- nrow(paramSet$LY@free)
+##     if(is.null(indLab)) {
+##       lhs <- rep(c(paste0("x",rep(1:ni,ni:1)),paste0("x",rep(1:ni))),ngroups)
+##       rhs <- rep(c(paste0("x",unlist(lapply(1:ni,function(k) (1:ni)[k:ni]))),rep("",ni)),ngroups)
+##     } else {
+##       lhs <- rep(c(rep(indLab,ni:1),indLab),ngroups)
+##       rhs <- rep(c(unlist(lapply(1:ni,function(k) indLab[k:ni])),rep("",ni)),ngroups)
+##     }
+##   } else { # Path
+##     if(!is.null(paramSet$RPS)) {
+##       ni <- nrow(paramSet$RPS@free)
+##     } else {
+##       ni <- nrow(paramSet$PS@free)
+##     }
+##     if(is.null(facLab)) {
+##       lhs <- rep(c(paste0("y",rep(1:ni,ni:1)),paste0("y",rep(1:ni))),ngroups)
+##       rhs <- rep(c(paste0("y",unlist(lapply(1:ni,function(k) (1:ni)[k:ni]))),rep("",ni)),ngroups)
+##     } else {
+##       lhs <- rep(c(rep(indLab,ni:1),facLab),ngroups)
+##       rhs <- rep(c(unlist(lapply(1:ni,function(k) facLab[k:ni])),rep("",ni)),ngroups)
+##     }
+##   }
+  
+##   numEl <- (ni*(ni+1)/2)
+##   id <- 1:((numEl+ni)*ngroups)
+##   op <- rep(c(rep("~~",numEl),rep("~1",ni)),ngroups)
+##   user <- exo <- eq.id <- rep(0,length(id))
+##   label <- rep("",length(id))
+
+##   tempMat <- matrix(0,ni,ni)
+##   diag(tempMat) <- NA
+##   ustart <- rep(c(as.vector(tempMat[lower.tri(tempMat,diag=TRUE)]),rep(NA,ni)),ngroups)
+  
+##   for(i in seq_len(ngroups)) {
+##     if(i == 1) {      
+##       diag(tempMat) <- 1:ni
+##       free <- unco <- c(as.vector(tempMat[lower.tri(tempMat,diag=TRUE)]),(ni+1):(2*ni))
+##     } else {
+##       start <- max(free)
+##       diag(tempMat) <- (start+1):(start+ni)
+##       last <- max(tempMat)
+##       free <- unco <- c(free,as.vector(tempMat[lower.tri(tempMat,diag=TRUE)]),(last+1):(last+ni))
+##     }
+##   }
+##   group <- rep(1:ngroups,each=(numEl+ni))
+  
+##   return(list(id=id,lhs=as.character(lhs),op=as.character(op),rhs=as.character(rhs),user=user,group=as.integer(group),
+##               free=as.integer(free),ustart=ustart,exo=exo,eq.id=eq.id,label=as.character(label),unco=as.integer(unco)))
+## }
+
 ## Returns a pt (list) of parsed SimMatrix/SimVector
-parseFree <- function(simDat,group,pt,op,lhs=NULL,rhs=NULL) {
+parseFree <- function(simDat,group,pt,op,lhs=NULL,rhs=NULL,smart=TRUE) {
   ## Calculate starting indices from previous pt
   if(!is.null(pt)) {
     startId <- max(pt$id)+1
@@ -308,7 +365,7 @@ parseFree <- function(simDat,group,pt,op,lhs=NULL,rhs=NULL) {
   user <- rep(0,numElem)
   group <- rep(group,numElem)
   free <- freeIdx(freeDat,start=startFree)   
-  ustart <- startingVal(freeDat,simDat@popParam)
+  ustart <- startingVal(freeDat,simDat@popParam,smart=smart)
   exo <- rep(0,length(id))
   eq.id <- eqIdx(freeDat,id)
   label <- names(eq.id)
@@ -420,13 +477,13 @@ eqIdx <- function(mat,id) {
 }
 
 ## Calculate starting values. Needs work, but no time to finish yet.
-startingVal <- function(free,popParam) {
+startingVal <- function(free,popParam,smart=TRUE) {
   if(is.matrix(free) && isSymmetric(free)) {
     flat <- as.vector(free[lower.tri(free,diag=TRUE)])
     flat[is.label(flat)] <- NA
     flat <- as.numeric(flat)
     
-    if(all(!is.nan(popParam))) { # Check if popParam was specified
+    if(all(!is.nan(popParam)) && smart) { # Check if popParam was specified
       flatPop <- as.vector(popParam[lower.tri(popParam,diag=TRUE)])
       suppressWarnings(flatPop <- as.numeric(flatPop))
       flat[is.na(flat)] <- flatPop[is.na(flat)]
@@ -436,7 +493,7 @@ startingVal <- function(free,popParam) {
     flat[is.label(flat)] <- NA
     flat <- as.numeric(flat)
     
-    if(all(!is.nan(popParam))) { # Check if popParam was specified
+    if(all(!is.nan(popParam)) && smart) { # Check if popParam was specified
       flatPop <- as.vector(popParam)
       suppressWarnings(flatPop <- as.numeric(flatPop))
       flat[is.na(flat)] <- flatPop[is.na(flat)]
