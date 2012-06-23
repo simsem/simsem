@@ -2138,7 +2138,7 @@ output.B.A <- runFit(model.B, PoliticalDemocracy, 10, misspec=misspec, analyzeMo
 output.B.B <- runFit(model.B, PoliticalDemocracy, 10, misspec=misspec)
 pValueNonNested(out.A, out.B, output.A.A, output.A.B, output.B.A, output.B.B)
 
-###################################### Double bootstrap, Bollen-Stine boot, double bollen-stine boot
+###################################### Double bootstrap, Bollen-Stine boot, double bollen-stine boot, residual bootstrap
 
 
 library(simsem)

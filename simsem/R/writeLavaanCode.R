@@ -65,12 +65,12 @@ writeLavaanCode <- function(object, constraint, aux = NULL) {
     if (!isNullObject(object@PS)) {
         var.code <- NULL
         for (i in 1:length(diag(object@PS))) {
-            if (!is.na(object@PS[i, i]) | !is.na(constraint@PS[i, i])) {
+            #if (!is.na(object@PS[i, i]) | !is.na(constraint@PS[i, i])) {
                 content <- paste(object@PS[i, i], "*", sep = "")
                 if (!is.na(constraint@PS[i, i])) 
                   content <- constraint@PS[i, i]
                 var.code <- paste(var.code, colnames(object@PS)[i], " ~~ ", content, colnames(object@PS)[i], " \n", sep = "")
-            }
+            #}
         }
         cov.code <- NULL
         if (nrow(object@PS) > 1) {
@@ -84,9 +84,9 @@ writeLavaanCode <- function(object, constraint, aux = NULL) {
                       cov.code <- paste(cov.code, rownames(object@PS)[i], " ~~ ", content, colnames(object@PS)[j], " \n", sep = "")
                     } else {
                       exo.set <- findRecursiveSet(object@BE)[[1]]
-                      if (!(is.element(i, exo.set) & is.element(j, exo.set))) {
+                      #if (!(is.element(i, exo.set) & is.element(j, exo.set))) {
                         cov.code <- paste(cov.code, rownames(object@PS)[i], " ~~ ", content, colnames(object@PS)[j], " \n", sep = "")
-                      }
+                      #}
                     }
                   } else {
                     content <- paste(object@PS[i, j], "*", sep = "")
@@ -95,7 +95,11 @@ writeLavaanCode <- function(object, constraint, aux = NULL) {
                     } else {
                       auxFac <- which(apply(object@BE, 1, function(x) all(!is.na(x) & (x == 0))) & apply(object@BE, 2, function(x) all(!is.na(x) & 
                         (x == 0))))
-                      if (is.element(i, auxFac) | is.element(j, auxFac)) {
+					  sets <- findRecursiveSet(object@BE)
+					  overlapSet <- which(sapply(sets, is.element, el = i) & sapply(sets, is.element, el = j))
+					  if (length(overlapSet) > 0) {
+                        cov.code <- paste(cov.code, rownames(object@PS)[i], " ~~ ", content, colnames(object@PS)[j], " \n", sep = "")				  
+					  } else if (is.element(i, auxFac) | is.element(j, auxFac)) {
                         cov.code <- paste(cov.code, rownames(object@PS)[i], " ~~ 0*", colnames(object@PS)[j], " \n", sep = "")
                       }
                     }

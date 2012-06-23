@@ -29,7 +29,7 @@ lavaan is BETA software! Please report any bugs.
 Loading required package: MASS
  
 ###############################################################################################
-This is simsem 0.2-6
+This is simsem 0.2-7
 simsem is BETA software! Please report any bugs.
 simsem was developed at the University of Kansas Center for Research Methods and Data Analysis.
 ###############################################################################################
@@ -1002,7 +1002,7 @@ Known Subclasses: "NullSimFunction"
 > # Real simulation will need more than just 10 replications
 > Output <- simResult(10, Data.Mis, Model, objFunction=fun)
 Error in solve.default(E) : 
-  system is computationally singular: reciprocal condition number = 3.63803e-24
+  system is computationally singular: reciprocal condition number = 3.84562e-24
 Warning in estimateVCOV(lavaanModel, samplestats = lavaanSampleStats, options = lavaanOptions,  :
   lavaan WARNING: could not compute standard errors!
 
@@ -18066,6 +18066,34 @@ Warning in estimateVCOV(lavaanModel, samplestats = lavaanSampleStats, options = 
 > likRatioFit(out.A, out.B, output.A.A, output.A.B, output.B.A, output.B.B)
 KernSmooth 2.23 loaded
 Copyright M. P. Wand 1997-2009
+Warning in if (is.na(hist)) { :
+  the condition has length > 1 and only the first element will be used
+Warning in if (is.na(hist)) { :
+  the condition has length > 1 and only the first element will be used
+Warning in if (is.na(hist)) { :
+  the condition has length > 1 and only the first element will be used
+Warning in if (is.na(hist)) { :
+  the condition has length > 1 and only the first element will be used
+Warning in if (is.na(hist)) { :
+  the condition has length > 1 and only the first element will be used
+Warning in if (is.na(hist)) { :
+  the condition has length > 1 and only the first element will be used
+Warning in if (is.na(hist)) { :
+  the condition has length > 1 and only the first element will be used
+Warning in if (is.na(hist)) { :
+  the condition has length > 1 and only the first element will be used
+Warning in if (is.na(hist)) { :
+  the condition has length > 1 and only the first element will be used
+Warning in if (is.na(hist)) { :
+  the condition has length > 1 and only the first element will be used
+Warning in if (is.na(hist)) { :
+  the condition has length > 1 and only the first element will be used
+Warning in if (is.na(hist)) { :
+  the condition has length > 1 and only the first element will be used
+Warning in if (is.na(hist)) { :
+  the condition has length > 1 and only the first element will be used
+Warning in if (is.na(hist)) { :
+  the condition has length > 1 and only the first element will be used
       Chi       AIC       BIC     RMSEA       CFI       TLI      SRMR 
 11.202764  2.665082  2.665082  2.470111  2.231091  1.926759 78.484750 
 > 
@@ -21160,7 +21188,7 @@ LY    NA   8      3
 > # Real simulation will need more than just 10 replications
 > Output <- simResult(10, Data.Mis, Model, objFunction=fun)
 Error in solve.default(E) : 
-  system is computationally singular: reciprocal condition number = 3.63803e-24
+  system is computationally singular: reciprocal condition number = 3.84562e-24
 Warning in estimateVCOV(lavaanModel, samplestats = lavaanSampleStats, options = lavaanOptions,  :
   lavaan WARNING: could not compute standard errors!
 
@@ -23308,7 +23336,7 @@ detaching 'package:parallel'
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  215.21 0.67 216.54 NA NA 
+Time elapsed:  202.75 0.73 203.63 NA NA 
 > grDevices::dev.off()
 null device 
           1 

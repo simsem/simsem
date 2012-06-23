@@ -28,27 +28,33 @@ likRatioFit <- function(outMod1, outMod2, dat1Mod1, dat1Mod2, dat2Mod1, dat2Mod2
 }
 
 findphist <- function(value, hist) {
-	x <- hist$x1
-	y <- hist$x2
-	posx <- posy <- NA
-	x <- (x[2:length(x)] + x[1:(length(x)-1)])/2
-	y <- (y[2:length(y)] + y[1:(length(y)-1)])/2
-	testx <- value[1] < x
-	testy <- value[2] < y
-	if(sum(testx) == 0) {
-		posx <- length(x)
+	if(is.na(hist)) {
+		return(NA)
 	} else {
-		posx <- which(testx)[1]
+		x <- hist$x1
+		y <- hist$x2
+		posx <- posy <- NA
+		x <- (x[2:length(x)] + x[1:(length(x)-1)])/2
+		y <- (y[2:length(y)] + y[1:(length(y)-1)])/2
+		testx <- value[1] < x
+		testy <- value[2] < y
+		if(sum(testx) == 0) {
+			posx <- length(x)
+		} else {
+			posx <- which(testx)[1]
+		}
+		if(sum(testy) == 0) {
+			posy <- length(y)
+		} else {
+			posy <- which(testy)[1]
+		}
+		return(hist$fhat[posx, posy])
 	}
-	if(sum(testy) == 0) {
-		posy <- length(y)
-	} else {
-		posy <- which(testy)[1]
-	}
-	return(hist$fhat[posx, posy])
 }
 
 find2Dhist <- function(vec1, vec2) {
 	library(KernSmooth)
-	suppressWarnings(bkde2D(cbind(vec1, vec2), c(dpik(vec1), dpik(vec2))))
+	result <- NA
+	try(result <- suppressWarnings(bkde2D(cbind(vec1, vec2), c(dpik(vec1), dpik(vec2)))), silent=TRUE)
+	return(result)
 }
