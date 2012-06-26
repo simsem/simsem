@@ -24,7 +24,7 @@ generate <- function(model, n, maxDraw=50,misfitBounds=NULL, misfitType="f0",
   data <- cbind(data,group=rep(1:ngroups,each=n))
   
   if(params) {
-    return(list(data=data,psl=psl))
+    return(list(data=data,psl=draws))
   } else {
     return(data)
   }

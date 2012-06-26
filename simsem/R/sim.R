@@ -271,7 +271,7 @@ runRep <- function(simConds, model, miss = NULL, fun=NULL, facDist = NULL, indDi
                 pmMAR <- 0
             miss <- simMissing(pmMCAR = pmMCAR, pmMAR = pmMAR)
         }
-    }
+      }
 
     data <- simConds[[1]] # either a paramSet or raw data
     set.seed(seed)
@@ -282,17 +282,17 @@ runRep <- function(simConds, model, miss = NULL, fun=NULL, facDist = NULL, indDi
       ##                   MoreArgs=list(n=n, sequential=sequential, modelBoot=modelBoot,realData=realData), SIMPLIFY=FALSE)
       ##         data <- do.call("rbind",datal)
       ##         data <- cbind(data,group=rep(1:ngroups,each=n))
-      genout <- generate(model=model, maxDraw=maxDraw, misfitBounds=misfitBounds, misfitType=misfitType, averageNumMisspec=averageNumMisspec,
+      genout <- generate(model=model, n=n, maxDraw=maxDraw, misfitBounds=misfitBounds, misfitType=misfitType, averageNumMisspec=averageNumMisspec,
                        optMisfit=optMisfit, optDraws=optDraws, indDist=indDist, sequential=sequential, facDist=facDist, errorDist=errorDist,
                        indLab=indLab, modelBoot=modelBoot, realData=realData, params=TRUE)
       data <- genout[[1]]
       psl <- genout[[2]] # Indexing: Group -> param/misParam/misOnly -> paramSet (reduced)
       if(!is.null(psl[[1]]$misParam)) {
-        param <- lapply(psl,"[[",2) # Group -> misParam -> paramSet
+        paramSet <- lapply(psl,"[[",2) # Group -> misParam -> paramSet (by group)
       } else {
-        param <- lapply(psl,"[[",1) # Group -> param -> paramSet
+        paramSet <- lapply(psl,"[[",1) # Group -> param -> paramSet (by group)
       }
-    } 
+    }
     # if(class(dataT) == 'SimDataOut') { data.mis <-dataT@data } else { data.mis <- dataT }
     
     if (is.null(miss)) {
@@ -309,59 +309,57 @@ runRep <- function(simConds, model, miss = NULL, fun=NULL, facDist = NULL, indDi
     out <- NULL
     # Impute missing and run results
     if (!is.null(miss) && miss@numImps > 0) {
-        if (silent) {
-          invisible(capture.output(suppressMessages(try(out <- analyze(model, data, simMissing=miss),silent=TRUE))))
-            #invisible(capture.output(suppressMessages(try(temp <- run(simConds = objModel, data = data.mis, simMissing = miss), silent = TRUE))))
-            #invisible(capture.output(suppressMessages(try(temp <- runMI(data.mis,objModel,miss@numImps,miss@impMethod), silent=TRUE))))
-        } else {
-          try(out <- analyze(model, data, simMissing=miss))
-            #try(temp <- run(simConds = objModel, data = data.mis, simMissing = miss), silent = TRUE)
-            # try(temp <- runMI(data.mis,objModel,miss@numImps,miss@impMethod))
-        }
+      if (silent) {
+        invisible(capture.output(suppressMessages(try(out <- analyze(model, data, simMissing=miss),silent=TRUE))))
+                                        #invisible(capture.output(suppressMessages(try(temp <- run(simConds = objModel, data = data.mis, simMissing = miss), silent = TRUE))))
+                                        #invisible(capture.output(suppressMessages(try(temp <- runMI(data.mis,objModel,miss@numImps,miss@impMethod), silent=TRUE))))
+      } else {
+        try(out <- analyze(model, data, simMissing=miss))
+                                        #try(temp <- run(simConds = objModel, data = data.mis, simMissing = miss), silent = TRUE)
+                                        # try(temp <- runMI(data.mis,objModel,miss@numImps,miss@impMethod))
+      }
     } else {
-        if (silent) {
-            invisible(capture.output(suppressMessages(try(out <- anal(model,data),silent=TRUE))))
-            # tryCatch(temp <- run(objModel, data), error=function(e) {print('Error')})
-        } else {
-            try(out <- anal(model,data))
-        }
+      if (silent) {
+        invisible(capture.output(suppressMessages(try(out <- anal(model,data),silent=TRUE))))
+                                        # tryCatch(temp <- run(objModel, data), error=function(e) {print('Error')})
+      } else {
+        try(out <- anal(model,data))
+      }
     }
+  
     
     if (!is.null(out)) {
         try(FitIndices <- extractLavaanFit(out))
         try(coef <- inspect(out,"coef"))
         try(se <- inspect(out,"se"))
-        try(converged <- inspect(fit, "converged"))
+        try(converged <- inspect(out, "converged"))
         try(check <- sum(unlist(lapply(se, sum))))
         try(if(is.na(check) || check==0) {converged <- FALSE},silent=TRUE)
       }
-
-    names <- param[[1]]
-    for(i in 1:length(param)) {
-      mapply(param[[i]],names,FUN=makeLabels,MoreArgs="OpenMx",SIMPLIFY=FALSE)
-    }
     
-        if (converged) {
-            coef <- vectorizeObject(temp@coef, Labels)
-            se <- vectorizeObject(temp@se, Labels)
-            fit <- temp@fit
-            stdSet <- standardize(temp)
-            std <- vectorizeObject(stdSet, Labels)
-            if (is(temp, "SimModelMIOut")) {
-                # Can we make vectorize object work with simModelOutMI too?
-                FMI1 <- vectorizeObject(temp@FMI1, Labels)
-                FMI2 <- vectorizeObject(temp@FMI2, Labels)
-            }
-            if (!is.null(temp@paramValue)) {
-                param <- vectorizeObject(temp@paramValue, Labels)
-            } else {
-                param <- NA
-            }
+    #for(i in seq_along(paramSet)) {     
+      if (converged) {
+        coef <- reduceLavaanParam(coef,paramSet)
+        se <- reduceLavaanParam(se,paramSet)
+        fit <- temp@fit
+        stdSet <- standardize(temp)
+        std <- vectorizeObject(stdSet, Labels)
+        if (is(temp, "SimModelMIOut")) {
+          
+          FMI1 <- vectorizeObject(temp@FMI1, Labels)
+          FMI2 <- vectorizeObject(temp@FMI2, Labels)
         }
-    #} else {
-        if (!is.null(data.mis) && is(data.mis, "SimDataOut")) 
-            param <- NA
-    #}
+        if (!is.null(temp@paramValue)) {
+          param <- vectorizeObject(temp@paramValue, Labels)
+        } else {
+          param <- NA
+        }
+     # }
+      
+      ##} else {
+      if (!is.null(data.mis) && is(data.mis, "SimDataOut")) 
+        param <- NA
+    }
     LabelsDataParam <- makeLabels(createFreeParameters(objData@param), "OpenMx")
     paramData <- vectorizeObject(simConds[[1]]$real, LabelsDataParam)
     Result <- list(coef = coef, se = se, fit = fit, converged = converged, param = param, FMI1 = FMI1, FMI2 = FMI2, std = std, paramData = paramData)
@@ -382,58 +380,173 @@ extractLavaanFit <- function(Output) {
     return(result)
 }
 
-is.random <- function(dat) {
-  dat[is.empty(dat)] <- "0" # Since we are trying to detect characters, we need to assign an arbitrary numeric value to ""
-  isRandom <- sapply(dat, FUN=function(x) {x <- suppressWarnings(is.na(as.numeric(x))) })
-  return(isRandom)
+## Probably not the most efficient.
+reduceLavaanParam <- function(glist,dgen) {
+  # Chunk at a time approach
+  names <- names(glist)
+  final <- NULL
+  if(!is.list(dgen)) { dgen <- list(dgen) }
+
+  if("lambda" %in% names) {
+    idx <- which(names=="lambda")
+    for(i in seq_along(idx)) {
+      free <- is.free(dgen[[i]]$LY@free)
+      param <- glist[idx[i]]$lambda[free]
+      lab <- makeLabels(free,name="LY")
+      names(param) <- lab[!is.na(lab)]
+      final <- c(final,param)
+    }
+  }
+  
+  if("theta" %in% names) {  
+    idx <- which(names=="theta")
+    for(i in seq_along(idx)) {
+      if(!is.null(dgen[[i]]$TE)) {
+        free <- is.free(dgen[[i]]$TE@free)
+      } else {
+        free <- is.free(dgen[[i]]$RTE@free)
+      }
+      param <- glist[idx[i]]$theta[free]
+      lab <- makeLabels(free,name="TE",symmetric=TRUE)
+      names(param) <- lab[!is.na(lab)]
+      final <- c(final,param)
+    }
+  }
+  
+  if("psi" %in% names) {  
+    idx <- which(names=="psi")
+    for(i in seq_along(idx)) {
+      if(!is.null(dgen[[i]]$PS)) {
+        free <- is.free(dgen[[i]]$PS@free)
+      } else {
+        free <- is.free(dgen[[i]]$RPS@free)
+      }
+      param <- glist[idx[i]]$psi[free]
+      lab <- makeLabels(free,name="PS",symmetric=TRUE)
+      names(param) <- lab[!is.na(lab)]
+      final <- c(final,param)
+    }
+  }
+  
+  if("beta" %in% names) {  
+    idx <- which(names=="beta")
+    for(i in seq_along(idx)) {
+      free <- is.free(dgen[[i]]$BE@free)
+      param <- glist[idx[i]]$beta[free]
+      lab <- makeLabels(free,name="BE")
+      names(param) <- lab[!is.na(lab)]
+      final <- c(final,param)
+    }
+  }
+
+  if("alpha" %in% names) {  
+    idx <- which(names=="alpha")
+    for(i in seq_along(idx)) {
+      free <- is.free(dgen[[i]]$AL@free)
+      param <- glist[idx[i]]$alpha[free]
+      lab <- makeLabels(free,name="AL")
+      names(param) <- lab[!is.na(lab)]
+      final <- c(final,param)
+    }
+  }
+
+   if("nu" %in% names) {  
+    idx <- which(names=="nu")
+    for(i in seq_along(idx)) {
+      free <- is.free(dgen[[i]]$TY@free)
+      param <- glist[idx[i]]$nu[free]
+      lab <- makeLabels(free,name="TY")
+      names(param) <- lab[!is.na(lab)]
+      final <- c(final,param)
+    }
+  }
+
+  return(final)
 }
 
-makeLabels <- function(dat, name, package, symmetric=FALSE) {
+makeLabels <- function(dat, name, symmetric=FALSE) {
 
   if (is.null(dat)) {
     return(NULL)
   } else if(is.vector(dat)) {
     Length <- length(dat)
-    if (package == "OpenMx") {
-      for (i in 1:Length) {
-        ifelse(is.na(dat[i]), dat[i] <- paste(name, i, sep = ""), dat[i] <- NA)
-      }
-      return(dat)
-    } else if (package == "lavaan") {
-      dat[] <- ""
-      return(dat)
+    for (i in 1:Length) {
+      ifelse(dat[i], dat[i] <- paste(name, i, sep = ""), dat[i] <- NA)
     }
+    return(dat)
+    
   } else if(is.matrix(dat)) {
     np <- nrow(dat)
     nq <- ncol(dat)
-    if (package == "OpenMx") {
-      if (symmetric) {
-        for (i in 1:np) {
-          for (j in 1:i) {
-            if (is.na(dat[i, j])) {
-              dat[i, j] <- paste(name, i, "_", j, sep = "")
-            } else {
-              dat[i, j] <- NA
-            }
-            if (i != j) 
-              dat[j, i] <- dat[i, j]
+    
+    if (symmetric) {
+      for (i in 1:np) {
+        for (j in 1:i) {
+          if (dat[i, j]) {
+            dat[i, j] <- paste(name, i, "_", j, sep = "")
+          } else {
+            dat[i, j] <- NA
           }
+          if (i != j) 
+            dat[j, i] <- dat[i, j]
         }
-      } else {
-        for (i in 1:np) {
-          for (j in 1:nq) {
-            if (is.na(dat[i, j])) {
-              dat[i, j] <- paste(name, i, "_", j, sep = "")
-            } else {
-              dat[i, j] <- NA
-            }
+      }
+    } else {
+      for (i in 1:np) {
+        for (j in 1:nq) {
+          if (dat[i, j]) {
+            dat[i, j] <- paste(name, i, "_", j, sep = "")
+          } else {
+            dat[i, j] <- NA
           }
         }
       }
-    } else if (package == "lavaan") {
-      dat[, ] <- ""
     }
-    return(dat)
   }
-  
+  return(dat)
+}
+
+standardize <- function() {
+    type <- object@modelType
+    sdIndicator <- sqrt(diag(diag(createImpliedMACS(object)$CM)))
+    sdLatent <- NULL
+    if (object@modelType == "CFA") {
+        sdLatent <- sqrt(diag(diag(object@PS)))
+    } else {
+        M <- object
+        if (M@modelType == "SEM") 
+            M@modelType <- "Path"
+        if (M@modelType == "SEM.exo") 
+            M@modelType <- "Path.exo"
+        sdLatent <- sqrt(diag(diag(createImpliedMACS(M)$CM)))
+    }
+    result <- new("SimRSet", modelType = type)
+    
+    if (type == "CFA") {
+        result@TY <- solve(sdIndicator) %*% object@TY
+        result@LY <- solve(sdIndicator) %*% object@LY %*% sdLatent
+        result@TE <- solve(sdIndicator) %*% object@TE %*% solve(sdIndicator)
+        result@AL <- solve(sdLatent) %*% object@AL
+        result@PS <- solve(sdLatent) %*% object@PS %*% solve(sdLatent)
+    } else if (type == "Path") {
+        result@AL <- solve(sdIndicator) %*% object@AL
+        result@PS <- solve(sdIndicator) %*% object@PS %*% solve(sdIndicator)
+        result@BE <- solve(sdIndicator) %*% object@BE %*% sdIndicator
+    } else if (type == "SEM") {
+        result@AL <- solve(sdLatent) %*% object@AL
+        result@PS <- solve(sdLatent) %*% object@PS %*% solve(sdLatent)
+        result@BE <- solve(sdLatent) %*% object@BE %*% sdLatent
+        result@TY <- solve(sdIndicator) %*% object@TY
+        result@LY <- solve(sdIndicator) %*% object@LY %*% sdLatent
+        result@TE <- solve(sdIndicator) %*% object@TE %*% solve(sdIndicator)
+    } else {
+        stop("The coefficient matrix does not have correct model type")
+    }
+    return(result)
+}
+
+is.random <- function(dat) {
+  dat[is.empty(dat)] <- "0" # Since we are trying to detect characters, we need to assign an arbitrary numeric value to ""
+  isRandom <- sapply(dat, FUN=function(x) {x <- suppressWarnings(is.na(as.numeric(x))) })
+  return(isRandom)
 }
