@@ -342,8 +342,8 @@ runRep <- function(simConds, model, miss = NULL, fun=NULL, facDist = NULL, indDi
         coef <- reduceLavaanParam(coef,paramSet)
         se <- reduceLavaanParam(se,paramSet)
         fit <- temp@fit
-        stdSet <- standardize(temp)
-        std <- vectorizeObject(stdSet, Labels)
+        stdSet <- standardize(out) 
+        std <- reduceLavaanParam(stdSet, paramSet)
         if (is(temp, "SimModelMIOut")) {
           
           FMI1 <- vectorizeObject(temp@FMI1, Labels)
@@ -380,7 +380,7 @@ extractLavaanFit <- function(Output) {
     return(result)
 }
 
-## Probably not the most efficient.
+## GLIST -> Re-labeled Params
 reduceLavaanParam <- function(glist,dgen) {
   # Chunk at a time approach
   names <- names(glist)
@@ -506,47 +506,33 @@ makeLabels <- function(dat, name, symmetric=FALSE) {
   return(dat)
 }
 
-standardize <- function() {
-    type <- object@modelType
-    sdIndicator <- sqrt(diag(diag(createImpliedMACS(object)$CM)))
-    sdLatent <- NULL
-    if (object@modelType == "CFA") {
-        sdLatent <- sqrt(diag(diag(object@PS)))
-    } else {
-        M <- object
-        if (M@modelType == "SEM") 
-            M@modelType <- "Path"
-        if (M@modelType == "SEM.exo") 
-            M@modelType <- "Path.exo"
-        sdLatent <- sqrt(diag(diag(createImpliedMACS(M)$CM)))
-    }
-    result <- new("SimRSet", modelType = type)
-    
-    if (type == "CFA") {
-        result@TY <- solve(sdIndicator) %*% object@TY
-        result@LY <- solve(sdIndicator) %*% object@LY %*% sdLatent
-        result@TE <- solve(sdIndicator) %*% object@TE %*% solve(sdIndicator)
-        result@AL <- solve(sdLatent) %*% object@AL
-        result@PS <- solve(sdLatent) %*% object@PS %*% solve(sdLatent)
-    } else if (type == "Path") {
-        result@AL <- solve(sdIndicator) %*% object@AL
-        result@PS <- solve(sdIndicator) %*% object@PS %*% solve(sdIndicator)
-        result@BE <- solve(sdIndicator) %*% object@BE %*% sdIndicator
-    } else if (type == "SEM") {
-        result@AL <- solve(sdLatent) %*% object@AL
-        result@PS <- solve(sdLatent) %*% object@PS %*% solve(sdLatent)
-        result@BE <- solve(sdLatent) %*% object@BE %*% sdLatent
-        result@TY <- solve(sdIndicator) %*% object@TY
-        result@LY <- solve(sdIndicator) %*% object@LY %*% sdLatent
-        result@TE <- solve(sdIndicator) %*% object@TE %*% solve(sdIndicator)
-    } else {
-        stop("The coefficient matrix does not have correct model type")
-    }
-    return(result)
-}
-
 is.random <- function(dat) {
   dat[is.empty(dat)] <- "0" # Since we are trying to detect characters, we need to assign an arbitrary numeric value to ""
   isRandom <- sapply(dat, FUN=function(x) {x <- suppressWarnings(is.na(as.numeric(x))) })
   return(isRandom)
 }
+
+## Lavaan -> GLIST (std)
+## taken shamelessly from param.value in lavaan.
+standardize <- function(object) {
+
+    GLIST <- object@Model@GLIST
+    est.std <- standardizedSolution(object)$est.std
+
+    for(mm in 1:length(GLIST)) {
+        # labels
+        dimnames(GLIST[[mm]]) <- object@Model@dimNames[[mm]]
+
+        # fill in starting values
+        m.user.idx <- object@Model@m.user.idx[[mm]]
+        x.user.idx <- object@Model@x.user.idx[[mm]]
+        GLIST[[mm]][m.user.idx] <- est.std[x.user.idx]
+
+        # class
+        class(GLIST[[mm]]) <- c("matrix")
+
+
+      }
+    GLIST
+  }
+
