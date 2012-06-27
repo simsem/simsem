@@ -14,7 +14,7 @@
       model@dgen <- generate@dgen
     }
 
-    ## 2. Compute factorial combinations of simulation parameters (MAR, MCAR, n)
+    ## 2. Compute combinations of simulation parameters (MAR, MCAR, n): complete factorial
     set.seed(seed)
     warnT <- as.numeric(options("warn"))
     if (silent) 
@@ -254,8 +254,6 @@
 
 # runRep: Run one replication
 
-## runRep <- function(simConds, , objModel, objMissing = new("NullSimMissing"), objFunction = new("NullSimFunction"), silent = FALSE) {
-## }
 runRep <- function(simConds, model, miss = NULL, fun=NULL, facDist = NULL, indDist = NULL, errorDist = NULL, sequential = FALSE, realData=NULL, silent = FALSE,
                    modelBoot = FALSE, maxDraw = 50, misfitType = "f0", misfitBounds = NULL, averageNumMisspec = NULL, optMisfit=NULL, optDraws = 50) {
     param <- NULL
@@ -357,8 +355,10 @@ runRep <- function(simConds, model, miss = NULL, fun=NULL, facDist = NULL, indDi
       if(!is.null(paramSet)) {
         popParam <- reduceParamSet(paramSet,dgen)
       } else {
-        popParam <- NA
+        popParam <- NA # Real Data
       }
+    } else {
+      popParam <- NA # Fail to converge
     }
     ##  if (is(temp, "SimModelMIOut")) {
     
@@ -390,6 +390,7 @@ extractLavaanFit <- function(Output) {
 
 ## paramSet -> Re-labeled population parameter values (for free parameters)
 reduceParamSet <- function(paramSet,dgen) {
+  if(!is.list(dgen[[1]])) { dgen <- list(dgen) }
   final <- NULL
   for(g in seq_along(paramSet)) {
     tpset <- paramSet[[g]]
@@ -398,19 +399,20 @@ reduceParamSet <- function(paramSet,dgen) {
         tmat <- tpset[[i]]
         name <- names(tpset)[[i]]
         idx <- which(names(dgen[[g]])==name)
-
         if(is.null(dgen[[g]][[idx]])) {
           idx <- which(names(dgen[[g]])==paste0("R",name))
-        }       
-        free <- is.free(dgen[[g]][[idx]]@free)
-        param <- tmat[free]
-        if(name == "PS" || name == "TE" ) {
-          lab <- makeLabels(free,name=name,symmetric=TRUE)
-        } else {
-          lab <- makeLabels(free,name=name)
         }
-        names(param) <- lab[!is.na(lab)]
-        final <- c(final,param)
+        if(length(idx) != 0) {
+          free <- is.free(dgen[[g]][[idx]]@free)
+          param <- tmat[free]
+          if(name == "PS" || name == "TE" ) {
+            lab <- makeLabels(free,name=name,symmetric=TRUE)
+          } else {
+            lab <- makeLabels(free,name=name)
+          }
+          names(param) <- lab[!is.na(lab)]
+          final <- c(final,param)
+        }
       }
     }
   }
@@ -478,7 +480,7 @@ reduceLavaanParam <- function(glist,dgen) {
     }
   }
 
-  if("alpha" %in% names) {  
+  if("alpha" %in% names && !is.null(dgen[[i]]$AL)) {  
     idx <- which(names=="alpha")
     for(i in seq_along(idx)) {
       free <- is.free(dgen[[i]]$AL@free)

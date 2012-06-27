@@ -7,11 +7,11 @@ clean <- function(object) {
     object@se <- object@se[converged, ]
     object@fit <- object@fit[converged, ]
     object@converged <- rep(TRUE, object@nRep)
-    if (!isNullObject(object@paramValue) && (nrow(object@paramValue) > 1)) 
+    if (!is.null(object@paramValue) && (nrow(object@paramValue) > 1)) 
         object@paramValue <- object@paramValue[converged, ]
-    if (!isNullObject(object@FMI1)) 
+    if (!is.null(object@FMI1)) 
         object@FMI1 <- object@FMI1[converged, ]
-    if (!isNullObject(object@FMI2)) 
+    if (!is.null(object@FMI2)) 
         object@FMI2 <- object@FMI2[converged, ]
     object@stdCoef <- object@stdCoef[converged, ]
     object@seed <- object@seed

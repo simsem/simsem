@@ -15,7 +15,7 @@ setMethod("summaryParam", signature(object = "SimResult"), definition = function
     result <- cbind(coef, real.se, estimated.se, pow, stdCoef, stdRealSE)
     
     colnames(result) <- c("Estimate Average", "Estimate SD", "Average SE", "Power (Not equal 0)", "Std Est", "Std Est SD")
-    if (!isNullObject(object@paramValue) && (ncol(object@coef) == ncol(object@paramValue)) && all(colnames(object@coef) == colnames(object@paramValue))) {
+    if (!is.null(object@paramValue) && (ncol(object@coef) == ncol(object@paramValue)) && all(colnames(object@coef) == colnames(object@paramValue))) {
         nRep <- nrow(object@coef)
         nParam <- ncol(object@coef)
         paramValue <- object@paramValue
@@ -56,7 +56,7 @@ setMethod("summaryParam", signature(object = "SimResult"), definition = function
             result <- data.frame(result, result3)
         }
     }
-    if (!isNullObject(object@FMI1) & !isNullObject(object@FMI2)) {
+    if (length(object@FMI1) != 0 & length(object@FMI2) != 0) {
         nRep <- nrow(object@coef)
         nFMI1 <- ncol(object@FMI1)
         FMI1 <- object@FMI1
@@ -88,53 +88,53 @@ setMethod("summaryParam", signature(object = "SimResult"), definition = function
     return(as.data.frame(result))
 })
 
-setMethod("summaryParam", signature(object = "SimModelOut"), definition = function(object, alpha = 0.05) {
-    lab <- makeLabels(object@param, "OpenMx")
-    coef <- vectorizeObject(object@coef, lab)
-    se <- vectorizeObject(object@se, lab)
-    se[se == 0] <- NA
-    z <- coef/se
-    p <- (1 - pnorm(abs(z))) * 2
-    stdSet <- standardize(object)
-    std <- vectorizeObject(stdSet, lab)
-    result <- cbind(coef, se, z, p, std)
-    colnames(result) <- c("Estimate", "SE", "z", "p", "Std Est")
-    if (!isNullObject(object@paramValue)) {
-        paramValue <- vectorizeObject(object@paramValue, lab)
-        biasParam <- vectorizeObject(subtractObject(object@coef, object@paramValue), lab)
-        crit <- qnorm(1 - alpha/2)
-        lowerBound <- coef - crit * se
-        upperBound <- coef + crit * se
-        cover <- (paramValue > lowerBound) & (paramValue < upperBound)
-        result <- data.frame(result, Param = paramValue, Bias = biasParam, Coverage = cover)
-    }
-    return(as.data.frame(result))
-})
+## setMethod("summaryParam", signature(object = "SimModelOut"), definition = function(object, alpha = 0.05) {
+##     lab <- makeLabels(object@param, "OpenMx")
+##     coef <- vectorizeObject(object@coef, lab)
+##     se <- vectorizeObject(object@se, lab)
+##     se[se == 0] <- NA
+##     z <- coef/se
+##     p <- (1 - pnorm(abs(z))) * 2
+##     stdSet <- standardize(object)
+##     std <- vectorizeObject(stdSet, lab)
+##     result <- cbind(coef, se, z, p, std)
+##     colnames(result) <- c("Estimate", "SE", "z", "p", "Std Est")
+##     if (!is.null(object@paramValue)) {
+##         paramValue <- vectorizeObject(object@paramValue, lab)
+##         biasParam <- vectorizeObject(subtractObject(object@coef, object@paramValue), lab)
+##         crit <- qnorm(1 - alpha/2)
+##         lowerBound <- coef - crit * se
+##         upperBound <- coef + crit * se
+##         cover <- (paramValue > lowerBound) & (paramValue < upperBound)
+##         result <- data.frame(result, Param = paramValue, Bias = biasParam, Coverage = cover)
+##     }
+##     return(as.data.frame(result))
+## })
 
-setMethod("summaryParam", signature(object = "SimModelMIOut"), definition = function(object, alpha = 0.05) {
-    lab <- makeLabels(object@param, "OpenMx")
-    coef <- vectorizeObject(object@coef, lab)
-    se <- vectorizeObject(object@se, lab)
-    stdSet <- standardize(object)
-    std <- vectorizeObject(stdSet, lab)
-    FMI1 <- vectorizeObject(object@FMI1, lab)
-    FMI2 <- vectorizeObject(object@FMI2, lab)
-    se[se == 0] <- NA
-    z <- coef/se
-    p <- (1 - pnorm(abs(z))) * 2
-    result <- cbind(coef, se, z, p, std, FMI1, FMI2)
-    colnames(result) <- c("Estimate", "SE", "z", "p", "Std Est", "FMI1", "FMI2")
-    if (!isNullObject(object@paramValue)) {
-        paramValue <- vectorizeObject(object@paramValue, lab)
-        biasParam <- vectorizeObject(subtractObject(object@coef, object@paramValue), lab)
-        crit <- qnorm(1 - alpha/2)
-        lowerBound <- coef - crit * se
-        upperBound <- coef + crit * se
-        cover <- (paramValue > lowerBound) & (paramValue < upperBound)
-        result <- data.frame(result, Param = paramValue, Bias = biasParam, Coverage = cover)
-    }
-    return(as.data.frame(result))
-})
+## setMethod("summaryParam", signature(object = "SimModelMIOut"), definition = function(object, alpha = 0.05) {
+##     lab <- makeLabels(object@param, "OpenMx")
+##     coef <- vectorizeObject(object@coef, lab)
+##     se <- vectorizeObject(object@se, lab)
+##     stdSet <- standardize(object)
+##     std <- vectorizeObject(stdSet, lab)
+##     FMI1 <- vectorizeObject(object@FMI1, lab)
+##     FMI2 <- vectorizeObject(object@FMI2, lab)
+##     se[se == 0] <- NA
+##     z <- coef/se
+##     p <- (1 - pnorm(abs(z))) * 2
+##     result <- cbind(coef, se, z, p, std, FMI1, FMI2)
+##     colnames(result) <- c("Estimate", "SE", "z", "p", "Std Est", "FMI1", "FMI2")
+##     if (!is.null(object@paramValue)) {
+##         paramValue <- vectorizeObject(object@paramValue, lab)
+##         biasParam <- vectorizeObject(subtractObject(object@coef, object@paramValue), lab)
+##         crit <- qnorm(1 - alpha/2)
+##         lowerBound <- coef - crit * se
+##         upperBound <- coef + crit * se
+##         cover <- (paramValue > lowerBound) & (paramValue < upperBound)
+##         result <- data.frame(result, Param = paramValue, Bias = biasParam, Coverage = cover)
+##     }
+##     return(as.data.frame(result))
+## })
 
 setMethod("summaryParam", signature(object = "SimResultParam"), definition = function(object) {
     average <- colMeans(object@param, na.rm = TRUE)

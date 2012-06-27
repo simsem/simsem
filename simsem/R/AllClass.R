@@ -208,5 +208,5 @@ setClass("SimResultParam",
                         misspec = "data.frame",
                         fit = "data.frame",
                         seed = "numeric")
-         )
+          )
 ## setClass("SimGenLabels", contains = "MatrixSet") 
