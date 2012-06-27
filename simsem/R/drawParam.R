@@ -7,14 +7,14 @@
 ## [[3]] $mis - Misspecification only
 
 
-draw <- function(model, maxDraw=50, misfitBounds=NULL, averageNumMisspec=FALSE, optMisfit = NULL, optDraws=20, misfitType="f0",misfitOut=FALSE) {
+draw <- function(model, maxDraw=50, misfitBounds=NULL, averageNumMisspec=FALSE, optMisfit = NULL, optDraws=50, misfitType="f0",misfitOut=FALSE) {
   stopifnot(class(model) == "SimSem")
   drawParam(model@dgen, maxDraw = maxDraw, numFree=max(model@pt$free), misfitBounds=misfitBounds, averageNumMisspec=averageNumMisspec,
             optMisfit=optMisfit, optDraws=optDraws, misfitType=misfitType, misfitOut=misfitOut)
 }
   
 
-drawParam <- function(paramSet, maxDraw=50, numFree, misfitBounds=NULL, averageNumMisspec=FALSE, optMisfit = NULL, optDraws=20, misfitType="f0",misfitOut=FALSE) {
+drawParam <- function(paramSet, maxDraw=50, numFree, misfitBounds=NULL, averageNumMisspec=FALSE, optMisfit = NULL, optDraws=50, misfitType="f0",misfitOut=FALSE) {
   if(!is.list(paramSet[[1]])) {
     paramSet <- list(paramSet)
   }
@@ -436,7 +436,7 @@ createImpliedMACS <- function(reducedParamSet) {
     return(list(M = as.vector(implied.mean), CM = implied.covariance))
 }
 
-    ## Doesn't really do anything? just finds the mean and covariance matrices from param and misspec. Weird.
+    ## Doesn't really do anything? just finds the mean and covariance matrices from param and misspec.
 ## popMisfit <- function(param, misspec, dfParam = NULL, fit.measures = "all", mg=FALSE) {
 ##     paramCM <- NULL
 ##     paramM <- NULL
