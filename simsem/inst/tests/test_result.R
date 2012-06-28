@@ -3,6 +3,7 @@
 library(devtools)
 library(simsem)
 
+# Internals
 source("../../R/AllClass.R")
 source("../../R/AllGenerics.R")
 source("../../R/model.R")
@@ -16,6 +17,13 @@ source("../../R/generate.R")
 source("../../R/analyze.R")
 source("../../R/miss.R")
 source("../../R/sim.R")
+
+# Summarization
+source("../../R/summary-methods.R")
+source("../../R/getKeywords.R")
+source("../../R/getCutoff-methods.R")
+source("../../R/clean.R")
+source("../../R/summaryParam-methods.R")
 
 # Sample Simulation - CFA
 
@@ -46,7 +54,7 @@ context("Simple Simulation")
 a <- system.time(
                  Output <- simResult(100, SimData, SimModel))
 b <- system.time(
-                 out <- sim(100,tcfa,200))
+                 out <- sim(10,tcfa,200))
 
 #cat(paste(a[[1]],"\n",sep=""))
 
@@ -121,3 +129,4 @@ BE <- bind(path, path.start)
 
 tsem <- model(LY=LY, RTE=RTE, RPS=RPS, BE=BE, modelType="SEM")
 system.time(out <- sim(100,tsem,300))
+# 45.439

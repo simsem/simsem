@@ -6,7 +6,12 @@ generate <- function(model, n, maxDraw=50,misfitBounds=NULL, misfitType="f0",
                      indDist=NULL, sequential=FALSE,
                      facDist=NULL, errorDist=NULL, indLab=NULL, modelBoot=FALSE, realData=NULL, params=FALSE) {
 
-  indLab <- unique(model@pt$rhs[model@pt$op=="=~"])
+  
+  if(model@modelType == "Path") {
+    indLab <- unique(model@pt$lhs)
+  } else {
+    indLab <- unique(model@pt$rhs[model@pt$op=="=~"])
+  }
   free <- max(model@pt$free)
   ngroups <- max(model@pt$group)
 
@@ -19,7 +24,7 @@ generate <- function(model, n, maxDraw=50,misfitBounds=NULL, misfitType="f0",
   draws <- draw(model, maxDraw=maxDraw, misfitBounds=misfitBounds, misfitType=misfitType,
                 averageNumMisspec=averageNumMisspec, optMisfit=optMisfit, optDraws=optDraws)
   datal <- mapply(FUN=createData,draws,indDist,facDist,errorDist,
-                  MoreArgs=list(n=n, sequential=sequential, modelBoot=modelBoot,realData=realData), SIMPLIFY=FALSE)
+                  MoreArgs=list(n=n, sequential=sequential, modelBoot=modelBoot,realData=realData,indLab=indLab), SIMPLIFY=FALSE)
   data <- do.call("rbind",datal)
   data <- cbind(data,group=rep(1:ngroups,each=n))
   

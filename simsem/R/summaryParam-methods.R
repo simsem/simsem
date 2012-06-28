@@ -16,7 +16,7 @@ setMethod("summaryParam", signature(object = "SimResult"), definition = function
     
     colnames(result) <- c("Estimate Average", "Estimate SD", "Average SE", "Power (Not equal 0)", "Std Est", "Std Est SD")
     if (!is.null(object@paramValue) && (ncol(object@coef) == ncol(object@paramValue)) && all(colnames(object@coef) == colnames(object@paramValue))) {
-        nRep <- nrow(object@coef)
+        nRep <- object@nRep
         nParam <- ncol(object@coef)
         paramValue <- object@paramValue
         if (nrow(object@paramValue) == 1) 

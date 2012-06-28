@@ -222,7 +222,11 @@ buildPT <- function(paramSet, pt=NULL, group=1,facLab=NULL, indLab=NULL, smart=T
       lhs <- rep(indLab,ni:1)
       rhs <- unlist(lapply(1:ni,function(k) indLab[k:ni]))
     }
-    pt <- mapply(pt, parseFree(paramSet$TE, group=group, pt=pt,op="~~",lhs,rhs,smart=smart),FUN=c,SIMPLIFY=FALSE)
+    if(!is.null(pt)) {
+      pt <- mapply(pt, parseFree(paramSet$TE, group=group, pt=pt,op="~~",lhs,rhs,smart=smart),FUN=c,SIMPLIFY=FALSE)
+    } else {
+      pt <- parseFree(paramSet$TE, group=group, pt=pt,op="~~",lhs,rhs,smart=smart)
+    }
   }
   
   ## RTE - Correlation of measurment error: Symmetric

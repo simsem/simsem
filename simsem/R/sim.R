@@ -254,7 +254,7 @@
 
 # runRep: Run one replication
 
-runRep <- function(simConds, model, miss = NULL, fun=NULL, facDist = NULL, indDist = NULL, errorDist = NULL, sequential = FALSE, realData=NULL, silent = FALSE,
+runRep <- function(simConds, model, miss = NULL, fun=NULL, facDist = NULL, indDist = NULL, indLab=NULL, errorDist = NULL, sequential = FALSE, realData=NULL, silent = FALSE,
                    modelBoot = FALSE, maxDraw = 50, misfitType = "f0", misfitBounds = NULL, averageNumMisspec = NULL, optMisfit=NULL, optDraws = 50) {
     param <- NULL
     coef <- NA
@@ -291,6 +291,7 @@ runRep <- function(simConds, model, miss = NULL, fun=NULL, facDist = NULL, indDi
       ##                   MoreArgs=list(n=n, sequential=sequential, modelBoot=modelBoot,realData=realData), SIMPLIFY=FALSE)
       ##         data <- do.call("rbind",datal)
       ##         data <- cbind(data,group=rep(1:ngroups,each=n))
+      if(model@modelType == "Path") { indLab <- unique(model@pt$lhs) }
       genout <- generate(model=model, n=n, maxDraw=maxDraw, misfitBounds=misfitBounds, misfitType=misfitType, averageNumMisspec=averageNumMisspec,
                        optMisfit=optMisfit, optDraws=optDraws, indDist=indDist, sequential=sequential, facDist=facDist, errorDist=errorDist,
                        indLab=indLab, modelBoot=modelBoot, realData=realData, params=TRUE)
@@ -351,15 +352,21 @@ runRep <- function(simConds, model, miss = NULL, fun=NULL, facDist = NULL, indDi
       fit <- extractLavaanFit(out)
       coef <- reduceLavaanParam(inspect(out,"coef"),dgen)
       se <- reduceLavaanParam(se,dgen)
-      std <- reduceLavaanParam(standardize(out), dgen)
-      if(!is.null(paramSet)) {
-        popParam <- reduceParamSet(paramSet,dgen)
-      } else {
-        popParam <- NA # Real Data
-      }
+      std <- reduceLavaanParam(standardize(out), dgen)     
     } else {
-      popParam <- NA # Fail to converge
+      fit <- NA
+      coef <- NA
+      se <- NA
+      std <- NA
     }
+    
+    ## Keep parameters regardless of convergence - may want to examine non-convergent sets
+    if(!is.null(paramSet)) {
+      popParam <- reduceParamSet(paramSet,dgen)
+    } else {
+      popParam <- NA # Real Data
+    }
+    
     ##  if (is(temp, "SimModelMIOut")) {
     
     ##           FMI1 <- vectorizeObject(temp@FMI1, Labels)
@@ -404,11 +411,12 @@ reduceParamSet <- function(paramSet,dgen) {
         }
         if(length(idx) != 0) {
           free <- is.free(dgen[[g]][[idx]]@free)
-          param <- tmat[free]
           if(name == "PS" || name == "TE" ) {
-            lab <- makeLabels(free,name=name,symmetric=TRUE)
+            lab <- makeLabels(free & lower.tri(free),name=name,group=g)
+            param <- tmat[free & lower.tri(free)]
           } else {
-            lab <- makeLabels(free,name=name)
+            lab <- makeLabels(free,name=name,group=g)
+            param <- tmat[free]
           }
           names(param) <- lab[!is.na(lab)]
           final <- c(final,param)
@@ -428,27 +436,27 @@ reduceLavaanParam <- function(glist,dgen) {
   final <- NULL
   if(!is.list(dgen[[1]])) { dgen <- list(dgen) }
 
-  if("lambda" %in% names) {
+  if("lambda" %in% names && !is.null(dgen[[1]]$LY)) {
     idx <- which(names=="lambda")
     for(i in seq_along(idx)) {
       free <- is.free(dgen[[i]]$LY@free)
       param <- glist[idx[i]]$lambda[free]
-      lab <- makeLabels(free,name="LY")
+      lab <- makeLabels(free,name="LY",group=i)
       names(param) <- lab[!is.na(lab)]
       final <- c(final,param)
     }
   }
   
-  if("theta" %in% names) {  
+  if("theta" %in% names && (!is.null(dgen[[1]]$TE) || !is.null(dgen[[1]]$RTE))) {  
     idx <- which(names=="theta")
     for(i in seq_along(idx)) {
       if(!is.null(dgen[[i]]$TE)) {
-        free <- is.free(dgen[[i]]$TE@free)
+        free <- is.free(dgen[[i]]$TE@free) & lower.tri(dgen[[i]]$TE@free)
       } else {
-        free <- is.free(dgen[[i]]$RTE@free)
+        free <- is.free(dgen[[i]]$RTE@free) & lower.tri(dgen[[i]]$RTE@free)
       }
       param <- glist[idx[i]]$theta[free]
-      lab <- makeLabels(free,name="TE",symmetric=TRUE)
+      lab <- makeLabels(free,name="TE",group=i)
       names(param) <- lab[!is.na(lab)]
       final <- c(final,param)
     }
@@ -458,12 +466,12 @@ reduceLavaanParam <- function(glist,dgen) {
     idx <- which(names=="psi")
     for(i in seq_along(idx)) {
       if(!is.null(dgen[[i]]$PS)) {
-        free <- is.free(dgen[[i]]$PS@free)
+        free <- is.free(dgen[[i]]$PS@free) & lower.tri(dgen[[i]]$PS@free) 
       } else {
-        free <- is.free(dgen[[i]]$RPS@free)
+        free <- is.free(dgen[[i]]$RPS@free) & lower.tri(dgen[[i]]$RPS@free) 
       }
-      param <- glist[idx[i]]$psi[free]
-      lab <- makeLabels(free,name="PS",symmetric=TRUE)
+      param <- glist[idx[i]]$psi[free & lower.tri(free)]
+      lab <- makeLabels(free,name="PS",group=i)
       names(param) <- lab[!is.na(lab)]
       final <- c(final,param)
     }
@@ -474,7 +482,7 @@ reduceLavaanParam <- function(glist,dgen) {
     for(i in seq_along(idx)) {
       free <- is.free(dgen[[i]]$BE@free)
       param <- glist[idx[i]]$beta[free]
-      lab <- makeLabels(free,name="BE")
+      lab <- makeLabels(free,name="BE",group=i)
       names(param) <- lab[!is.na(lab)]
       final <- c(final,param)
     }
@@ -485,7 +493,7 @@ reduceLavaanParam <- function(glist,dgen) {
     for(i in seq_along(idx)) {
       free <- is.free(dgen[[i]]$AL@free)
       param <- glist[idx[i]]$alpha[free]
-      lab <- makeLabels(free,name="AL")
+      lab <- makeLabels(free,name="AL",group=i)
       names(param) <- lab[!is.na(lab)]
       final <- c(final,param)
     }
@@ -496,7 +504,7 @@ reduceLavaanParam <- function(glist,dgen) {
     for(i in seq_along(idx)) {
       free <- is.free(dgen[[i]]$TY@free)
       param <- glist[idx[i]]$nu[free]
-      lab <- makeLabels(free,name="TY")
+      lab <- makeLabels(free,name="TY",group=i)
       names(param) <- lab[!is.na(lab)]
       final <- c(final,param)
     }
@@ -505,45 +513,33 @@ reduceLavaanParam <- function(glist,dgen) {
   return(final)
 }
 
-makeLabels <- function(dat, name, symmetric=FALSE) {
+# Takes a logical matrix or vector and labels the TRUE elements As
+# group.nameROW_COL e.g. 1.LY1_1
+makeLabels <- function(dat, name, group=1) {
 
   if (is.null(dat)) {
     return(NULL)
   } else if(is.vector(dat)) {
     Length <- length(dat)
     for (i in 1:Length) {
-      ifelse(dat[i], dat[i] <- paste(name, i, sep = ""), dat[i] <- NA)
+      ifelse(dat[i], dat[i] <- paste0(group, ".",name, i), dat[i] <- NA)
     }
     return(dat)
     
   } else if(is.matrix(dat)) {
     np <- nrow(dat)
     nq <- ncol(dat)
-    
-    if (symmetric) {
-      for (i in 1:np) {
-        for (j in 1:i) {
-          if (dat[i, j]) {
-            dat[i, j] <- paste(name, i, "_", j, sep = "")
-          } else {
-            dat[i, j] <- NA
-          }
-          if (i != j) 
-            dat[j, i] <- dat[i, j]
-        }
-      }
-    } else {
       for (i in 1:np) {
         for (j in 1:nq) {
           if (dat[i, j]) {
-            dat[i, j] <- paste(name, i, "_", j, sep = "")
+            dat[i, j] <- paste0(group, ".",name, i, "_", j)
           } else {
             dat[i, j] <- NA
           }
         }
       }
     }
-  }
+  #}
   return(dat)
 }
 
