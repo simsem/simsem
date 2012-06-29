@@ -1921,10 +1921,7 @@ getPowerFitNested(outDatParentModNested, outDatParentModParent, cutoff=cutoff2, 
 plotPowerFitNested(outDatParentModNested, outDatParentModParent, cutoff=cutoff2)
 plotPowerFitNested(outDatParentModNested, outDatParentModParent, cutoff=cutoff2, useContour=FALSE)
 
-##################################### Add the simResultParam in the Example 4? ################################
-##################################### Time slot in SimResult and SimResultParam ################################
-##################################### Add the nonconvergence paramValue ########################################
-###################################### Example 26 Nested Model by the real data ###################################
+###################################### Example 26 Analyzing Real Data with Nested Model Comparison ###################################
 
 library(simsem)
 library(lavaan)
@@ -1965,88 +1962,131 @@ simNestedParent <- runFit(model=nested, data=Demo.growth, nRep=1000, misspec=lin
 simParentNested <- runFit(model=parent, data=Demo.growth, nRep=1000, analyzeModel=nested)
 simParentParent <- runFit(model=parent, data=Demo.growth, nRep=1000)
 
-getCutoff(simNestedNested, simNestedParent, alpha=0.05)
 pValueNested(outNested, outParent, simNestedNested, simNestedParent)
+getPowerFitNested(simParentNested, simParentParent, nullNested=simNestedNested, nullParent=simNestedParent)
 
-
-
-###################################### Example 27 nonnested model comparison and power ################################# 
+###################################### Example 27 nonnested model comparison ################################# 
 
 library(simsem)
 
-# Kris Preacher Paper
+# Greg Hancock Paper pp.58-59.
 
 # Model 1
 
-path <- matrix(0, 6, 6)
-path[2, 1] <- NA
-path[3, 2] <- NA
-path[4, 3] <- NA
-path[5, 4] <- NA
-path[6, 5] <- NA
-BE <- simMatrix(path, 0.5)
+loading <- matrix(0, 8, 4)
+loading[1:4, 1] <- 1
+loading[1:4, 2] <- 0:3
+loading[5:8, 3] <- 1
+loading[5:8, 4] <- 0:3
+LY <- simMatrix(loading)
 
-RPS <- symMatrix(diag(6))
+RTE <- symMatrix(diag(8))
+VTE <- simVector(rep(NA, 8), 0.5)
+TY <- simVector(rep(0, 8))
 
-model1 <- simSetPath(BE=BE, RPS=RPS)
+AL <- simVector(rep(NA, 4), c(5, 2, 5, 2))
+VPS <- simVector(rep(NA, 4), c(1, 0.25, 1, 0.25))
+facCorA <- diag(4)
+facCorA[1, 3] <- facCorA[3, 1] <- NA
+RPSA <- symMatrix(facCorA, 0.3)
 
-loading <- matrix(NA, 6, 1)
-loading[1, 1] <- 1
-LY <- simMatrix(loading, 1)
+facCorB <- diag(4)
+facCorB[2, 4] <- facCorB[4, 2] <- NA
+RPSB <- symMatrix(facCorB, 0.3)
 
-PS <- symMatrix(as.matrix(NA), 1)
+modelA <- simSetCFA(LY=LY, TY=TY, RTE=RTE, VTE=VTE, AL=AL, VPS=VPS, RPS=RPSA)
+modelB <- simSetCFA(LY=LY, TY=TY, RTE=RTE, VTE=VTE, AL=AL, VPS=VPS, RPS=RPSB)
 
-TE <- symMatrix(diag(NA, 6), diag(0.5, 6))
+dataA <- simData(modelA, 200)
+dataB <- simData(modelB, 200)
 
-model2 <- simSetCFA(LY=LY, PS=PS, TE=TE)
-
-con1 <- matrix(c(2, 1, 3, 1), 2, 2, byrow=TRUE)
-rownames(con1) <- rep("LY", 2)
-con <- simEqualCon(con1, modelType="CFA")
-
-data1 <- simData(model1, 200)
-data2 <- simData(model2, 200, equalCon=con)
-
-analyze1 <- simModel(model1)
-analyze2 <- simModel(model2, equalCon=con)
+analyzeA <- simModel(modelA)
+analyzeB <- simModel(modelB)
 
 
-out11 <- simResult(1000, data1, analyze1)
-out21 <- simResult(1000, data2, analyze1)
-out12 <- simResult(1000, data1, analyze2)
-out22 <- simResult(1000, data2, analyze2)
+outAA <- simResult(1000, dataA, analyzeA)
+outBA <- simResult(1000, dataB, analyzeA)
+outAB <- simResult(1000, dataA, analyzeB)
+outBB <- simResult(1000, dataB, analyzeB)
+
+# anova for nonnested model comparison
+anova(outAA, outAB)
+anova(outBB, outBA)
+
+getCutoffNonNested(outAA, outAB, outBA, outBB)
+getCutoffNonNested(outAA, outAB)
+getCutoffNonNested(outBB, outBA)
+getCutoffNonNested(outAA, outAB, outBA, outBB, onetailed=TRUE)
+plotCutoffNonNested(outAA, outAB, outBA, outBB, alpha=0.05)
+plotCutoffNonNested(outAA, outAB, outBA, outBB, alpha=0.05, onetailed=TRUE)
+
+getPowerFitNonNested(outBA, outBB, dat1Mod1=outAA, dat1Mod2=outAB)
+plotPowerFitNonNested(outBA, outBB, dat1Mod1=outAA, dat1Mod2=outAB)
+plotPowerFitNonNested(outBA, outBB, dat1Mod1=outAA, dat1Mod2=outAB, usedFit="RMSEA")
+
+cutoff <- c(AIC=0, BIC=0)
+cutoff2 <- c(AIC=2, BIC=2)
+getPowerFitNonNested(outBA, outBB, cutoff=cutoff)
+getPowerFitNonNested(outBA, outBB, cutoff=cutoff2)
+plotPowerFitNonNested(outBA, outBB, cutoff=cutoff2)
+plotPowerFitNonNested(outBA, outBB, dat1Mod1=outAA, dat1Mod2=outAB, cutoff=cutoff2)
+
+###################################### Example 28 nonnested model comparison and power continuous N #################################
+
+# Quadratic and unconstrained change
+library(simsem)
+
+loadingA <- matrix(0, 5, 2)
+loadingA[1:5, 1] <- 1
+loadingA[1:5, 2] <- c(0, NA, NA, NA, 4)
+loadingValA <- matrix(0, 5, 2)
+loadingValA[1:5, 2] <- c(0, 2, 3, 3.67, 4)
+LYA <- simMatrix(loadingA, loadingValA)
+
+loadingB <- matrix(0, 5, 3)
+loadingB[1:5, 1] <- 1
+loadingB[1:5, 2] <- 0:4
+loadingB[1:5, 3] <- (0:4)^2
+LYB <- simMatrix(loadingB)
+
+RTE <- symMatrix(diag(5))
+VTE <- simVector(rep(NA, 5), 1.2)
+TY <- simVector(rep(0, 5))
+
+ALA <- simVector(rep(NA, 2), c(5, 2))
+VPSA <- simVector(rep(NA, 2), c(1, 0.25))
+facCorA <- matrix(NA, 2, 2)
+diag(facCorA) <- 1
+RPSA <- symMatrix(facCorA, -0.4)
+
+ALB <- simVector(rep(NA, 3), c(5, 2, -0.15))
+VPSB <- simVector(rep(NA, 3), c(1, 0.25, 0.1))
+facCorB <- matrix(NA, 3, 3)
+diag(facCorB) <- 1
+facCorValB <- diag(3)
+facCorValB[1, 2] <- facCorValB[2, 1] <- -0.4
+facCorValB[1, 3] <- facCorValB[3, 1] <- -0.4
+facCorValB[2, 3] <- facCorValB[3, 2] <- 0.5
+RPSB <- symMatrix(facCorB, facCorValB)
+
+modelA <- simSetCFA(LY=LYA, TY=TY, RTE=RTE, VTE=VTE, AL=ALA, VPS=VPSA, RPS=RPSA)
+modelB <- simSetCFA(LY=LYB, TY=TY, RTE=RTE, VTE=VTE, AL=ALB, VPS=VPSB, RPS=RPSB)
+
+dataA <- simData(modelA, 200)
+dataB <- simData(modelB, 200)
+
+analyzeA <- simModel(modelA)
+analyzeB <- simModel(modelB)
 
 
-dat1 <- run(data1)
-dat2 <- run(data2)
-result11 <- run(analyze1, dat1)
-result12 <- run(analyze2, dat1)
-result21 <- run(analyze1, dat2)
-result22 <- run(analyze2, dat2)
+outAA <- simResult(NULL, dataA, analyzeA, n = 50:500)
+outBA <- simResult(NULL, dataB, analyzeA, n = 50:500)
+outAB <- simResult(NULL, dataA, analyzeB, n = 50:500)
+outBB <- simResult(NULL, dataB, analyzeB, n = 50:500)
 
+###################################### Example 29 nonnested model comparison and power continuous N and pmMCAR ####################
 
-likRatioFit(result11, result12, out11, out12, out21, out22)
-likRatioFit(result21, result22, out11, out12, out21, out22) 
-
-getCutoffNonNested(out11, out12, out21, out22)
-
-getPowerFitNonNested(out21, out22, dat1Mod1=out11, dat1Mod2=out12)
-getPowerFitNonNested(out21, out22, cutoff=c(AIC=0, BIC=0))
-
-
-
-plotCutoffNonNested <- function(dat1Mod1, dat1Mod2, dat2Mod1=NULL, dat2Mod2=NULL, alpha=.05, onetailed=FALSE) {
-	# Maximum only one varying parameter
-	# If two varying parameter is selected, AIC is automatically used.
-}
-
-plotPowerFitNonNested <- function(dat1Mod1, dat1Mod2, dat2Mod1=NULL, dat2Mod2=NULL, alpha=.05, onetailed=FALSE) {
-	# The same function as the plotCutoffNonNested for scatterplot
-	# If logistic regression is used, AIC is automatically used.
-}
-
-
-############## Subexample 2 #####################
+# This example is simple. Should be in N and pmMCAR
 
 path <- matrix(0, 3, 3)
 path[2, 1] <- NA
@@ -2098,10 +2138,7 @@ plotCutoffNonNested(out11, out12, out21, out22, onetailed=TRUE)
 plotPowerFitNonNested(out21, out22, out11, out12)
 
 pValueNonNested(result11, result12, out11, out12, out21, out22)
-	# Compute the power in one and two tailed
 
-###################################### Example 28 nonnested model comparison and power continuous N ################################# 
-###################################### Example 29 nonnested model comparison and power continuous N and pmMCAR ####################
 ###################################### Example 30 Nonnested model by the real data ####################
 
 library(simsem)
@@ -2138,6 +2175,9 @@ output.B.A <- runFit(model.B, PoliticalDemocracy, 10, misspec=misspec, analyzeMo
 output.B.B <- runFit(model.B, PoliticalDemocracy, 10, misspec=misspec)
 pValueNonNested(out.A, out.B, output.A.A, output.A.B, output.B.A, output.B.B)
 
+##################################### Add the simResultParam in the Example 4? ################################
+##################################### Time slot in SimResult and SimResultParam ################################
+##################################### Add the nonconvergence paramValue ########################################
 ###################################### Double bootstrap, Bollen-Stine boot, double bollen-stine boot, residual bootstrap
 
 
