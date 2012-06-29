@@ -7,7 +7,7 @@
                   aux = NULL, 
                   seed = 123321, silent = FALSE, multicore = FALSE, cluster = FALSE, numProc = NULL,  
                   paramOnly = FALSE, dataOnly=FALSE, ...) {
-
+    start.time0 <- start.time <- proc.time()[3]; timing <- list()
     require(parallel)
     RNGkind("L'Ecuyer-CMRG")
     
@@ -51,7 +51,10 @@
         }
       }
     }
-
+    
+    timing$SimulationParams <- (proc.time()[3] - start.time0)
+    start.time <- proc.time()[3]
+    
     ## 3. Draws for randomly varying simulation parameters
     if (!is.null(n)) {
       if (is(n, "VirtualDist")) {
@@ -83,6 +86,9 @@
         stop("The pmMAR argument should be in a vector of numbers or distribution object only.")
       }
     }
+
+    timing$RandomSimParams <- (proc.time()[3] - start.time)
+    start.time <- proc.time()[3]
    
     ## 4. Build list of simulation conditions. Each element of simConds is a replication.
     ##modelType <- model@modelType
@@ -150,7 +156,10 @@
       }
     } else {
       stop("The rawData argument is not a SimData class or a list of data frames.")
-    } 
+    }
+
+    timing$SimConditions <- (proc.time()[3] - start.time)
+    start.time <- proc.time()[3]
     
     ## 5. Run replications
     if (multicore) {
@@ -177,6 +186,13 @@
                          maxDraw = maxDraw, misfitBounds=misfitBounds, averageNumMisspec=averageNumMisspec,
                          optMisfit=optMisfit, optDraws=optDraws, misfitType=misfitType)
     }
+
+    timing.l <- lapply(Result.l, function(x) {x$timing})
+    repTimes <- colSums(matrix(unlist(timing.l),nrow=nRep,byrow=TRUE))
+    names(repTimes) <- names(timing.l[[1]])
+    timing$InReps <- repTimes
+    timing$RunReplications <- (proc.time()[3] - start.time)
+    start.time <- proc.time()[3]
 
     ## 6. Extract results from replication lists
       
@@ -256,8 +272,12 @@
         ifelse(is.null(miss), pmMAR <- 0, pmMAR <- objMissing@pmMAR)
     if (nrow(param) == 1 & ncol(param) == 1 && is.na(param)) 
         param <- paramData
+
+    timing$CombineResults <- (proc.time()[3] - start.time)
+    start.time <- proc.time()[3]
+    
     Result <- new("SimResult", modelType = model@modelType, nRep = nRep, coef = coef, se = se, fit = fit, converged = converged, seed = seed, paramValue = param, FMI1 = data.frame(FMI1), FMI2 = data.frame(FMI2), stdCoef = std, 
-        n = n, pmMCAR = pmMCAR, pmMAR = pmMAR)
+        n = n, pmMCAR = pmMCAR, pmMAR = pmMAR, timing=timing)
     if (silent) 
         options(warn = warnT)
     return <- Result
@@ -266,8 +286,9 @@
 # runRep: Run one replication
 
 runRep <- function(simConds, model, miss = NULL, fun=NULL, facDist = NULL, indDist = NULL, indLab=NULL, errorDist = NULL, sequential = FALSE, realData=NULL, silent = FALSE,
-                   modelBoot = FALSE, maxDraw = 50, misfitType = "f0", misfitBounds = NULL, averageNumMisspec = NULL, optMisfit=NULL, optDraws = 50) {
-    param <- NULL
+                   modelBoot = FALSE, maxDraw = 50, misfitType = "f0", misfitBounds = NULL, averageNumMisspec = NULL, optMisfit=NULL, optDraws = 50, timing=NULL) {
+  start.time0 <- start.time <- proc.time()[3]; timing <- list()
+  param <- NULL
     coef <- NA
     se <- NA
     fit <- NA
@@ -293,7 +314,7 @@ runRep <- function(simConds, model, miss = NULL, fun=NULL, facDist = NULL, indDi
             miss <- simMissing(pmMCAR = pmMCAR, pmMAR = pmMAR)
         }
       }
-
+   
     ## 2. Generate data (data) & store parameter values (paramSet)
     data <- simConds[[1]] # either a paramSet or raw data
     #set.seed(seed)
@@ -316,7 +337,8 @@ runRep <- function(simConds, model, miss = NULL, fun=NULL, facDist = NULL, indDi
         paramSet <- lapply(psl,"[[",1) # Group -> param -> paramSet (by group)
       }
     } # else: do nothing. Raw data.
-
+    timing$GenerateData <- (proc.time()[3] - start.time)
+    start.time <- proc.time()[3]
     ## 3. Impose Missing (if any)
     if (!is.null(miss)) {
         
@@ -324,13 +346,18 @@ runRep <- function(simConds, model, miss = NULL, fun=NULL, facDist = NULL, indDi
                             twoMethod=miss@twoMethod, prAttr=miss@prAttr, timePoints=miss@timePoints, logical=miss@logical, ignoreCols=miss@ignoreCols,
                             threshold=miss@threshold)
     }
-
+    
+    timing$ImposeMissing <- (proc.time()[3] - start.time)
+    start.time <- proc.time()[3]
     ## 4. Call user function (if exists)
     if (!is.null(fun)) {
       data <- fun(data) # args??
       #data.mis <- run(objFunction, data.mis, checkDataOut = TRUE)
     }
-
+    
+    timing$UserFun <- (proc.time()[3] - start.time)
+    start.time <- proc.time()[3]
+    
     ## 5. Call lavaan using simsem template and generated data from 2.
     out <- NULL
     # Impute missing and run results
@@ -352,7 +379,10 @@ runRep <- function(simConds, model, miss = NULL, fun=NULL, facDist = NULL, indDi
         try(out <- anal(model,data))
       }
     }
-  
+
+    timing$Analyze <- (proc.time()[3] - start.time)
+    start.time <- proc.time()[3]
+    
     ## 6. Parse Lavaan Output
     if (!is.null(out)) {
       try(se <- inspect(out,"se"))
@@ -372,6 +402,7 @@ runRep <- function(simConds, model, miss = NULL, fun=NULL, facDist = NULL, indDi
       se <- NA
       std <- NA
     }
+
     
     ## Keep parameters regardless of convergence - may want to examine non-convergent sets
     if(!is.null(paramSet)) {
@@ -389,8 +420,11 @@ runRep <- function(simConds, model, miss = NULL, fun=NULL, facDist = NULL, indDi
     ##   ##} else {
     ##       if (!is.null(data.mis) && is(data.mis, "SimDataOut")) 
     ##         param <- NA
+
+    timing$ParseOutput <- (proc.time()[3] - start.time)
+    start.time <- proc.time()[3]
     
-    Result <- list(coef = coef, se = se, fit = fit, converged = converged, param = popParam, FMI1 = FMI1, FMI2 = FMI2, std = std)
+    Result <- list(coef = coef, se = se, fit = fit, converged = converged, param = popParam, FMI1 = FMI1, FMI2 = FMI2, std = std, timing=timing)
     Result
 }
 

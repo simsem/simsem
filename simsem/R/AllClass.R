@@ -1,5 +1,3 @@
-# Distribution Object
-
 setClass("SimUnif", representation(min = "numeric", max = "numeric"))
 
 setClass("SimNorm", representation(mean = "numeric", sd = "numeric"))
@@ -34,13 +32,8 @@ setClass("SimT", representation(df = "numeric", ncp = "numeric"), prototype(ncp 
 
 setClass("SimWeibull", representation(shape = "numeric", scale = "numeric"), prototype(scale = 1))
 
-<<<<<<< HEAD
 setClassUnion("VirtualDist", c("SimUnif", "SimNorm", "SimBeta", "SimBinom", "SimCauchy", "SimChisq", "SimExp", "SimF", "SimGamma", 
     "SimGeom", "SimHyper", "SimLnorm", "SimLogis", "SimNbinom", "SimPois", "SimT", "SimWeibull"))
-=======
-setClassUnion("VirtualDist", c("SimUnif", "SimNorm", "SimBeta", "SimBinom", "SimCauchy", "SimChisq", "SimExp", "SimF", "SimGamma", "SimGeom", "SimHyper", "SimLnorm", "SimLogis", "SimNbinom", 
-   "SimPois", "SimT", "SimWeibull"))
->>>>>>> experimental
 
 ## setClass("NullDataFrame", contains = "data.frame")
 
@@ -170,7 +163,8 @@ setClass("SimResult",
                         seed = "numeric",
                         n = "vector",
                         pmMCAR = "vector",
-                        pmMAR = "vector"
+                        pmMAR = "vector",
+                        timing = "list"
                         )
          )
 
