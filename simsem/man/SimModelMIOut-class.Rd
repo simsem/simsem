@@ -43,7 +43,6 @@ Objects can be created by \code{\link{run}} on the \code{\linkS4class{SimModel}}
 }
 \examples{
 showClass("SimModelMIOut")
-showClass("SimResult")
 loading <- matrix(0, 6, 1)
 loading[1:6, 1] <- NA
 LX <- simMatrix(loading, 0.7)

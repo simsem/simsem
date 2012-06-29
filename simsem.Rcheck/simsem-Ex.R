@@ -419,7 +419,6 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 showClass("SimModelMIOut")
-showClass("SimResult")
 loading <- matrix(0, 6, 1)
 loading[1:6, 1] <- NA
 LX <- simMatrix(loading, 0.7)
@@ -838,7 +837,8 @@ nameEx("anova")
 flush(stderr()); flush(stdout())
 
 ### Name: anova
-### Title: Provide a comparison of nested models across replications
+### Title: Provide a comparison of nested models and nonnested models
+###   across replications
 ### Aliases: anova,SimResult-method anova,SimModelOut-method
 ###   anova,SimModelMIOut-method
 
@@ -863,6 +863,10 @@ SimModel2 <- simModel(CFA.Model2)
 Output1 <- simResult(5, SimData, SimModel1, seed=123567)
 Output2 <- simResult(5, SimData, SimModel2, seed=123567)
 anova(Output1, Output2)
+
+Output1b <- simResult(NULL, SimData, SimModel1, seed=123567, n=seq(50, 500, 50))
+Output2b <- simResult(NULL, SimData, SimModel2, seed=123567, n=seq(50, 500, 50))
+anova(Output1b, Output2b)
 
 
 
@@ -924,8 +928,24 @@ nameEx("clean")
 flush(stderr()); flush(stdout())
 
 ### Name: clean
-### Title: Extract only converged replications in the result object
+### Title: Extract only converged replications in the result objects
 ### Aliases: clean
+
+### ** Examples
+
+# No example
+
+
+
+cleanEx()
+nameEx("cleanSimResult")
+### * cleanSimResult
+
+flush(stderr()); flush(stdout())
+
+### Name: cleanSimResult
+### Title: Extract only converged replications in the result object
+### Aliases: cleanSimResult
 
 ### ** Examples
 
@@ -1443,6 +1463,22 @@ flush(stderr()); flush(stdout())
 
 
 cleanEx()
+nameEx("find2Dhist")
+### * find2Dhist
+
+flush(stderr()); flush(stdout())
+
+### Name: find2Dhist
+### Title: Fit the 2D Kernel Density Estimate
+### Aliases: find2Dhist
+
+### ** Examples
+
+# No example
+
+
+
+cleanEx()
 nameEx("findFactorIntercept")
 ### * findFactorIntercept
 
@@ -1772,6 +1808,23 @@ flush(stderr()); flush(stdout())
 
 
 cleanEx()
+nameEx("findphist")
+### * findphist
+
+flush(stderr()); flush(stdout())
+
+### Name: findphist
+### Title: Find the density (likelihood) of a pair value in 2D Kernel
+###   Density Estimate
+### Aliases: findphist
+
+### ** Examples
+
+# No example
+
+
+
+cleanEx()
 nameEx("fitMeasuresChi")
 ### * fitMeasuresChi
 
@@ -1830,7 +1883,7 @@ nameEx("getCutoff")
 flush(stderr()); flush(stdout())
 
 ### Name: getCutoff
-### Title: Find cutoff given a priori alpha level
+### Title: Find fit indices cutoff given a priori alpha level
 ### Aliases: getCutoff getCutoff-methods getCutoff,data.frame-method
 ###   getCutoff,matrix-method getCutoff,SimResult-method
 
@@ -1860,6 +1913,111 @@ getCutoff(Output, 0.05)
 # Finding the cutoff when the sample size is varied.
 Output2 <- simResult(NULL, SimData, SimModel, n=seq(50, 100, 10))
 getCutoff(Output2, 0.05, nVal = 75)
+
+
+
+cleanEx()
+nameEx("getCutoffNested")
+### * getCutoffNested
+
+flush(stderr()); flush(stdout())
+
+### Name: getCutoffNested
+### Title: Find fit indices cutoff for nested model comparison given a
+###   priori alpha level
+### Aliases: getCutoffNested
+
+### ** Examples
+
+n1 <- simNorm(0, 0.1)
+u79 <- simUnif(0.7, 0.9)
+
+loading.null <- matrix(0, 6, 1)
+loading.null[1:6, 1] <- NA
+LX.NULL <- simMatrix(loading.null, 0.7)
+RPH.NULL <- symMatrix(diag(1))
+RTD <- symMatrix(diag(6))
+CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
+
+error.cor.mis <- matrix(NA, 6, 6)
+diag(error.cor.mis) <- 1
+RTD.Mis <- symMatrix(error.cor.mis, "n1")
+CFA.Model.NULL.Mis <- simMisspecCFA(RTE = RTD.Mis)
+
+loading.alt <- matrix(0, 6, 2)
+loading.alt[1:3, 1] <- NA
+loading.alt[4:6, 2] <- NA
+LX.ALT <- simMatrix(loading.alt, 0.7)
+latent.cor.alt <- matrix(NA, 2, 2)
+diag(latent.cor.alt) <- 1
+RPH.ALT <- symMatrix(latent.cor.alt, "u79")
+CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
+
+SimData.NULL <- simData(CFA.Model.NULL, 500)
+
+SimModel.NULL <- simModel(CFA.Model.NULL)
+SimModel.ALT <- simModel(CFA.Model.ALT)
+
+# The actual number of replications should be greater than 10.
+Output.NULL.NULL <- simResult(10, SimData.NULL, SimModel.NULL)
+Output.NULL.ALT <- simResult(10, SimData.NULL, SimModel.ALT)
+
+getCutoffNested(Output.NULL.NULL, Output.NULL.ALT)
+
+
+
+cleanEx()
+nameEx("getCutoffNonNested")
+### * getCutoffNonNested
+
+flush(stderr()); flush(stdout())
+
+### Name: getCutoffNonNested
+### Title: Find fit indices cutoff for non-nested model comparison given a
+###   priori alpha level
+### Aliases: getCutoffNonNested
+
+### ** Examples
+
+n1 <- simNorm(0, 0.1)
+u79 <- simUnif(0.7, 0.9)
+
+loading.A <- matrix(0, 8, 2)
+loading.A[1:3, 1] <- NA
+loading.A[4:8, 2] <- NA
+LX.A <- simMatrix(loading.A, 0.7)
+latent.cor <- matrix(NA, 2, 2)
+diag(latent.cor) <- 1
+RPH <- symMatrix(latent.cor, "u79")
+RTD <- symMatrix(diag(8))
+CFA.Model.A <- simSetCFA(LY = LX.A, RPS = RPH, RTE = RTD)
+
+error.cor.mis <- matrix(NA, 8, 8)
+diag(error.cor.mis) <- 1
+RTD.Mis <- symMatrix(error.cor.mis, "n1")
+CFA.Model.A.Mis <- simMisspecCFA(RTE = RTD.Mis)
+
+loading.B <- matrix(0, 8, 2)
+loading.B[1:4, 1] <- NA
+loading.B[5:8, 2] <- NA
+LX.B <- simMatrix(loading.B, 0.7)
+CFA.Model.B <- simSetCFA(LY = LX.B, RPS = RPH, RTE = RTD)
+
+SimData.A <- simData(CFA.Model.A, 500)
+SimData.B <- simData(CFA.Model.B, 500)
+
+SimModel.A <- simModel(CFA.Model.A)
+SimModel.B <- simModel(CFA.Model.B)
+
+# The actual number of replications should be greater than 10.
+Output.A.A <- simResult(10, SimData.A, SimModel.A)
+Output.A.B <- simResult(10, SimData.A, SimModel.B)
+Output.B.A <- simResult(10, SimData.B, SimModel.A)
+Output.B.B <- simResult(10, SimData.B, SimModel.B)
+
+getCutoffNonNested(Output.A.A, Output.A.B, Output.B.A, Output.B.B)
+getCutoffNonNested(Output.A.A, Output.A.B)
+getCutoffNonNested(Output.B.B, Output.B.A)
 
 
 
@@ -1942,8 +2100,10 @@ flush(stderr()); flush(stdout())
 ### Name: getPowerFit
 ### Title: Find power in rejecting alternative models based on fit indices
 ###   criteria
-### Aliases: getPowerFit getPowerFit-methods getPowerFit,data.frame-method
-###   getPowerFit,matrix-method getPowerFit,SimResult-method
+### Aliases: getPowerFit getPowerFit-methods
+###   getPowerFit,data.frame,vector-method getPowerFit,matrix,vector-method
+###   getPowerFit,SimResult,vector-method
+###   getPowerFit,SimResult,missing-method
 
 ### ** Examples
 
@@ -1971,9 +2131,139 @@ RPH.ALT <- symMatrix(latent.cor.alt, "u79")
 CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
 SimData.ALT <- simData(CFA.Model.ALT, 500)
 Output.ALT <- simResult(5, SimData.ALT, SimModel)
-getPowerFit(Output.ALT, Cut.NULL)
+getPowerFit(Output.ALT, cutoff=Cut.NULL)
 Rule.of.thumb <- c(RMSEA=0.05, CFI=0.95, TLI=0.95, SRMR=0.06)
-getPowerFit(Output.ALT, Rule.of.thumb, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+getPowerFit(Output.ALT, cutoff=Rule.of.thumb, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+
+Output.NULL2 <- simResult(NULL, SimData.NULL, SimModel, n=seq(50, 500, 50))
+Output.ALT2 <- simResult(NULL, SimData.ALT, SimModel, n=seq(50, 500, 50))
+getPowerFit(Output.ALT2, nullObject=Output.NULL2, nVal=250)
+
+
+
+
+cleanEx()
+nameEx("getPowerFitNested")
+### * getPowerFitNested
+
+flush(stderr()); flush(stdout())
+
+### Name: getPowerFitNested
+### Title: Find power in rejecting nested models based on the differences
+###   in fit indices
+### Aliases: getPowerFitNested getPowerFitNested-methods
+###   getPowerFitNested,SimResult,SimResult,vector-method
+###   getPowerFitNested,SimResult,SimResult,missing-method
+
+### ** Examples
+
+u2 <- simUnif(-0.2, 0.2)
+n1 <- simNorm(0, 0.1)
+u79 <- simUnif(0.7, 0.9)
+
+loading.null <- matrix(0, 6, 1)
+loading.null[1:6, 1] <- NA
+LX.NULL <- simMatrix(loading.null, 0.7)
+RPH.NULL <- symMatrix(diag(1))
+RTD <- symMatrix(diag(6))
+CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
+
+error.cor.mis <- matrix(NA, 6, 6)
+diag(error.cor.mis) <- 1
+RTD.Mis <- symMatrix(error.cor.mis, "rnorm(1,0,0.1)")
+CFA.Model.NULL.Mis <- simMisspecCFA(RTE = RTD.Mis)
+
+loading.alt <- matrix(0, 6, 2)
+loading.alt[1:3, 1] <- NA
+loading.alt[4:6, 2] <- NA
+LX.ALT <- simMatrix(loading.alt, 0.7)
+latent.cor.alt <- matrix(NA, 2, 2)
+diag(latent.cor.alt) <- 1
+RPH.ALT <- symMatrix(latent.cor.alt, 0.7)
+CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
+
+# loading.alt.mis <- matrix(NA, 6, 2)
+# loading.alt.mis[is.na(loading.alt)] <- 0
+# LX.alt.mis <- simMatrix(loading.alt.mis, "runif(1,-.2,.2)")
+# CFA.Model.alt.mis <- simMisspecCFA(LY = LX.alt.mis, RTE=RTD.Mis)
+
+SimData.NULL <- simData(CFA.Model.NULL, 500)
+SimData.ALT <- simData(CFA.Model.ALT, 500)
+
+SimModel.NULL <- simModel(CFA.Model.NULL)
+SimModel.ALT <- simModel(CFA.Model.ALT)
+
+Output.NULL.NULL <- simResult(10, SimData.NULL, SimModel.NULL)
+Output.ALT.NULL <- simResult(10, SimData.ALT, SimModel.NULL)
+Output.NULL.ALT <- simResult(10, SimData.NULL, SimModel.ALT)
+Output.ALT.ALT <- simResult(10, SimData.ALT, SimModel.ALT)
+
+getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT)
+getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, cutoff=c(Chi=3.84, CFI=-0.10))
+
+Output.NULL.NULL2 <- simResult(NULL, SimData.NULL, SimModel.NULL, n=seq(50, 500, 50))
+Output.ALT.NULL2 <- simResult(NULL, SimData.ALT, SimModel.NULL, n=seq(50, 500, 50))
+Output.NULL.ALT2 <- simResult(NULL, SimData.NULL, SimModel.ALT, n=seq(50, 500, 50))
+Output.ALT.ALT2 <- simResult(NULL, SimData.ALT, SimModel.ALT, n=seq(50, 500, 50))
+
+getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT, nVal = 250)
+getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, cutoff=c(Chi=3.84, CFI=-0.10), nVal = 250)
+
+
+
+cleanEx()
+nameEx("getPowerFitNonNested")
+### * getPowerFitNonNested
+
+flush(stderr()); flush(stdout())
+
+### Name: getPowerFitNonNested
+### Title: Find power in rejecting non-nested models based on the
+###   differences in fit indices
+### Aliases: getPowerFitNonNested getPowerFitNonNested-methods
+###   getPowerFitNonNested,SimResult,SimResult,vector-method
+###   getPowerFitNonNested,SimResult,SimResult,missing-method
+
+### ** Examples
+
+n1 <- simNorm(0, 0.1)
+u79 <- simUnif(0.7, 0.9)
+
+loading.A <- matrix(0, 8, 2)
+loading.A[1:3, 1] <- NA
+loading.A[4:8, 2] <- NA
+LX.A <- simMatrix(loading.A, 0.7)
+latent.cor <- matrix(NA, 2, 2)
+diag(latent.cor) <- 1
+RPH <- symMatrix(latent.cor, "u79")
+RTD <- symMatrix(diag(8))
+CFA.Model.A <- simSetCFA(LY = LX.A, RPS = RPH, RTE = RTD)
+
+error.cor.mis <- matrix(NA, 8, 8)
+diag(error.cor.mis) <- 1
+RTD.Mis <- symMatrix(error.cor.mis, "n1")
+CFA.Model.A.Mis <- simMisspecCFA(RTE = RTD.Mis)
+
+loading.B <- matrix(0, 8, 2)
+loading.B[1:4, 1] <- NA
+loading.B[5:8, 2] <- NA
+LX.B <- simMatrix(loading.B, 0.7)
+CFA.Model.B <- simSetCFA(LY = LX.B, RPS = RPH, RTE = RTD)
+
+SimData.A <- simData(CFA.Model.A, 500)
+SimData.B <- simData(CFA.Model.B, 500)
+
+SimModel.A <- simModel(CFA.Model.A)
+SimModel.B <- simModel(CFA.Model.B)
+
+# The actual number of replications should be greater than 10.
+Output.A.A <- simResult(10, SimData.A, SimModel.A)
+Output.A.B <- simResult(10, SimData.A, SimModel.B)
+Output.B.A <- simResult(10, SimData.B, SimModel.A)
+Output.B.B <- simResult(10, SimData.B, SimModel.B)
+
+getPowerFitNonNested(Output.B.A, Output.B.B, dat1Mod1=Output.A.A, dat1Mod2=Output.A.B)
+getPowerFitNonNested(Output.B.A, Output.B.B, cutoff=c(AIC=0, BIC=0))
 
 
 
@@ -2027,6 +2317,23 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 dat <- indProd(attitude[,-1], var1=1:3, var2=4:6)
+
+
+
+cleanEx()
+nameEx("interpolate")
+### * interpolate
+
+flush(stderr()); flush(stdout())
+
+### Name: interpolate
+### Title: Find the value of one vector relative to a value of another
+###   vector by interpolation
+### Aliases: interpolate
+
+### ** Examples
+
+# No Example
 
 
 
@@ -2174,6 +2481,54 @@ kurtosis(1:5)
 
 
 cleanEx()
+nameEx("likRatioFit")
+### * likRatioFit
+
+flush(stderr()); flush(stdout())
+
+### Name: likRatioFit
+### Title: Find the likelihood ratio (or Bayes factor) based on the
+###   bivariate distribution of fit indices
+### Aliases: likRatioFit
+
+### ** Examples
+
+library(lavaan)
+loading <- matrix(0, 11, 3)
+loading[1:3, 1] <- NA
+loading[4:7, 2] <- NA
+loading[8:11, 3] <- NA
+path.A <- matrix(0, 3, 3)
+path.A[2:3, 1] <- NA
+path.A[3, 2] <- NA
+param.A <- simParamSEM(LY=loading, BE=path.A)
+
+model.A <- simModel(param.A, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
+out.A <- run(model.A, PoliticalDemocracy)
+
+path.B <- matrix(0, 3, 3)
+path.B[1:2, 3] <- NA
+path.B[1, 2] <- NA
+param.B <- simParamSEM(LY=loading, BE=path.B)
+
+model.B <- simModel(param.B, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
+out.B <- run(model.B, PoliticalDemocracy)
+
+u2 <- simUnif(-0.2, 0.2)
+loading.mis <- matrix(NA, 11, 3)
+loading.mis[is.na(loading)] <- 0
+LY.mis <- simMatrix(loading.mis, "u2")
+misspec <- simMisspecSEM(LY=LY.mis)
+
+output.A.A <- runFit(model.A, PoliticalDemocracy, 10, misspec=misspec)
+output.A.B <- runFit(model.A, PoliticalDemocracy, 10, misspec=misspec, analyzeModel=model.B)
+output.B.A <- runFit(model.B, PoliticalDemocracy, 10, misspec=misspec, analyzeModel=model.A)
+output.B.B <- runFit(model.B, PoliticalDemocracy, 10, misspec=misspec)
+likRatioFit(out.A, out.B, output.A.A, output.A.B, output.B.A, output.B.B)
+
+
+
+cleanEx()
 nameEx("loadingFromAlpha")
 ### * loadingFromAlpha
 
@@ -2287,6 +2642,23 @@ miPoolVector(param, SE, nimps)
 
 
 cleanEx()
+nameEx("multipleAllEqual")
+### * multipleAllEqual
+
+flush(stderr()); flush(stdout())
+
+### Name: multipleAllEqual
+### Title: Test whether all objects are equal
+### Aliases: multipleAllEqual
+
+### ** Examples
+
+multipleAllEqual(1:5, 1:5, seq(2, 10, 2)/2)
+multipleAllEqual(1:5, 1:6, seq(2, 10, 2)/2)
+
+
+
+cleanEx()
 nameEx("overlapHist")
 ### * overlapHist
 
@@ -2346,6 +2718,131 @@ pValue(out, Output2)
 
 
 cleanEx()
+nameEx("pValueCondCutoff")
+### * pValueCondCutoff
+
+flush(stderr()); flush(stdout())
+
+### Name: pValueCondCutoff
+### Title: Find a p value when the target is conditional (valid) on a
+###   specific value of a predictor
+### Aliases: pValueCondCutoff
+
+### ** Examples
+
+# No example
+
+
+
+cleanEx()
+nameEx("pValueNested")
+### * pValueNested
+
+flush(stderr()); flush(stdout())
+
+### Name: pValueNested
+### Title: Find p-values (1 - percentile) for a nested model comparison
+### Aliases: pValueNested
+
+### ** Examples
+
+library(lavaan)
+
+LY <- matrix(1, 4, 2)
+LY[,2] <- 0:3
+PS <- matrix(NA, 2, 2)
+TY <- rep(0, 4)
+AL <- rep(NA, 2)
+TE <- diag(NA, 4)
+linearModel <- simParamCFA(LY=LY, PS=PS, TY=TY, AL=AL, TE=TE)
+
+LY2 <- matrix(1, 4, 2)
+LY2[,2] <- c(0, NA, NA, 3)
+unconstrainModel <- simParamCFA(LY=LY2, PS=PS, TY=TY, AL=AL, TE=TE)
+
+nested <- simModel(linearModel, indLab=paste("t", 1:4, sep=""))
+parent <- simModel(unconstrainModel, indLab=paste("t", 1:4, sep=""))
+
+outNested <- run(nested, Demo.growth)
+outParent <- run(parent, Demo.growth)
+
+loadingMis <- matrix(0, 4, 2)
+loadingMis[2:3, 2] <- NA
+LYmis <- simMatrix(loadingMis, "runif(1, -0.1, 0.1)")
+linearMis <- simMisspecCFA(LY=LYmis)
+
+simNestedNested <- runFit(model=nested, data=Demo.growth, nRep=10, misspec=linearMis)
+simNestedParent <- runFit(model=nested, data=Demo.growth, nRep=10, misspec=linearMis, analyzeModel=parent)
+
+pValueNested(outNested, outParent, simNestedNested, simNestedParent)
+
+
+
+cleanEx()
+nameEx("pValueNonNested")
+### * pValueNonNested
+
+flush(stderr()); flush(stdout())
+
+### Name: pValueNonNested
+### Title: Find p-values (1 - percentile) for a non-nested model comparison
+### Aliases: pValueNonNested
+
+### ** Examples
+
+library(lavaan)
+loading <- matrix(0, 11, 3)
+loading[1:3, 1] <- NA
+loading[4:7, 2] <- NA
+loading[8:11, 3] <- NA
+path.A <- matrix(0, 3, 3)
+path.A[2:3, 1] <- NA
+path.A[3, 2] <- NA
+param.A <- simParamSEM(LY=loading, BE=path.A)
+
+model.A <- simModel(param.A, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
+out.A <- run(model.A, PoliticalDemocracy)
+
+path.B <- matrix(0, 3, 3)
+path.B[1:2, 3] <- NA
+path.B[1, 2] <- NA
+param.B <- simParamSEM(LY=loading, BE=path.B)
+
+model.B <- simModel(param.B, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
+out.B <- run(model.B, PoliticalDemocracy)
+
+u2 <- simUnif(-0.2, 0.2)
+loading.mis <- matrix(NA, 11, 3)
+loading.mis[is.na(loading)] <- 0
+LY.mis <- simMatrix(loading.mis, "u2")
+misspec <- simMisspecSEM(LY=LY.mis)
+
+output.A.A <- runFit(model.A, PoliticalDemocracy, 10, misspec=misspec)
+output.A.B <- runFit(model.A, PoliticalDemocracy, 10, misspec=misspec, analyzeModel=model.B)
+output.B.A <- runFit(model.B, PoliticalDemocracy, 10, misspec=misspec, analyzeModel=model.A)
+output.B.B <- runFit(model.B, PoliticalDemocracy, 10, misspec=misspec)
+pValueNonNested(out.A, out.B, output.A.A, output.A.B, output.B.A, output.B.B)
+
+
+
+cleanEx()
+nameEx("pValueVariedCutoff")
+### * pValueVariedCutoff
+
+flush(stderr()); flush(stdout())
+
+### Name: pValueVariedCutoff
+### Title: Find a p value when the cutoff is specified as a vector given
+###   the values of predictors
+### Aliases: pValueVariedCutoff
+
+### ** Examples
+
+# No example
+
+
+
+cleanEx()
 nameEx("plot3DQtile")
 ### * plot3DQtile
 
@@ -2369,7 +2866,8 @@ nameEx("plotCutoff")
 flush(stderr()); flush(stdout())
 
 ### Name: plotCutoff
-### Title: Plot sampling distributions of fit indices
+### Title: Plot sampling distributions of fit indices with fit indices
+###   cutoffs
 ### Aliases: plotCutoff plotCutoff-methods plotCutoff,data.frame-method
 ###   plotCutoff,SimResult-method
 
@@ -2397,12 +2895,117 @@ Output <- simResult(5, SimData, SimModel)
 plotCutoff(Output, 0.05, usedFit=c("RMSEA", "SRMR", "CFI", "TLI"))
 
 # Varying N
-Output2 <- simResult(NULL, SimData, SimModel, n=seq(50, 100, 10))
+Output2 <- simResult(NULL, SimData, SimModel, n=seq(450, 500, 10))
 plotCutoff(Output2, 0.05)
 
 # Varying N and pmMCAR
-Output3 <- simResult(NULL, SimData, SimModel, n=seq(50, 100, 10), pmMCAR=c(0, 0.05, 0.1, 0.15))
+Output3 <- simResult(NULL, SimData, SimModel, n=seq(450, 500, 10), pmMCAR=c(0, 0.05, 0.1, 0.15))
 plotCutoff(Output3, 0.05)
+
+
+
+cleanEx()
+nameEx("plotCutoffNested")
+### * plotCutoffNested
+
+flush(stderr()); flush(stdout())
+
+### Name: plotCutoffNested
+### Title: Plot sampling distributions of the differences in fit indices
+###   between nested models with fit indices cutoffs
+### Aliases: plotCutoffNested
+
+### ** Examples
+
+n1 <- simNorm(0, 0.1)
+u79 <- simUnif(0.7, 0.9)
+
+loading.null <- matrix(0, 6, 1)
+loading.null[1:6, 1] <- NA
+LX.NULL <- simMatrix(loading.null, 0.7)
+RPH.NULL <- symMatrix(diag(1))
+RTD <- symMatrix(diag(6))
+CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
+
+error.cor.mis <- matrix(NA, 6, 6)
+diag(error.cor.mis) <- 1
+RTD.Mis <- symMatrix(error.cor.mis, "n1")
+CFA.Model.NULL.Mis <- simMisspecCFA(RTE = RTD.Mis)
+
+loading.alt <- matrix(0, 6, 2)
+loading.alt[1:3, 1] <- NA
+loading.alt[4:6, 2] <- NA
+LX.ALT <- simMatrix(loading.alt, 0.7)
+latent.cor.alt <- matrix(NA, 2, 2)
+diag(latent.cor.alt) <- 1
+RPH.ALT <- symMatrix(latent.cor.alt, "u79")
+CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
+
+SimData.NULL <- simData(CFA.Model.NULL, 500)
+
+SimModel.NULL <- simModel(CFA.Model.NULL)
+SimModel.ALT <- simModel(CFA.Model.ALT)
+
+# The actual number of replications should be greater than 10.
+Output.NULL.NULL <- simResult(10, SimData.NULL, SimModel.NULL)
+Output.NULL.ALT <- simResult(10, SimData.NULL, SimModel.ALT)
+
+plotCutoffNested(Output.NULL.NULL, Output.NULL.ALT, alpha=0.05)
+
+
+
+cleanEx()
+nameEx("plotCutoffNonNested")
+### * plotCutoffNonNested
+
+flush(stderr()); flush(stdout())
+
+### Name: plotCutoffNonNested
+### Title: Plot sampling distributions of the differences in fit indices
+###   between non-nested models with fit indices cutoffs
+### Aliases: plotCutoffNonNested
+
+### ** Examples
+
+n1 <- simNorm(0, 0.1)
+u79 <- simUnif(0.7, 0.9)
+
+loading.A <- matrix(0, 8, 2)
+loading.A[1:3, 1] <- NA
+loading.A[4:8, 2] <- NA
+LX.A <- simMatrix(loading.A, 0.7)
+latent.cor <- matrix(NA, 2, 2)
+diag(latent.cor) <- 1
+RPH <- symMatrix(latent.cor, "u79")
+RTD <- symMatrix(diag(8))
+CFA.Model.A <- simSetCFA(LY = LX.A, RPS = RPH, RTE = RTD)
+
+error.cor.mis <- matrix(NA, 8, 8)
+diag(error.cor.mis) <- 1
+RTD.Mis <- symMatrix(error.cor.mis, "n1")
+CFA.Model.A.Mis <- simMisspecCFA(RTE = RTD.Mis)
+
+loading.B <- matrix(0, 8, 2)
+loading.B[1:4, 1] <- NA
+loading.B[5:8, 2] <- NA
+LX.B <- simMatrix(loading.B, 0.7)
+CFA.Model.B <- simSetCFA(LY = LX.B, RPS = RPH, RTE = RTD)
+
+SimData.A <- simData(CFA.Model.A, 500)
+SimData.B <- simData(CFA.Model.B, 500)
+
+SimModel.A <- simModel(CFA.Model.A)
+SimModel.B <- simModel(CFA.Model.B)
+
+# The actual number of replications should be greater than 10.
+Output.A.A <- simResult(10, SimData.A, SimModel.A)
+Output.A.B <- simResult(10, SimData.A, SimModel.B)
+Output.B.A <- simResult(10, SimData.B, SimModel.A)
+Output.B.B <- simResult(10, SimData.B, SimModel.B)
+
+plotCutoffNonNested(Output.A.A, Output.A.B, Output.B.A, Output.B.B)
+plotCutoffNonNested(Output.A.A, Output.A.B)
+plotCutoffNonNested(Output.A.A, Output.A.B, onetailed=TRUE)
 
 
 
@@ -2425,6 +3028,40 @@ plotDist(gamma11)
 chi <- simChisq(5)
 dataDist <- simDataDist(chi, chi)
 plotDist(dataDist)
+
+
+
+cleanEx()
+nameEx("plotIndividualScatter")
+### * plotIndividualScatter
+
+flush(stderr()); flush(stdout())
+
+### Name: plotIndividualScatter
+### Title: Plot an overlaying scatter plot visualizing the power of
+###   rejecting misspecified models
+### Aliases: plotIndividualScatter
+
+### ** Examples
+
+# No example
+
+
+
+cleanEx()
+nameEx("plotLogisticFit")
+### * plotLogisticFit
+
+flush(stderr()); flush(stdout())
+
+### Name: plotLogisticFit
+### Title: Plot multiple logistic curves for predicting whether rejecting a
+###   misspecified model
+### Aliases: plotLogisticFit
+
+### ** Examples
+
+# No example
 
 
 
@@ -2475,6 +3112,22 @@ plotMisfit(ParamObject, misParam=1:2)
 
 
 cleanEx()
+nameEx("plotOverHist")
+### * plotOverHist
+
+flush(stderr()); flush(stdout())
+
+### Name: plotOverHist
+### Title: Plot multiple overlapping histograms
+### Aliases: plotOverHist
+
+### ** Examples
+
+# No example
+
+
+
+cleanEx()
 nameEx("plotPower")
 ### * plotPower
 
@@ -2512,11 +3165,8 @@ flush(stderr()); flush(stdout())
 
 ### Name: plotPowerFit
 ### Title: Plot sampling distributions of fit indices that visualize power
-### Aliases: plotPowerFit plotPowerFit-methods
-###   plotPowerFit,data.frame,data.frame-method
-###   plotPowerFit,data.frame,vector-method
-###   plotPowerFit,SimResult,SimResult-method
-###   plotPowerFit,SimResult,vector-method
+###   of rejecting datasets underlying misspecified models
+### Aliases: plotPowerFit
 
 ### ** Examples
 
@@ -2531,22 +3181,183 @@ SimModel <- simModel(CFA.Model.NULL)
 # We make the examples running only 5 replications to save time.
 # In reality, more replications are needed.
 Output.NULL <- simResult(5, SimData.NULL, SimModel)
-Cut.NULL <- getCutoff(Output.NULL, 0.95)
 
-u79 <- simUnif(0.7, 0.9)
 loading.alt <- matrix(0, 6, 2)
 loading.alt[1:3, 1] <- NA
 loading.alt[4:6, 2] <- NA
 LX.ALT <- simMatrix(loading.alt, 0.7)
 latent.cor.alt <- matrix(NA, 2, 2)
 diag(latent.cor.alt) <- 1
-RPH.ALT <- symMatrix(latent.cor.alt, "u79")
+RPH.ALT <- symMatrix(latent.cor.alt, 0.5)
 CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
 SimData.ALT <- simData(CFA.Model.ALT, 500)
 Output.ALT <- simResult(5, SimData.ALT, SimModel)
-getPowerFit(Output.ALT, Cut.NULL)
+plotPowerFit(Output.ALT, nullObject=Output.NULL, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
 Rule.of.thumb <- c(RMSEA=0.05, CFI=0.95, TLI=0.95, SRMR=0.06)
-plotPowerFit(Output.ALT, Output.NULL, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+plotPowerFit(Output.ALT, cutoff=Rule.of.thumb, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+
+Output.NULL2 <- simResult(NULL, SimData.NULL, SimModel, n=seq(50, 250, 25))
+Output.ALT2 <- simResult(NULL, SimData.ALT, SimModel, n=seq(50, 250, 25))
+
+plotPowerFit(Output.ALT2, nullObject=Output.NULL2, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+plotPowerFit(Output.ALT2, cutoff=Rule.of.thumb, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+
+
+
+cleanEx()
+nameEx("plotPowerFitDf")
+### * plotPowerFitDf
+
+flush(stderr()); flush(stdout())
+
+### Name: plotPowerFitDf
+### Title: Plot sampling distributions of fit indices that visualize power
+###   of rejecting datasets underlying misspecified models
+### Aliases: plotPowerFitDf
+
+### ** Examples
+
+# No example
+
+
+
+cleanEx()
+nameEx("plotPowerFitNested")
+### * plotPowerFitNested
+
+flush(stderr()); flush(stdout())
+
+### Name: plotPowerFitNested
+### Title: Plot power of rejecting a nested model in a nested model
+###   comparison by each fit index
+### Aliases: plotPowerFitNested
+
+### ** Examples
+
+u2 <- simUnif(-0.2, 0.2)
+n1 <- simNorm(0, 0.1)
+u79 <- simUnif(0.7, 0.9)
+
+loading.null <- matrix(0, 6, 1)
+loading.null[1:6, 1] <- NA
+LX.NULL <- simMatrix(loading.null, 0.7)
+RPH.NULL <- symMatrix(diag(1))
+RTD <- symMatrix(diag(6))
+CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
+
+error.cor.mis <- matrix(NA, 6, 6)
+diag(error.cor.mis) <- 1
+RTD.Mis <- symMatrix(error.cor.mis, "rnorm(1,0,0.1)")
+CFA.Model.NULL.Mis <- simMisspecCFA(RTE = RTD.Mis)
+
+loading.alt <- matrix(0, 6, 2)
+loading.alt[1:3, 1] <- NA
+loading.alt[4:6, 2] <- NA
+LX.ALT <- simMatrix(loading.alt, 0.7)
+latent.cor.alt <- matrix(NA, 2, 2)
+diag(latent.cor.alt) <- 1
+RPH.ALT <- symMatrix(latent.cor.alt, 0.7)
+CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
+
+# loading.alt.mis <- matrix(NA, 6, 2)
+# loading.alt.mis[is.na(loading.alt)] <- 0
+# LX.alt.mis <- simMatrix(loading.alt.mis, "runif(1,-.2,.2)")
+# CFA.Model.alt.mis <- simMisspecCFA(LY = LX.alt.mis, RTE=RTD.Mis)
+
+SimData.NULL <- simData(CFA.Model.NULL, 500)
+SimData.ALT <- simData(CFA.Model.ALT, 500)
+
+SimModel.NULL <- simModel(CFA.Model.NULL)
+SimModel.ALT <- simModel(CFA.Model.ALT)
+
+Output.NULL.NULL <- simResult(10, SimData.NULL, SimModel.NULL)
+Output.ALT.NULL <- simResult(10, SimData.ALT, SimModel.NULL)
+Output.NULL.ALT <- simResult(10, SimData.NULL, SimModel.ALT)
+Output.ALT.ALT <- simResult(10, SimData.ALT, SimModel.ALT)
+
+plotPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT)
+plotPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT, usedFit="CFI")
+
+Output.NULL.NULL2 <- simResult(NULL, SimData.NULL, SimModel.NULL, n=seq(50, 500, 50))
+Output.ALT.NULL2 <- simResult(NULL, SimData.ALT, SimModel.NULL, n=seq(50, 500, 50))
+Output.NULL.ALT2 <- simResult(NULL, SimData.NULL, SimModel.ALT, n=seq(50, 500, 50))
+Output.ALT.ALT2 <- simResult(NULL, SimData.ALT, SimModel.ALT, n=seq(50, 500, 50))
+
+plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNested=Output.NULL.NULL2, nullParent=Output.NULL.ALT2)
+
+plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNested=Output.NULL.NULL2, nullParent=Output.NULL.ALT2, logistic=FALSE)
+
+plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, cutoff=c(CFI=-0.1), logistic=FALSE)
+
+
+
+cleanEx()
+nameEx("plotPowerFitNonNested")
+### * plotPowerFitNonNested
+
+flush(stderr()); flush(stdout())
+
+### Name: plotPowerFitNonNested
+### Title: Plot power of rejecting a non-nested model based on a difference
+###   in fit index
+### Aliases: plotPowerFitNonNested
+
+### ** Examples
+
+n1 <- simNorm(0, 0.1)
+u79 <- simUnif(0.7, 0.9)
+
+loading.A <- matrix(0, 8, 2)
+loading.A[1:3, 1] <- NA
+loading.A[4:8, 2] <- NA
+LX.A <- simMatrix(loading.A, 0.7)
+latent.cor <- matrix(NA, 2, 2)
+diag(latent.cor) <- 1
+RPH <- symMatrix(latent.cor, "u79")
+RTD <- symMatrix(diag(8))
+CFA.Model.A <- simSetCFA(LY = LX.A, RPS = RPH, RTE = RTD)
+
+error.cor.mis <- matrix(NA, 8, 8)
+diag(error.cor.mis) <- 1
+RTD.Mis <- symMatrix(error.cor.mis, "n1")
+CFA.Model.A.Mis <- simMisspecCFA(RTE = RTD.Mis)
+
+loading.B <- matrix(0, 8, 2)
+loading.B[1:4, 1] <- NA
+loading.B[5:8, 2] <- NA
+LX.B <- simMatrix(loading.B, 0.7)
+CFA.Model.B <- simSetCFA(LY = LX.B, RPS = RPH, RTE = RTD)
+
+SimData.A <- simData(CFA.Model.A, 500)
+SimData.B <- simData(CFA.Model.B, 500)
+
+SimModel.A <- simModel(CFA.Model.A)
+SimModel.B <- simModel(CFA.Model.B)
+
+# The actual number of replications should be greater than 10.
+Output.A.A <- simResult(10, SimData.A, SimModel.A)
+Output.A.B <- simResult(10, SimData.A, SimModel.B)
+Output.B.A <- simResult(10, SimData.B, SimModel.A)
+Output.B.B <- simResult(10, SimData.B, SimModel.B)
+
+plotPowerFitNonNested(Output.B.A, Output.B.B, dat1Mod1=Output.A.A, dat1Mod2=Output.A.B)
+plotPowerFitNonNested(Output.B.A, Output.B.B, cutoff=c(AIC=0, BIC=0))
+
+
+
+cleanEx()
+nameEx("plotPowerSig")
+### * plotPowerSig
+
+flush(stderr()); flush(stdout())
+
+### Name: plotPowerSig
+### Title: Plot multiple logistic curves given a significance result matrix
+### Aliases: plotPowerSig
+
+### ** Examples
+
+# No example
 
 
 
@@ -2560,6 +3371,23 @@ flush(stderr()); flush(stdout())
 ### Title: Build a scatterplot with overlaying line of quantiles of
 ###   predicted values
 ### Aliases: plotQtile
+
+### ** Examples
+
+# No example
+
+
+
+cleanEx()
+nameEx("plotScatter")
+### * plotScatter
+
+flush(stderr()); flush(stdout())
+
+### Name: plotScatter
+### Title: Plot overlaying scatter plots visualizing the power of rejecting
+###   misspecified models
+### Aliases: plotScatter
 
 ### ** Examples
 
@@ -2755,6 +3583,25 @@ dat <- residualCovariate(attitude, 2:7, 1)
 
 
 cleanEx()
+nameEx("revText")
+### * revText
+
+flush(stderr()); flush(stdout())
+
+### Name: revText
+### Title: Reverse the proportion value by subtracting it from 1
+### Aliases: revText
+
+### ** Examples
+
+# This is a private function.
+
+# revText(.96)
+# revText("> .60")
+
+
+
+cleanEx()
 nameEx("run")
 ### * run
 
@@ -2780,7 +3627,8 @@ nameEx("runFit")
 flush(stderr()); flush(stdout())
 
 ### Name: runFit
-### Title: Build a result object from analyzing real data
+### Title: Build a Monte Carlo simulation that the data-generation
+###   parameters are from the result of analyzing real data
 ### Aliases: runFit runFit-methods runFit,ANY-method runFit,SimModel-method
 ###   runFit,SimModelOut-method
 
@@ -2830,6 +3678,40 @@ model <- simModel(param, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="
 out <- run(model, usedData, miss)
 output <- runFit(model, usedData, 5, missModel=miss)
 pValue(out, output)
+
+
+
+cleanEx()
+nameEx("runFitParam")
+### * runFitParam
+
+flush(stderr()); flush(stdout())
+
+### Name: runFitParam
+### Title: Build a parameter result object that the data-generation
+###   parameters are from the result of analyzing real data
+### Aliases: runFitParam runFitParam-methods runFitParam,ANY-method
+###   runFitParam,SimModel-method runFitParam,SimModelOut-method
+
+### ** Examples
+
+library(lavaan)
+loading <- matrix(0, 9, 3)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+loading[7:9, 3] <- NA
+model <- simParamCFA(LY=loading)
+SimModel <- simModel(model, indLab=paste("x", 1:9, sep=""))
+u2 <- simUnif(-0.2, 0.2)
+loading.trivial <- matrix(NA, 9, 3)
+loading.trivial[is.na(loading)] <- 0
+LY.trivial <- simMatrix(loading.trivial, "u2")
+mis <- simMisspecCFA(LY = LY.trivial)
+Output <- runFitParam(SimModel, data=HolzingerSwineford1939, nRep=5, misspec=mis)
+summary(Output)
+
+out <- run(SimModel, HolzingerSwineford1939)
+Output2 <- runFitParam(out, nRep=5, misspec=mis)
 
 
 
@@ -3033,7 +3915,7 @@ nameEx("simData")
 flush(stderr()); flush(stdout())
 
 ### Name: simData
-### Title: Data object
+### Title: Create a Data object
 ### Aliases: simData simData-methods simData,ANY-method
 ###   simData,SimSet-method simData,SimModelOut-method
 ###   simData,SimRSet-method
@@ -3494,8 +4376,7 @@ nameEx("simModel")
 flush(stderr()); flush(stdout())
 
 ### Name: simModel
-### Title: Create simModel from model specification and be ready for data
-###   analysis.
+### Title: Create a model object
 ### Aliases: simModel simModel-methods simModel,ANY-method
 ###   simModel,SimSet-method simModel,SimParam-method
 ###   simModel,SimModelOut-method
@@ -4004,12 +4885,28 @@ nameEx("skew")
 flush(stderr()); flush(stdout())
 
 ### Name: skew
-### Title: Finding skewness
+### Title: Find skewness
 ### Aliases: skew skew-methods skew,vector-method
 
 ### ** Examples
 
 skew(1:5)
+
+
+
+cleanEx()
+nameEx("sortList")
+### * sortList
+
+flush(stderr()); flush(stdout())
+
+### Name: sortList
+### Title: Sort two objects in a list
+### Aliases: sortList
+
+### ** Examples
+
+# No example
 
 
 
@@ -4146,6 +5043,82 @@ flush(stderr()); flush(stdout())
 #CFA.Model <- simSetCFA(LX = LX, PH = PH, TD = TD)
 #result <- startingValues(CFA.Model, 10)
 #summary(result)
+
+
+
+cleanEx()
+nameEx("summaryFit")
+### * summaryFit
+
+flush(stderr()); flush(stdout())
+
+### Name: summaryFit
+### Title: Provide summary of model fit across replications
+### Aliases: summaryFit summaryFit-methods summaryFit,ANY-method
+###   summaryFit,SimResult-method summaryFit,SimResultParam-method
+
+### ** Examples
+
+loading <- matrix(0, 6, 1)
+loading[1:6, 1] <- NA
+LX <- simMatrix(loading, 0.7)
+RPH <- symMatrix(diag(1))
+RTD <- symMatrix(diag(6))
+CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
+SimData <- simData(CFA.Model, 500)
+SimModel <- simModel(CFA.Model)
+# We make the examples running only 5 replications to save time.
+# In reality, more replications are needed.
+Output <- simResult(5, SimData, SimModel)
+summaryFit(Output)
+summaryFit(Output, detail=TRUE)
+
+
+
+cleanEx()
+nameEx("summaryMisspec")
+### * summaryMisspec
+
+flush(stderr()); flush(stdout())
+
+### Name: summaryMisspec
+### Title: Provide summary of model misspecification imposed across
+###   replications
+### Aliases: summaryMisspec summaryMisspec-methods
+###   summaryMisspec,ANY-method summaryMisspec,SimResultParam-method
+
+### ** Examples
+
+u35 <- simUnif(0.3, 0.5)
+u57 <- simUnif(0.5, 0.7)
+u1 <- simUnif(-0.1, 0.1)
+n31 <- simNorm(0.3, 0.1)
+
+path.BE <- matrix(0, 4, 4)
+path.BE[3, 1:2] <- NA
+path.BE[4, 3] <- NA
+starting.BE <- matrix("", 4, 4)
+starting.BE[3, 1:2] <- "u35"
+starting.BE[4, 3] <- "u57"
+BE <- simMatrix(path.BE, starting.BE)
+
+residual.error <- diag(4)
+residual.error[1,2] <- residual.error[2,1] <- NA
+RPS <- symMatrix(residual.error, "n31")
+
+ME <- simVector(rep(NA, 4), 0)
+
+Path.Model <- simSetPath(RPS = RPS, BE = BE, ME = ME)
+
+mis.path.BE <- matrix(0, 4, 4)
+mis.path.BE[4, 1:2] <- NA
+mis.BE <- simMatrix(mis.path.BE, "u1")
+Path.Mis.Model <- simMisspecPath(BE = mis.BE, misfitType="rmsea")
+
+# The number of replications in actual analysis should be much more than 5
+ParamObject <- simResultParam(5, Path.Model, Path.Mis.Model)
+
+summaryMisspec(ParamObject)
 
 
 
@@ -4318,6 +5291,22 @@ flush(stderr()); flush(stdout())
 
 
 cleanEx()
+nameEx("twoTailedPValue")
+### * twoTailedPValue
+
+flush(stderr()); flush(stdout())
+
+### Name: twoTailedPValue
+### Title: Find two-tailed _p_ value from one-tailed _p_ value
+### Aliases: twoTailedPValue
+
+### ** Examples
+
+# No example
+
+
+
+cleanEx()
 nameEx("validateCovariance")
 ### * validateCovariance
 
@@ -4401,6 +5390,25 @@ flush(stderr()); flush(stdout())
 # This function is not public
 
 # weightedMean(1:5, c(1,1,1,1,2))
+
+
+
+cleanEx()
+nameEx("whichMonotonic")
+### * whichMonotonic
+
+flush(stderr()); flush(stdout())
+
+### Name: whichMonotonic
+### Title: Extract a part of a vector that is monotonically increasing or
+###   decreasing
+### Aliases: whichMonotonic
+
+### ** Examples
+
+# This is a private function.
+
+# whichMonotonic(c(3, 4, 1, 2, 3, 5, 2, 1))
 
 
 

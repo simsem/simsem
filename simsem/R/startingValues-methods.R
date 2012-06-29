@@ -1,5 +1,6 @@
-# startingValues: Find starting values of free parameters based on pre-specified starting values. If the pre-specified starting values are numbers, the function will use that values. If they
-# are distribution object, this function will randomly draw from the distribution 10 times and take the average of those values.
+# startingValues: Find starting values of free parameters based on pre-specified starting values. If the pre-specified starting
+# values are numbers, the function will use that values. If they are distribution object, this function will randomly draw from the
+# distribution 10 times and take the average of those values.
 
 setMethod("startingValues", signature(object = "SimMatrix"), definition = function(object, trial, ...) {
     if (isNullObject(object)) 

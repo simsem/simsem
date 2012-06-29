@@ -47,7 +47,8 @@ setMethod("divideObject", signature(object = "MatrixSet", constant = "numeric"),
     RPH <- divideObject(object@RPH, constant, correlation = TRUE)
     KA <- divideObject(object@KA, constant)
     RTH <- divideObject(object@RTH, constant)
-    Output <- new("MatrixSet", modelType = object@modelType, LY = LY, VTE = VTE, RTE = RTE, VY = VY, TY = TY, MY = MY, BE = BE, VPS = VPS, RPS = RPS, VE = VE, AL = AL, ME = ME, LX = LX, VTD = VTD, 
-        RTD = RTD, VX = VX, TX = TX, MX = MX, GA = GA, VPH = VPH, RPH = RPH, KA = KA, RTH = RTH)
+    Output <- new("MatrixSet", modelType = object@modelType, LY = LY, VTE = VTE, RTE = RTE, VY = VY, TY = TY, MY = MY, BE = BE, VPS = VPS, 
+        RPS = RPS, VE = VE, AL = AL, ME = ME, LX = LX, VTD = VTD, RTD = RTD, VX = VX, TX = TX, MX = MX, GA = GA, VPH = VPH, RPH = RPH, 
+        KA = KA, RTH = RTH)
     return(Output)
 }) 

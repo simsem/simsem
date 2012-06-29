@@ -30,6 +30,7 @@ NONE. Only plot the fit indices distributions.
 \section{Details in \dots}{
 	\itemize{
 		\item \code{cutoff}: A priori cutoffs for fit indices, saved in a vector
+		\item \code{cutoff2}: Another set of priori cutoffs for fit indices, saved in a vector
 		\item \code{alpha}:	A priori alpha level to getCutoffs of fit indices (do not specify when you have \code{cutoff})
 		\item \code{revDirec}:	The default is to find critical point on the side that indicates worse fit (the right side of RMSEA or the left side of CFI). If specifying as TRUE, the directions are reversed.
 		\item \code{usedFit}:	The name of fit indices that researchers wish to plot
@@ -65,10 +66,10 @@ Output <- simResult(5, SimData, SimModel)
 plotCutoff(Output, 0.05, usedFit=c("RMSEA", "SRMR", "CFI", "TLI"))
 
 # Varying N
-Output2 <- simResult(NULL, SimData, SimModel, n=seq(50, 100, 10))
+Output2 <- simResult(NULL, SimData, SimModel, n=seq(450, 500, 10))
 plotCutoff(Output2, 0.05)
 
 # Varying N and pmMCAR
-Output3 <- simResult(NULL, SimData, SimModel, n=seq(50, 100, 10), pmMCAR=c(0, 0.05, 0.1, 0.15))
+Output3 <- simResult(NULL, SimData, SimModel, n=seq(450, 500, 10), pmMCAR=c(0, 0.05, 0.1, 0.15))
 plotCutoff(Output3, 0.05)
 }

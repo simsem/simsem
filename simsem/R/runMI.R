@@ -5,17 +5,39 @@
 
 ## TO DO: Get names for each element from the lavaan object
 
-runMI <- function(data.mat, data.model, m, miPackage = "amelia", silent = FALSE, ...) {
+runMI <- function(data.mat, data.model, m, miPackage = "amelia", silent = FALSE, opts = list()) {
     ################### I put the silent argument here as the 'runRep' and 'simResult' have one.
-	require(Amelia)
     data.model@auxiliary <- new("NullVector")
     # Currently only supports imputation by Amelia. We want to add mice, and maybe EM imputatin too...
     if (!miPackage == "amelia") 
         stop("Currently runMI only supports imputation by amelia")
     # Impute missing data no longer creates two copies of imputed data
-    temp.am <- amelia(data.mat, m, p2s = 0, ...)
+	
+	miFun <- list()
+	if(miPackage == "amelia") {
+		require(Amelia)
+		miFun[[1]] <- amelia
+	} else if (miPackage == "mice") {
+		stop("This package has not implemented the mice package yet.")
+		#miFun[[1]] <- mice
+	} else {
+		stop("Cannot recognize the package name used for multiple imputation")
+	}
+    miFun[[2]] <- data.mat
+	miFun[[3]] <- m
+    optsLength <- length(opts)
+	if(optsLength > 0) {
+		for (i in 1:optsLength) {
+			miFun[[i + 3]] <- opts[[i]]
+		}
+		names(miFun) <- c("", "", "", names(opts))
+	}
+    temp.am <- eval(as.call(miFun))
+	
+	
+	
     # nRep <- m
-    args <- list(...)
+    args <- opts
     ## Return list of simModelOut objects, to be combined.
     runSimMI <- function(MIdata, simModel) {
         model <- run(object = simModel, data = MIdata)

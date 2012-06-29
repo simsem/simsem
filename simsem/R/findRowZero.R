@@ -1,4 +1,5 @@
-# findRowZero: Find rows in a matrix that all elements are zero in non-fixed subset rows and columns. This function will be used in findRecursiveSet function.
+# findRowZero: Find rows in a matrix that all elements are zero in non-fixed subset rows and columns. This function will be used in
+# findRecursiveSet function.
 
 findRowZero <- function(square.matrix, is.row.fixed = FALSE) {
     ni <- nrow(square.matrix)

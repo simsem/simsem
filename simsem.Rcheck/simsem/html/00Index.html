@@ -10,7 +10,7 @@
 <div align="center">
 <a href="../../../doc/html/packages.html"><img src="../../../doc/html/left.jpg" alt="[Up]" width="30" height="30" border="0"></a>
 <a href="../../../doc/html/index.html"><img src="../../../doc/html/up.jpg" alt="[Top]" width="30" height="30" border="0"></a>
-</div><h2>Documentation for package &lsquo;simsem&rsquo; version 0.2-1</h2>
+</div><h2>Documentation for package &lsquo;simsem&rsquo; version 0.2-7</h2>
 
 <ul><li><a href="../DESCRIPTION">DESCRIPTION file</a>.</li>
 </ul>
@@ -51,7 +51,7 @@
 <tr><td width="25%"><a href="adjust.html">adjust-methods</a></td>
 <td>Change an element in 'SimMatrix', 'SymMatrix', or 'SimVector'.</td></tr>
 <tr><td width="25%"><a href="anova.html">anova-method</a></td>
-<td>Provide a comparison of nested models across replications</td></tr>
+<td>Provide a comparison of nested models and nonnested models across replications</td></tr>
 </table>
 
 <h2><a name="B">-- B --</a></h2>
@@ -71,6 +71,8 @@
 <tr><td width="25%"><a href="checkInputValue.html">checkInputValueVector</a></td>
 <td>Check the value argument in the matrix, symmetric matrix, or vector objects</td></tr>
 <tr><td width="25%"><a href="clean.html">clean</a></td>
+<td>Extract only converged replications in the result objects</td></tr>
+<tr><td width="25%"><a href="cleanSimResult.html">cleanSimResult</a></td>
 <td>Extract only converged replications in the result object</td></tr>
 <tr><td width="25%"><a href="collapseExo.html">collapseExo</a></td>
 <td>Collapse all exogenous variables and put all in endogenous side only.</td></tr>
@@ -175,6 +177,8 @@
 <table width="100%">
 <tr><td width="25%"><a href="fillParam.html">fillParam</a></td>
 <td>Fill in other objects based on the parameter values of current objects</td></tr>
+<tr><td width="25%"><a href="find2Dhist.html">find2Dhist</a></td>
+<td>Fit the 2D Kernel Density Estimate</td></tr>
 <tr><td width="25%"><a href="findFactorIntercept.html">findFactorIntercept</a></td>
 <td>Find factor intercept from regression coefficient matrix and factor total means</td></tr>
 <tr><td width="25%"><a href="findFactorMean.html">findFactorMean</a></td>
@@ -193,6 +197,8 @@
 <td>Find indicator residual variances from factor loading matrix, total factor covariance, and total indicator variances.</td></tr>
 <tr><td width="25%"><a href="findIndTotalVar.html">findIndTotalVar</a></td>
 <td>Find indicator total variances from factor loading matrix, total factor covariance, and indicator residual variances.</td></tr>
+<tr><td width="25%"><a href="findphist.html">findphist</a></td>
+<td>Find the density (likelihood) of a pair value in 2D Kernel Density Estimate</td></tr>
 <tr><td width="25%"><a href="findPossibleFactorCor.html">findPossibleFactorCor</a></td>
 <td>Find the appropriate position for freely estimated correlation (or covariance) given a regression coefficient matrix</td></tr>
 <tr><td width="25%"><a href="findPower.html">findPower</a></td>
@@ -215,11 +221,15 @@
 <tr><td width="25%"><a href="getCondQtile.html">getCondQtile</a></td>
 <td>Get a quantile of a variable given values of predictors</td></tr>
 <tr><td width="25%"><a href="getCutoff.html">getCutoff</a></td>
-<td>Find cutoff given a priori alpha level</td></tr>
+<td>Find fit indices cutoff given a priori alpha level</td></tr>
 <tr><td width="25%"><a href="getCutoff.html">getCutoff-method</a></td>
-<td>Find cutoff given a priori alpha level</td></tr>
+<td>Find fit indices cutoff given a priori alpha level</td></tr>
 <tr><td width="25%"><a href="getCutoff.html">getCutoff-methods</a></td>
-<td>Find cutoff given a priori alpha level</td></tr>
+<td>Find fit indices cutoff given a priori alpha level</td></tr>
+<tr><td width="25%"><a href="getCutoffNested.html">getCutoffNested</a></td>
+<td>Find fit indices cutoff for nested model comparison given a priori alpha level</td></tr>
+<tr><td width="25%"><a href="getCutoffNonNested.html">getCutoffNonNested</a></td>
+<td>Find fit indices cutoff for non-nested model comparison given a priori alpha level</td></tr>
 <tr><td width="25%"><a href="getKeywords.html">getKeywords</a></td>
 <td>List of all keywords used in the 'simsem' package</td></tr>
 <tr><td width="25%"><a href="getPopulation.html">getPopulation</a></td>
@@ -242,6 +252,18 @@
 <td>Find power in rejecting alternative models based on fit indices criteria</td></tr>
 <tr><td width="25%"><a href="getPowerFit.html">getPowerFit-methods</a></td>
 <td>Find power in rejecting alternative models based on fit indices criteria</td></tr>
+<tr><td width="25%"><a href="getPowerFitNested.html">getPowerFitNested</a></td>
+<td>Find power in rejecting nested models based on the differences in fit indices</td></tr>
+<tr><td width="25%"><a href="getPowerFitNested.html">getPowerFitNested-method</a></td>
+<td>Find power in rejecting nested models based on the differences in fit indices</td></tr>
+<tr><td width="25%"><a href="getPowerFitNested.html">getPowerFitNested-methods</a></td>
+<td>Find power in rejecting nested models based on the differences in fit indices</td></tr>
+<tr><td width="25%"><a href="getPowerFitNonNested.html">getPowerFitNonNested</a></td>
+<td>Find power in rejecting non-nested models based on the differences in fit indices</td></tr>
+<tr><td width="25%"><a href="getPowerFitNonNested.html">getPowerFitNonNested-method</a></td>
+<td>Find power in rejecting non-nested models based on the differences in fit indices</td></tr>
+<tr><td width="25%"><a href="getPowerFitNonNested.html">getPowerFitNonNested-methods</a></td>
+<td>Find power in rejecting non-nested models based on the differences in fit indices</td></tr>
 </table>
 
 <h2><a name="I">-- I --</a></h2>
@@ -251,6 +273,8 @@
 <td>Impose MAR, MCAR, planned missingness, or attrition on a data set</td></tr>
 <tr><td width="25%"><a href="indProd.html">indProd</a></td>
 <td>Make a product of indicators using mean centering or double-mean centering</td></tr>
+<tr><td width="25%"><a href="interpolate.html">interpolate</a></td>
+<td>Find the value of one vector relative to a value of another vector by interpolation</td></tr>
 <tr><td width="25%"><a href="isCorMatrix.html">isCorMatrix</a></td>
 <td>Check whether a 'matrix' is a possible correlation matrix</td></tr>
 <tr><td width="25%"><a href="isDefault.html">isDefault</a></td>
@@ -291,6 +315,8 @@
 <h2><a name="L">-- L --</a></h2>
 
 <table width="100%">
+<tr><td width="25%"><a href="likRatioFit.html">likRatioFit</a></td>
+<td>Find the likelihood ratio (or Bayes factor) based on the bivariate distribution of fit indices</td></tr>
 <tr><td width="25%"><a href="loadingFromAlpha.html">loadingFromAlpha</a></td>
 <td>Find standardized factor loading from coefficient alpha</td></tr>
 </table>
@@ -316,6 +342,8 @@
 <td>Function to pool imputed results that saved in a matrix format</td></tr>
 <tr><td width="25%"><a href="MatrixSet-class.html">MisspecSet-class</a></td>
 <td>Class '"MatrixSet"'</td></tr>
+<tr><td width="25%"><a href="multipleAllEqual.html">multipleAllEqual</a></td>
+<td>Test whether all objects are equal</td></tr>
 </table>
 
 <h2><a name="N">-- N --</a></h2>
@@ -364,11 +392,15 @@
 <tr><td width="25%"><a href="plot3DQtile.html">plot3DQtile</a></td>
 <td>Build a persepctive plot or contour plot of a quantile of predicted values</td></tr>
 <tr><td width="25%"><a href="plotCutoff.html">plotCutoff</a></td>
-<td>Plot sampling distributions of fit indices</td></tr>
+<td>Plot sampling distributions of fit indices with fit indices cutoffs</td></tr>
 <tr><td width="25%"><a href="plotCutoff.html">plotCutoff-method</a></td>
-<td>Plot sampling distributions of fit indices</td></tr>
+<td>Plot sampling distributions of fit indices with fit indices cutoffs</td></tr>
 <tr><td width="25%"><a href="plotCutoff.html">plotCutoff-methods</a></td>
-<td>Plot sampling distributions of fit indices</td></tr>
+<td>Plot sampling distributions of fit indices with fit indices cutoffs</td></tr>
+<tr><td width="25%"><a href="plotCutoffNested.html">plotCutoffNested</a></td>
+<td>Plot sampling distributions of the differences in fit indices between nested models with fit indices cutoffs</td></tr>
+<tr><td width="25%"><a href="plotCutoffNonNested.html">plotCutoffNonNested</a></td>
+<td>Plot sampling distributions of the differences in fit indices between non-nested models with fit indices cutoffs</td></tr>
 <tr><td width="25%"><a href="plotDist.html">plotDist</a></td>
 <td>Plot a distribution of a distribution object or data distribution object</td></tr>
 <tr><td width="25%"><a href="SimDataDist-class.html">plotDist-method</a></td>
@@ -377,18 +409,30 @@
 <td>Distribution Objects</td></tr>
 <tr><td width="25%"><a href="plotDist.html">plotDist-methods</a></td>
 <td>Plot a distribution of a distribution object or data distribution object</td></tr>
+<tr><td width="25%"><a href="plotIndividualScatter.html">plotIndividualScatter</a></td>
+<td>Plot an overlaying scatter plot visualizing the power of rejecting misspecified models</td></tr>
+<tr><td width="25%"><a href="plotLogisticFit.html">plotLogisticFit</a></td>
+<td>Plot multiple logistic curves for predicting whether rejecting a misspecified model</td></tr>
 <tr><td width="25%"><a href="plotMisfit.html">plotMisfit</a></td>
 <td>Plot the population misfit in parameter result object</td></tr>
+<tr><td width="25%"><a href="plotOverHist.html">plotOverHist</a></td>
+<td>Plot multiple overlapping histograms</td></tr>
 <tr><td width="25%"><a href="plotPower.html">plotPower</a></td>
 <td>Make a power plot of a parameter given varying parameters</td></tr>
 <tr><td width="25%"><a href="plotPowerFit.html">plotPowerFit</a></td>
-<td>Plot sampling distributions of fit indices that visualize power</td></tr>
-<tr><td width="25%"><a href="plotPowerFit.html">plotPowerFit-method</a></td>
-<td>Plot sampling distributions of fit indices that visualize power</td></tr>
-<tr><td width="25%"><a href="plotPowerFit.html">plotPowerFit-methods</a></td>
-<td>Plot sampling distributions of fit indices that visualize power</td></tr>
+<td>Plot sampling distributions of fit indices that visualize power of rejecting datasets underlying misspecified models</td></tr>
+<tr><td width="25%"><a href="plotPowerFitDf.html">plotPowerFitDf</a></td>
+<td>Plot sampling distributions of fit indices that visualize power of rejecting datasets underlying misspecified models</td></tr>
+<tr><td width="25%"><a href="plotPowerFitNested.html">plotPowerFitNested</a></td>
+<td>Plot power of rejecting a nested model in a nested model comparison by each fit index</td></tr>
+<tr><td width="25%"><a href="plotPowerFitNonNested.html">plotPowerFitNonNested</a></td>
+<td>Plot power of rejecting a non-nested model based on a difference in fit index</td></tr>
+<tr><td width="25%"><a href="plotPowerSig.html">plotPowerSig</a></td>
+<td>Plot multiple logistic curves given a significance result matrix</td></tr>
 <tr><td width="25%"><a href="plotQtile.html">plotQtile</a></td>
 <td>Build a scatterplot with overlaying line of quantiles of predicted values</td></tr>
+<tr><td width="25%"><a href="plotScatter.html">plotScatter</a></td>
+<td>Plot overlaying scatter plots visualizing the power of rejecting misspecified models</td></tr>
 <tr><td width="25%"><a href="popDiscrepancy.html">popDiscrepancy</a></td>
 <td>Find the discrepancy value between two means and covariance matrices</td></tr>
 <tr><td width="25%"><a href="popMisfit.html">popMisfit</a></td>
@@ -409,6 +453,14 @@
 <td>Find p-values (1 - percentile)</td></tr>
 <tr><td width="25%"><a href="pValue.html">pValue-methods</a></td>
 <td>Find p-values (1 - percentile)</td></tr>
+<tr><td width="25%"><a href="pValueCondCutoff.html">pValueCondCutoff</a></td>
+<td>Find a p value when the target is conditional (valid) on a specific value of a predictor</td></tr>
+<tr><td width="25%"><a href="pValueNested.html">pValueNested</a></td>
+<td>Find p-values (1 - percentile) for a nested model comparison</td></tr>
+<tr><td width="25%"><a href="pValueNonNested.html">pValueNonNested</a></td>
+<td>Find p-values (1 - percentile) for a non-nested model comparison</td></tr>
+<tr><td width="25%"><a href="pValueVariedCutoff.html">pValueVariedCutoff</a></td>
+<td>Find a p value when the cutoff is specified as a vector given the values of predictors</td></tr>
 </table>
 
 <h2><a name="R">-- R --</a></h2>
@@ -422,6 +474,8 @@
 <td>Reduce the model constraint to data generation parameterization to analysis model parameterization.</td></tr>
 <tr><td width="25%"><a href="residualCovariate.html">residualCovariate</a></td>
 <td>Residual centered all target indicators by covariates</td></tr>
+<tr><td width="25%"><a href="revText.html">revText</a></td>
+<td>Reverse the proportion value by subtracting it from 1</td></tr>
 <tr><td width="25%"><a href="run.html">run</a></td>
 <td>Run a particular object in 'simsem' package.</td></tr>
 <tr><td width="25%"><a href="SimData-class.html">run-method</a></td>
@@ -453,11 +507,17 @@
 <tr><td width="25%"><a href="run.html">run-methods</a></td>
 <td>Run a particular object in 'simsem' package.</td></tr>
 <tr><td width="25%"><a href="runFit.html">runFit</a></td>
-<td>Build a result object from analyzing real data</td></tr>
+<td>Build a Monte Carlo simulation that the data-generation parameters are from the result of analyzing real data</td></tr>
 <tr><td width="25%"><a href="runFit.html">runFit-method</a></td>
-<td>Build a result object from analyzing real data</td></tr>
+<td>Build a Monte Carlo simulation that the data-generation parameters are from the result of analyzing real data</td></tr>
 <tr><td width="25%"><a href="runFit.html">runFit-methods</a></td>
-<td>Build a result object from analyzing real data</td></tr>
+<td>Build a Monte Carlo simulation that the data-generation parameters are from the result of analyzing real data</td></tr>
+<tr><td width="25%"><a href="runFitParam.html">runFitParam</a></td>
+<td>Build a parameter result object that the data-generation parameters are from the result of analyzing real data</td></tr>
+<tr><td width="25%"><a href="runFitParam.html">runFitParam-method</a></td>
+<td>Build a parameter result object that the data-generation parameters are from the result of analyzing real data</td></tr>
+<tr><td width="25%"><a href="runFitParam.html">runFitParam-methods</a></td>
+<td>Build a parameter result object that the data-generation parameters are from the result of analyzing real data</td></tr>
 <tr><td width="25%"><a href="runLavaan.html">runLavaan</a></td>
 <td>Run data by the model object by the 'lavaan' package</td></tr>
 <tr><td width="25%"><a href="runMI.html">runMI</a></td>
@@ -504,13 +564,13 @@
 <tr><td width="25%"><a href="VirtualDist-class.html">SimChisq-class</a></td>
 <td>Distribution Objects</td></tr>
 <tr><td width="25%"><a href="simData.html">simData</a></td>
-<td>Data object</td></tr>
+<td>Create a Data object</td></tr>
 <tr><td width="25%"><a href="SimData-class.html">SimData-class</a></td>
 <td>Class '"SimData"'</td></tr>
 <tr><td width="25%"><a href="simData.html">simData-method</a></td>
-<td>Data object</td></tr>
+<td>Create a Data object</td></tr>
 <tr><td width="25%"><a href="simData.html">simData-methods</a></td>
-<td>Data object</td></tr>
+<td>Create a Data object</td></tr>
 <tr><td width="25%"><a href="simDataDist.html">simDataDist</a></td>
 <td>Create a data distribution object.</td></tr>
 <tr><td width="25%"><a href="SimDataDist-class.html">SimDataDist-class</a></td>
@@ -574,13 +634,13 @@
 <tr><td width="25%"><a href="simMisspecSEM.html">simMisspecSEM</a></td>
 <td>Set of model misspecification for SEM model.</td></tr>
 <tr><td width="25%"><a href="simModel.html">simModel</a></td>
-<td>Create simModel from model specification and be ready for data analysis.</td></tr>
+<td>Create a model object</td></tr>
 <tr><td width="25%"><a href="SimModel-class.html">SimModel-class</a></td>
 <td>Class '"SimModel"'</td></tr>
 <tr><td width="25%"><a href="simModel.html">simModel-method</a></td>
-<td>Create simModel from model specification and be ready for data analysis.</td></tr>
+<td>Create a model object</td></tr>
 <tr><td width="25%"><a href="simModel.html">simModel-methods</a></td>
-<td>Create simModel from model specification and be ready for data analysis.</td></tr>
+<td>Create a model object</td></tr>
 <tr><td width="25%"><a href="SimModelMIOut-class.html">SimModelMIOut-class</a></td>
 <td>Class '"SimModelMIOut"'</td></tr>
 <tr><td width="25%"><a href="SimModelOut-class.html">SimModelOut-class</a></td>
@@ -642,13 +702,15 @@
 <tr><td width="25%"><a href="VirtualDist-class.html">SimWeibull-class</a></td>
 <td>Distribution Objects</td></tr>
 <tr><td width="25%"><a href="skew.html">skew</a></td>
-<td>Finding skewness</td></tr>
+<td>Find skewness</td></tr>
 <tr><td width="25%"><a href="VirtualDist-class.html">skew-method</a></td>
 <td>Distribution Objects</td></tr>
 <tr><td width="25%"><a href="skew.html">skew-method</a></td>
-<td>Finding skewness</td></tr>
+<td>Find skewness</td></tr>
 <tr><td width="25%"><a href="skew.html">skew-methods</a></td>
-<td>Finding skewness</td></tr>
+<td>Find skewness</td></tr>
+<tr><td width="25%"><a href="sortList.html">sortList</a></td>
+<td>Sort two objects in a list</td></tr>
 <tr><td width="25%"><a href="standardize.html">standardize</a></td>
 <td>Standardize the parameter estimates within an object</td></tr>
 <tr><td width="25%"><a href="standardize.html">standardize-method</a></td>
@@ -707,6 +769,18 @@
 <td>Distribution Objects</td></tr>
 <tr><td width="25%"><a href="VirtualRSet-class.html">summary-method</a></td>
 <td>Class '"VirtualRSet"', '"SimLabels"' and '"SimRSet"'</td></tr>
+<tr><td width="25%"><a href="summaryFit.html">summaryFit</a></td>
+<td>Provide summary of model fit across replications</td></tr>
+<tr><td width="25%"><a href="summaryFit.html">summaryFit-method</a></td>
+<td>Provide summary of model fit across replications</td></tr>
+<tr><td width="25%"><a href="summaryFit.html">summaryFit-methods</a></td>
+<td>Provide summary of model fit across replications</td></tr>
+<tr><td width="25%"><a href="summaryMisspec.html">summaryMisspec</a></td>
+<td>Provide summary of model misspecification imposed across replications</td></tr>
+<tr><td width="25%"><a href="summaryMisspec.html">summaryMisspec-method</a></td>
+<td>Provide summary of model misspecification imposed across replications</td></tr>
+<tr><td width="25%"><a href="summaryMisspec.html">summaryMisspec-methods</a></td>
+<td>Provide summary of model misspecification imposed across replications</td></tr>
 <tr><td width="25%"><a href="summaryParam.html">summaryParam</a></td>
 <td>Provide summary of parameter estimates and standard error across replications</td></tr>
 <tr><td width="25%"><a href="SimResultParam-class.html">summaryParam-method</a></td>
@@ -768,6 +842,8 @@
 <td>Transform the analysis model object into the object for data generation</td></tr>
 <tr><td width="25%"><a href="toSimSet.html">toSimSet-methods</a></td>
 <td>Transform the analysis model object into the object for data generation</td></tr>
+<tr><td width="25%"><a href="twoTailedPValue.html">twoTailedPValue</a></td>
+<td>Find two-tailed _p_ value from one-tailed _p_ value</td></tr>
 </table>
 
 <h2><a name="V">-- V --</a></h2>
@@ -796,6 +872,8 @@
 <table width="100%">
 <tr><td width="25%"><a href="weightedMean.html">weightedMean</a></td>
 <td>Calculate the weighted mean of a variable</td></tr>
+<tr><td width="25%"><a href="whichMonotonic.html">whichMonotonic</a></td>
+<td>Extract a part of a vector that is monotonically increasing or decreasing</td></tr>
 <tr><td width="25%"><a href="writeLavaanCode.html">writeLavaanCode</a></td>
 <td>Write a lavaan code given the matrices of free parameter</td></tr>
 <tr><td width="25%"><a href="writeLavaanConstraint.html">writeLavaanConstraint</a></td>

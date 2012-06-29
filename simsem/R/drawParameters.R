@@ -34,7 +34,8 @@ drawParametersMisspec <- function(objSet, objMisspec = new("NullSimMisspec"), ob
                       if (!isNullObject(objEqualCon)) 
                         nFree <- nFree + countFreeParameters(objEqualCon)
                       dfParam <- nElements - nFree
-                      misfit <- popMisfitMACS(implied.CM.param$M, implied.CM.param$CM, implied.CM.misspec$M, implied.CM.misspec$CM, fit.measures = objMisspec@misfitType, dfParam = dfParam)
+                      misfit <- popMisfitMACS(implied.CM.param$M, implied.CM.param$CM, implied.CM.misspec$M, implied.CM.misspec$CM, fit.measures = objMisspec@misfitType, 
+                        dfParam = dfParam)
                       if (objMisspec@averageNumMisspec) 
                         misfit <- misfit/countFreeParameters(objMisspec)
                       

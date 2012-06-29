@@ -1,4 +1,5 @@
-# runMisspec: Run parameters from SimSet object with the parameters from SimMisspec to be put on top of it. The final parameters will be with and without model misspecification.
+# runMisspec: Run parameters from SimSet object with the parameters from SimMisspec to be put on top of it. The final parameters
+# will be with and without model misspecification.
 
 runMisspec <- function(object, misspec, SimEqualCon = new("NullSimEqualCon")) {
     Output1 <- NULL

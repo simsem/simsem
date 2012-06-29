@@ -1,0 +1,260 @@
+I think the entire user interface can be captured in these functions. The three primary functions are bind, model, and sim.
+This framework allows a lot of flexibility for the user as well as transparency. The "generate" function is how data is generated in "sim", which itself has two steps, "drawParameters" and "createData." "analyze" can be used to analyze real data, and is what will be used inside "sim" to analyze the simulated data. The arguments to these functions map directly onto the arguments in "sim." "fun" is a general way to pass functions to "sim" that operate on each individual generated data set. The special case of imposing missing values is handled with "miss."
+
+In addition to the user interface, we also took some thought to understand the internal class representations.
+Above each function is the data type transformation taking place internally. Anything in brackets denotes a list of objects of that class, or multiple objects passed through arguments. For example, the function "simMatrix" takes multiple matrices and turns them into one SimMatrix. 
+
+After the internal types, I have listed the function and it's arguments. Each argument is followed by it's type (in parenthesis) and a description of what the argument specifies. (charv) is a character vector, c("a","b","c") and (numericv) is a numeric vector c(1,2,3). The arguments are typically divided into "Required" and "Optional." 
+
+There are 4 classes: SimMatrix, SimSem, SimResult, and SimResultParam.
+There are 2 other data structures that are primarily internal: the parameter table (a data frame) and GLIST, which is just a list of matrices with numeric values. The descriptions of these are listed after the user specification.
+
+
+bind :: [matrix] -> SimMatrix
+bind <- function(
+	# Required
+	free	 (matrix)     - values can be fixed to a number e.g. "0", freely estimated "NA", or labeled e.g. "a1".
+				If two values share the same character label, they are constrained to be equal.
+	
+	# Optional
+	popParam (matrix) or  - matrix of specified population parameters for data generation (combination char/numeric)
+		 (numeric) or - all freely estimated parameters receive same population value e.g. .7
+		 (char)	      - all freely estimated parameters receive same population distribution  e.g. "runif(1,0,1)"
+	misspec	 (matrix) or  - model parameters that have misspecification e.g. "runif(1,0,1)".
+		 (char)       - If only a single character vector is specified, all parameters have that misspecification	
+	prior	 (matrix) or  - estimated model parameters with a prior distribution
+                 (char)       - freely estimated model parameters all have same prior
+)
+
+bind :: [vector] -> SimVector. Spec is identical to simMatrix.
+ 
+
+model :: [SimMatrix, SimVector] -> SimSem
+model <- function(
+	PS/RPS	  (simMatrix) or [simMatrix] - factor covariance / correlation 
+	LY	  (simMatrix) or [simMatrix] - factor loading
+	BE	  (simMatrix) or [simMatrix] - regression coefficient				
+	TE/RTE	  (simMatrix) or [simMatrix] - measurement error covariance / correlation  Default: Identity for RTE
+
+	VTE	  (simVector) - Measurement error variance	Default: Implied, Free
+	VY	  (simVector) - total indicator variance. 	Default: 1
+	VPS	  (simVector) - total factor variance		Default: 1
+	TY	  (simVector) - indicator intercepts		Default: Implied, Free
+	AL	  (simVector) - factor intercepts		Default: 0
+	MY 	  (simVector) - indicator means			Default: 0
+	ME	  (simVector) - factor means			Default: 0	
+)
+
+
+
+generate :: PT -> df (Simulated Data)
+generate <- function(
+	# Required
+	pt        	(SimSem)							
+	n 	  	(numeric)
+	data	  	(bool) - generate a simulated data set, or save as data generation template for simulation
+	
+	# Optional		
+	facDist   	(char) or (charv: length=number of factors) 		
+	indDist	  	(char) or (charv: length=number of indicators)
+	errDist   	(char) or (charv: length=number of indicators)
+	conBeforeMis	(bool)    - constraint parameters before misspecification
+	misBeforeFill	(bool)    - apply misspecification before auto completion of parameters
+	misfitType	(char)    - "rmsea", "f0", "srmr"
+	misfitBound	(numericv) - upper and lower bounds for population misfit
+	averageNumMisspec (bool)  - misfit divided by total free elements in model
+	optMisfit	(char)    - "min", "max". Function draws many misspecification sets, picks either min or max.
+	numIter		(numeric) - number of iterations for optimization method
+	modelBoot 	(bool) or - model based bootstrap for data generation. If a df is passed, the bootsrap will follow it's distribution 
+			(df)		
+	aux	  	(charv) or - Does not exist yet, but could add automated auxiliary variable creation (model based, or correlation)	  
+		  	(numericv)	
+	serial???
+)
+
+# These next two functions are a part of generate, and are used to show users what happens under the surface. The arguments are identical.
+drawParam :: PT -> GLIST
+drawParam <- function(
+	model 		(SimSem)
+	conBeforeMis
+	misBeforeFill
+	misfitType
+	misfitBound
+	averageNumMisspec
+	optMisfit
+	numIter
+)
+
+createData :: GLIST -> df
+createData <- function(
+	GLIST							
+	n 	  (numeric)
+	data	  (bool) - generate a simulated data set, or save as data generation template for simulation
+	
+	# Optional		
+	facDist   (char) or (charv: length=number of factors) 		
+	indDist	  (char) or (charv: length=number of indicators)
+	errDist   (char) or (charv: length=number of indicators)
+	modelBoot (bool) or (df)		
+	aux	  (charv) or 
+		  (numericv)
+	serial???
+)
+
+analyze :: (PT, df, miss=NULL, ...) -> lavaan fit
+analyze <- function(
+	# Required
+	pt	  (SimSem)
+	data	  (df)
+	# Optional
+	package   (char) - maybe? Or do we want to just be tied to lavaan?
+	estimator (char)
+	miss	  (char) - simMissing object for imputation else default to FIML
+	aux	  (numericv) or - indices or names of auxiliary variables
+		  (charv) 
+	...	  arguments to be passed to lavaan
+	
+)
+
+
+fun :: function -> SimFunction
+fun <- function (fun, ...)
+
+miss :: imposeMissing -> SimMissing
+miss <- function (
+	data 	(matrix)	- raw data
+	cov	(numericv)	- covariate argument for MAR, or attrition
+	pmMCAR  (numeric)	- percent MCAR
+	pmMAR	(numeric)	- percent MAR
+	nforms	(numeric)	- number of forms
+	itemGroups [numericv] 	- list of column index groups e.g. [[1]] = (1,2,3,4), [[2]] = (5,6,7,8), etc.
+	twoMethod  (numeric)	- vector of column index and percent missing
+	prAttr	(numeric) or [numeric] - probability of attrition
+	timePoints (numeric)	- number of time points
+	ignoreCols (numeric)
+	threshold  (numeric)	- for MAR missing. If value on covariate is above threshold, it is eligible to be deleted.
+	logical	(matrix)	- will impose missing directly.
+	miPackage		- Package to be used for imputation currently only Amelia is supported
+	...			- additonal arguments to be passed to amelia (or mice in the future?)
+)
+
+sim :: SimSem -> SimResult
+sim <- function(
+	# Fixed Simulation Parameters
+	nRep	  (numeric)
+	generate  (SimSem)
+	model	  (SimSem) optional if generation model and analysis model are different
+	fun       (SimFunction)
+	miss 	  (SimMissing)
+
+	# Data Generation
+	facDist
+	inDist 
+	errDist
+	popMisspec
+	modelBoot
+	conBeforeMis
+	misBeforeFill
+	misfitType
+	misfitBound
+	averageNumMisspec
+	optMisfit
+	serial???
+	
+	# Analysis
+	package
+	estimator
+	aux
+	...
+
+	# Computing Parameters
+	seed	  (numeric)
+	silent	  (bool)
+	multicore (bool)
+	numProc	  (numeric)
+
+	# Random Simulation Parameters
+	n	  (numericv) or (char) e.g. seq(100,500,by=100) or "runif(500,100,500)"
+	pmMCAR	  (numvericv) or (char)
+	pmMAR	  (numericv) or (char)
+)
+
+
+CLASSES
+
+Parameter Table Specification
+type, ng, ny, ne, lambda, psi, beta, theta, nu, alpha
+list(id, LHS, op, RHS, user, free, group, label, popParam, misspec, labelStd, std, misStd)
+
+SimMatrix
+Slots:
+@ Free
+@ popParam
+@ misspec
+@ prior
+
+Methods:
+- adjust
+- run
+- summary
+- extract
+
+Simsem
+Slots:
+@ PT
+@ VY, VE, ME, MY
+
+Methods:
+- run
+- summary
+- extract
+
+SimResult
+Slots:
+@ modelType 
+@ nRep
+@ coef
+@ se
+@ fit
+@ converged
+@ seed
+@ paramValue
+@ FMI1
+@ FMI2
+@ stdCoef
+@ n
+@ pmMCAR
+@ pmMAR
+@ simResultParam - diagnostic. What happened when we drew those random prameters?
+
+Methods
+ - getCutoff(), plotCutoff()
+ - getPower(), plotPower()
+ - anova()
+ - summary() - gain data.frame argument to return summarized results as a data frame?
+ - summaryPopulation()
+ - getPopulation() 
+ - setPopulation()
+ - plotMisfit()
+
+SimResultParam
+Slots:
+@ modelType
+@ nRep
+@ misspec
+@ fit
+@ seed
+
+Methods
+ - summary
+ - summaryParam
+ - plotMisfit
+
+
+matrix(GLIST) 
+[[1]] lambda
+[[2]] psi
+[[3]] beta
+[[4]] theta
+[[5]] nu
+[[6]] alpha 

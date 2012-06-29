@@ -129,8 +129,9 @@ setMethod("combineObject", signature(object1 = "MatrixSet", object2 = "MatrixSet
     KA <- combineObject(object1@KA, object2@KA)
     TH <- combineObject(object1@TH, object2@TH)
     RTH <- combineObject(object1@RTH, object2@RTH)
-    Output <- new("MatrixSet", modelType = object1@modelType, LY = LY, VTE = VTE, TE = TE, RTE = RTE, VY = VY, TY = TY, MY = MY, BE = BE, VPS = VPS, PS = PS, RPS = RPS, VE = VE, AL = AL, ME = ME, 
-        LX = LX, VTD = VTD, TD = TD, RTD = RTD, VX = VX, TX = TX, MX = MX, GA = GA, VPH = VPH, PH = PH, RPH = RPH, KA = KA, TH = TH, RTH = RTH)
+    Output <- new("MatrixSet", modelType = object1@modelType, LY = LY, VTE = VTE, TE = TE, RTE = RTE, VY = VY, TY = TY, MY = MY, BE = BE, 
+        VPS = VPS, PS = PS, RPS = RPS, VE = VE, AL = AL, ME = ME, LX = LX, VTD = VTD, TD = TD, RTD = RTD, VX = VX, TX = TX, MX = MX, GA = GA, 
+        VPH = VPH, PH = PH, RPH = RPH, KA = KA, TH = TH, RTH = RTH)
     return(Output)
 })
 
@@ -237,6 +238,6 @@ setMethod("combineObject", signature(object1 = "SimParam", object2 = "list"), de
     } else {
         stop("something wrong!")
     }
-    return(new("SimRSet", modelType = object1@modelType, PS = object1@PS, AL = object1@AL, BE = object1@BE, PH = object1@PH, KA = object1@KA, GA = object1@GA, LY = object1@LY, TE = object1@TE, TY = object1@TY, 
-        LX = object1@LX, TD = object1@TD, TX = object1@TX, TH = object1@TH))
+    return(new("SimRSet", modelType = object1@modelType, PS = object1@PS, AL = object1@AL, BE = object1@BE, PH = object1@PH, KA = object1@KA, 
+        GA = object1@GA, LY = object1@LY, TE = object1@TE, TY = object1@TY, LX = object1@LX, TD = object1@TD, TX = object1@TX, TH = object1@TH))
 }) 

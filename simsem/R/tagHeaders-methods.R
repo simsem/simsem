@@ -1,4 +1,5 @@
-# tagHeaders: This element will add names in each element of a vector or will add row and columns names of a matrix with variable or factor names
+# tagHeaders: This element will add names in each element of a vector or will add row and columns names of a matrix with variable or
+# factor names
 
 setMethod("tagHeaders", signature = "VirtualRSet", definition = function(object) {
     ny <- NULL

@@ -12,7 +12,8 @@ setMethod("setPopulation", signature(target = "SimResult", population = "SimSet"
     return(target)
 })
 
-setMethod("setPopulation", signature(target = "SimResult", population = "VirtualRSet"), definition = function(target, population, parameter) {
+setMethod("setPopulation", signature(target = "SimResult", population = "VirtualRSet"), definition = function(target, population, 
+    parameter) {
     LabelsDataParam <- makeLabels(parameter, "OpenMx")
     target@paramValue <- vectorizeObject(population, LabelsDataParam)
     return(target)

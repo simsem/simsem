@@ -57,5 +57,6 @@ defaultStartingValues <- function(object) {
         TH <- matrix(NA, nrow(object@TH), ncol(object@TH))
         TH[is.na(object@TH)] <- 0.7
     })
-    return(new("SimRSet", LY = LY, TE = TE, BE = BE, PS = PS, AL = AL, TY = TY, LX = LX, TD = TD, TX = TX, GA = GA, PH = PH, KA = KA, TH = TH, modelType = object@modelType))
+    return(new("SimRSet", LY = LY, TE = TE, BE = BE, PS = PS, AL = AL, TY = TY, LX = LX, TD = TD, TX = TX, GA = GA, PH = PH, KA = KA, 
+        TH = TH, modelType = object@modelType))
 } 

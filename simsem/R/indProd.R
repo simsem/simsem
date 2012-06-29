@@ -18,7 +18,8 @@ indProd <- function(data, var1, var2, match = TRUE, meanC = TRUE, residualC = FA
         if (residualC) {
             colnames(datProd) <- paste("interactionProduct", 1:ncol(datProd), sep = "")
             temp <- data.frame(datProd, dat1, dat2)
-            express <- paste("cbind(", paste(colnames(datProd), collapse = ", "), ") ~ ", paste(c(colnames(dat1), colnames(dat2)), collapse = " + "), sep = "")
+            express <- paste("cbind(", paste(colnames(datProd), collapse = ", "), ") ~ ", paste(c(colnames(dat1), colnames(dat2)), collapse = " + "), 
+                sep = "")
             datProd <- lm(express, data = temp)$residuals
         }
         if (doubleMC) 
@@ -38,7 +39,8 @@ indProd <- function(data, var1, var2, match = TRUE, meanC = TRUE, residualC = FA
         if (residualC) {
             colnames(datProd) <- paste("interactionProduct", 1:ncol(datProd), sep = "")
             temp <- data.frame(datProd, dat1, dat2)
-            express <- paste("cbind(", paste(colnames(datProd), collapse = ", "), ") ~ ", paste(c(colnames(dat1), colnames(dat2)), collapse = " + "), sep = "")
+            express <- paste("cbind(", paste(colnames(datProd), collapse = ", "), ") ~ ", paste(c(colnames(dat1), colnames(dat2)), collapse = " + "), 
+                sep = "")
             datProd <- lm(express, data = temp)$residuals
         }
         if (doubleMC) 

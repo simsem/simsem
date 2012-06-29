@@ -26,14 +26,16 @@ VirtualRSet-class       Class '"VirtualRSet"', '"SimLabels"' and
 adjust                  Change an element in 'SimMatrix', 'SymMatrix',
                         or 'SimVector'.
 anova,SimResult-method
-                        Provide a comparison of nested models across
-                        replications
+                        Provide a comparison of nested models and
+                        nonnested models across replications
 blankParameters         Change all elements in the non-null objects to
                         be all NAs.
 centralMoment           Calculate central moments of a variable
 checkInputValue         Check the value argument in the matrix,
                         symmetric matrix, or vector objects
 clean                   Extract only converged replications in the
+                        result objects
+cleanSimResult          Extract only converged replications in the
                         result object
 collapseExo             Collapse all exogenous variables and put all in
                         endogenous side only.
@@ -85,6 +87,7 @@ extractVectorNames      Extract a vector of parameter names based on
                         specified elements
 fillParam               Fill in other objects based on the parameter
                         values of current objects
+find2Dhist              Fit the 2D Kernel Density Estimate
 findFactorIntercept     Find factor intercept from regression
                         coefficient matrix and factor total means
 findFactorMean          Find factor total means from regression
@@ -119,13 +122,20 @@ findRowZero             Find rows in a matrix that all elements are
                         zero in non-fixed subset rows and columns.
 findTargetPower         Find a value of varying parameters that
                         provides a given value of power.
+findphist               Find the density (likelihood) of a pair value
+                        in 2D Kernel Density Estimate
 fitMeasuresChi          Find fit indices from the discrepancy values of
                         the target model and null models.
 freeVector              Create a free parameters vector with a starting
                         values in a vector object
 getCondQtile            Get a quantile of a variable given values of
                         predictors
-getCutoff               Find cutoff given a priori alpha level
+getCutoff               Find fit indices cutoff given a priori alpha
+                        level
+getCutoffNested         Find fit indices cutoff for nested model
+                        comparison given a priori alpha level
+getCutoffNonNested      Find fit indices cutoff for non-nested model
+                        comparison given a priori alpha level
 getKeywords             List of all keywords used in the 'simsem'
                         package
 getPopulation           Extract the data generation population model
@@ -133,10 +143,16 @@ getPopulation           Extract the data generation population model
 getPower                Find power of model parameters
 getPowerFit             Find power in rejecting alternative models
                         based on fit indices criteria
+getPowerFitNested       Find power in rejecting nested models based on
+                        the differences in fit indices
+getPowerFitNonNested    Find power in rejecting non-nested models based
+                        on the differences in fit indices
 imposeMissing           Impose MAR, MCAR, planned missingness, or
                         attrition on a data set
 indProd                 Make a product of indicators using mean
                         centering or double-mean centering
+interpolate             Find the value of one vector relative to a
+                        value of another vector by interpolation
 isCorMatrix             Check whether a 'matrix' is a possible
                         correlation matrix
 isDefault               Check whether a vector object is default
@@ -150,6 +166,9 @@ isVarianceConstraint    Check whether all rownames in a constraint
                         matrix containing symbols of variance vectors
 kStat                   Calculate the _k_-statistic of a variable
 kurtosis                Finding excessive kurtosis
+likRatioFit             Find the likelihood ratio (or Bayes factor)
+                        based on the bivariate distribution of fit
+                        indices
 loadingFromAlpha        Find standardized factor loading from
                         coefficient alpha
 makeLabels              Make parameter names for each element in
@@ -162,21 +181,54 @@ miPoolChi               Function to pool chi-square statistics from the
                         result from multiple imputation
 miPoolVector            Function to pool imputed results that saved in
                         a matrix format
+multipleAllEqual        Test whether all objects are equal
 overlapHist             Plot overlapping histograms
 pValue                  Find p-values (1 - percentile)
+pValueCondCutoff        Find a p value when the target is conditional
+                        (valid) on a specific value of a predictor
+pValueNested            Find p-values (1 - percentile) for a nested
+                        model comparison
+pValueNonNested         Find p-values (1 - percentile) for a non-nested
+                        model comparison
+pValueVariedCutoff      Find a p value when the cutoff is specified as
+                        a vector given the values of predictors
 plot3DQtile             Build a persepctive plot or contour plot of a
                         quantile of predicted values
-plotCutoff              Plot sampling distributions of fit indices
+plotCutoff              Plot sampling distributions of fit indices with
+                        fit indices cutoffs
+plotCutoffNested        Plot sampling distributions of the differences
+                        in fit indices between nested models with fit
+                        indices cutoffs
+plotCutoffNonNested     Plot sampling distributions of the differences
+                        in fit indices between non-nested models with
+                        fit indices cutoffs
 plotDist                Plot a distribution of a distribution object or
                         data distribution object
+plotIndividualScatter   Plot an overlaying scatter plot visualizing the
+                        power of rejecting misspecified models
+plotLogisticFit         Plot multiple logistic curves for predicting
+                        whether rejecting a misspecified model
 plotMisfit              Plot the population misfit in parameter result
                         object
+plotOverHist            Plot multiple overlapping histograms
 plotPower               Make a power plot of a parameter given varying
                         parameters
 plotPowerFit            Plot sampling distributions of fit indices that
-                        visualize power
+                        visualize power of rejecting datasets
+                        underlying misspecified models
+plotPowerFitDf          Plot sampling distributions of fit indices that
+                        visualize power of rejecting datasets
+                        underlying misspecified models
+plotPowerFitNested      Plot power of rejecting a nested model in a
+                        nested model comparison by each fit index
+plotPowerFitNonNested   Plot power of rejecting a non-nested model
+                        based on a difference in fit index
+plotPowerSig            Plot multiple logistic curves given a
+                        significance result matrix
 plotQtile               Build a scatterplot with overlaying line of
                         quantiles of predicted values
+plotScatter             Plot overlaying scatter plots visualizing the
+                        power of rejecting misspecified models
 popDiscrepancy          Find the discrepancy value between two means
                         and covariance matrices
 popMisfit               Calculate population misfit
@@ -194,8 +246,15 @@ reduceMatrices          Reduce the model constraint to data generation
                         parameterization.
 residualCovariate       Residual centered all target indicators by
                         covariates
+revText                 Reverse the proportion value by subtracting it
+                        from 1
 run                     Run a particular object in 'simsem' package.
-runFit                  Build a result object from analyzing real data
+runFit                  Build a Monte Carlo simulation that the
+                        data-generation parameters are from the result
+                        of analyzing real data
+runFitParam             Build a parameter result object that the
+                        data-generation parameters are from the result
+                        of analyzing real data
 runLavaan               Run data by the model object by the 'lavaan'
                         package
 runMI                   Multiply impute and analyze data using lavaan
@@ -210,7 +269,7 @@ simBeta                 Create random beta distribution object
 simBinom                Create random binomial distribution object
 simCauchy               Create random Cauchy distribution object
 simChisq                Create random chi-squared distribution object
-simData                 Data object
+simData                 Create a Data object
 simDataDist             Create a data distribution object.
 simEqualCon             Equality Constraint Object
 simExp                  Create random exponential distribution object
@@ -230,8 +289,7 @@ simMisspecCFA           Set of model misspecification for CFA model.
 simMisspecPath          Set of model misspecification for Path analysis
                         model.
 simMisspecSEM           Set of model misspecification for SEM model.
-simModel                Create simModel from model specification and be
-                        ready for data analysis.
+simModel                Create a model object
 simNbinom               Create random negative binomial distribution
                         object
 simNorm                 Create random normal distribution object
@@ -259,12 +317,17 @@ simUnif                 Create random uniform distribution object
 simVector               Create simVector that save free parameters and
                         starting values, as well as fixed values
 simWeibull              Create random Weibull distribution object
-skew                    Finding skewness
+skew                    Find skewness
+sortList                Sort two objects in a list
 standardize             Standardize the parameter estimates within an
                         object
 startingValues          Find starting values by averaging random
                         numbers
 subtractObject          Make a subtraction of each element in an object
+summaryFit              Provide summary of model fit across
+                        replications
+summaryMisspec          Provide summary of model misspecification
+                        imposed across replications
 summaryParam            Provide summary of parameter estimates and
                         standard error across replications
 summaryPopulation       Summarize the data generation population model
@@ -278,6 +341,8 @@ toFunction              Export the distribution object to a function
                         command in text that can be evaluated directly.
 toSimSet                Transform the analysis model object into the
                         object for data generation
+twoTailedPValue         Find two-tailed _p_ value from one-tailed _p_
+                        value
 validateCovariance      Validate whether all elements provides a good
                         covariance matrix
 validateObject          Validate whether the drawn parameters are good.
@@ -285,6 +350,8 @@ validatePath            Validate whether the regression coefficient (or
                         loading) matrix is good
 vectorizeObject         Change an object to a vector with labels
 weightedMean            Calculate the weighted mean of a variable
+whichMonotonic          Extract a part of a vector that is
+                        monotonically increasing or decreasing
 writeLavaanCode         Write a lavaan code given the matrices of free
                         parameter
 writeLavaanConstraint   Write a lavaan code for a given set of equality

@@ -1,4 +1,5 @@
-# checkInputValue: Check the values fed in the simMatrix, simVector, and symMatrix function and assign a function if the name of distribution object is specified
+# checkInputValue: Check the values fed in the simMatrix, simVector, and symMatrix function and assign a function if the name of
+# distribution object is specified
 
 checkInputValueVector <- function(txt) {
     for (i in 1:length(txt)) {

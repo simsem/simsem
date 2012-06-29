@@ -1,4 +1,4 @@
-# runLavaan: Transform model object to lavaan script, run the obtained data, and make model output object
+## runLavaan: Transform model object to lavaan script, run the obtained data, and make model output object
 
 runLavaan <- function(object, Data, miss = "fiml", estimator = "ML") {
     if (!require(lavaan)) {
@@ -13,7 +13,7 @@ runLavaan <- function(object, Data, miss = "fiml", estimator = "ML") {
     modelType <- object@modelType
     varnames <- NULL
     nz <- 0
-    if (!isNullObject(object@auxiliary))
+    if (!isNullObject(object@auxiliary)) 
         nz <- length(object@auxiliary)
     if (modelType == "Path.exo") {
         nx <- ncol(object@param@PH)
@@ -84,14 +84,14 @@ runLavaan <- function(object, Data, miss = "fiml", estimator = "ML") {
                 ratioNULL <- FitIndicesNull["Chi"]/FitIndicesNull["df"]
                 ratioReal <- FitIndices["Chi"]/FitIndices["df"]
                 TLI <- (ratioNULL - ratioReal)/(ratioNULL - 1)
-                if (TLI < 0)
+                if (TLI < 0) 
                   TLI <- 0
                 # Compute CFI
                 num1 <- FitIndicesNull["Chi"] - FitIndicesNull["df"]
-                if (num1 < 0)
+                if (num1 < 0) 
                   num1 <- 0
                 num2 <- FitIndices["Chi"] - FitIndices["df"]
-                if (num2 < 0)
+                if (num2 < 0) 
                   num2 <- 0
                 CFI <- (num1 - num2)/num1
                 FitIndices["baseline.Chi"] <- FitIndicesNull["Chi"]
@@ -101,12 +101,13 @@ runLavaan <- function(object, Data, miss = "fiml", estimator = "ML") {
                 FitIndices["TLI"] <- TLI
             }
         }
-        try(coef <- combineObject(param, inspect(fit, "coef")))
-        try(se <- combineObject(param, inspect(fit, "se")))
-        try(Converged <- inspect(fit, "converged"))
-        try(check <- sum(unlist(lapply(inspect(fit, "se"), sum))))
-        try(if (is.na(check) || check == 0)
+        try(coef <- combineObject(param, inspect(fit, "coef")), silent=TRUE)
+        try(se <- combineObject(param, inspect(fit, "se")), silent=TRUE)
+        try(Converged <- inspect(fit, "converged"), silent=TRUE)
+        try(check <- sum(unlist(lapply(inspect(fit, "se"), sum))), silent=TRUE)
+        try(if (is.na(check) || check == 0) 
             Converged = FALSE, silent = TRUE)
     }
-    return(new("SimModelOut", param = object@param, start = object@start, equalCon = object@equalCon, package = object@package, coef = coef, fit = FitIndices, se = se, converged = Converged))
+    return(new("SimModelOut", param = object@param, start = object@start, equalCon = object@equalCon, package = object@package, coef = coef, 
+        fit = FitIndices, se = se, converged = Converged))
 } 

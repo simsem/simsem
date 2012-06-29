@@ -1,73 +1,13 @@
 # imposeMissing: Function to impost planned, MAR and MCAR missing on a data set
 
-testImposeMissing <- function() {
-    
-    dat1 <- matrix(rep(1, 960), ncol = 48)
-    data <- matrix(1, ncol = 20, nrow = 100)
-    datac <- cbind(matrix(1, ncol = 10, nrow = 10), rnorm(10, 0, 1))
-    
-    # Imposing Missing with the following arguments produces no missing values
-    imposeMissing(data)
-    imposeMissing(data, cov = 21)
-    imposeMissing(data, pmMCAR = 0)
-    imposeMissing(data, pmMAR = 0)
-    imposeMissing(data, nforms = 0)
-    
-    # Some more usage examples
-    imposeMissing(data, pmMCAR = 0.1)
-    imposeMissing(datac, cov = 21, pmMAR = 0.2)
-    imposeMissing(data, nforms = 3)
-    imposeMissing(data, nforms = 3, itemGroups = list(c(1, 2, 3, 4, 5), c(6, 7, 8, 9, 10), c(11, 12, 13, 14, 15), c(16, 17, 18, 19, 20)))
-    imposeMissing(datac, cov = 21, nforms = 3)
-    imposeMissing(data, twoMethod = c(19, 0.8))
-    imposeMissing(datac, cov = 21, pmMCAR = 0.1, pmMAR = 0.1, nforms = 3)
-    imposeMissing(data, prAttr = 0.1, timePoints = 5)
-    
-    # OR - using testthat
-    
-    # loc <- '../inst/tests/test_missing.R'
-    
-    # test_file(loc)
-}
-
 ## The wrapper function for the various functions to impose missing values.  Currently, the function will delete x percent of eligible values for MAR and MCAR, if you mark colums to be ignored.
-imposeMissing <- function(data.mat, cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, itemGroups = 0, twoMethod = 0, prAttr = 0, timePoints = 1, ignoreCols = 0, threshold = 0, logical = new("NullMatrix")) {
-    
-    # Need the inputs to be numeric for the missing object. Turn to Nulls for this function
-    if (length(cov) == 1 && cov == 0) {
-        cov <- NULL
-    }
-    if (pmMCAR == 0) {
-        pmMCAR <- NULL
-    }
-    if (pmMAR == 0) {
-        pmMAR <- NULL
-    }
-    if (nforms == 0) {
-        nforms <- NULL
-    }
-    if (is.vector(itemGroups) && length(itemGroups) == 1 && itemGroups == 0) {
-        itemGroups <- NULL
-    }
-    if (length(twoMethod) == 1 && twoMethod == 0) {
-        twoMethod <- NULL
-    }
-    if (length(ignoreCols) == 1 && ignoreCols == 0) {
-        ignoreCols <- NULL
-    }
-    if (threshold == 0) {
-        threshold <- NULL
-    }
-    if (prAttr == 0) {
-        prAttr <- NULL
-    }
-    if (class(data.mat) == "data.frame") {
-        data.mat <- as.matrix(data.mat)
-    }
-    
+imposeMissing <- function(data.mat, cov = NULL, pmMCAR = NULL, pmMAR = NULL, nforms = NULL, itemGroups = NULL, twoMethod = NULL,
+                          prAttr = NULL, timePoints = 1, ignoreCols = NULL, threshold = NULL, logical = NULL) {
+
     if (!is.null(nforms) | !is.null(twoMethod)) {
         # TRUE values are values to delete
-        log.matpl <- plannedMissing(dim(data.mat), cov, nforms = nforms, twoMethod = twoMethod, itemGroups = itemGroups, timePoints = timePoints, ignoreCols = ignoreCols)
+        log.matpl <- plannedMissing(dim(data.mat), cov, nforms = nforms, twoMethod = twoMethod, itemGroups = itemGroups, timePoints = timePoints, 
+            ignoreCols = ignoreCols)
         data.mat[log.matpl] <- NA
     }
     # Impose MAR and MCAR
@@ -110,8 +50,8 @@ makeMAR <- function(data, pm = NULL, cov = NULL, ignoreCols = NULL, threshold = 
     excl <- c(cov, ignoreCols)
     misCols <- colList[-excl]
     
-    # Calculate the probability of missing above the threshold,starting with the mean of the covariate. If this probability is greater than or equal to 1, lower the threshold by choosing thresholds
-    # at increasingly lower quantiles of the data.
+    # Calculate the probability of missing above the threshold,starting with the mean of the covariate. If this probability is greater
+    # than or equal to 1, lower the threshold by choosing thresholds at increasingly lower quantiles of the data.
     if (is.null(threshold)) {
         threshold <- mean(data[, cov])
     }
@@ -182,15 +122,16 @@ makeMCAR <- function(dims, pm = NULL, cov = NULL, ignoreCols = NULL) {
 
 # Output: Boolean matrix of values to delete
 # 
-# Right now, function defaults to NULL missingness. If number of forms is specified, items are divided equally and grouped sequentially. (i.e. columns 1-5 are shared, 6-10 are A, 11-15 are B,
-# and 16-20 are C)
+# Right now, function defaults to NULL missingness. If number of forms is specified, items are divided equally and grouped
+# sequentially. (i.e. columns 1-5 are shared, 6-10 are A, 11-15 are B, and 16-20 are C)
 
 # TODO:
 
 # Warnings for illegal groupings
 
 # Check to see if item groupings are valid?
-plannedMissing <- function(dims = c(0, 0), nforms = NULL, itemGroups = NULL, twoMethod = NULL, cov = NULL, timePoints = 1, ignoreCols = NULL) {
+plannedMissing <- function(dims = c(0, 0), nforms = NULL, itemGroups = NULL, twoMethod = NULL, cov = NULL, timePoints = 1, 
+    ignoreCols = NULL) {
     
     nitems <- dims[2]
     nobs <- dims[1]
@@ -231,9 +172,10 @@ plannedMissing <- function(dims = c(0, 0), nforms = NULL, itemGroups = NULL, two
             itemGroups <- generateIndices(nforms + 1, 1:itemsPerTP)
         }
         
-        # groups observations into sets of row indices. Each set receives a different form - that is, each observation group has one subset of variables marked for deletion. At each time point, each
-        # group of observations systematically receives a different form. To do this, we calculate all possible combinations for a given number of forms (for a 3 form design, this is 6) and then repeat
-        # this matrix of permuations to cover all timepoints.
+        # groups observations into sets of row indices. Each set receives a different form - that is, each observation group has one subset
+        # of variables marked for deletion. At each time point, each group of observations systematically receives a different form. To do
+        # this, we calculate all possible combinations for a given number of forms (for a 3 form design, this is 6) and then repeat this
+        # matrix of permuations to cover all timepoints.
         
         obsGroups <- generateIndices(nforms, 1:nobs)
         formPerms <- matrix(unlist(permn(length(obsGroups))), ncol = nforms, byrow = TRUE)
@@ -282,7 +224,8 @@ plannedMissing <- function(dims = c(0, 0), nforms = NULL, itemGroups = NULL, two
             log.df <- as.data.frame(cbind(log.mat, exclMat))
             colnames(log.df) <- (c(itemList, excl))
             
-            # The column names need to be coerced to integers for the sort to work correctly, and then coerced back to strings for the data frame subsetting to work correctly.
+            # The column names need to be coerced to integers for the sort to work correctly, and then coerced back to strings for the data
+            # frame subsetting to work correctly.
             log.df <- log.df[, paste(sort(as.integer(colnames(log.df))), sep = "")]
             
             log.mat <- as.matrix(log.df)
@@ -302,8 +245,8 @@ plannedMissing <- function(dims = c(0, 0), nforms = NULL, itemGroups = NULL, two
 }
 
 
-# Default generation method for item groupings and observation groupings.  Generates sequential groups of lists of column indices based on the desired number of groups, and a range of the group
-# column indices. You can also exclude specific column indeces.
+# Default generation method for item groupings and observation groupings.  Generates sequential groups of lists of column indices
+# based on the desired number of groups, and a range of the group column indices. You can also exclude specific column indeces.
 
 # EX: generate.indices(3,1:12)
 
@@ -365,9 +308,10 @@ permn <- function(x, fun = NULL, ...) {
     out
 }
 
-# Implementing attrition using probability of attrition per TP as the parameter, and optionally, a covariate.  The probability argument can be a vector, allowing you to specify different
-# probabilities for different time points.  If there is only one value, this will be the probability of attrition at each time time point.  If the length does not equal the number of time
-# points, the pattern will repeat to cover the remaining time points.
+# Implementing attrition using probability of attrition per TP as the parameter, and optionally, a covariate.  The probability
+# argument can be a vector, allowing you to specify different probabilities for different time points.  If there is only one value,
+# this will be the probability of attrition at each time time point.  If the length does not equal the number of time points, the
+# pattern will repeat to cover the remaining time points.
 
 attrition <- function(data, prob = NULL, timePoints = 1, cov = NULL, threshold = NULL, ignoreCols = NULL) {
     dims <- dim(data)

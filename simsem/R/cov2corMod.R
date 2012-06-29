@@ -2,6 +2,6 @@
 
 cov2corMod <- function(V) {
     targetCol <- which(diag(V) != 0)
-    V[targetCol, targetCol] <- cov2cor(V[targetCol, targetCol])
+	if(length(targetCol) > 0) V[targetCol, targetCol] <- cov2cor(as.matrix(V[targetCol, targetCol]))
     return(V)
 } 

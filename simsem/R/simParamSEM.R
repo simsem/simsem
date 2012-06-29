@@ -31,7 +31,8 @@ simParamSEM <- function(..., exo = FALSE) {
         ifelse(8 %in% position, TX <- List[position == 8][[1]], TX <- rep(NA, nx))
         ifelse(11 %in% position, TD <- List[position == 11][[1]], TD <- diag(NA, nx))
         ifelse(13 %in% position, TH <- List[position == 13][[1]], TH <- matrix(0, nx, ny))
-        Output <- new("SimParam", BE = BE, PS = PS, AL = AL, LY = LY, TY = TY, TE = TE, GA = GA, PH = PH, KA = KA, LX = LX, TX = TX, TD = TD, TH = TH, modelType = "SEM.exo")
+        Output <- new("SimParam", BE = BE, PS = PS, AL = AL, LY = LY, TY = TY, TE = TE, GA = GA, PH = PH, KA = KA, LX = LX, TX = TX, TD = TD, 
+            TH = TH, modelType = "SEM.exo")
     } else {
         ifelse(3 %in% position, BE <- List[position == 3][[1]], stop("No path coefficient object between factor.ETA"))
         ne <- nrow(BE)

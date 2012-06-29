@@ -1,5 +1,5 @@
-# simVector: Create SimVector.c object that save free parameters and starting values, as well as fixed values. This will be used for model specification later, such as for factor mean vector or
-# measurement error variance vector.
+# simVector: Create SimVector.c object that save free parameters and starting values, as well as fixed values. This will be used for
+# model specification later, such as for factor mean vector or measurement error variance vector.
 
 simVector <- function(free = NULL, value = NULL) {
     if (is.null(value)) {

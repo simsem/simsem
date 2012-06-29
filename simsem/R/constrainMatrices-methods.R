@@ -1,9 +1,10 @@
 # constrainMatrices: Impose equality constraint in an object
 
-setMethod("constrainMatrices", signature(object = "MatrixSet", SimEqualCon = "SimEqualCon"), definition = function(object, SimEqualCon) {
+setMethod("constrainMatrices", signature(object = "MatrixSet", SimEqualCon = "SimEqualCon"), definition = function(object, 
+    SimEqualCon) {
     label.selection <- NULL
-    label.selection <- c("LY", "VTE", "TE", "RTE", "VY", "TY", "MY", "BE", "VPS", "PS", "RPS", "VE", "AL", "ME", "LX", "VTD", "TD", "RTD", "VX", "TX", "MX", "GA", "VPH", "PH", "RPH", "KA", "TH", 
-        "RTH")
+    label.selection <- c("LY", "VTE", "TE", "RTE", "VY", "TY", "MY", "BE", "VPS", "PS", "RPS", "VE", "AL", "ME", "LX", "VTD", "TD", "RTD", 
+        "VX", "TX", "MX", "GA", "VPH", "PH", "RPH", "KA", "TH", "RTH")
     matrices <- object
     constraint <- SimEqualCon@con
     n.constraint <- length(constraint)

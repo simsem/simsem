@@ -1,29 +1,46 @@
 \name{plotPowerFit}
 \alias{plotPowerFit}
-\alias{plotPowerFit-methods}
-\alias{plotPowerFit,data.frame,data.frame-method}
-\alias{plotPowerFit,data.frame,vector-method}
-\alias{plotPowerFit,SimResult,SimResult-method}
-\alias{plotPowerFit,SimResult,vector-method}
 \title{
 Plot sampling distributions of fit indices that visualize power of rejecting datasets underlying misspecified models
 }
 \description{
-This function will plot sampling distributions of fit indices that visualize power in either a histogram or overlapping histograms.
+This function will plot sampling distributions of fit indices that visualize power in rejecting the misspecified models
 }
 \usage{
-plotPowerFit(altObject, nullObject, ...)
+plotPowerFit(altObject, nullObject = NULL, cutoff = NULL, usedFit = NULL, 
+alpha = 0.05, contN = TRUE, contMCAR = TRUE, contMAR = TRUE, 
+useContour = TRUE, logistic = TRUE)
 }
 \arguments{
   \item{altObject}{
-	The object (\code{\linkS4class{SimResult}} or \code{data.frame}) that saves fit indices for alternative hypothesis
+	The result object (\code{\linkS4class{SimResult}}) saves the simulation result of fitting the hypothesized model when the hypothesized model is \code{FALSE}.
 }
   \item{nullObject}{
-	The object that represents null hypothesis. It can be \code{vector} of cutoffs (that might be calculated from \code{\link{getCutoff}} 
-	or an object that save raw data of fit indices for null hypothesis (\code{\linkS4class{SimResult}} or \code{data.frame}).
+	The result object (\code{\linkS4class{SimResult}}) saves the simulation result of fitting the hypothesized model when the hypothesized model is \code{TRUE}. This argument may be not specified if the \code{cutoff} is specified.
 }
-  \item{\dots}{
-	Other arguments specific to different types of object you pass in the function.
+  \item{cutoff}{
+	A vector of priori cutoffs for fit indices.
+}
+  \item{usedFit}{
+	Vector of names of fit indices that researchers wish to plot.
+}
+  \item{alpha}{
+	A priori alpha level
+}
+\item{contN}{
+	Include the varying sample size in the power plot if available
+}
+\item{contMCAR}{
+	Include the varying MCAR (missing completely at random percentage) in the power plot if available
+}
+\item{contMAR}{
+	Include the varying MAR (missing at random percentage) in the power plot if available
+}
+  \item{useContour}{
+	If there are two of sample size, percent completely at random, and percent missing at random are varying, the \code{plotCutoff} function will provide 3D graph. Contour graph is a default. However, if this is specified as \code{FALSE}, perspective plot is used.
+}
+  \item{logistic}{
+	If \code{logistic} is \code{TRUE} and the varying parameter exists (e.g., sample size or percent missing), the plot based on logistic regression predicting the significance by the varying parameters is preferred. If \code{FALSE}, the overlaying scatterplot with a line of cutoff is plotted.
 }
 }
 \value{
@@ -32,16 +49,11 @@ NONE. Only plot the fit indices distributions.
 \author{
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
-\section{Details in \dots}{
-	\itemize{
-		\item \code{alpha}:	A priori alpha level to getCutoffs of fit indices (do not specify when you have \code{cutoff})
-		\item \code{usedFit}:	The name of fit indices that researchers wish to plot
-	}
-}
 \seealso{
 	\itemize{
 		\item \code{\linkS4class{SimResult}} for simResult that used in this function.
 		\item \code{\link{getCutoff}} to find values of cutoffs based on null hypothesis sampling distributions only
+		\item \code{\link{getPowerFit}} to find power of rejecting the hypothesized model when the hypothesized model is \code{FALSE}.
 	}
 }
 \examples{
@@ -56,20 +68,24 @@ SimModel <- simModel(CFA.Model.NULL)
 # We make the examples running only 5 replications to save time.
 # In reality, more replications are needed.
 Output.NULL <- simResult(5, SimData.NULL, SimModel)
-Cut.NULL <- getCutoff(Output.NULL, 0.95)
 
-u79 <- simUnif(0.7, 0.9)
 loading.alt <- matrix(0, 6, 2)
 loading.alt[1:3, 1] <- NA
 loading.alt[4:6, 2] <- NA
 LX.ALT <- simMatrix(loading.alt, 0.7)
 latent.cor.alt <- matrix(NA, 2, 2)
 diag(latent.cor.alt) <- 1
-RPH.ALT <- symMatrix(latent.cor.alt, "u79")
+RPH.ALT <- symMatrix(latent.cor.alt, 0.5)
 CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
 SimData.ALT <- simData(CFA.Model.ALT, 500)
 Output.ALT <- simResult(5, SimData.ALT, SimModel)
-getPowerFit(Output.ALT, Cut.NULL)
+plotPowerFit(Output.ALT, nullObject=Output.NULL, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
 Rule.of.thumb <- c(RMSEA=0.05, CFI=0.95, TLI=0.95, SRMR=0.06)
-plotPowerFit(Output.ALT, Output.NULL, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+plotPowerFit(Output.ALT, cutoff=Rule.of.thumb, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+
+Output.NULL2 <- simResult(NULL, SimData.NULL, SimModel, n=seq(50, 250, 25))
+Output.ALT2 <- simResult(NULL, SimData.ALT, SimModel, n=seq(50, 250, 25))
+
+plotPowerFit(Output.ALT2, nullObject=Output.NULL2, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+plotPowerFit(Output.ALT2, cutoff=Rule.of.thumb, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
 }
