@@ -7,21 +7,22 @@
 # Later, support for other imputation packages will be included.
 miss <- function(cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, itemGroups = list(0), timePoints = 1, twoMethod = 0, prAttr = 0, package="default", ignoreCols = 0, threshold = 0, covAsAux = TRUE, logical = NULL, ...) {
   args <- list(...)
-  stopifnot(is.logical(logical))
-  if (is.data.frame(logical)) 
-        logical <- as.matrix(logical)
-  if(!is.null(logical) && !is.matrix(logical)) { stop("logical must be a matrix or data frame" ) }
+
+  if (is.data.frame(logical)) logical <- as.matrix(logical)
+  if(!is.null(logical)) {
+    stopifnot(is.logical(logical))
+    stopifnot(is.matrix(logical))    
+  } else { logical <- logical(0) }
+  if(package != "default" || package != "Amelia") { stop("Only \"default\" or \"Amelia\" are accepted as arguments to package.") }
     return(new("SimMissing", cov = cov, pmMCAR = pmMCAR, pmMAR = pmMAR, nforms = nforms, itemGroups = itemGroups, twoMethod = twoMethod, prAttr = prAttr,
-               timePoints = timePoints, threshold = threshold, ignoreCols = ignoreCols, numImps = numImps, covAsAux = covAsAux, logical = logical, args=args))
+               timePoints = timePoints, threshold = threshold, ignoreCols = ignoreCols, covAsAux = covAsAux, logical = logical, package=package, args=args))
 } 
 
 simMissing <- function(cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, itemGroups = list(0), timePoints = 1, twoMethod = 0, prAttr = 0, numImps = 0, ignoreCols = 0, threshold = 0, covAsAux = TRUE, 
     logical = new("NullMatrix")) {
->>>>>>> experimental
     if (is(logical, "data.frame")) 
         logical <- as.matrix(logical)
-    return(new("SimMissing", cov = cov, pmMCAR = pmMCAR, pmMAR = pmMAR, nforms = nforms, itemGroups = itemGroups, twoMethod = twoMethod, 
-        prAttr = prAttr, timePoints = timePoints, threshold = threshold, ignoreCols = ignoreCols, numImps = numImps, covAsAux = covAsAux, logical = logical, opts = args))
+    return(new("SimMissing", cov = cov, pmMCAR = pmMCAR, pmMAR = pmMAR, nforms = nforms, itemGroups = itemGroups, twoMethod = twoMethod, prAttr = prAttr, timePoints = timePoints, threshold = threshold, ignoreCols = ignoreCols, numImps = numImps, covAsAux = covAsAux, logical = logical))
 } 
 
 

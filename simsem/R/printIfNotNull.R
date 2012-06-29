@@ -2,7 +2,7 @@
 # object.
 
 printIfNotNull <- function(object, name = NULL) {
-    if (!isNullObject(object)) {
+    if (!is.null(object)) {
         if (!is.null(name)) 
             cat(name, "\n")
         summaryShort(object)

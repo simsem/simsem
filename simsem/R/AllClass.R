@@ -34,133 +34,184 @@ setClass("SimT", representation(df = "numeric", ncp = "numeric"), prototype(ncp 
 
 setClass("SimWeibull", representation(shape = "numeric", scale = "numeric"), prototype(scale = 1))
 
+<<<<<<< HEAD
 setClassUnion("VirtualDist", c("SimUnif", "SimNorm", "SimBeta", "SimBinom", "SimCauchy", "SimChisq", "SimExp", "SimF", "SimGamma", 
     "SimGeom", "SimHyper", "SimLnorm", "SimLogis", "SimNbinom", "SimPois", "SimT", "SimWeibull"))
+=======
+setClassUnion("VirtualDist", c("SimUnif", "SimNorm", "SimBeta", "SimBinom", "SimCauchy", "SimChisq", "SimExp", "SimF", "SimGamma", "SimGeom", "SimHyper", "SimLnorm", "SimLogis", "SimNbinom", 
+   "SimPois", "SimT", "SimWeibull"))
+>>>>>>> experimental
 
-setClass("NullDataFrame", contains = "data.frame")
+## setClass("NullDataFrame", contains = "data.frame")
 
-setClass("SimMatrix", representation(free = "matrix", value = "matrix"), prototype(free = as.matrix(NaN), value = as.matrix(NaN)))
+# Empty defaults to matrix with dimensions (0,0)
+setClass("SimMatrix",
+         representation(
+                        free = "matrix",
+                        popParam = "matrix",
+                        misspec = "matrix",
+                        symmetric = "logical"
+                        #prior = "matrix"
+                        )
+         )
+         #prototype(free = matrix(), popParam = matrix(), misspec = matrix(), prior = matrix()))
 
-setClass("SymMatrix", contains = "SimMatrix")
+#setClass("SymMatrix", contains = "SimMatrix")
 
-setClass("SimVector", representation(free = "vector", value = "vector"), prototype(free = as.vector(NaN), value = as.vector(NaN)))
+# Empty defaults to vector of length 0
+setClass("SimVector",
+         representation(
+                        free = "vector",
+                        popParam = "vector",
+                        misspec = "vector"
+                        #prior = "vector"
+                        )
+         )
+         #prototype(free = as.vector(NaN), popParam = as.vector(NaN), misspec = as.vector(NaN), prior = as.vector(NaN)))
 
-setClass("NullVector", contains = "vector")
+#setClass("NullVector", contains = "vector")
 
-setClass("NullMatrix", contains = "matrix")
+#setClass("NullMatrix", contains = "matrix")
 
-setClass("NullSimMatrix", contains = "SimMatrix")
+#setClass("NullSimMatrix", contains = "SimMatrix")
 
-setClass("NullSymMatrix", contains = "SymMatrix")
+#setClass("NullSymMatrix", contains = "SymMatrix")
 
-setClass("NullSimVector", contains = "SimVector")
+#setClass("NullSimVector", contains = "SimVector")
 
 # RTH: #Delta on rows, epsilon on columns
-setClass("SimSet", representation(modelType = "character", LY = "SimMatrix", TE = "SymMatrix", RTE = "SymMatrix", VTE = "SimVector", 
-    PS = "SymMatrix", RPS = "SymMatrix", VPS = "SimVector", BE = "SimMatrix", TY = "SimVector", AL = "SimVector", ME = "SimVector", MY = "SimVector", 
-    VE = "SimVector", VY = "SimVector", LX = "SimMatrix", TD = "SymMatrix", RTD = "SymMatrix", VTD = "SimVector", PH = "SymMatrix", RPH = "SymMatrix", 
-    VPH = "SimVector", GA = "SimMatrix", TX = "SimVector", KA = "SimVector", MX = "SimVector", VX = "SimVector", TH = "SimMatrix", RTH = "SimMatrix"), 
-    prototype(LY = new("NullSimMatrix"), TE = new("NullSymMatrix"), RTE = new("NullSymMatrix"), VTE = new("NullSimVector"), PS = new("NullSymMatrix"), 
-        RPS = new("NullSymMatrix"), VPS = new("NullSimVector"), BE = new("NullSimMatrix"), TY = new("NullSimVector"), AL = new("NullSimVector"), 
-        ME = new("NullSimVector"), MY = new("NullSimVector"), VE = new("NullSimVector"), VY = new("NullSimVector"), LX = new("NullSimMatrix"), 
-        TD = new("NullSymMatrix"), RTD = new("NullSymMatrix"), VTD = new("NullSimVector"), PH = new("NullSymMatrix"), RPH = new("NullSymMatrix"), 
-        VPH = new("NullSimVector"), GA = new("NullSimMatrix"), TX = new("NullSimVector"), KA = new("NullSimVector"), MX = new("NullSimVector"), 
-        VX = new("NullSimVector"), RTH = new("NullSimMatrix")))
 
-setClass("NullSimSet", contains = "SimSet")
+setClass("SimSem",
+   representation(
+                  pt = "list",
+                  #npt = "list",
+                  dgen = "list",
+                  modelType = "character"
+                  )
+         )
+          
 
-setClass("MatrixSet", representation(modelType = "character", LY = "matrix", RTE = "matrix", TE = "matrix", VTE = "vector", 
-    PS = "matrix", RPS = "matrix", VPS = "vector", BE = "matrix", TY = "vector", AL = "vector", ME = "vector", MY = "vector", VE = "vector", 
-    VY = "vector", LX = "matrix", TD = "matrix", RTD = "matrix", VTD = "vector", PH = "matrix", RPH = "matrix", GA = "matrix", TX = "vector", 
-    KA = "vector", MX = "vector", VPH = "vector", VX = "vector", TH = "matrix", RTH = "matrix"), prototype(LY = new("NullMatrix"), TE = new("NullMatrix"), 
-    RTE = new("NullMatrix"), VTE = new("NullVector"), PS = new("NullMatrix"), RPS = new("NullMatrix"), VPS = new("NullVector"), BE = new("NullMatrix"), 
-    TY = new("NullVector"), AL = new("NullVector"), ME = new("NullVector"), MY = new("NullVector"), VE = new("NullVector"), VY = new("NullVector"), 
-    LX = new("NullMatrix"), TD = new("NullMatrix"), RTD = new("NullMatrix"), VTD = new("NullVector"), PH = new("NullMatrix"), RPH = new("NullMatrix"), 
-    GA = new("NullMatrix"), TX = new("NullVector"), KA = new("NullVector"), MX = new("NullVector"), VPH = new("NullVector"), VX = new("NullVector"), 
-    TH = new("NullMatrix"), RTH = new("NullMatrix")))
+## setClass("SimSet", representation(modelType = "character",
+##                                   LY = "SimMatrix", TE = "SymMatrix", RTE = "SymMatrix",
+##                                   VTE = "SimVector", PS = "SymMatrix", RPS = "SymMatrix", VPS = "SimVector",
+##                                   BE = "SimMatrix", TY = "SimVector", AL = "SimVector", ME = "SimVector",
+##                                   MY = "SimVector", VE = "SimVector", VY = "SimVector"))
+        ##  , prototype(LY = new("NullSimMatrix"),  TE = new("NullSymMatrix"), RTE = new("NullSymMatrix"), VTE = new("NullSimVector"), PS = new("NullSymMatrix"), RPS = new("NullSymMatrix"), VPS = new("NullSimVector"), BE = new("NullSimMatrix"),     TY = new("NullSimVector"), AL = new("NullSimVector"), ME = new("NullSimVector"), MY = new("NullSimVector"), VE = new("NullSimVector"), VY = new("NullSimVector"), LX = new("NullSimMatrix"), TD = new("NullSymMatrix"), 
+##     RTD = new("NullSymMatrix"), VTD = new("NullSimVector"), PH = new("NullSymMatrix"), RPH = new("NullSymMatrix"), VPH = new("NullSimVector"), GA = new("NullSimMatrix"), TX = new("NullSimVector"), 
+##     KA = new("NullSimVector"), MX = new("NullSimVector"), VX = new("NullSimVector"), RTH = new("NullSimMatrix")))
 
-setClass("VirtualRSet", representation(modelType = "character", LY = "matrix", TE = "matrix", PS = "matrix", BE = "matrix", 
-    TY = "vector", AL = "vector", LX = "matrix", TD = "matrix", PH = "matrix", GA = "matrix", TX = "vector", KA = "vector", TH = "matrix"), 
-    prototype(LY = new("NullMatrix"), TE = new("NullMatrix"), PS = new("NullMatrix"), BE = new("NullMatrix"), TY = new("NullVector"), 
-        AL = new("NullVector"), LX = new("NullMatrix"), TD = new("NullMatrix"), PH = new("NullMatrix"), GA = new("NullMatrix"), TX = new("NullVector"), 
-        KA = new("NullVector"), TH = new("NullMatrix")))
+## setClass("NullSimSet", contains = "SimSet")
 
-setClass("SimEqualCon", representation(con = "list", modelType = "character", conBeforeFill = "logical"), prototype(conBeforeFill = TRUE))
+## setClass("MatrixSet", representation(modelType = "character", LY = "matrix", RTE = "matrix", TE = "matrix", VTE = "vector", PS = "matrix", RPS = "matrix", VPS = "vector", BE = "matrix", 
+##     TY = "vector", AL = "vector", ME = "vector", MY = "vector", VE = "vector", VY = "vector", LX = "matrix", TD = "matrix", RTD = "matrix", VTD = "vector", PH = "matrix", RPH = "matrix", GA = "matrix", 
+##     TX = "vector", KA = "vector", MX = "vector", VPH = "vector", VX = "vector", TH = "matrix", RTH = "matrix"), prototype(LY = new("NullMatrix"), TE = new("NullMatrix"), RTE = new("NullMatrix"), 
+##     VTE = new("NullVector"), PS = new("NullMatrix"), RPS = new("NullMatrix"), VPS = new("NullVector"), BE = new("NullMatrix"), TY = new("NullVector"), AL = new("NullVector"), ME = new("NullVector"), 
+##     MY = new("NullVector"), VE = new("NullVector"), VY = new("NullVector"), LX = new("NullMatrix"), TD = new("NullMatrix"), RTD = new("NullMatrix"), VTD = new("NullVector"), PH = new("NullMatrix"), 
+##     RPH = new("NullMatrix"), GA = new("NullMatrix"), TX = new("NullVector"), KA = new("NullVector"), MX = new("NullVector"), VPH = new("NullVector"), VX = new("NullVector"), TH = new("NullMatrix"), 
+##     RTH = new("NullMatrix")))
 
-setClass("NullSimEqualCon", contains = "SimEqualCon", representation(con = "list", modelType = "character"), prototype(con = list(NA), 
-    modelType = "NA"))
+## setClass("VirtualRSet", representation(modelType = "character", LY = "matrix", TE = "matrix", PS = "matrix", BE = "matrix", TY = "vector", AL = "vector", LX = "matrix", TD = "matrix", 
+##     PH = "matrix", GA = "matrix", TX = "vector", KA = "vector", TH = "matrix"), prototype(LY = new("NullMatrix"), TE = new("NullMatrix"), PS = new("NullMatrix"), BE = new("NullMatrix"), TY = new("NullVector"), 
+##     AL = new("NullVector"), LX = new("NullMatrix"), TD = new("NullMatrix"), PH = new("NullMatrix"), GA = new("NullMatrix"), TX = new("NullVector"), KA = new("NullVector"), TH = new("NullMatrix")))
 
-setClass("SimREqualCon", representation(con = "list", modelType = "character"))
+## setClass("SimEqualCon", representation(con = "list", modelType = "character", conBeforeFill = "logical"), prototype(conBeforeFill = TRUE))
 
-setClass("NullSimREqualCon", contains = "SimREqualCon", representation(con = "list", modelType = "character"), prototype(con = list(NA), 
-    modelType = "NA"))
+## setClass("NullSimEqualCon", contains = "SimEqualCon", representation(con = "list", modelType = "character"), prototype(con = list(NA), modelType = "NA"))
 
-setClass("SimParam", contains = "VirtualRSet")
+## setClass("SimREqualCon", representation(con = "list", modelType = "character"))
 
-setClass("SimLabels", contains = "VirtualRSet")
+## setClass("NullSimREqualCon", contains = "SimREqualCon", representation(con = "list", modelType = "character"), prototype(con = list(NA), modelType = "NA"))
 
-setClass("SimRSet", contains = "VirtualRSet")
+## setClass("SimParam", contains = "VirtualRSet")
 
-setClass("NullRSet", contains = "SimRSet", representation(modelType = "character", LY = "matrix", TE = "matrix", PS = "matrix", 
-    BE = "matrix", TY = "vector", AL = "vector", LX = "matrix", TD = "matrix", PH = "matrix", GA = "matrix", TX = "vector", KA = "vector", 
-    TH = "matrix"), prototype(modelType = character(0), LY = new("NullMatrix"), TE = new("NullMatrix"), PS = new("NullMatrix"), BE = new("NullMatrix"), 
-    TY = new("NullVector"), AL = new("NullVector"), LX = new("NullMatrix"), TD = new("NullMatrix"), PH = new("NullMatrix"), GA = new("NullMatrix"), 
-    TX = new("NullVector"), KA = new("NullVector"), TH = new("NullMatrix")))
+## setClass("SimLabels", contains = "VirtualRSet")
 
-setClass("SimMisspec", contains = "SimSet", representation(conBeforeMis = "logical", misBeforeFill = "logical", misfitType = "character", 
-    misfitBound = "vector", averageNumMisspec = "logical", optMisfit = "character", numIter = "numeric"), prototype(conBeforeMis = TRUE, 
-    misBeforeFill = TRUE, misfitType = "rmsea", misfitBound = new("NullVector"), averageNumMisspec = FALSE, optMisfit = "none", numIter = 20))
+## setClass("SimRSet", contains = "VirtualRSet")
 
-setClass("NullSimMisspec", contains = "SimMisspec")
+## setClass("NullRSet", contains = "SimRSet", representation(modelType = "character", LY = "matrix", TE = "matrix", PS = "matrix", BE = "matrix", TY = "vector", AL = "vector", LX = "matrix", 
+##     TD = "matrix", PH = "matrix", GA = "matrix", TX = "vector", KA = "vector", TH = "matrix"), prototype(modelType = character(0), LY = new("NullMatrix"), TE = new("NullMatrix"), PS = new("NullMatrix"), 
+##     BE = new("NullMatrix"), TY = new("NullVector"), AL = new("NullVector"), LX = new("NullMatrix"), TD = new("NullMatrix"), PH = new("NullMatrix"), GA = new("NullMatrix"), TX = new("NullVector"), 
+##     KA = new("NullVector"), TH = new("NullMatrix")))
 
-setClass("MisspecSet", contains = "MatrixSet")
+## setClass("SimMisspec", contains = "SimSet", representation(conBeforeMis = "logical", misBeforeFill = "logical", misfitType = "character", misfitBound = "vector", averageNumMisspec = "logical", 
+##     optMisfit = "character", numIter = "numeric"), prototype(conBeforeMis = TRUE, misBeforeFill = TRUE, misfitType = "rmsea", misfitBound = new("NullVector"), averageNumMisspec = FALSE, optMisfit = "none", 
+##     numIter = 20))
 
-setClass("SimDataDist", representation(p = "numeric", dist = "list", keepScale = "vector", reverse = "vector"))
+## setClass("NullSimMisspec", contains = "SimMisspec")
 
-setClass("NullSimDataDist", contains = "SimDataDist")
+## setClass("MisspecSet", contains = "MatrixSet")
 
-setClass("SimData", representation(modelType = "character", n = "numeric", param = "SimSet", misspec = "SimMisspec", equalCon = "SimEqualCon", 
-    maxDraw = "numeric", sequential = "logical", facDist = "SimDataDist", errorDist = "SimDataDist", indDist = "SimDataDist", indLab = "vector", 
-    modelBoot = "logical", realData = "data.frame"), prototype(misspec = new("NullSimMisspec"), equalCon = new("NullSimEqualCon"), maxDraw = 100, 
-    sequential = FALSE, facDist = new("NullSimDataDist"), errorDist = new("NullSimDataDist"), indDist = new("NullSimDataDist"), indLab = new("NullVector"), 
-    modelBoot = FALSE, realData = new("NullDataFrame")))
+ setClass("SimDataDist", representation(p = "numeric", dist = "list", keepScale = "logical", reverse = "vector"), prototype(keepScale = TRUE, reverse = FALSE))
 
-setClass("SimDataOut", representation(modelType = "character", data = "data.frame", param = "SimParam", paramOut = "SimRSet", 
-    misspecOut = "SimRSet", equalCon = "SimEqualCon", n = "numeric"), prototype(equalCon = new("NullSimEqualCon"), n = 0))
+## setClass("NullSimDataDist", contains = "SimDataDist")
 
-setClass("SimModel", representation(modelType = "character", param = "SimParam", start = "SimRSet", equalCon = "SimEqualCon", 
-    package = "character", estimator = "character", auxiliary = "vector", indLab = "vector", factorLab = "vector"), prototype(equalCon = new("NullSimEqualCon"), 
-    package = "lavaan", estimator = "ml", auxiliary = new("NullVector"), indLab = new("NullVector"), factorLab = new("NullVector")))
+## setClass("SimData", representation(modelType = "character", n = "numeric", param = "SimSet", misspec = "SimMisspec", equalCon = "SimEqualCon", maxDraw = "numeric", sequential = "logical", 
+##     facDist = "SimDataDist", errorDist = "SimDataDist", indDist = "SimDataDist", indLab = "vector", modelBoot = "logical", realData = "data.frame"), prototype(misspec = new("NullSimMisspec"), equalCon = new("NullSimEqualCon"), 
+##     maxDraw = 100, sequential = FALSE, facDist = new("NullSimDataDist"), errorDist = new("NullSimDataDist"), indDist = new("NullSimDataDist"), indLab = new("NullVector"), modelBoot = FALSE, realData = new("NullDataFrame")))
 
-setClass("SimResult", representation(modelType = "character", nRep = "numeric", coef = "data.frame", se = "data.frame", fit = "data.frame", 
-    converged = "vector", paramValue = "data.frame", FMI1 = "data.frame", FMI2 = "data.frame", stdCoef = "data.frame", seed = "numeric", 
-    n = "vector", pmMCAR = "vector", pmMAR = "vector"), prototype(stdCoef = new("NullDataFrame"), paramValue = new("NullDataFrame"), FMI1 = new("NullDataFrame"), 
-    FMI2 = new("NullDataFrame"), n = 0, pmMCAR = 0, pmMAR = 0))
+## setClass("SimDataOut", representation(modelType = "character", data = "data.frame", param = "SimParam", paramOut = "SimRSet", misspecOut = "SimRSet", equalCon = "SimEqualCon", n = "numeric"), 
+##     prototype(equalCon = new("NullSimEqualCon"), n = 0))
 
-setClass("SimModelOut", representation(param = "SimParam", start = "SimRSet", equalCon = "SimEqualCon", package = "character", 
-    coef = "SimRSet", fit = "vector", se = "SimRSet", converged = "logical", paramValue = "SimRSet", n = "numeric", pMiss = "vector", indLab = "vector", 
-    factorLab = "vector"), prototype(equalCon = new("NullSimEqualCon"), converged = FALSE, paramValue = new("NullRSet"), n = 0, pMiss = new("NullVector"), indLab = new("NullVector"), 
-    factorLab = new("NullVector")))
+## setClass("SimModel", representation(modelType = "character", param = "SimParam", start = "SimRSet", equalCon = "SimEqualCon", package = "character", estimator = "character", auxiliary = "vector", 
+##     indLab = "vector", factorLab = "vector"), prototype(equalCon = new("NullSimEqualCon"), package = "lavaan", estimator = "ml", auxiliary = new("NullVector"), indLab = new("NullVector"), factorLab = new("NullVector")))
 
-setClass("SimModelMIOut", contains = "SimModelOut", representation(FMI1 = "SimRSet", FMI2 = "SimRSet"), prototype(FMI1 = new("NullRSet"), 
-    FMI2 = new("NullRSet")))
+setClass("SimResult",
+         representation(
+                        modelType = "character",
+                        nRep = "numeric",
+                        coef = "data.frame",
+                        se = "data.frame",
+                        fit = "data.frame",
+                        converged = "vector",
+                        paramValue = "data.frame",
+                        FMI1 = "data.frame",
+                        FMI2 = "data.frame",
+                        stdCoef = "data.frame",
+                        seed = "numeric",
+                        n = "vector",
+                        pmMCAR = "vector",
+                        pmMAR = "vector"
+                        )
+         )
 
-setClass("SimMissing", representation(cov = "vector", pmMCAR = "numeric", pmMAR = "numeric", nforms = "numeric", itemGroups = "list", 
-    twoMethod = "vector", prAttr = "vector", impMethod = "vector", numImps = "numeric", timePoints = "numeric", ignoreCols = "numeric", 
-    threshold = "numeric", covAsAux = "logical", logical = "matrix", opts = "list"), prototype(cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, 
-    itemGroups = list(0), twoMethod = 0, prAttr = 0, impMethod = "amelia", numImps = 0, timePoints = 1, ignoreCols = 0, threshold = 0, 
-    covAsAux = TRUE, logical = new("NullMatrix"), opts = list()))
+## setClass("SimModelOut", representation(param = "SimParam", start = "SimRSet", equalCon = "SimEqualCon", package = "character", coef = "SimRSet", fit = "vector", se = "SimRSet", converged = "logical", 
+##     paramValue = "SimRSet", n = "numeric", indLab = "vector", factorLab = "vector"), prototype(equalCon = new("NullSimEqualCon"), converged = FALSE, paramValue = new("NullRSet"), n = 0, indLab = new("NullVector"), 
+##     factorLab = new("NullVector")))
 
-setClass("NullSimMissing", contains = "SimMissing")
+## setClass("SimModelMIOut", contains = "SimModelOut", representation(FMI1 = "SimRSet", FMI2 = "SimRSet"), prototype(FMI1 = new("NullRSet"), FMI2 = new("NullRSet")))
+
+setClass("SimMissing",
+         representation(
+                        cov = "vector", pmMCAR = "numeric", pmMAR = "numeric",
+                        nforms = "numeric", itemGroups = "list", twoMethod = "vector",
+                        prAttr = "vector", package = "character",
+                        timePoints = "numeric", ignoreCols = "numeric", threshold = "numeric",
+                        covAsAux = "logical", logical = "logical", args="list"
+                        )
+        ##  prototype(cov = 0, pmMCAR = 0, pmMAR = 0,
+##                    nforms = 0, itemGroups = list(0), twoMethod = 0,
+##                    prAttr = 0, impMethod = "amelia", numImps = 0,
+##                    timePoints = 1, ignoreCols = 0, threshold = 0,
+##                    covAsAux = TRUE
+##                    )
+         )
+
+## setClass("NullSimMissing", contains = "SimMissing")
 
 setClass("SimFunction", representation(fun = "function", attribute = "list", callfun = "call"))
 
-setClass("NullSimFunction", contains = "SimFunction")
+## setClass("NullSimFunction", contains = "SimFunction")
 
-setClass("SimDataOut", representation(modelType = "character", data = "data.frame", param = "SimParam", paramOut = "SimRSet", 
-    misspecOut = "SimRSet", equalCon = "SimEqualCon", n = "numeric"), prototype(equalCon = new("NullSimEqualCon"), n = 0))
+## setClass("SimDataOut", representation(modelType = "character", data = "data.frame", param = "SimParam", paramOut = "SimRSet", misspecOut = "SimRSet", equalCon = "SimEqualCon", n = "numeric"), 
+##     prototype(equalCon = new("NullSimEqualCon"), n = 0))
 
-setClass("SimResultParam", representation(modelType = "character", nRep = "numeric", param = "data.frame", misspec = "data.frame", 
-    fit = "data.frame", seed = "numeric"), prototype(misspec = new("NullDataFrame"), fit = new("NullDataFrame")))
-
-setClass("SimGenLabels", contains = "MatrixSet") 
+setClass("SimResultParam",
+         representation(
+                        modelType = "character",
+                        nRep = "numeric",
+                        param = "data.frame",
+                        misspec = "data.frame",
+                        fit = "data.frame",
+                        seed = "numeric")
+          )
+## setClass("SimGenLabels", contains = "MatrixSet") 

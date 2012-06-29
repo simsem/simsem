@@ -1,72 +1,9 @@
 # imposeMissing: Function to impost planned, MAR and MCAR missing on a data set
 
-testImposeMissing <- function() {
-    
-    dat1 <- matrix(rep(1, 960), ncol = 48)
-    data <- matrix(1, ncol = 20, nrow = 100)
-    datac <- cbind(matrix(1, ncol = 10, nrow = 10), rnorm(10, 0, 1))
-    
-    # Imposing Missing with the following arguments produces no missing values
-    imposeMissing(data)
-    imposeMissing(data, cov = 21)
-    imposeMissing(data, pmMCAR = 0)
-    imposeMissing(data, pmMAR = 0)
-    imposeMissing(data, nforms = 0)
-    
-    # Some more usage examples
-    imposeMissing(data, pmMCAR = 0.1)
-    imposeMissing(datac, cov = 21, pmMAR = 0.2)
-    imposeMissing(data, nforms = 3)
-    imposeMissing(data, nforms = 3, itemGroups = list(c(1, 2, 3, 4, 5), c(6, 7, 8, 9, 10), c(11, 12, 13, 14, 15), c(16, 17, 18, 19, 20)))
-    imposeMissing(datac, cov = 21, nforms = 3)
-    imposeMissing(data, twoMethod = c(19, 0.8))
-    imposeMissing(datac, cov = 21, pmMCAR = 0.1, pmMAR = 0.1, nforms = 3)
-    imposeMissing(data, prAttr = 0.1, timePoints = 5)
-    
-    # OR - using testthat
-    
-    # loc <- '../inst/tests/test_missing.R'
-    
-    # test_file(loc)
-}
+## The wrapper function for the various functions to impose missing values.  Currently, the function will delete x percent of eligible values for MAR and MCAR, if you mark colums to be ignored.
+imposeMissing <- function(data.mat, cov = NULL, pmMCAR = NULL, pmMAR = NULL, nforms = NULL, itemGroups = NULL, twoMethod = NULL,
+                          prAttr = NULL, timePoints = 1, ignoreCols = NULL, threshold = NULL, logical = NULL) {
 
-## The wrapper function for the various functions to impose missing values.  Currently, the function will delete x percent of
-## eligible values for MAR and MCAR, if you mark colums to be ignored.
-imposeMissing <- function(data.mat, cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, itemGroups = 0, twoMethod = 0, prAttr = 0, 
-    timePoints = 1, ignoreCols = 0, threshold = 0, logical = new("NullMatrix")) {
-    
-    # Need the inputs to be numeric for the missing object. Turn to Nulls for this function
-    if (length(cov) == 1 && cov == 0) {
-        cov <- NULL
-    }
-    if (pmMCAR == 0) {
-        pmMCAR <- NULL
-    }
-    if (pmMAR == 0) {
-        pmMAR <- NULL
-    }
-    if (nforms == 0) {
-        nforms <- NULL
-    }
-    if (is.vector(itemGroups) && length(itemGroups) == 1 && itemGroups == 0) {
-        itemGroups <- NULL
-    }
-    if (length(twoMethod) == 1 && twoMethod == 0) {
-        twoMethod <- NULL
-    }
-    if (length(ignoreCols) == 1 && ignoreCols == 0) {
-        ignoreCols <- NULL
-    }
-    if (threshold == 0) {
-        threshold <- NULL
-    }
-    if (prAttr == 0) {
-        prAttr <- NULL
-    }
-    if (class(data.mat) == "data.frame") {
-        data.mat <- as.matrix(data.mat)
-    }
-    
     if (!is.null(nforms) | !is.null(twoMethod)) {
         # TRUE values are values to delete
         log.matpl <- plannedMissing(dim(data.mat), cov, nforms = nforms, twoMethod = twoMethod, itemGroups = itemGroups, timePoints = timePoints, 
