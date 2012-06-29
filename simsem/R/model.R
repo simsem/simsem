@@ -500,7 +500,7 @@ startingVal <- function(free,popParam,smart=TRUE) {
     if(all(!is.nan(popParam)) && smart) { # Check if popParam was specified
       flatPop <- as.vector(popParam)
       suppressWarnings(flatPop <- as.numeric(flatPop))
-      flat[is.na(flat)] <- flatPop[is.na(flat)]
+      flat[is.na(flat)] <- flatPop[is.na(       flat)]
     }
   }
   flat

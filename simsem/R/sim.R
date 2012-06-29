@@ -8,6 +8,9 @@
                   seed = 123321, silent = FALSE, multicore = FALSE, cluster = FALSE, numProc = NULL,  
                   paramOnly = FALSE, dataOnly=FALSE, ...) {
 
+    require(parallel)
+    RNGkind("L'Ecuyer-CMRG")
+    
     ## 1. Set up correct data generation template
     dgen <- NULL
     if(!is.null(generate) && class(generate) == "SimSem") {
@@ -87,7 +90,16 @@
     drawnParams <- list()
     simConds <- list()
 
-    numseed <- as.list(round(sample(1:999999, nRep)))
+   
+    set.seed(seed)
+    numseed <- list()
+    s <- .Random.seed
+    origSeed <- s
+    for (i in 1:nRep) {
+        numseed[[i]] <- s
+        s <- nextRNGStream(s)
+    }
+    
     if (is.null(rawData)) {
       ##       if (any(sapply(dgen,fun=function(paramSet) { sapply(paramSet, fun=function(mat) {is.random(mat@popParam)}) }))) {
       ##         for (i in 1:nRep) {
@@ -138,8 +150,7 @@
       }
     } else {
       stop("The rawData argument is not a SimData class or a list of data frames.")
-    }
-    
+    } 
     
     ## 5. Run replications
     if (multicore) {
@@ -264,11 +275,13 @@ runRep <- function(simConds, model, miss = NULL, fun=NULL, facDist = NULL, indDi
     FMI1 <- NULL
     FMI2 <- NULL
     converged <- FALSE
-    seed <- simConds[[5]]
+    #seed <- simConds[[5]]
     n <- simConds[[2]]
     pmMCAR <- simConds[[3]]
     pmMAR <- simConds[[4]]
     dgen <- model@dgen
+    RNGkind("L'Ecuyer-CMRG")
+    assign(".Random.seed",simConds[[5]],envir=.GlobalEnv)
 
     ## 1. Create a missing data template from simulation parameters.
     if (is.null(miss)) {
@@ -283,7 +296,7 @@ runRep <- function(simConds, model, miss = NULL, fun=NULL, facDist = NULL, indDi
 
     ## 2. Generate data (data) & store parameter values (paramSet)
     data <- simConds[[1]] # either a paramSet or raw data
-    set.seed(seed)
+    #set.seed(seed)
     if (is.null(data)) { # Need to draw parameters
       ##data <- createData(paramSet = dat, indDist = indDist, sequential=sequential, facDist = facDist, errorDist=errorDist,
       ##                   indLab = indLab, modelBoot=modelBoot, realData=realData)

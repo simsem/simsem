@@ -1,7 +1,8 @@
 # summaryParam: This function will summarize the obtained parameter estimates and standard error.
 
 setMethod("summaryParam", signature(object = "SimResult"), definition = function(object, alpha = 0.05, detail = FALSE) {
-    object <- clean(object)
+
+  object <- clean(object)
     coef <- colMeans(object@coef, na.rm = TRUE)
     real.se <- sapply(object@coef, sd, na.rm = TRUE)
     estimated.se <- colMeans(object@se, na.rm = TRUE)
