@@ -1,4 +1,4 @@
-# runLavaan: Transform model object to lavaan script, run the obtained data, and make model output object
+## runLavaan: Transform model object to lavaan script, run the obtained data, and make model output object
 
 runLavaan <- function(object, Data, miss = "fiml", estimator = "ML") {
     if (!require(lavaan)) {
