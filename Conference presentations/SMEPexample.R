@@ -1,8 +1,10 @@
-# model1
-# model2
-# model3
-# model4
+# Supplemental codes for the proposal for the Society of Multivariate Experimental Psychology conference 2012
 
+# Taking into account sampling variability of model selection indices: A parametric bootstrap approach
+# Sunthud Pornprasertmanit, Wei Wu, and Todd D. Little; University of Kansas
+# Latest updated: July 1, 2012.
+
+library(simsem)
 N <- 300
 nRep <- 1000
 set.seed(123321)
@@ -102,7 +104,7 @@ PSB[7, 8] <- PSB[8, 7] <- NA
 PSB[7, 9] <- PSB[9, 7] <- NA
 PSB[8, 9] <- PSB[9, 8] <- NA
 
-modelB <- simSetSEM(BE=BEB, PS=PSB, LY=LY, TE=TE, AL=AL, TY=TY)
+modelB <- simParamSEM(BE=BEB, PS=PSB, LY=LY, TE=TE, AL=AL, TY=TY)
 
 # Create analysis template for Model D
 analyzeB <- simModel(modelB)
@@ -118,7 +120,7 @@ BEC[9, 6:8] <- NA
 PSC <- diag(NA, 9)
 PSC[1:5, 1:5] <- NA
 
-modelC <- simSetSEM(BE=BEC, PS=PSC, LY=LY, TE=TE, AL=AL, TY=TY)
+modelC <- simParamSEM(BE=BEC, PS=PSC, LY=LY, TE=TE, AL=AL, TY=TY)
 
 # Create analysis template for Model D
 analyzeC <- simModel(modelC)
@@ -142,101 +144,68 @@ summary(outDB)
 summary(outDC)
 summary(outDD)
 
+# Get the AIC and BIC difference
+# The anova function will provide the AIC or BIC values of the first object subtracted by the second object.
+# Thus, if the AIC or BIC difference is positive, the hypothesized model in the first object is preferred. 
+# If the AIC or BIC difference is negative, the hypothesized model in the second object is preferred.
+
+anova(outDA, outDB)
+anova(outDA, outDC)
+anova(outDA, outDD)
+anova(outDB, outDC)
+anova(outDB, outDD)
+anova(outDC, outDD)
+
 ############################################################# 
 #### Run a parametric bootstrap
 #############################################################
 
-# Run a simulation based on the result; the datD should not be necessary
-simAA <- runFit(outDA, nRep=nRep, analyzeModel=analyzeA, multicore=TRUE)
-simAB <- runFit(outDA, nRep=nRep, analyzeModel=analyzeB, multicore=TRUE)
-simAC <- runFit(outDA, nRep=nRep, analyzeModel=analyzeC, multicore=TRUE)
-simAD <- runFit(outDA, nRep=nRep, analyzeModel=analyzeD, multicore=TRUE)
-simBA <- runFit(outDB, nRep=nRep, analyzeModel=analyzeA, multicore=TRUE)
-simBB <- runFit(outDB, nRep=nRep, analyzeModel=analyzeB, multicore=TRUE)
-simBC <- runFit(outDB, nRep=nRep, analyzeModel=analyzeC, multicore=TRUE)
-simBD <- runFit(outDB, nRep=nRep, analyzeModel=analyzeD, multicore=TRUE)
-simCA <- runFit(outDC, nRep=nRep, analyzeModel=analyzeA, multicore=TRUE)
-simCB <- runFit(outDC, nRep=nRep, analyzeModel=analyzeB, multicore=TRUE)
-simCC <- runFit(outDC, nRep=nRep, analyzeModel=analyzeC, multicore=TRUE)
-simCD <- runFit(outDC, nRep=nRep, analyzeModel=analyzeD, multicore=TRUE)
-simDA <- runFit(outDD, nRep=nRep, analyzeModel=analyzeA, multicore=TRUE)
-simDB <- runFit(outDD, nRep=nRep, analyzeModel=analyzeB, multicore=TRUE)
-simDC <- runFit(outDD, nRep=nRep, analyzeModel=analyzeC, multicore=TRUE)
-simDD <- runFit(outDD, nRep=nRep, analyzeModel=analyzeD, multicore=TRUE)
+########## Create the parametric bootstrap distributions
 
-########## ANOVA
+simAA <- runFit(outDA, nRep=nRep, data=datD, analyzeModel=analyzeA, multicore=TRUE)
+simAB <- runFit(outDA, nRep=nRep, data=datD, analyzeModel=analyzeB, multicore=TRUE)
+simAC <- runFit(outDA, nRep=nRep, data=datD, analyzeModel=analyzeC, multicore=TRUE)
+simAD <- runFit(outDA, nRep=nRep, data=datD, analyzeModel=analyzeD, multicore=TRUE)
+simBA <- runFit(outDB, nRep=nRep, data=datD, analyzeModel=analyzeA, multicore=TRUE)
+simBB <- runFit(outDB, nRep=nRep, data=datD, analyzeModel=analyzeB, multicore=TRUE)
+simBC <- runFit(outDB, nRep=nRep, data=datD, analyzeModel=analyzeC, multicore=TRUE)
+simBD <- runFit(outDB, nRep=nRep, data=datD, analyzeModel=analyzeD, multicore=TRUE)
+simCA <- runFit(outDC, nRep=nRep, data=datD, analyzeModel=analyzeA, multicore=TRUE)
+simCB <- runFit(outDC, nRep=nRep, data=datD, analyzeModel=analyzeB, multicore=TRUE)
+simCC <- runFit(outDC, nRep=nRep, data=datD, analyzeModel=analyzeC, multicore=TRUE)
+simCD <- runFit(outDC, nRep=nRep, data=datD, analyzeModel=analyzeD, multicore=TRUE)
+simDA <- runFit(outDD, nRep=nRep, data=datD, analyzeModel=analyzeA, multicore=TRUE)
+simDB <- runFit(outDD, nRep=nRep, data=datD, analyzeModel=analyzeB, multicore=TRUE)
+simDC <- runFit(outDD, nRep=nRep, data=datD, analyzeModel=analyzeC, multicore=TRUE)
+simDD <- runFit(outDD, nRep=nRep, data=datD, analyzeModel=analyzeD, multicore=TRUE)
 
-anova.d.ab <- anova(outDA, outDB)[[2]][2, c("AIC.diff", "BIC.diff")]
-anova.d.ac <- anova(outDA, outDC)[[2]][2, c("AIC.diff", "BIC.diff")]
-anova.d.ad <- anova(outDA, outDD)[[2]][2, c("AIC.diff", "BIC.diff")]
-anova.d.bc <- anova(outDB, outDC)[[2]][2, c("AIC.diff", "BIC.diff")]
-anova.d.bd <- anova(outDB, outDD)[[2]][2, c("AIC.diff", "BIC.diff")]
-anova.d.cd <- anova(outDC, outDD)[[2]][2, c("AIC.diff", "BIC.diff")]
-anova.d <- c(anova.d.ab, anova.d.ac, anova.d.ad, anova.d.bc, anova.d.bd, anova.d.cd)
-anova.d <- unlist(anova.d[c(1, 3, 5, 7, 9, 11, 2, 4, 6, 8, 10, 12)])
-name <- expand.grid(c("ab", "ac", "ad", "bc", "bd", "cd"), c("AIC.d.", "BIC.d."))
-names(anova.d) <- paste(name[,2], name[,1], sep="")
+# The first argument is the output result used to generate data. 
+# The nRep argument is the number of bootstrap samples.
+# The data argument is the observed data
+# The analyze model is the analysis model that is used in analyzing bootstrap samples
+# The multicore is to use multi-processors in a computer, which will speed up the bootstrap analysis
 
-########## Monte Carlo Difference
+########## Obtain p-values 
 
-mc.d.ab <- sapply(pValueNonNested(outDA, outDB, simAA, simAB, simBA, simBB), function(x) x[c("AIC")])
-mc.d.ac <- sapply(pValueNonNested(outDA, outDC, simAA, simAC, simCA, simCC), function(x) x[c("AIC")])
-mc.d.ad <- sapply(pValueNonNested(outDA, outDD, simAA, simAD, simDA, simDD), function(x) x[c("AIC")])
-mc.d.bc <- sapply(pValueNonNested(outDB, outDC, simBB, simBC, simCB, simCC), function(x) x[c("AIC")])
-mc.d.bd <- sapply(pValueNonNested(outDB, outDD, simBB, simBD, simDB, simDD), function(x) x[c("AIC")])
-mc.d.cd <- sapply(pValueNonNested(outDC, outDD, simCC, simCD, simDC, simDD), function(x) x[c("AIC")])
-mc.d <- c(mc.d.ab, mc.d.ac, mc.d.ad, mc.d.bc, mc.d.bd, mc.d.cd)
-name <- expand.grid(c("mc1.d.", "mc2.d."), c("ab", "ac", "ad", "bc", "bd", "cd"))
-names(mc.d) <- paste(name[,1], name[,2], sep="")
+pValueNonNested(outDA, outDB, simAA, simAB, simBA, simBB)
+pValueNonNested(outDA, outDC, simAA, simAC, simCA, simCC)
+pValueNonNested(outDA, outDD, simAA, simAD, simDA, simDD)
+pValueNonNested(outDB, outDC, simBB, simBC, simCB, simCC)
+pValueNonNested(outDB, outDD, simBB, simBD, simDB, simDD)
+pValueNonNested(outDC, outDD, simCC, simCD, simDC, simDD)
 
-########## Monte Carlo Difference
+# The first argument is the original output from Model 1
+# The second argument is the original output from Model 2
+# The third argument is the simulation which generates data from Model 1 and analyzes data by Model 1
+# The fourth argument is the simulation which generates data from Model 1 and analyzes data by Model 2
+# The fifth argument is the simulation which generates data from Model 2 and analyzes data by Model 1
+# The sixth argument is the simulation which generates data from Model 2 and analyzes data by Model 2
 
-lik.d.ab <- likRatioFit(outDA, outDB, simAA, simAB, simBA, simBB)[c("AIC")]
-lik.d.ac <- likRatioFit(outDA, outDC, simAA, simAC, simCA, simCC)[c("AIC")]
-lik.d.ad <- likRatioFit(outDA, outDD, simAA, simAD, simDA, simDD)[c("AIC")]
-lik.d.bc <- likRatioFit(outDB, outDC, simBB, simBC, simCB, simCC)[c("AIC")]
-lik.d.bd <- likRatioFit(outDB, outDD, simBB, simBD, simDB, simDD)[c("AIC")]
-lik.d.cd <- likRatioFit(outDC, outDD, simCC, simCD, simDC, simDD)[c("AIC")]
-lik.d <- c(lik.d.ab, lik.d.ac, lik.d.ad, lik.d.bc, lik.d.bd, lik.d.cd)
-names(lik.d) <- paste("lik.d.", c("ab", "ac", "ad", "bc", "bd", "cd"), sep="")
-
-fit <- NULL
-target <- "AIC"
-fit <- c(outAA@fit[target], 
-outAB@fit[target], 
-outAC@fit[target], 
-outAD@fit[target], 
-outBA@fit[target], 
-outBB@fit[target], 
-outBC@fit[target], 
-outBD@fit[target], 
-outCA@fit[target], 
-outCB@fit[target], 
-outCC@fit[target], 
-outCD@fit[target], 
-outDA@fit[target], 
-outDB@fit[target], 
-outDC@fit[target], 
-outDD@fit[target])
-target <- "BIC"
-fit <- c(fit, outAA@fit[target], 
-outAB@fit[target], 
-outAC@fit[target], 
-outAD@fit[target], 
-outBA@fit[target], 
-outBB@fit[target], 
-outBC@fit[target], 
-outBD@fit[target], 
-outCA@fit[target], 
-outCB@fit[target], 
-outCC@fit[target], 
-outCD@fit[target], 
-outDA@fit[target], 
-outDB@fit[target], 
-outDC@fit[target], 
-outDD@fit[target])
-name <- expand.grid(c("A", "B", "C", "D"), c("A", "B", "C", "D"), c("AIC", "BIC"))
-names(fit) <- paste(name[,3], name[,2], name[,1], sep=".")
-
-result <- c(N=N, fit, anova.vec, mc.vec, lik.vec)
+# In the output, the first object is the p-value comparing the original difference in a fit index with the sampling distribution of the difference in a fit index when bootstrap samples are generated from Model 1. This p-value is referred as p1.
+# the second object is the p-value comparing the original difference in a fit index with the sampling distribution of the difference in a fit index when bootstrap samples are generated from Model 2. This p-value is referred as p2.
+# Let's alpha as the alpha level. There are four scenarios:
+#	1. p1 > alpha and p2 < alpha --> Model 1 is preferred
+# 	2. p1 < alpha and p2 > alpha --> Model 2 is preferred
+# 	3. p1 > alpha and p2 > alpha --> Model 1 and 2 are indistinguishable. The statistical power is not enough to discern the difference between two models.
+# 	4. p1 < alpha and p2 < alpha --> Model 1 and 2 are indistinguishable. Model 1 and Model 2 maybe not the same as the population model underlying the original dataset.
 
