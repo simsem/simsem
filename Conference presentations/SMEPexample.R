@@ -4,10 +4,10 @@
 # Sunthud Pornprasertmanit, Wei Wu, and Todd D. Little; University of Kansas
 # Latest updated: July 1, 2012.
 
-library(simsem)
-N <- 300
-nRep <- 1000
-set.seed(123321)
+library(simsem)		# This code is applicable for simsem 0.2-7
+N <- 300			# Sample Size
+nRep <- 1000		# Number of bootstrap drawn
+set.seed(123321)	# Set Seed Number
 
 ############################################################# 
 #### Create data generation model and analysis model D
