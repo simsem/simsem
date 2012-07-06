@@ -44,6 +44,7 @@ NONE. Only plot the fit indices distributions.
 	}
 }
 \examples{
+\dontrun{
 loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
@@ -72,4 +73,5 @@ plotCutoff(Output2, 0.05)
 # Varying N and pmMCAR
 Output3 <- simResult(NULL, SimData, SimModel, n=seq(450, 500, 10), pmMCAR=c(0, 0.05, 0.1, 0.15))
 plotCutoff(Output3, 0.05)
+}
 }

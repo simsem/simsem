@@ -5,12 +5,23 @@ options(pager = "console")
 library('simsem')
 
 assign(".oldSearch", search(), pos = 'CheckExEnv')
+assign(".ExTimings", "simsem-Ex.timings", pos = 'CheckExEnv')
+cat("name\tuser\tsystem\telapsed\n", file=get(".ExTimings", pos = 'CheckExEnv'))
+assign(".format_ptime",
+function(x) {
+  if(!is.na(x[4L])) x[1L] <- x[1L] + x[4L]
+  if(!is.na(x[5L])) x[2L] <- x[2L] + x[5L]
+  format(x[1L:3L])
+},
+pos = 'CheckExEnv')
+
 cleanEx()
 nameEx("MatrixSet-class")
 ### * MatrixSet-class
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: MatrixSet-class
 ### Title: Class '"MatrixSet"'
 ### Aliases: MatrixSet-class MisspecSet-class summary,MatrixSet-method
@@ -39,12 +50,16 @@ summary(MatrixSet)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("MatrixSet-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("Null-class")
 ### * Null-class
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: Nullclass
 ### Title: Null Objects
 ### Aliases: NullDataFrame-class NullVector-class NullMatrix-class
@@ -60,12 +75,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("Null-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("SimData-class")
 ### * SimData-class
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: SimData-class
 ### Title: Class '"SimData"'
 ### Aliases: SimData-class run,SimData-method summary,SimData-method
@@ -94,12 +113,16 @@ run(SimData)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("SimData-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("SimDataDist-class")
 ### * SimDataDist-class
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: SimDataDist-class
 ### Title: Class '"SimDataDist"'
 ### Aliases: SimDataDist-class summary,SimDataDist-method
@@ -126,12 +149,16 @@ plotDist(dist, r=0.2)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("SimDataDist-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("SimDataOut-class")
 ### * SimDataOut-class
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: SimDataOut-class
 ### Title: Class '"SimDataOut"'
 ### Aliases: SimDataOut-class summary,SimDataOut-method
@@ -158,12 +185,16 @@ mis <- getPopulation(Data, misspec=TRUE)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("SimDataOut-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("SimEqualCon-class")
 ### * SimEqualCon-class
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: SimEqualCon-class
 ### Title: Class '"SimEqualCon"'
 ### Aliases: SimEqualCon-class summary,SimEqualCon-method
@@ -186,12 +217,16 @@ summary(equal.loading)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("SimEqualCon-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("SimFunction-class")
 ### * SimFunction-class
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: SimFunction-class
 ### Title: Class '"SimFunction"'
 ### Aliases: SimFunction-class summary,SimFunction-method
@@ -271,12 +306,16 @@ summary(mc)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("SimFunction-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("SimGenLabels-class")
 ### * SimGenLabels-class
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: SimGenLabels-class
 ### Title: Class '"SimGenLabels"'
 ### Aliases: SimGenLabels-class run,SimGenLabels-method
@@ -288,12 +327,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("SimGenLabels-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("SimMatrix-class")
 ### * SimMatrix-class
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: SimMatrix-class
 ### Title: Matrix object: Random parameters matrix
 ### Aliases: SimMatrix-class run,SimMatrix-method
@@ -331,12 +374,16 @@ summary(LY)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("SimMatrix-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("SimMissing-class")
 ### * SimMissing-class
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: SimMissing-class
 ### Title: Class '"SimMissing"'
 ### Aliases: SimMissing-class summary,SimMissing-method
@@ -349,12 +396,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("SimMissing-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("SimMisspec-class")
 ### * SimMisspec-class
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: SimMisspec-class
 ### Title: Class '"SimMisspec"'
 ### Aliases: SimMisspec-class run,SimMisspec-method
@@ -372,12 +423,16 @@ CFA.Model.Mis <- simMisspecCFA(RTD=RTD.Mis)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("SimMisspec-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("SimModel-class")
 ### * SimModel-class
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: SimModel-class
 ### Title: Class '"SimModel"'
 ### Aliases: SimModel-class run,SimModel-method summary,SimModel-method
@@ -405,12 +460,16 @@ summary(SimModel)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("SimModel-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("SimModelMIOut-class")
 ### * SimModelMIOut-class
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: SimModelMIOut-class
 ### Title: Class '"SimModelMIOut"'
 ### Aliases: SimModelMIOut-class
@@ -435,12 +494,16 @@ summary(Result)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("SimModelMIOut-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("SimModelOut-class")
 ### * SimModelOut-class
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: SimModelOut-class
 ### Title: Class '"SimModelOut"'
 ### Aliases: SimModelOut-class summary,SimModelOut-method
@@ -472,12 +535,16 @@ Result3 <- setPopulation(Result, CFA.Model)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("SimModelOut-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("SimParam-class")
 ### * SimParam-class
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: SimParam-class
 ### Title: Class '"SimParam"'
 ### Aliases: SimParam-class summary,SimParam-method
@@ -502,12 +569,16 @@ summary(HS.Model2)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("SimParam-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("SimREqualCon-class")
 ### * SimREqualCon-class
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: SimREqualCon-class
 ### Title: Class '"SimREqualCon"'
 ### Aliases: SimREqualCon-class summary,SimREqualCon-method
@@ -519,12 +590,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("SimREqualCon-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("SimResult-class")
 ### * SimResult-class
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: SimResult-class
 ### Title: Class '"SimResult"'
 ### Aliases: SimResult-class summary,SimResult-method
@@ -558,12 +633,16 @@ Output2 <- setPopulation(Output, CFA.Model)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("SimResult-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("SimResultParam-class")
 ### * SimResultParam-class
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: SimResultParam-class
 ### Title: Class '"SimResultParam"'
 ### Aliases: SimResultParam-class summary,SimResultParam-method
@@ -606,12 +685,16 @@ summary(ParamObject)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("SimResultParam-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("SimSet-class")
 ### * SimSet-class
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: SimSet-class
 ### Title: Class '"SimSet"'
 ### Aliases: SimSet-class run,SimSet-method summary,SimSet-method
@@ -648,12 +731,16 @@ summary(CFA.Model2)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("SimSet-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("SimVector-class")
 ### * SimVector-class
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: SimVector-class
 ### Title: Vector object: Random parameters vector
 ### Aliases: SimVector-class run,SimVector-method
@@ -682,12 +769,16 @@ summary(AL)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("SimVector-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("SymMatrix-class")
 ### * SymMatrix-class
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: SymMatrix-class
 ### Title: Symmetric matrix object: Random parameters symmetric matrix
 ### Aliases: SymMatrix-class run,SymMatrix-method summary,SymMatrix-method
@@ -709,12 +800,16 @@ run(RPH)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("SymMatrix-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("VirtualDist-class")
 ### * VirtualDist-class
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: VirtualDist-class
 ### Title: Distribution Objects
 ### Aliases: VirtualDist-class SimBeta-class SimBinom-class SimCauchy-class
@@ -768,12 +863,16 @@ plotDist(chi3, reverse=TRUE)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("VirtualDist-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("VirtualRSet-class")
 ### * VirtualRSet-class
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: ParameterSet
 ### Title: Class '"VirtualRSet"', '"SimLabels"' and '"SimRSet"'
 ### Aliases: VirtualRSet-class SimRSet-class SimLabels-class
@@ -786,12 +885,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("VirtualRSet-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("adjust")
 ### * adjust
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: adjust
 ### Title: Change an element in 'SimMatrix', 'SymMatrix', or 'SimVector'.
 ### Aliases: adjust adjust-methods adjust,ANY-method
@@ -830,12 +933,16 @@ summary(AL)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("adjust", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("anova")
 ### * anova
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: anova
 ### Title: Provide a comparison of nested models and nonnested models
 ###   across replications
@@ -870,12 +977,16 @@ anova(Output1b, Output2b)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("anova", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("blankParameters")
 ### * blankParameters
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: blankParameters
 ### Title: Change all elements in the non-null objects to be all NAs.
 ### Aliases: blankParameters
@@ -886,12 +997,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("blankParameters", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("centralMoment")
 ### * centralMoment
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: centralMoment
 ### Title: Calculate central moments of a variable
 ### Aliases: centralMoment
@@ -904,12 +1019,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("centralMoment", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("checkInputValue")
 ### * checkInputValue
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: checkInputValue
 ### Title: Check the value argument in the matrix, symmetric matrix, or
 ###   vector objects
@@ -921,12 +1040,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("checkInputValue", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("clean")
 ### * clean
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: clean
 ### Title: Extract only converged replications in the result objects
 ### Aliases: clean
@@ -937,12 +1060,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("clean", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("cleanSimResult")
 ### * cleanSimResult
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: cleanSimResult
 ### Title: Extract only converged replications in the result object
 ### Aliases: cleanSimResult
@@ -953,12 +1080,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("cleanSimResult", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("collapseExo")
 ### * collapseExo
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: collapseExo
 ### Title: Collapse all exogenous variables and put all in endogenous side
 ###   only.
@@ -970,12 +1101,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("collapseExo", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("combineLatentCorExoEndo")
 ### * combineLatentCorExoEndo
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: combineLatentCorExoEndo
 ### Title: Combine exogenous factor correlation and endogenous factor
 ###   correlation into a single matrix
@@ -987,12 +1122,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("combineLatentCorExoEndo", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("combineLoadingExoEndo")
 ### * combineLoadingExoEndo
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: combineLoadingExoEndo
 ### Title: Combine factor loading from the exogenous and endogenous sides
 ###   into a single matrix
@@ -1004,12 +1143,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("combineLoadingExoEndo", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("combineMeasurementErrorExoEndo")
 ### * combineMeasurementErrorExoEndo
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: combineMeasurementErrorExoEndo
 ### Title: Combine measurement error correlation from the exogenous and
 ###   endogenous sides into a single matrix
@@ -1021,12 +1164,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("combineMeasurementErrorExoEndo", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("combineObject")
 ### * combineObject
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: combineObject
 ### Title: Combine by summing or binding two objects together.
 ### Aliases: combineObject combineObject-methods
@@ -1042,12 +1189,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("combineObject", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("combinePathExoEndo")
 ### * combinePathExoEndo
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: combinePathExoEndo
 ### Title: Combine the regression coefficient matrices
 ### Aliases: combinePathExoEndo
@@ -1058,12 +1209,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("combinePathExoEndo", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("constantVector")
 ### * constantVector
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: constantVector
 ### Title: Create a constant vector object
 ### Aliases: constantVector
@@ -1076,12 +1231,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("constantVector", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("constrainMatrices")
 ### * constrainMatrices
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: constrainMatrices
 ### Title: Impose an equality constraint in an object
 ### Aliases: constrainMatrices constrainMatrices-methods
@@ -1094,12 +1253,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("constrainMatrices", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("continuousPower")
 ### * continuousPower
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: continuousPower
 ### Title: Find power of model parameters when simulations have randomly
 ###   varying parameters
@@ -1107,37 +1270,42 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-# Specify Sample Size by n
-loading <- matrix(0, 6, 1)
-loading[1:6, 1] <- NA
-LX <- simMatrix(loading, 0.7)
-RPH <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
-SimData <- simData(CFA.Model, 500)
-SimModel <- simModel(CFA.Model)
-# We will use only 5 replications to save time.
-# In reality, more replications are needed.
+## Not run: 
+##D # Specify Sample Size by n
+##D loading <- matrix(0, 6, 1)
+##D loading[1:6, 1] <- NA
+##D LX <- simMatrix(loading, 0.7)
+##D RPH <- symMatrix(diag(1))
+##D RTD <- symMatrix(diag(6))
+##D CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
+##D SimData <- simData(CFA.Model, 500)
+##D SimModel <- simModel(CFA.Model)
+##D # We will use only 5 replications to save time.
+##D # In reality, more replications are needed.
+##D 
+##D # Specify both sample size and percent missing completely at random
+##D Output <- simResult(NULL, SimData, SimModel, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2))
+##D summary(Output)
+##D 
+##D Cpow <- continuousPower(Output, contN = TRUE, contMCAR = TRUE)
+##D Cpow
+##D 
+##D Cpow2 <- continuousPower(Output, contN = TRUE, contMCAR = TRUE, pred=list(N = 200, pmMCAR = 0.3))
+##D Cpow2
+## End(Not run)
 
-# Specify both sample size and percent missing completely at random
-Output <- simResult(NULL, SimData, SimModel, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2))
-summary(Output)
-
-Cpow <- continuousPower(Output, contN = TRUE, contMCAR = TRUE)
-Cpow
-
-Cpow2 <- continuousPower(Output, contN = TRUE, contMCAR = TRUE, pred=list(N = 200, pmMCAR = 0.3))
-Cpow2
 
 
 
-
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("continuousPower", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("countFreeParameters")
 ### * countFreeParameters
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: countFreeParameters
 ### Title: Count how many free parameters in the target object
 ### Aliases: countFreeParameters countFreeParameters-methods
@@ -1156,12 +1324,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("countFreeParameters", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("countMACS")
 ### * countMACS
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: countMACS
 ### Title: Count the number of elements in the sufficient statistics
 ### Aliases: countMACS
@@ -1172,12 +1344,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("countMACS", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("cov2corMod")
 ### * cov2corMod
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: cov2corMod
 ### Title: Convert a covariance matrix to a correlation matrix
 ### Aliases: cov2corMod
@@ -1188,12 +1364,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("cov2corMod", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("createData")
 ### * createData
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: createData
 ### Title: Create data from model parameters
 ### Aliases: createData
@@ -1204,12 +1384,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("createData", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("createFreeParameters")
 ### * createFreeParameters
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: createFreeParameters
 ### Title: Create a free parameters object from a model specification
 ### Aliases: createFreeParameters
@@ -1238,12 +1422,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("createFreeParameters", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("createImpliedMACS")
 ### * createImpliedMACS
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: createImpliedMACS
 ### Title: Create model implied mean vector and covariance matrix
 ### Aliases: createImpliedMACS createImpliedMACS-methods
@@ -1270,12 +1458,16 @@ createImpliedMACS(param)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("createImpliedMACS", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("defaultStartingValues")
 ### * defaultStartingValues
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: defaultStartingValues
 ### Title: Make ad hoc starting values
 ### Aliases: defaultStartingValues
@@ -1286,12 +1478,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("defaultStartingValues", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("divideObject")
 ### * divideObject
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: divideObject
 ### Title: Make a division on each element of the object
 ### Aliases: divideObject divideObject-methods divideObject,ANY-method
@@ -1304,12 +1500,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("divideObject", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("drawParameters")
 ### * drawParameters
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: drawParameters
 ### Title: Create parameter sets (with or without model misspecification)
 ###   from the data object
@@ -1321,12 +1521,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("drawParameters", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("drawParametersMisspec")
 ### * drawParametersMisspec
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: drawParametersMisspec
 ### Title: Create parameter sets (with or without model misspecification)
 ###   from the parameter with or without misspecification set
@@ -1338,12 +1542,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("drawParametersMisspec", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("expandMatrices")
 ### * expandMatrices
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: expandMatrices
 ### Title: Expand the set of intercept and covariance matrices into the set
 ###   of intercept/mean and covariance/correlation/variance objects
@@ -1355,12 +1563,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("expandMatrices", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("extract")
 ### * extract
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: extract
 ### Title: Extract a part of an object
 ### Aliases: extract extract-methods extract,vector-method
@@ -1374,12 +1586,16 @@ extract(diag(3), 1, 2:3)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("extract", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("extractLavaanFit")
 ### * extractLavaanFit
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: extractLavaanFit
 ### Title: Extract fit indices from the lavaan object
 ### Aliases: extractLavaanFit
@@ -1390,12 +1606,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("extractLavaanFit", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("extractMatrixNames")
 ### * extractMatrixNames
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: extractMatrixNames
 ### Title: Extract a vector of parameter names based on specified rows and
 ###   columns
@@ -1410,12 +1630,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("extractMatrixNames", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("extractOpenMxFit")
 ### * extractOpenMxFit
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: extractOpenMxFit
 ### Title: Extract the fit indices reported by the 'OpenMx' result
 ### Aliases: extractOpenMxFit
@@ -1426,12 +1650,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("extractOpenMxFit", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("extractVectorNames")
 ### * extractVectorNames
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: extractVectorNames
 ### Title: Extract a vector of parameter names based on specified elements
 ### Aliases: extractVectorNames
@@ -1445,12 +1673,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("extractVectorNames", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("fillParam")
 ### * fillParam
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: fillParam
 ### Title: Fill in other objects based on the parameter values of current
 ###   objects
@@ -1462,12 +1694,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("fillParam", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("find2Dhist")
 ### * find2Dhist
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: find2Dhist
 ### Title: Fit the 2D Kernel Density Estimate
 ### Aliases: find2Dhist
@@ -1478,12 +1714,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("find2Dhist", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("findFactorIntercept")
 ### * findFactorIntercept
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: findFactorIntercept
 ### Title: Find factor intercept from regression coefficient matrix and
 ###   factor total means
@@ -1502,12 +1742,16 @@ findFactorIntercept(path, factorMean)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("findFactorIntercept", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("findFactorMean")
 ### * findFactorMean
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: findFactorMean
 ### Title: Find factor total means from regression coefficient matrix and
 ###   factor intercept
@@ -1526,12 +1770,16 @@ findFactorMean(path, intcept)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("findFactorMean", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("findFactorResidualVar")
 ### * findFactorResidualVar
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: findFactorResidualVar
 ### Title: Find factor residual variances from regression coefficient
 ###   matrix, factor (residual) correlations, and total factor variances
@@ -1554,12 +1802,16 @@ findFactorResidualVar(path, facCor, totalVar)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("findFactorResidualVar", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("findFactorTotalCov")
 ### * findFactorTotalCov
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: findFactorTotalCov
 ### Title: Find factor total covariance from regression coefficient matrix,
 ###   factor residual covariance
@@ -1582,12 +1834,16 @@ findFactorTotalCov(path, corPsi=facCor, errorVarPsi=residualVar)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("findFactorTotalCov", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("findFactorTotalVar")
 ### * findFactorTotalVar
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: findFactorTotalVar
 ### Title: Find factor total variances from regression coefficient matrix,
 ###   factor (residual) correlations, and factor residual variances
@@ -1610,12 +1866,16 @@ findFactorTotalVar(path, facCor, residualVar)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("findFactorTotalVar", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("findIndIntercept")
 ### * findIndIntercept
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: findIndIntercept
 ### Title: Find indicator intercepts from factor loading matrix, total
 ###   factor mean, and indicator mean.
@@ -1632,12 +1892,16 @@ findIndIntercept(loading, facMean, indMean)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("findIndIntercept", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("findIndMean")
 ### * findIndMean
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: findIndMean
 ### Title: Find indicator total means from factor loading matrix, total
 ###   factor mean, and indicator intercept.
@@ -1654,12 +1918,16 @@ findIndMean(loading, facMean, intcept)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("findIndMean", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("findIndResidualVar")
 ### * findIndResidualVar
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: findIndResidualVar
 ### Title: Find indicator residual variances from factor loading matrix,
 ###   total factor covariance, and total indicator variances.
@@ -1676,12 +1944,16 @@ findIndResidualVar(loading, facCov, totalVar)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("findIndResidualVar", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("findIndTotalVar")
 ### * findIndTotalVar
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: findIndTotalVar
 ### Title: Find indicator total variances from factor loading matrix, total
 ###   factor covariance, and indicator residual variances.
@@ -1698,12 +1970,16 @@ findIndTotalVar(loading, facCov, resVar)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("findIndTotalVar", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("findPossibleFactorCor")
 ### * findPossibleFactorCor
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: findPossibleFactorCor
 ### Title: Find the appropriate position for freely estimated correlation
 ###   (or covariance) given a regression coefficient matrix
@@ -1721,12 +1997,16 @@ findPossibleFactorCor(path)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("findPossibleFactorCor", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("findPower")
 ### * findPower
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: findPower
 ### Title: Find a value of independent variables that provides a given
 ###   value of power.
@@ -1734,29 +2014,35 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-# Specify Sample Size by n
-loading <- matrix(0, 6, 1)
-loading[1:6, 1] <- NA
-LX <- simMatrix(loading, 0.4)
-RPH <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
-SimData <- simData(CFA.Model, 500)
-SimModel <- simModel(CFA.Model)
+## Not run: 
+##D # Specify Sample Size by n
+##D loading <- matrix(0, 6, 1)
+##D loading[1:6, 1] <- NA
+##D LX <- simMatrix(loading, 0.4)
+##D RPH <- symMatrix(diag(1))
+##D RTD <- symMatrix(diag(6))
+##D CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
+##D SimData <- simData(CFA.Model, 500)
+##D SimModel <- simModel(CFA.Model)
+##D 
+##D # Specify both sample size and percent missing completely at random
+##D Output <- simResult(NULL, SimData, SimModel, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2))
+##D pow <- getPower(Output)
+##D findPower(pow, "N", 0.80)
+## End(Not run)
 
-# Specify both sample size and percent missing completely at random
-Output <- simResult(NULL, SimData, SimModel, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2))
-pow <- getPower(Output)
-findPower(pow, "N", 0.80)
 
 
 
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("findPower", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("findRecursiveSet")
 ### * findRecursiveSet
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: findRecursiveSet
 ### Title: Group variables regarding the position in mediation chain
 ### Aliases: findRecursiveSet
@@ -1773,12 +2059,16 @@ findRecursiveSet(path)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("findRecursiveSet", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("findRowZero")
 ### * findRowZero
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: findRowZero
 ### Title: Find rows in a matrix that all elements are zero in non-fixed
 ###   subset rows and columns.
@@ -1790,12 +2080,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("findRowZero", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("findTargetPower")
 ### * findTargetPower
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: findTargetPower
 ### Title: Find a value of varying parameters that provides a given value
 ###   of power.
@@ -1807,12 +2101,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("findTargetPower", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("findphist")
 ### * findphist
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: findphist
 ### Title: Find the density (likelihood) of a pair value in 2D Kernel
 ###   Density Estimate
@@ -1824,12 +2122,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("findphist", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("fitMeasuresChi")
 ### * fitMeasuresChi
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: fitMeasuresChi
 ### Title: Find fit indices from the discrepancy values of the target model
 ###   and null models.
@@ -1841,12 +2143,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("fitMeasuresChi", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("freeVector")
 ### * freeVector
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: freeVector
 ### Title: Create a free parameters vector with a starting values in a
 ###   vector object
@@ -1860,12 +2166,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("freeVector", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("getCondQtile")
 ### * getCondQtile
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: getCondQtile
 ### Title: Get a quantile of a variable given values of predictors
 ### Aliases: getCondQtile
@@ -1876,12 +2186,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("getCondQtile", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("getCutoff")
 ### * getCutoff
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: getCutoff
 ### Title: Find fit indices cutoff given a priori alpha level
 ### Aliases: getCutoff getCutoff-methods getCutoff,data.frame-method
@@ -1889,39 +2203,45 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-loading <- matrix(0, 6, 2)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-loadingValues <- matrix(0, 6, 2)
-loadingValues[1:3, 1] <- 0.7
-loadingValues[4:6, 2] <- 0.7
-LX <- simMatrix(loading, loadingValues)
-latent.cor <- matrix(NA, 2, 2)
-diag(latent.cor) <- 1
-RPH <- symMatrix(latent.cor, 0.5)
-error.cor <- matrix(0, 6, 6)
-diag(error.cor) <- 1
-RTD <- symMatrix(error.cor)
-CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
-SimData <- simData(CFA.Model, 200)
-SimModel <- simModel(CFA.Model)
-# We make the examples running only 5 replications to save time.
-# In reality, more replications are needed.
-Output <- simResult(5, SimData, SimModel)
-getCutoff(Output, 0.05)
+## Not run: 
+##D loading <- matrix(0, 6, 2)
+##D loading[1:3, 1] <- NA
+##D loading[4:6, 2] <- NA
+##D loadingValues <- matrix(0, 6, 2)
+##D loadingValues[1:3, 1] <- 0.7
+##D loadingValues[4:6, 2] <- 0.7
+##D LX <- simMatrix(loading, loadingValues)
+##D latent.cor <- matrix(NA, 2, 2)
+##D diag(latent.cor) <- 1
+##D RPH <- symMatrix(latent.cor, 0.5)
+##D error.cor <- matrix(0, 6, 6)
+##D diag(error.cor) <- 1
+##D RTD <- symMatrix(error.cor)
+##D CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
+##D SimData <- simData(CFA.Model, 200)
+##D SimModel <- simModel(CFA.Model)
+##D # We make the examples running only 5 replications to save time.
+##D # In reality, more replications are needed.
+##D Output <- simResult(5, SimData, SimModel)
+##D getCutoff(Output, 0.05)
+##D 
+##D # Finding the cutoff when the sample size is varied.
+##D Output2 <- simResult(NULL, SimData, SimModel, n=seq(50, 100, 10))
+##D getCutoff(Output2, 0.05, nVal = 75)
+## End(Not run)
 
-# Finding the cutoff when the sample size is varied.
-Output2 <- simResult(NULL, SimData, SimModel, n=seq(50, 100, 10))
-getCutoff(Output2, 0.05, nVal = 75)
 
 
 
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("getCutoff", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("getCutoffNested")
 ### * getCutoffNested
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: getCutoffNested
 ### Title: Find fit indices cutoff for nested model comparison given a
 ###   priori alpha level
@@ -1929,49 +2249,55 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-n1 <- simNorm(0, 0.1)
-u79 <- simUnif(0.7, 0.9)
+## Not run: 
+##D n1 <- simNorm(0, 0.1)
+##D u79 <- simUnif(0.7, 0.9)
+##D 
+##D loading.null <- matrix(0, 6, 1)
+##D loading.null[1:6, 1] <- NA
+##D LX.NULL <- simMatrix(loading.null, 0.7)
+##D RPH.NULL <- symMatrix(diag(1))
+##D RTD <- symMatrix(diag(6))
+##D CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
+##D 
+##D error.cor.mis <- matrix(NA, 6, 6)
+##D diag(error.cor.mis) <- 1
+##D RTD.Mis <- symMatrix(error.cor.mis, "n1")
+##D CFA.Model.NULL.Mis <- simMisspecCFA(RTE = RTD.Mis)
+##D 
+##D loading.alt <- matrix(0, 6, 2)
+##D loading.alt[1:3, 1] <- NA
+##D loading.alt[4:6, 2] <- NA
+##D LX.ALT <- simMatrix(loading.alt, 0.7)
+##D latent.cor.alt <- matrix(NA, 2, 2)
+##D diag(latent.cor.alt) <- 1
+##D RPH.ALT <- symMatrix(latent.cor.alt, "u79")
+##D CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
+##D 
+##D SimData.NULL <- simData(CFA.Model.NULL, 500)
+##D 
+##D SimModel.NULL <- simModel(CFA.Model.NULL)
+##D SimModel.ALT <- simModel(CFA.Model.ALT)
+##D 
+##D # The actual number of replications should be greater than 10.
+##D Output.NULL.NULL <- simResult(10, SimData.NULL, SimModel.NULL)
+##D Output.NULL.ALT <- simResult(10, SimData.NULL, SimModel.ALT)
+##D 
+##D getCutoffNested(Output.NULL.NULL, Output.NULL.ALT)
+## End(Not run)
 
-loading.null <- matrix(0, 6, 1)
-loading.null[1:6, 1] <- NA
-LX.NULL <- simMatrix(loading.null, 0.7)
-RPH.NULL <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
-
-error.cor.mis <- matrix(NA, 6, 6)
-diag(error.cor.mis) <- 1
-RTD.Mis <- symMatrix(error.cor.mis, "n1")
-CFA.Model.NULL.Mis <- simMisspecCFA(RTE = RTD.Mis)
-
-loading.alt <- matrix(0, 6, 2)
-loading.alt[1:3, 1] <- NA
-loading.alt[4:6, 2] <- NA
-LX.ALT <- simMatrix(loading.alt, 0.7)
-latent.cor.alt <- matrix(NA, 2, 2)
-diag(latent.cor.alt) <- 1
-RPH.ALT <- symMatrix(latent.cor.alt, "u79")
-CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
-
-SimData.NULL <- simData(CFA.Model.NULL, 500)
-
-SimModel.NULL <- simModel(CFA.Model.NULL)
-SimModel.ALT <- simModel(CFA.Model.ALT)
-
-# The actual number of replications should be greater than 10.
-Output.NULL.NULL <- simResult(10, SimData.NULL, SimModel.NULL)
-Output.NULL.ALT <- simResult(10, SimData.NULL, SimModel.ALT)
-
-getCutoffNested(Output.NULL.NULL, Output.NULL.ALT)
 
 
 
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("getCutoffNested", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("getCutoffNonNested")
 ### * getCutoffNonNested
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: getCutoffNonNested
 ### Title: Find fit indices cutoff for non-nested model comparison given a
 ###   priori alpha level
@@ -1979,54 +2305,60 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-n1 <- simNorm(0, 0.1)
-u79 <- simUnif(0.7, 0.9)
+## Not run: 
+##D n1 <- simNorm(0, 0.1)
+##D u79 <- simUnif(0.7, 0.9)
+##D 
+##D loading.A <- matrix(0, 8, 2)
+##D loading.A[1:3, 1] <- NA
+##D loading.A[4:8, 2] <- NA
+##D LX.A <- simMatrix(loading.A, 0.7)
+##D latent.cor <- matrix(NA, 2, 2)
+##D diag(latent.cor) <- 1
+##D RPH <- symMatrix(latent.cor, "u79")
+##D RTD <- symMatrix(diag(8))
+##D CFA.Model.A <- simSetCFA(LY = LX.A, RPS = RPH, RTE = RTD)
+##D 
+##D error.cor.mis <- matrix(NA, 8, 8)
+##D diag(error.cor.mis) <- 1
+##D RTD.Mis <- symMatrix(error.cor.mis, "n1")
+##D CFA.Model.A.Mis <- simMisspecCFA(RTE = RTD.Mis)
+##D 
+##D loading.B <- matrix(0, 8, 2)
+##D loading.B[1:4, 1] <- NA
+##D loading.B[5:8, 2] <- NA
+##D LX.B <- simMatrix(loading.B, 0.7)
+##D CFA.Model.B <- simSetCFA(LY = LX.B, RPS = RPH, RTE = RTD)
+##D 
+##D SimData.A <- simData(CFA.Model.A, 500)
+##D SimData.B <- simData(CFA.Model.B, 500)
+##D 
+##D SimModel.A <- simModel(CFA.Model.A)
+##D SimModel.B <- simModel(CFA.Model.B)
+##D 
+##D # The actual number of replications should be greater than 10.
+##D Output.A.A <- simResult(10, SimData.A, SimModel.A)
+##D Output.A.B <- simResult(10, SimData.A, SimModel.B)
+##D Output.B.A <- simResult(10, SimData.B, SimModel.A)
+##D Output.B.B <- simResult(10, SimData.B, SimModel.B)
+##D 
+##D getCutoffNonNested(Output.A.A, Output.A.B, Output.B.A, Output.B.B)
+##D getCutoffNonNested(Output.A.A, Output.A.B)
+##D getCutoffNonNested(Output.B.B, Output.B.A)
+## End(Not run)
 
-loading.A <- matrix(0, 8, 2)
-loading.A[1:3, 1] <- NA
-loading.A[4:8, 2] <- NA
-LX.A <- simMatrix(loading.A, 0.7)
-latent.cor <- matrix(NA, 2, 2)
-diag(latent.cor) <- 1
-RPH <- symMatrix(latent.cor, "u79")
-RTD <- symMatrix(diag(8))
-CFA.Model.A <- simSetCFA(LY = LX.A, RPS = RPH, RTE = RTD)
-
-error.cor.mis <- matrix(NA, 8, 8)
-diag(error.cor.mis) <- 1
-RTD.Mis <- symMatrix(error.cor.mis, "n1")
-CFA.Model.A.Mis <- simMisspecCFA(RTE = RTD.Mis)
-
-loading.B <- matrix(0, 8, 2)
-loading.B[1:4, 1] <- NA
-loading.B[5:8, 2] <- NA
-LX.B <- simMatrix(loading.B, 0.7)
-CFA.Model.B <- simSetCFA(LY = LX.B, RPS = RPH, RTE = RTD)
-
-SimData.A <- simData(CFA.Model.A, 500)
-SimData.B <- simData(CFA.Model.B, 500)
-
-SimModel.A <- simModel(CFA.Model.A)
-SimModel.B <- simModel(CFA.Model.B)
-
-# The actual number of replications should be greater than 10.
-Output.A.A <- simResult(10, SimData.A, SimModel.A)
-Output.A.B <- simResult(10, SimData.A, SimModel.B)
-Output.B.A <- simResult(10, SimData.B, SimModel.A)
-Output.B.B <- simResult(10, SimData.B, SimModel.B)
-
-getCutoffNonNested(Output.A.A, Output.A.B, Output.B.A, Output.B.B)
-getCutoffNonNested(Output.A.A, Output.A.B)
-getCutoffNonNested(Output.B.B, Output.B.A)
 
 
 
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("getCutoffNonNested", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("getKeywords")
 ### * getKeywords
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: getKeywords
 ### Title: List of all keywords used in the 'simsem' package
 ### Aliases: getKeywords
@@ -2039,12 +2371,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("getKeywords", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("getPopulation")
 ### * getPopulation
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: getPopulation
 ### Title: Extract the data generation population model underlying an
 ###   object
@@ -2056,47 +2392,56 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("getPopulation", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("getPower")
 ### * getPower
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: getPower
 ### Title: Find power of model parameters
 ### Aliases: getPower
 
 ### ** Examples
 
-# Specify Sample Size by n
-loading <- matrix(0, 6, 1)
-loading[1:6, 1] <- NA
-LX <- simMatrix(loading, 0.7)
-RPH <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
-SimData <- simData(CFA.Model, 500)
-SimModel <- simModel(CFA.Model)
-# We will use only 5 replications to save time.
-# In reality, more replications are needed.
+## Not run: 
+##D # Specify Sample Size by n
+##D loading <- matrix(0, 6, 1)
+##D loading[1:6, 1] <- NA
+##D LX <- simMatrix(loading, 0.7)
+##D RPH <- symMatrix(diag(1))
+##D RTD <- symMatrix(diag(6))
+##D CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
+##D SimData <- simData(CFA.Model, 500)
+##D SimModel <- simModel(CFA.Model)
+##D # We will use only 5 replications to save time.
+##D # In reality, more replications are needed.
+##D 
+##D # Specify both sample size and percent missing completely at random
+##D Output <- simResult(NULL, SimData, SimModel, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2))
+##D summary(Output)
+##D 
+##D getPower(Output)
+##D 
+##D getPower(Output, nVal=c(100, 200), pmMCARval=c(0, 0.1, 0.2))
+## End(Not run)
 
-# Specify both sample size and percent missing completely at random
-Output <- simResult(NULL, SimData, SimModel, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2))
-summary(Output)
-
-getPower(Output)
-
-getPower(Output, nVal=c(100, 200), pmMCARval=c(0, 0.1, 0.2))
 
 
 
-
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("getPower", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("getPowerFit")
 ### * getPowerFit
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: getPowerFit
 ### Title: Find power in rejecting alternative models based on fit indices
 ###   criteria
@@ -2107,47 +2452,52 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-loading.null <- matrix(0, 6, 1)
-loading.null[1:6, 1] <- NA
-LX.NULL <- simMatrix(loading.null, 0.7)
-RPH.NULL <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
-SimData.NULL <- simData(CFA.Model.NULL, 500)
-SimModel <- simModel(CFA.Model.NULL)
-# We make the examples running only 5 replications to save time.
-# In reality, more replications are needed.
-Output.NULL <- simResult(5, SimData.NULL, SimModel)
-Cut.NULL <- getCutoff(Output.NULL, 0.95)
+## Not run: 
+##D loading.null <- matrix(0, 6, 1)
+##D loading.null[1:6, 1] <- NA
+##D LX.NULL <- simMatrix(loading.null, 0.7)
+##D RPH.NULL <- symMatrix(diag(1))
+##D RTD <- symMatrix(diag(6))
+##D CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
+##D SimData.NULL <- simData(CFA.Model.NULL, 500)
+##D SimModel <- simModel(CFA.Model.NULL)
+##D # We make the examples running only 5 replications to save time.
+##D # In reality, more replications are needed.
+##D Output.NULL <- simResult(5, SimData.NULL, SimModel)
+##D Cut.NULL <- getCutoff(Output.NULL, 0.95)
+##D 
+##D u79 <- simUnif(0.7, 0.9)
+##D loading.alt <- matrix(0, 6, 2)
+##D loading.alt[1:3, 1] <- NA
+##D loading.alt[4:6, 2] <- NA
+##D LX.ALT <- simMatrix(loading.alt, 0.7)
+##D latent.cor.alt <- matrix(NA, 2, 2)
+##D diag(latent.cor.alt) <- 1
+##D RPH.ALT <- symMatrix(latent.cor.alt, "u79")
+##D CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
+##D SimData.ALT <- simData(CFA.Model.ALT, 500)
+##D Output.ALT <- simResult(5, SimData.ALT, SimModel)
+##D getPowerFit(Output.ALT, cutoff=Cut.NULL)
+##D Rule.of.thumb <- c(RMSEA=0.05, CFI=0.95, TLI=0.95, SRMR=0.06)
+##D getPowerFit(Output.ALT, cutoff=Rule.of.thumb, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+##D 
+##D Output.NULL2 <- simResult(NULL, SimData.NULL, SimModel, n=seq(50, 500, 50))
+##D Output.ALT2 <- simResult(NULL, SimData.ALT, SimModel, n=seq(50, 500, 50))
+##D getPowerFit(Output.ALT2, nullObject=Output.NULL2, nVal=250)
+## End(Not run)
 
-u79 <- simUnif(0.7, 0.9)
-loading.alt <- matrix(0, 6, 2)
-loading.alt[1:3, 1] <- NA
-loading.alt[4:6, 2] <- NA
-LX.ALT <- simMatrix(loading.alt, 0.7)
-latent.cor.alt <- matrix(NA, 2, 2)
-diag(latent.cor.alt) <- 1
-RPH.ALT <- symMatrix(latent.cor.alt, "u79")
-CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
-SimData.ALT <- simData(CFA.Model.ALT, 500)
-Output.ALT <- simResult(5, SimData.ALT, SimModel)
-getPowerFit(Output.ALT, cutoff=Cut.NULL)
-Rule.of.thumb <- c(RMSEA=0.05, CFI=0.95, TLI=0.95, SRMR=0.06)
-getPowerFit(Output.ALT, cutoff=Rule.of.thumb, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
-
-Output.NULL2 <- simResult(NULL, SimData.NULL, SimModel, n=seq(50, 500, 50))
-Output.ALT2 <- simResult(NULL, SimData.ALT, SimModel, n=seq(50, 500, 50))
-getPowerFit(Output.ALT2, nullObject=Output.NULL2, nVal=250)
 
 
 
-
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("getPowerFit", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("getPowerFitNested")
 ### * getPowerFitNested
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: getPowerFitNested
 ### Title: Find power in rejecting nested models based on the differences
 ###   in fit indices
@@ -2157,66 +2507,72 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-u2 <- simUnif(-0.2, 0.2)
-n1 <- simNorm(0, 0.1)
-u79 <- simUnif(0.7, 0.9)
+## Not run: 
+##D u2 <- simUnif(-0.2, 0.2)
+##D n1 <- simNorm(0, 0.1)
+##D u79 <- simUnif(0.7, 0.9)
+##D 
+##D loading.null <- matrix(0, 6, 1)
+##D loading.null[1:6, 1] <- NA
+##D LX.NULL <- simMatrix(loading.null, 0.7)
+##D RPH.NULL <- symMatrix(diag(1))
+##D RTD <- symMatrix(diag(6))
+##D CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
+##D 
+##D error.cor.mis <- matrix(NA, 6, 6)
+##D diag(error.cor.mis) <- 1
+##D RTD.Mis <- symMatrix(error.cor.mis, "rnorm(1,0,0.1)")
+##D CFA.Model.NULL.Mis <- simMisspecCFA(RTE = RTD.Mis)
+##D 
+##D loading.alt <- matrix(0, 6, 2)
+##D loading.alt[1:3, 1] <- NA
+##D loading.alt[4:6, 2] <- NA
+##D LX.ALT <- simMatrix(loading.alt, 0.7)
+##D latent.cor.alt <- matrix(NA, 2, 2)
+##D diag(latent.cor.alt) <- 1
+##D RPH.ALT <- symMatrix(latent.cor.alt, 0.7)
+##D CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
+##D 
+##D # loading.alt.mis <- matrix(NA, 6, 2)
+##D # loading.alt.mis[is.na(loading.alt)] <- 0
+##D # LX.alt.mis <- simMatrix(loading.alt.mis, "runif(1,-.2,.2)")
+##D # CFA.Model.alt.mis <- simMisspecCFA(LY = LX.alt.mis, RTE=RTD.Mis)
+##D 
+##D SimData.NULL <- simData(CFA.Model.NULL, 500)
+##D SimData.ALT <- simData(CFA.Model.ALT, 500)
+##D 
+##D SimModel.NULL <- simModel(CFA.Model.NULL)
+##D SimModel.ALT <- simModel(CFA.Model.ALT)
+##D 
+##D Output.NULL.NULL <- simResult(10, SimData.NULL, SimModel.NULL)
+##D Output.ALT.NULL <- simResult(10, SimData.ALT, SimModel.NULL)
+##D Output.NULL.ALT <- simResult(10, SimData.NULL, SimModel.ALT)
+##D Output.ALT.ALT <- simResult(10, SimData.ALT, SimModel.ALT)
+##D 
+##D getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT)
+##D getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, cutoff=c(Chi=3.84, CFI=-0.10))
+##D 
+##D Output.NULL.NULL2 <- simResult(NULL, SimData.NULL, SimModel.NULL, n=seq(50, 500, 50))
+##D Output.ALT.NULL2 <- simResult(NULL, SimData.ALT, SimModel.NULL, n=seq(50, 500, 50))
+##D Output.NULL.ALT2 <- simResult(NULL, SimData.NULL, SimModel.ALT, n=seq(50, 500, 50))
+##D Output.ALT.ALT2 <- simResult(NULL, SimData.ALT, SimModel.ALT, n=seq(50, 500, 50))
+##D 
+##D getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT, nVal = 250)
+##D getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, cutoff=c(Chi=3.84, CFI=-0.10), nVal = 250)
+## End(Not run)
 
-loading.null <- matrix(0, 6, 1)
-loading.null[1:6, 1] <- NA
-LX.NULL <- simMatrix(loading.null, 0.7)
-RPH.NULL <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
-
-error.cor.mis <- matrix(NA, 6, 6)
-diag(error.cor.mis) <- 1
-RTD.Mis <- symMatrix(error.cor.mis, "rnorm(1,0,0.1)")
-CFA.Model.NULL.Mis <- simMisspecCFA(RTE = RTD.Mis)
-
-loading.alt <- matrix(0, 6, 2)
-loading.alt[1:3, 1] <- NA
-loading.alt[4:6, 2] <- NA
-LX.ALT <- simMatrix(loading.alt, 0.7)
-latent.cor.alt <- matrix(NA, 2, 2)
-diag(latent.cor.alt) <- 1
-RPH.ALT <- symMatrix(latent.cor.alt, 0.7)
-CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
-
-# loading.alt.mis <- matrix(NA, 6, 2)
-# loading.alt.mis[is.na(loading.alt)] <- 0
-# LX.alt.mis <- simMatrix(loading.alt.mis, "runif(1,-.2,.2)")
-# CFA.Model.alt.mis <- simMisspecCFA(LY = LX.alt.mis, RTE=RTD.Mis)
-
-SimData.NULL <- simData(CFA.Model.NULL, 500)
-SimData.ALT <- simData(CFA.Model.ALT, 500)
-
-SimModel.NULL <- simModel(CFA.Model.NULL)
-SimModel.ALT <- simModel(CFA.Model.ALT)
-
-Output.NULL.NULL <- simResult(10, SimData.NULL, SimModel.NULL)
-Output.ALT.NULL <- simResult(10, SimData.ALT, SimModel.NULL)
-Output.NULL.ALT <- simResult(10, SimData.NULL, SimModel.ALT)
-Output.ALT.ALT <- simResult(10, SimData.ALT, SimModel.ALT)
-
-getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT)
-getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, cutoff=c(Chi=3.84, CFI=-0.10))
-
-Output.NULL.NULL2 <- simResult(NULL, SimData.NULL, SimModel.NULL, n=seq(50, 500, 50))
-Output.ALT.NULL2 <- simResult(NULL, SimData.ALT, SimModel.NULL, n=seq(50, 500, 50))
-Output.NULL.ALT2 <- simResult(NULL, SimData.NULL, SimModel.ALT, n=seq(50, 500, 50))
-Output.ALT.ALT2 <- simResult(NULL, SimData.ALT, SimModel.ALT, n=seq(50, 500, 50))
-
-getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT, nVal = 250)
-getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, cutoff=c(Chi=3.84, CFI=-0.10), nVal = 250)
 
 
 
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("getPowerFitNested", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("getPowerFitNonNested")
 ### * getPowerFitNonNested
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: getPowerFitNonNested
 ### Title: Find power in rejecting non-nested models based on the
 ###   differences in fit indices
@@ -2226,53 +2582,59 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-n1 <- simNorm(0, 0.1)
-u79 <- simUnif(0.7, 0.9)
+## Not run: 
+##D n1 <- simNorm(0, 0.1)
+##D u79 <- simUnif(0.7, 0.9)
+##D 
+##D loading.A <- matrix(0, 8, 2)
+##D loading.A[1:3, 1] <- NA
+##D loading.A[4:8, 2] <- NA
+##D LX.A <- simMatrix(loading.A, 0.7)
+##D latent.cor <- matrix(NA, 2, 2)
+##D diag(latent.cor) <- 1
+##D RPH <- symMatrix(latent.cor, "u79")
+##D RTD <- symMatrix(diag(8))
+##D CFA.Model.A <- simSetCFA(LY = LX.A, RPS = RPH, RTE = RTD)
+##D 
+##D error.cor.mis <- matrix(NA, 8, 8)
+##D diag(error.cor.mis) <- 1
+##D RTD.Mis <- symMatrix(error.cor.mis, "n1")
+##D CFA.Model.A.Mis <- simMisspecCFA(RTE = RTD.Mis)
+##D 
+##D loading.B <- matrix(0, 8, 2)
+##D loading.B[1:4, 1] <- NA
+##D loading.B[5:8, 2] <- NA
+##D LX.B <- simMatrix(loading.B, 0.7)
+##D CFA.Model.B <- simSetCFA(LY = LX.B, RPS = RPH, RTE = RTD)
+##D 
+##D SimData.A <- simData(CFA.Model.A, 500)
+##D SimData.B <- simData(CFA.Model.B, 500)
+##D 
+##D SimModel.A <- simModel(CFA.Model.A)
+##D SimModel.B <- simModel(CFA.Model.B)
+##D 
+##D # The actual number of replications should be greater than 10.
+##D Output.A.A <- simResult(10, SimData.A, SimModel.A)
+##D Output.A.B <- simResult(10, SimData.A, SimModel.B)
+##D Output.B.A <- simResult(10, SimData.B, SimModel.A)
+##D Output.B.B <- simResult(10, SimData.B, SimModel.B)
+##D 
+##D getPowerFitNonNested(Output.B.A, Output.B.B, dat1Mod1=Output.A.A, dat1Mod2=Output.A.B)
+##D getPowerFitNonNested(Output.B.A, Output.B.B, cutoff=c(AIC=0, BIC=0))
+## End(Not run)
 
-loading.A <- matrix(0, 8, 2)
-loading.A[1:3, 1] <- NA
-loading.A[4:8, 2] <- NA
-LX.A <- simMatrix(loading.A, 0.7)
-latent.cor <- matrix(NA, 2, 2)
-diag(latent.cor) <- 1
-RPH <- symMatrix(latent.cor, "u79")
-RTD <- symMatrix(diag(8))
-CFA.Model.A <- simSetCFA(LY = LX.A, RPS = RPH, RTE = RTD)
-
-error.cor.mis <- matrix(NA, 8, 8)
-diag(error.cor.mis) <- 1
-RTD.Mis <- symMatrix(error.cor.mis, "n1")
-CFA.Model.A.Mis <- simMisspecCFA(RTE = RTD.Mis)
-
-loading.B <- matrix(0, 8, 2)
-loading.B[1:4, 1] <- NA
-loading.B[5:8, 2] <- NA
-LX.B <- simMatrix(loading.B, 0.7)
-CFA.Model.B <- simSetCFA(LY = LX.B, RPS = RPH, RTE = RTD)
-
-SimData.A <- simData(CFA.Model.A, 500)
-SimData.B <- simData(CFA.Model.B, 500)
-
-SimModel.A <- simModel(CFA.Model.A)
-SimModel.B <- simModel(CFA.Model.B)
-
-# The actual number of replications should be greater than 10.
-Output.A.A <- simResult(10, SimData.A, SimModel.A)
-Output.A.B <- simResult(10, SimData.A, SimModel.B)
-Output.B.A <- simResult(10, SimData.B, SimModel.A)
-Output.B.B <- simResult(10, SimData.B, SimModel.B)
-
-getPowerFitNonNested(Output.B.A, Output.B.B, dat1Mod1=Output.A.A, dat1Mod2=Output.A.B)
-getPowerFitNonNested(Output.B.A, Output.B.B, cutoff=c(AIC=0, BIC=0))
 
 
 
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("getPowerFitNonNested", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("imposeMissing")
 ### * imposeMissing
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: imposeMissing
 ### Title: Impose MAR, MCAR, planned missingness, or attrition on a data
 ###   set
@@ -2303,12 +2665,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("imposeMissing", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("indProd")
 ### * indProd
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: indProd
 ### Title: Make a product of indicators using mean centering or double-mean
 ###   centering
@@ -2320,12 +2686,16 @@ dat <- indProd(attitude[,-1], var1=1:3, var2=4:6)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("indProd", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("interpolate")
 ### * interpolate
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: interpolate
 ### Title: Find the value of one vector relative to a value of another
 ###   vector by interpolation
@@ -2337,12 +2707,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("interpolate", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("isCorMatrix")
 ### * isCorMatrix
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: isCorMatrix
 ### Title: Check whether a 'matrix' is a possible correlation matrix
 ### Aliases: isCorMatrix
@@ -2355,12 +2729,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("isCorMatrix", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("isDefault")
 ### * isDefault
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: isDefault
 ### Title: Check whether a vector object is default
 ### Aliases: isDefault
@@ -2371,12 +2749,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("isDefault", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("isMeanConstraint")
 ### * isMeanConstraint
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: isMeanConstraint
 ### Title: Check whether all rownames in a constraint matrix containing
 ###   symbols of means vectors
@@ -2388,12 +2770,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("isMeanConstraint", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("isNullObject")
 ### * isNullObject
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: isNullObject
 ### Title: Check whether the object is the 'NULL' type of that class
 ### Aliases: isNullObject isNullObject-methods isNullObject,ANY,ANY-method
@@ -2411,12 +2797,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("isNullObject", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("isRandom")
 ### * isRandom
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: isRandom
 ### Title: Check whether the object contains any random parameters
 ### Aliases: isRandom isRandom-methods isRandom,ANY-method
@@ -2429,12 +2819,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("isRandom", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("isVarianceConstraint")
 ### * isVarianceConstraint
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: isVarianceConstraint
 ### Title: Check whether all rownames in a constraint matrix containing
 ###   symbols of variance vectors
@@ -2446,12 +2840,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("isVarianceConstraint", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("kStat")
 ### * kStat
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: kStat
 ### Title: Calculate the _k_-statistic of a variable
 ### Aliases: kStat
@@ -2464,12 +2862,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("kStat", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("kurtosis")
 ### * kurtosis
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: kurtosis
 ### Title: Finding excessive kurtosis
 ### Aliases: kurtosis kurtosis-methods kurtosis,vector-method
@@ -2480,12 +2882,16 @@ kurtosis(1:5)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("kurtosis", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("likRatioFit")
 ### * likRatioFit
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: likRatioFit
 ### Title: Find the likelihood ratio (or Bayes factor) based on the
 ###   bivariate distribution of fit indices
@@ -2493,47 +2899,55 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-library(lavaan)
-loading <- matrix(0, 11, 3)
-loading[1:3, 1] <- NA
-loading[4:7, 2] <- NA
-loading[8:11, 3] <- NA
-path.A <- matrix(0, 3, 3)
-path.A[2:3, 1] <- NA
-path.A[3, 2] <- NA
-param.A <- simParamSEM(LY=loading, BE=path.A)
+## Not run: 
+##D library(lavaan)
+##D loading <- matrix(0, 11, 3)
+##D loading[1:3, 1] <- NA
+##D loading[4:7, 2] <- NA
+##D loading[8:11, 3] <- NA
+##D path.A <- matrix(0, 3, 3)
+##D path.A[2:3, 1] <- NA
+##D path.A[3, 2] <- NA
+##D param.A <- simParamSEM(LY=loading, BE=path.A)
+##D 
+##D model.A <- simModel(param.A, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
+##D out.A <- run(model.A, PoliticalDemocracy)
+##D 
+##D path.B <- matrix(0, 3, 3)
+##D path.B[1:2, 3] <- NA
+##D path.B[1, 2] <- NA
+##D param.B <- simParamSEM(LY=loading, BE=path.B)
+##D 
+##D model.B <- simModel(param.B, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
+##D out.B <- run(model.B, PoliticalDemocracy)
+##D 
+##D u2 <- simUnif(-0.2, 0.2)
+##D loading.mis <- matrix(NA, 11, 3)
+##D loading.mis[is.na(loading)] <- 0
+##D LY.mis <- simMatrix(loading.mis, "u2")
+##D misspec <- simMisspecSEM(LY=LY.mis)
+##D 
+##D output.A.A <- runFit(model.A, PoliticalDemocracy, 5, misspec=misspec)
+##D output.A.B <- runFit(model.A, PoliticalDemocracy, 5, misspec=misspec, analyzeModel=model.B)
+##D output.B.A <- runFit(model.B, PoliticalDemocracy, 5, misspec=misspec, analyzeModel=model.A)
+##D output.B.B <- runFit(model.B, PoliticalDemocracy, 5, misspec=misspec)
+##D 
+##D # The output may contain some warnings here. When the number of replications increases (e.g., 1000), the warnings should disappear.
+##D likRatioFit(out.A, out.B, output.A.A, output.A.B, output.B.A, output.B.B)
+## End(Not run)
 
-model.A <- simModel(param.A, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
-out.A <- run(model.A, PoliticalDemocracy)
-
-path.B <- matrix(0, 3, 3)
-path.B[1:2, 3] <- NA
-path.B[1, 2] <- NA
-param.B <- simParamSEM(LY=loading, BE=path.B)
-
-model.B <- simModel(param.B, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
-out.B <- run(model.B, PoliticalDemocracy)
-
-u2 <- simUnif(-0.2, 0.2)
-loading.mis <- matrix(NA, 11, 3)
-loading.mis[is.na(loading)] <- 0
-LY.mis <- simMatrix(loading.mis, "u2")
-misspec <- simMisspecSEM(LY=LY.mis)
-
-output.A.A <- runFit(model.A, PoliticalDemocracy, 10, misspec=misspec)
-output.A.B <- runFit(model.A, PoliticalDemocracy, 10, misspec=misspec, analyzeModel=model.B)
-output.B.A <- runFit(model.B, PoliticalDemocracy, 10, misspec=misspec, analyzeModel=model.A)
-output.B.B <- runFit(model.B, PoliticalDemocracy, 10, misspec=misspec)
-likRatioFit(out.A, out.B, output.A.A, output.A.B, output.B.A, output.B.B)
 
 
 
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("likRatioFit", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("loadingFromAlpha")
 ### * loadingFromAlpha
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: loadingFromAlpha
 ### Title: Find standardized factor loading from coefficient alpha
 ### Aliases: loadingFromAlpha
@@ -2544,12 +2958,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("loadingFromAlpha", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("makeLabels")
 ### * makeLabels
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: makeLabels
 ### Title: Make parameter names for each element in matrices or vectors or
 ###   the name for the whole object
@@ -2564,12 +2982,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("makeLabels", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("matchKeywords")
 ### * matchKeywords
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: matchKeywords
 ### Title: Search for the keywords and check whether the specified text
 ###   match one in the name vector
@@ -2583,12 +3005,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("matchKeywords", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("miPool")
 ### * miPool
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: miPool
 ### Title: Function to pool imputed results
 ### Aliases: miPool
@@ -2599,12 +3025,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("miPool", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("miPoolChi")
 ### * miPoolChi
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: miPoolChi
 ### Title: Function to pool chi-square statistics from the result from
 ###   multiple imputation
@@ -2616,12 +3046,16 @@ miPoolChi(c(89.864, 81.116, 71.500, 49.022, 61.986, 64.422, 55.256, 57.890, 79.4
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("miPoolChi", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("miPoolVector")
 ### * miPoolVector
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: miPoolVector
 ### Title: Function to pool imputed results that saved in a matrix format
 ### Aliases: miPoolVector
@@ -2641,12 +3075,16 @@ miPoolVector(param, SE, nimps)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("miPoolVector", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("multipleAllEqual")
 ### * multipleAllEqual
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: multipleAllEqual
 ### Title: Test whether all objects are equal
 ### Aliases: multipleAllEqual
@@ -2658,12 +3096,16 @@ multipleAllEqual(1:5, 1:6, seq(2, 10, 2)/2)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("multipleAllEqual", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("overlapHist")
 ### * overlapHist
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: overlapHist
 ### Title: Plot overlapping histograms
 ### Aliases: overlapHist
@@ -2678,12 +3120,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("overlapHist", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("pValue")
 ### * pValue
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: pValue
 ### Title: Find p-values (1 - percentile)
 ### Aliases: pValue pValue-methods pValue,ANY-method
@@ -2692,37 +3138,43 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-# Compare number with a vector
-pValue(0.5, rnorm(1000, 0, 1))
+## Not run: 
+##D # Compare number with a vector
+##D pValue(0.5, rnorm(1000, 0, 1))
+##D 
+##D # Compare numbers with a data frame
+##D pValue(c(0.5, 0.2), data.frame(rnorm(1000, 0, 1), runif(1000, 0, 1)))
+##D 
+##D # Compare an analysis result with a result of simulation study
+##D library(lavaan)
+##D loading <- matrix(0, 9, 3)
+##D loading[1:3, 1] <- NA
+##D loading[4:6, 2] <- NA
+##D loading[7:9, 3] <- NA
+##D model <- simParamCFA(LY=loading)
+##D SimModel <- simModel(model, indLab=paste("x", 1:9, sep=""))
+##D u2 <- simUnif(-0.2, 0.2)
+##D loading.trivial <- matrix(NA, 9, 3)
+##D loading.trivial[is.na(loading)] <- 0
+##D LY.trivial <- simMatrix(loading.trivial, "u2")
+##D mis <- simMisspecCFA(LY = LY.trivial)
+##D out <- run(SimModel, HolzingerSwineford1939)
+##D Output2 <- runFit(out, HolzingerSwineford1939, 20, mis)
+##D pValue(out, Output2)
+## End(Not run)
 
-# Compare numbers with a data frame
-pValue(c(0.5, 0.2), data.frame(rnorm(1000, 0, 1), runif(1000, 0, 1)))
-
-# Compare an analysis result with a result of simulation study
-library(lavaan)
-loading <- matrix(0, 9, 3)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-loading[7:9, 3] <- NA
-model <- simParamCFA(LY=loading)
-SimModel <- simModel(model, indLab=paste("x", 1:9, sep=""))
-u2 <- simUnif(-0.2, 0.2)
-loading.trivial <- matrix(NA, 9, 3)
-loading.trivial[is.na(loading)] <- 0
-LY.trivial <- simMatrix(loading.trivial, "u2")
-mis <- simMisspecCFA(LY = LY.trivial)
-out <- run(SimModel, HolzingerSwineford1939)
-Output2 <- runFit(out, HolzingerSwineford1939, 20, mis)
-pValue(out, Output2)
 
 
 
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("pValue", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("pValueCondCutoff")
 ### * pValueCondCutoff
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: pValueCondCutoff
 ### Title: Find a p value when the target is conditional (valid) on a
 ###   specific value of a predictor
@@ -2734,103 +3186,121 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("pValueCondCutoff", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("pValueNested")
 ### * pValueNested
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: pValueNested
 ### Title: Find p-values (1 - percentile) for a nested model comparison
 ### Aliases: pValueNested
 
 ### ** Examples
 
-library(lavaan)
+## Not run: 
+##D library(lavaan)
+##D 
+##D LY <- matrix(1, 4, 2)
+##D LY[,2] <- 0:3
+##D PS <- matrix(NA, 2, 2)
+##D TY <- rep(0, 4)
+##D AL <- rep(NA, 2)
+##D TE <- diag(NA, 4)
+##D linearModel <- simParamCFA(LY=LY, PS=PS, TY=TY, AL=AL, TE=TE)
+##D 
+##D LY2 <- matrix(1, 4, 2)
+##D LY2[,2] <- c(0, NA, NA, 3)
+##D unconstrainModel <- simParamCFA(LY=LY2, PS=PS, TY=TY, AL=AL, TE=TE)
+##D 
+##D nested <- simModel(linearModel, indLab=paste("t", 1:4, sep=""))
+##D parent <- simModel(unconstrainModel, indLab=paste("t", 1:4, sep=""))
+##D 
+##D outNested <- run(nested, Demo.growth)
+##D outParent <- run(parent, Demo.growth)
+##D 
+##D loadingMis <- matrix(0, 4, 2)
+##D loadingMis[2:3, 2] <- NA
+##D LYmis <- simMatrix(loadingMis, "runif(1, -0.1, 0.1)")
+##D linearMis <- simMisspecCFA(LY=LYmis)
+##D 
+##D simNestedNested <- runFit(model=nested, data=Demo.growth, nRep=10, misspec=linearMis)
+##D simNestedParent <- runFit(model=nested, data=Demo.growth, nRep=10, misspec=linearMis, analyzeModel=parent)
+##D 
+##D pValueNested(outNested, outParent, simNestedNested, simNestedParent)
+## End(Not run)
 
-LY <- matrix(1, 4, 2)
-LY[,2] <- 0:3
-PS <- matrix(NA, 2, 2)
-TY <- rep(0, 4)
-AL <- rep(NA, 2)
-TE <- diag(NA, 4)
-linearModel <- simParamCFA(LY=LY, PS=PS, TY=TY, AL=AL, TE=TE)
-
-LY2 <- matrix(1, 4, 2)
-LY2[,2] <- c(0, NA, NA, 3)
-unconstrainModel <- simParamCFA(LY=LY2, PS=PS, TY=TY, AL=AL, TE=TE)
-
-nested <- simModel(linearModel, indLab=paste("t", 1:4, sep=""))
-parent <- simModel(unconstrainModel, indLab=paste("t", 1:4, sep=""))
-
-outNested <- run(nested, Demo.growth)
-outParent <- run(parent, Demo.growth)
-
-loadingMis <- matrix(0, 4, 2)
-loadingMis[2:3, 2] <- NA
-LYmis <- simMatrix(loadingMis, "runif(1, -0.1, 0.1)")
-linearMis <- simMisspecCFA(LY=LYmis)
-
-simNestedNested <- runFit(model=nested, data=Demo.growth, nRep=10, misspec=linearMis)
-simNestedParent <- runFit(model=nested, data=Demo.growth, nRep=10, misspec=linearMis, analyzeModel=parent)
-
-pValueNested(outNested, outParent, simNestedNested, simNestedParent)
 
 
 
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("pValueNested", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("pValueNonNested")
 ### * pValueNonNested
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: pValueNonNested
 ### Title: Find p-values (1 - percentile) for a non-nested model comparison
 ### Aliases: pValueNonNested
 
 ### ** Examples
 
-library(lavaan)
-loading <- matrix(0, 11, 3)
-loading[1:3, 1] <- NA
-loading[4:7, 2] <- NA
-loading[8:11, 3] <- NA
-path.A <- matrix(0, 3, 3)
-path.A[2:3, 1] <- NA
-path.A[3, 2] <- NA
-param.A <- simParamSEM(LY=loading, BE=path.A)
+## Not run: 
+##D library(lavaan)
+##D loading <- matrix(0, 11, 3)
+##D loading[1:3, 1] <- NA
+##D loading[4:7, 2] <- NA
+##D loading[8:11, 3] <- NA
+##D path.A <- matrix(0, 3, 3)
+##D path.A[2:3, 1] <- NA
+##D path.A[3, 2] <- NA
+##D param.A <- simParamSEM(LY=loading, BE=path.A)
+##D 
+##D model.A <- simModel(param.A, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
+##D out.A <- run(model.A, PoliticalDemocracy)
+##D 
+##D path.B <- matrix(0, 3, 3)
+##D path.B[1:2, 3] <- NA
+##D path.B[1, 2] <- NA
+##D param.B <- simParamSEM(LY=loading, BE=path.B)
+##D 
+##D model.B <- simModel(param.B, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
+##D out.B <- run(model.B, PoliticalDemocracy)
+##D 
+##D u2 <- simUnif(-0.2, 0.2)
+##D loading.mis <- matrix(NA, 11, 3)
+##D loading.mis[is.na(loading)] <- 0
+##D LY.mis <- simMatrix(loading.mis, "u2")
+##D misspec <- simMisspecSEM(LY=LY.mis)
+##D 
+##D output.A.A <- runFit(model.A, PoliticalDemocracy, 5, misspec=misspec)
+##D output.A.B <- runFit(model.A, PoliticalDemocracy, 5, misspec=misspec, analyzeModel=model.B)
+##D output.B.A <- runFit(model.B, PoliticalDemocracy, 5, misspec=misspec, analyzeModel=model.A)
+##D output.B.B <- runFit(model.B, PoliticalDemocracy, 5, misspec=misspec)
+##D 
+##D # The output may contain some warnings here. When the number of replications increases (e.g., 1000), the warnings should disappear.
+##D pValueNonNested(out.A, out.B, output.A.A, output.A.B, output.B.A, output.B.B)
+## End(Not run)
 
-model.A <- simModel(param.A, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
-out.A <- run(model.A, PoliticalDemocracy)
-
-path.B <- matrix(0, 3, 3)
-path.B[1:2, 3] <- NA
-path.B[1, 2] <- NA
-param.B <- simParamSEM(LY=loading, BE=path.B)
-
-model.B <- simModel(param.B, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
-out.B <- run(model.B, PoliticalDemocracy)
-
-u2 <- simUnif(-0.2, 0.2)
-loading.mis <- matrix(NA, 11, 3)
-loading.mis[is.na(loading)] <- 0
-LY.mis <- simMatrix(loading.mis, "u2")
-misspec <- simMisspecSEM(LY=LY.mis)
-
-output.A.A <- runFit(model.A, PoliticalDemocracy, 10, misspec=misspec)
-output.A.B <- runFit(model.A, PoliticalDemocracy, 10, misspec=misspec, analyzeModel=model.B)
-output.B.A <- runFit(model.B, PoliticalDemocracy, 10, misspec=misspec, analyzeModel=model.A)
-output.B.B <- runFit(model.B, PoliticalDemocracy, 10, misspec=misspec)
-pValueNonNested(out.A, out.B, output.A.A, output.A.B, output.B.A, output.B.B)
 
 
 
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("pValueNonNested", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("pValueVariedCutoff")
 ### * pValueVariedCutoff
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: pValueVariedCutoff
 ### Title: Find a p value when the cutoff is specified as a vector given
 ###   the values of predictors
@@ -2842,12 +3312,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("pValueVariedCutoff", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("plot3DQtile")
 ### * plot3DQtile
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: plot3DQtile
 ### Title: Build a persepctive plot or contour plot of a quantile of
 ###   predicted values
@@ -2859,12 +3333,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("plot3DQtile", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("plotCutoff")
 ### * plotCutoff
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: plotCutoff
 ### Title: Plot sampling distributions of fit indices with fit indices
 ###   cutoffs
@@ -2873,43 +3351,49 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-loading <- matrix(0, 6, 2)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-loadingValues <- matrix(0, 6, 2)
-loadingValues[1:3, 1] <- 0.7
-loadingValues[4:6, 2] <- 0.7
-LX <- simMatrix(loading, loadingValues)
-latent.cor <- matrix(NA, 2, 2)
-diag(latent.cor) <- 1
-RPH <- symMatrix(latent.cor, 0.5)
-error.cor <- matrix(0, 6, 6)
-diag(error.cor) <- 1
-RTD <- symMatrix(error.cor)
-CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
-SimData <- simData(CFA.Model, 200)
-SimModel <- simModel(CFA.Model)
-# We make the examples running only 5 replications to save time.
-# In reality, more replications are needed.
-Output <- simResult(5, SimData, SimModel)
-plotCutoff(Output, 0.05, usedFit=c("RMSEA", "SRMR", "CFI", "TLI"))
+## Not run: 
+##D loading <- matrix(0, 6, 2)
+##D loading[1:3, 1] <- NA
+##D loading[4:6, 2] <- NA
+##D loadingValues <- matrix(0, 6, 2)
+##D loadingValues[1:3, 1] <- 0.7
+##D loadingValues[4:6, 2] <- 0.7
+##D LX <- simMatrix(loading, loadingValues)
+##D latent.cor <- matrix(NA, 2, 2)
+##D diag(latent.cor) <- 1
+##D RPH <- symMatrix(latent.cor, 0.5)
+##D error.cor <- matrix(0, 6, 6)
+##D diag(error.cor) <- 1
+##D RTD <- symMatrix(error.cor)
+##D CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
+##D SimData <- simData(CFA.Model, 200)
+##D SimModel <- simModel(CFA.Model)
+##D # We make the examples running only 5 replications to save time.
+##D # In reality, more replications are needed.
+##D Output <- simResult(5, SimData, SimModel)
+##D plotCutoff(Output, 0.05, usedFit=c("RMSEA", "SRMR", "CFI", "TLI"))
+##D 
+##D # Varying N
+##D Output2 <- simResult(NULL, SimData, SimModel, n=seq(450, 500, 10))
+##D plotCutoff(Output2, 0.05)
+##D 
+##D # Varying N and pmMCAR
+##D Output3 <- simResult(NULL, SimData, SimModel, n=seq(450, 500, 10), pmMCAR=c(0, 0.05, 0.1, 0.15))
+##D plotCutoff(Output3, 0.05)
+## End(Not run)
 
-# Varying N
-Output2 <- simResult(NULL, SimData, SimModel, n=seq(450, 500, 10))
-plotCutoff(Output2, 0.05)
-
-# Varying N and pmMCAR
-Output3 <- simResult(NULL, SimData, SimModel, n=seq(450, 500, 10), pmMCAR=c(0, 0.05, 0.1, 0.15))
-plotCutoff(Output3, 0.05)
 
 
 
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("plotCutoff", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("plotCutoffNested")
 ### * plotCutoffNested
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: plotCutoffNested
 ### Title: Plot sampling distributions of the differences in fit indices
 ###   between nested models with fit indices cutoffs
@@ -2917,49 +3401,55 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-n1 <- simNorm(0, 0.1)
-u79 <- simUnif(0.7, 0.9)
+## Not run: 
+##D n1 <- simNorm(0, 0.1)
+##D u79 <- simUnif(0.7, 0.9)
+##D 
+##D loading.null <- matrix(0, 6, 1)
+##D loading.null[1:6, 1] <- NA
+##D LX.NULL <- simMatrix(loading.null, 0.7)
+##D RPH.NULL <- symMatrix(diag(1))
+##D RTD <- symMatrix(diag(6))
+##D CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
+##D 
+##D error.cor.mis <- matrix(NA, 6, 6)
+##D diag(error.cor.mis) <- 1
+##D RTD.Mis <- symMatrix(error.cor.mis, "n1")
+##D CFA.Model.NULL.Mis <- simMisspecCFA(RTE = RTD.Mis)
+##D 
+##D loading.alt <- matrix(0, 6, 2)
+##D loading.alt[1:3, 1] <- NA
+##D loading.alt[4:6, 2] <- NA
+##D LX.ALT <- simMatrix(loading.alt, 0.7)
+##D latent.cor.alt <- matrix(NA, 2, 2)
+##D diag(latent.cor.alt) <- 1
+##D RPH.ALT <- symMatrix(latent.cor.alt, "u79")
+##D CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
+##D 
+##D SimData.NULL <- simData(CFA.Model.NULL, 500)
+##D 
+##D SimModel.NULL <- simModel(CFA.Model.NULL)
+##D SimModel.ALT <- simModel(CFA.Model.ALT)
+##D 
+##D # The actual number of replications should be greater than 10.
+##D Output.NULL.NULL <- simResult(10, SimData.NULL, SimModel.NULL)
+##D Output.NULL.ALT <- simResult(10, SimData.NULL, SimModel.ALT)
+##D 
+##D plotCutoffNested(Output.NULL.NULL, Output.NULL.ALT, alpha=0.05)
+## End(Not run)
 
-loading.null <- matrix(0, 6, 1)
-loading.null[1:6, 1] <- NA
-LX.NULL <- simMatrix(loading.null, 0.7)
-RPH.NULL <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
-
-error.cor.mis <- matrix(NA, 6, 6)
-diag(error.cor.mis) <- 1
-RTD.Mis <- symMatrix(error.cor.mis, "n1")
-CFA.Model.NULL.Mis <- simMisspecCFA(RTE = RTD.Mis)
-
-loading.alt <- matrix(0, 6, 2)
-loading.alt[1:3, 1] <- NA
-loading.alt[4:6, 2] <- NA
-LX.ALT <- simMatrix(loading.alt, 0.7)
-latent.cor.alt <- matrix(NA, 2, 2)
-diag(latent.cor.alt) <- 1
-RPH.ALT <- symMatrix(latent.cor.alt, "u79")
-CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
-
-SimData.NULL <- simData(CFA.Model.NULL, 500)
-
-SimModel.NULL <- simModel(CFA.Model.NULL)
-SimModel.ALT <- simModel(CFA.Model.ALT)
-
-# The actual number of replications should be greater than 10.
-Output.NULL.NULL <- simResult(10, SimData.NULL, SimModel.NULL)
-Output.NULL.ALT <- simResult(10, SimData.NULL, SimModel.ALT)
-
-plotCutoffNested(Output.NULL.NULL, Output.NULL.ALT, alpha=0.05)
 
 
 
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("plotCutoffNested", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("plotCutoffNonNested")
 ### * plotCutoffNonNested
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: plotCutoffNonNested
 ### Title: Plot sampling distributions of the differences in fit indices
 ###   between non-nested models with fit indices cutoffs
@@ -2967,54 +3457,60 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-n1 <- simNorm(0, 0.1)
-u79 <- simUnif(0.7, 0.9)
+## Not run: 
+##D n1 <- simNorm(0, 0.1)
+##D u79 <- simUnif(0.7, 0.9)
+##D 
+##D loading.A <- matrix(0, 8, 2)
+##D loading.A[1:3, 1] <- NA
+##D loading.A[4:8, 2] <- NA
+##D LX.A <- simMatrix(loading.A, 0.7)
+##D latent.cor <- matrix(NA, 2, 2)
+##D diag(latent.cor) <- 1
+##D RPH <- symMatrix(latent.cor, "u79")
+##D RTD <- symMatrix(diag(8))
+##D CFA.Model.A <- simSetCFA(LY = LX.A, RPS = RPH, RTE = RTD)
+##D 
+##D error.cor.mis <- matrix(NA, 8, 8)
+##D diag(error.cor.mis) <- 1
+##D RTD.Mis <- symMatrix(error.cor.mis, "n1")
+##D CFA.Model.A.Mis <- simMisspecCFA(RTE = RTD.Mis)
+##D 
+##D loading.B <- matrix(0, 8, 2)
+##D loading.B[1:4, 1] <- NA
+##D loading.B[5:8, 2] <- NA
+##D LX.B <- simMatrix(loading.B, 0.7)
+##D CFA.Model.B <- simSetCFA(LY = LX.B, RPS = RPH, RTE = RTD)
+##D 
+##D SimData.A <- simData(CFA.Model.A, 500)
+##D SimData.B <- simData(CFA.Model.B, 500)
+##D 
+##D SimModel.A <- simModel(CFA.Model.A)
+##D SimModel.B <- simModel(CFA.Model.B)
+##D 
+##D # The actual number of replications should be greater than 10.
+##D Output.A.A <- simResult(10, SimData.A, SimModel.A)
+##D Output.A.B <- simResult(10, SimData.A, SimModel.B)
+##D Output.B.A <- simResult(10, SimData.B, SimModel.A)
+##D Output.B.B <- simResult(10, SimData.B, SimModel.B)
+##D 
+##D plotCutoffNonNested(Output.A.A, Output.A.B, Output.B.A, Output.B.B)
+##D plotCutoffNonNested(Output.A.A, Output.A.B)
+##D plotCutoffNonNested(Output.A.A, Output.A.B, onetailed=TRUE)
+## End(Not run)
 
-loading.A <- matrix(0, 8, 2)
-loading.A[1:3, 1] <- NA
-loading.A[4:8, 2] <- NA
-LX.A <- simMatrix(loading.A, 0.7)
-latent.cor <- matrix(NA, 2, 2)
-diag(latent.cor) <- 1
-RPH <- symMatrix(latent.cor, "u79")
-RTD <- symMatrix(diag(8))
-CFA.Model.A <- simSetCFA(LY = LX.A, RPS = RPH, RTE = RTD)
-
-error.cor.mis <- matrix(NA, 8, 8)
-diag(error.cor.mis) <- 1
-RTD.Mis <- symMatrix(error.cor.mis, "n1")
-CFA.Model.A.Mis <- simMisspecCFA(RTE = RTD.Mis)
-
-loading.B <- matrix(0, 8, 2)
-loading.B[1:4, 1] <- NA
-loading.B[5:8, 2] <- NA
-LX.B <- simMatrix(loading.B, 0.7)
-CFA.Model.B <- simSetCFA(LY = LX.B, RPS = RPH, RTE = RTD)
-
-SimData.A <- simData(CFA.Model.A, 500)
-SimData.B <- simData(CFA.Model.B, 500)
-
-SimModel.A <- simModel(CFA.Model.A)
-SimModel.B <- simModel(CFA.Model.B)
-
-# The actual number of replications should be greater than 10.
-Output.A.A <- simResult(10, SimData.A, SimModel.A)
-Output.A.B <- simResult(10, SimData.A, SimModel.B)
-Output.B.A <- simResult(10, SimData.B, SimModel.A)
-Output.B.B <- simResult(10, SimData.B, SimModel.B)
-
-plotCutoffNonNested(Output.A.A, Output.A.B, Output.B.A, Output.B.B)
-plotCutoffNonNested(Output.A.A, Output.A.B)
-plotCutoffNonNested(Output.A.A, Output.A.B, onetailed=TRUE)
 
 
 
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("plotCutoffNonNested", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("plotDist")
 ### * plotDist
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: plotDist
 ### Title: Plot a distribution of a distribution object or data
 ###   distribution object
@@ -3031,12 +3527,16 @@ plotDist(dataDist)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("plotDist", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("plotIndividualScatter")
 ### * plotIndividualScatter
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: plotIndividualScatter
 ### Title: Plot an overlaying scatter plot visualizing the power of
 ###   rejecting misspecified models
@@ -3048,12 +3548,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("plotIndividualScatter", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("plotLogisticFit")
 ### * plotLogisticFit
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: plotLogisticFit
 ### Title: Plot multiple logistic curves for predicting whether rejecting a
 ###   misspecified model
@@ -3065,12 +3569,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("plotLogisticFit", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("plotMisfit")
 ### * plotMisfit
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: plotMisfit
 ### Title: Plot the population misfit in parameter result object
 ### Aliases: plotMisfit
@@ -3111,12 +3619,16 @@ plotMisfit(ParamObject, misParam=1:2)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("plotMisfit", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("plotOverHist")
 ### * plotOverHist
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: plotOverHist
 ### Title: Plot multiple overlapping histograms
 ### Aliases: plotOverHist
@@ -3127,42 +3639,52 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("plotOverHist", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("plotPower")
 ### * plotPower
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: plotPower
 ### Title: Make a power plot of a parameter given varying parameters
 ### Aliases: plotPower
 
 ### ** Examples
 
-# Specify Sample Size by n
-loading <- matrix(0, 6, 1)
-loading[1:6, 1] <- NA
-LX <- simMatrix(loading, 0.4)
-RPH <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
-SimData <- simData(CFA.Model, 500)
-SimModel <- simModel(CFA.Model)
-# We will use only 5 replications to save time.
-# In reality, more replications are needed.
+## Not run: 
+##D # Specify Sample Size by n
+##D loading <- matrix(0, 6, 1)
+##D loading[1:6, 1] <- NA
+##D LX <- simMatrix(loading, 0.4)
+##D RPH <- symMatrix(diag(1))
+##D RTD <- symMatrix(diag(6))
+##D CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
+##D SimData <- simData(CFA.Model, 500)
+##D SimModel <- simModel(CFA.Model)
+##D # We will use only 5 replications to save time.
+##D # In reality, more replications are needed.
+##D 
+##D # Specify both sample size and percent missing completely at random
+##D Output <- simResult(NULL, SimData, SimModel, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2))
+##D plotPower(Output, "LY1_1", contMCAR=FALSE)
+## End(Not run)
 
-# Specify both sample size and percent missing completely at random
-Output <- simResult(NULL, SimData, SimModel, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2))
-plotPower(Output, "LY1_1", contMCAR=FALSE)
 
 
 
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("plotPower", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("plotPowerFit")
 ### * plotPowerFit
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: plotPowerFit
 ### Title: Plot sampling distributions of fit indices that visualize power
 ###   of rejecting datasets underlying misspecified models
@@ -3170,46 +3692,52 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-loading.null <- matrix(0, 6, 1)
-loading.null[1:6, 1] <- NA
-LX.NULL <- simMatrix(loading.null, 0.7)
-RPH.NULL <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
-SimData.NULL <- simData(CFA.Model.NULL, 500)
-SimModel <- simModel(CFA.Model.NULL)
-# We make the examples running only 5 replications to save time.
-# In reality, more replications are needed.
-Output.NULL <- simResult(5, SimData.NULL, SimModel)
+## Not run: 
+##D loading.null <- matrix(0, 6, 1)
+##D loading.null[1:6, 1] <- NA
+##D LX.NULL <- simMatrix(loading.null, 0.7)
+##D RPH.NULL <- symMatrix(diag(1))
+##D RTD <- symMatrix(diag(6))
+##D CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
+##D SimData.NULL <- simData(CFA.Model.NULL, 500)
+##D SimModel <- simModel(CFA.Model.NULL)
+##D # We make the examples running only 5 replications to save time.
+##D # In reality, more replications are needed.
+##D Output.NULL <- simResult(5, SimData.NULL, SimModel)
+##D 
+##D loading.alt <- matrix(0, 6, 2)
+##D loading.alt[1:3, 1] <- NA
+##D loading.alt[4:6, 2] <- NA
+##D LX.ALT <- simMatrix(loading.alt, 0.7)
+##D latent.cor.alt <- matrix(NA, 2, 2)
+##D diag(latent.cor.alt) <- 1
+##D RPH.ALT <- symMatrix(latent.cor.alt, 0.5)
+##D CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
+##D SimData.ALT <- simData(CFA.Model.ALT, 500)
+##D Output.ALT <- simResult(5, SimData.ALT, SimModel)
+##D plotPowerFit(Output.ALT, nullObject=Output.NULL, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+##D Rule.of.thumb <- c(RMSEA=0.05, CFI=0.95, TLI=0.95, SRMR=0.06)
+##D plotPowerFit(Output.ALT, cutoff=Rule.of.thumb, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+##D 
+##D Output.NULL2 <- simResult(NULL, SimData.NULL, SimModel, n=seq(50, 250, 25))
+##D Output.ALT2 <- simResult(NULL, SimData.ALT, SimModel, n=seq(50, 250, 25))
+##D 
+##D plotPowerFit(Output.ALT2, nullObject=Output.NULL2, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+##D plotPowerFit(Output.ALT2, cutoff=Rule.of.thumb, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+## End(Not run)
 
-loading.alt <- matrix(0, 6, 2)
-loading.alt[1:3, 1] <- NA
-loading.alt[4:6, 2] <- NA
-LX.ALT <- simMatrix(loading.alt, 0.7)
-latent.cor.alt <- matrix(NA, 2, 2)
-diag(latent.cor.alt) <- 1
-RPH.ALT <- symMatrix(latent.cor.alt, 0.5)
-CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
-SimData.ALT <- simData(CFA.Model.ALT, 500)
-Output.ALT <- simResult(5, SimData.ALT, SimModel)
-plotPowerFit(Output.ALT, nullObject=Output.NULL, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
-Rule.of.thumb <- c(RMSEA=0.05, CFI=0.95, TLI=0.95, SRMR=0.06)
-plotPowerFit(Output.ALT, cutoff=Rule.of.thumb, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
-
-Output.NULL2 <- simResult(NULL, SimData.NULL, SimModel, n=seq(50, 250, 25))
-Output.ALT2 <- simResult(NULL, SimData.ALT, SimModel, n=seq(50, 250, 25))
-
-plotPowerFit(Output.ALT2, nullObject=Output.NULL2, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
-plotPowerFit(Output.ALT2, cutoff=Rule.of.thumb, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
 
 
 
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("plotPowerFit", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("plotPowerFitDf")
 ### * plotPowerFitDf
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: plotPowerFitDf
 ### Title: Plot sampling distributions of fit indices that visualize power
 ###   of rejecting datasets underlying misspecified models
@@ -3221,12 +3749,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("plotPowerFitDf", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("plotPowerFitNested")
 ### * plotPowerFitNested
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: plotPowerFitNested
 ### Title: Plot power of rejecting a nested model in a nested model
 ###   comparison by each fit index
@@ -3234,69 +3766,75 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-u2 <- simUnif(-0.2, 0.2)
-n1 <- simNorm(0, 0.1)
-u79 <- simUnif(0.7, 0.9)
+## Not run: 
+##D u2 <- simUnif(-0.2, 0.2)
+##D n1 <- simNorm(0, 0.1)
+##D u79 <- simUnif(0.7, 0.9)
+##D 
+##D loading.null <- matrix(0, 6, 1)
+##D loading.null[1:6, 1] <- NA
+##D LX.NULL <- simMatrix(loading.null, 0.7)
+##D RPH.NULL <- symMatrix(diag(1))
+##D RTD <- symMatrix(diag(6))
+##D CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
+##D 
+##D error.cor.mis <- matrix(NA, 6, 6)
+##D diag(error.cor.mis) <- 1
+##D RTD.Mis <- symMatrix(error.cor.mis, "rnorm(1,0,0.1)")
+##D CFA.Model.NULL.Mis <- simMisspecCFA(RTE = RTD.Mis)
+##D 
+##D loading.alt <- matrix(0, 6, 2)
+##D loading.alt[1:3, 1] <- NA
+##D loading.alt[4:6, 2] <- NA
+##D LX.ALT <- simMatrix(loading.alt, 0.7)
+##D latent.cor.alt <- matrix(NA, 2, 2)
+##D diag(latent.cor.alt) <- 1
+##D RPH.ALT <- symMatrix(latent.cor.alt, 0.7)
+##D CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
+##D 
+##D # loading.alt.mis <- matrix(NA, 6, 2)
+##D # loading.alt.mis[is.na(loading.alt)] <- 0
+##D # LX.alt.mis <- simMatrix(loading.alt.mis, "runif(1,-.2,.2)")
+##D # CFA.Model.alt.mis <- simMisspecCFA(LY = LX.alt.mis, RTE=RTD.Mis)
+##D 
+##D SimData.NULL <- simData(CFA.Model.NULL, 500)
+##D SimData.ALT <- simData(CFA.Model.ALT, 500)
+##D 
+##D SimModel.NULL <- simModel(CFA.Model.NULL)
+##D SimModel.ALT <- simModel(CFA.Model.ALT)
+##D 
+##D Output.NULL.NULL <- simResult(10, SimData.NULL, SimModel.NULL)
+##D Output.ALT.NULL <- simResult(10, SimData.ALT, SimModel.NULL)
+##D Output.NULL.ALT <- simResult(10, SimData.NULL, SimModel.ALT)
+##D Output.ALT.ALT <- simResult(10, SimData.ALT, SimModel.ALT)
+##D 
+##D plotPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT)
+##D plotPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT, usedFit="CFI")
+##D 
+##D Output.NULL.NULL2 <- simResult(NULL, SimData.NULL, SimModel.NULL, n=seq(50, 500, 50))
+##D Output.ALT.NULL2 <- simResult(NULL, SimData.ALT, SimModel.NULL, n=seq(50, 500, 50))
+##D Output.NULL.ALT2 <- simResult(NULL, SimData.NULL, SimModel.ALT, n=seq(50, 500, 50))
+##D Output.ALT.ALT2 <- simResult(NULL, SimData.ALT, SimModel.ALT, n=seq(50, 500, 50))
+##D 
+##D plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNested=Output.NULL.NULL2, nullParent=Output.NULL.ALT2)
+##D 
+##D plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNested=Output.NULL.NULL2, nullParent=Output.NULL.ALT2, logistic=FALSE)
+##D 
+##D plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, cutoff=c(CFI=-0.1), logistic=FALSE)
+## End(Not run)
 
-loading.null <- matrix(0, 6, 1)
-loading.null[1:6, 1] <- NA
-LX.NULL <- simMatrix(loading.null, 0.7)
-RPH.NULL <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
-
-error.cor.mis <- matrix(NA, 6, 6)
-diag(error.cor.mis) <- 1
-RTD.Mis <- symMatrix(error.cor.mis, "rnorm(1,0,0.1)")
-CFA.Model.NULL.Mis <- simMisspecCFA(RTE = RTD.Mis)
-
-loading.alt <- matrix(0, 6, 2)
-loading.alt[1:3, 1] <- NA
-loading.alt[4:6, 2] <- NA
-LX.ALT <- simMatrix(loading.alt, 0.7)
-latent.cor.alt <- matrix(NA, 2, 2)
-diag(latent.cor.alt) <- 1
-RPH.ALT <- symMatrix(latent.cor.alt, 0.7)
-CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
-
-# loading.alt.mis <- matrix(NA, 6, 2)
-# loading.alt.mis[is.na(loading.alt)] <- 0
-# LX.alt.mis <- simMatrix(loading.alt.mis, "runif(1,-.2,.2)")
-# CFA.Model.alt.mis <- simMisspecCFA(LY = LX.alt.mis, RTE=RTD.Mis)
-
-SimData.NULL <- simData(CFA.Model.NULL, 500)
-SimData.ALT <- simData(CFA.Model.ALT, 500)
-
-SimModel.NULL <- simModel(CFA.Model.NULL)
-SimModel.ALT <- simModel(CFA.Model.ALT)
-
-Output.NULL.NULL <- simResult(10, SimData.NULL, SimModel.NULL)
-Output.ALT.NULL <- simResult(10, SimData.ALT, SimModel.NULL)
-Output.NULL.ALT <- simResult(10, SimData.NULL, SimModel.ALT)
-Output.ALT.ALT <- simResult(10, SimData.ALT, SimModel.ALT)
-
-plotPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT)
-plotPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT, usedFit="CFI")
-
-Output.NULL.NULL2 <- simResult(NULL, SimData.NULL, SimModel.NULL, n=seq(50, 500, 50))
-Output.ALT.NULL2 <- simResult(NULL, SimData.ALT, SimModel.NULL, n=seq(50, 500, 50))
-Output.NULL.ALT2 <- simResult(NULL, SimData.NULL, SimModel.ALT, n=seq(50, 500, 50))
-Output.ALT.ALT2 <- simResult(NULL, SimData.ALT, SimModel.ALT, n=seq(50, 500, 50))
-
-plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNested=Output.NULL.NULL2, nullParent=Output.NULL.ALT2)
-
-plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNested=Output.NULL.NULL2, nullParent=Output.NULL.ALT2, logistic=FALSE)
-
-plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, cutoff=c(CFI=-0.1), logistic=FALSE)
 
 
 
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("plotPowerFitNested", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("plotPowerFitNonNested")
 ### * plotPowerFitNonNested
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: plotPowerFitNonNested
 ### Title: Plot power of rejecting a non-nested model based on a difference
 ###   in fit index
@@ -3304,53 +3842,59 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-n1 <- simNorm(0, 0.1)
-u79 <- simUnif(0.7, 0.9)
+## Not run: 
+##D n1 <- simNorm(0, 0.1)
+##D u79 <- simUnif(0.7, 0.9)
+##D 
+##D loading.A <- matrix(0, 8, 2)
+##D loading.A[1:3, 1] <- NA
+##D loading.A[4:8, 2] <- NA
+##D LX.A <- simMatrix(loading.A, 0.7)
+##D latent.cor <- matrix(NA, 2, 2)
+##D diag(latent.cor) <- 1
+##D RPH <- symMatrix(latent.cor, "u79")
+##D RTD <- symMatrix(diag(8))
+##D CFA.Model.A <- simSetCFA(LY = LX.A, RPS = RPH, RTE = RTD)
+##D 
+##D error.cor.mis <- matrix(NA, 8, 8)
+##D diag(error.cor.mis) <- 1
+##D RTD.Mis <- symMatrix(error.cor.mis, "n1")
+##D CFA.Model.A.Mis <- simMisspecCFA(RTE = RTD.Mis)
+##D 
+##D loading.B <- matrix(0, 8, 2)
+##D loading.B[1:4, 1] <- NA
+##D loading.B[5:8, 2] <- NA
+##D LX.B <- simMatrix(loading.B, 0.7)
+##D CFA.Model.B <- simSetCFA(LY = LX.B, RPS = RPH, RTE = RTD)
+##D 
+##D SimData.A <- simData(CFA.Model.A, 500)
+##D SimData.B <- simData(CFA.Model.B, 500)
+##D 
+##D SimModel.A <- simModel(CFA.Model.A)
+##D SimModel.B <- simModel(CFA.Model.B)
+##D 
+##D # The actual number of replications should be greater than 10.
+##D Output.A.A <- simResult(10, SimData.A, SimModel.A)
+##D Output.A.B <- simResult(10, SimData.A, SimModel.B)
+##D Output.B.A <- simResult(10, SimData.B, SimModel.A)
+##D Output.B.B <- simResult(10, SimData.B, SimModel.B)
+##D 
+##D plotPowerFitNonNested(Output.B.A, Output.B.B, dat1Mod1=Output.A.A, dat1Mod2=Output.A.B)
+##D plotPowerFitNonNested(Output.B.A, Output.B.B, cutoff=c(AIC=0, BIC=0))
+## End(Not run)
 
-loading.A <- matrix(0, 8, 2)
-loading.A[1:3, 1] <- NA
-loading.A[4:8, 2] <- NA
-LX.A <- simMatrix(loading.A, 0.7)
-latent.cor <- matrix(NA, 2, 2)
-diag(latent.cor) <- 1
-RPH <- symMatrix(latent.cor, "u79")
-RTD <- symMatrix(diag(8))
-CFA.Model.A <- simSetCFA(LY = LX.A, RPS = RPH, RTE = RTD)
-
-error.cor.mis <- matrix(NA, 8, 8)
-diag(error.cor.mis) <- 1
-RTD.Mis <- symMatrix(error.cor.mis, "n1")
-CFA.Model.A.Mis <- simMisspecCFA(RTE = RTD.Mis)
-
-loading.B <- matrix(0, 8, 2)
-loading.B[1:4, 1] <- NA
-loading.B[5:8, 2] <- NA
-LX.B <- simMatrix(loading.B, 0.7)
-CFA.Model.B <- simSetCFA(LY = LX.B, RPS = RPH, RTE = RTD)
-
-SimData.A <- simData(CFA.Model.A, 500)
-SimData.B <- simData(CFA.Model.B, 500)
-
-SimModel.A <- simModel(CFA.Model.A)
-SimModel.B <- simModel(CFA.Model.B)
-
-# The actual number of replications should be greater than 10.
-Output.A.A <- simResult(10, SimData.A, SimModel.A)
-Output.A.B <- simResult(10, SimData.A, SimModel.B)
-Output.B.A <- simResult(10, SimData.B, SimModel.A)
-Output.B.B <- simResult(10, SimData.B, SimModel.B)
-
-plotPowerFitNonNested(Output.B.A, Output.B.B, dat1Mod1=Output.A.A, dat1Mod2=Output.A.B)
-plotPowerFitNonNested(Output.B.A, Output.B.B, cutoff=c(AIC=0, BIC=0))
 
 
 
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("plotPowerFitNonNested", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("plotPowerSig")
 ### * plotPowerSig
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: plotPowerSig
 ### Title: Plot multiple logistic curves given a significance result matrix
 ### Aliases: plotPowerSig
@@ -3361,12 +3905,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("plotPowerSig", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("plotQtile")
 ### * plotQtile
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: plotQtile
 ### Title: Build a scatterplot with overlaying line of quantiles of
 ###   predicted values
@@ -3378,12 +3926,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("plotQtile", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("plotScatter")
 ### * plotScatter
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: plotScatter
 ### Title: Plot overlaying scatter plots visualizing the power of rejecting
 ###   misspecified models
@@ -3395,12 +3947,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("plotScatter", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("popDiscrepancy")
 ### * popDiscrepancy
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: popDiscrepancy
 ### Title: Find the discrepancy value between two means and covariance
 ###   matrices
@@ -3416,12 +3972,16 @@ popDiscrepancy(m1, S1, m2, S2)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("popDiscrepancy", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("popMisfit")
 ### * popMisfit
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: popMisfit
 ### Title: Calculate population misfit
 ### Aliases: popMisfit popMisfit-methods popMisfit,ANY,ANY-method
@@ -3461,12 +4021,16 @@ popMisfit(Path.Model, Path.Mis.Model, fit.measures="rmsea")
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("popMisfit", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("popMisfitMACS")
 ### * popMisfitMACS
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: popMisfitMACS
 ### Title: Find population misfit by sufficient statistics
 ### Aliases: popMisfitMACS
@@ -3481,12 +4045,16 @@ popMisfitMACS(m1, S1, m2, S2)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("popMisfitMACS", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("predProb")
 ### * predProb
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: predProb
 ### Title: Function to get predicted probabilities from logistic regression
 ### Aliases: predProb
@@ -3497,12 +4065,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("predProb", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("printIfNotNull")
 ### * printIfNotNull
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: printIfNotNull
 ### Title: Provide basic summary of each object if that object is not NULL.
 ### Aliases: printIfNotNull
@@ -3516,12 +4088,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("printIfNotNull", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("reassignNames")
 ### * reassignNames
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: reassignNames
 ### Title: Reassign the name of equality constraint
 ### Aliases: reassignNames
@@ -3532,12 +4108,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("reassignNames", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("reduceConstraint")
 ### * reduceConstraint
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: reduceConstraint
 ### Title: Reduce the model constraint to data generation parameterization
 ###   to analysis model parameterization.
@@ -3549,12 +4129,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("reduceConstraint", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("reduceMatrices")
 ### * reduceMatrices
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: reduceMatrices
 ### Title: Reduce the model constraint to data generation parameterization
 ###   to analysis model parameterization.
@@ -3566,12 +4150,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("reduceMatrices", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("residualCovariate")
 ### * residualCovariate
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: residualCovariate
 ### Title: Residual centered all target indicators by covariates
 ### Aliases: residualCovariate
@@ -3582,12 +4170,16 @@ dat <- residualCovariate(attitude, 2:7, 1)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("residualCovariate", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("revText")
 ### * revText
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: revText
 ### Title: Reverse the proportion value by subtracting it from 1
 ### Aliases: revText
@@ -3601,12 +4193,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("revText", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("run")
 ### * run
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: run
 ### Title: Run a particular object in 'simsem' package.
 ### Aliases: run run-methods run,ANY-method run,NullSimMatrix-method
@@ -3620,12 +4216,16 @@ run(n02)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("run", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("runFit")
 ### * runFit
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: runFit
 ### Title: Build a Monte Carlo simulation that the data-generation
 ###   parameters are from the result of analyzing real data
@@ -3634,59 +4234,65 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-library(lavaan)
-loading <- matrix(0, 9, 3)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-loading[7:9, 3] <- NA
-model <- simParamCFA(LY=loading)
-SimModel <- simModel(model, indLab=paste("x", 1:9, sep=""))
-u2 <- simUnif(-0.2, 0.2)
-loading.trivial <- matrix(NA, 9, 3)
-loading.trivial[is.na(loading)] <- 0
-LY.trivial <- simMatrix(loading.trivial, "u2")
-mis <- simMisspecCFA(LY = LY.trivial)
-Output <- runFit(SimModel, HolzingerSwineford1939, 5, mis)
-summary(Output)
+## Not run: 
+##D library(lavaan)
+##D loading <- matrix(0, 9, 3)
+##D loading[1:3, 1] <- NA
+##D loading[4:6, 2] <- NA
+##D loading[7:9, 3] <- NA
+##D model <- simParamCFA(LY=loading)
+##D SimModel <- simModel(model, indLab=paste("x", 1:9, sep=""))
+##D u2 <- simUnif(-0.2, 0.2)
+##D loading.trivial <- matrix(NA, 9, 3)
+##D loading.trivial[is.na(loading)] <- 0
+##D LY.trivial <- simMatrix(loading.trivial, "u2")
+##D mis <- simMisspecCFA(LY = LY.trivial)
+##D Output <- runFit(SimModel, HolzingerSwineford1939, 5, mis)
+##D summary(Output)
+##D 
+##D out <- run(SimModel, HolzingerSwineford1939)
+##D Output2 <- runFit(out, HolzingerSwineford1939, 5, mis)
+##D 
+##D # Bollen-Stine Bootstrap
+##D Output3 <- runFit(out, HolzingerSwineford1939, 5, modelBoot=TRUE)
+##D 
+##D # Bollen-Stine Bootstrap with trivial misspecification
+##D Output4 <- runFit(out, HolzingerSwineford1939, 5, mis, modelBoot=TRUE)
+##D 
+##D # Example with multiple imputation
+##D library(lavaan)
+##D loading <- matrix(0, 11, 3)
+##D loading[1:3, 1] <- NA
+##D loading[4:7, 2] <- NA
+##D loading[8:11, 3] <- NA
+##D path <- matrix(0, 3, 3)
+##D path[2:3, 1] <- NA
+##D path[3, 2] <- NA
+##D errorCov <- diag(NA, 11)
+##D facCov <- diag(3)
+##D param <- simParamSEM(LY=loading, BE=path, TE=errorCov, PS=facCov)
+##D 
+##D miss <- simMissing(pmMCAR=0.03, numImps=5)
+##D usedData <- run(miss, PoliticalDemocracy)
+##D 
+##D model <- simModel(param, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
+##D out <- run(model, usedData, miss)
+##D output <- runFit(model, usedData, 5, missModel=miss)
+##D pValue(out, output)
+## End(Not run)
 
-out <- run(SimModel, HolzingerSwineford1939)
-Output2 <- runFit(out, HolzingerSwineford1939, 5, mis)
-
-# Bollen-Stine Bootstrap
-Output3 <- runFit(out, HolzingerSwineford1939, 5, modelBoot=TRUE)
-
-# Bollen-Stine Bootstrap with trivial misspecification
-Output4 <- runFit(out, HolzingerSwineford1939, 5, mis, modelBoot=TRUE)
-
-# Example with multiple imputation
-library(lavaan)
-loading <- matrix(0, 11, 3)
-loading[1:3, 1] <- NA
-loading[4:7, 2] <- NA
-loading[8:11, 3] <- NA
-path <- matrix(0, 3, 3)
-path[2:3, 1] <- NA
-path[3, 2] <- NA
-errorCov <- diag(NA, 11)
-facCov <- diag(3)
-param <- simParamSEM(LY=loading, BE=path, TE=errorCov, PS=facCov)
-
-miss <- simMissing(pmMCAR=0.03, numImps=5)
-usedData <- run(miss, PoliticalDemocracy)
-
-model <- simModel(param, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
-out <- run(model, usedData, miss)
-output <- runFit(model, usedData, 5, missModel=miss)
-pValue(out, output)
 
 
 
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("runFit", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("runFitParam")
 ### * runFitParam
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: runFitParam
 ### Title: Build a parameter result object that the data-generation
 ###   parameters are from the result of analyzing real data
@@ -3715,12 +4321,16 @@ Output2 <- runFitParam(out, nRep=5, misspec=mis)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("runFitParam", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("runLavaan")
 ### * runLavaan
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: runLavaan
 ### Title: Run data by the model object by the 'lavaan' package
 ### Aliases: runLavaan
@@ -3731,12 +4341,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("runLavaan", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("runMI")
 ### * runMI
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: runMI
 ### Title: Multiply impute and analyze data using lavaan
 ### Aliases: runMI
@@ -3766,12 +4380,16 @@ function(data.mat,data.model,imps) {
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("runMI", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("runMisspec")
 ### * runMisspec
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: runMisspec
 ### Title: Draw actual parameters and model misspecification
 ### Aliases: runMisspec
@@ -3782,12 +4400,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("runMisspec", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("runRep")
 ### * runRep
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: runRep
 ### Title: Run one replication within a big simulation study
 ### Aliases: runRep
@@ -3798,12 +4420,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("runRep", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("setOpenMxObject")
 ### * setOpenMxObject
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: setOpenMxObject
 ### Title: Rearrange starting values for 'OpenMx'
 ### Aliases: setOpenMxObject setOpenMxObject-methods
@@ -3821,12 +4447,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("setOpenMxObject", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("setPopulation")
 ### * setPopulation
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: setPopulation
 ### Title: Set the data generation population model underlying an object
 ### Aliases: setPopulation setPopulation-methods setPopulation,ANY-method
@@ -3837,12 +4467,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("setPopulation", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simBeta")
 ### * simBeta
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simBeta
 ### Title: Create random beta distribution object
 ### Aliases: simBeta
@@ -3854,12 +4488,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("simBeta", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simBinom")
 ### * simBinom
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simBinom
 ### Title: Create random binomial distribution object
 ### Aliases: simBinom
@@ -3872,12 +4510,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("simBinom", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simCauchy")
 ### * simCauchy
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simCauchy
 ### Title: Create random Cauchy distribution object
 ### Aliases: simCauchy
@@ -3890,12 +4532,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("simCauchy", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simChisq")
 ### * simChisq
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simChisq
 ### Title: Create random chi-squared distribution object
 ### Aliases: simChisq
@@ -3908,12 +4554,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("simChisq", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simData")
 ### * simData
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simData
 ### Title: Create a Data object
 ### Aliases: simData simData-methods simData,ANY-method
@@ -3952,12 +4602,16 @@ run(SimData)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("simData", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simDataDist")
 ### * simDataDist
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simDataDist
 ### Title: Create a data distribution object.
 ### Aliases: simDataDist
@@ -3979,12 +4633,16 @@ Output <- simResult(5, SimData, SimModel)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("simDataDist", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simEqualCon")
 ### * simEqualCon
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simEqualCon
 ### Title: Equality Constraint Object
 ### Aliases: simEqualCon
@@ -4021,12 +4679,16 @@ summary(equal.loading2)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("simEqualCon", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simExp")
 ### * simExp
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simExp
 ### Title: Create random exponential distribution object
 ### Aliases: simExp
@@ -4039,12 +4701,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("simExp", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simF")
 ### * simF
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simF
 ### Title: Create random F distribution object
 ### Aliases: simF
@@ -4057,12 +4723,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("simF", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simFunction")
 ### * simFunction
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simFunction
 ### Title: Create function object
 ### Aliases: simFunction
@@ -4134,12 +4804,16 @@ summary(Output)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("simFunction", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simGamma")
 ### * simGamma
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simGamma
 ### Title: Create random gamma distribution object
 ### Aliases: simGamma
@@ -4152,12 +4826,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("simGamma", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simGeom")
 ### * simGeom
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simGeom
 ### Title: Create random geometric distribution object
 ### Aliases: simGeom
@@ -4170,12 +4848,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("simGeom", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simHyper")
 ### * simHyper
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simHyper
 ### Title: Create random hypergeometric distribution object
 ### Aliases: simHyper
@@ -4188,12 +4870,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("simHyper", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simLnorm")
 ### * simLnorm
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simLnorm
 ### Title: Create random log normal distribution object
 ### Aliases: simLnorm
@@ -4206,12 +4892,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("simLnorm", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simLogis")
 ### * simLogis
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simLogis
 ### Title: Create random logistic distribution object
 ### Aliases: simLogis
@@ -4224,12 +4914,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("simLogis", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simMatrix")
 ### * simMatrix
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simMatrix
 ### Title: Create simMatrix that save free parameters and starting values,
 ###   as well as fixed values
@@ -4259,12 +4953,16 @@ ST <- simMatrix(value=start)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("simMatrix", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simMissing")
 ### * simMissing
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simMissing
 ### Title: Construct a SimMissing object to create data with missingness
 ###   and analyze missing data.
@@ -4301,12 +4999,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("simMissing", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simMisspecCFA")
 ### * simMisspecCFA
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simMisspecCFA
 ### Title: Set of model misspecification for CFA model.
 ### Aliases: simMisspecCFA
@@ -4321,12 +5023,16 @@ CFA.Model.Mis <- simMisspecCFA(RTD=RTD.Mis)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("simMisspecCFA", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simMisspecPath")
 ### * simMisspecPath
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simMisspecPath
 ### Title: Set of model misspecification for Path analysis model.
 ### Aliases: simMisspecPath
@@ -4341,12 +5047,16 @@ Path.Mis.Model <- simMisspecPath(GA = mis.GA, exo=TRUE)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("simMisspecPath", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simMisspecSEM")
 ### * simMisspecSEM
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simMisspecSEM
 ### Title: Set of model misspecification for SEM model.
 ### Aliases: simMisspecSEM
@@ -4369,12 +5079,16 @@ SEM.Mis.Model <- simMisspecSEM(LX = LX.trivial, RTE = RTE.trivial, RTD = RTD.tri
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("simMisspecSEM", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simModel")
 ### * simModel
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simModel
 ### Title: Create a model object
 ### Aliases: simModel simModel-methods simModel,ANY-method
@@ -4411,12 +5125,16 @@ summary(out)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("simModel", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simNbinom")
 ### * simNbinom
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simNbinom
 ### Title: Create random negative binomial distribution object
 ### Aliases: simNbinom
@@ -4429,12 +5147,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("simNbinom", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simNorm")
 ### * simNorm
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simNorm
 ### Title: Create random normal distribution object
 ### Aliases: simNorm
@@ -4447,12 +5169,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("simNorm", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simParamCFA")
 ### * simParamCFA
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simParamCFA
 ### Title: Create a set of matrices of parameters for analyzing data that
 ###   belongs to CFA model.
@@ -4467,12 +5193,16 @@ CFA.Model <- simParamCFA(LX = loading)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("simParamCFA", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simParamPath")
 ### * simParamPath
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simParamPath
 ### Title: Create a set of matrices of parameters for analyzing data that
 ###   belongs to Path analysis model
@@ -4490,12 +5220,16 @@ model2 <- simParamPath(GA=exoPath, exo=TRUE)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("simParamPath", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simParamSEM")
 ### * simParamSEM
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simParamSEM
 ### Title: Create a set of matrices of parameters for analyzing data that
 ###   belongs to SEM model
@@ -4521,12 +5255,16 @@ SEM.Exo.model <- simParamSEM(GA=path.GA, BE=BE, LX=loading.X, LY=loading.Y, exo=
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("simParamSEM", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simPois")
 ### * simPois
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simPois
 ### Title: Create random Poisson distribution object
 ### Aliases: simPois
@@ -4539,63 +5277,72 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("simPois", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simResult")
 ### * simResult
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simResult
 ### Title: Create simResult.
 ### Aliases: simResult
 
 ### ** Examples
 
-loading <- matrix(0, 6, 1)
-loading[1:6, 1] <- NA
-LX <- simMatrix(loading, 0.7)
-RPH <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
-SimData <- simData(CFA.Model, 500)
-SimModel <- simModel(CFA.Model)
-# We make the examples running only 5 replications to save time.
-# In reality, more replications are needed.
-Output <- simResult(5, SimData, SimModel)
-summary(Output)
+## Not run: 
+##D loading <- matrix(0, 6, 1)
+##D loading[1:6, 1] <- NA
+##D LX <- simMatrix(loading, 0.7)
+##D RPH <- symMatrix(diag(1))
+##D RTD <- symMatrix(diag(6))
+##D CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
+##D SimData <- simData(CFA.Model, 500)
+##D SimModel <- simModel(CFA.Model)
+##D # We make the examples running only 5 replications to save time.
+##D # In reality, more replications are needed.
+##D Output <- simResult(5, SimData, SimModel)
+##D summary(Output)
+##D 
+##D # Specify Sample Size by n
+##D loading <- matrix(0, 6, 1)
+##D loading[1:6, 1] <- NA
+##D LX <- simMatrix(loading, 0.7)
+##D RPH <- symMatrix(diag(1))
+##D RTD <- symMatrix(diag(6))
+##D CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
+##D SimData <- simData(CFA.Model, 500)
+##D SimModel <- simModel(CFA.Model)
+##D # We make the examples running only 5 replications to save time.
+##D # In reality, more replications are needed.
+##D Output <- simResult(NULL, SimData, SimModel, n=seq(50, 100, 10))
+##D summary(Output)
+##D 
+##D # Specify both sample size and percent missing completely at random
+##D Output <- simResult(NULL, SimData, SimModel, n=seq(50, 100, 10), pmMCAR=c(0, 0.1, 0.2))
+##D summary(Output)
+##D 
+##D # Use distribution object on sample size and percent completely at random
+##D n <- simUnif(100, 500)
+##D pmMCAR <- simUnif(0, 0.1)
+##D Output <- simResult(5, SimData, SimModel, n=n, pmMCAR=pmMCAR)
+## End(Not run)
 
-# Specify Sample Size by n
-loading <- matrix(0, 6, 1)
-loading[1:6, 1] <- NA
-LX <- simMatrix(loading, 0.7)
-RPH <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
-SimData <- simData(CFA.Model, 500)
-SimModel <- simModel(CFA.Model)
-# We make the examples running only 5 replications to save time.
-# In reality, more replications are needed.
-Output <- simResult(NULL, SimData, SimModel, n=seq(50, 100, 10))
-summary(Output)
-
-# Specify both sample size and percent missing completely at random
-Output <- simResult(NULL, SimData, SimModel, n=seq(50, 100, 10), pmMCAR=c(0, 0.1, 0.2))
-summary(Output)
-
-# Use distribution object on sample size and percent completely at random
-n <- simUnif(100, 500)
-pmMCAR <- simUnif(0, 0.1)
-Output <- simResult(5, SimData, SimModel, n=n, pmMCAR=pmMCAR)
 
 
 
-
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("simResult", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simResultParam")
 ### * simResultParam
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simResultParam
 ### Title: The constructor of the parameter result object
 ### Aliases: simResultParam
@@ -4641,12 +5388,16 @@ ParamObject3 <- simResultParam(5, Path.Model, Path.Mis.Model3)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("simResultParam", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simSetCFA")
 ### * simSetCFA
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simSetCFA
 ### Title: Create a set of matrices of parameter and parameter values to
 ###   generate and analyze data that belongs to CFA model.
@@ -4675,12 +5426,16 @@ CFA.Model <- simSetCFA(LX = LX, RPH = RPH, RTD = RTD)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("simSetCFA", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simSetPath")
 ### * simSetPath
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simSetPath
 ### Title: Create a set of matrices of parameter and parameter values to
 ###   generate and analyze data that belongs to Path analysis model
@@ -4730,12 +5485,16 @@ Path.Exo.Model <- simSetPath(RPS = RPS, BE = BE, RPH = RPH, GA = GA, exo=TRUE)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("simSetPath", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simSetSEM")
 ### * simSetSEM
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simSetSEM
 ### Title: Create a set of matrices of parameter and parameter values to
 ###   generate and analyze data that belongs to SEM model
@@ -4799,12 +5558,16 @@ SEM.Exo.model <- simSetSEM(GA=GA, BE=BE, LX=LX, LY=LY, RPH=RPH, RPS=RPS, RTD=RTD
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("simSetSEM", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simT")
 ### * simT
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simT
 ### Title: Create random t distribution object
 ### Aliases: simT
@@ -4817,12 +5580,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("simT", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simUnif")
 ### * simUnif
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simUnif
 ### Title: Create random uniform distribution object
 ### Aliases: simUnif
@@ -4835,12 +5602,16 @@ summary(u1)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("simUnif", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simVector")
 ### * simVector
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simVector
 ### Title: Create simVector that save free parameters and starting values,
 ###   as well as fixed values
@@ -4860,12 +5631,16 @@ VE <- simVector(value=start)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("simVector", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simWeibull")
 ### * simWeibull
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simWeibull
 ### Title: Create random Weibull distribution object
 ### Aliases: simWeibull
@@ -4878,12 +5653,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("simWeibull", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("skew")
 ### * skew
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: skew
 ### Title: Find skewness
 ### Aliases: skew skew-methods skew,vector-method
@@ -4894,12 +5673,16 @@ skew(1:5)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("skew", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("sortList")
 ### * sortList
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: sortList
 ### Title: Sort two objects in a list
 ### Aliases: sortList
@@ -4910,12 +5693,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("sortList", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("standardize")
 ### * standardize
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: standardize
 ### Title: Standardize the parameter estimates within an object
 ### Aliases: standardize standardize-methods standardize,ANY-method
@@ -4963,12 +5750,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("standardize", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("startingValues")
 ### * startingValues
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: startingValues
 ### Title: Find starting values by averaging random numbers
 ### Aliases: startingValues startingValues-methods
@@ -5005,12 +5796,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("startingValues", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("subtractObject")
 ### * subtractObject
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: subtractObject
 ### Title: Make a subtraction of each element in an object
 ### Aliases: subtractObject subtractObject-methods
@@ -5046,12 +5841,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("subtractObject", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("summaryFit")
 ### * summaryFit
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: summaryFit
 ### Title: Provide summary of model fit across replications
 ### Aliases: summaryFit summaryFit-methods summaryFit,ANY-method
@@ -5075,12 +5874,16 @@ summaryFit(Output, detail=TRUE)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("summaryFit", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("summaryMisspec")
 ### * summaryMisspec
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: summaryMisspec
 ### Title: Provide summary of model misspecification imposed across
 ###   replications
@@ -5122,12 +5925,16 @@ summaryMisspec(ParamObject)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("summaryMisspec", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("summaryParam")
 ### * summaryParam
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: summaryParam
 ### Title: Provide summary of parameter estimates and standard error across
 ###   replications
@@ -5154,12 +5961,16 @@ summaryParam(Output, detail=TRUE)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("summaryParam", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("summaryPopulation")
 ### * summaryPopulation
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: summaryPopulation
 ### Title: Summarize the data generation population model underlying an
 ###   object
@@ -5172,12 +5983,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("summaryPopulation", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("summaryShort")
 ### * summaryShort
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: summaryShort
 ### Title: Provide short summary of an object.
 ### Aliases: summaryShort summaryShort-methods summaryShort,ANY-method
@@ -5195,12 +6010,16 @@ summaryShort(LX)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("summaryShort", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("symMatrix")
 ### * symMatrix
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: symMatrix
 ### Title: Create symmetric simMatrix that save free parameters and
 ###   starting values, as well as fixed values
@@ -5226,12 +6045,16 @@ ST <- symMatrix(value=start)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("symMatrix", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("tagHeaders")
 ### * tagHeaders
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: tagHeaders
 ### Title: Tag names to each element
 ### Aliases: tagHeaders tagHeaders-methods tagHeaders,ANY-method
@@ -5243,12 +6066,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("tagHeaders", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("toFunction")
 ### * toFunction
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: toFunction
 ### Title: Export the distribution object to a function command in text
 ###   that can be evaluated directly.
@@ -5261,12 +6088,16 @@ toFunction(u2)
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("toFunction", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("toSimSet")
 ### * toSimSet
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: toSimSet
 ### Title: Transform the analysis model object into the object for data
 ###   generation
@@ -5290,12 +6121,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("toSimSet", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("twoTailedPValue")
 ### * twoTailedPValue
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: twoTailedPValue
 ### Title: Find two-tailed _p_ value from one-tailed _p_ value
 ### Aliases: twoTailedPValue
@@ -5306,12 +6141,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("twoTailedPValue", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("validateCovariance")
 ### * validateCovariance
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: validateCovariance
 ### Title: Validate whether all elements provides a good covariance matrix
 ### Aliases: validateCovariance
@@ -5322,12 +6161,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("validateCovariance", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("validateObject")
 ### * validateObject
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: validateObject
 ### Title: Validate whether the drawn parameters are good.
 ### Aliases: validateObject
@@ -5338,12 +6181,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("validateObject", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("validatePath")
 ### * validatePath
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: validatePath
 ### Title: Validate whether the regression coefficient (or loading) matrix
 ###   is good
@@ -5355,12 +6202,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("validatePath", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("vectorizeObject")
 ### * vectorizeObject
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: vectorizeObject
 ### Title: Change an object to a vector with labels
 ### Aliases: vectorizeObject vectorizeObject-methods
@@ -5375,12 +6226,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("vectorizeObject", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("weightedMean")
 ### * weightedMean
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: weightedMean
 ### Title: Calculate the weighted mean of a variable
 ### Aliases: weightedMean
@@ -5393,12 +6248,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("weightedMean", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("whichMonotonic")
 ### * whichMonotonic
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: whichMonotonic
 ### Title: Extract a part of a vector that is monotonically increasing or
 ###   decreasing
@@ -5412,12 +6271,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("whichMonotonic", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("writeLavaanCode")
 ### * writeLavaanCode
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: writeLavaanCode
 ### Title: Write a lavaan code given the matrices of free parameter
 ### Aliases: writeLavaanCode
@@ -5428,12 +6291,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("writeLavaanCode", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("writeLavaanConstraint")
 ### * writeLavaanConstraint
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: writeLavaanConstraint
 ### Title: Write a lavaan code for a given set of equality constraints
 ### Aliases: writeLavaanConstraint
@@ -5444,12 +6311,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("writeLavaanConstraint", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("writeLavaanIndividualConstraint")
 ### * writeLavaanIndividualConstraint
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: writeLavaanIndividualConstraint
 ### Title: Write a lavaan code for a given equality constraint for each
 ###   parameter
@@ -5461,12 +6332,16 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("writeLavaanIndividualConstraint", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("writeLavaanNullCode")
 ### * writeLavaanNullCode
 
 flush(stderr()); flush(stdout())
 
+assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: writeLavaanNullCode
 ### Title: Write a lavaan code for a null model
 ### Aliases: writeLavaanNullCode
@@ -5477,6 +6352,9 @@ flush(stderr()); flush(stdout())
 
 
 
+
+assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+cat("writeLavaanNullCode", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 ### * <FOOTER>
 ###
 cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")

@@ -98,6 +98,7 @@ runFit(model, data, nRep=1000, misspec=new("NullSimMisspec"),
 	}
 }
 \examples{
+\dontrun{
 library(lavaan)
 loading <- matrix(0, 9, 3)
 loading[1:3, 1] <- NA
@@ -142,4 +143,5 @@ model <- simModel(param, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="
 out <- run(model, usedData, miss)
 output <- runFit(model, usedData, 5, missModel=miss)
 pValue(out, output)
+}
 }

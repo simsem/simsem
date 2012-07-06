@@ -59,6 +59,7 @@ pmMARval = NULL, df = 0)
 	\code{\link{plotCutoffNonNested}} Plot cutoffs for non-nested model comparison
 }
 \examples{
+\dontrun{
 n1 <- simNorm(0, 0.1)
 u79 <- simUnif(0.7, 0.9)
 
@@ -98,4 +99,5 @@ Output.B.B <- simResult(10, SimData.B, SimModel.B)
 getCutoffNonNested(Output.A.A, Output.A.B, Output.B.A, Output.B.B)
 getCutoffNonNested(Output.A.A, Output.A.B)
 getCutoffNonNested(Output.B.B, Output.B.A)
+}
 }

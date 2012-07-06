@@ -52,6 +52,7 @@ alpha=0.05, cutoff = NULL, usedFit = NULL, useContour = T, onetailed=FALSE)
 	}
 }
 \examples{
+\dontrun{
 n1 <- simNorm(0, 0.1)
 u79 <- simUnif(0.7, 0.9)
 
@@ -91,4 +92,5 @@ Output.B.B <- simResult(10, SimData.B, SimModel.B)
 plotCutoffNonNested(Output.A.A, Output.A.B, Output.B.A, Output.B.B)
 plotCutoffNonNested(Output.A.A, Output.A.B)
 plotCutoffNonNested(Output.A.A, Output.A.B, onetailed=TRUE)
+}
 }

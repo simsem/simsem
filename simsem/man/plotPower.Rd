@@ -52,6 +52,7 @@ plotPower(object, powerParam, alpha = 0.05, contParam = NULL, contN = TRUE,
 	}
 }
 \examples{
+\dontrun{
 # Specify Sample Size by n
 loading <- matrix(0, 6, 1)
 loading[1:6, 1] <- NA
@@ -67,4 +68,5 @@ SimModel <- simModel(CFA.Model)
 # Specify both sample size and percent missing completely at random
 Output <- simResult(NULL, SimData, SimModel, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2))
 plotPower(Output, "LY1_1", contMCAR=FALSE)
+}
 }

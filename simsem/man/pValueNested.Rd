@@ -56,6 +56,7 @@ nVal = NULL, pmMCARval = NULL, pmMARval = NULL, df = 0)
 	}
 }
 \examples{
+\dontrun{
 library(lavaan)
 
 LY <- matrix(1, 4, 2)
@@ -85,4 +86,5 @@ simNestedNested <- runFit(model=nested, data=Demo.growth, nRep=10, misspec=linea
 simNestedParent <- runFit(model=nested, data=Demo.growth, nRep=10, misspec=linearMis, analyzeModel=parent)
 
 pValueNested(outNested, outParent, simNestedNested, simNestedParent)
+}
 }

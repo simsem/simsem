@@ -43,6 +43,7 @@ usedFit = NULL, useContour = T)
 	}
 }
 \examples{
+\dontrun{
 n1 <- simNorm(0, 0.1)
 u79 <- simUnif(0.7, 0.9)
 
@@ -77,4 +78,5 @@ Output.NULL.NULL <- simResult(10, SimData.NULL, SimModel.NULL)
 Output.NULL.ALT <- simResult(10, SimData.NULL, SimModel.ALT)
 
 plotCutoffNested(Output.NULL.NULL, Output.NULL.ALT, alpha=0.05)
+}
 }

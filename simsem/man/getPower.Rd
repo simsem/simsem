@@ -54,6 +54,7 @@ Muthen, L. K., & Muthen, B. O. (2002). How to use a Monte Carlo study to decide 
 	}
 }
 \examples{
+\dontrun{
 # Specify Sample Size by n
 loading <- matrix(0, 6, 1)
 loading[1:6, 1] <- NA
@@ -73,5 +74,5 @@ summary(Output)
 getPower(Output)
 
 getPower(Output, nVal=c(100, 200), pmMCARval=c(0, 0.1, 0.2))
-
+}
 }

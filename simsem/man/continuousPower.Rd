@@ -54,6 +54,7 @@ Muthen, L. K., & Muthen, B. O. (2002). How to use a Monte Carlo study to decide 
 	}
 }
 \examples{
+\dontrun{
 # Specify Sample Size by n
 loading <- matrix(0, 6, 1)
 loading[1:6, 1] <- NA
@@ -75,5 +76,5 @@ Cpow
 
 Cpow2 <- continuousPower(Output, contN = TRUE, contMCAR = TRUE, pred=list(N = 200, pmMCAR = 0.3))
 Cpow2
-
+}
 }

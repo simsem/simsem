@@ -2,8 +2,9 @@
 
 validatePath <- function(path, var.iv, var.dv) {
     # Need to account for multiple independent variables
-    
-    singleIV <- apply(path, 1, function(object) sum(!is.na(object) && (object != 0)) == 1)
+	if(isTRUE(all.equal(var.iv, round(var.iv)))) var.iv <- round(var.iv)
+	if(isTRUE(all.equal(var.dv, round(var.dv)))) var.dv <- round(var.dv)
+    singleIV <- apply(path, 1, function(object) {x <- object[!is.na(object)]; sum(x != 0) == 1})
     if (all(singleIV == 0)) {
         return(TRUE)
     } else {
