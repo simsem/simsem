@@ -48,6 +48,7 @@ getPowerFitNested(altNested, altParent, cutoff, ...)
 	}
 }
 \examples{
+\dontrun{
 u2 <- simUnif(-0.2, 0.2)
 n1 <- simNorm(0, 0.1)
 u79 <- simUnif(0.7, 0.9)
@@ -99,4 +100,5 @@ Output.ALT.ALT2 <- simResult(NULL, SimData.ALT, SimModel.ALT, n=seq(50, 500, 50)
 
 getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT, nVal = 250)
 getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, cutoff=c(Chi=3.84, CFI=-0.10), nVal = 250)
+}
 }

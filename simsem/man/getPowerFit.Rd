@@ -60,6 +60,7 @@ getPowerFit(altObject, cutoff, revDirec = FALSE, usedFit=NULL, ...)
 	}
 }
 \examples{
+\dontrun{
 loading.null <- matrix(0, 6, 1)
 loading.null[1:6, 1] <- NA
 LX.NULL <- simMatrix(loading.null, 0.7)
@@ -91,5 +92,5 @@ getPowerFit(Output.ALT, cutoff=Rule.of.thumb, usedFit=c("RMSEA", "CFI", "TLI", "
 Output.NULL2 <- simResult(NULL, SimData.NULL, SimModel, n=seq(50, 500, 50))
 Output.ALT2 <- simResult(NULL, SimData.ALT, SimModel, n=seq(50, 500, 50))
 getPowerFit(Output.ALT2, nullObject=Output.NULL2, nVal=250)
-
+}
 }

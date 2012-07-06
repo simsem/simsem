@@ -48,6 +48,7 @@ usedFit=NULL, prior=1)
 	\code{\link{pValueNonNested}} for a nonnested model comparison by the difference in fit indices
 }
 \examples{
+\dontrun{
 library(lavaan)
 loading <- matrix(0, 11, 3)
 loading[1:3, 1] <- NA
@@ -75,9 +76,12 @@ loading.mis[is.na(loading)] <- 0
 LY.mis <- simMatrix(loading.mis, "u2")
 misspec <- simMisspecSEM(LY=LY.mis)
 
-output.A.A <- runFit(model.A, PoliticalDemocracy, 10, misspec=misspec)
-output.A.B <- runFit(model.A, PoliticalDemocracy, 10, misspec=misspec, analyzeModel=model.B)
-output.B.A <- runFit(model.B, PoliticalDemocracy, 10, misspec=misspec, analyzeModel=model.A)
-output.B.B <- runFit(model.B, PoliticalDemocracy, 10, misspec=misspec)
+output.A.A <- runFit(model.A, PoliticalDemocracy, 5, misspec=misspec)
+output.A.B <- runFit(model.A, PoliticalDemocracy, 5, misspec=misspec, analyzeModel=model.B)
+output.B.A <- runFit(model.B, PoliticalDemocracy, 5, misspec=misspec, analyzeModel=model.A)
+output.B.B <- runFit(model.B, PoliticalDemocracy, 5, misspec=misspec)
+
+# The output may contain some warnings here. When the number of replications increases (e.g., 1000), the warnings should disappear.
 likRatioFit(out.A, out.B, output.A.A, output.A.B, output.B.A, output.B.B)
+}
 }

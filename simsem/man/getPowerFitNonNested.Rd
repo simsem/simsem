@@ -48,6 +48,7 @@ getPowerFitNonNested(dat2Mod1, dat2Mod2, cutoff, ...)
 	}
 }
 \examples{
+\dontrun{
 n1 <- simNorm(0, 0.1)
 u79 <- simUnif(0.7, 0.9)
 
@@ -86,4 +87,5 @@ Output.B.B <- simResult(10, SimData.B, SimModel.B)
 
 getPowerFitNonNested(Output.B.A, Output.B.B, dat1Mod1=Output.A.A, dat1Mod2=Output.A.B)
 getPowerFitNonNested(Output.B.A, Output.B.B, cutoff=c(AIC=0, BIC=0))
+}
 }

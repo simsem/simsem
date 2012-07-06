@@ -65,6 +65,7 @@ logistic = TRUE)
 	}
 }
 \examples{
+\dontrun{
 u2 <- simUnif(-0.2, 0.2)
 n1 <- simNorm(0, 0.1)
 u79 <- simUnif(0.7, 0.9)
@@ -119,4 +120,5 @@ plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNested=Output.NULL.NUL
 plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNested=Output.NULL.NULL2, nullParent=Output.NULL.ALT2, logistic=FALSE)
 
 plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, cutoff=c(CFI=-0.1), logistic=FALSE)
+}
 }

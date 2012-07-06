@@ -46,6 +46,7 @@ getCutoffNested(nested, parent, alpha = 0.05, usedFit = NULL, nVal = NULL, pmMCA
 	\code{\link{getCutoff}} for a detail of finding cutoffs for absolute fit
 }
 \examples{
+\dontrun{
 n1 <- simNorm(0, 0.1)
 u79 <- simUnif(0.7, 0.9)
 
@@ -80,4 +81,5 @@ Output.NULL.NULL <- simResult(10, SimData.NULL, SimModel.NULL)
 Output.NULL.ALT <- simResult(10, SimData.NULL, SimModel.ALT)
 
 getCutoffNested(Output.NULL.NULL, Output.NULL.ALT)
+}
 }

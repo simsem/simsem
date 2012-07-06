@@ -57,6 +57,7 @@ NONE. Only plot the fit indices distributions.
 	}
 }
 \examples{
+\dontrun{
 loading.null <- matrix(0, 6, 1)
 loading.null[1:6, 1] <- NA
 LX.NULL <- simMatrix(loading.null, 0.7)
@@ -88,4 +89,5 @@ Output.ALT2 <- simResult(NULL, SimData.ALT, SimModel, n=seq(50, 250, 25))
 
 plotPowerFit(Output.ALT2, nullObject=Output.NULL2, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
 plotPowerFit(Output.ALT2, cutoff=Rule.of.thumb, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+}
 }

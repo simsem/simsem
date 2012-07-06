@@ -78,6 +78,7 @@ L'Ecuyer, P. (1999) Good parameters and implementations for combined multiple re
 	}
 }
 \examples{
+\dontrun{
 loading <- matrix(0, 6, 1)
 loading[1:6, 1] <- NA
 LX <- simMatrix(loading, 0.7)
@@ -113,5 +114,5 @@ summary(Output)
 n <- simUnif(100, 500)
 pmMCAR <- simUnif(0, 0.1)
 Output <- simResult(5, SimData, SimModel, n=n, pmMCAR=pmMCAR)
-
+}
 }

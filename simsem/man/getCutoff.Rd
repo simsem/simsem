@@ -52,6 +52,7 @@ getCutoff(object, alpha, revDirec = FALSE, usedFit = NULL, ...)
 	\code{\linkS4class{SimResult}} for a detail of simResult
 }
 \examples{
+\dontrun{
 loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
@@ -76,4 +77,5 @@ getCutoff(Output, 0.05)
 # Finding the cutoff when the sample size is varied.
 Output2 <- simResult(NULL, SimData, SimModel, n=seq(50, 100, 10))
 getCutoff(Output2, 0.05, nVal = 75)
+}
 }

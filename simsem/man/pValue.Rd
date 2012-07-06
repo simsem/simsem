@@ -54,6 +54,7 @@ pValue(target, dist, ...)
 	}
 }
 \examples{
+\dontrun{
 # Compare number with a vector
 pValue(0.5, rnorm(1000, 0, 1))
 
@@ -76,4 +77,5 @@ mis <- simMisspecCFA(LY = LY.trivial)
 out <- run(SimModel, HolzingerSwineford1939)
 Output2 <- runFit(out, HolzingerSwineford1939, 20, mis)
 pValue(out, Output2)
+}
 }
