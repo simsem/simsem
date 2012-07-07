@@ -149,8 +149,6 @@ getPowerFitNonNested    Find power in rejecting non-nested models based
                         on the differences in fit indices
 imposeMissing           Impose MAR, MCAR, planned missingness, or
                         attrition on a data set
-indProd                 Make a product of indicators using mean
-                        centering or double-mean centering
 interpolate             Find the value of one vector relative to a
                         value of another vector by interpolation
 isCorMatrix             Check whether a 'matrix' is a possible
@@ -244,8 +242,6 @@ reduceConstraint        Reduce the model constraint to data generation
 reduceMatrices          Reduce the model constraint to data generation
                         parameterization to analysis model
                         parameterization.
-residualCovariate       Residual centered all target indicators by
-                        covariates
 revText                 Reverse the proportion value by subtracting it
                         from 1
 run                     Run a particular object in 'simsem' package.

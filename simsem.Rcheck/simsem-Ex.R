@@ -5,23 +5,12 @@ options(pager = "console")
 library('simsem')
 
 assign(".oldSearch", search(), pos = 'CheckExEnv')
-assign(".ExTimings", "simsem-Ex.timings", pos = 'CheckExEnv')
-cat("name\tuser\tsystem\telapsed\n", file=get(".ExTimings", pos = 'CheckExEnv'))
-assign(".format_ptime",
-function(x) {
-  if(!is.na(x[4L])) x[1L] <- x[1L] + x[4L]
-  if(!is.na(x[5L])) x[2L] <- x[2L] + x[5L]
-  format(x[1L:3L])
-},
-pos = 'CheckExEnv')
-
 cleanEx()
 nameEx("MatrixSet-class")
 ### * MatrixSet-class
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: MatrixSet-class
 ### Title: Class '"MatrixSet"'
 ### Aliases: MatrixSet-class MisspecSet-class summary,MatrixSet-method
@@ -50,16 +39,12 @@ summary(MatrixSet)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("MatrixSet-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("Null-class")
 ### * Null-class
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: Nullclass
 ### Title: Null Objects
 ### Aliases: NullDataFrame-class NullVector-class NullMatrix-class
@@ -75,16 +60,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("Null-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("SimData-class")
 ### * SimData-class
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: SimData-class
 ### Title: Class '"SimData"'
 ### Aliases: SimData-class run,SimData-method summary,SimData-method
@@ -113,16 +94,12 @@ run(SimData)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("SimData-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("SimDataDist-class")
 ### * SimDataDist-class
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: SimDataDist-class
 ### Title: Class '"SimDataDist"'
 ### Aliases: SimDataDist-class summary,SimDataDist-method
@@ -149,16 +126,12 @@ plotDist(dist, r=0.2)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("SimDataDist-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("SimDataOut-class")
 ### * SimDataOut-class
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: SimDataOut-class
 ### Title: Class '"SimDataOut"'
 ### Aliases: SimDataOut-class summary,SimDataOut-method
@@ -185,16 +158,12 @@ mis <- getPopulation(Data, misspec=TRUE)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("SimDataOut-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("SimEqualCon-class")
 ### * SimEqualCon-class
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: SimEqualCon-class
 ### Title: Class '"SimEqualCon"'
 ### Aliases: SimEqualCon-class summary,SimEqualCon-method
@@ -217,16 +186,12 @@ summary(equal.loading)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("SimEqualCon-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("SimFunction-class")
 ### * SimFunction-class
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: SimFunction-class
 ### Title: Class '"SimFunction"'
 ### Aliases: SimFunction-class summary,SimFunction-method
@@ -293,29 +258,32 @@ analysis <- simParamSEM(BE=path, LY=loading)
 
 Model <- simModel(analysis)
 
-fun <- simFunction(indProd, var1=paste("y", 1:3, sep=""), var2=paste("y", 4:6, sep=""), namesProd=paste("y", 10:12, sep=""))
+# Find the products of indicators
+newFUN <- function(data, var1, var2, namesProd) {
+	prod <- data[,var1] * data[,var2]
+	colnames(prod) <- namesProd
+	return(data.frame(data, prod))
+}
+
+fun <- simFunction(newFUN, var1=paste("y", 1:3, sep=""), var2=paste("y", 4:6, sep=""), namesProd=paste("y", 10:12, sep=""))
 
 # Real simulation will need more than just 10 replications
 Output <- simResult(10, Data.Mis, Model, objFunction=fun)
 summary(Output)
 
 # Example of using the simfunction
-mc <- simFunction(indProd, var1=1:3, var2=4:6)
+mc <- simFunction(newFUN, var1=1:3, var2=4:6, namesProd=paste("y", 10:12, sep=""))
 run(mc, attitude[,-1])
 summary(mc)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("SimFunction-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("SimGenLabels-class")
 ### * SimGenLabels-class
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: SimGenLabels-class
 ### Title: Class '"SimGenLabels"'
 ### Aliases: SimGenLabels-class run,SimGenLabels-method
@@ -327,16 +295,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("SimGenLabels-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("SimMatrix-class")
 ### * SimMatrix-class
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: SimMatrix-class
 ### Title: Matrix object: Random parameters matrix
 ### Aliases: SimMatrix-class run,SimMatrix-method
@@ -374,16 +338,12 @@ summary(LY)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("SimMatrix-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("SimMissing-class")
 ### * SimMissing-class
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: SimMissing-class
 ### Title: Class '"SimMissing"'
 ### Aliases: SimMissing-class summary,SimMissing-method
@@ -396,16 +356,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("SimMissing-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("SimMisspec-class")
 ### * SimMisspec-class
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: SimMisspec-class
 ### Title: Class '"SimMisspec"'
 ### Aliases: SimMisspec-class run,SimMisspec-method
@@ -423,16 +379,12 @@ CFA.Model.Mis <- simMisspecCFA(RTD=RTD.Mis)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("SimMisspec-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("SimModel-class")
 ### * SimModel-class
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: SimModel-class
 ### Title: Class '"SimModel"'
 ### Aliases: SimModel-class run,SimModel-method summary,SimModel-method
@@ -460,16 +412,12 @@ summary(SimModel)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("SimModel-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("SimModelMIOut-class")
 ### * SimModelMIOut-class
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: SimModelMIOut-class
 ### Title: Class '"SimModelMIOut"'
 ### Aliases: SimModelMIOut-class
@@ -494,16 +442,12 @@ summary(Result)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("SimModelMIOut-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("SimModelOut-class")
 ### * SimModelOut-class
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: SimModelOut-class
 ### Title: Class '"SimModelOut"'
 ### Aliases: SimModelOut-class summary,SimModelOut-method
@@ -535,16 +479,12 @@ Result3 <- setPopulation(Result, CFA.Model)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("SimModelOut-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("SimParam-class")
 ### * SimParam-class
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: SimParam-class
 ### Title: Class '"SimParam"'
 ### Aliases: SimParam-class summary,SimParam-method
@@ -569,16 +509,12 @@ summary(HS.Model2)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("SimParam-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("SimREqualCon-class")
 ### * SimREqualCon-class
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: SimREqualCon-class
 ### Title: Class '"SimREqualCon"'
 ### Aliases: SimREqualCon-class summary,SimREqualCon-method
@@ -590,16 +526,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("SimREqualCon-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("SimResult-class")
 ### * SimResult-class
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: SimResult-class
 ### Title: Class '"SimResult"'
 ### Aliases: SimResult-class summary,SimResult-method
@@ -633,16 +565,12 @@ Output2 <- setPopulation(Output, CFA.Model)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("SimResult-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("SimResultParam-class")
 ### * SimResultParam-class
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: SimResultParam-class
 ### Title: Class '"SimResultParam"'
 ### Aliases: SimResultParam-class summary,SimResultParam-method
@@ -685,16 +613,12 @@ summary(ParamObject)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("SimResultParam-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("SimSet-class")
 ### * SimSet-class
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: SimSet-class
 ### Title: Class '"SimSet"'
 ### Aliases: SimSet-class run,SimSet-method summary,SimSet-method
@@ -731,16 +655,12 @@ summary(CFA.Model2)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("SimSet-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("SimVector-class")
 ### * SimVector-class
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: SimVector-class
 ### Title: Vector object: Random parameters vector
 ### Aliases: SimVector-class run,SimVector-method
@@ -769,16 +689,12 @@ summary(AL)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("SimVector-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("SymMatrix-class")
 ### * SymMatrix-class
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: SymMatrix-class
 ### Title: Symmetric matrix object: Random parameters symmetric matrix
 ### Aliases: SymMatrix-class run,SymMatrix-method summary,SymMatrix-method
@@ -800,16 +716,12 @@ run(RPH)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("SymMatrix-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("VirtualDist-class")
 ### * VirtualDist-class
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: VirtualDist-class
 ### Title: Distribution Objects
 ### Aliases: VirtualDist-class SimBeta-class SimBinom-class SimCauchy-class
@@ -863,16 +775,12 @@ plotDist(chi3, reverse=TRUE)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("VirtualDist-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("VirtualRSet-class")
 ### * VirtualRSet-class
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: ParameterSet
 ### Title: Class '"VirtualRSet"', '"SimLabels"' and '"SimRSet"'
 ### Aliases: VirtualRSet-class SimRSet-class SimLabels-class
@@ -885,16 +793,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("VirtualRSet-class", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("adjust")
 ### * adjust
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: adjust
 ### Title: Change an element in 'SimMatrix', 'SymMatrix', or 'SimVector'.
 ### Aliases: adjust adjust-methods adjust,ANY-method
@@ -933,16 +837,12 @@ summary(AL)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("adjust", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("anova")
 ### * anova
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: anova
 ### Title: Provide a comparison of nested models and nonnested models
 ###   across replications
@@ -977,16 +877,12 @@ anova(Output1b, Output2b)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("anova", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("blankParameters")
 ### * blankParameters
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: blankParameters
 ### Title: Change all elements in the non-null objects to be all NAs.
 ### Aliases: blankParameters
@@ -997,16 +893,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("blankParameters", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("centralMoment")
 ### * centralMoment
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: centralMoment
 ### Title: Calculate central moments of a variable
 ### Aliases: centralMoment
@@ -1019,16 +911,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("centralMoment", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("checkInputValue")
 ### * checkInputValue
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: checkInputValue
 ### Title: Check the value argument in the matrix, symmetric matrix, or
 ###   vector objects
@@ -1040,16 +928,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("checkInputValue", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("clean")
 ### * clean
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: clean
 ### Title: Extract only converged replications in the result objects
 ### Aliases: clean
@@ -1060,16 +944,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("clean", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("cleanSimResult")
 ### * cleanSimResult
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: cleanSimResult
 ### Title: Extract only converged replications in the result object
 ### Aliases: cleanSimResult
@@ -1080,16 +960,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("cleanSimResult", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("collapseExo")
 ### * collapseExo
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: collapseExo
 ### Title: Collapse all exogenous variables and put all in endogenous side
 ###   only.
@@ -1101,16 +977,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("collapseExo", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("combineLatentCorExoEndo")
 ### * combineLatentCorExoEndo
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: combineLatentCorExoEndo
 ### Title: Combine exogenous factor correlation and endogenous factor
 ###   correlation into a single matrix
@@ -1122,16 +994,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("combineLatentCorExoEndo", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("combineLoadingExoEndo")
 ### * combineLoadingExoEndo
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: combineLoadingExoEndo
 ### Title: Combine factor loading from the exogenous and endogenous sides
 ###   into a single matrix
@@ -1143,16 +1011,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("combineLoadingExoEndo", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("combineMeasurementErrorExoEndo")
 ### * combineMeasurementErrorExoEndo
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: combineMeasurementErrorExoEndo
 ### Title: Combine measurement error correlation from the exogenous and
 ###   endogenous sides into a single matrix
@@ -1164,16 +1028,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("combineMeasurementErrorExoEndo", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("combineObject")
 ### * combineObject
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: combineObject
 ### Title: Combine by summing or binding two objects together.
 ### Aliases: combineObject combineObject-methods
@@ -1189,16 +1049,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("combineObject", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("combinePathExoEndo")
 ### * combinePathExoEndo
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: combinePathExoEndo
 ### Title: Combine the regression coefficient matrices
 ### Aliases: combinePathExoEndo
@@ -1209,16 +1065,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("combinePathExoEndo", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("constantVector")
 ### * constantVector
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: constantVector
 ### Title: Create a constant vector object
 ### Aliases: constantVector
@@ -1231,16 +1083,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("constantVector", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("constrainMatrices")
 ### * constrainMatrices
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: constrainMatrices
 ### Title: Impose an equality constraint in an object
 ### Aliases: constrainMatrices constrainMatrices-methods
@@ -1253,16 +1101,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("constrainMatrices", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("continuousPower")
 ### * continuousPower
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: continuousPower
 ### Title: Find power of model parameters when simulations have randomly
 ###   varying parameters
@@ -1296,16 +1140,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("continuousPower", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("countFreeParameters")
 ### * countFreeParameters
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: countFreeParameters
 ### Title: Count how many free parameters in the target object
 ### Aliases: countFreeParameters countFreeParameters-methods
@@ -1324,16 +1164,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("countFreeParameters", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("countMACS")
 ### * countMACS
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: countMACS
 ### Title: Count the number of elements in the sufficient statistics
 ### Aliases: countMACS
@@ -1344,16 +1180,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("countMACS", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("cov2corMod")
 ### * cov2corMod
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: cov2corMod
 ### Title: Convert a covariance matrix to a correlation matrix
 ### Aliases: cov2corMod
@@ -1364,16 +1196,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("cov2corMod", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("createData")
 ### * createData
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: createData
 ### Title: Create data from model parameters
 ### Aliases: createData
@@ -1384,16 +1212,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("createData", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("createFreeParameters")
 ### * createFreeParameters
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: createFreeParameters
 ### Title: Create a free parameters object from a model specification
 ### Aliases: createFreeParameters
@@ -1422,16 +1246,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("createFreeParameters", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("createImpliedMACS")
 ### * createImpliedMACS
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: createImpliedMACS
 ### Title: Create model implied mean vector and covariance matrix
 ### Aliases: createImpliedMACS createImpliedMACS-methods
@@ -1458,16 +1278,12 @@ createImpliedMACS(param)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("createImpliedMACS", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("defaultStartingValues")
 ### * defaultStartingValues
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: defaultStartingValues
 ### Title: Make ad hoc starting values
 ### Aliases: defaultStartingValues
@@ -1478,16 +1294,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("defaultStartingValues", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("divideObject")
 ### * divideObject
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: divideObject
 ### Title: Make a division on each element of the object
 ### Aliases: divideObject divideObject-methods divideObject,ANY-method
@@ -1500,16 +1312,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("divideObject", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("drawParameters")
 ### * drawParameters
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: drawParameters
 ### Title: Create parameter sets (with or without model misspecification)
 ###   from the data object
@@ -1521,16 +1329,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("drawParameters", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("drawParametersMisspec")
 ### * drawParametersMisspec
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: drawParametersMisspec
 ### Title: Create parameter sets (with or without model misspecification)
 ###   from the parameter with or without misspecification set
@@ -1542,16 +1346,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("drawParametersMisspec", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("expandMatrices")
 ### * expandMatrices
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: expandMatrices
 ### Title: Expand the set of intercept and covariance matrices into the set
 ###   of intercept/mean and covariance/correlation/variance objects
@@ -1563,16 +1363,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("expandMatrices", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("extract")
 ### * extract
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: extract
 ### Title: Extract a part of an object
 ### Aliases: extract extract-methods extract,vector-method
@@ -1586,16 +1382,12 @@ extract(diag(3), 1, 2:3)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("extract", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("extractLavaanFit")
 ### * extractLavaanFit
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: extractLavaanFit
 ### Title: Extract fit indices from the lavaan object
 ### Aliases: extractLavaanFit
@@ -1606,16 +1398,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("extractLavaanFit", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("extractMatrixNames")
 ### * extractMatrixNames
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: extractMatrixNames
 ### Title: Extract a vector of parameter names based on specified rows and
 ###   columns
@@ -1630,16 +1418,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("extractMatrixNames", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("extractOpenMxFit")
 ### * extractOpenMxFit
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: extractOpenMxFit
 ### Title: Extract the fit indices reported by the 'OpenMx' result
 ### Aliases: extractOpenMxFit
@@ -1650,16 +1434,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("extractOpenMxFit", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("extractVectorNames")
 ### * extractVectorNames
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: extractVectorNames
 ### Title: Extract a vector of parameter names based on specified elements
 ### Aliases: extractVectorNames
@@ -1673,16 +1453,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("extractVectorNames", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("fillParam")
 ### * fillParam
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: fillParam
 ### Title: Fill in other objects based on the parameter values of current
 ###   objects
@@ -1694,16 +1470,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("fillParam", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("find2Dhist")
 ### * find2Dhist
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: find2Dhist
 ### Title: Fit the 2D Kernel Density Estimate
 ### Aliases: find2Dhist
@@ -1714,16 +1486,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("find2Dhist", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("findFactorIntercept")
 ### * findFactorIntercept
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: findFactorIntercept
 ### Title: Find factor intercept from regression coefficient matrix and
 ###   factor total means
@@ -1742,16 +1510,12 @@ findFactorIntercept(path, factorMean)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("findFactorIntercept", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("findFactorMean")
 ### * findFactorMean
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: findFactorMean
 ### Title: Find factor total means from regression coefficient matrix and
 ###   factor intercept
@@ -1770,16 +1534,12 @@ findFactorMean(path, intcept)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("findFactorMean", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("findFactorResidualVar")
 ### * findFactorResidualVar
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: findFactorResidualVar
 ### Title: Find factor residual variances from regression coefficient
 ###   matrix, factor (residual) correlations, and total factor variances
@@ -1802,16 +1562,12 @@ findFactorResidualVar(path, facCor, totalVar)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("findFactorResidualVar", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("findFactorTotalCov")
 ### * findFactorTotalCov
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: findFactorTotalCov
 ### Title: Find factor total covariance from regression coefficient matrix,
 ###   factor residual covariance
@@ -1834,16 +1590,12 @@ findFactorTotalCov(path, corPsi=facCor, errorVarPsi=residualVar)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("findFactorTotalCov", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("findFactorTotalVar")
 ### * findFactorTotalVar
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: findFactorTotalVar
 ### Title: Find factor total variances from regression coefficient matrix,
 ###   factor (residual) correlations, and factor residual variances
@@ -1866,16 +1618,12 @@ findFactorTotalVar(path, facCor, residualVar)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("findFactorTotalVar", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("findIndIntercept")
 ### * findIndIntercept
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: findIndIntercept
 ### Title: Find indicator intercepts from factor loading matrix, total
 ###   factor mean, and indicator mean.
@@ -1892,16 +1640,12 @@ findIndIntercept(loading, facMean, indMean)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("findIndIntercept", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("findIndMean")
 ### * findIndMean
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: findIndMean
 ### Title: Find indicator total means from factor loading matrix, total
 ###   factor mean, and indicator intercept.
@@ -1918,16 +1662,12 @@ findIndMean(loading, facMean, intcept)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("findIndMean", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("findIndResidualVar")
 ### * findIndResidualVar
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: findIndResidualVar
 ### Title: Find indicator residual variances from factor loading matrix,
 ###   total factor covariance, and total indicator variances.
@@ -1944,16 +1684,12 @@ findIndResidualVar(loading, facCov, totalVar)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("findIndResidualVar", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("findIndTotalVar")
 ### * findIndTotalVar
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: findIndTotalVar
 ### Title: Find indicator total variances from factor loading matrix, total
 ###   factor covariance, and indicator residual variances.
@@ -1970,16 +1706,12 @@ findIndTotalVar(loading, facCov, resVar)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("findIndTotalVar", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("findPossibleFactorCor")
 ### * findPossibleFactorCor
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: findPossibleFactorCor
 ### Title: Find the appropriate position for freely estimated correlation
 ###   (or covariance) given a regression coefficient matrix
@@ -1997,16 +1729,12 @@ findPossibleFactorCor(path)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("findPossibleFactorCor", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("findPower")
 ### * findPower
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: findPower
 ### Title: Find a value of independent variables that provides a given
 ###   value of power.
@@ -2033,16 +1761,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("findPower", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("findRecursiveSet")
 ### * findRecursiveSet
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: findRecursiveSet
 ### Title: Group variables regarding the position in mediation chain
 ### Aliases: findRecursiveSet
@@ -2059,16 +1783,12 @@ findRecursiveSet(path)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("findRecursiveSet", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("findRowZero")
 ### * findRowZero
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: findRowZero
 ### Title: Find rows in a matrix that all elements are zero in non-fixed
 ###   subset rows and columns.
@@ -2080,16 +1800,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("findRowZero", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("findTargetPower")
 ### * findTargetPower
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: findTargetPower
 ### Title: Find a value of varying parameters that provides a given value
 ###   of power.
@@ -2101,16 +1817,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("findTargetPower", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("findphist")
 ### * findphist
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: findphist
 ### Title: Find the density (likelihood) of a pair value in 2D Kernel
 ###   Density Estimate
@@ -2122,16 +1834,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("findphist", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("fitMeasuresChi")
 ### * fitMeasuresChi
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: fitMeasuresChi
 ### Title: Find fit indices from the discrepancy values of the target model
 ###   and null models.
@@ -2143,16 +1851,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("fitMeasuresChi", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("freeVector")
 ### * freeVector
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: freeVector
 ### Title: Create a free parameters vector with a starting values in a
 ###   vector object
@@ -2166,16 +1870,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("freeVector", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("getCondQtile")
 ### * getCondQtile
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: getCondQtile
 ### Title: Get a quantile of a variable given values of predictors
 ### Aliases: getCondQtile
@@ -2186,16 +1886,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("getCondQtile", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("getCutoff")
 ### * getCutoff
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: getCutoff
 ### Title: Find fit indices cutoff given a priori alpha level
 ### Aliases: getCutoff getCutoff-methods getCutoff,data.frame-method
@@ -2232,16 +1928,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("getCutoff", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("getCutoffNested")
 ### * getCutoffNested
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: getCutoffNested
 ### Title: Find fit indices cutoff for nested model comparison given a
 ###   priori alpha level
@@ -2288,16 +1980,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("getCutoffNested", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("getCutoffNonNested")
 ### * getCutoffNonNested
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: getCutoffNonNested
 ### Title: Find fit indices cutoff for non-nested model comparison given a
 ###   priori alpha level
@@ -2349,16 +2037,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("getCutoffNonNested", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("getKeywords")
 ### * getKeywords
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: getKeywords
 ### Title: List of all keywords used in the 'simsem' package
 ### Aliases: getKeywords
@@ -2371,16 +2055,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("getKeywords", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("getPopulation")
 ### * getPopulation
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: getPopulation
 ### Title: Extract the data generation population model underlying an
 ###   object
@@ -2392,16 +2072,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("getPopulation", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("getPower")
 ### * getPower
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: getPower
 ### Title: Find power of model parameters
 ### Aliases: getPower
@@ -2432,16 +2108,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("getPower", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("getPowerFit")
 ### * getPowerFit
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: getPowerFit
 ### Title: Find power in rejecting alternative models based on fit indices
 ###   criteria
@@ -2488,16 +2160,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("getPowerFit", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("getPowerFitNested")
 ### * getPowerFitNested
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: getPowerFitNested
 ### Title: Find power in rejecting nested models based on the differences
 ###   in fit indices
@@ -2563,16 +2231,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("getPowerFitNested", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("getPowerFitNonNested")
 ### * getPowerFitNonNested
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: getPowerFitNonNested
 ### Title: Find power in rejecting non-nested models based on the
 ###   differences in fit indices
@@ -2625,16 +2289,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("getPowerFitNonNested", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("imposeMissing")
 ### * imposeMissing
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: imposeMissing
 ### Title: Impose MAR, MCAR, planned missingness, or attrition on a data
 ###   set
@@ -2665,37 +2325,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("imposeMissing", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
-cleanEx()
-nameEx("indProd")
-### * indProd
-
-flush(stderr()); flush(stdout())
-
-assign(".ptime", proc.time(), pos = "CheckExEnv")
-### Name: indProd
-### Title: Make a product of indicators using mean centering or double-mean
-###   centering
-### Aliases: indProd
-
-### ** Examples
-
-dat <- indProd(attitude[,-1], var1=1:3, var2=4:6)
-
-
-
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("indProd", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("interpolate")
 ### * interpolate
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: interpolate
 ### Title: Find the value of one vector relative to a value of another
 ###   vector by interpolation
@@ -2707,16 +2342,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("interpolate", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("isCorMatrix")
 ### * isCorMatrix
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: isCorMatrix
 ### Title: Check whether a 'matrix' is a possible correlation matrix
 ### Aliases: isCorMatrix
@@ -2729,16 +2360,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("isCorMatrix", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("isDefault")
 ### * isDefault
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: isDefault
 ### Title: Check whether a vector object is default
 ### Aliases: isDefault
@@ -2749,16 +2376,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("isDefault", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("isMeanConstraint")
 ### * isMeanConstraint
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: isMeanConstraint
 ### Title: Check whether all rownames in a constraint matrix containing
 ###   symbols of means vectors
@@ -2770,16 +2393,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("isMeanConstraint", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("isNullObject")
 ### * isNullObject
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: isNullObject
 ### Title: Check whether the object is the 'NULL' type of that class
 ### Aliases: isNullObject isNullObject-methods isNullObject,ANY,ANY-method
@@ -2797,16 +2416,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("isNullObject", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("isRandom")
 ### * isRandom
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: isRandom
 ### Title: Check whether the object contains any random parameters
 ### Aliases: isRandom isRandom-methods isRandom,ANY-method
@@ -2819,16 +2434,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("isRandom", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("isVarianceConstraint")
 ### * isVarianceConstraint
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: isVarianceConstraint
 ### Title: Check whether all rownames in a constraint matrix containing
 ###   symbols of variance vectors
@@ -2840,16 +2451,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("isVarianceConstraint", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("kStat")
 ### * kStat
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: kStat
 ### Title: Calculate the _k_-statistic of a variable
 ### Aliases: kStat
@@ -2862,16 +2469,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("kStat", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("kurtosis")
 ### * kurtosis
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: kurtosis
 ### Title: Finding excessive kurtosis
 ### Aliases: kurtosis kurtosis-methods kurtosis,vector-method
@@ -2882,16 +2485,12 @@ kurtosis(1:5)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("kurtosis", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("likRatioFit")
 ### * likRatioFit
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: likRatioFit
 ### Title: Find the likelihood ratio (or Bayes factor) based on the
 ###   bivariate distribution of fit indices
@@ -2938,16 +2537,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("likRatioFit", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("loadingFromAlpha")
 ### * loadingFromAlpha
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: loadingFromAlpha
 ### Title: Find standardized factor loading from coefficient alpha
 ### Aliases: loadingFromAlpha
@@ -2958,16 +2553,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("loadingFromAlpha", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("makeLabels")
 ### * makeLabels
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: makeLabels
 ### Title: Make parameter names for each element in matrices or vectors or
 ###   the name for the whole object
@@ -2982,16 +2573,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("makeLabels", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("matchKeywords")
 ### * matchKeywords
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: matchKeywords
 ### Title: Search for the keywords and check whether the specified text
 ###   match one in the name vector
@@ -3005,16 +2592,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("matchKeywords", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("miPool")
 ### * miPool
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: miPool
 ### Title: Function to pool imputed results
 ### Aliases: miPool
@@ -3025,16 +2608,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("miPool", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("miPoolChi")
 ### * miPoolChi
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: miPoolChi
 ### Title: Function to pool chi-square statistics from the result from
 ###   multiple imputation
@@ -3046,16 +2625,12 @@ miPoolChi(c(89.864, 81.116, 71.500, 49.022, 61.986, 64.422, 55.256, 57.890, 79.4
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("miPoolChi", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("miPoolVector")
 ### * miPoolVector
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: miPoolVector
 ### Title: Function to pool imputed results that saved in a matrix format
 ### Aliases: miPoolVector
@@ -3075,16 +2650,12 @@ miPoolVector(param, SE, nimps)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("miPoolVector", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("multipleAllEqual")
 ### * multipleAllEqual
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: multipleAllEqual
 ### Title: Test whether all objects are equal
 ### Aliases: multipleAllEqual
@@ -3096,16 +2667,12 @@ multipleAllEqual(1:5, 1:6, seq(2, 10, 2)/2)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("multipleAllEqual", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("overlapHist")
 ### * overlapHist
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: overlapHist
 ### Title: Plot overlapping histograms
 ### Aliases: overlapHist
@@ -3120,16 +2687,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("overlapHist", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("pValue")
 ### * pValue
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: pValue
 ### Title: Find p-values (1 - percentile)
 ### Aliases: pValue pValue-methods pValue,ANY-method
@@ -3165,16 +2728,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("pValue", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("pValueCondCutoff")
 ### * pValueCondCutoff
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: pValueCondCutoff
 ### Title: Find a p value when the target is conditional (valid) on a
 ###   specific value of a predictor
@@ -3186,16 +2745,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("pValueCondCutoff", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("pValueNested")
 ### * pValueNested
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: pValueNested
 ### Title: Find p-values (1 - percentile) for a nested model comparison
 ### Aliases: pValueNested
@@ -3236,16 +2791,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("pValueNested", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("pValueNonNested")
 ### * pValueNonNested
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: pValueNonNested
 ### Title: Find p-values (1 - percentile) for a non-nested model comparison
 ### Aliases: pValueNonNested
@@ -3291,16 +2842,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("pValueNonNested", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("pValueVariedCutoff")
 ### * pValueVariedCutoff
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: pValueVariedCutoff
 ### Title: Find a p value when the cutoff is specified as a vector given
 ###   the values of predictors
@@ -3312,16 +2859,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("pValueVariedCutoff", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("plot3DQtile")
 ### * plot3DQtile
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: plot3DQtile
 ### Title: Build a persepctive plot or contour plot of a quantile of
 ###   predicted values
@@ -3333,16 +2876,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("plot3DQtile", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("plotCutoff")
 ### * plotCutoff
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: plotCutoff
 ### Title: Plot sampling distributions of fit indices with fit indices
 ###   cutoffs
@@ -3384,16 +2923,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("plotCutoff", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("plotCutoffNested")
 ### * plotCutoffNested
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: plotCutoffNested
 ### Title: Plot sampling distributions of the differences in fit indices
 ###   between nested models with fit indices cutoffs
@@ -3440,16 +2975,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("plotCutoffNested", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("plotCutoffNonNested")
 ### * plotCutoffNonNested
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: plotCutoffNonNested
 ### Title: Plot sampling distributions of the differences in fit indices
 ###   between non-nested models with fit indices cutoffs
@@ -3501,16 +3032,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("plotCutoffNonNested", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("plotDist")
 ### * plotDist
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: plotDist
 ### Title: Plot a distribution of a distribution object or data
 ###   distribution object
@@ -3527,16 +3054,12 @@ plotDist(dataDist)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("plotDist", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("plotIndividualScatter")
 ### * plotIndividualScatter
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: plotIndividualScatter
 ### Title: Plot an overlaying scatter plot visualizing the power of
 ###   rejecting misspecified models
@@ -3548,16 +3071,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("plotIndividualScatter", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("plotLogisticFit")
 ### * plotLogisticFit
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: plotLogisticFit
 ### Title: Plot multiple logistic curves for predicting whether rejecting a
 ###   misspecified model
@@ -3569,16 +3088,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("plotLogisticFit", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("plotMisfit")
 ### * plotMisfit
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: plotMisfit
 ### Title: Plot the population misfit in parameter result object
 ### Aliases: plotMisfit
@@ -3619,16 +3134,12 @@ plotMisfit(ParamObject, misParam=1:2)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("plotMisfit", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("plotOverHist")
 ### * plotOverHist
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: plotOverHist
 ### Title: Plot multiple overlapping histograms
 ### Aliases: plotOverHist
@@ -3639,16 +3150,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("plotOverHist", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("plotPower")
 ### * plotPower
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: plotPower
 ### Title: Make a power plot of a parameter given varying parameters
 ### Aliases: plotPower
@@ -3675,16 +3182,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("plotPower", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("plotPowerFit")
 ### * plotPowerFit
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: plotPowerFit
 ### Title: Plot sampling distributions of fit indices that visualize power
 ###   of rejecting datasets underlying misspecified models
@@ -3728,16 +3231,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("plotPowerFit", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("plotPowerFitDf")
 ### * plotPowerFitDf
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: plotPowerFitDf
 ### Title: Plot sampling distributions of fit indices that visualize power
 ###   of rejecting datasets underlying misspecified models
@@ -3749,16 +3248,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("plotPowerFitDf", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("plotPowerFitNested")
 ### * plotPowerFitNested
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: plotPowerFitNested
 ### Title: Plot power of rejecting a nested model in a nested model
 ###   comparison by each fit index
@@ -3825,16 +3320,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("plotPowerFitNested", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("plotPowerFitNonNested")
 ### * plotPowerFitNonNested
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: plotPowerFitNonNested
 ### Title: Plot power of rejecting a non-nested model based on a difference
 ###   in fit index
@@ -3885,16 +3376,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("plotPowerFitNonNested", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("plotPowerSig")
 ### * plotPowerSig
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: plotPowerSig
 ### Title: Plot multiple logistic curves given a significance result matrix
 ### Aliases: plotPowerSig
@@ -3905,16 +3392,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("plotPowerSig", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("plotQtile")
 ### * plotQtile
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: plotQtile
 ### Title: Build a scatterplot with overlaying line of quantiles of
 ###   predicted values
@@ -3926,16 +3409,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("plotQtile", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("plotScatter")
 ### * plotScatter
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: plotScatter
 ### Title: Plot overlaying scatter plots visualizing the power of rejecting
 ###   misspecified models
@@ -3947,16 +3426,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("plotScatter", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("popDiscrepancy")
 ### * popDiscrepancy
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: popDiscrepancy
 ### Title: Find the discrepancy value between two means and covariance
 ###   matrices
@@ -3972,16 +3447,12 @@ popDiscrepancy(m1, S1, m2, S2)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("popDiscrepancy", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("popMisfit")
 ### * popMisfit
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: popMisfit
 ### Title: Calculate population misfit
 ### Aliases: popMisfit popMisfit-methods popMisfit,ANY,ANY-method
@@ -4021,16 +3492,12 @@ popMisfit(Path.Model, Path.Mis.Model, fit.measures="rmsea")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("popMisfit", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("popMisfitMACS")
 ### * popMisfitMACS
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: popMisfitMACS
 ### Title: Find population misfit by sufficient statistics
 ### Aliases: popMisfitMACS
@@ -4045,16 +3512,12 @@ popMisfitMACS(m1, S1, m2, S2)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("popMisfitMACS", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("predProb")
 ### * predProb
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: predProb
 ### Title: Function to get predicted probabilities from logistic regression
 ### Aliases: predProb
@@ -4065,16 +3528,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("predProb", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("printIfNotNull")
 ### * printIfNotNull
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: printIfNotNull
 ### Title: Provide basic summary of each object if that object is not NULL.
 ### Aliases: printIfNotNull
@@ -4088,16 +3547,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("printIfNotNull", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("reassignNames")
 ### * reassignNames
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: reassignNames
 ### Title: Reassign the name of equality constraint
 ### Aliases: reassignNames
@@ -4108,16 +3563,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("reassignNames", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("reduceConstraint")
 ### * reduceConstraint
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: reduceConstraint
 ### Title: Reduce the model constraint to data generation parameterization
 ###   to analysis model parameterization.
@@ -4129,16 +3580,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("reduceConstraint", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("reduceMatrices")
 ### * reduceMatrices
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: reduceMatrices
 ### Title: Reduce the model constraint to data generation parameterization
 ###   to analysis model parameterization.
@@ -4150,36 +3597,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("reduceMatrices", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
-cleanEx()
-nameEx("residualCovariate")
-### * residualCovariate
-
-flush(stderr()); flush(stdout())
-
-assign(".ptime", proc.time(), pos = "CheckExEnv")
-### Name: residualCovariate
-### Title: Residual centered all target indicators by covariates
-### Aliases: residualCovariate
-
-### ** Examples
-
-dat <- residualCovariate(attitude, 2:7, 1)
-
-
-
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("residualCovariate", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("revText")
 ### * revText
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: revText
 ### Title: Reverse the proportion value by subtracting it from 1
 ### Aliases: revText
@@ -4193,16 +3616,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("revText", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("run")
 ### * run
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: run
 ### Title: Run a particular object in 'simsem' package.
 ### Aliases: run run-methods run,ANY-method run,NullSimMatrix-method
@@ -4216,16 +3635,12 @@ run(n02)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("run", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("runFit")
 ### * runFit
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: runFit
 ### Title: Build a Monte Carlo simulation that the data-generation
 ###   parameters are from the result of analyzing real data
@@ -4283,16 +3698,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("runFit", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("runFitParam")
 ### * runFitParam
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: runFitParam
 ### Title: Build a parameter result object that the data-generation
 ###   parameters are from the result of analyzing real data
@@ -4321,16 +3732,12 @@ Output2 <- runFitParam(out, nRep=5, misspec=mis)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("runFitParam", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("runLavaan")
 ### * runLavaan
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: runLavaan
 ### Title: Run data by the model object by the 'lavaan' package
 ### Aliases: runLavaan
@@ -4341,16 +3748,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("runLavaan", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("runMI")
 ### * runMI
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: runMI
 ### Title: Multiply impute and analyze data using lavaan
 ### Aliases: runMI
@@ -4380,16 +3783,12 @@ function(data.mat,data.model,imps) {
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("runMI", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("runMisspec")
 ### * runMisspec
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: runMisspec
 ### Title: Draw actual parameters and model misspecification
 ### Aliases: runMisspec
@@ -4400,16 +3799,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("runMisspec", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("runRep")
 ### * runRep
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: runRep
 ### Title: Run one replication within a big simulation study
 ### Aliases: runRep
@@ -4420,16 +3815,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("runRep", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("setOpenMxObject")
 ### * setOpenMxObject
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: setOpenMxObject
 ### Title: Rearrange starting values for 'OpenMx'
 ### Aliases: setOpenMxObject setOpenMxObject-methods
@@ -4447,16 +3838,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("setOpenMxObject", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("setPopulation")
 ### * setPopulation
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: setPopulation
 ### Title: Set the data generation population model underlying an object
 ### Aliases: setPopulation setPopulation-methods setPopulation,ANY-method
@@ -4467,16 +3854,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("setPopulation", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simBeta")
 ### * simBeta
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simBeta
 ### Title: Create random beta distribution object
 ### Aliases: simBeta
@@ -4488,16 +3871,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("simBeta", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simBinom")
 ### * simBinom
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simBinom
 ### Title: Create random binomial distribution object
 ### Aliases: simBinom
@@ -4510,16 +3889,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("simBinom", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simCauchy")
 ### * simCauchy
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simCauchy
 ### Title: Create random Cauchy distribution object
 ### Aliases: simCauchy
@@ -4532,16 +3907,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("simCauchy", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simChisq")
 ### * simChisq
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simChisq
 ### Title: Create random chi-squared distribution object
 ### Aliases: simChisq
@@ -4554,16 +3925,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("simChisq", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simData")
 ### * simData
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simData
 ### Title: Create a Data object
 ### Aliases: simData simData-methods simData,ANY-method
@@ -4602,16 +3969,12 @@ run(SimData)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("simData", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simDataDist")
 ### * simDataDist
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simDataDist
 ### Title: Create a data distribution object.
 ### Aliases: simDataDist
@@ -4633,16 +3996,12 @@ Output <- simResult(5, SimData, SimModel)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("simDataDist", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simEqualCon")
 ### * simEqualCon
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simEqualCon
 ### Title: Equality Constraint Object
 ### Aliases: simEqualCon
@@ -4679,16 +4038,12 @@ summary(equal.loading2)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("simEqualCon", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simExp")
 ### * simExp
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simExp
 ### Title: Create random exponential distribution object
 ### Aliases: simExp
@@ -4701,16 +4056,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("simExp", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simF")
 ### * simF
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simF
 ### Title: Create random F distribution object
 ### Aliases: simF
@@ -4723,16 +4074,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("simF", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simFunction")
 ### * simFunction
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simFunction
 ### Title: Create function object
 ### Aliases: simFunction
@@ -4796,7 +4143,14 @@ analysis <- simParamSEM(BE=path, LY=loading)
 
 Model <- simModel(analysis)
 
-fun <- simFunction(indProd, var1=paste("y", 1:3, sep=""), var2=paste("y", 4:6, sep=""), namesProd=paste("y", 10:12, sep=""))
+# Find the products of indicators
+newFUN <- function(data, var1, var2, namesProd) {
+	prod <- data[,var1] * data[,var2]
+	colnames(prod) <- namesProd
+	return(data.frame(data, prod))
+}
+
+fun <- simFunction(newFUN, var1=paste("y", 1:3, sep=""), var2=paste("y", 4:6, sep=""), namesProd=paste("y", 10:12, sep=""))
 
 # Real simulation will need more than just 10 replications
 Output <- simResult(10, Data.Mis, Model, objFunction=fun)
@@ -4804,16 +4158,12 @@ summary(Output)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("simFunction", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simGamma")
 ### * simGamma
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simGamma
 ### Title: Create random gamma distribution object
 ### Aliases: simGamma
@@ -4826,16 +4176,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("simGamma", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simGeom")
 ### * simGeom
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simGeom
 ### Title: Create random geometric distribution object
 ### Aliases: simGeom
@@ -4848,16 +4194,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("simGeom", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simHyper")
 ### * simHyper
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simHyper
 ### Title: Create random hypergeometric distribution object
 ### Aliases: simHyper
@@ -4870,16 +4212,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("simHyper", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simLnorm")
 ### * simLnorm
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simLnorm
 ### Title: Create random log normal distribution object
 ### Aliases: simLnorm
@@ -4892,16 +4230,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("simLnorm", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simLogis")
 ### * simLogis
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simLogis
 ### Title: Create random logistic distribution object
 ### Aliases: simLogis
@@ -4914,16 +4248,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("simLogis", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simMatrix")
 ### * simMatrix
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simMatrix
 ### Title: Create simMatrix that save free parameters and starting values,
 ###   as well as fixed values
@@ -4953,16 +4283,12 @@ ST <- simMatrix(value=start)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("simMatrix", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simMissing")
 ### * simMissing
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simMissing
 ### Title: Construct a SimMissing object to create data with missingness
 ###   and analyze missing data.
@@ -4999,16 +4325,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("simMissing", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simMisspecCFA")
 ### * simMisspecCFA
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simMisspecCFA
 ### Title: Set of model misspecification for CFA model.
 ### Aliases: simMisspecCFA
@@ -5023,16 +4345,12 @@ CFA.Model.Mis <- simMisspecCFA(RTD=RTD.Mis)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("simMisspecCFA", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simMisspecPath")
 ### * simMisspecPath
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simMisspecPath
 ### Title: Set of model misspecification for Path analysis model.
 ### Aliases: simMisspecPath
@@ -5047,16 +4365,12 @@ Path.Mis.Model <- simMisspecPath(GA = mis.GA, exo=TRUE)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("simMisspecPath", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simMisspecSEM")
 ### * simMisspecSEM
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simMisspecSEM
 ### Title: Set of model misspecification for SEM model.
 ### Aliases: simMisspecSEM
@@ -5079,16 +4393,12 @@ SEM.Mis.Model <- simMisspecSEM(LX = LX.trivial, RTE = RTE.trivial, RTD = RTD.tri
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("simMisspecSEM", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simModel")
 ### * simModel
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simModel
 ### Title: Create a model object
 ### Aliases: simModel simModel-methods simModel,ANY-method
@@ -5125,16 +4435,12 @@ summary(out)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("simModel", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simNbinom")
 ### * simNbinom
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simNbinom
 ### Title: Create random negative binomial distribution object
 ### Aliases: simNbinom
@@ -5147,16 +4453,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("simNbinom", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simNorm")
 ### * simNorm
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simNorm
 ### Title: Create random normal distribution object
 ### Aliases: simNorm
@@ -5169,16 +4471,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("simNorm", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simParamCFA")
 ### * simParamCFA
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simParamCFA
 ### Title: Create a set of matrices of parameters for analyzing data that
 ###   belongs to CFA model.
@@ -5193,16 +4491,12 @@ CFA.Model <- simParamCFA(LX = loading)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("simParamCFA", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simParamPath")
 ### * simParamPath
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simParamPath
 ### Title: Create a set of matrices of parameters for analyzing data that
 ###   belongs to Path analysis model
@@ -5220,16 +4514,12 @@ model2 <- simParamPath(GA=exoPath, exo=TRUE)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("simParamPath", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simParamSEM")
 ### * simParamSEM
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simParamSEM
 ### Title: Create a set of matrices of parameters for analyzing data that
 ###   belongs to SEM model
@@ -5255,16 +4545,12 @@ SEM.Exo.model <- simParamSEM(GA=path.GA, BE=BE, LX=loading.X, LY=loading.Y, exo=
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("simParamSEM", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simPois")
 ### * simPois
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simPois
 ### Title: Create random Poisson distribution object
 ### Aliases: simPois
@@ -5277,16 +4563,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("simPois", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simResult")
 ### * simResult
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simResult
 ### Title: Create simResult.
 ### Aliases: simResult
@@ -5333,16 +4615,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("simResult", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simResultParam")
 ### * simResultParam
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simResultParam
 ### Title: The constructor of the parameter result object
 ### Aliases: simResultParam
@@ -5388,16 +4666,12 @@ ParamObject3 <- simResultParam(5, Path.Model, Path.Mis.Model3)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("simResultParam", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simSetCFA")
 ### * simSetCFA
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simSetCFA
 ### Title: Create a set of matrices of parameter and parameter values to
 ###   generate and analyze data that belongs to CFA model.
@@ -5426,16 +4700,12 @@ CFA.Model <- simSetCFA(LX = LX, RPH = RPH, RTD = RTD)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("simSetCFA", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simSetPath")
 ### * simSetPath
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simSetPath
 ### Title: Create a set of matrices of parameter and parameter values to
 ###   generate and analyze data that belongs to Path analysis model
@@ -5485,16 +4755,12 @@ Path.Exo.Model <- simSetPath(RPS = RPS, BE = BE, RPH = RPH, GA = GA, exo=TRUE)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("simSetPath", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simSetSEM")
 ### * simSetSEM
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simSetSEM
 ### Title: Create a set of matrices of parameter and parameter values to
 ###   generate and analyze data that belongs to SEM model
@@ -5558,16 +4824,12 @@ SEM.Exo.model <- simSetSEM(GA=GA, BE=BE, LX=LX, LY=LY, RPH=RPH, RPS=RPS, RTD=RTD
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("simSetSEM", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simT")
 ### * simT
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simT
 ### Title: Create random t distribution object
 ### Aliases: simT
@@ -5580,16 +4842,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("simT", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simUnif")
 ### * simUnif
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simUnif
 ### Title: Create random uniform distribution object
 ### Aliases: simUnif
@@ -5602,16 +4860,12 @@ summary(u1)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("simUnif", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simVector")
 ### * simVector
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simVector
 ### Title: Create simVector that save free parameters and starting values,
 ###   as well as fixed values
@@ -5631,16 +4885,12 @@ VE <- simVector(value=start)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("simVector", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("simWeibull")
 ### * simWeibull
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: simWeibull
 ### Title: Create random Weibull distribution object
 ### Aliases: simWeibull
@@ -5653,16 +4903,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("simWeibull", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("skew")
 ### * skew
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: skew
 ### Title: Find skewness
 ### Aliases: skew skew-methods skew,vector-method
@@ -5673,16 +4919,12 @@ skew(1:5)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("skew", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("sortList")
 ### * sortList
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: sortList
 ### Title: Sort two objects in a list
 ### Aliases: sortList
@@ -5693,16 +4935,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("sortList", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("standardize")
 ### * standardize
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: standardize
 ### Title: Standardize the parameter estimates within an object
 ### Aliases: standardize standardize-methods standardize,ANY-method
@@ -5750,16 +4988,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("standardize", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("startingValues")
 ### * startingValues
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: startingValues
 ### Title: Find starting values by averaging random numbers
 ### Aliases: startingValues startingValues-methods
@@ -5796,16 +5030,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("startingValues", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("subtractObject")
 ### * subtractObject
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: subtractObject
 ### Title: Make a subtraction of each element in an object
 ### Aliases: subtractObject subtractObject-methods
@@ -5841,16 +5071,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("subtractObject", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("summaryFit")
 ### * summaryFit
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: summaryFit
 ### Title: Provide summary of model fit across replications
 ### Aliases: summaryFit summaryFit-methods summaryFit,ANY-method
@@ -5874,16 +5100,12 @@ summaryFit(Output, detail=TRUE)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("summaryFit", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("summaryMisspec")
 ### * summaryMisspec
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: summaryMisspec
 ### Title: Provide summary of model misspecification imposed across
 ###   replications
@@ -5925,16 +5147,12 @@ summaryMisspec(ParamObject)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("summaryMisspec", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("summaryParam")
 ### * summaryParam
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: summaryParam
 ### Title: Provide summary of parameter estimates and standard error across
 ###   replications
@@ -5961,16 +5179,12 @@ summaryParam(Output, detail=TRUE)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("summaryParam", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("summaryPopulation")
 ### * summaryPopulation
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: summaryPopulation
 ### Title: Summarize the data generation population model underlying an
 ###   object
@@ -5983,16 +5197,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("summaryPopulation", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("summaryShort")
 ### * summaryShort
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: summaryShort
 ### Title: Provide short summary of an object.
 ### Aliases: summaryShort summaryShort-methods summaryShort,ANY-method
@@ -6010,16 +5220,12 @@ summaryShort(LX)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("summaryShort", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("symMatrix")
 ### * symMatrix
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: symMatrix
 ### Title: Create symmetric simMatrix that save free parameters and
 ###   starting values, as well as fixed values
@@ -6045,16 +5251,12 @@ ST <- symMatrix(value=start)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("symMatrix", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("tagHeaders")
 ### * tagHeaders
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: tagHeaders
 ### Title: Tag names to each element
 ### Aliases: tagHeaders tagHeaders-methods tagHeaders,ANY-method
@@ -6066,16 +5268,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("tagHeaders", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("toFunction")
 ### * toFunction
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: toFunction
 ### Title: Export the distribution object to a function command in text
 ###   that can be evaluated directly.
@@ -6088,16 +5286,12 @@ toFunction(u2)
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("toFunction", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("toSimSet")
 ### * toSimSet
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: toSimSet
 ### Title: Transform the analysis model object into the object for data
 ###   generation
@@ -6121,16 +5315,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("toSimSet", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("twoTailedPValue")
 ### * twoTailedPValue
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: twoTailedPValue
 ### Title: Find two-tailed _p_ value from one-tailed _p_ value
 ### Aliases: twoTailedPValue
@@ -6141,16 +5331,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("twoTailedPValue", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("validateCovariance")
 ### * validateCovariance
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: validateCovariance
 ### Title: Validate whether all elements provides a good covariance matrix
 ### Aliases: validateCovariance
@@ -6161,16 +5347,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("validateCovariance", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("validateObject")
 ### * validateObject
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: validateObject
 ### Title: Validate whether the drawn parameters are good.
 ### Aliases: validateObject
@@ -6181,16 +5363,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("validateObject", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("validatePath")
 ### * validatePath
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: validatePath
 ### Title: Validate whether the regression coefficient (or loading) matrix
 ###   is good
@@ -6202,16 +5380,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("validatePath", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("vectorizeObject")
 ### * vectorizeObject
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: vectorizeObject
 ### Title: Change an object to a vector with labels
 ### Aliases: vectorizeObject vectorizeObject-methods
@@ -6226,16 +5400,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("vectorizeObject", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("weightedMean")
 ### * weightedMean
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: weightedMean
 ### Title: Calculate the weighted mean of a variable
 ### Aliases: weightedMean
@@ -6248,16 +5418,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("weightedMean", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("whichMonotonic")
 ### * whichMonotonic
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: whichMonotonic
 ### Title: Extract a part of a vector that is monotonically increasing or
 ###   decreasing
@@ -6271,16 +5437,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("whichMonotonic", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("writeLavaanCode")
 ### * writeLavaanCode
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: writeLavaanCode
 ### Title: Write a lavaan code given the matrices of free parameter
 ### Aliases: writeLavaanCode
@@ -6291,16 +5453,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("writeLavaanCode", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("writeLavaanConstraint")
 ### * writeLavaanConstraint
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: writeLavaanConstraint
 ### Title: Write a lavaan code for a given set of equality constraints
 ### Aliases: writeLavaanConstraint
@@ -6311,16 +5469,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("writeLavaanConstraint", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("writeLavaanIndividualConstraint")
 ### * writeLavaanIndividualConstraint
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: writeLavaanIndividualConstraint
 ### Title: Write a lavaan code for a given equality constraint for each
 ###   parameter
@@ -6332,16 +5486,12 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("writeLavaanIndividualConstraint", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 cleanEx()
 nameEx("writeLavaanNullCode")
 ### * writeLavaanNullCode
 
 flush(stderr()); flush(stdout())
 
-assign(".ptime", proc.time(), pos = "CheckExEnv")
 ### Name: writeLavaanNullCode
 ### Title: Write a lavaan code for a null model
 ### Aliases: writeLavaanNullCode
@@ -6352,9 +5502,6 @@ assign(".ptime", proc.time(), pos = "CheckExEnv")
 
 
 
-
-assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
-cat("writeLavaanNullCode", get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 ### * <FOOTER>
 ###
 cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")

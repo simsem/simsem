@@ -129,7 +129,6 @@ getPowerFitNonNested,SimResult,SimResult,missing-method	getPowerFitNonNested
 getPowerFitNonNested,SimResult,SimResult,vector-method	getPowerFitNonNested
 getPowerFitNonNested-methods	getPowerFitNonNested
 imposeMissing	imposeMissing
-indProd	indProd
 interpolate	interpolate
 isCorMatrix	isCorMatrix
 isDefault	isDefault
@@ -243,7 +242,6 @@ pValueVariedCutoff	pValueVariedCutoff
 reassignNames	reassignNames
 reduceConstraint	reduceConstraint
 reduceMatrices	reduceMatrices
-residualCovariate	residualCovariate
 revText	revText
 run	run
 run,ANY-method	run
