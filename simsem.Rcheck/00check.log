@@ -5,7 +5,12 @@
 * checking for file 'simsem/DESCRIPTION' ... OK
 * checking extension type ... Package
 * this is package 'simsem' version '0.2-8'
-* checking CRAN incoming feasibility ... OK
+* checking CRAN incoming feasibility ... NOTE
+New maintainer:
+  Sunthud Pornprasertmanit <psunthud@ku.edu>
+Old maintainer(s):
+  Sunthud Pornprasertmanit <psunthud@ku.edu>, Patrick Miller
+    <patr1ckm@ku.edu>, Alexander Schoemann <schoemann@ku.edu>
 * checking package namespace information ... OK
 * checking package dependencies ... OK
 * checking if this is a source package ... OK
@@ -41,3 +46,7 @@
 * checking for unstated dependencies in examples ... OK
 * checking examples ... OK
 * checking PDF version of manual ... OK
+NOTE: There was 1 note.
+See
+  'C:/Users/Sunthud/Desktop/My Dropbox/simsem/simsem.Rcheck/00check.log'
+for details.
