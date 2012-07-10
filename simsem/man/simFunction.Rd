@@ -86,7 +86,14 @@ analysis <- simParamSEM(BE=path, LY=loading)
 
 Model <- simModel(analysis)
 
-fun <- simFunction(indProd, var1=paste("y", 1:3, sep=""), var2=paste("y", 4:6, sep=""), namesProd=paste("y", 10:12, sep=""))
+# Find the products of indicators
+newFUN <- function(data, var1, var2, namesProd) {
+	prod <- data[,var1] * data[,var2]
+	colnames(prod) <- namesProd
+	return(data.frame(data, prod))
+}
+
+fun <- simFunction(newFUN, var1=paste("y", 1:3, sep=""), var2=paste("y", 4:6, sep=""), namesProd=paste("y", 10:12, sep=""))
 
 # Real simulation will need more than just 10 replications
 Output <- simResult(10, Data.Mis, Model, objFunction=fun)
