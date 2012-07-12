@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="simsem : R package for simulated structural equation modeling" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>simsem</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/simsem/simsem">View on GitHub</a>
+
+          <h1 id="project_title">simsem</h1>
+          <h2 id="project_tagline">R package for simulated structural equation modeling</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/simsem/simsem/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/simsem/simsem/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>simsem: SIMulated Structural Equation Modeling</h1>
+
+<p>This R package has been developed for facilitating analysts to simulate and analyze data within the structural equation modeling (SEM) framework. This package aims to help analysts create simulated data from their hypotheses or their analytic results from obtained data. The simulated data can be used for different purposes, such as power analysis, model fit evaluation, and planned missing design. This highlights of the current version is</p>
+
+<ol>
+<li><p><em>Building simulated sampling distribution for fit indices.</em> This package will help researchers tailor their fit indices cutoff based on a priori alpha level and a priori definition of trivial model misspecification. In other words, this package will help researchers simulate data based on their actual model with their defined trivial model misspecification. Then, the fit indices from the simulated data can be used to create empirical sampling distribution and find the fit indices cutoff based on the sampling distribution. The actual parameters can be specified manually or obtained from the result of data analysis. If the actual parameters are obtained from the result of data analysis, this approach may be called parametric bootstrap or Monte Carlo approach. The Bollen-Stine bootstrap approach for data generation is also available, as well as creating nonnormal distribution by Gaussian copula. </p></li>
+<li><p><em>Power analysis.</em> This package will help analysts find power of both parameter estimates and model evaluation. This package can find power when data are missing. Missing data imposed into simulated data can be 1) missing completely at random (MCAR), 2) missing at random (MAR), 3) missing not at random (NMAR), and 4) planned missing data (<em>n</em>-form design or two-method design). Longitudinal missing data (i.e., attrition) can be modeled as a MCAR or MAR process. Missing data can be handled through multiple imputation of Full Information Maximum Liklihood. Sample size and percent missing can be varied continuously and power plots given values of sample size or percent missing can be built.</p></li>
+<li><p><em>Methodological investigations.</em> This package can be used for methodological studies concerning SEM. Researchers can easily vary parameter values and model misspecification across parameters and easily summarize results from simulations. Nested models can be easily tested by comparing the results from two simulation runs. The powerful and flexible missing data options available in simsem make the package extremely useful in methodological investigations concerning SEM and missing data.</p></li>
+</ol><h2>Announcements</h2>
+
+<h3>[July 06, 2012] Latest Update: simsem, Version 0.2-8</h3>
+
+<p>This version is available in both CRAN and KRAN. We have fixed some minor bugs in the program and move <strong>indProd</strong> and <strong>residualCovariate</strong> functions to the <strong>semTools</strong> package. Hopefully, this is the last version in the 0.2 family. Please look forward to see the huge update soon. The simsem wiki page can also be accessed directly from <a href="http://www.simsem.org">http://www.simsem.org</a> </p>
+
+<h3>[June 22, 2012] Latest Update: simsem, Version 0.2-7</h3>
+
+<p>This version is only available in KRAN. We have fixed some minor bugs in the program. We also add four new examples about how to specify trivial misspecification (Example 22) and nested model comparison (Example 23, 24, and 25).</p>
+
+<h2>Developers</h2>
+
+<p><a href="http://people.ku.edu/%7Es044p855/">Sunthud Pornprasertmanit</a></p>
+
+<p>Patrick Miller</p>
+
+<p><a href="https://sites.google.com/site/alexandermschoemann/home">Alexander Schoemann</a></p>
+
+<p>Terry Jorgensen</p>
+
+<p>Scott Drotar</p>
+
+<h2>Program</h2>
+
+<p>The project is still under development. The package can be installed by copying this line into R:</p>
+
+<pre><code>install.packages("simsem")
+</code></pre>
+
+<p>If you are interested in the source code, please click the code tab. You may install the recently developed test version from KRAN (KU R Archive Network) by copying this line into R:</p>
+
+<pre><code>install.packages("simsem", repos="http://rweb.quant.ku.edu/kran")
+</code></pre>
+
+<p>Please report any bugs or give me any suggestions by <a href="mailto:psunthud@ku.edu">email</a>.</p>
+
+<h2>Materials</h2>
+
+<ul>
+<li><a href="https://github.com/simsem/simsem/wiki/Vignette">Simsem Vignette and Examples</a></li>
+<li><a href="https://github.com/simsem/simsem/raw/master/simsem.Rcheck/simsem-manual.pdf">The simsem R documentaion</a></li>
+</ul><h2>Presentations</h2>
+
+<p>Pornprasertmanit, S., Wu, W., &amp; Little, T. D. (October, 2012). <em>Taking into account sampling variability of model selection indices: A parametric bootstrap approach.</em> Proposal submitted for the Tenth Annual Society of Multivariate Experimental Psychology Graduate Student Pre-conference, Vancouver, Canada. <a href="https://github.com/simsem/simsem/raw/master/Conference%20presentations/Nonnested%20model%20comparison%20abstract%20for%20SMEP%20with%20authors%20name.pdf">Abstract</a>, <a href="https://github.com/simsem/simsem/blob/master/Conference%20presentations/SMEPexample.R">Example Code</a>.</p>
+
+<p>Pornprasertmanit, S., Wu, W., &amp; Little, T. D. (July, 2012). <em>Using a parametric bootstrap approach for nested model comparisons in structural equation modeling.</em> Presentation at the International Meeting of the Psychometric Society, Lincoln, NE. <a href="https://github.com/simsem/simsem/raw/master/Conference%20presentations/IMPS%20nested%20model%20comparison.pdf">Presentation</a>, <a href="https://github.com/simsem/simsem/blob/master/Conference%20presentations/IMPS%20nested%20model%20comparison%20example.R">Example Code</a>.</p>
+
+<p>Schoemann, A. M., Pornprasertmanit, S., &amp; Miller, P. (July, 2012). <em>simsem: SIMulated Structural Equation Modeling in R.</em> Presentation at the International Meeting of the Psychometric Society, Lincoln, NE. <a href="https://github.com/simsem/simsem/blob/master/Conference%20presentations/IMPS_simsem.pdf?raw=true">Presentation</a>,  <a href="https://github.com/simsem/simsem/blob/master/Conference%20presentations/IMPS_simsem.R">Example Code</a>.</p>
+
+<p>Schoemann, A. M., Little, T. D., Rhemtulla, M., &amp; Pornprasertmanit, S. (May, 2012). <em>From discrete conditions to continuous factors: Rethinking methodological simulations.</em> Presentation at the Modern Modeling Methods (M3) Conference, Storrs, CT. <a href="https://github.com/simsem/simsem/blob/master/Conference%20presentations/M3.2012.simulation.talk.pdf?raw=true">Presentation</a>, <a href="https://github.com/simsem/simsem/blob/master/M3.examples.R">Example Code</a>.</p>
+
+<p>Pornprasertmanit, S., Wu, W., &amp; Little, T. D. (May, 2012). <em>Monte Carlo Approach to Model Fit Evaluation in Structural Equation Modeling: How to Specify Trivial Misspecification.</em> Presentation given at the American Psychological Society Annual Convention, Chicago, IL. <a href="http://dl.dropbox.com/u/51983777/Publication/APS%20Paper%20final.pdf%22">Presentation</a>, <a href="https://github.com/simsem/simsem/blob/master/Conference%20presentations/APS%20misfit%20example.R">Example Code</a>.</p>
+
+<p>Schoemann, A. M., &amp; Pornprasertmanit, S. (February, 2012). <em>simsem: An R package for the future generation of SEM.</em> Presentation given at the first CRMDA workgroup symposium series in the Center of Research Methods and Data Analysis, University of Kansas. <a href="http://dl.dropbox.com/u/15234014/simsem%20pro%20sem%20120304.pdf">Presentation</a>, <a href="http://dl.dropbox.com/u/15234014/simsem%20pro%20sem%20120304.R">Example Code</a>.</p>
+
+<h2>Version History</h2>
+
+<ul>
+<li><a href="https://github.com/simsem/simsem/wiki/Version-History-%28Official%29">Version History</a></li>
+<li><a href="https://github.com/simsem/simsem/wiki/Version-History-%28Technical%29">Version History in Technical Details</a></li>
+</ul><h2>Acknowledgement</h2>
+
+<p>The development of <em>simsem</em> has been supported by the University of Kansas Center for Research Methods and Data Analysis. </p>
+
+<p>Partial support for this project was provided by grant NSF 1053160 (Wei Wu &amp; Todd D. Little, co-PIs) and the Center for Research Methods and Data Analysis at the University of Kansas (Todd D. Little, director). Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the funding agencies.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">simsem maintained by <a href="https://github.com/simsem">simsem</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-33333704-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+
+  </body>
+</html>
