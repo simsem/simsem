@@ -1,0 +1,90 @@
+## simsem, Version 0.2-8 07/06/12
+
+This version is available in both CRAN and KRAN. We have fixed some minor bugs in the program and move **indProd** and **residualCovariate** functions to the **semTools** package. Hopefully, this is the last version in the 0.2 family. Please look forward to see the huge update soon. The simsem wiki page can also be accessed directly from http://www.simsem.org 
+
+## simsem, Version 0.2-7 06/22/12
+
+This version is only available in KRAN. We have fixed some minor bugs in the program. We also add four new examples about how to specify trivial misspecification (Example 22) and nested model comparison (Example 23, 24, and 25).
+
+## simsem, Version 0.2-6 06/17/12
+
+This version is only available in KRAN. This version allows users to compare nested or nonnested models using the Monte Carlo approach (see the **pValueNested** and **pValueNonNested** functions), as well as comparing nonnested model based on likelihood-ratio test (see the **likRatioFit** function). The functions to find and plot the fit indices cutoff and power in nonnested model comparison are also available (see the **getCutoffNonNested**, **plotCutoffNonNested**, **getPowerFitNonNested**, and **plotPowerFitNonNested** functions). The varying parameter feature (e.g., continuous sample size) for the nonnested model comparison, however, is not ready yet. We also fixed some minor bugs we found in the program and change the output styles of some functions.  
+
+## simsem, Version 0.2-5 06/13/12
+
+This version is only available in KRAN. We have fixed some minor bugs we found in the program, including the bug when passing a list of datasets in the **simResult** command. We also added two more examples about power of rejecting misspecified models when sample size or percent missing are varying within a simulation. 
+
+## simsem, Version 0.2-4 06/11/12
+
+This version is only available in KRAN. This version allows users to find the statistical power in rejecting a misspecified model with varying parameters (such as varying sample size or percent missing). Please see the documentation of **getPowerFit** and **plotPowerFit** functions for further details. The **anova** function is also accounted for the varying parameters. This version also allows users to find the fit indices cutoffs in nested model comparison. For example, find the cutoff of the difference in CFI when trivial misspecification is added to the datasets created from the nested model (e.g., if CFI drops less than .004, retain the nested model). Please see the documentation of **getCutoffNested** and **plotCutoffNested** for further details. We also add **getPowerFitNested** and **plotPowerFitNested** functions to find the power in nested model comparison. All functions in nested model comparison are also accounted for the varying parameters.
+
+## simsem, Version 0.2-3 06/06/12
+
+This version is only available in KRAN. We add the **summaryFit** function to directly obtain the fit indices information that is provided in the **summary** function. We also fix some minor bugs in the package. 
+
+## simsem, Version 0.2-2 06/05/12
+
+This version is only available in KRAN. We implemented the L'Ecuyer (1999) of random number generation to make sure that the simulated datasets in each replication are completely nonoverlapping. We also change the **simMissing** function to take additional arguments to be passed to _Amelia_ for imputation. 
+
+## simsem, Version 0.2-1 05/28/12
+
+This version is only available in KRAN. We added more functions used for the simulation with varying parameters (e.g., sample size or percent missing completely at random), such as finding fit indices cutoffs, getting power of each parameter estimate, finding the values of varying parameters (e.g., sample size) that provides a specified power, or plot the powers of each parameter against varying parameter. We also added the Example 17 to 19 that shows how _simsem_ deals with the simulation with varying parameters. 
+
+## simsem, Version 0.2-0 05/18/12
+
+This version is the first version uploaded into CRAN. Mostly, this version is similar to the previous version. The vignette is updated by adding a new example. The R documentation are changed so that the amount of time running through all examples dramatically reduced. All comments in the package are clean up.
+
+## simsem, Version 0.1-6 05/15/12
+
+The internal codes of this version are changed in order to deal with distribution objects differently. By the new method, the problem of using distribution object in hpc is fixable. This version also allows users to specify parameter values only and the program will make nonzero values as free parameters (except 1 in symmetric matrix object). See the documentation of the **simMatrix**, **symMatrix**, and **simVector** functions.
+
+## simsem, Version 0.1-5 05/14/12
+
+This version allows users to use the maximal (or minimal) method for the misspecified parameters. That is, users can specify the range of values in misspecified parameters regarding as trivial misspecification. Then, the program will draw multiple sets of misspecified parameters and pick the set that provides the maximum (or minimum) of population misfit. See the help page of the **simResultParam** or **SimMisspec** for further details. A minor bug is also fixed in this version. 
+
+## simsem, Version 0.1-4 05/10/12
+
+This version is just a bug-fixed version from the previous version. The package currently is available on KRAN.
+
+## simsem, Version 0.1-3 05/06/12
+
+This version will allow us to calculate population misfit (_f0_, _rmsea_, and _srmr_), constrain the specified misspecification by a range of population misfit, such as rmsea from 0.05 to 0.10. In other words, create data that parameters have RMSEA from .05 to .10. We also make the new class called **SimResultParam**, which save all actual and misspecified parameters across replications before generating data. Therefore, this class can be used to investigating the population misfit by the **summary** or **plotMisfit** function across replications. See the documentation of **popMisfit**, **simResultParam**, and **plotMisfit** for further details.
+
+## simsem, Version 0.1-2 05/03/12
+
+We made a minor change in the code. The documentations about almost all private functions are added. 
+
+## simsem, Version 0.1-1 04/20/12
+
+This version allows users to create simulated data using the Bollen-Stine bootstrap approach which uses the real data distribution as a template to create new data with similar observed distributions. See the **simData** function or the **runFit** function documentations for further details.
+
+## simsem, Version 0.1-0 04/19/12
+
+This update includes several new features:
+
+1. The code is easier to analyze real data. The result of the real data can be used as parameter values to run a simulation, which means the Monte Carlo approach for model evaluation can be done easily. See Examples 13 and 14 in the manual for further details.
+2. Add continuous varying sample size and percent missing feature. Users can make a simulation with varying sample size and see the change of power by logistic curve. Check the **continuousPower** function for further details.
+3. The simsem can set percent attrition that can simulate participants drop out from a study. See **imposeMissing** function for further details.
+4. Add a new feature call function object that can transform data after generating data in the simulation study. See Example 15 in the manual for an example of residual centering for controlling covariates.
+
+## simsem, Version 0.0-9 03/11/12
+
+The new features are
+
+1) The package can take either correlation/variance inputs or covariance inputs. See Example 1 vs. 2 for a comparison.
+2) The **anova** method is built for comparing two analysis results together (either data analysis or simulation result). 
+
+## simsem, Version 0.0-8 03/05/12
+
+We have added some new features.
+
+1) simsem can account for auxiliary variable by just identifying the column index of the auxiliary variable. The package will make the model accounting the auxiliary variable in FIML for you. For MI, the auxiliary variables will be excluded in the analysis part.
+2) We have changed how to impose the MAR missing to the 'threshold' method. See the Example 11 for the detail.
+3) We changed the matrix name of all correlation matrices to begin with 'R', such as PS --> RPS, PH --> RPH, or TE --> RTE. The reason of this change is that we will make the simsem package to be able to be set by covariance matrices in the near future.
+
+## simsem, Version 0.0-7 02/26/12
+
+There are two major updates on this version.
+
+1. The alternative method for data generation is available, which is referred as _sequential_ method. The data will create from exogenous factors first. Then, the data will be passed along the arrows in SEM diagram and adding the generated residuals until we get the observed variables data. 
+2. The nonnormal distribution data generation is available. The nonnormal data can be modeled on the indicator distributions directly or on the factor distributions (and error distributions). The package uses Gaussian copula for nonnormal data generation. See the details of _Gaussian copula_ in the provided examples.
