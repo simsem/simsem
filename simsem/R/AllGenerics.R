@@ -1,6 +1,6 @@
-## setGeneric("run", function(object, ...) {
-##     return(standardGeneric("run"))
-## })
+setGeneric("run", function(object, ...) {
+    return(standardGeneric("run"))
+})
 
 ## setGeneric("adjust", function(target, value, pos, numAsFixed = TRUE) {
 ##     return(standardGeneric("adjust"))
@@ -46,9 +46,9 @@
 ##     return(standardGeneric("startingValues"))
 ## })
 
-## setGeneric("summaryShort", function(object, ...) {
-##     return(standardGeneric("summaryShort"))
-## })
+setGeneric("summaryShort", function(object, ...) {
+    return(standardGeneric("summaryShort"))
+})
 
 ## setGeneric("tagHeaders", function(object, ...) {
 ##     return(standardGeneric("tagHeaders"))
@@ -120,17 +120,17 @@ setGeneric("pValue", function(target, dist, ...) {
     return(standardGeneric("pValue"))
 })
 
-## setGeneric("summaryPopulation", function(object) {
-##     return(standardGeneric("summaryPopulation"))
-## })
+setGeneric("summaryPopulation", function(object) {
+    return(standardGeneric("summaryPopulation"))
+})
 
-## setGeneric("getPopulation", function(object, ...) {
-##     return(standardGeneric("getPopulation"))
-## })
+setGeneric("getPopulation", function(object, ...) {
+    return(standardGeneric("getPopulation"))
+})
 
-## setGeneric("setPopulation", function(target, population, ...) {
-##     return(standardGeneric("setPopulation"))
-## })
+setGeneric("setPopulation", function(target, population, ...) {
+    return(standardGeneric("setPopulation"))
+})
 
 ## setGeneric("popMisfit", function(param, misspec, dfParam = NULL, fit.measures = "all", ...) {
 ##     return(standardGeneric("popMisfit"))
@@ -154,4 +154,8 @@ setGeneric("runFitParam", function(model, nRep = 1000, misspec = new("NullSimMis
 
 setGeneric("getPowerFitNonNested", function(dat2Mod1, dat2Mod2, cutoff, ...) {
     return(standardGeneric("getPowerFitNonNested"))
+})
+
+setGeneric("toFunction",function(x) {
+  return(standardGeneric("toFunction"))
 })
