@@ -458,9 +458,12 @@ reduceParamSet <- function(paramSet,dgen) {
         }
         if(length(idx) != 0) {
           free <- is.free(dgen[[g]][[idx]]@free)
-          if(name == "PS" || name == "TE" ) {
+          if(name == "PS") {
             lab <- makeLabels(free & lower.tri(free),name=name,group=g)
             param <- tmat[free & lower.tri(free)]
+          } else if(name == "TE") {
+            lab <- makeLabels(free & lower.tri(free,diag=TRUE),name=name,group=g)
+            param <- tmat[free & lower.tri(free,diag=TRUE)]
           } else {
             lab <- makeLabels(free,name=name,group=g)
             param <- tmat[free]
@@ -474,8 +477,7 @@ reduceParamSet <- function(paramSet,dgen) {
   final
 }    
       
-    
-
+  
 ## GLIST -> Re-labeled Parameter Estimates
 reduceLavaanParam <- function(glist,dgen) {
   # Chunk at a time approach
@@ -498,9 +500,9 @@ reduceLavaanParam <- function(glist,dgen) {
     idx <- which(names=="theta")
     for(i in seq_along(idx)) {
       if(!is.null(dgen[[i]]$TE)) {
-        free <- is.free(dgen[[i]]$TE@free) & lower.tri(dgen[[i]]$TE@free)
+        free <- is.free(dgen[[i]]$TE@free) & lower.tri(dgen[[i]]$TE@free,diag=TRUE)
       } else {
-        free <- is.free(dgen[[i]]$RTE@free) & lower.tri(dgen[[i]]$RTE@free)
+        free <- is.free(dgen[[i]]$RTE@free) & lower.tri(dgen[[i]]$RTE@free,diag=TRUE)
       }
       param <- glist[idx[i]]$theta[free]
       lab <- makeLabels(free,name="TE",group=i)

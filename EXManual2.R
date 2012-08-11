@@ -77,8 +77,8 @@ diag(latent.cor) <- 1
 RPS <- binds(latent.cor, 0.5)
 
 error.cor <- matrix(0, 6, 6)
-diag(error.cor) <- 1
-RTE <- binds(error.cor)
+diag(error.cor) <- NA
+RTE <- binds(error.cor,1)
 
 CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE,modelType="CFA")
 
