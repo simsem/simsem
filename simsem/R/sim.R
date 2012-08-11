@@ -196,32 +196,32 @@
 
     ## 6. Extract results from replication lists
       
-    fit.l <- lapply(Result.l, function(object) {
-        object$fit
+    fit.l <- lapply(Result.l, function(rep) {
+        rep$fit
     })
-    coef.l <- lapply(Result.l, function(object) {
-        object$coef
+    coef.l <- lapply(Result.l, function(rep) {
+        rep$coef
     })
-    se.l <- lapply(Result.l, function(object) {
-        object$se
+    se.l <- lapply(Result.l, function(rep) {
+        rep$se
     })
-    converged.l <- lapply(Result.l, function(object) {
-        object$converged
+    converged.l <- lapply(Result.l, function(rep) {
+        rep$converged
     })
-    param.l <- lapply(Result.l, function(object) {
-        object$param
+    param.l <- lapply(Result.l, function(rep) {
+        rep$param
     })
-    FMI1.l <- lapply(Result.l, function(object) {
-        object$FMI1
+    FMI1.l <- lapply(Result.l, function(rep) {
+        rep$FMI1
     })
-    FMI2.l <- lapply(Result.l, function(object) {
-        object$FMI2
+    FMI2.l <- lapply(Result.l, function(rep) {
+        rep$FMI2
     })
-    std.l <- lapply(Result.l, function(object) {
-        object$std
+    std.l <- lapply(Result.l, function(rep) {
+        rep$std
     })
-   ##  paramData.l <- lapply(Result.l, function(object) {
-##         object$paramData
+   ##  paramData.l <- lapply(Result.l, function(rep) {
+##         rep$paramData
 ##     })
     coef <- as.data.frame(do.call(rbind, coef.l))
     se <- as.data.frame(do.call(rbind, se.l))

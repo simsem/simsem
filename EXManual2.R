@@ -66,30 +66,27 @@ dir <- "C:/Users/student/Dropbox/simsem/simsem/R/"
 #tidy.dir(dir)
 
 library(simsem)
+
 loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
-LX <- simMatrix(loading, 0.7)
+LY <- bind(loading, 0.7)
 
 latent.cor <- matrix(NA, 2, 2)
 diag(latent.cor) <- 1
-RPH <- symMatrix(latent.cor, 0.5)
+RPS <- binds(latent.cor, 0.5)
 
 error.cor <- matrix(0, 6, 6)
 diag(error.cor) <- 1
-RTD <- symMatrix(error.cor)
+RTE <- binds(error.cor)
 
-CFA.Model <- simSetCFA(LY = LX, RPH = RPH, RTD = RTD)
+CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE,modelType="CFA")
 
-SimData <- simData(CFA.Model, 200)
-
-data <- run(SimData)
-
-SimModel <- simModel(CFA.Model)
+out <- analyze(CFA.Model,generate(CFA.Model,200))
 
 #SimMissing <- simMissing(pmMCAR=0.1, numImps=5)
-Output <- simResult(200, SimData, SimModel)
-#Output <- simResult(100, SimData, SimModel, SimMissing, multicore=TRUE)
+Output <- sim(10, CFA.Model,n=200)
+#Output <- sim(100, SimData, SimModel, SimMissing, multicore=TRUE)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
@@ -106,17 +103,17 @@ loadingVal <- matrix(0, 9, 3)
 loadingVal[2:3, 1] <- c(0.6, 0.7)
 loadingVal[5:6, 2] <- c(1.1, 0.9)
 loadingVal[8:9, 3] <- c(1.2, 1.1)
-LY <- simMatrix(loading, loadingVal)
+LY <- bind(loading, loadingVal)
 
 facCov <- matrix(NA, 3, 3)
 facCovVal <- diag(c(0.8, 0.9, 0.4))
 facCovVal[lower.tri(facCovVal)] <- c(0.4, 0.2, 0.3)
 facCovVal[upper.tri(facCovVal)] <- c(0.4, 0.2, 0.3)
-PS <- symMatrix(facCov, facCovVal)
+PS <- binds(facCov, facCovVal)
 
 errorCov <- diag(NA, 9)
 errorCovVal <- diag(c(0.5, 1.1, 0.8, 0.4, 0.4, 0.8, 0.8, 0.5, 0.6))
-TE <- symMatrix(errorCov, errorCovVal)
+TE <- binds(errorCov, errorCovVal)
 
 AL <- simVector(rep(NA, 3), 0)
 TY <- simVector(c(0, NA, NA, 0, NA, NA, 0, NA, NA), 0)
@@ -125,7 +122,7 @@ HS.Model <- simSetCFA(LY=LY, PS=PS, TE=TE, AL=AL, TY=TY)
 
 SimData <- simData(HS.Model, 200)
 SimModel <- simModel(HS.Model)
-Output <- simResult(200, SimData, SimModel)
+Output <- sim(200, SimData, SimModel)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
@@ -137,7 +134,7 @@ library(simsem)
 factor.loading <- matrix(NA, 4, 2)
 factor.loading[,1] <- 1
 factor.loading[,2] <- 0:3
-LY <- simMatrix(factor.loading)
+LY <- bind(factor.loading)
 
 factor.mean <- rep(NA, 2)
 factor.mean.starting <- c(5, 2)
@@ -149,11 +146,11 @@ VPS <- simVector(factor.var, factor.var.starting)
 
 factor.cor <- matrix(NA, 2, 2)
 diag(factor.cor) <- 1
-RPS <- symMatrix(factor.cor, 0.5)
+RPS <- binds(factor.cor, 0.5)
 
 VTE <- simVector(rep(NA, 4), 1.2)
 
-RTE <- symMatrix(diag(4))
+RTE <- binds(diag(4))
 
 TY <- simVector(rep(0, 4))
 
@@ -161,7 +158,7 @@ LCA.Model <- simSetCFA(LY=LY, RPS=RPS, VPS=VPS, AL=AL, VTE=VTE, RTE=RTE, TY=TY)
 
 Data.True <- simData(LCA.Model, 300)
 SimModel <- simModel(LCA.Model)
-#Output <- simResult(100, Data.True, SimModel)
+#Output <- sim(100, Data.True, SimModel)
 #getCutoff(Output, 0.05)
 #plotCutoff(Output, 0.05)
 
@@ -169,13 +166,13 @@ SimModel <- simModel(LCA.Model)
 
 loading.trivial <- matrix(0, 4, 2)
 loading.trivial[2:3, 2] <- NA
-loading.mis <- simMatrix(loading.trivial, "runif(1,-0.1,0.1)")
+loading.mis <- bind(loading.trivial, "runif(1,-0.1,0.1)")
 
 LCA.Mis <- simMisspecCFA(LY = loading.mis)
 
 Data.Mis <- simData(LCA.Model, 300, LCA.Mis, sequential=TRUE)
 
-Output.Mis <- simResult(100, Data.Mis, SimModel)#, multicore=TRUE)
+Output.Mis <- sim(100, Data.Mis, SimModel)#, multicore=TRUE)
 getCutoff(Output.Mis, 0.05)
 plotCutoff(Output.Mis, 0.05)
 summaryParam(Output.Mis)
@@ -193,11 +190,11 @@ path.BE[4, 3] <- NA
 starting.BE <- matrix("", 4, 4)
 starting.BE[3, 1:2] <- "runif(1,0.3,0.5)"
 starting.BE[4, 3] <- "runif(1,0.5,0.7)"
-BE <- simMatrix(path.BE, starting.BE)
+BE <- bind(path.BE, starting.BE)
 
 residual.error <- diag(4)
 residual.error[1,2] <- residual.error[2,1] <- NA
-RPS <- symMatrix(residual.error, "rnorm(1,0.3,0.1)")
+RPS <- binds(residual.error, "rnorm(1,0.3,0.1)")
 
 ME <- simVector(rep(NA, 4), 0)
 
@@ -205,7 +202,7 @@ Path.Model <- simSetPath(RPS = RPS, BE = BE, ME = ME)
 
 mis.path.BE <- matrix(0, 4, 4)
 mis.path.BE[4, 1:2] <- NA
-mis.BE <- simMatrix(mis.path.BE, "runif(1,-0.1,0.1)")
+mis.BE <- bind(mis.path.BE, "runif(1,-0.1,0.1)")
 
 Path.Mis.Model <- simMisspecPath(BE = mis.BE, misfitType="rmsea", optMisfit="max", numIter=10) #, misfitBound=c(0.05, 0.08))
 
@@ -214,21 +211,21 @@ Data.Mis <- simData(Path.Model, 500, Path.Mis.Model)
 
 # dat <- run(Data.Mis)
 # x <- drawParametersMisspec(Path.Model, Path.Mis.Model)
-# y <- simResultParam(1000, Path.Model, Path.Mis.Model)
+# y <- simParam(1000, Path.Model, Path.Mis.Model)
 # plot(y@misspec[,2], y@fit[,2])
 # lines(loess.smooth(y@misspec[,2], y@fit[,2]), col="red")
 
 SimModel <- simModel(Path.Model)
 popMisfit(Path.Model, Path.Mis.Model, fit.measures="rmsea")
 
-#Output <- simResult(100, Data, SimModel)
-Output <- simResult(100, Data.Mis, SimModel)
+#Output <- sim(100, Data, SimModel)
+Output <- sim(100, Data.Mis, SimModel)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
 
 # Population Misfit Investigation
-paramOut <- simResultParam(1000, Path.Model, misspec=Path.Mis.Model)
+paramOut <- simParam(1000, Path.Model, misspec=Path.Mis.Model)
 
 
 # Example 4 with X sides #
@@ -241,30 +238,30 @@ library(simsem)
 
 path.GA <- matrix(0, 2, 2)
 path.GA[1, 1:2] <- NA
-GA <- simMatrix(path.GA, "runif(1,0.3,0.5)")
+GA <- bind(path.GA, "runif(1,0.3,0.5)")
 
 path.BE <- matrix(0, 2, 2)
 path.BE[2, 1] <- NA
-BE <- simMatrix(path.BE, "runif(1,0.5,0.7)")
+BE <- bind(path.BE, "runif(1,0.5,0.7)")
 
 exo.cor <- matrix(NA, 2, 2)
 diag(exo.cor) <- 1
-RPH <- symMatrix(exo.cor, "rnorm(1,0.3,0.1)")
+RPH <- binds(exo.cor, "rnorm(1,0.3,0.1)")
 
-RPS <- symMatrix(diag(2))
+RPS <- binds(diag(2))
 
 Path.Model <- simSetPath(RPS = RPS, BE = BE, RPH = RPH, GA = GA, exo=TRUE)
 
 mis.path.GA <- matrix(0, 2, 2)
 mis.path.GA[2, 1:2] <- NA
-mis.GA <- simMatrix(mis.path.GA, "runif(1,-0.1,0.1)")
+mis.GA <- bind(mis.path.GA, "runif(1,-0.1,0.1)")
 Path.Mis.Model <- simMisspecPath(GA = mis.GA, exo=TRUE)
 
 Data.Mis <- simData(Path.Model, 500, Path.Mis.Model)
 SimModel <- simModel(Path.Model)
 
 
-Output <- simResult(100, Data.Mis, SimModel)
+Output <- sim(100, Data.Mis, SimModel)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
@@ -286,30 +283,30 @@ loading.start <- matrix("", 8, 3)
 loading.start[1:3, 1] <- 0.7
 loading.start[4:6, 2] <- 0.7
 loading.start[7:8, 3] <- "rnorm(1,0.6,0.05)"
-LY <- simMatrix(loading, loading.start)
+LY <- bind(loading, loading.start)
 
-RTE <- symMatrix(diag(8))
+RTE <- binds(diag(8))
 
 factor.cor <- diag(3)
 factor.cor[1, 2] <- factor.cor[2, 1] <- NA
-RPS <- symMatrix(factor.cor, 0.5)
+RPS <- binds(factor.cor, 0.5)
 
 path <- matrix(0, 3, 3)
 path[3, 1:2] <- NA
 path.start <- matrix(0, 3, 3)
 path.start[3, 1] <- "rnorm(1,0.6,0.05)"
 path.start[3, 2] <- "runif(1,0.3,0.5)"
-BE <- simMatrix(path, path.start)
+BE <- bind(path, path.start)
 
 SEM.model <- simSetSEM(BE=BE, LY=LY, RPS=RPS, RTE=RTE)
 
 loading.trivial <- matrix(NA, 8, 3)
 loading.trivial[is.na(loading)] <- 0
-LY.trivial <- simMatrix(loading.trivial, "runif(1,-0.2,0.2)")
+LY.trivial <- bind(loading.trivial, "runif(1,-0.2,0.2)")
 
 error.cor.trivial <- matrix(NA, 8, 8)
 diag(error.cor.trivial) <- 0
-RTE.trivial <- symMatrix(error.cor.trivial, "rnorm(1,0,0.1)")
+RTE.trivial <- binds(error.cor.trivial, "rnorm(1,0,0.1)")
 
 SEM.Mis.Model <- simMisspecSEM(LY = LY.trivial, RTE = RTE.trivial, conBeforeMis=FALSE, misBeforeFill=TRUE)
 
@@ -330,7 +327,7 @@ Model.Original <- simModel(SEM.model)
 Model.Con <- simModel(SEM.model, equalCon=equal.loading)
 
 
-Output <- simResult(200, Data.Mis.Con, Model.Con) #, multicore=TRUE)
+Output <- sim(200, Data.Mis.Con, Model.Con) #, multicore=TRUE)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
@@ -385,42 +382,42 @@ n1 <- simNorm(0, 0.1)
 loading.X <- matrix(0, 6, 2)
 loading.X[1:3, 1] <- NA
 loading.X[4:6, 2] <- NA
-LX <- simMatrix(loading.X, 0.7)
+LX <- bind(loading.X, 0.7)
 
 loading.Y <- matrix(NA, 2, 1)
-LY <- simMatrix(loading.Y, "runif(1,0.6,0.8)")
+LY <- bind(loading.Y, "runif(1,0.6,0.8)")
 
-RTD <- symMatrix(diag(6))
+RTD <- binds(diag(6))
 
-RTE <- symMatrix(diag(2))
+RTE <- binds(diag(2))
 
 factor.K.cor <- matrix(NA, 2, 2)
 diag(factor.K.cor) <- 1
-RPH <- symMatrix(factor.K.cor, 0.5)
+RPH <- binds(factor.K.cor, 0.5)
 
-RPS <- symMatrix(as.matrix(1))
+RPS <- binds(as.matrix(1))
 
 path.GA <- matrix(NA, 1, 2)
 path.GA.start <- matrix(c("rnorm(1,0.6,0.05)", "runif(1,0.3,0.5)"), ncol=2)
-GA <- simMatrix(path.GA, path.GA.start)
+GA <- bind(path.GA, path.GA.start)
 
-BE <- simMatrix(as.matrix(0))
+BE <- bind(as.matrix(0))
 
 SEM.model <- simSetSEM(GA=GA, BE=BE, LX=LX, LY=LY, RPH=RPH, RPS=RPS, RTD=RTD, RTE=RTE, exo=TRUE)
 
 loading.X.trivial <- matrix(NA, 6, 2)
 loading.X.trivial[is.na(loading.X)] <- 0
-LX.trivial <- simMatrix(loading.X.trivial, "runif(-0.2,0.2)")
+LX.trivial <- bind(loading.X.trivial, "runif(-0.2,0.2)")
 
 error.cor.X.trivial <- matrix(NA, 6, 6)
 diag(error.cor.X.trivial) <- 0
-RTD.trivial <- symMatrix(error.cor.X.trivial, "rnorm(1,0,.1)")
+RTD.trivial <- binds(error.cor.X.trivial, "rnorm(1,0,.1)")
 
 error.cor.Y.trivial <- matrix(NA, 2, 2)
 diag(error.cor.Y.trivial) <- 0
-RTE.trivial <- symMatrix(error.cor.Y.trivial, "rnorm(1,0,.1)")
+RTE.trivial <- binds(error.cor.Y.trivial, "rnorm(1,0,.1)")
 
-RTH.trivial <- simMatrix(matrix(NA, 6, 2), "rnorm(1,0,.1)")
+RTH.trivial <- bind(matrix(NA, 6, 2), "rnorm(1,0,.1)")
 
 SEM.Mis.Model <- simMisspecSEM(LX = LX.trivial, RTE = RTE.trivial, RTD = RTD.trivial, RTH = 
 RTH.trivial, exo=TRUE)
@@ -445,7 +442,7 @@ Data.Mis.Con <- simData(SEM.model, 300, misspec=SEM.Mis.Model,
 Model.Original <- simModel(SEM.model)
 Model.Con <- simModel(SEM.model, equalCon=equal.loading)
 
-Output <- simResult(10, Data.Mis.Con, Model.Con)
+Output <- sim(10, Data.Mis.Con, Model.Con)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
@@ -460,36 +457,36 @@ u79 <- simUnif(0.7, 0.9)
 
 loading.null <- matrix(0, 6, 1)
 loading.null[1:6, 1] <- NA
-LX.NULL <- simMatrix(loading.null, 0.7)
-RPH.NULL <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
+LX.NULL <- bind(loading.null, 0.7)
+RPH.NULL <- binds(diag(1))
+RTD <- binds(diag(6))
 CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
 
 error.cor.mis <- matrix(NA, 6, 6)
 diag(error.cor.mis) <- 1
-RTD.Mis <- symMatrix(error.cor.mis, "rnorm(1,0,0.1)")
+RTD.Mis <- binds(error.cor.mis, "rnorm(1,0,0.1)")
 CFA.Model.NULL.Mis <- simMisspecCFA(RTE = RTD.Mis)
 
 SimData.NULL <- simData(CFA.Model.NULL, 500, misspec = CFA.Model.NULL.Mis)
 SimModel <- simModel(CFA.Model.NULL)
-Output.NULL <- simResult(300, SimData.NULL, SimModel)
+Output.NULL <- sim(300, SimData.NULL, SimModel)
 
 loading.alt <- matrix(0, 6, 2)
 loading.alt[1:3, 1] <- NA
 loading.alt[4:6, 2] <- NA
-LX.ALT <- simMatrix(loading.alt, 0.7)
+LX.ALT <- bind(loading.alt, 0.7)
 latent.cor.alt <- matrix(NA, 2, 2)
 diag(latent.cor.alt) <- 1
-RPH.ALT <- symMatrix(latent.cor.alt, "runif(1,0.7,0.9)")
+RPH.ALT <- binds(latent.cor.alt, "runif(1,0.7,0.9)")
 CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
 
 loading.alt.mis <- matrix(NA, 6, 2)
 loading.alt.mis[is.na(loading.alt)] <- 0
-LX.alt.mis <- simMatrix(loading.alt.mis, "runif(1,-.2,.2)")
+LX.alt.mis <- bind(loading.alt.mis, "runif(1,-.2,.2)")
 CFA.Model.alt.mis <- simMisspecCFA(LY = LX.alt.mis, RTE=RTD.Mis)
 
 SimData.ALT <- simData(CFA.Model.ALT, 500, misspec = CFA.Model.alt.mis)
-Output.ALT <- simResult(300, SimData.ALT, SimModel)
+Output.ALT <- sim(300, SimData.ALT, SimModel)
 
 cutoff <- getCutoff(Output.NULL, 0.05)
 getPowerFit(Output.ALT, cutoff)
@@ -556,7 +553,7 @@ loading.v[1:3, 1] <- "runif(1,.4,.9)"
 loading.v[4:6, 2] <- "runif(1,.4,.9)"
 loading.v[7:9, 3] <- "runif(1,.4,.9)"
 loading.v[c(1, 4, 7), 4] <- "runif(1,.3,.6)"
-LY <- simMatrix(loading, loading.v)
+LY <- bind(loading, loading.v)
 
 faccor <- diag(4)
 faccor[1, 2] <- faccor[2, 1] <- NA
@@ -566,19 +563,19 @@ faccor.v <- diag(4)
 faccor.v[1, 2] <- faccor.v[2, 1] <- "rnorm(1,.4,.1)"
 faccor.v[1, 3] <- faccor.v[3, 1] <- "rnorm(1,.2,.1)"
 faccor.v[2, 3] <- faccor.v[3, 2] <- "rnorm(1,.3,.1)"
-RPS <- symMatrix(faccor, faccor.v)
+RPS <- binds(faccor, faccor.v)
 
-RTE <- symMatrix(diag(9))
+RTE <- binds(diag(9))
 
 mtmm.model <- simSetCFA(LY=LY, RPS=RPS, RTE=RTE)
 
 error.cor.mis <- matrix(NA, 9, 9)
 diag(error.cor.mis) <- 1
-RTE.mis <- symMatrix(error.cor.mis, "rnorm(1,0,.1)")
+RTE.mis <- binds(error.cor.mis, "rnorm(1,0,.1)")
 loading.mis <- matrix(NA, 9, 4)
 loading.mis[is.na(loading)] <- 0
 loading.mis[,4] <- 0
-LY.mis <- simMatrix(loading.mis, "runif(1,-.2,.2)")
+LY.mis <- bind(loading.mis, "runif(1,-.2,.2)")
 mtmm.model.mis <- simMisspecCFA(RTE = RTE.mis, LY=LY.mis)
 
 SimMissing <- simMissing(pmMCAR=0.2, numImps=5)
@@ -586,7 +583,7 @@ SimMissing <- simMissing(pmMCAR=0.2, numImps=5)
 SimData <- simData(mtmm.model, 500, misspec = mtmm.model.mis)
 SimModel <- simModel(mtmm.model)
 
-Output <- simResult(10, SimData, SimModel, SimMissing)
+Output <- sim(10, SimData, SimModel, SimMissing)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summary(Output)
@@ -603,19 +600,19 @@ loading[1:12, 1] <- NA
 loading[13:24, 2] <- NA
 loading[25:36, 3] <- NA
 loading[37:48, 4] <- NA
-LY <- simMatrix(loading, "u49")
+LY <- bind(loading, "u49")
 
 faccor <- matrix(NA, 4, 4)
 diag(faccor) <- 1
-RPS <- symMatrix(faccor, "u16")
+RPS <- binds(faccor, "u16")
 
-RTE <- symMatrix(diag(48))
+RTE <- binds(diag(48))
 
 CFA.model <- simSetCFA(LY=LY, RPS=RPS, RTE=RTE)
 
 loading.mis <- matrix(NA, 48, 4)
 loading.mis[is.na(loading)] <- 0
-LY.mis <- simMatrix(loading.mis, "u2")
+LY.mis <- bind(loading.mis, "u2")
 CFA.model.mis <- simMisspecCFA(LY=LY.mis)
 
 setx <- c(1:3, 13:15, 25:27, 37:39)
@@ -633,7 +630,7 @@ dat <- run(SimData)
 dat <- run(SimMissing, dat)
 out <- run(SimModel, dat, SimMissing)
 
-Output <- simResult(20, SimData, SimModel, SimMissing, multicore=TRUE)
+Output <- sim(20, SimData, SimModel, SimMissing, multicore=TRUE)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summary(Output)
@@ -658,21 +655,21 @@ loading <- matrix(0, 12, 3)
 loading[1:4, 1] <- NA
 loading[5:8, 2] <- NA
 loading[9:12, 3] <- NA
-LX <- simMatrix(loading, 0.7)
+LX <- bind(loading, 0.7)
 
 latent.cor <- matrix(NA, 3, 3)
 diag(latent.cor) <- 1
-RPH <- symMatrix(latent.cor, "u5")
+RPH <- binds(latent.cor, "u5")
 
 error.cor <- matrix(0, 12, 12)
 diag(error.cor) <- 1
-RTD <- symMatrix(error.cor)
+RTD <- binds(error.cor)
 
 CFA.Model <- simSetCFA(LX = LX, RPH = RPH, RTD = RTD) 
 
 loading.mis <- matrix(NA, 12, 3)
 loading.mis[is.na(loading)] <- 0
-LY.mis <- simMatrix(loading.mis, "u2")
+LY.mis <- bind(loading.mis, "u2")
 CFA.model.mis <- simMisspecCFA(LY=LY.mis)
 
 SimDataDist <- simDataDist(t2, t3, t4, t5, chi3, chi4, chi5, chi6, chi3, chi4, chi5, chi6, reverse=c(rep(FALSE, 8), rep(TRUE, 4)))
@@ -683,7 +680,7 @@ dat <- run(SimData)
 SimData2 <- simData(CFA.Model, 200, misspec=CFA.model.mis, indDist=SimDataDist, modelBoot=TRUE, realData=dat)
 
 
-Output <- simResult(1000, SimData2, SimModel)
+Output <- sim(1000, SimData2, SimModel)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summary(Output)
@@ -720,34 +717,34 @@ path.BE[4, 3] <- NA
 starting.BE <- matrix("", 4, 4)
 starting.BE[3, 1:2] <- "u35"
 starting.BE[4, 3] <- "u57"
-BE <- simMatrix(path.BE, starting.BE)
+BE <- bind(path.BE, starting.BE)
 
 residual.error <- diag(4)
 residual.error[1,2] <- residual.error[2,1] <- NA
-RPS <- symMatrix(residual.error, "n31")
+RPS <- binds(residual.error, "n31")
 
 loading <- matrix(0, 12, 4)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
 loading[7:9, 3] <- NA
 loading[10:12, 4] <- NA
-LY <- simMatrix(loading, "u79")
+LY <- bind(loading, "u79")
 
-RTE <- symMatrix(diag(12))
+RTE <- binds(diag(12))
 
 SEM.Model <- simSetSEM(RPS = RPS, BE = BE, LY=LY, RTE=RTE)
 
 mis.path.BE <- matrix(0, 4, 4)
 mis.path.BE[4, 1:2] <- NA
-mis.BE <- simMatrix(mis.path.BE, "u1")
+mis.BE <- bind(mis.path.BE, "u1")
 
 mis.loading <- matrix(NA, 12, 4)
 mis.loading[is.na(loading)] <- 0
-mis.LY <- simMatrix(mis.loading, "u3")
+mis.LY <- bind(mis.loading, "u3")
 
 mis.error.cor <- matrix(NA, 12, 12)
 diag(mis.error.cor) <- 0
-mis.RTE <- symMatrix(mis.error.cor, "n1")
+mis.RTE <- binds(mis.error.cor, "n1")
 
 SEM.Mis.Model <- simMisspecSEM(BE = mis.BE, LY = mis.LY, RTE = mis.RTE)
 
@@ -758,7 +755,7 @@ modelTemplate <- simModel(SEM.Model, estimator="mlr")
 
 dat <- run(dataTemplate)
 
-simOut <- simResult(100, dataTemplate, modelTemplate) #, multicore=TRUE)
+simOut <- sim(100, dataTemplate, modelTemplate) #, multicore=TRUE)
 getCutoff(simOut, 0.05)
 plotCutoff(simOut, 0.05)
 summaryParam(simOut)
@@ -780,19 +777,19 @@ loadingVal <- matrix(0, 5, 3)
 loadingVal[1:3, 1] <- "u79"
 loadingVal[4, 2] <- 1
 loadingVal[5, 3] <- 1
-LY <- simMatrix(loading, loadingVal)
+LY <- bind(loading, loadingVal)
 
 facCor <- diag(3)
 facCor[2, 1] <- NA
 facCor[1, 2] <- NA
-RPS <- symMatrix(facCor, "u5")
+RPS <- binds(facCor, "u5")
 
 path <- matrix(0, 3, 3)
 path[3, 1] <- NA
 path[3, 2] <- NA
-BE <- simMatrix(path, "u5")
+BE <- bind(path, "u5")
 
-RTE <- symMatrix(diag(5))
+RTE <- binds(diag(5))
 
 VY <- simVector(c(NA, NA, NA, 0, 0), 1)
 
@@ -801,7 +798,7 @@ SEM.Model <- simSetSEM(LY=LY, RPS=RPS, BE=BE, RTE=RTE, VY=VY)
 errorCorMis <- diag(5)
 errorCorMis[1:3, 1:3] <- NA
 errorCorMis <- diag(5)
-RTE.mis <- symMatrix(errorCorMis, n01)
+RTE.mis <- binds(errorCorMis, n01)
 
 SEM.Model.Mis <- simMisspecSEM(RTE=RTE.mis)
 
@@ -809,7 +806,7 @@ facDist <- simDataDist(n01, c5, n01)
 
 SimData <- simData(SEM.Model, 200, misspec=SEM.Model.Mis, sequential=TRUE, facDist=facDist)
 SimModel <- simModel(SEM.Model, estimator="mlm")
-Output <- simResult(100, SimData, SimModel)
+Output <- sim(100, SimData, SimModel)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
@@ -828,18 +825,18 @@ loading[4, 2] <- 1
 loading[5, 3] <- 1
 loadingVal <- matrix(0, 5, 3)
 loadingVal[1:3, 1] <- "u79"
-LY <- simMatrix(loading, loadingVal)
+LY <- bind(loading, loadingVal)
 
 facCor <- diag(3)
 facCor[2, 1] <- NA
 facCor[1, 2] <- NA
-RPS <- symMatrix(facCor, "u5")
+RPS <- binds(facCor, "u5")
 
 
 path <- matrix(0, 3, 3)
 path[3, 1] <- NA
 path[3, 2] <- NA
-BE <- simMatrix(path, "u5")
+BE <- bind(path, "u5")
 
 VY <- simVector(c(NA, NA, NA, 0, 0), 1)
 
@@ -849,14 +846,14 @@ ME <- simVector(c(0, NA, NA), c(0, 0, 0))
 
 TY <- simVector(c(NA, NA, NA, 0, 0), rep(0, 5))
 
-RTE <- symMatrix(diag(5))
+RTE <- binds(diag(5))
 
 SEM.Model <- simSetSEM(LY=LY, RPS=RPS, BE=BE, RTE=RTE, VY=VY, VE=VE, ME=ME, TY=TY)
 
 errorCorMis <- diag(5)
 errorCorMis[1:3, 1:3] <- NA
 errorCorMis <- diag(5)
-RTE.mis <- symMatrix(errorCorMis, n01)
+RTE.mis <- binds(errorCorMis, n01)
 
 SEM.Model.Mis <- simMisspecSEM(RTE=RTE.mis)
 
@@ -867,7 +864,7 @@ SimData <- simData(SEM.Model, 200, misspec=SEM.Model.Mis, sequential=TRUE, facDi
  
 SimModel <- simModel(SEM.Model, estimator="mlm")
 
-Output <- simResult(100, SimData, SimModel)
+Output <- sim(100, SimData, SimModel)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
@@ -884,16 +881,16 @@ u2 <- simUnif(-0.2, 0.2)
 loading <- matrix(0, 7, 2)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
-LX <- simMatrix(loading, "u57")
+LX <- bind(loading, "u57")
 
 latent.cor <- matrix(NA, 2, 2)
 diag(latent.cor) <- 1
-RPH <- symMatrix(latent.cor, "u35")
+RPH <- binds(latent.cor, "u35")
 
 error.cor <- diag(7)
 error.cor[1:6, 7] <- NA
 error.cor[7, 1:6] <- NA
-RTD <- symMatrix(error.cor, "u4")
+RTD <- binds(error.cor, "u4")
 
 VX <- simVector(rep(NA, 7), 1)
 
@@ -902,7 +899,7 @@ CFA.Model.Aux <- simSetCFA(LX = LX, RPH = RPH, RTD = RTD, VX = VX)
 mis.loading <- matrix(0, 7, 2)
 mis.loading[1:3, 2] <- NA
 mis.loading[4:6, 1] <- NA
-mis.LY <- simMatrix(mis.loading, "u2")
+mis.LY <- bind(mis.loading, "u2")
 
 CFA.Mis.Model <- simMisspecCFA(LY = mis.LY)#, RTD = mis.RTD)
 
@@ -921,7 +918,7 @@ SimModel <- simModel(CFA.Model)
 
 out <- run(SimModel, data, simMissing=SimMissing)
 
-Output <- simResult(100, SimData, SimModel, SimMissing)
+Output <- sim(100, SimData, SimModel, SimMissing)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
@@ -934,7 +931,7 @@ data <- run(SimMissing, data)
 
 out <- run(SimModel, data, simMissing=SimMissing)
 
-Output <- simResult(100, SimData, SimModel, SimMissing)
+Output <- sim(100, SimData, SimModel, SimMissing)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
@@ -957,7 +954,7 @@ out <- run(SimModel, HolzingerSwineford1939)
 u2 <- simUnif(-0.2, 0.2)
 loading.mis <- matrix(NA, 9, 3)
 loading.mis[is.na(loading)] <- 0
-LY.mis <- simMatrix(loading.mis, "u2")
+LY.mis <- bind(loading.mis, "u2")
 misspec <- simMisspecCFA(LY=LY.mis)
 output2 <- runFit(SimModel, HolzingerSwineford1939, 1000, misspec=misspec)
 pValue(out, output2)
@@ -992,7 +989,7 @@ out <- run(model, usedData, miss)
 u2 <- simUnif(-0.2, 0.2)
 loading.mis <- matrix(NA, 11, 3)
 loading.mis[is.na(loading)] <- 0
-LY.mis <- simMatrix(loading.mis, "u2")
+LY.mis <- bind(loading.mis, "u2")
 misspec <- simMisspecSEM(LY=LY.mis)
 output <- runFit(model, usedData, 200, misspec=misspec, missModel=miss)
 pValue(out, output)
@@ -1013,15 +1010,15 @@ loadingVal[1:3, 1] <- "u57"
 loadingVal[4:6, 2] <- "u57"
 loadingVal[1:6, 3] <- "u35"
 loadingVal[7, 3] <- 1
-LY <- simMatrix(loading, loadingVal)
+LY <- bind(loading, loadingVal)
 
-RPS <- symMatrix(diag(3))
+RPS <- binds(diag(3))
 
 path <- matrix(0, 3, 3)
 path[2, 1] <- NA
-BE <- simMatrix(path, "u35")
+BE <- bind(path, "u35")
 
-RTE <- symMatrix(diag(7))
+RTE <- binds(diag(7))
 
 VY <- simVector(c(rep(NA, 6), 0), rep(1, 7))
 
@@ -1031,7 +1028,7 @@ loading.mis <- matrix(NA, 7, 3)
 loading.mis[is.na(loading)] <- 0
 loading.mis[,3] <- 0
 loading.mis[7,] <- 0
-LY.mis <- simMatrix(loading.mis, "u2")
+LY.mis <- bind(loading.mis, "u2")
 misspec <- simMisspecSEM(LY=LY.mis)
 
 SimData <- simData(Cov.Model, 200, misspec=misspec)
@@ -1039,7 +1036,7 @@ SimData <- simData(Cov.Model, 200, misspec=misspec)
 # First analysis model: Model without covariate
 No.Cov.Model <- extract(Cov.Model, y=1:6, e=1:2)
 model1 <- simModel(No.Cov.Model, indLab=paste("y", 1:6, sep=""))
-Output1 <- simResult(100, SimData, model1)
+Output1 <- sim(100, SimData, model1)
 param <- getPopulation(Output1)
 param <- extract(param, y=1:6, e=1:2)
 Output1 <- setPopulation(Output1, param) 
@@ -1047,13 +1044,13 @@ summary(Output1)
 
 # Second analysis model: Model accounting for covariate in the indicator level
 model2 <- simModel(Cov.Model)
-Output2 <- simResult(100, SimData, model2)
+Output2 <- sim(100, SimData, model2)
 summary(Output2)
 
 # Third analysis model: Model accounting for covariate with orthogonalization
 ortho <- simFunction(residualCovariate, targetVar=1:6, covVar=7)
 model3 <- model1
-Output3 <- simResult(100, SimData, model3, objFunction=ortho)
+Output3 <- sim(100, SimData, model3, objFunction=ortho)
 param <- getPopulation(Output3)
 param <- extract(param, y=1:6, e=1:2)
 Output3 <- setPopulation(Output3, param) 
@@ -1073,22 +1070,22 @@ errorCov[7, 7] <- 0
 facCov <- diag(3)
 Fac.Cov.Model <- simParamSEM(LY=loading, BE=path, TE=errorCov, PS=facCov)
 model4 <- simModel(Fac.Cov.Model)
-Output4 <- simResult(100, SimData, model4)
+Output4 <- sim(100, SimData, model4)
 
 loadingVal <- matrix(0, 7, 3)
 loadingVal[1:3, 1] <- 0.6
 loadingVal[4:6, 2] <- 0.6
 loadingVal[7, 3] <- 1
-LY <- simMatrix(loading, loadingVal)
+LY <- bind(loading, loadingVal)
 pathVal <- matrix(0, 3, 3)
 pathVal[2, 1] <- 0.4
 pathVal[1, 3] <- 0.4
 pathVal[2, 3] <- 0.4
-BE <- simMatrix(path, pathVal)
-PS <- symMatrix(facCov)
+BE <- bind(path, pathVal)
+PS <- binds(facCov)
 errorCovVal <- diag(0.64, 7)
 errorCovVal[7, 7] <- 0
-TE <- symMatrix(errorCov, errorCovVal)
+TE <- binds(errorCov, errorCovVal)
 Fac.Cov.Model.Full <- simSetSEM(LY=LY, PS=PS, BE=BE, TE=TE)
 Output4 <- setPopulation(Output4, Fac.Cov.Model.Full) 
 summary(Output4)
@@ -1112,12 +1109,12 @@ pathVal[5, 2] <- pathVal[8, 5] <- "u57"
 pathVal[6, 3] <- pathVal[9, 6] <- "u57"
 pathVal[5, 1] <- pathVal[8, 4] <- "u35"
 pathVal[6, 2] <- pathVal[9, 5] <- "u35"
-BE <- simMatrix(path, pathVal)
+BE <- bind(path, pathVal)
 facCor <- diag(9)
 facCor[1, 2] <- facCor[2, 1] <- NA
 facCor[1, 3] <- facCor[3, 1] <- NA
 facCor[2, 3] <- facCor[3, 2] <- NA
-RPS <- symMatrix(facCor, "u35")
+RPS <- binds(facCor, "u35")
 loading <- matrix(0, 27, 9)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
@@ -1128,7 +1125,7 @@ loading[16:18, 6] <- NA
 loading[19:21, 7] <- NA
 loading[22:24, 8] <- NA
 loading[25:27, 9] <- NA
-LY <- simMatrix(loading, "u57")
+LY <- bind(loading, "u57")
 errorCor <- diag(27)
 errorCor[1, 10] <- errorCor[10, 19] <- NA
 errorCor[2, 11] <- errorCor[11, 20] <- NA
@@ -1171,7 +1168,7 @@ errorCorVal[8, 26] <- 0.04
 errorCorVal[9, 27] <- 0.04
 errorCorVal <- errorCorVal + t(errorCorVal)
 diag(errorCorVal) <- 1
-TE <- symMatrix(errorCor, errorCorVal)
+TE <- binds(errorCor, errorCorVal)
 longMed <- simSetSEM(BE=BE, RPS=RPS, LY=LY, RTE=TE)
 
 c1 <- matrix(NA, 2, 1)
@@ -1270,7 +1267,7 @@ con <- simEqualCon(c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, 
 
 datModel <- simData(longMed, 200, equalCon=con)
 SimModel <- simModel(longMed, equalCon=con)
-output <- simResult(1000, datModel, SimModel)
+output <- sim(1000, datModel, SimModel)
 
 LY2 <- matrix(0, 9, 3)
 LY2[1:3, 1] <- NA
@@ -1281,12 +1278,12 @@ BE2[2,1] <- NA
 BE2[3,2] <- NA
 crossMed <- simParamSEM(LY=LY2, BE=BE2)
 SimModel2 <- simModel(crossMed, indLab=19:27)
-output2 <- simResult(100, datModel, SimModel2)
+output2 <- sim(100, datModel, SimModel2)
 
 n05 <- simNorm(0, 0.05)
 pathMis <- matrix(0, 9, 9)
 pathMis[6, 1] <- pathMis[9, 4] <- NA
-BEMis <- simMatrix(pathMis, "n05")
+BEMis <- bind(pathMis, "n05")
 longMedMis <- simMisspecSEM(BE=BEMis, misBeforeFill=FALSE, misBeforeCon=FALSE)
 datModel <- simData(longMed, 200, misspec=longMedMis, equalCon=con)
 
@@ -1296,21 +1293,21 @@ library(simsem)
 loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
-LX <- simMatrix(loading, 0.7)
+LX <- bind(loading, 0.7)
 
 latent.cor <- matrix(NA, 2, 2)
 diag(latent.cor) <- 1
-RPH <- symMatrix(latent.cor, 0.5)
+RPH <- binds(latent.cor, 0.5)
 
 error.cor <- matrix(0, 6, 6)
 diag(error.cor) <- 1
-RTD <- symMatrix(error.cor)
+RTD <- binds(error.cor)
 
 CFA.Model <- simSetCFA(LX = LX, RPH = RPH, RTD = RTD)
 
 SimData <- simData(CFA.Model, 500)
 SimModel <- simModel(CFA.Model)
-Output <- simResult(NULL, SimData, SimModel, n=50:1000)
+Output <- sim(NULL, SimData, SimModel, n=50:1000)
 summary(Output)
 plotCutoff(Output, 0.05)
 getCutoff(Output, 0.05, nVal = 200)	
@@ -1321,7 +1318,7 @@ findPower(Cpow, "N", 0.80)
 plotPower(Output, powerParam=c("LY1_1", "PS2_1"))
 
 
-#Output <- simResult(1000, SimData, SimModel, n=simUnif(50, 1000))
+#Output <- sim(1000, SimData, SimModel, n=simUnif(50, 1000))
 
 ############################## Example 18 ###########################
 
@@ -1331,7 +1328,7 @@ loading <- matrix(0, 5, 3)
 loading[1,1] <- 1
 loading[2:5,2] <- 1
 loading[2:5,3] <- 0:3
-LY <- simMatrix(loading)
+LY <- bind(loading)
 
 facMean <- rep(NA, 3)
 facMeanVal <- c(0.5, 5, 2)
@@ -1344,11 +1341,11 @@ VPS <- simVector(facVar, facVarVal)
 facCor <- diag(3)
 facCor[2,3] <- NA
 facCor[3,2] <- NA
-RPS <- symMatrix(facCor, 0.5)
+RPS <- binds(facCor, 0.5)
 
 VTE <- simVector(c(0, rep(NA, 4)), 1.2)
 
-RTE <- symMatrix(diag(5))
+RTE <- binds(diag(5))
 
 TY <- simVector(rep(0, 5))
 
@@ -1358,7 +1355,7 @@ path[3,1] <- NA
 pathVal <- matrix(0, 3, 3)
 pathVal[2,1] <- 0.5
 pathVal[3,1] <- 0.1
-BE <- simMatrix(path, pathVal)
+BE <- bind(path, pathVal)
 
 LCA.Model <- simSetSEM(LY=LY, RPS=RPS, VPS=VPS, AL=AL, VTE=VTE, RTE=RTE, TY=TY, BE=BE)
 
@@ -1366,7 +1363,7 @@ u1 <- simUnif(-0.1, 0.1)
 
 loading.trivial <- matrix(0, 5, 3)
 loading.trivial[3:4, 3] <- NA
-loading.mis <- simMatrix(loading.trivial, "u1")
+loading.mis <- bind(loading.trivial, "u1")
 
 LCA.Mis <- simMisspecSEM(LY = loading.mis)
 
@@ -1377,7 +1374,7 @@ facDist <- simDataDist(group, n01, n01, keepScale=c(FALSE, TRUE, TRUE))
 datTemplate <- simData(LCA.Model, 300, LCA.Mis, sequential=TRUE, facDist=facDist)
 model <- simModel(LCA.Model)
 
-Output <- simResult(NULL, datTemplate, model, n=seq(50, 500, 5), pmMCAR=seq(0, 0.4, 0.1))
+Output <- sim(NULL, datTemplate, model, n=seq(50, 500, 5), pmMCAR=seq(0, 0.4, 0.1))
 
 plotCutoff(Output, 0.05)
 getCutoff(Output, 0.05, nVal = 200, pmMCARval=0)
@@ -1392,7 +1389,7 @@ plotPower(Output, powerParam=c("BE2_1", "BE3_1"))
 
 
 
-#Output <- simResult(1000, datTemplate, model, n=simUnif(50, 500), pmMCAR=simUnif(0, 0.5))
+#Output <- sim(1000, datTemplate, model, n=simUnif(50, 500), pmMCAR=simUnif(0, 0.5))
 
 ###################################### Example 19 #################################
 
@@ -1402,21 +1399,21 @@ u09 <- simUnif(0, 0.9)
 loading <- matrix(0, 10, 2)
 loading[1:6, 1] <- NA
 loading[7:10, 2] <- NA
-LY <- simMatrix(loading, "u39")
+LY <- bind(loading, "u39")
 
-RPS <- symMatrix(diag(2))
+RPS <- binds(diag(2))
 
-RTE <- symMatrix(diag(10))
+RTE <- binds(diag(10))
 
 path <- matrix(0, 2, 2)
 path[2, 1] <- NA
-BE <- simMatrix(path, "u09")
+BE <- bind(path, "u09")
 
 latentReg <- simSetSEM(LY = LY, RPS = RPS, RTE = RTE, BE = BE)
 
 SimData <- simData(latentReg, 500)
 SimModel <- simModel(latentReg)
-Output <- simResult(NULL, SimData, SimModel, n=25:500)
+Output <- sim(NULL, SimData, SimModel, n=25:500)
 summary(Output)
 plotCutoff(Output, 0.05)
 getCutoff(Output, 0.05, n = 200)	
@@ -1441,22 +1438,22 @@ n1 <- simNorm(0, 0.1)
 loading.null <- matrix(0, 8, 2)
 loading.null[1:5, 1] <- NA
 loading.null[6:8, 2] <- NA
-LX.NULL <- simMatrix(loading.null, 0.7)
+LX.NULL <- bind(loading.null, 0.7)
 latent.cor.null <- matrix(NA, 2, 2)
 diag(latent.cor.null) <- 1
-RPH <- symMatrix(latent.cor.null, 0.5)
-RTD <- symMatrix(diag(8))
+RPH <- binds(latent.cor.null, 0.5)
+RTD <- binds(diag(8))
 CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH, RTE = RTD)
 
 error.cor.mis <- matrix(NA, 8, 8)
 diag(error.cor.mis) <- 1
-RTD.Mis <- symMatrix(error.cor.mis, "n1")
+RTD.Mis <- binds(error.cor.mis, "n1")
 CFA.Model.Mis <- simMisspecCFA(RTE = RTD.Mis)
 
 loading.alt <- matrix(0, 8, 2)
 loading.alt[1:4, 1] <- NA
 loading.alt[5:8, 2] <- NA
-LX.ALT <- simMatrix(loading.alt, 0.7)
+LX.ALT <- bind(loading.alt, 0.7)
 CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH, RTE = RTD)
 
 SimData.NULL <- simData(CFA.Model.NULL, 500, misspec=CFA.Model.Mis)
@@ -1464,8 +1461,8 @@ SimData.ALT <- simData(CFA.Model.ALT, 500, misspec=CFA.Model.Mis)
 
 SimModel <- simModel(CFA.Model.NULL)
 
-Output.NULL <- simResult(NULL, SimData.NULL, SimModel, n=25:500)
-Output.ALT <- simResult(NULL, SimData.ALT, SimModel, n=25:500)
+Output.NULL <- sim(NULL, SimData.NULL, SimModel, n=25:500)
+Output.ALT <- sim(NULL, SimData.ALT, SimModel, n=25:500)
 
 cutoff <- getCutoff(Output.NULL, alpha=0.05, nVal=250)
 plotCutoff(Output.NULL, alpha=0.05)
@@ -1491,10 +1488,10 @@ path.null[2, 1] <- NA
 path.null[3, 2] <- NA
 path.null[4, 3] <- NA
 path.null[5, 4] <- NA
-BE.null <- simMatrix(path.null, 0.4)
+BE.null <- bind(path.null, 0.4)
 
 residual <- diag(5)
-RPS <- symMatrix(residual)
+RPS <- binds(residual)
 
 path.model.null <- simSetPath(RPS = RPS, BE = BE.null)
 
@@ -1502,7 +1499,7 @@ path.null.mis <- matrix(0, 5, 5)
 path.null.mis[3:5, 1] <- NA
 path.null.mis[4:5, 2] <- NA
 path.null.mis[5, 3] <- NA
-BE.null.mis <- simMatrix(path.null.mis, "n05")
+BE.null.mis <- bind(path.null.mis, "n05")
 
 path.model.null.mis <- simMisspecPath(BE = BE.null.mis)
 
@@ -1510,13 +1507,13 @@ path.alt <- matrix(0, 5, 5)
 path.alt[2:3, 1] <- NA
 path.alt[4, 2:3] <- NA
 path.alt[5, 4] <- NA
-BE.alt <- simMatrix(path.alt, 0.4)
+BE.alt <- bind(path.alt, 0.4)
 path.model.alt <- simSetPath(RPS = RPS, BE = BE.alt)
 
 path.alt.mis <- matrix(0, 5, 5)
 path.alt.mis[4:5, 1] <- NA
 path.alt.mis[5, 2:3] <- NA
-BE.alt.mis <- simMatrix(path.alt.mis, "n05")
+BE.alt.mis <- bind(path.alt.mis, "n05")
 
 path.model.alt.mis <- simMisspecPath(BE = BE.alt.mis)
 
@@ -1525,8 +1522,8 @@ SimData.ALT <- simData(path.model.alt, 500, misspec=path.model.alt.mis)
 
 SimModel <- simModel(path.model.null)
 
-Output.NULL <- simResult(NULL, SimData.NULL, SimModel, n=25:500, pmMCAR=seq(0, 0.3, 0.1))
-Output.ALT <- simResult(NULL, SimData.ALT, SimModel, n=25:500, pmMCAR=seq(0, 0.3, 0.1))
+Output.NULL <- sim(NULL, SimData.NULL, SimModel, n=25:500, pmMCAR=seq(0, 0.3, 0.1))
+Output.ALT <- sim(NULL, SimData.ALT, SimModel, n=25:500, pmMCAR=seq(0, 0.3, 0.1))
 
 cutoff <- getCutoff(Output.NULL, alpha=0.05, nVal=250, pmMCARval = 0.2)
 plotCutoff(Output.NULL, alpha=0.05)
@@ -1557,7 +1554,7 @@ pValue(out, simOut1)
 loadingMis2 <- matrix(0, 9, 3)
 loadingMis2[1,2] <- NA
 loadingMis2[4,3] <- NA
-LYMis2 <- simMatrix(loadingMis2, 0.3)
+LYMis2 <- bind(loadingMis2, 0.3)
 misspec2 <- simMisspecCFA(LY=LYMis2, misBeforeFill=FALSE)
 simOut2 <- runFit(model=analyzeModel, data=HolzingerSwineford1939, nRep=1000, misspec=misspec2) 
 getCutoff(simOut2, alpha=0.05)
@@ -1566,7 +1563,7 @@ pValue(out, simOut2)
 loadingMis3 <- matrix(0, 9, 3)
 loadingMis3[6,1] <- NA
 loadingMis3[9,2] <- NA
-LYMis3 <- simMatrix(loadingMis3, 0.3)
+LYMis3 <- bind(loadingMis3, 0.3)
 misspec3 <- simMisspecCFA(LY=LYMis3, misBeforeFill=FALSE)
 simOut3 <- runFit(model=analyzeModel, data=HolzingerSwineford1939, nRep=1000, misspec=misspec3) 
 getCutoff(simOut3, alpha=0.05)
@@ -1577,7 +1574,7 @@ loadingMis4 <- matrix(0, 9, 3)
 loadingMis4[4:9, 1] <- NA
 loadingMis4[c(1:3, 7:9),2] <- NA
 loadingMis4[1:6,3] <- NA
-LYMis4 <- simMatrix(loadingMis4, "u3")
+LYMis4 <- bind(loadingMis4, "u3")
 misspec4 <- simMisspecCFA(LY=LYMis4, misBeforeFill=FALSE)
 simOut4 <- runFit(model=analyzeModel, data=HolzingerSwineford1939, nRep=1000, misspec=misspec4) 
 getCutoff(simOut4, alpha=0.05)
@@ -1588,7 +1585,7 @@ loadingMis5 <- matrix(0, 9, 3)
 loadingMis5[4:9, 1] <- NA
 loadingMis5[c(1:3, 7:9),2] <- NA
 loadingMis5[1:6,3] <- NA
-LYMis5 <- simMatrix(loadingMis5, "n3")
+LYMis5 <- bind(loadingMis5, "n3")
 misspec5 <- simMisspecCFA(LY=LYMis5, misBeforeFill=FALSE)
 simOut5 <- runFit(model=analyzeModel, data=HolzingerSwineford1939, nRep=1000, misspec=misspec5) 
 getCutoff(simOut5, alpha=0.05)
@@ -1599,7 +1596,7 @@ loadingMis6 <- matrix(0, 9, 3)
 loadingMis6[4:9, 1] <- NA
 loadingMis6[c(1:3, 7:9),2] <- NA
 loadingMis6[1:6,3] <- NA
-LYMis6 <- simMatrix(loadingMis6, "u3")
+LYMis6 <- bind(loadingMis6, "u3")
 misspec6 <- simMisspecCFA(LY=LYMis6, optMisfit="max", numIter=100, misBeforeFill=FALSE)
 simOut6 <- runFit(model=analyzeModel, data=HolzingerSwineford1939, nRep=1000, misspec=misspec6) 
 getCutoff(simOut6, alpha=0.05)
@@ -1610,7 +1607,7 @@ loadingMis7 <- matrix(0, 9, 3)
 loadingMis7[4:9, 1] <- NA
 loadingMis7[c(1:3, 7:9),2] <- NA
 loadingMis7[1:6,3] <- NA
-LYMis7 <- simMatrix(loadingMis7, "u1")
+LYMis7 <- bind(loadingMis7, "u1")
 misspec7 <- simMisspecCFA(LY=LYMis7, misfitBound=c(0.02, 0.05), numIter=200, misBeforeFill=FALSE)
 
 simOut7 <- runFit(model=analyzeModel, data=HolzingerSwineford1939, nRep=1000, misspec=misspec7) 
@@ -1623,7 +1620,7 @@ loadingMisAlt <- matrix(0, 9, 3)
 loadingMisAlt[4, 1] <- NA
 loadingMisAlt[7, 2] <- NA
 loadingMisAlt[1, 3] <- NA
-LYMisAlt <- simMatrix(loadingMisAlt, "u69")
+LYMisAlt <- bind(loadingMisAlt, "u69")
 misspecAlt <- simMisspecCFA(LY=LYMisAlt, optMisfit="min", numIter=100, misBeforeFill=FALSE)
 simOutAlt <- runFit(model=analyzeModel, data=HolzingerSwineford1939, nRep=1000, misspec=misspecAlt) 
 getPowerFit(simOutAlt, nullObject=simOut1) 
@@ -1663,7 +1660,7 @@ loading[4, 2] <- 1
 loading[5:6, 2] <- NA
 loading[7, 3] <- 1
 loading[8:9, 3] <- NA
-LY <- simMatrix(loading, "runif(1, 0.5, 1.5)")
+LY <- bind(loading, "runif(1, 0.5, 1.5)")
 
 facCor <- matrix(NA, 3, 3)
 diag(facCor) <- 1
@@ -1671,7 +1668,7 @@ facCorVal <- diag(3)
 facCorVal[1, 2] <- facCorVal[2, 1] <- 0.7
 facCorVal[2, 3] <- facCorVal[3, 2] <- 0.7
 facCorVal[1, 3] <- facCorVal[3, 1] <- 0.49
-RPS <- symMatrix(facCor, facCorVal)
+RPS <- binds(facCor, facCorVal)
 
 VE <- simVector(rep(NA, 3), c(1, 1.2, 1.4))
 
@@ -1689,7 +1686,7 @@ errorVal[3, 6] <- errorVal[6, 9] <- errorVal[6, 3] <- errorVal[9, 6] <- 0.2
 errorVal[1, 7] <- errorVal[7, 1] <- 0.04
 errorVal[2, 8] <- errorVal[8, 2] <- 0.04
 errorVal[3, 9] <- errorVal[9, 3] <- 0.04
-RTE <- symMatrix(error, errorVal)
+RTE <- binds(error, errorVal)
 
 VTE <- simVector(rep(NA, 9), 0.4)
 
@@ -1712,7 +1709,7 @@ loadingMis <- matrix(0, 9, 3)
 loadingMis[2:3, 1] <- NA
 loadingMis[5:6, 2] <- NA
 loadingMis[8:9, 3] <- NA
-LYMis <- simMatrix(loadingMis, "runif(1, -0.1, 0.1)") 
+LYMis <- bind(loadingMis, "runif(1, -0.1, 0.1)") 
 
 longCFAMis <- simMisspecCFA(LY=LYMis)
 
@@ -1722,15 +1719,15 @@ datParent <- simData(longCFA, 200, misspec=longCFAMis)
 modNested <- simModel(longCFA, equalCon=equalCon)
 modParent <- simModel(longCFA)
 
-outDatNestedModNested <- simResult(1000, datNested, modNested)
-outDatNestedModParent <- simResult(1000, datNested, modParent)
+outDatNestedModNested <- sim(1000, datNested, modNested)
+outDatNestedModParent <- sim(1000, datNested, modParent)
 
 anova(outDatNestedModNested, outDatNestedModParent)
 cutoff <- getCutoffNested(outDatNestedModNested, outDatNestedModParent)
 plotCutoffNested(outDatNestedModNested, outDatNestedModParent, alpha=0.05)
 
-outDatParentModNested <- simResult(1000, datParent, modNested)
-outDatParentModParent <- simResult(1000, datParent, modParent)
+outDatParentModNested <- sim(1000, datParent, modNested)
+outDatParentModParent <- sim(1000, datParent, modParent)
 
 anova(outDatParentModNested, outDatParentModParent)
 
@@ -1759,7 +1756,7 @@ loading[4, 2] <- 1
 loading[5:6, 2] <- NA
 loading[7, 3] <- 1
 loading[8:9, 3] <- NA
-LY <- simMatrix(loading, "runif(1, 0.5, 1.5)")
+LY <- bind(loading, "runif(1, 0.5, 1.5)")
 
 facCor <- matrix(NA, 3, 3)
 diag(facCor) <- 1
@@ -1767,7 +1764,7 @@ facCorVal <- diag(3)
 facCorVal[1, 2] <- facCorVal[2, 1] <- 0.7
 facCorVal[2, 3] <- facCorVal[3, 2] <- 0.7
 facCorVal[1, 3] <- facCorVal[3, 1] <- 0.49
-RPS <- symMatrix(facCor, facCorVal)
+RPS <- binds(facCor, facCorVal)
 
 VE <- simVector(rep(NA, 3), c(1, 1.2, 1.4))
 
@@ -1785,7 +1782,7 @@ errorVal[3, 6] <- errorVal[6, 9] <- errorVal[6, 3] <- errorVal[9, 6] <- 0.2
 errorVal[1, 7] <- errorVal[7, 1] <- 0.04
 errorVal[2, 8] <- errorVal[8, 2] <- 0.04
 errorVal[3, 9] <- errorVal[9, 3] <- 0.04
-RTE <- symMatrix(error, errorVal)
+RTE <- binds(error, errorVal)
 
 VTE <- simVector(rep(NA, 9), 0.4)
 
@@ -1818,7 +1815,7 @@ loadingMis <- matrix(0, 9, 3)
 loadingMis[2:3, 1] <- NA
 loadingMis[5:6, 2] <- NA
 loadingMis[8:9, 3] <- NA
-LYMis <- simMatrix(loadingMis, "runif(1, -0.1, 0.1)") 
+LYMis <- bind(loadingMis, "runif(1, -0.1, 0.1)") 
 
 TYMis <- simVector(c(0, NA, NA, 0, NA, NA, 0, NA, NA), "runif(1, -0.1, 0.1)")
 
@@ -1830,16 +1827,16 @@ datParent <- simData(longCFA, 200, misspec=longCFAMis, equalCon=equalCon1)
 modNested <- simModel(longCFA, equalCon=equalCon2)
 modParent <- simModel(longCFA, equalCon=equalCon1)
 
-outDatNestedModNested <- simResult(NULL, datNested, modNested, n=50:500)
-outDatNestedModParent <- simResult(NULL, datNested, modParent, n=50:500)
+outDatNestedModNested <- sim(NULL, datNested, modNested, n=50:500)
+outDatNestedModParent <- sim(NULL, datNested, modParent, n=50:500)
 
 anova(outDatNestedModNested, outDatNestedModParent)
 
 cutoff <- getCutoffNested(outDatNestedModNested, outDatNestedModParent, nVal=250)
 plotCutoffNested(outDatNestedModNested, outDatNestedModParent, alpha=0.05)
 
-outDatParentModNested <- simResult(NULL, datParent, modNested, n=50:500)
-outDatParentModParent <- simResult(NULL, datParent, modParent, n=50:500)
+outDatParentModNested <- sim(NULL, datParent, modNested, n=50:500)
+outDatParentModParent <- sim(NULL, datParent, modParent, n=50:500)
 
 anova(outDatParentModNested, outDatParentModParent)
 
@@ -1866,10 +1863,10 @@ path[2, 1] <- NA
 path[3, 2] <- NA
 path[4, 3] <- NA
 path[5, 4] <- NA
-BE <- simMatrix(path, "runif(1, 0.3, 0.7)")
+BE <- bind(path, "runif(1, 0.3, 0.7)")
 
 residual <- diag(5)
-RPS <- symMatrix(residual)
+RPS <- binds(residual)
 
 pathModel <- simSetPath(RPS = RPS, BE = BE)
 
@@ -1886,7 +1883,7 @@ pathMis[2:5, 1] <- NA
 pathMis[3:5, 2] <- NA
 pathMis[4:5, 3] <- NA
 pathMis[5, 4] <- NA
-BEMis <- simMatrix(pathMis, "rnorm(1, 0, 0.05)")
+BEMis <- bind(pathMis, "rnorm(1, 0, 0.05)")
 
 pathModelMis <- simMisspecPath(BE = BEMis)
 
@@ -1896,16 +1893,16 @@ datParent <- simData(pathModel, 200, misspec=pathModelMis)
 modNested <- simModel(pathModel, equalCon=equalCon)
 modParent <- simModel(pathModel)
 
-outDatNestedModNested <- simResult(NULL, datNested, modNested, n=50:500, pmMCAR=seq(0, 0.3, 0.1))
-outDatNestedModParent <- simResult(NULL, datNested, modParent, n=50:500, pmMCAR=seq(0, 0.3, 0.1))
+outDatNestedModNested <- sim(NULL, datNested, modNested, n=50:500, pmMCAR=seq(0, 0.3, 0.1))
+outDatNestedModParent <- sim(NULL, datNested, modParent, n=50:500, pmMCAR=seq(0, 0.3, 0.1))
 
 anova(outDatNestedModNested, outDatNestedModParent)
 
 cutoff <- getCutoffNested(outDatNestedModNested, outDatNestedModParent, nVal=250, pmMCARval=0.2)
 plotCutoffNested(outDatNestedModNested, outDatNestedModParent, alpha=0.05)
 
-outDatParentModNested <- simResult(NULL, datParent, modNested, n=50:500, pmMCAR=seq(0, 0.3, 0.1))
-outDatParentModParent <- simResult(NULL, datParent, modParent, n=50:500, pmMCAR=seq(0, 0.3, 0.1))
+outDatParentModNested <- sim(NULL, datParent, modNested, n=50:500, pmMCAR=seq(0, 0.3, 0.1))
+outDatParentModParent <- sim(NULL, datParent, modParent, n=50:500, pmMCAR=seq(0, 0.3, 0.1))
 
 anova(outDatParentModNested, outDatParentModParent)
 
@@ -1952,7 +1949,7 @@ outParent <- run(parent, Demo.growth)
 
 loadingMis <- matrix(0, 4, 2)
 loadingMis[2:3, 2] <- NA
-LYmis <- simMatrix(loadingMis, "runif(1, -0.1, 0.1)")
+LYmis <- bind(loadingMis, "runif(1, -0.1, 0.1)")
 
 
 linearMis <- simMisspecCFA(LY=LYmis)
@@ -1978,21 +1975,21 @@ loading[1:4, 1] <- 1
 loading[1:4, 2] <- 0:3
 loading[5:8, 3] <- 1
 loading[5:8, 4] <- 0:3
-LY <- simMatrix(loading)
+LY <- bind(loading)
 
-RTE <- symMatrix(diag(8))
-VTE <- simVector(rep(NA, 8), 0.5)
-TY <- simVector(rep(0, 8))
+RTE <- binds(diag(8))
+VTE <- bind(rep(NA, 8), 0.5)
+TY <- bind(rep(0, 8))
 
-AL <- simVector(rep(NA, 4), c(5, 2, 5, 2))
-VPS <- simVector(rep(NA, 4), c(1, 0.25, 1, 0.25))
+AL <- bind(rep(NA, 4), c(5, 2, 5, 2))
+VPS <- bind(rep(NA, 4), c(1, 0.25, 1, 0.25))
 facCorA <- diag(4)
 facCorA[1, 3] <- facCorA[3, 1] <- NA
-RPSA <- symMatrix(facCorA, 0.3)
+RPSA <- binds(facCorA, 0.3)
 
 facCorB <- diag(4)
 facCorB[2, 4] <- facCorB[4, 2] <- NA
-RPSB <- symMatrix(facCorB, 0.3)
+RPSB <- binds(facCorB, 0.3)
 
 modelA <- simSetCFA(LY=LY, TY=TY, RTE=RTE, VTE=VTE, AL=AL, VPS=VPS, RPS=RPSA)
 modelB <- simSetCFA(LY=LY, TY=TY, RTE=RTE, VTE=VTE, AL=AL, VPS=VPS, RPS=RPSB)
@@ -2004,10 +2001,10 @@ analyzeA <- simModel(modelA)
 analyzeB <- simModel(modelB)
 
 
-outAA <- simResult(1000, dataA, analyzeA)
-outBA <- simResult(1000, dataB, analyzeA)
-outAB <- simResult(1000, dataA, analyzeB)
-outBB <- simResult(1000, dataB, analyzeB)
+outAA <- sim(1000, dataA, analyzeA)
+outBA <- sim(1000, dataB, analyzeA)
+outAB <- sim(1000, dataA, analyzeB)
+outBB <- sim(1000, dataB, analyzeB)
 
 # anova for nonnested model comparison
 anova(outAA, outAB)
@@ -2041,33 +2038,33 @@ loadingA[1:5, 1] <- 1
 loadingA[1:5, 2] <- c(0, NA, NA, NA, 4)
 loadingValA <- matrix(0, 5, 2)
 loadingValA[1:5, 2] <- c(0, 2, 3, 3.67, 4)
-LYA <- simMatrix(loadingA, loadingValA)
+LYA <- bind(loadingA, loadingValA)
 
 loadingB <- matrix(0, 5, 3)
 loadingB[1:5, 1] <- 1
 loadingB[1:5, 2] <- 0:4
 loadingB[1:5, 3] <- (0:4)^2
-LYB <- simMatrix(loadingB)
+LYB <- bind(loadingB)
 
-RTE <- symMatrix(diag(5))
-VTE <- simVector(rep(NA, 5), 1.2)
-TY <- simVector(rep(0, 5))
+RTE <- binds(diag(5))
+VTE <- bind(rep(NA, 5), 1.2)
+TY <- bind(rep(0, 5))
 
-ALA <- simVector(rep(NA, 2), c(5, 2))
-VPSA <- simVector(rep(NA, 2), c(1, 0.25))
+ALA <- bind(rep(NA, 2), c(5, 2))
+VPSA <- bind(rep(NA, 2), c(1, 0.25))
 facCorA <- matrix(NA, 2, 2)
 diag(facCorA) <- 1
-RPSA <- symMatrix(facCorA, -0.4)
+RPSA <- binds(facCorA, -0.4)
 
-ALB <- simVector(rep(NA, 3), c(5, 2, -0.15))
-VPSB <- simVector(rep(NA, 3), c(1, 0.25, 0.1))
+ALB <- bind(rep(NA, 3), c(5, 2, -0.15))
+VPSB <- bind(rep(NA, 3), c(1, 0.25, 0.1))
 facCorB <- matrix(NA, 3, 3)
 diag(facCorB) <- 1
 facCorValB <- diag(3)
 facCorValB[1, 2] <- facCorValB[2, 1] <- -0.4
 facCorValB[1, 3] <- facCorValB[3, 1] <- -0.4
 facCorValB[2, 3] <- facCorValB[3, 2] <- 0.5
-RPSB <- symMatrix(facCorB, facCorValB)
+RPSB <- binds(facCorB, facCorValB)
 
 modelA <- simSetCFA(LY=LYA, TY=TY, RTE=RTE, VTE=VTE, AL=ALA, VPS=VPSA, RPS=RPSA)
 modelB <- simSetCFA(LY=LYB, TY=TY, RTE=RTE, VTE=VTE, AL=ALB, VPS=VPSB, RPS=RPSB)
@@ -2079,10 +2076,10 @@ analyzeA <- simModel(modelA)
 analyzeB <- simModel(modelB)
 
 
-outAA <- simResult(NULL, dataA, analyzeA, n = 50:500)
-outBA <- simResult(NULL, dataB, analyzeA, n = 50:500)
-outAB <- simResult(NULL, dataA, analyzeB, n = 50:500)
-outBB <- simResult(NULL, dataB, analyzeB, n = 50:500)
+outAA <- sim(NULL, dataA, analyzeA, n = 50:500)
+outBA <- sim(NULL, dataB, analyzeA, n = 50:500)
+outAB <- sim(NULL, dataA, analyzeB, n = 50:500)
+outBB <- sim(NULL, dataB, analyzeB, n = 50:500)
 
 ###################################### Example 29 nonnested model comparison and power continuous N and pmMCAR ####################
 
@@ -2091,14 +2088,14 @@ outBB <- simResult(NULL, dataB, analyzeB, n = 50:500)
 path <- matrix(0, 3, 3)
 path[2, 1] <- NA
 path[3, 2] <- NA
-BE <- simMatrix(path, 0.5)
-RPS <- symMatrix(diag(3))
+BE <- bind(path, 0.5)
+RPS <- binds(diag(3))
 model1 <- simSetPath(BE=BE, RPS=RPS)
 
 path2 <- matrix(0, 3, 3)
 path2[3, 1] <- NA
 path2[2, 3] <- NA
-BE2 <- simMatrix(path2, 0.5)
+BE2 <- bind(path2, 0.5)
 model2 <- simSetPath(BE=BE2, RPS=RPS)
 
 data1 <- simData(model1, 60)
@@ -2108,10 +2105,10 @@ analyze1 <- simModel(model1)
 analyze2 <- simModel(model2)
 
 
-out11 <- simResult(1000, data1, analyze1)
-out21 <- simResult(1000, data2, analyze1)
-out12 <- simResult(1000, data1, analyze2)
-out22 <- simResult(1000, data2, analyze2)
+out11 <- sim(1000, data1, analyze1)
+out21 <- sim(1000, data2, analyze1)
+out12 <- sim(1000, data1, analyze2)
+out22 <- sim(1000, data2, analyze2)
 
 
 dat1 <- run(data1)
@@ -2166,7 +2163,7 @@ out.B <- run(model.B, PoliticalDemocracy)
 u2 <- simUnif(-0.2, 0.2)
 loading.mis <- matrix(NA, 11, 3)
 loading.mis[is.na(loading)] <- 0
-LY.mis <- simMatrix(loading.mis, "u2")
+LY.mis <- bind(loading.mis, "u2")
 misspec <- simMisspecSEM(LY=LY.mis)
 
 output.A.A <- runFit(model.A, PoliticalDemocracy, 10, misspec=misspec)
@@ -2175,7 +2172,7 @@ output.B.A <- runFit(model.B, PoliticalDemocracy, 10, misspec=misspec, analyzeMo
 output.B.B <- runFit(model.B, PoliticalDemocracy, 10, misspec=misspec)
 pValueNonNested(out.A, out.B, output.A.A, output.A.B, output.B.A, output.B.B)
 
-##################################### Add the simResultParam in the Example 4? ################################
+##################################### Add the simParam in the Example 4? ################################
 ##################################### Time slot in SimResult and SimResultParam ################################
 ##################################### Add the nonconvergence paramValue ########################################
 ###################################### Double bootstrap, Bollen-Stine boot, double bollen-stine boot, residual bootstrap
@@ -2189,28 +2186,28 @@ u79 <- simUnif(0.7, 0.9)
 
 loading.null <- matrix(0, 6, 1)
 loading.null[1:6, 1] <- NA
-LX.NULL <- simMatrix(loading.null, 0.7)
-RPH.NULL <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
+LX.NULL <- bind(loading.null, 0.7)
+RPH.NULL <- binds(diag(1))
+RTD <- binds(diag(6))
 CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
 
 error.cor.mis <- matrix(NA, 6, 6)
 diag(error.cor.mis) <- 1
-RTD.Mis <- symMatrix(error.cor.mis, "rnorm(1,0,0.1)")
+RTD.Mis <- binds(error.cor.mis, "rnorm(1,0,0.1)")
 CFA.Model.NULL.Mis <- simMisspecCFA(RTE = RTD.Mis)
 
 loading.alt <- matrix(0, 6, 2)
 loading.alt[1:3, 1] <- NA
 loading.alt[4:6, 2] <- NA
-LX.ALT <- simMatrix(loading.alt, 0.7)
+LX.ALT <- bind(loading.alt, 0.7)
 latent.cor.alt <- matrix(NA, 2, 2)
 diag(latent.cor.alt) <- 1
-RPH.ALT <- symMatrix(latent.cor.alt, 0.7)
+RPH.ALT <- binds(latent.cor.alt, 0.7)
 CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
 
 # loading.alt.mis <- matrix(NA, 6, 2)
 # loading.alt.mis[is.na(loading.alt)] <- 0
-# LX.alt.mis <- simMatrix(loading.alt.mis, "runif(1,-.2,.2)")
+# LX.alt.mis <- bind(loading.alt.mis, "runif(1,-.2,.2)")
 # CFA.Model.alt.mis <- simMisspecCFA(LY = LX.alt.mis, RTE=RTD.Mis)
 
 SimData.NULL <- simData(CFA.Model.NULL, 500)
@@ -2219,10 +2216,10 @@ SimData.ALT <- simData(CFA.Model.ALT, 500)
 SimModel.NULL <- simModel(CFA.Model.NULL)
 SimModel.ALT <- simModel(CFA.Model.ALT)
 
-Output.NULL.NULL <- simResult(1000, SimData.NULL, SimModel.NULL)
-Output.ALT.NULL <- simResult(1000, SimData.ALT, SimModel.NULL)
-Output.NULL.ALT <- simResult(1000, SimData.NULL, SimModel.ALT)
-Output.ALT.ALT <- simResult(1000, SimData.ALT, SimModel.ALT)
+Output.NULL.NULL <- sim(1000, SimData.NULL, SimModel.NULL)
+Output.ALT.NULL <- sim(1000, SimData.ALT, SimModel.NULL)
+Output.NULL.ALT <- sim(1000, SimData.NULL, SimModel.ALT)
+Output.ALT.ALT <- sim(1000, SimData.ALT, SimModel.ALT)
 
 anova(Output.NULL.NULL, Output.NULL.ALT)
 anova(Output.ALT.NULL, Output.ALT.ALT)
@@ -2240,10 +2237,10 @@ plotPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL,
 # Continuous N
 
 
-Output.NULL.NULL <- simResult(NULL, SimData.NULL, SimModel.NULL, n=50:500)
-Output.ALT.NULL <- simResult(NULL, SimData.ALT, SimModel.NULL, n=50:500)
-Output.NULL.ALT <- simResult(NULL, SimData.NULL, SimModel.ALT, n=50:500)
-Output.ALT.ALT <- simResult(NULL, SimData.ALT, SimModel.ALT, n=50:500)
+Output.NULL.NULL <- sim(NULL, SimData.NULL, SimModel.NULL, n=50:500)
+Output.ALT.NULL <- sim(NULL, SimData.ALT, SimModel.NULL, n=50:500)
+Output.NULL.ALT <- sim(NULL, SimData.NULL, SimModel.ALT, n=50:500)
+Output.ALT.ALT <- sim(NULL, SimData.ALT, SimModel.ALT, n=50:500)
 
 anova(Output.NULL.NULL, Output.NULL.ALT)
 anova(Output.ALT.NULL, Output.ALT.ALT)
@@ -2269,36 +2266,36 @@ u79 <- simUnif(0.7, 0.9)
 
 loading.null <- matrix(0, 6, 1)
 loading.null[1:6, 1] <- NA
-LX.NULL <- simMatrix(loading.null, 0.7)
-RPH.NULL <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
+LX.NULL <- bind(loading.null, 0.7)
+RPH.NULL <- binds(diag(1))
+RTD <- binds(diag(6))
 CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
 
 error.cor.mis <- matrix(NA, 6, 6)
 diag(error.cor.mis) <- 1
-RTD.Mis <- symMatrix(error.cor.mis, "rnorm(1,0,0.1)")
+RTD.Mis <- binds(error.cor.mis, "rnorm(1,0,0.1)")
 CFA.Model.NULL.Mis <- simMisspecCFA(RTE = RTD.Mis)
 
 SimData.NULL <- simData(CFA.Model.NULL, 500, misspec = CFA.Model.NULL.Mis)
 SimModel <- simModel(CFA.Model.NULL)
-Output.NULL <- simResult(NULL, SimData.NULL, SimModel, n=50:500)
+Output.NULL <- sim(NULL, SimData.NULL, SimModel, n=50:500)
 
 loading.alt <- matrix(0, 6, 2)
 loading.alt[1:3, 1] <- NA
 loading.alt[4:6, 2] <- NA
-LX.ALT <- simMatrix(loading.alt, 0.7)
+LX.ALT <- bind(loading.alt, 0.7)
 latent.cor.alt <- matrix(NA, 2, 2)
 diag(latent.cor.alt) <- 1
-RPH.ALT <- symMatrix(latent.cor.alt, 0.7)
+RPH.ALT <- binds(latent.cor.alt, 0.7)
 CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
 
 loading.alt.mis <- matrix(NA, 6, 2)
 loading.alt.mis[is.na(loading.alt)] <- 0
-LX.alt.mis <- simMatrix(loading.alt.mis, "runif(1,-.2,.2)")
+LX.alt.mis <- bind(loading.alt.mis, "runif(1,-.2,.2)")
 CFA.Model.alt.mis <- simMisspecCFA(LY = LX.alt.mis, RTE=RTD.Mis)
 
 SimData.ALT <- simData(CFA.Model.ALT, 500, misspec = CFA.Model.alt.mis)
-Output.ALT <- simResult(NULL, SimData.ALT, SimModel, n=50:500)
+Output.ALT <- sim(NULL, SimData.ALT, SimModel, n=50:500)
 
 getPowerFit(Output.ALT, nullObject=Output.NULL, nVal=250)
 
@@ -2324,36 +2321,36 @@ u79 <- simUnif(0.7, 0.9)
 
 loading.null <- matrix(0, 6, 1)
 loading.null[1:6, 1] <- NA
-LX.NULL <- simMatrix(loading.null, 0.7)
-RPH.NULL <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
+LX.NULL <- bind(loading.null, 0.7)
+RPH.NULL <- binds(diag(1))
+RTD <- binds(diag(6))
 CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
 
 error.cor.mis <- matrix(NA, 6, 6)
 diag(error.cor.mis) <- 1
-RTD.Mis <- symMatrix(error.cor.mis, "rnorm(1,0,0.1)")
+RTD.Mis <- binds(error.cor.mis, "rnorm(1,0,0.1)")
 CFA.Model.NULL.Mis <- simMisspecCFA(RTE = RTD.Mis)
 
 SimData.NULL <- simData(CFA.Model.NULL, 500, misspec = CFA.Model.NULL.Mis)
 SimModel <- simModel(CFA.Model.NULL)
-Output.NULL <- simResult(NULL, SimData.NULL, SimModel, n=50:500, pmMCAR=seq(0, 0.4, 0.1))
+Output.NULL <- sim(NULL, SimData.NULL, SimModel, n=50:500, pmMCAR=seq(0, 0.4, 0.1))
 
 loading.alt <- matrix(0, 6, 2)
 loading.alt[1:3, 1] <- NA
 loading.alt[4:6, 2] <- NA
-LX.ALT <- simMatrix(loading.alt, 0.7)
+LX.ALT <- bind(loading.alt, 0.7)
 latent.cor.alt <- matrix(NA, 2, 2)
 diag(latent.cor.alt) <- 1
-RPH.ALT <- symMatrix(latent.cor.alt, 0.7)
+RPH.ALT <- binds(latent.cor.alt, 0.7)
 CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
 
 loading.alt.mis <- matrix(NA, 6, 2)
 loading.alt.mis[is.na(loading.alt)] <- 0
-LX.alt.mis <- simMatrix(loading.alt.mis, "runif(1,-.2,.2)")
+LX.alt.mis <- bind(loading.alt.mis, "runif(1,-.2,.2)")
 CFA.Model.alt.mis <- simMisspecCFA(LY = LX.alt.mis, RTE=RTD.Mis)
 
 SimData.ALT <- simData(CFA.Model.ALT, 500, misspec = CFA.Model.alt.mis)
-Output.ALT <- simResult(NULL, SimData.ALT, SimModel, n=50:500, pmMCAR=seq(0, 0.4, 0.1))
+Output.ALT <- sim(NULL, SimData.ALT, SimModel, n=50:500, pmMCAR=seq(0, 0.4, 0.1))
 
 getPowerFit(Output.ALT, Output.NULL, nVal=250)
 
@@ -2372,4 +2369,4 @@ plotPowerFit(Output.ALT, Output.NULL, cutoff=cutoff2, alpha=0.05)
 plotPowerFit(Output.ALT, Output.NULL, cutoff=cutoff2, alpha=0.05, logistic = FALSE)
 
 # Fix Example 6 Wiki
-# Make simResult to save nonconvergent param value and # of replications
+# Make sim to save nonconvergent param value and # of replications
