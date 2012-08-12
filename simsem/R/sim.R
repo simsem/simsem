@@ -276,6 +276,8 @@
     timing$CombineResults <- (proc.time()[3] - start.time)
     start.time <- proc.time()[3]
     
+	if(is.null(generate)) param <- param[,match(colnames(object@paramValue), colnames(object@coef))]
+	
     Result <- new("SimResult", modelType = model@modelType, nRep = nRep, coef = coef, se = se, fit = fit, converged = converged, seed = seed, paramValue = param, FMI1 = data.frame(FMI1), FMI2 = data.frame(FMI2), stdCoef = std, 
         n = n, pmMCAR = pmMCAR, pmMAR = pmMAR, timing=timing)
     if (silent) 

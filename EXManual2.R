@@ -10,7 +10,7 @@
 # Trimed means #
 
 ################################## Example 1 ##############################################
-#library(simsem)
+##library(simsem)
 
 #install.packages("C:/Users/Sunthud/Desktop/My Dropbox/simsem/simsem_0.0-11.tar.gz", repos=NULL, type="source")
 #install.packages("C:/Users/student/Dropbox/simsem/simsem_0.1-1.tar.gz", repos=NULL, type="source")
@@ -65,7 +65,7 @@ dir <- "C:/Users/student/Dropbox/simsem/simsem/R/"
 #library(formatR)
 #tidy.dir(dir)
 
-library(simsem)
+##library(simsem)
 
 loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA
@@ -80,12 +80,12 @@ error.cor <- matrix(0, 6, 6)
 diag(error.cor) <- NA
 RTE <- binds(error.cor,1)
 
-CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE,modelType="CFA")
+CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA")
 
 out <- analyze(CFA.Model,generate(CFA.Model,200))
 
 #SimMissing <- simMissing(pmMCAR=0.1, numImps=5)
-Output <- sim(10, CFA.Model,n=200)
+Output <- sim(100, CFA.Model,n=200)
 #Output <- sim(100, SimData, SimModel, SimMissing, multicore=TRUE)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
@@ -93,7 +93,7 @@ summaryParam(Output)
 
 #################################### Example 2 #######################
 
-library(simsem)
+##library(simsem)
 
 loading <- matrix(0, 9, 3)
 loading[1:3, 1] <- c(1, NA, NA)
@@ -115,21 +115,22 @@ errorCov <- diag(NA, 9)
 errorCovVal <- diag(c(0.5, 1.1, 0.8, 0.4, 0.4, 0.8, 0.8, 0.5, 0.6))
 TE <- binds(errorCov, errorCovVal)
 
-AL <- simVector(rep(NA, 3), 0)
-TY <- simVector(c(0, NA, NA, 0, NA, NA, 0, NA, NA), 0)
+AL <- bind(rep(NA, 3), 0)
+TY <- bind(c(0, NA, NA, 0, NA, NA, 0, NA, NA), 0)
 
-HS.Model <- simSetCFA(LY=LY, PS=PS, TE=TE, AL=AL, TY=TY)
+HS.Model <- model(LY=LY, PS=PS, TE=TE, AL=AL, TY=TY, modelType="CFA")
 
-SimData <- simData(HS.Model, 200)
-SimModel <- simModel(HS.Model)
-Output <- sim(200, SimData, SimModel)
+out <- analyze(HS.Model,generate(HS.Model,200))
+
+Output <- sim(100, HS.Model, n=200)
+
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
 
 ########################## Example 3 ##########################################
 
-library(simsem)
+##library(simsem)
 
 factor.loading <- matrix(NA, 4, 2)
 factor.loading[,1] <- 1
@@ -138,11 +139,11 @@ LY <- bind(factor.loading)
 
 factor.mean <- rep(NA, 2)
 factor.mean.starting <- c(5, 2)
-AL <- simVector(factor.mean, factor.mean.starting)
+AL <- bind(factor.mean, factor.mean.starting)
 
 factor.var <- rep(NA, 2)
 factor.var.starting <- c(1, 0.25)
-VPS <- simVector(factor.var, factor.var.starting)
+VPS <- bind(factor.var, factor.var.starting)
 
 factor.cor <- matrix(NA, 2, 2)
 diag(factor.cor) <- 1
@@ -178,7 +179,7 @@ plotCutoff(Output.Mis, 0.05)
 summaryParam(Output.Mis)
 
 ################################# Example 4 ##################################
-library(simsem)
+##library(simsem)
 
 #u35 <- simUnif(0.3, 0.5)
 #u57 <- simUnif(0.5, 0.7)
@@ -229,7 +230,7 @@ paramOut <- simParam(1000, Path.Model, misspec=Path.Mis.Model)
 
 
 # Example 4 with X sides #
-library(simsem)
+##library(simsem)
 
 #u35 <- simUnif(0.3, 0.5)
 #u57 <- simUnif(0.5, 0.7)
@@ -267,7 +268,7 @@ plotCutoff(Output, 0.05)
 summaryParam(Output)
 
 ############# Example 5 ################################
-library(simsem)
+#library(simsem)
 
 #n65 <- simNorm(0.6, 0.05)
 #u35 <- simUnif(0.3, 0.5)
@@ -371,7 +372,7 @@ abline(h = 0.8,col="darkgreen",lwd=3)
 par(obj)
 
 # Example 5 with X side and stringent constraints #
-library(simsem)
+#library(simsem)
 
 n65 <- simNorm(0.6, 0.05)
 u35 <- simUnif(0.3, 0.5)
@@ -449,7 +450,7 @@ summaryParam(Output)
 
 ################### Example 6 ##################################
 
-library(simsem)
+#library(simsem)
 
 u2 <- simUnif(-0.2, 0.2)
 n1 <- simNorm(0, 0.1)
@@ -534,7 +535,7 @@ cutoff2 <- find.cutoff(Output.NULL, 0.05, usedFit=x)
 
 
 ################################## Example 7 ##########################################
-library(simsem)
+#library(simsem)
 
 #u2 <- simUnif(-0.2, 0.2)
 #u49 <- simUnif(0.4, 0.9)
@@ -589,7 +590,7 @@ plotCutoff(Output, 0.05)
 summary(Output)
 
 ################################## Example 8 ##########################################
-library(simsem)
+#library(simsem)
 
 u2 <- simUnif(-0.2, 0.2)
 u49 <- simUnif(0.4, 0.9)
@@ -638,7 +639,7 @@ summary(Output)
 
 ############################# Example 9 #############################
 
-library(simsem)
+#library(simsem)
 
 u2 <- simUnif(-0.2, 0.2)
 u5 <- simUnif(-0.5, 0.5)
@@ -700,7 +701,7 @@ plotDist(obj, var=c(2,3))
 
 ##################################### Example 10 #######################
 
-library(simsem)
+#library(simsem)
 
 u35 <- simUnif(0.3, 0.5)
 u57 <- simUnif(0.5, 0.7)
@@ -762,7 +763,7 @@ summaryParam(simOut)
 
 ####################################### Example 11 ############################
 
-library(simsem)
+#library(simsem)
 
 u79 <- simUnif(0.7, 0.9)
 u5 <- simUnif(-0.5, 0.5)
@@ -871,7 +872,7 @@ summaryParam(Output)
 
 ################################### Example 12 ######################################
 
-library(simsem)
+#library(simsem)
 
 u57 <- simUnif(0.5, 0.7)
 u4 <- simUnif(-0.4, 0.4)
@@ -937,7 +938,7 @@ plotCutoff(Output, 0.05)
 summaryParam(Output)
 
 ########################################## Example 13 ###################
-library(simsem)
+#library(simsem)
 library(lavaan)
 loading <- matrix(0, 9, 3)
 loading[1:3, 1] <- NA
@@ -969,7 +970,7 @@ model <- simParamCFA(LY=loading, PS=facCov, TE=errorCov, TY=intercept, AL=facMea
 
 ############################### Example 14 #######################
 
-library(simsem)
+#library(simsem)
 library(lavaan)
 loading <- matrix(0, 11, 3)
 loading[1:3, 1] <- NA
@@ -996,7 +997,7 @@ pValue(out, output)
 
 ############################# Example 15 ############################################
 
-library(simsem)
+#library(simsem)
 u35 <- simUnif(0.1, 0.3)
 u57 <- simUnif(0.5, 0.7)
 u2 <- simUnif(-0.2, 0.2)
@@ -1092,7 +1093,7 @@ summary(Output4)
 
 ############################# Example 16 ############################################
 
-library(simsem)
+#library(simsem)
 u35 <- simUnif(0.1, 0.3)
 u57 <- simUnif(0.5, 0.7)
 u2 <- simUnif(-0.2, 0.2)
@@ -1289,7 +1290,7 @@ datModel <- simData(longMed, 200, misspec=longMedMis, equalCon=con)
 
 ############################## Example 17 ###########################
 
-library(simsem)
+#library(simsem)
 loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
@@ -1322,7 +1323,7 @@ plotPower(Output, powerParam=c("LY1_1", "PS2_1"))
 
 ############################## Example 18 ###########################
 
-library(simsem)
+#library(simsem)
 
 loading <- matrix(0, 5, 3)
 loading[1,1] <- 1
@@ -1393,7 +1394,7 @@ plotPower(Output, powerParam=c("BE2_1", "BE3_1"))
 
 ###################################### Example 19 #################################
 
-library(simsem)
+#library(simsem)
 u39 <- simUnif(0.3, 0.9)
 u09 <- simUnif(0, 0.9)
 loading <- matrix(0, 10, 2)
@@ -1431,7 +1432,7 @@ plotPower(Output, powerParam=c("BE2_1", "LY10_2"), contParam="BE2_1")
 
 ###################################### Example 20 Get power fit continutous N ################################# 
 
-library(simsem)
+#library(simsem)
 
 n1 <- simNorm(0, 0.1)
 
@@ -1479,7 +1480,7 @@ plotPowerFit(Output.ALT, cutoff=cutoff2, logistic=FALSE)
 
 ###################################### Example 21 Get power continutous N and pmMCAR ################################# 
 
-library(simsem)
+#library(simsem)
 
 n05 <- simNorm(0, 0.05)
 
@@ -1537,7 +1538,7 @@ plotPowerFit(Output.ALT, cutoff=cutoff2)
 
 ###################################### Example 22 Specifying misspecification ################################# 
 
-library(simsem)
+#library(simsem)
 library(lavaan)
 loading <- matrix(0, 9, 3)
 loading[1:3, 1] <- NA
@@ -1651,7 +1652,7 @@ plotMisfit(param4, misParam="LY9_1")
 ###################################### Example 23 nested model comparison and power ################################# 
 
 # longitudinal weak invariance
-library(simsem)
+#library(simsem)
 
 loading <- matrix(0, 9, 3)
 loading[1, 1] <- 1
@@ -1747,7 +1748,7 @@ plotPowerFitNested(outDatParentModNested, outDatParentModParent, nullNested=outD
 
 # longitudinal strong invariance
 
-library(simsem)
+#library(simsem)
 
 loading <- matrix(0, 9, 3)
 loading[1, 1] <- 1
@@ -1856,7 +1857,7 @@ plotPowerFitNested(outDatParentModNested, outDatParentModParent, nullNested=outD
 ###################################### Example 25 nested model comparison and power continuous N and pmMCAR ######################
 
 # Equal first-order effect
-library(simsem)
+#library(simsem)
 
 path <- matrix(0, 5, 5)
 path[2, 1] <- NA
@@ -1920,7 +1921,7 @@ plotPowerFitNested(outDatParentModNested, outDatParentModParent, cutoff=cutoff2,
 
 ###################################### Example 26 Analyzing Real Data with Nested Model Comparison ###################################
 
-library(simsem)
+#library(simsem)
 library(lavaan)
 
 LY <- matrix(1, 4, 2)
@@ -1964,7 +1965,7 @@ getPowerFitNested(simParentNested, simParentParent, nullNested=simNestedNested, 
 
 ###################################### Example 27 nonnested model comparison ################################# 
 
-library(simsem)
+#library(simsem)
 
 # Greg Hancock Paper pp.58-59.
 
@@ -2031,7 +2032,7 @@ plotPowerFitNonNested(outBA, outBB, dat1Mod1=outAA, dat1Mod2=outAB, cutoff=cutof
 ###################################### Example 28 nonnested model comparison and power continuous N #################################
 
 # Quadratic and unconstrained change
-library(simsem)
+#library(simsem)
 
 loadingA <- matrix(0, 5, 2)
 loadingA[1:5, 1] <- 1
@@ -2138,7 +2139,7 @@ pValueNonNested(result11, result12, out11, out12, out21, out22)
 
 ###################################### Example 30 Nonnested model by the real data ####################
 
-library(simsem)
+#library(simsem)
 library(lavaan)
 loading <- matrix(0, 11, 3)
 loading[1:3, 1] <- NA
@@ -2178,7 +2179,7 @@ pValueNonNested(out.A, out.B, output.A.A, output.A.B, output.B.A, output.B.B)
 ###################################### Double bootstrap, Bollen-Stine boot, double bollen-stine boot, residual bootstrap
 
 
-library(simsem)
+#library(simsem)
 
 u2 <- simUnif(-0.2, 0.2)
 n1 <- simNorm(0, 0.1)

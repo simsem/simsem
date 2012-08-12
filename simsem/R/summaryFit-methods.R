@@ -4,7 +4,7 @@ setMethod("summaryFit", signature(object = "SimResult"), definition = function(o
         cleanObj <- clean(object)
 		usedFit <- getKeywords()$usedFit
 
-	condition <- c(length(object@pmMCAR) > 1, length(object@pmMAR) > 1, length(object@n) > 1)
+	condition <- c(length(unique(object@pmMCAR)) > 1, length(unique(object@pmMAR)) > 1, length(unique(object@n)) > 1)
 	if(any(condition)) {
 		if (is.null(alpha)) 
 			alpha <- 0.05

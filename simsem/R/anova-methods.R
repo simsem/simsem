@@ -54,14 +54,14 @@ setMethod("anova", signature(object = "SimResult"), function(object, ...) {
 	x <- NULL
     pred <- NULL
     
-    if (length(object@n) > 1) {
+    if (length(unique(object@n)) > 1) {
         if (!length(object@n) == nrep) {
             stop("Number of random sample sizes is not the same as the number of replications, check to see if N varied across replications")
         }
         x <- cbind(x, object@n)
         pred$N <- unique(round(seq(min(object@n), max(object@n), length.out=20)))
     }
-    if (length(object@pmMCAR) > 1) {
+    if (length(unique(object@pmMCAR)) > 1) {
         if (!length(object@pmMCAR) == nrep) {
             stop("Number of random pmMCARs is not the same as the number of replications, check to see if pmMCAR varied across replications")
         }
@@ -69,7 +69,7 @@ setMethod("anova", signature(object = "SimResult"), function(object, ...) {
         pred$MCAR <- seq(min(object@pmMCAR), max(object@pmMCAR), length.out=20)
         
     }
-    if (length(object@pmMAR) > 1) {
+    if (length(unique(object@pmMAR)) > 1) {
         if (!length(object@pmMAR) == nrep) {
             stop("Number of random pmMARs is not the same as the number of replications, check to see if pmMAR varied across replications")
         }
@@ -135,68 +135,68 @@ setMethod("anova", signature(object = "SimResult"), function(object, ...) {
 	# If n, pmMCAR, pmMAR are varying, return the additional arguments in the list that provide the conditional median of the varying parameter.
 })
 
-# this is based on the anova function in the lmer/lavaan package
-setMethod("anova", signature(object = "SimModelOut"), function(object, ...) {
+## this is based on the anova function in the lmer/lavaan package
+# setMethod("anova", signature(object = "SimModelOut"), function(object, ...) {
     
-    mcall <- match.call(expand.dots = TRUE)
-    dots <- list(...)
-    modp <- if (length(dots)) 
-        sapply(dots, is, "SimModelOut") else logical(0)
+    # mcall <- match.call(expand.dots = TRUE)
+    # dots <- list(...)
+    # modp <- if (length(dots)) 
+        # sapply(dots, is, "SimModelOut") else logical(0)
     
-    # single argument version is not supported (what should be display?)
-    if (!any(modp)) 
-        stop("simSEM ERROR: need two models to compare")
+    ## single argument version is not supported (what should be display?)
+    # if (!any(modp)) 
+        # stop("simSEM ERROR: need two models to compare")
     
-    # list of models
-    mods <- c(list(object), dots[modp])
-    names(mods) <- sapply(as.list(mcall)[c(FALSE, TRUE, modp)], as.character)
+    ## list of models
+    # mods <- c(list(object), dots[modp])
+    # names(mods) <- sapply(as.list(mcall)[c(FALSE, TRUE, modp)], as.character)
     
-    # put them in order (using number of free parameters) nfreepar <- sapply(lapply(mods, logLik), attr, 'df')
-    nfreepar <- mods[[1]]@fit["df"][1]
-    for (i in 2:length(mods)) {
-        nfreepar <- c(nfreepar, mods[[i]]@fit["df"][1])
-    }
+    ## put them in order (using number of free parameters) nfreepar <- sapply(lapply(mods, logLik), attr, 'df')
+    # nfreepar <- mods[[1]]@fit["df"][1]
+    # for (i in 2:length(mods)) {
+        # nfreepar <- c(nfreepar, mods[[i]]@fit["df"][1])
+    # }
     
     
-    # ORDERING DOES NOT WORK RIGHT NOW. Why??
-    mods <- mods[order(nfreepar, decreasing = FALSE)]
+    ## ORDERING DOES NOT WORK RIGHT NOW. Why??
+    # mods <- mods[order(nfreepar, decreasing = FALSE)]
     
-    # Need to pull fit statistics from each model, compare each one...
+    ## Need to pull fit statistics from each model, compare each one...
     
-    # Use apply and diff function to get differneces for each rows
+    ## Use apply and diff function to get differneces for each rows
     
-    # collect statistics for each model
-    Df <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")["df"])), ncol = length(mods))
-    Chi <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")["Chi"])), ncol = length(mods))
-    CFI <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")["CFI"])), ncol = length(mods))
-    TLI <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")["TLI"])), ncol = length(mods))
-    RMSEA <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")["RMSEA"])), ncol = length(mods))
-    AIC <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")["AIC"])), ncol = length(mods))
-    BIC <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")["BIC"])), ncol = length(mods))
+    ## collect statistics for each model
+    # Df <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")["df"])), ncol = length(mods))
+    # Chi <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")["Chi"])), ncol = length(mods))
+    # CFI <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")["CFI"])), ncol = length(mods))
+    # TLI <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")["TLI"])), ncol = length(mods))
+    # RMSEA <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")["RMSEA"])), ncol = length(mods))
+    # AIC <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")["AIC"])), ncol = length(mods))
+    # BIC <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")["BIC"])), ncol = length(mods))
    
-    # difference statistics. Taking the absolute value so order models entered doesn't matter
-    Chi.delta <- (apply(Chi, 1, diff))
-    Df.delta <- (apply(Df, 1, diff))
-    CFI.delta <- (apply(CFI, 1, diff))
-    TLI.delta <- (apply(TLI, 1, diff))
-    RMSEA.delta <- (apply(RMSEA, 1, diff))
-    AIC.delta <- (apply(AIC, 1, diff))
-    BIC.delta <- (apply(BIC, 1, diff))
+    ## difference statistics. Taking the absolute value so order models entered doesn't matter
+    # Chi.delta <- (apply(Chi, 1, diff))
+    # Df.delta <- (apply(Df, 1, diff))
+    # CFI.delta <- (apply(CFI, 1, diff))
+    # TLI.delta <- (apply(TLI, 1, diff))
+    # RMSEA.delta <- (apply(RMSEA, 1, diff))
+    # AIC.delta <- (apply(AIC, 1, diff))
+    # BIC.delta <- (apply(BIC, 1, diff))
     
     
-	pValue <- NULL
-    if (!any(duplicated(nfreepar))) pValue <- pchisq(Chi.delta, Df.delta, lower = FALSE)
+	# pValue <- NULL
+    # if (!any(duplicated(nfreepar))) pValue <- pchisq(Chi.delta, Df.delta, lower = FALSE)
     
-	val <- data.frame(Df = colMeans(Df), Chisq = colMeans(Chi), CFI = colMeans(CFI), TLI = colMeans(TLI), RMSEA = colMeans(RMSEA), AIC = colMeans(AIC), BIC = colMeans(BIC))
+	# val <- data.frame(Df = colMeans(Df), Chisq = colMeans(Chi), CFI = colMeans(CFI), TLI = colMeans(TLI), RMSEA = colMeans(RMSEA), AIC = colMeans(AIC), BIC = colMeans(BIC))
 	
 		
-    # Need to think about what we want out of this. Maybe just mean differences across models? Lets do that for now
-    diff <- data.frame(Chisq.diff = c(NA, Chi.delta), Df.diff = c(NA, Df.delta), pValue = c(NA, pValue), CFI.diff = c(NA, 
-        CFI.delta), TLI.diff = c(NA, TLI.delta), RMSEA.diff = c(NA, RMSEA.delta), AIC.diff = c(NA, AIC.delta), BIC.diff = c(NA, BIC.delta))
-    #' Pr(>Chisq)' = Pvalue.delta, Don't report mean p value, meaningless?
+    ## Need to think about what we want out of this. Maybe just mean differences across models? Lets do that for now
+    # diff <- data.frame(Chisq.diff = c(NA, Chi.delta), Df.diff = c(NA, Df.delta), pValue = c(NA, pValue), CFI.diff = c(NA, 
+        # CFI.delta), TLI.diff = c(NA, TLI.delta), RMSEA.diff = c(NA, RMSEA.delta), AIC.diff = c(NA, AIC.delta), BIC.diff = c(NA, BIC.delta))
+    ## ' Pr(>Chisq)' = Pvalue.delta, Don't report mean p value, meaningless?
     
-    result <- list(summary = val, diff = diff)
-    return(result)
+    # result <- list(summary = val, diff = diff)
+    # return(result)
     
-})
+# })
  
