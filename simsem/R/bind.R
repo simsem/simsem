@@ -91,7 +91,7 @@ bind <- function(free = NULL, popParam = NULL, misspec = NULL, symmetric=FALSE) 
     }    
     else if(is.vector(popParam)) {
       if((length(free) != length(popParam)) && length(popParam) > 1) stop("Free vector and popParam are not the same length")
-      if( all(!is.empty(popParam) == is.free(free))) { stop("Please assign a value for any free parameters") }
+      if( !all(!is.empty(popParam) & is.free(free))) { stop("Please assign a value for any free parameters") }
       paramVec <- as.character(popParam)
     }
     else { paramVec <-  vector() }
