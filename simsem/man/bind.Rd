@@ -5,11 +5,16 @@
 	Bind together R matrices into a simMatrix for simulation and analysis of structural equation models, using a Lisrel-style notation. 
 }
 \description{
-	Create \code{\linkS4class{SimMatrix}} object that save free parameters, as well as fixed values. 
-	This will be used for model specification later, such as for factor loading matrix or regression coefficient matrix.
+	Create \code{\linkS4class{SimMatrix}} object that specifies
+	1. Pattern of fixed/freed parameters for analysis
+	2. Population parameter values for data generation.
+	3. Any model misspecification (true population parameter is different than the one specified) for these parameters.
+ 
+	Each matrix in the Lisrel-style notation is specified in this way (e.g. LY, PS, and TE) and is used to create a model analysis template and a data generation template for simulation through the \code{model} function.
 }
 \usage{
-simMatrix(free = NULL, value = NULL)
+bind(free = NULL, popParam = NULL, misspec = NULL, symmetric = FALSE)
+binds(free = NULL, popParam = NULL, misspec = NULL, symmetric = TRUE)
 }
 \arguments{
   \item{free}{
