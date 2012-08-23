@@ -36,9 +36,9 @@ imposeMissing(data.mat, cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0,
     forms. Unless specified, items will be divided into groups sequentially (e.g. 1-3,4-6,7-9,10-12)
 }
   \item{twoMethod}{
-    Vector of (column index, percent missing). Will put a given percent
+    With missing on one variable: vector of (column index, percent missing). Will put a given percent
     missing on that column in the matrix to simulate a two method
-    planned missing data research design. 
+    planned missing data research design. With missing on two or more variables: list of (column indices, percent missing).
   }
   \item{prAttr}{
     Probability (or vector of probabilities) of an entire case being removed due to attrition at a
