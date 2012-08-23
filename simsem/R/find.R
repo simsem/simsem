@@ -52,7 +52,7 @@ findFactorResidualVar <- function(beta, corPsi, totalVarPsi = NULL) {
         tempPsiSd <- rep(0, length(dv))
         for (j in 1:length(dv)) {
             errorVar[dv[j]] <- totalVarPsi[dv[j]] - var.reg[j, j]
-            if (errorVar[dv[j]] < 0) {
+            if (is.na(errorVar[dv[j]]) || errorVar[dv[j]] < 0) {
                 tempPsiSd[j] <- NaN
             } else {
                 tempPsiSd[j] <- sqrt(errorVar[dv[j]])

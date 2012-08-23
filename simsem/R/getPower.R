@@ -4,7 +4,7 @@
 getPower <- function(simResult, alpha = 0.05, contParam = NULL, powerParam = NULL, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, 
     paramVal = NULL) {
     object <- clean(simResult)
-    condition <- c(length(object@pmMCAR) > 1, length(object@pmMAR) > 1, length(object@n) > 1)
+    condition <- c(length(unique(object@pmMCAR)) > 1, length(unique(object@pmMAR)) > 1, length(unique(object@n)) > 1)
     if (any(condition)) {
         pred <- NULL
         pred$N <- nVal
@@ -27,7 +27,7 @@ getPower <- function(simResult, alpha = 0.05, contParam = NULL, powerParam = NUL
                 }
             }
         }
-        pow <- continuousPower(object, length(object@n) > 1, length(object@pmMCAR) > 1, length(object@pmMAR) > 1, contParam = contParam, 
+        pow <- continuousPower(object, length(unique(object@n)) > 1, length(unique(object@pmMCAR)) > 1, length(unique(object@pmMAR)) > 1, contParam = contParam, 
             alpha = alpha, powerParam = powerParam, pred = pred)
         return(pow)
     } else {

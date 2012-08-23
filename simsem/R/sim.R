@@ -196,32 +196,32 @@
 
     ## 6. Extract results from replication lists
       
-    fit.l <- lapply(Result.l, function(object) {
-        object$fit
+    fit.l <- lapply(Result.l, function(rep) {
+        rep$fit
     })
-    coef.l <- lapply(Result.l, function(object) {
-        object$coef
+    coef.l <- lapply(Result.l, function(rep) {
+        rep$coef
     })
-    se.l <- lapply(Result.l, function(object) {
-        object$se
+    se.l <- lapply(Result.l, function(rep) {
+        rep$se
     })
-    converged.l <- lapply(Result.l, function(object) {
-        object$converged
+    converged.l <- lapply(Result.l, function(rep) {
+        rep$converged
     })
-    param.l <- lapply(Result.l, function(object) {
-        object$param
+    param.l <- lapply(Result.l, function(rep) {
+        rep$param
     })
-    FMI1.l <- lapply(Result.l, function(object) {
-        object$FMI1
+    FMI1.l <- lapply(Result.l, function(rep) {
+        rep$FMI1
     })
-    FMI2.l <- lapply(Result.l, function(object) {
-        object$FMI2
+    FMI2.l <- lapply(Result.l, function(rep) {
+        rep$FMI2
     })
-    std.l <- lapply(Result.l, function(object) {
-        object$std
+    std.l <- lapply(Result.l, function(rep) {
+        rep$std
     })
-   ##  paramData.l <- lapply(Result.l, function(object) {
-##         object$paramData
+   ##  paramData.l <- lapply(Result.l, function(rep) {
+##         rep$paramData
 ##     })
     coef <- as.data.frame(do.call(rbind, coef.l))
     se <- as.data.frame(do.call(rbind, se.l))
@@ -276,6 +276,8 @@
     timing$CombineResults <- (proc.time()[3] - start.time)
     start.time <- proc.time()[3]
     
+	if(is.null(generate)) param <- param[,match(colnames(object@paramValue), colnames(object@coef))]
+	
     Result <- new("SimResult", modelType = model@modelType, nRep = nRep, coef = coef, se = se, fit = fit, converged = converged, seed = seed, paramValue = param, FMI1 = data.frame(FMI1), FMI2 = data.frame(FMI2), stdCoef = std, 
         n = n, pmMCAR = pmMCAR, pmMAR = pmMAR, timing=timing)
     if (silent) 
@@ -458,9 +460,12 @@ reduceParamSet <- function(paramSet,dgen) {
         }
         if(length(idx) != 0) {
           free <- is.free(dgen[[g]][[idx]]@free)
-          if(name == "PS" || name == "TE" ) {
+          if(name == "PS") {
             lab <- makeLabels(free & lower.tri(free),name=name,group=g)
             param <- tmat[free & lower.tri(free)]
+          } else if(name == "TE") {
+            lab <- makeLabels(free & lower.tri(free,diag=TRUE),name=name,group=g)
+            param <- tmat[free & lower.tri(free,diag=TRUE)]
           } else {
             lab <- makeLabels(free,name=name,group=g)
             param <- tmat[free]
@@ -474,8 +479,7 @@ reduceParamSet <- function(paramSet,dgen) {
   final
 }    
       
-    
-
+  
 ## GLIST -> Re-labeled Parameter Estimates
 reduceLavaanParam <- function(glist,dgen) {
   # Chunk at a time approach
@@ -498,9 +502,9 @@ reduceLavaanParam <- function(glist,dgen) {
     idx <- which(names=="theta")
     for(i in seq_along(idx)) {
       if(!is.null(dgen[[i]]$TE)) {
-        free <- is.free(dgen[[i]]$TE@free) & lower.tri(dgen[[i]]$TE@free)
+        free <- is.free(dgen[[i]]$TE@free) & lower.tri(dgen[[i]]$TE@free,diag=TRUE)
       } else {
-        free <- is.free(dgen[[i]]$RTE@free) & lower.tri(dgen[[i]]$RTE@free)
+        free <- is.free(dgen[[i]]$RTE@free) & lower.tri(dgen[[i]]$RTE@free,diag=TRUE)
       }
       param <- glist[idx[i]]$theta[free]
       lab <- makeLabels(free,name="TE",group=i)

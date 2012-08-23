@@ -4,14 +4,15 @@ setMethod("getPopulation", signature(object = "SimResult"), definition = functio
     return(object@paramValue)
 })
 
-setMethod("getPopulation", signature(object = "SimModelOut"), definition = function(object) {
-    return(object@paramValue)
-})
+## setMethod("getPopulation", signature(object = "SimModelOut"), definition = function(object) {
+##     return(object@paramValue)
+## })
 
-setMethod("getPopulation", signature(object = "SimDataOut"), definition = function(object, misspec = TRUE) {
-    if (misspec) {
-        return(object@misspecOut)
-    } else {
-        return(object@paramOut)
-    }
-}) 
+## setMethod("getPopulation", signature(object = "SimDataOut"), definition = function(object, misspec = TRUE) {
+##     if (misspec) {
+##         return(object@misspecOut)
+##     } else {
+##         return(object@paramOut)
+##     }
+## })
+

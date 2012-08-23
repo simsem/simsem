@@ -16,14 +16,14 @@ plotPower <- function(object, powerParam, alpha = 0.05, contParam = NULL, contN 
     x <- NULL
     pred <- NULL
     
-    if ((length(object@n) > 1) && contN) {
+    if ((length(unique(object@n)) > 1) && contN) {
         if (!length(object@n) == nrep) {
             stop("Number of random sample sizes is not the same as the number of replications, check to see if N varied across replications")
         }
         x <- cbind(x, object@n)
         pred$N <- min(object@n):max(object@n)
     }
-    if ((length(object@pmMCAR) > 1) && contMCAR) {
+    if ((length(unique(object@pmMCAR)) > 1) && contMCAR) {
         if (!length(object@pmMCAR) == nrep) {
             stop("Number of random pmMCARs is not the same as the number of replications, check to see if pmMCAR varied across replications")
         }
@@ -31,7 +31,7 @@ plotPower <- function(object, powerParam, alpha = 0.05, contParam = NULL, contN 
         pred$MCAR <- seq(min(object@pmMCAR), max(object@pmMCAR), by = 0.01)
         
     }
-    if ((length(object@pmMAR) > 1) && contMAR) {
+    if ((length(unique(object@pmMAR)) > 1) && contMAR) {
         if (!length(object@pmMAR) == nrep) {
             stop("Number of random pmMARs is not the same as the number of replications, check to see if pmMAR varied across replications")
         }
