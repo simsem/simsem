@@ -15,8 +15,7 @@ simMissing(cov=0, pmMCAR=0, pmMAR=0, nforms=0, itemGroups=list(0), timePoints=1,
     \item{pmMAR}{Decimal percent of missingness to introduce using the listed covariates as predictors.}
     \item{nforms}{The number of forms for planned missing data designs, not including the shared form.}
     \item{itemGroups}{List of lists of item groupings for planned missing data forms. Without this, items will be divided into groups sequentially (e.g. 1-3,4-6,7-9,10-12)}
-    \item{twoMethod}{Vector of (percent missing, column index). Will put a given percent missing on that column in the matrix to simulate a two method
-		planned missing data research design. }
+    \item{twoMethod}{With missing on one variable: vector of (column index, percent missing). Will put a given percent missing on that column in the matrix to simulate a two method planned missing data research design. With missing on two or more variables: list of (column indices, percent missing). }
 	\item{prAttr}{Probability (or vector of probabilities) of an entire case being removed due to attrition at a given time point. See \code{\link{imposeMissing}} for further details.}
     \item{timePoints}{Number of timepoints items were measured over. For longitudinal data, planned missing designs will be implemented within each timepoint.}
     \item{numImps}{The number of imputations to be used when multiply imputing missing data. Setting numImps to 0 will use FIML to handle missing data.}
