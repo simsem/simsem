@@ -80,16 +80,18 @@ error.cor <- matrix(0, 6, 6)
 diag(error.cor) <- NA
 RTE <- binds(error.cor,1)
 
-#VY <- bind(rep(NA,6),2)
+VY <- bind(rep(NA,6),2)
 
-CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, VY=VY, modelType="CFA")
+CFA.Model2 <- model(LY = LY, RPS = RPS, RTE = RTE, VY=VY, modelType="CFA")
 CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
 out <- analyze(CFA.Model,generate(CFA.Model,200))
 
 #SimMissing <- simMissing(pmMCAR=0.1, numImps=5)
-Output <- sim(10, CFA.Model,n=200)
+Output <- sim(2, CFA.Model,n=200)
+Output2 <- sim(2, CFA.Model2, n=200)
+Output3 <- sim(20, CFA.Model, n=200, multicore=TRUE, numProc=2)
 #Output <- sim(100, SimData, SimModel, SimMissing, multicore=TRUE)
-getCutoff(Output, 0.05)
+bgetCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
 

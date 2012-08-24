@@ -66,6 +66,7 @@ dir <- "C:/Users/student/Dropbox/simsem/simsem/R/"
 #tidy.dir(dir)
 
 library(simsem)
+
 loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
@@ -79,16 +80,22 @@ error.cor <- matrix(0, 6, 6)
 diag(error.cor) <- 1
 RTD <- symMatrix(error.cor)
 
+VX <- simVector(rep(NA,6),2)
+
 CFA.Model <- simSetCFA(LY = LX, RPH = RPH, RTD = RTD)
+CFA.Model2 <- simSetCFA(LY = LX, RPH = RPH, RTD = RTD, VX=VX)
 
 SimData <- simData(CFA.Model, 200)
+SimData2 <- simData(CFA.Model2, 200)
 
 data <- run(SimData)
 
 SimModel <- simModel(CFA.Model)
+SimModel2 <- simModel(CFA.Model2)
 
 #SimMissing <- simMissing(pmMCAR=0.1, numImps=5)
-Output <- simResult(200, SimData, SimModel)
+Output <- simResult(2, SimData, SimModel)
+Output2 <- simResult(2, SimData2, SimModel2)
 #Output <- simResult(100, SimData, SimModel, SimMissing, multicore=TRUE)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)

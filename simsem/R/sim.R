@@ -187,12 +187,15 @@
                          optMisfit=optMisfit, optDraws=optDraws, misfitType=misfitType)
     }
 
+    if(!multicore) {
     timing.l <- lapply(Result.l, function(x) {x$timing})
     repTimes <- colSums(matrix(unlist(timing.l),nrow=nRep,byrow=TRUE))
     names(repTimes) <- names(timing.l[[1]])
     timing$InReps <- repTimes
     timing$RunReplications <- (proc.time()[3] - start.time)
+  }
     start.time <- proc.time()[3]
+  
 
     ## 6. Extract results from replication lists
       
@@ -276,7 +279,7 @@
     timing$CombineResults <- (proc.time()[3] - start.time)
     start.time <- proc.time()[3]
     
-	if(is.null(generate)) param <- param[,match(colnames(object@paramValue), colnames(object@coef))]
+	#if(is.null(generate)) param <- param[,match(colnames(object@paramValue), colnames(object@coef))]
 	
     Result <- new("SimResult", modelType = model@modelType, nRep = nRep, coef = coef, se = se, fit = fit, converged = converged, seed = seed, paramValue = param, FMI1 = data.frame(FMI1), FMI2 = data.frame(FMI2), stdCoef = std, 
         n = n, pmMCAR = pmMCAR, pmMAR = pmMAR, timing=timing)
