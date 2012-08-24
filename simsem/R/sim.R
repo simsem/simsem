@@ -187,13 +187,13 @@
                          optMisfit=optMisfit, optDraws=optDraws, misfitType=misfitType)
     }
 
-    if(!multicore) {
+
     timing.l <- lapply(Result.l, function(x) {x$timing})
     repTimes <- colSums(matrix(unlist(timing.l),nrow=nRep,byrow=TRUE))
     names(repTimes) <- names(timing.l[[1]])
     timing$InReps <- repTimes
     timing$RunReplications <- (proc.time()[3] - start.time)
-  }
+ 
     start.time <- proc.time()[3]
   
 
