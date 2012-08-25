@@ -80,22 +80,34 @@ error.cor <- matrix(0, 6, 6)
 diag(error.cor) <- 1
 RTD <- symMatrix(error.cor)
 
+VTD <- simVector(rep(NA,6),0.51)
+
 VX <- simVector(rep(NA,6),2)
+
+VPH <- simVector(rep(.8,2))
 
 CFA.Model <- simSetCFA(LY = LX, RPH = RPH, RTD = RTD)
 CFA.Model2 <- simSetCFA(LY = LX, RPH = RPH, RTD = RTD, VX=VX)
+CFA.Model3 <- simSetCFA(LY = LX, RPH = RPH, RTD = RTD, VTD = VTD)
+CFA.Model4 <- simSetCFA(LY = LX, RPH = RPH, RTD = RTD, VTD = VTD, VPH=VPH)
 
 SimData <- simData(CFA.Model, 200)
 SimData2 <- simData(CFA.Model2, 200)
+SimData3 <- simData(CFA.Model3, 200)
+SimData4 <- simData(CFA.Model4, 200)
 
 data <- run(SimData)
 
 SimModel <- simModel(CFA.Model)
 SimModel2 <- simModel(CFA.Model2)
+SimModel3 <- simModel(CFA.Model3)
+SimModel4 <- simModel(CFA.Model4)
 
 #SimMissing <- simMissing(pmMCAR=0.1, numImps=5)
 Output <- simResult(2, SimData, SimModel)
 Output2 <- simResult(2, SimData2, SimModel2)
+Output3 <- simResult(2, SimData3, SimModel3)
+Output4 <- simResult(2, SimData4, SimModel4)
 #Output <- simResult(100, SimData, SimModel, SimMissing, multicore=TRUE)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)

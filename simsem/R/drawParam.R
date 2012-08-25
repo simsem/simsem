@@ -325,9 +325,9 @@ fillParam <- function(rawParamSet) {
         if (is.null(PS)) {
             PS <- suppressWarnings(cor2cov(RPS, sqrt(VE)))
         } else {
-            VE <- diag(PS)
-            VPS <- diag(PS)
-            RPS <- cov2corMod(PS)
+            #VE <- diag(PS)
+            #VPS <- diag(PS)
+            #RPS <- cov2corMod(PS)
         }
         if (is.null(TE)) {
             if (is.null(VTE)) 
@@ -353,9 +353,9 @@ fillParam <- function(rawParamSet) {
                 VE <- findFactorTotalVar(BE, RPS, VPS)
             PS <- suppressWarnings(cor2cov(RPS, suppressWarnings(sqrt(VPS))))
         } else {
-            VPS <- diag(PS)
-            RPS <- cov2corMod(PS)
-            VE <- findFactorTotalVar(BE, RPS, VPS)
+            ## VPS <- diag(PS)
+            ## RPS <- cov2corMod(PS)
+            ## VE <- findFactorTotalVar(BE, RPS, VPS)
         }
         if (is.null(ME)) 
             ME <- findFactorMean(BE, AL)
@@ -404,10 +404,11 @@ fillParam <- function(rawParamSet) {
 reduceMatrices <- function(paramSet) {
   require(lavaan)
  
-  if (is.null(paramSet$PS)) 
+  if (is.null(paramSet$PS))
     paramSet$PS <- suppressWarnings(cor2cov(paramSet$RPS, sqrt(paramSet$VPS)))
 
-  if (is.null(paramSet$TE) && !is.null(paramSet$RTE)) {
+  # If SEM or CFA, Convert RTE/VTE to TE
+  if (!is.null(paramSet$LY) && is.null(TE)) {
       paramSet$TE <- suppressWarnings(cor2cov(paramSet$RTE, sqrt(paramSet$VTE)))
   }
   
