@@ -59,23 +59,22 @@ loading[4:6, 2] <- NA
 loadingValues <- matrix(0, 6, 2)
 loadingValues[1:3, 1] <- 0.7
 loadingValues[4:6, 2] <- 0.7
-LX <- simMatrix(loading, loadingValues)
+LX <- bind(loading, loadingValues)
 latent.cor <- matrix(NA, 2, 2)
 diag(latent.cor) <- 1
-RPH <- symMatrix(latent.cor, 0.5)
+RPH <- binds(latent.cor, 0.5)
 error.cor <- matrix(0, 6, 6)
 diag(error.cor) <- 1
-RTD <- symMatrix(error.cor)
-CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
-SimData <- simData(CFA.Model, 200)
-SimModel <- simModel(CFA.Model)
+RTD <- binds(error.cor)
+CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+
 # We make the examples running only 5 replications to save time.
 # In reality, more replications are needed.
-Output <- simResult(5, SimData, SimModel)
+Output <- sim(5, n = 200, model=CFA.Model)
 getCutoff(Output, 0.05)
 
 # Finding the cutoff when the sample size is varied.
-Output2 <- simResult(NULL, SimData, SimModel, n=seq(50, 100, 10))
+Output2 <- sim(NULL, model=CFA.Model, n=seq(50, 100, 10))
 getCutoff(Output2, 0.05, nVal = 75)
 }
 }

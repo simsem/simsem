@@ -48,4 +48,4 @@ export(simUnif, simNorm, simBeta, simBinom, simCauchy, simChisq, simExp,
 	continuousPower,
 	plotPowerFit, plotPowerFitNested, plotCutoffNested, getCutoffNested, multipleAllEqual,
 	getCutoffNonNested, plotCutoffNonNested, plotPowerFitNonNested, likRatioFit, pValueNested, pValueNonNested,
-	bind, binds, model, generate, analyze, sim)
+	bind, binds, model, generate, analyze, sim, draw, createData)

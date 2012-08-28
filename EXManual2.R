@@ -82,6 +82,9 @@ VY <- bind(rep(NA,6),2)
 
 CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
 
+param <- draw(CFA.Model)
+dat <- createData(param[[1]], n = 200)
+
 dat <- generate(CFA.Model,200)
 dat2 <- generate(CFA.Model, 200, params=TRUE)
 out <- analyze(CFA.Model,dat)
@@ -153,31 +156,31 @@ factor.cor <- matrix(NA, 2, 2)
 diag(factor.cor) <- 1
 RPS <- binds(factor.cor, 0.5)
 
-VTE <- simVector(rep(NA, 4), 1.2)
+VTE <- bind(rep(NA, 4), 1.2)
 
 RTE <- binds(diag(4))
 
-TY <- simVector(rep(0, 4))
+TY <- bind(rep(0, 4))
 
-LCA.Model <- simSetCFA(LY=LY, RPS=RPS, VPS=VPS, AL=AL, VTE=VTE, RTE=RTE, TY=TY)
+LCA.Model <- model(LY=LY, RPS=RPS, VPS=VPS, AL=AL, VTE=VTE, RTE=RTE, TY=TY, modelType="CFA")
 
-Data.True <- simData(LCA.Model, 300)
-SimModel <- simModel(LCA.Model)
-#Output <- sim(100, Data.True, SimModel)
-#getCutoff(Output, 0.05)
-#plotCutoff(Output, 0.05)
+Data.True <- generate(LCA.Model, 300)
+out <- analyze(LCA.Model, Data.True)
 
-#u1 <- simUnif(-0.1, 0.1)
+
 
 loading.trivial <- matrix(0, 4, 2)
-loading.trivial[2:3, 2] <- NA
-loading.mis <- bind(loading.trivial, "runif(1,-0.1,0.1)")
+loading.trivial[2:3, 2] <- "runif(1,-0.1,0.1)"
 
-LCA.Mis <- simMisspecCFA(LY = loading.mis)
+LY.mis <- bind(factor.loading, misspec=loading.trivial)
 
-Data.Mis <- simData(LCA.Model, 300, LCA.Mis, sequential=TRUE)
+LCA.Mis <- model(LY=LY.mis, RPS=RPS, VPS=VPS, AL=AL, VTE=VTE, RTE=RTE, TY=TY, modelType="CFA")
 
-Output.Mis <- sim(100, Data.Mis, SimModel)#, multicore=TRUE)
+
+Data.Mis <- generate(LCA.Mis, 300, params=TRUE)
+out <- analyze(LCA.Mis, Data.Mis)
+
+Output.Mis <- sim(100, n=300, model=LCA.Mis)#, multicore=TRUE)
 getCutoff(Output.Mis, 0.05)
 plotCutoff(Output.Mis, 0.05)
 summaryParam(Output.Mis)
@@ -193,28 +196,21 @@ path.BE <- matrix(0, 4, 4)
 path.BE[3, 1:2] <- NA
 path.BE[4, 3] <- NA
 starting.BE <- matrix("", 4, 4)
-starting.BE[3, 1:2] <- "runif(1,0.3,0.5)"
+starting.BE[3, 1:2] <- "runif(1, 0.3, 0.5)"
 starting.BE[4, 3] <- "runif(1,0.5,0.7)"
-BE <- bind(path.BE, starting.BE)
+mis.path.BE <- matrix(0, 4, 4)
+mis.path.BE[4, 1:2] <- "runif(1,-0.1,0.1)"
+BE <- bind(path.BE, starting.BE, misspec=mis.path.BE)
 
 residual.error <- diag(4)
 residual.error[1,2] <- residual.error[2,1] <- NA
 RPS <- binds(residual.error, "rnorm(1,0.3,0.1)")
 
-ME <- simVector(rep(NA, 4), 0)
+ME <- bind(rep(NA, 4), 0)
 
-Path.Model <- simSetPath(RPS = RPS, BE = BE, ME = ME)
+Path.Model <- model(RPS = RPS, BE = BE, ME = ME, modelType="Path")
 
-mis.path.BE <- matrix(0, 4, 4)
-mis.path.BE[4, 1:2] <- NA
-mis.BE <- bind(mis.path.BE, "runif(1,-0.1,0.1)")
-
-Path.Mis.Model <- simMisspecPath(BE = mis.BE, misfitType="rmsea", optMisfit="max", numIter=10) #, misfitBound=c(0.05, 0.08))
-
-Data <- simData(Path.Model, 500, maxDraw=1000)
-Data.Mis <- simData(Path.Model, 500, Path.Mis.Model)
-
-# dat <- run(Data.Mis)
+dat <- generate(Path.Model, n=500, misfitType="rmsea", optMisfit="max", optDraws=10, params=TRUE)
 # x <- drawParametersMisspec(Path.Model, Path.Mis.Model)
 # y <- simParam(1000, Path.Model, Path.Mis.Model)
 # plot(y@misspec[,2], y@fit[,2])

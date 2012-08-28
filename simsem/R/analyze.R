@@ -4,10 +4,13 @@ analyze <- function(model, data, package="lavaan", simMissing=NULL,indLab=NULL,a
   Output <- NULL
   DataOut <- NULL
   args <- list(...)
-  ##  if (class(data) == "SimDataOut") {
-  ##         DataOut <- data
-  ##         data <- DataOut@data
-  ##     }
+  if (is(data, "list")) {
+	if("data" %in% names(data)) {
+	  data <- data$data
+	} else {
+	  stop("The list does not contain any 'data' slot.")
+	}
+  }
   if (is.null(colnames(data))) 
     colnames(data) <- paste0("x", 1:ncol(data))
   if (is.null(auxiliary)) {

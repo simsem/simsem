@@ -31,7 +31,7 @@ getCutoffNonNested <- function(dat1Mod1, dat1Mod2, dat2Mod1=NULL, dat2Mod2=NULL,
 	Data2 <- NULL
 	if(!is.null(dat2Mod1) & !is.null(dat2Mod2)) Data2 <- as.data.frame((dat2Mod1@fit - dat2Mod2@fit))
 	
-    condition <- c(length(dat1Mod1@pmMCAR) > 1, length(dat1Mod1@pmMAR) > 1, length(dat1Mod1@n) > 1)
+    condition <- c(length(unique(dat1Mod1@pmMCAR)) > 1, length(unique(dat1Mod1@pmMAR)) > 1, length(unique(dat1Mod1@n)) > 1)
     condValue <- cbind(dat1Mod1@pmMCAR, dat1Mod1@pmMAR, dat1Mod1@n)
     colnames(condValue) <- c("Percent MCAR", "Percent MAR", "N")
     condValue <- condValue[, condition]
