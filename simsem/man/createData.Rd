@@ -1,32 +1,49 @@
 \name{createData}
 \alias{createData}
 \title{
-	Create data from model parameters
+	TBA
 }
 \description{
-	Create data from model parameters. The data generation can be multivariate normal, copula model, or Bollen-Stine bootstrap model.
+	TBA
 }
 \usage{
-createData(paramSet, n, object, dataOnly)
+createData(paramSet, n, indDist=NULL, sequential=FALSE, facDist=NULL, 
+errorDist=NULL, indLab=NULL, modelBoot=FALSE, realData=NULL)
 }
 \arguments{
   \item{paramSet}{
-	The list of parameters used for creating data. This list has one element as the actual parameters and the misspecification parameters.
+	TBA
 }
   \item{n}{
 	Sample size
 }
-  \item{object}{
-	The data object, \code{\linkS4class{SimData}}
+  \item{indDist}{
+	TBA
 }
-  \item{dataOnly}{
-	\code{TRUE} to create data in \code{data.frame} only. \code{FALSE} to create data output object, \code{\linkS4class{SimDataOut}}
+  \item{sequential}{
+	TBA
+}
+  \item{facDist}{
+	TBA
+}
+  \item{errorDist}{
+	TBA
+}
+  \item{indLab}{
+	TBA
+}
+  \item{modelBoot}{
+	TBA
+}
+  \item{realData}{
+	TBA
 }
 }
 \value{
-	A \code{data.frame} or a data output object, \code{\linkS4class{SimDataOut}}
+	TBA
 }
 \author{
+	Patrick Miller (Univeristy of Notre Dame; \email{pmille13@nd.edu})
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \examples{
