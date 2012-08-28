@@ -1,10 +1,5 @@
 \name{anova}
-%\alias{anova}
-%\alias{anova-methods}
-%\alias{anova,ANY-method}
 \alias{anova,SimResult-method}
-\alias{anova,SimModelOut-method}
-\alias{anova,SimModelMIOut-method}
 \title{
 	Provide a comparison of nested models and nonnested models across replications
 }
@@ -49,23 +44,21 @@ loading1 <- matrix(0, 6, 1)
 loading1[1:6, 1] <- NA
 loading2 <- loading1
 loading2[6,1] <- 0
-LX1 <- simMatrix(loading1, 0.7)
-LX2 <- simMatrix(loading2, 0.7)
-RPH <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model1 <- simSetCFA(LY = LX1, RPS = RPH, RTE = RTD)
-CFA.Model2 <- simSetCFA(LY = LX2, RPS = RPH, RTE = RTD)
-SimData <- simData(CFA.Model1, 500)
-SimModel1 <- simModel(CFA.Model1)
-SimModel2 <- simModel(CFA.Model2)
+LX1 <- bind(loading1, 0.7)
+LX2 <- bind(loading2, 0.7)
+RPH <- binds(diag(1))
+RTD <- binds(diag(6))
+CFA.Model1 <- model(LY = LX1, RPS = RPH, RTE = RTD, modelType="CFA")
+CFA.Model2 <- model(LY = LX2, RPS = RPH, RTE = RTD, modelType="CFA")
+
 # We make the examples running only 5 replications to save time.
 # In reality, more replications are needed.
 # Need to make sure that both simResult calls have the same seed!
-Output1 <- simResult(5, SimData, SimModel1, seed=123567)
-Output2 <- simResult(5, SimData, SimModel2, seed=123567)
+Output1 <- sim(5, n=500, model=CFA.Model1, generate=CFA.Model1, seed=123567)
+Output2 <- sim(5, n=500, model=CFA.Model2, generate=CFA.Model1, seed=123567)
 anova(Output1, Output2)
 
-Output1b <- simResult(NULL, SimData, SimModel1, seed=123567, n=seq(50, 500, 50))
-Output2b <- simResult(NULL, SimData, SimModel2, seed=123567, n=seq(50, 500, 50))
+Output1b <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model1, generate=CFA.Model1, seed=123567)
+Output2b <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model2, generate=CFA.Model1, seed=123567)
 anova(Output1b, Output2b)
 }

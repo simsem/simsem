@@ -7,7 +7,8 @@
 	TBA
 }
 \usage{
-analyze(model, data, package="lavaan", simMissing=NULL,indLab=NULL,auxiliary=NULL,...)
+analyze(model, data, package="lavaan", simMissing=NULL, indLab=NULL, 
+auxiliary=NULL, ...)
 }
 \arguments{
   \item{model}{
