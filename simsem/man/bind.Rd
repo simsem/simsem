@@ -3,7 +3,7 @@
 \alias{binds}
 \title{Specify matrices for Monte Carlo simulation of structural equation models}
 \description{
-	Create \code{\linkS4class{SimMatrix}} object that specifies
+	Create \code{\linkS4class{SimMatrix}} or \code{\linkS4class{SimVector}} object that specifies
 \enumerate{
 	\item{Pattern of fixed/freed parameters for analysis}
 	\item{Population parameter values for data generation}
@@ -20,7 +20,7 @@ binds(free = NULL, popParam = NULL, misspec = NULL, symmetric = TRUE)
   \item{popParam}{Optional matrix or vector of identical dimension to the free matrix whose elements contain population parameter values for data generation in simulation. For simlutation, each free parameter requires a population parameter value, which is a quoted numeric value. Parameters that don't have population values are left as empty strings.
 Population parameters can also be drawn from a distribution. This is done by wrapping a call to create 1 value from an existing random generation function in quotes: e.g \code{"runif(1,0,1)","rnorm(1,0,.01)"} Every replication in the simulation will draw a parameter value from this distribution. The function checks that what is quoted is valid R. 
 
-If a random population parameter is constrained to equality in the free matrix, \emph{each drawn population parameter value will be the same.} More details on data generation is available in \code{?generate}, \code{?createData}, and \code{?drawParam}.
+If a random population parameter is constrained to equality in the free matrix, \emph{each drawn population parameter value will be the same.} More details on data generation is available in \code{?generate}, \code{?createData}, and \code{?draw}.
 
 To simplify the most common case, \code{popParam} can take 1 value or distribution and create a matrix or vector that assigns that population parameter or distribution to all freed parameters. These population values are used as starting values for analysis by default.}
 
@@ -36,7 +36,7 @@ In simulations supported by \emph{simsem}, a given parameter may be either fixed
 
 }
 
-\value{	\code{\linkS4class{SimMatrix}} object that used for model specification for analysis and data generation in simsem.}
+\value{	\code{\linkS4class{SimMatrix}} or \code{\linkS4class{SimVector}} object that used for model specification for analysis and data generation in simsem.}
 
 \author{
     Patrick Miller (Univeristy of Notre Dame; \email{pmille13@nd.edu}), 
