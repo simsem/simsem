@@ -1,9 +1,9 @@
 ## Takes model specification matrices of type SimMatrix (or lists of these matrices for multiple groups).
 ## Returns a SimSem object that contains templates for data generation and analyis.
 model <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL, VTE = NULL, VY = NULL,
-                  VPS = NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, modelType, indLab=NULL, facLab=NULL, ngroups=1, smartStart=TRUE) {
+                  VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, modelType, indLab=NULL, facLab=NULL, ngroups=1, smartStart=TRUE) {
   
-  paramSet <- list(LY=LY, PS=PS, RPS=RPS, TE=TE, RTE=RTE, BE=BE, VTE=VTE, VY=VY, VPS=VPS, TY=TY, AL=AL, MY=MY,ME=ME)
+  paramSet <- list(LY=LY, PS=PS, RPS=RPS, TE=TE, RTE=RTE, BE=BE, VTE=VTE, VY=VY, VPS=VPS, VE=VE, TY=TY, AL=AL, MY=MY,ME=ME)
   if(!is.null(modelType)) {
 
     mg <- NULL
@@ -96,9 +96,9 @@ buildModel <- function(paramSet,modelType) {
   if(!is.null(paramSet$PS)) {
     stopifnot(paramSet$PS@symmetric)
     if(!is.null(paramSet$RPS)) stop("Factor covariance and factor correlation cannot be specified at the same time!")
-    if(!is.null(paramSet$VE)) stop("Factor covariance and factor variance cannot be specified at the same time!")
+    if(!is.null(paramSet$VE)) stop("Factor covariance and total factor variance cannot be specified at the same time!")
   } else {
-    if(is.null(paramSet$RPS)) stop("No latent variables correlation object in CFA")
+    if(is.null(paramSet$RPS)) stop("In CFA, must specify either PS or RPS")
     stopifnot(paramSet$RPS@symmetric)
     if(is.null(paramSet$VE)) { paramSet$VE <- bind(free=rep(1,nk)) } # Set the latent variances to be fixed to 1  
   }
@@ -115,7 +115,7 @@ buildModel <- function(paramSet,modelType) {
     stopifnot(paramSet$PS@symmetric)
     if(!is.null(paramSet$RPS)) stop("Covariance and correlation cannot be specified at the same time!")
     if(!is.null(paramSet$VPS)) stop("Covariance and variance cannot be specified at the same time!")
-    if(!is.null(paramSet$VE)) stop("Covariance and total indicator variance cannot be specified at the same time!")
+    if(!is.null(paramSet$VE)) stop("Covariance and total factor variance cannot be specified at the same time!")
   } else {
     if(is.null(paramSet$RPS)) stop("No residual correlation object between factor.ETA")
     stopifnot(paramSet$RPS@symmetric)
