@@ -47,9 +47,6 @@ getCutoffNested(nested, parent, alpha = 0.05, usedFit = NULL, nVal = NULL, pmMCA
 }
 \examples{
 \dontrun{
-n1 <- simNorm(0, 0.1)
-u79 <- simUnif(0.7, 0.9)
-
 loading.null <- matrix(0, 6, 1)
 loading.null[1:6, 1] <- NA
 LX.NULL <- bind(loading.null, 0.7)
@@ -66,7 +63,7 @@ loading.alt[4:6, 2] <- NA
 LX.ALT <- bind(loading.alt, 0.7)
 latent.cor.alt <- matrix(NA, 2, 2)
 diag(latent.cor.alt) <- 1
-RPH.ALT <- binds(latent.cor.alt, "u79")
+RPH.ALT <- binds(latent.cor.alt, "runif(1, 0.7, 0.9)")
 CFA.Model.ALT <- model(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD, modelType="CFA")
 
 # The actual number of replications should be greater than 10.

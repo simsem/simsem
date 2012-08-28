@@ -3,6 +3,9 @@
 #Call it population value instead of starting value
 #Summary function put star for fixed parameters (Any nonzero values that is fixed is labelled as stars)
 
+# To do: write the whole runFit function
+# Write the dataDist funciton: try to make it not depends on any distribution object
+
 #####Result
 # Bias behind each simAnalysis
 # Coverage by confidence interval
@@ -211,61 +214,18 @@ ME <- bind(rep(NA, 4), 0)
 Path.Model <- model(RPS = RPS, BE = BE, ME = ME, modelType="Path")
 
 dat <- generate(Path.Model, n=500, misfitType="rmsea", optMisfit="max", optDraws=10, params=TRUE)
-# x <- drawParametersMisspec(Path.Model, Path.Mis.Model)
-# y <- simParam(1000, Path.Model, Path.Mis.Model)
-# plot(y@misspec[,2], y@fit[,2])
-# lines(loess.smooth(y@misspec[,2], y@fit[,2]), col="red")
+out <- analyze(Path.Model, dat)
+# The VTE is still wrong. Check after the LCA comes in.
 
-SimModel <- simModel(Path.Model)
-popMisfit(Path.Model, Path.Mis.Model, fit.measures="rmsea")
 
-#Output <- sim(100, Data, SimModel)
-Output <- sim(100, Data.Mis, SimModel)
+# Output is wrong. It contains some bugs.
+Output <- sim(100, n=500, Path.Model)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
 
-# Population Misfit Investigation
-paramOut <- simParam(1000, Path.Model, misspec=Path.Mis.Model)
-
-
-# Example 4 with X sides #
-##library(simsem)
-
-#u35 <- simUnif(0.3, 0.5)
-#u57 <- simUnif(0.5, 0.7)
-#u1 <- simUnif(-0.1, 0.1)
-#n31 <- simNorm(0.3, 0.1)
-
-path.GA <- matrix(0, 2, 2)
-path.GA[1, 1:2] <- NA
-GA <- bind(path.GA, "runif(1,0.3,0.5)")
-
-path.BE <- matrix(0, 2, 2)
-path.BE[2, 1] <- NA
-BE <- bind(path.BE, "runif(1,0.5,0.7)")
-
-exo.cor <- matrix(NA, 2, 2)
-diag(exo.cor) <- 1
-RPH <- binds(exo.cor, "rnorm(1,0.3,0.1)")
-
-RPS <- binds(diag(2))
-
-Path.Model <- simSetPath(RPS = RPS, BE = BE, RPH = RPH, GA = GA, exo=TRUE)
-
-mis.path.GA <- matrix(0, 2, 2)
-mis.path.GA[2, 1:2] <- NA
-mis.GA <- bind(mis.path.GA, "runif(1,-0.1,0.1)")
-Path.Mis.Model <- simMisspecPath(GA = mis.GA, exo=TRUE)
-
-Data.Mis <- simData(Path.Model, 500, Path.Mis.Model)
-SimModel <- simModel(Path.Model)
-
-
-Output <- sim(100, Data.Mis, SimModel)
-getCutoff(Output, 0.05)
-plotCutoff(Output, 0.05)
-summaryParam(Output)
+# It does not stop at the ParamOnly
+paramOut <- sim(100, n=500, Path.Model, paramOnly=TRUE)
 
 ############# Example 5 ################################
 #library(simsem)
