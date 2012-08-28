@@ -407,7 +407,8 @@ reduceMatrices <- function(paramSet) {
   if (is.null(paramSet$PS)) 
     paramSet$PS <- suppressWarnings(cor2cov(paramSet$RPS, sqrt(paramSet$VPS)))
 
-  if (is.null(paramSet$TE) && !is.null(paramSet$RTE)) {
+  # If SEM or CFA, Convert RTE/VTE to TE
+  if (!is.null(paramSet$LY) && is.null(paramSet$TE)) {
       paramSet$TE <- suppressWarnings(cor2cov(paramSet$RTE, sqrt(paramSet$VTE)))
   }
   

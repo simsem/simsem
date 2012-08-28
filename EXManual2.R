@@ -76,22 +76,22 @@ latent.cor <- matrix(NA, 2, 2)
 diag(latent.cor) <- 1
 RPS <- binds(latent.cor, 0.5)
 
-error.cor <- matrix(0, 6, 6)
-diag(error.cor) <- NA
-RTE <- binds(error.cor,1)
+RTE <- binds(diag(6))
 
 VY <- bind(rep(NA,6),2)
 
-CFA.Model2 <- model(LY = LY, RPS = RPS, RTE = RTE, VY=VY, modelType="CFA")
 CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
-out <- analyze(CFA.Model,generate(CFA.Model,200))
+
+dat <- generate(CFA.Model,200)
+dat2 <- generate(CFA.Model, 200, params=TRUE)
+out <- analyze(CFA.Model,dat)
 
 #SimMissing <- simMissing(pmMCAR=0.1, numImps=5)
-Output <- sim(2, CFA.Model,n=200)
-Output2 <- sim(2, CFA.Model2, n=200)
+Output <- sim(20, CFA.Model,n=200)
+Output2 <- sim(20, CFA.Model2, n=200)
 Output3 <- sim(20, CFA.Model, n=200, multicore=TRUE, numProc=2)
 #Output <- sim(100, SimData, SimModel, SimMissing, multicore=TRUE)
-bgetCutoff(Output, 0.05)
+getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
 
