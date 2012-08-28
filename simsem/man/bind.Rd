@@ -1,15 +1,14 @@
 \name{bind}
-\name{binds}
-\alias{bind}
-\title{
-	Bind together R matrices into a simMatrix for simulation and analysis of structural equation models, using a Lisrel-style notation. 
-}
+
+\alias{binds}
+\title{bind}
+
 \description{
 	Create \code{\linkS4class{SimMatrix}} object that specifies
-	1. Pattern of fixed/freed parameters for analysis
-	2. Population parameter values for data generation.
-	3. Any model misspecification (true population parameter is different than the one specified) for these parameters.
- 
+\enumerate{
+	\item{Pattern of fixed/freed parameters for analysis}
+	\item{Population parameter values for data generation}
+	\item{Any model misspecification (true population parameter is different than the one specified) for these parameters.} }
 	Each matrix in the Lisrel-style notation is specified in this way (e.g. LY, PS, and TE) and is used to create a model analysis template and a data generation template for simulation through the \code{model} function.
 }
 \usage{
@@ -17,39 +16,35 @@ bind(free = NULL, popParam = NULL, misspec = NULL, symmetric = FALSE)
 binds(free = NULL, popParam = NULL, misspec = NULL, symmetric = TRUE)
 }
 \arguments{
-  \item{free}{
-	Required matrix or vector where each element represents a fixed or freed parameter used for analysis with structural equation models. Parameters can be freed by setting the corresponding element in the matrix to \code{NA}, and can be fixed by setting the value of the element to any number (e.g. 0). Parameters can be labeled using any character string, and parameters with identical labels will be constrained to equality. 
-}
-  \item{popParam}{
-	Optional matrix or vector of identical dimension to the free matrix whose elements contain population parameter values for data generation in simulation. For simlutation, each free parameter requires a population parameter value, which is a quoted numeric value. Parameters that don't have population values are left as empty strings.
-Population parameters can also be drawn from a distribution. This is done by wrapping a call to create 1 value from an existing random generation function in quotes: e.g \code{"runif(1,0,1)","rnorm(1,0,.01)"} Every replication in the simulation will draw a parameter value from this distribution. The function checks that what is quoted is valid R. More details on data generation is available in \code{?generate}, \code{?createData}, and \code{drawParam}. 
+  \item{free}{Required matrix or vector where each element represents a fixed or freed parameter used for analysis with structural equation models. Parameters can be freed by setting the corresponding element in the matrix to \code{NA}, and can be fixed by setting the value of the element to any number (e.g. 0). Parameters can be labeled using any character string. Any labeled parameter is considered to be free, and parameters with identical labels will be constrained to equality for analysis.}
 
-To simplify the most common case, popParam can take 1 value or distribution and create a matrix or vector that assigns that population parameter or distribution to all freed parameters.
+  \item{popParam}{Optional matrix or vector of identical dimension to the free matrix whose elements contain population parameter values for data generation in simulation. For simlutation, each free parameter requires a population parameter value, which is a quoted numeric value. Parameters that don't have population values are left as empty strings.
+Population parameters can also be drawn from a distribution. This is done by wrapping a call to create 1 value from an existing random generation function in quotes: e.g \code{"runif(1,0,1)","rnorm(1,0,.01)"} Every replication in the simulation will draw a parameter value from this distribution. The function checks that what is quoted is valid R. 
 
-These population values are used as starting values for analysis by default.
+If a random population parameter is constrained to equality in the free matrix, \emph{their population values will also be the same.} More details on data generation is available in \code{?generate}, \code{?createData}, and \code{?drawParam}. 
+
+To simplify the most common case, popParam can take 1 value or distribution and create a matrix or vector that assigns that population parameter or distribution to all freed parameters. These population values are used as starting values for analysis by default.}
+
+   \item{misspec}{Optional matrix or vector of identical dimension to the free matrix whose elements contain population parameter values for specifying misspecification. That is, elements of this matrix contain population parameters that are added to parameters that are fixed or have an existing population value. These parameters are wrapped in quotes, and can optionally be drawn from distributions as described above. Again, to simplify the most common case, misspec can take 1 value or distribution and create a matrix or vector that assigns that value or distribution to all previously specified fixed parameters. Details about misspecification are included the data generation functions.}
+
+   \item{symmetric}{Set as \code{TRUE} if the matrix created is symmetric (RPS/PS, RTE/TE). The function \code{binds} can also be used, which defaults to \code{symmetric = TRUE} }
 }
-\item{misspec} {
-Optional matrix or vector of identical dimension to the free matrix whose elements contain population parameter values for specifying misspecification. That is, elements of this matrix contain population parameters that are added to parameters that are fixed or have an existing population value. These parameters are wrapped in quotes, and can optionally be drawn from distributions as described above. Again, to simplify the most common case, misspec can take 1 value or distribution and create a matrix or vector that assigns that value or distribution to all previously specified fixed parameters. Details about misspecification are included the data generation functions.
-}
-\item{symmetric} {
-Set as \code{TRUE} if the matrix created is symmetric (RPS/PS, RTE/TE). The function \code{binds} can also be used, which defaults to \code{symmetric = TRUE}
-}
-\value{
-	\code{\linkS4class{SimMatrix}} object that used for model specification for analysis and data generation in simsem.
-}
+
+\value{	\code{\linkS4class{SimMatrix}} object that used for model specification for analysis and data generation in simsem.}
+
 \author{
-    Patrick Miller (Univeristy of Notre Dame; \email{pmille13@nd.edu})
+    Patrick Miller (Univeristy of Notre Dame; \email{pmille13@nd.edu}), 
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \seealso{
-	\itemize{
-		
-		\item {See \code{\link{model}} To combine simMatrix objects into a complete data analysis and data generation template, which is a \code{\linkS4class{simsem}} object}
+	\itemize{\item {See \code{\link{model}} To combine simMatrix objects into a complete data analysis and data generation template, which is a \code{\linkS4class{simsem}} object}
 		\item See \code{\link{generate}} To generate data using the simsem template.
 		\item See \code{\link{analyze}} To analyze real or generated data using the simsem template.
 	}
 }
+
 \examples{
+
 loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
