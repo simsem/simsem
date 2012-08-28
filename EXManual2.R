@@ -76,16 +76,14 @@ latent.cor <- matrix(NA, 2, 2)
 diag(latent.cor) <- 1
 RPS <- binds(latent.cor, 0.5)
 
-#error.cor <- matrix(0, 6, 6)
-#diag(error.cor) <- NA
 RTE <- binds(diag(6))
 
 VY <- bind(rep(NA,6),2)
 
-#CFA.Model2 <- model(LY = LY, RPS = RPS, RTE = RTE, VY=VY, modelType="CFA")
 CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
 
 dat <- generate(CFA.Model,200)
+dat2 <- generate(CFA.Model, 200, params=TRUE)
 out <- analyze(CFA.Model,dat)
 
 #SimMissing <- simMissing(pmMCAR=0.1, numImps=5)
