@@ -316,7 +316,7 @@ runRep <- function(simConds, model, miss = NULL, fun=NULL, facDist = NULL, indDi
                 pmMCAR <- 0
             if (is.null(pmMAR)) 
                 pmMAR <- 0
-            miss <- simMissing(pmMCAR = pmMCAR, pmMAR = pmMAR)
+            miss <- simMissing(pmMCAR = pmMCAR, pmMAR = pmMAR, ignoreCols="group")
         }
       }
    
@@ -366,7 +366,7 @@ runRep <- function(simConds, model, miss = NULL, fun=NULL, facDist = NULL, indDi
     ## 5. Call lavaan using simsem template and generated data from 2.
     out <- NULL
     # Impute missing and run results
-    if (!is.null(miss) && miss@numImps > 0) {
+    if (!is.null(miss)) { #&& miss@numImps > 0) { # Remove numImps out
       if (silent) {
         invisible(capture.output(suppressMessages(try(out <- analyze(model, data, simMissing=miss),silent=TRUE))))
         ##invisible(capture.output(suppressMessages(try(temp <- run(simConds = objModel, data = data.mis, simMissing = miss), silent = TRUE))))

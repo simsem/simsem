@@ -1,33 +1,34 @@
 # imposeMissing: Function to impost planned, MAR and MCAR missing on a data set
 
 ## The wrapper function for the various functions to impose missing values.  Currently, the function will delete x percent of eligible values for MAR and MCAR, if you mark colums to be ignored.
-imposeMissing <- function(data.mat, cov = NULL, pmMCAR = NULL, pmMAR = NULL, nforms = NULL, itemGroups = NULL, twoMethod = NULL,
-                          prAttr = NULL, timePoints = 1, ignoreCols = NULL, threshold = NULL, logical = NULL) {
-
-    if (!is.null(nforms) | !is.null(twoMethod)) {
+imposeMissing <- function(data.mat, cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, itemGroups = list(0), twoMethod = 0,
+                          prAttr = 0, timePoints = 1, ignoreCols = 0, threshold = 0, logical = NULL) {
+	if (is.character(ignoreCols)) ignoreCols <- match(ignoreCols, colnames(data.mat))
+	if (is.character(cov)) cov <- match(cov, colnames(data.mat))
+    if (nforms != 0 | twoMethod != 0) {
         # TRUE values are values to delete
         log.matpl <- plannedMissing(dim(data.mat), cov, nforms = nforms, twoMethod = twoMethod, itemGroups = itemGroups, timePoints = timePoints, 
             ignoreCols = ignoreCols)
         data.mat[log.matpl] <- NA
     }
     # Impose MAR and MCAR
-    if (!is.null(pmMCAR)) {
+    if (pmMCAR != 0) {
         log.mat1 <- makeMCAR(dim(data.mat), pmMCAR, cov, ignoreCols)
         data.mat[log.mat1] <- NA
     }
     
-    if (!is.null(pmMAR)) {
+    if (pmMAR != 0) {
         
         log.mat2 <- makeMAR(data.mat, pmMAR, cov, ignoreCols, threshold)
         data.mat[log.mat2] <- NA
     }
     
-    if (!is.null(prAttr)) {
+    if (prAttr != 0) {
         log.mat3 <- attrition(data.mat, prob = prAttr, timePoints, cov, threshold, ignoreCols)
         data.mat[log.mat3] <- NA
     }
     
-    if (!isNullObject(logical)) {
+    if (!is.null(logical) && !is.null(dim(logical))) {
         if (!(class(logical) %in% c("matrix", "data.frame"))) 
             stop("The logical argument must be matrix or data frame.")
         if ((dim(data.mat)[1] != dim(logical)[1]) | (dim(data.mat)[2] != dim(logical)[2])) 
@@ -94,17 +95,13 @@ makeMAR <- function(data, pm = NULL, cov = NULL, ignoreCols = NULL, threshold = 
 # Input: Data matrix dimensions, desired percent missing, columns of covariates to not have missingness on
 
 # Output: Logical matrix of values to be deleted
-makeMCAR <- function(dims, pm = NULL, cov = NULL, ignoreCols = NULL) {
+makeMCAR <- function(dims, pm = 0, cov = 0, ignoreCols = 0) {
     nrow <- dims[1]
     ncol <- dims[2]
     colList <- seq_len(ncol)
-    
+	
     excl <- c(cov, ignoreCols)
-    if (!is.null(excl)) {
-        misCols <- colList[-excl]
-    } else {
-        misCols <- colList
-    }
+    misCols <- setdiff(colList, excl)
     
     percent.eligible <- (nrow * length(misCols))/(nrow * ncol)
     pr.missing <- pm/percent.eligible

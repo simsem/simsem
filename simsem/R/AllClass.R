@@ -179,7 +179,7 @@ setClass("SimMissing",
                         cov = "vector", pmMCAR = "numeric", pmMAR = "numeric",
                         nforms = "numeric", itemGroups = "list", twoMethod = "vector",
                         prAttr = "vector", package = "character",
-                        timePoints = "numeric", ignoreCols = "numeric", threshold = "numeric",
+                        timePoints = "numeric", ignoreCols = "vector", threshold = "numeric",
                         covAsAux = "logical", logical = "logical", args="list"
                         )
         ##  prototype(cov = 0, pmMCAR = 0, pmMAR = 0,
