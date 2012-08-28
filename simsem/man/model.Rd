@@ -1,7 +1,7 @@
 \name{model}
 \alias{model}
 \title{
-	TBA
+	TBD
 }
 \description{
 	TBA... the \code{VE} argument is needed
@@ -52,16 +52,16 @@ ME = NULL, modelType, indLab=NULL, facLab=NULL, ngroups=1, smartStart=TRUE)
 	Total mean of endogenous factors (need to be \code{\linkS4class{SimVector}} object). NOTE: Either endogenous factor intercept or total mean of endogenous factor is specified. Both cannot be simultaneously specified.
 }
   \item{modelType}{
-	TBA
+	"CFA", "Sem", or "Path". This is specified to ensure that the analysis and data generation template created based on specified matrices in model correspond to what the user intends.
 }
   \item{indLab}{
-	TBA
+	Character vector of indicator labels. If left blank, automatic labels will be generated as  \code{"x1"}, \code{"x2"}, ... \code{"xx"}.
 }
-  \item{facLab}{
-	TBA
+  \item{facLab}{ 
+	Character vector of factor labels. If left blank, automatic labels will be generated as \code{"y1"}, \code{"y2"}, ... \code{"yx"}.
 }
   \item{ngroups}{
-	TBA
+	Integer. Number of groups for data generation.
 }
   \item{smartStart}{
 	TBA
