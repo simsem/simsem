@@ -7,11 +7,11 @@
 	Validate whether the drawn parameters are good (providing an identified model).
 }
 \usage{
-validateObject(object)
+validateObject(paramSet)
 }
 \arguments{
-  \item{object}{
-	A target \code{\linkS4class{MatrixSet}}
+  \item{paramSet}{
+	A target set of parameters
 }
 }
 \value{

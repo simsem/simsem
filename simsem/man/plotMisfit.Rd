@@ -11,7 +11,7 @@ plotMisfit(object, usedFit="default", misParam=NULL)
 }
 \arguments{
   \item{object}{
-	The parameter result object, \code{\linkS4class{SimResultParam}}
+	The result object, \code{\linkS4class{SimResult}}
 }
   \item{usedFit}{
 	The fit indices used to plot. If the \code{misParam} is not specified, all fit indices are used. If the \code{misParam} is specified, the \code{"rmsea"} is used in the plot.

@@ -15,6 +15,7 @@
 # simFunction still does not work
 # Consider run function in the SimMatrix and SimVector
 # summaryMisspec in simResult
+# Summary simsem got a vector for the symmetric matrix
 
 #####Result
 # Bias behind each simAnalysis
@@ -89,11 +90,13 @@ latent.cor <- matrix(NA, 2, 2)
 diag(latent.cor) <- 1
 RPS <- binds(latent.cor, 0.5)
 
-RTE <- binds(diag(6))
+RTE <- binds(diag(NA, 6), diag(6))
+
+VTE <- bind(rep(NA, 6), 0.51)
 
 VY <- bind(rep(NA,6),2)
 
-CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
+CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, VTE=VTE, modelType = "CFA")
 
 param <- draw(CFA.Model)
 dat <- createData(param[[1]], n = 200)
@@ -102,9 +105,11 @@ dat <- generate(CFA.Model,200)
 dat2 <- generate(CFA.Model, 200, params=TRUE)
 out <- analyze(CFA.Model,dat)
 
+
+
 #SimMissing <- simMissing(pmMCAR=0.1, numImps=5)
 Output <- sim(20, CFA.Model,n=200)
-Output3 <- sim(20, CFA.Model, n=200, multicore=TRUE, numProc=2)
+Output3 <- sim(20, CFA.Model, n=200, multicore=TRUE)
 #Output <- sim(100, SimData, SimModel, SimMissing, multicore=TRUE)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)

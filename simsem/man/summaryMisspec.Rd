@@ -2,7 +2,7 @@
 \alias{summaryMisspec}
 \alias{summaryMisspec-methods}
 \alias{summaryMisspec,ANY-method}
-%\alias{summaryMisspec,SimResultParam-method}
+%\alias{summaryMisspec,SimResult-method}
 \title{
 	Provide summary of model misspecification imposed across replications
 }
@@ -28,7 +28,7 @@ summaryMisspec(object,...)
 }
 
 \seealso{
-	\code{\linkS4class{SimResultParam}} for the object input
+	\code{\linkS4class{SimResult}} for the object input
 }
 \examples{
 # Incomplete

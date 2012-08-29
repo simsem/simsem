@@ -1,5 +1,5 @@
 \name{bind}
-
+\alias{bind}
 \alias{binds}
 \title{Specify matrices for Monte Carlo simulation of structural equation models}
 \description{
@@ -43,7 +43,7 @@ In simulations supported by \emph{simsem}, a given parameter may be either fixed
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \seealso{
-	\itemize{\item {\code{\link{model}} To combine simMatrix objects into a complete data analysis and data generation template, which is a \code{\linkS4class{simsem}} object}
+	\itemize{\item {\code{\link{model}} To combine simMatrix objects into a complete data analysis and data generation template, which is a \code{\linkS4class{SimSem}} object}
 		\item \code{\link{generate}} To generate data using the simsem template.
 		\item \code{\link{analyze}} To analyze real or generated data using the simsem template.
 	}

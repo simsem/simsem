@@ -13,7 +13,7 @@
 This class will save data analysis results from multiple replications and ready to find some useful statistics, such as fit indices cutoffs or power.
 }
 \section{Objects from the Class}{
-Objects can be created by \code{\link{simResult}}. It can also be called from the form \code{new("SimResult", ...)}.
+Objects can be created by \code{\link{sim}}. It can also be called from the form \code{new("SimResult", ...)}.
 }
 \section{Slots}{
   \describe{
@@ -31,6 +31,7 @@ Objects can be created by \code{\link{simResult}}. It can also be called from th
 	\item{\code{n}:}{Sample size of the analyzed data.}
 	\item{\code{pmMCAR}:}{Percent missing completely at random.}
 	\item{\code{pmMAR}:}{Percent missing at random.}
+	\item{\code{timing}:}{Time elapsed in each phase of the simulation.}
   }
 }
 \section{Methods}{
@@ -52,9 +53,9 @@ Objects can be created by \code{\link{simResult}}. It can also be called from th
 }
 \seealso{
 	\itemize{
-		\item \code{\linkS4class{SimData}} for data generation model.
-		\item \code{\linkS4class{SimModel}} for analysis model
-		\item \code{\link{simResult}} for the constructor of this class
+		%\item \code{\linkS4class{SimData}} for data generation model.
+		%\item \code{\linkS4class{SimModel}} for analysis model
+		\item \code{\link{sim}} for the constructor of this class
 	
 	}
 }
@@ -62,21 +63,19 @@ Objects can be created by \code{\link{simResult}}. It can also be called from th
 showClass("SimResult")
 loading <- matrix(0, 6, 1)
 loading[1:6, 1] <- NA
-LX <- simMatrix(loading, 0.7)
-RPH <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
-SimData <- simData(CFA.Model, 500)
-SimModel <- simModel(CFA.Model)
+LX <- bind(loading, 0.7)
+RPH <- binds(diag(1))
+RTD <- binds(diag(6))
+CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+
 # We make the examples running only 5 replications to save time.
 # In reality, more replications are needed.
-Output <- simResult(5, SimData, SimModel)
+Output <- sim(5, n=500, CFA.Model)
 summary(Output)
 getCutoff(Output, 0.05)
 summaryParam(Output)
 summaryPopulation(Output)
 param <- getPopulation(Output)
 Output <- setPopulation(Output, param)
-Output2 <- setPopulation(Output, CFA.Model)
 }
 \keyword{classes}

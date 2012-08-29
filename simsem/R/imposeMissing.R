@@ -1,11 +1,11 @@
 # imposeMissing: Function to impost planned, MAR and MCAR missing on a data set
 
 ## The wrapper function for the various functions to impose missing values.  Currently, the function will delete x percent of eligible values for MAR and MCAR, if you mark colums to be ignored.
-imposeMissing <- function(data.mat, cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, itemGroups = list(0), twoMethod = 0,
+imposeMissing <- function(data.mat, cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, itemGroups = list(), twoMethod = 0,
                           prAttr = 0, timePoints = 1, ignoreCols = 0, threshold = 0, logical = NULL) {
 	if (is.character(ignoreCols)) ignoreCols <- match(ignoreCols, colnames(data.mat))
 	if (is.character(cov)) cov <- match(cov, colnames(data.mat))
-    if (nforms != 0 | twoMethod != 0) {
+    if (nforms != 0 | !isTRUE(all.equal(twoMethod, 0))) {
         # TRUE values are values to delete
         log.matpl <- plannedMissing(dim(data.mat), cov, nforms = nforms, twoMethod = twoMethod, itemGroups = itemGroups, timePoints = timePoints, 
             ignoreCols = ignoreCols)
@@ -130,6 +130,10 @@ makeMCAR <- function(dims, pm = 0, cov = 0, ignoreCols = 0) {
 plannedMissing <- function(dims = c(0, 0), nforms = NULL, itemGroups = NULL, twoMethod = NULL, cov = NULL, timePoints = 1, 
     ignoreCols = NULL) {
     
+	if(!is.null(itemGroups) && is.list(itemGroups) && length(itemGroups) == 0) itemGroups <- NULL
+	if(is.vector(twoMethod) && length(twoMethod) == 1 && twoMethod == 0) twoMethod <- NULL
+	if(is.vector(nforms) && length(nforms) == 1 && nforms == 0) nforms <- NULL
+	
     nitems <- dims[2]
     nobs <- dims[1]
     excl <- c(cov, ignoreCols)
@@ -137,10 +141,8 @@ plannedMissing <- function(dims = c(0, 0), nforms = NULL, itemGroups = NULL, two
     
     itemList <- seq_len(nitems)
     
-    
-    if (!is.null(excl)) {
-        itemList <- itemList[-excl]
-    }
+    excl <- c(cov, ignoreCols)
+    itemList <- setdiff(itemList, excl)
     
     itemsPerTP <- length(itemList)/timePoints
     
@@ -216,6 +218,7 @@ plannedMissing <- function(dims = c(0, 0), nforms = NULL, itemGroups = NULL, two
         
         # 6) Convert back to matrix
         
+		excl <- setdiff(excl, 0)
         if (length(excl) != 0) {
             exclMat <- matrix(rep(FALSE, nobs * length(excl)), ncol = length(excl))
             log.df <- as.data.frame(cbind(log.mat, exclMat))

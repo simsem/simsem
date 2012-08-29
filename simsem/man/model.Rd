@@ -16,16 +16,16 @@ ME = NULL, modelType, indLab=NULL, facLab=NULL, ngroups=1, smartStart=TRUE)
 	Factor loading matrix from endogenous factors to Y indicators (need to be \code{\linkS4class{SimMatrix}} object).
 }
   \item{PS}{
-	Residual covariance matrix among endogenous factors (need to be \code{\linkS4class{SymMatrix}} object).
+	Residual covariance matrix among endogenous factors (need to be \code{\linkS4class{SimMatrix}} object).
 }
   \item{RPS}{
-	Residual correlation matrix among endogenous factors (need to be \code{\linkS4class{SymMatrix}} object).
+	Residual correlation matrix among endogenous factors (need to be \code{\linkS4class{SimMatrix}} object).
 }
   \item{TE}{
-	Measurement error covariance matrix among Y indicators (need to be \code{\linkS4class{SymMatrix}} object).
+	Measurement error covariance matrix among Y indicators (need to be \code{\linkS4class{SimMatrix}} object).
 }
   \item{RTE}{
-	Measurement error correlation matrix among Y indicators (need to be \code{\linkS4class{SymMatrix}} object).
+	Measurement error correlation matrix among Y indicators (need to be \code{\linkS4class{SimMatrix}} object).
 }
   \item{BE}{
 	Regression coefficient matrix among endogenous factors (need to be \code{\linkS4class{SimMatrix}} object).

@@ -11,7 +11,7 @@
 This object can be used to represent a vector in SEM model. It contains free parameters, fixed values, and starting values. This object can be represented mean, intercept, or variance vectors.
 }
 \section{Objects from the Class}{
-This object is created by \code{\link{simVector}} function. Objects can be created by calls of the form \code{new("SimVector", ...)}.
+This object is created by \code{\link{bind}} function. Objects can be created by calls of the form \code{new("SimVector", ...)}.
 }
 \section{Slots}{
   \describe{
@@ -41,7 +41,7 @@ showClass("SimVector")
 factor.mean <- rep(NA, 2)
 factor.mean.starting <- c(5, 2)
 AL <- bind(factor.mean, factor.mean.starting)
-run(AL)
+#run(AL)
 summary(AL)
 summaryShort(AL)
 

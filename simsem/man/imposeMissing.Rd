@@ -8,9 +8,9 @@ Function imposes missing values on a data based on the known missing data types,
 including MCAR, MAR, planned, and attrition.
 }
 \usage{
-imposeMissing(data.mat, cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0,
-	itemGroups = 0, twoMethod = 0,  prAttr = 0, timePoints = 1, 
-	ignoreCols = 0, threshold = 0, logical = NULL)
+imposeMissing(data.mat, cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, 
+itemGroups = list(), twoMethod = 0, prAttr = 0, timePoints = 1, 
+ignoreCols = 0, threshold = 0, logical = NULL)
 }
 \arguments{
   \item{data.mat}{
@@ -114,7 +114,7 @@ Alexander M. Schoemann (University of Kansas; \email{schoemann@ku.edu})
 }
 \seealso{
 	\itemize{
-		\item \code{\linkS4class{SimMissing}} for the alternative way to save missing data feature for using in the \code{\link{simResult}} function.
+		\item \code{\linkS4class{SimMissing}} for the alternative way to save missing data feature for using in the \code{\link{sim}} function.
 		\item \code{\link{runMI}} for imputing missing data by multiple imputation and analyze the imputed data.
 	}
 }

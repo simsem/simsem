@@ -45,7 +45,7 @@ showClass("SimDataDist")
 chisq3 <- simChisq(3)
 chisq8 <- simChisq(8)
 dist <- simDataDist(chisq3, chisq8)
-dist2 <- extract(dist, 2)
+% dist2 <- extract(dist, 2)
 
 m <- c(0, 0)
 cm <- matrix(c(1, 0.5, 0.5, 1), 2, 2)

@@ -19,11 +19,6 @@
 }
 \value{
 	A data frame that provides the statistics described above from all parameters.
-	For using with \code{\linkS4class{SimModelOut}}, each column means
-	\itemize{
-		\item \code{summary:} The fit indices of each output
-		\item \code{diff:} The differences in fit indices among outputs 
-	}	
 	For using with \code{linkS4class{SimResult}}, the result is a list with two or three elements:
 	\itemize{
 		\item \code{summary:} Average of fit indices across all replications

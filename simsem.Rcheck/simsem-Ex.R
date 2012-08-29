@@ -6,95 +6,6 @@ library('simsem')
 
 assign(".oldSearch", search(), pos = 'CheckExEnv')
 cleanEx()
-nameEx("MatrixSet-class")
-### * MatrixSet-class
-
-flush(stderr()); flush(stdout())
-
-### Name: MatrixSet-class
-### Title: Class '"MatrixSet"'
-### Aliases: MatrixSet-class MisspecSet-class summary,MatrixSet-method
-###   summary,MisspecSet-method
-
-### ** Examples
-
-showClass("SimSet")
-
-loading <- matrix(0, 6, 2)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-loadingValues <- matrix(0, 6, 2)
-loadingValues[1:3, 1] <- 0.7
-loadingValues[4:6, 2] <- 0.7
-LX <- simMatrix(loading, loadingValues)
-latent.cor <- matrix(NA, 2, 2)
-diag(latent.cor) <- 1
-RPH <- symMatrix(latent.cor, 0.5)
-error.cor <- matrix(0, 6, 6)
-diag(error.cor) <- 1
-RTD <- symMatrix(error.cor)
-CFA.Model <- simSetCFA(LX = LX, RPH = RPH, RTD = RTD)
-MatrixSet <- run(CFA.Model)
-summary(MatrixSet)
-
-
-
-cleanEx()
-nameEx("Null-class")
-### * Null-class
-
-flush(stderr()); flush(stdout())
-
-### Name: Nullclass
-### Title: Null Objects
-### Aliases: NullDataFrame-class NullVector-class NullMatrix-class
-###   NullSimMatrix-class NullSymMatrix-class NullSimVector-class
-###   NullSimSet-class NullSimEqualCon-class NullSimREqualCon-class
-###   NullRSet-class NullSimMisspec-class NullSimDataDist-class
-###   NullSimMissing-class NullSimFunction-class
-### Keywords: classes
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("SimData-class")
-### * SimData-class
-
-flush(stderr()); flush(stdout())
-
-### Name: SimData-class
-### Title: Class '"SimData"'
-### Aliases: SimData-class run,SimData-method summary,SimData-method
-### Keywords: classes
-
-### ** Examples
-
-showClass("SimData")
-loading <- matrix(0, 6, 2)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-loadingValues <- matrix(0, 6, 2)
-loadingValues[1:3, 1] <- 0.7
-loadingValues[4:6, 2] <- 0.7
-LX <- simMatrix(loading, loadingValues)
-latent.cor <- matrix(NA, 2, 2)
-diag(latent.cor) <- 1
-RPH <- symMatrix(latent.cor, 0.5)
-error.cor <- matrix(0, 6, 6)
-diag(error.cor) <- 1
-RTD <- symMatrix(error.cor)
-CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
-SimData <- simData(CFA.Model, 200)
-summary(SimData)
-run(SimData)
-
-
-
-cleanEx()
 nameEx("SimDataDist-class")
 ### * SimDataDist-class
 
@@ -109,80 +20,21 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
+# Need to be fixed
+
 showClass("SimDataDist")
 
 chisq3 <- simChisq(3)
 chisq8 <- simChisq(8)
 dist <- simDataDist(chisq3, chisq8)
-dist2 <- extract(dist, 2)
 
 m <- c(0, 0)
 cm <- matrix(c(1, 0.5, 0.5, 1), 2, 2)
 n <- 20
-dat <- run(dist, n, m, cm)
+# dat <- run(dist, n, m, cm)
 
 plotDist(dist, r=0.2)
 
-
-
-
-cleanEx()
-nameEx("SimDataOut-class")
-### * SimDataOut-class
-
-flush(stderr()); flush(stdout())
-
-### Name: SimDataOut-class
-### Title: Class '"SimDataOut"'
-### Aliases: SimDataOut-class summary,SimDataOut-method
-###   createImpliedMACS,SimDataOut-method
-###   summaryPopulation,SimDataOut-method getPopulation,SimDataOut-method
-### Keywords: classes
-
-### ** Examples
-
-showClass("SimDataOut")
-loading <- matrix(0, 6, 1)
-loading[1:6, 1] <- NA
-LX <- simMatrix(loading, 0.7)
-RPH <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
-SimData <- simData(CFA.Model, 500)
-SimModel <- simModel(CFA.Model)
-Data <- run(SimData, dataOnly=FALSE)
-Result <- run(SimModel, Data)
-summary(Data)
-summaryPopulation(Data)
-mis <- getPopulation(Data, misspec=TRUE)
-
-
-
-cleanEx()
-nameEx("SimEqualCon-class")
-### * SimEqualCon-class
-
-flush(stderr()); flush(stdout())
-
-### Name: SimEqualCon-class
-### Title: Class '"SimEqualCon"'
-### Aliases: SimEqualCon-class summary,SimEqualCon-method
-### Keywords: classes
-
-### ** Examples
-
-showClass("SimEqualCon")
-constraint1 <- matrix(1, 3, 2)
-constraint1[,1] <- 1:3
-rownames(constraint1) <- rep("LY", 3)
-constraint2 <- matrix(2, 3, 2)
-constraint2[,1] <- 4:6
-rownames(constraint2) <- rep("LY", 3)
-constraint3 <- matrix(3, 2, 2)
-constraint3[,1] <- 7:8
-rownames(constraint3) <- rep("LY", 2)
-equal.loading <- simEqualCon(constraint1, constraint2, constraint3, modelType="SEM")
-summary(equal.loading)
 
 
 
@@ -200,91 +52,83 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-showClass("SimFunction")
+# The example still does not work
 
-n65 <- simNorm(0.6, 0.05)
-u35 <- simUnif(0.3, 0.5)
-u68 <- simUnif(0.6, 0.8)
-u2 <- simUnif(-0.2, 0.2)
-n1 <- simNorm(0, 0.1)
+#showClass("SimFunction")
 
-loading <- matrix(0, 9, 3)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-loading[7:9, 3] <- NA
-loading.start <- matrix("", 9, 3)
-loading.start[1:3, 1] <- 0.7
-loading.start[4:6, 2] <- 0.7
-loading.start[7:9, 3] <- "u68"
-LY <- simMatrix(loading, loading.start)
+#n65 <- simNorm(0.6, 0.05)
+#u35 <- simUnif(0.3, 0.5)
+#u68 <- simUnif(0.6, 0.8)
+#u2 <- simUnif(-0.2, 0.2)
+#n1 <- simNorm(0, 0.1)
 
-RTE <- symMatrix(diag(9))
+#loading <- matrix(0, 9, 3)
+#loading[1:3, 1] <- NA
+#loading[4:6, 2] <- NA
+#loading[7:9, 3] <- NA
+#loading.start <- matrix("", 9, 3)
+#loading.start[1:3, 1] <- 0.7
+#loading.start[4:6, 2] <- 0.7
+#loading.start[7:9, 3] <- "u68"
+#LY <- simMatrix(loading, loading.start)
 
-factor.cor <- diag(3)
-factor.cor[1, 2] <- factor.cor[2, 1] <- NA
-RPS <- symMatrix(factor.cor, 0.5)
+#RTE <- symMatrix(diag(9))
 
-path <- matrix(0, 3, 3)
-path[3, 1:2] <- NA
-path.start <- matrix(0, 3, 3)
-path.start[3, 1] <- "n65"
-path.start[3, 2] <- "u35"
-BE <- simMatrix(path, path.start)
+#factor.cor <- diag(3)
+#factor.cor[1, 2] <- factor.cor[2, 1] <- NA
+#RPS <- symMatrix(factor.cor, 0.5)
 
-datGen <- simSetSEM(BE=BE, LY=LY, RPS=RPS, RTE=RTE)
+#path <- matrix(0, 3, 3)
+#path[3, 1:2] <- NA
+#path.start <- matrix(0, 3, 3)
+#path.start[3, 1] <- "n65"
+#path.start[3, 2] <- "u35"
+#BE <- simMatrix(path, path.start)
 
-loading.trivial <- matrix(NA, 9, 3)
-loading.trivial[is.na(loading)] <- 0
-LY.trivial <- simMatrix(loading.trivial, "u2")
+#datGen <- simSetSEM(BE=BE, LY=LY, RPS=RPS, RTE=RTE)
 
-error.cor.trivial <- matrix(NA, 9, 9)
-diag(error.cor.trivial) <- 0
-RTE.trivial <- symMatrix(error.cor.trivial, "n1")
+#loading.trivial <- matrix(NA, 9, 3)
+#loading.trivial[is.na(loading)] <- 0
+#LY.trivial <- simMatrix(loading.trivial, "u2")
 
-misGen <- simMisspecSEM(LY = LY.trivial, RTE = RTE.trivial)
+#error.cor.trivial <- matrix(NA, 9, 9)
+#diag(error.cor.trivial) <- 0
+#RTE.trivial <- symMatrix(error.cor.trivial, "n1")
 
-Data.Mis <- simData(datGen, 300, misspec=misGen)
+#misGen <- simMisspecSEM(LY = LY.trivial, RTE = RTE.trivial)
 
-loading <- matrix(0, 12, 4)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-loading[7:9, 4] <- NA
-loading[10:12, 3] <- NA
+#Data.Mis <- simData(datGen, 300, misspec=misGen)
 
-path <- matrix(0, 4, 4)
-path[4, 1:3] <- NA
+#loading <- matrix(0, 12, 4)
+#loading[1:3, 1] <- NA
+#loading[4:6, 2] <- NA
+#loading[7:9, 4] <- NA
+#loading[10:12, 3] <- NA
 
-analysis <- simParamSEM(BE=path, LY=loading)
+#path <- matrix(0, 4, 4)
+#path[4, 1:3] <- NA
 
-Model <- simModel(analysis)
+#analysis <- simParamSEM(BE=path, LY=loading)
 
-fun <- simFunction(indProd, var1=paste("y", 1:3, sep=""), var2=paste("y", 4:6, sep=""), namesProd=paste("y", 10:12, sep=""))
+#Model <- simModel(analysis)
+
+# Find the products of indicators
+#newFUN <- function(data, var1, var2, namesProd) {
+#	prod <- data[,var1] * data[,var2]
+#	colnames(prod) <- namesProd
+#	return(data.frame(data, prod))
+#}
+
+#fun <- simFunction(newFUN, var1=paste("y", 1:3, sep=""), var2=paste("y", 4:6, sep=""), namesProd=paste("y", 10:12, sep=""))
 
 # Real simulation will need more than just 10 replications
-Output <- simResult(10, Data.Mis, Model, objFunction=fun)
-summary(Output)
+#Output <- simResult(10, Data.Mis, Model, objFunction=fun)
+#summary(Output)
 
 # Example of using the simfunction
-mc <- simFunction(indProd, var1=1:3, var2=4:6)
-run(mc, attitude[,-1])
-summary(mc)
-
-
-
-cleanEx()
-nameEx("SimGenLabels-class")
-### * SimGenLabels-class
-
-flush(stderr()); flush(stdout())
-
-### Name: SimGenLabels-class
-### Title: Class '"SimGenLabels"'
-### Aliases: SimGenLabels-class run,SimGenLabels-method
-### Keywords: classes
-
-### ** Examples
-
-# No example
+#mc <- simFunction(newFUN, var1=1:3, var2=4:6, namesProd=paste("y", 10:12, sep=""))
+#run(mc, attitude[,-1])
+#summary(mc)
 
 
 
@@ -298,7 +142,6 @@ flush(stderr()); flush(stdout())
 ### Title: Matrix object: Random parameters matrix
 ### Aliases: SimMatrix-class run,SimMatrix-method
 ###   summaryShort,SimMatrix-method summary,SimMatrix-method
-###   extract,SimMatrix-method
 ### Keywords: classes
 
 ### ** Examples
@@ -311,23 +154,13 @@ loading[4:6, 2] <- NA
 loadingValues <- matrix(0, 6, 2)
 loadingValues[1:3, 1] <- 0.7
 loadingValues[4:6, 2] <- 0.7
-LX <- simMatrix(loading, loadingValues)
+LX <- bind(loading, loadingValues)
 summary(LX)
-run(LX)
+# run(LX)
 
-n65 <- simNorm(0.6, 0.05)
-LY <- simMatrix(loading, "n65")
+LY <- bind(loading, "rnorm(1, 0.6, 0.05)")
 summary(LY)
-run(LY)
-
-u34 <- simUnif(0.3, 0.4)
-LY <- adjust(LY, "u34", c(2, 1))
-summary(LY)
-run(LY)
-summaryShort(LY)
-
-LY <- extract(LY, 1:3, 1)
-summary(LY)
+# run(LY)
 
 
 
@@ -346,176 +179,6 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 # No Example
-
-
-
-cleanEx()
-nameEx("SimMisspec-class")
-### * SimMisspec-class
-
-flush(stderr()); flush(stdout())
-
-### Name: SimMisspec-class
-### Title: Class '"SimMisspec"'
-### Aliases: SimMisspec-class run,SimMisspec-method
-###   summary,SimMisspec-method
-### Keywords: classes
-
-### ** Examples
-
-showClass("SimMisspec")
-n01 <- simNorm(0, 0.1)
-error.cor.Mis <- matrix(NA, 6, 6)
-diag(error.cor.Mis) <- 1
-RTD.Mis <- symMatrix(error.cor.Mis, "n01")
-CFA.Model.Mis <- simMisspecCFA(RTD=RTD.Mis)
-
-
-
-cleanEx()
-nameEx("SimModel-class")
-### * SimModel-class
-
-flush(stderr()); flush(stdout())
-
-### Name: SimModel-class
-### Title: Class '"SimModel"'
-### Aliases: SimModel-class run,SimModel-method summary,SimModel-method
-### Keywords: classes
-
-### ** Examples
-
-showClass("SimModel")
-loading <- matrix(0, 6, 2)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-loadingValues <- matrix(0, 6, 2)
-loadingValues[1:3, 1] <- 0.7
-loadingValues[4:6, 2] <- 0.7
-LX <- simMatrix(loading, loadingValues)
-latent.cor <- matrix(NA, 2, 2)
-diag(latent.cor) <- 1
-RPH <- symMatrix(latent.cor, 0.5)
-error.cor <- matrix(0, 6, 6)
-diag(error.cor) <- 1
-RTD <- symMatrix(error.cor)
-CFA.Model <- simSetCFA(LX = LX, RPH = RPH, RTD = RTD)
-SimModel <- simModel(CFA.Model)
-summary(SimModel)
-
-
-
-cleanEx()
-nameEx("SimModelMIOut-class")
-### * SimModelMIOut-class
-
-flush(stderr()); flush(stdout())
-
-### Name: SimModelMIOut-class
-### Title: Class '"SimModelMIOut"'
-### Aliases: SimModelMIOut-class
-### Keywords: classes
-
-### ** Examples
-
-showClass("SimModelMIOut")
-loading <- matrix(0, 6, 1)
-loading[1:6, 1] <- NA
-LX <- simMatrix(loading, 0.7)
-RPH <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
-SimData <- simData(CFA.Model, 500)
-SimModel <- simModel(CFA.Model)
-SimMissing <- simMissing(pmMCAR=0.05, numImps=5)
-Data <- run(SimData)
-Data <- run(SimMissing, Data)
-Result <- run(SimModel, Data, SimMissing)
-summary(Result)
-
-
-
-cleanEx()
-nameEx("SimModelOut-class")
-### * SimModelOut-class
-
-flush(stderr()); flush(stdout())
-
-### Name: SimModelOut-class
-### Title: Class '"SimModelOut"'
-### Aliases: SimModelOut-class summary,SimModelOut-method
-###   createImpliedMACS,SimModelOut-method
-###   summaryPopulation,SimModelOut-method getPopulation,SimModelOut-method
-###   setPopulation,SimModelOut,SimRSet-method
-###   setPopulation,SimModelOut,SimSet-method
-### Keywords: classes
-
-### ** Examples
-
-showClass("SimModelOut")
-loading <- matrix(0, 6, 1)
-loading[1:6, 1] <- NA
-LX <- simMatrix(loading, 0.7)
-RPH <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
-SimData <- simData(CFA.Model, 500)
-SimModel <- simModel(CFA.Model)
-Data <- run(SimData)
-Result <- run(SimModel, Data)
-summary(Result)
-summaryParam(Result)
-summaryPopulation(Result)
-param <- getPopulation(Result)
-Result2 <- setPopulation(Result, param)
-Result3 <- setPopulation(Result, CFA.Model)
-
-
-
-cleanEx()
-nameEx("SimParam-class")
-### * SimParam-class
-
-flush(stderr()); flush(stdout())
-
-### Name: SimParam-class
-### Title: Class '"SimParam"'
-### Aliases: SimParam-class summary,SimParam-method
-
-### ** Examples
-
-showClass("SimParam")
-
-library(lavaan)
-loading <- matrix(0, 9, 3)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-loading[7:9, 3] <- NA
-HS.Model <- simParamCFA(LX = loading)
-summary(HS.Model)
-SimModel <- simModel(HS.Model, indLab=paste("x", 1:9, sep=""))
-out <- run(SimModel, HolzingerSwineford1939)
-summary(out)
-
-HS.Model2 <- extract(HS.Model, y=1:3)
-summary(HS.Model2)
-
-
-
-cleanEx()
-nameEx("SimREqualCon-class")
-### * SimREqualCon-class
-
-flush(stderr()); flush(stdout())
-
-### Name: SimREqualCon-class
-### Title: Class '"SimREqualCon"'
-### Aliases: SimREqualCon-class summary,SimREqualCon-method
-### Keywords: classes
-
-### ** Examples
-
-# No example
 
 
 
@@ -539,87 +202,36 @@ flush(stderr()); flush(stdout())
 showClass("SimResult")
 loading <- matrix(0, 6, 1)
 loading[1:6, 1] <- NA
-LX <- simMatrix(loading, 0.7)
-RPH <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
-SimData <- simData(CFA.Model, 500)
-SimModel <- simModel(CFA.Model)
+LX <- bind(loading, 0.7)
+RPH <- binds(diag(1))
+RTD <- binds(diag(6))
+CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+
 # We make the examples running only 5 replications to save time.
 # In reality, more replications are needed.
-Output <- simResult(5, SimData, SimModel)
+Output <- sim(5, n=500, CFA.Model)
 summary(Output)
 getCutoff(Output, 0.05)
 summaryParam(Output)
 summaryPopulation(Output)
 param <- getPopulation(Output)
 Output <- setPopulation(Output, param)
-Output2 <- setPopulation(Output, CFA.Model)
 
 
 
 cleanEx()
-nameEx("SimResultParam-class")
-### * SimResultParam-class
+nameEx("SimSem-class")
+### * SimSem-class
 
 flush(stderr()); flush(stdout())
 
-### Name: SimResultParam-class
-### Title: Class '"SimResultParam"'
-### Aliases: SimResultParam-class summary,SimResultParam-method
-###   summaryParam,SimResultParam-method
-### Keywords: classes
+### Name: SimSem-class
+### Title: Class '"SimSem"'
+### Aliases: SimSem-class summary,SimSem-method
 
 ### ** Examples
 
-showClass("SimResultParam")
-
-u35 <- simUnif(0.3, 0.5)
-u57 <- simUnif(0.5, 0.7)
-u1 <- simUnif(-0.1, 0.1)
-n31 <- simNorm(0.3, 0.1)
-
-path.BE <- matrix(0, 4, 4)
-path.BE[3, 1:2] <- NA
-path.BE[4, 3] <- NA
-starting.BE <- matrix("", 4, 4)
-starting.BE[3, 1:2] <- "u35"
-starting.BE[4, 3] <- "u57"
-BE <- simMatrix(path.BE, starting.BE)
-
-residual.error <- diag(4)
-residual.error[1,2] <- residual.error[2,1] <- NA
-RPS <- symMatrix(residual.error, "n31")
-
-ME <- simVector(rep(NA, 4), 0)
-
-Path.Model <- simSetPath(RPS = RPS, BE = BE, ME = ME)
-
-mis.path.BE <- matrix(0, 4, 4)
-mis.path.BE[4, 1:2] <- NA
-mis.BE <- simMatrix(mis.path.BE, "u1")
-Path.Mis.Model <- simMisspecPath(BE = mis.BE, misfitType="rmsea") #, misfitBound=c(0.05, 0.08))
-
-# The number of replications in actual analysis should be much more than 5
-ParamObject <- simResultParam(5, Path.Model, Path.Mis.Model)
-summary(ParamObject)
-
-
-
-cleanEx()
-nameEx("SimSet-class")
-### * SimSet-class
-
-flush(stderr()); flush(stdout())
-
-### Name: SimSet-class
-### Title: Class '"SimSet"'
-### Aliases: SimSet-class run,SimSet-method summary,SimSet-method
-###   extract,SimSet-method
-
-### ** Examples
-
-showClass("SimSet")
+showClass("SimSem")
 
 loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA
@@ -627,24 +239,24 @@ loading[4:6, 2] <- NA
 loadingValues <- matrix(0, 6, 2)
 loadingValues[1:3, 1] <- 0.7
 loadingValues[4:6, 2] <- 0.7
-LX <- simMatrix(loading, loadingValues)
+LX <- bind(loading, loadingValues)
 summary(LX)
 
 latent.cor <- matrix(NA, 2, 2)
 diag(latent.cor) <- 1
-RPH <- symMatrix(latent.cor, 0.5)
+RPH <- binds(latent.cor, 0.5)
 
 # Error Correlation Object
 error.cor <- matrix(0, 6, 6)
 diag(error.cor) <- 1
-RTD <- symMatrix(error.cor)
+RTD <- binds(error.cor)
 
-CFA.Model <- simSetCFA(LX = LX, RPH = RPH, RTD = RTD)
+CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
 summary(CFA.Model)
 #run(CFA.Model)
 
-CFA.Model2 <- extract(CFA.Model, y=1:3, e=1)
-summary(CFA.Model2)
+#CFA.Model2 <- extract(CFA.Model, y=1:3, e=1)
+#summary(CFA.Model2)
 
 
 
@@ -667,45 +279,11 @@ showClass("SimVector")
 
 factor.mean <- rep(NA, 2)
 factor.mean.starting <- c(5, 2)
-AL <- simVector(factor.mean, factor.mean.starting)
-run(AL)
+AL <- bind(factor.mean, factor.mean.starting)
+#run(AL)
 summary(AL)
 summaryShort(AL)
 
-n01 <- simNorm(0, 1)
-AL <- adjust(AL, "n01", 2)
-run(AL)
-summary(AL)
-
-AL <- extract(AL, 1)
-summary(AL)
-
-
-
-cleanEx()
-nameEx("SymMatrix-class")
-### * SymMatrix-class
-
-flush(stderr()); flush(stdout())
-
-### Name: SymMatrix-class
-### Title: Symmetric matrix object: Random parameters symmetric matrix
-### Aliases: SymMatrix-class run,SymMatrix-method summary,SymMatrix-method
-### Keywords: classes
-
-### ** Examples
-
-showClass("SymMatrix")
-
-latent.cor <- matrix(NA, 3, 3)
-diag(latent.cor) <- 1
-RPH <- symMatrix(latent.cor, 0.5)
-
-u46 <- simUnif(0.4, 0.6)
-RPH <- adjust(RPH, "u46", c(3,2))
-summary(RPH)
-summaryShort(RPH)
-run(RPH)
 
 
 
@@ -769,64 +347,34 @@ plotDist(chi3, reverse=TRUE)
 
 
 cleanEx()
-nameEx("VirtualRSet-class")
-### * VirtualRSet-class
+nameEx("analyze")
+### * analyze
 
 flush(stderr()); flush(stdout())
 
-### Name: ParameterSet
-### Title: Class '"VirtualRSet"', '"SimLabels"' and '"SimRSet"'
-### Aliases: VirtualRSet-class SimRSet-class SimLabels-class
-###   summary,VirtualRSet-method summary,SimRSet-method
-###   summary,SimLabels-method
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("adjust")
-### * adjust
-
-flush(stderr()); flush(stdout())
-
-### Name: adjust
-### Title: Change an element in 'SimMatrix', 'SymMatrix', or 'SimVector'.
-### Aliases: adjust adjust-methods adjust,ANY-method
-###   adjust,SimMatrix-method adjust,SymMatrix-method
-###   adjust,SimVector-method
+### Name: analyze
+### Title: TBA
+### Aliases: analyze
 
 ### ** Examples
 
 loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
-LX <- simMatrix(loading, 0.7)
-summary(LX)
-run(LX)
+LY <- bind(loading, 0.7)
 
-u34 <- simUnif(0.3, 0.4)
-LX <- adjust(LX, "u34", c(2, 1))
-summary(LX)
-run(LX)
+latent.cor <- matrix(NA, 2, 2)
+diag(latent.cor) <- 1
+RPS <- binds(latent.cor, 0.5)
 
-LX <- adjust(LX, 0, c(2,1))
-LX <- adjust(LX, 0.5, c(2,2), FALSE)
-summary(LX)
-run(LX)
+RTE <- binds(diag(6))
 
-factor.mean <- rep(NA, 2)
-factor.mean.starting <- c(5, 2)
-AL <- simVector(factor.mean, factor.mean.starting)
-run(AL)
-summary(AL)
+VY <- bind(rep(NA,6),2)
 
-n01 <- simNorm(0, 1)
-AL <- adjust(AL, "n01", 2)
-run(AL)
-summary(AL)
+CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
+
+dat <- generate(CFA.Model,200)
+out <- analyze(CFA.Model,dat)
 
 
 
@@ -839,8 +387,7 @@ flush(stderr()); flush(stdout())
 ### Name: anova
 ### Title: Provide a comparison of nested models and nonnested models
 ###   across replications
-### Aliases: anova,SimResult-method anova,SimModelOut-method
-###   anova,SimModelMIOut-method
+### Aliases: anova,SimResult-method
 
 ### ** Examples
 
@@ -848,41 +395,59 @@ loading1 <- matrix(0, 6, 1)
 loading1[1:6, 1] <- NA
 loading2 <- loading1
 loading2[6,1] <- 0
-LX1 <- simMatrix(loading1, 0.7)
-LX2 <- simMatrix(loading2, 0.7)
-RPH <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model1 <- simSetCFA(LY = LX1, RPS = RPH, RTE = RTD)
-CFA.Model2 <- simSetCFA(LY = LX2, RPS = RPH, RTE = RTD)
-SimData <- simData(CFA.Model1, 500)
-SimModel1 <- simModel(CFA.Model1)
-SimModel2 <- simModel(CFA.Model2)
+LX1 <- bind(loading1, 0.7)
+LX2 <- bind(loading2, 0.7)
+RPH <- binds(diag(1))
+RTD <- binds(diag(6))
+CFA.Model1 <- model(LY = LX1, RPS = RPH, RTE = RTD, modelType="CFA")
+CFA.Model2 <- model(LY = LX2, RPS = RPH, RTE = RTD, modelType="CFA")
+
 # We make the examples running only 5 replications to save time.
 # In reality, more replications are needed.
 # Need to make sure that both simResult calls have the same seed!
-Output1 <- simResult(5, SimData, SimModel1, seed=123567)
-Output2 <- simResult(5, SimData, SimModel2, seed=123567)
+Output1 <- sim(5, n=500, model=CFA.Model1, generate=CFA.Model1, seed=123567)
+Output2 <- sim(5, n=500, model=CFA.Model2, generate=CFA.Model1, seed=123567)
 anova(Output1, Output2)
 
-Output1b <- simResult(NULL, SimData, SimModel1, seed=123567, n=seq(50, 500, 50))
-Output2b <- simResult(NULL, SimData, SimModel2, seed=123567, n=seq(50, 500, 50))
+Output1b <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model1, generate=CFA.Model1, seed=123567)
+Output2b <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model2, generate=CFA.Model1, seed=123567)
 anova(Output1b, Output2b)
 
 
 
 cleanEx()
-nameEx("blankParameters")
-### * blankParameters
+nameEx("bind")
+### * bind
 
 flush(stderr()); flush(stdout())
 
-### Name: blankParameters
-### Title: Change all elements in the non-null objects to be all NAs.
-### Aliases: blankParameters
+### Name: bind
+### Title: Specify matrices for Monte Carlo simulation of structural
+###   equation models
+### Aliases: bind binds
 
 ### ** Examples
 
-# No example
+
+loading <- matrix(0, 6, 2)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+loadingValues <- matrix(0, 6, 2)
+loadingValues[1:3, 1] <- 0.7
+loadingValues[4:6, 2] <- 0.7
+LY <- bind(loading, loadingValues)
+summary(LY)
+
+# Set both factor correlations to .05
+latent.cor <- matrix(NA, 2, 2)
+diag(latent.cor) <- 1
+RPS <- binds(latent.cor, 0.5)
+
+# Misspecify all error covarainces
+error.cor <- matrix(0, 6, 6)
+diag(error.cor) <- NA
+RTE <- binds(error.cor,1,"runif(1,-.05,.05)")
+
 
 
 
@@ -901,23 +466,6 @@ flush(stderr()); flush(stdout())
 # This function is not public.
 
 # centralMoment(1:5, 2)
-
-
-
-cleanEx()
-nameEx("checkInputValue")
-### * checkInputValue
-
-flush(stderr()); flush(stdout())
-
-### Name: checkInputValue
-### Title: Check the value argument in the matrix, symmetric matrix, or
-###   vector objects
-### Aliases: checkInputValue checkInputValueVector
-
-### ** Examples
-
-# No example
 
 
 
@@ -954,147 +502,6 @@ flush(stderr()); flush(stdout())
 
 
 cleanEx()
-nameEx("collapseExo")
-### * collapseExo
-
-flush(stderr()); flush(stdout())
-
-### Name: collapseExo
-### Title: Collapse all exogenous variables and put all in endogenous side
-###   only.
-### Aliases: collapseExo
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("combineLatentCorExoEndo")
-### * combineLatentCorExoEndo
-
-flush(stderr()); flush(stdout())
-
-### Name: combineLatentCorExoEndo
-### Title: Combine exogenous factor correlation and endogenous factor
-###   correlation into a single matrix
-### Aliases: combineLatentCorExoEndo
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("combineLoadingExoEndo")
-### * combineLoadingExoEndo
-
-flush(stderr()); flush(stdout())
-
-### Name: combineLoadingExoEndo
-### Title: Combine factor loading from the exogenous and endogenous sides
-###   into a single matrix
-### Aliases: combineLoadingExoEndo
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("combineMeasurementErrorExoEndo")
-### * combineMeasurementErrorExoEndo
-
-flush(stderr()); flush(stdout())
-
-### Name: combineMeasurementErrorExoEndo
-### Title: Combine measurement error correlation from the exogenous and
-###   endogenous sides into a single matrix
-### Aliases: combineMeasurementErrorExoEndo
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("combineObject")
-### * combineObject
-
-flush(stderr()); flush(stdout())
-
-### Name: combineObject
-### Title: Combine by summing or binding two objects together.
-### Aliases: combineObject combineObject-methods
-###   combineObject,ANY,ANY-method combineObject,SimMatrix,SimMatrix-method
-###   combineObject,SimVector,SimVector-method
-###   combineObject,vector,vector-method combineObject,matrix,matrix-method
-###   combineObject,MatrixSet,MatrixSet-method
-###   combineObject,SimParam,list-method
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("combinePathExoEndo")
-### * combinePathExoEndo
-
-flush(stderr()); flush(stdout())
-
-### Name: combinePathExoEndo
-### Title: Combine the regression coefficient matrices
-### Aliases: combinePathExoEndo
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("constantVector")
-### * constantVector
-
-flush(stderr()); flush(stdout())
-
-### Name: constantVector
-### Title: Create a constant vector object
-### Aliases: constantVector
-
-### ** Examples
-
-# This function is not public.
-
-# constantVector(0, 5)
-
-
-
-cleanEx()
-nameEx("constrainMatrices")
-### * constrainMatrices
-
-flush(stderr()); flush(stdout())
-
-### Name: constrainMatrices
-### Title: Impose an equality constraint in an object
-### Aliases: constrainMatrices constrainMatrices-methods
-###   constrainMatrices,ANY,ANY-method
-###   constrainMatrices,MatrixSet,SimEqualCon-method
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
 nameEx("continuousPower")
 ### * continuousPower
 
@@ -1107,84 +514,31 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-# Specify Sample Size by n
-loading <- matrix(0, 6, 1)
-loading[1:6, 1] <- NA
-LX <- simMatrix(loading, 0.7)
-RPH <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
-SimData <- simData(CFA.Model, 500)
-SimModel <- simModel(CFA.Model)
-# We will use only 5 replications to save time.
-# In reality, more replications are needed.
-
-# Specify both sample size and percent missing completely at random
-Output <- simResult(NULL, SimData, SimModel, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2))
-summary(Output)
-
-Cpow <- continuousPower(Output, contN = TRUE, contMCAR = TRUE)
-Cpow
-
-Cpow2 <- continuousPower(Output, contN = TRUE, contMCAR = TRUE, pred=list(N = 200, pmMCAR = 0.3))
-Cpow2
-
-
-
-
-cleanEx()
-nameEx("countFreeParameters")
-### * countFreeParameters
-
-flush(stderr()); flush(stdout())
-
-### Name: countFreeParameters
-### Title: Count how many free parameters in the target object
-### Aliases: countFreeParameters countFreeParameters-methods
-###   countFreeParameters,ANY-method countFreeParameters,SimMatrix-method
-###   countFreeParameters,SymMatrix-method
-###   countFreeParameters,SimVector-method
-###   countFreeParameters,SimSet-method countFreeParameters,matrix-method
-###   countFreeParameters,vector-method
-###   countFreeParameters,VirtualRSet-method
-###   countFreeParameters,SimEqualCon-method
-###   countFreeParameters,SimREqualCon-method
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("countMACS")
-### * countMACS
-
-flush(stderr()); flush(stdout())
-
-### Name: countMACS
-### Title: Count the number of elements in the sufficient statistics
-### Aliases: countMACS
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("cov2corMod")
-### * cov2corMod
-
-flush(stderr()); flush(stdout())
-
-### Name: cov2corMod
-### Title: Convert a covariance matrix to a correlation matrix
-### Aliases: cov2corMod
-
-### ** Examples
-
-# No example
+## Not run: 
+##D # Specify Sample Size by n
+##D loading <- matrix(0, 6, 1)
+##D loading[1:6, 1] <- NA
+##D LX <- bind(loading, 0.7)
+##D RPH <- binds(diag(1))
+##D RTD <- binds(diag(6))
+##D CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+##D dat <- generate(CFA.Model, 50)
+##D out <- analyze(CFA.Model, dat)
+##D 
+##D # We will use only 5 replications to save time.
+##D # In reality, more replications are needed.
+##D 
+##D # Specify both sample size and percent missing completely at random
+##D 
+##D Output <- sim(NULL, CFA.Model, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2))
+##D summary(Output)
+##D 
+##D Cpow <- continuousPower(Output, contN = TRUE, contMCAR = TRUE)
+##D Cpow
+##D 
+##D Cpow2 <- continuousPower(Output, contN = TRUE, contMCAR = TRUE, pred=list(N = 200, pmMCAR = 0.3))
+##D Cpow2
+## End(Not run)
 
 
 
@@ -1195,182 +549,61 @@ nameEx("createData")
 flush(stderr()); flush(stdout())
 
 ### Name: createData
-### Title: Create data from model parameters
+### Title: TBA
 ### Aliases: createData
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("createFreeParameters")
-### * createFreeParameters
-
-flush(stderr()); flush(stdout())
-
-### Name: createFreeParameters
-### Title: Create a free parameters object from a model specification
-### Aliases: createFreeParameters
-
-### ** Examples
-
-# No comment out because this function is not public
-
-# loading <- matrix(0, 6, 2)
-# loading[1:3, 1] <- NA
-# loading[4:6, 2] <- NA
-# loadingValues <- matrix(0, 6, 2)
-# loadingValues[1:3, 1] <- 0.7
-# loadingValues[4:6, 2] <- 0.7
-# LX <- simMatrix(loading, loadingValues)
-# latent.cor <- matrix(NA, 2, 2)
-# diag(latent.cor) <- 1
-# RPH <- symMatrix(latent.cor, 0.5)
-# error.cor <- matrix(0, 6, 6)
-# diag(error.cor) <- 1
-# RTD <- symMatrix(error.cor)
-# indicator.mean <- rep(NA, 6)
-# MX <- simVector(indicator.mean, 0)
-# CFA.Model <- simSetCFA(LX = LX, RPH = RPH, RTD = RTD, MX = MX)
-# free <- createFreeParameters(CFA.Model)
-
-
-
-cleanEx()
-nameEx("createImpliedMACS")
-### * createImpliedMACS
-
-flush(stderr()); flush(stdout())
-
-### Name: createImpliedMACS
-### Title: Create model implied mean vector and covariance matrix
-### Aliases: createImpliedMACS createImpliedMACS-methods
-###   createImpliedMACS,MatrixSet-method createImpliedMACS,SimRSet-method
 
 ### ** Examples
 
 loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
-loadingValues <- matrix(0, 6, 2)
-loadingValues[1:3, 1] <- 0.7
-loadingValues[4:6, 2] <- 0.7
-LX <- simMatrix(loading, loadingValues)
+LY <- bind(loading, 0.7)
+
 latent.cor <- matrix(NA, 2, 2)
 diag(latent.cor) <- 1
-RPH <- symMatrix(latent.cor, 0.5)
-error.cor <- matrix(0, 6, 6)
-diag(error.cor) <- 1
-RTD <- symMatrix(error.cor)
-CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
-param <- run(CFA.Model)
-createImpliedMACS(param)
+RPS <- binds(latent.cor, 0.5)
+
+RTE <- binds(diag(6))
+
+VY <- bind(rep(NA,6),2)
+
+CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
+
+param <- draw(CFA.Model)
+
+dat <- createData(param[[1]], n = 200) 
+# Get the first-group parameter from the param object
 
 
 
 cleanEx()
-nameEx("defaultStartingValues")
-### * defaultStartingValues
+nameEx("draw")
+### * draw
 
 flush(stderr()); flush(stdout())
 
-### Name: defaultStartingValues
-### Title: Make ad hoc starting values
-### Aliases: defaultStartingValues
+### Name: draw
+### Title: TBA
+### Aliases: draw
 
 ### ** Examples
 
-# No example
+loading <- matrix(0, 6, 2)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+LY <- bind(loading, 0.7)
 
+latent.cor <- matrix(NA, 2, 2)
+diag(latent.cor) <- 1
+RPS <- binds(latent.cor, 0.5)
 
+RTE <- binds(diag(6))
 
-cleanEx()
-nameEx("divideObject")
-### * divideObject
+VY <- bind(rep(NA,6),2)
 
-flush(stderr()); flush(stdout())
+CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
 
-### Name: divideObject
-### Title: Make a division on each element of the object
-### Aliases: divideObject divideObject-methods divideObject,ANY-method
-###   divideObject,vector,numeric-method divideObject,matrix,numeric-method
-###   divideObject,MatrixSet,numeric-method
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("drawParameters")
-### * drawParameters
-
-flush(stderr()); flush(stdout())
-
-### Name: drawParameters
-### Title: Create parameter sets (with or without model misspecification)
-###   from the data object
-### Aliases: drawParameters
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("drawParametersMisspec")
-### * drawParametersMisspec
-
-flush(stderr()); flush(stdout())
-
-### Name: drawParametersMisspec
-### Title: Create parameter sets (with or without model misspecification)
-###   from the parameter with or without misspecification set
-### Aliases: drawParametersMisspec
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("expandMatrices")
-### * expandMatrices
-
-flush(stderr()); flush(stdout())
-
-### Name: expandMatrices
-### Title: Expand the set of intercept and covariance matrices into the set
-###   of intercept/mean and covariance/correlation/variance objects
-### Aliases: expandMatrices
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("extract")
-### * extract
-
-flush(stderr()); flush(stdout())
-
-### Name: extract
-### Title: Extract a part of an object
-### Aliases: extract extract-methods extract,vector-method
-###   extract,matrix-method extract,VirtualRSet-method
-###   extract,data.frame-method
-
-### ** Examples
-
-extract(1:10, c(4, 5))
-extract(diag(3), 1, 2:3)
+param <- draw(CFA.Model)
 
 
 
@@ -1383,78 +616,6 @@ flush(stderr()); flush(stdout())
 ### Name: extractLavaanFit
 ### Title: Extract fit indices from the lavaan object
 ### Aliases: extractLavaanFit
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("extractMatrixNames")
-### * extractMatrixNames
-
-flush(stderr()); flush(stdout())
-
-### Name: extractMatrixNames
-### Title: Extract a vector of parameter names based on specified rows and
-###   columns
-### Aliases: extractMatrixNames
-
-### ** Examples
-
-# The function is not public
-
-# vec <- c("LY1_1", "LY2_1", "LY3_1", "LY4_2", "LY5_2", "LY6_2", "LY7_3")
-# extractMatrixNames(vec, 5:6, 2)
-
-
-
-cleanEx()
-nameEx("extractOpenMxFit")
-### * extractOpenMxFit
-
-flush(stderr()); flush(stdout())
-
-### Name: extractOpenMxFit
-### Title: Extract the fit indices reported by the 'OpenMx' result
-### Aliases: extractOpenMxFit
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("extractVectorNames")
-### * extractVectorNames
-
-flush(stderr()); flush(stdout())
-
-### Name: extractVectorNames
-### Title: Extract a vector of parameter names based on specified elements
-### Aliases: extractVectorNames
-
-### ** Examples
-
-# The function is not public
-
-#vec <- c("TY1", "TY2", "TY3", "TY4", "TY5", "TY6", "TY7")
-#extractVectorNames(vec, 5:6)
-
-
-
-cleanEx()
-nameEx("fillParam")
-### * fillParam
-
-flush(stderr()); flush(stdout())
-
-### Name: fillParam
-### Title: Fill in other objects based on the parameter values of current
-###   objects
-### Aliases: fillParam
 
 ### ** Examples
 
@@ -1734,20 +895,20 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-# Specify Sample Size by n
-loading <- matrix(0, 6, 1)
-loading[1:6, 1] <- NA
-LX <- simMatrix(loading, 0.4)
-RPH <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
-SimData <- simData(CFA.Model, 500)
-SimModel <- simModel(CFA.Model)
-
-# Specify both sample size and percent missing completely at random
-Output <- simResult(NULL, SimData, SimModel, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2))
-pow <- getPower(Output)
-findPower(pow, "N", 0.80)
+## Not run: 
+##D # Specify Sample Size by n
+##D loading <- matrix(0, 6, 1)
+##D loading[1:6, 1] <- NA
+##D LX <- bind(loading, 0.4)
+##D RPH <- binds(diag(1))
+##D RTD <- binds(diag(6))
+##D CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+##D 
+##D # Specify both sample size and percent missing completely at random
+##D Output <- sim(NULL, model=CFA.Model, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2))
+##D pow <- getPower(Output)
+##D findPower(pow, "N", 0.80)
+## End(Not run)
 
 
 
@@ -1842,21 +1003,33 @@ flush(stderr()); flush(stdout())
 
 
 cleanEx()
-nameEx("freeVector")
-### * freeVector
+nameEx("generate")
+### * generate
 
 flush(stderr()); flush(stdout())
 
-### Name: freeVector
-### Title: Create a free parameters vector with a starting values in a
-###   vector object
-### Aliases: freeVector
+### Name: generate
+### Title: TBA
+### Aliases: generate
 
 ### ** Examples
 
-# This function is not a public function.
+loading <- matrix(0, 6, 2)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+LY <- bind(loading, 0.7)
 
-# freeVector(0, 5)
+latent.cor <- matrix(NA, 2, 2)
+diag(latent.cor) <- 1
+RPS <- binds(latent.cor, 0.5)
+
+RTE <- binds(diag(6))
+
+VY <- bind(rep(NA,6),2)
+
+CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
+
+dat <- generate(CFA.Model,200)
 
 
 
@@ -1889,30 +1062,31 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-loading <- matrix(0, 6, 2)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-loadingValues <- matrix(0, 6, 2)
-loadingValues[1:3, 1] <- 0.7
-loadingValues[4:6, 2] <- 0.7
-LX <- simMatrix(loading, loadingValues)
-latent.cor <- matrix(NA, 2, 2)
-diag(latent.cor) <- 1
-RPH <- symMatrix(latent.cor, 0.5)
-error.cor <- matrix(0, 6, 6)
-diag(error.cor) <- 1
-RTD <- symMatrix(error.cor)
-CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
-SimData <- simData(CFA.Model, 200)
-SimModel <- simModel(CFA.Model)
-# We make the examples running only 5 replications to save time.
-# In reality, more replications are needed.
-Output <- simResult(5, SimData, SimModel)
-getCutoff(Output, 0.05)
-
-# Finding the cutoff when the sample size is varied.
-Output2 <- simResult(NULL, SimData, SimModel, n=seq(50, 100, 10))
-getCutoff(Output2, 0.05, nVal = 75)
+## Not run: 
+##D loading <- matrix(0, 6, 2)
+##D loading[1:3, 1] <- NA
+##D loading[4:6, 2] <- NA
+##D loadingValues <- matrix(0, 6, 2)
+##D loadingValues[1:3, 1] <- 0.7
+##D loadingValues[4:6, 2] <- 0.7
+##D LX <- bind(loading, loadingValues)
+##D latent.cor <- matrix(NA, 2, 2)
+##D diag(latent.cor) <- 1
+##D RPH <- binds(latent.cor, 0.5)
+##D error.cor <- matrix(0, 6, 6)
+##D diag(error.cor) <- 1
+##D RTD <- binds(error.cor)
+##D CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+##D 
+##D # We make the examples running only 5 replications to save time.
+##D # In reality, more replications are needed.
+##D Output <- sim(5, n = 200, model=CFA.Model)
+##D getCutoff(Output, 0.05)
+##D 
+##D # Finding the cutoff when the sample size is varied.
+##D Output2 <- sim(NULL, model=CFA.Model, n=seq(50, 100, 10))
+##D getCutoff(Output2, 0.05, nVal = 75)
+## End(Not run)
 
 
 
@@ -1929,40 +1103,32 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-n1 <- simNorm(0, 0.1)
-u79 <- simUnif(0.7, 0.9)
-
-loading.null <- matrix(0, 6, 1)
-loading.null[1:6, 1] <- NA
-LX.NULL <- simMatrix(loading.null, 0.7)
-RPH.NULL <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
-
-error.cor.mis <- matrix(NA, 6, 6)
-diag(error.cor.mis) <- 1
-RTD.Mis <- symMatrix(error.cor.mis, "n1")
-CFA.Model.NULL.Mis <- simMisspecCFA(RTE = RTD.Mis)
-
-loading.alt <- matrix(0, 6, 2)
-loading.alt[1:3, 1] <- NA
-loading.alt[4:6, 2] <- NA
-LX.ALT <- simMatrix(loading.alt, 0.7)
-latent.cor.alt <- matrix(NA, 2, 2)
-diag(latent.cor.alt) <- 1
-RPH.ALT <- symMatrix(latent.cor.alt, "u79")
-CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
-
-SimData.NULL <- simData(CFA.Model.NULL, 500)
-
-SimModel.NULL <- simModel(CFA.Model.NULL)
-SimModel.ALT <- simModel(CFA.Model.ALT)
-
-# The actual number of replications should be greater than 10.
-Output.NULL.NULL <- simResult(10, SimData.NULL, SimModel.NULL)
-Output.NULL.ALT <- simResult(10, SimData.NULL, SimModel.ALT)
-
-getCutoffNested(Output.NULL.NULL, Output.NULL.ALT)
+## Not run: 
+##D loading.null <- matrix(0, 6, 1)
+##D loading.null[1:6, 1] <- NA
+##D LX.NULL <- bind(loading.null, 0.7)
+##D RPH.NULL <- binds(diag(1))
+##D 
+##D error.cor.mis <- matrix("rnorm(1, 0, 0.1)", 6, 6)
+##D diag(error.cor.mis) <- 1
+##D RTD <- binds(diag(6), misspec=error.cor.mis)
+##D CFA.Model.NULL <- model(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD, modelType="CFA")
+##D 
+##D loading.alt <- matrix(0, 6, 2)
+##D loading.alt[1:3, 1] <- NA
+##D loading.alt[4:6, 2] <- NA
+##D LX.ALT <- bind(loading.alt, 0.7)
+##D latent.cor.alt <- matrix(NA, 2, 2)
+##D diag(latent.cor.alt) <- 1
+##D RPH.ALT <- binds(latent.cor.alt, "runif(1, 0.7, 0.9)")
+##D CFA.Model.ALT <- model(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD, modelType="CFA")
+##D 
+##D # The actual number of replications should be greater than 10.
+##D Output.NULL.NULL <- sim(10, n=500, model=CFA.Model.NULL, generate=CFA.Model.NULL)
+##D Output.NULL.ALT <- sim(10, n=500, model=CFA.Model.ALT, generate=CFA.Model.NULL)
+##D 
+##D getCutoffNested(Output.NULL.NULL, Output.NULL.ALT)
+## End(Not run)
 
 
 
@@ -1979,45 +1145,33 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-n1 <- simNorm(0, 0.1)
-u79 <- simUnif(0.7, 0.9)
-
-loading.A <- matrix(0, 8, 2)
-loading.A[1:3, 1] <- NA
-loading.A[4:8, 2] <- NA
-LX.A <- simMatrix(loading.A, 0.7)
-latent.cor <- matrix(NA, 2, 2)
-diag(latent.cor) <- 1
-RPH <- symMatrix(latent.cor, "u79")
-RTD <- symMatrix(diag(8))
-CFA.Model.A <- simSetCFA(LY = LX.A, RPS = RPH, RTE = RTD)
-
-error.cor.mis <- matrix(NA, 8, 8)
-diag(error.cor.mis) <- 1
-RTD.Mis <- symMatrix(error.cor.mis, "n1")
-CFA.Model.A.Mis <- simMisspecCFA(RTE = RTD.Mis)
-
-loading.B <- matrix(0, 8, 2)
-loading.B[1:4, 1] <- NA
-loading.B[5:8, 2] <- NA
-LX.B <- simMatrix(loading.B, 0.7)
-CFA.Model.B <- simSetCFA(LY = LX.B, RPS = RPH, RTE = RTD)
-
-SimData.A <- simData(CFA.Model.A, 500)
-SimData.B <- simData(CFA.Model.B, 500)
-
-SimModel.A <- simModel(CFA.Model.A)
-SimModel.B <- simModel(CFA.Model.B)
-
-# The actual number of replications should be greater than 10.
-Output.A.A <- simResult(10, SimData.A, SimModel.A)
-Output.A.B <- simResult(10, SimData.A, SimModel.B)
-Output.B.A <- simResult(10, SimData.B, SimModel.A)
-Output.B.B <- simResult(10, SimData.B, SimModel.B)
-
-getCutoffNonNested(Output.A.A, Output.A.B, Output.B.A, Output.B.B)
-getCutoffNonNested(Output.A.A, Output.A.B)
-getCutoffNonNested(Output.B.B, Output.B.A)
+## Not run: 
+##D loading.A <- matrix(0, 8, 2)
+##D loading.A[1:3, 1] <- NA
+##D loading.A[4:8, 2] <- NA
+##D LX.A <- bind(loading.A, 0.7)
+##D latent.cor <- matrix(NA, 2, 2)
+##D diag(latent.cor) <- 1
+##D RPH <- binds(latent.cor, "runif(1, 0.7, 0.9)")
+##D RTD <- binds(diag(8))
+##D CFA.Model.A <- model(LY = LX.A, RPS = RPH, RTE = RTD, modelType="CFA")
+##D 
+##D loading.B <- matrix(0, 8, 2)
+##D loading.B[1:4, 1] <- NA
+##D loading.B[5:8, 2] <- NA
+##D LX.B <- bind(loading.B, 0.7)
+##D CFA.Model.B <- model(LY = LX.B, RPS = RPH, RTE = RTD, modelType="CFA")
+##D 
+##D # The actual number of replications should be greater than 10.
+##D Output.A.A <- sim(10, n=500, model=CFA.Model.A, generate=CFA.Model.A)
+##D Output.A.B <- sim(10, n=500, model=CFA.Model.B, generate=CFA.Model.A)
+##D Output.B.A <- sim(10, n=500, model=CFA.Model.A, generate=CFA.Model.B)
+##D Output.B.B <- sim(10, n=500, model=CFA.Model.B, generate=CFA.Model.B)
+##D 
+##D getCutoffNonNested(Output.A.A, Output.A.B, Output.B.A, Output.B.B)
+##D getCutoffNonNested(Output.A.A, Output.A.B)
+##D getCutoffNonNested(Output.B.B, Output.B.A)
+## End(Not run)
 
 
 
@@ -2068,26 +1222,26 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-# Specify Sample Size by n
-loading <- matrix(0, 6, 1)
-loading[1:6, 1] <- NA
-LX <- simMatrix(loading, 0.7)
-RPH <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
-SimData <- simData(CFA.Model, 500)
-SimModel <- simModel(CFA.Model)
-# We will use only 5 replications to save time.
-# In reality, more replications are needed.
-
-# Specify both sample size and percent missing completely at random
-Output <- simResult(NULL, SimData, SimModel, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2))
-summary(Output)
-
-getPower(Output)
-
-getPower(Output, nVal=c(100, 200), pmMCARval=c(0, 0.1, 0.2))
-
+## Not run: 
+##D # Specify Sample Size by n
+##D loading <- matrix(0, 6, 1)
+##D loading[1:6, 1] <- NA
+##D LX <- bind(loading, 0.7)
+##D RPH <- binds(diag(1))
+##D RTD <- binds(diag(6))
+##D CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+##D 
+##D # We will use only 5 replications to save time.
+##D # In reality, more replications are needed.
+##D 
+##D # Specify both sample size and percent missing completely at random
+##D Output <- sim(NULL, model=CFA.Model, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2))
+##D summary(Output)
+##D 
+##D getPower(Output)
+##D 
+##D getPower(Output, nVal=c(100, 200), pmMCARval=c(0, 0.1, 0.2))
+## End(Not run)
 
 
 
@@ -2107,38 +1261,37 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-loading.null <- matrix(0, 6, 1)
-loading.null[1:6, 1] <- NA
-LX.NULL <- simMatrix(loading.null, 0.7)
-RPH.NULL <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
-SimData.NULL <- simData(CFA.Model.NULL, 500)
-SimModel <- simModel(CFA.Model.NULL)
-# We make the examples running only 5 replications to save time.
-# In reality, more replications are needed.
-Output.NULL <- simResult(5, SimData.NULL, SimModel)
-Cut.NULL <- getCutoff(Output.NULL, 0.95)
-
-u79 <- simUnif(0.7, 0.9)
-loading.alt <- matrix(0, 6, 2)
-loading.alt[1:3, 1] <- NA
-loading.alt[4:6, 2] <- NA
-LX.ALT <- simMatrix(loading.alt, 0.7)
-latent.cor.alt <- matrix(NA, 2, 2)
-diag(latent.cor.alt) <- 1
-RPH.ALT <- symMatrix(latent.cor.alt, "u79")
-CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
-SimData.ALT <- simData(CFA.Model.ALT, 500)
-Output.ALT <- simResult(5, SimData.ALT, SimModel)
-getPowerFit(Output.ALT, cutoff=Cut.NULL)
-Rule.of.thumb <- c(RMSEA=0.05, CFI=0.95, TLI=0.95, SRMR=0.06)
-getPowerFit(Output.ALT, cutoff=Rule.of.thumb, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
-
-Output.NULL2 <- simResult(NULL, SimData.NULL, SimModel, n=seq(50, 500, 50))
-Output.ALT2 <- simResult(NULL, SimData.ALT, SimModel, n=seq(50, 500, 50))
-getPowerFit(Output.ALT2, nullObject=Output.NULL2, nVal=250)
-
+## Not run: 
+##D loading.null <- matrix(0, 6, 1)
+##D loading.null[1:6, 1] <- NA
+##D LX.NULL <- bind(loading.null, 0.7)
+##D RPH.NULL <- binds(diag(1))
+##D RTD <- binds(diag(6))
+##D CFA.Model.NULL <- model(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD, modelType="CFA")
+##D 
+##D # We make the examples running only 5 replications to save time.
+##D # In reality, more replications are needed.
+##D Output.NULL <- sim(5, n=500, model=CFA.Model.NULL)
+##D Cut.NULL <- getCutoff(Output.NULL, 0.95)
+##D 
+##D loading.alt <- matrix(0, 6, 2)
+##D loading.alt[1:3, 1] <- NA
+##D loading.alt[4:6, 2] <- NA
+##D LX.ALT <- bind(loading.alt, 0.7)
+##D latent.cor.alt <- matrix(NA, 2, 2)
+##D diag(latent.cor.alt) <- 1
+##D RPH.ALT <- binds(latent.cor.alt, "runif(1, 0.7, 0.9)")
+##D CFA.Model.ALT <- model(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD, modelType="CFA")
+##D 
+##D Output.ALT <- sim(5, n=500, model=CFA.Model.NULL, generate=CFA.Model.ALT)
+##D getPowerFit(Output.ALT, cutoff=Cut.NULL)
+##D Rule.of.thumb <- c(RMSEA=0.05, CFI=0.95, TLI=0.95, SRMR=0.06)
+##D getPowerFit(Output.ALT, cutoff=Rule.of.thumb, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+##D 
+##D Output.NULL2 <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model.NULL, generate=CFA.Model.NULL)
+##D Output.ALT2 <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model.NULL, generate=CFA.Model.ALT)
+##D getPowerFit(Output.ALT2, nullObject=Output.NULL2, nVal=250)
+## End(Not run)
 
 
 
@@ -2157,57 +1310,39 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-u2 <- simUnif(-0.2, 0.2)
-n1 <- simNorm(0, 0.1)
-u79 <- simUnif(0.7, 0.9)
-
-loading.null <- matrix(0, 6, 1)
-loading.null[1:6, 1] <- NA
-LX.NULL <- simMatrix(loading.null, 0.7)
-RPH.NULL <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
-
-error.cor.mis <- matrix(NA, 6, 6)
-diag(error.cor.mis) <- 1
-RTD.Mis <- symMatrix(error.cor.mis, "rnorm(1,0,0.1)")
-CFA.Model.NULL.Mis <- simMisspecCFA(RTE = RTD.Mis)
-
-loading.alt <- matrix(0, 6, 2)
-loading.alt[1:3, 1] <- NA
-loading.alt[4:6, 2] <- NA
-LX.ALT <- simMatrix(loading.alt, 0.7)
-latent.cor.alt <- matrix(NA, 2, 2)
-diag(latent.cor.alt) <- 1
-RPH.ALT <- symMatrix(latent.cor.alt, 0.7)
-CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
-
-# loading.alt.mis <- matrix(NA, 6, 2)
-# loading.alt.mis[is.na(loading.alt)] <- 0
-# LX.alt.mis <- simMatrix(loading.alt.mis, "runif(1,-.2,.2)")
-# CFA.Model.alt.mis <- simMisspecCFA(LY = LX.alt.mis, RTE=RTD.Mis)
-
-SimData.NULL <- simData(CFA.Model.NULL, 500)
-SimData.ALT <- simData(CFA.Model.ALT, 500)
-
-SimModel.NULL <- simModel(CFA.Model.NULL)
-SimModel.ALT <- simModel(CFA.Model.ALT)
-
-Output.NULL.NULL <- simResult(10, SimData.NULL, SimModel.NULL)
-Output.ALT.NULL <- simResult(10, SimData.ALT, SimModel.NULL)
-Output.NULL.ALT <- simResult(10, SimData.NULL, SimModel.ALT)
-Output.ALT.ALT <- simResult(10, SimData.ALT, SimModel.ALT)
-
-getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT)
-getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, cutoff=c(Chi=3.84, CFI=-0.10))
-
-Output.NULL.NULL2 <- simResult(NULL, SimData.NULL, SimModel.NULL, n=seq(50, 500, 50))
-Output.ALT.NULL2 <- simResult(NULL, SimData.ALT, SimModel.NULL, n=seq(50, 500, 50))
-Output.NULL.ALT2 <- simResult(NULL, SimData.NULL, SimModel.ALT, n=seq(50, 500, 50))
-Output.ALT.ALT2 <- simResult(NULL, SimData.ALT, SimModel.ALT, n=seq(50, 500, 50))
-
-getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT, nVal = 250)
-getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, cutoff=c(Chi=3.84, CFI=-0.10), nVal = 250)
+## Not run: 
+##D loading.null <- matrix(0, 6, 1)
+##D loading.null[1:6, 1] <- NA
+##D LX.NULL <- bind(loading.null, 0.7)
+##D RPH.NULL <- binds(diag(1))
+##D RTD <- binds(diag(6))
+##D CFA.Model.NULL <- model(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD, modelType="CFA")
+##D 
+##D loading.alt <- matrix(0, 6, 2)
+##D loading.alt[1:3, 1] <- NA
+##D loading.alt[4:6, 2] <- NA
+##D LX.ALT <- bind(loading.alt, 0.7)
+##D latent.cor.alt <- matrix(NA, 2, 2)
+##D diag(latent.cor.alt) <- 1
+##D RPH.ALT <- binds(latent.cor.alt, 0.7)
+##D CFA.Model.ALT <- model(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD, modelType="CFA")
+##D 
+##D Output.NULL.NULL <- sim(10, n=500, model=CFA.Model.NULL, generate=CFA.Model.NULL) 
+##D Output.ALT.NULL <- sim(10, n=500, model=CFA.Model.NULL, generate=CFA.Model.ALT) 
+##D Output.NULL.ALT <- sim(10, n=500, model=CFA.Model.ALT, generate=CFA.Model.NULL) 
+##D Output.ALT.ALT <- sim(10, n=500, model=CFA.Model.ALT, generate=CFA.Model.ALT) 
+##D 
+##D getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT)
+##D getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, cutoff=c(Chi=3.84, CFI=-0.10))
+##D 
+##D Output.NULL.NULL2 <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model.NULL, generate=CFA.Model.NULL) 
+##D Output.ALT.NULL2 <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model.NULL, generate=CFA.Model.ALT) 
+##D Output.NULL.ALT2 <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model.ALT, generate=CFA.Model.NULL) 
+##D Output.ALT.ALT2 <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model.ALT, generate=CFA.Model.ALT) 
+##D 
+##D getPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNested=Output.NULL.NULL2, nullParent=Output.NULL.ALT2, nVal = 250)
+##D getPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, cutoff=c(Chi=3.84, CFI=-0.10), nVal = 250)
+## End(Not run)
 
 
 
@@ -2226,44 +1361,32 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-n1 <- simNorm(0, 0.1)
-u79 <- simUnif(0.7, 0.9)
-
-loading.A <- matrix(0, 8, 2)
-loading.A[1:3, 1] <- NA
-loading.A[4:8, 2] <- NA
-LX.A <- simMatrix(loading.A, 0.7)
-latent.cor <- matrix(NA, 2, 2)
-diag(latent.cor) <- 1
-RPH <- symMatrix(latent.cor, "u79")
-RTD <- symMatrix(diag(8))
-CFA.Model.A <- simSetCFA(LY = LX.A, RPS = RPH, RTE = RTD)
-
-error.cor.mis <- matrix(NA, 8, 8)
-diag(error.cor.mis) <- 1
-RTD.Mis <- symMatrix(error.cor.mis, "n1")
-CFA.Model.A.Mis <- simMisspecCFA(RTE = RTD.Mis)
-
-loading.B <- matrix(0, 8, 2)
-loading.B[1:4, 1] <- NA
-loading.B[5:8, 2] <- NA
-LX.B <- simMatrix(loading.B, 0.7)
-CFA.Model.B <- simSetCFA(LY = LX.B, RPS = RPH, RTE = RTD)
-
-SimData.A <- simData(CFA.Model.A, 500)
-SimData.B <- simData(CFA.Model.B, 500)
-
-SimModel.A <- simModel(CFA.Model.A)
-SimModel.B <- simModel(CFA.Model.B)
-
-# The actual number of replications should be greater than 10.
-Output.A.A <- simResult(10, SimData.A, SimModel.A)
-Output.A.B <- simResult(10, SimData.A, SimModel.B)
-Output.B.A <- simResult(10, SimData.B, SimModel.A)
-Output.B.B <- simResult(10, SimData.B, SimModel.B)
-
-getPowerFitNonNested(Output.B.A, Output.B.B, dat1Mod1=Output.A.A, dat1Mod2=Output.A.B)
-getPowerFitNonNested(Output.B.A, Output.B.B, cutoff=c(AIC=0, BIC=0))
+## Not run: 
+##D loading.A <- matrix(0, 8, 2)
+##D loading.A[1:3, 1] <- NA
+##D loading.A[4:8, 2] <- NA
+##D LX.A <- bind(loading.A, 0.7)
+##D latent.cor <- matrix(NA, 2, 2)
+##D diag(latent.cor) <- 1
+##D RPH <- binds(latent.cor, "runif(1, 0.7, 0.9)")
+##D RTD <- binds(diag(8))
+##D CFA.Model.A <- model(LY = LX.A, RPS = RPH, RTE = RTD, modelType="CFA")
+##D 
+##D loading.B <- matrix(0, 8, 2)
+##D loading.B[1:4, 1] <- NA
+##D loading.B[5:8, 2] <- NA
+##D LX.B <- bind(loading.B, 0.7)
+##D CFA.Model.B <- model(LY = LX.B, RPS = RPH, RTE = RTD, modelType="CFA")
+##D 
+##D # The actual number of replications should be greater than 10.
+##D Output.A.A <- sim(10, n=500, model=CFA.Model.A, generate=CFA.Model.A) 
+##D Output.A.B <- sim(10, n=500, model=CFA.Model.B, generate=CFA.Model.A) 
+##D Output.B.A <- sim(10, n=500, model=CFA.Model.A, generate=CFA.Model.B) 
+##D Output.B.B <- sim(10, n=500, model=CFA.Model.B, generate=CFA.Model.B) 
+##D 
+##D getPowerFitNonNested(Output.B.A, Output.B.B, dat1Mod1=Output.A.A, dat1Mod2=Output.A.B)
+##D getPowerFitNonNested(Output.B.A, Output.B.B, cutoff=c(AIC=0, BIC=0))
+## End(Not run)
 
 
 
@@ -2304,23 +1427,6 @@ flush(stderr()); flush(stdout())
 
 
 cleanEx()
-nameEx("indProd")
-### * indProd
-
-flush(stderr()); flush(stdout())
-
-### Name: indProd
-### Title: Make a product of indicators using mean centering or double-mean
-###   centering
-### Aliases: indProd
-
-### ** Examples
-
-dat <- indProd(attitude[,-1], var1=1:3, var2=4:6)
-
-
-
-cleanEx()
 nameEx("interpolate")
 ### * interpolate
 
@@ -2334,115 +1440,6 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 # No Example
-
-
-
-cleanEx()
-nameEx("isCorMatrix")
-### * isCorMatrix
-
-flush(stderr()); flush(stdout())
-
-### Name: isCorMatrix
-### Title: Check whether a 'matrix' is a possible correlation matrix
-### Aliases: isCorMatrix
-
-### ** Examples
-
-# This function is not a public function.
-
-# isCorMatrix(diag(5))
-
-
-
-cleanEx()
-nameEx("isDefault")
-### * isDefault
-
-flush(stderr()); flush(stdout())
-
-### Name: isDefault
-### Title: Check whether a vector object is default
-### Aliases: isDefault
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("isMeanConstraint")
-### * isMeanConstraint
-
-flush(stderr()); flush(stdout())
-
-### Name: isMeanConstraint
-### Title: Check whether all rownames in a constraint matrix containing
-###   symbols of means vectors
-### Aliases: isMeanConstraint
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("isNullObject")
-### * isNullObject
-
-flush(stderr()); flush(stdout())
-
-### Name: isNullObject
-### Title: Check whether the object is the 'NULL' type of that class
-### Aliases: isNullObject isNullObject-methods isNullObject,ANY,ANY-method
-###   isNullObject,vector-method isNullObject,matrix-method
-###   isNullObject,SimMatrix-method isNullObject,SymMatrix-method
-###   isNullObject,SimVector-method isNullObject,SimSet-method
-###   isNullObject,SimEqualCon-method isNullObject,SimREqualCon-method
-###   isNullObject,SimMisspec-method isNullObject,VirtualRSet-method
-###   isNullObject,data.frame-method isNullObject,SimMissing-method
-###   isNullObject,SimDataDist-method isNullObject,SimFunction-method
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("isRandom")
-### * isRandom
-
-flush(stderr()); flush(stdout())
-
-### Name: isRandom
-### Title: Check whether the object contains any random parameters
-### Aliases: isRandom isRandom-methods isRandom,ANY-method
-###   isRandom,SimMatrix-method isRandom,SimVector-method
-###   isRandom,SimSet-method
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("isVarianceConstraint")
-### * isVarianceConstraint
-
-flush(stderr()); flush(stdout())
-
-### Name: isVarianceConstraint
-### Title: Check whether all rownames in a constraint matrix containing
-###   symbols of variance vectors
-### Aliases: isVarianceConstraint
-
-### ** Examples
-
-# No example
 
 
 
@@ -2493,38 +1490,44 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-library(lavaan)
-loading <- matrix(0, 11, 3)
-loading[1:3, 1] <- NA
-loading[4:7, 2] <- NA
-loading[8:11, 3] <- NA
-path.A <- matrix(0, 3, 3)
-path.A[2:3, 1] <- NA
-path.A[3, 2] <- NA
-param.A <- simParamSEM(LY=loading, BE=path.A)
-
-model.A <- simModel(param.A, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
-out.A <- run(model.A, PoliticalDemocracy)
-
-path.B <- matrix(0, 3, 3)
-path.B[1:2, 3] <- NA
-path.B[1, 2] <- NA
-param.B <- simParamSEM(LY=loading, BE=path.B)
-
-model.B <- simModel(param.B, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
-out.B <- run(model.B, PoliticalDemocracy)
-
-u2 <- simUnif(-0.2, 0.2)
-loading.mis <- matrix(NA, 11, 3)
-loading.mis[is.na(loading)] <- 0
-LY.mis <- simMatrix(loading.mis, "u2")
-misspec <- simMisspecSEM(LY=LY.mis)
-
-output.A.A <- runFit(model.A, PoliticalDemocracy, 10, misspec=misspec)
-output.A.B <- runFit(model.A, PoliticalDemocracy, 10, misspec=misspec, analyzeModel=model.B)
-output.B.A <- runFit(model.B, PoliticalDemocracy, 10, misspec=misspec, analyzeModel=model.A)
-output.B.B <- runFit(model.B, PoliticalDemocracy, 10, misspec=misspec)
-likRatioFit(out.A, out.B, output.A.A, output.A.B, output.B.A, output.B.B)
+## Not run: 
+##D # It does not work now.
+##D 
+##D #library(lavaan)
+##D #loading <- matrix(0, 11, 3)
+##D #loading[1:3, 1] <- NA
+##D #loading[4:7, 2] <- NA
+##D #loading[8:11, 3] <- NA
+##D #path.A <- matrix(0, 3, 3)
+##D #path.A[2:3, 1] <- NA
+##D #path.A[3, 2] <- NA
+##D #param.A <- model(LY=bind(loading), BE=bind(path.A), modelType="SEM")
+##D 
+##D #model.A <- simModel(param.A, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
+##D #out.A <- run(model.A, PoliticalDemocracy)
+##D 
+##D #path.B <- matrix(0, 3, 3)
+##D #path.B[1:2, 3] <- NA
+##D #path.B[1, 2] <- NA
+##D #param.B <- simParamSEM(LY=loading, BE=path.B)
+##D 
+##D #model.B <- simModel(param.B, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
+##D #out.B <- run(model.B, PoliticalDemocracy)
+##D 
+##D #u2 <- simUnif(-0.2, 0.2)
+##D #loading.mis <- matrix(NA, 11, 3)
+##D #loading.mis[is.na(loading)] <- 0
+##D #LY.mis <- simMatrix(loading.mis, "u2")
+##D #misspec <- simMisspecSEM(LY=LY.mis)
+##D 
+##D #output.A.A <- runFit(model.A, PoliticalDemocracy, 5, misspec=misspec)
+##D #output.A.B <- runFit(model.A, PoliticalDemocracy, 5, misspec=misspec, analyzeModel=model.B)
+##D #output.B.A <- runFit(model.B, PoliticalDemocracy, 5, misspec=misspec, analyzeModel=model.A)
+##D #output.B.B <- runFit(model.B, PoliticalDemocracy, 5, misspec=misspec)
+##D 
+##D # The output may contain some warnings here. When the number of replications increases (e.g., 1000), the warnings should disappear.
+##D #likRatioFit(out.A, out.B, output.A.A, output.A.B, output.B.A, output.B.B)
+## End(Not run)
 
 
 
@@ -2541,45 +1544,6 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
     loadingFromAlpha(0.8, 4)
-
-
-
-cleanEx()
-nameEx("makeLabels")
-### * makeLabels
-
-flush(stderr()); flush(stdout())
-
-### Name: makeLabels
-### Title: Make parameter names for each element in matrices or vectors or
-###   the name for the whole object
-### Aliases: makeLabels makeLabels-methods makeLabels,ANY-method
-###   makeLabels,vector-method makeLabels,matrix-method
-###   makeLabels,SimParam-method makeLabels,VirtualDist-method
-###   makeLabels,SimSet-method
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("matchKeywords")
-### * matchKeywords
-
-flush(stderr()); flush(stdout())
-
-### Name: matchKeywords
-### Title: Search for the keywords and check whether the specified text
-###   match one in the name vector
-### Aliases: matchKeywords
-
-### ** Examples
-
-# This function is not a public function.
-
-# matchKeywords("ly", c("LY", "LX"))
 
 
 
@@ -2642,6 +1606,75 @@ miPoolVector(param, SE, nimps)
 
 
 cleanEx()
+nameEx("miss")
+### * miss
+
+flush(stderr()); flush(stdout())
+
+### Name: miss
+### Title: TBA
+### Aliases: miss
+
+### ** Examples
+
+#Example of imposing 10% MCAR missing in all variables with no imputations (FIML method)
+Missing <- miss(pmMCAR=0.1)
+summary(Missing)
+
+loading <- matrix(0, 6, 1)
+loading[1:6, 1] <- NA
+LX <- bind(loading, 0.7)
+RPH <- binds(diag(1))
+RTD <- binds(diag(6))
+CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+
+#Create data
+dat <- generate(CFA.Model, n = 20)
+
+#Impose missing
+#dat <- run(Missing, dat)
+
+#Analyze data
+#out <- run(SimModel, dat)
+#summary(out)
+
+#Example to create simMissing object for 3 forms design at 3 timepoints with 10 imputations
+Missing <- miss(nforms=3, timePoints=3, numImps=10)
+
+
+
+
+cleanEx()
+nameEx("model")
+### * model
+
+flush(stderr()); flush(stdout())
+
+### Name: model
+### Title: Data generation template and analysis template for simulation.
+### Aliases: model
+
+### ** Examples
+
+
+loading <- matrix(0, 6, 2)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+LY <- bind(loading, 0.7)
+
+latent.cor <- matrix(NA, 2, 2)
+diag(latent.cor) <- 1
+RPS <- binds(latent.cor, 0.5)
+
+RTE <- binds(diag(6))
+
+VY <- bind(rep(NA,6),2)
+
+CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
+
+
+
+cleanEx()
 nameEx("multipleAllEqual")
 ### * multipleAllEqual
 
@@ -2688,32 +1721,38 @@ flush(stderr()); flush(stdout())
 ### Title: Find p-values (1 - percentile)
 ### Aliases: pValue pValue-methods pValue,ANY-method
 ###   pValue,numeric,vector-method pValue,numeric,data.frame-method
-###   pValue,SimModelOut,SimResult-method
 
 ### ** Examples
 
-# Compare number with a vector
-pValue(0.5, rnorm(1000, 0, 1))
-
-# Compare numbers with a data frame
-pValue(c(0.5, 0.2), data.frame(rnorm(1000, 0, 1), runif(1000, 0, 1)))
-
-# Compare an analysis result with a result of simulation study
-library(lavaan)
-loading <- matrix(0, 9, 3)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-loading[7:9, 3] <- NA
-model <- simParamCFA(LY=loading)
-SimModel <- simModel(model, indLab=paste("x", 1:9, sep=""))
-u2 <- simUnif(-0.2, 0.2)
-loading.trivial <- matrix(NA, 9, 3)
-loading.trivial[is.na(loading)] <- 0
-LY.trivial <- simMatrix(loading.trivial, "u2")
-mis <- simMisspecCFA(LY = LY.trivial)
-out <- run(SimModel, HolzingerSwineford1939)
-Output2 <- runFit(out, HolzingerSwineford1939, 20, mis)
-pValue(out, Output2)
+## Not run: 
+##D ########## Make the pValue comparing between lavaan and SimResult work
+##D 
+##D 
+##D 
+##D 
+##D # Compare number with a vector
+##D pValue(0.5, rnorm(1000, 0, 1))
+##D 
+##D # Compare numbers with a data frame
+##D pValue(c(0.5, 0.2), data.frame(rnorm(1000, 0, 1), runif(1000, 0, 1)))
+##D 
+##D # Compare an analysis result with a result of simulation study
+##D #library(lavaan)
+##D #loading <- matrix(0, 9, 3)
+##D #loading[1:3, 1] <- NA
+##D #loading[4:6, 2] <- NA
+##D #loading[7:9, 3] <- NA
+##D #model <- simParamCFA(LY=loading)
+##D #SimModel <- simModel(model, indLab=paste("x", 1:9, sep=""))
+##D #u2 <- simUnif(-0.2, 0.2)
+##D #loading.trivial <- matrix(NA, 9, 3)
+##D #loading.trivial[is.na(loading)] <- 0
+##D #LY.trivial <- simMatrix(loading.trivial, "u2")
+##D #mis <- simMisspecCFA(LY = LY.trivial)
+##D #out <- run(SimModel, HolzingerSwineford1939)
+##D #Output2 <- runFit(out, HolzingerSwineford1939, 20, mis)
+##D #pValue(out, Output2)
+## End(Not run)
 
 
 
@@ -2746,35 +1785,37 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-library(lavaan)
-
-LY <- matrix(1, 4, 2)
-LY[,2] <- 0:3
-PS <- matrix(NA, 2, 2)
-TY <- rep(0, 4)
-AL <- rep(NA, 2)
-TE <- diag(NA, 4)
-linearModel <- simParamCFA(LY=LY, PS=PS, TY=TY, AL=AL, TE=TE)
-
-LY2 <- matrix(1, 4, 2)
-LY2[,2] <- c(0, NA, NA, 3)
-unconstrainModel <- simParamCFA(LY=LY2, PS=PS, TY=TY, AL=AL, TE=TE)
-
-nested <- simModel(linearModel, indLab=paste("t", 1:4, sep=""))
-parent <- simModel(unconstrainModel, indLab=paste("t", 1:4, sep=""))
-
-outNested <- run(nested, Demo.growth)
-outParent <- run(parent, Demo.growth)
-
-loadingMis <- matrix(0, 4, 2)
-loadingMis[2:3, 2] <- NA
-LYmis <- simMatrix(loadingMis, "runif(1, -0.1, 0.1)")
-linearMis <- simMisspecCFA(LY=LYmis)
-
-simNestedNested <- runFit(model=nested, data=Demo.growth, nRep=10, misspec=linearMis)
-simNestedParent <- runFit(model=nested, data=Demo.growth, nRep=10, misspec=linearMis, analyzeModel=parent)
-
-pValueNested(outNested, outParent, simNestedNested, simNestedParent)
+## Not run: 
+##D #library(lavaan)
+##D 
+##D #LY <- matrix(1, 4, 2)
+##D #LY[,2] <- 0:3
+##D #PS <- matrix(NA, 2, 2)
+##D #TY <- rep(0, 4)
+##D #AL <- rep(NA, 2)
+##D #TE <- diag(NA, 4)
+##D #linearModel <- simParamCFA(LY=LY, PS=PS, TY=TY, AL=AL, TE=TE)
+##D 
+##D #LY2 <- matrix(1, 4, 2)
+##D #LY2[,2] <- c(0, NA, NA, 3)
+##D #unconstrainModel <- simParamCFA(LY=LY2, PS=PS, TY=TY, AL=AL, TE=TE)
+##D 
+##D #nested <- simModel(linearModel, indLab=paste("t", 1:4, sep=""))
+##D #parent <- simModel(unconstrainModel, indLab=paste("t", 1:4, sep=""))
+##D 
+##D #outNested <- run(nested, Demo.growth)
+##D #outParent <- run(parent, Demo.growth)
+##D 
+##D #loadingMis <- matrix(0, 4, 2)
+##D #loadingMis[2:3, 2] <- NA
+##D #LYmis <- simMatrix(loadingMis, "runif(1, -0.1, 0.1)")
+##D #linearMis <- simMisspecCFA(LY=LYmis)
+##D 
+##D #simNestedNested <- runFit(model=nested, data=Demo.growth, nRep=10, misspec=linearMis)
+##D #simNestedParent <- runFit(model=nested, data=Demo.growth, nRep=10, misspec=linearMis, analyzeModel=parent)
+##D 
+##D #pValueNested(outNested, outParent, simNestedNested, simNestedParent)
+## End(Not run)
 
 
 
@@ -2790,38 +1831,42 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-library(lavaan)
-loading <- matrix(0, 11, 3)
-loading[1:3, 1] <- NA
-loading[4:7, 2] <- NA
-loading[8:11, 3] <- NA
-path.A <- matrix(0, 3, 3)
-path.A[2:3, 1] <- NA
-path.A[3, 2] <- NA
-param.A <- simParamSEM(LY=loading, BE=path.A)
-
-model.A <- simModel(param.A, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
-out.A <- run(model.A, PoliticalDemocracy)
-
-path.B <- matrix(0, 3, 3)
-path.B[1:2, 3] <- NA
-path.B[1, 2] <- NA
-param.B <- simParamSEM(LY=loading, BE=path.B)
-
-model.B <- simModel(param.B, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
-out.B <- run(model.B, PoliticalDemocracy)
-
-u2 <- simUnif(-0.2, 0.2)
-loading.mis <- matrix(NA, 11, 3)
-loading.mis[is.na(loading)] <- 0
-LY.mis <- simMatrix(loading.mis, "u2")
-misspec <- simMisspecSEM(LY=LY.mis)
-
-output.A.A <- runFit(model.A, PoliticalDemocracy, 10, misspec=misspec)
-output.A.B <- runFit(model.A, PoliticalDemocracy, 10, misspec=misspec, analyzeModel=model.B)
-output.B.A <- runFit(model.B, PoliticalDemocracy, 10, misspec=misspec, analyzeModel=model.A)
-output.B.B <- runFit(model.B, PoliticalDemocracy, 10, misspec=misspec)
-pValueNonNested(out.A, out.B, output.A.A, output.A.B, output.B.A, output.B.B)
+## Not run: 
+##D #library(lavaan)
+##D #loading <- matrix(0, 11, 3)
+##D #loading[1:3, 1] <- NA
+##D #loading[4:7, 2] <- NA
+##D #loading[8:11, 3] <- NA
+##D #path.A <- matrix(0, 3, 3)
+##D #path.A[2:3, 1] <- NA
+##D #path.A[3, 2] <- NA
+##D #param.A <- simParamSEM(LY=loading, BE=path.A)
+##D 
+##D #model.A <- simModel(param.A, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
+##D #out.A <- run(model.A, PoliticalDemocracy)
+##D 
+##D #path.B <- matrix(0, 3, 3)
+##D #path.B[1:2, 3] <- NA
+##D #path.B[1, 2] <- NA
+##D #param.B <- simParamSEM(LY=loading, BE=path.B)
+##D 
+##D #model.B <- simModel(param.B, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
+##D #out.B <- run(model.B, PoliticalDemocracy)
+##D 
+##D #u2 <- simUnif(-0.2, 0.2)
+##D #loading.mis <- matrix(NA, 11, 3)
+##D #loading.mis[is.na(loading)] <- 0
+##D #LY.mis <- simMatrix(loading.mis, "u2")
+##D #misspec <- simMisspecSEM(LY=LY.mis)
+##D 
+##D #output.A.A <- runFit(model.A, PoliticalDemocracy, 5, misspec=misspec)
+##D #output.A.B <- runFit(model.A, PoliticalDemocracy, 5, misspec=misspec, analyzeModel=model.B)
+##D #output.B.A <- runFit(model.B, PoliticalDemocracy, 5, misspec=misspec, analyzeModel=model.A)
+##D #output.B.B <- runFit(model.B, PoliticalDemocracy, 5, misspec=misspec)
+##D 
+##D # The output may contain some warnings here. When the number of replications increases (e.g., 1000), the warnings should disappear.
+##D #pValueNonNested(out.A, out.B, output.A.A, output.A.B, output.B.A, output.B.B)
+## End(Not run)
 
 
 
@@ -2873,34 +1918,34 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-loading <- matrix(0, 6, 2)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-loadingValues <- matrix(0, 6, 2)
-loadingValues[1:3, 1] <- 0.7
-loadingValues[4:6, 2] <- 0.7
-LX <- simMatrix(loading, loadingValues)
-latent.cor <- matrix(NA, 2, 2)
-diag(latent.cor) <- 1
-RPH <- symMatrix(latent.cor, 0.5)
-error.cor <- matrix(0, 6, 6)
-diag(error.cor) <- 1
-RTD <- symMatrix(error.cor)
-CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
-SimData <- simData(CFA.Model, 200)
-SimModel <- simModel(CFA.Model)
-# We make the examples running only 5 replications to save time.
-# In reality, more replications are needed.
-Output <- simResult(5, SimData, SimModel)
-plotCutoff(Output, 0.05, usedFit=c("RMSEA", "SRMR", "CFI", "TLI"))
-
-# Varying N
-Output2 <- simResult(NULL, SimData, SimModel, n=seq(450, 500, 10))
-plotCutoff(Output2, 0.05)
-
-# Varying N and pmMCAR
-Output3 <- simResult(NULL, SimData, SimModel, n=seq(450, 500, 10), pmMCAR=c(0, 0.05, 0.1, 0.15))
-plotCutoff(Output3, 0.05)
+## Not run: 
+##D loading <- matrix(0, 6, 2)
+##D loading[1:3, 1] <- NA
+##D loading[4:6, 2] <- NA
+##D loadingValues <- matrix(0, 6, 2)
+##D loadingValues[1:3, 1] <- 0.7
+##D loadingValues[4:6, 2] <- 0.7
+##D LX <- bind(loading, loadingValues)
+##D latent.cor <- matrix(NA, 2, 2)
+##D diag(latent.cor) <- 1
+##D RPH <- binds(latent.cor, 0.5)
+##D error.cor <- matrix(0, 6, 6)
+##D diag(error.cor) <- 1
+##D RTD <- binds(error.cor)
+##D CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+##D # We make the examples running only 5 replications to save time.
+##D # In reality, more replications are needed.
+##D Output <- sim(5, n=200, model=CFA.Model) 
+##D plotCutoff(Output, 0.05, usedFit=c("RMSEA", "SRMR", "CFI", "TLI"))
+##D 
+##D # Varying N
+##D Output2 <- sim(NULL, n=seq(450, 500, 10), model=CFA.Model)
+##D plotCutoff(Output2, 0.05)
+##D 
+##D # Varying N and pmMCAR
+##D Output3 <- sim(NULL, n=seq(450, 500, 10), pmMCAR=c(0, 0.05, 0.1, 0.15), model=CFA.Model)
+##D plotCutoff(Output3, 0.05)
+## End(Not run)
 
 
 
@@ -2917,40 +1962,29 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-n1 <- simNorm(0, 0.1)
-u79 <- simUnif(0.7, 0.9)
-
-loading.null <- matrix(0, 6, 1)
-loading.null[1:6, 1] <- NA
-LX.NULL <- simMatrix(loading.null, 0.7)
-RPH.NULL <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
-
-error.cor.mis <- matrix(NA, 6, 6)
-diag(error.cor.mis) <- 1
-RTD.Mis <- symMatrix(error.cor.mis, "n1")
-CFA.Model.NULL.Mis <- simMisspecCFA(RTE = RTD.Mis)
-
-loading.alt <- matrix(0, 6, 2)
-loading.alt[1:3, 1] <- NA
-loading.alt[4:6, 2] <- NA
-LX.ALT <- simMatrix(loading.alt, 0.7)
-latent.cor.alt <- matrix(NA, 2, 2)
-diag(latent.cor.alt) <- 1
-RPH.ALT <- symMatrix(latent.cor.alt, "u79")
-CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
-
-SimData.NULL <- simData(CFA.Model.NULL, 500)
-
-SimModel.NULL <- simModel(CFA.Model.NULL)
-SimModel.ALT <- simModel(CFA.Model.ALT)
-
-# The actual number of replications should be greater than 10.
-Output.NULL.NULL <- simResult(10, SimData.NULL, SimModel.NULL)
-Output.NULL.ALT <- simResult(10, SimData.NULL, SimModel.ALT)
-
-plotCutoffNested(Output.NULL.NULL, Output.NULL.ALT, alpha=0.05)
+## Not run: 
+##D loading.null <- matrix(0, 6, 1)
+##D loading.null[1:6, 1] <- NA
+##D LX.NULL <- bind(loading.null, 0.7)
+##D RPH.NULL <- binds(diag(1))
+##D RTD <- binds(diag(6))
+##D CFA.Model.NULL <- model(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD, modelType="CFA")
+##D 
+##D loading.alt <- matrix(0, 6, 2)
+##D loading.alt[1:3, 1] <- NA
+##D loading.alt[4:6, 2] <- NA
+##D LX.ALT <- bind(loading.alt, 0.7)
+##D latent.cor.alt <- matrix(NA, 2, 2)
+##D diag(latent.cor.alt) <- 1
+##D RPH.ALT <- binds(latent.cor.alt, "runif(1, 0.7, 0.9)")
+##D CFA.Model.ALT <- model(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD, modelType="CFA")
+##D 
+##D # The actual number of replications should be greater than 10.
+##D Output.NULL.NULL <- sim(10, n=500, model=CFA.Model.NULL) 
+##D Output.NULL.ALT <- sim(10, n=500, model=CFA.Model.ALT, generate=CFA.Model.NULL)
+##D 
+##D plotCutoffNested(Output.NULL.NULL, Output.NULL.ALT, alpha=0.05)
+## End(Not run)
 
 
 
@@ -2967,45 +2001,33 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-n1 <- simNorm(0, 0.1)
-u79 <- simUnif(0.7, 0.9)
-
-loading.A <- matrix(0, 8, 2)
-loading.A[1:3, 1] <- NA
-loading.A[4:8, 2] <- NA
-LX.A <- simMatrix(loading.A, 0.7)
-latent.cor <- matrix(NA, 2, 2)
-diag(latent.cor) <- 1
-RPH <- symMatrix(latent.cor, "u79")
-RTD <- symMatrix(diag(8))
-CFA.Model.A <- simSetCFA(LY = LX.A, RPS = RPH, RTE = RTD)
-
-error.cor.mis <- matrix(NA, 8, 8)
-diag(error.cor.mis) <- 1
-RTD.Mis <- symMatrix(error.cor.mis, "n1")
-CFA.Model.A.Mis <- simMisspecCFA(RTE = RTD.Mis)
-
-loading.B <- matrix(0, 8, 2)
-loading.B[1:4, 1] <- NA
-loading.B[5:8, 2] <- NA
-LX.B <- simMatrix(loading.B, 0.7)
-CFA.Model.B <- simSetCFA(LY = LX.B, RPS = RPH, RTE = RTD)
-
-SimData.A <- simData(CFA.Model.A, 500)
-SimData.B <- simData(CFA.Model.B, 500)
-
-SimModel.A <- simModel(CFA.Model.A)
-SimModel.B <- simModel(CFA.Model.B)
-
-# The actual number of replications should be greater than 10.
-Output.A.A <- simResult(10, SimData.A, SimModel.A)
-Output.A.B <- simResult(10, SimData.A, SimModel.B)
-Output.B.A <- simResult(10, SimData.B, SimModel.A)
-Output.B.B <- simResult(10, SimData.B, SimModel.B)
-
-plotCutoffNonNested(Output.A.A, Output.A.B, Output.B.A, Output.B.B)
-plotCutoffNonNested(Output.A.A, Output.A.B)
-plotCutoffNonNested(Output.A.A, Output.A.B, onetailed=TRUE)
+## Not run: 
+##D loading.A <- matrix(0, 8, 2)
+##D loading.A[1:3, 1] <- NA
+##D loading.A[4:8, 2] <- NA
+##D LX.A <- bind(loading.A, 0.7)
+##D latent.cor <- matrix(NA, 2, 2)
+##D diag(latent.cor) <- 1
+##D RPH <- binds(latent.cor, "runif(1, 0.7, 0.9)")
+##D RTD <- binds(diag(8))
+##D CFA.Model.A <- model(LY = LX.A, RPS = RPH, RTE = RTD, modelType="CFA")
+##D 
+##D loading.B <- matrix(0, 8, 2)
+##D loading.B[1:4, 1] <- NA
+##D loading.B[5:8, 2] <- NA
+##D LX.B <- bind(loading.B, 0.7)
+##D CFA.Model.B <- model(LY = LX.B, RPS = RPH, RTE = RTD, modelType="CFA")
+##D 
+##D # The actual number of replications should be greater than 10.
+##D Output.A.A <- sim(10, n=500, model=CFA.Model.A, generate=CFA.Model.A)
+##D Output.A.B <- sim(10, n=500, model=CFA.Model.B, generate=CFA.Model.A)
+##D Output.B.A <- sim(10, n=500, model=CFA.Model.A, generate=CFA.Model.B)
+##D Output.B.B <- sim(10, n=500, model=CFA.Model.B, generate=CFA.Model.B)
+##D 
+##D plotCutoffNonNested(Output.A.A, Output.A.B, Output.B.A, Output.B.B)
+##D plotCutoffNonNested(Output.A.A, Output.A.B)
+##D plotCutoffNonNested(Output.A.A, Output.A.B, onetailed=TRUE)
+## End(Not run)
 
 
 
@@ -3026,8 +2048,8 @@ gamma11 <- simGamma(1, 1)
 plotDist(gamma11)
 
 chi <- simChisq(5)
-dataDist <- simDataDist(chi, chi)
-plotDist(dataDist)
+#dataDist <- simDataDist(chi, chi)
+#plotDist(dataDist)
 
 
 
@@ -3077,37 +2099,29 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-u35 <- simUnif(0.3, 0.5)
-u57 <- simUnif(0.5, 0.7)
-u1 <- simUnif(-0.1, 0.1)
-n31 <- simNorm(0.3, 0.1)
-
 path.BE <- matrix(0, 4, 4)
 path.BE[3, 1:2] <- NA
 path.BE[4, 3] <- NA
 starting.BE <- matrix("", 4, 4)
-starting.BE[3, 1:2] <- "u35"
-starting.BE[4, 3] <- "u57"
-BE <- simMatrix(path.BE, starting.BE)
+starting.BE[3, 1:2] <- "runif(1, 0.3, 0.5)"
+starting.BE[4, 3] <- "runif(1, 0.5, 0.7)"
+mis.path.BE <- matrix(0, 4, 4)
+mis.path.BE[4, 1:2] <- "runif(1, -0.1, 0.1)"
+BE <- bind(path.BE, starting.BE, misspec=mis.path.BE)
 
 residual.error <- diag(4)
 residual.error[1,2] <- residual.error[2,1] <- NA
-RPS <- symMatrix(residual.error, "n31")
+RPS <- binds(residual.error, "rnorm(1, 0.3, 0.1)")
 
-ME <- simVector(rep(NA, 4), 0)
+ME <- bind(rep(NA, 4), 0)
 
-Path.Model <- simSetPath(RPS = RPS, BE = BE, ME = ME)
-
-mis.path.BE <- matrix(0, 4, 4)
-mis.path.BE[4, 1:2] <- NA
-mis.BE <- simMatrix(mis.path.BE, "u1")
-Path.Mis.Model <- simMisspecPath(BE = mis.BE, misfitType="rmsea") #, misfitBound=c(0.05, 0.08))
+Path.Model <- model(RPS = RPS, BE = BE, ME = ME, modelType="Path")
 
 # The number of replications in actual analysis should be much more than 5
-ParamObject <- simResultParam(20, Path.Model, Path.Mis.Model)
-plotMisfit(ParamObject)
+ParamObject <- sim(20, n=500, Path.Model, misfitType="rmsea", paramOnly=TRUE)
+#plotMisfit(ParamObject)
 
-plotMisfit(ParamObject, misParam=1:2)
+#plotMisfit(ParamObject, misParam=1:2)
 
 
 
@@ -3139,21 +2153,20 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-# Specify Sample Size by n
-loading <- matrix(0, 6, 1)
-loading[1:6, 1] <- NA
-LX <- simMatrix(loading, 0.4)
-RPH <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
-SimData <- simData(CFA.Model, 500)
-SimModel <- simModel(CFA.Model)
-# We will use only 5 replications to save time.
-# In reality, more replications are needed.
-
-# Specify both sample size and percent missing completely at random
-Output <- simResult(NULL, SimData, SimModel, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2))
-plotPower(Output, "LY1_1", contMCAR=FALSE)
+## Not run: 
+##D # Specify Sample Size by n
+##D loading <- matrix(0, 6, 1)
+##D loading[1:6, 1] <- NA
+##D LX <- bind(loading, 0.4)
+##D RPH <- binds(diag(1))
+##D RTD <- binds(diag(6))
+##D CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+##D 
+##D 
+##D # Specify both sample size and percent missing completely at random
+##D Output <- sim(NULL, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2), model=CFA.Model)
+##D plotPower(Output, "1.LY1_1", contMCAR=FALSE)
+## End(Not run)
 
 
 
@@ -3170,37 +2183,48 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-loading.null <- matrix(0, 6, 1)
-loading.null[1:6, 1] <- NA
-LX.NULL <- simMatrix(loading.null, 0.7)
-RPH.NULL <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
-SimData.NULL <- simData(CFA.Model.NULL, 500)
-SimModel <- simModel(CFA.Model.NULL)
-# We make the examples running only 5 replications to save time.
-# In reality, more replications are needed.
-Output.NULL <- simResult(5, SimData.NULL, SimModel)
-
-loading.alt <- matrix(0, 6, 2)
-loading.alt[1:3, 1] <- NA
-loading.alt[4:6, 2] <- NA
-LX.ALT <- simMatrix(loading.alt, 0.7)
-latent.cor.alt <- matrix(NA, 2, 2)
-diag(latent.cor.alt) <- 1
-RPH.ALT <- symMatrix(latent.cor.alt, 0.5)
-CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
-SimData.ALT <- simData(CFA.Model.ALT, 500)
-Output.ALT <- simResult(5, SimData.ALT, SimModel)
-plotPowerFit(Output.ALT, nullObject=Output.NULL, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
-Rule.of.thumb <- c(RMSEA=0.05, CFI=0.95, TLI=0.95, SRMR=0.06)
-plotPowerFit(Output.ALT, cutoff=Rule.of.thumb, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
-
-Output.NULL2 <- simResult(NULL, SimData.NULL, SimModel, n=seq(50, 250, 25))
-Output.ALT2 <- simResult(NULL, SimData.ALT, SimModel, n=seq(50, 250, 25))
-
-plotPowerFit(Output.ALT2, nullObject=Output.NULL2, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
-plotPowerFit(Output.ALT2, cutoff=Rule.of.thumb, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+## Not run: 
+##D ### Something is wrong here. Why the alternative data has the better fit than the null data.
+##D 
+##D 
+##D 
+##D loading.null <- matrix(0, 6, 1)
+##D loading.null[1:6, 1] <- NA
+##D LX.NULL <- bind(loading.null, 0.7)
+##D RPH.NULL <- binds(diag(1))
+##D RTD <- binds(diag(6))
+##D CFA.Model.NULL <- model(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD, modelType="CFA")
+##D # We make the examples running only 5 replications to save time.
+##D # In reality, more replications are needed.
+##D Output.NULL <- sim(50, n=50, model=CFA.Model.NULL, generate=CFA.Model.NULL) 
+##D 
+##D loading.alt <- matrix(0, 6, 2)
+##D loading.alt[1:3, 1] <- NA
+##D loading.alt[4:6, 2] <- NA
+##D LX.ALT <- bind(loading.alt, 0.7)
+##D latent.cor.alt <- matrix(NA, 2, 2)
+##D diag(latent.cor.alt) <- 1
+##D RPH.ALT <- binds(latent.cor.alt, 0.5)
+##D CFA.Model.ALT <- model(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD, modelType="CFA")
+##D Output.ALT <- sim(50, n=50, model=CFA.Model.NULL, generate=CFA.Model.ALT)
+##D 
+##D datNull <- generate(CFA.Model.NULL, n=50, params=TRUE)
+##D datAlt <- generate(CFA.Model.ALT, n=50, params=TRUE)
+##D outNull <- analyze(CFA.Model.NULL, datNull)
+##D outAlt <- analyze(CFA.Model.NULL, datAlt)
+##D summaryFit(Output.NULL)
+##D summaryFit(Output.ALT)
+##D  
+##D plotPowerFit(Output.ALT, nullObject=Output.NULL, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+##D Rule.of.thumb <- c(RMSEA=0.05, CFI=0.95, TLI=0.95, SRMR=0.06)
+##D plotPowerFit(Output.ALT, cutoff=Rule.of.thumb, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+##D 
+##D Output.NULL2 <- simResult(NULL, SimData.NULL, SimModel, n=seq(50, 250, 25))
+##D Output.ALT2 <- simResult(NULL, SimData.ALT, SimModel, n=seq(50, 250, 25))
+##D 
+##D plotPowerFit(Output.ALT2, nullObject=Output.NULL2, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+##D plotPowerFit(Output.ALT2, cutoff=Rule.of.thumb, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+## End(Not run)
 
 
 
@@ -3234,60 +2258,44 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-u2 <- simUnif(-0.2, 0.2)
-n1 <- simNorm(0, 0.1)
-u79 <- simUnif(0.7, 0.9)
-
-loading.null <- matrix(0, 6, 1)
-loading.null[1:6, 1] <- NA
-LX.NULL <- simMatrix(loading.null, 0.7)
-RPH.NULL <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
-
-error.cor.mis <- matrix(NA, 6, 6)
-diag(error.cor.mis) <- 1
-RTD.Mis <- symMatrix(error.cor.mis, "rnorm(1,0,0.1)")
-CFA.Model.NULL.Mis <- simMisspecCFA(RTE = RTD.Mis)
-
-loading.alt <- matrix(0, 6, 2)
-loading.alt[1:3, 1] <- NA
-loading.alt[4:6, 2] <- NA
-LX.ALT <- simMatrix(loading.alt, 0.7)
-latent.cor.alt <- matrix(NA, 2, 2)
-diag(latent.cor.alt) <- 1
-RPH.ALT <- symMatrix(latent.cor.alt, 0.7)
-CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
-
-# loading.alt.mis <- matrix(NA, 6, 2)
-# loading.alt.mis[is.na(loading.alt)] <- 0
-# LX.alt.mis <- simMatrix(loading.alt.mis, "runif(1,-.2,.2)")
-# CFA.Model.alt.mis <- simMisspecCFA(LY = LX.alt.mis, RTE=RTD.Mis)
-
-SimData.NULL <- simData(CFA.Model.NULL, 500)
-SimData.ALT <- simData(CFA.Model.ALT, 500)
-
-SimModel.NULL <- simModel(CFA.Model.NULL)
-SimModel.ALT <- simModel(CFA.Model.ALT)
-
-Output.NULL.NULL <- simResult(10, SimData.NULL, SimModel.NULL)
-Output.ALT.NULL <- simResult(10, SimData.ALT, SimModel.NULL)
-Output.NULL.ALT <- simResult(10, SimData.NULL, SimModel.ALT)
-Output.ALT.ALT <- simResult(10, SimData.ALT, SimModel.ALT)
-
-plotPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT)
-plotPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT, usedFit="CFI")
-
-Output.NULL.NULL2 <- simResult(NULL, SimData.NULL, SimModel.NULL, n=seq(50, 500, 50))
-Output.ALT.NULL2 <- simResult(NULL, SimData.ALT, SimModel.NULL, n=seq(50, 500, 50))
-Output.NULL.ALT2 <- simResult(NULL, SimData.NULL, SimModel.ALT, n=seq(50, 500, 50))
-Output.ALT.ALT2 <- simResult(NULL, SimData.ALT, SimModel.ALT, n=seq(50, 500, 50))
-
-plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNested=Output.NULL.NULL2, nullParent=Output.NULL.ALT2)
-
-plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNested=Output.NULL.NULL2, nullParent=Output.NULL.ALT2, logistic=FALSE)
-
-plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, cutoff=c(CFI=-0.1), logistic=FALSE)
+## Not run: 
+##D ############# Still does not work. Check it back later
+##D 
+##D loading.null <- matrix(0, 6, 1)
+##D loading.null[1:6, 1] <- NA
+##D LX.NULL <- bind(loading.null, 0.7)
+##D RPH.NULL <- binds(diag(1))
+##D RTD <- binds(diag(6))
+##D CFA.Model.NULL <- model(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD, modelType="CFA")
+##D 
+##D loading.alt <- matrix(0, 6, 2)
+##D loading.alt[1:3, 1] <- NA
+##D loading.alt[4:6, 2] <- NA
+##D LX.ALT <- bind(loading.alt, 0.7)
+##D latent.cor.alt <- matrix(NA, 2, 2)
+##D diag(latent.cor.alt) <- 1
+##D RPH.ALT <- binds(latent.cor.alt, 0.7)
+##D CFA.Model.ALT <- model(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD, modelType="CFA")
+##D 
+##D Output.NULL.NULL <- sim(10, n=500, model=CFA.Model.NULL, generate=CFA.Model.NULL) 
+##D Output.ALT.NULL <- sim(10, n=500, model=CFA.Model.NULL, generate=CFA.Model.ALT) 
+##D Output.NULL.ALT <- sim(10, n=500, model=CFA.Model.ALT, generate=CFA.Model.NULL) 
+##D Output.ALT.ALT <- sim(10, n=500, model=CFA.Model.ALT, generate=CFA.Model.ALT) 
+##D 
+##D plotPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT)
+##D plotPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT, usedFit="CFI")
+##D 
+##D Output.NULL.NULL2 <- sim(NULL, n=seq(50, 500, 25), model=CFA.Model.NULL, generate=CFA.Model.NULL) 
+##D Output.ALT.NULL2 <- sim(NULL, n=seq(50, 500, 25), model=CFA.Model.NULL, generate=CFA.Model.ALT) 
+##D Output.NULL.ALT2 <- sim(NULL, n=seq(50, 500, 25), model=CFA.Model.ALT, generate=CFA.Model.NULL) 
+##D Output.ALT.ALT2 <- sim(NULL, n=seq(50, 500, 25), model=CFA.Model.ALT, generate=CFA.Model.ALT) 
+##D 
+##D plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNested=Output.NULL.NULL2, nullParent=Output.NULL.ALT2)
+##D 
+##D plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNested=Output.NULL.NULL2, nullParent=Output.NULL.ALT2, logistic=FALSE)
+##D 
+##D plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, cutoff=c(CFI=-0.1), logistic=FALSE)
+## End(Not run)
 
 
 
@@ -3304,44 +2312,34 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-n1 <- simNorm(0, 0.1)
-u79 <- simUnif(0.7, 0.9)
-
-loading.A <- matrix(0, 8, 2)
-loading.A[1:3, 1] <- NA
-loading.A[4:8, 2] <- NA
-LX.A <- simMatrix(loading.A, 0.7)
-latent.cor <- matrix(NA, 2, 2)
-diag(latent.cor) <- 1
-RPH <- symMatrix(latent.cor, "u79")
-RTD <- symMatrix(diag(8))
-CFA.Model.A <- simSetCFA(LY = LX.A, RPS = RPH, RTE = RTD)
-
-error.cor.mis <- matrix(NA, 8, 8)
-diag(error.cor.mis) <- 1
-RTD.Mis <- symMatrix(error.cor.mis, "n1")
-CFA.Model.A.Mis <- simMisspecCFA(RTE = RTD.Mis)
-
-loading.B <- matrix(0, 8, 2)
-loading.B[1:4, 1] <- NA
-loading.B[5:8, 2] <- NA
-LX.B <- simMatrix(loading.B, 0.7)
-CFA.Model.B <- simSetCFA(LY = LX.B, RPS = RPH, RTE = RTD)
-
-SimData.A <- simData(CFA.Model.A, 500)
-SimData.B <- simData(CFA.Model.B, 500)
-
-SimModel.A <- simModel(CFA.Model.A)
-SimModel.B <- simModel(CFA.Model.B)
-
-# The actual number of replications should be greater than 10.
-Output.A.A <- simResult(10, SimData.A, SimModel.A)
-Output.A.B <- simResult(10, SimData.A, SimModel.B)
-Output.B.A <- simResult(10, SimData.B, SimModel.A)
-Output.B.B <- simResult(10, SimData.B, SimModel.B)
-
-plotPowerFitNonNested(Output.B.A, Output.B.B, dat1Mod1=Output.A.A, dat1Mod2=Output.A.B)
-plotPowerFitNonNested(Output.B.A, Output.B.B, cutoff=c(AIC=0, BIC=0))
+## Not run: 
+##D # Still does not work. Check it later.
+##D 
+##D loading.A <- matrix(0, 8, 2)
+##D loading.A[1:3, 1] <- NA
+##D loading.A[4:8, 2] <- NA
+##D LX.A <- bind(loading.A, 0.7)
+##D latent.cor <- matrix(NA, 2, 2)
+##D diag(latent.cor) <- 1
+##D RPH <- binds(latent.cor, "runif(1, 0.7, 0.9)")
+##D RTD <- binds(diag(8))
+##D CFA.Model.A <- model(LY = LX.A, RPS = RPH, RTE = RTD, modelType="CFA")
+##D 
+##D loading.B <- matrix(0, 8, 2)
+##D loading.B[1:4, 1] <- NA
+##D loading.B[5:8, 2] <- NA
+##D LX.B <- bind(loading.B, 0.7)
+##D CFA.Model.B <- model(LY = LX.B, RPS = RPH, RTE = RTD, modelType="CFA")
+##D 
+##D # The actual number of replications should be greater than 10.
+##D Output.A.A <- sim(10, n=500, model=CFA.Model.A, generate=CFA.Model.A)
+##D Output.A.B <- sim(10, n=500, model=CFA.Model.B, generate=CFA.Model.A)
+##D Output.B.A <- sim(10, n=500, model=CFA.Model.A, generate=CFA.Model.B)
+##D Output.B.B <- sim(10, n=500, model=CFA.Model.B, generate=CFA.Model.B)
+##D 
+##D plotPowerFitNonNested(Output.B.A, Output.B.B, dat1Mod1=Output.A.A, dat1Mod2=Output.A.B)
+##D plotPowerFitNonNested(Output.B.A, Output.B.B, cutoff=c(AIC=0, BIC=0))
+## End(Not run)
 
 
 
@@ -3417,51 +2415,6 @@ popDiscrepancy(m1, S1, m2, S2)
 
 
 cleanEx()
-nameEx("popMisfit")
-### * popMisfit
-
-flush(stderr()); flush(stdout())
-
-### Name: popMisfit
-### Title: Calculate population misfit
-### Aliases: popMisfit popMisfit-methods popMisfit,ANY,ANY-method
-###   popMisfit,matrix,matrix-method popMisfit,list,list-method
-###   popMisfit,SimRSet,SimRSet-method popMisfit,MatrixSet,MatrixSet-method
-###   popMisfit,SimSet,SimMisspec-method
-
-### ** Examples
-
-u35 <- simUnif(0.3, 0.5)
-u57 <- simUnif(0.5, 0.7)
-u1 <- simUnif(-0.1, 0.1)
-n31 <- simNorm(0.3, 0.1)
-
-path.BE <- matrix(0, 4, 4)
-path.BE[3, 1:2] <- NA
-path.BE[4, 3] <- NA
-starting.BE <- matrix("", 4, 4)
-starting.BE[3, 1:2] <- "u35"
-starting.BE[4, 3] <- "u57"
-BE <- simMatrix(path.BE, starting.BE)
-
-residual.error <- diag(4)
-residual.error[1,2] <- residual.error[2,1] <- NA
-RPS <- symMatrix(residual.error, "n31")
-
-ME <- simVector(rep(NA, 4), 0)
-
-Path.Model <- simSetPath(RPS = RPS, BE = BE, ME = ME)
-
-mis.path.BE <- matrix(0, 4, 4)
-mis.path.BE[4, 1:2] <- NA
-mis.BE <- simMatrix(mis.path.BE, "u1")
-Path.Mis.Model <- simMisspecPath(BE = mis.BE, misfitType="rmsea") #, misfitBound=c(0.05, 0.08))
-
-popMisfit(Path.Model, Path.Mis.Model, fit.measures="rmsea")
-
-
-
-cleanEx()
 nameEx("popMisfitMACS")
 ### * popMisfitMACS
 
@@ -3517,72 +2470,6 @@ flush(stderr()); flush(stdout())
 
 
 cleanEx()
-nameEx("reassignNames")
-### * reassignNames
-
-flush(stderr()); flush(stdout())
-
-### Name: reassignNames
-### Title: Reassign the name of equality constraint
-### Aliases: reassignNames
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("reduceConstraint")
-### * reduceConstraint
-
-flush(stderr()); flush(stdout())
-
-### Name: reduceConstraint
-### Title: Reduce the model constraint to data generation parameterization
-###   to analysis model parameterization.
-### Aliases: reduceConstraint
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("reduceMatrices")
-### * reduceMatrices
-
-flush(stderr()); flush(stdout())
-
-### Name: reduceMatrices
-### Title: Reduce the model constraint to data generation parameterization
-###   to analysis model parameterization.
-### Aliases: reduceMatrices
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("residualCovariate")
-### * residualCovariate
-
-flush(stderr()); flush(stdout())
-
-### Name: residualCovariate
-### Title: Residual centered all target indicators by covariates
-### Aliases: residualCovariate
-
-### ** Examples
-
-dat <- residualCovariate(attitude, 2:7, 1)
-
-
-
-cleanEx()
 nameEx("revText")
 ### * revText
 
@@ -3609,125 +2496,13 @@ flush(stderr()); flush(stdout())
 
 ### Name: run
 ### Title: Run a particular object in 'simsem' package.
-### Aliases: run run-methods run,ANY-method run,NullSimMatrix-method
-###   run,NullSymMatrix-method run,NullSimVector-method
+### Aliases: run run-methods run,ANY-method
 ### Keywords: run
 
 ### ** Examples
 
 n02 <- simNorm(0, 0.2)
 run(n02)
-
-
-
-cleanEx()
-nameEx("runFit")
-### * runFit
-
-flush(stderr()); flush(stdout())
-
-### Name: runFit
-### Title: Build a Monte Carlo simulation that the data-generation
-###   parameters are from the result of analyzing real data
-### Aliases: runFit runFit-methods runFit,ANY-method runFit,SimModel-method
-###   runFit,SimModelOut-method
-
-### ** Examples
-
-library(lavaan)
-loading <- matrix(0, 9, 3)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-loading[7:9, 3] <- NA
-model <- simParamCFA(LY=loading)
-SimModel <- simModel(model, indLab=paste("x", 1:9, sep=""))
-u2 <- simUnif(-0.2, 0.2)
-loading.trivial <- matrix(NA, 9, 3)
-loading.trivial[is.na(loading)] <- 0
-LY.trivial <- simMatrix(loading.trivial, "u2")
-mis <- simMisspecCFA(LY = LY.trivial)
-Output <- runFit(SimModel, HolzingerSwineford1939, 5, mis)
-summary(Output)
-
-out <- run(SimModel, HolzingerSwineford1939)
-Output2 <- runFit(out, HolzingerSwineford1939, 5, mis)
-
-# Bollen-Stine Bootstrap
-Output3 <- runFit(out, HolzingerSwineford1939, 5, modelBoot=TRUE)
-
-# Bollen-Stine Bootstrap with trivial misspecification
-Output4 <- runFit(out, HolzingerSwineford1939, 5, mis, modelBoot=TRUE)
-
-# Example with multiple imputation
-library(lavaan)
-loading <- matrix(0, 11, 3)
-loading[1:3, 1] <- NA
-loading[4:7, 2] <- NA
-loading[8:11, 3] <- NA
-path <- matrix(0, 3, 3)
-path[2:3, 1] <- NA
-path[3, 2] <- NA
-errorCov <- diag(NA, 11)
-facCov <- diag(3)
-param <- simParamSEM(LY=loading, BE=path, TE=errorCov, PS=facCov)
-
-miss <- simMissing(pmMCAR=0.03, numImps=5)
-usedData <- run(miss, PoliticalDemocracy)
-
-model <- simModel(param, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
-out <- run(model, usedData, miss)
-output <- runFit(model, usedData, 5, missModel=miss)
-pValue(out, output)
-
-
-
-cleanEx()
-nameEx("runFitParam")
-### * runFitParam
-
-flush(stderr()); flush(stdout())
-
-### Name: runFitParam
-### Title: Build a parameter result object that the data-generation
-###   parameters are from the result of analyzing real data
-### Aliases: runFitParam runFitParam-methods runFitParam,ANY-method
-###   runFitParam,SimModel-method runFitParam,SimModelOut-method
-
-### ** Examples
-
-library(lavaan)
-loading <- matrix(0, 9, 3)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-loading[7:9, 3] <- NA
-model <- simParamCFA(LY=loading)
-SimModel <- simModel(model, indLab=paste("x", 1:9, sep=""))
-u2 <- simUnif(-0.2, 0.2)
-loading.trivial <- matrix(NA, 9, 3)
-loading.trivial[is.na(loading)] <- 0
-LY.trivial <- simMatrix(loading.trivial, "u2")
-mis <- simMisspecCFA(LY = LY.trivial)
-Output <- runFitParam(SimModel, data=HolzingerSwineford1939, nRep=5, misspec=mis)
-summary(Output)
-
-out <- run(SimModel, HolzingerSwineford1939)
-Output2 <- runFitParam(out, nRep=5, misspec=mis)
-
-
-
-cleanEx()
-nameEx("runLavaan")
-### * runLavaan
-
-flush(stderr()); flush(stdout())
-
-### Name: runLavaan
-### Title: Run data by the model object by the 'lavaan' package
-### Aliases: runLavaan
-
-### ** Examples
-
-# No example
 
 
 
@@ -3767,61 +2542,6 @@ function(data.mat,data.model,imps) {
 
 
 cleanEx()
-nameEx("runMisspec")
-### * runMisspec
-
-flush(stderr()); flush(stdout())
-
-### Name: runMisspec
-### Title: Draw actual parameters and model misspecification
-### Aliases: runMisspec
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("runRep")
-### * runRep
-
-flush(stderr()); flush(stdout())
-
-### Name: runRep
-### Title: Run one replication within a big simulation study
-### Aliases: runRep
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("setOpenMxObject")
-### * setOpenMxObject
-
-flush(stderr()); flush(stdout())
-
-### Name: setOpenMxObject
-### Title: Rearrange starting values for 'OpenMx'
-### Aliases: setOpenMxObject setOpenMxObject-methods
-###   setOpenMxObject,ANY,ANY-method setOpenMxObject,vector,vector-method
-###   setOpenMxObject,matrix,matrix-method
-###   setOpenMxObject,SimParam,SimRSet-method
-
-### ** Examples
-
-# This function is not public
-
-# parameter <- c(NA, NA, 0, 0)
-# startingValues <- c(2, 5, 0, 0)
-# setOpenMxObject(parameter, startingValues)
-
-
-
-cleanEx()
 nameEx("setPopulation")
 ### * setPopulation
 
@@ -3834,6 +2554,38 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 # See each class for an example.
+
+
+
+cleanEx()
+nameEx("sim")
+### * sim
+
+flush(stderr()); flush(stdout())
+
+### Name: sim
+### Title: TBA
+### Aliases: sim
+
+### ** Examples
+
+loading <- matrix(0, 6, 2)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+LY <- bind(loading, 0.7)
+
+latent.cor <- matrix(NA, 2, 2)
+diag(latent.cor) <- 1
+RPS <- binds(latent.cor, 0.5)
+
+RTE <- binds(diag(6))
+
+VY <- bind(rep(NA,6),2)
+
+CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
+
+Output <- sim(20, CFA.Model,n=200)
+summary(Output)
 
 
 
@@ -3909,50 +2661,6 @@ flush(stderr()); flush(stdout())
 
 
 cleanEx()
-nameEx("simData")
-### * simData
-
-flush(stderr()); flush(stdout())
-
-### Name: simData
-### Title: Create a Data object
-### Aliases: simData simData-methods simData,ANY-method
-###   simData,SimSet-method simData,SimModelOut-method
-###   simData,SimRSet-method
-
-### ** Examples
-
-loading <- matrix(0, 6, 2)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-loadingValues <- matrix(0, 6, 2)
-loadingValues[1:3, 1] <- 0.7
-loadingValues[4:6, 2] <- 0.7
-LX <- simMatrix(loading, loadingValues)
-latent.cor <- matrix(NA, 2, 2)
-diag(latent.cor) <- 1
-RPH <- symMatrix(latent.cor, 0.5)
-error.cor <- matrix(0, 6, 6)
-diag(error.cor) <- 1
-RTD <- symMatrix(error.cor)
-CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
-SimData <- simData(CFA.Model, 200)
-summary(SimData)
-run(SimData)
-
-# With Misspecification Model
-n01 <- simNorm(0, 0.1)
-error.cor.Mis <- matrix(NA, 6, 6)
-diag(error.cor.Mis) <- 1
-RTD.Mis <- symMatrix(error.cor.Mis, "n01")
-CFA.Model.Mis <- simMisspecCFA(RTD=RTD.Mis)
-SimData <- simData(CFA.Model, 200, misspec=CFA.Model.Mis)
-summary(SimData)
-run(SimData)
-
-
-
-cleanEx()
 nameEx("simDataDist")
 ### * simDataDist
 
@@ -3964,60 +2672,7 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-loading <- matrix(0, 6, 1)
-loading[1:6, 1] <- NA
-LX <- simMatrix(loading, 0.7)
-RPH <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
-SimData <- simData(CFA.Model, 500)
-SimModel <- simModel(CFA.Model)
-# We make the examples running only 5 replications to save time.
-# In reality, more replications are needed.
-Output <- simResult(5, SimData, SimModel)
-#summary(Output)
-
-
-
-cleanEx()
-nameEx("simEqualCon")
-### * simEqualCon
-
-flush(stderr()); flush(stdout())
-
-### Name: simEqualCon
-### Title: Equality Constraint Object
-### Aliases: simEqualCon
-
-### ** Examples
-
-# Example 1: Single-group, one constraint
-constraint <- matrix(0, 3, 2)
-constraint[1,] <- c(1, 1)
-constraint[2,] <- c(2, 1)
-constraint[3,] <- c(3, 1)
-rownames(constraint) <- rep("LY", 3)
-equal.loading <- simEqualCon(constraint, modelType="SEM.exo")
-
-# Example 2: Multiple-group, one constraint
-group.con <- matrix(0, 2, 3)
-group.con[1,] <- c(1, 2, 1)
-group.con[2,] <- c(2, 2, 1)
-rownames(group.con) <- rep("BE", 2)
-equal.path <- simEqualCon(group.con, modelType="Path")
-
-# Example 3: Single-group, multiple constraints
-constraint1 <- matrix(1, 3, 2)
-constraint1[,1] <- 1:3
-rownames(constraint1) <- rep("LY", 3)
-constraint2 <- matrix(2, 3, 2)
-constraint2[,1] <- 4:6
-rownames(constraint2) <- rep("LY", 3)
-constraint3 <- matrix(3, 2, 2)
-constraint3[,1] <- 7:8
-rownames(constraint3) <- rep("LY", 2)
-equal.loading2 <- simEqualCon(constraint1, constraint2, constraint3, modelType="SEM")
-summary(equal.loading2)
+# Need an example
 
 
 
@@ -4069,13 +2724,7 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-
-n65 <- simNorm(0.6, 0.05)
-u35 <- simUnif(0.3, 0.5)
-u68 <- simUnif(0.6, 0.8)
-u2 <- simUnif(-0.2, 0.2)
-n1 <- simNorm(0, 0.1)
-
+# The example still does not work
 loading <- matrix(0, 9, 3)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
@@ -4083,54 +2732,56 @@ loading[7:9, 3] <- NA
 loading.start <- matrix("", 9, 3)
 loading.start[1:3, 1] <- 0.7
 loading.start[4:6, 2] <- 0.7
-loading.start[7:9, 3] <- "u68"
-LY <- simMatrix(loading, loading.start)
+loading.start[7:9, 3] <- "runif(1, 0.6, 0.8)"
 
-RTE <- symMatrix(diag(9))
+loading.trivial <- matrix("runif(1, -0.2, 0.2)", 9, 3)
+loading.trivial[is.na(loading)] <- 0
+
+LY <- bind(loading, loading.start, misspec=loading.trivial)
+
+error.cor.trivial <- matrix("rnorm(1, 0, 0.1)", 9, 9)
+diag(error.cor.trivial) <- 0
+
+RTE <- binds(diag(9), misspec=error.cor.trivial)
 
 factor.cor <- diag(3)
 factor.cor[1, 2] <- factor.cor[2, 1] <- NA
-RPS <- symMatrix(factor.cor, 0.5)
+RPS <- binds(factor.cor, 0.5)
 
 path <- matrix(0, 3, 3)
 path[3, 1:2] <- NA
 path.start <- matrix(0, 3, 3)
-path.start[3, 1] <- "n65"
-path.start[3, 2] <- "u35"
-BE <- simMatrix(path, path.start)
+path.start[3, 1] <- "rnorm(1, 0.6, 0.05)"
+path.start[3, 2] <- "runif(1, 0.3, 0.5)"
+BE <- bind(path, path.start)
 
-datGen <- simSetSEM(BE=BE, LY=LY, RPS=RPS, RTE=RTE)
+datGen <- model(BE=BE, LY=LY, RPS=RPS, RTE=RTE, modelType="SEM")
 
-loading.trivial <- matrix(NA, 9, 3)
-loading.trivial[is.na(loading)] <- 0
-LY.trivial <- simMatrix(loading.trivial, "u2")
+#loading <- matrix(0, 12, 4)
+#loading[1:3, 1] <- NA
+#loading[4:6, 2] <- NA
+#loading[7:9, 4] <- NA
+#loading[10:12, 3] <- NA
 
-error.cor.trivial <- matrix(NA, 9, 9)
-diag(error.cor.trivial) <- 0
-RTE.trivial <- symMatrix(error.cor.trivial, "n1")
+#path <- matrix(0, 4, 4)
+#path[4, 1:3] <- NA
 
-misGen <- simMisspecSEM(LY = LY.trivial, RTE = RTE.trivial)
+#analysis <- simParamSEM(BE=path, LY=loading)
 
-Data.Mis <- simData(datGen, 300, misspec=misGen)
+#Model <- simModel(analysis)
 
-loading <- matrix(0, 12, 4)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-loading[7:9, 4] <- NA
-loading[10:12, 3] <- NA
+# Find the products of indicators
+#newFUN <- function(data, var1, var2, namesProd) {
+#	prod <- data[,var1] * data[,var2]
+#	colnames(prod) <- namesProd
+#	return(data.frame(data, prod))
+#}
 
-path <- matrix(0, 4, 4)
-path[4, 1:3] <- NA
-
-analysis <- simParamSEM(BE=path, LY=loading)
-
-Model <- simModel(analysis)
-
-fun <- simFunction(indProd, var1=paste("y", 1:3, sep=""), var2=paste("y", 4:6, sep=""), namesProd=paste("y", 10:12, sep=""))
+#fun <- simFunction(newFUN, var1=paste("y", 1:3, sep=""), var2=paste("y", 4:6, sep=""), namesProd=paste("y", 10:12, sep=""))
 
 # Real simulation will need more than just 10 replications
-Output <- simResult(10, Data.Mis, Model, objFunction=fun)
-summary(Output)
+#Output <- simResult(10, Data.Mis, Model, objFunction=fun)
+#summary(Output)
 
 
 
@@ -4225,193 +2876,6 @@ flush(stderr()); flush(stdout())
 
 
 cleanEx()
-nameEx("simMatrix")
-### * simMatrix
-
-flush(stderr()); flush(stdout())
-
-### Name: simMatrix
-### Title: Create simMatrix that save free parameters and starting values,
-###   as well as fixed values
-### Aliases: simMatrix
-
-### ** Examples
-
-loading <- matrix(0, 6, 2)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-loadingValues <- matrix(0, 6, 2)
-loadingValues[1:3, 1] <- 0.7
-loadingValues[4:6, 2] <- 0.7
-LX <- simMatrix(loading, loadingValues)
-summary(LX)
-run(LX)
-
-n65 <- simNorm(0.6, 0.05)
-LY <- simMatrix(loading, "n65")
-summary(LY)
-run(LY)
-
-start <- matrix(0, 6, 2)
-start[1:3, 1] <- 0.7
-start[4:6, 2] <- 0.7
-ST <- simMatrix(value=start)
-
-
-
-cleanEx()
-nameEx("simMissing")
-### * simMissing
-
-flush(stderr()); flush(stdout())
-
-### Name: simMissing
-### Title: Construct a SimMissing object to create data with missingness
-###   and analyze missing data.
-### Aliases: simMissing
-
-### ** Examples
-
-	#Example of imposing 10% MCAR missing in all variables with no imputations (FIML method)
-	Missing <- simMissing(pmMCAR=0.1)
-	summary(Missing)
-	
-	loading <- matrix(0, 6, 1)
-	loading[1:6, 1] <- NA
-	LX <- simMatrix(loading, 0.7)
-	RPH <- symMatrix(diag(1))
-	RTD <- symMatrix(diag(6))
-	CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
-	SimData <- simData(CFA.Model, 500)
-	SimModel <- simModel(CFA.Model)
-	
-	#Create data
-	dat <- run(SimData)
-	
-	#Impose missing
-	dat <- run(Missing, dat)
-	
-	#Analyze data
-	out <- run(SimModel, dat)
-	summary(out)
-	
-	#Example to create simMissing object for 3 forms design at 3 timepoints with 10 imputations
-	Missing <- simMissing(nforms=3, timePoints=3, numImps=10)
-
-
-
-
-cleanEx()
-nameEx("simMisspecCFA")
-### * simMisspecCFA
-
-flush(stderr()); flush(stdout())
-
-### Name: simMisspecCFA
-### Title: Set of model misspecification for CFA model.
-### Aliases: simMisspecCFA
-
-### ** Examples
-
-n01 <- simNorm(0, 0.1)
-error.cor.Mis <- matrix(NA, 6, 6)
-diag(error.cor.Mis) <- 1
-RTD.Mis <- symMatrix(error.cor.Mis, "n01")
-CFA.Model.Mis <- simMisspecCFA(RTD=RTD.Mis)
-
-
-
-cleanEx()
-nameEx("simMisspecPath")
-### * simMisspecPath
-
-flush(stderr()); flush(stdout())
-
-### Name: simMisspecPath
-### Title: Set of model misspecification for Path analysis model.
-### Aliases: simMisspecPath
-
-### ** Examples
-
-u1 <- simUnif(-0.1, 0.1)
-mis.path.GA <- matrix(0, 2, 2)
-mis.path.GA[2, 1:2] <- NA
-mis.GA <- simMatrix(mis.path.GA, "u1")
-Path.Mis.Model <- simMisspecPath(GA = mis.GA, exo=TRUE)
-
-
-
-cleanEx()
-nameEx("simMisspecSEM")
-### * simMisspecSEM
-
-flush(stderr()); flush(stdout())
-
-### Name: simMisspecSEM
-### Title: Set of model misspecification for SEM model.
-### Aliases: simMisspecSEM
-
-### ** Examples
-
-u2 <- simUnif(-0.2, 0.2)
-n1 <- simNorm(0, 0.1)
-loading.X.trivial <- matrix(NA, 6, 2)
-loading.X.trivial[is.na(loading.X.trivial)] <- 0
-LX.trivial <- simMatrix(loading.X.trivial, "u2")
-error.cor.X.trivial <- matrix(NA, 6, 6)
-diag(error.cor.X.trivial) <- 0
-RTD.trivial <- symMatrix(error.cor.X.trivial, "n1")
-error.cor.Y.trivial <- matrix(NA, 2, 2)
-diag(error.cor.Y.trivial) <- 0
-RTE.trivial <- symMatrix(error.cor.Y.trivial, "n1")
-RTH.trivial <- simMatrix(matrix(NA, 6, 2), "n1")
-SEM.Mis.Model <- simMisspecSEM(LX = LX.trivial, RTE = RTE.trivial, RTD = RTD.trivial, RTH = RTH.trivial, exo=TRUE)
-
-
-
-cleanEx()
-nameEx("simModel")
-### * simModel
-
-flush(stderr()); flush(stdout())
-
-### Name: simModel
-### Title: Create a model object
-### Aliases: simModel simModel-methods simModel,ANY-method
-###   simModel,SimSet-method simModel,SimParam-method
-###   simModel,SimModelOut-method
-
-### ** Examples
-
-loading <- matrix(0, 6, 2)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-loadingValues <- matrix(0, 6, 2)
-loadingValues[1:3, 1] <- 0.7
-loadingValues[4:6, 2] <- 0.7
-LX <- simMatrix(loading, loadingValues)
-latent.cor <- matrix(NA, 2, 2)
-diag(latent.cor) <- 1
-RPH <- symMatrix(latent.cor, 0.5)
-error.cor <- matrix(0, 6, 6)
-diag(error.cor) <- 1
-RTD <- symMatrix(error.cor)
-CFA.Model <- simSetCFA(LX = LX, RPH = RPH, RTD = RTD)
-SimModel <- simModel(CFA.Model)
-
-library(lavaan)
-loading <- matrix(0, 9, 3)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-loading[7:9, 3] <- NA
-HS.Model <- simParamCFA(LX = loading)
-SimModel <- simModel(HS.Model, indLab=paste("x", 1:9, sep=""))
-out <- run(SimModel, HolzingerSwineford1939)
-summary(out)
-
-
-
-cleanEx()
 nameEx("simNbinom")
 ### * simNbinom
 
@@ -4448,80 +2912,6 @@ flush(stderr()); flush(stdout())
 
 
 cleanEx()
-nameEx("simParamCFA")
-### * simParamCFA
-
-flush(stderr()); flush(stdout())
-
-### Name: simParamCFA
-### Title: Create a set of matrices of parameters for analyzing data that
-###   belongs to CFA model.
-### Aliases: simParamCFA
-
-### ** Examples
-
-loading <- matrix(0, 6, 2)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-CFA.Model <- simParamCFA(LX = loading)
-
-
-
-cleanEx()
-nameEx("simParamPath")
-### * simParamPath
-
-flush(stderr()); flush(stdout())
-
-### Name: simParamPath
-### Title: Create a set of matrices of parameters for analyzing data that
-###   belongs to Path analysis model
-### Aliases: simParamPath
-
-### ** Examples
- 
-path <- matrix(0, 4, 4)
-path[3, 1:2] <- NA
-path[4, 3] <- NA
-model <- simParamPath(BE=path)
-
-exoPath <- matrix(NA, 3, 2)
-model2 <- simParamPath(GA=exoPath, exo=TRUE)
-
-
-
-cleanEx()
-nameEx("simParamSEM")
-### * simParamSEM
-
-flush(stderr()); flush(stdout())
-
-### Name: simParamSEM
-### Title: Create a set of matrices of parameters for analyzing data that
-###   belongs to SEM model
-### Aliases: simParamSEM
-
-### ** Examples
-
-loading <- matrix(0, 8, 3)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-loading[7:8, 3] <- NA
-path <- matrix(0, 3, 3)
-path[3, 1:2] <- NA
-SEM.model <- simParamSEM(BE=path, LY=loading)
-
-loading.X <- matrix(0, 6, 2)
-loading.X[1:3, 1] <- NA
-loading.X[4:6, 2] <- NA
-loading.Y <- matrix(NA, 2, 1)
-path.GA <- matrix(NA, 1, 2)
-BE <- as.matrix(0)
-SEM.Exo.model <- simParamSEM(GA=path.GA, BE=BE, LX=loading.X, LY=loading.Y, exo=TRUE)
-
-
-
-cleanEx()
 nameEx("simPois")
 ### * simPois
 
@@ -4536,266 +2926,6 @@ flush(stderr()); flush(stdout())
     pois5 <- simPois(5)
     run(pois5)
 	summary(pois5)
-
-
-
-cleanEx()
-nameEx("simResult")
-### * simResult
-
-flush(stderr()); flush(stdout())
-
-### Name: simResult
-### Title: Create simResult.
-### Aliases: simResult
-
-### ** Examples
-
-loading <- matrix(0, 6, 1)
-loading[1:6, 1] <- NA
-LX <- simMatrix(loading, 0.7)
-RPH <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
-SimData <- simData(CFA.Model, 500)
-SimModel <- simModel(CFA.Model)
-# We make the examples running only 5 replications to save time.
-# In reality, more replications are needed.
-Output <- simResult(5, SimData, SimModel)
-summary(Output)
-
-# Specify Sample Size by n
-loading <- matrix(0, 6, 1)
-loading[1:6, 1] <- NA
-LX <- simMatrix(loading, 0.7)
-RPH <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
-SimData <- simData(CFA.Model, 500)
-SimModel <- simModel(CFA.Model)
-# We make the examples running only 5 replications to save time.
-# In reality, more replications are needed.
-Output <- simResult(NULL, SimData, SimModel, n=seq(50, 100, 10))
-summary(Output)
-
-# Specify both sample size and percent missing completely at random
-Output <- simResult(NULL, SimData, SimModel, n=seq(50, 100, 10), pmMCAR=c(0, 0.1, 0.2))
-summary(Output)
-
-# Use distribution object on sample size and percent completely at random
-n <- simUnif(100, 500)
-pmMCAR <- simUnif(0, 0.1)
-Output <- simResult(5, SimData, SimModel, n=n, pmMCAR=pmMCAR)
-
-
-
-
-cleanEx()
-nameEx("simResultParam")
-### * simResultParam
-
-flush(stderr()); flush(stdout())
-
-### Name: simResultParam
-### Title: The constructor of the parameter result object
-### Aliases: simResultParam
-
-### ** Examples
-
-u35 <- simUnif(0.3, 0.5)
-u57 <- simUnif(0.5, 0.7)
-u1 <- simUnif(-0.1, 0.1)
-n31 <- simNorm(0.3, 0.1)
-
-path.BE <- matrix(0, 4, 4)
-path.BE[3, 1:2] <- NA
-path.BE[4, 3] <- NA
-starting.BE <- matrix("", 4, 4)
-starting.BE[3, 1:2] <- "u35"
-starting.BE[4, 3] <- "u57"
-BE <- simMatrix(path.BE, starting.BE)
-
-residual.error <- diag(4)
-residual.error[1,2] <- residual.error[2,1] <- NA
-RPS <- symMatrix(residual.error, "n31")
-
-ME <- simVector(rep(NA, 4), 0)
-
-Path.Model <- simSetPath(RPS = RPS, BE = BE, ME = ME)
-
-mis.path.BE <- matrix(0, 4, 4)
-mis.path.BE[4, 1:2] <- NA
-mis.BE <- simMatrix(mis.path.BE, "u1")
-Path.Mis.Model <- simMisspecPath(BE = mis.BE, misfitType="rmsea")
-
-# The number of replications in actual analysis should be much more than 5
-ParamObject <- simResultParam(5, Path.Model, Path.Mis.Model)
-
-# Specify the range of misfits to select the set of misspecified parameters
-Path.Mis.Model2 <- simMisspecPath(BE = mis.BE, misfitType="rmsea", misfitBound=c(0.05, 0.08))
-ParamObject2 <- simResultParam(5, Path.Model, Path.Mis.Model2)
-
-# Find the maximum misspecification for each actual parameter
-Path.Mis.Model3 <- simMisspecPath(BE = mis.BE, misfitType="rmsea", optMisfit="max", numIter=10)
-ParamObject3 <- simResultParam(5, Path.Model, Path.Mis.Model3)
-
-
-
-cleanEx()
-nameEx("simSetCFA")
-### * simSetCFA
-
-flush(stderr()); flush(stdout())
-
-### Name: simSetCFA
-### Title: Create a set of matrices of parameter and parameter values to
-###   generate and analyze data that belongs to CFA model.
-### Aliases: simSetCFA
-
-### ** Examples
-
-loading <- matrix(0, 6, 2)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-loadingValues <- matrix(0, 6, 2)
-loadingValues[1:3, 1] <- 0.7
-loadingValues[4:6, 2] <- 0.7
-LX <- simMatrix(loading, loadingValues)
-summary(LX)
-
-latent.cor <- matrix(NA, 2, 2)
-diag(latent.cor) <- 1
-RPH <- symMatrix(latent.cor, 0.5)
-
-error.cor <- matrix(0, 6, 6)
-diag(error.cor) <- 1
-RTD <- symMatrix(error.cor)
-
-CFA.Model <- simSetCFA(LX = LX, RPH = RPH, RTD = RTD)
-
-
-
-cleanEx()
-nameEx("simSetPath")
-### * simSetPath
-
-flush(stderr()); flush(stdout())
-
-### Name: simSetPath
-### Title: Create a set of matrices of parameter and parameter values to
-###   generate and analyze data that belongs to Path analysis model
-### Aliases: simSetPath
-
-### ** Examples
- 
-u35 <- simUnif(0.3, 0.5)
-u57 <- simUnif(0.5, 0.7)
-u1 <- simUnif(-0.1, 0.1)
-n31 <- simNorm(0.3, 0.1)
-
-path.BE <- matrix(0, 4, 4)
-path.BE[3, 1:2] <- NA
-path.BE[4, 3] <- NA
-starting.BE <- matrix("", 4, 4)
-starting.BE[3, 1:2] <- "u35"
-starting.BE[4, 3] <- "u57"
-BE <- simMatrix(path.BE, starting.BE)
-
-residual.error <- diag(4)
-residual.error[1,2] <- residual.error[2,1] <- NA
-RPS <- symMatrix(residual.error, "n31")
-
-Path.Model <- simSetPath(RPS = RPS, BE = BE)
-
-u35 <- simUnif(0.3, 0.5)
-u57 <- simUnif(0.5, 0.7)
-u1 <- simUnif(-0.1, 0.1)
-n31 <- simNorm(0.3, 0.1)
-
-path.GA <- matrix(0, 2, 2)
-path.GA[1, 1:2] <- NA
-GA <- simMatrix(path.GA, "u35")
-
-path.BE <- matrix(0, 2, 2)
-path.BE[2, 1] <- NA
-BE <- simMatrix(path.BE, "u57")
-
-exo.cor <- matrix(NA, 2, 2)
-diag(exo.cor) <- 1
-RPH <- symMatrix(exo.cor, "n31")
-
-RPS <- symMatrix(diag(2))
-
-Path.Exo.Model <- simSetPath(RPS = RPS, BE = BE, RPH = RPH, GA = GA, exo=TRUE)
-
-
-
-cleanEx()
-nameEx("simSetSEM")
-### * simSetSEM
-
-flush(stderr()); flush(stdout())
-
-### Name: simSetSEM
-### Title: Create a set of matrices of parameter and parameter values to
-###   generate and analyze data that belongs to SEM model
-### Aliases: simSetSEM
-
-### ** Examples
-
-u35 <- simUnif(0.3, 0.5)
-u68 <- simUnif(0.6, 0.8)
-n65 <- simNorm(0.6, 0.05)
-loading <- matrix(0, 8, 3)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-loading[7:8, 3] <- NA
-loading.start <- matrix("", 8, 3)
-loading.start[1:3, 1] <- 0.7
-loading.start[4:6, 2] <- 0.7
-loading.start[7:8, 3] <- "u68"
-LY <- simMatrix(loading, loading.start)
-
-RTE <- symMatrix(diag(8))
-
-factor.cor <- diag(3)
-factor.cor[1, 2] <- factor.cor[2, 1] <- NA
-RPS <- symMatrix(factor.cor, 0.5)
-
-path <- matrix(0, 3, 3)
-path[3, 1:2] <- NA
-path.start <- matrix(0, 3, 3)
-path.start[3, 1] <- "n65"
-path.start[3, 2] <- "u35"
-BE <- simMatrix(path, path.start)
-
-SEM.model <- simSetSEM(BE=BE, LY=LY, RPS=RPS, RTE=RTE)
-
-loading.X <- matrix(0, 6, 2)
-loading.X[1:3, 1] <- NA
-loading.X[4:6, 2] <- NA
-LX <- simMatrix(loading.X, 0.7)
-
-loading.Y <- matrix(NA, 2, 1)
-LY <- simMatrix(loading.Y, "u68")
-
-RTD <- symMatrix(diag(6))
-
-RTE <- symMatrix(diag(2))
-
-factor.K.cor <- matrix(NA, 2, 2)
-diag(factor.K.cor) <- 1
-RPH <- symMatrix(factor.K.cor, 0.5)
-
-RPS <- symMatrix(as.matrix(1))
-
-path.GA <- matrix(NA, 1, 2)
-path.GA.start <- matrix(c("n65", "u35"), ncol=2)
-GA <- simMatrix(path.GA, path.GA.start)
-
-BE <- simMatrix(as.matrix(0))
-
-SEM.Exo.model <- simSetSEM(GA=GA, BE=BE, LX=LX, LY=LY, RPH=RPH, RPS=RPS, RTD=RTD, RTE=RTE, exo=TRUE)
 
 
 
@@ -4832,31 +2962,6 @@ flush(stderr()); flush(stdout())
 u1 <- simUnif(-0.1, 0.1)
 run(u1)
 summary(u1)
-
-
-
-cleanEx()
-nameEx("simVector")
-### * simVector
-
-flush(stderr()); flush(stdout())
-
-### Name: simVector
-### Title: Create simVector that save free parameters and starting values,
-###   as well as fixed values
-### Aliases: simVector
-
-### ** Examples
-
-factor.mean <- rep(NA, 4)
-AL <- simVector(factor.mean, 0)
-
-n02 <- simNorm(0, 0.2)
-factor.start <- rep("n02", 4)
-KA <- simVector(factor.mean, factor.start)
-
-start <- c(2, 0, 0, 1)
-VE <- simVector(value=start)
 
 
 
@@ -4911,101 +3016,6 @@ flush(stderr()); flush(stdout())
 
 
 cleanEx()
-nameEx("standardize")
-### * standardize
-
-flush(stderr()); flush(stdout())
-
-### Name: standardize
-### Title: Standardize the parameter estimates within an object
-### Aliases: standardize standardize-methods standardize,ANY-method
-###   standardize,SimModelOut-method standardize,SimRSet-method
-
-### ** Examples
-
-# This function is not public.
-
-# loading <- matrix(0, 6, 2)
-# loading[1:3, 1] <- NA
-# loading[4:6, 2] <- NA
-# loadingValues <- matrix(0, 6, 2)
-# loadingValues[1:3, 1] <- 0.7
-# loadingValues[4:6, 2] <- 0.7
-# LX <- simMatrix(loading, loadingValues)
-# summary(LX)
-# latent.cor <- matrix(NA, 2, 2)
-# diag(latent.cor) <- 1
-# PH <- symMatrix(latent.cor, 0.5)
-# error.cor <- matrix(0, 6, 6)
-# diag(error.cor) <- 1
-# TD <- symMatrix(error.cor)
-# CFA.Model <- simSetCFA(LX = LX, PH = PH, TD = TD)
-# SimData <- simData(CFA.Model, 200)
-# SimModel <- simModel(CFA.Model)
-# standardize(run(SimModel, run(SimData)))
-
-# loading <- matrix(0, 6, 2)
-# loading[1:3, 1] <- NA
-# loading[4:6, 2] <- NA
-# loadingValues <- matrix(0, 6, 2)
-# loadingValues[1:3, 1] <- 0.7
-# loadingValues[4:6, 2] <- 0.7
-# LX <- simMatrix(loading, loadingValues)
-# summary(LX)
-# latent.cor <- matrix(NA, 2, 2)
-# diag(latent.cor) <- 1
-# PH <- symMatrix(latent.cor, 0.5)
-# error.cor <- matrix(0, 6, 6)
-# diag(error.cor) <- 1
-# TD <- symMatrix(error.cor)
-# CFA.Model <- simSetCFA(LX = LX, PH = PH, TD = TD)
-# set <- reduceMatrices(run(CFA.Model))
-
-
-
-cleanEx()
-nameEx("startingValues")
-### * startingValues
-
-flush(stderr()); flush(stdout())
-
-### Name: startingValues
-### Title: Find starting values by averaging random numbers
-### Aliases: startingValues startingValues-methods
-###   startingValues,ANY-method startingValues,SimMatrix-method
-###   startingValues,SimVector-method startingValues,SimSet-method
-
-### ** Examples
-
-# This function is not public
-
-#u89 <- simUnif(0.8, 0.9)
-#loading <- matrix(0, 6, 2)
-#loading[1:3, 1] <- NA
-#loading[4:6, 2] <- NA
-#loadingValues <- matrix(0, 6, 2)
-#LX <- simMatrix(loading, "u89")
-#startingValues(LX, 10)
-
-#u89 <- simUnif(0.8, 0.9)
-#loading <- matrix(0, 6, 2)
-#loading[1:3, 1] <- NA
-#loading[4:6, 2] <- NA
-#loadingValues <- matrix(0, 6, 2)
-#LX <- simMatrix(loading, "u89")
-#latent.cor <- matrix(NA, 2, 2)
-#diag(latent.cor) <- 1
-#PH <- symMatrix(latent.cor, 0.5)
-#error.cor <- matrix(0, 6, 6)
-#diag(error.cor) <- 1
-#TD <- symMatrix(error.cor)
-#CFA.Model <- simSetCFA(LX = LX, PH = PH, TD = TD)
-#result <- startingValues(CFA.Model, 10)
-#summary(result)
-
-
-
-cleanEx()
 nameEx("subtractObject")
 ### * subtractObject
 
@@ -5055,23 +3065,21 @@ flush(stderr()); flush(stdout())
 ### Name: summaryFit
 ### Title: Provide summary of model fit across replications
 ### Aliases: summaryFit summaryFit-methods summaryFit,ANY-method
-###   summaryFit,SimResult-method summaryFit,SimResultParam-method
+###   summaryFit,SimResult-method
 
 ### ** Examples
 
 loading <- matrix(0, 6, 1)
 loading[1:6, 1] <- NA
-LX <- simMatrix(loading, 0.7)
-RPH <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
-SimData <- simData(CFA.Model, 500)
-SimModel <- simModel(CFA.Model)
+LX <- bind(loading, 0.7)
+RPH <- binds(diag(1))
+RTD <- binds(diag(6))
+CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+
 # We make the examples running only 5 replications to save time.
 # In reality, more replications are needed.
-Output <- simResult(5, SimData, SimModel)
+Output <- sim(5, n=500, CFA.Model)
 summaryFit(Output)
-summaryFit(Output, detail=TRUE)
 
 
 
@@ -5085,40 +3093,35 @@ flush(stderr()); flush(stdout())
 ### Title: Provide summary of model misspecification imposed across
 ###   replications
 ### Aliases: summaryMisspec summaryMisspec-methods
-###   summaryMisspec,ANY-method summaryMisspec,SimResultParam-method
+###   summaryMisspec,ANY-method
 
 ### ** Examples
 
-u35 <- simUnif(0.3, 0.5)
-u57 <- simUnif(0.5, 0.7)
-u1 <- simUnif(-0.1, 0.1)
-n31 <- simNorm(0.3, 0.1)
+# Incomplete
 
 path.BE <- matrix(0, 4, 4)
 path.BE[3, 1:2] <- NA
 path.BE[4, 3] <- NA
 starting.BE <- matrix("", 4, 4)
-starting.BE[3, 1:2] <- "u35"
-starting.BE[4, 3] <- "u57"
-BE <- simMatrix(path.BE, starting.BE)
+starting.BE[3, 1:2] <- "runif(1, 0.3, 0.5)"
+starting.BE[4, 3] <- "runif(1, 0.5, 0.7)"
+mis.path.BE <- matrix(0, 4, 4)
+mis.path.BE[4, 1:2] <- "runif(1, -0.1, 0.1)"
+BE <- bind(path.BE, starting.BE, misspec=mis.path.BE)
 
 residual.error <- diag(4)
 residual.error[1,2] <- residual.error[2,1] <- NA
-RPS <- symMatrix(residual.error, "n31")
+RPS <- binds(residual.error, "rnorm(1, 0.3, 0.1)")
 
-ME <- simVector(rep(NA, 4), 0)
+ME <- bind(rep(NA, 4), 0)
 
-Path.Model <- simSetPath(RPS = RPS, BE = BE, ME = ME)
+Path.Model <- model(RPS = RPS, BE = BE, ME = ME, modelType="Path")
 
-mis.path.BE <- matrix(0, 4, 4)
-mis.path.BE[4, 1:2] <- NA
-mis.BE <- simMatrix(mis.path.BE, "u1")
-Path.Mis.Model <- simMisspecPath(BE = mis.BE, misfitType="rmsea")
 
 # The number of replications in actual analysis should be much more than 5
-ParamObject <- simResultParam(5, Path.Model, Path.Mis.Model)
+# ParamObject <- simResultParam(5, Path.Model, Path.Mis.Model)
 
-summaryMisspec(ParamObject)
+# summaryMisspec(ParamObject)
 
 
 
@@ -5132,23 +3135,21 @@ flush(stderr()); flush(stdout())
 ### Title: Provide summary of parameter estimates and standard error across
 ###   replications
 ### Aliases: summaryParam summaryParam-methods summaryParam,ANY-method
-###   summaryParam,SimResult-method summaryParam,SimModelOut-method
-###   summaryParam,SimModelMIOut-method
+###   summaryParam,SimResult-method
 
 ### ** Examples
 
 showClass("SimResult")
 loading <- matrix(0, 6, 1)
 loading[1:6, 1] <- NA
-LX <- simMatrix(loading, 0.7)
-RPH <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
-SimData <- simData(CFA.Model, 500)
-SimModel <- simModel(CFA.Model)
+LX <- bind(loading, 0.7)
+RPH <- binds(diag(1))
+RTD <- binds(diag(6))
+CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+
 # We make the examples running only 5 replications to save time.
 # In reality, more replications are needed.
-Output <- simResult(5, SimData, SimModel)
+Output <- sim(5, n=500, CFA.Model)
 summaryParam(Output)
 summaryParam(Output, detail=TRUE)
 
@@ -5185,61 +3186,12 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-u89 <- simUnif(0.8, 0.9)
 loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
 loadingValues <- matrix(0, 6, 2)
-LX <- simMatrix(loading, "u89")
+LX <- bind(loading, "runif(1, 0.8, 0.9)")
 summaryShort(LX)
-
-
-
-cleanEx()
-nameEx("symMatrix")
-### * symMatrix
-
-flush(stderr()); flush(stdout())
-
-### Name: symMatrix
-### Title: Create symmetric simMatrix that save free parameters and
-###   starting values, as well as fixed values
-### Aliases: symMatrix
-
-### ** Examples
-
-latent.cor <- matrix(NA, 3, 3)
-diag(latent.cor) <- 1
-RPH <- symMatrix(latent.cor, 0.5)
-
-u46 <- simUnif(0.4, 0.6)
-factor.cor <- matrix(NA, 4, 4)
-diag(factor.cor) <- 1
-factor.cor.start <- matrix("u46", 4, 4)
-factor.cor.start[1, 2] <- factor.cor.start[2, 1] <- "0.5"
-RPS <- symMatrix(factor.cor, factor.cor.start)
-
-start <- diag(4)
-start[1, 2] <- 0.5
-start[2, 1] <- 0.5
-ST <- symMatrix(value=start)
-
-
-
-cleanEx()
-nameEx("tagHeaders")
-### * tagHeaders
-
-flush(stderr()); flush(stdout())
-
-### Name: tagHeaders
-### Title: Tag names to each element
-### Aliases: tagHeaders tagHeaders-methods tagHeaders,ANY-method
-###   tagHeaders,VirtualRSet-method
-
-### ** Examples
-
-# No example
 
 
 
@@ -5258,35 +3210,6 @@ flush(stderr()); flush(stdout())
 
 u2 <- simUnif(-0.2, 0.2)
 toFunction(u2)
-
-
-
-cleanEx()
-nameEx("toSimSet")
-### * toSimSet
-
-flush(stderr()); flush(stdout())
-
-### Name: toSimSet
-### Title: Transform the analysis model object into the object for data
-###   generation
-### Aliases: toSimSet toSimSet-methods toSimSet,ANY-method
-###   toSimSet,SimRSet-method toSimSet,SimModelOut-method
-
-### ** Examples
-
-# This function is not public.
-
-# library(lavaan)
-# hs <- HolzingerSwineford1939
-# loading <- matrix(0, 9, 3)
-# loading[1:3, 1] <- NA
-# loading[4:6, 2] <- NA
-# loading[7:9, 3] <- NA
-# model <- simParamCFA(LY=loading)
-# SimModel <- simModel(model, indLab=paste("x", 1:9, sep=""))
-# out <- run(SimModel, hs)
-# set <- toSimSet(out)
 
 
 
@@ -5356,26 +3279,6 @@ flush(stderr()); flush(stdout())
 
 
 cleanEx()
-nameEx("vectorizeObject")
-### * vectorizeObject
-
-flush(stderr()); flush(stdout())
-
-### Name: vectorizeObject
-### Title: Change an object to a vector with labels
-### Aliases: vectorizeObject vectorizeObject-methods
-###   vectorizeObject,ANY,ANY-method vectorizeObject,vector,vector-method
-###   vectorizeObject,matrix,matrix-method
-###   vectorizeObject,VirtualRSet,SimLabels-method
-###   vectorizeObject,MatrixSet,SimGenLabels-method
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
 nameEx("weightedMean")
 ### * weightedMean
 
@@ -5409,71 +3312,6 @@ flush(stderr()); flush(stdout())
 # This is a private function.
 
 # whichMonotonic(c(3, 4, 1, 2, 3, 5, 2, 1))
-
-
-
-cleanEx()
-nameEx("writeLavaanCode")
-### * writeLavaanCode
-
-flush(stderr()); flush(stdout())
-
-### Name: writeLavaanCode
-### Title: Write a lavaan code given the matrices of free parameter
-### Aliases: writeLavaanCode
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("writeLavaanConstraint")
-### * writeLavaanConstraint
-
-flush(stderr()); flush(stdout())
-
-### Name: writeLavaanConstraint
-### Title: Write a lavaan code for a given set of equality constraints
-### Aliases: writeLavaanConstraint
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("writeLavaanIndividualConstraint")
-### * writeLavaanIndividualConstraint
-
-flush(stderr()); flush(stdout())
-
-### Name: writeLavaanIndividualConstraint
-### Title: Write a lavaan code for a given equality constraint for each
-###   parameter
-### Aliases: writeLavaanIndividualConstraint
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("writeLavaanNullCode")
-### * writeLavaanNullCode
-
-flush(stderr()); flush(stdout())
-
-### Name: writeLavaanNullCode
-### Title: Write a lavaan code for a null model
-### Aliases: writeLavaanNullCode
-
-### ** Examples
-
-# No example
 
 
 

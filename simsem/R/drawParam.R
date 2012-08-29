@@ -484,7 +484,12 @@ createImpliedMACS <- function(reducedParamSet) {
 
 ## Now takes lists for the matrices for mg
 popMisfitMACS <- function(paramM, paramCM, misspecM, misspecCM, dfParam = NULL, fit.measures = "all") {
-    if (fit.measures == "all") {
+	if(is.vector(paramM)) paramM <- list(paramM)
+	if(is.vector(misspecM)) misspecM <- list(misspecM)
+	if(is.matrix(paramCM)) paramCM <- list(paramCM)
+	if(is.matrix(misspecCM)) misspecCM <- list(misspecCM)
+	
+	if (fit.measures == "all") {
         fit.measures <- c("f0","rmsea","srmr")
         #fit.measures <- c("f0","rmsea")
         if (is.null(dfParam)) 

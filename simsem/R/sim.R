@@ -161,6 +161,7 @@
     timing$SimConditions <- (proc.time()[3] - start.time)
     start.time <- proc.time()[3]
     
+	
     ## 5. Run replications
     if (multicore) {
       library(parallel)
@@ -168,20 +169,20 @@
       if (is.null(numProc)) 
         numProc <- detectCores()
       if (sys == "windows") {
-        cl <- makeCluster(rep("localhost", numProc), type = "SOCK")                        
-        Result.l <- clusterApplyLB(cl, simConds, runRep, miss = miss, fun = fun, silent = silent,
+        cl <- makeCluster(rep("localhost", numProc), type = "SOCK")  
+        Result.l <- clusterApplyLB(cl, simConds, runRep, model = model, miss = miss, funObj = fun, silent = silent,
                                    facDist = facDist, indDist = indDist, errorDist=errorDist, sequential=sequential, realData=realData,
                                    maxDraw = maxDraw, misfitBounds=misfitBounds, averageNumMisspec=averageNumMisspec,
                                    optMisfit=optMisfit, optDraws=optDraws, misfitType=misfitType)
         stopCluster(cl)
       } else {
-        Result.l <- mclapply(simConds, runRep, model, miss = miss, fun = fun,  silent = silent,
+        Result.l <- mclapply(simConds, runRep, model = model, miss = miss, funObj = fun,  silent = silent,
                              facDist = facDist, indDist = indDist, errorDist=errorDist, sequential=sequential, realData=realData,
                              maxDraw = maxDraw, misfitBounds=misfitBounds, averageNumMisspec=averageNumMisspec,
                              optMisfit=optMisfit, optDraws=optDraws, misfitType=misfitType, mc.cores = numProc)
       }
     } else {
-      Result.l <- lapply(simConds, runRep, model, miss = miss, fun = fun, silent = silent,
+      Result.l <- lapply(simConds, runRep, model = model, miss = miss, funObj = fun, silent = silent,
                          facDist = facDist, indDist = indDist, errorDist=errorDist, sequential=sequential, realData=realData,
                          maxDraw = maxDraw, misfitBounds=misfitBounds, averageNumMisspec=averageNumMisspec,
                          optMisfit=optMisfit, optDraws=optDraws, misfitType=misfitType)
@@ -256,25 +257,13 @@
         if (nrow(unique(FMI2)) == 1) 
             FMI2 <- unique(FMI2)
     }
-    if (is.null(n)) {
-##         if (class(objData) == "SimData") {
-##             if (is.null(n)) 
-##                 n <- objData@n
-##         } else if (is.list(objData)) {
-##             if (class(objData[[1]]) == "SimDataOut") {
-##                 n <- objData@n
-           ##  } else
-    if (is.matrix(objData[[1]]) | is.data.frame(objData[[1]])) {
-                n <- nrow(objData[[1]])
-              }
-  }
   
     if (is.null(pmMCAR)) 
-        ifelse(is.null(miss), pmMCAR <- 0, pmMCAR <- objMissing@pmMCAR)
+        ifelse(is.null(miss), pmMCAR <- 0, pmMCAR <- miss@pmMCAR)
     if (is.null(pmMAR)) 
-        ifelse(is.null(miss), pmMAR <- 0, pmMAR <- objMissing@pmMAR)
-    if (nrow(param) == 1 & ncol(param) == 1 && is.na(param)) 
-        param <- paramData
+        ifelse(is.null(miss), pmMAR <- 0, pmMAR <- miss@pmMAR)
+    #if (nrow(param) == 1 & ncol(param) == 1 && is.na(param)) 
+    #    param <- paramData
 
     timing$CombineResults <- (proc.time()[3] - start.time)
     start.time <- proc.time()[3]
@@ -290,7 +279,7 @@
 
 # runRep: Run one replication
 
-runRep <- function(simConds, model, miss = NULL, fun=NULL, facDist = NULL, indDist = NULL, indLab=NULL, errorDist = NULL, sequential = FALSE, realData=NULL, silent = FALSE,
+runRep <- function(simConds, model, miss = NULL, funObj=NULL, facDist = NULL, indDist = NULL, indLab=NULL, errorDist = NULL, sequential = FALSE, realData=NULL, silent = FALSE,
                    modelBoot = FALSE, maxDraw = 50, misfitType = "f0", misfitBounds = NULL, averageNumMisspec = NULL, optMisfit=NULL, optDraws = 50, timing=NULL) {
   start.time0 <- start.time <- proc.time()[3]; timing <- list()
   param <- NULL
@@ -316,7 +305,7 @@ runRep <- function(simConds, model, miss = NULL, fun=NULL, facDist = NULL, indDi
                 pmMCAR <- 0
             if (is.null(pmMAR)) 
                 pmMAR <- 0
-            miss <- simMissing(pmMCAR = pmMCAR, pmMAR = pmMAR, ignoreCols="group")
+            miss <- miss(pmMCAR = pmMCAR, pmMAR = pmMAR, ignoreCols="group")
         }
       }
    
@@ -355,8 +344,8 @@ runRep <- function(simConds, model, miss = NULL, fun=NULL, facDist = NULL, indDi
     timing$ImposeMissing <- (proc.time()[3] - start.time)
     start.time <- proc.time()[3]
     ## 4. Call user function (if exists)
-    if (!is.null(fun)) {
-      data <- fun(data) # args??
+    if (!is.null(funObj)) {
+      data <- funObj(data) # args??
       #data.mis <- run(objFunction, data.mis, checkDataOut = TRUE)
     }
     

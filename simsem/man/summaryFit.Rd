@@ -3,7 +3,6 @@
 \alias{summaryFit-methods}
 \alias{summaryFit,ANY-method}
 \alias{summaryFit,SimResult-method}
-\alias{summaryFit,SimResultParam-method}
 \title{
 	Provide summary of model fit across replications
 }
@@ -15,7 +14,7 @@ summaryFit(object,...)
 }
 \arguments{
   \item{object}{
-	\code{\linkS4class{SimResult}} or \code{linkS4class{SimResultParam}} to be summarized
+	\code{\linkS4class{SimResult}} to be summarized
 }
   \item{\dots}{
     any additional arguments, such as for the function with result object, \code{digits} argument is available to adjust digits in results, \code{alpha} is available to select a specific alpha for fit index cutoffs.
@@ -35,13 +34,7 @@ summaryFit(object,...)
 		\item {SRMR} Standardized Root Mean Residual
 	}
 	When \code{linkS4class{SimResult}} has random simulation parameters (sample size or percent missing), columns are the fit indices listed above and rows are values of the random parameter.
-	
-	When \code{linkS4class{SimResultParam}} is specified in the \code{object}, the reported fit indices are
-	\itemize{
-		\item {f0} Discrepancy Function
-		\item {RMSEA} Root Mean Square Error of Approximation
-		\item {SRMR} Standardized Root Mean Residual
-	}
+
 	See details in \code{\link{popDiscrepancy}} and \code{\link{popMisfitMACS}}
 }
 \author{
@@ -51,7 +44,6 @@ summaryFit(object,...)
 
 \seealso{
 	\code{\linkS4class{SimResult}} for the result object input
-	\code{\linkS4class{SimResultParam}} for the parameter result object input
 }
 \examples{
 loading <- matrix(0, 6, 1)
@@ -65,5 +57,4 @@ CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
 # In reality, more replications are needed.
 Output <- sim(5, n=500, CFA.Model)
 summaryFit(Output)
-summaryFit(Output, detail=TRUE)
 }

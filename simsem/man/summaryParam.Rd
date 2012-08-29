@@ -24,16 +24,6 @@ summaryParam(object, ...)
 }
 \value{
 	A data frame that provides the statistics described above from all parameters.
-	For using with \code{\linkS4class{SimModelOut}}, each column means
-	\itemize{
-		\item \code{Estimate:} Parameter Estimates
-		\item \code{SE:} Standard Error of the Parameter Estimates
-		\item \code{z:} Wald Statistic
-		\item \code{p:} \emph{p} value based on the Wald Statistic
-		\item \code{Param:} Parameter Value underlying the analyzed data
-		\item \code{Bias:} Bias in Parameter Estimates
-		\item \code{Coverage:} Whether (1-alpha)\% confidence interval covers the parameter estimates
-	}	
 	For using with \code{linkS4class{SimResult}}, each column means
 	\itemize{
 		\item \code{Estimate.Average:} Average of parameter estimates across all replications

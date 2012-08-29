@@ -18,7 +18,7 @@ simFunction(fun, ...)
 }
 }
 \value{
-	\code{\linkS4class{SimFunction}} that saves the function to use later in the simulation (within \code{\link{simResult}})
+	\code{\linkS4class{SimFunction}} that saves the function to use later in the simulation (within \code{\link{sim}})
 }
 \author{
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})

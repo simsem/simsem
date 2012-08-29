@@ -41,7 +41,7 @@ analyze <- function(model, data, package="lavaan", simMissing=NULL,indLab=NULL,a
   ##    miss <- sum(is.na(data)) > 0
 
   if (!is.null(simMissing) && length(simMissing@package) != 0 && simMissing@package == "Amelia") {
-    Output <- runMI(data, object, simMissing@args)
+    Output <- runMI(data, model, simMissing@args)
   } else {
     Output <- lavaan(model@pt, data=data, group="group", model.type=model@modelType,...)
   }

@@ -70,47 +70,47 @@ miPool <- function(Result.l) {
     OutputFMI2 <- Result.l[[which(Converged == TRUE)[1]]]@se
     
     for (i in 1:length(paramNames)) {
-        if (!isNullObject(slot(OutputCoef, paramNames[i]))) {
-            mparam <- as.matrix(sapply(Result.l, function(result, slotname1, slotname2) {
-                slot(slot(result, slotname1), slotname2)
-            }, slotname1 = "param", slotname2 = paramNames[i]))
-            if (ncol(mparam) == 1) 
-                mparam <- t(mparam)  # Prevent single element matrix problem
-            mparam <- mparam[, 1]
-            mcoef <- as.matrix(sapply(Result.l, function(result, slotname1, slotname2) {
-                slot(slot(result, slotname1), slotname2)
-            }, slotname1 = "coef", slotname2 = paramNames[i]))
-            if (ncol(mcoef) == 1) 
-                mcoef <- t(mcoef)  # Prevent single element matrix problem
-            mcoef <- mcoef[is.na(mparam), ]
-            mse <- as.matrix(sapply(Result.l, function(result, slotname1, slotname2) {
-                slot(slot(result, slotname1), slotname2)
-            }, slotname1 = "se", slotname2 = paramNames[i]))
-            if (ncol(mse) == 1) 
-                mse <- t(mse)  # Prevent single element matrix problem
-            mse <- mse[is.na(mparam), ]
-            temp <- miPoolVector(t(mcoef), t(mse), length(Result.l))
-            temp1 <- as.vector(slot(OutputCoef, paramNames[i]))
-            temp2 <- as.vector(slot(OutputSE, paramNames[i]))
-            temp3 <- as.vector(slot(OutputFMI1, paramNames[i]))
-            temp4 <- as.vector(slot(OutputFMI2, paramNames[i]))
-            temp1[which(is.na(mparam))] <- temp$coef
-            temp2[which(is.na(mparam))] <- temp$se
-            temp3[which(is.na(mparam))] <- temp$FMI.1
-            temp4[which(is.na(mparam))] <- temp$FMI.2
-            if (is.matrix(slot(OutputCoef, paramNames[i]))) {
-                numcol <- ncol((slot(OutputCoef, paramNames[i])))
-                slot(OutputCoef, paramNames[i]) <- matrix(temp1, ncol = numcol)
-                slot(OutputSE, paramNames[i]) <- matrix(temp2, ncol = numcol)
-                slot(OutputFMI1, paramNames[i]) <- matrix(temp3, ncol = numcol)
-                slot(OutputFMI2, paramNames[i]) <- matrix(temp4, ncol = numcol)
-            } else {
-                slot(OutputCoef, paramNames[i]) <- temp1
-                slot(OutputSE, paramNames[i]) <- temp2
-                slot(OutputFMI1, paramNames[i]) <- temp3
-                slot(OutputFMI2, paramNames[i]) <- temp4
-            }
-        }
+        #if (!isNullObject(slot(OutputCoef, paramNames[i]))) {
+		mparam <- as.matrix(sapply(Result.l, function(result, slotname1, slotname2) {
+			slot(slot(result, slotname1), slotname2)
+		}, slotname1 = "param", slotname2 = paramNames[i]))
+		if (ncol(mparam) == 1) 
+			mparam <- t(mparam)  # Prevent single element matrix problem
+		mparam <- mparam[, 1]
+		mcoef <- as.matrix(sapply(Result.l, function(result, slotname1, slotname2) {
+			slot(slot(result, slotname1), slotname2)
+		}, slotname1 = "coef", slotname2 = paramNames[i]))
+		if (ncol(mcoef) == 1) 
+			mcoef <- t(mcoef)  # Prevent single element matrix problem
+		mcoef <- mcoef[is.na(mparam), ]
+		mse <- as.matrix(sapply(Result.l, function(result, slotname1, slotname2) {
+			slot(slot(result, slotname1), slotname2)
+		}, slotname1 = "se", slotname2 = paramNames[i]))
+		if (ncol(mse) == 1) 
+			mse <- t(mse)  # Prevent single element matrix problem
+		mse <- mse[is.na(mparam), ]
+		temp <- miPoolVector(t(mcoef), t(mse), length(Result.l))
+		temp1 <- as.vector(slot(OutputCoef, paramNames[i]))
+		temp2 <- as.vector(slot(OutputSE, paramNames[i]))
+		temp3 <- as.vector(slot(OutputFMI1, paramNames[i]))
+		temp4 <- as.vector(slot(OutputFMI2, paramNames[i]))
+		temp1[which(is.na(mparam))] <- temp$coef
+		temp2[which(is.na(mparam))] <- temp$se
+		temp3[which(is.na(mparam))] <- temp$FMI.1
+		temp4[which(is.na(mparam))] <- temp$FMI.2
+		if (is.matrix(slot(OutputCoef, paramNames[i]))) {
+			numcol <- ncol((slot(OutputCoef, paramNames[i])))
+			slot(OutputCoef, paramNames[i]) <- matrix(temp1, ncol = numcol)
+			slot(OutputSE, paramNames[i]) <- matrix(temp2, ncol = numcol)
+			slot(OutputFMI1, paramNames[i]) <- matrix(temp3, ncol = numcol)
+			slot(OutputFMI2, paramNames[i]) <- matrix(temp4, ncol = numcol)
+		} else {
+			slot(OutputCoef, paramNames[i]) <- temp1
+			slot(OutputSE, paramNames[i]) <- temp2
+			slot(OutputFMI1, paramNames[i]) <- temp3
+			slot(OutputFMI2, paramNames[i]) <- temp4
+		}
+        #}
     }
     conv <- mean(Converged, na.rm = TRUE) > 0.8
     start <- Result.l[[which(Converged == TRUE)[1]]]@start

@@ -5,7 +5,7 @@
 \alias{run,SimFunction-method}
 \title{Class \code{"SimFunction"}}
 \description{
-This class will save a function using for data transformation later in a simulation study within \code{\link{simResult}}.
+This class will save a function using for data transformation later in a simulation study within \code{\link{sim}}.
 }
 \section{Objects from the Class}{
 Objects can be created by \code{\link{simFunction}}. It can also be called from the form \code{new("SimFunction", ...)}.

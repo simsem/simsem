@@ -40,7 +40,7 @@ Mijke Rhemtulla (University of Kansas; \email{mijke@ku.edu})
 \seealso{
 	\itemize{
 		\item \code{\link{runMI}} for imputing missing values by multiple imputation and analyzing the imputed datasets.
-		\item \code{\link{miPool}} for combining results in the \code{\linkS4class{SimModelOut}} format.
+		\item \code{\link{miPool}} TBA %for combining results in the \code{\linkS4class{SimModelOut}} format.
 	}
 }
 \examples{

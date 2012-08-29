@@ -7,9 +7,9 @@ TBA
 TBA
 }
 \usage{
-miss(cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, itemGroups = list(0), 
-timePoints = 1, twoMethod = 0, prAttr = 0, package="default", 
-ignoreCols = 0, threshold = 0, covAsAux = TRUE, logical = FALSE, ...)
+miss(cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, itemGroups = list(), 
+timePoints = 1, twoMethod = 0, prAttr = 0, package="default", ignoreCols = 0, 
+threshold = 0, covAsAux = TRUE, logical = NULL, ...)
 }
 \arguments{
 	\item{cov}{Column indices of any normally distributed covariates used in the data set.}
@@ -34,12 +34,12 @@ TBA
 TBA
 }
 \author{
-Alexander M. Schoemann (University of Kansas; \email{schoemann@ku.edu})  
-Patrick Miller(University of Kansas; \email{patr1ckm@ku.edu})
-Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})}
+	Alexander M. Schoemann (University of Kansas; \email{schoemann@ku.edu}), 
+    Patrick Miller (Univeristy of Notre Dame; \email{pmille13@nd.edu}), 
+	Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})}
 \seealso{
 	\itemize{
-		\item \code{\linkS4class{SimMissing}} for the alternative way to save missing data feature for using in the \code{\link{simResult}} function.
+		\item \code{\linkS4class{SimMissing}} for the alternative way to save missing data feature for using in the \code{\link{sim}} function.
 	}
 }
 \examples{

@@ -77,11 +77,7 @@ extract <- function(object, row = NULL, col = NULL) {
         if (length(row) == 1) 
             return(t(as.matrix(object[row, col])))
     }
-  } else if (class(object) == "vector") {
-    if (is.null(pos)) {
-        return(object)
-    } else {
-        return(object[pos])
-    }
-   }
+  } else {
+	stop("This function can be used for a matrix only.")
+  }
 }

@@ -10,7 +10,7 @@
 This object can be used to represent a matrix in SEM model. It contains free parameters, fixed values, and starting values. This object can be represented factor loading matrix or regreesion coefficient matrix. 
 }
 \section{Objects from the Class}{
-This object is created by \code{"\link[=simMatrix]{simMatrix}"} function. Objects can be also created by calls of the form \code{new("SimMatrix", ...)}.
+This object is created by \code{\link{bind}} function. Objects can be also created by calls of the form \code{new("SimMatrix", ...)}.
 }
 \section{Slots}{
   \describe{

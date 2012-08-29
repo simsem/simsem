@@ -105,6 +105,9 @@ paramOnly = FALSE, dataOnly=FALSE, ...)
   \item{dataOnly}{ 
 	TBA
 }
+  \item{\dots}{ 
+	TBA
+}
 }
 \value{
 	TBA

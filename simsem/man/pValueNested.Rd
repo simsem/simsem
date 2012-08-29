@@ -12,10 +12,10 @@ nVal = NULL, pmMCARval = NULL, pmMARval = NULL, df = 0)
 }
 \arguments{
   \item{outNested}{
-	\code{\linkS4class{SimModelOut}} that saves the analysis result of the nested model from the target dataset
+	\code{\linkS4class{lavaan}} that saves the analysis result of the nested model from the target dataset
 }
   \item{outParent}{
-	\code{\linkS4class{SimModelOut}} that saves the analysis result of the parent model from the target dataset
+	\code{\linkS4class{lavaan}} that saves the analysis result of the parent model from the target dataset
 }
   \item{simNested}{
 	\code{\linkS4class{SimResult}} that saves the analysis results of nested model from multiple replications

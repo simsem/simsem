@@ -127,7 +127,7 @@ List of all distribution objects. These distribution objects can be used to spec
 	 }
 }
 \details{
-	These distribution objects can be used to specify random parameters or marginal distribution of variables in Gaussian copula. The random parameter feature is to make data generation parameters different across replications in a simualtion study. The distribution object can be specified as random parameters in \code{\link{simMatrix}}, \code{\link{symMatrix}}, \code{\link{simVector}}, and \code{\link{simResult}} (in \code{n}, \code{pmMCAR}, and \code{pmMAR}). The distribution object can also be used for specifying marginal distribution of factors, measurement errors, or indicators. See the data distribution object, \code{\link{simDataDist}}, for how to model marginal distribution of variables, which will be put in setting the data object up, \code{\link{simData}}.
+	These distribution objects can be used to specify random parameters or marginal distribution of variables in Gaussian copula. The random parameter feature is to make data generation parameters different across replications in a simualtion study. The distribution object can be specified as random parameters in \code{\link{bind}}, \code{\link{binds}}, and \code{\link{sim}} (in \code{n}, \code{pmMCAR}, and \code{pmMAR}). The distribution object can also be used for specifying marginal distribution of factors, measurement errors, or indicators. See the data distribution object, \code{\link{simDataDist}}, for how to model marginal distribution of variables, which will be used in nonnormal data generation.
 }
 \author{
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
@@ -155,10 +155,9 @@ List of all distribution objects. These distribution objects can be used to spec
 	}
 	Here are the list of possible applications of a distribution object
 	\itemize{
-		\item \code{\link{simMatrix}} Random parameter matrix. A distribution object can be used to create random parameter.
-		\item \code{\link{symMatrix}} Random parameter symmetric matrix. A distribution object can be used to create random parameter.
-		\item \code{\link{simVector}} Random parameter vector. A distribution object can be used to create random parameter.
-		\item \code{\link{simResult}} Result object that saves the result of a simulation study. A distribution object can be used to vary sample size (\code{n}), proportion completely missing at random (\code{pmMCAR}), or proportion missing at random (\code{pmMAR}), which make those factors (e.g., sample size) different across replications.
+		\item \code{\link{bind}} Random parameter matrix. A distribution object can be used to create random parameter.
+		\item \code{\link{binds}} Random parameter symmetric matrix. A distribution object can be used to create random parameter.
+		\item \code{\link{sim}} Result object that saves the result of a simulation study. A distribution object can be used to vary sample size (\code{n}), proportion completely missing at random (\code{pmMCAR}), or proportion missing at random (\code{pmMAR}), which make those factors (e.g., sample size) different across replications.
 		\item \code{\link{simDataDist}} Data distribution object. A distribution object can be used to specify marginal distributions of variables (which can be factors, measurement errors, or indicators).
 	}
 }
