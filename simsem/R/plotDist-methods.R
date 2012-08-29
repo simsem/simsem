@@ -1,8 +1,6 @@
 # plotDist: This function will plot a distribution
 
 setMethod("plotDist", signature = "SimDataDist", definition = function(object, xlim = NULL, ylim = NULL, r = 0, var = NULL) {
-    if (isNullObject(object)) 
-        stop("The data distribution object is not specified yet.")
     if (!is.null(var)) {
         if (!is.vector(var)) 
             stop("Please specify a vector (no more than two elements) of variables")

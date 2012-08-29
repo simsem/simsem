@@ -29,7 +29,7 @@ setMethod("getPowerFit", signature(altObject = "SimResult", cutoff = "vector"), 
         pmMARval <- NULL
     altObject <- clean(altObject)
     Data <- as.data.frame(altObject@fit)
-    condition <- c(length(altObject@pmMCAR) > 1, length(altObject@pmMAR) > 1, length(altObject@n) > 1)
+    condition <- c(length(unique(altObject@pmMCAR)) > 1, length(unique(altObject@pmMAR)) > 1, length(unique(altObject@n)) > 1)
     condValue <- cbind(altObject@pmMCAR, altObject@pmMAR, altObject@n)
     colnames(condValue) <- c("Percent MCAR", "Percent MAR", "N")
     condValue <- condValue[, condition]
@@ -76,7 +76,7 @@ setMethod("getPowerFit", signature(altObject = "SimResult", cutoff = "missing"),
         pmMCARval <- NULL
     if (is.null(pmMARval) || is.na(pmMARval)) 
         pmMARval <- NULL
-    condition <- c(length(altObject@pmMCAR) > 1, length(altObject@pmMAR) > 1, length(altObject@n) > 1)
+    condition <- c(length(unique(altObject@pmMCAR)) > 1, length(unique(altObject@pmMAR)) > 1, length(unique(altObject@n)) > 1)
     condValue <- cbind(altObject@pmMCAR, altObject@pmMAR, altObject@n)
     colnames(condValue) <- c("Percent MCAR", "Percent MAR", "N")
     condValue <- condValue[, condition]

@@ -56,17 +56,14 @@ plotPower(object, powerParam, alpha = 0.05, contParam = NULL, contN = TRUE,
 # Specify Sample Size by n
 loading <- matrix(0, 6, 1)
 loading[1:6, 1] <- NA
-LX <- simMatrix(loading, 0.4)
-RPH <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
-SimData <- simData(CFA.Model, 500)
-SimModel <- simModel(CFA.Model)
-# We will use only 5 replications to save time.
-# In reality, more replications are needed.
+LX <- bind(loading, 0.4)
+RPH <- binds(diag(1))
+RTD <- binds(diag(6))
+CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+
 
 # Specify both sample size and percent missing completely at random
-Output <- simResult(NULL, SimData, SimModel, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2))
-plotPower(Output, "LY1_1", contMCAR=FALSE)
+Output <- sim(NULL, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2), model=CFA.Model)
+plotPower(Output, "1.LY1_1", contMCAR=FALSE)
 }
 }

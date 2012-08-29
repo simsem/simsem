@@ -11,7 +11,7 @@ plotCutoffNested <- function(nested, parent, alpha=0.05, cutoff = NULL, usedFit 
 
     Data <- as.data.frame(nested@fit - parent@fit)
     
-    condition <- c(length(nested@pmMCAR) > 1, length(nested@pmMAR) > 1, length(nested@n) > 1)
+    condition <- c(length(unique(nested@pmMCAR)) > 1, length(unique(nested@pmMAR)) > 1, length(unique(nested@n)) > 1)
     condValue <- cbind(nested@pmMCAR, nested@pmMAR, nested@n)
     colnames(condValue) <- c("Percent MCAR", "Percent MAR", "N")
     if (!is.null(alpha)) {

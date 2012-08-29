@@ -49,56 +49,36 @@ getPowerFitNested(altNested, altParent, cutoff, ...)
 }
 \examples{
 \dontrun{
-u2 <- simUnif(-0.2, 0.2)
-n1 <- simNorm(0, 0.1)
-u79 <- simUnif(0.7, 0.9)
-
 loading.null <- matrix(0, 6, 1)
 loading.null[1:6, 1] <- NA
-LX.NULL <- simMatrix(loading.null, 0.7)
-RPH.NULL <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
-
-error.cor.mis <- matrix(NA, 6, 6)
-diag(error.cor.mis) <- 1
-RTD.Mis <- symMatrix(error.cor.mis, "rnorm(1,0,0.1)")
-CFA.Model.NULL.Mis <- simMisspecCFA(RTE = RTD.Mis)
+LX.NULL <- bind(loading.null, 0.7)
+RPH.NULL <- binds(diag(1))
+RTD <- binds(diag(6))
+CFA.Model.NULL <- model(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD, modelType="CFA")
 
 loading.alt <- matrix(0, 6, 2)
 loading.alt[1:3, 1] <- NA
 loading.alt[4:6, 2] <- NA
-LX.ALT <- simMatrix(loading.alt, 0.7)
+LX.ALT <- bind(loading.alt, 0.7)
 latent.cor.alt <- matrix(NA, 2, 2)
 diag(latent.cor.alt) <- 1
-RPH.ALT <- symMatrix(latent.cor.alt, 0.7)
-CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
+RPH.ALT <- binds(latent.cor.alt, 0.7)
+CFA.Model.ALT <- model(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD, modelType="CFA")
 
-# loading.alt.mis <- matrix(NA, 6, 2)
-# loading.alt.mis[is.na(loading.alt)] <- 0
-# LX.alt.mis <- simMatrix(loading.alt.mis, "runif(1,-.2,.2)")
-# CFA.Model.alt.mis <- simMisspecCFA(LY = LX.alt.mis, RTE=RTD.Mis)
-
-SimData.NULL <- simData(CFA.Model.NULL, 500)
-SimData.ALT <- simData(CFA.Model.ALT, 500)
-
-SimModel.NULL <- simModel(CFA.Model.NULL)
-SimModel.ALT <- simModel(CFA.Model.ALT)
-
-Output.NULL.NULL <- simResult(10, SimData.NULL, SimModel.NULL)
-Output.ALT.NULL <- simResult(10, SimData.ALT, SimModel.NULL)
-Output.NULL.ALT <- simResult(10, SimData.NULL, SimModel.ALT)
-Output.ALT.ALT <- simResult(10, SimData.ALT, SimModel.ALT)
+Output.NULL.NULL <- sim(10, n=500, model=CFA.Model.NULL, generate=CFA.Model.NULL) 
+Output.ALT.NULL <- sim(10, n=500, model=CFA.Model.NULL, generate=CFA.Model.ALT) 
+Output.NULL.ALT <- sim(10, n=500, model=CFA.Model.ALT, generate=CFA.Model.NULL) 
+Output.ALT.ALT <- sim(10, n=500, model=CFA.Model.ALT, generate=CFA.Model.ALT) 
 
 getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT)
 getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, cutoff=c(Chi=3.84, CFI=-0.10))
 
-Output.NULL.NULL2 <- simResult(NULL, SimData.NULL, SimModel.NULL, n=seq(50, 500, 50))
-Output.ALT.NULL2 <- simResult(NULL, SimData.ALT, SimModel.NULL, n=seq(50, 500, 50))
-Output.NULL.ALT2 <- simResult(NULL, SimData.NULL, SimModel.ALT, n=seq(50, 500, 50))
-Output.ALT.ALT2 <- simResult(NULL, SimData.ALT, SimModel.ALT, n=seq(50, 500, 50))
+Output.NULL.NULL2 <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model.NULL, generate=CFA.Model.NULL) 
+Output.ALT.NULL2 <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model.NULL, generate=CFA.Model.ALT) 
+Output.NULL.ALT2 <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model.ALT, generate=CFA.Model.NULL) 
+Output.ALT.ALT2 <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model.ALT, generate=CFA.Model.ALT) 
 
-getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT, nVal = 250)
-getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, cutoff=c(Chi=3.84, CFI=-0.10), nVal = 250)
+getPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNested=Output.NULL.NULL2, nullParent=Output.NULL.ALT2, nVal = 250)
+getPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, cutoff=c(Chi=3.84, CFI=-0.10), nVal = 250)
 }
 }

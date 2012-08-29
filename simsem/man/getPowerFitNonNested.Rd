@@ -49,41 +49,27 @@ getPowerFitNonNested(dat2Mod1, dat2Mod2, cutoff, ...)
 }
 \examples{
 \dontrun{
-n1 <- simNorm(0, 0.1)
-u79 <- simUnif(0.7, 0.9)
-
 loading.A <- matrix(0, 8, 2)
 loading.A[1:3, 1] <- NA
 loading.A[4:8, 2] <- NA
-LX.A <- simMatrix(loading.A, 0.7)
+LX.A <- bind(loading.A, 0.7)
 latent.cor <- matrix(NA, 2, 2)
 diag(latent.cor) <- 1
-RPH <- symMatrix(latent.cor, "u79")
-RTD <- symMatrix(diag(8))
-CFA.Model.A <- simSetCFA(LY = LX.A, RPS = RPH, RTE = RTD)
-
-error.cor.mis <- matrix(NA, 8, 8)
-diag(error.cor.mis) <- 1
-RTD.Mis <- symMatrix(error.cor.mis, "n1")
-CFA.Model.A.Mis <- simMisspecCFA(RTE = RTD.Mis)
+RPH <- binds(latent.cor, "runif(1, 0.7, 0.9)")
+RTD <- binds(diag(8))
+CFA.Model.A <- model(LY = LX.A, RPS = RPH, RTE = RTD, modelType="CFA")
 
 loading.B <- matrix(0, 8, 2)
 loading.B[1:4, 1] <- NA
 loading.B[5:8, 2] <- NA
-LX.B <- simMatrix(loading.B, 0.7)
-CFA.Model.B <- simSetCFA(LY = LX.B, RPS = RPH, RTE = RTD)
-
-SimData.A <- simData(CFA.Model.A, 500)
-SimData.B <- simData(CFA.Model.B, 500)
-
-SimModel.A <- simModel(CFA.Model.A)
-SimModel.B <- simModel(CFA.Model.B)
+LX.B <- bind(loading.B, 0.7)
+CFA.Model.B <- model(LY = LX.B, RPS = RPH, RTE = RTD, modelType="CFA")
 
 # The actual number of replications should be greater than 10.
-Output.A.A <- simResult(10, SimData.A, SimModel.A)
-Output.A.B <- simResult(10, SimData.A, SimModel.B)
-Output.B.A <- simResult(10, SimData.B, SimModel.A)
-Output.B.B <- simResult(10, SimData.B, SimModel.B)
+Output.A.A <- sim(10, n=500, model=CFA.Model.A, generate=CFA.Model.A) 
+Output.A.B <- sim(10, n=500, model=CFA.Model.B, generate=CFA.Model.A) 
+Output.B.A <- sim(10, n=500, model=CFA.Model.A, generate=CFA.Model.B) 
+Output.B.B <- sim(10, n=500, model=CFA.Model.B, generate=CFA.Model.B) 
 
 getPowerFitNonNested(Output.B.A, Output.B.B, dat1Mod1=Output.A.A, dat1Mod2=Output.A.B)
 getPowerFitNonNested(Output.B.A, Output.B.B, cutoff=c(AIC=0, BIC=0))

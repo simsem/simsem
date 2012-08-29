@@ -35,6 +35,6 @@ gamma11 <- simGamma(1, 1)
 plotDist(gamma11)
 
 chi <- simChisq(5)
-dataDist <- simDataDist(chi, chi)
-plotDist(dataDist)
+#dataDist <- simDataDist(chi, chi)
+#plotDist(dataDist)
 }

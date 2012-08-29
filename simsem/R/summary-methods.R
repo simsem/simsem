@@ -470,8 +470,6 @@ setMethod("summary", signature = "SimResult", definition = function(object, digi
 setMethod("summary", signature = "SimMissing", definition = function(object) {
     cat("MISSING OBJECT\n")
     handling <- "Maximum Likelihood"
-    if (object@numImps > 0) 
-        handling <- paste("Multiple Imputation with", object@numImps, "imputations")
     cat(paste("The method of missing data handling:", handling, "\n"))
     printcov <- "Covariates (will not impose any missing values):"
     if (length(object@cov) == 1 && object@cov == 0) {

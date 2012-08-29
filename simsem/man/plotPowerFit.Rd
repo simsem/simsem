@@ -58,28 +58,31 @@ NONE. Only plot the fit indices distributions.
 }
 \examples{
 \dontrun{
+### Something is wrong here. Why the alternative data has the better fit than the null data.
+
+
+
 loading.null <- matrix(0, 6, 1)
 loading.null[1:6, 1] <- NA
-LX.NULL <- simMatrix(loading.null, 0.7)
-RPH.NULL <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
-SimData.NULL <- simData(CFA.Model.NULL, 500)
-SimModel <- simModel(CFA.Model.NULL)
+LX.NULL <- bind(loading.null, 0.7)
+RPH.NULL <- binds(diag(1))
+RTD <- binds(diag(6))
+CFA.Model.NULL <- model(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD, modelType="CFA")
 # We make the examples running only 5 replications to save time.
 # In reality, more replications are needed.
-Output.NULL <- simResult(5, SimData.NULL, SimModel)
+Output.NULL <- sim(50, n=500, CFA.Model.NULL) 
 
 loading.alt <- matrix(0, 6, 2)
 loading.alt[1:3, 1] <- NA
 loading.alt[4:6, 2] <- NA
-LX.ALT <- simMatrix(loading.alt, 0.7)
+LX.ALT <- bind(loading.alt, 0.7)
 latent.cor.alt <- matrix(NA, 2, 2)
 diag(latent.cor.alt) <- 1
-RPH.ALT <- symMatrix(latent.cor.alt, 0.5)
-CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
-SimData.ALT <- simData(CFA.Model.ALT, 500)
-Output.ALT <- simResult(5, SimData.ALT, SimModel)
+RPH.ALT <- binds(latent.cor.alt, 0.5)
+CFA.Model.ALT <- model(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD, modelType="CFA")
+Output.ALT <- sim(50, n=500, CFA.Model.NULL, generate=CFA.Model.ALT)
+
+ 
 plotPowerFit(Output.ALT, nullObject=Output.NULL, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
 Rule.of.thumb <- c(RMSEA=0.05, CFI=0.95, TLI=0.95, SRMR=0.06)
 plotPowerFit(Output.ALT, cutoff=Rule.of.thumb, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))

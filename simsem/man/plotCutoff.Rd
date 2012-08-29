@@ -51,27 +51,25 @@ loading[4:6, 2] <- NA
 loadingValues <- matrix(0, 6, 2)
 loadingValues[1:3, 1] <- 0.7
 loadingValues[4:6, 2] <- 0.7
-LX <- simMatrix(loading, loadingValues)
+LX <- bind(loading, loadingValues)
 latent.cor <- matrix(NA, 2, 2)
 diag(latent.cor) <- 1
-RPH <- symMatrix(latent.cor, 0.5)
+RPH <- binds(latent.cor, 0.5)
 error.cor <- matrix(0, 6, 6)
 diag(error.cor) <- 1
-RTD <- symMatrix(error.cor)
-CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
-SimData <- simData(CFA.Model, 200)
-SimModel <- simModel(CFA.Model)
+RTD <- binds(error.cor)
+CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
 # We make the examples running only 5 replications to save time.
 # In reality, more replications are needed.
-Output <- simResult(5, SimData, SimModel)
+Output <- sim(5, n=200, model=CFA.Model) 
 plotCutoff(Output, 0.05, usedFit=c("RMSEA", "SRMR", "CFI", "TLI"))
 
 # Varying N
-Output2 <- simResult(NULL, SimData, SimModel, n=seq(450, 500, 10))
+Output2 <- sim(NULL, n=seq(450, 500, 10), model=CFA.Model)
 plotCutoff(Output2, 0.05)
 
 # Varying N and pmMCAR
-Output3 <- simResult(NULL, SimData, SimModel, n=seq(450, 500, 10), pmMCAR=c(0, 0.05, 0.1, 0.15))
+Output3 <- sim(NULL, n=seq(450, 500, 10), pmMCAR=c(0, 0.05, 0.1, 0.15), model=CFA.Model)
 plotCutoff(Output3, 0.05)
 }
 }

@@ -15,7 +15,7 @@ setMethod("getPowerFitNested", signature(altNested = "SimResult", altParent = "S
 	if(!isTRUE(all.equal(unique(altNested@pmMCAR), unique(altParent@pmMCAR)))) stop("Models are based on different values of the percent completely missing at random")
 	if(!isTRUE(all.equal(unique(altNested@pmMAR), unique(altParent@pmMAR)))) stop("Models are based on different values of the percent missing at random")
     Data <- as.data.frame((altNested@fit - altParent@fit)) 
-    condition <- c(length(altNested@pmMCAR) > 1, length(altNested@pmMAR) > 1, length(altNested@n) > 1)
+    condition <- c(length(unique(altNested@pmMCAR)) > 1, length(unique(altNested@pmMAR)) > 1, length(unique(altNested@n)) > 1)
     condValue <- cbind(altNested@pmMCAR, altNested@pmMAR, altNested@n)
     colnames(condValue) <- c("Percent MCAR", "Percent MAR", "N")
     condValue <- condValue[, condition]
@@ -61,7 +61,7 @@ setMethod("getPowerFitNested", signature(altNested = "SimResult", altParent = "S
         pmMCARval <- NULL
     if (is.null(pmMARval) || is.na(pmMARval)) 
         pmMARval <- NULL
-    condition <- c(length(altNested@pmMCAR) > 1, length(altNested@pmMAR) > 1, length(altNested@n) > 1)
+    condition <- c(length(unique(altNested@pmMCAR)) > 1, length(unique(altNested@pmMAR)) > 1, length(unique(altNested@n)) > 1)
     condValue <- cbind(altNested@pmMCAR, altNested@pmMAR, altNested@n)
     colnames(condValue) <- c("Percent MCAR", "Percent MAR", "N")
     condValue <- condValue[, condition]

@@ -44,38 +44,25 @@ usedFit = NULL, useContour = T)
 }
 \examples{
 \dontrun{
-n1 <- simNorm(0, 0.1)
-u79 <- simUnif(0.7, 0.9)
-
 loading.null <- matrix(0, 6, 1)
 loading.null[1:6, 1] <- NA
-LX.NULL <- simMatrix(loading.null, 0.7)
-RPH.NULL <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
-
-error.cor.mis <- matrix(NA, 6, 6)
-diag(error.cor.mis) <- 1
-RTD.Mis <- symMatrix(error.cor.mis, "n1")
-CFA.Model.NULL.Mis <- simMisspecCFA(RTE = RTD.Mis)
+LX.NULL <- bind(loading.null, 0.7)
+RPH.NULL <- binds(diag(1))
+RTD <- binds(diag(6))
+CFA.Model.NULL <- model(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD, modelType="CFA")
 
 loading.alt <- matrix(0, 6, 2)
 loading.alt[1:3, 1] <- NA
 loading.alt[4:6, 2] <- NA
-LX.ALT <- simMatrix(loading.alt, 0.7)
+LX.ALT <- bind(loading.alt, 0.7)
 latent.cor.alt <- matrix(NA, 2, 2)
 diag(latent.cor.alt) <- 1
-RPH.ALT <- symMatrix(latent.cor.alt, "u79")
-CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
-
-SimData.NULL <- simData(CFA.Model.NULL, 500)
-
-SimModel.NULL <- simModel(CFA.Model.NULL)
-SimModel.ALT <- simModel(CFA.Model.ALT)
+RPH.ALT <- binds(latent.cor.alt, "runif(1, 0.7, 0.9)")
+CFA.Model.ALT <- model(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD, modelType="CFA")
 
 # The actual number of replications should be greater than 10.
-Output.NULL.NULL <- simResult(10, SimData.NULL, SimModel.NULL)
-Output.NULL.ALT <- simResult(10, SimData.NULL, SimModel.ALT)
+Output.NULL.NULL <- sim(10, n=500, model=CFA.Model.NULL) 
+Output.NULL.ALT <- sim(10, n=500, model=CFA.Model.ALT, generate=CFA.Model.NULL)
 
 plotCutoffNested(Output.NULL.NULL, Output.NULL.ALT, alpha=0.05)
 }

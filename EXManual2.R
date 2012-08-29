@@ -5,6 +5,10 @@
 
 # To do: write the whole runFit function
 # Write the dataDist funciton: try to make it not depends on any distribution object
+# likRatio need to be fixed
+# missing object need to make it runable
+# plotMisfit does not work
+# Fix the plotPowerFit
 
 #####Result
 # Bias behind each simAnalysis
