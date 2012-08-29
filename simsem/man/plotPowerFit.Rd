@@ -70,7 +70,7 @@ RTD <- binds(diag(6))
 CFA.Model.NULL <- model(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD, modelType="CFA")
 # We make the examples running only 5 replications to save time.
 # In reality, more replications are needed.
-Output.NULL <- sim(50, n=500, CFA.Model.NULL) 
+Output.NULL <- sim(50, n=50, model=CFA.Model.NULL, generate=CFA.Model.NULL) 
 
 loading.alt <- matrix(0, 6, 2)
 loading.alt[1:3, 1] <- NA
@@ -80,8 +80,14 @@ latent.cor.alt <- matrix(NA, 2, 2)
 diag(latent.cor.alt) <- 1
 RPH.ALT <- binds(latent.cor.alt, 0.5)
 CFA.Model.ALT <- model(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD, modelType="CFA")
-Output.ALT <- sim(50, n=500, CFA.Model.NULL, generate=CFA.Model.ALT)
+Output.ALT <- sim(50, n=50, model=CFA.Model.NULL, generate=CFA.Model.ALT)
 
+datNull <- generate(CFA.Model.NULL, n=50, params=TRUE)
+datAlt <- generate(CFA.Model.ALT, n=50, params=TRUE)
+outNull <- analyze(CFA.Model.NULL, datNull)
+outAlt <- analyze(CFA.Model.NULL, datAlt)
+summaryFit(Output.NULL)
+summaryFit(Output.ALT)
  
 plotPowerFit(Output.ALT, nullObject=Output.NULL, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
 Rule.of.thumb <- c(RMSEA=0.05, CFI=0.95, TLI=0.95, SRMR=0.06)

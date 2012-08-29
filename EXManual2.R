@@ -9,6 +9,12 @@
 # missing object need to make it runable
 # plotMisfit does not work
 # Fix the plotPowerFit
+# {pValue,lavaan,SimResult-method}.
+# Fix pValueNested and pValueNonNested
+# run function of the simDataDist, simMissing
+# simFunction still does not work
+# Consider run function in the SimMatrix and SimVector
+# summaryMisspec in simResult
 
 #####Result
 # Bias behind each simAnalysis
@@ -98,7 +104,6 @@ out <- analyze(CFA.Model,dat)
 
 #SimMissing <- simMissing(pmMCAR=0.1, numImps=5)
 Output <- sim(20, CFA.Model,n=200)
-Output2 <- sim(20, CFA.Model2, n=200)
 Output3 <- sim(20, CFA.Model, n=200, multicore=TRUE, numProc=2)
 #Output <- sim(100, SimData, SimModel, SimMissing, multicore=TRUE)
 getCutoff(Output, 0.05)

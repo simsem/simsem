@@ -4,8 +4,7 @@
 	Create a data distribution object.
 }
 \description{
-This function will create simResult by different ways. One way is to create data and analyze data multiple times by specifying \code{\linkS4class{SimData}} 
-and \code{\linkS4class{SimModel}} and save it in the \code{\linkS4class{SimDataDist}}.
+TBA
 }
 \usage{
 simDataDist(..., p=NULL, keepScale=TRUE, reverse=FALSE)
@@ -32,22 +31,9 @@ simDataDist(..., p=NULL, keepScale=TRUE, reverse=FALSE)
 }
 \seealso{
 	\itemize{
-		\item \code{\linkS4class{SimData}} for data model specification
-		\item \code{\linkS4class{SimModel}} for analysis model specification
 		\item \code{\linkS4class{SimResult}} for the type of resulting object
 	}
 }
 \examples{
-loading <- matrix(0, 6, 1)
-loading[1:6, 1] <- NA
-LX <- simMatrix(loading, 0.7)
-RPH <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
-SimData <- simData(CFA.Model, 500)
-SimModel <- simModel(CFA.Model)
-# We make the examples running only 5 replications to save time.
-# In reality, more replications are needed.
-Output <- simResult(5, SimData, SimModel)
-#summary(Output)
+# Need an example
 }

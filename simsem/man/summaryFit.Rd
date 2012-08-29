@@ -56,15 +56,14 @@ summaryFit(object,...)
 \examples{
 loading <- matrix(0, 6, 1)
 loading[1:6, 1] <- NA
-LX <- simMatrix(loading, 0.7)
-RPH <- symMatrix(diag(1))
-RTD <- symMatrix(diag(6))
-CFA.Model <- simSetCFA(LY = LX, RPS = RPH, RTE = RTD)
-SimData <- simData(CFA.Model, 500)
-SimModel <- simModel(CFA.Model)
+LX <- bind(loading, 0.7)
+RPH <- binds(diag(1))
+RTD <- binds(diag(6))
+CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+
 # We make the examples running only 5 replications to save time.
 # In reality, more replications are needed.
-Output <- simResult(5, SimData, SimModel)
+Output <- sim(5, n=500, CFA.Model)
 summaryFit(Output)
 summaryFit(Output, detail=TRUE)
 }

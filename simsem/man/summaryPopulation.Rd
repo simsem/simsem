@@ -6,14 +6,14 @@
 	Summarize the data generation population model underlying an object
 }
 \description{
-This function will summarize the data generation population model underlying an object. The target object can be \code{linkS4class{SimModelOut}}, \code{linkS4class{SimDataOut}}, or \code{linkS4class{SimResult}}.
+This function will summarize the data generation population model underlying an object. The target object can be \code{linkS4class{SimResult}}.
 }
 \usage{
 summaryPopulation(object)
 }
 \arguments{
   \item{object}{
-	The target object that you wish to extract the data generation population model from, which can be \code{linkS4class{SimModelOut}}, \code{linkS4class{SimDataOut}}, or \code{linkS4class{SimResult}}.
+	The target object that you wish to extract the data generation population model from, which can be \code{linkS4class{SimResult}}.
 }
 }
 \value{
@@ -24,8 +24,6 @@ summaryPopulation(object)
 }
 \seealso{
 	\itemize{
-		\item \code{\linkS4class{SimDataOut}} for data output object
-		\item \code{\linkS4class{SimModelOut}} for model output object
 		\item \code{\linkS4class{SimResult}} for result object
 	}
 }

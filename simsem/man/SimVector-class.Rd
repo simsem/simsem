@@ -15,13 +15,14 @@ This object is created by \code{\link{simVector}} function. Objects can be creat
 }
 \section{Slots}{
   \describe{
-    \item{\code{free}:}{Object of class \code{"vector"} draws starting values from the \code{"labels"} slot and show as a vector sample. }
-    \item{\code{value}:}{Object of class \code{"vector"} provides a thorough description of all information in the object }
+    \item{\code{free}:}{TBA}
+    \item{\code{popParam}:}{TBA}
+	\item{\code{misspec}:}{TBA}
   }
 }
 \section{Methods}{
   \describe{
-    \item{\code{\link{adjust}}}{Adjust an element in the \code{"SimVector"} object }
+    %\item{\code{\link{adjust}}}{Adjust an element in the \code{"SimVector"} object }
     \item{\code{\link{run}}}{Draws starting values from the \code{"labels"} slot and show as a vector sample. }
     \item{\code{\link{summaryShort}}}{Provides a short summary of all information in the object }
     \item{\code{\link{summary}}}{Provides a thorough description of all information in the object }
@@ -32,24 +33,17 @@ This object is created by \code{\link{simVector}} function. Objects can be creat
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \seealso{
-\code{\linkS4class{SimMatrix}} for random parameter matrix and \code{\linkS4class{SymMatrix}} for random parameter symmetric matrix.
+\code{\linkS4class{SimMatrix}} for random parameter matrix 
 }
 \examples{
 showClass("SimVector")
 
 factor.mean <- rep(NA, 2)
 factor.mean.starting <- c(5, 2)
-AL <- simVector(factor.mean, factor.mean.starting)
+AL <- bind(factor.mean, factor.mean.starting)
 run(AL)
 summary(AL)
 summaryShort(AL)
 
-n01 <- simNorm(0, 1)
-AL <- adjust(AL, "n01", 2)
-run(AL)
-summary(AL)
-
-AL <- extract(AL, 1)
-summary(AL)
 }
 \keyword{classes}

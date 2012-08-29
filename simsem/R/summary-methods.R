@@ -112,6 +112,8 @@ setMethod("summary", signature = "SimMatrix", definition = function(object) {
     print(object@free)
     print("Population Parameters/Starting Values:")
     print(object@popParam)
+	print("Model misspecification")
+	print(object@misspec)
 })
 
 ## setMethod("summary", signature = "SymMatrix", definition = function(object) {
@@ -128,6 +130,8 @@ setMethod("summary", signature = "SimVector", definition = function(object) {
     print(object@free)
     print("Population Parameters/Starting Values:")
     print(object@popParam)
+	print("Model misspecification")
+	print(object@misspec)
 })
 
 setMethod("summary", signature = "SimSem", definition = function(object) {
@@ -528,31 +532,31 @@ setMethod("summary", signature(object = "SimFunction"), definition = function(ob
     }
 })
 
-setMethod("summary", signature(object = "SimResultParam"), definition = function(object, digits = 3, usedFit = NULL) {
-    if (is.null(usedFit)) 
-        usedFit <- getKeywords()$usedFitPop
-    cat("PARAMETER RESULT OBJECT\n")
-    cat("Model Type\n")
-    print(object@modelType)
-    cat("========= Parameter Values ============\n")
-    print(round(summaryParam(object), digits))
-    cat("========= Misspecification Values ============\n")
-	if(!isNullObject(object@misspec)) {
-		mis <- summaryMisspec(object)
-		print(round(mis, digits))
-	} else {
-		print("No Misspecification")
-	}
-    cat("========= Fit Indices Distributions ============\n")
-	if(!isNullObject(object@fit)) {
-		fit <- summaryFit(object)
-		print(round(fit, digits))
-	} else {
-		print("No Fit Indices Quantifying the Amount of Misspecification")
-	}
-	if(!isNullObject(object@misspec) & !isNullObject(object@fit) && (nrow(unique(object@fit)) > 1)) {
-		cat("========= Correlation between Fit Indices and Parameter Misspecification ============\n")
-		fit <- data.frame(object@misspec, object@fit[, usedFit])
-		print(round(cor(fit), digits))
-	}
-}) 
+# setMethod("summary", signature(object = "SimResultParam"), definition = function(object, digits = 3, usedFit = NULL) {
+    # if (is.null(usedFit)) 
+        # usedFit <- getKeywords()$usedFitPop
+    # cat("PARAMETER RESULT OBJECT\n")
+    # cat("Model Type\n")
+    # print(object@modelType)
+    # cat("========= Parameter Values ============\n")
+    # print(round(summaryParam(object), digits))
+    # cat("========= Misspecification Values ============\n")
+	# if(!isNullObject(object@misspec)) {
+		# mis <- summaryMisspec(object)
+		# print(round(mis, digits))
+	# } else {
+		# print("No Misspecification")
+	# }
+    # cat("========= Fit Indices Distributions ============\n")
+	# if(!isNullObject(object@fit)) {
+		# fit <- summaryFit(object)
+		# print(round(fit, digits))
+	# } else {
+		# print("No Fit Indices Quantifying the Amount of Misspecification")
+	# }
+	# if(!isNullObject(object@misspec) & !isNullObject(object@fit) && (nrow(unique(object@fit)) > 1)) {
+		# cat("========= Correlation between Fit Indices and Parameter Misspecification ============\n")
+		# fit <- data.frame(object@misspec, object@fit[, usedFit])
+		# print(round(cor(fit), digits))
+	# }
+# }) 

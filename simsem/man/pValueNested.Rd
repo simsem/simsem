@@ -50,41 +50,41 @@ nVal = NULL, pmMCARval = NULL, pmMARval = NULL, df = 0)
 }
 \seealso{
 	\itemize{
-		\item \code{\linkS4class{SimModelOut}} to see how to get the analysis result of observed data
+		%\item \code{\linkS4class{SimModelOut}} to see how to get the analysis result of observed data
 		\item \code{\linkS4class{SimResult}} to run a simulation study
-		\item \code{\link{runFit}} to run a simulation study based on the parameter estimates from the analysis result of observed data
+		%\item \code{\link{runFit}} to run a simulation study based on the parameter estimates from the analysis result of observed data
 	}
 }
 \examples{
 \dontrun{
-library(lavaan)
+#library(lavaan)
 
-LY <- matrix(1, 4, 2)
-LY[,2] <- 0:3
-PS <- matrix(NA, 2, 2)
-TY <- rep(0, 4)
-AL <- rep(NA, 2)
-TE <- diag(NA, 4)
-linearModel <- simParamCFA(LY=LY, PS=PS, TY=TY, AL=AL, TE=TE)
+#LY <- matrix(1, 4, 2)
+#LY[,2] <- 0:3
+#PS <- matrix(NA, 2, 2)
+#TY <- rep(0, 4)
+#AL <- rep(NA, 2)
+#TE <- diag(NA, 4)
+#linearModel <- simParamCFA(LY=LY, PS=PS, TY=TY, AL=AL, TE=TE)
 
-LY2 <- matrix(1, 4, 2)
-LY2[,2] <- c(0, NA, NA, 3)
-unconstrainModel <- simParamCFA(LY=LY2, PS=PS, TY=TY, AL=AL, TE=TE)
+#LY2 <- matrix(1, 4, 2)
+#LY2[,2] <- c(0, NA, NA, 3)
+#unconstrainModel <- simParamCFA(LY=LY2, PS=PS, TY=TY, AL=AL, TE=TE)
 
-nested <- simModel(linearModel, indLab=paste("t", 1:4, sep=""))
-parent <- simModel(unconstrainModel, indLab=paste("t", 1:4, sep=""))
+#nested <- simModel(linearModel, indLab=paste("t", 1:4, sep=""))
+#parent <- simModel(unconstrainModel, indLab=paste("t", 1:4, sep=""))
 
-outNested <- run(nested, Demo.growth)
-outParent <- run(parent, Demo.growth)
+#outNested <- run(nested, Demo.growth)
+#outParent <- run(parent, Demo.growth)
 
-loadingMis <- matrix(0, 4, 2)
-loadingMis[2:3, 2] <- NA
-LYmis <- simMatrix(loadingMis, "runif(1, -0.1, 0.1)")
-linearMis <- simMisspecCFA(LY=LYmis)
+#loadingMis <- matrix(0, 4, 2)
+#loadingMis[2:3, 2] <- NA
+#LYmis <- simMatrix(loadingMis, "runif(1, -0.1, 0.1)")
+#linearMis <- simMisspecCFA(LY=LYmis)
 
-simNestedNested <- runFit(model=nested, data=Demo.growth, nRep=10, misspec=linearMis)
-simNestedParent <- runFit(model=nested, data=Demo.growth, nRep=10, misspec=linearMis, analyzeModel=parent)
+#simNestedNested <- runFit(model=nested, data=Demo.growth, nRep=10, misspec=linearMis)
+#simNestedParent <- runFit(model=nested, data=Demo.growth, nRep=10, misspec=linearMis, analyzeModel=parent)
 
-pValueNested(outNested, outParent, simNestedNested, simNestedParent)
+#pValueNested(outNested, outParent, simNestedNested, simNestedParent)
 }
 }

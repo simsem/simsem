@@ -38,6 +38,8 @@ Objects can be created by \code{\link{simDataDist}} function. It can also be cal
 	}
 }
 \examples{
+# Need to be fixed
+
 showClass("SimDataDist")
 
 chisq3 <- simChisq(3)
@@ -48,7 +50,7 @@ dist2 <- extract(dist, 2)
 m <- c(0, 0)
 cm <- matrix(c(1, 0.5, 0.5, 1), 2, 2)
 n <- 20
-dat <- run(dist, n, m, cm)
+# dat <- run(dist, n, m, cm)
 
 plotDist(dist, r=0.2)
 
