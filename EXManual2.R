@@ -16,6 +16,7 @@
 # Consider run function in the SimMatrix and SimVector
 # summaryMisspec in simResult
 # Summary simsem got a vector for the symmetric matrix
+# Fix misfitType="rmsea", optMisfit="max", optDraws=10,  in example 4
 
 #####Result
 # Bias behind each simAnalysis
@@ -109,8 +110,6 @@ out <- analyze(CFA.Model,dat)
 
 #SimMissing <- simMissing(pmMCAR=0.1, numImps=5)
 Output <- sim(20, CFA.Model,n=200)
-Output3 <- sim(20, CFA.Model, n=200, multicore=TRUE)
-#Output <- sim(100, SimData, SimModel, SimMissing, multicore=TRUE)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
@@ -184,7 +183,7 @@ LCA.Model <- model(LY=LY, RPS=RPS, VPS=VPS, AL=AL, VTE=VTE, RTE=RTE, TY=TY, mode
 Data.True <- generate(LCA.Model, 300)
 out <- analyze(LCA.Model, Data.True)
 
-
+#Output.True <- sim(100, n=300, LCA.Model)
 
 loading.trivial <- matrix(0, 4, 2)
 loading.trivial[2:3, 2] <- "runif(1,-0.1,0.1)"
@@ -227,7 +226,11 @@ ME <- bind(rep(NA, 4), 0)
 
 Path.Model <- model(RPS = RPS, BE = BE, ME = ME, modelType="Path")
 
-dat <- generate(Path.Model, n=500, misfitType="rmsea", optMisfit="max", optDraws=10, params=TRUE)
+param <- draw(Path.Model)
+dat <- createData(param[[1]], n = 200)
+
+
+dat <- generate(Path.Model, n=500, params=TRUE)
 out <- analyze(Path.Model, dat)
 # The VTE is still wrong. Check after the LCA comes in.
 
@@ -239,21 +242,15 @@ plotCutoff(Output, 0.05)
 summaryParam(Output)
 
 # It does not stop at the ParamOnly
-paramOut <- sim(100, n=500, Path.Model, paramOnly=TRUE)
+# paramOut <- sim(100, n=500, Path.Model, paramOnly=TRUE)
 
 ############# Example 5 ################################
 #library(simsem)
 
-#n65 <- simNorm(0.6, 0.05)
-#u35 <- simUnif(0.3, 0.5)
-#u68 <- simUnif(0.6, 0.8)
-#u2 <- simUnif(-0.2, 0.2)
-#n1 <- simNorm(0, 0.1)
-
 loading <- matrix(0, 8, 3)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
-loading[7:8, 3] <- NA
+loading[7:8, 3] <- "con1"
 loading.start <- matrix("", 8, 3)
 loading.start[1:3, 1] <- 0.7
 loading.start[4:6, 2] <- 0.7
@@ -273,151 +270,12 @@ path.start[3, 1] <- "rnorm(1,0.6,0.05)"
 path.start[3, 2] <- "runif(1,0.3,0.5)"
 BE <- bind(path, path.start)
 
-SEM.model <- simSetSEM(BE=BE, LY=LY, RPS=RPS, RTE=RTE)
+SEM.model <- model(BE=BE, LY=LY, RPS=RPS, RTE=RTE, modelType="SEM")
 
-loading.trivial <- matrix(NA, 8, 3)
-loading.trivial[is.na(loading)] <- 0
-LY.trivial <- bind(loading.trivial, "runif(1,-0.2,0.2)")
+dat <- generate(SEM.model, n=300)
+out <- analyze(SEM.model, dat)
 
-error.cor.trivial <- matrix(NA, 8, 8)
-diag(error.cor.trivial) <- 0
-RTE.trivial <- binds(error.cor.trivial, "rnorm(1,0,0.1)")
-
-SEM.Mis.Model <- simMisspecSEM(LY = LY.trivial, RTE = RTE.trivial, conBeforeMis=FALSE, misBeforeFill=TRUE)
-
-constraint <- matrix(0, 2, 2)
-constraint[1,] <- c(7, 3)
-constraint[2,] <- c(8, 3)
-rownames(constraint) <- rep("LY", 2)
-equal.loading <- simEqualCon(constraint, modelType="SEM", conBeforeFill=FALSE)
-
-Data.Original <- simData(SEM.model, 300)
-Data.Mis <- simData(SEM.model, 300, misspec=SEM.Mis.Model)
-Data.Con <- simData(SEM.model, 300, equalCon=equal.loading)
-Data.Mis.Con <- simData(SEM.model, 300, misspec=SEM.Mis.Model, equalCon=equal.loading)
-
-dat <- run(Data.Mis.Con)
-
-Model.Original <- simModel(SEM.model)
-Model.Con <- simModel(SEM.model, equalCon=equal.loading)
-
-
-Output <- sim(200, Data.Mis.Con, Model.Con) #, multicore=TRUE)
-getCutoff(Output, 0.05)
-plotCutoff(Output, 0.05)
-summaryParam(Output)
-
-# Example 5 Extension: Kernel Regression
-ss <- seq(50, 300, 2)
-ss <- ss[order(ss)]
-Data <- lapply(ss, run, object=Data.Mis.Con)
-Result <- lapply(Data, run, object=Model.Con)
-converged <- sapply(Result, fun <- function(object) { object@converged } )
-fit <- sapply(Result, fun <- function(object) { object@fit } )
-fit.Converged <- as.data.frame(t(fit)[converged,])
-Estimates <- sapply(Result, fun <- function(object) { c(object@coef@LY[1,1], object@coef@BE[3,1], object@coef@BE[3,2], object@coef@PS[2,1]) } )
-Estimates.Converged <- as.data.frame(t(Estimates)[converged,])
-SE <- sapply(Result, fun <- function(object) { c(object@se@LY[1,1], object@se@BE[3,1], object@se@BE[3,2], object@se@PS[2,1]) } )
-SE.Converged <- as.data.frame(t(SE)[converged,])
-ss.Converged <- ss[converged]
-z <- Estimates.Converged / SE.Converged
-alpha <- 0.05
-sig.agg <- abs(z) > pnorm(1 - alpha/2)
-library(KernSmooth)
-x <- c("LY1_1", "BE3_1", "BE3_2", "PS2_1")
-colnames(sig.agg) <- x
-obj <- par(mfrow=c(2,2))
-for(i in 1:length(x)) {
-sig <- sig.agg[,x[i]]
-plot(ss.Converged, sig, main=x[i],ylim=c(0,1),xlab="Sample Size", ylab="Power")
-lines(lowess(ss.Converged, sig), col="red")
-if(mean(sig) > 0.01 && mean(sig) < 0.99) {
-h <- dpill(ss.Converged, sig)
-fit <- locpoly(ss.Converged, sig, bandwidth = h)
-lines(fit)
-Model <- glm(sig~ss.Converged,family=binomial(link="logit"))
-plot.data <- data.frame(ss.Converged, Model$fitted.values)
-plot.data <- plot.data[order(ss.Converged),]
-plot.data <- unique(plot.data)
-lines(plot.data, col="blue")
-}
-abline(h = 0.8,col="darkgreen",lwd=3)
-}
-par(obj)
-
-# Example 5 with X side and stringent constraints #
-#library(simsem)
-
-n65 <- simNorm(0.6, 0.05)
-u35 <- simUnif(0.3, 0.5)
-u68 <- simUnif(0.6, 0.8)
-u2 <- simUnif(-0.2, 0.2)
-n1 <- simNorm(0, 0.1)
-
-loading.X <- matrix(0, 6, 2)
-loading.X[1:3, 1] <- NA
-loading.X[4:6, 2] <- NA
-LX <- bind(loading.X, 0.7)
-
-loading.Y <- matrix(NA, 2, 1)
-LY <- bind(loading.Y, "runif(1,0.6,0.8)")
-
-RTD <- binds(diag(6))
-
-RTE <- binds(diag(2))
-
-factor.K.cor <- matrix(NA, 2, 2)
-diag(factor.K.cor) <- 1
-RPH <- binds(factor.K.cor, 0.5)
-
-RPS <- binds(as.matrix(1))
-
-path.GA <- matrix(NA, 1, 2)
-path.GA.start <- matrix(c("rnorm(1,0.6,0.05)", "runif(1,0.3,0.5)"), ncol=2)
-GA <- bind(path.GA, path.GA.start)
-
-BE <- bind(as.matrix(0))
-
-SEM.model <- simSetSEM(GA=GA, BE=BE, LX=LX, LY=LY, RPH=RPH, RPS=RPS, RTD=RTD, RTE=RTE, exo=TRUE)
-
-loading.X.trivial <- matrix(NA, 6, 2)
-loading.X.trivial[is.na(loading.X)] <- 0
-LX.trivial <- bind(loading.X.trivial, "runif(-0.2,0.2)")
-
-error.cor.X.trivial <- matrix(NA, 6, 6)
-diag(error.cor.X.trivial) <- 0
-RTD.trivial <- binds(error.cor.X.trivial, "rnorm(1,0,.1)")
-
-error.cor.Y.trivial <- matrix(NA, 2, 2)
-diag(error.cor.Y.trivial) <- 0
-RTE.trivial <- binds(error.cor.Y.trivial, "rnorm(1,0,.1)")
-
-RTH.trivial <- bind(matrix(NA, 6, 2), "rnorm(1,0,.1)")
-
-SEM.Mis.Model <- simMisspecSEM(LX = LX.trivial, RTE = RTE.trivial, RTD = RTD.trivial, RTH = 
-RTH.trivial, exo=TRUE)
-
-constraint1 <- matrix(1, 3, 2)
-constraint1[,1] <- 1:3
-rownames(constraint1) <- rep("LY", 3)
-constraint2 <- matrix(2, 3, 2)
-constraint2[,1] <- 4:6
-rownames(constraint2) <- rep("LY", 3)
-constraint3 <- matrix(1, 2, 2)
-constraint3[,1] <- 1:2
-rownames(constraint3) <- rep("LY", 2)
-equal.loading <- simEqualCon(constraint1, constraint2, constraint3, modelType="SEM.exo")
-
-Data.Original <- simData(SEM.model, 300)
-Data.Mis <- simData(SEM.model, 300, misspec=SEM.Mis.Model)
-Data.Con <- simData(SEM.model, 300, equalCon=equal.loading)
-Data.Mis.Con <- simData(SEM.model, 300, misspec=SEM.Mis.Model, 
-	equalCon=equal.loading)
-
-Model.Original <- simModel(SEM.model)
-Model.Con <- simModel(SEM.model, equalCon=equal.loading)
-
-Output <- sim(10, Data.Mis.Con, Model.Con)
+Output <- sim(200, n=300, SEM.model) # Data.Mis.Con, Model.Con) #, multicore=TRUE)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)

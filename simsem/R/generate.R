@@ -20,7 +20,7 @@ generate <- function(model, n, maxDraw=50,misfitBounds=NULL, misfitType="f0",
   if(!class(facDist) == "list") {facDist <- rep(list(facDist),ngroups) }
   if(!class(errorDist) == "list") {errorDist <- rep(list(errorDist),ngroups) }
   
-
+  
   draws <- draw(model, maxDraw=maxDraw, misfitBounds=misfitBounds, misfitType=misfitType,
                 averageNumMisspec=averageNumMisspec, optMisfit=optMisfit, optDraws=optDraws)
   datal <- mapply(FUN=createData,draws,indDist,facDist,errorDist,

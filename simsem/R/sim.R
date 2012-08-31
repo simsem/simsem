@@ -442,22 +442,40 @@ reduceParamSet <- function(paramSet,dgen) {
   final <- NULL
   for(g in seq_along(paramSet)) {
     tpset <- paramSet[[g]]
+	
     for(i in seq_along(tpset)) {
       if(!is.null(tpset[[i]])) {
         tmat <- tpset[[i]]
         name <- names(tpset)[[i]]
         idx <- which(names(dgen[[g]])==name)
         if(is.null(dgen[[g]][[idx]])) {
-          idx <- which(names(dgen[[g]])==paste0("R",name))
+          if(name %in% "TY") {
+		    idx <- which(names(dgen[[g]])=="MY")
+		  } else if (name %in% "AL") {
+		    idx <- which(names(dgen[[g]])=="ME")
+		  } else {
+		    idx <- which(names(dgen[[g]])==paste0("R",name))
+		  }
         }
+		extra <- NULL 
+		if(names(dgen[[g]])[idx] %in% "RPS") {
+			extra <- which(names(dgen[[g]])=="VPS")
+			if(is.null(dgen[[g]][[extra]])) extra <- which(names(dgen[[g]])=="VE")
+		}
+		if(names(dgen[[g]])[idx] %in% "RTE") {
+			extra <- which(names(dgen[[g]])=="VTE")
+			if(is.null(dgen[[g]][[extra]])) extra <- which(names(dgen[[g]])=="VY")
+		}
         if(length(idx) != 0) {
+		  
           free <- is.free(dgen[[g]][[idx]]@free)
+		  if(!is.null(extra)) diag(free) <- is.free(dgen[[g]][[extra]]@free)
           if(name == "PS") {
-            lab <- makeLabels(free & lower.tri(free),name=name,group=g)
-            param <- tmat[free & lower.tri(free)]
+            lab <- makeLabels(free & lower.tri(free, diag=TRUE),name=name,group=g)
+            param <- tmat[free & lower.tri(free, diag=TRUE)]
           } else if(name == "TE") {
             lab <- makeLabels(free & lower.tri(free,diag=TRUE),name=name,group=g)
-            param <- tmat[free & lower.tri(free,diag=TRUE)]
+            param <- tmat[free & lower.tri(free, diag=TRUE)]
           } else {
             lab <- makeLabels(free,name=name,group=g)
             param <- tmat[free]
@@ -496,7 +514,12 @@ reduceLavaanParam <- function(glist,dgen) {
       if(!is.null(dgen[[i]]$TE)) {
         free <- is.free(dgen[[i]]$TE@free) & lower.tri(dgen[[i]]$TE@free,diag=TRUE)
       } else {
-        free <- is.free(dgen[[i]]$RTE@free) & lower.tri(dgen[[i]]$RTE@free,diag=TRUE)
+        free <- is.free(dgen[[i]]$RTE@free) & lower.tri(dgen[[i]]$RTE@free,diag=FALSE)
+		if(!is.null(dgen[[i]]$VTE)) {
+		  diag(free) <- is.free(dgen[[i]]$VTE@free) 
+		} else if (!is.null(dgen[[i]]$VY)) {
+		  diag(free) <- is.free(dgen[[i]]$VY@free)
+		}
       }
       param <- glist[idx[i]]$theta[free]
       lab <- makeLabels(free,name="TE",group=i)
@@ -509,11 +532,16 @@ reduceLavaanParam <- function(glist,dgen) {
     idx <- which(names=="psi")
     for(i in seq_along(idx)) {
       if(!is.null(dgen[[i]]$PS)) {
-        free <- is.free(dgen[[i]]$PS@free) & lower.tri(dgen[[i]]$PS@free) 
+        free <- is.free(dgen[[i]]$PS@free) & lower.tri(dgen[[i]]$PS@free, diag=TRUE) 
       } else {
-        free <- is.free(dgen[[i]]$RPS@free) & lower.tri(dgen[[i]]$RPS@free) 
+        free <- is.free(dgen[[i]]$RPS@free) & lower.tri(dgen[[i]]$RPS@free, diag=FALSE)
+		if(!is.null(dgen[[i]]$VPS)) {
+		  diag(free) <- is.free(dgen[[i]]$VPS@free) 
+		} else if (!is.null(dgen[[i]]$VE)) {
+		  diag(free) <- is.free(dgen[[i]]$VE@free)
+		}		
       }
-      param <- glist[idx[i]]$psi[free & lower.tri(free)]
+      param <- glist[idx[i]]$psi[free]
       lab <- makeLabels(free,name="PS",group=i)
       names(param) <- lab[!is.na(lab)]
       final <- c(final,param)
@@ -531,21 +559,29 @@ reduceLavaanParam <- function(glist,dgen) {
     }
   }
 
-  if("alpha" %in% names && !is.null(dgen[[i]]$AL)) {  
+  if("alpha" %in% names && (!is.null(dgen[[i]]$AL) || !is.null(dgen[[i]]$ME))) {  
     idx <- which(names=="alpha")
     for(i in seq_along(idx)) {
-      free <- is.free(dgen[[i]]$AL@free)
+	  if(!is.null(dgen[[i]]$AL)) {
+        free <- is.free(dgen[[i]]$AL@free)
+	  } else {
+	    free <- is.free(dgen[[i]]$ME@free)
+	  }
       param <- glist[idx[i]]$alpha[free]
       lab <- makeLabels(free,name="AL",group=i)
       names(param) <- lab[!is.na(lab)]
       final <- c(final,param)
     }
   }
-
-   if("nu" %in% names) {  
+  
+   if("nu" %in% names && (!is.null(dgen[[i]]$TY) || !is.null(dgen[[i]]$MY))) {  
     idx <- which(names=="nu")
     for(i in seq_along(idx)) {
-      free <- is.free(dgen[[i]]$TY@free)
+	  if(!is.null(dgen[[i]]$TY)) {
+        free <- is.free(dgen[[i]]$TY@free)
+	  } else {
+	    free <- is.free(dgen[[i]]$MY@free)
+	  }
       param <- glist[idx[i]]$nu[free]
       lab <- makeLabels(free,name="TY",group=i)
       names(param) <- lab[!is.na(lab)]

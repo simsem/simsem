@@ -90,7 +90,7 @@ buildModel <- function(paramSet,modelType) {
   } else {
     if(is.null(paramSet$RTE)) stop("No error correlation object in CFA")
     stopifnot(paramSet$RTE@symmetric)
-    if(is.null(paramSet$VY)) { paramSet$VY <- bind(rep(NA,ni),popParam=1) } ## Set variance of indicators to be free, pop value of 1
+    if(is.null(paramSet$VTE) && is.null(paramSet$VY)) { paramSet$VY <- bind(rep(NA,ni),popParam=1) } ## Set variance of indicators to be free, pop value of 1
   }
 
   if(!is.null(paramSet$PS)) {
@@ -100,12 +100,16 @@ buildModel <- function(paramSet,modelType) {
   } else {
     if(is.null(paramSet$RPS)) stop("In CFA, must specify either PS or RPS")
     stopifnot(paramSet$RPS@symmetric)
-    if(is.null(paramSet$VE)) { paramSet$VE <- bind(free=rep(1,nk)) } # Set the latent variances to be fixed to 1  
+	if(!is.null(paramSet$VPS)) { paramSet$VE <- paramSet$VPS }
+    if(is.null(paramSet$VE)) { paramSet$VE <- bind(free=rep(1,nk)) } # Set the latent variances to be fixed to 1 
+	if(is.null(paramSet$VPS)) paramSet$VPS <- paramSet$VE
   }
   
-  if(is.null(paramSet$TY)) { paramSet$TY <- bind(free=rep(NA,ni),popParam=0) } # Set measurement intercept to be free, pop value of 0
+  if(is.null(paramSet$MY) && is.null(paramSet$TY)) { paramSet$TY <- bind(free=rep(NA,ni),popParam=0) } # Set measurement intercept to be free, pop value of 0
   #if(is.null(paramSet$ME)) { paramSet$ME <- bind(free=rep(0,nk)) } # Set means of factors to be fixed to 0
+  if(!is.null(paramSet$ME)) { paramSet$AL <- paramSet$ME }
   if(is.null(paramSet$AL)) { paramSet$AL <- bind(free=rep(0,nk)) } # Set factor intercepts to be fixed to 0
+  if(is.null(paramSet$ME)) { paramSet$ME <- paramSet$AL }
   
 } else if (modelType == "Path" ) {
   
@@ -119,9 +123,9 @@ buildModel <- function(paramSet,modelType) {
   } else {
     if(is.null(paramSet$RPS)) stop("No residual correlation object between factor.ETA")
     stopifnot(paramSet$RPS@symmetric)
-    if(is.null(paramSet$VE)) { paramSet$VE <- bind(free=rep(NA,ne),popParam = 1) } ## Set latent variance to be free, pop value = 1
+    if(is.null(paramSet$VPS) && is.null(paramSet$VE)) { paramSet$VE <- bind(free=rep(NA,ne),popParam = 1) } ## Set latent variance to be free, pop value = 1
   }
-  if(is.null(paramSet$AL)) { AL <- bind(rep(NA,ne),popParam=0) } ## Set factor intercepts to be free, pop value = 0
+  if(is.null(paramSet$ME) && is.null(paramSet$AL)) { paramSet$ME <- bind(rep(NA,ne),popParam=0) } ## Set factor intercepts to be free, pop value = 0
   
 } else if (modelType == "SEM") {
   
@@ -137,10 +141,10 @@ buildModel <- function(paramSet,modelType) {
   } else {
     if(is.null(paramSet$RTE)) stop("No measurement error correlation object between indicator.Y")
     stopifnot(paramSet$RTE@symmetric)
-    if(is.null(paramSet$VY)) { paramSet$VY <- bind(rep(NA,ny),popParam=1) } ## Set indicator variance to be free, pop value at 1
+    if(is.null(paramSet$VTE) && is.null(paramSet$VY)) { paramSet$VY <- bind(rep(NA,ny),popParam=1) } ## Set indicator variance to be free, pop value at 1
   }
 
-  if(is.null(paramSet$TY)) { paramSet$TY <- bind(rep(NA,ny),popParam=0) } ## Set measurement intercepts to be free, pop value at 0
+  if(is.null(paramSet$MY) && is.null(paramSet$TY)) { paramSet$TY <- bind(rep(NA,ny),popParam=0) } ## Set measurement intercepts to be free, pop value at 0
   
   if(is.null(paramSet$BE)) stop("No path coefficient object between factor.ETA")
 
@@ -152,9 +156,9 @@ buildModel <- function(paramSet,modelType) {
   } else {
     if(is.null(paramSet$RPS)) stop("No measurement error correlation object between indicator.Y")
     stopifnot(paramSet$RPS@symmetric)
-    if(is.null(paramSet$VE)) { paramSet$VE <- bind(rep(1,ne)) } ## Set factor variance to be fixed at 1
+    if(is.null(paramSet$VPS) && is.null(paramSet$VE)) { paramSet$VE <- bind(rep(1,ne)) } ## Set factor variance to be fixed at 1
   }
-  if(is.null(paramSet$ME)) { ME <- bind(rep(0,ne)) } ## Set factor means to be fixed at 0
+  if(is.null(paramSet$AL) && is.null(paramSet$ME)) { paramSet$ME <- bind(rep(0,ne)) } ## Set factor means to be fixed at 0
   #if(is.null(paramSet$AL)) { AL <- bind(rep(0,ne)) } ## Set factor intercepts to be fixed at 0
 } else { stop("modelType not recognized. Possible options are: \"CFA\", \"SEM\", or \"Path\"") }
 
@@ -193,9 +197,17 @@ buildPT <- function(paramSet, pt=NULL, group=1,facLab=NULL, indLab=NULL, smart=T
       pt <- parseFree(paramSet$PS, group=group, pt=pt,op="~~",lhs,rhs,smart=smart)
     }
   }
-
+  
   ## RPS - factor correlation (same as PS): Symmetric
   if (!is.null(paramSet$RPS)) {
+    # Step 1: parse variance information to the RPS
+    if(!is.null(paramSet$VPS)) {
+	  diag(paramSet$RPS@free) <- paramSet$VPS@free
+	} else if (!is.null(paramSet$VE)) { # Intentionally use else if to select either VPS or VE
+	  diag(paramSet$RPS@free) <- paramSet$VE@free
+	}
+	
+    # Step 2: create pt
     nf <- ncol(paramSet$RPS@free)
     if(is.null(facLab)){
       lhs <- paste0("y",rep(1:nf,nf:1))
@@ -205,9 +217,9 @@ buildPT <- function(paramSet, pt=NULL, group=1,facLab=NULL, indLab=NULL, smart=T
       rhs <- unlist(lapply(1:nf,function(k) facLab[k:nf]))
     }
     if(!is.null(pt)) {
-      pt <- mapply(pt, parseFree(paramSet$RPS, group=group, pt=pt,op="~~",lhs,rhs,smart=smart),FUN=c,SIMPLIFY=FALSE)
+      pt <- mapply(pt, parseFree(paramSet$RPS, group=group, pt=pt,op="~~",lhs,rhs,smart=FALSE),FUN=c,SIMPLIFY=FALSE)
     } else {
-      pt <- parseFree(paramSet$RPS, group=group, pt=pt,op="~~",lhs,rhs,smart=smart)
+      pt <- parseFree(paramSet$RPS, group=group, pt=pt,op="~~",lhs,rhs,smart=FALSE)
     }
   }
 
@@ -230,7 +242,15 @@ buildPT <- function(paramSet, pt=NULL, group=1,facLab=NULL, indLab=NULL, smart=T
   }
   
   ## RTE - Correlation of measurment error: Symmetric
- if (!is.null(paramSet$RTE)) {
+  if (!is.null(paramSet$RTE)) {
+    # Step 1: parse variance information to the RTE
+    if(!is.null(paramSet$VTE)) {
+	  diag(paramSet$RTE@free) <- paramSet$VTE@free
+	} else if (!is.null(paramSet$VY)) { # Intentionally use else if to select either VPS or VE
+	  diag(paramSet$RTE@free) <- paramSet$VY@free
+	}
+	
+    # Step 2: create pt
      ni <- ncol(paramSet$RTE@free)
      if(is.null(indLab)){
        lhs <- paste0("x",rep(1:ni,ni:1))
@@ -239,7 +259,7 @@ buildPT <- function(paramSet, pt=NULL, group=1,facLab=NULL, indLab=NULL, smart=T
        lhs <- rep(indLab,ni:1)
        rhs <- unlist(lapply(1:ni,function(k) indLab[k:ni]))
      }
-    pt <- mapply(pt, parseFree(paramSet$RTE, group=group, pt=pt,op="~~",lhs,rhs,smart=smart),FUN=c,SIMPLIFY=FALSE)
+    pt <- mapply(pt, parseFree(paramSet$RTE, group=group, pt=pt,op="~~",lhs,rhs,smart=FALSE),FUN=c,SIMPLIFY=FALSE)
   }
   
 
@@ -253,12 +273,21 @@ buildPT <- function(paramSet, pt=NULL, group=1,facLab=NULL, indLab=NULL, smart=T
       lhs <- rep(facLab,each=nf)
       rhs <- rep(facLab,times=nf)
     }
-    pt <- mapply(pt, parseFree(paramSet$BE, group=group, pt=pt,op="~",lhs,rhs,smart=smart),FUN=c,SIMPLIFY=FALSE)
+    pt <- mapply(pt, parseFree(paramSet$BE, group=group, pt=pt,op="~",lhs,rhs,smart=smart,swap=TRUE),FUN=c,SIMPLIFY=FALSE)
   }
   
 
   ## AL - factor intercept
- if (!is.null(paramSet$AL)) {
+  
+  # if ME is not null but AL is null
+  tempSmart <- smart
+  if(!is.null(paramSet$ME) && is.null(paramSet$AL)) {
+    paramSet$AL <- paramSet$ME
+	tempSmart <- FALSE
+  }
+  
+  # Create pt
+  if (!is.null(paramSet$AL)) {
     nf <- length(paramSet$AL@free)
     if(is.null(facLab)){
       lhs <- paste("y",1:nf,sep="")
@@ -267,10 +296,19 @@ buildPT <- function(paramSet, pt=NULL, group=1,facLab=NULL, indLab=NULL, smart=T
       lhs <- facLab
       rhs <- rep("",times=nf)
     }
-    pt <- mapply(pt, parseFree(paramSet$AL, group=group, pt=pt,op="~1",lhs,rhs,smart=smart),FUN=c,SIMPLIFY=FALSE)
+    pt <- mapply(pt, parseFree(paramSet$AL, group=group, pt=pt,op="~1",lhs,rhs,smart=tempSmart),FUN=c,SIMPLIFY=FALSE)
   }    
 
   ## TY - indicator intercept
+  
+  # if MY is not null but TY is null
+  tempSmart <- smart
+  if(!is.null(paramSet$MY) && is.null(paramSet$TY)) {
+    paramSet$TY <- paramSet$MY
+	tempSmart <- FALSE
+  }
+  
+  # Create pt
   if (!is.null(paramSet$TY)) {
      ni <- length(paramSet$TY@free)
      if(is.null(indLab)){
@@ -282,6 +320,7 @@ buildPT <- function(paramSet, pt=NULL, group=1,facLab=NULL, indLab=NULL, smart=T
      }
     pt <- mapply(pt, parseFree(paramSet$TY, group=group, pt=pt,op="~1",lhs,rhs,smart=smart),FUN=c,SIMPLIFY=FALSE)
   }
+  
   return(pt)  
 }
 
@@ -341,7 +380,7 @@ buildPT <- function(paramSet, pt=NULL, group=1,facLab=NULL, indLab=NULL, smart=T
 ## }
 
 ## Returns a pt (list) of parsed SimMatrix/SimVector
-parseFree <- function(simDat,group,pt,op,lhs=NULL,rhs=NULL,smart=TRUE) {
+parseFree <- function(simDat,group,pt,op,lhs=NULL,rhs=NULL,smart=TRUE,swap=FALSE) {
   ## Calculate starting indices from previous pt
   if(!is.null(pt)) {
     startId <- max(pt$id)+1
@@ -354,6 +393,11 @@ parseFree <- function(simDat,group,pt,op,lhs=NULL,rhs=NULL,smart=TRUE) {
   }
 
   freeDat <- simDat@free
+  popParamDat <- simDat@popParam
+  if(swap) {
+	freeDat <- t(freeDat)
+	popParamDat <- t(popParamDat)
+  }
   numElem <- NULL
   
   if(class(simDat) == "SimVector") {
@@ -369,7 +413,7 @@ parseFree <- function(simDat,group,pt,op,lhs=NULL,rhs=NULL,smart=TRUE) {
   user <- rep(0,numElem)
   group <- rep(group,numElem)
   free <- freeIdx(freeDat,start=startFree)   
-  ustart <- startingVal(freeDat,simDat@popParam,smart=smart)
+  ustart <- startingVal(freeDat,popParamDat,smart=smart)
   exo <- rep(0,length(id))
   eq.id <- eqIdx(freeDat,id)
   label <- names(eq.id)
