@@ -53,7 +53,7 @@ model <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NUL
            pt <- mapply(pt,buildPT(psl[[i]], pt=pt, group=i,facLab=NULL, indLab=NULL,smart=smartStart),FUN=c,SIMPLIFY=FALSE)
          }
        }
-
+	  
       # Adjust indices for between group constraints
       pt <- btwGroupCons(pt)
       #nullpt <- nullpt(psl[[1]], ngroups=n)
@@ -573,6 +573,6 @@ btwGroupCons <- function(pt) {
   
   elRows <- pt$id[which(pt$free != 0)] # Rows that are free
   elRows <- elRows[-match(updatedRows,elRows)] # Remove rows that have been updated
-  pt$free[elRows] <- (1:(length(elRows)+length(usedFreeId)))[-usedFreeId] #Remove used free ids from available list of ids
+  if(!is.null(usedFreeId)) { pt$free[elRows] <- (1:(length(elRows)+length(usedFreeId)))[-usedFreeId] } #Remove used free ids from available list of ids
   return(pt)
 }

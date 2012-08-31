@@ -17,6 +17,8 @@
 # summaryMisspec in simResult
 # Summary simsem got a vector for the symmetric matrix
 # Fix misfitType="rmsea", optMisfit="max", optDraws=10,  in example 4
+# Fix the starting values for each rep. It would be faster.
+# Adjust to be equal with the same matrix
 
 #####Result
 # Bias behind each simAnalysis
@@ -91,11 +93,9 @@ latent.cor <- matrix(NA, 2, 2)
 diag(latent.cor) <- 1
 RPS <- binds(latent.cor, 0.5)
 
-RTE <- binds(diag(NA, 6), diag(6))
+RTE <- binds(diag(6))
 
 VTE <- bind(rep(NA, 6), 0.51)
-
-VY <- bind(rep(NA,6),2)
 
 CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, VTE=VTE, modelType = "CFA")
 
@@ -113,6 +113,102 @@ Output <- sim(20, CFA.Model,n=200)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
+
+
+################################# Example 1.1 Multiple Group
+
+# Noninvariance
+loading1 <- matrix(NA, 6, 1)
+loading2 <- matrix(0, 6, 2)
+loading2[1:3, 1] <- NA
+loading2[4:6, 2] <- NA
+LY1 <- bind(loading1, 0.7)
+LY2 <- bind(loading2, 0.7)
+
+latent.cor2 <- matrix(NA, 2, 2)
+diag(latent.cor2) <- 1
+RPS1 <- binds(as.matrix(1))
+RPS2 <- binds(latent.cor2, 0.5)
+
+RTE <- binds(diag(6))
+
+VTE <- bind(rep(NA, 6), 0.51)
+
+CFA.Model <- model(LY = list(LY1, LY2), RPS = list(RPS1, RPS2), RTE = list(RTE, RTE), VTE=list(VTE, VTE), ngroups=2, modelType = "CFA")
+
+# Configural Invariance
+loading <- matrix(0, 6, 2)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+LY <- bind(loading, 0.7)
+
+latent.cor <- matrix(NA, 2, 2)
+diag(latent.cor) <- 1
+RPS <- binds(latent.cor, 0.5)
+
+RTE <- binds(diag(6))
+
+VTE <- bind(rep(NA, 6), 0.51)
+
+CFA.Model <- model(LY = list(LY, LY), RPS = list(RPS, RPS), RTE = list(RTE, RTE), VTE=list(VTE, VTE), ngroups=2, modelType = "CFA")
+
+# Weak Invariance
+loading <- matrix(0, 6, 2)
+loading[1:3, 1] <- paste0("con", 1:3)
+loading[4:6, 2] <- paste0("con", 4:6)
+LY <- bind(loading, 0.7)
+
+latent.cor <- matrix(NA, 2, 2)
+diag(latent.cor) <- 1
+RPS <- binds(latent.cor, 0.5)
+
+RTE <- binds(diag(6))
+
+VTE <- bind(rep(NA, 6), 0.51)
+
+CFA.Model <- model(LY = LY, RPS = list(RPS, RPS), RTE = list(RTE, RTE), VTE=list(VTE, VTE), ngroups=2, modelType = "CFA")
+
+# Strong Invariance
+loading <- matrix(0, 6, 2)
+loading[1:3, 1] <- paste0("con", 1:3)
+loading[4:6, 2] <- paste0("con", 4:6)
+LY <- bind(loading, 0.7)
+
+latent.cor <- matrix(NA, 2, 2)
+diag(latent.cor) <- 1
+RPS <- binds(latent.cor, 0.5)
+
+RTE <- binds(diag(6))
+
+VTE <- bind(rep(NA, 6), 0.51)
+
+TY <- bind(paste0("ty", 1:6), 0)
+
+CFA.Model <- model(LY = LY, RPS = list(RPS, RPS), RTE = list(RTE, RTE), VTE=list(VTE, VTE), TY=TY, ngroups=2, modelType = "CFA")
+
+
+
+param <- draw(CFA.Model)
+dat <- createData(param[[1]], n = 200)
+
+dat <- generate(CFA.Model,200)
+dat2 <- generate(CFA.Model, 200, params=TRUE)
+out <- analyze(CFA.Model,dat)
+
+
+
+#SimMissing <- simMissing(pmMCAR=0.1, numImps=5)
+Output <- sim(20, CFA.Model,n=200)
+getCutoff(Output, 0.05)
+plotCutoff(Output, 0.05)
+summaryParam(Output)
+
+
+
+
+
+
+
 
 #################################### Example 2 #######################
 
