@@ -1,3 +1,0 @@
-1. What is the difference between total varaince vector of factors and measurement errors (VE, VY) and residual variance vector of factors and measurement errors (VPS, VTE)? 
-
-2. If you have RPS/VPS, or RPS/VE, what calculations need to happen to draw parameters for PS? That is, if you have the factor correlation matrix, and either the total variance of the factors or the residual variance of factors, how do you calculate the factor covariance matrix?
