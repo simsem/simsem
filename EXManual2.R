@@ -14,6 +14,8 @@
 # run function of the simDataDist, simMissing
 # simFunction still does not work
 # Consider run function in the SimMatrix and SimVector
+#    PM 9/1: This is implemented as "rawDraw", internal to drawParam.
+#    Consider making "draw" a generic method that dispatches on a SimMatrix or SimVector
 # summaryMisspec in simResult
 # Summary simsem got a vector for the symmetric matrix
 # Fix misfitType="rmsea", optMisfit="max", optDraws=10,  in example 4

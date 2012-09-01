@@ -1,0 +1,215 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: Data generation template and analysis template for...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+</head><body>
+
+<table width="100%" summary="page for model"><tr><td>model</td><td align="right">R Documentation</td></tr></table>
+
+<h2>
+Data generation template and analysis template for simulation.
+</h2>
+
+<h3>Description</h3>
+
+
+<p>Creates a data generation and analysis template (lavaan parameter table) for simulations with structural equation models based on Y-side LISREL design matrices. Each corresponds to a LISREL matrix, but must be a <code>SimMatrix</code> or <code>SimVector</code> built using <code>bind</code>. In addition to the usual Y-side matrices in LISREL, both PS and TE can be specified using correlations (RPS, RTE) and scaled by a vector of residual variances (VTE, VPS) or total variances (VY, VE). Multiple groups are supported by passing lists of <code>SimMatrix</code> or <code>SimVector</code> to arguments, or by specifying the number of groups. 
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+model(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = NULL, 
+VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, MY = NULL, 
+ME = NULL, modelType, indLab=NULL, facLab=NULL, ngroups=1, smartStart=TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+
+<table summary="R argblock">
+<tr valign="top"><td><code>LY</code></td>
+<td>
+
+<p>Factor loading matrix from endogenous factors to Y indicators (need to be <code>SimMatrix</code> object).
+</p>
+</td></tr>
+<tr valign="top"><td><code>PS</code></td>
+<td>
+
+<p>Residual covariance matrix among endogenous factors (need to be <code>SimMatrix</code> object).
+</p>
+</td></tr>
+<tr valign="top"><td><code>RPS</code></td>
+<td>
+
+<p>Residual correlation matrix among endogenous factors (need to be <code>SimMatrix</code> object).
+</p>
+</td></tr>
+<tr valign="top"><td><code>TE</code></td>
+<td>
+
+<p>Measurement error covariance matrix among Y indicators (need to be <code>SimMatrix</code> object).
+</p>
+</td></tr>
+<tr valign="top"><td><code>RTE</code></td>
+<td>
+
+<p>Measurement error correlation matrix among Y indicators (need to be <code>SimMatrix</code> object).
+</p>
+</td></tr>
+<tr valign="top"><td><code>BE</code></td>
+<td>
+
+<p>Regression coefficient matrix among endogenous factors (need to be <code>SimMatrix</code> object).
+</p>
+</td></tr>
+<tr valign="top"><td><code>VTE</code></td>
+<td>
+
+<p>Measurement error variance of indicators (need to be <code>SimVector</code> object).
+</p>
+</td></tr>
+<tr valign="top"><td><code>VY</code></td>
+<td>
+
+<p>Total variance of indicators (need to be <code>SimVector</code> object). NOTE: Either measurement error variance or indicator variance is specified. Both cannot be simultaneously specified.
+</p>
+</td></tr>
+<tr valign="top"><td><code>VPS</code></td>
+<td>
+
+<p>Residual variance of factors (need to be <code>SimVector</code> object).
+</p>
+</td></tr>
+<tr valign="top"><td><code>VE</code></td>
+<td>
+
+<p>Total variance of of factors (need to be <code>SimVector</code> object). NOTE: Either residual variance of factors or total variance of factors is specified. Both cannot be simulatneously specified.
+</p>
+</td></tr>  
+<tr valign="top"><td><code>TY</code></td>
+<td>
+
+<p>Measurement intercepts of Y indicators. (need to be <code>SimVector</code> object).
+</p>
+</td></tr>
+<tr valign="top"><td><code>AL</code></td>
+<td>
+
+<p>Endogenous factor intercept (need to be <code>SimVector</code> object).
+</p>
+</td></tr>
+<tr valign="top"><td><code>MY</code></td>
+<td>
+
+<p>Overall Y indicator means. (need to be <code>SimVector</code> object). NOTE: Either measurement intercept of indicator mean can be specified. Both cannot be specified simultaneously.
+</p>
+</td></tr>
+<tr valign="top"><td><code>ME</code></td>
+<td>
+
+<p>Total mean of endogenous factors (need to be <code>SimVector</code> object). NOTE: Either endogenous factor intercept or total mean of endogenous factor is specified. Both cannot be simultaneously specified.
+</p>
+</td></tr>
+<tr valign="top"><td><code>modelType</code></td>
+<td>
+
+<p>&quot;CFA&quot;, &quot;Sem&quot;, or &quot;Path&quot;. This is specified to ensure that the analysis and data generation template created based on specified matrices in model correspond to what the user intends.
+</p>
+</td></tr>
+<tr valign="top"><td><code>indLab</code></td>
+<td>
+
+<p>Character vector of indicator labels. If left blank, automatic labels will be generated as  <code>x1</code>, <code>x2</code>, ... <code>xx</code>.
+</p>
+</td></tr>
+<tr valign="top"><td><code>facLab</code></td>
+<td>
+ 
+<p>Character vector of factor labels. If left blank, automatic labels will be generated as <code>y1</code>, <code>y2</code>, ... <code>yx</code></p>
+</td></tr>
+<tr valign="top"><td><code>ngroups</code></td>
+<td>
+
+<p>Integer. Number of groups for data generation, defaults to 1. If larger than one, all specified matrices will be repeated for each additional group. If any matrix argument is a list, the length of this list will be the number of groups and ngroups is ignored.
+</p>
+</td></tr>
+<tr valign="top"><td><code>smartStart</code></td>
+<td>
+
+<p>Defaults to FALSE. If TRUE, population parameter values that are real numbers will be used as starting values.
+</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+
+<p>The <EM>simsem</EM> package is intricately tied to the <EM>lavaan</EM> package for analysis of structural equation models. The analysis template that is generated by <code>model</code> is a lavaan parameter table, a low-level access point to lavaan that allows repeated analyses to happen more rapidly. If desired, the parameter table generated can be used directly with lavaan for many analyses.
+</p>
+<p>The data generation template is simply a list of <code>SimMatrix</code> or <code>SimVector</code>. The <code>SimSem</code> object can be passed to the function <code>generate</code> to generate data.
+</p>
+<p>If multiple group data is desired, the user can optionally either specify the number of groups argument, or pass a list of  <code>SimMatrix</code> or <code>SimVector</code> to any of the matrix arguments. The length of this list will be the number of groups. If only one argument is a list, all other arguments will be automatically replicated to that length, parameters will be identified in the same way, have the same population parameter value/distribution, and have the same misspecification. If only ngroups is specified, all arguments will be replicated in this fashion. If equality constraints are present during the automatic replication, these parameters will be constrained to be equal across groups.	
+</p>
+
+
+<h3>Value</h3>
+
+
+<p><code>SimSem</code> object that contains the data generation template (<code>@dgen</code>) and analysis template (<code>@pt</code>).
+</p>
+
+
+<h3>Author(s)</h3>
+
+
+<p>Patrick Miller (Univeristy of Notre Dame; <a href="mailto:pmille13@nd.edu">pmille13@nd.edu</a>), 
+Sunthud Pornprasertmanit (University of Kansas; <a href="mailto:psunthud@ku.edu">psunthud@ku.edu</a>)
+</p>
+
+
+<h3>See Also</h3>
+
+
+<ul>
+<li> <p><code>sim</code> for simulations using the <code>SimSem</code> template.
+</p>
+</li>
+<li> <p><code>generate</code> To generate data using the <code>SimSem</code> template.
+</p>
+</li>
+<li> <p><code>analyze</code> To analyze real or generated data using the <code>SimSem</code> template.
+</p>
+</li>
+<li> <p><code>draw</code> To draw parameters using the <code>SimSem</code> template.
+</p>
+</li></ul>
+
+
+
+<h3>Examples</h3>
+
+<pre>
+
+loading &lt;- matrix(0, 6, 2)
+loading[1:3, 1] &lt;- NA
+loading[4:6, 2] &lt;- NA
+LY &lt;- bind(loading, 0.7)
+
+latent.cor &lt;- matrix(NA, 2, 2)
+diag(latent.cor) &lt;- 1
+RPS &lt;- binds(latent.cor, 0.5)
+
+RTE &lt;- binds(diag(6))
+
+VY &lt;- bind(rep(NA,6),2)
+
+CFA.Model &lt;- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
+</pre>
+
+
+</body></html>
