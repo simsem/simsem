@@ -149,7 +149,7 @@ dataGen <- function(dataDist, n, m, cm) {
                 attribute[[i]] <- temp
             }
             Mvdc <- mvdc(CopNorm, distName, attribute)
-            Data <- rmvdc(Mvdc, n)
+            Data <- rMvdc(n, Mvdc)
             if (sum(varNotZeros) < dataDist@p) {
                 varZeros <- diag(cm) == 0
                 constant <- matrix(0, n, sum(varZeros))

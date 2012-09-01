@@ -539,7 +539,7 @@ CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
 
 SimDataDist <- simDataDist(t2, t3, t4, t5, chi3, chi4, chi5, chi6, chi3, chi4, chi5, chi6, reverse=c(rep(FALSE, 8), rep(TRUE, 4)))
 dat <- generate(CFA.Model, n=200, indDist=SimDataDist)
-out <- analyze(CFA.Model, dat, estimator="mlm")
+out <- analyze(CFA.Model, dat, estimator="mlr")
 
 Output <- sim(50, n=200, CFA.Model, indDist=SimDataDist, estimator="mlm")
 getCutoff(Output, 0.05)

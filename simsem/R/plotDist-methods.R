@@ -55,7 +55,7 @@ setMethod("plotDist", signature = "SimDataDist", definition = function(object, x
         xis <- seq(xlim[1], xlim[2], length = 51)
         yis <- seq(ylim[1], ylim[2], length = 51)
         grids <- as.matrix(expand.grid(xis, yis))
-        zmat <- matrix(dmvdc(Mvdc, grids), 51, 51)
+        zmat <- matrix(dMvdc(grids, Mvdc), 51, 51)
         if (object@reverse[1]) {
             zmat <- zmat[nrow(zmat):1, ]
             den <- apply(zmat, 1, sum)
