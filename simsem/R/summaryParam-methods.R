@@ -14,12 +14,12 @@ setMethod("summaryParam", signature(object = "SimResult"), definition = function
     stdCoef <- colMeans(object@stdCoef, na.rm = TRUE)
     stdRealSE <- sapply(object@stdCoef, sd, na.rm = TRUE)
     result <- cbind(coef, real.se, estimated.se, pow, stdCoef, stdRealSE)
-    
     colnames(result) <- c("Estimate Average", "Estimate SD", "Average SE", "Power (Not equal 0)", "Std Est", "Std Est SD")
-    if (!is.null(object@paramValue) && (ncol(object@coef) == ncol(object@paramValue)) && all(colnames(object@coef) == colnames(object@paramValue))) {
+    if (!is.null(object@paramValue)) {
+	  paramValue <- object@paramValue[,match(colnames(object@coef), colnames(object@paramValue))]
+	  if ((ncol(object@coef) == ncol(paramValue)) && all(colnames(object@coef) == colnames(paramValue))) {
         nRep <- object@nRep
         nParam <- ncol(object@coef)
-        paramValue <- object@paramValue
         if (nrow(object@paramValue) == 1) 
             paramValue <- matrix(unlist(rep(paramValue, nRep)), nRep, nParam, byrow = T)
         biasParam <- object@coef - paramValue
@@ -56,6 +56,7 @@ setMethod("summaryParam", signature(object = "SimResult"), definition = function
             colnames(result3) <- c("Rel Bias", "Std Bias", "Rel SE Bias")
             result <- data.frame(result, result3)
         }
+	  }
     }
     if (length(object@FMI1) != 0 & length(object@FMI2) != 0) {
         nRep <- nrow(object@coef)

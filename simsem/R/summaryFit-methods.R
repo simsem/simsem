@@ -31,8 +31,9 @@ setMethod("summaryFit", signature(object = "SimResult"), definition = function(o
 		
 		fit <- as.data.frame(cleanObj@fit[,usedFit])
 		meanfit <- apply(fit, 2, mean, na.rm=TRUE)
-		result <- cbind(cutoffs, meanfit)
-		colnames(result) <- c(alpha, "Mean")
+		sdfit <- apply(fit, 2, sd, na.rm=TRUE)
+		result <- cbind(cutoffs, meanfit, sdfit)
+		colnames(result) <- c(alpha, "Mean", "SD")
 		rownames(result)<-usedFit
 		names(dimnames(result)) <- c("Fit Indices", "Alpha")
 		#print(as.data.frame(cutoffs))

@@ -297,7 +297,7 @@ runRep <- function(simConds, model, miss = NULL, funObj=NULL, facDist = NULL, in
     dgen <- model@dgen
     RNGkind("L'Ecuyer-CMRG")
     assign(".Random.seed",simConds[[5]],envir=.GlobalEnv)
-
+	
     ## 1. Create a missing data template from simulation parameters.
     if (is.null(miss)) {
         if (!is.null(pmMAR) | !is.null(pmMCAR)) {
@@ -336,7 +336,7 @@ runRep <- function(simConds, model, miss = NULL, funObj=NULL, facDist = NULL, in
     ## 3. Impose Missing (if any)
     if (!is.null(miss)) {
         
-      data <- imposeMissing(data, cov=miss@cov, pmMCAR=pmMCAR, pmMAR=pmMAR, nforms=miss@nforms, itemGroups=miss@itemGroups,
+      data <- imposeMissing(data, cov=miss@cov, pmMCAR=miss@pmMCAR, pmMAR=miss@pmMAR, nforms=miss@nforms, itemGroups=miss@itemGroups,
                             twoMethod=miss@twoMethod, prAttr=miss@prAttr, timePoints=miss@timePoints, logical=miss@logical, ignoreCols=miss@ignoreCols,
                             threshold=miss@threshold)
     }
@@ -376,13 +376,14 @@ runRep <- function(simConds, model, miss = NULL, funObj=NULL, facDist = NULL, in
 
     timing$Analyze <- (proc.time()[3] - start.time)
     start.time <- proc.time()[3]
-    
+   
     ## 6. Parse Lavaan Output
     if (!is.null(out)) {
       try(se <- inspect(out,"se"))
       try(converged <- inspect(out, "converged"))
       try(check <- sum(unlist(lapply(se, sum))))
-      try(if(is.na(check) || check==0) {converged <- FALSE},silent=TRUE)
+	  try(negVar <- checkVar(out))
+      try(if(is.na(check) || check==0 || negVar) {converged <- FALSE},silent=TRUE)
     }
     
     if (converged) {
@@ -652,3 +653,8 @@ standardize <- function(object) {
   GLIST
 }
 
+checkVar <- function(object) {
+	GLIST <- object@Model@GLIST
+	covGLIST <- GLIST[names(GLIST) %in% c("theta", "psi")]
+	return(any(sapply(covGLIST, function(x) any(diag(x) < 0))))
+}

@@ -12,6 +12,7 @@ imposeMissing <- function(data.mat, cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, 
         data.mat[log.matpl] <- NA
     }
     # Impose MAR and MCAR
+	
     if (pmMCAR != 0) {
         log.mat1 <- makeMCAR(dim(data.mat), pmMCAR, cov, ignoreCols)
         data.mat[log.mat1] <- NA

@@ -142,7 +142,7 @@ drawParam <- function(paramSet, maxDraw=50, numFree, misfitBounds=NULL, averageN
              (sum(unlist(lapply(lapply(lapply(macsPopls,"[[",2),eigen),"[[",1)) <= 0) == 0) &&
              all(is.finite(unlist(lapply(macsMisls,"[[",2)))) &&
              (sum(unlist(lapply(lapply(lapply(macsMisls,"[[",2),eigen),"[[",1)) <=0) == 0) )) {
-          cat("FAIL")
+          #cat("FAIL")
           draw <- draw + 1
           next
           ## because pop matrix is invalid or pop+misspec, move on to next draw

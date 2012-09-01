@@ -57,35 +57,34 @@ createData <- function(paramSet, n, indDist=NULL, sequential=FALSE, facDist=NULL
         Data <- z[index, ]
     } else {
         if (sequential) {
-            if (is.null(paramSet$BE) && !is.null(paramSet$LY)) { # CFA
+            if (is.null(usedParam$BE) && !is.null(usedParam$LY)) { # CFA
                 fac <- dataGen(facDist, n, usedParam@AL, usedParam@PS)
                 trueScore <- fac %*% t(usedParam@LY)
                 errorScore <- dataGen(errorDist, n, usedParam@TY, usedParam@TE)
                 Data <- trueScore + errorScore
             } else {
                 usedParam2 <- NULL
-             
-                if (!is.null(paramSet$BE)) { # SEM or Path
+                if (!is.null(usedParam$BE)) { # SEM or Path
                   usedParam2 <- usedParam
                 } else {
                   stop("Incorrect model type")
                 }
-                set <- findRecursiveSet(usedParam2@BE)
+                set <- findRecursiveSet(usedParam2$BE)
                 iv <- set[[1]]
-                fac <- dataGen(extract(facDist, iv), n, usedParam2@AL[iv], usedParam2@PS[iv, iv])
+                fac <- dataGen(extractSimDataDist(facDist, iv), n, usedParam2$AL[iv], usedParam2$PS[iv, iv])
                 for (i in 2:length(set)) {
                   dv <- set[[i]]
-                  pred <- fac %*% t(extract(usedParam2@BE, dv, iv))
-                  res <- dataGen(extract(facDist, dv), n, usedParam2@AL[dv], usedParam2@PS[dv, dv])
+                  pred <- fac %*% t(extract(usedParam2$BE, dv, iv))
+                  res <- dataGen(extractSimDataDist(facDist, dv), n, usedParam2$AL[dv], usedParam2$PS[dv, dv])
                   new <- pred + res
                   fac <- cbind(fac, new)
                   iv <- c(iv, set[[i]])
                 }
-                if (is.null(paramSet$LY)) { # Path
+                if (is.null(usedParam$LY)) { # Path
                   Data <- fac
                 } else { # SEM
-                  trueScore <- fac %*% t(usedParam2@LY)
-                  errorScore <- dataGen(errorDist, n, usedParam2@TY, usedParam2@TE)
+                  trueScore <- fac %*% t(usedParam2$LY)
+                  errorScore <- dataGen(errorDist, n, usedParam2$TY, usedParam2$TE)
                   Data <- trueScore + errorScore
                 }
             }
@@ -119,13 +118,14 @@ dataGen <- function(dataDist, n, m, cm) {
     require(MASS)
     Data <- NULL
     # Check dim(M) dim(CM) dim(copula) are equal
+	if(!is.null(dataDist)) {
         require(copula)
         if (dataDist@p > 1) {
             varNotZeros <- diag(cm) != 0
             dataDist2 <- dataDist
             cm2 <- cm
             if (sum(varNotZeros) < dataDist@p) {
-                dataDist2 <- extract(dataDist, which(varNotZeros))
+                dataDist2 <- extractSimDataDist(dataDist, which(varNotZeros))
                 cm2 <- extract(cm, which(varNotZeros), which(varNotZeros))
             }
             r <- cov2cor(as.matrix(cm2))
@@ -175,7 +175,7 @@ dataGen <- function(dataDist, n, m, cm) {
         }
         if (!is.matrix(Data)) 
             Data <- as.matrix(Data)
-        if (dataDist@keepScale) {
+        if (any(dataDist@keepScale)) {
             Data <- scale(Data)
             Data[is.na(Data)] <- 0
             fakeDat <- mvrnorm(n, m, cm)
@@ -187,6 +187,12 @@ dataGen <- function(dataDist, n, m, cm) {
         }
         if (nrow(Data) == 1) 
             Data <- t(Data)
-  
+    } else {
+		Data <- mvrnorm(n, m, cm)
+	}
     return(Data)
+}
+
+extractSimDataDist <-  function(object, pos) {
+    return(new("SimDataDist", p = length(pos), dist = object@dist[pos], keepScale = object@keepScale[pos], reverse = object@reverse[pos]))
 }

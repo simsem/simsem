@@ -22,14 +22,14 @@ plotPowerFit <- function(altObject, nullObject = NULL, cutoff = NULL, usedFit = 
     x <- NULL
     pred <- NULL
     
-    if ((length(altObject@n) > 1) && contN) {
+    if ((length(unique(altObject@n)) > 1) && contN) {
         if (!length(altObject@n) == nrep) {
             stop("Number of random sample sizes is not the same as the number of replications, check to see if N varied across replications")
         }
         x <- cbind(x, N = altObject@n)
         pred$N <- min(altObject@n):max(altObject@n)
     }
-    if ((length(altObject@pmMCAR) > 1) && contMCAR) {
+    if ((length(unique(altObject@pmMCAR)) > 1) && contMCAR) {
         if (!length(altObject@pmMCAR) == nrep) {
             stop("Number of random pmMCARs is not the same as the number of replications, check to see if pmMCAR varied across replications")
         }
@@ -37,7 +37,7 @@ plotPowerFit <- function(altObject, nullObject = NULL, cutoff = NULL, usedFit = 
         pred$MCAR <- seq(min(altObject@pmMCAR), max(altObject@pmMCAR), by = 0.01)
         
     }
-    if ((length(altObject@pmMAR) > 1) && contMAR) {
+    if ((length(unique(altObject@pmMAR)) > 1) && contMAR) {
         if (!length(altObject@pmMAR) == nrep) {
             stop("Number of random pmMARs is not the same as the number of replications, check to see if pmMAR varied across replications")
         }
