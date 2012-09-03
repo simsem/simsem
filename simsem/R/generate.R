@@ -5,12 +5,12 @@ generate <- function(model, n, maxDraw=50,misfitBounds=NULL, misfitType="f0",
                      averageNumMisspec=FALSE, optMisfit=NULL, optDraws=50,
                      indDist=NULL, sequential=FALSE,
                      facDist=NULL, errorDist=NULL, indLab=NULL, modelBoot=FALSE, realData=NULL, params=FALSE) {
-
-  
-  if(model@modelType == "Path") {
-    indLab <- unique(model@pt$lhs)
-  } else {
-    indLab <- unique(model@pt$rhs[model@pt$op=="=~"])
+  if(is.null(indLab)) {
+	  if(model@modelType == "Path") {
+		indLab <- unique(model@pt$lhs)
+	  } else {
+		indLab <- unique(model@pt$rhs[model@pt$op=="=~"])
+	  }
   }
   free <- max(model@pt$free)
   ngroups <- max(model@pt$group)

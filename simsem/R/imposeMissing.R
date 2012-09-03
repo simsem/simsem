@@ -1,5 +1,25 @@
 # imposeMissing: Function to impost planned, MAR and MCAR missing on a data set
 
+impose <- function(miss, data, pmMCAR = NULL, pmMAR = NULL) {
+    if (!is.null(pmMCAR)) 
+        miss@pmMCAR <- pmMCAR
+    if (!is.null(pmMAR)) 
+        miss@pmMAR <- pmMAR
+    if (is(data, "list")) {
+		if(!("data" %in% names(data))) stop("The list does not contain any dataset.")
+        data$data <- as.data.frame(imposeMissing(data, cov=miss@cov, pmMCAR=miss@pmMCAR, pmMAR=miss@pmMAR, nforms=miss@nforms, itemGroups=miss@itemGroups, twoMethod=miss@twoMethod, prAttr=miss@prAttr, timePoints=miss@timePoints, logical=miss@logical, ignoreCols=miss@ignoreCols, threshold=miss@threshold))
+    } else {
+		if (is.matrix(data)) data <- as.data.frame(data)
+		data <- as.data.frame(imposeMissing(data, cov=miss@cov, pmMCAR=miss@pmMCAR, pmMAR=miss@pmMAR, nforms=miss@nforms, itemGroups=miss@itemGroups,
+                            twoMethod=miss@twoMethod, prAttr=miss@prAttr, timePoints=miss@timePoints, logical=miss@logical, ignoreCols=miss@ignoreCols, threshold=miss@threshold))
+	}
+    return(data)
+}
+## setMethod("run", signature = "SimMissing", definition = function(object, data, pmMCAR = NULL, pmMAR = NULL) {
+
+## })
+
+
 ## The wrapper function for the various functions to impose missing values.  Currently, the function will delete x percent of eligible values for MAR and MCAR, if you mark colums to be ignored.
 imposeMissing <- function(data.mat, cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, itemGroups = list(), twoMethod = 0,
                           prAttr = 0, timePoints = 1, ignoreCols = 0, threshold = 0, logical = NULL) {
@@ -19,7 +39,6 @@ imposeMissing <- function(data.mat, cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, 
     }
     
     if (pmMAR != 0) {
-        
         log.mat2 <- makeMAR(data.mat, pmMAR, cov, ignoreCols, threshold)
         data.mat[log.mat2] <- NA
     }
@@ -50,8 +69,8 @@ makeMAR <- function(data, pm = NULL, cov = NULL, ignoreCols = NULL, threshold = 
     ncol <- dim(data)[2]
     colList <- seq_len(ncol)
     excl <- c(cov, ignoreCols)
-    misCols <- colList[-excl]
-    
+    misCols <- setdiff(colList, excl)
+
     # Calculate the probability of missing above the threshold,starting with the mean of the covariate. If this probability is greater
     # than or equal to 1, lower the threshold by choosing thresholds at increasingly lower quantiles of the data.
     if (is.null(threshold)) {
@@ -66,7 +85,7 @@ makeMAR <- function(data, pm = NULL, cov = NULL, ignoreCols = NULL, threshold = 
             threshold <- quantile(cov, qlist[i])
         }
         
-        percent.eligible <- (sum(data[, cov] > threshold) * length(misCols))/length(data)
+        percent.eligible <- (sum(data[, cov] > threshold) * length(misCols))/length(as.matrix(data))
         pr.missing <- pm/percent.eligible
         i <- i + 1
     }
@@ -86,7 +105,7 @@ makeMAR <- function(data, pm = NULL, cov = NULL, ignoreCols = NULL, threshold = 
     misrand <- runif(length(total.elig)) < pr.missing
     mismat <- matrix(mapply(`&&`, misrand, total.elig), nrow = nrow, byrow = TRUE)
     mismat[, excl] <- FALSE
-    
+   
     return(mismat)
 }
 

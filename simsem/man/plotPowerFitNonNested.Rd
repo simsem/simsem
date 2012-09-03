@@ -68,8 +68,6 @@ contMAR = TRUE, useContour = TRUE, logistic = TRUE, onetailed = FALSE)
 }
 \examples{
 \dontrun{
-# Still does not work. Check it later.
-
 loading.A <- matrix(0, 8, 2)
 loading.A[1:3, 1] <- NA
 loading.A[4:8, 2] <- NA

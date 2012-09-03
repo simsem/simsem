@@ -35,14 +35,14 @@ plotPowerFitNonNested <- function(dat2Mod1, dat2Mod2, dat1Mod1=NULL, dat1Mod2=NU
     x <- NULL
     pred <- NULL
     
-    if ((length(dat2Mod1@n) > 1) && contN) {
+    if ((length(unique(dat2Mod1@n)) > 1) && contN) {
         if (!length(dat2Mod1@n) == nrep) {
             stop("Number of random sample sizes is not the same as the number of replications, check to see if N varied across replications")
         }
         x <- cbind(x, N = dat2Mod1@n)
         pred$N <- min(dat2Mod1@n):max(dat2Mod1@n)
     }
-    if ((length(dat2Mod1@pmMCAR) > 1) && contMCAR) {
+    if ((length(unique(dat2Mod1@pmMCAR)) > 1) && contMCAR) {
         if (!length(dat2Mod1@pmMCAR) == nrep) {
             stop("Number of random pmMCARs is not the same as the number of replications, check to see if pmMCAR varied across replications")
         }
@@ -50,7 +50,7 @@ plotPowerFitNonNested <- function(dat2Mod1, dat2Mod2, dat1Mod1=NULL, dat1Mod2=NU
         pred$MCAR <- seq(min(dat2Mod1@pmMCAR), max(dat2Mod1@pmMCAR), by = 0.01)
         
     }
-    if ((length(dat2Mod1@pmMAR) > 1) && contMAR) {
+    if ((length(unique(dat2Mod1@pmMAR)) > 1) && contMAR) {
         if (!length(dat2Mod1@pmMAR) == nrep) {
             stop("Number of random pmMARs is not the same as the number of replications, check to see if pmMAR varied across replications")
         }

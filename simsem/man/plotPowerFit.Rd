@@ -58,10 +58,6 @@ NONE. Only plot the fit indices distributions.
 }
 \examples{
 \dontrun{
-### Something is wrong here. Why the alternative data has the better fit than the null data.
-
-
-
 loading.null <- matrix(0, 6, 1)
 loading.null[1:6, 1] <- NA
 LX.NULL <- bind(loading.null, 0.7)
@@ -93,8 +89,8 @@ plotPowerFit(Output.ALT, nullObject=Output.NULL, alpha=0.05, usedFit=c("RMSEA", 
 Rule.of.thumb <- c(RMSEA=0.05, CFI=0.95, TLI=0.95, SRMR=0.06)
 plotPowerFit(Output.ALT, cutoff=Rule.of.thumb, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
 
-Output.NULL2 <- simResult(NULL, SimData.NULL, SimModel, n=seq(50, 250, 25))
-Output.ALT2 <- simResult(NULL, SimData.ALT, SimModel, n=seq(50, 250, 25))
+Output.NULL2 <- sim(NULL, n=seq(50, 250, 25), model=CFA.Model.NULL, generate=CFA.Model.NULL)
+Output.ALT2 <- sim(NULL, n=seq(50, 250, 25), model=CFA.Model.NULL, generate=CFA.Model.ALT)
 
 plotPowerFit(Output.ALT2, nullObject=Output.NULL2, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
 plotPowerFit(Output.ALT2, cutoff=Rule.of.thumb, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))

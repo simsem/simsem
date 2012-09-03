@@ -66,8 +66,6 @@ logistic = TRUE)
 }
 \examples{
 \dontrun{
-############# Still does not work. Check it back later
-
 loading.null <- matrix(0, 6, 1)
 loading.null[1:6, 1] <- NA
 LX.NULL <- bind(loading.null, 0.7)

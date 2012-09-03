@@ -1,6 +1,6 @@
 
 
-analyze <- function(model, data, package="lavaan", simMissing=NULL,indLab=NULL,auxiliary=NULL,...) {
+analyze <- function(model, data, package="lavaan", miss=NULL,indLab=NULL,aux=NULL,...) {
   Output <- NULL
   DataOut <- NULL
   args <- list(...)
@@ -13,21 +13,21 @@ analyze <- function(model, data, package="lavaan", simMissing=NULL,indLab=NULL,a
   }
   if (is.null(colnames(data))) 
     colnames(data) <- paste0("x", 1:ncol(data))
-  if (is.null(auxiliary)) {
-    if (!is.null(simMissing) && !(length(simMissing@cov) == 1 && simMissing@cov == 0) && simMissing@covAsAux) 
-      auxiliy <- simMissing@cov
+  if (is.null(aux)) {
+    if (!is.null(miss) && !(length(miss@cov) == 1 && miss@cov == 0) && miss@covAsAux) 
+      auxiliy <- miss@cov
   }
   if (is.null(indLab)) {
-    if (is.null(auxiliary)) {
+    if (is.null(aux)) {
       indLab <- colnames(data)
-    } else if (is.numeric(auxiliary)) {
-      if (max(auxiliary) > ncol(data)) 
+    } else if (is.numeric(aux)) {
+      if (max(aux) > ncol(data)) 
         stop("The maximum index in the auxiliary variable set is greater than the number of variables in the data.")
-      indLab <- colnames(data)[-auxiliary]
+      indLab <- colnames(data)[-aux]
     } else {
-      if (length(intersect(colnames(data), auxiliary)) != length(auxiliary)) 
+      if (length(intersect(colnames(data), aux)) != length(aux)) 
         stop("Some auxiliary variables does not exist in the dataset.")
-      indLab <- setdiff(colnames(data), auxiliary)
+      indLab <- setdiff(colnames(data), aux)
     }
   }
   ##  if (is.numeric(indLab)) 
@@ -40,12 +40,17 @@ analyze <- function(model, data, package="lavaan", simMissing=NULL,indLab=NULL,a
   ##     data <- data[, targetCol]
   ##    miss <- sum(is.na(data)) > 0
   
-  if (!is.null(simMissing) && length(simMissing@package) != 0 && simMissing@package == "Amelia") {
-    Output <- runMI(data, model, simMissing@args)
+  if (!is.null(miss) && length(miss@package) != 0 && miss@package == "Amelia") {
+    Output <- runMI(data, model, miss@args)
   } else {
     missing <- "default"
     if(any(is.na(data))) missing <- "fiml"
-    Output <- lavaan(model@pt, data=data, group="group", model.type=model@modelType,missing=missing,...)
+	if(!is.null(aux)) {
+		library(semTools)
+		Output <- auxiliary(model@pt, aux=aux, data=data, group="group", model.type=model@modelType,missing=missing,...)
+	} else {
+		Output <- lavaan(model@pt, data=data, group="group", model.type=model@modelType,missing=missing,...)
+	}
   }
 
     return(Output)

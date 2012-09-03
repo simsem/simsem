@@ -320,17 +320,7 @@ flush(stderr()); flush(stdout())
 ###   summaryShort,SimLogis-method summaryShort,SimNbinom-method
 ###   summaryShort,SimNorm-method summaryShort,SimPois-method
 ###   summaryShort,SimT-method summaryShort,SimUnif-method
-###   summaryShort,SimWeibull-method toFunction,SimBeta-method
-###   toFunction,SimBinom-method toFunction,SimCauchy-method
-###   toFunction,SimChisq-method toFunction,SimExp-method
-###   toFunction,SimF-method toFunction,SimGamma-method
-###   toFunction,SimGeom-method toFunction,SimHyper-method
-###   toFunction,SimLnorm-method toFunction,SimLogis-method
-###   toFunction,SimNbinom-method toFunction,SimNorm-method
-###   toFunction,SimPois-method toFunction,SimT-method
-###   toFunction,SimUnif-method toFunction,SimWeibull-method
-###   plotDist,VirtualDist-method skew,VirtualDist-method
-###   kurtosis,VirtualDist-method
+###   summaryShort,SimWeibull-method plotDist,VirtualDist-method
 ### Keywords: classes
 
 ### ** Examples
@@ -339,8 +329,6 @@ showClass("VirtualDist")
 u1 <- simUnif(0, 1)
 chi3 <- simChisq(3)
 summary(chi3)
-skew(chi3)
-kurtosis(chi3)
 plotDist(chi3)
 plotDist(chi3, reverse=TRUE)
 
@@ -452,24 +440,6 @@ RTE <- binds(error.cor,1,"runif(1,-.05,.05)")
 
 
 cleanEx()
-nameEx("centralMoment")
-### * centralMoment
-
-flush(stderr()); flush(stdout())
-
-### Name: centralMoment
-### Title: Calculate central moments of a variable
-### Aliases: centralMoment
-
-### ** Examples
-
-# This function is not public.
-
-# centralMoment(1:5, 2)
-
-
-
-cleanEx()
 nameEx("clean")
 ### * clean
 
@@ -549,7 +519,7 @@ nameEx("createData")
 flush(stderr()); flush(stdout())
 
 ### Name: createData
-### Title: TBA
+### Title: Create data from a set of drawn parameters.
 ### Aliases: createData
 
 ### ** Examples
@@ -571,8 +541,8 @@ CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
 
 param <- draw(CFA.Model)
 
+# Generate data from the first group in the paramList.
 dat <- createData(param[[1]], n = 200) 
-# Get the first-group parameter from the param object
 
 
 
@@ -583,7 +553,7 @@ nameEx("draw")
 flush(stderr()); flush(stdout())
 
 ### Name: draw
-### Title: TBA
+### Title: Draw parameters from a 'SimSem' object.
 ### Aliases: draw
 
 ### ** Examples
@@ -1009,7 +979,7 @@ nameEx("generate")
 flush(stderr()); flush(stdout())
 
 ### Name: generate
-### Title: TBA
+### Title: Generate data using SimSem template
 ### Aliases: generate
 
 ### ** Examples
@@ -1440,40 +1410,6 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 # No Example
-
-
-
-cleanEx()
-nameEx("kStat")
-### * kStat
-
-flush(stderr()); flush(stdout())
-
-### Name: kStat
-### Title: Calculate the _k_-statistic of a variable
-### Aliases: kStat
-
-### ** Examples
-
-# This function is not a public function.
-
-# kStat(1:5, 4)
-
-
-
-cleanEx()
-nameEx("kurtosis")
-### * kurtosis
-
-flush(stderr()); flush(stdout())
-
-### Name: kurtosis
-### Title: Finding excessive kurtosis
-### Aliases: kurtosis kurtosis-methods kurtosis,vector-method
-
-### ** Examples
-
-kurtosis(1:5)
 
 
 
@@ -2184,10 +2120,6 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 ## Not run: 
-##D ### Something is wrong here. Why the alternative data has the better fit than the null data.
-##D 
-##D 
-##D 
 ##D loading.null <- matrix(0, 6, 1)
 ##D loading.null[1:6, 1] <- NA
 ##D LX.NULL <- bind(loading.null, 0.7)
@@ -2219,8 +2151,8 @@ flush(stderr()); flush(stdout())
 ##D Rule.of.thumb <- c(RMSEA=0.05, CFI=0.95, TLI=0.95, SRMR=0.06)
 ##D plotPowerFit(Output.ALT, cutoff=Rule.of.thumb, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
 ##D 
-##D Output.NULL2 <- simResult(NULL, SimData.NULL, SimModel, n=seq(50, 250, 25))
-##D Output.ALT2 <- simResult(NULL, SimData.ALT, SimModel, n=seq(50, 250, 25))
+##D Output.NULL2 <- sim(NULL, n=seq(50, 250, 25), model=CFA.Model.NULL, generate=CFA.Model.NULL)
+##D Output.ALT2 <- sim(NULL, n=seq(50, 250, 25), model=CFA.Model.NULL, generate=CFA.Model.ALT)
 ##D 
 ##D plotPowerFit(Output.ALT2, nullObject=Output.NULL2, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
 ##D plotPowerFit(Output.ALT2, cutoff=Rule.of.thumb, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
@@ -2259,8 +2191,6 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 ## Not run: 
-##D ############# Still does not work. Check it back later
-##D 
 ##D loading.null <- matrix(0, 6, 1)
 ##D loading.null[1:6, 1] <- NA
 ##D LX.NULL <- bind(loading.null, 0.7)
@@ -2313,8 +2243,6 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 ## Not run: 
-##D # Still does not work. Check it later.
-##D 
 ##D loading.A <- matrix(0, 8, 2)
 ##D loading.A[1:3, 1] <- NA
 ##D loading.A[4:8, 2] <- NA
@@ -2564,7 +2492,7 @@ nameEx("sim")
 flush(stderr()); flush(stdout())
 
 ### Name: sim
-### Title: TBA
+### Title: Run a monte carlo simulation with a structural equation model.
 ### Aliases: sim
 
 ### ** Examples
@@ -2984,22 +2912,6 @@ flush(stderr()); flush(stdout())
 
 
 cleanEx()
-nameEx("skew")
-### * skew
-
-flush(stderr()); flush(stdout())
-
-### Name: skew
-### Title: Find skewness
-### Aliases: skew skew-methods skew,vector-method
-
-### ** Examples
-
-skew(1:5)
-
-
-
-cleanEx()
 nameEx("sortList")
 ### * sortList
 
@@ -3012,47 +2924,6 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 # No example
-
-
-
-cleanEx()
-nameEx("subtractObject")
-### * subtractObject
-
-flush(stderr()); flush(stdout())
-
-### Name: subtractObject
-### Title: Make a subtraction of each element in an object
-### Aliases: subtractObject subtractObject-methods
-###   subtractObject,ANY,ANY-method subtractObject,SimRSet,SimRSet-method
-
-### ** Examples
-
-# This function is not public
-
-#u89 <- simUnif(0.8, 0.9)
-#loading <- matrix(0, 6, 2)
-#loading[1:3, 1] <- NA
-#loading[4:6, 2] <- NA
-#loadingValues <- matrix(0, 6, 2)
-#LX <- simMatrix(loading, "u89")
-#startingValues(LX, 10)
-
-#u89 <- simUnif(0.8, 0.9)
-#loading <- matrix(0, 6, 2)
-#loading[1:3, 1] <- NA
-#loading[4:6, 2] <- NA
-#loadingValues <- matrix(0, 6, 2)
-#LX <- simMatrix(loading, "u89")
-#latent.cor <- matrix(NA, 2, 2)
-#diag(latent.cor) <- 1
-#PH <- symMatrix(latent.cor, 0.5)
-#error.cor <- matrix(0, 6, 6)
-#diag(error.cor) <- 1
-#TD <- symMatrix(error.cor)
-#CFA.Model <- simSetCFA(LX = LX, PH = PH, TD = TD)
-#result <- startingValues(CFA.Model, 10)
-#summary(result)
 
 
 
@@ -3192,24 +3063,6 @@ loading[4:6, 2] <- NA
 loadingValues <- matrix(0, 6, 2)
 LX <- bind(loading, "runif(1, 0.8, 0.9)")
 summaryShort(LX)
-
-
-
-cleanEx()
-nameEx("toFunction")
-### * toFunction
-
-flush(stderr()); flush(stdout())
-
-### Name: toFunction
-### Title: Export the distribution object to a function command in text
-###   that can be evaluated directly.
-### Aliases: toFunction toFunction-methods toFunction,ANY-method
-
-### ** Examples
-
-u2 <- simUnif(-0.2, 0.2)
-toFunction(u2)
 
 
 

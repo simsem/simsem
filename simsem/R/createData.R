@@ -99,7 +99,6 @@ createData <- function(paramSet, n, indDist=NULL, sequential=FALSE, facDist=NULL
       }
   varnames <- NULL
   if(!is.null(indLab)) { varnames <- indLab } else { varnames <- paste0("x",1:ncol(Data)) }
-
   colnames(Data) <- varnames
   Data <- as.data.frame(Data)
   

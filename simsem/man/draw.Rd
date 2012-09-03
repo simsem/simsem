@@ -37,7 +37,7 @@ optMisfit = NULL, optDraws=50, misfitType="f0",misfitOut=FALSE)
 }
 }
 \value{
-	Nested list of drawn parameters in the form \code{[[\emph{Group}]][[param,misspec,misOnly]][[\emph{SimMatrix}]]}. E.g. The LY parameter matrix of the first group would be indexed as \code{obj[[1]]$param$LY}.
+	Nested list of drawn parameters in the form \code{[[Group]][[param,misspec,misOnly]][[SimMatrix]]}. E.g. The LY parameter matrix of the first group would be indexed as \code{obj[[1]]$param$LY}.
 The values in $param are the raw parameter values with no misspecification. The values in $misspec are raw parameter values + misspecification. The values in $misOnly are only the misspecification values. 
 }
 \author{	

@@ -69,26 +69,7 @@
 \alias{summaryShort,SimT-method}
 \alias{summaryShort,SimUnif-method}
 \alias{summaryShort,SimWeibull-method}	
-\alias{toFunction,SimBeta-method}
-\alias{toFunction,SimBinom-method}
-\alias{toFunction,SimCauchy-method}
-\alias{toFunction,SimChisq-method}
-\alias{toFunction,SimExp-method}
-\alias{toFunction,SimF-method}
-\alias{toFunction,SimGamma-method}
-\alias{toFunction,SimGeom-method}
-\alias{toFunction,SimHyper-method}
-\alias{toFunction,SimLnorm-method}
-\alias{toFunction,SimLogis-method}
-\alias{toFunction,SimNbinom-method}
-\alias{toFunction,SimNorm-method}
-\alias{toFunction,SimPois-method}
-\alias{toFunction,SimT-method}
-\alias{toFunction,SimUnif-method}
-\alias{toFunction,SimWeibull-method}
 \alias{plotDist,VirtualDist-method}
-\alias{skew,VirtualDist-method}
-\alias{kurtosis,VirtualDist-method}
 \title{Distribution Objects}
 \description{
 List of all distribution objects. These distribution objects can be used to specify random parameters or specify a marginal distribution of a variable.
@@ -121,9 +102,6 @@ List of all distribution objects. These distribution objects can be used to spec
     \item{\code{summary}}{Summarize information withinin the object. }
     \item{\code{\link{summaryShort}}}{Summarize information within the object in a short form. }
 	\item{\code{\link{plotDist}}}{Plot a distribution of the distribution object. Arguments: \code{xlim} is the range of plotting values (should be a vector of two values: lower and upper bound), \code{reverse} is to mirror the distribution, such as changing chi-square distribution from positively skew to negatively skew. }
-	\item{\code{\link{skew}}}{Find a skewness of a distribution.}
-	\item{\code{\link{kurtosis}}}{Find an excessive kurtosis of a distribution.}
-	\item{\code{\link{toFunction}}}{Export the distribution object to a function command in text that can be evaluated directly.}
 	 }
 }
 \details{
@@ -166,8 +144,6 @@ showClass("VirtualDist")
 u1 <- simUnif(0, 1)
 chi3 <- simChisq(3)
 summary(chi3)
-skew(chi3)
-kurtosis(chi3)
 plotDist(chi3)
 plotDist(chi3, reverse=TRUE)
 }

@@ -7,8 +7,8 @@
 	TBA
 }
 \usage{
-analyze(model, data, package="lavaan", simMissing=NULL, indLab=NULL, 
-auxiliary=NULL, ...)
+analyze(model, data, package="lavaan", miss=NULL, indLab=NULL, 
+aux=NULL, ...)
 }
 \arguments{
   \item{model}{
@@ -20,13 +20,13 @@ auxiliary=NULL, ...)
   \item{package}{
 	TBA
 }
-  \item{simMissing}{ 
+  \item{miss}{ 
 	TBA
 }
   \item{indLab}{ 
 	TBA
 }
-  \item{auxiliary}{ 
+  \item{aux}{ 
 	TBA
 }
   \item{\dots}{ 

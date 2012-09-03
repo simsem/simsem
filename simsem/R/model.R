@@ -576,3 +576,10 @@ btwGroupCons <- function(pt) {
   if(!is.null(usedFreeId)) { pt$free[elRows] <- (1:(length(elRows)+length(usedFreeId)))[-usedFreeId] } #Remove used free ids from available list of ids
   return(pt)
 }
+
+######################## Create some shortcuts ########################
+
+# model <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL, VTE = NULL, VY = NULL,
+                  # VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, modelType, indLab=NULL, facLab=NULL, ngroups=1, smartStart=TRUE) {
+
+# model

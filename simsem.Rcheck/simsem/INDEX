@@ -12,15 +12,14 @@ anova,SimResult-method
                         nonnested models across replications
 bind                    Specify matrices for Monte Carlo simulation of
                         structural equation models
-centralMoment           Calculate central moments of a variable
 clean                   Extract only converged replications in the
                         result objects
 cleanSimResult          Extract only converged replications in the
                         result object
 continuousPower         Find power of model parameters when simulations
                         have randomly varying parameters
-createData              TBA
-draw                    TBA
+createData              Create data from a set of drawn parameters.
+draw                    Draw parameters from a 'SimSem' object.
 extractLavaanFit        Extract fit indices from the lavaan object
 find2Dhist              Fit the 2D Kernel Density Estimate
 findFactorIntercept     Find factor intercept from regression
@@ -61,7 +60,7 @@ findphist               Find the density (likelihood) of a pair value
                         in 2D Kernel Density Estimate
 fitMeasuresChi          Find fit indices from the discrepancy values of
                         the target model and null models.
-generate                TBA
+generate                Generate data using SimSem template
 getCondQtile            Get a quantile of a variable given values of
                         predictors
 getCutoff               Find fit indices cutoff given a priori alpha
@@ -85,8 +84,6 @@ imposeMissing           Impose MAR, MCAR, planned missingness, or
                         attrition on a data set
 interpolate             Find the value of one vector relative to a
                         value of another vector by interpolation
-kStat                   Calculate the _k_-statistic of a variable
-kurtosis                Finding excessive kurtosis
 likRatioFit             Find the likelihood ratio (or Bayes factor)
                         based on the bivariate distribution of fit
                         indices
@@ -161,7 +158,8 @@ run                     Run a particular object in 'simsem' package.
 runMI                   Multiply impute and analyze data using lavaan
 setPopulation           Set the data generation population model
                         underlying an object
-sim                     TBA
+sim                     Run a monte carlo simulation with a structural
+                        equation model.
 simBeta                 Create random beta distribution object
 simBinom                Create random binomial distribution object
 simCauchy               Create random Cauchy distribution object
@@ -183,9 +181,7 @@ simPois                 Create random Poisson distribution object
 simT                    Create random t distribution object
 simUnif                 Create random uniform distribution object
 simWeibull              Create random Weibull distribution object
-skew                    Find skewness
 sortList                Sort two objects in a list
-subtractObject          Make a subtraction of each element in an object
 summaryFit              Provide summary of model fit across
                         replications
 summaryMisspec          Provide summary of model misspecification
@@ -195,8 +191,6 @@ summaryParam            Provide summary of parameter estimates and
 summaryPopulation       Summarize the data generation population model
                         underlying an object
 summaryShort            Provide short summary of an object.
-toFunction              Export the distribution object to a function
-                        command in text that can be evaluated directly.
 twoTailedPValue         Find two-tailed _p_ value from one-tailed _p_
                         value
 validateCovariance      Validate whether all elements provides a good

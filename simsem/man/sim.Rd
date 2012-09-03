@@ -79,8 +79,8 @@ paramOnly = FALSE, dataOnly=FALSE, ...)
   \item{optDraws}{ 
 	Number of parameter sets to draw if optMisfit is not null. The set of parameters with the maximum or minimum misfit will be returned.
 }
-  \item{aux} {
-  TBA
+  \item{aux}{
+    The names of auxiliary variables saved in a vector
 }
   \item{seed}{ 
 	Random number seed. Reproducibility across multiple cores or clusters is ensured using R'Lecuyer package.

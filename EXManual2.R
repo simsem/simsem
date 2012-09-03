@@ -8,7 +8,6 @@
 # likRatio need to be fixed
 # missing object need to make it runable
 # plotMisfit does not work
-# Fix the plotPowerFit
 # {pValue,lavaan,SimResult-method}.
 # Fix pValueNested and pValueNonNested
 # run function of the simDataDist, simMissing
@@ -108,10 +107,22 @@ dat <- generate(CFA.Model,200)
 dat2 <- generate(CFA.Model, 200, params=TRUE)
 out <- analyze(CFA.Model,dat)
 
+# Try auxiliary
+datm <- imposeMissing(dat, cov="group", pmMCAR=0.2)
+datx <- data.frame(datm, z=rnorm(nrow(dat), 0, 1))
+out <- analyze(CFA.Model,aux="z",datx)
+
 
 
 #SimMissing <- simMissing(pmMCAR=0.1, numImps=5)
 Output <- sim(20, CFA.Model,n=200)
+getCutoff(Output, 0.05)
+plotCutoff(Output, 0.05)
+summaryParam(Output)
+
+# Try auxiliary
+m <- miss(pmMCAR=0.1, cov="group")
+Output <- sim(20, CFA.Model,n=200, miss=m)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
@@ -460,7 +471,7 @@ mtmm.model <- model(LY=LY, RPS=RPS, RTE=RTE, modelType="CFA")
 out <- sim(10, n=500, mtmm.model)
 
 
-miss.model <- miss(pmMCAR=0.2) #, numImps=5)
+miss.model <- miss(pmMCAR=0.2, ignoreCols="group") #, numImps=5)
 
 Output <- sim(10, n=500, mtmm.model, miss=miss.model)
 getCutoff(Output, 0.05)
@@ -645,68 +656,60 @@ summaryParam(Output)
 
 #library(simsem)
 
-u57 <- simUnif(0.5, 0.7)
-u4 <- simUnif(-0.4, 0.4)
-u35 <- simUnif(0.3, 0.5)
-u2 <- simUnif(-0.2, 0.2)
-
 loading <- matrix(0, 7, 2)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
-LX <- bind(loading, "u57")
+mis.loading <- matrix(0, 7, 2)
+mis.loading[1:3, 2] <- "runif(1, -0.2, 0.2)"
+mis.loading[4:6, 1] <- "runif(1, -0.2, 0.2)"
+
+LX <- bind(loading, "runif(1, 0.5, 0.7)", misspec=mis.loading)
 
 latent.cor <- matrix(NA, 2, 2)
 diag(latent.cor) <- 1
-RPH <- binds(latent.cor, "u35")
+RPH <- binds(latent.cor, "runif(1, 0.3, 0.5)")
 
 error.cor <- diag(7)
 error.cor[1:6, 7] <- NA
 error.cor[7, 1:6] <- NA
-RTD <- binds(error.cor, "u4")
+RTD <- binds(error.cor, "runif(1, -0.4, 0.4)")
 
-VX <- simVector(rep(NA, 7), 1)
+VX <- bind(rep(NA, 7), 1)
 
-CFA.Model.Aux <- simSetCFA(LX = LX, RPH = RPH, RTD = RTD, VX = VX) 
+CFA.Model.Aux <- model(LY = LX, RPS = RPH, RTE = RTD, VY = VX, modelType="CFA") 
 
-mis.loading <- matrix(0, 7, 2)
-mis.loading[1:3, 2] <- NA
-mis.loading[4:6, 1] <- NA
-mis.LY <- bind(mis.loading, "u2")
+dat <- generate(CFA.Model.Aux, n=200)
+missmodel <- miss(pmMAR=0.1, cov=7, ignoreCols=8, threshold = 0.5)
 
-CFA.Mis.Model <- simMisspecCFA(LY = mis.LY)#, RTD = mis.RTD)
-
-SimData <- simData(CFA.Model.Aux, 200, misspec = CFA.Mis.Model)
-
-CFA.Model <- extract(CFA.Model.Aux, y=1:6)
-
-data <- run(SimData, dataOnly=F)
-
-SimMissing <- simMissing(pmMAR=0.1, cov=7, numImps=5, threshold = 0.5)
-
-data <- run(SimMissing, data)
-
-SimModel <- simModel(CFA.Model)
+dat <- impose(missmodel, dat)
 
 
-out <- run(SimModel, data, simMissing=SimMissing)
+############### Analysis model ###########################
 
-Output <- sim(100, SimData, SimModel, SimMissing)
+
+loading2 <- matrix(0, 6, 2)
+loading2[1:3, 1] <- NA
+loading2[4:6, 2] <- NA
+
+LX2 <- bind(loading2)
+
+latent.cor2 <- matrix(NA, 2, 2)
+diag(latent.cor2) <- 1
+RPH2 <- binds(latent.cor2)
+
+error.cor2 <- diag(NA, 6)
+RTD2 <- binds(error.cor2)
+
+CFA.Model <- model(LY = LX2, RPS = RPH2, RTE = RTD2, modelType="CFA") 
+out <- analyze(CFA.Model, dat, indLab=paste0("x", 1:6), aux="x7")
+
+Output <- sim(10, n=200, model=CFA.Model, generate=CFA.Model.Aux, miss=missmodel)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
 
 
-SimMissing <- simMissing(pmMAR=0.1, cov=7, numImps=5, threshold = 0.5, covAsAux=FALSE)
-SimModel <- simModel(CFA.Model, indLab=1:6)
 
-data <- run(SimMissing, data)
-
-out <- run(SimModel, data, simMissing=SimMissing)
-
-Output <- sim(100, SimData, SimModel, SimMissing)
-getCutoff(Output, 0.05)
-plotCutoff(Output, 0.05)
-summaryParam(Output)
 
 ########################################## Example 13 ###################
 #library(simsem)

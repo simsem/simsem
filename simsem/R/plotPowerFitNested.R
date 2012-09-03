@@ -34,14 +34,14 @@ plotPowerFitNested <- function(altNested, altParent, nullNested = NULL, nullPare
     x <- NULL
     pred <- NULL
     
-    if ((length(altNested@n) > 1) && contN) {
+    if ((length(unique(altNested@n)) > 1) && contN) {
         if (!length(altNested@n) == nrep) {
             stop("Number of random sample sizes is not the same as the number of replications, check to see if N varied across replications")
         }
         x <- cbind(x, N = altNested@n)
         pred$N <- min(altNested@n):max(altNested@n)
     }
-    if ((length(altNested@pmMCAR) > 1) && contMCAR) {
+    if ((length(unique(altNested@pmMCAR)) > 1) && contMCAR) {
         if (!length(altNested@pmMCAR) == nrep) {
             stop("Number of random pmMCARs is not the same as the number of replications, check to see if pmMCAR varied across replications")
         }
@@ -49,7 +49,7 @@ plotPowerFitNested <- function(altNested, altParent, nullNested = NULL, nullPare
         pred$MCAR <- seq(min(altNested@pmMCAR), max(altNested@pmMCAR), by = 0.01)
         
     }
-    if ((length(altNested@pmMAR) > 1) && contMAR) {
+    if ((length(unique(altNested@pmMAR)) > 1) && contMAR) {
         if (!length(altNested@pmMAR) == nrep) {
             stop("Number of random pmMARs is not the same as the number of replications, check to see if pmMAR varied across replications")
         }
