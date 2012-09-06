@@ -40,12 +40,11 @@ model <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NUL
         psl <- list()
         for(i in 1:n) { psl[[i]] <- lapply(paramSet,"[[",i) } 
         
-        psl <- lapply(psl,buildModel,modelType="CFA")
+        psl <- lapply(psl,buildModel,modelType=modelType)
       
       }
       # Create pt for MG
       pt <- NULL
-       
        for(i in seq_along(psl)) {
          if (i == 1) {
            pt <- buildPT(psl[[i]], pt=pt, group=i,facLab=NULL, indLab=NULL,smart=smartStart)
@@ -172,7 +171,6 @@ buildModel <- function(paramSet,modelType) {
 buildPT <- function(paramSet, pt=NULL, group=1,facLab=NULL, indLab=NULL, smart=TRUE) {
 
   ## Convert a chunk at a time - starting with LY - factor loading. At least LY,PS/RPS must be specified.
-  
   if (!is.null(paramSet$LY)) {
     nf <- ncol(paramSet$LY@free)
     ni <- nrow(paramSet$LY@free)
@@ -192,7 +190,11 @@ buildPT <- function(paramSet, pt=NULL, group=1,facLab=NULL, indLab=NULL, smart=T
       rhs <- unlist(lapply(1:nf,function(k) facLab[k:nf]))
     }
     if(!is.null(pt)) {
-      pt <- mapply(pt, parseFree(paramSet$PS, group=group, pt=pt,op="~~",lhs,rhs,smart=smart),FUN=c,SIMPLIFY=FALSE)
+	  if(!is.null(paramSet$LY)) {
+        pt <- mapply(pt, parseFree(paramSet$PS, group=group, pt=pt,op="~~",lhs,rhs,smart=smart),FUN=c,SIMPLIFY=FALSE)
+	  } else {
+	    pt <- parseFree(paramSet$PS, group=group, pt=pt,op="~~",lhs,rhs,smart=smart)
+	  }
     } else {
       pt <- parseFree(paramSet$PS, group=group, pt=pt,op="~~",lhs,rhs,smart=smart)
     }
@@ -217,7 +219,11 @@ buildPT <- function(paramSet, pt=NULL, group=1,facLab=NULL, indLab=NULL, smart=T
       rhs <- unlist(lapply(1:nf,function(k) facLab[k:nf]))
     }
     if(!is.null(pt)) {
-      pt <- mapply(pt, parseFree(paramSet$RPS, group=group, pt=pt,op="~~",lhs,rhs,smart=FALSE),FUN=c,SIMPLIFY=FALSE)
+	  if(!is.null(paramSet$LY)) {
+        pt <- mapply(pt, parseFree(paramSet$RPS, group=group, pt=pt,op="~~",lhs,rhs,smart=FALSE),FUN=c,SIMPLIFY=FALSE)
+	  } else {
+	    pt <- parseFree(paramSet$RPS, group=group, pt=pt,op="~~",lhs,rhs,smart=FALSE)
+	  }
     } else {
       pt <- parseFree(paramSet$RPS, group=group, pt=pt,op="~~",lhs,rhs,smart=FALSE)
     }
@@ -552,7 +558,6 @@ startingVal <- function(free,popParam,smart=TRUE) {
 
 # Adjusts pt for between group constraints (if they exist). Adjusting here is not very elegant and should probably be reworked into everything else.
 btwGroupCons <- function(pt) {
-
   ngroups <- max(pt$group)
   labelids <- which(pt$eq.id != 0)
   labels <- pt$label[labelids]
@@ -582,4 +587,253 @@ btwGroupCons <- function(pt) {
 # model <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL, VTE = NULL, VY = NULL,
                   # VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, modelType, indLab=NULL, facLab=NULL, ngroups=1, smartStart=TRUE) {
 
-# model
+model.cfa <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, VTE = NULL, VY = NULL, VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, indLab=NULL, facLab=NULL, ngroups=1, smartStart=TRUE) {
+	model(LY = LY,PS = PS,RPS = RPS, TE = TE,RTE = RTE, BE = NULL, VTE = VTE, VY = VY, VPS = VPS, VE=VE, TY = TY, AL = AL, MY = MY, ME = ME, modelType="CFA", indLab=indLab, facLab=facLab, ngroups=ngroups, smartStart=smartStart)
+}
+
+model.path <- function(PS = NULL, RPS = NULL, BE = NULL, VPS = NULL, VE=NULL, AL = NULL, ME = NULL, indLab=NULL, facLab=NULL, ngroups=1, smartStart=TRUE) {
+	model(LY = NULL,PS = PS,RPS = RPS, TE = NULL, RTE = NULL, BE = BE, VTE = NULL, VY = NULL, VPS = VPS, VE=VE, TY = NULL, AL = AL, MY = NULL, ME = ME, modelType="Path", indLab=indLab, facLab=facLab, ngroups=ngroups, smartStart=smartStart)
+}
+
+model.sem <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL, VTE = NULL, VY = NULL, VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, indLab=NULL, facLab=NULL, ngroups=1, smartStart=TRUE) {
+	model(LY = LY,PS = PS,RPS = RPS, TE = TE,RTE = RTE, BE = BE, VTE = VTE, VY = VY, VPS = VPS, VE=VE, TY = TY, AL = AL, MY = MY, ME = ME, modelType="SEM", indLab=indLab, facLab=facLab, ngroups=ngroups, smartStart=smartStart)
+}
+
+estmodel <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL, VTE = NULL, VY = NULL, VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, modelType, indLab=NULL, facLab=NULL, ngroups=1, smartStart=TRUE) {
+	if(is.null(modelType)) stop("Must specify model type")
+	if(modelType == "CFA") {
+		if(!is.list(LY)) LY <- list(LY)
+		ne <- ncol(LY[[1]])
+		ny <- nrow(LY[[1]])
+		LY <- lapply(LY, bind)
+		if(is.null(PS)) {
+			if(is.null(RPS)) {
+				temp <- rep(list(matrix(NA, ne, ne)), length(LY))
+				temp2 <- lapply(LY, function(y) !apply(y@free, 2, function(x) any(!is.free(x) & (!is.na(x) & x != 0))))
+				temp <- mapply(function(ps, x) {diag(ps)[x] <- 1; return(ps)}, ps=temp, x=temp2, SIMPLIFY=FALSE)
+				PS <- lapply(temp, binds)
+			} else {
+				if(!is.list(RPS)) RPS <- list(RPS)
+				RPS <- binds(RPS)
+				if(!is.null(VPS)) if(is.list(VPS)) { VPS <- lapply(VPS, bind) } else { VPS <- list(bind(VPS)) }
+				if(!is.null(VE)) if(is.list(VE)) { VE <- lapply(VE, bind) } else { VE <- list(bind(VE)) }
+			}
+		} else {
+			if(is.list(PS)) { PS <- lapply(PS, binds) } else { PS <- list(binds(PS)) }
+		}
+		if(is.null(TE)) {
+			if(is.null(RTE)) {
+				TE <- rep(list(diag(NA, ny)), length(LY))
+				TE <- lapply(TE, binds)
+			} else {
+				if(!is.list(RTE)) RTE <- list(RTE)
+				RTE <- lapply(RTE, binds)
+				if(!is.null(VTE)) if(is.list(VTE)) { VTE <- lapply(VTE, bind) } else { VTE <- list(bind(VTE)) }
+				if(!is.null(VY)) if(is.list(VY)) { VY <- lapply(VY, bind) } else { VY <- list(bind(VY)) }
+			}
+		} else {
+			if(is.list(TE)) { TE <- lapply(TE, binds) } else { TE <- list(binds(TE)) }
+		}
+		if(is.null(TY)) {
+			if(is.null(MY)) {
+				TY <- lapply(rep(list(rep(NA, ny)), length(LY)), bind)
+			} else {
+				if(is.list(MY)) { MY <- lapply(MY, bind) } else { MY <- list(bind(MY)) }
+			}
+		} else {
+			if(is.list(TY)) { TY <- lapply(TY, bind) } else { TY <- list(bind(TY)) }
+		}
+		if(is.null(AL)) {
+			if(is.null(ME)) {
+				AL <- lapply(rep(list(rep(0, ne)), length(LY)), bind)
+			} else {	
+				if(is.list(ME)) { ME <- lapply(ME, bind) } else { ME <- list(bind(ME)) }
+			}
+		} else {
+			if(is.list(AL)) { AL <- lapply(AL, bind) } else { AL <- list(bind(AL)) }
+		}
+	} else if (modelType == "Path") {
+		if(!is.list(BE)) BE <- list(BE)
+		ne <- ncol(BE[[1]])
+		BE <- lapply(BE, bind)
+		if(is.null(PS)) {
+			if(is.null(RPS)) {
+				temp <- rep(list(matrix(0, ne, ne)), length(BE))
+				temp <- lapply(temp, function(x) {diag(x) <- NA; return(x)})
+				set1 <- lapply(BE, function(x) findRecursiveSet(x@free)[[1]])
+				temp <- mapply(function(x, y) { x[y, y] <- NA ; return(x) }, x = temp, y = set1, SIMPLIFY=FALSE)
+				PS <- lapply(temp, binds)
+			} else {
+				if(!is.list(RPS)) RPS <- list(RPS)
+				RPS <- binds(RPS)
+				if(!is.null(VPS)) if(is.list(VPS)) { VPS <- lapply(VPS, bind) } else { VPS <- list(bind(VPS)) }
+				if(!is.null(VE)) if(is.list(VE)) { VE <- lapply(VE, bind) } else { VE <- list(bind(VE)) }
+			}
+		} else {
+			if(is.list(PS)) { PS <- lapply(PS, binds) } else { PS <- list(binds(PS)) }
+		}
+		if(is.null(AL)) {
+			if(is.null(ME)) {
+				AL <- lapply(rep(list(rep(NA, ne)), length(BE)), bind)
+			} else {
+				if(is.list(ME)) { ME <- lapply(ME, bind) } else { ME <- list(bind(ME)) }
+			}
+		} else {
+			if(is.list(AL)) { AL <- lapply(AL, bind) } else { AL <- list(bind(AL)) }
+		}	
+	} else if (modelType == "SEM") {
+		if(!is.list(LY)) LY <- list(LY)
+		ne <- ncol(LY[[1]])
+		ny <- nrow(LY[[1]])
+		LY <- lapply(LY, bind)
+		if(is.list(BE)) { BE <- lapply(BE, bind) } else { BE <- rep(list(bind(BE)), length(LY)) }
+		if(is.null(PS)) {
+			if(is.null(RPS)) {
+				temp <- rep(list(matrix(0, ne, ne)), length(LY))
+				temp <- lapply(temp, function(x) {diag(x) <- NA; return(x)})
+				set1 <- lapply(BE, function(x) findRecursiveSet(x@free)[[1]])
+				temp <- mapply(function(x, y) { x[y, y] <- NA ; return(x) }, x = temp, y = set1, SIMPLIFY=FALSE)
+				temp2 <- lapply(LY, function(y) !apply(y@free, 2, function(x) any(!is.free(x) & (!is.na(x) & x != 0))))
+				temp <- mapply(function(ps, x) {diag(ps)[x] <- 1; return(ps)}, ps=temp, x=temp2, SIMPLIFY=FALSE)
+				PS <- lapply(temp, binds)				
+			} else {
+				if(!is.list(RPS)) RPS <- list(RPS)
+				RPS <- binds(RPS)
+				if(!is.null(VPS)) if(is.list(VPS)) { VPS <- lapply(VPS, bind) } else { VPS <- list(bind(VPS)) }
+				if(!is.null(VE)) if(is.list(VE)) { VE <- lapply(VE, bind) } else { VE <- list(bind(VE)) }
+			}
+		} else {
+			if(is.list(PS)) { PS <- lapply(PS, binds) } else { PS <- list(binds(PS)) }
+		}
+		if(is.null(TE)) {
+			if(is.null(RTE)) {
+				TE <- rep(list(diag(NA, ny)), length(LY))
+				TE <- lapply(TE, binds)
+			} else {
+				if(!is.list(RTE)) RTE <- list(RTE)
+				RTE <- lapply(RTE, binds)
+				if(!is.null(VTE)) if(is.list(VTE)) { VTE <- lapply(VTE, bind) } else { VTE <- list(bind(VTE)) }
+				if(!is.null(VY)) if(is.list(VY)) { VY <- lapply(VY, bind) } else { VY <- list(bind(VY)) }
+			}
+		} else {
+			if(is.list(TE)) { TE <- lapply(TE, binds) } else { TE <- list(binds(TE)) }
+		}
+		if(is.null(TY)) {
+			if(is.null(MY)) {
+				TY <- lapply(rep(list(rep(NA, ny)), length(LY)), bind)
+			} else {
+				if(is.list(MY)) { MY <- lapply(MY, bind) } else { MY <- list(bind(MY)) }
+			}
+		} else {
+			if(is.list(TY)) { TY <- lapply(TY, bind) } else { TY <- list(bind(TY)) }
+		}
+		if(is.null(AL)) {
+			if(is.null(ME)) {
+				AL <- lapply(rep(list(rep(0, ne)), length(LY)), bind)
+			} else {	
+				if(is.list(ME)) { ME <- lapply(ME, bind) } else { ME <- list(bind(ME)) }
+			}
+		} else {
+			if(is.list(AL)) { AL <- lapply(AL, bind) } else { AL <- list(bind(AL)) }
+		}
+	} else {
+		stop("The modelType specification is incorrect.")
+	}
+	if(!is.null(LY) && (ngroups != length(LY))) LY <- rep(LY, ngroups)
+	if(!is.null(PS) && (ngroups != length(PS))) PS <- rep(PS, ngroups)
+	if(!is.null(RPS) && (ngroups != length(RPS))) RPS <- rep(RPS, ngroups)
+	if(!is.null(TE) && (ngroups != length(TE))) TE <- rep(TE, ngroups)
+	if(!is.null(RTE) && (ngroups != length(RTE))) RTE <- rep(RTE, ngroups)
+	if(!is.null(BE) && (ngroups != length(BE))) BE <- rep(BE, ngroups)
+	if(!is.null(VTE) && (ngroups != length(VTE))) VTE <- rep(VTE, ngroups)
+	if(!is.null(VY) && (ngroups != length(VY))) VY <- rep(VY, ngroups)
+	if(!is.null(VPS) && (ngroups != length(VPS))) VPS <- rep(VPS, ngroups)
+	if(!is.null(VE) && (ngroups != length(VE))) VE <- rep(VE, ngroups)
+	if(!is.null(TY) && (ngroups != length(TY))) TY <- rep(TY, ngroups)
+	if(!is.null(AL) && (ngroups != length(AL))) AL <- rep(AL, ngroups)
+	if(!is.null(MY) && (ngroups != length(MY))) MY <- rep(MY, ngroups)
+	if(!is.null(ME) && (ngroups != length(ME))) ME <- rep(ME, ngroups)
+	
+	model(LY = LY,PS = PS,RPS = RPS, TE = TE,RTE = RTE, BE = BE, VTE = VTE, VY = VY, VPS = VPS, VE=VE, TY = TY, AL = AL, MY = MY, ME = ME, modelType=modelType, indLab=indLab, facLab=facLab, ngroups=ngroups, smartStart=smartStart)
+}
+
+estmodel.cfa <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, VTE = NULL, VY = NULL, VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, indLab=NULL, facLab=NULL, ngroups=1, smartStart=TRUE) {
+	estmodel(LY = LY,PS = PS,RPS = RPS, TE = TE,RTE = RTE, BE = NULL, VTE = VTE, VY = VY, VPS = VPS, VE=VE, TY = TY, AL = AL, MY = MY, ME = ME, modelType="CFA", indLab=indLab, facLab=facLab, ngroups=ngroups, smartStart=smartStart)
+}
+
+estmodel.path <- function(PS = NULL, RPS = NULL, BE = NULL, VPS = NULL, VE=NULL, AL = NULL, ME = NULL, indLab=NULL, facLab=NULL, ngroups=1, smartStart=TRUE) {
+	estmodel(LY = NULL,PS = PS,RPS = RPS, TE = NULL, RTE = NULL, BE = BE, VTE = NULL, VY = NULL, VPS = VPS, VE=VE, TY = NULL, AL = AL, MY = NULL, ME = ME, modelType="Path", indLab=indLab, facLab=facLab, ngroups=ngroups, smartStart=smartStart)
+}
+
+estmodel.sem <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL, VTE = NULL, VY = NULL, VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, indLab=NULL, facLab=NULL, ngroups=1, smartStart=TRUE) {
+	estmodel(LY = LY,PS = PS,RPS = RPS, TE = TE,RTE = RTE, BE = BE, VTE = VTE, VY = VY, VPS = VPS, VE=VE, TY = TY, AL = AL, MY = MY, ME = ME, modelType="SEM", indLab=indLab, facLab=facLab, ngroups=ngroups, smartStart=smartStart)
+}
+
+# Not finish
+model.lavaan <- function(object, LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL, VTE = NULL, VY = NULL, VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, modelType, indLab=NULL, facLab=NULL, ngroups=1, smartStart=TRUE) {
+	inspect(object, "free")
+	inspect(object, "coef")
+	standardize(object)
+	#if standardize, use nonzero as free.
+}
+
+
+test.estmodel <- function() {
+	loading <- matrix(0, 6, 2)
+	loading[1:3, 1] <- NA
+	loading[4:6, 2] <- NA
+	cfa1 <- estmodel(LY=loading, ngroups=1, modelType="CFA")
+	cfa2 <- estmodel(LY=loading, ngroups=2, modelType="CFA")
+	
+	loading <- matrix(0, 6, 2)
+	loading[1:3, 1] <- c(1, "con1", "con2")
+	loading[4:6, 2] <- c(1, "con3", "con4")
+	latent <- matrix(NA, 2, 2)
+	intcept <- paste0("int", 1:6)
+	facmean <- rep(0, 2)
+	error <- diag(NA, 6)
+	cfa3 <- estmodel(LY=loading, PS=list(latent, latent), TE=error, AL=facmean, TY=intcept, ngroups=2, modelType="CFA")
+	
+	
+	path <- matrix(0, 4, 4)
+	path[3, 1:2] <- NA
+	path[4, 3] <- NA
+	path1 <- estmodel(BE=path, ngroups=1, modelType="Path")
+	path2 <- estmodel(BE=path, ngroups=2, modelType="Path")
+	
+	path <- matrix(0, 4, 4)
+	path[3, 1:2] <- c("con1", "con2")
+	path[4, 3] <- "con3"
+	faccov <- diag(NA, 4)
+	faccov[2, 1] <- faccov[1, 2] <- NA
+	facmean <- rep(NA, 4)
+	path3 <- estmodel(BE=path, PS=list(faccov, faccov), AL=facmean, ngroups=2, modelType="Path")
+	
+	path <- matrix(0, 4, 4)
+	path[3, 1:2] <- NA
+	path[4, 3] <- NA
+	loading <- matrix(0, 12, 4)
+	loading[1:3, 1] <- NA
+	loading[4:6, 2] <- NA
+	loading[7:9, 3] <- NA
+	loading[10:12, 4] <- NA
+	sem1 <- estmodel(LY=loading, BE=path, ngroups=1, modelType="SEM")
+	sem2 <- estmodel(LY=loading, BE=path, ngroups=2, modelType="SEM")
+	
+	path <- matrix(0, 4, 4)
+	path[3, 1:2] <- NA
+	path[4, 3] <- NA
+	loading <- matrix(0, 12, 4)
+	loading[1:3, 1] <- paste0("con", 1:3)
+	loading[4:6, 2] <- paste0("con", 4:6)
+	loading[7:9, 3] <- paste0("con", 7:9)
+	loading[10:12, 4] <- paste0("con", 10:12)
+	faccov <- diag(1, 4)
+	faccov[2, 1] <- faccov[1, 2] <- NA
+	intcept <- paste0("int", 1:12)
+	facmean <- rep(0, 4)
+	error <- diag(NA, 12)
+	sem3 <- estmodel(LY=loading, BE=path, PS=faccov, TY=intcept, AL=facmean, TE=error, ngroups=2, modelType="SEM")
+
+}
+
