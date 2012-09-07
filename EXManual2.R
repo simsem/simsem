@@ -692,16 +692,13 @@ loading2 <- matrix(0, 6, 2)
 loading2[1:3, 1] <- NA
 loading2[4:6, 2] <- NA
 
-LX2 <- bind(loading2)
 
 latent.cor2 <- matrix(NA, 2, 2)
 diag(latent.cor2) <- 1
-RPH2 <- binds(latent.cor2)
 
 error.cor2 <- diag(NA, 6)
-RTD2 <- binds(error.cor2)
 
-CFA.Model <- model(LY = LX2, RPS = RPH2, RTE = RTD2, modelType="CFA") 
+CFA.Model <- estmodel(LY = loading2, PS = latent.cor2, TE = error.cor2, modelType="CFA")
 out <- analyze(CFA.Model, dat, indLab=paste0("x", 1:6), aux="x7")
 
 Output <- sim(10, n=200, model=CFA.Model, generate=CFA.Model.Aux, miss=missmodel)
@@ -719,34 +716,25 @@ loading <- matrix(0, 9, 3)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
 loading[7:9, 3] <- NA
-model <- simParamCFA(LY=loading)
-SimModel <- simModel(model, indLab=paste("x", 1:9, sep=""))
-out <- run(SimModel, HolzingerSwineford1939)
+cfamodel <- estmodel(LY=loading, modelType="CFA", indLab=paste("x", 1:9, sep=""))
+out <- analyze(cfamodel, HolzingerSwineford1939)
 
 ### Making result object without trivial model misspecification
 #output <- runFit(SimModel, HolzingerSwineford1939, 1000)
 #pValue(out, output)
 
-u2 <- simUnif(-0.2, 0.2)
-loading.mis <- matrix(NA, 9, 3)
+loading.mis <- matrix("runif(1, -0.2, 0.2)", 9, 3)
 loading.mis[is.na(loading)] <- 0
-LY.mis <- bind(loading.mis, "u2")
-misspec <- simMisspecCFA(LY=LY.mis)
-output2 <- runFit(SimModel, HolzingerSwineford1939, 1000, misspec=misspec)
-pValue(out, output2)
 
+datamodel <- model.lavaan(out, std=TRUE, LY=loading.mis)
+output <- sim(200, n=nrow(HolzingerSwineford1939), datamodel)
 
-facCov <- matrix(NA, 3, 3)
-diag(facCov) <- 1
-errorCov <- diag(NA, 9)
-intercept <- rep(NA, 9)
-facMean <- rep(0, 3)
-model <- simParamCFA(LY=loading, PS=facCov, TE=errorCov, TY=intercept, AL=facMean)
+pValue(out, output)
 
 ############################### Example 14 #######################
 
 #library(simsem)
-library(lavaan)
+#library(lavaan)
 loading <- matrix(0, 11, 3)
 loading[1:3, 1] <- NA
 loading[4:7, 2] <- NA
@@ -754,13 +742,16 @@ loading[8:11, 3] <- NA
 path <- matrix(0, 3, 3)
 path[2:3, 1] <- NA
 path[3, 2] <- NA
-param <- simParamSEM(LY=loading, BE=path)
+param <- estmodel(LY=loading, BE=path, modelType="SEM", indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
 
 usedData <- imposeMissing(PoliticalDemocracy, pmMCAR=0.03)
 
-model <- simModel(param, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
-miss <- simMissing(numImps=5)
-out <- run(model, usedData, miss)
+#model <- simModel(param)
+#miss <- simMissing(numImps=5)
+out <- analyze(param, usedData)
+
+usedData2 <- imposeMissing(PoliticalDemocracy, logical=is.na(usedData))
+miss <- miss(logical=is.na(usedData))
 
 u2 <- simUnif(-0.2, 0.2)
 loading.mis <- matrix(NA, 11, 3)

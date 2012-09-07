@@ -48,7 +48,7 @@ imposeMissing <- function(data.mat, cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, 
         data.mat[log.mat3] <- NA
     }
     
-    if (!is.null(logical) && !is.null(dim(logical))) {
+    if (!is.null(logical) && !is.null(dim(logical)) && !all(dim(logical) == 1)) {
         if (!(class(logical) %in% c("matrix", "data.frame"))) 
             stop("The logical argument must be matrix or data frame.")
         if ((dim(data.mat)[1] != dim(logical)[1]) | (dim(data.mat)[2] != dim(logical)[2])) 

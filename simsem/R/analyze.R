@@ -40,6 +40,7 @@ analyze <- function(model, data, package="lavaan", miss=NULL,indLab=NULL,aux=NUL
   ##     data <- data[, targetCol]
   ##    miss <- sum(is.na(data)) > 0
   
+  if(!("group" %in% colnames(data))) data <- data.frame(data, group=1)
   if (!is.null(miss) && length(miss@package) != 0 && miss@package == "Amelia") {
     Output <- runMI(data, model, miss@args)
   } else {

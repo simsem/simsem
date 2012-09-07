@@ -52,6 +52,56 @@ setMethod("pValue", signature(target = "numeric", dist = "data.frame"), definiti
     }
 })
 
+setMethod("pValue", signature(target = "lavaan", dist = "SimResult"), definition = function(target, dist, usedFit = NULL, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, df = 0) {
+    dist <- clean(dist)
+    if (is.null(usedFit)) 
+        usedFit <- getKeywords()$usedFit
+    revDirec <- (usedFit %in% c("CFI", "TLI")) # CFA --> FALSE, RMSEA --> TRUE
+	
+	
+	
+	if (is.null(nVal) || is.na(nVal)) 
+        nVal <- NULL
+    if (is.null(pmMCARval) || is.na(pmMCARval)) 
+        pmMCARval <- NULL
+    if (is.null(pmMARval) || is.na(pmMARval)) 
+        pmMARval <- NULL
+    Data <- as.data.frame(dist@fit[, usedFit])
+    condition <- c(length(unique(dist@pmMCAR)) > 1, length(unique(dist@pmMAR)) > 1, length(unique(dist@n)) > 1)
+    condValue <- cbind(dist@pmMCAR, dist@pmMAR, dist@n)
+    colnames(condValue) <- c("Percent MCAR", "Percent MAR", "N")
+    condValue <- condValue[, condition]
+    if (is.null(condValue) || length(condValue) == 0) 
+        condValue <- NULL
+    predictorVal <- rep(NA, 3)
+    if (condition[3]) {
+        ifelse(is.null(nVal), stop("Please specify the sample size value, 'nVal', because the sample size in the result object is varying"), 
+            predictorVal[3] <- nVal)
+    }
+    if (condition[1]) {
+        ifelse(is.null(pmMCARval), stop("Please specify the percent of missing completely at random, 'pmMCARval', because the percent of missing completely at random in the result object is varying"), 
+            predictorVal[1] <- pmMCARval)
+    }
+    if (condition[2]) {
+        ifelse(is.null(pmMARval), stop("Please specify the percent of missing at random, 'pmMARval', because the percent of missing at random in the result object is varying"), 
+            predictorVal[2] <- pmMARval)
+    }
+    predictorVal <- predictorVal[condition]
+    cutoff <- extractLavaanFit(target)[usedFit]
+	if(any(condition)) {
+		result <- pValue(cutoff, Data, revDirec, x = condValue, xval = predictorVal, df = df, asLogical = FALSE)
+		names(result) <- usedFit
+		return(result)
+	} else {
+		logicalMat <- pValue(cutoff, Data, revDirec, asLogical = TRUE)
+		result <- apply(logicalMat, 2, mean, na.rm = TRUE)
+		names(result) <- usedFit
+		andRule <- mean(apply(logicalMat, 1, all), na.rm = TRUE)
+		orRule <- mean(apply(logicalMat, 1, any), na.rm = TRUE)
+		return(c(result, andRule = andRule, orRule = orRule))
+	}
+}) 
+
 # setMethod("pValue", signature(target = "SimModelOut", dist = "SimResult"), definition = function(target, dist, usedFit = NULL, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, df = 0) {
     # dist <- clean(dist)
     # if (is.null(usedFit)) 

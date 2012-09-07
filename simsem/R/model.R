@@ -770,11 +770,150 @@ estmodel.sem <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, B
 }
 
 # Not finish
-model.lavaan <- function(object, LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL, VTE = NULL, VY = NULL, VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, modelType, indLab=NULL, facLab=NULL, ngroups=1, smartStart=TRUE) {
-	inspect(object, "free")
-	inspect(object, "coef")
-	standardize(object)
-	#if standardize, use nonzero as free.
+model.lavaan <- function(object, std = FALSE, LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL, VTE = NULL, VY = NULL, VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, smartStart=TRUE) {
+	ngroups <- object@Model@ngroups
+	name <- names(object@Model@GLIST)
+	modelType <- NULL
+	indLab <- NULL
+	facLab <- NULL
+	if(isTRUE(all.equal(object@Model@dimNames[[1]][[1]], object@Model@dimNames[[1]][[2]]))) {
+		indLab <- object@Model@dimNames[[1]][[1]]
+		modelType <- "Path"
+	} else {
+		indLab <- object@Model@dimNames[[1]][[1]]
+		facLab <- object@Model@dimNames[[1]][[2]]
+		if("beta" %in% name) {
+			modelType <- "SEM"
+		} else {
+			modelType <- "CFA"
+		}	
+	}
+	
+	if(std) {
+		est <- standardize(object)	
+		free <- lapply(est, function(x) {x[!(round(x,4) == 1 | round(x,4) == 0)] <- NA ; x})
+		freeUnstd <- inspect(object, "free")
+		if(!is.null(PS)) stop("Misspecification is not allowed in PS if 'std' is TRUE.")
+		if(!is.null(TE)) stop("Misspecification is not allowed in TE if 'std' is TRUE.")
+		if(!is.null(VE)) stop("Misspecification is not allowed in VE if 'std' is TRUE.")
+		if(!is.null(VY)) stop("Misspecification is not allowed in VY if 'std' is TRUE.")
+
+		FUN <- function(x, y=NULL, z=NULL, h) { 
+			x[is.na(x) & (h != 0)] <- paste0("simcon", h[is.na(x) & (h != 0)])
+			y[!is.free(x)] <- ""
+			bind(x, y, z)
+		}
+		FUNS <- function(x, y, z=NULL, h) { 
+			x[is.na(x) & (h != 0)] <- paste0("simcon", h[is.na(x) & (h != 0)])
+			diag(x) <- 1
+			if(is.matrix(y)) y[!is.free(x)] <- ""
+			binds(x, y, z)
+		}		
+		FUNV <- function(x, y=NULL, z=NULL, h) {
+			h <- diag(h)
+			x[is.na(x) & (h != 0)] <- paste0("simcon", h[is.na(x) & (h != 0)])
+			y[!is.free(x)] <- ""
+			bind(x, y, z)
+		}
+		
+		if(!is.list(RPS)) RPS <- rep(list(RPS), ngroups)
+		RPS <- mapply(FUNS, x=free[names(free) == "psi"], y=est[names(est) == "psi"], z=RPS, h=freeUnstd[names(freeUnstd) == "psi"], SIMPLIFY=FALSE)	
+				
+		if(modelType %in% c("CFA", "SEM")) {
+			ne <- ncol(est[["lambda"]])
+			ny <- nrow(est[["lambda"]])
+			if(!is.list(LY)) LY <- rep(list(LY), ngroups)
+			LY <- mapply(FUN, x=free[names(free) == "lambda"], y=est[names(est) == "lambda"], z=LY, h=freeUnstd[names(freeUnstd) == "lambda"], SIMPLIFY=FALSE)
+			
+			if(!is.list(AL)) AL <- rep(list(AL), ngroups)
+			if(!("alpha" %in% names(freeUnstd))) freeUnstd <- c(freeUnstd, rep(list(alpha=rep(0, ne)), ngroups))
+			AL <- mapply(FUN, x=rep(list(rep(0, ne)), ngroups), z=AL, h=freeUnstd[names(freeUnstd) == "alpha"], SIMPLIFY=FALSE)
+			VE <- mapply(FUNV, x=rep(list(rep(1, ne)), ngroups), h=freeUnstd[names(freeUnstd) == "psi"], SIMPLIFY=FALSE)
+			if(!is.list(RTE)) RTE <- rep(list(RTE), ngroups)
+			RTE <- mapply(FUNS, x=free[names(free) == "theta"], y=est[names(est) == "theta"], z=RTE, h=freeUnstd[names(freeUnstd) == "theta"], SIMPLIFY=FALSE)
+			VY <- mapply(FUNV, x=rep(list(rep(NA, ny)), ngroups), y=rep(list(rep(1, ny)), ngroups), h=freeUnstd[names(freeUnstd) == "theta"], SIMPLIFY=FALSE)
+			if(!is.list(TY)) TY <- rep(list(TY), ngroups)
+			if(!("nu" %in% names(freeUnstd))) freeUnstd <- c(freeUnstd, rep(list(nu=rep(0, ny)), ngroups))
+			TY <- mapply(FUN, x=rep(list(rep(NA, ny)), ngroups), y=rep(list(rep(0, ny)), ngroups), z=TY, h=freeUnstd[names(freeUnstd) == "nu"], SIMPLIFY=FALSE)
+		} else {
+			ne <- ncol(est[["psi"]])
+			if(!is.list(AL)) AL <- rep(list(AL), ngroups)
+			if(!("alpha" %in% names(freeUnstd))) freeUnstd <- c(freeUnstd, rep(list(alpha=rep(0, ne)), ngroups))
+			AL <- mapply(FUN, x=rep(list(rep(NA, ne)), ngroups), y=rep(list(rep(0, ne)), ngroups), z=AL, h=freeUnstd[names(freeUnstd) == "alpha"], SIMPLIFY=FALSE)
+			VE <- mapply(FUNV, x=rep(list(rep(NA, ne)), ngroups), y=rep(list(rep(1, ne)), ngroups), h=freeUnstd[names(freeUnstd) == "psi"], SIMPLIFY=FALSE)
+		}
+		
+		if("beta" %in% names(est)) {
+			if(!is.list(BE)) BE <- rep(list(BE), ngroups)
+			BE <- mapply(FUN, x=free[names(free) == "beta"], y=est[names(est) == "beta"], z=BE, h=freeUnstd[names(freeUnstd) == "beta"], SIMPLIFY=FALSE)
+		}
+		
+	} else {
+		est <- inspect(object, "coef")
+		free <- lapply(inspect(object, "free"), function(h) {  apply(h, 2, function(x) {x[x != 0] <- paste0("sim", x[x!=0]); return(x) }) })
+		if(modelType == "Path") {
+			set1 <- lapply(free[names(free) == "beta"], function(x) findRecursiveSet(x)[[1]])
+			pospsi <- match("psi", names(free))
+			for ( i in seq_along(pospsi)) {
+				free[[pospsi[i]]][set1[[i]],set1[[i]]] <- NA
+			}
+		}
+		if(!is.null(RPS)) stop("Misspecification is not allowed in RPS if 'std' is FALSE.")
+		if(!is.null(VPS)) stop("Misspecification is not allowed in VPS if 'std' is FALSE.")
+		if(!is.null(VE)) stop("Misspecification is not allowed in VE if 'std' is FALSE.")
+		if(!is.null(RTE)) stop("Misspecification is not allowed in RTE if 'std' is FALSE.")
+		if(!is.null(VTE)) stop("Misspecification is not allowed in VTE if 'std' is FALSE.")
+		if(!is.null(VY)) stop("Misspecification is not allowed in VY if 'std' is FALSE.")
+		if(!is.null(ME)) stop("Misspecification is not allowed in ME if 'std' is FALSE.")
+		if(!is.null(MY)) stop("Misspecification is not allowed in MY if 'std' is FALSE.")
+		if(!is.list(RPS)) RPS <- rep(list(RPS), ngroups)
+		FUN <- function(x, y=NULL, z=NULL) { 
+			y[!is.free(x)] <- ""
+			bind(x, y, z)
+		}
+		FUNS <- function(x, y, z=NULL) { 
+			y[!is.free(x)] <- ""
+			binds(x, y, z)
+		}	
+		if(!is.list(PS)) PS <- rep(list(PS), ngroups)
+		PS <- mapply(FUNS, x=free[names(free) == "psi"], y=est[names(est) == "psi"], z=PS, SIMPLIFY=FALSE)	
+				
+		if(modelType %in% c("CFA", "SEM")) {
+			if(!is.list(LY)) LY <- rep(list(LY), ngroups)
+			LY <- mapply(FUN, x=free[names(free) == "lambda"], y=est[names(est) == "lambda"], z=LY, SIMPLIFY=FALSE)
+
+			if(!is.list(TE)) TE <- rep(list(TE), ngroups)
+			TE <- mapply(FUNS, x=free[names(free) == "theta"], y=est[names(est) == "theta"], z=TE, SIMPLIFY=FALSE)
+			
+			if(!is.list(TY)) TY <- rep(list(TY), ngroups)
+			if("nu" %in% names(est)) {
+				TY <- mapply(FUN, x=lapply(free[names(free) == "nu"], as.vector), y=lapply(est[names(est) == "nu"], as.vector), z=TY, SIMPLIFY=FALSE)
+			} else {
+				ny <- nrow(est[["lambda"]])
+				TY <- mapply(FUN, x=rep(list(rep(NA, ny)), ngroups), y=rep(list(rep(0, ny)), ngroups), z=TY, SIMPLIFY=FALSE)
+			}
+		} 
+		if(!is.list(AL)) AL <- rep(list(AL), ngroups)
+		if("alpha" %in% names(est)) {
+			AL <- mapply(FUN, x=lapply(free[names(free) == "alpha"], as.vector), y=lapply(est[names(est) == "alpha"], as.vector), z=AL, SIMPLIFY=FALSE)
+		} else {
+			p <- ncol(est[["psi"]])
+			if(modelType == "Path") {
+				AL <- mapply(FUN, x=rep(list(rep(NA, p)), ngroups), y=rep(list(rep(0, p)), ngroups), z=AL, SIMPLIFY=FALSE)
+			} else {
+				AL <- mapply(FUN, x=rep(list(rep(0, p)), ngroups), z=AL, SIMPLIFY=FALSE)
+			}		
+		}
+		
+		if("beta" %in% names(est)) {
+			if(!is.list(BE)) BE <- rep(list(BE), ngroups)
+			BE <- mapply(FUN, x=free[names(free) == "beta"], y=est[names(est) == "beta"], z=BE, SIMPLIFY=FALSE)
+		}
+		
+	}
+	
+	result <- model(LY = LY,PS = PS,RPS = RPS, TE = TE,RTE = RTE, BE = BE, VTE = VTE, VY = VY, VPS = VPS, VE=VE, TY = TY, AL = AL, MY = MY, ME = ME, modelType=modelType, indLab=indLab, facLab=facLab, ngroups=ngroups, smartStart=smartStart)
+	return(result)
 }
 
 
@@ -837,3 +976,51 @@ test.estmodel <- function() {
 
 }
 
+test.model.lavaan <- function() {
+
+	HS.model <- ' visual  =~ x1 + x2 + x3
+				  textual =~ x4 + x5 + x6
+				  speed   =~ x7 + x8 + x9 '
+				  
+	dat <- data.frame(HolzingerSwineford1939, z=rnorm(nrow(HolzingerSwineford1939), 0, 1))
+				  
+	fit <- cfa(HS.model, data=dat) 
+	dat2 <- generate(model.lavaan(fit), n=200)
+	dat2 <- generate(model.lavaan(fit, std=TRUE), n=200)
+	
+	fitgroup <- cfa(HS.model, data=dat, group="school")
+	dat2 <- generate(model.lavaan(fitgroup), n=200)
+	dat2 <- generate(model.lavaan(fitgroup, std=TRUE), n=200)
+	
+	mod <- ' x5 ~ x4
+	x4 ~ x3
+	x3 ~ x1 + x2'
+
+	fitpath <- sem(mod, data=dat)
+	dat2 <- generate(model.lavaan(fitpath), n=200)
+	dat2 <- generate(model.lavaan(fitpath, std=TRUE), n=200)
+	
+
+	dat2 <- data.frame(PoliticalDemocracy, z=rnorm(nrow(PoliticalDemocracy), 0, 1))
+	model1 <- ' 
+	  # latent variable definitions
+		 ind60 =~ x1 + x2 + x3
+		 dem60 =~ y1 + a*y2 + b*y3 + c*y4
+		 dem65 =~ y5 + a*y6 + b*y7 + c*y8
+
+	  # regressions
+		dem60 ~ ind60
+		dem65 ~ ind60 + dem60
+
+	  # residual correlations
+		y1 ~~ y5
+		y2 ~~ y4 + y6
+		y3 ~~ y7
+		y4 ~~ y8
+		y6 ~~ y8
+	'
+	fitsem <- sem(model1, data=dat2, meanstructure=TRUE)
+	dat3 <- generate(model.lavaan(fitsem), n=200)
+	dat3 <- generate(model.lavaan(fitsem, std=TRUE), n=200)
+
+}

@@ -12,7 +12,7 @@ miss <- function(cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, itemGroups = list()
   if(!is.null(logical)) {
     stopifnot(is.logical(logical))
     stopifnot(is.matrix(logical))    
-  } else { logical <- logical(0) }
+  } else { logical <- as.matrix(FALSE) }
   if(!(package == "default" || package == "Amelia")) { stop("Only \"default\" or \"Amelia\" are accepted as arguments to package.") }
     return(new("SimMissing", cov = cov, pmMCAR = pmMCAR, pmMAR = pmMAR, nforms = nforms, itemGroups = itemGroups, twoMethod = twoMethod, prAttr = prAttr,
                timePoints = timePoints, threshold = threshold, ignoreCols = ignoreCols, covAsAux = covAsAux, logical = logical, package=package, args=args))
