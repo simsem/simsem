@@ -5,13 +5,13 @@ SimMissing-class        Class '"SimMissing"'
 SimResult-class         Class '"SimResult"'
 SimSem-class            Class '"SimSem"'
 SimVector-class         Vector object: Random parameters vector
-VirtualDist-class       Distribution Objects
 analyze                 TBA
 anova,SimResult-method
                         Provide a comparison of nested models and
                         nonnested models across replications
 bind                    Specify matrices for Monte Carlo simulation of
                         structural equation models
+bindDist                Create a data distribution object.
 clean                   Extract only converged replications in the
                         result objects
 cleanSimResult          Extract only converged replications in the
@@ -89,11 +89,6 @@ likRatioFit             Find the likelihood ratio (or Bayes factor)
                         indices
 loadingFromAlpha        Find standardized factor loading from
                         coefficient alpha
-miPool                  Function to pool imputed results
-miPoolChi               Function to pool chi-square statistics from the
-                        result from multiple imputation
-miPoolVector            Function to pool imputed results that saved in
-                        a matrix format
 miss                    TBA
 model                   Data generation template and analysis template
                         for simulation.
@@ -154,33 +149,11 @@ printIfNotNull          Provide basic summary of each object if that
                         object is not NULL.
 revText                 Reverse the proportion value by subtracting it
                         from 1
-run                     Run a particular object in 'simsem' package.
-runMI                   Multiply impute and analyze data using lavaan
 setPopulation           Set the data generation population model
                         underlying an object
 sim                     Run a monte carlo simulation with a structural
                         equation model.
-simBeta                 Create random beta distribution object
-simBinom                Create random binomial distribution object
-simCauchy               Create random Cauchy distribution object
-simChisq                Create random chi-squared distribution object
-simDataDist             Create a data distribution object.
-simExp                  Create random exponential distribution object
-simF                    Create random F distribution object
 simFunction             Create function object
-simGamma                Create random gamma distribution object
-simGeom                 Create random geometric distribution object
-simHyper                Create random hypergeometric distribution
-                        object
-simLnorm                Create random log normal distribution object
-simLogis                Create random logistic distribution object
-simNbinom               Create random negative binomial distribution
-                        object
-simNorm                 Create random normal distribution object
-simPois                 Create random Poisson distribution object
-simT                    Create random t distribution object
-simUnif                 Create random uniform distribution object
-simWeibull              Create random Weibull distribution object
 sortList                Sort two objects in a list
 summaryFit              Provide summary of model fit across
                         replications
@@ -198,6 +171,5 @@ validateCovariance      Validate whether all elements provides a good
 validateObject          Validate whether the drawn parameters are good.
 validatePath            Validate whether the regression coefficient (or
                         loading) matrix is good
-weightedMean            Calculate the weighted mean of a variable
 whichMonotonic          Extract a part of a vector that is
                         monotonically increasing or decreasing

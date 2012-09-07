@@ -135,19 +135,9 @@ dataGen <- function(dataDist, n, m, cm) {
                 }
             }
             listR <- r[lower.tri(diag(dataDist2@p))]
-            CopNorm <- ellipCopula(family = "normal", dim = dataDist2@p, dispstr = "un", param = listR)
-            distName <- sapply(dataDist2@dist, class)
-            distName <- tolower(gsub("Sim", "", distName))
-            attribute <- list()
-            for (i in 1:length(dataDist2@dist)) {
-                temp <- list()
-                indivAttr <- slotNames(dataDist2@dist[[i]])
-                for (j in 1:length(indivAttr)) {
-                  temp[[j]] <- call("=", indivAttr[[j]], slot(dataDist2@dist[[i]], indivAttr[[j]]))
-                }
-                attribute[[i]] <- temp
-            }
-            Mvdc <- mvdc(CopNorm, distName, attribute)
+			CopNorm <- ellipCopula(family = "normal", dim = dataDist2@p, dispstr = "un", param = listR)
+
+            Mvdc <- mvdc(CopNorm, dataDist2@margins, dataDist2@paramMargins)
             Data <- rMvdc(n, Mvdc)
             if (sum(varNotZeros) < dataDist@p) {
                 varZeros <- diag(cm) == 0
@@ -159,7 +149,9 @@ dataGen <- function(dataDist, n, m, cm) {
             if (as.matrix(cm)[1, 1] == 0) {
                 Data <- rep(m[1], n)
             } else {
-                Data <- as.matrix(run(dataDist@dist[[1]], n = n))
+                #Data <- as.matrix(run(dataDist@dist[[1]], n = n))
+				temp <- c(list(get(paste0("r", dataDist@margins[[1]]))), dataDist@paramMargins[[1]], list(n=n))
+				Data <- as.matrix(eval(as.call(temp)))
             }
         } else {
             stop("when creating a data distribution object, p cannot equal 0.")
@@ -193,5 +185,5 @@ dataGen <- function(dataDist, n, m, cm) {
 }
 
 extractSimDataDist <-  function(object, pos) {
-    return(new("SimDataDist", p = length(pos), dist = object@dist[pos], keepScale = object@keepScale[pos], reverse = object@reverse[pos]))
+    return(new("SimDataDist", margins = object@margins[pos], paramMargins=object@paramMargins[pos], p = length(pos), keepScale = object@keepScale[pos], reverse = object@reverse[pos]))
 }

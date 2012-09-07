@@ -2,7 +2,7 @@
 \docType{class}
 \alias{SimFunction-class}
 \alias{summary,SimFunction-method}
-\alias{run,SimFunction-method}
+%\alias{run,SimFunction-method}
 \title{Class \code{"SimFunction"}}
 \description{
 This class will save a function using for data transformation later in a simulation study within \code{\link{sim}}.
@@ -20,7 +20,7 @@ Objects can be created by \code{\link{simFunction}}. It can also be called from 
 \section{Methods}{
 	\itemize{
 		\item \code{\link{summary}} To summarize the object
-		\item \code{\link{run}} To use the object for data transformation.
+		%\item \code{\link{run}} To use the object for data transformation.
 	}
 }
 \author{

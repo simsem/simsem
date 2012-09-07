@@ -14,8 +14,7 @@ flush(stderr()); flush(stdout())
 ### Name: SimDataDist-class
 ### Title: Class '"SimDataDist"'
 ### Aliases: SimDataDist-class summary,SimDataDist-method
-###   run,SimDataDist-method plotDist,SimDataDist-method
-###   extract,SimDataDist-method
+###   plotDist,SimDataDist-method
 ### Keywords: classes
 
 ### ** Examples
@@ -24,16 +23,17 @@ flush(stderr()); flush(stdout())
 
 showClass("SimDataDist")
 
-chisq3 <- simChisq(3)
-chisq8 <- simChisq(8)
-dist <- simDataDist(chisq3, chisq8)
+d1 <- list(df=2)
+d2 <- list(df=3)
+d3 <- list(df=4)
+d4 <- list(df=5)
+d5 <- list(df=3)
+d6 <- list(df=4)
+d7 <- list(df=5)
+d8 <- list(df=6)
 
-m <- c(0, 0)
-cm <- matrix(c(1, 0.5, 0.5, 1), 2, 2)
-n <- 20
-# dat <- run(dist, n, m, cm)
 
-plotDist(dist, r=0.2)
+dist <- bindDist(c(rep("t", 4), rep("chisq", 8)), d1, d2, d3, d4, d5, d6, d7, d8, d5, d6, d7, d8)
 
 
 
@@ -47,7 +47,6 @@ flush(stderr()); flush(stdout())
 ### Name: SimFunction-class
 ### Title: Class '"SimFunction"'
 ### Aliases: SimFunction-class summary,SimFunction-method
-###   run,SimFunction-method
 ### Keywords: classes
 
 ### ** Examples
@@ -140,8 +139,8 @@ flush(stderr()); flush(stdout())
 
 ### Name: SimMatrix-class
 ### Title: Matrix object: Random parameters matrix
-### Aliases: SimMatrix-class run,SimMatrix-method
-###   summaryShort,SimMatrix-method summary,SimMatrix-method
+### Aliases: SimMatrix-class summaryShort,SimMatrix-method
+###   summary,SimMatrix-method
 ### Keywords: classes
 
 ### ** Examples
@@ -173,7 +172,6 @@ flush(stderr()); flush(stdout())
 ### Name: SimMissing-class
 ### Title: Class '"SimMissing"'
 ### Aliases: SimMissing-class summary,SimMissing-method
-###   run,SimMissing-method
 ### Keywords: classes
 
 ### ** Examples
@@ -268,9 +266,8 @@ flush(stderr()); flush(stdout())
 
 ### Name: SimVector-class
 ### Title: Vector object: Random parameters vector
-### Aliases: SimVector-class run,SimVector-method
-###   summaryShort,SimVector-method summary,SimVector-method
-###   extract,SimVector-method
+### Aliases: SimVector-class summaryShort,SimVector-method
+###   summary,SimVector-method extract,SimVector-method
 ### Keywords: classes
 
 ### ** Examples
@@ -284,53 +281,6 @@ AL <- bind(factor.mean, factor.mean.starting)
 summary(AL)
 summaryShort(AL)
 
-
-
-
-cleanEx()
-nameEx("VirtualDist-class")
-### * VirtualDist-class
-
-flush(stderr()); flush(stdout())
-
-### Name: VirtualDist-class
-### Title: Distribution Objects
-### Aliases: VirtualDist-class SimBeta-class SimBinom-class SimCauchy-class
-###   SimChisq-class SimExp-class SimF-class SimGamma-class SimGeom-class
-###   SimHyper-class SimLnorm-class SimLogis-class SimNbinom-class
-###   SimNorm-class SimPois-class SimT-class SimUnif-class SimWeibull-class
-###   run,SimBeta-method run,SimBinom-method run,SimCauchy-method
-###   run,SimChisq-method run,SimExp-method run,SimF-method
-###   run,SimGamma-method run,SimGeom-method run,SimHyper-method
-###   run,SimLnorm-method run,SimLogis-method run,SimNbinom-method
-###   run,SimNorm-method run,SimPois-method run,SimT-method
-###   run,SimUnif-method run,SimWeibull-method summary,SimBeta-method
-###   summary,SimBinom-method summary,SimCauchy-method
-###   summary,SimChisq-method summary,SimExp-method summary,SimF-method
-###   summary,SimGamma-method summary,SimGeom-method
-###   summary,SimHyper-method summary,SimLnorm-method
-###   summary,SimLogis-method summary,SimNbinom-method
-###   summary,SimNorm-method summary,SimPois-method summary,SimT-method
-###   summary,SimUnif-method summary,SimWeibull-method
-###   summaryShort,SimBeta-method summaryShort,SimBinom-method
-###   summaryShort,SimCauchy-method summaryShort,SimChisq-method
-###   summaryShort,SimExp-method summaryShort,SimF-method
-###   summaryShort,SimGamma-method summaryShort,SimGeom-method
-###   summaryShort,SimHyper-method summaryShort,SimLnorm-method
-###   summaryShort,SimLogis-method summaryShort,SimNbinom-method
-###   summaryShort,SimNorm-method summaryShort,SimPois-method
-###   summaryShort,SimT-method summaryShort,SimUnif-method
-###   summaryShort,SimWeibull-method plotDist,VirtualDist-method
-### Keywords: classes
-
-### ** Examples
-
-showClass("VirtualDist")
-u1 <- simUnif(0, 1)
-chi3 <- simChisq(3)
-summary(chi3)
-plotDist(chi3)
-plotDist(chi3, reverse=TRUE)
 
 
 
@@ -436,6 +386,32 @@ error.cor <- matrix(0, 6, 6)
 diag(error.cor) <- NA
 RTE <- binds(error.cor,1,"runif(1,-.05,.05)")
 
+
+
+
+cleanEx()
+nameEx("bindDist")
+### * bindDist
+
+flush(stderr()); flush(stdout())
+
+### Name: bindDist
+### Title: Create a data distribution object.
+### Aliases: bindDist
+
+### ** Examples
+
+d1 <- list(df=2)
+d2 <- list(df=3)
+d3 <- list(df=4)
+d4 <- list(df=5)
+d5 <- list(df=3)
+d6 <- list(df=4)
+d7 <- list(df=5)
+d8 <- list(df=6)
+
+
+dist <- bindDist(c(rep("t", 4), rep("chisq", 8)), d1, d2, d3, d4, d5, d6, d7, d8, d5, d6, d7, d8)
 
 
 
@@ -1484,64 +1460,6 @@ flush(stderr()); flush(stdout())
 
 
 cleanEx()
-nameEx("miPool")
-### * miPool
-
-flush(stderr()); flush(stdout())
-
-### Name: miPool
-### Title: Function to pool imputed results
-### Aliases: miPool
-
-### ** Examples
-
-# No Example
-
-
-
-cleanEx()
-nameEx("miPoolChi")
-### * miPoolChi
-
-flush(stderr()); flush(stdout())
-
-### Name: miPoolChi
-### Title: Function to pool chi-square statistics from the result from
-###   multiple imputation
-### Aliases: miPoolChi
-
-### ** Examples
-
-miPoolChi(c(89.864, 81.116, 71.500, 49.022, 61.986, 64.422, 55.256, 57.890, 79.416, 63.944), 2)
-
-
-
-cleanEx()
-nameEx("miPoolVector")
-### * miPoolVector
-
-flush(stderr()); flush(stdout())
-
-### Name: miPoolVector
-### Title: Function to pool imputed results that saved in a matrix format
-### Aliases: miPoolVector
-
-### ** Examples
-
-param <- matrix(c(0.7, 0.1, 0.5,
-					0.75, 0.12, 0.54,
-					0.66, 0.11, 0.56,
-					0.74, 0.09, 0.55), nrow=4, byrow=TRUE)
-SE <- matrix(c(0.1, 0.01, 0.05,
-				0.11, 0.023, 0.055,
-				0.10, 0.005, 0.04,
-				0.14, 0.012, 0.039), nrow=4, byrow=TRUE)
-nimps <- 4
-miPoolVector(param, SE, nimps)
-
-
-
-cleanEx()
 nameEx("miss")
 ### * miss
 
@@ -1657,6 +1575,7 @@ flush(stderr()); flush(stdout())
 ### Title: Find p-values (1 - percentile)
 ### Aliases: pValue pValue-methods pValue,ANY-method
 ###   pValue,numeric,vector-method pValue,numeric,data.frame-method
+###   pValue,lavaan,SimResult-method
 
 ### ** Examples
 
@@ -1980,12 +1899,7 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-gamma11 <- simGamma(1, 1)
-plotDist(gamma11)
-
-chi <- simChisq(5)
-#dataDist <- simDataDist(chi, chi)
-#plotDist(dataDist)
+# Need Example
 
 
 
@@ -2417,59 +2331,6 @@ flush(stderr()); flush(stdout())
 
 
 cleanEx()
-nameEx("run")
-### * run
-
-flush(stderr()); flush(stdout())
-
-### Name: run
-### Title: Run a particular object in 'simsem' package.
-### Aliases: run run-methods run,ANY-method
-### Keywords: run
-
-### ** Examples
-
-n02 <- simNorm(0, 0.2)
-run(n02)
-
-
-
-cleanEx()
-nameEx("runMI")
-### * runMI
-
-flush(stderr()); flush(stdout())
-
-### Name: runMI
-### Title: Multiply impute and analyze data using lavaan
-### Aliases: runMI
-
-### ** Examples
-
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
-
-## The function is currently defined as
-function(data.mat,data.model,imps) {
-  #Impute missing data
-  imputed.l<-imputeMissing(data.mat,imps)
-  
-  #Run models on each imputed data set
-  #Does this give results from each dataset in the list?
-  
-  imputed.results<-result.object(imputed.l[[1]],sim.data.model,10)
-
-  imputed.results <- lapply(imputed.l,result.object,data.model,1)
-  comb.results<-MIpool(imputed.results,imps)
-  
-  return(comb.results)
-
-  }
-
-
-
-cleanEx()
 nameEx("setPopulation")
 ### * setPopulation
 
@@ -2514,129 +2375,6 @@ CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
 
 Output <- sim(20, CFA.Model,n=200)
 summary(Output)
-
-
-
-cleanEx()
-nameEx("simBeta")
-### * simBeta
-
-flush(stderr()); flush(stdout())
-
-### Name: simBeta
-### Title: Create random beta distribution object
-### Aliases: simBeta
-
-### ** Examples
-
-    b11 <- simBeta(1, 1)
-    run(b11)
-
-
-
-cleanEx()
-nameEx("simBinom")
-### * simBinom
-
-flush(stderr()); flush(stdout())
-
-### Name: simBinom
-### Title: Create random binomial distribution object
-### Aliases: simBinom
-
-### ** Examples
-
-    b55 <- simBinom(5, 0.5)
-    run(b55)
-	summary(b55)
-
-
-
-cleanEx()
-nameEx("simCauchy")
-### * simCauchy
-
-flush(stderr()); flush(stdout())
-
-### Name: simCauchy
-### Title: Create random Cauchy distribution object
-### Aliases: simCauchy
-
-### ** Examples
-
-    c02 <- simCauchy(0, 2)
-    run(c02)
-	summary(c02)
-
-
-
-cleanEx()
-nameEx("simChisq")
-### * simChisq
-
-flush(stderr()); flush(stdout())
-
-### Name: simChisq
-### Title: Create random chi-squared distribution object
-### Aliases: simChisq
-
-### ** Examples
-
-    chi5 <- simChisq(5)
-    run(chi5)
-	summary(chi5)
-
-
-
-cleanEx()
-nameEx("simDataDist")
-### * simDataDist
-
-flush(stderr()); flush(stdout())
-
-### Name: simDataDist
-### Title: Create a data distribution object.
-### Aliases: simDataDist
-
-### ** Examples
-
-# Need an example
-
-
-
-cleanEx()
-nameEx("simExp")
-### * simExp
-
-flush(stderr()); flush(stdout())
-
-### Name: simExp
-### Title: Create random exponential distribution object
-### Aliases: simExp
-
-### ** Examples
-
-    exp2 <- simExp(2)
-    run(exp2)
-	summary(exp2)
-
-
-
-cleanEx()
-nameEx("simF")
-### * simF
-
-flush(stderr()); flush(stdout())
-
-### Name: simF
-### Title: Create random F distribution object
-### Aliases: simF
-
-### ** Examples
-
-    f27 <- simF(2, 7)
-    run(f27)
-	summary(f27)
 
 
 
@@ -2710,204 +2448,6 @@ datGen <- model(BE=BE, LY=LY, RPS=RPS, RTE=RTE, modelType="SEM")
 # Real simulation will need more than just 10 replications
 #Output <- simResult(10, Data.Mis, Model, objFunction=fun)
 #summary(Output)
-
-
-
-cleanEx()
-nameEx("simGamma")
-### * simGamma
-
-flush(stderr()); flush(stdout())
-
-### Name: simGamma
-### Title: Create random gamma distribution object
-### Aliases: simGamma
-
-### ** Examples
-
-    g11 <- simGamma(1, 1)
-    run(g11)
-	summary(g11)
-
-
-
-cleanEx()
-nameEx("simGeom")
-### * simGeom
-
-flush(stderr()); flush(stdout())
-
-### Name: simGeom
-### Title: Create random geometric distribution object
-### Aliases: simGeom
-
-### ** Examples
-
-    geom5 <- simGeom(0.05)
-    run(geom5)
-	summary(geom5)
-
-
-
-cleanEx()
-nameEx("simHyper")
-### * simHyper
-
-flush(stderr()); flush(stdout())
-
-### Name: simHyper
-### Title: Create random hypergeometric distribution object
-### Aliases: simHyper
-
-### ** Examples
-
-    hyp <- simHyper(20, 5, 10)
-    run(hyp)
-	summary(hyp)
-
-
-
-cleanEx()
-nameEx("simLnorm")
-### * simLnorm
-
-flush(stderr()); flush(stdout())
-
-### Name: simLnorm
-### Title: Create random log normal distribution object
-### Aliases: simLnorm
-
-### ** Examples
-
-    lognorm <- simLnorm(0, exp(1))
-    run(lognorm)
-	summary(lognorm)
-
-
-
-cleanEx()
-nameEx("simLogis")
-### * simLogis
-
-flush(stderr()); flush(stdout())
-
-### Name: simLogis
-### Title: Create random logistic distribution object
-### Aliases: simLogis
-
-### ** Examples
-
-    logis <- simLogis(0, 1)
-    run(logis)
-	summary(logis)
-
-
-
-cleanEx()
-nameEx("simNbinom")
-### * simNbinom
-
-flush(stderr()); flush(stdout())
-
-### Name: simNbinom
-### Title: Create random negative binomial distribution object
-### Aliases: simNbinom
-
-### ** Examples
-
-    nbinom <- simNbinom(5, 0.25)
-    run(nbinom)
-	summary(nbinom)
-
-
-
-cleanEx()
-nameEx("simNorm")
-### * simNorm
-
-flush(stderr()); flush(stdout())
-
-### Name: simNorm
-### Title: Create random normal distribution object
-### Aliases: simNorm
-
-### ** Examples
-
-    n02 <- simNorm(0, 0.2)
-    run(n02)
-	summary(n02)
-
-
-
-cleanEx()
-nameEx("simPois")
-### * simPois
-
-flush(stderr()); flush(stdout())
-
-### Name: simPois
-### Title: Create random Poisson distribution object
-### Aliases: simPois
-
-### ** Examples
-
-    pois5 <- simPois(5)
-    run(pois5)
-	summary(pois5)
-
-
-
-cleanEx()
-nameEx("simT")
-### * simT
-
-flush(stderr()); flush(stdout())
-
-### Name: simT
-### Title: Create random t distribution object
-### Aliases: simT
-
-### ** Examples
-
-    nct82 <- simT(8, ncp=2)
-    run(nct82)
-	summary(nct82)
-
-
-
-cleanEx()
-nameEx("simUnif")
-### * simUnif
-
-flush(stderr()); flush(stdout())
-
-### Name: simUnif
-### Title: Create random uniform distribution object
-### Aliases: simUnif
-
-### ** Examples
-
-u1 <- simUnif(-0.1, 0.1)
-run(u1)
-summary(u1)
-
-
-
-cleanEx()
-nameEx("simWeibull")
-### * simWeibull
-
-flush(stderr()); flush(stdout())
-
-### Name: simWeibull
-### Title: Create random Weibull distribution object
-### Aliases: simWeibull
-
-### ** Examples
-
-    exWeibull <- simWeibull(2, 100)
-    run(exWeibull)
-	summary(exWeibull)
 
 
 
@@ -3128,24 +2668,6 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 # No example
-
-
-
-cleanEx()
-nameEx("weightedMean")
-### * weightedMean
-
-flush(stderr()); flush(stdout())
-
-### Name: weightedMean
-### Title: Calculate the weighted mean of a variable
-### Aliases: weightedMean
-
-### ** Examples
-
-# This function is not public
-
-# weightedMean(1:5, c(1,1,1,1,2))
 
 
 

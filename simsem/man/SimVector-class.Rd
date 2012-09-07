@@ -2,7 +2,6 @@
 \Rdversion{1.1}
 \docType{class}
 \alias{SimVector-class}
-\alias{run,SimVector-method}
 \alias{summaryShort,SimVector-method}
 \alias{summary,SimVector-method}
 \alias{extract,SimVector-method}
@@ -23,7 +22,7 @@ This object is created by \code{\link{bind}} function. Objects can be created by
 \section{Methods}{
   \describe{
     %\item{\code{\link{adjust}}}{Adjust an element in the \code{"SimVector"} object }
-    \item{\code{\link{run}}}{Draws starting values from the \code{"labels"} slot and show as a vector sample. }
+    %\item{\code{\link{run}}}{Draws starting values from the \code{"labels"} slot and show as a vector sample. }
     \item{\code{\link{summaryShort}}}{Provides a short summary of all information in the object }
     \item{\code{\link{summary}}}{Provides a thorough description of all information in the object }
 

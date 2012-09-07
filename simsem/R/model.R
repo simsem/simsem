@@ -867,47 +867,47 @@ model.lavaan <- function(object, std = FALSE, LY = NULL,PS = NULL,RPS = NULL, TE
 		if(!is.null(ME)) stop("Misspecification is not allowed in ME if 'std' is FALSE.")
 		if(!is.null(MY)) stop("Misspecification is not allowed in MY if 'std' is FALSE.")
 		if(!is.list(RPS)) RPS <- rep(list(RPS), ngroups)
-		FUN <- function(x, y=NULL, z=NULL) { 
+		FUN2 <- function(x, y=NULL, z=NULL) { 
 			y[!is.free(x)] <- ""
 			bind(x, y, z)
 		}
-		FUNS <- function(x, y, z=NULL) { 
+		FUNS2 <- function(x, y, z=NULL) { 
 			y[!is.free(x)] <- ""
 			binds(x, y, z)
 		}	
 		if(!is.list(PS)) PS <- rep(list(PS), ngroups)
-		PS <- mapply(FUNS, x=free[names(free) == "psi"], y=est[names(est) == "psi"], z=PS, SIMPLIFY=FALSE)	
+		PS <- mapply(FUNS2, x=free[names(free) == "psi"], y=est[names(est) == "psi"], z=PS, SIMPLIFY=FALSE)	
 				
 		if(modelType %in% c("CFA", "SEM")) {
 			if(!is.list(LY)) LY <- rep(list(LY), ngroups)
-			LY <- mapply(FUN, x=free[names(free) == "lambda"], y=est[names(est) == "lambda"], z=LY, SIMPLIFY=FALSE)
+			LY <- mapply(FUN2, x=free[names(free) == "lambda"], y=est[names(est) == "lambda"], z=LY, SIMPLIFY=FALSE)
 
 			if(!is.list(TE)) TE <- rep(list(TE), ngroups)
-			TE <- mapply(FUNS, x=free[names(free) == "theta"], y=est[names(est) == "theta"], z=TE, SIMPLIFY=FALSE)
+			TE <- mapply(FUNS2, x=free[names(free) == "theta"], y=est[names(est) == "theta"], z=TE, SIMPLIFY=FALSE)
 			
 			if(!is.list(TY)) TY <- rep(list(TY), ngroups)
 			if("nu" %in% names(est)) {
-				TY <- mapply(FUN, x=lapply(free[names(free) == "nu"], as.vector), y=lapply(est[names(est) == "nu"], as.vector), z=TY, SIMPLIFY=FALSE)
+				TY <- mapply(FUN2, x=lapply(free[names(free) == "nu"], as.vector), y=lapply(est[names(est) == "nu"], as.vector), z=TY, SIMPLIFY=FALSE)
 			} else {
 				ny <- nrow(est[["lambda"]])
-				TY <- mapply(FUN, x=rep(list(rep(NA, ny)), ngroups), y=rep(list(rep(0, ny)), ngroups), z=TY, SIMPLIFY=FALSE)
+				TY <- mapply(FUN2, x=rep(list(rep(NA, ny)), ngroups), y=rep(list(rep(0, ny)), ngroups), z=TY, SIMPLIFY=FALSE)
 			}
 		} 
 		if(!is.list(AL)) AL <- rep(list(AL), ngroups)
 		if("alpha" %in% names(est)) {
-			AL <- mapply(FUN, x=lapply(free[names(free) == "alpha"], as.vector), y=lapply(est[names(est) == "alpha"], as.vector), z=AL, SIMPLIFY=FALSE)
+			AL <- mapply(FUN2, x=lapply(free[names(free) == "alpha"], as.vector), y=lapply(est[names(est) == "alpha"], as.vector), z=AL, SIMPLIFY=FALSE)
 		} else {
 			p <- ncol(est[["psi"]])
 			if(modelType == "Path") {
-				AL <- mapply(FUN, x=rep(list(rep(NA, p)), ngroups), y=rep(list(rep(0, p)), ngroups), z=AL, SIMPLIFY=FALSE)
+				AL <- mapply(FUN2, x=rep(list(rep(NA, p)), ngroups), y=rep(list(rep(0, p)), ngroups), z=AL, SIMPLIFY=FALSE)
 			} else {
-				AL <- mapply(FUN, x=rep(list(rep(0, p)), ngroups), z=AL, SIMPLIFY=FALSE)
+				AL <- mapply(FUN2, x=rep(list(rep(0, p)), ngroups), z=AL, SIMPLIFY=FALSE)
 			}		
 		}
 		
 		if("beta" %in% names(est)) {
 			if(!is.list(BE)) BE <- rep(list(BE), ngroups)
-			BE <- mapply(FUN, x=free[names(free) == "beta"], y=est[names(est) == "beta"], z=BE, SIMPLIFY=FALSE)
+			BE <- mapply(FUN2, x=free[names(free) == "beta"], y=est[names(est) == "beta"], z=BE, SIMPLIFY=FALSE)
 		}
 		
 	}

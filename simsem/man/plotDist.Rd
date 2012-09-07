@@ -27,14 +27,8 @@ plotDist(object, ...)
 \seealso{
 	\itemize{
 		\item \code{\linkS4class{SimDataDist}} for plotting a data distribution object
-		\item \code{\linkS4class{VirtualDist}} for plotting a distribution object
 	}
 }
 \examples{
-gamma11 <- simGamma(1, 1)
-plotDist(gamma11)
-
-chi <- simChisq(5)
-#dataDist <- simDataDist(chi, chi)
-#plotDist(dataDist)
+# Need Example
 }

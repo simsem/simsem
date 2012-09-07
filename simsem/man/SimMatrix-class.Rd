@@ -1,7 +1,6 @@
 \name{SimMatrix-class}
 \docType{class}
 \alias{SimMatrix-class}
-\alias{run,SimMatrix-method}
 \alias{summaryShort,SimMatrix-method}
 \alias{summary,SimMatrix-method}
 %\alias{extract,SimMatrix-method}
@@ -24,7 +23,7 @@ This object is created by \code{\link{bind}} function. Objects can be also creat
 \section{Methods}{
   \describe{
     %\item{\code{\link{adjust}}}{Adjust an element in the \code{"SimMatrix"} object }
-    \item{\code{\link{run}}}{Draws starting values from the \code{"labels"} slot and show as a matrix sample. }
+    %\item{\code{\link{run}}}{Draws starting values from the \code{"labels"} slot and show as a matrix sample. }
     \item{\code{\link{summaryShort}}}{Provides a short summary of all information in the object }
     \item{\code{summary}}{Provides a thorough description of all information in the object }
     %\item{\code{\link{extract}}}{Extract elements from a simMatrix. The additional arguments are the indicies of rows and columns to be extracted. }

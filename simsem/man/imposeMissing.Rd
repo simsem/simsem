@@ -115,7 +115,7 @@ Alexander M. Schoemann (University of Kansas; \email{schoemann@ku.edu})
 \seealso{
 	\itemize{
 		\item \code{\linkS4class{SimMissing}} for the alternative way to save missing data feature for using in the \code{\link{sim}} function.
-		\item \code{\link{runMI}} for imputing missing data by multiple imputation and analyze the imputed data.
+		%\item \code{\link{runMI}} for imputing missing data by multiple imputation and analyze the imputed data.
 	}
 }
 \examples{

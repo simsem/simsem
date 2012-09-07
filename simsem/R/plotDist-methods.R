@@ -82,36 +82,36 @@ setMethod("plotDist", signature = "SimDataDist", definition = function(object, x
     }
 })
 
-setMethod("plotDist", signature = "VirtualDist", definition = function(object, xlim = NULL, reverse = FALSE) {
-    distName <- class(object)
-    distName <- tolower(gsub("Sim", "", distName))
-    if (is.null(xlim)) {
-        funmin <- list(get(paste("q", distName, sep = "")), 0.005)
-        funmax <- list(get(paste("q", distName, sep = "")), 0.995)
-        indivAttr <- slotNames(object)
-        for (j in 1:length(indivAttr)) {
-            funmin[[j + 2]] <- call("=", indivAttr[[j]], slot(object, indivAttr[[j]]))
-            funmax[[j + 2]] <- funmin[[j + 2]]
-        }
-        xlim <- rep(0, 0)
-        xlim[1] <- eval(as.call(funmin))
-        xlim[2] <- eval(as.call(funmax))
-    }
-    xrange <- seq(xlim[1], xlim[2], length.out = 200)
-    fun <- list(get(paste("d", distName, sep = "")))
-    fun[[2]] <- xrange
-    for (j in 1:length(indivAttr)) {
-        fun[[j + 2]] <- call("=", indivAttr[[j]], slot(object, indivAttr[[j]]))
-    }
-    yrange <- eval(as.call(fun))
-    if (reverse) {
-        wMeanOld <- sum(xrange * yrange)/sum(yrange)
-        disLeftOld <- wMeanOld - min(xrange)
-        disRightOld <- max(xrange) - wMeanOld
-        yrange <- rev(yrange)
-        wMeanNew <- sum(xrange * yrange)/sum(yrange)
-        xrange <- seq(wMeanNew - disRightOld, wMeanNew + disLeftOld, length.out = length(xrange))
-    }
-    plot(xrange, yrange, type = "n", xlab = "value", ylab = "density")
-    lines(xrange, yrange)
-}) 
+# setMethod("plotDist", signature = "VirtualDist", definition = function(object, xlim = NULL, reverse = FALSE) {
+    # distName <- class(object)
+    # distName <- tolower(gsub("Sim", "", distName))
+    # if (is.null(xlim)) {
+        # funmin <- list(get(paste("q", distName, sep = "")), 0.005)
+        # funmax <- list(get(paste("q", distName, sep = "")), 0.995)
+        # indivAttr <- slotNames(object)
+        # for (j in 1:length(indivAttr)) {
+            # funmin[[j + 2]] <- call("=", indivAttr[[j]], slot(object, indivAttr[[j]]))
+            # funmax[[j + 2]] <- funmin[[j + 2]]
+        # }
+        # xlim <- rep(0, 0)
+        # xlim[1] <- eval(as.call(funmin))
+        # xlim[2] <- eval(as.call(funmax))
+    # }
+    # xrange <- seq(xlim[1], xlim[2], length.out = 200)
+    # fun <- list(get(paste("d", distName, sep = "")))
+    # fun[[2]] <- xrange
+    # for (j in 1:length(indivAttr)) {
+        # fun[[j + 2]] <- call("=", indivAttr[[j]], slot(object, indivAttr[[j]]))
+    # }
+    # yrange <- eval(as.call(fun))
+    # if (reverse) {
+        # wMeanOld <- sum(xrange * yrange)/sum(yrange)
+        # disLeftOld <- wMeanOld - min(xrange)
+        # disRightOld <- max(xrange) - wMeanOld
+        # yrange <- rev(yrange)
+        # wMeanNew <- sum(xrange * yrange)/sum(yrange)
+        # xrange <- seq(wMeanNew - disRightOld, wMeanNew + disLeftOld, length.out = length(xrange))
+    # }
+    # plot(xrange, yrange, type = "n", xlab = "value", ylab = "density")
+    # lines(xrange, yrange)
+# }) 

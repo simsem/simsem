@@ -2,73 +2,73 @@
 
 # Distribution object: draw a random sample from a distribution
 
-setMethod("run", signature(object = "SimNorm"), function(object, n = 1) {
-    rnorm(n, object@mean, object@sd)
-})
+# setMethod("run", signature(object = "SimNorm"), function(object, n = 1) {
+    # rnorm(n, object@mean, object@sd)
+# })
 
-setMethod("run", signature(object = "SimUnif"), function(object, n = 1) {
-    runif(n, object@min, object@max)
-})
+# setMethod("run", signature(object = "SimUnif"), function(object, n = 1) {
+    # runif(n, object@min, object@max)
+# })
 
-setMethod("run", signature(object = "SimBeta"), function(object, n = 1) {
-    rbeta(n, object@shape1, object@shape2, object@ncp)
-})
+# setMethod("run", signature(object = "SimBeta"), function(object, n = 1) {
+    # rbeta(n, object@shape1, object@shape2, object@ncp)
+# })
 
-setMethod("run", signature(object = "SimBinom"), function(object, n = 1) {
-    rbinom(n, object@size, object@prob)
-})
+# setMethod("run", signature(object = "SimBinom"), function(object, n = 1) {
+    # rbinom(n, object@size, object@prob)
+# })
 
-setMethod("run", signature(object = "SimCauchy"), function(object, n = 1) {
-    rcauchy(n, object@location, object@scale)
-})
+# setMethod("run", signature(object = "SimCauchy"), function(object, n = 1) {
+    # rcauchy(n, object@location, object@scale)
+# })
 
-setMethod("run", signature(object = "SimChisq"), function(object, n = 1) {
-    rchisq(n, object@df, object@ncp)
-})
+# setMethod("run", signature(object = "SimChisq"), function(object, n = 1) {
+    # rchisq(n, object@df, object@ncp)
+# })
 
-setMethod("run", signature(object = "SimExp"), function(object, n = 1) {
-    rexp(n, object@rate)
-})
+# setMethod("run", signature(object = "SimExp"), function(object, n = 1) {
+    # rexp(n, object@rate)
+# })
 
-setMethod("run", signature(object = "SimF"), function(object, n = 1) {
-    rf(n, object@df1, object@df2, object@ncp)
-})
+# setMethod("run", signature(object = "SimF"), function(object, n = 1) {
+    # rf(n, object@df1, object@df2, object@ncp)
+# })
 
-setMethod("run", signature(object = "SimGamma"), function(object, n = 1) {
-    rgamma(n, object@shape, object@rate)
-})
+# setMethod("run", signature(object = "SimGamma"), function(object, n = 1) {
+    # rgamma(n, object@shape, object@rate)
+# })
 
-setMethod("run", signature(object = "SimGeom"), function(object, n = 1) {
-    rgeom(n, object@prob)
-})
+# setMethod("run", signature(object = "SimGeom"), function(object, n = 1) {
+    # rgeom(n, object@prob)
+# })
 
-setMethod("run", signature(object = "SimHyper"), function(object, n = 1) {
-    rhyper(n, object@m, object@n, object@k)
-})
+# setMethod("run", signature(object = "SimHyper"), function(object, n = 1) {
+    # rhyper(n, object@m, object@n, object@k)
+# })
 
-setMethod("run", signature(object = "SimLnorm"), function(object, n = 1) {
-    rlnorm(n, object@meanlog, object@sdlog)
-})
+# setMethod("run", signature(object = "SimLnorm"), function(object, n = 1) {
+    # rlnorm(n, object@meanlog, object@sdlog)
+# })
 
-setMethod("run", signature(object = "SimLogis"), function(object, n = 1) {
-    rlogis(n, object@location, object@scale)
-})
+# setMethod("run", signature(object = "SimLogis"), function(object, n = 1) {
+    # rlogis(n, object@location, object@scale)
+# })
 
-setMethod("run", signature(object = "SimNbinom"), function(object, n = 1) {
-    rnbinom(n, object@size, object@prob)
-})
+# setMethod("run", signature(object = "SimNbinom"), function(object, n = 1) {
+    # rnbinom(n, object@size, object@prob)
+# })
 
-setMethod("run", signature(object = "SimPois"), function(object, n = 1) {
-    rpois(n, object@lambda)
-})
+# setMethod("run", signature(object = "SimPois"), function(object, n = 1) {
+    # rpois(n, object@lambda)
+# })
 
-setMethod("run", signature(object = "SimT"), function(object, n = 1) {
-    rt(n, object@df, object@ncp)
-})
+# setMethod("run", signature(object = "SimT"), function(object, n = 1) {
+    # rt(n, object@df, object@ncp)
+# })
 
-setMethod("run", signature(object = "SimWeibull"), function(object, n = 1) {
-    rweibull(n, object@shape, object@scale)
-})
+# setMethod("run", signature(object = "SimWeibull"), function(object, n = 1) {
+    # rweibull(n, object@shape, object@scale)
+# })
 
 ###############################################################################
 

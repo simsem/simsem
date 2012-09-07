@@ -4,7 +4,7 @@
 \alias{pValue,ANY-method}
 \alias{pValue,numeric,vector-method}
 \alias{pValue,numeric,data.frame-method}
-%\alias{pValue,lavaan,SimResult-method}
+\alias{pValue,lavaan,SimResult-method}
 \title{
 	Find p-values (1 - percentile)
 }

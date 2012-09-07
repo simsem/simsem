@@ -3,7 +3,6 @@
 \docType{class}
 \alias{SimMissing-class}
 \alias{summary,SimMissing-method}
-\alias{run,SimMissing-method}
 \title{Class \code{"SimMissing"}}
 \description{
 Missing information imposing on the complete dataset
@@ -34,7 +33,7 @@ Objects can be created by \code{simMissing} function. It can also be called from
 \section{Methods}{
 	\itemize{
 		\item \code{\link{summary}} To summarize the object
-		\item \code{\link{run}} To impose missing information into data
+		%\item \code{\link{run}} To impose missing information into data
 	}
 }
 \author{

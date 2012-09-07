@@ -10,7 +10,7 @@
 <div align="center">
 <a href="../../../doc/html/packages.html"><img src="../../../doc/html/left.jpg" alt="[Up]" width="30" height="30" border="0"></a>
 <a href="../../../doc/html/index.html"><img src="../../../doc/html/up.jpg" alt="[Top]" width="30" height="30" border="0"></a>
-</div><h2>Documentation for package &lsquo;simsem&rsquo; version 0.3-1</h2>
+</div><h2>Documentation for package &lsquo;simsem&rsquo; version 0.3-2</h2>
 
 <ul><li><a href="../DESCRIPTION">DESCRIPTION file</a>.</li>
 </ul>
@@ -53,6 +53,8 @@
 <table width="100%">
 <tr><td width="25%"><a href="bind.html">bind</a></td>
 <td>Specify matrices for Monte Carlo simulation of structural equation models</td></tr>
+<tr><td width="25%"><a href="bindDist.html">bindDist</a></td>
+<td>Create a data distribution object.</td></tr>
 <tr><td width="25%"><a href="bind.html">binds</a></td>
 <td>Specify matrices for Monte Carlo simulation of structural equation models</td></tr>
 </table>
@@ -80,8 +82,6 @@
 <h2><a name="E">-- E --</a></h2>
 
 <table width="100%">
-<tr><td width="25%"><a href="SimDataDist-class.html">extract-method</a></td>
-<td>Class '"SimDataDist"'</td></tr>
 <tr><td width="25%"><a href="SimVector-class.html">extract-method</a></td>
 <td>Vector object: Random parameters vector</td></tr>
 <tr><td width="25%"><a href="extractLavaanFit.html">extractLavaanFit</a></td>
@@ -197,12 +197,6 @@
 <h2><a name="M">-- M --</a></h2>
 
 <table width="100%">
-<tr><td width="25%"><a href="miPool.html">miPool</a></td>
-<td>Function to pool imputed results</td></tr>
-<tr><td width="25%"><a href="miPoolChi.html">miPoolChi</a></td>
-<td>Function to pool chi-square statistics from the result from multiple imputation</td></tr>
-<tr><td width="25%"><a href="miPoolVector.html">miPoolVector</a></td>
-<td>Function to pool imputed results that saved in a matrix format</td></tr>
 <tr><td width="25%"><a href="miss.html">miss</a></td>
 <td>TBA</td></tr>
 <tr><td width="25%"><a href="model.html">model</a></td>
@@ -237,8 +231,6 @@
 <td>Plot a distribution of a distribution object or data distribution object</td></tr>
 <tr><td width="25%"><a href="SimDataDist-class.html">plotDist-method</a></td>
 <td>Class '"SimDataDist"'</td></tr>
-<tr><td width="25%"><a href="VirtualDist-class.html">plotDist-method</a></td>
-<td>Distribution Objects</td></tr>
 <tr><td width="25%"><a href="plotDist.html">plotDist-methods</a></td>
 <td>Plot a distribution of a distribution object or data distribution object</td></tr>
 <tr><td width="25%"><a href="plotIndividualScatter.html">plotIndividualScatter</a></td>
@@ -294,26 +286,6 @@
 <table width="100%">
 <tr><td width="25%"><a href="revText.html">revText</a></td>
 <td>Reverse the proportion value by subtracting it from 1</td></tr>
-<tr><td width="25%"><a href="run.html">run</a></td>
-<td>Run a particular object in 'simsem' package.</td></tr>
-<tr><td width="25%"><a href="SimDataDist-class.html">run-method</a></td>
-<td>Class '"SimDataDist"'</td></tr>
-<tr><td width="25%"><a href="SimFunction-class.html">run-method</a></td>
-<td>Class '"SimFunction"'</td></tr>
-<tr><td width="25%"><a href="SimMatrix-class.html">run-method</a></td>
-<td>Matrix object: Random parameters matrix</td></tr>
-<tr><td width="25%"><a href="SimMissing-class.html">run-method</a></td>
-<td>Class '"SimMissing"'</td></tr>
-<tr><td width="25%"><a href="SimVector-class.html">run-method</a></td>
-<td>Vector object: Random parameters vector</td></tr>
-<tr><td width="25%"><a href="VirtualDist-class.html">run-method</a></td>
-<td>Distribution Objects</td></tr>
-<tr><td width="25%"><a href="run.html">run-method</a></td>
-<td>Run a particular object in 'simsem' package.</td></tr>
-<tr><td width="25%"><a href="run.html">run-methods</a></td>
-<td>Run a particular object in 'simsem' package.</td></tr>
-<tr><td width="25%"><a href="runMI.html">runMI</a></td>
-<td>Multiply impute and analyze data using lavaan</td></tr>
 </table>
 
 <h2><a name="S">-- S --</a></h2>
@@ -329,92 +301,22 @@
 <td>Set the data generation population model underlying an object</td></tr>
 <tr><td width="25%"><a href="sim.html">sim</a></td>
 <td>Run a monte carlo simulation with a structural equation model.</td></tr>
-<tr><td width="25%"><a href="simBeta.html">simBeta</a></td>
-<td>Create random beta distribution object</td></tr>
-<tr><td width="25%"><a href="VirtualDist-class.html">SimBeta-class</a></td>
-<td>Distribution Objects</td></tr>
-<tr><td width="25%"><a href="simBinom.html">simBinom</a></td>
-<td>Create random binomial distribution object</td></tr>
-<tr><td width="25%"><a href="VirtualDist-class.html">SimBinom-class</a></td>
-<td>Distribution Objects</td></tr>
-<tr><td width="25%"><a href="simCauchy.html">simCauchy</a></td>
-<td>Create random Cauchy distribution object</td></tr>
-<tr><td width="25%"><a href="VirtualDist-class.html">SimCauchy-class</a></td>
-<td>Distribution Objects</td></tr>
-<tr><td width="25%"><a href="simChisq.html">simChisq</a></td>
-<td>Create random chi-squared distribution object</td></tr>
-<tr><td width="25%"><a href="VirtualDist-class.html">SimChisq-class</a></td>
-<td>Distribution Objects</td></tr>
-<tr><td width="25%"><a href="simDataDist.html">simDataDist</a></td>
-<td>Create a data distribution object.</td></tr>
 <tr><td width="25%"><a href="SimDataDist-class.html">SimDataDist-class</a></td>
 <td>Class '"SimDataDist"'</td></tr>
-<tr><td width="25%"><a href="simExp.html">simExp</a></td>
-<td>Create random exponential distribution object</td></tr>
-<tr><td width="25%"><a href="VirtualDist-class.html">SimExp-class</a></td>
-<td>Distribution Objects</td></tr>
-<tr><td width="25%"><a href="simF.html">simF</a></td>
-<td>Create random F distribution object</td></tr>
-<tr><td width="25%"><a href="VirtualDist-class.html">SimF-class</a></td>
-<td>Distribution Objects</td></tr>
 <tr><td width="25%"><a href="simFunction.html">simFunction</a></td>
 <td>Create function object</td></tr>
 <tr><td width="25%"><a href="SimFunction-class.html">SimFunction-class</a></td>
 <td>Class '"SimFunction"'</td></tr>
-<tr><td width="25%"><a href="simGamma.html">simGamma</a></td>
-<td>Create random gamma distribution object</td></tr>
-<tr><td width="25%"><a href="VirtualDist-class.html">SimGamma-class</a></td>
-<td>Distribution Objects</td></tr>
-<tr><td width="25%"><a href="simGeom.html">simGeom</a></td>
-<td>Create random geometric distribution object</td></tr>
-<tr><td width="25%"><a href="VirtualDist-class.html">SimGeom-class</a></td>
-<td>Distribution Objects</td></tr>
-<tr><td width="25%"><a href="simHyper.html">simHyper</a></td>
-<td>Create random hypergeometric distribution object</td></tr>
-<tr><td width="25%"><a href="VirtualDist-class.html">SimHyper-class</a></td>
-<td>Distribution Objects</td></tr>
-<tr><td width="25%"><a href="simLnorm.html">simLnorm</a></td>
-<td>Create random log normal distribution object</td></tr>
-<tr><td width="25%"><a href="VirtualDist-class.html">SimLnorm-class</a></td>
-<td>Distribution Objects</td></tr>
-<tr><td width="25%"><a href="simLogis.html">simLogis</a></td>
-<td>Create random logistic distribution object</td></tr>
-<tr><td width="25%"><a href="VirtualDist-class.html">SimLogis-class</a></td>
-<td>Distribution Objects</td></tr>
 <tr><td width="25%"><a href="SimMatrix-class.html">SimMatrix-class</a></td>
 <td>Matrix object: Random parameters matrix</td></tr>
 <tr><td width="25%"><a href="SimMissing-class.html">SimMissing-class</a></td>
 <td>Class '"SimMissing"'</td></tr>
-<tr><td width="25%"><a href="simNbinom.html">simNbinom</a></td>
-<td>Create random negative binomial distribution object</td></tr>
-<tr><td width="25%"><a href="VirtualDist-class.html">SimNbinom-class</a></td>
-<td>Distribution Objects</td></tr>
-<tr><td width="25%"><a href="simNorm.html">simNorm</a></td>
-<td>Create random normal distribution object</td></tr>
-<tr><td width="25%"><a href="VirtualDist-class.html">SimNorm-class</a></td>
-<td>Distribution Objects</td></tr>
-<tr><td width="25%"><a href="simPois.html">simPois</a></td>
-<td>Create random Poisson distribution object</td></tr>
-<tr><td width="25%"><a href="VirtualDist-class.html">SimPois-class</a></td>
-<td>Distribution Objects</td></tr>
 <tr><td width="25%"><a href="SimResult-class.html">SimResult-class</a></td>
 <td>Class '"SimResult"'</td></tr>
 <tr><td width="25%"><a href="SimSem-class.html">SimSem-class</a></td>
 <td>Class '"SimSem"'</td></tr>
-<tr><td width="25%"><a href="simT.html">simT</a></td>
-<td>Create random t distribution object</td></tr>
-<tr><td width="25%"><a href="VirtualDist-class.html">SimT-class</a></td>
-<td>Distribution Objects</td></tr>
-<tr><td width="25%"><a href="simUnif.html">simUnif</a></td>
-<td>Create random uniform distribution object</td></tr>
-<tr><td width="25%"><a href="VirtualDist-class.html">SimUnif-class</a></td>
-<td>Distribution Objects</td></tr>
 <tr><td width="25%"><a href="SimVector-class.html">SimVector-class</a></td>
 <td>Vector object: Random parameters vector</td></tr>
-<tr><td width="25%"><a href="simWeibull.html">simWeibull</a></td>
-<td>Create random Weibull distribution object</td></tr>
-<tr><td width="25%"><a href="VirtualDist-class.html">SimWeibull-class</a></td>
-<td>Distribution Objects</td></tr>
 <tr><td width="25%"><a href="sortList.html">sortList</a></td>
 <td>Sort two objects in a list</td></tr>
 <tr><td width="25%"><a href="SimDataDist-class.html">summary-method</a></td>
@@ -431,8 +333,6 @@
 <td>Class '"SimSem"'</td></tr>
 <tr><td width="25%"><a href="SimVector-class.html">summary-method</a></td>
 <td>Vector object: Random parameters vector</td></tr>
-<tr><td width="25%"><a href="VirtualDist-class.html">summary-method</a></td>
-<td>Distribution Objects</td></tr>
 <tr><td width="25%"><a href="summaryFit.html">summaryFit</a></td>
 <td>Provide summary of model fit across replications</td></tr>
 <tr><td width="25%"><a href="summaryFit.html">summaryFit-method</a></td>
@@ -465,8 +365,6 @@
 <td>Matrix object: Random parameters matrix</td></tr>
 <tr><td width="25%"><a href="SimVector-class.html">summaryShort-method</a></td>
 <td>Vector object: Random parameters vector</td></tr>
-<tr><td width="25%"><a href="VirtualDist-class.html">summaryShort-method</a></td>
-<td>Distribution Objects</td></tr>
 <tr><td width="25%"><a href="summaryShort.html">summaryShort-method</a></td>
 <td>Provide short summary of an object.</td></tr>
 <tr><td width="25%"><a href="summaryShort.html">summaryShort-methods</a></td>
@@ -489,15 +387,11 @@
 <td>Validate whether the drawn parameters are good.</td></tr>
 <tr><td width="25%"><a href="validatePath.html">validatePath</a></td>
 <td>Validate whether the regression coefficient (or loading) matrix is good</td></tr>
-<tr><td width="25%"><a href="VirtualDist-class.html">VirtualDist-class</a></td>
-<td>Distribution Objects</td></tr>
 </table>
 
 <h2><a name="W">-- W --</a></h2>
 
 <table width="100%">
-<tr><td width="25%"><a href="weightedMean.html">weightedMean</a></td>
-<td>Calculate the weighted mean of a variable</td></tr>
 <tr><td width="25%"><a href="whichMonotonic.html">whichMonotonic</a></td>
 <td>Extract a part of a vector that is monotonically increasing or decreasing</td></tr>
 </table>

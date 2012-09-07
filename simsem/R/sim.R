@@ -56,9 +56,7 @@
     
     ## 3. Draws for randomly varying simulation parameters
     if (!is.null(n)) {
-      if (is(n, "VirtualDist")) {
-        n <- round(run(n, nRep))
-      } else if (is.vector(n)) {
+      if (is.vector(n)) {
         if (length(n) != nRep) 
           ifelse(length(n) > nRep, n <- sample(n, nRep, replace = TRUE), n <- sample(n, nRep))
       } else {
@@ -66,9 +64,7 @@
       }
     }
     if (!is.null(pmMCAR)) {
-      if (is(pmMCAR, "VirtualDist")) {
-        pmMCAR <- run(pmMCAR, nRep)
-      } else if (is.vector(pmMCAR)) {
+      if (is.vector(pmMCAR)) {
         if (length(pmMCAR) != nRep) 
           ifelse(length(pmMCAR) > nRep, pmMCAR <- sample(pmMCAR, nRep, replace = TRUE), pmMCAR <- sample(pmMCAR, nRep))
       } else {
@@ -76,9 +72,7 @@
       }
     }
     if (!is.null(pmMAR)) {
-      if (is(pmMAR, "VirtualDist")) {
-        pmMAR <- run(pmMAR, nRep)
-      } else if (is.vector(pmMAR)) {
+      if (is.vector(pmMAR)) {
         if (length(pmMAR) != nRep) 
           ifelse(length(pmMAR) > nRep, pmMAR <- sample(pmMAR, nRep, replace = TRUE), pmMAR <- sample(pmMAR, nRep))
       } else {

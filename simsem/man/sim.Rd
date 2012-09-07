@@ -22,7 +22,7 @@ paramOnly = FALSE, dataOnly=FALSE, ...)
 	\code{\linkS4class{SimSem}} object created by \code{\link{model}}. Will be used to generate data and analyze it.
 }
   \item{n}{
-	Sample size. This argument is not necessary except the user wish to vary sample size across replications. The sample size here can be random distribution object (\code{\linkS4class{VirtualDist}}), or a vector of sample size in integers. For the random distribution object, if the resulting value has decimal, the value will be rounded. 
+	Sample size. This argument is not necessary except the user wish to vary sample size across replications. The sample size here is a vector of sample size in integers. For the random distribution object, if the resulting value has decimal, the value will be rounded. 
 }
   \item{generate}{
 	\code{\linkS4class{SimSem}} object created by \code{\link{model}}. If included, this will be used to generate data instead of 
@@ -37,10 +37,10 @@ paramOnly = FALSE, dataOnly=FALSE, ...)
 	Function to be applied to generated data set at each replication.
 }
   \item{pmMCAR}{
-	The percent completely missing at random. This argument is not necessary except the user wish to vary percent missing completely at random across replications. The \code{pmMCAR} here can be random distribution object (\code{\linkS4class{VirtualDist}}), or a vector of percent missing, which the values can be in between 0 and 1 only. The specification of \code{objMissing} is not needed (but is needed if users wish to specify complex missing value data generation or wish to use multiple imputation). 
+	The percent completely missing at random. This argument is not necessary except the user wish to vary percent missing completely at random across replications. The \code{pmMCAR} here is a vector of percent missing, which the values can be in between 0 and 1 only. The specification of \code{objMissing} is not needed (but is needed if users wish to specify complex missing value data generation or wish to use multiple imputation). 
 }
   \item{pmMAR}{
-	The percent missing at random. This argument is not necessary except the user wish to vary percent missing at random across replications. The \code{pmMAR} here can be random distribution object (\code{\linkS4class{VirtualDist}}), or a vector of percent missing, which the values can be in between 0 and 1 only. The specification of \code{objMissing} is not needed (but is needed if users wish to specify complex missing value data generation or wish to use multiple imputation). 
+	The percent missing at random. This argument is not necessary except the user wish to vary percent missing at random across replications. The \code{pmMAR} here is a vector of percent missing, which the values can be in between 0 and 1 only. The specification of \code{objMissing} is not needed (but is needed if users wish to specify complex missing value data generation or wish to use multiple imputation). 
 
 }
   \item{facDist}{ 

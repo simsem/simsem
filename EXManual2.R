@@ -3,12 +3,9 @@
 #Call it population value instead of starting value
 #Summary function put star for fixed parameters (Any nonzero values that is fixed is labelled as stars)
 
-# To do: write the whole runFit function
-# Write the dataDist funciton: try to make it not depends on any distribution object
 # likRatio need to be fixed
 # missing object need to make it runable
 # plotMisfit does not work
-# {pValue,lavaan,SimResult-method}.
 # Fix pValueNested and pValueNonNested
 # run function of the simDataDist, simMissing
 # simFunction still does not work
@@ -522,17 +519,6 @@ summary(Output)
 
 #library(simsem)
 
-u2 <- simUnif(-0.2, 0.2)
-u5 <- simUnif(-0.5, 0.5)
-t2 <- simT(2)
-t3 <- simT(3)
-t4 <- simT(4)
-t5 <- simT(5)
-chi3 <- simChisq(3)
-chi4 <- simChisq(4)
-chi5 <- simChisq(5)
-chi6 <- simChisq(6)
-
 loading <- matrix(0, 12, 3)
 loading[1:4, 1] <- NA
 loading[5:8, 2] <- NA
@@ -551,11 +537,30 @@ RTD <- binds(error.cor)
 
 CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA") 
 
-SimDataDist <- simDataDist(t2, t3, t4, t5, chi3, chi4, chi5, chi6, chi3, chi4, chi5, chi6, reverse=c(rep(FALSE, 8), rep(TRUE, 4)))
-dat <- generate(CFA.Model, n=200, indDist=SimDataDist)
+# margins 	
+
+# a character vector specifying all the marginal distributions. See details below.
+
+# paramMargins 	
+
+# a list whose each component is a list of named components, giving the parameter values of the marginal distributions. See details below.
+
+d1 <- list(df=2)
+d2 <- list(df=3)
+d3 <- list(df=4)
+d4 <- list(df=5)
+d5 <- list(df=3)
+d6 <- list(df=4)
+d7 <- list(df=5)
+d8 <- list(df=6)
+
+
+dist <- bindDist(c(rep("t", 4), rep("chisq", 8)), d1, d2, d3, d4, d5, d6, d7, d8, d5, d6, d7, d8)
+
+dat <- generate(CFA.Model, n=200, indDist=dist)
 out <- analyze(CFA.Model, dat, estimator="mlr")
 
-Output <- sim(50, n=200, CFA.Model, indDist=SimDataDist, estimator="mlm")
+Output <- sim(50, n=200, CFA.Model, indDist=dist, estimator="mlm")
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summary(Output)
@@ -564,8 +569,6 @@ summary(Output)
 
 #library(simsem)
 
-n1 <- simNorm(0, 0.1)
-chi5 <- simChisq(5)
 
 path.BE <- matrix(0, 4, 4)
 path.BE[3, 1:2] <- NA
@@ -596,7 +599,10 @@ RTE <- binds(diag(12), misspec=mis.error.cor)
 
 SEM.Model <- model(RPS = RPS, BE = BE, LY=LY, RTE=RTE, modelType="SEM")
 
-facDist <- simDataDist(chi5, chi5, n1, n1)
+n1 <- list(mean = 0, sd = 0.1)
+chi5 <- list(df = 5)
+
+facDist <- bindDist(c("chisq", "chisq", "norm", "norm"), chi5, chi5, n1, n1)
 
 dat <- generate(SEM.Model, n=500, sequential=TRUE, facDist=facDist)
 out <- analyze(SEM.Model, dat, estimator="mlr")
@@ -744,6 +750,8 @@ path[2:3, 1] <- NA
 path[3, 2] <- NA
 param <- estmodel(LY=loading, BE=path, modelType="SEM", indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
 
+# Fix indLab facLab and groupLab
+
 usedData <- imposeMissing(PoliticalDemocracy, pmMCAR=0.03)
 
 #model <- simModel(param)
@@ -754,9 +762,8 @@ usedData2 <- imposeMissing(PoliticalDemocracy, logical=is.na(usedData))
 miss <- miss(logical=is.na(usedData))
 
 u2 <- simUnif(-0.2, 0.2)
-loading.mis <- matrix(NA, 11, 3)
+loading.mis <- matrix("runif(1, -0.2, 0.2)", 11, 3)
 loading.mis[is.na(loading)] <- 0
-LY.mis <- bind(loading.mis, "u2")
 misspec <- simMisspecSEM(LY=LY.mis)
 output <- runFit(model, usedData, 200, misspec=misspec, missModel=miss)
 pValue(out, output)

@@ -1,6 +1,6 @@
-setGeneric("run", function(object, ...) {
-    return(standardGeneric("run"))
-})
+# setGeneric("run", function(object, ...) {
+    # return(standardGeneric("run"))
+# })
 
 ## setGeneric("adjust", function(target, value, pos, numAsFixed = TRUE) {
 ##     return(standardGeneric("adjust"))
