@@ -123,8 +123,7 @@ plotIndividualScatter   Plot an overlaying scatter plot visualizing the
                         power of rejecting misspecified models
 plotLogisticFit         Plot multiple logistic curves for predicting
                         whether rejecting a misspecified model
-plotMisfit              Plot the population misfit in parameter result
-                        object
+plotMisfit              Plot the population misfit in the result object
 plotOverHist            Plot multiple overlapping histograms
 plotPower               Make a power plot of a parameter given varying
                         parameters
@@ -158,7 +157,13 @@ setPopulation           Set the data generation population model
 sim                     Run a monte carlo simulation with a structural
                         equation model.
 sortList                Sort two objects in a list
+summaryConverge         Provide a comparison between the
+                        characteristics of convergent replications and
+                        nonconvergent replications
 summaryFit              Provide summary of model fit across
+                        replications
+summaryMisspec          Provide summary of the population misfit and
+                        misspecified-parameter values across
                         replications
 summaryParam            Provide summary of parameter estimates and
                         standard error across replications

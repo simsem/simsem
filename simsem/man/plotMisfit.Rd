@@ -1,10 +1,10 @@
 \name{plotMisfit}
 \alias{plotMisfit}
 \title{
-	Plot the population misfit in parameter result object
+	Plot the population misfit in the result object
 }
 \description{
-	Plot a histogram of the amount of population misfit in parameter result object or the scatter plot of the relationship between misspecified parameter and the population misfit
+	Plot a histogram of the amount of population misfit in parameter result object or the scatter plot of the relationship between misspecified parameter and the population misfit or the fit indices
 }
 \usage{
 plotMisfit(object, usedFit="default", misParam=NULL)
@@ -14,7 +14,7 @@ plotMisfit(object, usedFit="default", misParam=NULL)
 	The result object, \code{\linkS4class{SimResult}}
 }
   \item{usedFit}{
-	The fit indices used to plot. If the \code{misParam} is not specified, all fit indices are used. If the \code{misParam} is specified, the \code{"rmsea"} is used in the plot.
+	The sample fit indices or population misfit used to plot. All sample fit indices are available. The available population misfit are \code{"pop.f0"}, \code{"pop.rmsea"}, and \code{"pop.srmr"}. If the \code{misParam} is not specified, all population misfit are used. If the \code{misParam} is specified, the \code{"pop.rmsea"} is used in the plot.
 }
   \item{misParam}{
 	The index or the name of misspecified parameters used to plot.
@@ -46,8 +46,8 @@ ME <- bind(rep(NA, 4), 0)
 Path.Model <- model(RPS = RPS, BE = BE, ME = ME, modelType="Path")
 
 # The number of replications in actual analysis should be much more than 5
-ParamObject <- sim(20, n=500, Path.Model, misfitType="rmsea", paramOnly=TRUE)
-#plotMisfit(ParamObject)
+ParamObject <- sim(20, n=500, Path.Model)
+plotMisfit(ParamObject)
 
-#plotMisfit(ParamObject, misParam=1:2)
+plotMisfit(ParamObject, misParam=1:2)
 }

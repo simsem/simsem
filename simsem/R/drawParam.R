@@ -7,14 +7,14 @@
 ## [[3]] $mis - Misspecification only
 
 
-draw <- function(model, maxDraw=50, misfitBounds=NULL, averageNumMisspec=FALSE, optMisfit = NULL, optDraws=50, misfitType="f0",misfitOut=FALSE) {
+draw <- function(model, maxDraw=50, misfitBounds=NULL, averageNumMisspec=FALSE, optMisfit = NULL, optDraws=50, misfitType="f0") {
   stopifnot(class(model) == "SimSem")
   drawParam(model@dgen, maxDraw = maxDraw, numFree=max(model@pt$free), misfitBounds=misfitBounds, averageNumMisspec=averageNumMisspec,
-            optMisfit=optMisfit, optDraws=optDraws, misfitType=misfitType, misfitOut=misfitOut)
+            optMisfit=optMisfit, optDraws=optDraws, misfitType=misfitType)
 }
   
 
-drawParam <- function(paramSet, maxDraw=50, numFree, misfitBounds=NULL, averageNumMisspec=FALSE, optMisfit = NULL, optDraws=50, misfitType="f0",misfitOut=FALSE) {
+drawParam <- function(paramSet, maxDraw=50, numFree, misfitBounds=NULL, averageNumMisspec=FALSE, optMisfit = NULL, optDraws=50, misfitType="f0") {
   if(!is.list(paramSet[[1]])) {
     paramSet <- list(paramSet)
   }
@@ -39,12 +39,12 @@ drawParam <- function(paramSet, maxDraw=50, numFree, misfitBounds=NULL, averageN
       fullpls <- list() # list of drawn parameter sets (filled)
       fullmpls <- list() # list of drawn parameter sets with misspec (filled)
       fullmls <- list() # list of parameter sets with misspec only (filled)
-      
+
       for(i in groupLoop) {
         rpls[[i]] <- lapply(paramSet[[i]],rawDraw)
         fullpls[[i]] <- fillParam(lapply(rpls[[i]],"[[",1))
         fullmpls[[i]] <- fillParam(lapply(rpls[[i]],"[[",2))
-        fullmls[[i]] <- mapply("-",fullmpls[[i]],fullpls[[i]])
+		fullmls[[i]] <- mapply("-", lapply(rpls[[i]],"[[",2),lapply(rpls[[i]],"[[",1))
       }
              
       if(!is.null(optMisfit)) { #  if misfit needs to be optimized
@@ -71,14 +71,15 @@ drawParam <- function(paramSet, maxDraw=50, numFree, misfitBounds=NULL, averageN
         
         mls <- list() # list of misspec draws numIterations by groups. length(mls) = optDraws, length(mls[[1]]) = numgroups
         macsMisls <- list() # list of misspec macs, numIterations by groups
-               
+        
+		temp <- list()		
         for (i in seq_len(optDraws)) {
           misspecDraws <- list()
           macsMis <- list()
-          temp <- list()
+          temp[[i]] <- list()
           for (j in groupLoop) {
-            temp <- lapply(paramSet[[j]],rawDraw,misOnly=TRUE)
-            addMis <- mapply("+",rpls[[j]],temp)
+            temp[[i]][[j]] <- lapply(paramSet[[j]],rawDraw,misOnly=TRUE)
+            addMis <- mapply("+",rpls[[j]],temp[[i]][[j]])
             misspecDraws[[j]] <- fillParam(lapply(addMis, FUN=function(x) {if(length(x) == 0) { x <- NULL } else x }))
             tempMacs <- createImpliedMACS(misspecDraws[[j]])
             if (all(is.finite(tempMacs$CM)) && (sum(eigen(tempMacs$CM)$values <= 0) == 0)) {
@@ -119,8 +120,9 @@ drawParam <- function(paramSet, maxDraw=50, numFree, misfitBounds=NULL, averageN
         } 
         
         fullmpls <- mls[[iter]]
+		rawDrawResult <- temp[[iter]]
         for(i in groupLoop) {
-          fullmls[[i]] <- mapply("-",fullmpls[[i]],fullpls[[i]])
+		  fullmls[[i]] <- mapply("-", lapply(rawDrawResult[[i]],"[[",2),rawDrawResult(rpls[[i]],"[[",1))
         }
         
       } # End optimization, return control to normal misspec checks / draws
@@ -208,11 +210,7 @@ drawParam <- function(paramSet, maxDraw=50, numFree, misfitBounds=NULL, averageN
     for(i in groupLoop) {
       final[[i]] <- list(param=redpls[[i]], misspec=redmpls[[i]], misOnly=redmls[[i]])
     }
-    if(misfitOut) {
-      return(list(final, misfit=misfit))
-    } else {        
-      return(final)
-    }
+    return(final)
   } else {
     stop(paste0("Cannot make a good set of parameters with given constraints within the maximum number of draws.\n",misfitType,": ",round(misfit,6)))
   }
@@ -484,10 +482,10 @@ createImpliedMACS <- function(reducedParamSet) {
 
 ## Now takes lists for the matrices for mg
 popMisfitMACS <- function(paramM, paramCM, misspecM, misspecCM, dfParam = NULL, fit.measures = "all") {
-	if(is.vector(paramM)) paramM <- list(paramM)
-	if(is.vector(misspecM)) misspecM <- list(misspecM)
-	if(is.matrix(paramCM)) paramCM <- list(paramCM)
-	if(is.matrix(misspecCM)) misspecCM <- list(misspecCM)
+	if(!is.list(paramM)) paramM <- list(paramM)
+	if(!is.list(misspecM)) misspecM <- list(misspecM)
+	if(!is.list(paramCM)) paramCM <- list(paramCM)
+	if(!is.list(misspecCM)) misspecCM <- list(misspecCM)
 	
 	if (fit.measures == "all") {
         fit.measures <- c("f0","rmsea","srmr")
@@ -495,7 +493,7 @@ popMisfitMACS <- function(paramM, paramCM, misspecM, misspecCM, dfParam = NULL, 
         if (is.null(dfParam)) 
             fit.measures <- fit.measures[c(1, 3)]
     }
-    p <- length(paramM)
+    p <- length(paramM[[1]])
     fit.measures <- tolower(fit.measures)
 
     # If multiple group, f0 is added for each group

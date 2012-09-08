@@ -21,6 +21,12 @@ cleanSimResult <- function(object, converged=NULL) {
     object@converged <- rep(TRUE, object@nRep)
     if (!is.null(object@paramValue) && (nrow(object@paramValue) > 1)) 
         object@paramValue <- object@paramValue[converged, ]
+    if (!is.null(object@misspecValue) && (nrow(object@misspecValue) > 1)) 
+        object@misspecValue <- object@misspecValue[converged, ]
+    if (!is.null(object@popFit) && (nrow(object@popFit) > 1)) 
+        object@popFit <- object@popFit[converged, ]
+    if (!is.null(object@extraOut) && (length(object@extraOut) > 1)) 
+        object@extraOut <- object@extraOut[converged]
     if (!is.null(object@FMI1)) 
         object@FMI1 <- object@FMI1[converged, ]
     if (!is.null(object@FMI2)) 

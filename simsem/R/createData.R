@@ -30,7 +30,7 @@ createData <- function(paramSet, n, indDist=NULL, sequential=FALSE, facDist=NULL
   if (sequential & !is.null(indDist)) 
     stop("indDist is not allowed when using sequential method in data generation")
   #classes <- sapply(list(facDist,indDist,errorDist),class) could be a check soon
-   
+
     Data <- NULL
     param <- paramSet$param
     usedParam <- NULL
@@ -39,7 +39,7 @@ createData <- function(paramSet, n, indDist=NULL, sequential=FALSE, facDist=NULL
     } else {
         usedParam <- param
     }
-
+	
     if (modelBoot) {
         require(lavaan)
         originalData <- realData

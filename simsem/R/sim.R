@@ -223,6 +223,13 @@
 			rep$extra
 		})
 	} 
+	popMis.l <- lapply(Result.l, function(rep) {
+        rep$popMis
+    })
+	misfitOut.l <- lapply(Result.l, function(rep) {
+        rep$misfitOut
+    })
+	
    ##  paramData.l <- lapply(Result.l, function(rep) {
 ##         rep$paramData
 ##     })
@@ -235,6 +242,8 @@
     param <- NULL
     FMI1 <- NULL
     FMI2 <- NULL
+	popMis <- NULL
+	misfitOut <- NULL
     if (!is.null(param.l[[1]])) {
         param <- as.data.frame(do.call(rbind, param.l))
         if (sum(dim(param)) == 0) 
@@ -256,7 +265,22 @@
         if (nrow(unique(FMI2)) == 1) 
             FMI2 <- unique(FMI2)
     }
-  
+    if (!is.null(popMis.l[[1]])) {
+        popMis <- as.data.frame(do.call(rbind, popMis.l))
+        if (sum(dim(popMis)) == 0) 
+            popMis <- NULL
+        if (nrow(unique(popMis)) == 1) 
+            popMis <- unique(popMis)
+    }
+	if(all(dim(popMis)==1)) popMis <- data.frame()
+    if (!is.null(misfitOut.l[[1]])) {
+        misfitOut <- as.data.frame(do.call(rbind, misfitOut.l))
+        if (sum(dim(misfitOut)) == 0) 
+            misfitOut <- NULL
+        if (nrow(unique(misfitOut)) == 1) 
+            misfitOut <- unique(misfitOut)
+    }
+    if(all(dim(misfitOut)==1)) misfitOut <- data.frame()
     if (is.null(pmMCAR)) 
         ifelse(is.null(miss), pmMCAR <- 0, pmMCAR <- miss@pmMCAR)
     if (is.null(pmMAR)) 
@@ -269,7 +293,7 @@
     
 	#if(is.null(generate)) param <- param[,match(colnames(object@paramValue), colnames(object@coef))]
 	
-    Result <- new("SimResult", modelType = model@modelType, nRep = nRep, coef = coef, se = se, fit = fit, converged = converged, seed = seed, paramValue = param, FMI1 = data.frame(FMI1), FMI2 = data.frame(FMI2), stdCoef = std, 
+    Result <- new("SimResult", modelType = model@modelType, nRep = nRep, coef = coef, se = se, fit = fit, converged = converged, seed = seed, paramValue = param, misspecValue= popMis, popFit= misfitOut,FMI1 = data.frame(FMI1), FMI2 = data.frame(FMI2), stdCoef = std, 
         n = n, pmMCAR = pmMCAR, pmMAR = pmMAR, extraOut = extra, timing=timing)
     if (silent) 
         options(warn = warnT)
@@ -333,7 +357,7 @@ runRep <- function(simConds, model, generate=NULL, miss = NULL, datafun=NULL, ou
                        indLab=indLab, modelBoot=modelBoot, realData=realData, params=TRUE)
       data <- genout[[1]]
       psl <- genout[[2]] # Indexing: Group -> param/misParam/misOnly -> paramSet (reduced)
-      if(!is.null(psl[[1]]$misParam)) {
+      if(!is.null(psl[[1]]$misspec)) {
         paramSet <- lapply(psl,"[[",2) # Group -> misParam -> paramSet (by group)
       } else {
         paramSet <- lapply(psl,"[[",1) # Group -> param -> paramSet (by group)
@@ -439,10 +463,28 @@ runRep <- function(simConds, model, generate=NULL, miss = NULL, datafun=NULL, ou
 			facLabGen <- unique(generate@pt$lhs[generate@pt$op=="=~"])
 		}
 		popParam <- reduceParamSet(paramSet,generate@dgen, indLabGen, facLabGen, aux)
+		
+		if(!is.null(psl[[1]]$misspec)) {
+			 # Group -> misParam -> paramSet (by group)
+			misParamSet <- lapply(psl,"[[",3)
+			popMis <- reduceMisspecSet(misParamSet, generate@modelType != "Path", indLabGen, facLabGen)
+			p <- length(indLabGen)
+			nElements <- (p + (p * (p + 1)/2)) * length(psl)
+			dfParam <- nElements - max(generate@pt$free)
+			misfitOut <- popMisfitParams(psl, df=dfParam)
+		} else {
+			popMis <- NA
+			misfitOut <- NA
+		}
     } else {
 		popParam <- NA # Real Data
+		popMis <- NA # Misspecfication
+		misfitOut <- NA # Misfit indices for misspecification
     }
     
+
+
+	
     ##  if (is(temp, "SimModelMIOut")) {
     
     ##           FMI1 <- vectorizeObject(temp@FMI1, Labels)
@@ -456,7 +498,7 @@ runRep <- function(simConds, model, generate=NULL, miss = NULL, datafun=NULL, ou
     timing$ParseOutput <- (proc.time()[3] - start.time)
     start.time <- proc.time()[3]
     
-    Result <- list(coef = coef, se = se, fit = fit, converged = converged, param = popParam, FMI1 = FMI1, FMI2 = FMI2, std = std, timing=timing, extra=extra)
+    Result <- list(coef = coef, se = se, fit = fit, converged = converged, param = popParam, FMI1 = FMI1, FMI2 = FMI2, std = std, timing=timing, extra=extra, popMis = popMis, misfitOut = misfitOut)
     Result
 }
 
@@ -590,8 +632,126 @@ reduceParamSet <- function(paramSet,dgen,indLab=NULL, facLab=NULL,aux=NULL) {
   }
   final
 }    
-      
+
+## paramSet -> Re-labeled population parameter values (for free parameters)
+reduceMisspecSet <- function(misspecSet, latent, indLab=NULL, facLab=NULL) {
+
+  final <- NULL
+  psLab <- NULL
+  if(latent) {
+	psLab <- facLab
+  } else {
+	psLab <- indLab
+  }
   
+  #LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL, VTE = NULL, VY = NULL, VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL
+  
+  for(g in seq_along(misspecSet)) {
+    tpset <- misspecSet[[g]]
+	tpset <- lapply(tpset, function(x) { if(is.null(x) || (is.vector(x) && length(x) == 0)) { return(NULL) } else {return(x) } })
+	
+	if(!is.null(tpset$LY)) {
+		free <- tpset$LY != 0
+		lab <- outer(indLab, facLab, function(x, y, op, g) paste0(g, ".", y, op, x), op="=~", g=g)
+		param <- tpset$LY[free]
+		names(param) <- lab[free]
+		final <- c(final,param)
+	}
+	if(!is.null(tpset$TE)) {
+		free <- tpset$TE != 0 & lower.tri(tpset$TE, diag=TRUE)
+		lab <- outer(indLab, indLab, function(x, y, op, g) paste0(g, ".", x, op, y), op="~~", g=g)
+		param <- tpset$TE[free]
+		names(param) <- lab[free]
+		final <- c(final,param)
+	}
+	if(!is.null(tpset$RTE)) {
+		free <- tpset$RTE != 0 & lower.tri(tpset$RTE, diag=FALSE)
+		lab <- outer(indLab, indLab, function(x, y, op, g) paste0(g, ".", x, op, y), op="~~*", g=g)
+		param <- tpset$RTE[free]
+		names(param) <- lab[free]
+		final <- c(final,param)
+	}
+	if(!is.null(tpset$VTE)) {
+		free <- tpset$VTE != 0 
+		lab <- paste0(g, ".", facLab, "~~", facLab) 
+		param <- tpset$VTE[free]
+		names(param) <- lab[free]
+		final <- c(final,param)
+	}	
+	if(!is.null(tpset$VY)) {
+		free <- tpset$VY != 0 
+		lab <- paste0(g, ".", facLab, "~~*", facLab) 
+		param <- tpset$VY[free]
+		names(param) <- lab[free]
+		final <- c(final,param)
+	}	
+	if(!is.null(tpset$PS)) {
+		free <- tpset$PS != 0 & lower.tri(tpset$PS, diag=TRUE)
+		lab <- outer(psLab, psLab, function(x, y, op, g) paste0(g, ".", x, op, y), op="~~", g=g)
+		param <- tpset$PS[free]
+		names(param) <- lab[free]
+		final <- c(final,param)
+	}		
+	if(!is.null(tpset$RPS)) {
+		free <- tpset$RPS != 0 & lower.tri(tpset$RPS, diag=FALSE)
+		lab <- outer(psLab, psLab, function(x, y, op, g) paste0(g, ".", x, op, y), op="~~*", g=g)
+		param <- tpset$RPS[free]
+		names(param) <- lab[free]
+		final <- c(final,param)
+	}
+	if(!is.null(tpset$VPS)) {
+		free <- tpset$VPS != 0 
+		lab <- paste0(g, ".", psLab, "~~", psLab) 
+		param <- tpset$VPS[free]
+		names(param) <- lab[free]
+		final <- c(final,param)
+	}	
+	if(!is.null(tpset$VE)) {
+		free <- tpset$VE != 0 
+		lab <- paste0(g, ".", psLab, "~~*", psLab) 
+		param <- tpset$VE[free]
+		names(param) <- lab[free]
+		final <- c(final,param)
+	}	
+	if(!is.null(tpset$BE)) {
+		free <- tpset$BE != 0
+		lab <- outer(psLab, psLab, function(x, y, op, g) paste0(g, ".", x, op, y), op="~", g=g)
+		param <- tpset$BE[free]
+		names(param) <- lab[free]
+		final <- c(final,param)
+	}
+	if(!is.null(tpset$AL)) {
+		free <- tpset$AL != 0 
+		lab <- paste0(g, ".", psLab, "~1") 
+		param <- tpset$AL[free]
+		names(param) <- lab[free]
+		final <- c(final,param)
+	}
+	if(!is.null(tpset$ME)) {
+		free <- tpset$ME != 0 
+		lab <- paste0(g, ".", psLab, "~1*") 
+		param <- tpset$ME[free]
+		names(param) <- lab[free]
+		final <- c(final,param)
+	}
+	if(!is.null(tpset$TY)) {
+		free <- tpset$TY != 0 
+		lab <- paste0(g, ".", indLab, "~1")
+		param <- tpset$TY[free]
+		names(param) <- lab[free]
+		final <- c(final,param)
+	}
+	if(!is.null(tpset$MY)) {
+		free <- tpset$MY != 0 
+		lab <- paste0(g, ".", indLab, "~1*")
+		param <- tpset$MY[free]
+		names(param) <- lab[free]
+		final <- c(final,param)
+	}
+  }
+  final
+}    
+       
 ## GLIST -> Re-labeled Parameter Estimates
 reduceLavaanParam <- function(glist,dgen, indLab, facLab) {
   # Chunk at a time approach

@@ -1930,7 +1930,7 @@ nameEx("plotMisfit")
 flush(stderr()); flush(stdout())
 
 ### Name: plotMisfit
-### Title: Plot the population misfit in parameter result object
+### Title: Plot the population misfit in the result object
 ### Aliases: plotMisfit
 
 ### ** Examples
@@ -1954,10 +1954,10 @@ ME <- bind(rep(NA, 4), 0)
 Path.Model <- model(RPS = RPS, BE = BE, ME = ME, modelType="Path")
 
 # The number of replications in actual analysis should be much more than 5
-ParamObject <- sim(20, n=500, Path.Model, misfitType="rmsea", paramOnly=TRUE)
-#plotMisfit(ParamObject)
+ParamObject <- sim(20, n=500, Path.Model)
+plotMisfit(ParamObject)
 
-#plotMisfit(ParamObject, misParam=1:2)
+plotMisfit(ParamObject, misParam=1:2)
 
 
 
@@ -2443,6 +2443,63 @@ flush(stderr()); flush(stdout())
 
 
 cleanEx()
+nameEx("summaryConverge")
+### * summaryConverge
+
+flush(stderr()); flush(stdout())
+
+### Name: summaryConverge
+### Title: Provide a comparison between the characteristics of convergent
+###   replications and nonconvergent replications
+### Aliases: summaryConverge
+
+### ** Examples
+
+## Not run: 
+##D path.BE <- matrix(0, 4, 4)
+##D path.BE[3, 1:2] <- NA
+##D path.BE[4, 3] <- NA
+##D starting.BE <- matrix("", 4, 4)
+##D starting.BE[3, 1:2] <- "runif(1, 0.3, 0.5)"
+##D starting.BE[4, 3] <- "runif(1, 0.5, 0.7)"
+##D mis.path.BE <- matrix(0, 4, 4)
+##D mis.path.BE[4, 1:2] <- "runif(1, -0.1, 0.1)"
+##D BE <- bind(path.BE, starting.BE, misspec=mis.path.BE)
+##D 
+##D residual.error <- diag(4)
+##D residual.error[1,2] <- residual.error[2,1] <- NA
+##D RPS <- binds(residual.error, "rnorm(1, 0.3, 0.1)")
+##D 
+##D loading <- matrix(0, 12, 4)
+##D loading[1:3, 1] <- NA
+##D loading[4:6, 2] <- NA
+##D loading[7:9, 3] <- NA
+##D loading[10:12, 4] <- NA
+##D mis.loading <- matrix("runif(1, -0.3, 0.3)", 12, 4)
+##D mis.loading[is.na(loading)] <- 0
+##D LY <- bind(loading, "runif(1, 0.7, 0.9)", misspec=mis.loading)
+##D 
+##D mis.error.cor <- matrix("rnorm(1, 0, 0.1)", 12, 12)
+##D diag(mis.error.cor) <- 0
+##D RTE <- binds(diag(12), misspec=mis.error.cor)
+##D 
+##D SEM.Model <- model(RPS = RPS, BE = BE, LY=LY, RTE=RTE, modelType="SEM")
+##D 
+##D n1 <- list(mean = 0, sd = 0.1)
+##D chi5 <- list(df = 5)
+##D 
+##D facDist <- bindDist(c("chisq", "chisq", "norm", "norm"), chi5, chi5, n1, n1)
+##D 
+##D dat <- generate(SEM.Model, n=500, sequential=TRUE, facDist=facDist)
+##D out <- analyze(SEM.Model, dat, estimator="mlr")
+##D 
+##D simOut <- sim(50, n=500, SEM.Model, sequential=TRUE, facDist=facDist, estimator="mlr")
+##D summaryConverge(simOut)
+## End(Not run)
+
+
+
+cleanEx()
 nameEx("summaryFit")
 ### * summaryFit
 
@@ -2465,6 +2522,44 @@ CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
 # In reality, more replications are needed.
 Output <- sim(5, n=500, CFA.Model)
 summaryFit(Output)
+
+
+
+cleanEx()
+nameEx("summaryMisspec")
+### * summaryMisspec
+
+flush(stderr()); flush(stdout())
+
+### Name: summaryMisspec
+### Title: Provide summary of the population misfit and
+###   misspecified-parameter values across replications
+### Aliases: summaryMisspec
+
+### ** Examples
+
+## Not run: 
+##D path <- matrix(0, 4, 4)
+##D path[3, 1:2] <- NA
+##D path[4, 3] <- NA
+##D pathVal <- matrix("", 4, 4)
+##D pathVal[3, 1:2] <- "runif(1, 0.3, 0.5)"
+##D pathVal[4, 3] <- "runif(1, 0.5, 0.7)"
+##D pathMis <- matrix(0, 4, 4)
+##D pathMis[4, 1:2] <- "runif(1, -0.1, 0.1)"
+##D BE <- bind(path, pathVal, pathMis)
+##D 
+##D residual.error <- diag(4)
+##D residual.error[1,2] <- residual.error[2,1] <- NA
+##D RPS <- binds(residual.error, "rnorm(1, 0.3, 0.1)")
+##D 
+##D Path.Model <- model(RPS = RPS, BE = BE, modelType="Path")
+##D 
+##D # The number of replications in actual analysis should be much more than 5
+##D ParamObject <- sim(5, n=200, Path.Model)
+##D 
+##D summaryMisspec(ParamObject)
+## End(Not run)
 
 
 

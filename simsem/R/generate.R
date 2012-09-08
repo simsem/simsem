@@ -44,3 +44,17 @@ generate <- function(model, n, maxDraw=50,misfitBounds=NULL, misfitType="f0",
 ## [[3]] mis: misspecification only
 ## paramSet$param: reduced list of model matrices with parameter draws, or a "GLIST"
 ##  GLIST: PS, BE, AL, TE, LY, TY
+
+popMisfitParams <- function(psl, df=NULL) {
+	ngroups <- length(psl)
+	real <- lapply(psl,"[[",1)
+	realmis <- lapply(psl,"[[",2)
+	macsreal <- lapply(real,createImpliedMACS)
+	macsmis <- lapply(realmis,createImpliedMACS)
+	misfit <- popMisfitMACS(paramM = lapply(macsreal,"[[",1),
+						  paramCM = lapply(macsreal,"[[",2),
+						  misspecM = lapply(macsmis, "[[",1),
+						  misspecCM = lapply(macsmis,"[[",2),
+						  fit.measures = "all", dfParam = df)
+	return(misfit)
+}

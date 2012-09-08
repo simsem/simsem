@@ -17,16 +17,3 @@ summaryPopulation <- function(object) {
     }
     return(result)
 }
-
-## setMethod("summaryPopulation", signature(object = "SimModelOut"), definition = function(object) {
-##     ifelse(isNullObject(object@paramValue), print("There is no parameter value underlying the data."), summary(object@paramValue))
-## })
-
-## setMethod("summaryPopulation", signature(object = "SimDataOut"), definition = function(object) {
-##     cat("======== Real Parameters =========\n")
-##     summary(object@paramOut)
-##     if (!isNullObject(object@misspecOut)) {
-##         cat("======== Real Parameters with Model Misspecification ========\n")
-##         summary(object@misspecOut)
-##     }
-## }) 

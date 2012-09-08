@@ -8,7 +8,7 @@
 }
 \usage{
 draw(model, maxDraw=50, misfitBounds=NULL, averageNumMisspec=FALSE, 
-optMisfit = NULL, optDraws=50, misfitType="f0",misfitOut=FALSE)
+optMisfit = NULL, optDraws=50, misfitType="f0")
 }
 \arguments{
   \item{model}{
@@ -31,9 +31,6 @@ optMisfit = NULL, optDraws=50, misfitType="f0",misfitOut=FALSE)
 }
   \item{misfitType}{
 	Character vector indicating the fit measure used to assess the misfit of a set of parameters. Can be "f0", "rmsea", "srmr", or "all". 
-}
-  \item{misfitOut}{
-	Argument specifying how the misfit is returned.
 }
 }
 \value{

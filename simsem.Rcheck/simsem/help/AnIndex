@@ -126,7 +126,9 @@ summary,SimMissing-method	SimMissing-class
 summary,SimResult-method	SimResult-class
 summary,SimSem-method	SimSem-class
 summary,SimVector-method	SimVector-class
+summaryConverge	summaryConverge
 summaryFit	summaryFit
+summaryMisspec	summaryMisspec
 summaryParam	summaryParam
 summaryPopulation	summaryPopulation
 summaryPopulation,SimResult-method	SimResult-class

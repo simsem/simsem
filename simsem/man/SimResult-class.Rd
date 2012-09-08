@@ -25,6 +25,8 @@ Objects can be created by \code{\link{sim}}. It can also be called from the form
     \item{\code{converged}:}{Number of convergence replications }
     \item{\code{seed}:}{Seed number. }
 	\item{\code{paramValue}:}{Population model underlying each simulated dataset.}
+	\item{\code{misspecValue}:}{Misspecified-parameter values that are imposed on the population model in each replication.}
+	\item{\code{popFit}:}{The amount of population misfit. See details at \code{\link{popMisfitMACS}}}
 	\item{\code{FMI1}:}{Fraction Missing Method 1.}
 	\item{\code{FMI2}:}{Fraction Missing Method 2.}
 	\item{\code{stdCoef}:}{Standardized coefficients from each replication}

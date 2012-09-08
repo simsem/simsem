@@ -1,7 +1,6 @@
 # summaryParam: This function will summarize the obtained parameter estimates and standard error.
 
 summaryParam <- function(object, alpha = 0.05, detail = FALSE) {
-
   object <- clean(object)
     coef <- colMeans(object@coef, na.rm = TRUE)
     real.se <- sapply(object@coef, sd, na.rm = TRUE)
@@ -92,58 +91,3 @@ summaryParam <- function(object, alpha = 0.05, detail = FALSE) {
     }
     return(as.data.frame(result))
 }
-
-## setMethod("summaryParam", signature(object = "SimModelOut"), definition = function(object, alpha = 0.05) {
-##     lab <- makeLabels(object@param, "OpenMx")
-##     coef <- vectorizeObject(object@coef, lab)
-##     se <- vectorizeObject(object@se, lab)
-##     se[se == 0] <- NA
-##     z <- coef/se
-##     p <- (1 - pnorm(abs(z))) * 2
-##     stdSet <- standardize(object)
-##     std <- vectorizeObject(stdSet, lab)
-##     result <- cbind(coef, se, z, p, std)
-##     colnames(result) <- c("Estimate", "SE", "z", "p", "Std Est")
-##     if (!is.null(object@paramValue)) {
-##         paramValue <- vectorizeObject(object@paramValue, lab)
-##         biasParam <- vectorizeObject(subtractObject(object@coef, object@paramValue), lab)
-##         crit <- qnorm(1 - alpha/2)
-##         lowerBound <- coef - crit * se
-##         upperBound <- coef + crit * se
-##         cover <- (paramValue > lowerBound) & (paramValue < upperBound)
-##         result <- data.frame(result, Param = paramValue, Bias = biasParam, Coverage = cover)
-##     }
-##     return(as.data.frame(result))
-## })
-
-## setMethod("summaryParam", signature(object = "SimModelMIOut"), definition = function(object, alpha = 0.05) {
-##     lab <- makeLabels(object@param, "OpenMx")
-##     coef <- vectorizeObject(object@coef, lab)
-##     se <- vectorizeObject(object@se, lab)
-##     stdSet <- standardize(object)
-##     std <- vectorizeObject(stdSet, lab)
-##     FMI1 <- vectorizeObject(object@FMI1, lab)
-##     FMI2 <- vectorizeObject(object@FMI2, lab)
-##     se[se == 0] <- NA
-##     z <- coef/se
-##     p <- (1 - pnorm(abs(z))) * 2
-##     result <- cbind(coef, se, z, p, std, FMI1, FMI2)
-##     colnames(result) <- c("Estimate", "SE", "z", "p", "Std Est", "FMI1", "FMI2")
-##     if (!is.null(object@paramValue)) {
-##         paramValue <- vectorizeObject(object@paramValue, lab)
-##         biasParam <- vectorizeObject(subtractObject(object@coef, object@paramValue), lab)
-##         crit <- qnorm(1 - alpha/2)
-##         lowerBound <- coef - crit * se
-##         upperBound <- coef + crit * se
-##         cover <- (paramValue > lowerBound) & (paramValue < upperBound)
-##         result <- data.frame(result, Param = paramValue, Bias = biasParam, Coverage = cover)
-##     }
-##     return(as.data.frame(result))
-## })
-
-# setMethod("summaryParam", signature(object = "SimResultParam"), definition = function(object) {
-    # average <- colMeans(object@param, na.rm = TRUE)
-    # se <- sapply(object@param, sd, na.rm = TRUE)
-    # result <- data.frame(mean = average, sd = se)
-    # return(result)
-# }) 

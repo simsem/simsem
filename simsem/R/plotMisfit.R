@@ -1,8 +1,11 @@
-# plotMisfit: Plot the misfit of the SimResultParam
+# plotMisfit: Plot the misfit of the SimResult
 
 plotMisfit <- function(object, usedFit = "default", misParam = NULL) {
+	if(all(dim(object@misspecValue) == 0))
+		stop("This object does not have any model misspecification.")
+	object <- clean(object)
     if (usedFit == "default") {
-        ifelse(is.null(misParam), usedFit <- c("f0", "rmsea", "srmr"), usedFit <- "rmsea")
+        ifelse(is.null(misParam), usedFit <- c("pop.f0", "pop.rmsea", "pop.srmr"), usedFit <- "pop.rmsea")
     }
     dimOut <- length(usedFit)
     if (!is.null(misParam)) {
@@ -21,17 +24,20 @@ plotMisfit <- function(object, usedFit = "default", misParam = NULL) {
     } else {
         stop("Some errors occur")
     }
+	target <- object@popFit
+	names(target) <- paste0("pop.", names(target))
+	target <- cbind(object@fit, target)
     if (all(is.numeric(usedFit))) 
-        usedFit <- colnames(object@fit)[usedFit]
+        usedFit <- colnames(target)[usedFit]
     if (!is.null(misParam) && all(is.numeric(misParam))) 
-        misParam <- colnames(object@misspec)[misParam]
+        misParam <- colnames(object@misspecValue)[misParam]
     for (i in 1:dimOut) {
         if (is.null(misParam)) {
-            fit <- object@fit[, usedFit[i]]
+            fit <- target[, usedFit[i]]
             hist(fit, main = usedFit[i], breaks = 10, col = "yellow", xlab = "Value")
         } else {
-            fit <- object@fit[, usedFit]
-            xVal <- object@misspec[, misParam[i]]
+            fit <- target[, usedFit]
+            xVal <- object@misspecValue[, misParam[i]]
             plot(xVal, fit, main = misParam[i], ylab = usedFit, xlab = "Misspecification Value")
             lines(loess.smooth(xVal, fit), col = "red")
         }

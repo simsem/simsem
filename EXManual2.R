@@ -72,8 +72,6 @@ dir <- "C:/Users/student/Dropbox/simsem/simsem/R/"
 
 
 
-
-
 #library(formatR)
 #tidy.dir(dir)
 
@@ -216,7 +214,28 @@ getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
 
+################################ Try misspec ############
 
+
+loading <- matrix(0, 6, 2)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+loading.mis <- matrix("runif(1, -0.1, 0.1)", 6, 2)
+loading.mis[is.na(loading)] <- ""
+LY <- bind(loading, 0.7, loading.mis)
+
+latent.cor <- matrix(NA, 2, 2)
+diag(latent.cor) <- 1
+RPS <- binds(latent.cor, 0.5)
+
+RTE <- binds(diag(6))
+
+VTE <- bind(rep(NA, 6), 0.51)
+
+CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, VTE=VTE, modelType = "CFA")
+
+param <- draw(CFA.Model, misfitOut=TRUE)
+dat <- createData(param[[1]], n = 200)
 
 
 
@@ -335,11 +354,13 @@ ME <- bind(rep(NA, 4), 0)
 
 Path.Model <- model(RPS = RPS, BE = BE, ME = ME, modelType="Path")
 
-param <- draw(Path.Model)
+param <- draw(Path.Model,misfitOut=TRUE)
 dat <- createData(param[[1]], n = 200)
 
 
 dat <- generate(Path.Model, n=500, params=TRUE)
+
+
 out <- analyze(Path.Model, dat)
 # The VTE is still wrong. Check after the LCA comes in.
 
@@ -401,7 +422,7 @@ RTD <- binds(diag(6), misspec=matrix("rnorm(1,0,0.1)", 6, 6))
 
 CFA.NULL <- model(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD, modelType="CFA")
 
-Output.NULL <- sim(300, n=500, CFA.NULL)
+Output.NULL <- sim(20, n=500, CFA.NULL)
 
 loading.alt <- matrix(0, 6, 2)
 loading.alt[1:3, 1] <- NA
@@ -414,7 +435,7 @@ diag(latent.cor.alt) <- 1
 RPH.ALT <- binds(latent.cor.alt, "runif(1,0.7,0.9)")
 CFA.ALT <- model(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD, modelType="CFA")
 
-Output.ALT <- sim(300, n=500, model=CFA.NULL, generate=CFA.ALT)
+Output.ALT <- sim(20, n=500, model=CFA.NULL, generate=CFA.ALT)
 
 cutoff <- getCutoff(Output.NULL, 0.05)
 getPowerFit(Output.ALT, cutoff)
