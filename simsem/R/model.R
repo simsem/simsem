@@ -1,7 +1,7 @@
 ## Takes model specification matrices of type SimMatrix (or lists of these matrices for multiple groups).
 ## Returns a SimSem object that contains templates for data generation and analyis.
 model <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL, VTE = NULL, VY = NULL,
-                  VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, modelType, indLab=NULL, facLab=NULL, ngroups=1, smartStart=TRUE) {
+                  VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, modelType, indLab=NULL, facLab=NULL, groupLab="group", ngroups=1, smartStart=TRUE) {
   
   paramSet <- list(LY=LY, PS=PS, RPS=RPS, TE=TE, RTE=RTE, BE=BE, VTE=VTE, VY=VY, VPS=VPS, VE=VE, TY=TY, AL=AL, MY=MY,ME=ME)
   if(!is.null(modelType)) {
@@ -47,9 +47,9 @@ model <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NUL
       pt <- NULL
        for(i in seq_along(psl)) {
          if (i == 1) {
-           pt <- buildPT(psl[[i]], pt=pt, group=i,facLab=NULL, indLab=NULL,smart=smartStart)
+           pt <- buildPT(psl[[i]], pt=pt, group=i,facLab=facLab, indLab=indLab,smart=smartStart)
          } else {
-           pt <- mapply(pt,buildPT(psl[[i]], pt=pt, group=i,facLab=NULL, indLab=NULL,smart=smartStart),FUN=c,SIMPLIFY=FALSE)
+           pt <- mapply(pt,buildPT(psl[[i]], pt=pt, group=i,facLab=facLab, indLab=indLab,smart=smartStart),FUN=c,SIMPLIFY=FALSE)
          }
        }
 	  
@@ -57,13 +57,13 @@ model <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NUL
       pt <- btwGroupCons(pt)
       #nullpt <- nullpt(psl[[1]], ngroups=n)
 
-      return(new("SimSem",pt=pt,dgen=psl,modelType=modelType))
+      return(new("SimSem",pt=pt,dgen=psl,modelType=modelType,groupLab=groupLab))
       
     } else { # ngroups = 1, and no matrices are lists
      paramSet <- buildModel(paramSet,modelType)
      pt <- buildPT(paramSet,smart=smartStart)
      #nullpt <- nullpt(paramSet)
-     return(new("SimSem",pt=pt,dgen=paramSet,modelType=modelType))
+     return(new("SimSem",pt=pt,dgen=paramSet,modelType=modelType,groupLab=groupLab))
    }
   } else { stop("Must specify model type") } 
 }
@@ -174,8 +174,8 @@ buildPT <- function(paramSet, pt=NULL, group=1,facLab=NULL, indLab=NULL, smart=T
   if (!is.null(paramSet$LY)) {
     nf <- ncol(paramSet$LY@free)
     ni <- nrow(paramSet$LY@free)
-    if(is.null(facLab)){lhs <- rep(paste("y",1:nf,sep=""),each=ni) } else { lhs <- rep(facLab,each=ni)}
-    if(is.null(indLab)){rhs <- rep(paste("x",1:ni,sep=""),times=nf) } else { rhs <- rep(indLab,times=nf)}
+    if(is.null(facLab)){lhs <- rep(paste("f",1:nf,sep=""),each=ni) } else { lhs <- rep(facLab,each=ni)}
+    if(is.null(indLab)){rhs <- rep(paste("y",1:ni,sep=""),times=nf) } else { rhs <- rep(indLab,times=nf)}
     pt <- parseFree(paramSet$LY, group=group, pt=pt,op="=~",lhs,rhs,smart=smart)
   }
 
@@ -183,8 +183,8 @@ buildPT <- function(paramSet, pt=NULL, group=1,facLab=NULL, indLab=NULL, smart=T
   if (!is.null(paramSet$PS)) {
     nf <- ncol(paramSet$PS@free)
     if(is.null(facLab)){
-      lhs <- paste0("y",rep(1:nf,nf:1))
-      rhs <- paste0("y",unlist(lapply(1:nf,function(k) (1:nf)[k:nf])))
+      lhs <- paste0("f",rep(1:nf,nf:1))
+      rhs <- paste0("f",unlist(lapply(1:nf,function(k) (1:nf)[k:nf])))
     } else {
       lhs <- rep(facLab,nf:1)
       rhs <- unlist(lapply(1:nf,function(k) facLab[k:nf]))
@@ -212,8 +212,8 @@ buildPT <- function(paramSet, pt=NULL, group=1,facLab=NULL, indLab=NULL, smart=T
     # Step 2: create pt
     nf <- ncol(paramSet$RPS@free)
     if(is.null(facLab)){
-      lhs <- paste0("y",rep(1:nf,nf:1))
-      rhs <- paste0("y",unlist(lapply(1:nf,function(k) (1:nf)[k:nf])))
+      lhs <- paste0("f",rep(1:nf,nf:1))
+      rhs <- paste0("f",unlist(lapply(1:nf,function(k) (1:nf)[k:nf])))
     } else {
       lhs <- rep(facLab,nf:1)
       rhs <- unlist(lapply(1:nf,function(k) facLab[k:nf]))
@@ -234,8 +234,8 @@ buildPT <- function(paramSet, pt=NULL, group=1,facLab=NULL, indLab=NULL, smart=T
    if (!is.null(paramSet$TE)) {
     ni <- ncol(paramSet$TE@free)
     if(is.null(indLab)){
-      lhs <- paste0("x",rep(1:ni,ni:1))
-      rhs <- paste0("x",unlist(lapply(1:ni,function(k) (1:ni)[k:ni])))
+      lhs <- paste0("y",rep(1:ni,ni:1))
+      rhs <- paste0("y",unlist(lapply(1:ni,function(k) (1:ni)[k:ni])))
     } else {
       lhs <- rep(indLab,ni:1)
       rhs <- unlist(lapply(1:ni,function(k) indLab[k:ni]))
@@ -259,8 +259,8 @@ buildPT <- function(paramSet, pt=NULL, group=1,facLab=NULL, indLab=NULL, smart=T
     # Step 2: create pt
      ni <- ncol(paramSet$RTE@free)
      if(is.null(indLab)){
-       lhs <- paste0("x",rep(1:ni,ni:1))
-       rhs <- paste0("x",unlist(lapply(1:ni,function(k) (1:ni)[k:ni])))
+       lhs <- paste0("y",rep(1:ni,ni:1))
+       rhs <- paste0("y",unlist(lapply(1:ni,function(k) (1:ni)[k:ni])))
      } else {
        lhs <- rep(indLab,ni:1)
        rhs <- unlist(lapply(1:ni,function(k) indLab[k:ni]))
@@ -273,8 +273,8 @@ buildPT <- function(paramSet, pt=NULL, group=1,facLab=NULL, indLab=NULL, smart=T
   if (!is.null(paramSet$BE)) {
     nf <- ncol(paramSet$BE@free)
     if(is.null(facLab)){
-      lhs <- rep(paste("y",1:nf,sep=""),each=nf)
-      rhs <- rep(paste("y",1:nf,sep=""),times=nf)
+      lhs <- rep(paste("f",1:nf,sep=""),each=nf)
+      rhs <- rep(paste("f",1:nf,sep=""),times=nf)
     } else {
       lhs <- rep(facLab,each=nf)
       rhs <- rep(facLab,times=nf)
@@ -296,7 +296,7 @@ buildPT <- function(paramSet, pt=NULL, group=1,facLab=NULL, indLab=NULL, smart=T
   if (!is.null(paramSet$AL)) {
     nf <- length(paramSet$AL@free)
     if(is.null(facLab)){
-      lhs <- paste("y",1:nf,sep="")
+      lhs <- paste("f",1:nf,sep="")
       rhs <- rep("",times=nf)
     } else {
       lhs <- facLab
@@ -318,7 +318,7 @@ buildPT <- function(paramSet, pt=NULL, group=1,facLab=NULL, indLab=NULL, smart=T
   if (!is.null(paramSet$TY)) {
      ni <- length(paramSet$TY@free)
      if(is.null(indLab)){
-       lhs <- paste("x",1:ni,sep="")
+       lhs <- paste("y",1:ni,sep="")
        rhs <- rep("",times=ni)
      } else {
        lhs <- indLab
@@ -587,19 +587,19 @@ btwGroupCons <- function(pt) {
 # model <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL, VTE = NULL, VY = NULL,
                   # VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, modelType, indLab=NULL, facLab=NULL, ngroups=1, smartStart=TRUE) {
 
-model.cfa <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, VTE = NULL, VY = NULL, VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, indLab=NULL, facLab=NULL, ngroups=1, smartStart=TRUE) {
-	model(LY = LY,PS = PS,RPS = RPS, TE = TE,RTE = RTE, BE = NULL, VTE = VTE, VY = VY, VPS = VPS, VE=VE, TY = TY, AL = AL, MY = MY, ME = ME, modelType="CFA", indLab=indLab, facLab=facLab, ngroups=ngroups, smartStart=smartStart)
+model.cfa <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, VTE = NULL, VY = NULL, VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, indLab=NULL, facLab=NULL, groupLab="group", ngroups=1, smartStart=TRUE) {
+	model(LY = LY,PS = PS,RPS = RPS, TE = TE,RTE = RTE, BE = NULL, VTE = VTE, VY = VY, VPS = VPS, VE=VE, TY = TY, AL = AL, MY = MY, ME = ME, modelType="CFA", indLab=indLab, facLab=facLab, groupLab=groupLab, ngroups=ngroups, smartStart=smartStart)
 }
 
-model.path <- function(PS = NULL, RPS = NULL, BE = NULL, VPS = NULL, VE=NULL, AL = NULL, ME = NULL, indLab=NULL, facLab=NULL, ngroups=1, smartStart=TRUE) {
-	model(LY = NULL,PS = PS,RPS = RPS, TE = NULL, RTE = NULL, BE = BE, VTE = NULL, VY = NULL, VPS = VPS, VE=VE, TY = NULL, AL = AL, MY = NULL, ME = ME, modelType="Path", indLab=indLab, facLab=facLab, ngroups=ngroups, smartStart=smartStart)
+model.path <- function(PS = NULL, RPS = NULL, BE = NULL, VPS = NULL, VE=NULL, AL = NULL, ME = NULL, indLab=NULL, facLab=NULL, groupLab="group", ngroups=1, smartStart=TRUE) {
+	model(LY = NULL,PS = PS,RPS = RPS, TE = NULL, RTE = NULL, BE = BE, VTE = NULL, VY = NULL, VPS = VPS, VE=VE, TY = NULL, AL = AL, MY = NULL, ME = ME, modelType="Path", indLab=indLab, facLab=facLab, groupLab=groupLab, ngroups=ngroups, smartStart=smartStart)
 }
 
-model.sem <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL, VTE = NULL, VY = NULL, VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, indLab=NULL, facLab=NULL, ngroups=1, smartStart=TRUE) {
-	model(LY = LY,PS = PS,RPS = RPS, TE = TE,RTE = RTE, BE = BE, VTE = VTE, VY = VY, VPS = VPS, VE=VE, TY = TY, AL = AL, MY = MY, ME = ME, modelType="SEM", indLab=indLab, facLab=facLab, ngroups=ngroups, smartStart=smartStart)
+model.sem <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL, VTE = NULL, VY = NULL, VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, indLab=NULL, facLab=NULL, groupLab="group", ngroups=1, smartStart=TRUE) {
+	model(LY = LY,PS = PS,RPS = RPS, TE = TE,RTE = RTE, BE = BE, VTE = VTE, VY = VY, VPS = VPS, VE=VE, TY = TY, AL = AL, MY = MY, ME = ME, modelType="SEM", indLab=indLab, facLab=facLab, groupLab=groupLab, ngroups=ngroups, smartStart=smartStart)
 }
 
-estmodel <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL, VTE = NULL, VY = NULL, VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, modelType, indLab=NULL, facLab=NULL, ngroups=1, smartStart=TRUE) {
+estmodel <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL, VTE = NULL, VY = NULL, VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, modelType, indLab=NULL, facLab=NULL, groupLab="group", ngroups=1, smartStart=TRUE) {
 	if(is.null(modelType)) stop("Must specify model type")
 	if(modelType == "CFA") {
 		if(!is.list(LY)) LY <- list(LY)
@@ -754,19 +754,19 @@ estmodel <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = 
 	if(!is.null(MY) && (ngroups != length(MY))) MY <- rep(MY, ngroups)
 	if(!is.null(ME) && (ngroups != length(ME))) ME <- rep(ME, ngroups)
 	
-	model(LY = LY,PS = PS,RPS = RPS, TE = TE,RTE = RTE, BE = BE, VTE = VTE, VY = VY, VPS = VPS, VE=VE, TY = TY, AL = AL, MY = MY, ME = ME, modelType=modelType, indLab=indLab, facLab=facLab, ngroups=ngroups, smartStart=smartStart)
+	model(LY = LY,PS = PS,RPS = RPS, TE = TE,RTE = RTE, BE = BE, VTE = VTE, VY = VY, VPS = VPS, VE=VE, TY = TY, AL = AL, MY = MY, ME = ME, modelType=modelType, indLab=indLab, facLab=facLab, groupLab=groupLab, ngroups=ngroups, smartStart=smartStart)
 }
 
-estmodel.cfa <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, VTE = NULL, VY = NULL, VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, indLab=NULL, facLab=NULL, ngroups=1, smartStart=TRUE) {
-	estmodel(LY = LY,PS = PS,RPS = RPS, TE = TE,RTE = RTE, BE = NULL, VTE = VTE, VY = VY, VPS = VPS, VE=VE, TY = TY, AL = AL, MY = MY, ME = ME, modelType="CFA", indLab=indLab, facLab=facLab, ngroups=ngroups, smartStart=smartStart)
+estmodel.cfa <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, VTE = NULL, VY = NULL, VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, indLab=NULL, facLab=NULL, groupLab="group", ngroups=1, smartStart=TRUE) {
+	estmodel(LY = LY,PS = PS,RPS = RPS, TE = TE,RTE = RTE, BE = NULL, VTE = VTE, VY = VY, VPS = VPS, VE=VE, TY = TY, AL = AL, MY = MY, ME = ME, modelType="CFA", indLab=indLab, facLab=facLab, groupLab=groupLab, ngroups=ngroups, smartStart=smartStart)
 }
 
-estmodel.path <- function(PS = NULL, RPS = NULL, BE = NULL, VPS = NULL, VE=NULL, AL = NULL, ME = NULL, indLab=NULL, facLab=NULL, ngroups=1, smartStart=TRUE) {
-	estmodel(LY = NULL,PS = PS,RPS = RPS, TE = NULL, RTE = NULL, BE = BE, VTE = NULL, VY = NULL, VPS = VPS, VE=VE, TY = NULL, AL = AL, MY = NULL, ME = ME, modelType="Path", indLab=indLab, facLab=facLab, ngroups=ngroups, smartStart=smartStart)
+estmodel.path <- function(PS = NULL, RPS = NULL, BE = NULL, VPS = NULL, VE=NULL, AL = NULL, ME = NULL, indLab=NULL, facLab=NULL, groupLab="group", ngroups=1, smartStart=TRUE) {
+	estmodel(LY = NULL,PS = PS,RPS = RPS, TE = NULL, RTE = NULL, BE = BE, VTE = NULL, VY = NULL, VPS = VPS, VE=VE, TY = NULL, AL = AL, MY = NULL, ME = ME, modelType="Path", indLab=indLab, facLab=facLab, groupLab=groupLab, ngroups=ngroups, smartStart=smartStart)
 }
 
-estmodel.sem <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL, VTE = NULL, VY = NULL, VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, indLab=NULL, facLab=NULL, ngroups=1, smartStart=TRUE) {
-	estmodel(LY = LY,PS = PS,RPS = RPS, TE = TE,RTE = RTE, BE = BE, VTE = VTE, VY = VY, VPS = VPS, VE=VE, TY = TY, AL = AL, MY = MY, ME = ME, modelType="SEM", indLab=indLab, facLab=facLab, ngroups=ngroups, smartStart=smartStart)
+estmodel.sem <- function(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL, VTE = NULL, VY = NULL, VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, indLab=NULL, facLab=NULL, groupLab="group", ngroups=1, smartStart=TRUE) {
+	estmodel(LY = LY,PS = PS,RPS = RPS, TE = TE,RTE = RTE, BE = BE, VTE = VTE, VY = VY, VPS = VPS, VE=VE, TY = TY, AL = AL, MY = MY, ME = ME, modelType="SEM", indLab=indLab, facLab=facLab, groupLab=groupLab, ngroups=ngroups, smartStart=smartStart)
 }
 
 # Not finish
@@ -911,8 +911,9 @@ model.lavaan <- function(object, std = FALSE, LY = NULL,PS = NULL,RPS = NULL, TE
 		}
 		
 	}
-	
-	result <- model(LY = LY,PS = PS,RPS = RPS, TE = TE,RTE = RTE, BE = BE, VTE = VTE, VY = VY, VPS = VPS, VE=VE, TY = TY, AL = AL, MY = MY, ME = ME, modelType=modelType, indLab=indLab, facLab=facLab, ngroups=ngroups, smartStart=smartStart)
+	groupLab <- object@Options$group
+	if(is.null(groupLab)) groupLab <- "group"
+	result <- model(LY = LY,PS = PS,RPS = RPS, TE = TE,RTE = RTE, BE = BE, VTE = VTE, VY = VY, VPS = VPS, VE=VE, TY = TY, AL = AL, MY = MY, ME = ME, modelType=modelType, indLab=indLab, facLab=facLab, groupLab=groupLab, ngroups=ngroups, smartStart=smartStart)
 	return(result)
 }
 

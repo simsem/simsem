@@ -27,6 +27,7 @@ generate <- function(model, n, maxDraw=50,misfitBounds=NULL, misfitType="f0",
                   MoreArgs=list(n=n, sequential=sequential, modelBoot=modelBoot,realData=realData,indLab=indLab), SIMPLIFY=FALSE)
   data <- do.call("rbind",datal)
   data <- cbind(data,group=rep(1:ngroups,each=n))
+  colnames(data)[ncol(data)] <- model@groupLab
   
   if(params) {
     return(list(data=data,psl=draws))

@@ -1,6 +1,6 @@
 
   sim <- function(nRep, model, n, generate = NULL, rawData = NULL,
-                  miss = NULL, fun=NULL,
+                  miss = NULL, datafun=NULL, outfun=NULL,
                   pmMCAR = NULL, pmMAR = NULL,
                   facDist = NULL, indDist = NULL, errorDist = NULL, sequential = FALSE, 
                   modelBoot = FALSE, realData = NULL, maxDraw = 50, misfitType = "f0", misfitBounds = NULL, averageNumMisspec = NULL, optMisfit=NULL, optDraws = 50, 
@@ -163,19 +163,19 @@
         numProc <- detectCores()
       if (sys == "windows") {
         cl <- makeCluster(rep("localhost", numProc), type = "SOCK")  
-        Result.l <- clusterApplyLB(cl, simConds, runRep, model = model, generate=generate, miss = miss, funObj = fun, silent = silent,
+        Result.l <- clusterApplyLB(cl, simConds, runRep, model = model, generate=generate, miss = miss, datafun = datafun, outfun=outfun, silent = silent,
                                    facDist = facDist, indDist = indDist, errorDist=errorDist, sequential=sequential, realData=realData,
                                    maxDraw = maxDraw, misfitBounds=misfitBounds, averageNumMisspec=averageNumMisspec,
                                    optMisfit=optMisfit, optDraws=optDraws, misfitType=misfitType, aux=aux)
         stopCluster(cl)
       } else {
-        Result.l <- mclapply(simConds, runRep, model = model, generate=generate, miss = miss, funObj = fun,  silent = silent,
+        Result.l <- mclapply(simConds, runRep, model = model, generate=generate, miss = miss, datafun = datafun, outfun=outfun, silent = silent,
                              facDist = facDist, indDist = indDist, errorDist=errorDist, sequential=sequential, realData=realData,
                              maxDraw = maxDraw, misfitBounds=misfitBounds, averageNumMisspec=averageNumMisspec,
                              optMisfit=optMisfit, optDraws=optDraws, misfitType=misfitType, aux=aux, mc.cores = numProc)
       }
     } else {
-      Result.l <- lapply(simConds, runRep, model = model, generate=generate, miss = miss, funObj = fun, silent = silent,
+      Result.l <- lapply(simConds, runRep, model = model, generate=generate, miss = miss, datafun = datafun, outfun=outfun, silent = silent,
                          facDist = facDist, indDist = indDist, errorDist=errorDist, sequential=sequential, realData=realData,
                          maxDraw = maxDraw, misfitBounds=misfitBounds, averageNumMisspec=averageNumMisspec,
                          optMisfit=optMisfit, optDraws=optDraws, misfitType=misfitType, aux=aux)
@@ -217,6 +217,12 @@
     std.l <- lapply(Result.l, function(rep) {
         rep$std
     })
+	extra <- list()
+	if(!is.null(outfun)) {
+		extra <- lapply(Result.l, function(rep) {
+			rep$extra
+		})
+	} 
    ##  paramData.l <- lapply(Result.l, function(rep) {
 ##         rep$paramData
 ##     })
@@ -264,7 +270,7 @@
 	#if(is.null(generate)) param <- param[,match(colnames(object@paramValue), colnames(object@coef))]
 	
     Result <- new("SimResult", modelType = model@modelType, nRep = nRep, coef = coef, se = se, fit = fit, converged = converged, seed = seed, paramValue = param, FMI1 = data.frame(FMI1), FMI2 = data.frame(FMI2), stdCoef = std, 
-        n = n, pmMCAR = pmMCAR, pmMAR = pmMAR, timing=timing)
+        n = n, pmMCAR = pmMCAR, pmMAR = pmMAR, extraOut = extra, timing=timing)
     if (silent) 
         options(warn = warnT)
     return <- Result
@@ -272,7 +278,7 @@
 
 # runRep: Run one replication
 
-runRep <- function(simConds, model, generate=NULL, miss = NULL, funObj=NULL, facDist = NULL, indDist = NULL, indLab=NULL, errorDist = NULL, sequential = FALSE, realData=NULL, silent = FALSE,
+runRep <- function(simConds, model, generate=NULL, miss = NULL, datafun=NULL, outfun=NULL, facDist = NULL, indDist = NULL, indLab=NULL, errorDist = NULL, sequential = FALSE, realData=NULL, silent = FALSE,
                    modelBoot = FALSE, maxDraw = 50, misfitType = "f0", misfitBounds = NULL, averageNumMisspec = NULL, optMisfit=NULL, optDraws = 50, timing=NULL, aux=NULL) {
   start.time0 <- start.time <- proc.time()[3]; timing <- list()
   param <- NULL
@@ -280,6 +286,7 @@ runRep <- function(simConds, model, generate=NULL, miss = NULL, funObj=NULL, fac
     se <- NA
     fit <- NA
     std <- NA
+	extra <- NA
     FMI1 <- NULL
     FMI2 <- NULL
     converged <- FALSE
@@ -345,8 +352,8 @@ runRep <- function(simConds, model, generate=NULL, miss = NULL, funObj=NULL, fac
     timing$ImposeMissing <- (proc.time()[3] - start.time)
     start.time <- proc.time()[3]
     ## 4. Call user function (if exists)
-    if (!is.null(funObj)) {
-      data <- funObj(data) # args??
+    if (!is.null(datafun)) {
+      data <- datafun(data) # args??
       #data.mis <- run(objFunction, data.mis, checkDataOut = TRUE)
     }
     
@@ -377,7 +384,7 @@ runRep <- function(simConds, model, generate=NULL, miss = NULL, funObj=NULL, fac
 
     timing$Analyze <- (proc.time()[3] - start.time)
     start.time <- proc.time()[3]
-   
+	
     ## 6. Parse Lavaan Output
     if (!is.null(out)) {
       try(se <- inspect(out,"se"))
@@ -405,7 +412,12 @@ runRep <- function(simConds, model, generate=NULL, miss = NULL, funObj=NULL, fac
       fit <- extractLavaanFit(out)
       coef <- reduceLavaanParam(inspect(out,"coef"), dgen, indLab, facLab)
       se <- reduceLavaanParam(se, dgen, indLab, facLab)
-      std <- reduceLavaanParam(standardize(out), dgen, indLab, facLab)     
+      std <- reduceLavaanParam(standardize(out), dgen, indLab, facLab)
+	  
+	  ## 6.1. Call output function (if exists)
+	  if (!is.null(outfun)) {
+		extra <- outfun(out) 
+	  }
     } else {
       fit <- NA
       coef <- NA
@@ -444,7 +456,7 @@ runRep <- function(simConds, model, generate=NULL, miss = NULL, funObj=NULL, fac
     timing$ParseOutput <- (proc.time()[3] - start.time)
     start.time <- proc.time()[3]
     
-    Result <- list(coef = coef, se = se, fit = fit, converged = converged, param = popParam, FMI1 = FMI1, FMI2 = FMI2, std = std, timing=timing)
+    Result <- list(coef = coef, se = se, fit = fit, converged = converged, param = popParam, FMI1 = FMI1, FMI2 = FMI2, std = std, timing=timing, extra=extra)
     Result
 }
 

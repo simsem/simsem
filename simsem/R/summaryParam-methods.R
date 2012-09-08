@@ -16,7 +16,10 @@ setMethod("summaryParam", signature(object = "SimResult"), definition = function
     result <- cbind(coef, real.se, estimated.se, pow, stdCoef, stdRealSE)
     colnames(result) <- c("Estimate Average", "Estimate SD", "Average SE", "Power (Not equal 0)", "Std Est", "Std Est SD")
     if (!is.null(object@paramValue)) {
-	  paramValue <- object@paramValue[,match(colnames(object@coef), colnames(object@paramValue))]
+	  targetVar <- match(colnames(object@coef), colnames(object@paramValue))
+	  targetVar <- targetVar[!is.na(targetVar)]
+	  paramValue <- object@paramValue[,targetVar]
+	  
 	  if ((ncol(object@coef) == ncol(paramValue)) && all(colnames(object@coef) == colnames(paramValue))) {
         nRep <- object@nRep
         nParam <- ncol(object@coef)

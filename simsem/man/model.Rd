@@ -1,5 +1,8 @@
 \name{model}
 \alias{model}
+\alias{model.cfa}
+\alias{model.path}
+\alias{model.sem}
 \title{
 	Data generation template and analysis template for simulation.
 }
@@ -8,8 +11,16 @@
 }
 \usage{
 model(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = NULL, 
-VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, MY = NULL, 
-ME = NULL, modelType, indLab=NULL, facLab=NULL, ngroups=1, smartStart=TRUE)
+	VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, MY = NULL, 
+	ME = NULL, modelType, indLab=NULL, facLab=NULL, ngroups=1, smartStart=TRUE)
+model.cfa(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, VTE = NULL, 
+	VY = NULL, VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, 
+	indLab=NULL, facLab=NULL, ngroups=1, smartStart=TRUE)
+model.path(PS = NULL, RPS = NULL, BE = NULL, VPS = NULL, VE=NULL, AL = NULL, 
+	ME = NULL, indLab=NULL, facLab=NULL, ngroups=1, smartStart=TRUE)
+model.sem(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL, 
+	VTE = NULL, VY = NULL, VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NULL, 
+	ME = NULL, indLab=NULL, facLab=NULL, ngroups=1, smartStart=TRUE)
 }
 \arguments{
   \item{LY}{
@@ -76,6 +87,8 @@ The \emph{simsem} package is intricately tied to the \emph{lavaan} package for a
 The data generation template is simply a list of \code{SimMatrix} or \code{SimVector}. The \code{SimSem} object can be passed to the function \code{generate} to generate data.
 
 If multiple group data is desired, the user can optionally either specify the number of groups argument, or pass a list of  \code{SimMatrix} or \code{SimVector} to any of the matrix arguments. The length of this list will be the number of groups. If only one argument is a list, all other arguments will be automatically replicated to that length, parameters will be identified in the same way, have the same population parameter value/distribution, and have the same misspecification. If only ngroups is specified, all arguments will be replicated in this fashion. If equality constraints are present during the automatic replication, these parameters will be constrained to be equal across groups.	
+
+The \code{model.cfa}, \code{model.path}, and \code{model.sem} are the shortcuts for the \code{model} function when \code{modelType} are \code{"CFA"}, \code{"Path"}, and \code{"SEM"}, respectively.
 }
 
 \value{

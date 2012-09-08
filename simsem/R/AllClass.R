@@ -79,7 +79,8 @@ setClass("SimSem",
                   pt = "list",
                   #npt = "list",
                   dgen = "list",
-                  modelType = "character"
+                  modelType = "character",
+				  groupLab = "character"
                   )
          )
           
@@ -164,6 +165,7 @@ setClass("SimResult",
                         n = "vector",
                         pmMCAR = "vector",
                         pmMAR = "vector",
+						extraOut = "list",
                         timing = "list"
                         )
          )

@@ -40,7 +40,10 @@ analyze <- function(model, data, package="lavaan", miss=NULL,indLab=NULL,aux=NUL
   ##     data <- data[, targetCol]
   ##    miss <- sum(is.na(data)) > 0
   
-  if(!("group" %in% colnames(data))) data <- data.frame(data, group=1)
+  if(!(model@groupLab %in% colnames(data))) {
+	data <- data.frame(data, group=1)
+	colnames(data)[ncol(data)] <- model@groupLab
+  }
   if (!is.null(miss) && length(miss@package) != 0 && miss@package == "Amelia") {
     Output <- runMI(data, model, miss@args)
   } else {
@@ -48,9 +51,9 @@ analyze <- function(model, data, package="lavaan", miss=NULL,indLab=NULL,aux=NUL
     if(any(is.na(data))) missing <- "fiml"
 	if(!is.null(aux)) {
 		library(semTools)
-		Output <- auxiliary(model@pt, aux=aux, data=data, group="group", model.type=model@modelType,missing=missing,...)
+		Output <- auxiliary(model@pt, aux=aux, data=data, group=model@groupLab, model.type=model@modelType,missing=missing,...)
 	} else {
-		Output <- lavaan(model@pt, data=data, group="group", model.type=model@modelType,missing=missing,...)
+		Output <- lavaan(model@pt, data=data, group=model@groupLab, model.type=model@modelType,missing=missing,...)
 	}
   }
 

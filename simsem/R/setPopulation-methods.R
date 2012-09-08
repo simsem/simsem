@@ -5,12 +5,24 @@ setMethod("setPopulation", signature(target = "SimResult", population = "data.fr
     return(target)
 })
 
-## setMethod("setPopulation", signature(target = "SimResult", population = "SimSet"), definition = function(target, population) {
-##     LabelsDataParam <- makeLabels(createFreeParameters(population), "OpenMx")
-##     pop <- startingValues(population, 10, reduced = TRUE)
-##     target@paramValue <- as.data.frame(t(data.frame(param = vectorizeObject(pop, LabelsDataParam))))
-##     return(target)
-## })
+
+setMethod("setPopulation", signature(target = "SimResult", population = "SimSem"), definition = function(target, population) {
+	psl <- generate(population, n=20, params=TRUE)$psl
+	paramSet <- lapply(psl,"[[",1)
+	indLabGen <- NULL
+	if(population@modelType == "Path") {
+		indLabGen <- unique(population@pt$lhs)
+	} else {
+		indLabGen <- unique(population@pt$rhs[population@pt$op=="=~"])
+	}
+	facLabGen <- NULL
+	if(population@modelType != "Path") {
+		facLabGen <- unique(population@pt$lhs[population@pt$op=="=~"])
+	}
+	popParam <- reduceParamSet(paramSet,population@dgen, indLabGen, facLabGen)
+    target@paramValue <- as.data.frame(t(data.frame(param = popParam)))
+    return(target)
+})
 
 # setMethod("setPopulation", signature(target = "SimResult", population = "VirtualRSet"), definition = function(target, population, 
     # parameter) {

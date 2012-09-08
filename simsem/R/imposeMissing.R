@@ -51,9 +51,12 @@ imposeMissing <- function(data.mat, cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, 
     if (!is.null(logical) && !is.null(dim(logical)) && !all(dim(logical) == 1)) {
         if (!(class(logical) %in% c("matrix", "data.frame"))) 
             stop("The logical argument must be matrix or data frame.")
-        if ((dim(data.mat)[1] != dim(logical)[1]) | (dim(data.mat)[2] != dim(logical)[2])) 
+		usecol <- setdiff(seq_len(ncol(data.mat)), ignoreCols)
+		data.mat2 <- data.mat[,usecol]
+        if ((dim(data.mat2)[1] != dim(logical)[1]) | (dim(data.mat2)[2] != dim(logical)[2])) 
             stop("The dimension in the logical argument is not equal to the dimension in the data")
-        data.mat[logical] <- NA
+        data.mat2[logical] <- NA
+		data.mat[,usecol] <- data.mat2
     }
     return(data.mat)
     
