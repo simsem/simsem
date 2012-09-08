@@ -1318,7 +1318,7 @@ flush(stderr()); flush(stdout())
 ### Name: imposeMissing
 ### Title: Impose MAR, MCAR, planned missingness, or attrition on a data
 ###   set
-### Aliases: imposeMissing
+### Aliases: imposeMissing impose
 
 ### ** Examples
 

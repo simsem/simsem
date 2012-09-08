@@ -133,6 +133,7 @@ outfun <- function(out) {
 	inspect(out, "mi")
 }
 Output <- sim(20, CFA.Model,n=200, outfun=outfun)
+getExtraOutput(Output)
 
 ################################# Example 1.1 Multiple Group
 
@@ -625,9 +626,6 @@ summaryParam(simOut)
 
 #library(simsem)
 
-n01 <- simNorm(0, 1)
-c5 <- simChisq(5)
-
 loading <- matrix(0, 5, 3)
 loading[1:3, 1] <- NA
 loading[4, 2] <- NA
@@ -657,7 +655,10 @@ VY <- bind(c(NA, NA, NA, 0, 0), 1)
 
 SEM.Model <- model(LY=LY, RPS=RPS, BE=BE, RTE=RTE, VY=VY, modelType="SEM")
 
-facDist <- simDataDist(n01, c5, n01)
+dist <- c("norm", "chisq", "norm")
+n01 <- list(mean=0, sd=1)
+c5 <- list(df=5)
+facDist <- bindDist(dist, n01, c5, n01)
 
 dat <- generate(SEM.Model, n=200, sequential=TRUE, facDist=facDist, params=TRUE)
 out <- analyze(SEM.Model, dat, estimator="mlm")
@@ -713,7 +714,7 @@ diag(latent.cor2) <- 1
 error.cor2 <- diag(NA, 6)
 
 CFA.Model <- estmodel(LY = loading2, PS = latent.cor2, TE = error.cor2, modelType="CFA")
-out <- analyze(CFA.Model, dat, indLab=paste0("x", 1:6), aux="x7")
+out <- analyze(CFA.Model, dat, indLab=paste0("y", 1:6), aux="y7")
 
 Output <- sim(10, n=200, model=CFA.Model, generate=CFA.Model.Aux, miss=missmodel)
 getCutoff(Output, 0.05)
@@ -888,11 +889,11 @@ path[6, 3] <- path[9, 6] <- NA
 path[5, 1] <- path[8, 4] <- NA
 path[6, 2] <- path[9, 5] <- NA
 pathVal <- matrix(0, 9, 9)
-pathVal[4, 1] <- pathVal[7, 4] <- "u57"
-pathVal[5, 2] <- pathVal[8, 5] <- "u57"
-pathVal[6, 3] <- pathVal[9, 6] <- "u57"
-pathVal[5, 1] <- pathVal[8, 4] <- "u35"
-pathVal[6, 2] <- pathVal[9, 5] <- "u35"
+pathVal[4, 1] <- pathVal[7, 4] <- "runif(1, 0.5, 0.7)"
+pathVal[5, 2] <- pathVal[8, 5] <- "runif(1, 0.5, 0.7)"
+pathVal[6, 3] <- pathVal[9, 6] <- "runif(1, 0.5, 0.7)"
+pathVal[5, 1] <- pathVal[8, 4] <- "runif(1, 0.3, 0.5)"
+pathVal[6, 2] <- pathVal[9, 5] <- "runif(1, 0.3, 0.5)"
 BE <- bind(path, pathVal)
 facCor <- diag(9)
 facCor[1, 2] <- facCor[2, 1] <- NA

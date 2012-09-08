@@ -1714,7 +1714,7 @@ detaching 'package:parallel'
 > ### Name: imposeMissing
 > ### Title: Impose MAR, MCAR, planned missingness, or attrition on a data
 > ###   set
-> ### Aliases: imposeMissing
+> ### Aliases: imposeMissing impose
 > 
 > ### ** Examples
 > 
@@ -3668,7 +3668,7 @@ detaching 'package:parallel'
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  6.27 0.03 6.34 NA NA 
+Time elapsed:  6.44 0 6.46 NA NA 
 > grDevices::dev.off()
 null device 
           1 

@@ -1,5 +1,6 @@
 \name{imposeMissing}
 \alias{imposeMissing}
+\alias{impose}
 \title{ 
 Impose MAR, MCAR, planned missingness, or attrition on a data set
 }
@@ -8,11 +9,15 @@ Function imposes missing values on a data based on the known missing data types,
 including MCAR, MAR, planned, and attrition.
 }
 \usage{
+impose(miss, data.mat, pmMCAR = NULL, pmMAR = NULL)
 imposeMissing(data.mat, cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, 
-itemGroups = list(), twoMethod = 0, prAttr = 0, timePoints = 1, 
-ignoreCols = 0, threshold = 0, logical = NULL)
+	itemGroups = list(), twoMethod = 0, prAttr = 0, timePoints = 1, 
+	ignoreCols = 0, threshold = 0, logical = NULL)
 }
 \arguments{
+  \item{miss}{
+    Missing data object (\code{\linkS4class{SimMissing}}) used as the template for impose missing values
+}
   \item{data.mat}{
     Data to impose missing upon. Can be either a matrix or a data frame. 
 }

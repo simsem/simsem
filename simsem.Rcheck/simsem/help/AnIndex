@@ -59,6 +59,7 @@ getPowerFitNonNested	getPowerFitNonNested
 getPowerFitNonNested,SimResult,SimResult,missing-method	getPowerFitNonNested
 getPowerFitNonNested,SimResult,SimResult,vector-method	getPowerFitNonNested
 getPowerFitNonNested-methods	getPowerFitNonNested
+impose	imposeMissing
 imposeMissing	imposeMissing
 interpolate	interpolate
 likRatioFit	likRatioFit
