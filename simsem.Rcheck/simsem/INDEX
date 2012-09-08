@@ -160,8 +160,6 @@ sim                     Run a monte carlo simulation with a structural
 sortList                Sort two objects in a list
 summaryFit              Provide summary of model fit across
                         replications
-summaryMisspec          Provide summary of model misspecification
-                        imposed across replications
 summaryParam            Provide summary of parameter estimates and
                         standard error across replications
 summaryPopulation       Summarize the data generation population model

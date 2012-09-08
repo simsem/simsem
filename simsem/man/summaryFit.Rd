@@ -1,8 +1,5 @@
 \name{summaryFit}
 \alias{summaryFit}
-\alias{summaryFit-methods}
-\alias{summaryFit,ANY-method}
-\alias{summaryFit,SimResult-method}
 \title{
 	Provide summary of model fit across replications
 }
@@ -10,14 +7,14 @@
 	This function will provide fit index cutoffs for values of alpha, and mean fit index values across all replications.
 }
 \usage{
-summaryFit(object,...)
+summaryFit(object, alpha = NULL)
 }
 \arguments{
   \item{object}{
 	\code{\linkS4class{SimResult}} to be summarized
 }
-  \item{\dots}{
-    any additional arguments, such as for the function with result object, \code{digits} argument is available to adjust digits in results, \code{alpha} is available to select a specific alpha for fit index cutoffs.
+  \item{alpha}{
+	The alpha level used to find the fit indices cutoff. If there is no varying condition, a vector of different alpha levels can be provided.
 }
 }
 \value{
@@ -41,7 +38,6 @@ summaryFit(object,...)
     Alexander M. Schoemann (University of Kansas; \email{schoemann@ku.edu})
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
-
 \seealso{
 	\code{\linkS4class{SimResult}} for the result object input
 }

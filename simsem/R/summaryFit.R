@@ -1,6 +1,6 @@
 # summaryFit: This function will summarize the obtained fit indices and generate a data frame.
 
-setMethod("summaryFit", signature(object = "SimResult"), definition = function(object, alpha = NULL) {
+summaryFit <- function(object, alpha = NULL) {
         cleanObj <- clean(object)
 		usedFit <- getKeywords()$usedFit
 
@@ -40,7 +40,7 @@ setMethod("summaryFit", signature(object = "SimResult"), definition = function(o
 	}
 		
     return(result)
-})
+}
 
 
 # setMethod("summaryFit", signature(object = "SimResultParam"), definition = function(object, digits=3) {

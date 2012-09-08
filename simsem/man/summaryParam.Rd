@@ -1,10 +1,5 @@
 \name{summaryParam}
 \alias{summaryParam}
-\alias{summaryParam-methods}
-\alias{summaryParam,ANY-method}
-\alias{summaryParam,SimResult-method}
-%\alias{summaryParam,SimModelOut-method}
-%\alias{summaryParam,SimModelMIOut-method}
 \title{
 	Provide summary of parameter estimates and standard error across replications
 }
@@ -12,14 +7,17 @@
 	This function will provide averages of parameter estimates, standard deviations of parameter estimates, averages of standard errors, and power of rejection with a priori alpha level for the null hypothesis of parameters equal 0.
 }
 \usage{
-summaryParam(object, ...)
+summaryParam(object, alpha = 0.05, detail = FALSE)
 }
 \arguments{
   \item{object}{
 	\code{\linkS4class{SimResult}} object being described
 }
-  \item{\dots}{
-    any additional arguments, such as for the function with result object, \code{detail} argument is available. If \code{TRUE}, it provides relative bias, standardized bias, and relative bias in standard errors.
+  \item{alpha}{
+	The alpha level used to find the statistical power of each parameter estimate
+}
+  \item{detail}{
+	If TRUE, more details about each parameter estimate are provided, such as relative bias, standardized bias, or relative standard error bias.
 }
 }
 \value{
@@ -54,10 +52,9 @@ summaryParam(object, ...)
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \references{
-	\itemize{
-		\item Collins, L. M., Schafer, J. L., & Kam, C. M. (2001). A comparison of inclusive and restrictive strategies in modern missing data procedures. \emph{Psychological Methods, 6(4)}, 330.
-		\item Hoogland, J. J., & Boomsma, A. (1998). Robustness studies in covariance structure modeling. \emph{Sociological Methods & Research, 26(3)}, 329.
-	}
+Collins, L. M., Schafer, J. L., & Kam, C. M. (2001). A comparison of inclusive and restrictive strategies in modern missing data procedures. \emph{Psychological Methods, 6}, 330-351.
+
+Hoogland, J. J., & Boomsma, A. (1998). Robustness studies in covariance structure modeling. \emph{Sociological Methods & Research, 26}, 329-367.
 }
 \seealso{
 	\code{\linkS4class{SimResult}} for the object input

@@ -398,7 +398,7 @@ setMethod("summary", signature = "SimResult", definition = function(object, digi
     cleanObj <- clean(object)
     
     cat("========= Fit Indices Cutoffs ============\n")
-	print(round(summaryFit(object), digits))
+	print(summaryFit(object, alpha=alpha), digits)
     cat("========= Parameter Estimates and Standard Errors ============\n")
     print(round(summaryParam(object), digits))
     cat("========= Correlation between Fit Indices ============\n")

@@ -127,16 +127,7 @@ summary,SimResult-method	SimResult-class
 summary,SimSem-method	SimSem-class
 summary,SimVector-method	SimVector-class
 summaryFit	summaryFit
-summaryFit,ANY-method	summaryFit
-summaryFit,SimResult-method	summaryFit
-summaryFit-methods	summaryFit
-summaryMisspec	summaryMisspec
-summaryMisspec,ANY-method	summaryMisspec
-summaryMisspec-methods	summaryMisspec
 summaryParam	summaryParam
-summaryParam,ANY-method	summaryParam
-summaryParam,SimResult-method	summaryParam
-summaryParam-methods	summaryParam
 summaryPopulation	summaryPopulation
 summaryPopulation,SimResult-method	SimResult-class
 summaryShort	summaryShort

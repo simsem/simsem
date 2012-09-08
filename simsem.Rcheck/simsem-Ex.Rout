@@ -216,14 +216,14 @@ Model Type
 [1] "CFA"
 ========= Fit Indices Cutoffs ============
            Alpha
-Fit Indices      0.1     0.05     0.01    0.001     Mean     SD
-      Chi     17.123   17.314   17.468   17.502   11.619  5.626
-      AIC   7506.931 7510.452 7513.269 7513.903 7448.091 69.165
-      BIC   7582.794 7586.315 7589.132 7589.766 7523.954 69.165
-      RMSEA    0.042    0.043    0.043    0.043    0.022  0.021
-      CFI      0.992    0.992    0.991    0.991    0.996  0.004
-      TLI      0.987    0.986    0.985    0.985    0.996  0.009
-      SRMR     0.019    0.019    0.019    0.019    0.015  0.004
+Fit Indices      0.1     0.05     0.01    0.001     Mean       SD
+      Chi   1.71e+01 1.73e+01 1.75e+01 1.75e+01 1.16e+01  5.62615
+      AIC   7.51e+03 7.51e+03 7.51e+03 7.51e+03 7.45e+03 69.16470
+      BIC   7.58e+03 7.59e+03 7.59e+03 7.59e+03 7.52e+03 69.16470
+      RMSEA 4.25e-02 4.30e-02 4.34e-02 4.35e-02 2.23e-02  0.02130
+      CFI   9.92e-01 9.92e-01 9.91e-01 9.91e-01 9.96e-01  0.00402
+      TLI   9.87e-01 9.86e-01 9.85e-01 9.85e-01 9.96e-01  0.00918
+      SRMR  1.87e-02 1.89e-02 1.90e-02 1.90e-02 1.47e-02  0.00407
 ========= Parameter Estimates and Standard Errors ============
          Estimate.Average Estimate.SD Average.SE Power..Not.equal.0. Std.Est
 1.f1=~y1            0.691       0.028      0.041                   1   0.697
@@ -3206,14 +3206,14 @@ Model Type
 [1] "CFA"
 ========= Fit Indices Cutoffs ============
            Alpha
-Fit Indices      0.1     0.05     0.01    0.001     Mean     SD
-      Chi     15.047   16.798   19.514   20.125    9.454  4.268
-      AIC   3185.654 3200.848 3209.517 3211.467 3125.114 44.893
-      BIC   3248.322 3263.516 3272.185 3274.135 3187.782 44.893
-      RMSEA    0.066    0.074    0.085    0.087    0.025  0.029
-      CFI      0.973    0.972    0.962    0.960    0.992  0.012
-      TLI      0.949    0.947    0.929    0.925    0.991  0.027
-      SRMR     0.036    0.039    0.043    0.043    0.029  0.007
+Fit Indices      0.1     0.05     0.01    0.001     Mean       SD
+      Chi   1.50e+01 1.68e+01 1.95e+01 2.01e+01 9.45e+00  4.26841
+      AIC   3.19e+03 3.20e+03 3.21e+03 3.21e+03 3.13e+03 44.89252
+      BIC   3.25e+03 3.26e+03 3.27e+03 3.27e+03 3.19e+03 44.89252
+      RMSEA 6.63e-02 7.41e-02 8.47e-02 8.70e-02 2.53e-02  0.02940
+      CFI   9.73e-01 9.72e-01 9.62e-01 9.60e-01 9.92e-01  0.01154
+      TLI   9.49e-01 9.47e-01 9.29e-01 9.25e-01 9.91e-01  0.02659
+      SRMR  3.63e-02 3.95e-02 4.27e-02 4.35e-02 2.90e-02  0.00723
 ========= Parameter Estimates and Standard Errors ============
          Estimate.Average Estimate.SD Average.SE Power..Not.equal.0. Std.Est
 1.f1=~y1            0.682       0.094      0.074                1.00   0.691
@@ -3299,8 +3299,7 @@ detaching 'package:parallel'
 > 
 > ### Name: summaryFit
 > ### Title: Provide summary of model fit across replications
-> ### Aliases: summaryFit summaryFit-methods summaryFit,ANY-method
-> ###   summaryFit,SimResult-method
+> ### Aliases: summaryFit
 > 
 > ### ** Examples
 > 
@@ -3341,48 +3340,6 @@ Fit Indices           SD
 
 detaching 'package:parallel'
 
-> nameEx("summaryMisspec")
-> ### * summaryMisspec
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: summaryMisspec
-> ### Title: Provide summary of model misspecification imposed across
-> ###   replications
-> ### Aliases: summaryMisspec summaryMisspec-methods
-> ###   summaryMisspec,ANY-method
-> 
-> ### ** Examples
-> 
-> # Incomplete
-> 
-> path.BE <- matrix(0, 4, 4)
-> path.BE[3, 1:2] <- NA
-> path.BE[4, 3] <- NA
-> starting.BE <- matrix("", 4, 4)
-> starting.BE[3, 1:2] <- "runif(1, 0.3, 0.5)"
-> starting.BE[4, 3] <- "runif(1, 0.5, 0.7)"
-> mis.path.BE <- matrix(0, 4, 4)
-> mis.path.BE[4, 1:2] <- "runif(1, -0.1, 0.1)"
-> BE <- bind(path.BE, starting.BE, misspec=mis.path.BE)
-> 
-> residual.error <- diag(4)
-> residual.error[1,2] <- residual.error[2,1] <- NA
-> RPS <- binds(residual.error, "rnorm(1, 0.3, 0.1)")
-> 
-> ME <- bind(rep(NA, 4), 0)
-> 
-> Path.Model <- model(RPS = RPS, BE = BE, ME = ME, modelType="Path")
-> 
-> 
-> # The number of replications in actual analysis should be much more than 5
-> # ParamObject <- simResultParam(5, Path.Model, Path.Mis.Model)
-> 
-> # summaryMisspec(ParamObject)
-> 
-> 
-> 
-> cleanEx()
 > nameEx("summaryParam")
 > ### * summaryParam
 > 
@@ -3391,8 +3348,7 @@ detaching 'package:parallel'
 > ### Name: summaryParam
 > ### Title: Provide summary of parameter estimates and standard error across
 > ###   replications
-> ### Aliases: summaryParam summaryParam-methods summaryParam,ANY-method
-> ###   summaryParam,SimResult-method
+> ### Aliases: summaryParam
 > 
 > ### ** Examples
 > 
@@ -3668,7 +3624,7 @@ detaching 'package:parallel'
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  6.44 0 6.46 NA NA 
+Time elapsed:  6.1 0.09 6.19 NA NA 
 > grDevices::dev.off()
 null device 
           1 

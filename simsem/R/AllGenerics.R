@@ -70,17 +70,17 @@ setGeneric("getPowerFit", function(altObject, cutoff, revDirec = FALSE, usedFit 
 ##     return(standardGeneric("vectorizeObject"))
 ## })
 
-setGeneric("summaryParam", function(object, ...) {
-    return(standardGeneric("summaryParam"))
-})
+# setGeneric("summaryParam", function(object, ...) {
+    # return(standardGeneric("summaryParam"))
+# })
 
-setGeneric("summaryFit", function(object, ...) {
-    return(standardGeneric("summaryFit"))
-})
+# setGeneric("summaryFit", function(object, ...) {
+    # return(standardGeneric("summaryFit"))
+# })
 
-setGeneric("summaryMisspec", function(object, ...) {
-    return(standardGeneric("summaryMisspec"))
-})
+# setGeneric("summaryMisspec", function(object, ...) {
+    # return(standardGeneric("summaryMisspec"))
+# })
 
 # setGeneric("subtractObject", function(object1, object2, ...) {
     # return(standardGeneric("subtractObject"))

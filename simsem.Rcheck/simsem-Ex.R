@@ -2450,8 +2450,7 @@ flush(stderr()); flush(stdout())
 
 ### Name: summaryFit
 ### Title: Provide summary of model fit across replications
-### Aliases: summaryFit summaryFit-methods summaryFit,ANY-method
-###   summaryFit,SimResult-method
+### Aliases: summaryFit
 
 ### ** Examples
 
@@ -2470,48 +2469,6 @@ summaryFit(Output)
 
 
 cleanEx()
-nameEx("summaryMisspec")
-### * summaryMisspec
-
-flush(stderr()); flush(stdout())
-
-### Name: summaryMisspec
-### Title: Provide summary of model misspecification imposed across
-###   replications
-### Aliases: summaryMisspec summaryMisspec-methods
-###   summaryMisspec,ANY-method
-
-### ** Examples
-
-# Incomplete
-
-path.BE <- matrix(0, 4, 4)
-path.BE[3, 1:2] <- NA
-path.BE[4, 3] <- NA
-starting.BE <- matrix("", 4, 4)
-starting.BE[3, 1:2] <- "runif(1, 0.3, 0.5)"
-starting.BE[4, 3] <- "runif(1, 0.5, 0.7)"
-mis.path.BE <- matrix(0, 4, 4)
-mis.path.BE[4, 1:2] <- "runif(1, -0.1, 0.1)"
-BE <- bind(path.BE, starting.BE, misspec=mis.path.BE)
-
-residual.error <- diag(4)
-residual.error[1,2] <- residual.error[2,1] <- NA
-RPS <- binds(residual.error, "rnorm(1, 0.3, 0.1)")
-
-ME <- bind(rep(NA, 4), 0)
-
-Path.Model <- model(RPS = RPS, BE = BE, ME = ME, modelType="Path")
-
-
-# The number of replications in actual analysis should be much more than 5
-# ParamObject <- simResultParam(5, Path.Model, Path.Mis.Model)
-
-# summaryMisspec(ParamObject)
-
-
-
-cleanEx()
 nameEx("summaryParam")
 ### * summaryParam
 
@@ -2520,8 +2477,7 @@ flush(stderr()); flush(stdout())
 ### Name: summaryParam
 ### Title: Provide summary of parameter estimates and standard error across
 ###   replications
-### Aliases: summaryParam summaryParam-methods summaryParam,ANY-method
-###   summaryParam,SimResult-method
+### Aliases: summaryParam
 
 ### ** Examples
 

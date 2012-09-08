@@ -3,15 +3,9 @@
 #Call it population value instead of starting value
 #Summary function put star for fixed parameters (Any nonzero values that is fixed is labelled as stars)
 
-# likRatio need to be fixed
-# missing object need to make it runable
-# plotMisfit does not work
-# Fix pValueNested and pValueNonNested
-# run function of the simDataDist, simMissing
 # Consider run function in the SimMatrix and SimVector
 #    PM 9/1: This is implemented as "rawDraw", internal to drawParam.
 #    Consider making "draw" a generic method that dispatches on a SimMatrix or SimVector
-# summaryMisspec in simResult
 # Summary simsem got a vector for the symmetric matrix
 # Fix misfitType="rmsea", optMisfit="max", optDraws=10,  in example 4
 # Fix the starting values for each rep. It would be faster.
@@ -22,7 +16,6 @@
 
 
 #####Result
-# Bias behind each simAnalysis
 # Coverage by confidence interval
 # Bias from its expected value of random distribution
 # Trimed means #
