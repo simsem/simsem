@@ -39,99 +39,6 @@ dist <- bindDist(c(rep("t", 4), rep("chisq", 8)), d1, d2, d3, d4, d5, d6, d7, d8
 
 
 cleanEx()
-nameEx("SimFunction-class")
-### * SimFunction-class
-
-flush(stderr()); flush(stdout())
-
-### Name: SimFunction-class
-### Title: Class '"SimFunction"'
-### Aliases: SimFunction-class summary,SimFunction-method
-### Keywords: classes
-
-### ** Examples
-
-# The example still does not work
-
-#showClass("SimFunction")
-
-#n65 <- simNorm(0.6, 0.05)
-#u35 <- simUnif(0.3, 0.5)
-#u68 <- simUnif(0.6, 0.8)
-#u2 <- simUnif(-0.2, 0.2)
-#n1 <- simNorm(0, 0.1)
-
-#loading <- matrix(0, 9, 3)
-#loading[1:3, 1] <- NA
-#loading[4:6, 2] <- NA
-#loading[7:9, 3] <- NA
-#loading.start <- matrix("", 9, 3)
-#loading.start[1:3, 1] <- 0.7
-#loading.start[4:6, 2] <- 0.7
-#loading.start[7:9, 3] <- "u68"
-#LY <- simMatrix(loading, loading.start)
-
-#RTE <- symMatrix(diag(9))
-
-#factor.cor <- diag(3)
-#factor.cor[1, 2] <- factor.cor[2, 1] <- NA
-#RPS <- symMatrix(factor.cor, 0.5)
-
-#path <- matrix(0, 3, 3)
-#path[3, 1:2] <- NA
-#path.start <- matrix(0, 3, 3)
-#path.start[3, 1] <- "n65"
-#path.start[3, 2] <- "u35"
-#BE <- simMatrix(path, path.start)
-
-#datGen <- simSetSEM(BE=BE, LY=LY, RPS=RPS, RTE=RTE)
-
-#loading.trivial <- matrix(NA, 9, 3)
-#loading.trivial[is.na(loading)] <- 0
-#LY.trivial <- simMatrix(loading.trivial, "u2")
-
-#error.cor.trivial <- matrix(NA, 9, 9)
-#diag(error.cor.trivial) <- 0
-#RTE.trivial <- symMatrix(error.cor.trivial, "n1")
-
-#misGen <- simMisspecSEM(LY = LY.trivial, RTE = RTE.trivial)
-
-#Data.Mis <- simData(datGen, 300, misspec=misGen)
-
-#loading <- matrix(0, 12, 4)
-#loading[1:3, 1] <- NA
-#loading[4:6, 2] <- NA
-#loading[7:9, 4] <- NA
-#loading[10:12, 3] <- NA
-
-#path <- matrix(0, 4, 4)
-#path[4, 1:3] <- NA
-
-#analysis <- simParamSEM(BE=path, LY=loading)
-
-#Model <- simModel(analysis)
-
-# Find the products of indicators
-#newFUN <- function(data, var1, var2, namesProd) {
-#	prod <- data[,var1] * data[,var2]
-#	colnames(prod) <- namesProd
-#	return(data.frame(data, prod))
-#}
-
-#fun <- simFunction(newFUN, var1=paste("y", 1:3, sep=""), var2=paste("y", 4:6, sep=""), namesProd=paste("y", 10:12, sep=""))
-
-# Real simulation will need more than just 10 replications
-#Output <- simResult(10, Data.Mis, Model, objFunction=fun)
-#summary(Output)
-
-# Example of using the simfunction
-#mc <- simFunction(newFUN, var1=1:3, var2=4:6, namesProd=paste("y", 10:12, sep=""))
-#run(mc, attitude[,-1])
-#summary(mc)
-
-
-
-cleanEx()
 nameEx("SimMatrix-class")
 ### * SimMatrix-class
 
@@ -212,8 +119,6 @@ summary(Output)
 getCutoff(Output, 0.05)
 summaryParam(Output)
 summaryPopulation(Output)
-param <- getPopulation(Output)
-Output <- setPopulation(Output, param)
 
 
 
@@ -550,6 +455,27 @@ VY <- bind(rep(NA,6),2)
 CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
 
 param <- draw(CFA.Model)
+
+
+
+cleanEx()
+nameEx("estmodel")
+### * estmodel
+
+flush(stderr()); flush(stdout())
+
+### Name: estmodel
+### Title: Shortcut for data analysis template for simulation.
+### Aliases: estmodel estmodel.cfa estmodel.path estmodel.sem
+
+### ** Examples
+
+
+loading <- matrix(0, 6, 2)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+
+CFA.Model <- estmodel(LY = loading, modelType = "CFA")
 
 
 
@@ -1122,6 +1048,41 @@ flush(stderr()); flush(stdout())
 
 
 cleanEx()
+nameEx("getExtraOutput")
+### * getExtraOutput
+
+flush(stderr()); flush(stdout())
+
+### Name: getExtraOutput
+### Title: Get extra outputs from the result of simulation
+### Aliases: getExtraOutput
+
+### ** Examples
+
+## Not run: 
+##D # Specify Sample Size by n
+##D loading <- matrix(0, 6, 1)
+##D loading[1:6, 1] <- NA
+##D LX <- bind(loading, 0.7)
+##D RPH <- binds(diag(1))
+##D RTD <- binds(diag(6))
+##D CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+##D 
+##D # We will use only 5 replications to save time.
+##D # In reality, more replications are needed.
+##D 
+##D outfun <- function(out) {
+##D 	result <- inspect(out, "mi")
+##D }
+##D 
+##D # Specify both sample size and percent missing completely at random
+##D Output <- sim(5, n=200, model=CFA.Model, outfun=outfun)
+##D getExtraOutput(Output)
+## End(Not run)
+
+
+
+cleanEx()
 nameEx("getKeywords")
 ### * getKeywords
 
@@ -1146,13 +1107,25 @@ nameEx("getPopulation")
 flush(stderr()); flush(stdout())
 
 ### Name: getPopulation
-### Title: Extract the data generation population model underlying an
+### Title: Extract the data generation population model underlying a result
 ###   object
-### Aliases: getPopulation getPopulation-methods getPopulation,ANY-method
+### Aliases: getPopulation
 
 ### ** Examples
 
-# See each class for an example.
+## Not run: 
+##D loading <- matrix(0, 6, 1)
+##D loading[1:6, 1] <- NA
+##D LX <- bind(loading, "runif(1, 0.4, 0.9)")
+##D RPH <- binds(diag(1))
+##D RTD <- binds(diag(6))
+##D CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+##D 
+##D # We will use only 10 replications to save time.
+##D # In reality, more replications are needed.
+##D Output <- sim(10, n=200, model=CFA.Model)
+##D getPopulation(Output)
+## End(Not run)
 
 
 
@@ -1403,42 +1376,40 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 ## Not run: 
-##D # It does not work now.
+##D library(lavaan)
+##D loading <- matrix(0, 11, 3)
+##D loading[1:3, 1] <- NA
+##D loading[4:7, 2] <- NA
+##D loading[8:11, 3] <- NA
+##D path.A <- matrix(0, 3, 3)
+##D path.A[2:3, 1] <- NA
+##D path.A[3, 2] <- NA
+##D model.A <- estmodel(LY=loading, BE=path.A, modelType="SEM", indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
 ##D 
-##D #library(lavaan)
-##D #loading <- matrix(0, 11, 3)
-##D #loading[1:3, 1] <- NA
-##D #loading[4:7, 2] <- NA
-##D #loading[8:11, 3] <- NA
-##D #path.A <- matrix(0, 3, 3)
-##D #path.A[2:3, 1] <- NA
-##D #path.A[3, 2] <- NA
-##D #param.A <- model(LY=bind(loading), BE=bind(path.A), modelType="SEM")
+##D out.A <- analyze(model.A, PoliticalDemocracy)
 ##D 
-##D #model.A <- simModel(param.A, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
-##D #out.A <- run(model.A, PoliticalDemocracy)
+##D path.B <- matrix(0, 3, 3)
+##D path.B[1:2, 3] <- NA
+##D path.B[1, 2] <- NA
+##D model.B <- estmodel(LY=loading, BE=path.B, modelType="SEM", indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
 ##D 
-##D #path.B <- matrix(0, 3, 3)
-##D #path.B[1:2, 3] <- NA
-##D #path.B[1, 2] <- NA
-##D #param.B <- simParamSEM(LY=loading, BE=path.B)
+##D out.B <- analyze(model.B, PoliticalDemocracy)
 ##D 
-##D #model.B <- simModel(param.B, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
-##D #out.B <- run(model.B, PoliticalDemocracy)
+##D loading.mis <- matrix("runif(1, -0.2, 0.2)", 11, 3)
+##D loading.mis[is.na(loading)] <- 0
 ##D 
-##D #u2 <- simUnif(-0.2, 0.2)
-##D #loading.mis <- matrix(NA, 11, 3)
-##D #loading.mis[is.na(loading)] <- 0
-##D #LY.mis <- simMatrix(loading.mis, "u2")
-##D #misspec <- simMisspecSEM(LY=LY.mis)
+##D datamodel.A <- model.lavaan(out.A, std=TRUE, LY=loading.mis)
+##D datamodel.B <- model.lavaan(out.B, std=TRUE, LY=loading.mis)
 ##D 
-##D #output.A.A <- runFit(model.A, PoliticalDemocracy, 5, misspec=misspec)
-##D #output.A.B <- runFit(model.A, PoliticalDemocracy, 5, misspec=misspec, analyzeModel=model.B)
-##D #output.B.A <- runFit(model.B, PoliticalDemocracy, 5, misspec=misspec, analyzeModel=model.A)
-##D #output.B.B <- runFit(model.B, PoliticalDemocracy, 5, misspec=misspec)
+##D n <- nrow(PoliticalDemocracy)
+##D 
+##D output.A.A <- sim(20, n=n, model.A, generate=datamodel.A) 
+##D output.A.B <- sim(20, n=n, model.B, generate=datamodel.A)
+##D output.B.A <- sim(20, n=n, model.A, generate=datamodel.B)
+##D output.B.B <- sim(20, n=n, model.B, generate=datamodel.B)
 ##D 
 ##D # The output may contain some warnings here. When the number of replications increases (e.g., 1000), the warnings should disappear.
-##D #likRatioFit(out.A, out.B, output.A.A, output.A.B, output.B.A, output.B.B)
+##D likRatioFit(out.A, out.B, output.A.A, output.A.B, output.B.A, output.B.B)
 ## End(Not run)
 
 
@@ -1506,7 +1477,7 @@ flush(stderr()); flush(stdout())
 
 ### Name: model
 ### Title: Data generation template and analysis template for simulation.
-### Aliases: model
+### Aliases: model model.cfa model.path model.sem
 
 ### ** Examples
 
@@ -1525,6 +1496,28 @@ RTE <- binds(diag(6))
 VY <- bind(rep(NA,6),2)
 
 CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
+
+
+
+cleanEx()
+nameEx("modelLavaan")
+### * modelLavaan
+
+flush(stderr()); flush(stdout())
+
+### Name: model.lavaan
+### Title: Build the data generation template and analysis template from
+###   the lavaan result
+### Aliases: model.lavaan
+
+### ** Examples
+
+HS.model <- ' visual  =~ x1 + x2 + x3
+             textual =~ x4 + x5 + x6
+             speed   =~ x7 + x8 + x9 '
+
+fit <- cfa(HS.model, data=HolzingerSwineford1939)
+datamodel <- model.lavaan(fit, std=TRUE)
 
 
 
@@ -1580,11 +1573,6 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 ## Not run: 
-##D ########## Make the pValue comparing between lavaan and SimResult work
-##D 
-##D 
-##D 
-##D 
 ##D # Compare number with a vector
 ##D pValue(0.5, rnorm(1000, 0, 1))
 ##D 
@@ -1592,21 +1580,20 @@ flush(stderr()); flush(stdout())
 ##D pValue(c(0.5, 0.2), data.frame(rnorm(1000, 0, 1), runif(1000, 0, 1)))
 ##D 
 ##D # Compare an analysis result with a result of simulation study
-##D #library(lavaan)
-##D #loading <- matrix(0, 9, 3)
-##D #loading[1:3, 1] <- NA
-##D #loading[4:6, 2] <- NA
-##D #loading[7:9, 3] <- NA
-##D #model <- simParamCFA(LY=loading)
-##D #SimModel <- simModel(model, indLab=paste("x", 1:9, sep=""))
-##D #u2 <- simUnif(-0.2, 0.2)
-##D #loading.trivial <- matrix(NA, 9, 3)
-##D #loading.trivial[is.na(loading)] <- 0
-##D #LY.trivial <- simMatrix(loading.trivial, "u2")
-##D #mis <- simMisspecCFA(LY = LY.trivial)
-##D #out <- run(SimModel, HolzingerSwineford1939)
-##D #Output2 <- runFit(out, HolzingerSwineford1939, 20, mis)
-##D #pValue(out, Output2)
+##D library(lavaan)
+##D loading <- matrix(0, 9, 3)
+##D loading[1:3, 1] <- NA
+##D loading[4:6, 2] <- NA
+##D loading[7:9, 3] <- NA
+##D targetmodel <- estmodel(LY=loading, modelType="CFA", indLab=paste("x", 1:9, sep=""))
+##D out <- analyze(targetmodel, HolzingerSwineford1939)
+##D 
+##D loading.trivial <- matrix("runif(1, -0.2, 0.2)", 9, 3)
+##D loading.trivial[is.na(loading)] <- 0
+##D mismodel <- model.lavaan(out, std=TRUE, LY=loading.trivial)
+##D 
+##D simout <- sim(20, n=nrow(HolzingerSwineford1939), mismodel)
+##D pValue(out, simout)
 ## End(Not run)
 
 
@@ -1641,35 +1628,33 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 ## Not run: 
-##D #library(lavaan)
+##D library(lavaan)
 ##D 
-##D #LY <- matrix(1, 4, 2)
-##D #LY[,2] <- 0:3
-##D #PS <- matrix(NA, 2, 2)
-##D #TY <- rep(0, 4)
-##D #AL <- rep(NA, 2)
-##D #TE <- diag(NA, 4)
-##D #linearModel <- simParamCFA(LY=LY, PS=PS, TY=TY, AL=AL, TE=TE)
+##D LY <- matrix(1, 4, 2)
+##D LY[,2] <- 0:3
+##D PS <- matrix(NA, 2, 2)
+##D TY <- rep(0, 4)
+##D AL <- rep(NA, 2)
+##D TE <- diag(NA, 4)
+##D nested <- estmodel(LY=LY, PS=PS, TY=TY, AL=AL, TE=TE, modelType="CFA", indLab=paste("t", 1:4, sep=""))
 ##D 
-##D #LY2 <- matrix(1, 4, 2)
-##D #LY2[,2] <- c(0, NA, NA, 3)
-##D #unconstrainModel <- simParamCFA(LY=LY2, PS=PS, TY=TY, AL=AL, TE=TE)
+##D LY2 <- matrix(1, 4, 2)
+##D LY2[,2] <- c(0, NA, NA, 3)
+##D parent <- estmodel(LY=LY2, PS=PS, TY=TY, AL=AL, TE=TE, modelType="CFA", indLab=paste("t", 1:4, sep=""))
 ##D 
-##D #nested <- simModel(linearModel, indLab=paste("t", 1:4, sep=""))
-##D #parent <- simModel(unconstrainModel, indLab=paste("t", 1:4, sep=""))
+##D outNested <- analyze(nested, Demo.growth)
+##D outParent <- analyze(parent, Demo.growth)
 ##D 
-##D #outNested <- run(nested, Demo.growth)
-##D #outParent <- run(parent, Demo.growth)
+##D loadingMis <- matrix(0, 4, 2)
+##D loadingMis[2:3, 2] <- "runif(1, -0.1, 0.1)"
+##D datamodel <- model.lavaan(outNested, LY=loadingMis)
 ##D 
-##D #loadingMis <- matrix(0, 4, 2)
-##D #loadingMis[2:3, 2] <- NA
-##D #LYmis <- simMatrix(loadingMis, "runif(1, -0.1, 0.1)")
-##D #linearMis <- simMisspecCFA(LY=LYmis)
+##D n <- nrow(Demo.growth)
 ##D 
-##D #simNestedNested <- runFit(model=nested, data=Demo.growth, nRep=10, misspec=linearMis)
-##D #simNestedParent <- runFit(model=nested, data=Demo.growth, nRep=10, misspec=linearMis, analyzeModel=parent)
+##D simNestedNested <- sim(30, n=n, nested, generate=datamodel) 
+##D simNestedParent <- sim(30, n=n, parent, generate=datamodel)
 ##D 
-##D #pValueNested(outNested, outParent, simNestedNested, simNestedParent)
+##D pValueNested(outNested, outParent, simNestedNested, simNestedParent)
 ## End(Not run)
 
 
@@ -1687,40 +1672,40 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 ## Not run: 
-##D #library(lavaan)
-##D #loading <- matrix(0, 11, 3)
-##D #loading[1:3, 1] <- NA
-##D #loading[4:7, 2] <- NA
-##D #loading[8:11, 3] <- NA
-##D #path.A <- matrix(0, 3, 3)
-##D #path.A[2:3, 1] <- NA
-##D #path.A[3, 2] <- NA
-##D #param.A <- simParamSEM(LY=loading, BE=path.A)
+##D library(lavaan)
+##D loading <- matrix(0, 11, 3)
+##D loading[1:3, 1] <- NA
+##D loading[4:7, 2] <- NA
+##D loading[8:11, 3] <- NA
+##D path.A <- matrix(0, 3, 3)
+##D path.A[2:3, 1] <- NA
+##D path.A[3, 2] <- NA
+##D model.A <- estmodel(LY=loading, BE=path.A, modelType="SEM", indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
 ##D 
-##D #model.A <- simModel(param.A, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
-##D #out.A <- run(model.A, PoliticalDemocracy)
+##D out.A <- analyze(model.A, PoliticalDemocracy)
 ##D 
-##D #path.B <- matrix(0, 3, 3)
-##D #path.B[1:2, 3] <- NA
-##D #path.B[1, 2] <- NA
-##D #param.B <- simParamSEM(LY=loading, BE=path.B)
+##D path.B <- matrix(0, 3, 3)
+##D path.B[1:2, 3] <- NA
+##D path.B[1, 2] <- NA
+##D model.B <- estmodel(LY=loading, BE=path.B, modelType="SEM", indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
 ##D 
-##D #model.B <- simModel(param.B, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
-##D #out.B <- run(model.B, PoliticalDemocracy)
+##D out.B <- analyze(model.B, PoliticalDemocracy)
 ##D 
-##D #u2 <- simUnif(-0.2, 0.2)
-##D #loading.mis <- matrix(NA, 11, 3)
-##D #loading.mis[is.na(loading)] <- 0
-##D #LY.mis <- simMatrix(loading.mis, "u2")
-##D #misspec <- simMisspecSEM(LY=LY.mis)
+##D loading.mis <- matrix("runif(1, -0.2, 0.2)", 11, 3)
+##D loading.mis[is.na(loading)] <- 0
 ##D 
-##D #output.A.A <- runFit(model.A, PoliticalDemocracy, 5, misspec=misspec)
-##D #output.A.B <- runFit(model.A, PoliticalDemocracy, 5, misspec=misspec, analyzeModel=model.B)
-##D #output.B.A <- runFit(model.B, PoliticalDemocracy, 5, misspec=misspec, analyzeModel=model.A)
-##D #output.B.B <- runFit(model.B, PoliticalDemocracy, 5, misspec=misspec)
+##D datamodel.A <- model.lavaan(out.A, std=TRUE, LY=loading.mis)
+##D datamodel.B <- model.lavaan(out.B, std=TRUE, LY=loading.mis)
+##D 
+##D n <- nrow(PoliticalDemocracy)
+##D 
+##D output.A.A <- sim(5, n=n, model.A, generate=datamodel.A) 
+##D output.A.B <- sim(5, n=n, model.B, generate=datamodel.A)
+##D output.B.A <- sim(5, n=n, model.A, generate=datamodel.B)
+##D output.B.B <- sim(5, n=n, model.B, generate=datamodel.B)
 ##D 
 ##D # The output may contain some warnings here. When the number of replications increases (e.g., 1000), the warnings should disappear.
-##D #pValueNonNested(out.A, out.B, output.A.A, output.A.B, output.B.A, output.B.B)
+##D pValueNonNested(out.A, out.B, output.A.A, output.A.B, output.B.A, output.B.B)
 ## End(Not run)
 
 
@@ -1893,13 +1878,14 @@ nameEx("plotDist")
 flush(stderr()); flush(stdout())
 
 ### Name: plotDist
-### Title: Plot a distribution of a distribution object or data
-###   distribution object
-### Aliases: plotDist plotDist-methods
+### Title: Plot a distribution of a data distribution object
+### Aliases: plotDist
 
 ### ** Examples
 
-# Need Example
+datadist <- bindDist(c("chisq", "t", "f"), list(df=5), list(df=3), list(df1=3, df2=5))
+plotDist(datadist, r=0.5, var=1:2)
+plotDist(datadist, var=3)
 
 
 
@@ -2338,11 +2324,73 @@ flush(stderr()); flush(stdout())
 
 ### Name: setPopulation
 ### Title: Set the data generation population model underlying an object
-### Aliases: setPopulation setPopulation-methods setPopulation,ANY-method
+### Aliases: setPopulation
 
 ### ** Examples
 
 # See each class for an example.
+## Not run: 
+##D 
+##D loading <- matrix(0, 7, 3)
+##D loading[1:3, 1] <- NA
+##D loading[4:6, 2] <- NA
+##D loading[1:7, 3] <- NA
+##D loadingVal <- matrix(0, 7, 3)
+##D loadingVal[1:3, 1] <- "runif(1, 0.5, 0.7)"
+##D loadingVal[4:6, 2] <- "runif(1, 0.5, 0.7)"
+##D loadingVal[1:6, 3] <- "runif(1, 0.3, 0.5)"
+##D loadingVal[7, 3] <- 1
+##D loading.mis <- matrix("runif(1, -0.2, 0.2)", 7, 3)
+##D loading.mis[is.na(loading)] <- 0
+##D loading.mis[,3] <- 0
+##D loading.mis[7,] <- 0
+##D LY <- bind(loading, loadingVal, misspec=loading.mis)
+##D 
+##D RPS <- binds(diag(3))
+##D 
+##D path <- matrix(0, 3, 3)
+##D path[2, 1] <- NA
+##D BE <- bind(path, "runif(1, 0.3, 0.5)")
+##D 
+##D RTE <- binds(diag(7))
+##D 
+##D VY <- bind(c(rep(NA, 6), 0), c(rep(1, 6), ""))
+##D 
+##D datamodel <- model(LY=LY, RPS=RPS, BE=BE, RTE=RTE, VY=VY, modelType="SEM")
+##D 
+##D loading <- matrix(0, 7, 3)
+##D loading[1:3, 1] <- NA
+##D loading[4:6, 2] <- NA
+##D loading[7, 3] <- NA
+##D path <- matrix(0, 3, 3)
+##D path[2, 1] <- NA
+##D path[1, 3] <- NA
+##D path[2, 3] <- NA
+##D errorCov <- diag(NA, 7)
+##D errorCov[7, 7] <- 0
+##D facCov <- diag(3)
+##D analysis <- estmodel(LY=loading, BE=path, TE=errorCov, PS=facCov, modelType="SEM", indLab=paste("y", 1:7, sep=""))
+##D 
+##D Output <- sim(100, n=200, analysis, generate=datamodel)
+##D 
+##D loadingVal <- matrix(0, 7, 3)
+##D loadingVal[1:3, 1] <- 0.6
+##D loadingVal[4:6, 2] <- 0.6
+##D loadingVal[7, 3] <- 1
+##D LY <- bind(loading, loadingVal)
+##D pathVal <- matrix(0, 3, 3)
+##D pathVal[2, 1] <- 0.4
+##D pathVal[1, 3] <- 0.4
+##D pathVal[2, 3] <- 0.4
+##D BE <- bind(path, pathVal)
+##D PS <- binds(facCov)
+##D errorCovVal <- diag(0.64, 7)
+##D errorCovVal[7, 7] <- 0
+##D TE <- binds(errorCov, errorCovVal)
+##D population <- model(LY=LY, PS=PS, BE=BE, TE=TE, modelType="SEM")
+##D Output <- setPopulation(Output, population) 
+##D summary(Output)
+## End(Not run)
 
 
 
@@ -2375,79 +2423,6 @@ CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
 
 Output <- sim(20, CFA.Model,n=200)
 summary(Output)
-
-
-
-cleanEx()
-nameEx("simFunction")
-### * simFunction
-
-flush(stderr()); flush(stdout())
-
-### Name: simFunction
-### Title: Create function object
-### Aliases: simFunction
-
-### ** Examples
-
-# The example still does not work
-loading <- matrix(0, 9, 3)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-loading[7:9, 3] <- NA
-loading.start <- matrix("", 9, 3)
-loading.start[1:3, 1] <- 0.7
-loading.start[4:6, 2] <- 0.7
-loading.start[7:9, 3] <- "runif(1, 0.6, 0.8)"
-
-loading.trivial <- matrix("runif(1, -0.2, 0.2)", 9, 3)
-loading.trivial[is.na(loading)] <- 0
-
-LY <- bind(loading, loading.start, misspec=loading.trivial)
-
-error.cor.trivial <- matrix("rnorm(1, 0, 0.1)", 9, 9)
-diag(error.cor.trivial) <- 0
-
-RTE <- binds(diag(9), misspec=error.cor.trivial)
-
-factor.cor <- diag(3)
-factor.cor[1, 2] <- factor.cor[2, 1] <- NA
-RPS <- binds(factor.cor, 0.5)
-
-path <- matrix(0, 3, 3)
-path[3, 1:2] <- NA
-path.start <- matrix(0, 3, 3)
-path.start[3, 1] <- "rnorm(1, 0.6, 0.05)"
-path.start[3, 2] <- "runif(1, 0.3, 0.5)"
-BE <- bind(path, path.start)
-
-datGen <- model(BE=BE, LY=LY, RPS=RPS, RTE=RTE, modelType="SEM")
-
-#loading <- matrix(0, 12, 4)
-#loading[1:3, 1] <- NA
-#loading[4:6, 2] <- NA
-#loading[7:9, 4] <- NA
-#loading[10:12, 3] <- NA
-
-#path <- matrix(0, 4, 4)
-#path[4, 1:3] <- NA
-
-#analysis <- simParamSEM(BE=path, LY=loading)
-
-#Model <- simModel(analysis)
-
-# Find the products of indicators
-#newFUN <- function(data, var1, var2, namesProd) {
-#	prod <- data[,var1] * data[,var2]
-#	colnames(prod) <- namesProd
-#	return(data.frame(data, prod))
-#}
-
-#fun <- simFunction(newFUN, var1=paste("y", 1:3, sep=""), var2=paste("y", 4:6, sep=""), namesProd=paste("y", 10:12, sep=""))
-
-# Real simulation will need more than just 10 replications
-#Output <- simResult(10, Data.Mis, Model, objFunction=fun)
-#summary(Output)
 
 
 
@@ -2573,14 +2548,25 @@ nameEx("summaryPopulation")
 flush(stderr()); flush(stdout())
 
 ### Name: summaryPopulation
-### Title: Summarize the data generation population model underlying an
-###   object
-### Aliases: summaryPopulation summaryPopulation-methods
-###   summaryPopulation,ANY-method
+### Title: Summarize the data generation population model underlying a
+###   result object
+### Aliases: summaryPopulation
 
 ### ** Examples
 
-# See each class for an example.
+## Not run: 
+##D loading <- matrix(0, 6, 1)
+##D loading[1:6, 1] <- NA
+##D LX <- bind(loading, "runif(1, 0.4, 0.9)")
+##D RPH <- binds(diag(1))
+##D RTD <- binds(diag(6))
+##D CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+##D 
+##D # We will use only 10 replications to save time.
+##D # In reality, more replications are needed.
+##D Output <- sim(10, n=200, model=CFA.Model)
+##D summaryPopulation(Output)
+## End(Not run)
 
 
 

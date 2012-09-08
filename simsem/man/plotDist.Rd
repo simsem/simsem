@@ -1,21 +1,32 @@
 \name{plotDist}
 \alias{plotDist}
-\alias{plotDist-methods}
 \title{
-	Plot a distribution of a distribution object or data distribution object
+	Plot a distribution of a data distribution object
 }
 \description{
-	Plot a distribution of a distribution object or data distribution object
+	Plot a distribution of a data distribution object
 }
 \usage{
-plotDist(object, ...)
+plotDist(object, xlim = NULL, ylim = NULL, r = 0, var = NULL, contour = TRUE)
 }
 \arguments{
   \item{object}{
-	The object to plot a distribution 
+	The data distribution object (\code{\linkS4class{SimDataDist}}) to plot a distribution 
 }
-  \item{...}{
-	Other arguments. Please see a class-specific method.
+  \item{xlim}{
+	A numeric vector with two elements specifying the lower and upper limit of the x-axis to be plotted. 
+}
+  \item{ylim}{
+	A numeric vector with two elements specifying the lower and upper limit of the y-axis to be plotted. This argument is applicable for the joint distribution of two dimensions only
+}
+  \item{r}{
+	The correlation of two dimensions in the joint distribution
+}
+  \item{var}{
+	A vector of the index of variables to be plotted. The length of vector cannot be greater than 2.
+}
+  \item{contour}{
+	Applicable if two variables are used only. If TRUE, the contour plot is provided. If FALSE, the perspective plot is provided.
 }
 }
 \value{
@@ -30,5 +41,7 @@ plotDist(object, ...)
 	}
 }
 \examples{
-# Need Example
+datadist <- bindDist(c("chisq", "t", "f"), list(df=5), list(df=3), list(df1=3, df2=5))
+plotDist(datadist, r=0.5, var=1:2)
+plotDist(datadist, var=3)
 }

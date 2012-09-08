@@ -24,7 +24,7 @@ pValueNonNested <- function(outMod1, outMod2, dat1Mod1, dat1Mod2, dat2Mod1, dat2
     if (is.null(pmMARval) || is.na(pmMARval)) 
         pmMARval <- NULL
     
-	condition <- c(length(dat2Mod1@pmMCAR) > 1, length(dat2Mod1@pmMAR) > 1, length(dat2Mod1@n) > 1)
+	condition <- c(length(unique(dat2Mod1@pmMCAR)) > 1, length(unique(dat2Mod1@pmMAR)) > 1, length(unique(dat2Mod1@n)) > 1)
     condValue <- cbind(dat2Mod1@pmMCAR, dat2Mod1@pmMAR, dat2Mod1@n)
     colnames(condValue) <- c("Percent MCAR", "Percent MAR", "N")
     condValue <- condValue[, condition]
@@ -45,12 +45,11 @@ pValueNonNested <- function(outMod1, outMod2, dat1Mod1, dat1Mod2, dat2Mod1, dat2
     }
     predictorVal <- predictorVal[condition]
 	
-	
 	Data1 <- as.data.frame((dat1Mod1@fit - dat1Mod2@fit)[,usedFit])
 	Data2 <- as.data.frame((dat2Mod1@fit - dat2Mod2@fit)[,usedFit])
 	
-	
-    cutoff <- outMod1@fit[usedFit] - outMod2@fit[usedFit]
+	cutoff <- extractLavaanFit(outMod1)[usedFit] - extractLavaanFit(outMod2)[usedFit]
+
 	result1 <- NULL
 	result2 <- NULL
 	if(any(condition)) {

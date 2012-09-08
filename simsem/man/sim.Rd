@@ -7,7 +7,7 @@
 	TBA
 }
 \usage{
-sim(nRep, model, n, generate = NULL, rawData = NULL, miss = NULL, fun=NULL,
+sim(nRep, model, n, generate = NULL, rawData = NULL, miss = NULL, datafun=NULL, outfun=NULL,
 pmMCAR = NULL, pmMAR = NULL, facDist = NULL, indDist = NULL, errorDist = NULL, sequential = FALSE, 
 modelBoot = FALSE, realData = NULL, maxDraw = 50, misfitType = "f0", 
 misfitBounds = NULL, averageNumMisspec = NULL, optMisfit=NULL, optDraws = 50, 
@@ -33,8 +33,11 @@ paramOnly = FALSE, dataOnly=FALSE, ...)
   \item{miss}{
 	Missing data handling template, created by the function \code{\link{miss}}.
 }
-  \item{fun}{
+  \item{datafun}{
 	Function to be applied to generated data set at each replication.
+}
+  \item{outfun}{
+	Function to be applied to the \code{\linkS4class{lavaan}} output at each replication. The output of this function in each replication will be saved in the simulation output (\code{\linkS4class{SimResult}}). The extra outputs can be obtained by the \code{\link{getExtraOutput}} function.
 }
   \item{pmMCAR}{
 	The percent completely missing at random. This argument is not necessary except the user wish to vary percent missing completely at random across replications. The \code{pmMCAR} here is a vector of percent missing, which the values can be in between 0 and 1 only. The specification of \code{objMissing} is not needed (but is needed if users wish to specify complex missing value data generation or wish to use multiple imputation). 

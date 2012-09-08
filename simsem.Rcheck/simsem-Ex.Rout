@@ -75,99 +75,6 @@ Class:      numeric    character         list      logical       vector
 > 
 > 
 > cleanEx()
-> nameEx("SimFunction-class")
-> ### * SimFunction-class
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: SimFunction-class
-> ### Title: Class '"SimFunction"'
-> ### Aliases: SimFunction-class summary,SimFunction-method
-> ### Keywords: classes
-> 
-> ### ** Examples
-> 
-> # The example still does not work
-> 
-> #showClass("SimFunction")
-> 
-> #n65 <- simNorm(0.6, 0.05)
-> #u35 <- simUnif(0.3, 0.5)
-> #u68 <- simUnif(0.6, 0.8)
-> #u2 <- simUnif(-0.2, 0.2)
-> #n1 <- simNorm(0, 0.1)
-> 
-> #loading <- matrix(0, 9, 3)
-> #loading[1:3, 1] <- NA
-> #loading[4:6, 2] <- NA
-> #loading[7:9, 3] <- NA
-> #loading.start <- matrix("", 9, 3)
-> #loading.start[1:3, 1] <- 0.7
-> #loading.start[4:6, 2] <- 0.7
-> #loading.start[7:9, 3] <- "u68"
-> #LY <- simMatrix(loading, loading.start)
-> 
-> #RTE <- symMatrix(diag(9))
-> 
-> #factor.cor <- diag(3)
-> #factor.cor[1, 2] <- factor.cor[2, 1] <- NA
-> #RPS <- symMatrix(factor.cor, 0.5)
-> 
-> #path <- matrix(0, 3, 3)
-> #path[3, 1:2] <- NA
-> #path.start <- matrix(0, 3, 3)
-> #path.start[3, 1] <- "n65"
-> #path.start[3, 2] <- "u35"
-> #BE <- simMatrix(path, path.start)
-> 
-> #datGen <- simSetSEM(BE=BE, LY=LY, RPS=RPS, RTE=RTE)
-> 
-> #loading.trivial <- matrix(NA, 9, 3)
-> #loading.trivial[is.na(loading)] <- 0
-> #LY.trivial <- simMatrix(loading.trivial, "u2")
-> 
-> #error.cor.trivial <- matrix(NA, 9, 9)
-> #diag(error.cor.trivial) <- 0
-> #RTE.trivial <- symMatrix(error.cor.trivial, "n1")
-> 
-> #misGen <- simMisspecSEM(LY = LY.trivial, RTE = RTE.trivial)
-> 
-> #Data.Mis <- simData(datGen, 300, misspec=misGen)
-> 
-> #loading <- matrix(0, 12, 4)
-> #loading[1:3, 1] <- NA
-> #loading[4:6, 2] <- NA
-> #loading[7:9, 4] <- NA
-> #loading[10:12, 3] <- NA
-> 
-> #path <- matrix(0, 4, 4)
-> #path[4, 1:3] <- NA
-> 
-> #analysis <- simParamSEM(BE=path, LY=loading)
-> 
-> #Model <- simModel(analysis)
-> 
-> # Find the products of indicators
-> #newFUN <- function(data, var1, var2, namesProd) {
-> #	prod <- data[,var1] * data[,var2]
-> #	colnames(prod) <- namesProd
-> #	return(data.frame(data, prod))
-> #}
-> 
-> #fun <- simFunction(newFUN, var1=paste("y", 1:3, sep=""), var2=paste("y", 4:6, sep=""), namesProd=paste("y", 10:12, sep=""))
-> 
-> # Real simulation will need more than just 10 replications
-> #Output <- simResult(10, Data.Mis, Model, objFunction=fun)
-> #summary(Output)
-> 
-> # Example of using the simfunction
-> #mc <- simFunction(newFUN, var1=1:3, var2=4:6, namesProd=paste("y", 10:12, sep=""))
-> #run(mc, attitude[,-1])
-> #summary(mc)
-> 
-> 
-> 
-> cleanEx()
 > nameEx("SimMatrix-class")
 > ### * SimMatrix-class
 > 
@@ -289,9 +196,9 @@ Class:  character    numeric data.frame data.frame data.frame     vector
                                                                         
 Name:  paramValue       FMI1       FMI2    stdCoef       seed          n
 Class: data.frame data.frame data.frame data.frame    numeric     vector
-                                       
-Name:      pmMCAR      pmMAR     timing
-Class:     vector     vector       list
+                                                  
+Name:      pmMCAR      pmMAR   extraOut     timing
+Class:     vector     vector       list       list
 > loading <- matrix(0, 6, 1)
 > loading[1:6, 1] <- NA
 > LX <- bind(loading, 0.7)
@@ -319,43 +226,43 @@ Fit Indices      0.1     0.05     0.01    0.001     Mean     SD
       SRMR     0.019    0.019    0.019    0.019    0.015  0.004
 ========= Parameter Estimates and Standard Errors ============
          Estimate.Average Estimate.SD Average.SE Power..Not.equal.0. Std.Est
-1.y1=~x1            0.691       0.028      0.041                   1   0.697
-1.y1=~x2            0.685       0.023      0.042                   1   0.685
-1.y1=~x3            0.696       0.016      0.041                   1   0.703
-1.y1=~x4            0.666       0.056      0.041                   1   0.681
-1.y1=~x5            0.695       0.031      0.042                   1   0.699
-1.y1=~x6            0.727       0.050      0.042                   1   0.721
-1.x1~~x1            0.504       0.014      0.038                   1   0.514
-1.x2~~x2            0.531       0.034      0.040                   1   0.531
-1.x3~~x3            0.496       0.044      0.038                   1   0.505
-1.x4~~x4            0.509       0.038      0.038                   1   0.535
-1.x5~~x5            0.506       0.056      0.039                   1   0.510
-1.x6~~x6            0.485       0.021      0.038                   1   0.479
-1.x1~1              0.018       0.029      0.044                   0   0.018
-1.x2~1              0.005       0.043      0.045                   0   0.005
-1.x3~1              0.021       0.019      0.044                   0   0.021
-1.x4~1              0.014       0.039      0.044                   0   0.015
-1.x5~1              0.007       0.033      0.044                   0   0.007
-1.x6~1              0.013       0.021      0.045                   0   0.013
+1.f1=~y1            0.691       0.028      0.041                   1   0.697
+1.f1=~y2            0.685       0.023      0.042                   1   0.685
+1.f1=~y3            0.696       0.016      0.041                   1   0.703
+1.f1=~y4            0.666       0.056      0.041                   1   0.681
+1.f1=~y5            0.695       0.031      0.042                   1   0.699
+1.f1=~y6            0.727       0.050      0.042                   1   0.721
+1.y1~~y1            0.504       0.014      0.038                   1   0.514
+1.y2~~y2            0.531       0.034      0.040                   1   0.531
+1.y3~~y3            0.496       0.044      0.038                   1   0.505
+1.y4~~y4            0.509       0.038      0.038                   1   0.535
+1.y5~~y5            0.506       0.056      0.039                   1   0.510
+1.y6~~y6            0.485       0.021      0.038                   1   0.479
+1.y1~1              0.018       0.029      0.044                   0   0.018
+1.y2~1              0.005       0.043      0.045                   0   0.005
+1.y3~1              0.021       0.019      0.044                   0   0.021
+1.y4~1              0.014       0.039      0.044                   0   0.015
+1.y5~1              0.007       0.033      0.044                   0   0.007
+1.y6~1              0.013       0.021      0.045                   0   0.013
          Std.Est.SD Average.Param Average.Bias Coverage
-1.y1=~x1      0.014          0.70       -0.009      1.0
-1.y1=~x2      0.016          0.70       -0.015      1.0
-1.y1=~x3      0.018          0.70       -0.004      1.0
-1.y1=~x4      0.039          0.70       -0.034      0.8
-1.y1=~x5      0.022          0.70       -0.005      1.0
-1.y1=~x6      0.028          0.70        0.027      0.8
-1.x1~~x1      0.020          0.51       -0.006      1.0
-1.x2~~x2      0.022          0.51        0.021      1.0
-1.x3~~x3      0.025          0.51       -0.014      1.0
-1.x4~~x4      0.051          0.51       -0.001      1.0
-1.x5~~x5      0.031          0.51       -0.004      1.0
-1.x6~~x6      0.040          0.51       -0.025      1.0
-1.x1~1        0.029          0.00        0.018      1.0
-1.x2~1        0.042          0.00        0.005      1.0
-1.x3~1        0.020          0.00        0.021      1.0
-1.x4~1        0.041          0.00        0.014      1.0
-1.x5~1        0.033          0.00        0.007      1.0
-1.x6~1        0.021          0.00        0.013      1.0
+1.f1=~y1      0.014          0.70       -0.009      1.0
+1.f1=~y2      0.016          0.70       -0.015      1.0
+1.f1=~y3      0.018          0.70       -0.004      1.0
+1.f1=~y4      0.039          0.70       -0.034      0.8
+1.f1=~y5      0.022          0.70       -0.005      1.0
+1.f1=~y6      0.028          0.70        0.027      0.8
+1.y1~~y1      0.020          0.51       -0.006      1.0
+1.y2~~y2      0.022          0.51        0.021      1.0
+1.y3~~y3      0.025          0.51       -0.014      1.0
+1.y4~~y4      0.051          0.51       -0.001      1.0
+1.y5~~y5      0.031          0.51       -0.004      1.0
+1.y6~~y6      0.040          0.51       -0.025      1.0
+1.y1~1        0.029          0.00        0.018      1.0
+1.y2~1        0.042          0.00        0.005      1.0
+1.y3~1        0.020          0.00        0.021      1.0
+1.y4~1        0.041          0.00        0.014      1.0
+1.y5~1        0.033          0.00        0.007      1.0
+1.y6~1        0.021          0.00        0.013      1.0
 ========= Correlation between Fit Indices ============
          Chi    AIC    BIC  RMSEA    CFI    TLI   SRMR
 Chi    1.000 -0.669 -0.669  0.996 -0.977 -0.998  1.000
@@ -375,50 +282,48 @@ Number of Converged Replications
 95% 17.31436 7510.452 7586.315 0.0429723 0.9915622 0.985937 0.01886139
 > summaryParam(Output)
          Estimate.Average Estimate.SD Average.SE Power..Not.equal.0.
-1.y1=~x1      0.690756156  0.02810822 0.04149426                   1
-1.y1=~x2      0.684804691  0.02263627 0.04211500                   1
-1.y1=~x3      0.696132921  0.01555991 0.04135121                   1
-1.y1=~x4      0.665635591  0.05563827 0.04117407                   1
-1.y1=~x5      0.695344582  0.03075850 0.04160583                   1
-1.y1=~x6      0.726805534  0.04988723 0.04168946                   1
-1.x1~~x1      0.504025133  0.01390457 0.03830915                   1
-1.x2~~x2      0.530959200  0.03432317 0.03978899                   1
-1.x3~~x3      0.495700421  0.04352861 0.03793284                   1
-1.x4~~x4      0.509197688  0.03774779 0.03808872                   1
-1.x5~~x5      0.505610318  0.05558941 0.03852026                   1
-1.x6~~x6      0.484795772  0.02083428 0.03801104                   1
-1.x1~1        0.018166046  0.02869040 0.04430370                   0
-1.x2~1        0.004590887  0.04278074 0.04471879                   0
-1.x3~1        0.020747715  0.01949681 0.04427270                   0
-1.x4~1        0.013662157  0.03941881 0.04367342                   0
-1.x5~1        0.006917330  0.03267557 0.04446808                   0
-1.x6~1        0.013019004  0.02085169 0.04503690                   0
+1.f1=~y1      0.690756156  0.02810822 0.04149426                   1
+1.f1=~y2      0.684804691  0.02263627 0.04211500                   1
+1.f1=~y3      0.696132921  0.01555991 0.04135121                   1
+1.f1=~y4      0.665635591  0.05563827 0.04117407                   1
+1.f1=~y5      0.695344582  0.03075850 0.04160583                   1
+1.f1=~y6      0.726805534  0.04988723 0.04168946                   1
+1.y1~~y1      0.504025133  0.01390457 0.03830915                   1
+1.y2~~y2      0.530959200  0.03432317 0.03978899                   1
+1.y3~~y3      0.495700421  0.04352861 0.03793284                   1
+1.y4~~y4      0.509197688  0.03774779 0.03808872                   1
+1.y5~~y5      0.505610318  0.05558941 0.03852026                   1
+1.y6~~y6      0.484795772  0.02083428 0.03801104                   1
+1.y1~1        0.018166046  0.02869040 0.04430370                   0
+1.y2~1        0.004590887  0.04278074 0.04471879                   0
+1.y3~1        0.020747715  0.01949681 0.04427270                   0
+1.y4~1        0.013662157  0.03941881 0.04367342                   0
+1.y5~1        0.006917330  0.03267557 0.04446808                   0
+1.y6~1        0.013019004  0.02085169 0.04503690                   0
              Std.Est Std.Est.SD Average.Param  Average.Bias Coverage
-1.y1=~x1 0.697070143 0.01422193          0.70 -0.0092438439      1.0
-1.y1=~x2 0.684851022 0.01632425          0.70 -0.0151953087      1.0
-1.y1=~x3 0.703397021 0.01804013          0.70 -0.0038670795      1.0
-1.y1=~x4 0.680861392 0.03863723          0.70 -0.0343644092      0.8
-1.y1=~x5 0.699459950 0.02232976          0.70 -0.0046554178      1.0
-1.y1=~x6 0.721071722 0.02764561          0.70  0.0268055340      0.8
-1.x1~~x1 0.513931405 0.01991776          0.51 -0.0059748670      1.0
-1.x2~~x2 0.530765893 0.02240770          0.51  0.0209592001      1.0
-1.x3~~x3 0.504972274 0.02529073          0.51 -0.0142995790      1.0
-1.x4~~x4 0.535233496 0.05128518          0.51 -0.0008023119      1.0
-1.x5~~x5 0.510356884 0.03111063          0.51 -0.0043896822      1.0
-1.x6~~x6 0.479444147 0.03996509          0.51 -0.0252042285      1.0
-1.x1~1   0.018417709 0.02909937          0.00  0.0181660459      1.0
-1.x2~1   0.004545703 0.04208763          0.00  0.0045908869      1.0
-1.x3~1   0.021140079 0.02002116          0.00  0.0207477151      1.0
-1.x4~1   0.014854838 0.04097594          0.00  0.0136621570      1.0
-1.x5~1   0.007233804 0.03314310          0.00  0.0069173300      1.0
-1.x6~1   0.013257560 0.02080362          0.00  0.0130190044      1.0
+1.f1=~y1 0.697070143 0.01422193          0.70 -0.0092438439      1.0
+1.f1=~y2 0.684851022 0.01632425          0.70 -0.0151953087      1.0
+1.f1=~y3 0.703397021 0.01804013          0.70 -0.0038670795      1.0
+1.f1=~y4 0.680861392 0.03863723          0.70 -0.0343644092      0.8
+1.f1=~y5 0.699459950 0.02232976          0.70 -0.0046554178      1.0
+1.f1=~y6 0.721071722 0.02764561          0.70  0.0268055340      0.8
+1.y1~~y1 0.513931405 0.01991776          0.51 -0.0059748670      1.0
+1.y2~~y2 0.530765893 0.02240770          0.51  0.0209592001      1.0
+1.y3~~y3 0.504972274 0.02529073          0.51 -0.0142995790      1.0
+1.y4~~y4 0.535233496 0.05128518          0.51 -0.0008023119      1.0
+1.y5~~y5 0.510356884 0.03111063          0.51 -0.0043896822      1.0
+1.y6~~y6 0.479444147 0.03996509          0.51 -0.0252042285      1.0
+1.y1~1   0.018417709 0.02909937          0.00  0.0181660459      1.0
+1.y2~1   0.004545703 0.04208763          0.00  0.0045908869      1.0
+1.y3~1   0.021140079 0.02002116          0.00  0.0207477151      1.0
+1.y4~1   0.014854838 0.04097594          0.00  0.0136621570      1.0
+1.y5~1   0.007233804 0.03314310          0.00  0.0069173300      1.0
+1.y6~1   0.013257560 0.02080362          0.00  0.0130190044      1.0
 > summaryPopulation(Output)
                  [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12]
 Population Value 0.7  0.7  0.7  0.7  0.7  0.7  0.51 0.51 0.51 0.51  0.51  0.51 
                  [,13] [,14] [,15] [,16] [,17] [,18]
 Population Value 0     0     0     0     0     0    
-> param <- getPopulation(Output)
-> Output <- setPopulation(Output, param)
 > 
 > 
 > 
@@ -441,9 +346,9 @@ detaching 'package:parallel'
 Class "SimSem" [package "simsem"]
 
 Slots:
-                                    
-Name:         pt      dgen modelType
-Class:      list      list character
+                                              
+Name:         pt      dgen modelType  groupLab
+Class:      list      list character character
 > 
 > loading <- matrix(0, 6, 2)
 > loading[1:3, 1] <- NA
@@ -909,6 +814,27 @@ detaching 'package:parallel'
 > CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
 > 
 > param <- draw(CFA.Model)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("estmodel")
+> ### * estmodel
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: estmodel
+> ### Title: Shortcut for data analysis template for simulation.
+> ### Aliases: estmodel estmodel.cfa estmodel.path estmodel.sem
+> 
+> ### ** Examples
+> 
+> 
+> loading <- matrix(0, 6, 2)
+> loading[1:3, 1] <- NA
+> loading[4:6, 2] <- NA
+> 
+> CFA.Model <- estmodel(LY = loading, modelType = "CFA")
 > 
 > 
 > 
@@ -1518,6 +1444,41 @@ detaching 'package:parallel'
 > 
 > 
 > cleanEx()
+> nameEx("getExtraOutput")
+> ### * getExtraOutput
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: getExtraOutput
+> ### Title: Get extra outputs from the result of simulation
+> ### Aliases: getExtraOutput
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D # Specify Sample Size by n
+> ##D loading <- matrix(0, 6, 1)
+> ##D loading[1:6, 1] <- NA
+> ##D LX <- bind(loading, 0.7)
+> ##D RPH <- binds(diag(1))
+> ##D RTD <- binds(diag(6))
+> ##D CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+> ##D 
+> ##D # We will use only 5 replications to save time.
+> ##D # In reality, more replications are needed.
+> ##D 
+> ##D outfun <- function(out) {
+> ##D 	result <- inspect(out, "mi")
+> ##D }
+> ##D 
+> ##D # Specify both sample size and percent missing completely at random
+> ##D Output <- sim(5, n=200, model=CFA.Model, outfun=outfun)
+> ##D getExtraOutput(Output)
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
 > nameEx("getKeywords")
 > ### * getKeywords
 > 
@@ -1542,13 +1503,25 @@ detaching 'package:parallel'
 > flush(stderr()); flush(stdout())
 > 
 > ### Name: getPopulation
-> ### Title: Extract the data generation population model underlying an
+> ### Title: Extract the data generation population model underlying a result
 > ###   object
-> ### Aliases: getPopulation getPopulation-methods getPopulation,ANY-method
+> ### Aliases: getPopulation
 > 
 > ### ** Examples
 > 
-> # See each class for an example.
+> ## Not run: 
+> ##D loading <- matrix(0, 6, 1)
+> ##D loading[1:6, 1] <- NA
+> ##D LX <- bind(loading, "runif(1, 0.4, 0.9)")
+> ##D RPH <- binds(diag(1))
+> ##D RTD <- binds(diag(6))
+> ##D CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+> ##D 
+> ##D # We will use only 10 replications to save time.
+> ##D # In reality, more replications are needed.
+> ##D Output <- sim(10, n=200, model=CFA.Model)
+> ##D getPopulation(Output)
+> ## End(Not run)
 > 
 > 
 > 
@@ -2162,42 +2135,40 @@ detaching 'package:parallel'
 > ### ** Examples
 > 
 > ## Not run: 
-> ##D # It does not work now.
+> ##D library(lavaan)
+> ##D loading <- matrix(0, 11, 3)
+> ##D loading[1:3, 1] <- NA
+> ##D loading[4:7, 2] <- NA
+> ##D loading[8:11, 3] <- NA
+> ##D path.A <- matrix(0, 3, 3)
+> ##D path.A[2:3, 1] <- NA
+> ##D path.A[3, 2] <- NA
+> ##D model.A <- estmodel(LY=loading, BE=path.A, modelType="SEM", indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
 > ##D 
-> ##D #library(lavaan)
-> ##D #loading <- matrix(0, 11, 3)
-> ##D #loading[1:3, 1] <- NA
-> ##D #loading[4:7, 2] <- NA
-> ##D #loading[8:11, 3] <- NA
-> ##D #path.A <- matrix(0, 3, 3)
-> ##D #path.A[2:3, 1] <- NA
-> ##D #path.A[3, 2] <- NA
-> ##D #param.A <- model(LY=bind(loading), BE=bind(path.A), modelType="SEM")
+> ##D out.A <- analyze(model.A, PoliticalDemocracy)
 > ##D 
-> ##D #model.A <- simModel(param.A, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
-> ##D #out.A <- run(model.A, PoliticalDemocracy)
+> ##D path.B <- matrix(0, 3, 3)
+> ##D path.B[1:2, 3] <- NA
+> ##D path.B[1, 2] <- NA
+> ##D model.B <- estmodel(LY=loading, BE=path.B, modelType="SEM", indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
 > ##D 
-> ##D #path.B <- matrix(0, 3, 3)
-> ##D #path.B[1:2, 3] <- NA
-> ##D #path.B[1, 2] <- NA
-> ##D #param.B <- simParamSEM(LY=loading, BE=path.B)
+> ##D out.B <- analyze(model.B, PoliticalDemocracy)
 > ##D 
-> ##D #model.B <- simModel(param.B, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
-> ##D #out.B <- run(model.B, PoliticalDemocracy)
+> ##D loading.mis <- matrix("runif(1, -0.2, 0.2)", 11, 3)
+> ##D loading.mis[is.na(loading)] <- 0
 > ##D 
-> ##D #u2 <- simUnif(-0.2, 0.2)
-> ##D #loading.mis <- matrix(NA, 11, 3)
-> ##D #loading.mis[is.na(loading)] <- 0
-> ##D #LY.mis <- simMatrix(loading.mis, "u2")
-> ##D #misspec <- simMisspecSEM(LY=LY.mis)
+> ##D datamodel.A <- model.lavaan(out.A, std=TRUE, LY=loading.mis)
+> ##D datamodel.B <- model.lavaan(out.B, std=TRUE, LY=loading.mis)
 > ##D 
-> ##D #output.A.A <- runFit(model.A, PoliticalDemocracy, 5, misspec=misspec)
-> ##D #output.A.B <- runFit(model.A, PoliticalDemocracy, 5, misspec=misspec, analyzeModel=model.B)
-> ##D #output.B.A <- runFit(model.B, PoliticalDemocracy, 5, misspec=misspec, analyzeModel=model.A)
-> ##D #output.B.B <- runFit(model.B, PoliticalDemocracy, 5, misspec=misspec)
+> ##D n <- nrow(PoliticalDemocracy)
+> ##D 
+> ##D output.A.A <- sim(20, n=n, model.A, generate=datamodel.A) 
+> ##D output.A.B <- sim(20, n=n, model.B, generate=datamodel.A)
+> ##D output.B.A <- sim(20, n=n, model.A, generate=datamodel.B)
+> ##D output.B.B <- sim(20, n=n, model.B, generate=datamodel.B)
 > ##D 
 > ##D # The output may contain some warnings here. When the number of replications increases (e.g., 1000), the warnings should disappear.
-> ##D #likRatioFit(out.A, out.B, output.A.A, output.A.B, output.B.A, output.B.B)
+> ##D likRatioFit(out.A, out.B, output.A.A, output.A.B, output.B.A, output.B.B)
 > ## End(Not run)
 > 
 > 
@@ -2270,7 +2241,7 @@ Proportion of MCAR: 0.1
 > 
 > ### Name: model
 > ### Title: Data generation template and analysis template for simulation.
-> ### Aliases: model
+> ### Aliases: model model.cfa model.path model.sem
 > 
 > ### ** Examples
 > 
@@ -2289,6 +2260,28 @@ Proportion of MCAR: 0.1
 > VY <- bind(rep(NA,6),2)
 > 
 > CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
+> 
+> 
+> 
+> cleanEx()
+> nameEx("modelLavaan")
+> ### * modelLavaan
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: model.lavaan
+> ### Title: Build the data generation template and analysis template from
+> ###   the lavaan result
+> ### Aliases: model.lavaan
+> 
+> ### ** Examples
+> 
+> HS.model <- ' visual  =~ x1 + x2 + x3
++              textual =~ x4 + x5 + x6
++              speed   =~ x7 + x8 + x9 '
+> 
+> fit <- cfa(HS.model, data=HolzingerSwineford1939)
+> datamodel <- model.lavaan(fit, std=TRUE)
 > 
 > 
 > 
@@ -2346,11 +2339,6 @@ Proportion of MCAR: 0.1
 > ### ** Examples
 > 
 > ## Not run: 
-> ##D ########## Make the pValue comparing between lavaan and SimResult work
-> ##D 
-> ##D 
-> ##D 
-> ##D 
 > ##D # Compare number with a vector
 > ##D pValue(0.5, rnorm(1000, 0, 1))
 > ##D 
@@ -2358,21 +2346,20 @@ Proportion of MCAR: 0.1
 > ##D pValue(c(0.5, 0.2), data.frame(rnorm(1000, 0, 1), runif(1000, 0, 1)))
 > ##D 
 > ##D # Compare an analysis result with a result of simulation study
-> ##D #library(lavaan)
-> ##D #loading <- matrix(0, 9, 3)
-> ##D #loading[1:3, 1] <- NA
-> ##D #loading[4:6, 2] <- NA
-> ##D #loading[7:9, 3] <- NA
-> ##D #model <- simParamCFA(LY=loading)
-> ##D #SimModel <- simModel(model, indLab=paste("x", 1:9, sep=""))
-> ##D #u2 <- simUnif(-0.2, 0.2)
-> ##D #loading.trivial <- matrix(NA, 9, 3)
-> ##D #loading.trivial[is.na(loading)] <- 0
-> ##D #LY.trivial <- simMatrix(loading.trivial, "u2")
-> ##D #mis <- simMisspecCFA(LY = LY.trivial)
-> ##D #out <- run(SimModel, HolzingerSwineford1939)
-> ##D #Output2 <- runFit(out, HolzingerSwineford1939, 20, mis)
-> ##D #pValue(out, Output2)
+> ##D library(lavaan)
+> ##D loading <- matrix(0, 9, 3)
+> ##D loading[1:3, 1] <- NA
+> ##D loading[4:6, 2] <- NA
+> ##D loading[7:9, 3] <- NA
+> ##D targetmodel <- estmodel(LY=loading, modelType="CFA", indLab=paste("x", 1:9, sep=""))
+> ##D out <- analyze(targetmodel, HolzingerSwineford1939)
+> ##D 
+> ##D loading.trivial <- matrix("runif(1, -0.2, 0.2)", 9, 3)
+> ##D loading.trivial[is.na(loading)] <- 0
+> ##D mismodel <- model.lavaan(out, std=TRUE, LY=loading.trivial)
+> ##D 
+> ##D simout <- sim(20, n=nrow(HolzingerSwineford1939), mismodel)
+> ##D pValue(out, simout)
 > ## End(Not run)
 > 
 > 
@@ -2407,35 +2394,33 @@ Proportion of MCAR: 0.1
 > ### ** Examples
 > 
 > ## Not run: 
-> ##D #library(lavaan)
+> ##D library(lavaan)
 > ##D 
-> ##D #LY <- matrix(1, 4, 2)
-> ##D #LY[,2] <- 0:3
-> ##D #PS <- matrix(NA, 2, 2)
-> ##D #TY <- rep(0, 4)
-> ##D #AL <- rep(NA, 2)
-> ##D #TE <- diag(NA, 4)
-> ##D #linearModel <- simParamCFA(LY=LY, PS=PS, TY=TY, AL=AL, TE=TE)
+> ##D LY <- matrix(1, 4, 2)
+> ##D LY[,2] <- 0:3
+> ##D PS <- matrix(NA, 2, 2)
+> ##D TY <- rep(0, 4)
+> ##D AL <- rep(NA, 2)
+> ##D TE <- diag(NA, 4)
+> ##D nested <- estmodel(LY=LY, PS=PS, TY=TY, AL=AL, TE=TE, modelType="CFA", indLab=paste("t", 1:4, sep=""))
 > ##D 
-> ##D #LY2 <- matrix(1, 4, 2)
-> ##D #LY2[,2] <- c(0, NA, NA, 3)
-> ##D #unconstrainModel <- simParamCFA(LY=LY2, PS=PS, TY=TY, AL=AL, TE=TE)
+> ##D LY2 <- matrix(1, 4, 2)
+> ##D LY2[,2] <- c(0, NA, NA, 3)
+> ##D parent <- estmodel(LY=LY2, PS=PS, TY=TY, AL=AL, TE=TE, modelType="CFA", indLab=paste("t", 1:4, sep=""))
 > ##D 
-> ##D #nested <- simModel(linearModel, indLab=paste("t", 1:4, sep=""))
-> ##D #parent <- simModel(unconstrainModel, indLab=paste("t", 1:4, sep=""))
+> ##D outNested <- analyze(nested, Demo.growth)
+> ##D outParent <- analyze(parent, Demo.growth)
 > ##D 
-> ##D #outNested <- run(nested, Demo.growth)
-> ##D #outParent <- run(parent, Demo.growth)
+> ##D loadingMis <- matrix(0, 4, 2)
+> ##D loadingMis[2:3, 2] <- "runif(1, -0.1, 0.1)"
+> ##D datamodel <- model.lavaan(outNested, LY=loadingMis)
 > ##D 
-> ##D #loadingMis <- matrix(0, 4, 2)
-> ##D #loadingMis[2:3, 2] <- NA
-> ##D #LYmis <- simMatrix(loadingMis, "runif(1, -0.1, 0.1)")
-> ##D #linearMis <- simMisspecCFA(LY=LYmis)
+> ##D n <- nrow(Demo.growth)
 > ##D 
-> ##D #simNestedNested <- runFit(model=nested, data=Demo.growth, nRep=10, misspec=linearMis)
-> ##D #simNestedParent <- runFit(model=nested, data=Demo.growth, nRep=10, misspec=linearMis, analyzeModel=parent)
+> ##D simNestedNested <- sim(30, n=n, nested, generate=datamodel) 
+> ##D simNestedParent <- sim(30, n=n, parent, generate=datamodel)
 > ##D 
-> ##D #pValueNested(outNested, outParent, simNestedNested, simNestedParent)
+> ##D pValueNested(outNested, outParent, simNestedNested, simNestedParent)
 > ## End(Not run)
 > 
 > 
@@ -2453,40 +2438,40 @@ Proportion of MCAR: 0.1
 > ### ** Examples
 > 
 > ## Not run: 
-> ##D #library(lavaan)
-> ##D #loading <- matrix(0, 11, 3)
-> ##D #loading[1:3, 1] <- NA
-> ##D #loading[4:7, 2] <- NA
-> ##D #loading[8:11, 3] <- NA
-> ##D #path.A <- matrix(0, 3, 3)
-> ##D #path.A[2:3, 1] <- NA
-> ##D #path.A[3, 2] <- NA
-> ##D #param.A <- simParamSEM(LY=loading, BE=path.A)
+> ##D library(lavaan)
+> ##D loading <- matrix(0, 11, 3)
+> ##D loading[1:3, 1] <- NA
+> ##D loading[4:7, 2] <- NA
+> ##D loading[8:11, 3] <- NA
+> ##D path.A <- matrix(0, 3, 3)
+> ##D path.A[2:3, 1] <- NA
+> ##D path.A[3, 2] <- NA
+> ##D model.A <- estmodel(LY=loading, BE=path.A, modelType="SEM", indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
 > ##D 
-> ##D #model.A <- simModel(param.A, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
-> ##D #out.A <- run(model.A, PoliticalDemocracy)
+> ##D out.A <- analyze(model.A, PoliticalDemocracy)
 > ##D 
-> ##D #path.B <- matrix(0, 3, 3)
-> ##D #path.B[1:2, 3] <- NA
-> ##D #path.B[1, 2] <- NA
-> ##D #param.B <- simParamSEM(LY=loading, BE=path.B)
+> ##D path.B <- matrix(0, 3, 3)
+> ##D path.B[1:2, 3] <- NA
+> ##D path.B[1, 2] <- NA
+> ##D model.B <- estmodel(LY=loading, BE=path.B, modelType="SEM", indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
 > ##D 
-> ##D #model.B <- simModel(param.B, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
-> ##D #out.B <- run(model.B, PoliticalDemocracy)
+> ##D out.B <- analyze(model.B, PoliticalDemocracy)
 > ##D 
-> ##D #u2 <- simUnif(-0.2, 0.2)
-> ##D #loading.mis <- matrix(NA, 11, 3)
-> ##D #loading.mis[is.na(loading)] <- 0
-> ##D #LY.mis <- simMatrix(loading.mis, "u2")
-> ##D #misspec <- simMisspecSEM(LY=LY.mis)
+> ##D loading.mis <- matrix("runif(1, -0.2, 0.2)", 11, 3)
+> ##D loading.mis[is.na(loading)] <- 0
 > ##D 
-> ##D #output.A.A <- runFit(model.A, PoliticalDemocracy, 5, misspec=misspec)
-> ##D #output.A.B <- runFit(model.A, PoliticalDemocracy, 5, misspec=misspec, analyzeModel=model.B)
-> ##D #output.B.A <- runFit(model.B, PoliticalDemocracy, 5, misspec=misspec, analyzeModel=model.A)
-> ##D #output.B.B <- runFit(model.B, PoliticalDemocracy, 5, misspec=misspec)
+> ##D datamodel.A <- model.lavaan(out.A, std=TRUE, LY=loading.mis)
+> ##D datamodel.B <- model.lavaan(out.B, std=TRUE, LY=loading.mis)
+> ##D 
+> ##D n <- nrow(PoliticalDemocracy)
+> ##D 
+> ##D output.A.A <- sim(5, n=n, model.A, generate=datamodel.A) 
+> ##D output.A.B <- sim(5, n=n, model.B, generate=datamodel.A)
+> ##D output.B.A <- sim(5, n=n, model.A, generate=datamodel.B)
+> ##D output.B.B <- sim(5, n=n, model.B, generate=datamodel.B)
 > ##D 
 > ##D # The output may contain some warnings here. When the number of replications increases (e.g., 1000), the warnings should disappear.
-> ##D #pValueNonNested(out.A, out.B, output.A.A, output.A.B, output.B.A, output.B.B)
+> ##D pValueNonNested(out.A, out.B, output.A.A, output.A.B, output.B.A, output.B.B)
 > ## End(Not run)
 > 
 > 
@@ -2659,17 +2644,21 @@ Proportion of MCAR: 0.1
 > flush(stderr()); flush(stdout())
 > 
 > ### Name: plotDist
-> ### Title: Plot a distribution of a distribution object or data
-> ###   distribution object
-> ### Aliases: plotDist plotDist-methods
+> ### Title: Plot a distribution of a data distribution object
+> ### Aliases: plotDist
 > 
 > ### ** Examples
 > 
-> # Need Example
+> datadist <- bindDist(c("chisq", "t", "f"), list(df=5), list(df=3), list(df1=3, df2=5))
+> plotDist(datadist, r=0.5, var=1:2)
+> plotDist(datadist, var=3)
 > 
 > 
 > 
 > cleanEx()
+
+detaching 'package:copula'
+
 > nameEx("plotIndividualScatter")
 > ### * plotIndividualScatter
 > 
@@ -3112,11 +3101,73 @@ detaching 'package:parallel'
 > 
 > ### Name: setPopulation
 > ### Title: Set the data generation population model underlying an object
-> ### Aliases: setPopulation setPopulation-methods setPopulation,ANY-method
+> ### Aliases: setPopulation
 > 
 > ### ** Examples
 > 
 > # See each class for an example.
+> ## Not run: 
+> ##D 
+> ##D loading <- matrix(0, 7, 3)
+> ##D loading[1:3, 1] <- NA
+> ##D loading[4:6, 2] <- NA
+> ##D loading[1:7, 3] <- NA
+> ##D loadingVal <- matrix(0, 7, 3)
+> ##D loadingVal[1:3, 1] <- "runif(1, 0.5, 0.7)"
+> ##D loadingVal[4:6, 2] <- "runif(1, 0.5, 0.7)"
+> ##D loadingVal[1:6, 3] <- "runif(1, 0.3, 0.5)"
+> ##D loadingVal[7, 3] <- 1
+> ##D loading.mis <- matrix("runif(1, -0.2, 0.2)", 7, 3)
+> ##D loading.mis[is.na(loading)] <- 0
+> ##D loading.mis[,3] <- 0
+> ##D loading.mis[7,] <- 0
+> ##D LY <- bind(loading, loadingVal, misspec=loading.mis)
+> ##D 
+> ##D RPS <- binds(diag(3))
+> ##D 
+> ##D path <- matrix(0, 3, 3)
+> ##D path[2, 1] <- NA
+> ##D BE <- bind(path, "runif(1, 0.3, 0.5)")
+> ##D 
+> ##D RTE <- binds(diag(7))
+> ##D 
+> ##D VY <- bind(c(rep(NA, 6), 0), c(rep(1, 6), ""))
+> ##D 
+> ##D datamodel <- model(LY=LY, RPS=RPS, BE=BE, RTE=RTE, VY=VY, modelType="SEM")
+> ##D 
+> ##D loading <- matrix(0, 7, 3)
+> ##D loading[1:3, 1] <- NA
+> ##D loading[4:6, 2] <- NA
+> ##D loading[7, 3] <- NA
+> ##D path <- matrix(0, 3, 3)
+> ##D path[2, 1] <- NA
+> ##D path[1, 3] <- NA
+> ##D path[2, 3] <- NA
+> ##D errorCov <- diag(NA, 7)
+> ##D errorCov[7, 7] <- 0
+> ##D facCov <- diag(3)
+> ##D analysis <- estmodel(LY=loading, BE=path, TE=errorCov, PS=facCov, modelType="SEM", indLab=paste("y", 1:7, sep=""))
+> ##D 
+> ##D Output <- sim(100, n=200, analysis, generate=datamodel)
+> ##D 
+> ##D loadingVal <- matrix(0, 7, 3)
+> ##D loadingVal[1:3, 1] <- 0.6
+> ##D loadingVal[4:6, 2] <- 0.6
+> ##D loadingVal[7, 3] <- 1
+> ##D LY <- bind(loading, loadingVal)
+> ##D pathVal <- matrix(0, 3, 3)
+> ##D pathVal[2, 1] <- 0.4
+> ##D pathVal[1, 3] <- 0.4
+> ##D pathVal[2, 3] <- 0.4
+> ##D BE <- bind(path, pathVal)
+> ##D PS <- binds(facCov)
+> ##D errorCovVal <- diag(0.64, 7)
+> ##D errorCovVal[7, 7] <- 0
+> ##D TE <- binds(errorCov, errorCovVal)
+> ##D population <- model(LY=LY, PS=PS, BE=BE, TE=TE, modelType="SEM")
+> ##D Output <- setPopulation(Output, population) 
+> ##D summary(Output)
+> ## End(Not run)
 > 
 > 
 > 
@@ -3165,45 +3216,45 @@ Fit Indices      0.1     0.05     0.01    0.001     Mean     SD
       SRMR     0.036    0.039    0.043    0.043    0.029  0.007
 ========= Parameter Estimates and Standard Errors ============
          Estimate.Average Estimate.SD Average.SE Power..Not.equal.0. Std.Est
-1.y1=~x1            0.682       0.094      0.074                1.00   0.691
-1.y1=~x2            0.680       0.092      0.074                1.00   0.680
-1.y1=~x3            0.704       0.069      0.075                1.00   0.705
-1.y2=~x4            0.715       0.077      0.074                1.00   0.710
-1.y2=~x5            0.711       0.090      0.072                1.00   0.721
-1.y2=~x6            0.684       0.076      0.073                1.00   0.686
-1.x1~~x1            0.501       0.069      0.076                1.00   0.520
-1.x2~~x2            0.528       0.090      0.077                1.00   0.532
-1.x3~~x3            0.496       0.061      0.078                1.00   0.500
-1.x4~~x4            0.499       0.102      0.077                1.00   0.492
-1.x5~~x5            0.458       0.058      0.074                1.00   0.478
-1.x6~~x6            0.520       0.077      0.075                1.00   0.526
-1.y2~~y1            0.487       0.095      0.079                1.00   0.487
-1.x1~1              0.010       0.068      0.070                0.00   0.009
-1.x2~1              0.027       0.070      0.071                0.00   0.026
-1.x3~1              0.019       0.102      0.071                0.15   0.019
-1.x4~1              0.035       0.076      0.071                0.10   0.033
-1.x5~1              0.025       0.064      0.070                0.05   0.025
-1.x6~1              0.041       0.069      0.070                0.05   0.041
+1.f1=~y1            0.682       0.094      0.074                1.00   0.691
+1.f1=~y2            0.680       0.092      0.074                1.00   0.680
+1.f1=~y3            0.704       0.069      0.075                1.00   0.705
+1.f2=~y4            0.715       0.077      0.074                1.00   0.710
+1.f2=~y5            0.711       0.090      0.072                1.00   0.721
+1.f2=~y6            0.684       0.076      0.073                1.00   0.686
+1.y1~~y1            0.501       0.069      0.076                1.00   0.520
+1.y2~~y2            0.528       0.090      0.077                1.00   0.532
+1.y3~~y3            0.496       0.061      0.078                1.00   0.500
+1.y4~~y4            0.499       0.102      0.077                1.00   0.492
+1.y5~~y5            0.458       0.058      0.074                1.00   0.478
+1.y6~~y6            0.520       0.077      0.075                1.00   0.526
+1.f2~~f1            0.487       0.095      0.079                1.00   0.487
+1.y1~1              0.010       0.068      0.070                0.00   0.009
+1.y2~1              0.027       0.070      0.071                0.00   0.026
+1.y3~1              0.019       0.102      0.071                0.15   0.019
+1.y4~1              0.035       0.076      0.071                0.10   0.033
+1.y5~1              0.025       0.064      0.070                0.05   0.025
+1.y6~1              0.041       0.069      0.070                0.05   0.041
          Std.Est.SD Average.Param Average.Bias Coverage
-1.y1=~x1      0.056          0.70       -0.018     0.90
-1.y1=~x2      0.072          0.70       -0.020     0.90
-1.y1=~x3      0.053          0.70        0.004     0.95
-1.y2=~x4      0.063          0.70        0.015     0.90
-1.y2=~x5      0.051          0.70        0.011     0.90
-1.y2=~x6      0.060          0.70       -0.016     0.95
-1.x1~~x1      0.078          0.51       -0.009     0.95
-1.x2~~x2      0.097          0.51        0.018     0.95
-1.x3~~x3      0.073          0.51       -0.014     1.00
-1.x4~~x4      0.091          0.51       -0.011     0.90
-1.x5~~x5      0.075          0.51       -0.052     0.95
-1.x6~~x6      0.081          0.51        0.010     1.00
-1.y2~~y1      0.095          0.50       -0.013     0.95
-1.x1~1        0.067          0.00        0.010     1.00
-1.x2~1        0.071          0.00        0.027     1.00
-1.x3~1        0.101          0.00        0.019     0.85
-1.x4~1        0.074          0.00        0.035     0.90
-1.x5~1        0.066          0.00        0.025     0.95
-1.x6~1        0.070          0.00        0.041     0.95
+1.f1=~y1      0.056          0.70       -0.018     0.90
+1.f1=~y2      0.072          0.70       -0.020     0.90
+1.f1=~y3      0.053          0.70        0.004     0.95
+1.f2=~y4      0.063          0.70        0.015     0.90
+1.f2=~y5      0.051          0.70        0.011     0.90
+1.f2=~y6      0.060          0.70       -0.016     0.95
+1.y1~~y1      0.078          0.51       -0.009     0.95
+1.y2~~y2      0.097          0.51        0.018     0.95
+1.y3~~y3      0.073          0.51       -0.014     1.00
+1.y4~~y4      0.091          0.51       -0.011     0.90
+1.y5~~y5      0.075          0.51       -0.052     0.95
+1.y6~~y6      0.081          0.51        0.010     1.00
+1.f2~~f1      0.095          0.50       -0.013     0.95
+1.y1~1        0.067          0.00        0.010     1.00
+1.y2~1        0.071          0.00        0.027     1.00
+1.y3~1        0.101          0.00        0.019     0.85
+1.y4~1        0.074          0.00        0.035     0.90
+1.y5~1        0.066          0.00        0.025     0.95
+1.y6~1        0.070          0.00        0.041     0.95
 ========= Correlation between Fit Indices ============
          Chi    AIC    BIC  RMSEA    CFI    TLI   SRMR
 Chi    1.000  0.206  0.206  0.959 -0.951 -0.993  0.841
@@ -3225,79 +3276,6 @@ Number of Converged Replications
 
 detaching 'package:parallel'
 
-> nameEx("simFunction")
-> ### * simFunction
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: simFunction
-> ### Title: Create function object
-> ### Aliases: simFunction
-> 
-> ### ** Examples
-> 
-> # The example still does not work
-> loading <- matrix(0, 9, 3)
-> loading[1:3, 1] <- NA
-> loading[4:6, 2] <- NA
-> loading[7:9, 3] <- NA
-> loading.start <- matrix("", 9, 3)
-> loading.start[1:3, 1] <- 0.7
-> loading.start[4:6, 2] <- 0.7
-> loading.start[7:9, 3] <- "runif(1, 0.6, 0.8)"
-> 
-> loading.trivial <- matrix("runif(1, -0.2, 0.2)", 9, 3)
-> loading.trivial[is.na(loading)] <- 0
-> 
-> LY <- bind(loading, loading.start, misspec=loading.trivial)
-> 
-> error.cor.trivial <- matrix("rnorm(1, 0, 0.1)", 9, 9)
-> diag(error.cor.trivial) <- 0
-> 
-> RTE <- binds(diag(9), misspec=error.cor.trivial)
-> 
-> factor.cor <- diag(3)
-> factor.cor[1, 2] <- factor.cor[2, 1] <- NA
-> RPS <- binds(factor.cor, 0.5)
-> 
-> path <- matrix(0, 3, 3)
-> path[3, 1:2] <- NA
-> path.start <- matrix(0, 3, 3)
-> path.start[3, 1] <- "rnorm(1, 0.6, 0.05)"
-> path.start[3, 2] <- "runif(1, 0.3, 0.5)"
-> BE <- bind(path, path.start)
-> 
-> datGen <- model(BE=BE, LY=LY, RPS=RPS, RTE=RTE, modelType="SEM")
-> 
-> #loading <- matrix(0, 12, 4)
-> #loading[1:3, 1] <- NA
-> #loading[4:6, 2] <- NA
-> #loading[7:9, 4] <- NA
-> #loading[10:12, 3] <- NA
-> 
-> #path <- matrix(0, 4, 4)
-> #path[4, 1:3] <- NA
-> 
-> #analysis <- simParamSEM(BE=path, LY=loading)
-> 
-> #Model <- simModel(analysis)
-> 
-> # Find the products of indicators
-> #newFUN <- function(data, var1, var2, namesProd) {
-> #	prod <- data[,var1] * data[,var2]
-> #	colnames(prod) <- namesProd
-> #	return(data.frame(data, prod))
-> #}
-> 
-> #fun <- simFunction(newFUN, var1=paste("y", 1:3, sep=""), var2=paste("y", 4:6, sep=""), namesProd=paste("y", 10:12, sep=""))
-> 
-> # Real simulation will need more than just 10 replications
-> #Output <- simResult(10, Data.Mis, Model, objFunction=fun)
-> #summary(Output)
-> 
-> 
-> 
-> cleanEx()
 > nameEx("sortList")
 > ### * sortList
 > 
@@ -3428,9 +3406,9 @@ Class:  character    numeric data.frame data.frame data.frame     vector
                                                                         
 Name:  paramValue       FMI1       FMI2    stdCoef       seed          n
 Class: data.frame data.frame data.frame data.frame    numeric     vector
-                                       
-Name:      pmMCAR      pmMAR     timing
-Class:     vector     vector       list
+                                                  
+Name:      pmMCAR      pmMAR   extraOut     timing
+Class:     vector     vector       list       list
 > loading <- matrix(0, 6, 1)
 > loading[1:6, 1] <- NA
 > LX <- bind(loading, 0.7)
@@ -3444,101 +3422,101 @@ Class:     vector     vector       list
 Loading required package: parallel
 > summaryParam(Output)
          Estimate.Average Estimate.SD Average.SE Power..Not.equal.0.
-1.y1=~x1      0.690756156  0.02810822 0.04149426                   1
-1.y1=~x2      0.684804691  0.02263627 0.04211500                   1
-1.y1=~x3      0.696132921  0.01555991 0.04135121                   1
-1.y1=~x4      0.665635591  0.05563827 0.04117407                   1
-1.y1=~x5      0.695344582  0.03075850 0.04160583                   1
-1.y1=~x6      0.726805534  0.04988723 0.04168946                   1
-1.x1~~x1      0.504025133  0.01390457 0.03830915                   1
-1.x2~~x2      0.530959200  0.03432317 0.03978899                   1
-1.x3~~x3      0.495700421  0.04352861 0.03793284                   1
-1.x4~~x4      0.509197688  0.03774779 0.03808872                   1
-1.x5~~x5      0.505610318  0.05558941 0.03852026                   1
-1.x6~~x6      0.484795772  0.02083428 0.03801104                   1
-1.x1~1        0.018166046  0.02869040 0.04430370                   0
-1.x2~1        0.004590887  0.04278074 0.04471879                   0
-1.x3~1        0.020747715  0.01949681 0.04427270                   0
-1.x4~1        0.013662157  0.03941881 0.04367342                   0
-1.x5~1        0.006917330  0.03267557 0.04446808                   0
-1.x6~1        0.013019004  0.02085169 0.04503690                   0
+1.f1=~y1      0.690756156  0.02810822 0.04149426                   1
+1.f1=~y2      0.684804691  0.02263627 0.04211500                   1
+1.f1=~y3      0.696132921  0.01555991 0.04135121                   1
+1.f1=~y4      0.665635591  0.05563827 0.04117407                   1
+1.f1=~y5      0.695344582  0.03075850 0.04160583                   1
+1.f1=~y6      0.726805534  0.04988723 0.04168946                   1
+1.y1~~y1      0.504025133  0.01390457 0.03830915                   1
+1.y2~~y2      0.530959200  0.03432317 0.03978899                   1
+1.y3~~y3      0.495700421  0.04352861 0.03793284                   1
+1.y4~~y4      0.509197688  0.03774779 0.03808872                   1
+1.y5~~y5      0.505610318  0.05558941 0.03852026                   1
+1.y6~~y6      0.484795772  0.02083428 0.03801104                   1
+1.y1~1        0.018166046  0.02869040 0.04430370                   0
+1.y2~1        0.004590887  0.04278074 0.04471879                   0
+1.y3~1        0.020747715  0.01949681 0.04427270                   0
+1.y4~1        0.013662157  0.03941881 0.04367342                   0
+1.y5~1        0.006917330  0.03267557 0.04446808                   0
+1.y6~1        0.013019004  0.02085169 0.04503690                   0
              Std.Est Std.Est.SD Average.Param  Average.Bias Coverage
-1.y1=~x1 0.697070143 0.01422193          0.70 -0.0092438439      1.0
-1.y1=~x2 0.684851022 0.01632425          0.70 -0.0151953087      1.0
-1.y1=~x3 0.703397021 0.01804013          0.70 -0.0038670795      1.0
-1.y1=~x4 0.680861392 0.03863723          0.70 -0.0343644092      0.8
-1.y1=~x5 0.699459950 0.02232976          0.70 -0.0046554178      1.0
-1.y1=~x6 0.721071722 0.02764561          0.70  0.0268055340      0.8
-1.x1~~x1 0.513931405 0.01991776          0.51 -0.0059748670      1.0
-1.x2~~x2 0.530765893 0.02240770          0.51  0.0209592001      1.0
-1.x3~~x3 0.504972274 0.02529073          0.51 -0.0142995790      1.0
-1.x4~~x4 0.535233496 0.05128518          0.51 -0.0008023119      1.0
-1.x5~~x5 0.510356884 0.03111063          0.51 -0.0043896822      1.0
-1.x6~~x6 0.479444147 0.03996509          0.51 -0.0252042285      1.0
-1.x1~1   0.018417709 0.02909937          0.00  0.0181660459      1.0
-1.x2~1   0.004545703 0.04208763          0.00  0.0045908869      1.0
-1.x3~1   0.021140079 0.02002116          0.00  0.0207477151      1.0
-1.x4~1   0.014854838 0.04097594          0.00  0.0136621570      1.0
-1.x5~1   0.007233804 0.03314310          0.00  0.0069173300      1.0
-1.x6~1   0.013257560 0.02080362          0.00  0.0130190044      1.0
+1.f1=~y1 0.697070143 0.01422193          0.70 -0.0092438439      1.0
+1.f1=~y2 0.684851022 0.01632425          0.70 -0.0151953087      1.0
+1.f1=~y3 0.703397021 0.01804013          0.70 -0.0038670795      1.0
+1.f1=~y4 0.680861392 0.03863723          0.70 -0.0343644092      0.8
+1.f1=~y5 0.699459950 0.02232976          0.70 -0.0046554178      1.0
+1.f1=~y6 0.721071722 0.02764561          0.70  0.0268055340      0.8
+1.y1~~y1 0.513931405 0.01991776          0.51 -0.0059748670      1.0
+1.y2~~y2 0.530765893 0.02240770          0.51  0.0209592001      1.0
+1.y3~~y3 0.504972274 0.02529073          0.51 -0.0142995790      1.0
+1.y4~~y4 0.535233496 0.05128518          0.51 -0.0008023119      1.0
+1.y5~~y5 0.510356884 0.03111063          0.51 -0.0043896822      1.0
+1.y6~~y6 0.479444147 0.03996509          0.51 -0.0252042285      1.0
+1.y1~1   0.018417709 0.02909937          0.00  0.0181660459      1.0
+1.y2~1   0.004545703 0.04208763          0.00  0.0045908869      1.0
+1.y3~1   0.021140079 0.02002116          0.00  0.0207477151      1.0
+1.y4~1   0.014854838 0.04097594          0.00  0.0136621570      1.0
+1.y5~1   0.007233804 0.03314310          0.00  0.0069173300      1.0
+1.y6~1   0.013257560 0.02080362          0.00  0.0130190044      1.0
 > summaryParam(Output, detail=TRUE)
          Estimate.Average Estimate.SD Average.SE Power..Not.equal.0.
-1.y1=~x1      0.690756156  0.02810822 0.04149426                   1
-1.y1=~x2      0.684804691  0.02263627 0.04211500                   1
-1.y1=~x3      0.696132921  0.01555991 0.04135121                   1
-1.y1=~x4      0.665635591  0.05563827 0.04117407                   1
-1.y1=~x5      0.695344582  0.03075850 0.04160583                   1
-1.y1=~x6      0.726805534  0.04988723 0.04168946                   1
-1.x1~~x1      0.504025133  0.01390457 0.03830915                   1
-1.x2~~x2      0.530959200  0.03432317 0.03978899                   1
-1.x3~~x3      0.495700421  0.04352861 0.03793284                   1
-1.x4~~x4      0.509197688  0.03774779 0.03808872                   1
-1.x5~~x5      0.505610318  0.05558941 0.03852026                   1
-1.x6~~x6      0.484795772  0.02083428 0.03801104                   1
-1.x1~1        0.018166046  0.02869040 0.04430370                   0
-1.x2~1        0.004590887  0.04278074 0.04471879                   0
-1.x3~1        0.020747715  0.01949681 0.04427270                   0
-1.x4~1        0.013662157  0.03941881 0.04367342                   0
-1.x5~1        0.006917330  0.03267557 0.04446808                   0
-1.x6~1        0.013019004  0.02085169 0.04503690                   0
+1.f1=~y1      0.690756156  0.02810822 0.04149426                   1
+1.f1=~y2      0.684804691  0.02263627 0.04211500                   1
+1.f1=~y3      0.696132921  0.01555991 0.04135121                   1
+1.f1=~y4      0.665635591  0.05563827 0.04117407                   1
+1.f1=~y5      0.695344582  0.03075850 0.04160583                   1
+1.f1=~y6      0.726805534  0.04988723 0.04168946                   1
+1.y1~~y1      0.504025133  0.01390457 0.03830915                   1
+1.y2~~y2      0.530959200  0.03432317 0.03978899                   1
+1.y3~~y3      0.495700421  0.04352861 0.03793284                   1
+1.y4~~y4      0.509197688  0.03774779 0.03808872                   1
+1.y5~~y5      0.505610318  0.05558941 0.03852026                   1
+1.y6~~y6      0.484795772  0.02083428 0.03801104                   1
+1.y1~1        0.018166046  0.02869040 0.04430370                   0
+1.y2~1        0.004590887  0.04278074 0.04471879                   0
+1.y3~1        0.020747715  0.01949681 0.04427270                   0
+1.y4~1        0.013662157  0.03941881 0.04367342                   0
+1.y5~1        0.006917330  0.03267557 0.04446808                   0
+1.y6~1        0.013019004  0.02085169 0.04503690                   0
              Std.Est Std.Est.SD Average.Param  Average.Bias Coverage
-1.y1=~x1 0.697070143 0.01422193          0.70 -0.0092438439      1.0
-1.y1=~x2 0.684851022 0.01632425          0.70 -0.0151953087      1.0
-1.y1=~x3 0.703397021 0.01804013          0.70 -0.0038670795      1.0
-1.y1=~x4 0.680861392 0.03863723          0.70 -0.0343644092      0.8
-1.y1=~x5 0.699459950 0.02232976          0.70 -0.0046554178      1.0
-1.y1=~x6 0.721071722 0.02764561          0.70  0.0268055340      0.8
-1.x1~~x1 0.513931405 0.01991776          0.51 -0.0059748670      1.0
-1.x2~~x2 0.530765893 0.02240770          0.51  0.0209592001      1.0
-1.x3~~x3 0.504972274 0.02529073          0.51 -0.0142995790      1.0
-1.x4~~x4 0.535233496 0.05128518          0.51 -0.0008023119      1.0
-1.x5~~x5 0.510356884 0.03111063          0.51 -0.0043896822      1.0
-1.x6~~x6 0.479444147 0.03996509          0.51 -0.0252042285      1.0
-1.x1~1   0.018417709 0.02909937          0.00  0.0181660459      1.0
-1.x2~1   0.004545703 0.04208763          0.00  0.0045908869      1.0
-1.x3~1   0.021140079 0.02002116          0.00  0.0207477151      1.0
-1.x4~1   0.014854838 0.04097594          0.00  0.0136621570      1.0
-1.x5~1   0.007233804 0.03314310          0.00  0.0069173300      1.0
-1.x6~1   0.013257560 0.02080362          0.00  0.0130190044      1.0
+1.f1=~y1 0.697070143 0.01422193          0.70 -0.0092438439      1.0
+1.f1=~y2 0.684851022 0.01632425          0.70 -0.0151953087      1.0
+1.f1=~y3 0.703397021 0.01804013          0.70 -0.0038670795      1.0
+1.f1=~y4 0.680861392 0.03863723          0.70 -0.0343644092      0.8
+1.f1=~y5 0.699459950 0.02232976          0.70 -0.0046554178      1.0
+1.f1=~y6 0.721071722 0.02764561          0.70  0.0268055340      0.8
+1.y1~~y1 0.513931405 0.01991776          0.51 -0.0059748670      1.0
+1.y2~~y2 0.530765893 0.02240770          0.51  0.0209592001      1.0
+1.y3~~y3 0.504972274 0.02529073          0.51 -0.0142995790      1.0
+1.y4~~y4 0.535233496 0.05128518          0.51 -0.0008023119      1.0
+1.y5~~y5 0.510356884 0.03111063          0.51 -0.0043896822      1.0
+1.y6~~y6 0.479444147 0.03996509          0.51 -0.0252042285      1.0
+1.y1~1   0.018417709 0.02909937          0.00  0.0181660459      1.0
+1.y2~1   0.004545703 0.04208763          0.00  0.0045908869      1.0
+1.y3~1   0.021140079 0.02002116          0.00  0.0207477151      1.0
+1.y4~1   0.014854838 0.04097594          0.00  0.0136621570      1.0
+1.y5~1   0.007233804 0.03314310          0.00  0.0069173300      1.0
+1.y6~1   0.013257560 0.02080362          0.00  0.0130190044      1.0
              Rel.Bias    Std.Bias  Rel.SE.Bias
-1.y1=~x1 -0.013205491 -0.32886624  0.476232426
-1.y1=~x2 -0.021707584 -0.67128160  0.860509969
-1.y1=~x3 -0.005524399 -0.24852841  1.657548540
-1.y1=~x4 -0.049092013 -0.61763981 -0.259968483
-1.y1=~x5 -0.006650597 -0.15135388  0.352661183
-1.y1=~x6  0.038293620  0.53732251 -0.164326099
-1.x1~~x1 -0.011715425 -0.42970516  1.755147759
-1.x2~~x2  0.041096471  0.61064289  0.159245888
-1.x3~~x3 -0.028038390 -0.32850991 -0.128553689
-1.x4~~x4 -0.001573161 -0.02125454  0.009032014
-1.x5~~x5 -0.008607220 -0.07896616 -0.307057631
-1.x6~~x6 -0.049420056 -1.20974817  0.824447343
-1.x1~1             NA  0.63317496  0.544199150
-1.x2~1             NA  0.10731201  0.045302013
-1.x3~1            Inf  1.06415922  1.270765561
-1.x4~1             NA  0.34658981  0.107933667
-1.x5~1             NA  0.21169729  0.360896634
-1.x6~1             NA  0.62436194  1.159867416
+1.f1=~y1 -0.013205491 -0.32886624  0.476232426
+1.f1=~y2 -0.021707584 -0.67128160  0.860509969
+1.f1=~y3 -0.005524399 -0.24852841  1.657548540
+1.f1=~y4 -0.049092013 -0.61763981 -0.259968483
+1.f1=~y5 -0.006650597 -0.15135388  0.352661183
+1.f1=~y6  0.038293620  0.53732251 -0.164326099
+1.y1~~y1 -0.011715425 -0.42970516  1.755147759
+1.y2~~y2  0.041096471  0.61064289  0.159245888
+1.y3~~y3 -0.028038390 -0.32850991 -0.128553689
+1.y4~~y4 -0.001573161 -0.02125454  0.009032014
+1.y5~~y5 -0.008607220 -0.07896616 -0.307057631
+1.y6~~y6 -0.049420056 -1.20974817  0.824447343
+1.y1~1             NA  0.63317496  0.544199150
+1.y2~1             NA  0.10731201  0.045302013
+1.y3~1            Inf  1.06415922  1.270765561
+1.y4~1             NA  0.34658981  0.107933667
+1.y5~1             NA  0.21169729  0.360896634
+1.y6~1             NA  0.62436194  1.159867416
 > 
 > 
 > 
@@ -3552,14 +3530,25 @@ detaching 'package:parallel'
 > flush(stderr()); flush(stdout())
 > 
 > ### Name: summaryPopulation
-> ### Title: Summarize the data generation population model underlying an
-> ###   object
-> ### Aliases: summaryPopulation summaryPopulation-methods
-> ###   summaryPopulation,ANY-method
+> ### Title: Summarize the data generation population model underlying a
+> ###   result object
+> ### Aliases: summaryPopulation
 > 
 > ### ** Examples
 > 
-> # See each class for an example.
+> ## Not run: 
+> ##D loading <- matrix(0, 6, 1)
+> ##D loading[1:6, 1] <- NA
+> ##D LX <- bind(loading, "runif(1, 0.4, 0.9)")
+> ##D RPH <- binds(diag(1))
+> ##D RTD <- binds(diag(6))
+> ##D CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+> ##D 
+> ##D # We will use only 10 replications to save time.
+> ##D # In reality, more replications are needed.
+> ##D Output <- sim(10, n=200, model=CFA.Model)
+> ##D summaryPopulation(Output)
+> ## End(Not run)
 > 
 > 
 > 
@@ -3679,7 +3668,7 @@ detaching 'package:parallel'
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  5.94 0.04 5.99 NA NA 
+Time elapsed:  6.27 0.03 6.34 NA NA 
 > grDevices::dev.off()
 null device 
           1 

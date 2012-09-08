@@ -1,5 +1,4 @@
 SimDataDist-class       Class '"SimDataDist"'
-SimFunction-class       Class '"SimFunction"'
 SimMatrix-class         Matrix object: Random parameters matrix
 SimMissing-class        Class '"SimMissing"'
 SimResult-class         Class '"SimResult"'
@@ -20,6 +19,8 @@ continuousPower         Find power of model parameters when simulations
                         have randomly varying parameters
 createData              Create data from a set of drawn parameters.
 draw                    Draw parameters from a 'SimSem' object.
+estmodel                Shortcut for data analysis template for
+                        simulation.
 extractLavaanFit        Extract fit indices from the lavaan object
 find2Dhist              Fit the 2D Kernel Density Estimate
 findFactorIntercept     Find factor intercept from regression
@@ -69,10 +70,11 @@ getCutoffNested         Find fit indices cutoff for nested model
                         comparison given a priori alpha level
 getCutoffNonNested      Find fit indices cutoff for non-nested model
                         comparison given a priori alpha level
+getExtraOutput          Get extra outputs from the result of simulation
 getKeywords             List of all keywords used in the 'simsem'
                         package
 getPopulation           Extract the data generation population model
-                        underlying an object
+                        underlying a result object
 getPower                Find power of model parameters
 getPowerFit             Find power in rejecting alternative models
                         based on fit indices criteria
@@ -92,6 +94,8 @@ loadingFromAlpha        Find standardized factor loading from
 miss                    TBA
 model                   Data generation template and analysis template
                         for simulation.
+model.lavaan            Build the data generation template and analysis
+                        template from the lavaan result
 multipleAllEqual        Test whether all objects are equal
 overlapHist             Plot overlapping histograms
 pValue                  Find p-values (1 - percentile)
@@ -113,8 +117,8 @@ plotCutoffNested        Plot sampling distributions of the differences
 plotCutoffNonNested     Plot sampling distributions of the differences
                         in fit indices between non-nested models with
                         fit indices cutoffs
-plotDist                Plot a distribution of a distribution object or
-                        data distribution object
+plotDist                Plot a distribution of a data distribution
+                        object
 plotIndividualScatter   Plot an overlaying scatter plot visualizing the
                         power of rejecting misspecified models
 plotLogisticFit         Plot multiple logistic curves for predicting
@@ -153,7 +157,6 @@ setPopulation           Set the data generation population model
                         underlying an object
 sim                     Run a monte carlo simulation with a structural
                         equation model.
-simFunction             Create function object
 sortList                Sort two objects in a list
 summaryFit              Provide summary of model fit across
                         replications
@@ -162,7 +165,7 @@ summaryMisspec          Provide summary of model misspecification
 summaryParam            Provide summary of parameter estimates and
                         standard error across replications
 summaryPopulation       Summarize the data generation population model
-                        underlying an object
+                        underlying a result object
 summaryShort            Provide short summary of an object.
 twoTailedPValue         Find two-tailed _p_ value from one-tailed _p_
                         value

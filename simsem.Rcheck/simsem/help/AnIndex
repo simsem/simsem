@@ -8,6 +8,10 @@ cleanSimResult	cleanSimResult
 continuousPower	continuousPower
 createData	createData
 draw	draw
+estmodel	estmodel
+estmodel.cfa	estmodel
+estmodel.path	estmodel
+estmodel.sem	estmodel
 extract,SimVector-method	SimVector-class
 extractLavaanFit	extractLavaanFit
 find2Dhist	find2Dhist
@@ -36,11 +40,10 @@ getCutoff,SimResult-method	getCutoff
 getCutoff-methods	getCutoff
 getCutoffNested	getCutoffNested
 getCutoffNonNested	getCutoffNonNested
+getExtraOutput	getExtraOutput
 getKeywords	getKeywords
 getPopulation	getPopulation
-getPopulation,ANY-method	getPopulation
 getPopulation,SimResult-method	SimResult-class
-getPopulation-methods	getPopulation
 getPower	getPower
 getPowerFit	getPowerFit
 getPowerFit,data.frame,vector-method	getPowerFit
@@ -62,6 +65,10 @@ likRatioFit	likRatioFit
 loadingFromAlpha	loadingFromAlpha
 miss	miss
 model	model
+model.cfa	model
+model.lavaan	modelLavaan
+model.path	model
+model.sem	model
 multipleAllEqual	multipleAllEqual
 overlapHist	overlapHist
 plot3DQtile	plot3DQtile
@@ -73,7 +80,6 @@ plotCutoffNested	plotCutoffNested
 plotCutoffNonNested	plotCutoffNonNested
 plotDist	plotDist
 plotDist,SimDataDist-method	SimDataDist-class
-plotDist-methods	plotDist
 plotIndividualScatter	plotIndividualScatter
 plotLogisticFit	plotLogisticFit
 plotMisfit	plotMisfit
@@ -102,15 +108,11 @@ pValueNonNested	pValueNonNested
 pValueVariedCutoff	pValueVariedCutoff
 revText	revText
 setPopulation	setPopulation
-setPopulation,ANY-method	setPopulation
 setPopulation,SimResult,data.frame-method	SimResult-class
 setPopulation,SimResult,SimSet-method	SimResult-class
 setPopulation,SimResult,VirtualRSet-method	SimResult-class
-setPopulation-methods	setPopulation
 sim	sim
 SimDataDist-class	SimDataDist-class
-simFunction	simFunction
-SimFunction-class	SimFunction-class
 SimMatrix-class	SimMatrix-class
 SimMissing-class	SimMissing-class
 SimResult-class	SimResult-class
@@ -118,7 +120,6 @@ SimSem-class	SimSem-class
 SimVector-class	SimVector-class
 sortList	sortList
 summary,SimDataDist-method	SimDataDist-class
-summary,SimFunction-method	SimFunction-class
 summary,SimMatrix-method	SimMatrix-class
 summary,SimMissing-method	SimMissing-class
 summary,SimResult-method	SimResult-class
@@ -136,9 +137,7 @@ summaryParam,ANY-method	summaryParam
 summaryParam,SimResult-method	summaryParam
 summaryParam-methods	summaryParam
 summaryPopulation	summaryPopulation
-summaryPopulation,ANY-method	summaryPopulation
 summaryPopulation,SimResult-method	SimResult-class
-summaryPopulation-methods	summaryPopulation
 summaryShort	summaryShort
 summaryShort,ANY-method	summaryShort
 summaryShort,matrix-method	summaryShort

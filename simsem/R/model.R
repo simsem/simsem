@@ -868,10 +868,12 @@ model.lavaan <- function(object, std = FALSE, LY = NULL,PS = NULL,RPS = NULL, TE
 		if(!is.null(MY)) stop("Misspecification is not allowed in MY if 'std' is FALSE.")
 		if(!is.list(RPS)) RPS <- rep(list(RPS), ngroups)
 		FUN2 <- function(x, y=NULL, z=NULL) { 
+			x[!is.free(x)] <- y[!is.free(x)]
 			y[!is.free(x)] <- ""
 			bind(x, y, z)
 		}
 		FUNS2 <- function(x, y, z=NULL) { 
+			x[!is.free(x)] <- y[!is.free(x)]
 			y[!is.free(x)] <- ""
 			binds(x, y, z)
 		}	

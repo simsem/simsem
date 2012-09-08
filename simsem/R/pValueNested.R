@@ -20,7 +20,7 @@ pValueNested <- function(outNested, outParent, simNested, simParent, usedFit = N
     if (is.null(pmMARval) || is.na(pmMARval)) 
         pmMARval <- NULL
     Data <- as.data.frame((simNested@fit - simParent@fit)[,usedFit]) 
-    condition <- c(length(simNested@pmMCAR) > 1, length(simNested@pmMAR) > 1, length(simNested@n) > 1)
+    condition <- c(length(unique(simNested@pmMCAR)) > 1, length(unique(simNested@pmMAR)) > 1, length(unique(simNested@n)) > 1)
     condValue <- cbind(simNested@pmMCAR, simNested@pmMAR, simNested@n)
     colnames(condValue) <- c("Percent MCAR", "Percent MAR", "N")
     condValue <- condValue[, condition]
@@ -28,11 +28,11 @@ pValueNested <- function(outNested, outParent, simNested, simParent, usedFit = N
         condValue <- NULL
     predictorVal <- rep(NA, 3)
     if (condition[3]) {
-        ifelse(is.null(nVal), predictorVal[3] <- outNested@n, 
+        ifelse(is.null(nVal), stop("Please specify the sample size value, 'nVal', because the sample size in the result object is varying"), 
             predictorVal[3] <- nVal)
     }
     if (condition[1]) {
-        ifelse(is.null(pmMCARval), predictorVal[1] <- mean(outNested@pMiss), 
+        ifelse(is.null(pmMCARval), stop("Please specify the percent of missing completely at random, 'pmMCARval', because the percent of missing completely at random in the result object is varying"), 
             predictorVal[1] <- pmMCARval)
     }
     if (condition[2]) {
@@ -40,7 +40,7 @@ pValueNested <- function(outNested, outParent, simNested, simParent, usedFit = N
             predictorVal[2] <- pmMARval)
     }
     predictorVal <- predictorVal[condition]
-    cutoff <- outNested@fit[usedFit] - outParent@fit[usedFit]
+	cutoff <- extractLavaanFit(outNested)[usedFit] - extractLavaanFit(outParent)[usedFit]
 	if(any(condition)) {
 		result <- pValue(cutoff, Data, revDirec, x = condValue, xval = predictorVal, df = df, asLogical = FALSE)
 		names(result) <- usedFit

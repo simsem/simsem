@@ -31,6 +31,7 @@ Objects can be created by \code{\link{sim}}. It can also be called from the form
 	\item{\code{n}:}{Sample size of the analyzed data.}
 	\item{\code{pmMCAR}:}{Percent missing completely at random.}
 	\item{\code{pmMAR}:}{Percent missing at random.}
+	\item{\code{extraOut}:}{Extra outputs obtained from running the function specified in \code{outfun} argument.}
 	\item{\code{timing}:}{Time elapsed in each phase of the simulation.}
   }
 }
@@ -75,7 +76,5 @@ summary(Output)
 getCutoff(Output, 0.05)
 summaryParam(Output)
 summaryPopulation(Output)
-param <- getPopulation(Output)
-Output <- setPopulation(Output, param)
 }
 \keyword{classes}

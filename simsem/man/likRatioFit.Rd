@@ -49,41 +49,39 @@ usedFit=NULL, prior=1)
 }
 \examples{
 \dontrun{
-# It does not work now.
+library(lavaan)
+loading <- matrix(0, 11, 3)
+loading[1:3, 1] <- NA
+loading[4:7, 2] <- NA
+loading[8:11, 3] <- NA
+path.A <- matrix(0, 3, 3)
+path.A[2:3, 1] <- NA
+path.A[3, 2] <- NA
+model.A <- estmodel(LY=loading, BE=path.A, modelType="SEM", indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
 
-#library(lavaan)
-#loading <- matrix(0, 11, 3)
-#loading[1:3, 1] <- NA
-#loading[4:7, 2] <- NA
-#loading[8:11, 3] <- NA
-#path.A <- matrix(0, 3, 3)
-#path.A[2:3, 1] <- NA
-#path.A[3, 2] <- NA
-#param.A <- model(LY=bind(loading), BE=bind(path.A), modelType="SEM")
+out.A <- analyze(model.A, PoliticalDemocracy)
 
-#model.A <- simModel(param.A, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
-#out.A <- run(model.A, PoliticalDemocracy)
+path.B <- matrix(0, 3, 3)
+path.B[1:2, 3] <- NA
+path.B[1, 2] <- NA
+model.B <- estmodel(LY=loading, BE=path.B, modelType="SEM", indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
 
-#path.B <- matrix(0, 3, 3)
-#path.B[1:2, 3] <- NA
-#path.B[1, 2] <- NA
-#param.B <- simParamSEM(LY=loading, BE=path.B)
+out.B <- analyze(model.B, PoliticalDemocracy)
 
-#model.B <- simModel(param.B, indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
-#out.B <- run(model.B, PoliticalDemocracy)
+loading.mis <- matrix("runif(1, -0.2, 0.2)", 11, 3)
+loading.mis[is.na(loading)] <- 0
 
-#u2 <- simUnif(-0.2, 0.2)
-#loading.mis <- matrix(NA, 11, 3)
-#loading.mis[is.na(loading)] <- 0
-#LY.mis <- simMatrix(loading.mis, "u2")
-#misspec <- simMisspecSEM(LY=LY.mis)
+datamodel.A <- model.lavaan(out.A, std=TRUE, LY=loading.mis)
+datamodel.B <- model.lavaan(out.B, std=TRUE, LY=loading.mis)
 
-#output.A.A <- runFit(model.A, PoliticalDemocracy, 5, misspec=misspec)
-#output.A.B <- runFit(model.A, PoliticalDemocracy, 5, misspec=misspec, analyzeModel=model.B)
-#output.B.A <- runFit(model.B, PoliticalDemocracy, 5, misspec=misspec, analyzeModel=model.A)
-#output.B.B <- runFit(model.B, PoliticalDemocracy, 5, misspec=misspec)
+n <- nrow(PoliticalDemocracy)
+
+output.A.A <- sim(20, n=n, model.A, generate=datamodel.A) 
+output.A.B <- sim(20, n=n, model.B, generate=datamodel.A)
+output.B.A <- sim(20, n=n, model.A, generate=datamodel.B)
+output.B.B <- sim(20, n=n, model.B, generate=datamodel.B)
 
 # The output may contain some warnings here. When the number of replications increases (e.g., 1000), the warnings should disappear.
-#likRatioFit(out.A, out.B, output.A.A, output.A.B, output.B.A, output.B.B)
+likRatioFit(out.A, out.B, output.A.A, output.A.B, output.B.A, output.B.B)
 }
 }

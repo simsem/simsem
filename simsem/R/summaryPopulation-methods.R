@@ -1,6 +1,6 @@
 # summaryPopulation: Summarize population values behind data generation model
 
-setMethod("summaryPopulation", signature(object = "SimResult"), definition = function(object) {
+summaryPopulation <- function(object) {
     object <- clean(object)
     paramValue <- object@paramValue
     nRep <- nrow(paramValue)
@@ -16,7 +16,7 @@ setMethod("summaryPopulation", signature(object = "SimResult"), definition = fun
         rownames(result) <- c("Average", "SD")
     }
     return(result)
-})
+}
 
 ## setMethod("summaryPopulation", signature(object = "SimModelOut"), definition = function(object) {
 ##     ifelse(isNullObject(object@paramValue), print("There is no parameter value underlying the data."), summary(object@paramValue))

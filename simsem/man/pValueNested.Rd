@@ -57,34 +57,32 @@ nVal = NULL, pmMCARval = NULL, pmMARval = NULL, df = 0)
 }
 \examples{
 \dontrun{
-#library(lavaan)
+library(lavaan)
 
-#LY <- matrix(1, 4, 2)
-#LY[,2] <- 0:3
-#PS <- matrix(NA, 2, 2)
-#TY <- rep(0, 4)
-#AL <- rep(NA, 2)
-#TE <- diag(NA, 4)
-#linearModel <- simParamCFA(LY=LY, PS=PS, TY=TY, AL=AL, TE=TE)
+LY <- matrix(1, 4, 2)
+LY[,2] <- 0:3
+PS <- matrix(NA, 2, 2)
+TY <- rep(0, 4)
+AL <- rep(NA, 2)
+TE <- diag(NA, 4)
+nested <- estmodel(LY=LY, PS=PS, TY=TY, AL=AL, TE=TE, modelType="CFA", indLab=paste("t", 1:4, sep=""))
 
-#LY2 <- matrix(1, 4, 2)
-#LY2[,2] <- c(0, NA, NA, 3)
-#unconstrainModel <- simParamCFA(LY=LY2, PS=PS, TY=TY, AL=AL, TE=TE)
+LY2 <- matrix(1, 4, 2)
+LY2[,2] <- c(0, NA, NA, 3)
+parent <- estmodel(LY=LY2, PS=PS, TY=TY, AL=AL, TE=TE, modelType="CFA", indLab=paste("t", 1:4, sep=""))
 
-#nested <- simModel(linearModel, indLab=paste("t", 1:4, sep=""))
-#parent <- simModel(unconstrainModel, indLab=paste("t", 1:4, sep=""))
+outNested <- analyze(nested, Demo.growth)
+outParent <- analyze(parent, Demo.growth)
 
-#outNested <- run(nested, Demo.growth)
-#outParent <- run(parent, Demo.growth)
+loadingMis <- matrix(0, 4, 2)
+loadingMis[2:3, 2] <- "runif(1, -0.1, 0.1)"
+datamodel <- model.lavaan(outNested, LY=loadingMis)
 
-#loadingMis <- matrix(0, 4, 2)
-#loadingMis[2:3, 2] <- NA
-#LYmis <- simMatrix(loadingMis, "runif(1, -0.1, 0.1)")
-#linearMis <- simMisspecCFA(LY=LYmis)
+n <- nrow(Demo.growth)
 
-#simNestedNested <- runFit(model=nested, data=Demo.growth, nRep=10, misspec=linearMis)
-#simNestedParent <- runFit(model=nested, data=Demo.growth, nRep=10, misspec=linearMis, analyzeModel=parent)
+simNestedNested <- sim(30, n=n, nested, generate=datamodel) 
+simNestedParent <- sim(30, n=n, parent, generate=datamodel)
 
-#pValueNested(outNested, outParent, simNestedNested, simNestedParent)
+pValueNested(outNested, outParent, simNestedNested, simNestedParent)
 }
 }

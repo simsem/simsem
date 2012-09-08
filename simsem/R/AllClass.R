@@ -194,7 +194,7 @@ setClass("SimMissing",
 
 ## setClass("NullSimMissing", contains = "SimMissing")
 
-setClass("SimFunction", representation(fun = "function", attribute = "list", callfun = "call"))
+# setClass("SimFunction", representation(fun = "function", attribute = "list", callfun = "call"))
 
 ## setClass("NullSimFunction", contains = "SimFunction")
 

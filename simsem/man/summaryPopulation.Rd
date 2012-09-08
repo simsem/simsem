@@ -1,19 +1,17 @@
 \name{summaryPopulation}
 \alias{summaryPopulation}
-\alias{summaryPopulation-methods}
-\alias{summaryPopulation,ANY-method}
 \title{
-	Summarize the data generation population model underlying an object
+	Summarize the data generation population model underlying a result object
 }
 \description{
-This function will summarize the data generation population model underlying an object. The target object can be \code{linkS4class{SimResult}}.
+	Summarize the data generation population model underlying a result object
 }
 \usage{
 summaryPopulation(object)
 }
 \arguments{
   \item{object}{
-	The target object that you wish to extract the data generation population model from, which can be \code{linkS4class{SimResult}}.
+	The result object that you wish to extract the data generation population model from (\code{linkS4class{SimResult}}).
 }
 }
 \value{
@@ -28,5 +26,17 @@ summaryPopulation(object)
 	}
 }
 \examples{
-# See each class for an example.
+\dontrun{
+loading <- matrix(0, 6, 1)
+loading[1:6, 1] <- NA
+LX <- bind(loading, "runif(1, 0.4, 0.9)")
+RPH <- binds(diag(1))
+RTD <- binds(diag(6))
+CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+
+# We will use only 10 replications to save time.
+# In reality, more replications are needed.
+Output <- sim(10, n=200, model=CFA.Model)
+summaryPopulation(Output)
+}
 }

@@ -12,16 +12,16 @@
 \usage{
 estmodel(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = NULL, 
 	VTE = NULL, VY = NULL, VPS = NULL, VE=NULL, TY = NULL, AL = NULL, 
-	MY = NULL, ME = NULL, modelType, indLab=NULL, facLab=NULL, ngroups=1, 
-	smartStart=TRUE)
+	MY = NULL, ME = NULL, modelType, indLab=NULL, facLab=NULL, groupLab="group", 
+	ngroups=1, smartStart=TRUE)
 estmodel.cfa(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, VTE = NULL, 
 	VY = NULL, VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, 
-	indLab=NULL, facLab=NULL, ngroups=1, smartStart=TRUE)
-estmodel.pathPS = NULL, RPS = NULL, BE = NULL, VPS = NULL, VE=NULL, AL = NULL, 
-	ME = NULL, indLab=NULL, facLab=NULL, ngroups=1, smartStart=TRUE)
+	indLab=NULL, facLab=NULL, groupLab="group", ngroups=1, smartStart=TRUE)
+estmodel.path(PS = NULL, RPS = NULL, BE = NULL, VPS = NULL, VE=NULL, AL = NULL, 
+	ME = NULL, indLab=NULL, facLab=NULL, groupLab="group", ngroups=1, smartStart=TRUE)
 estmodel.sem(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL, 
 	VTE = NULL, VY = NULL, VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NULL, 
-	ME = NULL, indLab=NULL, facLab=NULL, ngroups=1, smartStart=TRUE)
+	ME = NULL, indLab=NULL, facLab=NULL, groupLab="group", ngroups=1, smartStart=TRUE)
 }
 \arguments{
   \item{LY}{
@@ -70,10 +70,13 @@ estmodel.sem(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL,
 	"CFA", "Sem", or "Path". This is specified to ensure that the analysis and data generation template created based on specified matrices in model correspond to what the user intends.
 }
   \item{indLab}{
-	Character vector of indicator labels. If left blank, automatic labels will be generated as  \code{x1}, \code{x2}, ... \code{xx}.
+	Character vector of indicator labels. If left blank, automatic labels will be generated as  \code{y1}, \code{y2}, ... \code{yy}.
 }
   \item{facLab}{ 
-	Character vector of factor labels. If left blank, automatic labels will be generated as \code{y1}, \code{y2}, ... \code{yx}}
+	Character vector of factor labels. If left blank, automatic labels will be generated as \code{f1}, \code{f2}, ... \code{ff}}
+  \item{groupLab}{
+	Character of group-variable label (not the names of each group). If left blank, automatic labels will be generated as \code{group}
+}
   \item{ngroups}{
 	Integer. Number of groups for data generation, defaults to 1. If larger than one, all specified matrices will be repeated for each additional group. If any matrix argument is a list, the length of this list will be the number of groups and ngroups is ignored.
 }

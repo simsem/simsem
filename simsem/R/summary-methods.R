@@ -523,14 +523,14 @@ setMethod("summary", signature = "SimDataDist", definition = function(object) {
     cat(paste("Reverse (mirror) distribution:", paste(object@reverse, collapse = " / "), "\n"))
 })
 
-setMethod("summary", signature(object = "SimFunction"), definition = function(object) {
-    cat("FUNCTION OBJECT\n")
-    x <- as.list(object@callfun)
-    cat("Function Name = ", x$fun, "\n")
-    if (length(x) > 2) {
-        cat("Addition attributes = ", paste(names(x)[3:length(x)], collapse = ", "), "\n")
-    }
-})
+# setMethod("summary", signature(object = "SimFunction"), definition = function(object) {
+    # cat("FUNCTION OBJECT\n")
+    # x <- as.list(object@callfun)
+    # cat("Function Name = ", x$fun, "\n")
+    # if (length(x) > 2) {
+        # cat("Addition attributes = ", paste(names(x)[3:length(x)], collapse = ", "), "\n")
+    # }
+# })
 
 # setMethod("summary", signature(object = "SimResultParam"), definition = function(object, digits = 3, usedFit = NULL) {
     # if (is.null(usedFit)) 

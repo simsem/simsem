@@ -55,11 +55,6 @@ pValue(target, dist, ...)
 }
 \examples{
 \dontrun{
-########## Make the pValue comparing between lavaan and SimResult work
-
-
-
-
 # Compare number with a vector
 pValue(0.5, rnorm(1000, 0, 1))
 
@@ -67,20 +62,19 @@ pValue(0.5, rnorm(1000, 0, 1))
 pValue(c(0.5, 0.2), data.frame(rnorm(1000, 0, 1), runif(1000, 0, 1)))
 
 # Compare an analysis result with a result of simulation study
-#library(lavaan)
-#loading <- matrix(0, 9, 3)
-#loading[1:3, 1] <- NA
-#loading[4:6, 2] <- NA
-#loading[7:9, 3] <- NA
-#model <- simParamCFA(LY=loading)
-#SimModel <- simModel(model, indLab=paste("x", 1:9, sep=""))
-#u2 <- simUnif(-0.2, 0.2)
-#loading.trivial <- matrix(NA, 9, 3)
-#loading.trivial[is.na(loading)] <- 0
-#LY.trivial <- simMatrix(loading.trivial, "u2")
-#mis <- simMisspecCFA(LY = LY.trivial)
-#out <- run(SimModel, HolzingerSwineford1939)
-#Output2 <- runFit(out, HolzingerSwineford1939, 20, mis)
-#pValue(out, Output2)
+library(lavaan)
+loading <- matrix(0, 9, 3)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+loading[7:9, 3] <- NA
+targetmodel <- estmodel(LY=loading, modelType="CFA", indLab=paste("x", 1:9, sep=""))
+out <- analyze(targetmodel, HolzingerSwineford1939)
+
+loading.trivial <- matrix("runif(1, -0.2, 0.2)", 9, 3)
+loading.trivial[is.na(loading)] <- 0
+mismodel <- model.lavaan(out, std=TRUE, LY=loading.trivial)
+
+simout <- sim(20, n=nrow(HolzingerSwineford1939), mismodel)
+pValue(out, simout)
 }
 }

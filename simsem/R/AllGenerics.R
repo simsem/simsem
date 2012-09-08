@@ -94,9 +94,9 @@ setGeneric("summaryMisspec", function(object, ...) {
 ##     return(standardGeneric("extract"))
 ## })
 
-setGeneric("plotDist", function(object, ...) {
-    return(standardGeneric("plotDist"))
-})
+# setGeneric("plotDist", function(object, ...) {
+    # return(standardGeneric("plotDist"))
+# })
 
 # setGeneric("skew", function(object, ...) {
     # return(standardGeneric("skew"))
@@ -120,17 +120,17 @@ setGeneric("pValue", function(target, dist, ...) {
     return(standardGeneric("pValue"))
 })
 
-setGeneric("summaryPopulation", function(object) {
-    return(standardGeneric("summaryPopulation"))
-})
+# setGeneric("summaryPopulation", function(object) {
+    # return(standardGeneric("summaryPopulation"))
+# })
 
-setGeneric("getPopulation", function(object, ...) {
-    return(standardGeneric("getPopulation"))
-})
+# setGeneric("getPopulation", function(object, ...) {
+    # return(standardGeneric("getPopulation"))
+# })
 
-setGeneric("setPopulation", function(target, population, ...) {
-    return(standardGeneric("setPopulation"))
-})
+# setGeneric("setPopulation", function(target, population, ...) {
+    # return(standardGeneric("setPopulation"))
+# })
 
 ## setGeneric("popMisfit", function(param, misspec, dfParam = NULL, fit.measures = "all", ...) {
 ##     return(standardGeneric("popMisfit"))

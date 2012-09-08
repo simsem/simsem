@@ -18,6 +18,7 @@
     \item{\code{pt}:}{ TBA }
     \item{\code{dgen}:}{TBA}
     \item{\code{modelType}:}{TBA}
+    \item{\code{groupLab}:}{TBA}
   }
 }
 \section{Methods}{
