@@ -41,18 +41,3 @@ summaryFit <- function(object, alpha = NULL) {
 		
     return(result)
 }
-
-
-# setMethod("summaryFit", signature(object = "SimResultParam"), definition = function(object, digits=3) {
-	# if(isNullObject(object@fit)) {
-		# stop("This object does not have any model misspecification.")
-	# } else {
-		# quantileValue <- c(0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95)
-		# result <- round(apply(object@fit, 2, quantile, quantileValue), digits)
-		# names(dimnames(result)) <- c("Fit Indices", "Quantile")
-		# fitAverage <- colMeans(object@fit, na.rm = TRUE)
-		# fitSE <- sapply(object@fit, sd, na.rm = TRUE)
-		# result <- rbind(result, fitAverage, fitSE)
-		# return(result)
-	# }
-# })

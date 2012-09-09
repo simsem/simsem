@@ -164,7 +164,7 @@ is.free <- function(mat) {
   return(isFree)
 }
   
-test <- function() {
+test.bind <- function() {
   a <- matrix(0,2,2)
   a[1,1] <- NA
   a[1,2] <- 0

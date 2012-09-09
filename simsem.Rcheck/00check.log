@@ -35,24 +35,9 @@
 * checking Rd metadata ... OK
 * checking Rd cross-references ... OK
 * checking for missing documentation entries ... OK
-* checking for code/documentation mismatches ... WARNING
-Codoc mismatches from documentation object 'draw':
-draw
-  Code: function(model, maxDraw = 50, misfitBounds = NULL,
-                 averageNumMisspec = FALSE, optMisfit = NULL, optDraws
-                 = 50, misfitType = "f0")
-  Docs: function(model, maxDraw = 50, misfitBounds = NULL,
-                 averageNumMisspec = FALSE, optMisfit = NULL, optDraws
-                 = 50, misfitType = "f0", misfitOut = FALSE)
-  Argument names in docs not in code:
-    misfitOut
-
+* checking for code/documentation mismatches ... OK
 * checking Rd \usage sections ... OK
 * checking Rd contents ... OK
 * checking for unstated dependencies in examples ... OK
 * checking examples ... OK
 * checking PDF version of manual ... OK
-WARNING: There was 1 warning.
-See
-  'C:/Users/Sunthud/Desktop/My Dropbox/simsem/simsem.Rcheck/00check.log'
-for details.

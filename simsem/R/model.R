@@ -330,61 +330,6 @@ buildPT <- function(paramSet, pt=NULL, group=1,facLab=NULL, indLab=NULL, smart=T
   return(pt)  
 }
 
-# Currently, does not handle auxiliary variables
-## nullpt <- function(paramSet, ngroups=1, facLab = NULL, indLab=NULL, aux=NULL) {
-
-##   ni <- NULL # number of variables in data set
-##   if(!is.null(paramSet$LY)) { # SEM or CFA
-##     ni <- nrow(paramSet$LY@free)
-##     if(is.null(indLab)) {
-##       lhs <- rep(c(paste0("x",rep(1:ni,ni:1)),paste0("x",rep(1:ni))),ngroups)
-##       rhs <- rep(c(paste0("x",unlist(lapply(1:ni,function(k) (1:ni)[k:ni]))),rep("",ni)),ngroups)
-##     } else {
-##       lhs <- rep(c(rep(indLab,ni:1),indLab),ngroups)
-##       rhs <- rep(c(unlist(lapply(1:ni,function(k) indLab[k:ni])),rep("",ni)),ngroups)
-##     }
-##   } else { # Path
-##     if(!is.null(paramSet$RPS)) {
-##       ni <- nrow(paramSet$RPS@free)
-##     } else {
-##       ni <- nrow(paramSet$PS@free)
-##     }
-##     if(is.null(facLab)) {
-##       lhs <- rep(c(paste0("y",rep(1:ni,ni:1)),paste0("y",rep(1:ni))),ngroups)
-##       rhs <- rep(c(paste0("y",unlist(lapply(1:ni,function(k) (1:ni)[k:ni]))),rep("",ni)),ngroups)
-##     } else {
-##       lhs <- rep(c(rep(indLab,ni:1),facLab),ngroups)
-##       rhs <- rep(c(unlist(lapply(1:ni,function(k) facLab[k:ni])),rep("",ni)),ngroups)
-##     }
-##   }
-  
-##   numEl <- (ni*(ni+1)/2)
-##   id <- 1:((numEl+ni)*ngroups)
-##   op <- rep(c(rep("~~",numEl),rep("~1",ni)),ngroups)
-##   user <- exo <- eq.id <- rep(0,length(id))
-##   label <- rep("",length(id))
-
-##   tempMat <- matrix(0,ni,ni)
-##   diag(tempMat) <- NA
-##   ustart <- rep(c(as.vector(tempMat[lower.tri(tempMat,diag=TRUE)]),rep(NA,ni)),ngroups)
-  
-##   for(i in seq_len(ngroups)) {
-##     if(i == 1) {      
-##       diag(tempMat) <- 1:ni
-##       free <- unco <- c(as.vector(tempMat[lower.tri(tempMat,diag=TRUE)]),(ni+1):(2*ni))
-##     } else {
-##       start <- max(free)
-##       diag(tempMat) <- (start+1):(start+ni)
-##       last <- max(tempMat)
-##       free <- unco <- c(free,as.vector(tempMat[lower.tri(tempMat,diag=TRUE)]),(last+1):(last+ni))
-##     }
-##   }
-##   group <- rep(1:ngroups,each=(numEl+ni))
-  
-##   return(list(id=id,lhs=as.character(lhs),op=as.character(op),rhs=as.character(rhs),user=user,group=as.integer(group),
-##               free=as.integer(free),ustart=ustart,exo=exo,eq.id=eq.id,label=as.character(label),unco=as.integer(unco)))
-## }
-
 ## Returns a pt (list) of parsed SimMatrix/SimVector
 parseFree <- function(simDat,group,pt,op,lhs=NULL,rhs=NULL,smart=TRUE,swap=FALSE) {
   ## Calculate starting indices from previous pt

@@ -30,15 +30,6 @@ analyze <- function(model, data, package="lavaan", miss=NULL,indLab=NULL,aux=NUL
       indLab <- setdiff(colnames(data), aux)
     }
   }
-  ##  if (is.numeric(indLab)) 
-  ##         indLab <- colnames(data)[indLab]
-  ##     if (is.numeric(auxiliary)) 
-  ##         auxiliary <- colnames(data)[auxiliary]
-  ##     if (length(intersect(auxiliary, indLab)) != 0) 
-  ##         stop("There is common variable between the variables in the model and the auxiliary variables.")
-  ##     targetCol <- c(indLab, auxiliary)
-  ##     data <- data[, targetCol]
-  ##    miss <- sum(is.na(data)) > 0
   
   if(!(model@groupLab %in% colnames(data))) {
 	data <- data.frame(data, group=1)
@@ -66,42 +57,3 @@ anal <- function(model, data, package="lavaan", ...) {
   Output <- lavaan(model@pt, data=data, group="group", model.type=model@modelType,...)    
   return(Output)
 }
-
-##     # is.equal(DataOut@param, Output@param) yes --> compute bias
-##     if (!is.null(DataOut)) {
-##         param <- DataOut@param
-##         check <- all.equal(param, Output@param)
-##         usedX <- NULL
-##         usedY <- NULL
-##         if (!(length(check) == 1 && check == TRUE) & !is.null(auxiliary)) {
-##             usedY <- which(!(colnames(data) %in% auxiliary))
-##             nx <- 0
-##             if (modelType == "SEM.exo") 
-##                 nx <- nrow(param@LX)
-##             if (modelType == "Path.exo") 
-##                 nx <- nrow(param@PH)
-##             if (nx > 0) 
-##                 usedX <- intersect(1:nx, usedY)
-##             usedY <- setdiff(usedY, usedX)
-##             param <- extract(param, y = usedY, x = usedX)
-##         }
-##         check <- all.equal(param, Output@param)
-##         if (length(check) == 1 && check == TRUE) {
-##             paramOut <- DataOut@paramOut
-##             if (!is.null(auxiliary)) 
-##                 paramOut <- extract(paramOut, y = usedY, x = usedX)
-##             Output@paramValue <- paramOut
-##         }
-##     }
-##     Output@n <- nrow(data)
-##     if (!is.nully(indLab)) {
-##         Output@indLab <- indLab
-##     } else {
-##         Output@indLab <- colnames(data)
-##     }
-##     Output@factorLab <- factorLab
-##     # Add labels in the SimModelOut --> go to SimModelOut and relabels it
-    
-##     # Provide a nicer summary --> Groups elements from the same matrix together
-##     return(Output)
-## })

@@ -37,14 +37,6 @@ generate <- function(model, n, maxDraw=50,misfitBounds=NULL, misfitType="f0",
   
 }
 
-## draws = list of paramSet, length = number of groups
-## paramSet:
-## [[1]] param: parameter draws, no misspecification
-## [[2]] misParam: parameter draws with misspecification
-## [[3]] mis: misspecification only
-## paramSet$param: reduced list of model matrices with parameter draws, or a "GLIST"
-##  GLIST: PS, BE, AL, TE, LY, TY
-
 popMisfitParams <- function(psl, df=NULL) {
 	ngroups <- length(psl)
 	real <- lapply(psl,"[[",1)
