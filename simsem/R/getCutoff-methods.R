@@ -1,27 +1,32 @@
-# getCutoff: This function will find a cutoff of each fit index based on a priori alpha level from sampling distributions of fit
-# indices
+# getCutoff: This function will find a cutoff of each fit index based on a
+# priori alpha level from sampling distributions of fit indices
 
-setMethod("getCutoff", signature(object = "data.frame"), definition = function(object, alpha, revDirec = FALSE, usedFit = NULL, 
-    predictor = NULL, predictorVal = NULL, df = 0) {
+setMethod("getCutoff", signature(object = "data.frame"), definition = function(object, 
+    alpha, revDirec = FALSE, usedFit = NULL, predictor = NULL, predictorVal = NULL, 
+    df = 0) {
     if (is.null(usedFit)) 
         usedFit <- getKeywords()$usedFit
     percentile <- 1 - alpha
     if (revDirec) 
         percentile <- 1 - percentile
     object <- as.data.frame(object[, usedFit])
-	colnames(object) <- usedFit
+    colnames(object) <- usedFit
     temp <- list()
-    temp <- lapply(object, getCondQtile, qtile = percentile, df = df, x = predictor, xval = predictorVal)
+    temp <- lapply(object, getCondQtile, qtile = percentile, df = df, x = predictor, 
+        xval = predictorVal)
     if ("TLI" %in% colnames(object)) 
-        temp$TLI <- getCondQtile(object[, "TLI"], x = predictor, xval = predictorVal, qtile = 1 - percentile, df = df)
+        temp$TLI <- getCondQtile(object[, "TLI"], x = predictor, xval = predictorVal, 
+            qtile = 1 - percentile, df = df)
     if ("CFI" %in% colnames(object)) 
-        temp$CFI <- getCondQtile(object[, "CFI"], x = predictor, xval = predictorVal, qtile = 1 - percentile, df = df)
-	temp <- data.frame(temp)
+        temp$CFI <- getCondQtile(object[, "CFI"], x = predictor, xval = predictorVal, 
+            qtile = 1 - percentile, df = df)
+    temp <- data.frame(temp)
     return(temp)
 })
 
-setMethod("getCutoff", signature(object = "SimResult"), definition = function(object, alpha, revDirec = FALSE, usedFit = NULL, 
-    nVal = NULL, pmMCARval = NULL, pmMARval = NULL, df = 0) {
+setMethod("getCutoff", signature(object = "SimResult"), definition = function(object, 
+    alpha, revDirec = FALSE, usedFit = NULL, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, 
+    df = 0) {
     if (is.null(nVal) || is.na(nVal)) 
         nVal <- NULL
     if (is.null(pmMCARval) || is.na(pmMCARval)) 
@@ -30,7 +35,8 @@ setMethod("getCutoff", signature(object = "SimResult"), definition = function(ob
         pmMARval <- NULL
     object <- clean(object)
     Data <- as.data.frame(object@fit)
-    condition <- c(length(unique(object@pmMCAR)) > 1, length(unique(object@pmMAR)) > 1, length(unique(object@n)) > 1)
+    condition <- c(length(unique(object@pmMCAR)) > 1, length(unique(object@pmMAR)) > 
+        1, length(unique(object@n)) > 1)
     condValue <- cbind(object@pmMCAR, object@pmMAR, object@n)
     colnames(condValue) <- c("Percent MCAR", "Percent MAR", "N")
     condValue <- condValue[, condition]
@@ -51,13 +57,16 @@ setMethod("getCutoff", signature(object = "SimResult"), definition = function(ob
     }
     predictorVal <- predictorVal[condition]
     
-    output <- getCutoff(Data, alpha, revDirec, usedFit, predictor = condValue, predictorVal = predictorVal, df = df)
+    output <- getCutoff(Data, alpha, revDirec, usedFit, predictor = condValue, predictorVal = predictorVal, 
+        df = df)
     return(output)
 })
 
-setMethod("getCutoff", signature(object = "matrix"), definition = function(object, alpha, revDirec = FALSE, usedFit = NULL, 
-    predictor = NULL, predictorVal = NULL, df = 0) {
+setMethod("getCutoff", signature(object = "matrix"), definition = function(object, 
+    alpha, revDirec = FALSE, usedFit = NULL, predictor = NULL, predictorVal = NULL, 
+    df = 0) {
     object <- as.data.frame(object)
-    output <- getCutoff(object, alpha, revDirec, usedFit, predictor = predictor, predictorVal = predictorVal, df = df)
+    output <- getCutoff(object, alpha, revDirec, usedFit, predictor = predictor, 
+        predictorVal = predictorVal, df = df)
     return(output)
 }) 

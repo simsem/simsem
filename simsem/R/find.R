@@ -1,7 +1,8 @@
 
 
 
-# findFactorIntercept: Find the factor intercept if regression coefficients and factor means are specified
+# findFactorIntercept: Find the factor intercept if regression coefficients and
+# factor means are specified
 
 findFactorIntercept <- function(beta, factorMean = NULL) {
     ni <- nrow(beta)
@@ -25,9 +26,10 @@ findFactorIntercept <- function(beta, factorMean = NULL) {
         }
     }
     return(as.vector(intercept))
-} 
+}
 
-# findFactorResidualVar: Find the factor residual variance if total variances, correlation, and regression coefficients are specified.
+# findFactorResidualVar: Find the factor residual variance if total variances,
+# correlation, and regression coefficients are specified.
 
 findFactorResidualVar <- function(beta, corPsi, totalVarPsi = NULL) {
     require(lavaan)
@@ -62,7 +64,8 @@ findFactorResidualVar <- function(beta, corPsi, totalVarPsi = NULL) {
             tempPsi <- suppressWarnings(cor2cov(as.matrix(tempPsi), tempPsiSd))
             real.tempPsi <- matrix(0, length(iv) + length(dv), length(iv) + length(dv))
             real.tempPsi[1:length(iv), 1:length(iv)] <- ivCov
-            real.tempPsi[(length(iv) + 1):(length(iv) + length(dv)), (length(iv) + 1):(length(iv) + length(dv))] <- tempPsi
+            real.tempPsi[(length(iv) + 1):(length(iv) + length(dv)), (length(iv) + 
+                1):(length(iv) + length(dv))] <- tempPsi
             agg <- c(iv, dv)
             blank.path <- matrix(0, nrow = length(iv), ncol = length(agg))
             temp.path2 <- beta[dv, agg]
@@ -75,7 +78,9 @@ findFactorResidualVar <- function(beta, corPsi, totalVarPsi = NULL) {
     return(as.vector(errorVar))
 }
 
-# findFactorTotalVar: Find the factor total variance if regression coefficients, factor correlation, and factor residual variances are specified.
+# findFactorTotalVar: Find the factor total variance if regression
+# coefficients, factor correlation, and factor residual variances are
+# specified.
 
 findFactorTotalVar <- function(beta, corPsi, residualVarPsi) {
     library(lavaan)
@@ -89,7 +94,8 @@ findFactorTotalVar <- function(beta, corPsi, residualVarPsi) {
     return(as.vector(factor.var))
 }
 
-# findFactorMean: Find the factor mean if regression coefficients and factor intercept are specified.
+# findFactorMean: Find the factor mean if regression coefficients and factor
+# intercept are specified.
 
 findFactorMean <- function(beta, alpha = NULL) {
     ni <- nrow(beta)
@@ -114,10 +120,13 @@ findFactorMean <- function(beta, alpha = NULL) {
     return(as.vector(factor.mean))
 }
 
-# findFactorTotalCov: Find the factor total covariance if regression coefficients and factor covariances (which may be made from factor correlation, total factor variances, and error factor
-# variances) are specified
+# findFactorTotalCov: Find the factor total covariance if regression
+# coefficients and factor covariances (which may be made from factor
+# correlation, total factor variances, and error factor variances) are
+# specified
 
-findFactorTotalCov <- function(beta, psi = NULL, corPsi = NULL, totalVarPsi = NULL, errorVarPsi = NULL) {
+findFactorTotalCov <- function(beta, psi = NULL, corPsi = NULL, totalVarPsi = NULL, 
+    errorVarPsi = NULL) {
     if (is.null(psi)) {
         library(lavaan)
         if (is.null(errorVarPsi)) 
@@ -127,16 +136,18 @@ findFactorTotalCov <- function(beta, psi = NULL, corPsi = NULL, totalVarPsi = NU
     iden <- diag(nrow(beta))
     facTotalCov <- solve(iden - beta) %*% psi %*% t(solve(iden - beta))
     return(facTotalCov)
-} 
+}
 
-# findIndTotalVar: Find indicator total variances based on loading matrix, total factor covariance, and measurement error variances.
+# findIndTotalVar: Find indicator total variances based on loading matrix,
+# total factor covariance, and measurement error variances.
 findIndTotalVar <- function(lambda, totalFactorCov, residualVarTheta) {
     factor.part <- lambda %*% totalFactorCov %*% t(lambda)
     indicator.var <- diag(factor.part) + residualVarTheta
     return(as.vector(indicator.var))
 }
 
-# findIndIntercept: Find the measurement intercept if factor loading, total factor covariance, and total indicator variances are specified
+# findIndIntercept: Find the measurement intercept if factor loading, total
+# factor covariance, and total indicator variances are specified
 
 findIndIntercept <- function(lambda, factorMean = NULL, indicatorMean = NULL) {
     ni <- nrow(lambda)
@@ -150,7 +161,8 @@ findIndIntercept <- function(lambda, factorMean = NULL, indicatorMean = NULL) {
     return(as.vector(intercept))
 }
 
-# findIndResidualVar: Find the residual variances of indicators if factor loading, total factor covariance, and total indicator variances are specified
+# findIndResidualVar: Find the residual variances of indicators if factor
+# loading, total factor covariance, and total indicator variances are specified
 
 findIndResidualVar <- function(lambda, totalFactorCov, totalVarTheta = NULL) {
     ni <- nrow(lambda)
@@ -162,7 +174,8 @@ findIndResidualVar <- function(lambda, totalFactorCov, totalVarTheta = NULL) {
     return(as.vector(error.var))
 }
 
-# findIndMean: Find indicator means based on loading matrix, factor means, and measurement intercept.
+# findIndMean: Find indicator means based on loading matrix, factor means, and
+# measurement intercept.
 
 findIndMean <- function(lambda, factorMean = NULL, tau = NULL) {
     ni <- nrow(lambda)
@@ -176,7 +189,8 @@ findIndMean <- function(lambda, factorMean = NULL, tau = NULL) {
     return(as.vector(indicator.mean))
 }
 
-# findPossibleFactorCor: From the set of regression coefficients, this function will find the elements that is possible to free covariances or correlations
+# findPossibleFactorCor: From the set of regression coefficients, this function
+# will find the elements that is possible to free covariances or correlations
 
 findPossibleFactorCor <- function(beta) {
     ni <- nrow(beta)
@@ -195,9 +209,10 @@ findPossibleFactorCor <- function(beta) {
         }
     }
     return(psi)
-} 
+}
 
-# findRecursiveSet: Group variables together regarding the position in the mediation chain
+# findRecursiveSet: Group variables together regarding the position in the
+# mediation chain
 
 findRecursiveSet <- function(beta) {
     result <- list()
@@ -215,7 +230,7 @@ findRecursiveSet <- function(beta) {
         ni.sofar <- ni.sofar + length(temp)
     }
     return(result)
-} 
+}
 
 findRowZero <- function(square.matrix, is.row.fixed = FALSE) {
     ni <- nrow(square.matrix)

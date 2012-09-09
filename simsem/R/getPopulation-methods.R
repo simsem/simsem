@@ -2,4 +2,4 @@
 
 getPopulation <- function(object) {
     return(object@paramValue)
-}
+} 

@@ -27,16 +27,16 @@ getCondQtile <- function(y, x = NULL, xval = NULL, df = 0, qtile = 0.5) {
         dat <- data.frame(y = y, x)
         library(quantreg)
         mod <- rq(express, data = dat, tau = qtile)
-		if(length(xval) == 1 && xval == "all") {
-			result <- predict(mod, as.data.frame(x), interval="none")
-		} else {
-			names(xval) <- name
-			xvalSecondord <- outer(as.vector(xval), as.vector(xval), "*")[lower.tri(diag(length(xval)))]
-			predictorVal <- c(1, xval, xvalSecondord)
-			pred <- data.frame(t(xval)) 
-			colnames(pred) <- colnames(x)
-			result <- predict(mod, pred, interval="none")
-		}
+        if (length(xval) == 1 && xval == "all") {
+            result <- predict(mod, as.data.frame(x), interval = "none")
+        } else {
+            names(xval) <- name
+            xvalSecondord <- outer(as.vector(xval), as.vector(xval), "*")[lower.tri(diag(length(xval)))]
+            predictorVal <- c(1, xval, xvalSecondord)
+            pred <- data.frame(t(xval))
+            colnames(pred) <- colnames(x)
+            result <- predict(mod, pred, interval = "none")
+        }
         return(result)
     }
 } 

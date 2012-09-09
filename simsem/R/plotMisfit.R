@@ -1,11 +1,12 @@
 # plotMisfit: Plot the misfit of the SimResult
 
 plotMisfit <- function(object, usedFit = "default", misParam = NULL) {
-	if(all(dim(object@misspecValue) == 0))
-		stop("This object does not have any model misspecification.")
-	object <- clean(object)
+    if (all(dim(object@misspecValue) == 0)) 
+        stop("This object does not have any model misspecification.")
+    object <- clean(object)
     if (usedFit == "default") {
-        ifelse(is.null(misParam), usedFit <- c("pop.f0", "pop.rmsea", "pop.srmr"), usedFit <- "pop.rmsea")
+        ifelse(is.null(misParam), usedFit <- c("pop.f0", "pop.rmsea", "pop.srmr"), 
+            usedFit <- "pop.rmsea")
     }
     dimOut <- length(usedFit)
     if (!is.null(misParam)) {
@@ -24,9 +25,9 @@ plotMisfit <- function(object, usedFit = "default", misParam = NULL) {
     } else {
         stop("Some errors occur")
     }
-	target <- object@popFit
-	names(target) <- paste0("pop.", names(target))
-	target <- cbind(object@fit, target)
+    target <- object@popFit
+    names(target) <- paste0("pop.", names(target))
+    target <- cbind(object@fit, target)
     if (all(is.numeric(usedFit))) 
         usedFit <- colnames(target)[usedFit]
     if (!is.null(misParam) && all(is.numeric(misParam))) 

@@ -6,33 +6,45 @@ impose <- function(miss, data.mat, pmMCAR = NULL, pmMAR = NULL) {
     if (!is.null(pmMAR)) 
         miss@pmMAR <- pmMAR
     if (is(data.mat, "list")) {
-		if(!("data" %in% names(data.mat))) stop("The list does not contain any dataset.")
-        data.mat$data <- as.data.frame(imposeMissing(data.mat$data, cov=miss@cov, pmMCAR=miss@pmMCAR, pmMAR=miss@pmMAR, nforms=miss@nforms, itemGroups=miss@itemGroups, twoMethod=miss@twoMethod, prAttr=miss@prAttr, timePoints=miss@timePoints, logical=miss@logical, ignoreCols=miss@ignoreCols, threshold=miss@threshold))
+        if (!("data" %in% names(data.mat))) 
+            stop("The list does not contain any dataset.")
+        data.mat$data <- as.data.frame(imposeMissing(data.mat$data, cov = miss@cov, 
+            pmMCAR = miss@pmMCAR, pmMAR = miss@pmMAR, nforms = miss@nforms, itemGroups = miss@itemGroups, 
+            twoMethod = miss@twoMethod, prAttr = miss@prAttr, timePoints = miss@timePoints, 
+            logical = miss@logical, ignoreCols = miss@ignoreCols, threshold = miss@threshold))
     } else {
-		if (is.matrix(data.mat)) data.mat <- as.data.frame(data.mat)
-		data.mat <- as.data.frame(imposeMissing(data.mat, cov=miss@cov, pmMCAR=miss@pmMCAR, pmMAR=miss@pmMAR, nforms=miss@nforms, itemGroups=miss@itemGroups,
-                            twoMethod=miss@twoMethod, prAttr=miss@prAttr, timePoints=miss@timePoints, logical=miss@logical, ignoreCols=miss@ignoreCols, threshold=miss@threshold))
-	}
+        if (is.matrix(data.mat)) 
+            data.mat <- as.data.frame(data.mat)
+        data.mat <- as.data.frame(imposeMissing(data.mat, cov = miss@cov, pmMCAR = miss@pmMCAR, 
+            pmMAR = miss@pmMAR, nforms = miss@nforms, itemGroups = miss@itemGroups, 
+            twoMethod = miss@twoMethod, prAttr = miss@prAttr, timePoints = miss@timePoints, 
+            logical = miss@logical, ignoreCols = miss@ignoreCols, threshold = miss@threshold))
+    }
     return(data.mat)
 }
-## setMethod("run", signature = "SimMissing", definition = function(object, data, pmMCAR = NULL, pmMAR = NULL) {
+## setMethod('run', signature = 'SimMissing', definition = function(object,
+## data, pmMCAR = NULL, pmMAR = NULL) {
 
 ## })
 
 
-## The wrapper function for the various functions to impose missing values.  Currently, the function will delete x percent of eligible values for MAR and MCAR, if you mark colums to be ignored.
-imposeMissing <- function(data.mat, cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, itemGroups = list(), twoMethod = 0,
-                          prAttr = 0, timePoints = 1, ignoreCols = 0, threshold = 0, logical = NULL) {
-	if (is.character(ignoreCols)) ignoreCols <- match(ignoreCols, colnames(data.mat))
-	if (is.character(cov)) cov <- match(cov, colnames(data.mat))
+## The wrapper function for the various functions to impose missing values.
+## Currently, the function will delete x percent of eligible values for MAR and
+## MCAR, if you mark colums to be ignored.
+imposeMissing <- function(data.mat, cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, itemGroups = list(), 
+    twoMethod = 0, prAttr = 0, timePoints = 1, ignoreCols = 0, threshold = 0, logical = NULL) {
+    if (is.character(ignoreCols)) 
+        ignoreCols <- match(ignoreCols, colnames(data.mat))
+    if (is.character(cov)) 
+        cov <- match(cov, colnames(data.mat))
     if (nforms != 0 | !isTRUE(all.equal(twoMethod, 0))) {
         # TRUE values are values to delete
-        log.matpl <- plannedMissing(dim(data.mat), cov, nforms = nforms, twoMethod = twoMethod, itemGroups = itemGroups, timePoints = timePoints, 
-            ignoreCols = ignoreCols)
+        log.matpl <- plannedMissing(dim(data.mat), cov, nforms = nforms, twoMethod = twoMethod, 
+            itemGroups = itemGroups, timePoints = timePoints, ignoreCols = ignoreCols)
         data.mat[log.matpl] <- NA
     }
     # Impose MAR and MCAR
-	
+    
     if (pmMCAR != 0) {
         log.mat1 <- makeMCAR(dim(data.mat), pmMCAR, cov, ignoreCols)
         data.mat[log.mat1] <- NA
@@ -44,19 +56,20 @@ imposeMissing <- function(data.mat, cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, 
     }
     
     if (prAttr != 0) {
-        log.mat3 <- attrition(data.mat, prob = prAttr, timePoints, cov, threshold, ignoreCols)
+        log.mat3 <- attrition(data.mat, prob = prAttr, timePoints, cov, threshold, 
+            ignoreCols)
         data.mat[log.mat3] <- NA
     }
     
     if (!is.null(logical) && !is.null(dim(logical)) && !all(dim(logical) == 1)) {
         if (!(class(logical) %in% c("matrix", "data.frame"))) 
             stop("The logical argument must be matrix or data frame.")
-		usecol <- setdiff(seq_len(ncol(data.mat)), ignoreCols)
-		data.mat2 <- data.mat[,usecol]
+        usecol <- setdiff(seq_len(ncol(data.mat)), ignoreCols)
+        data.mat2 <- data.mat[, usecol]
         if ((dim(data.mat2)[1] != dim(logical)[1]) | (dim(data.mat2)[2] != dim(logical)[2])) 
             stop("The dimension in the logical argument is not equal to the dimension in the data")
         data.mat2[logical] <- NA
-		data.mat[,usecol] <- data.mat2
+        data.mat[, usecol] <- data.mat2
     }
     return(data.mat)
     
@@ -73,9 +86,11 @@ makeMAR <- function(data, pm = NULL, cov = NULL, ignoreCols = NULL, threshold = 
     colList <- seq_len(ncol)
     excl <- c(cov, ignoreCols)
     misCols <- setdiff(colList, excl)
-
-    # Calculate the probability of missing above the threshold,starting with the mean of the covariate. If this probability is greater
-    # than or equal to 1, lower the threshold by choosing thresholds at increasingly lower quantiles of the data.
+    
+    # Calculate the probability of missing above the threshold,starting with the
+    # mean of the covariate. If this probability is greater than or equal to 1,
+    # lower the threshold by choosing thresholds at increasingly lower quantiles of
+    # the data.
     if (is.null(threshold)) {
         threshold <- mean(data[, cov])
     }
@@ -108,21 +123,22 @@ makeMAR <- function(data, pm = NULL, cov = NULL, ignoreCols = NULL, threshold = 
     misrand <- runif(length(total.elig)) < pr.missing
     mismat <- matrix(mapply(`&&`, misrand, total.elig), nrow = nrow, byrow = TRUE)
     mismat[, excl] <- FALSE
-   
+    
     return(mismat)
 }
 
 
 # Function to make some MCAR missing
 
-# Input: Data matrix dimensions, desired percent missing, columns of covariates to not have missingness on
+# Input: Data matrix dimensions, desired percent missing, columns of covariates
+# to not have missingness on
 
 # Output: Logical matrix of values to be deleted
 makeMCAR <- function(dims, pm = 0, cov = 0, ignoreCols = 0) {
     nrow <- dims[1]
     ncol <- dims[2]
     colList <- seq_len(ncol)
-	
+    
     excl <- c(cov, ignoreCols)
     misCols <- setdiff(colList, excl)
     
@@ -142,21 +158,25 @@ makeMCAR <- function(dims, pm = 0, cov = 0, ignoreCols = 0) {
 
 # Output: Boolean matrix of values to delete
 # 
-# Right now, function defaults to NULL missingness. If number of forms is specified, items are divided equally and grouped
-# sequentially. (i.e. columns 1-5 are shared, 6-10 are A, 11-15 are B, and 16-20 are C)
+# Right now, function defaults to NULL missingness. If number of forms is
+# specified, items are divided equally and grouped sequentially. (i.e. columns
+# 1-5 are shared, 6-10 are A, 11-15 are B, and 16-20 are C)
 
 # TODO:
 
 # Warnings for illegal groupings
 
 # Check to see if item groupings are valid?
-plannedMissing <- function(dims = c(0, 0), nforms = NULL, itemGroups = NULL, twoMethod = NULL, cov = NULL, timePoints = 1, 
-    ignoreCols = NULL) {
+plannedMissing <- function(dims = c(0, 0), nforms = NULL, itemGroups = NULL, twoMethod = NULL, 
+    cov = NULL, timePoints = 1, ignoreCols = NULL) {
     
-	if(!is.null(itemGroups) && is.list(itemGroups) && length(itemGroups) == 0) itemGroups <- NULL
-	if(is.vector(twoMethod) && length(twoMethod) == 1 && twoMethod == 0) twoMethod <- NULL
-	if(is.vector(nforms) && length(nforms) == 1 && nforms == 0) nforms <- NULL
-	
+    if (!is.null(itemGroups) && is.list(itemGroups) && length(itemGroups) == 0) 
+        itemGroups <- NULL
+    if (is.vector(twoMethod) && length(twoMethod) == 1 && twoMethod == 0) 
+        twoMethod <- NULL
+    if (is.vector(nforms) && length(nforms) == 1 && nforms == 0) 
+        nforms <- NULL
+    
     nitems <- dims[2]
     nobs <- dims[1]
     excl <- c(cov, ignoreCols)
@@ -194,10 +214,12 @@ plannedMissing <- function(dims = c(0, 0), nforms = NULL, itemGroups = NULL, two
             itemGroups <- generateIndices(nforms + 1, 1:itemsPerTP)
         }
         
-        # groups observations into sets of row indices. Each set receives a different form - that is, each observation group has one subset
-        # of variables marked for deletion. At each time point, each group of observations systematically receives a different form. To do
-        # this, we calculate all possible combinations for a given number of forms (for a 3 form design, this is 6) and then repeat this
-        # matrix of permuations to cover all timepoints.
+        # groups observations into sets of row indices. Each set receives a different
+        # form - that is, each observation group has one subset of variables marked for
+        # deletion. At each time point, each group of observations systematically
+        # receives a different form. To do this, we calculate all possible combinations
+        # for a given number of forms (for a 3 form design, this is 6) and then repeat
+        # this matrix of permuations to cover all timepoints.
         
         obsGroups <- generateIndices(nforms, 1:nobs)
         formPerms <- matrix(unlist(permn(length(obsGroups))), ncol = nforms, byrow = TRUE)
@@ -233,7 +255,8 @@ plannedMissing <- function(dims = c(0, 0), nforms = NULL, itemGroups = NULL, two
         
         # 2) Create a logical matrix of FALSE for each covariate
         
-        # 3) Add the columns of ignored variables to the end of the matrix, and convert to data frame
+        # 3) Add the columns of ignored variables to the end of the matrix, and convert
+        # to data frame
         
         # 4) Rename the colums of the data frame
         
@@ -241,14 +264,15 @@ plannedMissing <- function(dims = c(0, 0), nforms = NULL, itemGroups = NULL, two
         
         # 6) Convert back to matrix
         
-		excl <- setdiff(excl, 0)
+        excl <- setdiff(excl, 0)
         if (length(excl) != 0) {
             exclMat <- matrix(rep(FALSE, nobs * length(excl)), ncol = length(excl))
             log.df <- as.data.frame(cbind(log.mat, exclMat))
             colnames(log.df) <- (c(itemList, excl))
             
-            # The column names need to be coerced to integers for the sort to work correctly, and then coerced back to strings for the data
-            # frame subsetting to work correctly.
+            # The column names need to be coerced to integers for the sort to work
+            # correctly, and then coerced back to strings for the data frame subsetting to
+            # work correctly.
             log.df <- log.df[, paste(sort(as.integer(colnames(log.df))), sep = "")]
             
             log.mat <- as.matrix(log.df)
@@ -268,8 +292,10 @@ plannedMissing <- function(dims = c(0, 0), nforms = NULL, itemGroups = NULL, two
 }
 
 
-# Default generation method for item groupings and observation groupings.  Generates sequential groups of lists of column indices
-# based on the desired number of groups, and a range of the group column indices. You can also exclude specific column indeces.
+# Default generation method for item groupings and observation groupings.
+# Generates sequential groups of lists of column indices based on the desired
+# number of groups, and a range of the group column indices. You can also
+# exclude specific column indeces.
 
 # EX: generate.indices(3,1:12)
 
@@ -331,12 +357,15 @@ permn <- function(x, fun = NULL, ...) {
     out
 }
 
-# Implementing attrition using probability of attrition per TP as the parameter, and optionally, a covariate.  The probability
-# argument can be a vector, allowing you to specify different probabilities for different time points.  If there is only one value,
-# this will be the probability of attrition at each time time point.  If the length does not equal the number of time points, the
-# pattern will repeat to cover the remaining time points.
+# Implementing attrition using probability of attrition per TP as the
+# parameter, and optionally, a covariate.  The probability argument can be a
+# vector, allowing you to specify different probabilities for different time
+# points.  If there is only one value, this will be the probability of
+# attrition at each time time point.  If the length does not equal the number
+# of time points, the pattern will repeat to cover the remaining time points.
 
-attrition <- function(data, prob = NULL, timePoints = 1, cov = NULL, threshold = NULL, ignoreCols = NULL) {
+attrition <- function(data, prob = NULL, timePoints = 1, cov = NULL, threshold = NULL, 
+    ignoreCols = NULL) {
     dims <- dim(data)
     nrow <- dims[1]
     
@@ -362,7 +391,8 @@ attrition <- function(data, prob = NULL, timePoints = 1, cov = NULL, threshold =
                 # Each value that isn't true has a prob likelihood of being marked true
                 misrand <- runif(nrow) <= prob[i]
                 attr <- mapply(`||`, slice, misrand)
-                # For each row in attr marked true, mark true for all columns excluding previous timepoints.
+                # For each row in attr marked true, mark true for all columns excluding
+                # previous timepoints.
                 log.mat[attr, unlist(colGroups[-excl])] <- TRUE
                 excl <- c(excl, i)
             }
@@ -377,7 +407,8 @@ attrition <- function(data, prob = NULL, timePoints = 1, cov = NULL, threshold =
         excl <- NULL
         for (i in seq_len(timePoints)) {
             if (is.null(excl)) {
-                # attr <- sapply(rows.eligible,function(x) { if(x && runif(dims[1]) <= prob[i]) {x <- TRUE} else {x <- FALSE} })
+                # attr <- sapply(rows.eligible,function(x) { if(x && runif(dims[1]) <= prob[i])
+                # {x <- TRUE} else {x <- FALSE} })
                 misrand <- runif(length(rows.eligible)) <= prob[i]
                 attr <- mapply(`&&`, rows.eligible, misrand)
                 log.mat[attr, unlist(colGroups)] <- TRUE
@@ -388,12 +419,14 @@ attrition <- function(data, prob = NULL, timePoints = 1, cov = NULL, threshold =
                 
                 # Each value that isn't true has a prob likelihood of being marked true
                 
-                # attr <- mapply(function(x,y) { if(x == FALSE && y == TRUE){runif(1) <= prob[i]} else {FALSE}},slice,rows.eligible)
+                # attr <- mapply(function(x,y) { if(x == FALSE && y == TRUE){runif(1) <=
+                # prob[i]} else {FALSE}},slice,rows.eligible)
                 misrand <- runif(length(prevRmv)) <= prob[i]
                 eligible <- mapply("&&", rows.eligible, misrand)
                 attr <- mapply("||", eligible, prevRmv)
                 
-                # For each row in attr marked true, mark true for all columns excluding previous timepoints.
+                # For each row in attr marked true, mark true for all columns excluding
+                # previous timepoints.
                 log.mat[attr, unlist(colGroups[-excl])] <- TRUE
                 excl <- c(excl, i)
             }

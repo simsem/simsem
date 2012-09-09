@@ -8,7 +8,7 @@ getKeywords <- function() {
     optMax <- c("max", "maximum", "upper")
     optNone <- c("none", "null")
     
-    result <- list(usedFit = usedFit, 
-        usedFitPop = usedFitPop, optMin = optMin, optMax = optMax, optNone = optNone)
+    result <- list(usedFit = usedFit, usedFitPop = usedFitPop, optMin = optMin, optMax = optMax, 
+        optNone = optNone)
     return(result)
 } 

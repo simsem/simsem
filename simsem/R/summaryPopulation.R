@@ -16,4 +16,4 @@ summaryPopulation <- function(object) {
         rownames(result) <- c("Average", "SD")
     }
     return(result)
-}
+} 

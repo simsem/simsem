@@ -1,4 +1,5 @@
-# loadingFromAlpha: Find a standardized factor loading that provide a specified alpha value
+# loadingFromAlpha: Find a standardized factor loading that provide a specified
+# alpha value
 
 loadingFromAlpha <- function(alpha, ni) {
     denominator <- ni - ((ni - 1) * alpha)

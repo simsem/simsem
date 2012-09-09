@@ -1,23 +1,29 @@
-# getCutoffNested: get the cutoff from the simulated sampling distribution of difference in fit indices
+# getCutoffNested: get the cutoff from the simulated sampling distribution of
+# difference in fit indices
 
-# model1: nested model --> more df
-# model2: parent model --> less df
-getCutoffNested <- function(nested, parent, alpha = 0.05, usedFit = NULL, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, df = 0) { 
-	mod <- clean(nested, parent)
-	nested <- mod[[1]]
-	parent <- mod[[2]]
-	if(!isTRUE(all.equal(unique(nested@paramValue), unique(parent@paramValue)))) stop("Models are based on different data and cannot be compared, check your random seed")
-	if(!isTRUE(all.equal(unique(nested@n), unique(parent@n)))) stop("Models are based on different values of sample sizes")
-	if(!isTRUE(all.equal(unique(nested@pmMCAR), unique(parent@pmMCAR)))) stop("Models are based on different values of the percent completely missing at random")
-	if(!isTRUE(all.equal(unique(nested@pmMAR), unique(parent@pmMAR)))) stop("Models are based on different values of the percent missing at random")
-	if (is.null(nVal) || is.na(nVal)) 
+# model1: nested model --> more df model2: parent model --> less df
+getCutoffNested <- function(nested, parent, alpha = 0.05, usedFit = NULL, nVal = NULL, 
+    pmMCARval = NULL, pmMARval = NULL, df = 0) {
+    mod <- clean(nested, parent)
+    nested <- mod[[1]]
+    parent <- mod[[2]]
+    if (!isTRUE(all.equal(unique(nested@paramValue), unique(parent@paramValue)))) 
+        stop("Models are based on different data and cannot be compared, check your random seed")
+    if (!isTRUE(all.equal(unique(nested@n), unique(parent@n)))) 
+        stop("Models are based on different values of sample sizes")
+    if (!isTRUE(all.equal(unique(nested@pmMCAR), unique(parent@pmMCAR)))) 
+        stop("Models are based on different values of the percent completely missing at random")
+    if (!isTRUE(all.equal(unique(nested@pmMAR), unique(parent@pmMAR)))) 
+        stop("Models are based on different values of the percent missing at random")
+    if (is.null(nVal) || is.na(nVal)) 
         nVal <- NULL
     if (is.null(pmMCARval) || is.na(pmMCARval)) 
         pmMCARval <- NULL
     if (is.null(pmMARval) || is.na(pmMARval)) 
         pmMARval <- NULL
     Data <- as.data.frame((nested@fit - parent@fit))
-	condition <- c(length(unique(nested@pmMCAR)) > 1, length(unique(nested@pmMAR)) > 1, length(unique(nested@n)) > 1)
+    condition <- c(length(unique(nested@pmMCAR)) > 1, length(unique(nested@pmMAR)) > 
+        1, length(unique(nested@n)) > 1)
     condValue <- cbind(nested@pmMCAR, nested@pmMAR, nested@n)
     colnames(condValue) <- c("Percent MCAR", "Percent MAR", "N")
     condValue <- condValue[, condition]
@@ -37,7 +43,8 @@ getCutoffNested <- function(nested, parent, alpha = 0.05, usedFit = NULL, nVal =
             predictorVal[2] <- pmMARval)
     }
     predictorVal <- predictorVal[condition]
-    output <- getCutoff(Data, alpha, FALSE, usedFit, predictor = condValue, predictorVal = predictorVal, df = df)
-	
-	return(output)
-}
+    output <- getCutoff(Data, alpha, FALSE, usedFit, predictor = condValue, predictorVal = predictorVal, 
+        df = df)
+    
+    return(output)
+} 

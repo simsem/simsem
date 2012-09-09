@@ -2,18 +2,21 @@
 
 
 clean <- function(...) {
-object.l <- list(...)
-converged <- sapply(object.l, slot, name="converged")
-allConverged <- apply(converged, 1, all)
-if(all(!allConverged)) stop("All replications in the result object are not convergent. Thus, the result object cannot be used.")
-object.l <- lapply(object.l, cleanSimResult, converged=allConverged)
-if(length(object.l) == 1) object.l <- object.l[[1]]
-return(object.l)
+    object.l <- list(...)
+    converged <- sapply(object.l, slot, name = "converged")
+    allConverged <- apply(converged, 1, all)
+    if (all(!allConverged)) 
+        stop("All replications in the result object are not convergent. Thus, the result object cannot be used.")
+    object.l <- lapply(object.l, cleanSimResult, converged = allConverged)
+    if (length(object.l) == 1) 
+        object.l <- object.l[[1]]
+    return(object.l)
 }
 
 # cleanSimResult: Extract only converged replications in a result object
-cleanSimResult <- function(object, converged=NULL) {
-    if(is.null(converged)) converged <- object@converged
+cleanSimResult <- function(object, converged = NULL) {
+    if (is.null(converged)) 
+        converged <- object@converged
     object@nRep <- sum(converged)
     object@coef <- object@coef[converged, ]
     object@se <- object@se[converged, ]
@@ -39,6 +42,6 @@ cleanSimResult <- function(object, converged=NULL) {
         object@pmMCAR <- object@pmMCAR[converged]
     if (length(object@pmMAR) > 1) 
         object@pmMAR <- object@pmMAR[converged]
-	object@converged <- rep(TRUE, sum(converged))
+    object@converged <- rep(TRUE, sum(converged))
     return(object)
 } 
