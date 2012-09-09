@@ -1,40 +1,36 @@
 \name{analyze}
 \alias{analyze}
 \title{
-	TBA
+	Data analysis using the model specification
 }
 \description{
-	TBA
+	Data analysis using the model specification (\code{linkS4class{SimSem}}). Data will be multiply imputed if the \code{miss} argument is specified.
 }
 \usage{
-analyze(model, data, package="lavaan", miss=NULL, indLab=NULL, 
-aux=NULL, ...)
+analyze(model, data, package="lavaan", miss=NULL, aux=NULL, ...)
 }
 \arguments{
   \item{model}{
-	TBA
+	The model specification (\code{linkS4class{SimSem}})
 }
   \item{data}{
-	TBA
+	The target dataset 
 }
   \item{package}{
-	TBA
+	The package used in data analysis. Currently, only \code{lavaan} package can be used.
 }
   \item{miss}{ 
-	TBA
-}
-  \item{indLab}{ 
-	TBA
+	The missing object with the specification of auxiliary variable or the specification for the multiple imputation.
 }
   \item{aux}{ 
-	TBA
+	List of auxiliary variables
 }
   \item{\dots}{ 
-	TBA
+	Additional arguments in the \code{\link[lavaan]{lavaan}} function
 }
 }
 \value{
-	TBA
+	The \code{\linkS4class{lavaan}} object containing the output
 }
 \author{
 	Patrick Miller (Univeristy of Notre Dame; \email{pmille13@nd.edu})

@@ -1,28 +1,22 @@
-SimDataDist-class       Class '"SimDataDist"'
+SimDataDist-class       Class '"SimDataDist"': Data distribution object
 SimMatrix-class         Matrix object: Random parameters matrix
 SimMissing-class        Class '"SimMissing"'
-SimResult-class         Class '"SimResult"'
+SimResult-class         Class '"SimResult"': Simulation Result Object
 SimSem-class            Class '"SimSem"'
 SimVector-class         Vector object: Random parameters vector
-analyze                 TBA
+analyze                 Data analysis using the model specification
 anova,SimResult-method
                         Provide a comparison of nested models and
                         nonnested models across replications
 bind                    Specify matrices for Monte Carlo simulation of
                         structural equation models
 bindDist                Create a data distribution object.
-clean                   Extract only converged replications in the
-                        result objects
-cleanSimResult          Extract only converged replications in the
-                        result object
 continuousPower         Find power of model parameters when simulations
                         have randomly varying parameters
 createData              Create data from a set of drawn parameters.
 draw                    Draw parameters from a 'SimSem' object.
 estmodel                Shortcut for data analysis template for
                         simulation.
-extractLavaanFit        Extract fit indices from the lavaan object
-find2Dhist              Fit the 2D Kernel Density Estimate
 findFactorIntercept     Find factor intercept from regression
                         coefficient matrix and factor total means
 findFactorMean          Find factor total means from regression
@@ -53,17 +47,7 @@ findPower               Find a value of independent variables that
                         provides a given value of power.
 findRecursiveSet        Group variables regarding the position in
                         mediation chain
-findRowZero             Find rows in a matrix that all elements are
-                        zero in non-fixed subset rows and columns.
-findTargetPower         Find a value of varying parameters that
-                        provides a given value of power.
-findphist               Find the density (likelihood) of a pair value
-                        in 2D Kernel Density Estimate
-fitMeasuresChi          Find fit indices from the discrepancy values of
-                        the target model and null models.
 generate                Generate data using SimSem template
-getCondQtile            Get a quantile of a variable given values of
-                        predictors
 getCutoff               Find fit indices cutoff given a priori alpha
                         level
 getCutoffNested         Find fit indices cutoff for nested model
@@ -71,8 +55,6 @@ getCutoffNested         Find fit indices cutoff for nested model
 getCutoffNonNested      Find fit indices cutoff for non-nested model
                         comparison given a priori alpha level
 getExtraOutput          Get extra outputs from the result of simulation
-getKeywords             List of all keywords used in the 'simsem'
-                        package
 getPopulation           Extract the data generation population model
                         underlying a result object
 getPower                Find power of model parameters
@@ -84,31 +66,21 @@ getPowerFitNonNested    Find power in rejecting non-nested models based
                         on the differences in fit indices
 imposeMissing           Impose MAR, MCAR, planned missingness, or
                         attrition on a data set
-interpolate             Find the value of one vector relative to a
-                        value of another vector by interpolation
 likRatioFit             Find the likelihood ratio (or Bayes factor)
                         based on the bivariate distribution of fit
                         indices
-loadingFromAlpha        Find standardized factor loading from
-                        coefficient alpha
-miss                    TBA
+miss                    Specifying the missing template to impose on a
+                        dataset
 model                   Data generation template and analysis template
                         for simulation.
 model.lavaan            Build the data generation template and analysis
                         template from the lavaan result
 multipleAllEqual        Test whether all objects are equal
-overlapHist             Plot overlapping histograms
 pValue                  Find p-values (1 - percentile)
-pValueCondCutoff        Find a p value when the target is conditional
-                        (valid) on a specific value of a predictor
 pValueNested            Find p-values (1 - percentile) for a nested
                         model comparison
 pValueNonNested         Find p-values (1 - percentile) for a non-nested
                         model comparison
-pValueVariedCutoff      Find a p value when the cutoff is specified as
-                        a vector given the values of predictors
-plot3DQtile             Build a persepctive plot or contour plot of a
-                        quantile of predicted values
 plotCutoff              Plot sampling distributions of fit indices with
                         fit indices cutoffs
 plotCutoffNested        Plot sampling distributions of the differences
@@ -119,44 +91,24 @@ plotCutoffNonNested     Plot sampling distributions of the differences
                         fit indices cutoffs
 plotDist                Plot a distribution of a data distribution
                         object
-plotIndividualScatter   Plot an overlaying scatter plot visualizing the
-                        power of rejecting misspecified models
-plotLogisticFit         Plot multiple logistic curves for predicting
-                        whether rejecting a misspecified model
 plotMisfit              Plot the population misfit in the result object
-plotOverHist            Plot multiple overlapping histograms
 plotPower               Make a power plot of a parameter given varying
                         parameters
 plotPowerFit            Plot sampling distributions of fit indices that
-                        visualize power of rejecting datasets
-                        underlying misspecified models
-plotPowerFitDf          Plot sampling distributions of fit indices that
                         visualize power of rejecting datasets
                         underlying misspecified models
 plotPowerFitNested      Plot power of rejecting a nested model in a
                         nested model comparison by each fit index
 plotPowerFitNonNested   Plot power of rejecting a non-nested model
                         based on a difference in fit index
-plotPowerSig            Plot multiple logistic curves given a
-                        significance result matrix
-plotQtile               Build a scatterplot with overlaying line of
-                        quantiles of predicted values
-plotScatter             Plot overlaying scatter plots visualizing the
-                        power of rejecting misspecified models
 popDiscrepancy          Find the discrepancy value between two means
                         and covariance matrices
 popMisfitMACS           Find population misfit by sufficient statistics
-predProb                Function to get predicted probabilities from
-                        logistic regression
-printIfNotNull          Provide basic summary of each object if that
-                        object is not NULL.
-revText                 Reverse the proportion value by subtracting it
-                        from 1
+rawDraw                 Draw values from vector or matrix objects
 setPopulation           Set the data generation population model
                         underlying an object
 sim                     Run a monte carlo simulation with a structural
                         equation model.
-sortList                Sort two objects in a list
 summaryConverge         Provide a comparison between the
                         characteristics of convergent replications and
                         nonconvergent replications
@@ -167,15 +119,6 @@ summaryMisspec          Provide summary of the population misfit and
                         replications
 summaryParam            Provide summary of parameter estimates and
                         standard error across replications
-summaryPopulation       Summarize the data generation population model
-                        underlying a result object
+summaryPopulation       Summarize the population model used for data
+                        generation underlying a result object
 summaryShort            Provide short summary of an object.
-twoTailedPValue         Find two-tailed _p_ value from one-tailed _p_
-                        value
-validateCovariance      Validate whether all elements provides a good
-                        covariance matrix
-validateObject          Validate whether the drawn parameters are good.
-validatePath            Validate whether the regression coefficient (or
-                        loading) matrix is good
-whichMonotonic          Extract a part of a vector that is
-                        monotonically increasing or decreasing

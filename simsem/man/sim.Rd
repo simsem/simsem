@@ -111,7 +111,7 @@ paramOnly = FALSE, dataOnly=FALSE, ...)
 }
 }
 \value{
-	A result object (\item \code{\linkS4class{SimResult}})
+	A result object (\code{\linkS4class{SimResult}})
 }
 \author{
 	Patrick Miller (Univeristy of Notre Dame; \email{pmille13@nd.edu})

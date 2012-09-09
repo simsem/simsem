@@ -489,6 +489,24 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
     Result
 }
 
+# \title{
+	# Extract fit indices from the lavaan object
+# }
+# \description{
+	# Extract fit indices from the \code{lavaan} object
+# }
+# \usage{
+# extractLavaanFit(Output)
+# }
+# \arguments{
+  # \item{Output}{
+	# The \code{lavaan} object
+# }
+# }
+# \value{
+	# The renamed vector of fit measures
+# }
+
 extractLavaanFit <- function(Output) {
     Indices <- fitmeasures(Output)
     result <- c(Indices["chisq"], Indices["df"], Indices["pvalue"], Indices["baseline.chisq"], 

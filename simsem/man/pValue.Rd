@@ -16,7 +16,7 @@ pValue(target, dist, ...)
 }
 \arguments{
   \item{target}{
-	A value, multiple values, or a model output object used to find p values. This argument could be a cutoff of a fit index.
+	A value, multiple values, or a lavaan object used to find p values. This argument could be a cutoff of a fit index.
 }
   \item{dist}{
 	The comparison distribution, which can be a vector of numbers, a data frame, or a result object.
@@ -33,9 +33,9 @@ pValue(target, dist, ...)
 	\item{signature(target="numeric", dist="data.frame")}{
 		This method will find the \emph{p} value of each columns in the \code{dist} based on the value specified in the \code{target}. The additional arguments are \code{revDirec}, \code{x} , \code{xval}, \code{df}, and \code{asLogical}. The \code{revDirec} is a logical vector whether to reverse the direction of comparison. If \code{TRUE}, the proportion of the \code{dist} that is lower than \code{target} value is reported. If \code{FALSE}, the proportion of the \code{dist} that is higher than the \code{target} value is reported. The \code{x} is the \code{data.frame} of the predictor values. The number of rows of the \code{x} argument should be equal to the number of rows in the \code{dist}. The \code{xval} is the values of predictor that researchers would like to find the fit indices cutoffs from. The \code{df} is the degree of freedom used in spline method in predicting the fit indices by the predictors. If \code{df} is 0, the spline method will not be applied. The \code{asLogical} is to provide the result as the matrix of significance result (\code{TRUE}) or just the proportion of significance result (\code{FALSE}).
 	}
-	%\item{signature(target="SimModelOut", dist="SimResult")}{
-		%This method will find the \emph{p} value of the analysis result compared to the simulated sampling distribution in a result object (\code{SimResult}). The additional arguments are \code{usedFit}, \code{nVal}, \code{pmMCARval}, \code{pmMARval}, and \code{df}. The \code{usedFit} is the vector of names of fit indices that researchers wish to find the \emph{p} value from. The \code{nVal} is the sample size value that researchers wish to find the fit indices cutoffs from. The \code{pmMCARval} is the percent missing completely at random value that researchers wish to find the fit indices cutoffs from. The \code{pmMARval} is the percent missing at random value that researchers wish to find the fit indices cutoffs from. The \code{df} is the degree of freedom used in spline method in predicting the fit indices by the predictors. If \code{df} is 0, the spline method will not be applied.
-	%}
+	\item{signature(target="lavaan", dist="SimResult")}{
+		This method will find the \emph{p} value of the analysis result compared to the simulated sampling distribution in a result object (\code{SimResult}). The additional arguments are \code{usedFit}, \code{nVal}, \code{pmMCARval}, \code{pmMARval}, and \code{df}. The \code{usedFit} is the vector of names of fit indices that researchers wish to find the \emph{p} value from. The \code{nVal} is the sample size value that researchers wish to find the fit indices cutoffs from. The \code{pmMCARval} is the percent missing completely at random value that researchers wish to find the fit indices cutoffs from. The \code{pmMARval} is the percent missing at random value that researchers wish to find the fit indices cutoffs from. The \code{df} is the degree of freedom used in spline method in predicting the fit indices by the predictors. If \code{df} is 0, the spline method will not be applied.
+	}
 }}
 \value{
 	Mostly, this function provides a vector of \emph{p} values based on the comparison. If the target is a model output object and dist is a result object, the \emph{p} values of fit indices are provided, as well as two additional values: \code{andRule} and \code{orRule}. The \code{andRule} is based on the principle that the model is retained only when all fit indices provide good fit. The proportion is calculated from the number of replications that have all fit indices indicating a better model than the observed data. The proportion from the \code{andRule} is the most stringent rule in retaining a hypothesized model. The \code{orRule} is based on the principle that the model is retained only when at least one fit index provides good fit. The proportion is calculated from the number of replications that have at least one fit index indicating a better model than the observed data. The proportion from the \code{orRule} is the most lenient rule in retaining a hypothesized model.
@@ -48,9 +48,7 @@ pValue(target, dist, ...)
 }
 \seealso{
 	\itemize{
-		%\item \code{\linkS4class{SimModelOut}} to see how to get the analysis result of observed data
 		\item \code{\linkS4class{SimResult}} to run a simulation study
-		%\item \code{\link{runFit}} to run a simulation study based on the parameter estimates from the analysis result of observed data
 	}
 }
 \examples{

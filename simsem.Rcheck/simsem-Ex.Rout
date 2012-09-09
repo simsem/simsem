@@ -29,7 +29,7 @@ lavaan is BETA software! Please report any bugs.
 Loading required package: MASS
  
 ###############################################################################################
-This is simsem 0.3-3
+This is simsem 0.3-4
 simsem is BETA software! Please report any bugs.
 simsem was developed at the University of Kansas Center for Research Methods and Data Analysis.
 ###############################################################################################
@@ -42,14 +42,12 @@ simsem was developed at the University of Kansas Center for Research Methods and
 > flush(stderr()); flush(stdout())
 > 
 > ### Name: SimDataDist-class
-> ### Title: Class '"SimDataDist"'
+> ### Title: Class '"SimDataDist"': Data distribution object
 > ### Aliases: SimDataDist-class summary,SimDataDist-method
 > ###   plotDist,SimDataDist-method
 > ### Keywords: classes
 > 
 > ### ** Examples
-> 
-> # Need to be fixed
 > 
 > showClass("SimDataDist")
 Class "SimDataDist" [package "simsem"]
@@ -68,9 +66,25 @@ Class:      numeric    character         list      logical       vector
 > d7 <- list(df=5)
 > d8 <- list(df=6)
 > 
-> 
 > dist <- bindDist(c(rep("t", 4), rep("chisq", 8)), d1, d2, d3, d4, d5, d6, d7, d8, d5, d6, d7, d8)
-> 
+> summary(dist)
+DATA DISTRIBUTION OBJECT
+The number of variables is 12 
+Keep means and variances of the original scales: TRUE / TRUE / TRUE / TRUE / TRUE / TRUE / TRUE / TRUE / TRUE / TRUE / TRUE / TRUE 
+The list of distributions:
+1. t: df = 2
+2. t: df = 3
+3. t: df = 4
+4. t: df = 5
+5. chisq: df = 3
+6. chisq: df = 4
+7. chisq: df = 5
+8. chisq: df = 6
+9. chisq: df = 3
+10. chisq: df = 4
+11. chisq: df = 5
+12. chisq: df = 6
+Reverse (mirror) distribution: FALSE / FALSE / FALSE / FALSE / FALSE / FALSE / FALSE / FALSE / FALSE / FALSE / FALSE / FALSE 
 > 
 > 
 > 
@@ -124,7 +138,25 @@ Class:    matrix    matrix    matrix   logical
 [1] "Model misspecification"
      [,1]
 [1,]  NaN
-> # run(LX)
+> rawDraw(LX)
+$param
+     [,1] [,2]
+[1,]  0.7  0.0
+[2,]  0.7  0.0
+[3,]  0.7  0.0
+[4,]  0.0  0.7
+[5,]  0.0  0.7
+[6,]  0.0  0.7
+
+$paramMis
+     [,1] [,2]
+[1,]  0.7  0.0
+[2,]  0.7  0.0
+[3,]  0.7  0.0
+[4,]  0.0  0.7
+[5,]  0.0  0.7
+[6,]  0.0  0.7
+
 > 
 > LY <- bind(loading, "rnorm(1, 0.6, 0.05)")
 > summary(LY)
@@ -148,7 +180,25 @@ Class:    matrix    matrix    matrix   logical
 [1] "Model misspecification"
      [,1]
 [1,]  NaN
-> # run(LY)
+> rawDraw(LY)
+$param
+          [,1]      [,2]
+[1,] 0.6091822 0.0000000
+[2,] 0.5582186 0.0000000
+[3,] 0.6797640 0.0000000
+[4,] 0.0000000 0.6164754
+[5,] 0.0000000 0.5589766
+[6,] 0.0000000 0.6243715
+
+$paramMis
+          [,1]      [,2]
+[1,] 0.6091822 0.0000000
+[2,] 0.5582186 0.0000000
+[3,] 0.6797640 0.0000000
+[4,] 0.0000000 0.6164754
+[5,] 0.0000000 0.5589766
+[6,] 0.0000000 0.6243715
+
 > 
 > 
 > 
@@ -165,7 +215,12 @@ Class:    matrix    matrix    matrix   logical
 > 
 > ### ** Examples
 > 
-> # No Example
+> misstemplate <- miss(pmMCAR=0.2)
+> summary(misstemplate)
+MISSING OBJECT
+The method of missing data handling: Maximum Likelihood 
+Covariates (will not impose any missing values): none 
+Proportion of MCAR: 0.2 
 > 
 > 
 > 
@@ -176,12 +231,9 @@ Class:    matrix    matrix    matrix   logical
 > flush(stderr()); flush(stdout())
 > 
 > ### Name: SimResult-class
-> ### Title: Class '"SimResult"'
+> ### Title: Class '"SimResult"': Simulation Result Object
 > ### Aliases: SimResult-class summary,SimResult-method
-> ###   summaryPopulation,SimResult-method getPopulation,SimResult-method
-> ###   setPopulation,SimResult,data.frame-method
-> ###   setPopulation,SimResult,SimSet-method
-> ###   setPopulation,SimResult,VirtualRSet-method
+> ###   summaryShort,SimResult-method
 > ### Keywords: classes
 > 
 > ### ** Examples
@@ -204,10 +256,10 @@ Name:         pmMAR     extraOut       timing
 Class:       vector         list         list
 > loading <- matrix(0, 6, 1)
 > loading[1:6, 1] <- NA
-> LX <- bind(loading, 0.7)
-> RPH <- binds(diag(1))
-> RTD <- binds(diag(6))
-> CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+> LY <- bind(loading, 0.7)
+> RPS <- binds(diag(1))
+> RTE <- binds(diag(6))
+> CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA")
 > 
 > # We make the examples running only 5 replications to save time.
 > # In reality, more replications are needed.
@@ -432,10 +484,6 @@ AL: Regression Intercept of Factor.ETA
 ME: mean of Factor.ETA 
 [1] "0:" "0:"
 -------------------------- 
-> #run(CFA.Model)
-> 
-> #CFA.Model2 <- extract(CFA.Model, y=1:3, e=1)
-> #summary(CFA.Model2)
 > 
 > 
 > 
@@ -448,7 +496,7 @@ ME: mean of Factor.ETA
 > ### Name: SimVector-class
 > ### Title: Vector object: Random parameters vector
 > ### Aliases: SimVector-class summaryShort,SimVector-method
-> ###   summary,SimVector-method extract,SimVector-method
+> ###   summary,SimVector-method
 > ### Keywords: classes
 > 
 > ### ** Examples
@@ -464,7 +512,13 @@ Class:   vector   vector   vector
 > factor.mean <- rep(NA, 2)
 > factor.mean.starting <- c(5, 2)
 > AL <- bind(factor.mean, factor.mean.starting)
-> #run(AL)
+> rawDraw(AL)
+$param
+[1] 5 2
+
+$paramMis
+[1] 5 2
+
 > summary(AL)
 [1] "Random Vector Object."
 [1] "Free/Fixed Parameters:"
@@ -478,7 +532,6 @@ logical(0)
 > 
 > 
 > 
-> 
 > cleanEx()
 > nameEx("analyze")
 > ### * analyze
@@ -486,7 +539,7 @@ logical(0)
 > flush(stderr()); flush(stdout())
 > 
 > ### Name: analyze
-> ### Title: TBA
+> ### Title: Data analysis using the model specification
 > ### Aliases: analyze
 > 
 > ### ** Examples
@@ -524,83 +577,33 @@ logical(0)
 > 
 > ### ** Examples
 > 
-> loading1 <- matrix(0, 6, 1)
-> loading1[1:6, 1] <- NA
-> loading2 <- loading1
-> loading2[6,1] <- 0
-> LX1 <- bind(loading1, 0.7)
-> LX2 <- bind(loading2, 0.7)
-> RPH <- binds(diag(1))
-> RTD <- binds(diag(6))
-> CFA.Model1 <- model(LY = LX1, RPS = RPH, RTE = RTD, modelType="CFA")
-> CFA.Model2 <- model(LY = LX2, RPS = RPH, RTE = RTD, modelType="CFA")
-> 
-> # We make the examples running only 5 replications to save time.
-> # In reality, more replications are needed.
-> # Need to make sure that both simResult calls have the same seed!
-> Output1 <- sim(5, n=500, model=CFA.Model1, generate=CFA.Model1, seed=123567)
-Loading required package: parallel
-> Output2 <- sim(5, n=500, model=CFA.Model2, generate=CFA.Model1, seed=123567)
-> anova(Output1, Output2)
-$summary
-  df      chisq       CFI       TLI       RMSEA      AIC      BIC
-1  9   6.845657 0.9996655 1.0036849 0.004462633 7430.953 7506.816
-2 10 270.509542 0.7583201 0.6374801 0.227991831 7692.617 7764.265
-
-$diff
- Chisq diff     Df diff       Power    CFI diff    TLI diff  RMSEA diff 
-263.6638858   1.0000000   1.0000000  -0.2413454  -0.3662047   0.2235292 
-   AIC diff    BIC diff 
-261.6638858 257.4492777 
-
-$varyParam
-NULL
-
-> 
-> Output1b <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model1, generate=CFA.Model1, seed=123567)
-> Output2b <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model2, generate=CFA.Model1, seed=123567)
-> anova(Output1b, Output2b)
-$summary
-  df      chisq       CFI       TLI      RMSEA      AIC      BIC
-1  9   9.161416 0.9894247 0.9867162 0.02533748 4151.350 4212.954
-2 10 146.767548 0.7738087 0.6607130 0.22183507 4286.956 4345.138
-
-$diff
- Chisq diff     Df diff       Power    CFI diff    TLI diff  RMSEA diff 
-137.6061325   1.0000000   1.0000000  -0.2156160  -0.3260032   0.1964976 
-   AIC diff    BIC diff 
-135.6061325 132.1836683 
-
-$varyParam
-     N power.1
-1   50       1
-2   74       1
-3   97       1
-4  121       1
-5  145       1
-6  168       1
-7  192       1
-8  216       1
-9  239       1
-10 263       1
-11 287       1
-12 311       1
-13 334       1
-14 358       1
-15 382       1
-16 405       1
-17 429       1
-18 453       1
-19 476       1
-20 500       1
-
+> ## Not run: 
+> ##D loading1 <- matrix(0, 6, 1)
+> ##D loading1[1:6, 1] <- NA
+> ##D loading2 <- loading1
+> ##D loading2[6,1] <- 0
+> ##D LX1 <- bind(loading1, 0.7)
+> ##D LX2 <- bind(loading2, 0.7)
+> ##D RPH <- binds(diag(1))
+> ##D RTD <- binds(diag(6))
+> ##D CFA.Model1 <- model(LY = LX1, RPS = RPH, RTE = RTD, modelType="CFA")
+> ##D CFA.Model2 <- model(LY = LX2, RPS = RPH, RTE = RTD, modelType="CFA")
+> ##D 
+> ##D # We make the examples running only 5 replications to save time.
+> ##D # In reality, more replications are needed.
+> ##D # Need to make sure that both simResult calls have the same seed!
+> ##D Output1 <- sim(5, n=500, model=CFA.Model1, generate=CFA.Model1, seed=123567)
+> ##D Output2 <- sim(5, n=500, model=CFA.Model2, generate=CFA.Model1, seed=123567)
+> ##D anova(Output1, Output2)
+> ##D 
+> ##D Output1b <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model1, generate=CFA.Model1, seed=123567)
+> ##D Output2b <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model2, generate=CFA.Model1, seed=123567)
+> ##D anova(Output1b, Output2b)
+> ## End(Not run)
 > 
 > 
 > 
 > cleanEx()
-
-detaching 'package:parallel'
-
 > nameEx("bind")
 > ### * bind
 > 
@@ -679,38 +682,6 @@ detaching 'package:parallel'
 > 
 > 
 > dist <- bindDist(c(rep("t", 4), rep("chisq", 8)), d1, d2, d3, d4, d5, d6, d7, d8, d5, d6, d7, d8)
-> 
-> 
-> 
-> cleanEx()
-> nameEx("clean")
-> ### * clean
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: clean
-> ### Title: Extract only converged replications in the result objects
-> ### Aliases: clean
-> 
-> ### ** Examples
-> 
-> # No example
-> 
-> 
-> 
-> cleanEx()
-> nameEx("cleanSimResult")
-> ### * cleanSimResult
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: cleanSimResult
-> ### Title: Extract only converged replications in the result object
-> ### Aliases: cleanSimResult
-> 
-> ### ** Examples
-> 
-> # No example
 > 
 > 
 > 
@@ -838,38 +809,6 @@ detaching 'package:parallel'
 > loading[4:6, 2] <- NA
 > 
 > CFA.Model <- estmodel(LY = loading, modelType = "CFA")
-> 
-> 
-> 
-> cleanEx()
-> nameEx("extractLavaanFit")
-> ### * extractLavaanFit
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: extractLavaanFit
-> ### Title: Extract fit indices from the lavaan object
-> ### Aliases: extractLavaanFit
-> 
-> ### ** Examples
-> 
-> # No example
-> 
-> 
-> 
-> cleanEx()
-> nameEx("find2Dhist")
-> ### * find2Dhist
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: find2Dhist
-> ### Title: Fit the 2D Kernel Density Estimate
-> ### Aliases: find2Dhist
-> 
-> ### ** Examples
-> 
-> # No example
 > 
 > 
 > 
@@ -1206,74 +1145,6 @@ detaching 'package:parallel'
 > 
 > 
 > cleanEx()
-> nameEx("findRowZero")
-> ### * findRowZero
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: findRowZero
-> ### Title: Find rows in a matrix that all elements are zero in non-fixed
-> ###   subset rows and columns.
-> ### Aliases: findRowZero
-> 
-> ### ** Examples
-> 
-> # No example
-> 
-> 
-> 
-> cleanEx()
-> nameEx("findTargetPower")
-> ### * findTargetPower
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: findTargetPower
-> ### Title: Find a value of varying parameters that provides a given value
-> ###   of power.
-> ### Aliases: findTargetPower
-> 
-> ### ** Examples
-> 
-> # No example
-> 
-> 
-> 
-> cleanEx()
-> nameEx("findphist")
-> ### * findphist
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: findphist
-> ### Title: Find the density (likelihood) of a pair value in 2D Kernel
-> ###   Density Estimate
-> ### Aliases: findphist
-> 
-> ### ** Examples
-> 
-> # No example
-> 
-> 
-> 
-> cleanEx()
-> nameEx("fitMeasuresChi")
-> ### * fitMeasuresChi
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: fitMeasuresChi
-> ### Title: Find fit indices from the discrepancy values of the target model
-> ###   and null models.
-> ### Aliases: fitMeasuresChi
-> 
-> ### ** Examples
-> 
-> # No example
-> 
-> 
-> 
-> cleanEx()
 > nameEx("generate")
 > ### * generate
 > 
@@ -1301,22 +1172,6 @@ detaching 'package:parallel'
 > CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
 > 
 > dat <- generate(CFA.Model,200)
-> 
-> 
-> 
-> cleanEx()
-> nameEx("getCondQtile")
-> ### * getCondQtile
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: getCondQtile
-> ### Title: Get a quantile of a variable given values of predictors
-> ### Aliases: getCondQtile
-> 
-> ### ** Examples
-> 
-> # No example
 > 
 > 
 > 
@@ -1478,24 +1333,6 @@ detaching 'package:parallel'
 > ##D Output <- sim(5, n=200, model=CFA.Model, outfun=outfun)
 > ##D getExtraOutput(Output)
 > ## End(Not run)
-> 
-> 
-> 
-> cleanEx()
-> nameEx("getKeywords")
-> ### * getKeywords
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: getKeywords
-> ### Title: List of all keywords used in the 'simsem' package
-> ### Aliases: getKeywords
-> 
-> ### ** Examples
-> 
-> # This function is not a public function.
-> 
-> # getKeywords()
 > 
 > 
 > 
@@ -2108,23 +1945,6 @@ detaching 'package:parallel'
 > 
 > 
 > cleanEx()
-> nameEx("interpolate")
-> ### * interpolate
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: interpolate
-> ### Title: Find the value of one vector relative to a value of another
-> ###   vector by interpolation
-> ### Aliases: interpolate
-> 
-> ### ** Examples
-> 
-> # No Example
-> 
-> 
-> 
-> cleanEx()
 > nameEx("likRatioFit")
 > ### * likRatioFit
 > 
@@ -2177,36 +1997,19 @@ detaching 'package:parallel'
 > 
 > 
 > cleanEx()
-> nameEx("loadingFromAlpha")
-> ### * loadingFromAlpha
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: loadingFromAlpha
-> ### Title: Find standardized factor loading from coefficient alpha
-> ### Aliases: loadingFromAlpha
-> 
-> ### ** Examples
-> 
->     loadingFromAlpha(0.8, 4)
-[1] 0.7071068
-> 
-> 
-> 
-> cleanEx()
 > nameEx("miss")
 > ### * miss
 > 
 > flush(stderr()); flush(stdout())
 > 
 > ### Name: miss
-> ### Title: TBA
+> ### Title: Specifying the missing template to impose on a dataset
 > ### Aliases: miss
 > 
 > ### ** Examples
 > 
 > #Example of imposing 10% MCAR missing in all variables with no imputations (FIML method)
-> Missing <- miss(pmMCAR=0.1)
+> Missing <- miss(pmMCAR=0.1, ignoreCols="group")
 > summary(Missing)
 MISSING OBJECT
 The method of missing data handling: Maximum Likelihood 
@@ -2224,11 +2027,77 @@ Proportion of MCAR: 0.1
 > dat <- generate(CFA.Model, n = 20)
 > 
 > #Impose missing
-> #dat <- run(Missing, dat)
+> dat <- impose(Missing, dat)
 > 
 > #Analyze data
-> #out <- run(SimModel, dat)
-> #summary(out)
+> out <- analyze(CFA.Model, dat)
+> summary(out)
+lavaan (0.4-14) converged normally after 26 iterations
+
+  Number of observations                            20
+
+  Number of missing patterns                         9
+
+  Estimator                                         ML
+  Minimum Function Chi-square                    4.205
+  Degrees of freedom                                 9
+  P-value                                        0.897
+
+Parameter estimates:
+
+  Information                                 Observed
+  Standard Errors                             Standard
+
+                   Estimate  Std.err  Z-value  P(>|z|)
+Latent variables:
+  f1 =~
+    y1                0.673    0.191    3.520    0.000
+    y2                0.559    0.170    3.285    0.001
+    y3                0.633    0.181    3.505    0.000
+    y4                0.436    0.211    2.066    0.039
+    y5                0.371    0.125    2.957    0.003
+    y6                1.068    0.152    7.042    0.000
+
+Covariances:
+  y1 ~~
+    y2                0.000
+    y3                0.000
+    y4                0.000
+    y5                0.000
+    y6                0.000
+  y2 ~~
+    y3                0.000
+    y4                0.000
+    y5                0.000
+    y6                0.000
+  y3 ~~
+    y4                0.000
+    y5                0.000
+    y6                0.000
+  y4 ~~
+    y5                0.000
+    y6                0.000
+  y5 ~~
+    y6                0.000
+
+Intercepts:
+    f1                0.000
+    y1               -0.171    0.222   -0.771    0.441
+    y2               -0.001    0.200   -0.007    0.994
+    y3                0.011    0.209    0.054    0.957
+    y4               -0.208    0.248   -0.839    0.401
+    y5               -0.194    0.144   -1.344    0.179
+    y6               -0.230    0.222   -1.035    0.301
+
+Variances:
+    f1                1.000
+    y1                0.504    0.171
+    y2                0.416    0.132
+    y3                0.396    0.133
+    y4                0.889    0.299
+    y5                0.267    0.081
+    y6               -0.167    0.113
+
 > 
 > #Example to create simMissing object for 3 forms design at 3 timepoints with 10 imputations
 > Missing <- miss(nforms=3, timePoints=3, numImps=10)
@@ -2308,26 +2177,6 @@ Proportion of MCAR: 0.1
 > 
 > 
 > cleanEx()
-> nameEx("overlapHist")
-> ### * overlapHist
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: overlapHist
-> ### Title: Plot overlapping histograms
-> ### Aliases: overlapHist
-> 
-> ### ** Examples
-> 
-> # This function is not a public function.
-> 
-> # a <- rnorm(10000, 0, 1)
-> # b <- rnorm(10000, 1, 1.5)
-> # overlapHist(a, b, main="Example")
-> 
-> 
-> 
-> cleanEx()
 > nameEx("pValue")
 > ### * pValue
 > 
@@ -2364,23 +2213,6 @@ Proportion of MCAR: 0.1
 > ##D simout <- sim(20, n=nrow(HolzingerSwineford1939), mismodel)
 > ##D pValue(out, simout)
 > ## End(Not run)
-> 
-> 
-> 
-> cleanEx()
-> nameEx("pValueCondCutoff")
-> ### * pValueCondCutoff
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: pValueCondCutoff
-> ### Title: Find a p value when the target is conditional (valid) on a
-> ###   specific value of a predictor
-> ### Aliases: pValueCondCutoff
-> 
-> ### ** Examples
-> 
-> # No example
 > 
 > 
 > 
@@ -2476,40 +2308,6 @@ Proportion of MCAR: 0.1
 > ##D # The output may contain some warnings here. When the number of replications increases (e.g., 1000), the warnings should disappear.
 > ##D pValueNonNested(out.A, out.B, output.A.A, output.A.B, output.B.A, output.B.B)
 > ## End(Not run)
-> 
-> 
-> 
-> cleanEx()
-> nameEx("pValueVariedCutoff")
-> ### * pValueVariedCutoff
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: pValueVariedCutoff
-> ### Title: Find a p value when the cutoff is specified as a vector given
-> ###   the values of predictors
-> ### Aliases: pValueVariedCutoff
-> 
-> ### ** Examples
-> 
-> # No example
-> 
-> 
-> 
-> cleanEx()
-> nameEx("plot3DQtile")
-> ### * plot3DQtile
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: plot3DQtile
-> ### Title: Build a persepctive plot or contour plot of a quantile of
-> ###   predicted values
-> ### Aliases: plot3DQtile
-> 
-> ### ** Examples
-> 
-> # No example
 > 
 > 
 > 
@@ -2662,40 +2460,6 @@ Proportion of MCAR: 0.1
 
 detaching 'package:copula'
 
-> nameEx("plotIndividualScatter")
-> ### * plotIndividualScatter
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: plotIndividualScatter
-> ### Title: Plot an overlaying scatter plot visualizing the power of
-> ###   rejecting misspecified models
-> ### Aliases: plotIndividualScatter
-> 
-> ### ** Examples
-> 
-> # No example
-> 
-> 
-> 
-> cleanEx()
-> nameEx("plotLogisticFit")
-> ### * plotLogisticFit
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: plotLogisticFit
-> ### Title: Plot multiple logistic curves for predicting whether rejecting a
-> ###   misspecified model
-> ### Aliases: plotLogisticFit
-> 
-> ### ** Examples
-> 
-> # No example
-> 
-> 
-> 
-> cleanEx()
 > nameEx("plotMisfit")
 > ### * plotMisfit
 > 
@@ -2738,22 +2502,6 @@ Loading required package: parallel
 
 detaching 'package:parallel'
 
-> nameEx("plotOverHist")
-> ### * plotOverHist
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: plotOverHist
-> ### Title: Plot multiple overlapping histograms
-> ### Aliases: plotOverHist
-> 
-> ### ** Examples
-> 
-> # No example
-> 
-> 
-> 
-> cleanEx()
 > nameEx("plotPower")
 > ### * plotPower
 > 
@@ -2833,23 +2581,6 @@ detaching 'package:parallel'
 > ##D plotPowerFit(Output.ALT2, nullObject=Output.NULL2, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
 > ##D plotPowerFit(Output.ALT2, cutoff=Rule.of.thumb, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
 > ## End(Not run)
-> 
-> 
-> 
-> cleanEx()
-> nameEx("plotPowerFitDf")
-> ### * plotPowerFitDf
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: plotPowerFitDf
-> ### Title: Plot sampling distributions of fit indices that visualize power
-> ###   of rejecting datasets underlying misspecified models
-> ### Aliases: plotPowerFitDf
-> 
-> ### ** Examples
-> 
-> # No example
 > 
 > 
 > 
@@ -2948,56 +2679,6 @@ detaching 'package:parallel'
 > 
 > 
 > cleanEx()
-> nameEx("plotPowerSig")
-> ### * plotPowerSig
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: plotPowerSig
-> ### Title: Plot multiple logistic curves given a significance result matrix
-> ### Aliases: plotPowerSig
-> 
-> ### ** Examples
-> 
-> # No example
-> 
-> 
-> 
-> cleanEx()
-> nameEx("plotQtile")
-> ### * plotQtile
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: plotQtile
-> ### Title: Build a scatterplot with overlaying line of quantiles of
-> ###   predicted values
-> ### Aliases: plotQtile
-> 
-> ### ** Examples
-> 
-> # No example
-> 
-> 
-> 
-> cleanEx()
-> nameEx("plotScatter")
-> ### * plotScatter
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: plotScatter
-> ### Title: Plot overlaying scatter plots visualizing the power of rejecting
-> ###   misspecified models
-> ### Aliases: plotScatter
-> 
-> ### ** Examples
-> 
-> # No example
-> 
-> 
-> 
-> cleanEx()
 > nameEx("popDiscrepancy")
 > ### * popDiscrepancy
 > 
@@ -3043,56 +2724,71 @@ detaching 'package:parallel'
 > 
 > 
 > cleanEx()
-> nameEx("predProb")
-> ### * predProb
+> nameEx("rawDraw")
+> ### * rawDraw
 > 
 > flush(stderr()); flush(stdout())
 > 
-> ### Name: predProb
-> ### Title: Function to get predicted probabilities from logistic regression
-> ### Aliases: predProb
+> ### Name: rawDraw
+> ### Title: Draw values from vector or matrix objects
+> ### Aliases: rawDraw
 > 
 > ### ** Examples
 > 
-> # No example
-> 
-> 
-> 
-> cleanEx()
-> nameEx("printIfNotNull")
-> ### * printIfNotNull
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: printIfNotNull
-> ### Title: Provide basic summary of each object if that object is not NULL.
-> ### Aliases: printIfNotNull
-> 
-> ### ** Examples
-> 
-> # This function is not public
-> 
-> # AL <- simVector(rep(NA, 5), "0")
-> # printIfNotNull(AL, "Factor mean")
-> 
-> 
-> 
-> cleanEx()
-> nameEx("revText")
-> ### * revText
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: revText
-> ### Title: Reverse the proportion value by subtracting it from 1
-> ### Aliases: revText
-> 
-> ### ** Examples
-> 
-> # This is a private function.
-> 
-> # revText(.96)
-> # revText("> .60")
+> loading <- matrix(0, 7, 3)
+> loading[1:3, 1] <- NA
+> loading[4:6, 2] <- NA
+> loading[1:7, 3] <- NA
+> loadingVal <- matrix(0, 7, 3)
+> loadingVal[1:3, 1] <- "runif(1, 0.5, 0.7)"
+> loadingVal[4:6, 2] <- "runif(1, 0.5, 0.7)"
+> loadingVal[1:6, 3] <- "runif(1, 0.3, 0.5)"
+> loadingVal[7, 3] <- 1
+> loading.mis <- matrix("runif(1, -0.2, 0.2)", 7, 3)
+> loading.mis[is.na(loading)] <- 0
+> loading.mis[,3] <- 0
+> loading.mis[7,] <- 0
+> loading[1:3, 1] <- "con1"
+> LY <- bind(loading, loadingVal, misspec=loading.mis)
+> rawDraw(LY)
+$param
+         [,1]      [,2]      [,3]
+[1,] 0.576007 0.0000000 0.4739382
+[2,] 0.576007 0.0000000 0.3680698
+[3,] 0.576007 0.0000000 0.3964160
+[4,] 0.000000 0.5772228 0.4199132
+[5,] 0.000000 0.5026781 0.3987083
+[6,] 0.000000 0.5764776 0.3372435
+[7,] 0.000000 0.0000000 1.0000000
+
+$paramMis
+           [,1]        [,2]      [,3]
+[1,]  0.5760070  0.06066951 0.4739382
+[2,]  0.5760070 -0.14977796 0.3680698
+[3,]  0.5760070 -0.09311173 0.3964160
+[4,]  0.1109781  0.57722282 0.4199132
+[5,]  0.1738821  0.50267807 0.3987083
+[6,] -0.1151430  0.57647759 0.3372435
+[7,]  0.0000000  0.00000000 1.0000000
+
+> rawDraw(LY, parMisOnly=TRUE)
+           [,1]        [,2]      [,3]
+[1,]  0.6654747  0.08948438 0.4059439
+[2,]  0.6654747 -0.03549023 0.4578712
+[3,]  0.6654747  0.12837852 0.3046662
+[4,]  0.0673867  0.62941204 0.3954460
+[5,]  0.1176959  0.65658655 0.4464627
+[6,] -0.1568225  0.61060726 0.4385463
+[7,]  0.0000000  0.00000000 1.0000000
+> rawDraw(LY, misOnly=TRUE)
+            [,1]        [,2] [,3]
+[1,]  0.00000000 -0.17172838    0
+[2,]  0.00000000 -0.16021354    0
+[3,]  0.00000000 -0.07349132    0
+[4,]  0.14448379  0.00000000    0
+[5,] -0.02476116  0.00000000    0
+[6,] -0.10208109  0.00000000    0
+[7,]  0.00000000  0.00000000    0
 > 
 > 
 > 
@@ -3201,7 +2897,7 @@ detaching 'package:parallel'
 > 
 > CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
 > 
-> Output <- sim(20, CFA.Model,n=200)
+> Output <- sim(5, CFA.Model,n=200)
 Loading required package: parallel
 > summary(Output)
 RESULT OBJECT
@@ -3210,68 +2906,386 @@ Model Type
 ========= Fit Indices Cutoffs ============
            Alpha
 Fit Indices      0.1     0.05     0.01    0.001     Mean       SD
-      Chi   1.50e+01 1.68e+01 1.95e+01 2.01e+01 9.45e+00  4.26841
-      AIC   3.19e+03 3.20e+03 3.21e+03 3.21e+03 3.13e+03 44.89252
-      BIC   3.25e+03 3.26e+03 3.27e+03 3.27e+03 3.19e+03 44.89252
-      RMSEA 6.63e-02 7.41e-02 8.47e-02 8.70e-02 2.53e-02  0.02940
-      CFI   9.73e-01 9.72e-01 9.62e-01 9.60e-01 9.92e-01  0.01154
-      TLI   9.49e-01 9.47e-01 9.29e-01 9.25e-01 9.91e-01  0.02659
-      SRMR  3.63e-02 3.95e-02 4.27e-02 4.35e-02 2.90e-02  0.00723
+      Chi   1.71e+01 1.86e+01 1.99e+01 2.02e+01 1.08e+01  5.76562
+      AIC   3.15e+03 3.16e+03 3.17e+03 3.17e+03 3.11e+03 39.64869
+      BIC   3.21e+03 3.22e+03 3.23e+03 3.23e+03 3.17e+03 39.64869
+      RMSEA 7.35e-02 8.04e-02 8.59e-02 8.72e-02 2.80e-02  0.04027
+      CFI   9.71e-01 9.65e-01 9.61e-01 9.60e-01 9.89e-01  0.01736
+      TLI   9.45e-01 9.35e-01 9.27e-01 9.25e-01 9.84e-01  0.03558
+      SRMR  3.78e-02 3.85e-02 3.91e-02 3.92e-02 3.01e-02  0.00759
 ========= Parameter Estimates and Standard Errors ============
          Estimate.Average Estimate.SD Average.SE Power..Not.equal.0. Std.Est
-1.f1=~y1            0.682       0.094      0.074                1.00   0.691
-1.f1=~y2            0.680       0.092      0.074                1.00   0.680
-1.f1=~y3            0.704       0.069      0.075                1.00   0.705
-1.f2=~y4            0.715       0.077      0.074                1.00   0.710
-1.f2=~y5            0.711       0.090      0.072                1.00   0.721
-1.f2=~y6            0.684       0.076      0.073                1.00   0.686
-1.y1~~y1            0.501       0.069      0.076                1.00   0.520
-1.y2~~y2            0.528       0.090      0.077                1.00   0.532
-1.y3~~y3            0.496       0.061      0.078                1.00   0.500
-1.y4~~y4            0.499       0.102      0.077                1.00   0.492
-1.y5~~y5            0.458       0.058      0.074                1.00   0.478
-1.y6~~y6            0.520       0.077      0.075                1.00   0.526
-1.f2~~f1            0.487       0.095      0.079                1.00   0.487
-1.y1~1              0.010       0.068      0.070                0.00   0.009
-1.y2~1              0.027       0.070      0.071                0.00   0.026
-1.y3~1              0.019       0.102      0.071                0.15   0.019
-1.y4~1              0.035       0.076      0.071                0.10   0.033
-1.y5~1              0.025       0.064      0.070                0.05   0.025
-1.y6~1              0.041       0.069      0.070                0.05   0.041
+1.f1=~y1            0.649       0.107      0.073                 1.0   0.671
+1.f1=~y2            0.649       0.071      0.073                 1.0   0.669
+1.f1=~y3            0.711       0.076      0.076                 1.0   0.710
+1.f2=~y4            0.720       0.100      0.072                 1.0   0.731
+1.f2=~y5            0.802       0.107      0.075                 1.0   0.776
+1.f2=~y6            0.614       0.084      0.071                 1.0   0.629
+1.y1~~y1            0.503       0.085      0.076                 1.0   0.546
+1.y2~~y2            0.517       0.090      0.075                 1.0   0.550
+1.y3~~y3            0.490       0.044      0.082                 1.0   0.494
+1.y4~~y4            0.444       0.118      0.074                 1.0   0.461
+1.y5~~y5            0.414       0.059      0.082                 1.0   0.395
+1.y6~~y6            0.565       0.047      0.071                 1.0   0.601
+1.f2~~f1            0.459       0.101      0.079                 1.0   0.459
+1.y1~1              0.001       0.063      0.068                 0.0   0.001
+1.y2~1              0.025       0.065      0.069                 0.0   0.027
+1.y3~1              0.019       0.053      0.071                 0.0   0.019
+1.y4~1              0.071       0.094      0.070                 0.2   0.068
+1.y5~1              0.050       0.039      0.073                 0.0   0.047
+1.y6~1              0.058       0.087      0.069                 0.2   0.059
          Std.Est.SD Average.Param Average.Bias Coverage
-1.f1=~y1      0.056          0.70       -0.018     0.90
-1.f1=~y2      0.072          0.70       -0.020     0.90
-1.f1=~y3      0.053          0.70        0.004     0.95
-1.f2=~y4      0.063          0.70        0.015     0.90
-1.f2=~y5      0.051          0.70        0.011     0.90
-1.f2=~y6      0.060          0.70       -0.016     0.95
-1.y1~~y1      0.078          0.51       -0.009     0.95
-1.y2~~y2      0.097          0.51        0.018     0.95
-1.y3~~y3      0.073          0.51       -0.014     1.00
-1.y4~~y4      0.091          0.51       -0.011     0.90
-1.y5~~y5      0.075          0.51       -0.052     0.95
-1.y6~~y6      0.081          0.51        0.010     1.00
-1.f2~~f1      0.095          0.50       -0.013     0.95
-1.y1~1        0.067          0.00        0.010     1.00
-1.y2~1        0.071          0.00        0.027     1.00
-1.y3~1        0.101          0.00        0.019     0.85
-1.y4~1        0.074          0.00        0.035     0.90
-1.y5~1        0.066          0.00        0.025     0.95
-1.y6~1        0.070          0.00        0.041     0.95
+1.f1=~y1      0.074          0.70       -0.051      0.8
+1.f1=~y2      0.060          0.70       -0.051      1.0
+1.f1=~y3      0.051          0.70        0.011      1.0
+1.f2=~y4      0.079          0.70        0.020      0.8
+1.f2=~y5      0.059          0.70        0.102      0.6
+1.f2=~y6      0.061          0.70       -0.086      0.8
+1.y1~~y1      0.100          0.51       -0.007      1.0
+1.y2~~y2      0.082          0.51        0.007      1.0
+1.y3~~y3      0.070          0.51       -0.020      1.0
+1.y4~~y4      0.117          0.51       -0.066      0.8
+1.y5~~y5      0.088          0.51       -0.096      1.0
+1.y6~~y6      0.079          0.51        0.055      1.0
+1.f2~~f1      0.101          0.50       -0.041      1.0
+1.y1~1        0.067          0.00        0.001      1.0
+1.y2~1        0.068          0.00        0.025      1.0
+1.y3~1        0.053          0.00        0.019      1.0
+1.y4~1        0.094          0.00        0.071      0.8
+1.y5~1        0.033          0.00        0.050      1.0
+1.y6~1        0.090          0.00        0.058      0.8
 ========= Correlation between Fit Indices ============
          Chi    AIC    BIC  RMSEA    CFI    TLI   SRMR
-Chi    1.000  0.206  0.206  0.959 -0.951 -0.993  0.841
-AIC    0.206  1.000  1.000  0.215 -0.184 -0.211  0.192
-BIC    0.206  1.000  1.000  0.215 -0.184 -0.211  0.192
-RMSEA  0.959  0.215  0.215  1.000 -0.946 -0.958  0.776
-CFI   -0.951 -0.184 -0.184 -0.946  1.000  0.962 -0.742
-TLI   -0.993 -0.211 -0.211 -0.958  0.962  1.000 -0.846
-SRMR   0.841  0.192  0.192  0.776 -0.742 -0.846  1.000
+Chi    1.000 -0.057 -0.057  0.981 -0.994 -0.999  0.881
+AIC   -0.057  1.000  1.000 -0.082  0.108  0.055  0.072
+BIC   -0.057  1.000  1.000 -0.082  0.108  0.055  0.072
+RMSEA  0.981 -0.082 -0.082  1.000 -0.961 -0.973  0.893
+CFI   -0.994  0.108  0.108 -0.961  1.000  0.996 -0.831
+TLI   -0.999  0.055  0.055 -0.973  0.996  1.000 -0.873
+SRMR   0.881  0.072  0.072  0.893 -0.831 -0.873  1.000
 ================== Replications =====================
 Number of Replications
-[1] 20
+[1] 5
 Number of Converged Replications
-[1] 20
+[1] 5
+> 
+> # Example of data transformation
+> fun1 <- function(data) {
++ 	temp <- scale(data)
++ 	temp[,"group"] <- data[,"group"]
++ 	as.data.frame(temp)
++ }
+> 
+> # Example of additional output
+> fun2 <- function(out) {
++ 	inspect(out, "mi")
++ }
+> Output <- sim(5, CFA.Model,n=200,datafun=fun1, outfun=fun2)
+> summary(Output)
+RESULT OBJECT
+Model Type
+[1] "CFA"
+========= Fit Indices Cutoffs ============
+           Alpha
+Fit Indices      0.1     0.05     0.01    0.001     Mean       SD
+      Chi   1.71e+01 1.86e+01 1.99e+01 2.02e+01 1.08e+01  5.76562
+      AIC   3.16e+03 3.16e+03 3.16e+03 3.16e+03 3.14e+03 31.77623
+      BIC   3.22e+03 3.22e+03 3.22e+03 3.22e+03 3.20e+03 31.77623
+      RMSEA 7.35e-02 8.04e-02 8.59e-02 8.72e-02 2.80e-02  0.04027
+      CFI   9.71e-01 9.65e-01 9.61e-01 9.60e-01 9.89e-01  0.01736
+      TLI   9.45e-01 9.35e-01 9.27e-01 9.25e-01 9.84e-01  0.03558
+      SRMR  3.78e-02 3.85e-02 3.91e-02 3.92e-02 3.01e-02  0.00759
+========= Parameter Estimates and Standard Errors ============
+         Estimate.Average Estimate.SD Average.SE Power..Not.equal.0. Std.Est
+1.f1=~y1            0.669       0.074      0.076                   1   0.671
+1.f1=~y2            0.667       0.060      0.075                   1   0.669
+1.f1=~y3            0.708       0.051      0.076                   1   0.710
+1.f2=~y4            0.729       0.079      0.073                   1   0.731
+1.f2=~y5            0.774       0.058      0.072                   1   0.776
+1.f2=~y6            0.628       0.061      0.072                   1   0.629
+1.y1~~y1            0.543       0.099      0.080                   1   0.546
+1.y2~~y2            0.547       0.082      0.079                   1   0.550
+1.y3~~y3            0.491       0.070      0.081                   1   0.494
+1.y4~~y4            0.459       0.117      0.076                   1   0.461
+1.y5~~y5            0.393       0.087      0.077                   1   0.395
+1.y6~~y6            0.598       0.079      0.075                   1   0.601
+1.f2~~f1            0.459       0.101      0.079                   1   0.459
+1.y1~1              0.000       0.000      0.071                   0   0.000
+1.y2~1              0.000       0.000      0.071                   0   0.000
+1.y3~1              0.000       0.000      0.071                   0   0.000
+1.y4~1              0.000       0.000      0.071                   0   0.000
+1.y5~1              0.000       0.000      0.071                   0   0.000
+1.y6~1              0.000       0.000      0.071                   0   0.000
+         Std.Est.SD Average.Param Average.Bias Coverage
+1.f1=~y1      0.074          0.70       -0.031      1.0
+1.f1=~y2      0.060          0.70       -0.033      1.0
+1.f1=~y3      0.051          0.70        0.008      1.0
+1.f2=~y4      0.079          0.70        0.029      1.0
+1.f2=~y5      0.059          0.70        0.074      1.0
+1.f2=~y6      0.061          0.70       -0.072      1.0
+1.y1~~y1      0.100          0.51        0.033      1.0
+1.y2~~y2      0.082          0.51        0.037      1.0
+1.y3~~y3      0.070          0.51       -0.019      1.0
+1.y4~~y4      0.117          0.51       -0.051      0.8
+1.y5~~y5      0.088          0.51       -0.117      0.8
+1.y6~~y6      0.079          0.51        0.088      0.8
+1.f2~~f1      0.101          0.50       -0.041      1.0
+1.y1~1        0.000          0.00        0.000      1.0
+1.y2~1        0.000          0.00        0.000      1.0
+1.y3~1        0.000          0.00        0.000      1.0
+1.y4~1        0.000          0.00        0.000      1.0
+1.y5~1        0.000          0.00        0.000      1.0
+1.y6~1        0.000          0.00        0.000      1.0
+========= Correlation between Fit Indices ============
+         Chi    AIC    BIC  RMSEA    CFI    TLI   SRMR
+Chi    1.000 -0.443 -0.443  0.981 -0.994 -0.999  0.881
+AIC   -0.443  1.000  1.000 -0.606  0.363  0.409 -0.595
+BIC   -0.443  1.000  1.000 -0.606  0.363  0.409 -0.595
+RMSEA  0.981 -0.606 -0.606  1.000 -0.961 -0.973  0.893
+CFI   -0.994  0.363  0.363 -0.961  1.000  0.996 -0.831
+TLI   -0.999  0.409  0.409 -0.973  0.996  1.000 -0.873
+SRMR   0.881 -0.595 -0.595  0.893 -0.831 -0.873  1.000
+================== Replications =====================
+Number of Replications
+[1] 5
+Number of Converged Replications
+[1] 5
+> getExtraOutput(Output)
+[[1]]
+   lhs op rhs    mi    epc sepc.lv sepc.all sepc.nox
+1   f1 =~  y1 0.000  0.000   0.000    0.000    0.000
+2   f1 =~  y2 0.000  0.000   0.000    0.000    0.000
+3   f1 =~  y3 0.000  0.000   0.000    0.000    0.000
+4   f1 =~  y4 2.756  0.155   0.155    0.155    0.155
+5   f1 =~  y5 0.991 -0.084  -0.084   -0.084   -0.084
+6   f1 =~  y6 0.876 -0.079  -0.079   -0.080   -0.080
+7   f2 =~  y1 0.049  0.019   0.019    0.019    0.019
+8   f2 =~  y2 0.117  0.030   0.030    0.030    0.030
+9   f2 =~  y3 0.259 -0.050  -0.050   -0.050   -0.050
+10  f2 =~  y4 0.000  0.000   0.000    0.000    0.000
+11  f2 =~  y5 0.000  0.000   0.000    0.000    0.000
+12  f2 =~  y6 0.000  0.000   0.000    0.000    0.000
+13  y1 ~~  y1 0.000  0.000   0.000    0.000    0.000
+14  y1 ~~  y2 0.259 -0.048  -0.048   -0.048   -0.048
+15  y1 ~~  y3 0.117  0.043   0.043    0.043    0.043
+16  y1 ~~  y4 0.283  0.025   0.025    0.025    0.025
+17  y1 ~~  y5 0.052  0.011   0.011    0.011    0.011
+18  y1 ~~  y6 0.602 -0.040  -0.040   -0.040   -0.040
+19  y2 ~~  y2 0.000  0.000   0.000    0.000    0.000
+20  y2 ~~  y3 0.049  0.030   0.030    0.030    0.030
+21  y2 ~~  y4 0.620 -0.037  -0.037   -0.037   -0.037
+22  y2 ~~  y5 0.007 -0.004  -0.004   -0.004   -0.004
+23  y2 ~~  y6 2.604  0.082   0.082    0.082    0.082
+24  y3 ~~  y3 0.000  0.000   0.000    0.000    0.000
+25  y3 ~~  y4 2.421  0.073   0.073    0.073    0.073
+26  y3 ~~  y5 1.001 -0.048  -0.048   -0.048   -0.048
+27  y3 ~~  y6 2.403 -0.076  -0.076   -0.076   -0.076
+28  y4 ~~  y4 0.000  0.000   0.000    0.000    0.000
+29  y4 ~~  y5 0.876 -0.140  -0.140   -0.141   -0.141
+30  y4 ~~  y6 0.991 -0.127  -0.127   -0.128   -0.128
+31  y5 ~~  y5 0.000  0.000   0.000    0.000    0.000
+32  y5 ~~  y6 2.756  0.153   0.153    0.154    0.154
+33  y6 ~~  y6 0.000  0.000   0.000    0.000    0.000
+34  f1 ~~  f1    NA     NA      NA       NA       NA
+35  f1 ~~  f2 0.000  0.000   0.000    0.000    0.000
+36  f2 ~~  f2    NA     NA      NA       NA       NA
+37  y1 ~1     0.000  0.000   0.000    0.000    0.000
+38  y2 ~1     0.000  0.000   0.000    0.000    0.000
+39  y3 ~1     0.000  0.000   0.000    0.000    0.000
+40  y4 ~1     0.000  0.000   0.000    0.000    0.000
+41  y5 ~1     0.000  0.000   0.000    0.000    0.000
+42  y6 ~1     0.000  0.000   0.000    0.000    0.000
+43  f1 ~1        NA     NA      NA       NA       NA
+44  f2 ~1        NA     NA      NA       NA       NA
+
+[[2]]
+   lhs op rhs    mi    epc sepc.lv sepc.all sepc.nox
+1   f1 =~  y1 0.000  0.000   0.000    0.000    0.000
+2   f1 =~  y2 0.000  0.000   0.000    0.000    0.000
+3   f1 =~  y3 0.000  0.000   0.000    0.000    0.000
+4   f1 =~  y4 2.106  0.146   0.146    0.147    0.147
+5   f1 =~  y5 0.478 -0.077  -0.077   -0.077   -0.077
+6   f1 =~  y6 0.384 -0.064  -0.064   -0.064   -0.064
+7   f2 =~  y1 4.172  0.214   0.214    0.214    0.214
+8   f2 =~  y2 0.426  0.077   0.077    0.077    0.077
+9   f2 =~  y3 6.410 -0.290  -0.290   -0.291   -0.291
+10  f2 =~  y4 0.000  0.000   0.000    0.000    0.000
+11  f2 =~  y5 0.000  0.000   0.000    0.000    0.000
+12  f2 =~  y6 0.000  0.000   0.000    0.000    0.000
+13  y1 ~~  y1 0.000  0.000   0.000    0.000    0.000
+14  y1 ~~  y2 6.410 -0.190  -0.190   -0.191   -0.191
+15  y1 ~~  y3 0.426  0.047   0.047    0.048    0.048
+16  y1 ~~  y4 1.027  0.050   0.050    0.050    0.050
+17  y1 ~~  y5 0.433  0.030   0.030    0.030    0.030
+18  y1 ~~  y6 0.105  0.015   0.015    0.015    0.015
+19  y2 ~~  y2 0.000  0.000   0.000    0.000    0.000
+20  y2 ~~  y3 4.172  0.199   0.199    0.200    0.200
+21  y2 ~~  y4 0.460 -0.031  -0.031   -0.031   -0.031
+22  y2 ~~  y5 0.278  0.023   0.023    0.023    0.023
+23  y2 ~~  y6 0.267  0.023   0.023    0.023    0.023
+24  y3 ~~  y3 0.000  0.000   0.000    0.000    0.000
+25  y3 ~~  y4 1.849  0.063   0.063    0.063    0.063
+26  y3 ~~  y5 2.784 -0.073  -0.073   -0.073   -0.073
+27  y3 ~~  y6 1.911 -0.062  -0.062   -0.062   -0.062
+28  y4 ~~  y4 0.000  0.000   0.000    0.000    0.000
+29  y4 ~~  y5 0.384 -0.050  -0.050   -0.050   -0.050
+30  y4 ~~  y6 0.478 -0.047  -0.047   -0.047   -0.047
+31  y5 ~~  y5 0.000  0.000   0.000    0.000    0.000
+32  y5 ~~  y6 2.106  0.140   0.140    0.140    0.140
+33  y6 ~~  y6 0.000  0.000   0.000    0.000    0.000
+34  f1 ~~  f1    NA     NA      NA       NA       NA
+35  f1 ~~  f2 0.000  0.000   0.000    0.000    0.000
+36  f2 ~~  f2    NA     NA      NA       NA       NA
+37  y1 ~1     0.000  0.000   0.000    0.000    0.000
+38  y2 ~1     0.000  0.000   0.000    0.000    0.000
+39  y3 ~1     0.000  0.000   0.000    0.000    0.000
+40  y4 ~1     0.000  0.000   0.000    0.000    0.000
+41  y5 ~1     0.000  0.000   0.000    0.000    0.000
+42  y6 ~1     0.000  0.000   0.000    0.000    0.000
+43  f1 ~1        NA     NA      NA       NA       NA
+44  f2 ~1        NA     NA      NA       NA       NA
+
+[[3]]
+   lhs op rhs    mi    epc sepc.lv sepc.all sepc.nox
+1   f1 =~  y1 0.000  0.000   0.000    0.000    0.000
+2   f1 =~  y2 0.000  0.000   0.000    0.000    0.000
+3   f1 =~  y3 0.000  0.000   0.000    0.000    0.000
+4   f1 =~  y4 0.307 -0.043  -0.043   -0.043   -0.043
+5   f1 =~  y5 0.810 -0.072  -0.072   -0.073   -0.073
+6   f1 =~  y6 3.229  0.140   0.140    0.141    0.141
+7   f2 =~  y1 0.151  0.031   0.031    0.031    0.031
+8   f2 =~  y2 1.380  0.092   0.092    0.092    0.092
+9   f2 =~  y3 2.017 -0.113  -0.113   -0.113   -0.113
+10  f2 =~  y4 0.000  0.000   0.000    0.000    0.000
+11  f2 =~  y5 0.000  0.000   0.000    0.000    0.000
+12  f2 =~  y6 0.000  0.000   0.000    0.000    0.000
+13  y1 ~~  y1 0.000  0.000   0.000    0.000    0.000
+14  y1 ~~  y2 2.017 -0.187  -0.187   -0.188   -0.188
+15  y1 ~~  y3 1.380  0.205   0.205    0.206    0.206
+16  y1 ~~  y4 0.041  0.009   0.009    0.009    0.009
+17  y1 ~~  y5 2.998 -0.077  -0.077   -0.077   -0.077
+18  y1 ~~  y6 6.794  0.125   0.125    0.125    0.125
+19  y2 ~~  y2 0.000  0.000   0.000    0.000    0.000
+20  y2 ~~  y3 0.151  0.050   0.050    0.050    0.050
+21  y2 ~~  y4 0.015  0.006   0.006    0.006    0.006
+22  y2 ~~  y5 7.348  0.125   0.125    0.126    0.126
+23  y2 ~~  y6 6.835 -0.132  -0.132   -0.133   -0.133
+24  y3 ~~  y3 0.000  0.000   0.000    0.000    0.000
+25  y3 ~~  y4 0.655 -0.037  -0.037   -0.037   -0.037
+26  y3 ~~  y5 1.592 -0.056  -0.056   -0.056   -0.056
+27  y3 ~~  y6 1.456  0.058   0.058    0.058    0.058
+28  y4 ~~  y4 0.000  0.000   0.000    0.000    0.000
+29  y4 ~~  y5 3.229  0.346   0.346    0.348    0.348
+30  y4 ~~  y6 0.810 -0.106  -0.106   -0.106   -0.106
+31  y5 ~~  y5 0.000  0.000   0.000    0.000    0.000
+32  y5 ~~  y6 0.307 -0.075  -0.075   -0.076   -0.076
+33  y6 ~~  y6 0.000  0.000   0.000    0.000    0.000
+34  f1 ~~  f1    NA     NA      NA       NA       NA
+35  f1 ~~  f2 0.000  0.000   0.000    0.000    0.000
+36  f2 ~~  f2    NA     NA      NA       NA       NA
+37  y1 ~1     0.000  0.000   0.000    0.000    0.000
+38  y2 ~1     0.000  0.000   0.000    0.000    0.000
+39  y3 ~1     0.000  0.000   0.000    0.000    0.000
+40  y4 ~1     0.000  0.000   0.000    0.000    0.000
+41  y5 ~1     0.000  0.000   0.000    0.000    0.000
+42  y6 ~1     0.000  0.000   0.000    0.000    0.000
+43  f1 ~1        NA     NA      NA       NA       NA
+44  f2 ~1        NA     NA      NA       NA       NA
+
+[[4]]
+   lhs op rhs    mi    epc sepc.lv sepc.all sepc.nox
+1   f1 =~  y1 0.000  0.000   0.000    0.000    0.000
+2   f1 =~  y2 0.000  0.000   0.000    0.000    0.000
+3   f1 =~  y3 0.000  0.000   0.000    0.000    0.000
+4   f1 =~  y4 0.705  0.086   0.086    0.086    0.086
+5   f1 =~  y5 1.067 -0.106  -0.106   -0.106   -0.106
+6   f1 =~  y6 0.059  0.023   0.023    0.023    0.023
+7   f2 =~  y1 0.806  0.090   0.090    0.090    0.090
+8   f2 =~  y2 0.438 -0.071  -0.071   -0.071   -0.071
+9   f2 =~  y3 0.045 -0.021  -0.021   -0.021   -0.021
+10  f2 =~  y4 0.000  0.000   0.000    0.000    0.000
+11  f2 =~  y5 0.000  0.000   0.000    0.000    0.000
+12  f2 =~  y6 0.000  0.000   0.000    0.000    0.000
+13  y1 ~~  y1 0.000  0.000   0.000    0.000    0.000
+14  y1 ~~  y2 0.045 -0.023  -0.023   -0.023   -0.023
+15  y1 ~~  y3 0.438 -0.058  -0.058   -0.059   -0.059
+16  y1 ~~  y4 3.585  0.090   0.090    0.091    0.091
+17  y1 ~~  y5 0.619 -0.038  -0.038   -0.038   -0.038
+18  y1 ~~  y6 0.302 -0.029  -0.029   -0.029   -0.029
+19  y2 ~~  y2 0.000  0.000   0.000    0.000    0.000
+20  y2 ~~  y3 0.806  0.091   0.091    0.092    0.092
+21  y2 ~~  y4 0.143  0.018   0.018    0.018    0.018
+22  y2 ~~  y5 0.548 -0.035  -0.035   -0.035   -0.035
+23  y2 ~~  y6 0.053 -0.012  -0.012   -0.012   -0.012
+24  y3 ~~  y3 0.000  0.000   0.000    0.000    0.000
+25  y3 ~~  y4 2.463 -0.075  -0.075   -0.076   -0.076
+26  y3 ~~  y5 0.408  0.031   0.031    0.031    0.031
+27  y3 ~~  y6 1.298  0.060   0.060    0.061    0.061
+28  y4 ~~  y4 0.000  0.000   0.000    0.000    0.000
+29  y4 ~~  y5 0.059  0.036   0.036    0.036    0.036
+30  y4 ~~  y6 1.067 -0.088  -0.088   -0.088   -0.088
+31  y5 ~~  y5 0.000  0.000   0.000    0.000    0.000
+32  y5 ~~  y6 0.705  0.071   0.071    0.071    0.071
+33  y6 ~~  y6 0.000  0.000   0.000    0.000    0.000
+34  f1 ~~  f1    NA     NA      NA       NA       NA
+35  f1 ~~  f2 0.000  0.000   0.000    0.000    0.000
+36  f2 ~~  f2    NA     NA      NA       NA       NA
+37  y1 ~1     0.000  0.000   0.000    0.000    0.000
+38  y2 ~1     0.000  0.000   0.000    0.000    0.000
+39  y3 ~1     0.000  0.000   0.000    0.000    0.000
+40  y4 ~1     0.000  0.000   0.000    0.000    0.000
+41  y5 ~1     0.000  0.000   0.000    0.000    0.000
+42  y6 ~1     0.000  0.000   0.000    0.000    0.000
+43  f1 ~1        NA     NA      NA       NA       NA
+44  f2 ~1        NA     NA      NA       NA       NA
+
+[[5]]
+   lhs op rhs    mi    epc sepc.lv sepc.all sepc.nox
+1   f1 =~  y1 0.000  0.000   0.000    0.000    0.000
+2   f1 =~  y2 0.000  0.000   0.000    0.000    0.000
+3   f1 =~  y3 0.000  0.000   0.000    0.000    0.000
+4   f1 =~  y4 0.027  0.014   0.014    0.014    0.014
+5   f1 =~  y5 1.496 -0.120  -0.120   -0.120   -0.120
+6   f1 =~  y6 1.594  0.110   0.110    0.110    0.110
+7   f2 =~  y1 3.098  0.160   0.160    0.160    0.160
+8   f2 =~  y2 0.096  0.027   0.027    0.027    0.027
+9   f2 =~  y3 4.422 -0.184  -0.184   -0.185   -0.185
+10  f2 =~  y4 0.000  0.000   0.000    0.000    0.000
+11  f2 =~  y5 0.000  0.000   0.000    0.000    0.000
+12  f2 =~  y6 0.000  0.000   0.000    0.000    0.000
+13  y1 ~~  y1 0.000  0.000   0.000    0.000    0.000
+14  y1 ~~  y2 4.422 -0.238  -0.238   -0.239   -0.239
+15  y1 ~~  y3 0.096  0.044   0.044    0.044    0.044
+16  y1 ~~  y4 0.065  0.012   0.012    0.012    0.012
+17  y1 ~~  y5 0.132  0.017   0.017    0.017    0.017
+18  y1 ~~  y6 1.260  0.055   0.055    0.055    0.055
+19  y2 ~~  y2 0.000  0.000   0.000    0.000    0.000
+20  y2 ~~  y3 3.098  0.179   0.179    0.180    0.180
+21  y2 ~~  y4 0.307  0.028   0.028    0.028    0.028
+22  y2 ~~  y5 0.000  0.000   0.000    0.000    0.000
+23  y2 ~~  y6 0.049 -0.011  -0.011   -0.012   -0.012
+24  y3 ~~  y3 0.000  0.000   0.000    0.000    0.000
+25  y3 ~~  y4 0.347 -0.029  -0.029   -0.029   -0.029
+26  y3 ~~  y5 1.975 -0.066  -0.066   -0.066   -0.066
+27  y3 ~~  y6 0.045  0.011   0.011    0.011    0.011
+28  y4 ~~  y4 0.000  0.000   0.000    0.000    0.000
+29  y4 ~~  y5 1.594  0.183   0.183    0.184    0.184
+30  y4 ~~  y6 1.496 -0.114  -0.114   -0.115   -0.115
+31  y5 ~~  y5 0.000  0.000   0.000    0.000    0.000
+32  y5 ~~  y6 0.027  0.021   0.021    0.021    0.021
+33  y6 ~~  y6 0.000  0.000   0.000    0.000    0.000
+34  f1 ~~  f1    NA     NA      NA       NA       NA
+35  f1 ~~  f2 0.000  0.000   0.000    0.000    0.000
+36  f2 ~~  f2    NA     NA      NA       NA       NA
+37  y1 ~1     0.000  0.000   0.000    0.000    0.000
+38  y2 ~1     0.000  0.000   0.000    0.000    0.000
+39  y3 ~1     0.000  0.000   0.000    0.000    0.000
+40  y4 ~1     0.000  0.000   0.000    0.000    0.000
+41  y5 ~1     0.000  0.000   0.000    0.000    0.000
+42  y6 ~1     0.000  0.000   0.000    0.000    0.000
+43  f1 ~1        NA     NA      NA       NA       NA
+44  f2 ~1        NA     NA      NA       NA       NA
+
 > 
 > 
 > 
@@ -3279,22 +3293,6 @@ Number of Converged Replications
 
 detaching 'package:parallel'
 
-> nameEx("sortList")
-> ### * sortList
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: sortList
-> ### Title: Sort two objects in a list
-> ### Aliases: sortList
-> 
-> ### ** Examples
-> 
-> # No example
-> 
-> 
-> 
-> cleanEx()
 > nameEx("summaryConverge")
 > ### * summaryConverge
 > 
@@ -3587,8 +3585,8 @@ detaching 'package:parallel'
 > flush(stderr()); flush(stdout())
 > 
 > ### Name: summaryPopulation
-> ### Title: Summarize the data generation population model underlying a
-> ###   result object
+> ### Title: Summarize the population model used for data generation
+> ###   underlying a result object
 > ### Aliases: summaryPopulation
 > 
 > ### ** Examples
@@ -3638,94 +3636,10 @@ detaching 'package:parallel'
 > 
 > 
 > 
-> cleanEx()
-> nameEx("twoTailedPValue")
-> ### * twoTailedPValue
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: twoTailedPValue
-> ### Title: Find two-tailed _p_ value from one-tailed _p_ value
-> ### Aliases: twoTailedPValue
-> 
-> ### ** Examples
-> 
-> # No example
-> 
-> 
-> 
-> cleanEx()
-> nameEx("validateCovariance")
-> ### * validateCovariance
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: validateCovariance
-> ### Title: Validate whether all elements provides a good covariance matrix
-> ### Aliases: validateCovariance
-> 
-> ### ** Examples
-> 
-> # No example
-> 
-> 
-> 
-> cleanEx()
-> nameEx("validateObject")
-> ### * validateObject
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: validateObject
-> ### Title: Validate whether the drawn parameters are good.
-> ### Aliases: validateObject
-> 
-> ### ** Examples
-> 
-> # No example
-> 
-> 
-> 
-> cleanEx()
-> nameEx("validatePath")
-> ### * validatePath
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: validatePath
-> ### Title: Validate whether the regression coefficient (or loading) matrix
-> ###   is good
-> ### Aliases: validatePath
-> 
-> ### ** Examples
-> 
-> # No example
-> 
-> 
-> 
-> cleanEx()
-> nameEx("whichMonotonic")
-> ### * whichMonotonic
-> 
-> flush(stderr()); flush(stdout())
-> 
-> ### Name: whichMonotonic
-> ### Title: Extract a part of a vector that is monotonically increasing or
-> ###   decreasing
-> ### Aliases: whichMonotonic
-> 
-> ### ** Examples
-> 
-> # This is a private function.
-> 
-> # whichMonotonic(c(3, 4, 1, 2, 3, 5, 2, 1))
-> 
-> 
-> 
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  6.21 0.05 6.29 NA NA 
+Time elapsed:  4.41 0.05 4.51 NA NA 
 > grDevices::dev.off()
 null device 
           1 

@@ -4,7 +4,7 @@
 	Set the data generation population model underlying an object
 }
 \description{
-This function will set the data generation population model to be an appropriate one. If the appropriate data generation model is put (the same model as the analysis model), the additional features can be seen when we run a \code{\link{summary}} function on the target object, such as bias in parameter estimates or percentage coverage. 
+This function will set the data generation population model to be an appropriate one. If the appropriate data generation model is specified, the additional features can be seen in \code{\link{summary}} or \code{\link{summaryParam}} functions on the target object, such as bias in parameter estimates or percentage coverage. 
 }
 \usage{
 setPopulation(target, population)

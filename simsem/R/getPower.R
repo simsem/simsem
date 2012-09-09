@@ -148,6 +148,27 @@ continuousPower <- function(simResult, contN = TRUE, contMCAR = FALSE, contMAR =
 
 ## predProb: Function to get predicted probabilities from logistic regression
 
+# \title{
+	# Function to get predicted probabilities from logistic regression
+# }
+# \description{
+	# Function to get predicted probabilities from logistic regression
+# }
+# \usage{
+# predProb(newdat, glmObj)
+# }
+# \arguments{
+# \item{newdat}{
+	# A vector of values for all predictors, including the intercept
+# }
+  # \item{glmObj}{
+	# An object from a fitted glm run with a logit link
+# }
+# }
+# \value{
+	# Predictive probability of success given the values in the \code{newdat} argument.
+# }
+
 predProb <- function(newdat, glmObj) {
     slps <- as.numeric(coef(glmObj))
     logi <- sum(newdat * slps)

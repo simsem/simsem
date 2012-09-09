@@ -12,7 +12,6 @@ This function will plot sampling distributions of null hypothesis fit indices. T
 \usage{
 plotCutoff(object, ...)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{object}{
 	The object (\code{\linkS4class{SimResult}} or \code{data.frame}) that contains values of fit indices in each distribution.

@@ -36,6 +36,30 @@ findPower <- function(powerTable, iv, power) {
 # findTargetPower: Find a value of a given independent variable that provides a
 # given value of power. This function can handle only one independent variable.
 
+# \title{
+	# Find a value of varying parameters that provides a given value of power. 
+# }
+# \description{
+	# Find a value of varying parameters that provides a given value of power. This function can deal with only one varying parameter only (\code{\link{findPower}} can deal with more than one varying parameter).
+# }
+# \usage{
+# findTargetPower(iv, dv, power)
+# }
+# \arguments{
+  # \item{iv}{
+	# A vector of the target varying parameter
+# }
+  # \item{dv}{
+	# A \code{data.frame} of the power table of target parameters
+# }
+  # \item{power}{
+	# A desired power.
+# }
+# }
+# \value{
+	# The value of the target varying parameter providing the desired power. If the value is \code{NA}, there is no value in the domain of varying parameters that provide the target power. If the value is the minimum value of the varying parameters, it means that the minimum value has already provided enough power. The value of varying parameters that provides exact desired power may be lower than the minimum value.
+# }
+
 findTargetPower <- function(iv, dv, power) {
     FUN <- function(dv, iv, power) {
         x <- dv > power

@@ -83,3 +83,137 @@ setMethod("plotCutoff", signature(object = "SimResult"), definition = function(o
     }
     
 }) 
+
+# plot3DQtile: Build a persepctive plot or contour plot of a quantile of
+# predicted values
+
+# \title{
+	# Build a persepctive plot or contour plot of a quantile of predicted values
+# }
+# \description{
+	# Build a persepctive plot or contour plot of a quantile of predicted values
+# }
+# \usage{
+# plot3DQtile(x, y, z, df=0, qtile=0.5, useContour=TRUE, xlab=NULL, 
+	# ylab=NULL, zlab=NULL, main=NULL)
+# }
+# \arguments{
+  # \item{x}{
+	# The values of the first variable (e.g., a vector of sample size)
+# }
+  # \item{y}{
+	# The values of the second variable (e.g., a vector of percent missing)
+# }
+  # \item{z}{
+	# The values of the dependent variable
+# }
+  # \item{df}{
+	# The degree of freedom in spline method
+# }
+  # \item{qtile}{
+	# The quantile values used to plot a graph
+# }
+  # \item{useContour}{
+	# If \code{TRUE}, use contour plot. If \code{FALSE}, use perspective plot.
+# }
+  # \item{xlab}{
+	# The labels of x-axis
+# }
+  # \item{ylab}{
+	# The labels of y-axis
+# }
+  # \item{zlab}{
+	# The labels of z-axis
+# }
+  # \item{main}{
+	# The title of the graph
+# }
+# }
+# \value{
+	# None. This function will plot only.
+# }
+
+plot3DQtile <- function(x, y, z, df = 0, qtile = 0.5, useContour = TRUE, xlab = NULL, 
+    ylab = NULL, zlab = NULL, main = NULL) {
+    library(quantreg)
+    if (length(qtile) > 1) 
+        stop("Please use only one quantile value at a time")
+    xyz <- data.frame(x = x, y = y, z = z)
+    xyz <- xyz[apply(is.na(xyz), 1, sum) == 0, ]
+    mod <- NULL
+    if (df == 0) {
+        mod <- rq(z ~ x + y + x * y, data = xyz, tau = qtile)
+    } else {
+        library(splines)
+        mod <- rq(z ~ ns(x, df) + ns(y, df) + ns(x, df) * ns(y, df), data = xyz, 
+            tau = qtile)
+    }
+    xseq <- seq(min(x), max(x), length = 20)
+    yseq <- seq(min(y), max(y), length = 20)
+    f <- function(x, y) {
+        r <- mod$coefficients[1] + mod$coefficients[2] * x + mod$coefficients[3] * 
+            y + mod$coefficients[3] * x * y
+    }
+    zpred <- outer(xseq, yseq, f)
+    if (useContour) {
+        contour(xseq, yseq, zpred, xlab = xlab, ylab = ylab, main = main)
+    } else {
+        persp(xseq, yseq, zpred, theta = 30, phi = 30, expand = 0.5, col = "lightblue", 
+            ltheta = 120, shade = 0.75, ticktype = "detailed", xlab = xlab, ylab = ylab, 
+            main = main, zlab = zlab)
+    }
+} 
+
+# plotQtile: Build a scatterplot with overlaying line of quantiles of predicted
+# values
+
+# \title{
+	# Build a scatterplot with overlaying line of quantiles of predicted values
+# }
+# \description{
+	# Build a scatterplot with overlaying line of quantiles of predicted values
+# }
+# \usage{
+# plotQtile(x, y, df=0, qtile=NULL, ...)
+# }
+# \arguments{
+  # \item{x}{
+	# The values of the independent variable (e.g., a vector of sample size)
+# }
+  # \item{y}{
+	# The values of the dependent variable
+# }
+  # \item{df}{
+	# The degree of freedom in spline method
+# }
+  # \item{qtile}{
+	# The quantile values used to plot a graph
+# }
+  # \item{\dots}{
+	# Other arguments in the \code{plot} command
+# }
+# }
+# \value{
+	# None. This function will plot only.
+# }
+
+plotQtile <- function(x, y, df = 0, qtile = NULL, ...) {
+    library(quantreg)
+    xy <- data.frame(x = x, y = y)
+    plot(x, y, ...)
+    if (!is.null(qtile)) {
+        mod <- NULL
+        if (df == 0) {
+            mod <- rq(y ~ x, tau = qtile)
+        } else {
+            library(splines)
+            mod <- rq(y ~ ns(x, df), tau = qtile)
+        }
+        xseq <- seq(min(x), max(x), length = nrow(xy))
+        pred <- predict(mod, data.frame(x = xseq), interval = "none", level = 0.95)
+        pred <- as.matrix(pred)
+        for (i in 1:ncol(pred)) {
+            lines(xseq, pred[, i], col = "red")
+        }
+    }
+} 

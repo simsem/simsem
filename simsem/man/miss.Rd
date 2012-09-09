@@ -1,10 +1,10 @@
 \name{miss}
 \alias{miss}
 \title{ 
-TBA
+Specifying the missing template to impose on a dataset
 }
 \description{
-TBA
+Specifying the missing template (\code{\linkS4class{SimMissing}}) to impose on a dataset. The template will be used in Monte Carlo simulation such that, in the \code{\link{sim}} function, datasets are created and imposed by missing values created by this template. See \code{\link{imposeMissing}} for further details of each argument.
 }
 \usage{
 miss(cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, itemGroups = list(), 
@@ -20,18 +20,15 @@ threshold = 0, covAsAux = TRUE, logical = NULL, ...)
     \item{timePoints}{Number of timepoints items were measured over. For longitudinal data, planned missing designs will be implemented within each timepoint.}
     \item{twoMethod}{With missing on one variable: vector of (column index, percent missing). Will put a given percent missing on that column in the matrix to simulate a two method planned missing data research design. With missing on two or more variables: list of (column indices, percent missing). }
 	\item{prAttr}{Probability (or vector of probabilities) of an entire case being removed due to attrition at a given time point. See \code{\link{imposeMissing}} for further details.}
-    \item{package}{TBA}
+    \item{package}{The package to be used in multiple imputation. This feature currently does not work now.}
 	\item{ignoreCols}{The columns not imposed any missing values for any missing data patterns} 
 	\item{threshold}{The threshold of covariates that divide between the area to impose missing and the area not to impose missing. The default threshold is the mean of the covariate.}
 	\item{covAsAux}{If \code{TRUE}, the covariate listed in the object will be used as auxiliary variables when putting in the model object. If \code{FALSE}, the covariate will be included in the analysis.}
 	\item{logical}{A matrix of logical values (\code{TRUE/FALSE}). If a value in the dataset is corresponding to the \code{TRUE} in the logical matrix, the value will be missing.}
-	\item{\dots}{TBA}
-}
-\details{
-TBA
+	\item{\dots}{Additional arguments used in multiple imputation function. This feature currently does not work now.}
 }
 \value{
-TBA
+	A missing object that contains missing-data template (\code{\linkS4class{SimMissing}})
 }
 \author{
 	Alexander M. Schoemann (University of Kansas; \email{schoemann@ku.edu}), 
@@ -39,12 +36,12 @@ TBA
 	Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})}
 \seealso{
 	\itemize{
-		\item \code{\linkS4class{SimMissing}} for the alternative way to save missing data feature for using in the \code{\link{sim}} function.
+		\item \code{\linkS4class{SimMissing}} The resulting missing object
 	}
 }
 \examples{
 #Example of imposing 10% MCAR missing in all variables with no imputations (FIML method)
-Missing <- miss(pmMCAR=0.1)
+Missing <- miss(pmMCAR=0.1, ignoreCols="group")
 summary(Missing)
 
 loading <- matrix(0, 6, 1)
@@ -58,11 +55,11 @@ CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
 dat <- generate(CFA.Model, n = 20)
 
 #Impose missing
-#dat <- run(Missing, dat)
+dat <- impose(Missing, dat)
 
 #Analyze data
-#out <- run(SimModel, dat)
-#summary(out)
+out <- analyze(CFA.Model, dat)
+summary(out)
 
 #Example to create simMissing object for 3 forms design at 3 timepoints with 10 imputations
 Missing <- miss(nforms=3, timePoints=3, numImps=10)

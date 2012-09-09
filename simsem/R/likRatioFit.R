@@ -29,6 +29,27 @@ likRatioFit <- function(outMod1, outMod2, dat1Mod1, dat1Mod2, dat2Mod1, dat2Mod2
     (likDat1/likDat2) * prior
 }
 
+# \title{
+	# Find the density (likelihood) of a pair value in 2D Kernel Density Estimate
+# }
+# \description{
+	# Find the density (likelihood) of a pair value in 2D Kernel Density Estimate
+# }
+# \usage{
+# findphist(value, hist) 
+# }
+# \arguments{
+  # \item{value}{
+	# A target pair of values
+# }
+  # \item{hist}{
+	# A 2D Binned Kernel Density Estimate 
+# }
+# }
+# \value{
+	# The probability (density) of the target pair of value
+# }
+
 findphist <- function(value, hist) {
     if (is.na(hist)) {
         return(NA)
@@ -53,6 +74,27 @@ findphist <- function(value, hist) {
         return(hist$fhat[posx, posy])
     }
 }
+
+# \title{
+	# Fit the 2D Kernel Density Estimate
+# }
+# \description{
+	# Fit the 2D Kernel Density Estimate to a pair of variables
+# }
+# \usage{
+# find2Dhist(vec1, vec2) 
+# }
+# \arguments{
+  # \item{vec1}{
+	# Variable 1
+# }
+  # \item{vec2}{
+	# Variable 2
+# }
+# }
+# \value{
+	# The 2D Kernel Density Estimate based on each pair of values in \code{vec1} and \code{vec2}
+# }
 
 find2Dhist <- function(vec1, vec2) {
     library(KernSmooth)

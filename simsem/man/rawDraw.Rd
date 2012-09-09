@@ -4,7 +4,7 @@
 	Draw values from vector or matrix objects
 }
 \description{
-	Takes one matrix or vector object (\code{\linkS4clss{SimMatrix}} or \code{\linkS4clss{SimVector}}) and returns a matrix or a vector with numerical values for population parameters. If a matrix is symmetric, it is arbitrarily chosen that parameters on the upper triangular elements are set equal to the parameters on the lower triangular elements.
+	Takes one matrix or vector object (\code{\linkS4class{SimMatrix}} or \code{\linkS4class{SimVector}}) and returns a matrix or a vector with numerical values for population parameters. If a matrix is symmetric, it is arbitrarily chosen that parameters on the upper triangular elements are set equal to the parameters on the lower triangular elements.
 }
 \usage{
 rawDraw(simDat, constraint = TRUE, misSpec = TRUE, parMisOnly = FALSE, 
@@ -12,7 +12,7 @@ rawDraw(simDat, constraint = TRUE, misSpec = TRUE, parMisOnly = FALSE,
 }
 \arguments{
   \item{simDat}{
-	A matrix or vector object (\code{\linkS4clss{SimMatrix}} or \code{\linkS4clss{SimVector}})
+	A matrix or vector object (\code{\linkS4class{SimMatrix}} or \code{\linkS4class{SimVector}})
 }
   \item{constraint}{
 	If TRUE, then constraints are applied simultaneously

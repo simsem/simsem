@@ -21,7 +21,7 @@ optMisfit = NULL, optDraws=50, misfitType="f0")
 	Vector that contains upper and lower bounds of the misfit measure. Sets of parameters drawn that are not within these bounds are rejected.
 }
   \item{averageNumMisspec}{
-	\code{TRUE} or \code{FALSE}. ??
+	If \code{TRUE}, the provided fit will be divided by the number of misspecified parameters. 
 }
   \item{optMisfit}{
 	Character vector of either "min" or "max" indicating either maximum or minimum optimized misfit. If not null, the set of parameters out of the number of draws in "optDraws" that has either the maximum or minimum misfit of the given misfit type will be returned.

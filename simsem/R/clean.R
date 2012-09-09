@@ -1,5 +1,22 @@
 # clean: Extract only simultaneous converged replications in the result objects
 
+# \title{
+	# Extract only converged replications in the result objects
+# }
+# \description{
+	# Extract only the replications that are converegent in all supplied result objects (\code{\linkS4class{SimResult}})
+# }
+# \usage{
+# clean(...)
+# }
+# \arguments{
+  # \item{\dots}{
+	# The target result objects (\code{\linkS4class{SimResult}})
+# }
+# }
+# \value{
+	# The cleaned result objects
+# }
 
 clean <- function(...) {
     object.l <- list(...)
@@ -14,6 +31,28 @@ clean <- function(...) {
 }
 
 # cleanSimResult: Extract only converged replications in a result object
+
+# \title{
+	# Extract only converged replications in the result object
+# }
+# \description{
+	# Extract only the replications that are converegent in a result object (\code{\linkS4class{SimResult}})
+# }
+# \usage{
+# cleanSimResult(object, converged=NULL)
+# }
+# \arguments{
+  # \item{object}{
+	# The target result object (\code{\linkS4class{SimResult}})
+# }
+  # \item{converged}{
+	# The replications to be extracted. If \code{NULL}, the converged slot in the result object will be used
+# }
+# }
+# \value{
+	# The cleaned result object
+# }
+
 cleanSimResult <- function(object, converged = NULL) {
     if (is.null(converged)) 
         converged <- object@converged

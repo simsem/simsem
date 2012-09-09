@@ -6,9 +6,6 @@
 \description{
 	This function will provide averages of model fit statistics and indices for nested models. It will also provide average differences of fit indices and power for likelihood ratio tests of nested models.
 }
-%\usage{
-%anova(object, ...)
-%}
 \arguments{
   \item{object}{
 	\code{\linkS4class{SimResult}} object being described. Currently at least two objects must be included as arguments
@@ -35,6 +32,7 @@
 	\code{\linkS4class{SimResult}} for the object input
 }
 \examples{
+\dontrun{
 loading1 <- matrix(0, 6, 1)
 loading1[1:6, 1] <- NA
 loading2 <- loading1
@@ -56,4 +54,5 @@ anova(Output1, Output2)
 Output1b <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model1, generate=CFA.Model1, seed=123567)
 Output2b <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model2, generate=CFA.Model1, seed=123567)
 anova(Output1b, Output2b)
+}
 }

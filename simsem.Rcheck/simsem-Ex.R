@@ -12,14 +12,12 @@ nameEx("SimDataDist-class")
 flush(stderr()); flush(stdout())
 
 ### Name: SimDataDist-class
-### Title: Class '"SimDataDist"'
+### Title: Class '"SimDataDist"': Data distribution object
 ### Aliases: SimDataDist-class summary,SimDataDist-method
 ###   plotDist,SimDataDist-method
 ### Keywords: classes
 
 ### ** Examples
-
-# Need to be fixed
 
 showClass("SimDataDist")
 
@@ -32,9 +30,8 @@ d6 <- list(df=4)
 d7 <- list(df=5)
 d8 <- list(df=6)
 
-
 dist <- bindDist(c(rep("t", 4), rep("chisq", 8)), d1, d2, d3, d4, d5, d6, d7, d8, d5, d6, d7, d8)
-
+summary(dist)
 
 
 
@@ -62,11 +59,11 @@ loadingValues[1:3, 1] <- 0.7
 loadingValues[4:6, 2] <- 0.7
 LX <- bind(loading, loadingValues)
 summary(LX)
-# run(LX)
+rawDraw(LX)
 
 LY <- bind(loading, "rnorm(1, 0.6, 0.05)")
 summary(LY)
-# run(LY)
+rawDraw(LY)
 
 
 
@@ -83,7 +80,8 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-# No Example
+misstemplate <- miss(pmMCAR=0.2)
+summary(misstemplate)
 
 
 
@@ -94,12 +92,9 @@ nameEx("SimResult-class")
 flush(stderr()); flush(stdout())
 
 ### Name: SimResult-class
-### Title: Class '"SimResult"'
+### Title: Class '"SimResult"': Simulation Result Object
 ### Aliases: SimResult-class summary,SimResult-method
-###   summaryPopulation,SimResult-method getPopulation,SimResult-method
-###   setPopulation,SimResult,data.frame-method
-###   setPopulation,SimResult,SimSet-method
-###   setPopulation,SimResult,VirtualRSet-method
+###   summaryShort,SimResult-method
 ### Keywords: classes
 
 ### ** Examples
@@ -107,10 +102,10 @@ flush(stderr()); flush(stdout())
 showClass("SimResult")
 loading <- matrix(0, 6, 1)
 loading[1:6, 1] <- NA
-LX <- bind(loading, 0.7)
-RPH <- binds(diag(1))
-RTD <- binds(diag(6))
-CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+LY <- bind(loading, 0.7)
+RPS <- binds(diag(1))
+RTE <- binds(diag(6))
+CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA")
 
 # We make the examples running only 5 replications to save time.
 # In reality, more replications are needed.
@@ -156,10 +151,6 @@ RTD <- binds(error.cor)
 
 CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
 summary(CFA.Model)
-#run(CFA.Model)
-
-#CFA.Model2 <- extract(CFA.Model, y=1:3, e=1)
-#summary(CFA.Model2)
 
 
 
@@ -172,7 +163,7 @@ flush(stderr()); flush(stdout())
 ### Name: SimVector-class
 ### Title: Vector object: Random parameters vector
 ### Aliases: SimVector-class summaryShort,SimVector-method
-###   summary,SimVector-method extract,SimVector-method
+###   summary,SimVector-method
 ### Keywords: classes
 
 ### ** Examples
@@ -182,10 +173,9 @@ showClass("SimVector")
 factor.mean <- rep(NA, 2)
 factor.mean.starting <- c(5, 2)
 AL <- bind(factor.mean, factor.mean.starting)
-#run(AL)
+rawDraw(AL)
 summary(AL)
 summaryShort(AL)
-
 
 
 
@@ -196,7 +186,7 @@ nameEx("analyze")
 flush(stderr()); flush(stdout())
 
 ### Name: analyze
-### Title: TBA
+### Title: Data analysis using the model specification
 ### Aliases: analyze
 
 ### ** Examples
@@ -234,27 +224,29 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-loading1 <- matrix(0, 6, 1)
-loading1[1:6, 1] <- NA
-loading2 <- loading1
-loading2[6,1] <- 0
-LX1 <- bind(loading1, 0.7)
-LX2 <- bind(loading2, 0.7)
-RPH <- binds(diag(1))
-RTD <- binds(diag(6))
-CFA.Model1 <- model(LY = LX1, RPS = RPH, RTE = RTD, modelType="CFA")
-CFA.Model2 <- model(LY = LX2, RPS = RPH, RTE = RTD, modelType="CFA")
-
-# We make the examples running only 5 replications to save time.
-# In reality, more replications are needed.
-# Need to make sure that both simResult calls have the same seed!
-Output1 <- sim(5, n=500, model=CFA.Model1, generate=CFA.Model1, seed=123567)
-Output2 <- sim(5, n=500, model=CFA.Model2, generate=CFA.Model1, seed=123567)
-anova(Output1, Output2)
-
-Output1b <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model1, generate=CFA.Model1, seed=123567)
-Output2b <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model2, generate=CFA.Model1, seed=123567)
-anova(Output1b, Output2b)
+## Not run: 
+##D loading1 <- matrix(0, 6, 1)
+##D loading1[1:6, 1] <- NA
+##D loading2 <- loading1
+##D loading2[6,1] <- 0
+##D LX1 <- bind(loading1, 0.7)
+##D LX2 <- bind(loading2, 0.7)
+##D RPH <- binds(diag(1))
+##D RTD <- binds(diag(6))
+##D CFA.Model1 <- model(LY = LX1, RPS = RPH, RTE = RTD, modelType="CFA")
+##D CFA.Model2 <- model(LY = LX2, RPS = RPH, RTE = RTD, modelType="CFA")
+##D 
+##D # We make the examples running only 5 replications to save time.
+##D # In reality, more replications are needed.
+##D # Need to make sure that both simResult calls have the same seed!
+##D Output1 <- sim(5, n=500, model=CFA.Model1, generate=CFA.Model1, seed=123567)
+##D Output2 <- sim(5, n=500, model=CFA.Model2, generate=CFA.Model1, seed=123567)
+##D anova(Output1, Output2)
+##D 
+##D Output1b <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model1, generate=CFA.Model1, seed=123567)
+##D Output2b <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model2, generate=CFA.Model1, seed=123567)
+##D anova(Output1b, Output2b)
+## End(Not run)
 
 
 
@@ -317,38 +309,6 @@ d8 <- list(df=6)
 
 
 dist <- bindDist(c(rep("t", 4), rep("chisq", 8)), d1, d2, d3, d4, d5, d6, d7, d8, d5, d6, d7, d8)
-
-
-
-cleanEx()
-nameEx("clean")
-### * clean
-
-flush(stderr()); flush(stdout())
-
-### Name: clean
-### Title: Extract only converged replications in the result objects
-### Aliases: clean
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("cleanSimResult")
-### * cleanSimResult
-
-flush(stderr()); flush(stdout())
-
-### Name: cleanSimResult
-### Title: Extract only converged replications in the result object
-### Aliases: cleanSimResult
-
-### ** Examples
-
-# No example
 
 
 
@@ -476,38 +436,6 @@ loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
 
 CFA.Model <- estmodel(LY = loading, modelType = "CFA")
-
-
-
-cleanEx()
-nameEx("extractLavaanFit")
-### * extractLavaanFit
-
-flush(stderr()); flush(stdout())
-
-### Name: extractLavaanFit
-### Title: Extract fit indices from the lavaan object
-### Aliases: extractLavaanFit
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("find2Dhist")
-### * find2Dhist
-
-flush(stderr()); flush(stdout())
-
-### Name: find2Dhist
-### Title: Fit the 2D Kernel Density Estimate
-### Aliases: find2Dhist
-
-### ** Examples
-
-# No example
 
 
 
@@ -807,74 +735,6 @@ findRecursiveSet(path)
 
 
 cleanEx()
-nameEx("findRowZero")
-### * findRowZero
-
-flush(stderr()); flush(stdout())
-
-### Name: findRowZero
-### Title: Find rows in a matrix that all elements are zero in non-fixed
-###   subset rows and columns.
-### Aliases: findRowZero
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("findTargetPower")
-### * findTargetPower
-
-flush(stderr()); flush(stdout())
-
-### Name: findTargetPower
-### Title: Find a value of varying parameters that provides a given value
-###   of power.
-### Aliases: findTargetPower
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("findphist")
-### * findphist
-
-flush(stderr()); flush(stdout())
-
-### Name: findphist
-### Title: Find the density (likelihood) of a pair value in 2D Kernel
-###   Density Estimate
-### Aliases: findphist
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("fitMeasuresChi")
-### * fitMeasuresChi
-
-flush(stderr()); flush(stdout())
-
-### Name: fitMeasuresChi
-### Title: Find fit indices from the discrepancy values of the target model
-###   and null models.
-### Aliases: fitMeasuresChi
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
 nameEx("generate")
 ### * generate
 
@@ -902,22 +762,6 @@ VY <- bind(rep(NA,6),2)
 CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
 
 dat <- generate(CFA.Model,200)
-
-
-
-cleanEx()
-nameEx("getCondQtile")
-### * getCondQtile
-
-flush(stderr()); flush(stdout())
-
-### Name: getCondQtile
-### Title: Get a quantile of a variable given values of predictors
-### Aliases: getCondQtile
-
-### ** Examples
-
-# No example
 
 
 
@@ -1079,24 +923,6 @@ flush(stderr()); flush(stdout())
 ##D Output <- sim(5, n=200, model=CFA.Model, outfun=outfun)
 ##D getExtraOutput(Output)
 ## End(Not run)
-
-
-
-cleanEx()
-nameEx("getKeywords")
-### * getKeywords
-
-flush(stderr()); flush(stdout())
-
-### Name: getKeywords
-### Title: List of all keywords used in the 'simsem' package
-### Aliases: getKeywords
-
-### ** Examples
-
-# This function is not a public function.
-
-# getKeywords()
 
 
 
@@ -1346,23 +1172,6 @@ flush(stderr()); flush(stdout())
 
 
 cleanEx()
-nameEx("interpolate")
-### * interpolate
-
-flush(stderr()); flush(stdout())
-
-### Name: interpolate
-### Title: Find the value of one vector relative to a value of another
-###   vector by interpolation
-### Aliases: interpolate
-
-### ** Examples
-
-# No Example
-
-
-
-cleanEx()
 nameEx("likRatioFit")
 ### * likRatioFit
 
@@ -1415,35 +1224,19 @@ flush(stderr()); flush(stdout())
 
 
 cleanEx()
-nameEx("loadingFromAlpha")
-### * loadingFromAlpha
-
-flush(stderr()); flush(stdout())
-
-### Name: loadingFromAlpha
-### Title: Find standardized factor loading from coefficient alpha
-### Aliases: loadingFromAlpha
-
-### ** Examples
-
-    loadingFromAlpha(0.8, 4)
-
-
-
-cleanEx()
 nameEx("miss")
 ### * miss
 
 flush(stderr()); flush(stdout())
 
 ### Name: miss
-### Title: TBA
+### Title: Specifying the missing template to impose on a dataset
 ### Aliases: miss
 
 ### ** Examples
 
 #Example of imposing 10% MCAR missing in all variables with no imputations (FIML method)
-Missing <- miss(pmMCAR=0.1)
+Missing <- miss(pmMCAR=0.1, ignoreCols="group")
 summary(Missing)
 
 loading <- matrix(0, 6, 1)
@@ -1457,11 +1250,11 @@ CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
 dat <- generate(CFA.Model, n = 20)
 
 #Impose missing
-#dat <- run(Missing, dat)
+dat <- impose(Missing, dat)
 
 #Analyze data
-#out <- run(SimModel, dat)
-#summary(out)
+out <- analyze(CFA.Model, dat)
+summary(out)
 
 #Example to create simMissing object for 3 forms design at 3 timepoints with 10 imputations
 Missing <- miss(nforms=3, timePoints=3, numImps=10)
@@ -1539,26 +1332,6 @@ multipleAllEqual(1:5, 1:6, seq(2, 10, 2)/2)
 
 
 cleanEx()
-nameEx("overlapHist")
-### * overlapHist
-
-flush(stderr()); flush(stdout())
-
-### Name: overlapHist
-### Title: Plot overlapping histograms
-### Aliases: overlapHist
-
-### ** Examples
-
-# This function is not a public function.
-
-# a <- rnorm(10000, 0, 1)
-# b <- rnorm(10000, 1, 1.5)
-# overlapHist(a, b, main="Example")
-
-
-
-cleanEx()
 nameEx("pValue")
 ### * pValue
 
@@ -1595,23 +1368,6 @@ flush(stderr()); flush(stdout())
 ##D simout <- sim(20, n=nrow(HolzingerSwineford1939), mismodel)
 ##D pValue(out, simout)
 ## End(Not run)
-
-
-
-cleanEx()
-nameEx("pValueCondCutoff")
-### * pValueCondCutoff
-
-flush(stderr()); flush(stdout())
-
-### Name: pValueCondCutoff
-### Title: Find a p value when the target is conditional (valid) on a
-###   specific value of a predictor
-### Aliases: pValueCondCutoff
-
-### ** Examples
-
-# No example
 
 
 
@@ -1707,40 +1463,6 @@ flush(stderr()); flush(stdout())
 ##D # The output may contain some warnings here. When the number of replications increases (e.g., 1000), the warnings should disappear.
 ##D pValueNonNested(out.A, out.B, output.A.A, output.A.B, output.B.A, output.B.B)
 ## End(Not run)
-
-
-
-cleanEx()
-nameEx("pValueVariedCutoff")
-### * pValueVariedCutoff
-
-flush(stderr()); flush(stdout())
-
-### Name: pValueVariedCutoff
-### Title: Find a p value when the cutoff is specified as a vector given
-###   the values of predictors
-### Aliases: pValueVariedCutoff
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("plot3DQtile")
-### * plot3DQtile
-
-flush(stderr()); flush(stdout())
-
-### Name: plot3DQtile
-### Title: Build a persepctive plot or contour plot of a quantile of
-###   predicted values
-### Aliases: plot3DQtile
-
-### ** Examples
-
-# No example
 
 
 
@@ -1890,40 +1612,6 @@ plotDist(datadist, var=3)
 
 
 cleanEx()
-nameEx("plotIndividualScatter")
-### * plotIndividualScatter
-
-flush(stderr()); flush(stdout())
-
-### Name: plotIndividualScatter
-### Title: Plot an overlaying scatter plot visualizing the power of
-###   rejecting misspecified models
-### Aliases: plotIndividualScatter
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("plotLogisticFit")
-### * plotLogisticFit
-
-flush(stderr()); flush(stdout())
-
-### Name: plotLogisticFit
-### Title: Plot multiple logistic curves for predicting whether rejecting a
-###   misspecified model
-### Aliases: plotLogisticFit
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
 nameEx("plotMisfit")
 ### * plotMisfit
 
@@ -1958,22 +1646,6 @@ ParamObject <- sim(20, n=500, Path.Model)
 plotMisfit(ParamObject)
 
 plotMisfit(ParamObject, misParam=1:2)
-
-
-
-cleanEx()
-nameEx("plotOverHist")
-### * plotOverHist
-
-flush(stderr()); flush(stdout())
-
-### Name: plotOverHist
-### Title: Plot multiple overlapping histograms
-### Aliases: plotOverHist
-
-### ** Examples
-
-# No example
 
 
 
@@ -2057,23 +1729,6 @@ flush(stderr()); flush(stdout())
 ##D plotPowerFit(Output.ALT2, nullObject=Output.NULL2, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
 ##D plotPowerFit(Output.ALT2, cutoff=Rule.of.thumb, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
 ## End(Not run)
-
-
-
-cleanEx()
-nameEx("plotPowerFitDf")
-### * plotPowerFitDf
-
-flush(stderr()); flush(stdout())
-
-### Name: plotPowerFitDf
-### Title: Plot sampling distributions of fit indices that visualize power
-###   of rejecting datasets underlying misspecified models
-### Aliases: plotPowerFitDf
-
-### ** Examples
-
-# No example
 
 
 
@@ -2172,56 +1827,6 @@ flush(stderr()); flush(stdout())
 
 
 cleanEx()
-nameEx("plotPowerSig")
-### * plotPowerSig
-
-flush(stderr()); flush(stdout())
-
-### Name: plotPowerSig
-### Title: Plot multiple logistic curves given a significance result matrix
-### Aliases: plotPowerSig
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("plotQtile")
-### * plotQtile
-
-flush(stderr()); flush(stdout())
-
-### Name: plotQtile
-### Title: Build a scatterplot with overlaying line of quantiles of
-###   predicted values
-### Aliases: plotQtile
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("plotScatter")
-### * plotScatter
-
-flush(stderr()); flush(stdout())
-
-### Name: plotScatter
-### Title: Plot overlaying scatter plots visualizing the power of rejecting
-###   misspecified models
-### Aliases: plotScatter
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
 nameEx("popDiscrepancy")
 ### * popDiscrepancy
 
@@ -2263,56 +1868,35 @@ popMisfitMACS(m1, S1, m2, S2)
 
 
 cleanEx()
-nameEx("predProb")
-### * predProb
+nameEx("rawDraw")
+### * rawDraw
 
 flush(stderr()); flush(stdout())
 
-### Name: predProb
-### Title: Function to get predicted probabilities from logistic regression
-### Aliases: predProb
+### Name: rawDraw
+### Title: Draw values from vector or matrix objects
+### Aliases: rawDraw
 
 ### ** Examples
 
-# No example
-
-
-
-cleanEx()
-nameEx("printIfNotNull")
-### * printIfNotNull
-
-flush(stderr()); flush(stdout())
-
-### Name: printIfNotNull
-### Title: Provide basic summary of each object if that object is not NULL.
-### Aliases: printIfNotNull
-
-### ** Examples
-
-# This function is not public
-
-# AL <- simVector(rep(NA, 5), "0")
-# printIfNotNull(AL, "Factor mean")
-
-
-
-cleanEx()
-nameEx("revText")
-### * revText
-
-flush(stderr()); flush(stdout())
-
-### Name: revText
-### Title: Reverse the proportion value by subtracting it from 1
-### Aliases: revText
-
-### ** Examples
-
-# This is a private function.
-
-# revText(.96)
-# revText("> .60")
+loading <- matrix(0, 7, 3)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+loading[1:7, 3] <- NA
+loadingVal <- matrix(0, 7, 3)
+loadingVal[1:3, 1] <- "runif(1, 0.5, 0.7)"
+loadingVal[4:6, 2] <- "runif(1, 0.5, 0.7)"
+loadingVal[1:6, 3] <- "runif(1, 0.3, 0.5)"
+loadingVal[7, 3] <- 1
+loading.mis <- matrix("runif(1, -0.2, 0.2)", 7, 3)
+loading.mis[is.na(loading)] <- 0
+loading.mis[,3] <- 0
+loading.mis[7,] <- 0
+loading[1:3, 1] <- "con1"
+LY <- bind(loading, loadingVal, misspec=loading.mis)
+rawDraw(LY)
+rawDraw(LY, parMisOnly=TRUE)
+rawDraw(LY, misOnly=TRUE)
 
 
 
@@ -2421,24 +2005,23 @@ VY <- bind(rep(NA,6),2)
 
 CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
 
-Output <- sim(20, CFA.Model,n=200)
+Output <- sim(5, CFA.Model,n=200)
 summary(Output)
 
+# Example of data transformation
+fun1 <- function(data) {
+	temp <- scale(data)
+	temp[,"group"] <- data[,"group"]
+	as.data.frame(temp)
+}
 
-
-cleanEx()
-nameEx("sortList")
-### * sortList
-
-flush(stderr()); flush(stdout())
-
-### Name: sortList
-### Title: Sort two objects in a list
-### Aliases: sortList
-
-### ** Examples
-
-# No example
+# Example of additional output
+fun2 <- function(out) {
+	inspect(out, "mi")
+}
+Output <- sim(5, CFA.Model,n=200,datafun=fun1, outfun=fun2)
+summary(Output)
+getExtraOutput(Output)
 
 
 
@@ -2599,8 +2182,8 @@ nameEx("summaryPopulation")
 flush(stderr()); flush(stdout())
 
 ### Name: summaryPopulation
-### Title: Summarize the data generation population model underlying a
-###   result object
+### Title: Summarize the population model used for data generation
+###   underlying a result object
 ### Aliases: summaryPopulation
 
 ### ** Examples
@@ -2640,90 +2223,6 @@ loading[4:6, 2] <- NA
 loadingValues <- matrix(0, 6, 2)
 LX <- bind(loading, "runif(1, 0.8, 0.9)")
 summaryShort(LX)
-
-
-
-cleanEx()
-nameEx("twoTailedPValue")
-### * twoTailedPValue
-
-flush(stderr()); flush(stdout())
-
-### Name: twoTailedPValue
-### Title: Find two-tailed _p_ value from one-tailed _p_ value
-### Aliases: twoTailedPValue
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("validateCovariance")
-### * validateCovariance
-
-flush(stderr()); flush(stdout())
-
-### Name: validateCovariance
-### Title: Validate whether all elements provides a good covariance matrix
-### Aliases: validateCovariance
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("validateObject")
-### * validateObject
-
-flush(stderr()); flush(stdout())
-
-### Name: validateObject
-### Title: Validate whether the drawn parameters are good.
-### Aliases: validateObject
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("validatePath")
-### * validatePath
-
-flush(stderr()); flush(stdout())
-
-### Name: validatePath
-### Title: Validate whether the regression coefficient (or loading) matrix
-###   is good
-### Aliases: validatePath
-
-### ** Examples
-
-# No example
-
-
-
-cleanEx()
-nameEx("whichMonotonic")
-### * whichMonotonic
-
-flush(stderr()); flush(stdout())
-
-### Name: whichMonotonic
-### Title: Extract a part of a vector that is monotonically increasing or
-###   decreasing
-### Aliases: whichMonotonic
-
-### ** Examples
-
-# This is a private function.
-
-# whichMonotonic(c(3, 4, 1, 2, 3, 5, 2, 1))
 
 
 

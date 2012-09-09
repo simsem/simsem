@@ -66,15 +66,14 @@ generate(model, n, maxDraw=50, misfitBounds=NULL, misfitType="f0",
 	A data.frame containing simulated data from the data generation template. A variable "group" is appended indicating group membership.
 }
 \details{
-	This function will use \code{mvrnorm} function in \code{MASS} package to create data from model implied covariance matrix if the data distribution object (\code{\linkS4class{SimDataDist}}) is not specified. It the data distribution object is specified, the Gaussian copula model is used. See \code{\linkS4class{SimDataDist}} for further details. For the model-based bootstrap, the transformation proposed by Yung & Bentler (1996) is used. This procedure is the expansion from the Bollen and Stine (1992) bootstrap including a mean structure. The model-implied mean vector and covariance matrix with trivial misspecification will be used in the model-based bootstrap if \code{misspec} is specified. See page 133 of Bollen and Stine (1992) for a reference. 
+This function will use \code{\link[MASS]{mvrnorm}} function ito create data from model implied covariance matrix if the data distribution object (\code{\linkS4class{SimDataDist}}) is not specified. It the data distribution object is specified, the Gaussian copula model is used. See \code{\linkS4class{SimDataDist}} for further details. For the model-based bootstrap, the transformation proposed by Yung & Bentler (1996) is used. This procedure is the expansion from the Bollen and Stine (1992) bootstrap including a mean structure. The model-implied mean vector and covariance matrix with trivial misspecification will be used in the model-based bootstrap if \code{misspec} is specified. See page 133 of Bollen and Stine (1992) for a reference. 
 
 Internally, parameters are first drawn, and data is then created from these parameters. Both of these steps are available via the \code{\link{draw}} and \code{\link{createData}} functions respectively.
 }
 \references{
-	\itemize{
-		\item Bollen, K. A., & Stine, R. A. (1992). Bootstrapping goodness-of-fit measures in structural equation models. \emph{Sociological Methods and Research, 21,} 205-229.
-		\item Yung, Y.-F., & Bentler, P. M. (1996). Bootstrapping techniques in analysis of mean and covariance structures. In G. A. Marcoulides & R. E. Schumacker (Eds.), \emph{Advanced structural equation modeling: Issues and techniques} (pp. 195-226). Mahwah, NJ: Erlbaum.
-	}
+Bollen, K. A., & Stine, R. A. (1992). Bootstrapping goodness-of-fit measures in structural equation models. \emph{Sociological Methods and Research, 21,} 205-229.
+
+Yung, Y.-F., & Bentler, P. M. (1996). Bootstrapping techniques in analysis of mean and covariance structures. In G. A. Marcoulides & R. E. Schumacker (Eds.), \emph{Advanced structural equation modeling: Issues and techniques} (pp. 195-226). Mahwah, NJ: Erlbaum.
 }
 \author{	
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu}), Patrick Miller (Univeristy of Notre Dame; \email{pmille13@nd.edu})

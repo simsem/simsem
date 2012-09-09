@@ -21,13 +21,13 @@ summaryMisspec(object)
 	
 	\deqn{ F_0 = tr\left( \tilde{\Sigma} \Sigma^{-1} \right) - \log{\left| \tilde{\Sigma} \Sigma^{-1} \right|} - p + \left( \tilde{\mu} - \mu \right)^{\prime} \Sigma^{-1} \left( \tilde{\mu} - \mu \right).	}
 	
-	where \eqn{\mu} is the model-implied mean from the real parameters, \eqn{\Sigma} is the model-implied covariance matrix from the real parameters, \eqn{\tilde{\mu}} is the model-implied mean from the real and misspecified parameters, \eqn{\tilde{\Sigma}} is the model-implied covariance matrix from the real and misspecified parameter, \emph{p} is the number of indicators. For the multiple groups, the \eqn{f_0} value is the sum of this value across groups.
+	where \eqn{\mu} is the model-implied mean from the real parameters, \eqn{\Sigma} is the model-implied covariance matrix from the real parameters, \eqn{\tilde{\mu}} is the model-implied mean from the real and misspecified parameters, \eqn{\tilde{\Sigma}} is the model-implied covariance matrix from the real and misspecified parameter, \emph{p} is the number of indicators. For the multiple groups, the resulting \eqn{f_0} value is the sum of this value across groups.
 	
 	The root mean squared error of approximation (rmsea) is calculated by
 	
 	\deqn{rmsea = \sqrt{\frac{f_0}{df}}}
 	
-	where \eqn{f_0} is the discrepancy value between two means vectors and covariance matrices (see \code{\link{popDiscrepancy}}) and \eqn{df} is the degree of freedom in the real model.
+	where \eqn{df} is the degree of freedom in the real model.
 	
 	The standardized root mean squared residual (srmr) can be calculated by
 	

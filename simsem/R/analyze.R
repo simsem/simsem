@@ -1,6 +1,6 @@
 
 
-analyze <- function(model, data, package = "lavaan", miss = NULL, indLab = NULL, 
+analyze <- function(model, data, package = "lavaan", miss = NULL, 
     aux = NULL, ...) {
     Output <- NULL
     DataOut <- NULL
@@ -18,20 +18,6 @@ analyze <- function(model, data, package = "lavaan", miss = NULL, indLab = NULL,
         if (!is.null(miss) && !(length(miss@cov) == 1 && miss@cov == 0) && miss@covAsAux) 
             auxiliy <- miss@cov
     }
-    if (is.null(indLab)) {
-        if (is.null(aux)) {
-            indLab <- colnames(data)
-        } else if (is.numeric(aux)) {
-            if (max(aux) > ncol(data)) 
-                stop("The maximum index in the auxiliary variable set is greater than the number of variables in the data.")
-            indLab <- colnames(data)[-aux]
-        } else {
-            if (length(intersect(colnames(data), aux)) != length(aux)) 
-                stop("Some auxiliary variables does not exist in the dataset.")
-            indLab <- setdiff(colnames(data), aux)
-        }
-    }
-    
     if (!(model@groupLab %in% colnames(data))) {
         data <- data.frame(data, group = 1)
         colnames(data)[ncol(data)] <- model@groupLab

@@ -481,6 +481,7 @@ createImpliedMACS <- function(reducedParamSet) {
 }
 
 ## Now takes lists for the matrices for mg
+
 popMisfitMACS <- function(paramM, paramCM, misspecM, misspecCM, dfParam = NULL, fit.measures = "all") {
     if (!is.list(paramM)) 
         paramM <- list(paramM)
@@ -543,6 +544,7 @@ popMisfitMACS <- function(paramM, paramCM, misspecM, misspecCM, dfParam = NULL, 
 
 # F0 in population: The discrepancy due to approximation (Browne & Cudeck,
 # 1992)
+
 popDiscrepancy <- function(paramM, paramCM, misspecM, misspecCM) {
     p <- length(misspecM)
     inv <- solve(paramCM)

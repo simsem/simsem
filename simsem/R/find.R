@@ -232,6 +232,27 @@ findRecursiveSet <- function(beta) {
     return(result)
 }
 
+# \title{
+	# Find rows in a matrix that all elements are zero in non-fixed subset rows and columns. 
+# }
+# \description{
+	# Find rows in a matrix that all elements are zero in non-fixed subset rows and columns. This function will be used in the \code{\link{findRecursiveSet}} function
+# }
+# \usage{
+# findRowZero(square.matrix, is.row.fixed = FALSE)
+# }
+# \arguments{
+  # \item{square.matrix}{
+	# Any square matrix
+# }
+  # \item{is.row.fixed}{
+	# A logical vector with the length equal to the dimension of the \code{square.matrix}. If \code{TRUE}, the function will skip examining this row.
+# }
+# }
+# \value{
+	# A vector of positions that contain rows of all zeros
+# }
+
 findRowZero <- function(square.matrix, is.row.fixed = FALSE) {
     ni <- nrow(square.matrix)
     if (length(is.row.fixed) == 1) {

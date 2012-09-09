@@ -140,3 +140,35 @@ setMethod("summary", signature = "SimDataDist", definition = function(object) {
     cat(paste("Reverse (mirror) distribution:", paste(object@reverse, collapse = " / "), 
         "\n"))
 }) 
+
+# printIfNotNull: Provide basic summary of each object if that object is not
+# NULL. Mainly call from summary function from SimSet.c object.
+
+# \title{
+	# Provide basic summary of each object if that object is not NULL. 
+# }
+# \description{
+	# Provide basic summary of each object if that object is not NULL. This function is mainly used in the \code{summary} function from the \code{linkS4class{SimSet}} object.
+# }
+# \usage{
+# printIfNotNull(object, name=NULL)
+# }
+# \arguments{
+  # \item{object}{
+	# The target object to be printed, which can be \code{linkS4class{SimMatrix}}, \code{linkS4class{SymMatrix}}, or \code{linkS4class{SimVector}}.
+# }
+  # \item{name}{
+	# The name of the target object
+# }
+# }
+# \value{
+	# None. This function will print only.
+# }
+
+printIfNotNull <- function(object, name = NULL) {
+    if (!is.null(object)) {
+        if (!is.null(name)) 
+            cat(name, "\n")
+        summaryShort(object)
+    }
+} 
