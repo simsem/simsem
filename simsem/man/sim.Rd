@@ -4,7 +4,7 @@
 	Run a monte carlo simulation with a structural equation model.
 }
 \description{
-	TBA
+	This function will draw parameters in data-generation model, create data, impose missing, analyze data by the target model, and summarize the outputs across replications. Data can be transformed by the \code{datafun} argument. The additional output can be extracted by the \code{outfun} argument. Paralleled processing is also availabe by the \code{multicore} argument.
 }
 \usage{
 sim(nRep, model, n, generate = NULL, rawData = NULL, miss = NULL, datafun=NULL, outfun=NULL,
@@ -74,7 +74,7 @@ paramOnly = FALSE, dataOnly=FALSE, ...)
 	Vector that contains upper and lower bounds of the misfit measure. Sets of parameters drawn that are not within these bounds are rejected.
 }
   \item{averageNumMisspec}{ 
-	\code{TRUE} or \code{FALSE}. ??
+	If \code{TRUE}, the provided fit will be divided by the number of misspecified parameters. 
 }
   \item{optMisfit}{ 
 	Character vector of either "min" or "max" indicating either maximum or minimum optimized misfit. If not null, the set of parameters out of the number of draws in "optDraws" that has either the maximum or minimum misfit of the given misfit type will be returned.
@@ -111,11 +111,16 @@ paramOnly = FALSE, dataOnly=FALSE, ...)
 }
 }
 \value{
-	TBA
+	A result object (\item \code{\linkS4class{SimResult}})
 }
 \author{
 	Patrick Miller (Univeristy of Notre Dame; \email{pmille13@nd.edu})
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
+}
+\seealso{
+	\itemize{
+		\item \code{\linkS4class{SimResult}} for the resulting output description
+	}
 }
 \examples{
 loading <- matrix(0, 6, 2)
@@ -133,7 +138,22 @@ VY <- bind(rep(NA,6),2)
 
 CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
 
-Output <- sim(20, CFA.Model,n=200)
+Output <- sim(5, CFA.Model,n=200)
 summary(Output)
+
+# Example of data transformation
+fun1 <- function(data) {
+	temp <- scale(data)
+	temp[,"group"] <- data[,"group"]
+	as.data.frame(temp)
+}
+
+# Example of additional output
+fun2 <- function(out) {
+	inspect(out, "mi")
+}
+Output <- sim(5, CFA.Model,n=200,datafun=fun1, outfun=fun2)
+summary(Output)
+getExtraOutput(Output)
 }
 

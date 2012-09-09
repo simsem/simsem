@@ -2,31 +2,26 @@
 \Rdversion{1.1}
 \docType{class}
 \alias{SimSem-class}
-%\alias{run,SimSem-method}
 \alias{summary,SimSem-method}
-%\alias{extract,SimSem-method}
-
 \title{Class \code{"SimSem"}}
 \description{
-	TBA
+	The template containing data-generation and data-analysis specification
 }
 \section{Objects from the Class}{
-	TBA
+	Objects can be created by \code{\link{model}}. 
 }
 \section{Slots}{
   \describe{
-    \item{\code{pt}:}{ TBA }
-    \item{\code{dgen}:}{TBA}
-    \item{\code{modelType}:}{TBA}
-    \item{\code{groupLab}:}{TBA}
+    \item{\code{pt}:}{ Parameter table used in data analysis }
+    \item{\code{dgen}:}{ Data generation template }
+    \item{\code{modelType}:}{ Type of models (CFA, Path, or SEM) contained in this object }
+    \item{\code{groupLab}:}{ The label of grouping variable }
   }
 }
 \section{Methods}{
   \describe{
-    %\item{run}{Create a sample of parameters in this object. In other words, draw a sample from all random parameters which is represented in \code{\linkS4class{VirtualDist}}. }
     \item{summary}{Get the summary of model specification }
-    %\item{extract}{Extract elements from a SimSem. There are several additional arguments. First, if \code{yOnly} is \code{TRUE}, then the result will provide only Y side. Second, \code{y} is the index of indicators in Y side to be extracted. Third, \code{e} is the index of factors in Y side to be extracted. Fourth, \code{x} is the index of the indicators in X side to be extracted. Finally, \code{k} is the index of the factors in X side to be extracted. }
-	 }
+ }
 }
 \author{
     Patrick Miller (Univeristy of Notre Dame; \email{pmille13@nd.edu}), 
@@ -60,8 +55,4 @@ RTD <- binds(error.cor)
 
 CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
 summary(CFA.Model)
-#run(CFA.Model)
-
-#CFA.Model2 <- extract(CFA.Model, y=1:3, e=1)
-#summary(CFA.Model2)
 }

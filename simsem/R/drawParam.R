@@ -480,26 +480,6 @@ createImpliedMACS <- function(reducedParamSet) {
     return(list(M = as.vector(implied.mean), CM = implied.covariance))
 }
 
-## Doesn't really do anything? just finds the mean and covariance matrices from
-## param and misspec.  popMisfit <- function(param, misspec, dfParam = NULL,
-## fit.measures = 'all', mg=FALSE) { paramCM <- NULL paramM <- NULL misspecCM
-## <- NULL misspecM <- NULL if (is(param[[1]], 'matrix')) { paramCM <-
-## param[[1]] p <- nrow(paramCM) paramM <- rep(0, p) if (is(param[[2]],
-## 'vector')) { paramM <- param[[2]] } } else if (is(param[[2]], 'matrix')) {
-## paramCM <- param[[2]] if (is(param[[1]], 'vector')) { paramM <- param[[1]] }
-## else { stop('Cannot find the mean vector of the parameter values.') } } else
-## { stop('Cannot find covariance matrix in the parameter values') } if
-## (is(misspec[[1]], 'matrix')) { misspecCM <- misspec[[1]] p <-
-## nrow(misspecCM) misspecM <- rep(0, p) if (is(misspec[[2]], 'vector')) {
-## misspecM <- misspec[[2]] } } else if (is(misspec[[2]], 'matrix')) {
-## misspecCM <- misspec[[2]] if (is(param[[1]], 'vector')) { misspecM <-
-## misspec[[1]] } else { stop('Cannot find the mean vector of the
-## misspecification values.') } } else { stop('Cannot find covariance matrix in
-## the misspecification values') } result <- popMisfitMACS(paramM, paramCM,
-## misspecM, misspecCM, dfParam = dfParam, fit.measures = fit.measures)
-## return(result) }
-
-
 ## Now takes lists for the matrices for mg
 popMisfitMACS <- function(paramM, paramCM, misspecM, misspecCM, dfParam = NULL, fit.measures = "all") {
     if (!is.list(paramM)) 

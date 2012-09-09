@@ -8,7 +8,7 @@
 Missing information imposing on the complete dataset
 }
 \section{Objects from the Class}{
-Objects can be created by \code{simMissing} function. It can also be called from the form \code{new("SimMissing", ...)}.
+Objects can be created by \code{\link{miss}} function. 
 }
 \section{Slots}{
   \describe{
@@ -33,11 +33,11 @@ Objects can be created by \code{simMissing} function. It can also be called from
 \section{Methods}{
 	\itemize{
 		\item \code{\link{summary}} To summarize the object
-		%\item \code{\link{run}} To impose missing information into data
+		\item \code{\link{impose}} To impose missing information into data
 	}
 }
 \author{
-	Patrick Miller(University of Kansas; \email{patr1ckm@ku.edu})
+	Patrick Miller (Univeristy of Notre Dame; \email{pmille13@nd.edu})
 	Alexander M. Schoemann (University of Kansas; \email{schoemann@ku.edu})  
 	Kyle Lang (University of Kansas; \email{kylelang@ku.edu})
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
@@ -48,6 +48,7 @@ Objects can be created by \code{simMissing} function. It can also be called from
 	}
 }
 \examples{
-# No Example
+misstemplate <- miss(pmMCAR=0.2)
+summary(misstemplate)
 }
 \keyword{classes}

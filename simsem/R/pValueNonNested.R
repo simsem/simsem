@@ -90,6 +90,12 @@ pValueNonNested <- function(outMod1, outMod2, dat1Mod1, dat1Mod2, dat2Mod1, dat2
     return(list(pValueMod1 = result1, pValueMod2 = result2))
 }
 
+# twoTaledPValue: Find two-tailed \emph{p} value from one-tailed \emph{p} value
+
+# arguments: vec A vector of one-tailed \emph{p} value.
+
+# value A vector of two-tailed \emph{p} value.
+
 twoTailedPValue <- function(vec) {
     apply(cbind(vec, 1 - vec), 1, min) * 2
 } 

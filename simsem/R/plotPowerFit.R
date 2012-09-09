@@ -61,6 +61,48 @@ plotPowerFit <- function(altObject, nullObject = NULL, cutoff = NULL, usedFit = 
 # that visualize power in detecting misspecified models where the inputs are
 # data.frame
 
+# \title{
+# Plot sampling distributions of fit indices that visualize power of rejecting datasets underlying misspecified models
+# }
+# \description{
+# This function will plot sampling distributions of fit indices that visualize power in rejecting the misspecified models. This function is similar to the \code{\link{plotPowerFit}} function but the input distributions are \code{data.frame}.
+# }
+# \usage{
+# plotPowerFitDf(altObject, nullObject = NULL, cutoff = NULL, usedFit = NULL, alpha = 0.05, x = NULL, xval = NULL, useContour = TRUE, logistic = TRUE)
+# }
+# \arguments{
+  # \item{altObject}{
+	# The result object (\code{data.frame}) saves the simulation result of fitting the hypothesized model when the hypothesized model is \code{FALSE}.
+# }
+  # \item{nullObject}{
+	# The result object (\code{data.frame}) saves the simulation result of fitting the hypothesized model when the hypothesized model is \code{TRUE}. This argument may be not specified if the \code{cutoff} is specified.
+# }
+  # \item{cutoff}{
+	# A vector of priori cutoffs for fit indices.
+# }
+  # \item{usedFit}{
+	# Vector of names of fit indices that researchers wish to plot.
+# }
+  # \item{alpha}{
+	# A priori alpha level
+# }
+# \item{x}{
+	# The \code{data.frame} of the predictor values. The number of rows of the \code{x} argument should be equal to the number of rows in the \code{object}.
+# }
+# \item{xval}{
+	# The values of predictor that researchers would like to find the fit indices cutoffs from.
+# }
+  # \item{useContour}{
+	# If there are two of sample size, percent completely at random, and percent missing at random are varying, the \code{plotCutoff} function will provide 3D graph. Contour graph is a default. However, if this is specified as \code{FALSE}, perspective plot is used.
+# }
+  # \item{logistic}{
+	# If \code{logistic} is \code{TRUE} and the varying parameter exists (e.g., sample size or percent missing), the plot based on logistic regression predicting the significance by the varying parameters is preferred. If \code{FALSE}, the overlaying scatterplot with a line of cutoff is plotted.
+# }
+# }
+# \value{
+	# NONE. Only plot the fit indices distributions.
+# }
+
 plotPowerFitDf <- function(altObject, nullObject = NULL, cutoff = NULL, usedFit = NULL, 
     alpha = 0.05, x = NULL, xval = NULL, useContour = TRUE, logistic = TRUE) {
     if (is.null(x)) {
@@ -95,6 +137,46 @@ plotPowerFitDf <- function(altObject, nullObject = NULL, cutoff = NULL, usedFit 
 }
 
 # plotOverHist: Plot overlapping distributions with specified cutoffs
+
+# \title{
+# Plot multiple overlapping histograms
+# }
+# \description{
+# Plot multiple overlapping histograms and find the cutoff values if not specified
+# }
+# \usage{
+# plotOverHist(altObject, nullObject, cutoff=NULL, usedFit=NULL, alpha=0.05, 
+# cutoff2=NULL, cutoff3=NULL, cutoff4=NULL)
+# }
+# \arguments{
+  # \item{altObject}{
+	# The result object (\code{data.frame}) saves the simulation result of fitting the hypothesized model when the hypothesized model is \code{FALSE}.
+# }
+  # \item{nullObject}{
+	# The result object (\code{data.frame}) saves the simulation result of fitting the hypothesized model when the hypothesized model is \code{TRUE}. 
+# }
+  # \item{cutoff}{
+	# A vector of priori cutoffs for fit indices.
+# }
+  # \item{usedFit}{
+	# Vector of names of fit indices that researchers wish to plot.
+# }
+  # \item{alpha}{
+	# A priori alpha level
+# }
+  # \item{cutoff2}{
+	# Another vector of priori cutoffs for fit indices.
+# }
+  # \item{cutoff3}{
+	# A vector of priori cutoffs for fit indices for the \code{altObject}.
+# }
+  # \item{cutoff4}{
+	# Another vector of priori cutoffs for fit indices for the \code{altObject}.
+# }
+# }
+# \value{
+	# NONE. Only plot the fit indices distributions.
+# }
 
 plotOverHist <- function(altObject, nullObject, cutoff = NULL, usedFit = NULL, alpha = 0.05, 
     cutoff2 = NULL, cutoff3 = NULL, cutoff4 = NULL) {
@@ -165,6 +247,49 @@ plotOverHist <- function(altObject, nullObject, cutoff = NULL, usedFit = NULL, a
 # plotLogisticFit: Plot the logistic curves of predicting the
 # rejection/retention of a hypothesized model
 
+# \title{
+# Plot multiple logistic curves for predicting whether rejecting a misspecified model
+# }
+# \description{
+# This function will find the fit indices cutoff values if not specified, then check whether the hypothesized model is rejected in each dataset, and plot the logistic curve given the value of predictors. 
+# }
+# \usage{
+# plotLogisticFit(altObject, nullObject=NULL, cutoff=NULL, 
+# usedFit=NULL, x, xval, alpha=0.05, useContour=TRUE, df=0)
+# }
+# \arguments{
+  # \item{altObject}{
+	# The result object (\code{data.frame}) saves the simulation result of fitting the hypothesized model when the hypothesized model is \code{FALSE}.
+# }
+  # \item{nullObject}{
+	# The result object (\code{data.frame}) saves the simulation result of fitting the hypothesized model when the hypothesized model is \code{TRUE}. This argument may be not specified if the \code{cutoff} is specified.
+# }
+  # \item{cutoff}{
+	# A vector of priori cutoffs for fit indices.
+# }
+  # \item{usedFit}{
+	# Vector of names of fit indices that researchers wish to plot.
+# }
+  # \item{alpha}{
+	# A priori alpha level
+# }
+# \item{x}{
+	# The \code{data.frame} of the predictor values. The number of rows of the \code{x} argument should be equal to the number of rows in the \code{object}.
+# }
+# \item{xval}{
+	# The values of predictor that researchers would like to find the fit indices cutoffs from.
+# }
+  # \item{useContour}{
+	# If there are two of sample size, percent completely at random, and percent missing at random are varying, the \code{plotCutoff} function will provide 3D graph. Contour graph is a default. However, if this is specified as \code{FALSE}, perspective plot is used.
+# }
+  # \item{df}{
+	# The degree of freedom used in spline method in predicting the fit indices by the predictors. If \code{df} is 0, the spline method will not be applied.
+# }
+# }
+# \value{
+	# NONE. Only plot the fit indices distributions.
+# }
+
 plotLogisticFit <- function(altObject, nullObject = NULL, cutoff = NULL, usedFit = NULL, 
     x, xval, alpha = 0.05, useContour = TRUE, df = 0) {
     warnT <- as.numeric(options("warn"))
@@ -203,6 +328,42 @@ plotLogisticFit <- function(altObject, nullObject = NULL, cutoff = NULL, usedFit
 
 # plotScatter: Plot the overlapping scatterplots showing the distribution of
 # fit indices given the values of varying parameters
+
+# \title{
+# Plot overlaying scatter plots visualizing the power of rejecting misspecified models
+# }
+# \description{
+# This function will find the fit indices cutoff values if not specified and then plot the fit indices value against the value of predictors. The plot will include the fit indices value of the alternative models, the fit indices value of the null model (if specified), and the fit indices cutoffs.  
+# }
+# \usage{
+# plotScatter(altObject, nullObject=NULL, cutoff=NULL, usedFit = NULL, x, alpha=0.05, df=5)
+# }
+# \arguments{
+  # \item{altObject}{
+	# The result object (\code{data.frame}) saves the simulation result of fitting the hypothesized model when the hypothesized model is \code{FALSE}.
+# }
+  # \item{nullObject}{
+	# The result object (\code{data.frame}) saves the simulation result of fitting the hypothesized model when the hypothesized model is \code{TRUE}. This argument may be not specified if the \code{cutoff} is specified.
+# }
+  # \item{cutoff}{
+	# A vector of priori cutoffs for fit indices.
+# }
+  # \item{usedFit}{
+	# Vector of names of fit indices that researchers wish to plot.
+# }
+# \item{x}{
+	# The \code{data.frame} of the predictor values. The number of rows of the \code{x} argument should be equal to the number of rows in the \code{object}.
+# }
+  # \item{alpha}{
+	# A priori alpha level
+# }
+  # \item{df}{
+	# The degree of freedom used in spline method in predicting the fit indices by the predictors. If \code{df} is 0, the spline method will not be applied.
+# }
+# }
+# \value{
+	# NONE. Only plot the fit indices distributions.
+# }
 
 plotScatter <- function(altObject, nullObject = NULL, cutoff = NULL, usedFit = NULL, 
     x, alpha = 0.05, df = 5) {
@@ -254,6 +415,36 @@ plotScatter <- function(altObject, nullObject = NULL, cutoff = NULL, usedFit = N
 
 # plotIndividualScatter: Plot each overlapping scatterplot showing the
 # distribution of fit indices given the values of varying parameters
+
+# \title{
+# Plot an overlaying scatter plot visualizing the power of rejecting misspecified models
+# }
+# \description{
+# Plot the fit indices value against the value of predictors. The plot will include the fit indices value of the alternative models, the fit indices value of the null model (if specified), and the fit indices cutoffs (if specified).  
+# }
+# \usage{
+# plotIndividualScatter(altVec, nullVec=NULL, cutoff=NULL, x, main = NULL)
+# }
+# \arguments{
+  # \item{altVec}{
+	# The vector saving the fit index distribution when the hypothesized model is \code{FALSE}.
+# }
+  # \item{nullVec}{
+	# The vector saving the fit index distribution when the hypothesized model is \code{TRUE}.
+# }
+  # \item{cutoff}{
+	# A priori cutoff 
+# }
+# \item{x}{
+	# The \code{data.frame} of the predictor values. The number of rows of the \code{x} argument should be equal to the number of rows in the \code{object}.
+# }
+  # \item{main}{
+	# The title of the graph
+# }
+# }
+# \value{
+	# NONE. Only plot the fit indices distributions.
+# }
 
 plotIndividualScatter <- function(altVec, nullVec = NULL, cutoff = NULL, x, main = NULL) {
     maxAll <- max(c(altVec, nullVec), na.rm = TRUE)

@@ -31,8 +31,6 @@ summaryFit(object, alpha = NULL)
 		\item {SRMR} Standardized Root Mean Residual
 	}
 	When \code{linkS4class{SimResult}} has random simulation parameters (sample size or percent missing), columns are the fit indices listed above and rows are values of the random parameter.
-
-	See details in \code{\link{popDiscrepancy}} and \code{\link{popMisfitMACS}}
 }
 \author{
     Alexander M. Schoemann (University of Kansas; \email{schoemann@ku.edu})

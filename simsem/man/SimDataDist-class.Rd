@@ -4,7 +4,7 @@
 \alias{SimDataDist-class}
 \alias{summary,SimDataDist-method}
 \alias{plotDist,SimDataDist-method}
-\title{Class \code{"SimDataDist"}}
+\title{Class \code{"SimDataDist"}: Data distribution object}
 \description{
 This class will provide the distribution of a dataset.
 }
@@ -23,8 +23,7 @@ Objects can be created by \code{\link{bindDist}} function. It can also be called
 \section{Methods}{
 	\itemize{
 		\item{summary}{To summarize the object}
-		\item{plotDist}{To plot a density distribution (for one variable) or a contour plot (for two variables). If the object has more than two variables, the \code{var} argument can be used to select the index of plotting variables. For two variables, the default is to have correlation of 0. To change a correlation, the \code{r} argument can be used. The \code{xlim} and \code{ylim} can be specified to set the ranges of variables.}
-		\item{extract}{Extract elements from an object. The next argument is the position of the object to be extracted. }
+		\item{plotDist}{To plot a density distribution (for one variable) or a contour plot (for two variables).}
 	}
 }
 \author{
@@ -36,8 +35,6 @@ Objects can be created by \code{\link{bindDist}} function. It can also be called
 	}
 }
 \examples{
-# Need to be fixed
-
 showClass("SimDataDist")
 
 d1 <- list(df=2)
@@ -49,8 +46,7 @@ d6 <- list(df=4)
 d7 <- list(df=5)
 d8 <- list(df=6)
 
-
 dist <- bindDist(c(rep("t", 4), rep("chisq", 8)), d1, d2, d3, d4, d5, d6, d7, d8, d5, d6, d7, d8)
-
+summary(dist)
 }
 \keyword{classes}

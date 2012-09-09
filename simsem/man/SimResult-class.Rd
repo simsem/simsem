@@ -3,17 +3,13 @@
 \docType{class}
 \alias{SimResult-class}
 \alias{summary,SimResult-method}
-\alias{summaryPopulation,SimResult-method}
-\alias{getPopulation,SimResult-method}
-\alias{setPopulation,SimResult,data.frame-method}
-\alias{setPopulation,SimResult,SimSet-method}
-\alias{setPopulation,SimResult,VirtualRSet-method}
-\title{Class \code{"SimResult"}}
+\alias{summaryShort,SimResult-method}
+\title{Class \code{"SimResult"}: Simulation Result Object}
 \description{
-This class will save data analysis results from multiple replications and ready to find some useful statistics, such as fit indices cutoffs or power.
+This class will save data analysis results from multiple replications, such as fit indices cutoffs or power, parameter values, model misspecification, etc.
 }
 \section{Objects from the Class}{
-Objects can be created by \code{\link{sim}}. It can also be called from the form \code{new("SimResult", ...)}.
+Objects can be created by \code{\link{sim}}. 
 }
 \section{Slots}{
   \describe{
@@ -26,29 +22,50 @@ Objects can be created by \code{\link{sim}}. It can also be called from the form
     \item{\code{seed}:}{Seed number. }
 	\item{\code{paramValue}:}{Population model underlying each simulated dataset.}
 	\item{\code{misspecValue}:}{Misspecified-parameter values that are imposed on the population model in each replication.}
-	\item{\code{popFit}:}{The amount of population misfit. See details at \code{\link{popMisfitMACS}}}
+	\item{\code{popFit}:}{The amount of population misfit. See details at \code{\link{summaryMisspec}}}
 	\item{\code{FMI1}:}{Fraction Missing Method 1.}
 	\item{\code{FMI2}:}{Fraction Missing Method 2.}
 	\item{\code{stdCoef}:}{Standardized coefficients from each replication}
 	\item{\code{n}:}{Sample size of the analyzed data.}
 	\item{\code{pmMCAR}:}{Percent missing completely at random.}
 	\item{\code{pmMAR}:}{Percent missing at random.}
-	\item{\code{extraOut}:}{Extra outputs obtained from running the function specified in \code{outfun} argument.}
+	\item{\code{extraOut}:}{Extra outputs obtained from running the function specified in \code{outfun} argument in the \code{\link{sim}} function.}
 	\item{\code{timing}:}{Time elapsed in each phase of the simulation.}
   }
 }
 \section{Methods}{
+	The following methods are listed alphabetically. More details can be found by following the link of each method.
 	\itemize{
-		\item \code{\link{getCutoff}} to getCutoff of fit indices based on a priori alpha level.
-		\item \code{\link{getPowerFit}} to getPowerFit of rejection when the simResult is the alternative hypothesis and users specify cutoffs of the fit indices.
-		\item \code{\link{plotCutoff}} to plot null hypothesis sampling distributions of fit indices with an option to draw fit indices cutoffs by specifying a priori alpha level.
-		\item \code{\link{plotPowerFit}} to plot alternative hypothesis (and null hypothesis) with a priori cutoffs or alpha level.
+		\item \code{\link{anova}} to find the averages of model fit statistics and indices for nested models, as well as the differences of model fit indices among models. This function requires at least two \code{SimResult} objects. 
+		\item \code{\link{findPower}} to find a value of independent variables (e.g., sample size) that provides a given value of power of a parameter estimate. 
+		\item \code{\link{getCutoff}} to get the cutoff of fit indices based on a priori alpha level.
+		\item \code{\link{getCutoffNested}} to get the cutoff of the difference in fit indices of nested models based on a priori alpha level. 
+		\item \code{\link{getCutoffNonNested}} to get the cutoff of the difference in fit indices of nonnested models based on a priori alpha level. 
+		\item \code{\link{getExtraOutput}} to get extra outputs that users requested before running a simulation
+		\item \code{\link{getPopulation}} to get population parameter values underlying each dataset
+		\item \code{\link{getPower}} to get the power of each parameter estimate
+		\item \code{\link{getPowerFit}} to get the power in rejecting alternative models based on absolute model fit cutoff. 
+		\item \code{\link{getPowerFitNested}} to get the power in rejecting alternative models based on the difference between model fit cutoffs of nested models. 
+		\item \code{\link{getPowerFitNonNested}} to get the power in rejecting alternative models based on the difference between model fit cutoffs of nonnested models.  
+		\item \code{\link{likRatioFit}} to find the likelihood ratio (or Bayes factor) based on the bivariate distribution of fit indices
+		\item \code{\link{plotCutoff}} to plot sampling distributions of fit indices with an option to draw fit indices cutoffs by specifying a priori alpha level.
+		\item \code{\link{plotCutoffNested}} to plot sampling distributions of the difference in fit indices between nested models with an option to draw fit indices cutoffs by specifying a priori alpha level.
+		\item \code{\link{plotCutoffNonNested}} to plot sampling distributions of the difference in fit indices between nonnested models with an option to draw fit indices cutoffs by specifying a priori alpha level.
+		\item \code{\link{plotMisfit}} to visualize the population misfit and misspecified parameter values
+		\item \code{\link{plotPower}} to plot power of parameter estimates 
+		\item \code{\link{plotPowerFit}} to plot the power in rejecting alternative models based on absolute model fit cutoff.
+		\item \code{\link{plotPowerFitNested}} to plot the power in rejecting alternative models based on the difference between model fit cutoffs of nested models. 
+		\item \code{\link{plotPowerFitNonNested}} to plot the power in rejecting alternative models based on the difference between model fit cutoffs of nonnested models.   
+		\item \code{\link{pValue}} to find a p-value in comparing sample fit indices with the null sampling distribution of fit indices
+		\item \code{\link{pValueNested}} to find a p-value in comparing the difference in sample fit indices between nested models with the null sampling distribution of the difference in fit indices
+		\item \code{\link{pValueNonNested}} to find a p-value in comparing the difference in sample fit indices between nonnested models with the null sampling distribution of the difference in fit indices
+		\item \code{\link{setPopulation}} to set population model for computing bias
 		\item \code{\link{summary}} to summarize the result output
+		\item \code{\link{summaryConverge}} to provide a head-to-head comparison between the characteristics of convergent and nonconvergent replications
+		\item \code{\link{summaryMisspec}} to provide a summary of model misfit
 		\item \code{\link{summaryParam}} to summarize all parameter estimates
-		\item \code{anova} find the averages of model fit statistics and indices for nested models, as well as the differences of model fit indices among models. This function requires at least two \code{SimResult} objects. See \code{\link{anova}} for further details.
 		\item \code{\link{summaryPopulation}} to summarize the data generation population underlying the simulation study.
-		\item \code{\link{getPopulation}} to extract the data generation population underlying the simulation study. This method will return a data frame of the population underlying each replication.
-		\item \code{\link{setPopulation}} to put the appropriate data generation model into the result object. If the appropriate data generation model is put (the same model as the analysis model), the bias in parameter estimates and standard errors will be able to be calculated by the \code{summary} function. The first argument is the result object. The second argument can be either \code{data.frame} of the population or \code{SimSet} of the population. See the 'modeling with covariate' in the manual for an example.	
+		\item \code{\link{summaryShort}} to provide a short summary of the result output
 	}
 }
 \author{
@@ -56,20 +73,17 @@ Objects can be created by \code{\link{sim}}. It can also be called from the form
 }
 \seealso{
 	\itemize{
-		%\item \code{\linkS4class{SimData}} for data generation model.
-		%\item \code{\linkS4class{SimModel}} for analysis model
 		\item \code{\link{sim}} for the constructor of this class
-	
 	}
 }
 \examples{
 showClass("SimResult")
 loading <- matrix(0, 6, 1)
 loading[1:6, 1] <- NA
-LX <- bind(loading, 0.7)
-RPH <- binds(diag(1))
-RTD <- binds(diag(6))
-CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+LY <- bind(loading, 0.7)
+RPS <- binds(diag(1))
+RTE <- binds(diag(6))
+CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA")
 
 # We make the examples running only 5 replications to save time.
 # In reality, more replications are needed.

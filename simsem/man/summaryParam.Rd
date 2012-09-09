@@ -27,11 +27,11 @@ summaryParam(object, alpha = 0.05, detail = FALSE)
 		\item \code{Estimate.Average:} Average of parameter estimates across all replications
 		\item \code{Estimate.SD:} Standard Deviation of parameter estimates across all replications
 		\item \code{Average.SE:} Average of standard errors across all replications
-		\item \code{Power (Not equal 0):} Proportion of significant replications when testing whether the parameters are different from zero
+		\item \code{Power (Not equal 0):} Proportion of significant replications when testing whether the parameters are different from zero. The alpha level can be set by the \code{alpha} argument of this function.
 		\item \code{Average.Param:} Parameter values or average values of parameters if random parameters are specified
-		\item \code{SD.Param:} Standard Deviations of parameters. Appeared only when random parameters are specified.
+		\item \code{SD.Param:} Standard Deviations of parameters. Show only when random parameters are specified.
 		\item \code{Average.Bias:} The difference between parameter estimates and parameter underlying data
-		\item \code{SD.Bias:} Standard Deviations of bias across all replications. Appeared only when random parameters are specified. 
+		\item \code{SD.Bias:} Standard Deviations of bias across all replications. Show only when random parameters are specified. 
 			This value is the expected value of average standard error when random parameter are specified.
 		\item \code{Coverage:} The percentage of (1-alpha)\% confidence interval covers parameters underlying the data.
 		\item \code{Rel.Bias:} Relative Bias, which is (\code{Estimate.Average} - \code{Average.Param})/\code{Average.Param}. 

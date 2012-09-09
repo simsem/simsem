@@ -1,3 +1,8 @@
+# validateObject: Validate whether the drawn parameters are good (providing an identified model).
+
+# arguments: paramSet A target set of parameters
+
+# value: Return \code{TRUE} if the target parameters are good.
 
 validateObject <- function(paramSet) {
     if (validateCovariance(paramSet$VPS, paramSet$RPS, paramSet$VE) == FALSE) 
@@ -19,6 +24,12 @@ validateObject <- function(paramSet) {
 
 # validatePath: Validate whether the regression coefficient (or loading) matrix
 # is good
+
+# arguments: a) path A regression coefficient or loading matrix
+# 			 b) var.iv The variances of variables corresponding to the columns
+# 			 c) var.dv The variances of variables corresponding to the rows
+
+# value: Return \code{TRUE} if the target regression coefficient matrix is good.
 
 validatePath <- function(path, var.iv, var.dv) {
     # Need to account for multiple independent variables
@@ -43,8 +54,13 @@ validatePath <- function(path, var.iv, var.dv) {
     }
 }
 
-# validateCovariance: Validate whether all elements provides a good covariance
-# matrix
+# validateCovariance: Validate whether all elements provides a good covariance matrix
+
+# arguments: a) resVar A vector of residual variances
+# 			b) correlation A correlation matrix
+# 			c) totalVar A vector of total variances
+
+# value: Return \code{TRUE} if the covariance matrix is good
 
 validateCovariance <- function(resVar, correlation, totalVar = NULL) {
     if (!isSymmetric(correlation)) 
@@ -71,6 +87,14 @@ validateCovariance <- function(resVar, correlation, totalVar = NULL) {
     }
     return(TRUE)
 }
+
+# Extract: extract elements from a matrix without changing to a vector
+
+# arguments: a) object a target matrix
+#			b) row a target row
+#			c) col a target column
+
+# value: The resulting matrix with extracted elements
 
 extract <- function(object, row = NULL, col = NULL) {
     if (class(object) == "matrix") {

@@ -23,7 +23,7 @@ A list with the following elements:
 	\item \code{pmMAR} Percent missing at random
 	\item \code{paramValue} Parameter values
 	\item \code{misspecValue} Misspecified-parameter values
-	\item \code{popFit} Population misfit
+	\item \code{popFit} Population misfit. See details of each element at \code{\link{summaryMisspec}}.
 }
 Each element will provide the head-to-head comparison between convergent and nonconvergent replications properties.
 }

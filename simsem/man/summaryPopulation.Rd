@@ -1,10 +1,10 @@
 \name{summaryPopulation}
 \alias{summaryPopulation}
 \title{
-	Summarize the data generation population model underlying a result object
+	Summarize the population model used for data generation underlying a result object
 }
 \description{
-	Summarize the data generation population model underlying a result object
+	Summarize the population model used for data generation underlying a result object
 }
 \usage{
 summaryPopulation(object)
@@ -15,7 +15,7 @@ summaryPopulation(object)
 }
 }
 \value{
-	None except using for \code{linkS4class{SimResult}} which the return value is a \code{data.frame} of the summary of population model across replications.
+	A \code{data.frame} contianing the summary of population model across replications.
 }
 \author{
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})

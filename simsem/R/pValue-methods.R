@@ -114,6 +114,39 @@ setMethod("pValue", signature(target = "lavaan", dist = "SimResult"), definition
 # pValueCondCutoff: Find the p-value comparing between a cutoff and a
 # distribution when a cutoff is conditional on a predictor value
 
+# \title{
+# Find a p value when the target is conditional (valid) on a specific value of a predictor
+# }
+# \description{
+# Find a \emph{p} value when the target is conditional (valid) on a specific value of a predictor. That is, the target value is applicable only a given value of a predictor.
+# }
+# \usage{
+# pValueCondCutoff(target, dist, revDirec = FALSE, x = NULL, xval = NULL, df = 0)
+# }
+# \arguments{
+  # \item{target}{
+	# A target value used to find \code{p} values. 
+# }
+# \item{dist}{
+	# The comparison distribution, which can be a vector of numbers, a data frame, or a result object.
+# }
+# \item{revDirec}{
+	# A logical argument whether to reverse the direction of comparison. If \code{TRUE}, the proportion of the \code{dist} that is lower than \code{target} value is reported. If \code{FALSE}, the proportion of the \code{dist} that is higher than the \code{target} value is reported.
+# }
+  # \item{x}{
+	# the \code{data.frame} of the predictor values. The number of rows of the \code{x} argument should be equal to the number of rows in the \code{dist}
+# }
+  # \item{xval}{
+	# the values of predictor that researchers would like to find the fit indices cutoffs from.
+# }
+  # \item{df}{
+	# the degree of freedom used in spline method in predicting the fit indices by the predictors. If \code{df} is 0, the spline method will not be applied. 
+# }
+# }
+# \value{
+	# A vector of \emph{p} values based on the comparison.
+# }
+
 pValueCondCutoff <- function(target, dist, revDirec = FALSE, x = NULL, xval = NULL, 
     df = 0) {
     if (!is.matrix(x)) 
@@ -154,6 +187,24 @@ pValueCondCutoff <- function(target, dist, revDirec = FALSE, x = NULL, xval = NU
 
 # revText: Reverse the direction of p value such as '> .98' to '< .02'
 
+# \title{
+	# Reverse the proportion value by subtracting it from 1
+# }
+# \description{
+	# Reverse the proportion value by subtracting it from 1. This function can reverse a value reported in text, such as from "> .98" to "< .02"
+# }
+# \usage{
+# revText(val)
+# }
+# \arguments{
+  # \item{val}{
+	# The value to be reversed
+# }
+# }
+# \value{
+	# The reversed value or text
+# }
+
 revText <- function(val) {
     if (suppressWarnings(is.na(as.numeric(val)))) {
         ntext <- nchar(val)
@@ -175,6 +226,30 @@ revText <- function(val) {
 
 # whichMonotonic: Find the center of a vector that is monotonically increasing
 # or decreasing
+
+# \title{
+	# Extract a part of a vector that is monotonically increasing or decreasing
+# }
+# \description{
+	# Extract a part of a vector that is monotonically increasing or decreasing. This function will go to the anchor value and extract the neighbor values that are monotonically increasing or decreasing.
+# }
+# \usage{
+# whichMonotonic(vec, ord=NULL, anchor=NULL)
+# }
+# \arguments{
+  # \item{vec}{
+	# The target vector to be extracted
+# }
+  # \item{ord}{
+	# The names of each element of the vector to be attached
+# }
+  # \item{anchor}{
+	# The position of the element to be anchored. The default value is the middle position.
+# }
+# }
+# \value{
+	# The monotonic part of a vector
+# }
 
 whichMonotonic <- function(vec, ord = NULL, anchor = NULL) {
     vec <- as.vector(vec)
@@ -208,6 +283,30 @@ whichMonotonic <- function(vec, ord = NULL, anchor = NULL) {
 # interpolate: Find a specific percentile value by a linear interpolation of a
 # closed value
 
+# \title{
+	# Find the value of one vector relative to a value of another vector by interpolation
+# }
+# \description{
+	# Find the value of the resulting vector that have the position similar to the value of the baseline vector. If the starting value in the baseline vector is in between two elements, the resulting value will be predicted by linear interpolation.
+# }
+# \usage{
+# interpolate(baselineVec, val, resultVec=NULL)
+# }
+# \arguments{
+  # \item{baselineVec}{
+	# The target vector to be used as a baseline. The resulting vector can be attached as the element names of this vector.
+# }
+  # \item{val}{
+	# The value relative to the baseline vector to be used for projecting the resulting value
+# }
+  # \item{resultVec}{
+	# The vector that the resulting value will be used to base their result form
+# }
+# }
+# \value{
+	# The interpolated value from the resulting vector relative to the value in the baseline vector
+# }
+
 interpolate <- function(baselineVec, val, resultVec = NULL) {
     p <- length(baselineVec)
     if (is.null(resultVec)) 
@@ -231,6 +330,36 @@ interpolate <- function(baselineVec, val, resultVec = NULL) {
 }
 
 # pValueVariedCutoff: Find a value when the cutoffs are specified as a vector
+
+# \title{
+# Find a p value when the cutoff is specified as a vector given the values of predictors
+# }
+# \description{
+# Find a \emph{p} value when the cutoff is specified as a vector given the values of predictors. 
+# }
+# \usage{
+# pValueVariedCutoff(cutoff, obtainedValue, revDirec = FALSE, x = NULL, xval = NULL)
+# }
+# \arguments{
+  # \item{cutoff}{
+	# A vector of values used to find \code{p} values. Each value in the vector should be the target value conditional (applicable) to each value of the predictors (\code{x}) respectively.
+# }
+# \item{obtainedValue}{
+	# The comparison distribution, which can be a vector of numbers, a data frame, or a result object.
+# }
+# \item{revDirec}{
+	# A logical argument whether to reverse the direction of comparison. If \code{TRUE}, the proportion of the \code{dist} that is lower than \code{target} value is reported. If \code{FALSE}, the proportion of the \code{dist} that is higher than the \code{target} value is reported.
+# }
+  # \item{x}{
+	# the \code{data.frame} of the predictor values. The number of rows of the \code{x} argument should be equal to the number of rows in the \code{dist}
+# }
+  # \item{xval}{
+	# the values of predictor that researchers would like to find the fit indices cutoffs from.
+# }
+# }
+# \value{
+	# A vector of \emph{p} values based on the comparison.
+# }
 
 pValueVariedCutoff <- function(cutoff, obtainedValue, revDirec = FALSE, x = NULL, 
     xval = NULL) {
