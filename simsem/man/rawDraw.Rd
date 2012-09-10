@@ -49,7 +49,13 @@ loading.mis[,3] <- 0
 loading.mis[7,] <- 0
 loading[1:3, 1] <- "con1"
 LY <- bind(loading, loadingVal, misspec=loading.mis)
+
+# Draw values
 rawDraw(LY)
+
+# Draw only model parameters containing misspecification
 rawDraw(LY, parMisOnly=TRUE)
+
+# Draw only misspecification.
 rawDraw(LY, misOnly=TRUE)
 }

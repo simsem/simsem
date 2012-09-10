@@ -59,22 +59,27 @@ loading[4:6, 2] <- NA
 loadingValues <- matrix(0, 6, 2)
 loadingValues[1:3, 1] <- 0.7
 loadingValues[4:6, 2] <- 0.7
-LX <- bind(loading, loadingValues)
+LY <- bind(loading, loadingValues)
 latent.cor <- matrix(NA, 2, 2)
 diag(latent.cor) <- 1
-RPH <- binds(latent.cor, 0.5)
+RPS <- binds(latent.cor, 0.5)
 error.cor <- matrix(0, 6, 6)
 diag(error.cor) <- 1
-RTD <- binds(error.cor)
-CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+RTE <- binds(error.cor)
+CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA")
 
 # We make the examples running only 5 replications to save time.
 # In reality, more replications are needed.
 Output <- sim(5, n = 200, model=CFA.Model)
+
+# Get the cutoff (critical value) when alpha is 0.05
 getCutoff(Output, 0.05)
 
-# Finding the cutoff when the sample size is varied.
+# Finding the cutoff when the sample size is varied. Note that more fine-grained 
+# values of n is needed, e.g., n=seq(50, 500, 1)
 Output2 <- sim(NULL, model=CFA.Model, n=seq(50, 100, 10))
+
+# Get the fit index cutoff when sample size is 75.
 getCutoff(Output2, 0.05, nVal = 75)
 }
 }

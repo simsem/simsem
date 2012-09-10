@@ -1171,13 +1171,17 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
         if (!is.list(RPS)) 
             RPS <- rep(list(RPS), ngroups)
         FUN2 <- function(x, y = NULL, z = NULL) {
-            x[!is.free(x)] <- y[!is.free(x)]
-            y[!is.free(x)] <- ""
+			if(!is.null(y)) {
+				x[!is.free(x)] <- y[!is.free(x)]
+				y[!is.free(x)] <- ""
+			}
             bind(x, y, z)
         }
         FUNS2 <- function(x, y, z = NULL) {
-            x[!is.free(x)] <- y[!is.free(x)]
-            y[!is.free(x)] <- ""
+			if(!is.null(y)) {
+				x[!is.free(x)] <- y[!is.free(x)]
+				y[!is.free(x)] <- ""
+			}
             binds(x, y, z)
         }
         if (!is.list(PS)) 

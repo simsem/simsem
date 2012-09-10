@@ -59,5 +59,6 @@ VY <- bind(rep(NA,6),2)
 
 CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
 
+# Draw a parameter set for data generation.
 param <- draw(CFA.Model)
 }

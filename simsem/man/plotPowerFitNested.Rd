@@ -66,39 +66,50 @@ logistic = TRUE)
 }
 \examples{
 \dontrun{
+# Null model: One-factor model
 loading.null <- matrix(0, 6, 1)
 loading.null[1:6, 1] <- NA
-LX.NULL <- bind(loading.null, 0.7)
-RPH.NULL <- binds(diag(1))
-RTD <- binds(diag(6))
-CFA.Model.NULL <- model(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD, modelType="CFA")
+LY.NULL <- bind(loading.null, 0.7)
+RPS.NULL <- binds(diag(1))
+RTE <- binds(diag(6))
+CFA.Model.NULL <- model(LY = LY.NULL, RPS = RPS.NULL, RTE = RTE, modelType="CFA")
 
+# Alternative model: Two-factor model
 loading.alt <- matrix(0, 6, 2)
 loading.alt[1:3, 1] <- NA
 loading.alt[4:6, 2] <- NA
-LX.ALT <- bind(loading.alt, 0.7)
+LY.ALT <- bind(loading.alt, 0.7)
 latent.cor.alt <- matrix(NA, 2, 2)
 diag(latent.cor.alt) <- 1
-RPH.ALT <- binds(latent.cor.alt, 0.7)
-CFA.Model.ALT <- model(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD, modelType="CFA")
+RPS.ALT <- binds(latent.cor.alt, 0.7)
+CFA.Model.ALT <- model(LY = LY.ALT, RPS = RPS.ALT, RTE = RTE, modelType="CFA")
 
+# In reality, more than 10 replications are needed
 Output.NULL.NULL <- sim(10, n=500, model=CFA.Model.NULL, generate=CFA.Model.NULL) 
 Output.ALT.NULL <- sim(10, n=500, model=CFA.Model.NULL, generate=CFA.Model.ALT) 
 Output.NULL.ALT <- sim(10, n=500, model=CFA.Model.ALT, generate=CFA.Model.NULL) 
 Output.ALT.ALT <- sim(10, n=500, model=CFA.Model.ALT, generate=CFA.Model.ALT) 
 
+# Plot the power based on the derived cutoff from the models analyzed on the null datasets
 plotPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT)
+
+# Plot the power by only CFI
 plotPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT, usedFit="CFI")
 
+# The example of continous varying sample size. Note that more fine-grained 
+# values of n is needed, e.g., n=seq(50, 500, 1)
 Output.NULL.NULL2 <- sim(NULL, n=seq(50, 500, 25), model=CFA.Model.NULL, generate=CFA.Model.NULL) 
 Output.ALT.NULL2 <- sim(NULL, n=seq(50, 500, 25), model=CFA.Model.NULL, generate=CFA.Model.ALT) 
 Output.NULL.ALT2 <- sim(NULL, n=seq(50, 500, 25), model=CFA.Model.ALT, generate=CFA.Model.NULL) 
 Output.ALT.ALT2 <- sim(NULL, n=seq(50, 500, 25), model=CFA.Model.ALT, generate=CFA.Model.ALT) 
 
+# Plot logistic line for the power based on the derived cutoff from the null model along sample size values
 plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNested=Output.NULL.NULL2, nullParent=Output.NULL.ALT2)
 
+# Plot scatterplot for the power based on the derived cutoff from the null model along sample size values
 plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNested=Output.NULL.NULL2, nullParent=Output.NULL.ALT2, logistic=FALSE)
 
+# Plot scatterplot for the power based on the advanced CFI value
 plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, cutoff=c(CFI=-0.1), logistic=FALSE)
 }
 }

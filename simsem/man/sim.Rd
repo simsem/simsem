@@ -138,22 +138,27 @@ VY <- bind(rep(NA,6),2)
 
 CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
 
+# In reality, more than 5 replications are needed.
 Output <- sim(5, CFA.Model,n=200)
 summary(Output)
 
-# Example of data transformation
+# Example of data transformation: Transforming to standard score
 fun1 <- function(data) {
 	temp <- scale(data)
 	temp[,"group"] <- data[,"group"]
 	as.data.frame(temp)
 }
 
-# Example of additional output
+# Example of additional output: Extract modification indices from lavaan
 fun2 <- function(out) {
 	inspect(out, "mi")
 }
+
+# In reality, more than 5 replications are needed.
 Output <- sim(5, CFA.Model,n=200,datafun=fun1, outfun=fun2)
 summary(Output)
+
+# Get modification indices
 getExtraOutput(Output)
 }
 

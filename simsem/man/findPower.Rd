@@ -44,14 +44,19 @@ findPower(powerTable, iv, power)
 # Specify Sample Size by n
 loading <- matrix(0, 6, 1)
 loading[1:6, 1] <- NA
-LX <- bind(loading, 0.4)
-RPH <- binds(diag(1))
-RTD <- binds(diag(6))
-CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+LY <- bind(loading, 0.4)
+RPS <- binds(diag(1))
+RTE <- binds(diag(6))
+CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA")
 
-# Specify both sample size and percent missing completely at random
+# Specify both sample size and percent missing completely at random. Note that more fine-grained 
+# values of n and pmMCAR is needed, e.g., n=seq(50, 500, 1) and pmMCAR=seq(0, 0.2, 0.01)
 Output <- sim(NULL, model=CFA.Model, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2))
+
+# Find the power of all possible combination of N and pmMCAR
 pow <- getPower(Output)
+
+# Find the sample size that provides the power of 0.8
 findPower(pow, "N", 0.80)
 }
 }

@@ -45,9 +45,15 @@ ME <- bind(rep(NA, 4), 0)
 
 Path.Model <- model(RPS = RPS, BE = BE, ME = ME, modelType="Path")
 
-# The number of replications in actual analysis should be much more than 5
-ParamObject <- sim(20, n=500, Path.Model)
-plotMisfit(ParamObject)
+# The number of replications in actual analysis should be much more than 20
+Output <- sim(20, n=500, Path.Model)
 
-plotMisfit(ParamObject, misParam=1:2)
+# Plot the distribution of population misfit
+plotMisfit(Output)
+
+# Plot the relationship between population RMSEA and all misspecified direct effects
+plotMisfit(Output, misParam=1:2)
+
+# Plot the relationship between sample CFI and all misspecified direct effects 
+plotMisfit(Output, usedFit="CFI", misParam=1:2)
 }

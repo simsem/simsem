@@ -29,7 +29,7 @@ generate(model, n, maxDraw=50, misfitBounds=NULL, misfitType="f0",
 	Character vector indicating the fit measure used to assess the misfit of a set of parameters. Can be "f0", "rmsea", "srmr", or "all". 
 }
   \item{averageNumMisspec}{ 
-	\code{TRUE} or \code{FALSE}. ??
+	If \code{TRUE}, the provided fit will be divided by the number of misspecified parameters. 
 }
   \item{optMisfit}{ 
 	Character vector of either "min" or "max" indicating either maximum or minimum optimized misfit. If not null, the set of parameters out of the number of draws in "optDraws" that has either the maximum or minimum misfit of the given misfit type will be returned.

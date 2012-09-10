@@ -47,29 +47,33 @@ getCutoffNested(nested, parent, alpha = 0.05, usedFit = NULL, nVal = NULL, pmMCA
 }
 \examples{
 \dontrun{
+# Nested Model
 loading.null <- matrix(0, 6, 1)
 loading.null[1:6, 1] <- NA
-LX.NULL <- bind(loading.null, 0.7)
-RPH.NULL <- binds(diag(1))
+LY.NULL <- bind(loading.null, 0.7)
+RPS.NULL <- binds(diag(1))
 
 error.cor.mis <- matrix("rnorm(1, 0, 0.1)", 6, 6)
 diag(error.cor.mis) <- 1
-RTD <- binds(diag(6), misspec=error.cor.mis)
-CFA.Model.NULL <- model(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD, modelType="CFA")
+RTE <- binds(diag(6), misspec=error.cor.mis)
+CFA.Model.NULL <- model(LY = LY.NULL, RPS = RPS.NULL, RTE = RTE, modelType="CFA")
 
+# Parent Model
 loading.alt <- matrix(0, 6, 2)
 loading.alt[1:3, 1] <- NA
 loading.alt[4:6, 2] <- NA
-LX.ALT <- bind(loading.alt, 0.7)
+LY.ALT <- bind(loading.alt, 0.7)
 latent.cor.alt <- matrix(NA, 2, 2)
 diag(latent.cor.alt) <- 1
-RPH.ALT <- binds(latent.cor.alt, "runif(1, 0.7, 0.9)")
-CFA.Model.ALT <- model(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD, modelType="CFA")
+RPS.ALT <- binds(latent.cor.alt, "runif(1, 0.7, 0.9)")
+CFA.Model.ALT <- model(LY = LY.ALT, RPS = RPS.ALT, RTE = RTE, modelType="CFA")
 
 # The actual number of replications should be greater than 10.
 Output.NULL.NULL <- sim(10, n=500, model=CFA.Model.NULL, generate=CFA.Model.NULL)
 Output.NULL.ALT <- sim(10, n=500, model=CFA.Model.ALT, generate=CFA.Model.NULL)
 
-getCutoffNested(Output.NULL.NULL, Output.NULL.ALT)
+# Find the fix index cutoff from the sampling distribution of the difference
+# in fit index of nested models where the alpha is 0.05.
+getCutoffNested(Output.NULL.NULL, Output.NULL.ALT, alpha=0.05)
 }
 }

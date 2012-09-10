@@ -31,7 +31,7 @@ setPopulation(target, population)
 \examples{
 # See each class for an example.
 \dontrun{
-
+# Data generation model
 loading <- matrix(0, 7, 3)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
@@ -59,6 +59,7 @@ VY <- bind(c(rep(NA, 6), 0), c(rep(1, 6), ""))
 
 datamodel <- model(LY=LY, RPS=RPS, BE=BE, RTE=RTE, VY=VY, modelType="SEM")
 
+# Data analysis model
 loading <- matrix(0, 7, 3)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
@@ -72,8 +73,10 @@ errorCov[7, 7] <- 0
 facCov <- diag(3)
 analysis <- estmodel(LY=loading, BE=path, TE=errorCov, PS=facCov, modelType="SEM", indLab=paste("y", 1:7, sep=""))
 
-Output <- sim(100, n=200, analysis, generate=datamodel)
+# In reality, more than 10 replications are needed.
+Output <- sim(10, n=200, analysis, generate=datamodel)
 
+# Population 
 loadingVal <- matrix(0, 7, 3)
 loadingVal[1:3, 1] <- 0.6
 loadingVal[4:6, 2] <- 0.6
@@ -89,7 +92,11 @@ errorCovVal <- diag(0.64, 7)
 errorCovVal[7, 7] <- 0
 TE <- binds(errorCov, errorCovVal)
 population <- model(LY=LY, PS=PS, BE=BE, TE=TE, modelType="SEM")
+
+# Set up the new population
 Output <- setPopulation(Output, population) 
+
+# This summary will contain the bias information
 summary(Output)
 }
 }

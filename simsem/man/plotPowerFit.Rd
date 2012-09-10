@@ -58,41 +58,45 @@ NONE. Only plot the fit indices distributions.
 }
 \examples{
 \dontrun{
+# Null model: One factor model
 loading.null <- matrix(0, 6, 1)
 loading.null[1:6, 1] <- NA
-LX.NULL <- bind(loading.null, 0.7)
-RPH.NULL <- binds(diag(1))
-RTD <- binds(diag(6))
-CFA.Model.NULL <- model(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD, modelType="CFA")
+LY.NULL <- bind(loading.null, 0.7)
+RPS.NULL <- binds(diag(1))
+RTE <- binds(diag(6))
+CFA.Model.NULL <- model(LY = LY.NULL, RPS = RPS.NULL, RTE = RTE, modelType="CFA")
+
 # We make the examples running only 5 replications to save time.
 # In reality, more replications are needed.
 Output.NULL <- sim(50, n=50, model=CFA.Model.NULL, generate=CFA.Model.NULL) 
 
+# Alternative model: Two-factor model
 loading.alt <- matrix(0, 6, 2)
 loading.alt[1:3, 1] <- NA
 loading.alt[4:6, 2] <- NA
-LX.ALT <- bind(loading.alt, 0.7)
+LY.ALT <- bind(loading.alt, 0.7)
 latent.cor.alt <- matrix(NA, 2, 2)
 diag(latent.cor.alt) <- 1
-RPH.ALT <- binds(latent.cor.alt, 0.5)
-CFA.Model.ALT <- model(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD, modelType="CFA")
+RPS.ALT <- binds(latent.cor.alt, 0.5)
+CFA.Model.ALT <- model(LY = LY.ALT, RPS = RPS.ALT, RTE = RTE, modelType="CFA")
 Output.ALT <- sim(50, n=50, model=CFA.Model.NULL, generate=CFA.Model.ALT)
 
-datNull <- generate(CFA.Model.NULL, n=50, params=TRUE)
-datAlt <- generate(CFA.Model.ALT, n=50, params=TRUE)
-outNull <- analyze(CFA.Model.NULL, datNull)
-outAlt <- analyze(CFA.Model.NULL, datAlt)
-summaryFit(Output.NULL)
-summaryFit(Output.ALT)
- 
+# Plot the power based on derived cutoff from the null model using four fit indices
 plotPowerFit(Output.ALT, nullObject=Output.NULL, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+
+# Plot the power of rejecting null model when the rule of thumb from Hu & Bentler (1999) is used
 Rule.of.thumb <- c(RMSEA=0.05, CFI=0.95, TLI=0.95, SRMR=0.06)
 plotPowerFit(Output.ALT, cutoff=Rule.of.thumb, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
 
+# The example of continous varying sample size. Note that more fine-grained 
+# values of n is needed, e.g., n=seq(50, 500, 1)
 Output.NULL2 <- sim(NULL, n=seq(50, 250, 25), model=CFA.Model.NULL, generate=CFA.Model.NULL)
 Output.ALT2 <- sim(NULL, n=seq(50, 250, 25), model=CFA.Model.NULL, generate=CFA.Model.ALT)
 
+# Plot the power based on derived cutoff from the null model using four fit indices along sample size
 plotPowerFit(Output.ALT2, nullObject=Output.NULL2, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+
+# Plot the power based on rule of thumb along sample size
 plotPowerFit(Output.ALT2, cutoff=Rule.of.thumb, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
 }
 }

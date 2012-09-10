@@ -11,7 +11,7 @@ bindDist(margins, ..., p = NULL, keepScale = TRUE, reverse = FALSE)
 }
 \arguments{
   \item{margins}{
-	A character vector specifying all the marginal distributions. See the description of \code{margins} attribute of the \code{\link[copula]{Mvdc}} function for further details.
+	A character vector specifying all the marginal distributions. The characters in argument margins are used to construct density, distribution, and quantile function names. For example, \code{"norm"} can be used to specify marginal distribution, because \code{"dnorm"}, \code{"pnorm"}, and \code{"qnorm"} are all available. A user-defined distribution or other distributions can be used. For example, \code{"gl"} function in the \code{"gld"} package can be used to represent the generalized lambda distribution where \code{"dgl"}, \code{"pgl"}, and \code{"qgl"} are available. See the description of \code{margins} attribute of the \code{\link[copula]{Mvdc}} function for further details.
 }
   \item{...}{
 	A list whose each component is a list of named components, giving the parameter values of the marginal distributions. See the description of \code{paramMargins} attribute of the \code{\link[copula]{Mvdc}} function for further details.
@@ -38,15 +38,18 @@ bindDist(margins, ..., p = NULL, keepScale = TRUE, reverse = FALSE)
 	}
 }
 \examples{
+# Create three-dimensional distribution by gaussian copula with 
+# the following marginal distributions
+#   1. t-distribution with df = 2
+# 	2. chi-square distribution with df = 3
+#	3. normal distribution with mean = 0 and sd = 1
+
+# Setting the attribute of each marginal distribution
 d1 <- list(df=2)
 d2 <- list(df=3)
-d3 <- list(df=4)
-d4 <- list(df=5)
-d5 <- list(df=3)
-d6 <- list(df=4)
-d7 <- list(df=5)
-d8 <- list(df=6)
+d3 <- list(mean=0, sd=1)
 
-
-dist <- bindDist(c(rep("t", 4), rep("chisq", 8)), d1, d2, d3, d4, d5, d6, d7, d8, d5, d6, d7, d8)
+# Create a data distribution object by setting the names of each distribution
+# and their arguments
+dist <- bindDist(c("t", "chisq", "norm"), d1, d2, d3)
 }

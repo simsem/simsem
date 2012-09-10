@@ -66,10 +66,10 @@ chi5 <- list(df = 5)
 
 facDist <- bindDist(c("chisq", "chisq", "norm", "norm"), chi5, chi5, n1, n1)
 
-dat <- generate(SEM.Model, n=500, sequential=TRUE, facDist=facDist)
-out <- analyze(SEM.Model, dat, estimator="mlr")
-
+# In reality, more than 50 replications are needed.
 simOut <- sim(50, n=500, SEM.Model, sequential=TRUE, facDist=facDist, estimator="mlr")
+
+# Summary the convergent and nonconvergent replications
 summaryConverge(simOut)
 }
 }

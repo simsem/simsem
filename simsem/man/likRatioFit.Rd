@@ -49,21 +49,23 @@ usedFit=NULL, prior=1)
 }
 \examples{
 \dontrun{
+# Model A; Factor 1 --> Factor 2; Factor 2 --> Factor 3
 library(lavaan)
 loading <- matrix(0, 11, 3)
 loading[1:3, 1] <- NA
 loading[4:7, 2] <- NA
 loading[8:11, 3] <- NA
 path.A <- matrix(0, 3, 3)
-path.A[2:3, 1] <- NA
+path.A[2, 1] <- NA
 path.A[3, 2] <- NA
 model.A <- estmodel(LY=loading, BE=path.A, modelType="SEM", indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
 
 out.A <- analyze(model.A, PoliticalDemocracy)
 
+# Model A; Factor 1 --> Factor 3; Factor 3 --> Factor 2
 path.B <- matrix(0, 3, 3)
-path.B[1:2, 3] <- NA
-path.B[1, 2] <- NA
+path.B[3, 1] <- NA
+path.B[2, 3] <- NA
 model.B <- estmodel(LY=loading, BE=path.B, modelType="SEM", indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
 
 out.B <- analyze(model.B, PoliticalDemocracy)
@@ -71,17 +73,21 @@ out.B <- analyze(model.B, PoliticalDemocracy)
 loading.mis <- matrix("runif(1, -0.2, 0.2)", 11, 3)
 loading.mis[is.na(loading)] <- 0
 
+# Create SimSem object for data generation and data analysis template
 datamodel.A <- model.lavaan(out.A, std=TRUE, LY=loading.mis)
 datamodel.B <- model.lavaan(out.B, std=TRUE, LY=loading.mis)
 
+# Get sample size
 n <- nrow(PoliticalDemocracy)
 
+# The actual number of replications should be greater than 20.
 output.A.A <- sim(20, n=n, model.A, generate=datamodel.A) 
 output.A.B <- sim(20, n=n, model.B, generate=datamodel.A)
 output.B.A <- sim(20, n=n, model.A, generate=datamodel.B)
 output.B.B <- sim(20, n=n, model.B, generate=datamodel.B)
 
-# The output may contain some warnings here. When the number of replications increases (e.g., 1000), the warnings should disappear.
+# Find the likelihood ratio ;The output may contain some warnings here. 
+# When the number of replications increases (e.g., 1000), the warnings should disappear.
 likRatioFit(out.A, out.B, output.A.A, output.A.B, output.B.A, output.B.B)
 }
 }

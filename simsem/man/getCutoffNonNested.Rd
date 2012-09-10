@@ -60,21 +60,23 @@ pmMARval = NULL, df = 0)
 }
 \examples{
 \dontrun{
+# Model A: Factor 1 with items 1-3 and Factor 2 with items 4-8
 loading.A <- matrix(0, 8, 2)
 loading.A[1:3, 1] <- NA
 loading.A[4:8, 2] <- NA
-LX.A <- bind(loading.A, 0.7)
+LY.A <- bind(loading.A, 0.7)
 latent.cor <- matrix(NA, 2, 2)
 diag(latent.cor) <- 1
-RPH <- binds(latent.cor, "runif(1, 0.7, 0.9)")
-RTD <- binds(diag(8))
-CFA.Model.A <- model(LY = LX.A, RPS = RPH, RTE = RTD, modelType="CFA")
+RPS <- binds(latent.cor, "runif(1, 0.7, 0.9)")
+RTE <- binds(diag(8))
+CFA.Model.A <- model(LY = LY.A, RPS = RPS, RTE = RTE, modelType="CFA")
 
+# Model B: Factor 1 with items 1-4 and Factor 2 with items 5-8
 loading.B <- matrix(0, 8, 2)
 loading.B[1:4, 1] <- NA
 loading.B[5:8, 2] <- NA
-LX.B <- bind(loading.B, 0.7)
-CFA.Model.B <- model(LY = LX.B, RPS = RPH, RTE = RTD, modelType="CFA")
+LY.B <- bind(loading.B, 0.7)
+CFA.Model.B <- model(LY = LY.B, RPS = RPS, RTE = RTE, modelType="CFA")
 
 # The actual number of replications should be greater than 10.
 Output.A.A <- sim(10, n=500, model=CFA.Model.A, generate=CFA.Model.A)
@@ -82,8 +84,14 @@ Output.A.B <- sim(10, n=500, model=CFA.Model.B, generate=CFA.Model.A)
 Output.B.A <- sim(10, n=500, model=CFA.Model.A, generate=CFA.Model.B)
 Output.B.B <- sim(10, n=500, model=CFA.Model.B, generate=CFA.Model.B)
 
+# Find the cutoffs from the sampling distribution to reject model A (model 1)
+# and to reject model B (model 2)
 getCutoffNonNested(Output.A.A, Output.A.B, Output.B.A, Output.B.B)
+
+# Find the cutoffs from the sampling distribution to reject model A (model 1)
 getCutoffNonNested(Output.A.A, Output.A.B)
+
+# Find the cutoffs from the sampling distribution to reject model B (model 1)
 getCutoffNonNested(Output.B.B, Output.B.A)
 }
 }

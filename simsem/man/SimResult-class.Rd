@@ -88,9 +88,20 @@ CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA")
 # We make the examples running only 5 replications to save time.
 # In reality, more replications are needed.
 Output <- sim(5, n=500, CFA.Model)
+
+# Summary the simulation result
 summary(Output)
+
+# Short summary of the simulation result
+summaryShort(Output)
+
+# Find the fit index cutoff
 getCutoff(Output, 0.05)
+
+# Summary of parameter estimates
 summaryParam(Output)
+
+# Summary of population parameters
 summaryPopulation(Output)
 }
 \keyword{classes}

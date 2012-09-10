@@ -44,26 +44,29 @@ usedFit = NULL, useContour = T)
 }
 \examples{
 \dontrun{
+# Nested model: One factor
 loading.null <- matrix(0, 6, 1)
 loading.null[1:6, 1] <- NA
-LX.NULL <- bind(loading.null, 0.7)
-RPH.NULL <- binds(diag(1))
-RTD <- binds(diag(6))
-CFA.Model.NULL <- model(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD, modelType="CFA")
+LY.NULL <- bind(loading.null, 0.7)
+RPS.NULL <- binds(diag(1))
+RTE <- binds(diag(6))
+CFA.Model.NULL <- model(LY = LY.NULL, RPS = RPS.NULL, RTE = RTE, modelType="CFA")
 
+# Parent model: two factors
 loading.alt <- matrix(0, 6, 2)
 loading.alt[1:3, 1] <- NA
 loading.alt[4:6, 2] <- NA
-LX.ALT <- bind(loading.alt, 0.7)
+LY.ALT <- bind(loading.alt, 0.7)
 latent.cor.alt <- matrix(NA, 2, 2)
 diag(latent.cor.alt) <- 1
-RPH.ALT <- binds(latent.cor.alt, "runif(1, 0.7, 0.9)")
-CFA.Model.ALT <- model(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD, modelType="CFA")
+RPS.ALT <- binds(latent.cor.alt, "runif(1, 0.7, 0.9)")
+CFA.Model.ALT <- model(LY = LY.ALT, RPS = RPS.ALT, RTE = RTE, modelType="CFA")
 
 # The actual number of replications should be greater than 10.
 Output.NULL.NULL <- sim(10, n=500, model=CFA.Model.NULL) 
 Output.NULL.ALT <- sim(10, n=500, model=CFA.Model.ALT, generate=CFA.Model.NULL)
 
+# Plot the cutoffs in nested model comparison
 plotCutoffNested(Output.NULL.NULL, Output.NULL.ALT, alpha=0.05)
 }
 }

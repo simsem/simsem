@@ -28,14 +28,11 @@ To simplify the most common case, \code{popParam} can take 1 value or distributi
 
    \item{symmetric}{Set as \code{TRUE} if the matrix created is symmetric (RPS/PS, RTE/TE). The function \code{binds} can also be used, which defaults to \code{symmetric = TRUE} }
 }
-
 \details{
 Bind is the first step in the \code{bind} -> \code{model} -> \code{sim} workflow of \emph{simsem}, and this document outlines the user interface or language used to describe these simulations. This interface, while complex, enables a wide array of simulation specifications for structural equation models by building on LISREL-style parameter specifications. 
 
 In simulations supported by \emph{simsem}, a given parameter may be either fixed or freed for analysis, but may optionally also have a population value or distribution for data generation, or a value or distribution of misspecification. The purpose of bind is to stack these multiple meanings of a parameter into an object recognized by \emph{simsem}, a \code{\linkS4class{SimMatrix}}. Each matrix in the Lisrel notation (e.g. LY, PS, TE, BE) becomes a \code{\linkS4class{SimMatrix}}, and is passed to the function \code{model}, which builds the data generation template and an analysis template (a lavaan parameter table), collectively forming a \code{SimSem} object, which can be passed to the function \code{sim} for simulation.
-
 }
-
 \value{	\code{\linkS4class{SimMatrix}} or \code{\linkS4class{SimVector}} object that used for model specification for analysis and data generation in simsem.}
 
 \author{
@@ -48,9 +45,7 @@ In simulations supported by \emph{simsem}, a given parameter may be either fixed
 		\item \code{\link{analyze}} To analyze real or generated data using the simsem template.
 	}
 }
-
 \examples{
-
 loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
@@ -69,5 +64,4 @@ RPS <- binds(latent.cor, 0.5)
 error.cor <- matrix(0, 6, 6)
 diag(error.cor) <- NA
 RTE <- binds(error.cor,1,"runif(1,-.05,.05)")
-
 }

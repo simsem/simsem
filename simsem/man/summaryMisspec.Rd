@@ -66,6 +66,7 @@ Path.Model <- model(RPS = RPS, BE = BE, modelType="Path")
 # The number of replications in actual analysis should be much more than 5
 ParamObject <- sim(5, n=200, Path.Model)
 
+# Summarize the model misspecification that is specified in the 'pathMis' object
 summaryMisspec(ParamObject)
 }
 }

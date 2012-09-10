@@ -59,6 +59,7 @@ nVal = NULL, pmMCARval = NULL, pmMARval = NULL, df = 0)
 \dontrun{
 library(lavaan)
 
+# Nested Model: Linear growth curve model
 LY <- matrix(1, 4, 2)
 LY[,2] <- 0:3
 PS <- matrix(NA, 2, 2)
@@ -67,22 +68,29 @@ AL <- rep(NA, 2)
 TE <- diag(NA, 4)
 nested <- estmodel(LY=LY, PS=PS, TY=TY, AL=AL, TE=TE, modelType="CFA", indLab=paste("t", 1:4, sep=""))
 
+# Parent Model: Unconditional growth curve model
 LY2 <- matrix(1, 4, 2)
 LY2[,2] <- c(0, NA, NA, 3)
 parent <- estmodel(LY=LY2, PS=PS, TY=TY, AL=AL, TE=TE, modelType="CFA", indLab=paste("t", 1:4, sep=""))
 
+# Analyze the output
 outNested <- analyze(nested, Demo.growth)
 outParent <- analyze(parent, Demo.growth)
 
+# Create data template from the nested model with small misfit on the linear curve
 loadingMis <- matrix(0, 4, 2)
 loadingMis[2:3, 2] <- "runif(1, -0.1, 0.1)"
 datamodel <- model.lavaan(outNested, LY=loadingMis)
 
+# Get the sample size
 n <- nrow(Demo.growth)
 
+# The actual replications should be much greater than 30.
 simNestedNested <- sim(30, n=n, nested, generate=datamodel) 
 simNestedParent <- sim(30, n=n, parent, generate=datamodel)
 
+# Find the p-value comparing the observed fit indices against the simulated 
+# sampling distribution of fit indices
 pValueNested(outNested, outParent, simNestedNested, simNestedParent)
 }
 }

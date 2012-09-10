@@ -21,6 +21,6 @@ multipleAllEqual(...)
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \examples{
-multipleAllEqual(1:5, 1:5, seq(2, 10, 2)/2)
-multipleAllEqual(1:5, 1:6, seq(2, 10, 2)/2)
+multipleAllEqual(1:5, 1:5, seq(2, 10, 2)/2) # Should be TRUE
+multipleAllEqual(1:5, 1:6, seq(2, 10, 2)/2) # Should be FALSE
 }

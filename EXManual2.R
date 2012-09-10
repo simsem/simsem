@@ -416,11 +416,11 @@ summaryParam(Output)
 
 loading.null <- matrix(0, 6, 1)
 loading.null[1:6, 1] <- NA
-LX.NULL <- bind(loading.null, 0.7)
-RPH.NULL <- binds(diag(1))
-RTD <- binds(diag(6), misspec=matrix("rnorm(1,0,0.1)", 6, 6))
+LY.NULL <- bind(loading.null, 0.7)
+RPS.NULL <- binds(diag(1))
+RTE <- binds(diag(6), misspec=matrix("rnorm(1,0,0.1)", 6, 6))
 
-CFA.NULL <- model(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD, modelType="CFA")
+CFA.NULL <- model(LY = LY.NULL, RPS = RPS.NULL, RTE = RTE, modelType="CFA")
 
 Output.NULL <- sim(20, n=500, CFA.NULL)
 
@@ -429,11 +429,11 @@ loading.alt[1:3, 1] <- NA
 loading.alt[4:6, 2] <- NA
 loading.alt.mis <- matrix("runif(1,-.2,.2)", 6, 2)
 loading.alt.mis[is.na(loading.alt)] <- 0
-LX.ALT <- bind(loading.alt, 0.7, misspec=loading.alt.mis)
+LY.ALT <- bind(loading.alt, 0.7, misspec=loading.alt.mis)
 latent.cor.alt <- matrix(NA, 2, 2)
 diag(latent.cor.alt) <- 1
-RPH.ALT <- binds(latent.cor.alt, "runif(1,0.7,0.9)")
-CFA.ALT <- model(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD, modelType="CFA")
+RPS.ALT <- binds(latent.cor.alt, "runif(1,0.7,0.9)")
+CFA.ALT <- model(LY = LY.ALT, RPS = RPS.ALT, RTE = RTE, modelType="CFA")
 
 Output.ALT <- sim(20, n=500, model=CFA.NULL, generate=CFA.ALT)
 
@@ -548,17 +548,17 @@ loading[5:8, 2] <- NA
 loading[9:12, 3] <- NA
 loading.mis <- matrix("runif(1, -0.2, 0.2)", 12, 3)
 loading.mis[is.na(loading)] <- 0
-LX <- bind(loading, 0.7, misspec=loading.mis)
+LY <- bind(loading, 0.7, misspec=loading.mis)
 
 latent.cor <- matrix(NA, 3, 3)
 diag(latent.cor) <- 1
-RPH <- binds(latent.cor, "runif(1, -0.5, 0.5)")
+RPS <- binds(latent.cor, "runif(1, -0.5, 0.5)")
 
 error.cor <- matrix(0, 12, 12)
 diag(error.cor) <- 1
-RTD <- binds(error.cor)
+RTE <- binds(error.cor)
 
-CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA") 
+CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA") 
 
 # margins 	
 
@@ -693,20 +693,20 @@ mis.loading <- matrix(0, 7, 2)
 mis.loading[1:3, 2] <- "runif(1, -0.2, 0.2)"
 mis.loading[4:6, 1] <- "runif(1, -0.2, 0.2)"
 
-LX <- bind(loading, "runif(1, 0.5, 0.7)", misspec=mis.loading)
+LY <- bind(loading, "runif(1, 0.5, 0.7)", misspec=mis.loading)
 
 latent.cor <- matrix(NA, 2, 2)
 diag(latent.cor) <- 1
-RPH <- binds(latent.cor, "runif(1, 0.3, 0.5)")
+RPS <- binds(latent.cor, "runif(1, 0.3, 0.5)")
 
 error.cor <- diag(7)
 error.cor[1:6, 7] <- NA
 error.cor[7, 1:6] <- NA
-RTD <- binds(error.cor, "runif(1, -0.4, 0.4)")
+RTE <- binds(error.cor, "runif(1, -0.4, 0.4)")
 
 VX <- bind(rep(NA, 7), 1)
 
-CFA.Model.Aux <- model(LY = LX, RPS = RPH, RTE = RTD, VY = VX, modelType="CFA") 
+CFA.Model.Aux <- model(LY = LY, RPS = RPS, RTE = RTE, VY = VX, modelType="CFA") 
 
 dat <- generate(CFA.Model.Aux, n=200)
 missmodel <- miss(pmMAR=0.1, cov=7, ignoreCols=8, threshold = 0.5)
@@ -1092,17 +1092,17 @@ datModel <- simData(longMed, 200, misspec=longMedMis, equalCon=con)
 loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
-LX <- bind(loading, 0.7)
+LY <- bind(loading, 0.7)
 
 latent.cor <- matrix(NA, 2, 2)
 diag(latent.cor) <- 1
-RPH <- binds(latent.cor, 0.5)
+RPS <- binds(latent.cor, 0.5)
 
 error.cor <- matrix(0, 6, 6)
 diag(error.cor) <- 1
-RTD <- binds(error.cor)
+RTE <- binds(error.cor)
 
-CFA.Model <- simSetCFA(LX = LX, RPH = RPH, RTD = RTD)
+CFA.Model <- simSetCFA(LY = LY, RPS = RPS, RTE = RTE)
 
 SimData <- simData(CFA.Model, 500)
 SimModel <- simModel(CFA.Model)
@@ -1237,23 +1237,23 @@ n1 <- simNorm(0, 0.1)
 loading.null <- matrix(0, 8, 2)
 loading.null[1:5, 1] <- NA
 loading.null[6:8, 2] <- NA
-LX.NULL <- bind(loading.null, 0.7)
+LY.NULL <- bind(loading.null, 0.7)
 latent.cor.null <- matrix(NA, 2, 2)
 diag(latent.cor.null) <- 1
-RPH <- binds(latent.cor.null, 0.5)
-RTD <- binds(diag(8))
-CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH, RTE = RTD)
+RPS <- binds(latent.cor.null, 0.5)
+RTE <- binds(diag(8))
+CFA.Model.NULL <- simSetCFA(LY = LY.NULL, RPS = RPS, RTE = RTE)
 
 error.cor.mis <- matrix(NA, 8, 8)
 diag(error.cor.mis) <- 1
-RTD.Mis <- binds(error.cor.mis, "n1")
-CFA.Model.Mis <- simMisspecCFA(RTE = RTD.Mis)
+RTE.Mis <- binds(error.cor.mis, "n1")
+CFA.Model.Mis <- simMisspecCFA(RTE = RTE.Mis)
 
 loading.alt <- matrix(0, 8, 2)
 loading.alt[1:4, 1] <- NA
 loading.alt[5:8, 2] <- NA
-LX.ALT <- bind(loading.alt, 0.7)
-CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH, RTE = RTD)
+LY.ALT <- bind(loading.alt, 0.7)
+CFA.Model.ALT <- simSetCFA(LY = LY.ALT, RPS = RPS, RTE = RTE)
 
 SimData.NULL <- simData(CFA.Model.NULL, 500, misspec=CFA.Model.Mis)
 SimData.ALT <- simData(CFA.Model.ALT, 500, misspec=CFA.Model.Mis)
@@ -1985,29 +1985,29 @@ u79 <- simUnif(0.7, 0.9)
 
 loading.null <- matrix(0, 6, 1)
 loading.null[1:6, 1] <- NA
-LX.NULL <- bind(loading.null, 0.7)
-RPH.NULL <- binds(diag(1))
-RTD <- binds(diag(6))
-CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
+LY.NULL <- bind(loading.null, 0.7)
+RPS.NULL <- binds(diag(1))
+RTE <- binds(diag(6))
+CFA.Model.NULL <- simSetCFA(LY = LY.NULL, RPS = RPS.NULL, RTE = RTE)
 
 error.cor.mis <- matrix(NA, 6, 6)
 diag(error.cor.mis) <- 1
-RTD.Mis <- binds(error.cor.mis, "rnorm(1,0,0.1)")
-CFA.Model.NULL.Mis <- simMisspecCFA(RTE = RTD.Mis)
+RTE.Mis <- binds(error.cor.mis, "rnorm(1,0,0.1)")
+CFA.Model.NULL.Mis <- simMisspecCFA(RTE = RTE.Mis)
 
 loading.alt <- matrix(0, 6, 2)
 loading.alt[1:3, 1] <- NA
 loading.alt[4:6, 2] <- NA
-LX.ALT <- bind(loading.alt, 0.7)
+LY.ALT <- bind(loading.alt, 0.7)
 latent.cor.alt <- matrix(NA, 2, 2)
 diag(latent.cor.alt) <- 1
-RPH.ALT <- binds(latent.cor.alt, 0.7)
-CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
+RPS.ALT <- binds(latent.cor.alt, 0.7)
+CFA.Model.ALT <- simSetCFA(LY = LY.ALT, RPS = RPS.ALT, RTE = RTE)
 
 # loading.alt.mis <- matrix(NA, 6, 2)
 # loading.alt.mis[is.na(loading.alt)] <- 0
-# LX.alt.mis <- bind(loading.alt.mis, "runif(1,-.2,.2)")
-# CFA.Model.alt.mis <- simMisspecCFA(LY = LX.alt.mis, RTE=RTD.Mis)
+# LY.alt.mis <- bind(loading.alt.mis, "runif(1,-.2,.2)")
+# CFA.Model.alt.mis <- simMisspecCFA(LY = LY.alt.mis, RTE=RTE.Mis)
 
 SimData.NULL <- simData(CFA.Model.NULL, 500)
 SimData.ALT <- simData(CFA.Model.ALT, 500)
@@ -2065,15 +2065,15 @@ u79 <- simUnif(0.7, 0.9)
 
 loading.null <- matrix(0, 6, 1)
 loading.null[1:6, 1] <- NA
-LX.NULL <- bind(loading.null, 0.7)
-RPH.NULL <- binds(diag(1))
-RTD <- binds(diag(6))
-CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
+LY.NULL <- bind(loading.null, 0.7)
+RPS.NULL <- binds(diag(1))
+RTE <- binds(diag(6))
+CFA.Model.NULL <- simSetCFA(LY = LY.NULL, RPS = RPS.NULL, RTE = RTE)
 
 error.cor.mis <- matrix(NA, 6, 6)
 diag(error.cor.mis) <- 1
-RTD.Mis <- binds(error.cor.mis, "rnorm(1,0,0.1)")
-CFA.Model.NULL.Mis <- simMisspecCFA(RTE = RTD.Mis)
+RTE.Mis <- binds(error.cor.mis, "rnorm(1,0,0.1)")
+CFA.Model.NULL.Mis <- simMisspecCFA(RTE = RTE.Mis)
 
 SimData.NULL <- simData(CFA.Model.NULL, 500, misspec = CFA.Model.NULL.Mis)
 SimModel <- simModel(CFA.Model.NULL)
@@ -2082,16 +2082,16 @@ Output.NULL <- sim(NULL, SimData.NULL, SimModel, n=50:500)
 loading.alt <- matrix(0, 6, 2)
 loading.alt[1:3, 1] <- NA
 loading.alt[4:6, 2] <- NA
-LX.ALT <- bind(loading.alt, 0.7)
+LY.ALT <- bind(loading.alt, 0.7)
 latent.cor.alt <- matrix(NA, 2, 2)
 diag(latent.cor.alt) <- 1
-RPH.ALT <- binds(latent.cor.alt, 0.7)
-CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
+RPS.ALT <- binds(latent.cor.alt, 0.7)
+CFA.Model.ALT <- simSetCFA(LY = LY.ALT, RPS = RPS.ALT, RTE = RTE)
 
 loading.alt.mis <- matrix(NA, 6, 2)
 loading.alt.mis[is.na(loading.alt)] <- 0
-LX.alt.mis <- bind(loading.alt.mis, "runif(1,-.2,.2)")
-CFA.Model.alt.mis <- simMisspecCFA(LY = LX.alt.mis, RTE=RTD.Mis)
+LY.alt.mis <- bind(loading.alt.mis, "runif(1,-.2,.2)")
+CFA.Model.alt.mis <- simMisspecCFA(LY = LY.alt.mis, RTE=RTE.Mis)
 
 SimData.ALT <- simData(CFA.Model.ALT, 500, misspec = CFA.Model.alt.mis)
 Output.ALT <- sim(NULL, SimData.ALT, SimModel, n=50:500)
@@ -2120,15 +2120,15 @@ u79 <- simUnif(0.7, 0.9)
 
 loading.null <- matrix(0, 6, 1)
 loading.null[1:6, 1] <- NA
-LX.NULL <- bind(loading.null, 0.7)
-RPH.NULL <- binds(diag(1))
-RTD <- binds(diag(6))
-CFA.Model.NULL <- simSetCFA(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD)
+LY.NULL <- bind(loading.null, 0.7)
+RPS.NULL <- binds(diag(1))
+RTE <- binds(diag(6))
+CFA.Model.NULL <- simSetCFA(LY = LY.NULL, RPS = RPS.NULL, RTE = RTE)
 
 error.cor.mis <- matrix(NA, 6, 6)
 diag(error.cor.mis) <- 1
-RTD.Mis <- binds(error.cor.mis, "rnorm(1,0,0.1)")
-CFA.Model.NULL.Mis <- simMisspecCFA(RTE = RTD.Mis)
+RTE.Mis <- binds(error.cor.mis, "rnorm(1,0,0.1)")
+CFA.Model.NULL.Mis <- simMisspecCFA(RTE = RTE.Mis)
 
 SimData.NULL <- simData(CFA.Model.NULL, 500, misspec = CFA.Model.NULL.Mis)
 SimModel <- simModel(CFA.Model.NULL)
@@ -2137,16 +2137,16 @@ Output.NULL <- sim(NULL, SimData.NULL, SimModel, n=50:500, pmMCAR=seq(0, 0.4, 0.
 loading.alt <- matrix(0, 6, 2)
 loading.alt[1:3, 1] <- NA
 loading.alt[4:6, 2] <- NA
-LX.ALT <- bind(loading.alt, 0.7)
+LY.ALT <- bind(loading.alt, 0.7)
 latent.cor.alt <- matrix(NA, 2, 2)
 diag(latent.cor.alt) <- 1
-RPH.ALT <- binds(latent.cor.alt, 0.7)
-CFA.Model.ALT <- simSetCFA(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD)
+RPS.ALT <- binds(latent.cor.alt, 0.7)
+CFA.Model.ALT <- simSetCFA(LY = LY.ALT, RPS = RPS.ALT, RTE = RTE)
 
 loading.alt.mis <- matrix(NA, 6, 2)
 loading.alt.mis[is.na(loading.alt)] <- 0
-LX.alt.mis <- bind(loading.alt.mis, "runif(1,-.2,.2)")
-CFA.Model.alt.mis <- simMisspecCFA(LY = LX.alt.mis, RTE=RTD.Mis)
+LY.alt.mis <- bind(loading.alt.mis, "runif(1,-.2,.2)")
+CFA.Model.alt.mis <- simMisspecCFA(LY = LY.alt.mis, RTE=RTE.Mis)
 
 SimData.ALT <- simData(CFA.Model.ALT, 500, misspec = CFA.Model.alt.mis)
 Output.ALT <- sim(NULL, SimData.ALT, SimModel, n=50:500, pmMCAR=seq(0, 0.4, 0.1))

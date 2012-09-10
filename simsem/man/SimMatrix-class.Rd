@@ -43,11 +43,17 @@ loading[4:6, 2] <- NA
 loadingValues <- matrix(0, 6, 2)
 loadingValues[1:3, 1] <- 0.7
 loadingValues[4:6, 2] <- 0.7
-LX <- bind(loading, loadingValues)
-summary(LX)
-rawDraw(LX)
+LY <- bind(loading, loadingValues)
+summary(LY)
+rawDraw(LY)
 
 LY <- bind(loading, "rnorm(1, 0.6, 0.05)")
+summary(LY)
+rawDraw(LY)
+
+mis <- matrix("runif(1, -0.1, 0.1)", 6, 2)
+mis[is.na(loading)] <- 0
+LY <- bind(loading, "rnorm(1, 0.6, 0.05)", mis)
 summary(LY)
 rawDraw(LY)
 }

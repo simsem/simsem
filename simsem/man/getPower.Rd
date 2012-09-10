@@ -55,23 +55,22 @@ Muthen, L. K., & Muthen, B. O. (2002). How to use a Monte Carlo study to decide 
 }
 \examples{
 \dontrun{
-# Specify Sample Size by n
 loading <- matrix(0, 6, 1)
 loading[1:6, 1] <- NA
-LX <- bind(loading, 0.7)
-RPH <- binds(diag(1))
-RTD <- binds(diag(6))
-CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+LY <- bind(loading, 0.7)
+RPS <- binds(diag(1))
+RTE <- binds(diag(6))
+CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA")
 
-# We will use only 5 replications to save time.
-# In reality, more replications are needed.
-
-# Specify both sample size and percent missing completely at random
+# Specify both sample size and percent missing completely at random. Note that more fine-grained 
+# values of n and pmMCAR is needed, e.g., n=seq(50, 500, 1) and pmMCAR=seq(0, 0.2, 0.01)
 Output <- sim(NULL, model=CFA.Model, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2))
 summary(Output)
 
+# Get the power of all possible combinations of n and pmMCAR
 getPower(Output)
 
+# Get the power of the combinations of n of 100 and 200 and pmMCAR of 0, 0.1, and 0.2
 getPower(Output, nVal=c(100, 200), pmMCARval=c(0, 0.1, 0.2))
 }
 }

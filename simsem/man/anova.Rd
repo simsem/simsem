@@ -37,12 +37,12 @@ loading1 <- matrix(0, 6, 1)
 loading1[1:6, 1] <- NA
 loading2 <- loading1
 loading2[6,1] <- 0
-LX1 <- bind(loading1, 0.7)
-LX2 <- bind(loading2, 0.7)
-RPH <- binds(diag(1))
-RTD <- binds(diag(6))
-CFA.Model1 <- model(LY = LX1, RPS = RPH, RTE = RTD, modelType="CFA")
-CFA.Model2 <- model(LY = LX2, RPS = RPH, RTE = RTD, modelType="CFA")
+LY1 <- bind(loading1, 0.7)
+LY2 <- bind(loading2, 0.7)
+RPS <- binds(diag(1))
+RTE <- binds(diag(6))
+CFA.Model1 <- model(LY = LY1, RPS = RPS, RTE = RTE, modelType="CFA")
+CFA.Model2 <- model(LY = LY2, RPS = RPS, RTE = RTE, modelType="CFA")
 
 # We make the examples running only 5 replications to save time.
 # In reality, more replications are needed.
@@ -51,6 +51,7 @@ Output1 <- sim(5, n=500, model=CFA.Model1, generate=CFA.Model1, seed=123567)
 Output2 <- sim(5, n=500, model=CFA.Model2, generate=CFA.Model1, seed=123567)
 anova(Output1, Output2)
 
+# The example when the sample size is varying
 Output1b <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model1, generate=CFA.Model1, seed=123567)
 Output2b <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model2, generate=CFA.Model1, seed=123567)
 anova(Output1b, Output2b)

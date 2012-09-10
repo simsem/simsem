@@ -72,7 +72,11 @@ loading.trivial <- matrix("runif(1, -0.2, 0.2)", 9, 3)
 loading.trivial[is.na(loading)] <- 0
 mismodel <- model.lavaan(out, std=TRUE, LY=loading.trivial)
 
+# The actual number of replications should be much greater than 20.
 simout <- sim(20, n=nrow(HolzingerSwineford1939), mismodel)
+
+# Find the p-value comparing the observed fit indices against the simulated 
+# sampling distribution of fit indices
 pValue(out, simout)
 }
 }
