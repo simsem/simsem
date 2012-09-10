@@ -57,11 +57,17 @@ loading[4:6, 2] <- NA
 loadingValues <- matrix(0, 6, 2)
 loadingValues[1:3, 1] <- 0.7
 loadingValues[4:6, 2] <- 0.7
-LX <- bind(loading, loadingValues)
-summary(LX)
-rawDraw(LX)
+LY <- bind(loading, loadingValues)
+summary(LY)
+rawDraw(LY)
 
 LY <- bind(loading, "rnorm(1, 0.6, 0.05)")
+summary(LY)
+rawDraw(LY)
+
+mis <- matrix("runif(1, -0.1, 0.1)", 6, 2)
+mis[is.na(loading)] <- 0
+LY <- bind(loading, "rnorm(1, 0.6, 0.05)", mis)
 summary(LY)
 rawDraw(LY)
 
@@ -110,9 +116,20 @@ CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA")
 # We make the examples running only 5 replications to save time.
 # In reality, more replications are needed.
 Output <- sim(5, n=500, CFA.Model)
+
+# Summary the simulation result
 summary(Output)
+
+# Short summary of the simulation result
+summaryShort(Output)
+
+# Find the fit index cutoff
 getCutoff(Output, 0.05)
+
+# Summary of parameter estimates
 summaryParam(Output)
+
+# Summary of population parameters
 summaryPopulation(Output)
 
 
@@ -137,19 +154,19 @@ loading[4:6, 2] <- NA
 loadingValues <- matrix(0, 6, 2)
 loadingValues[1:3, 1] <- 0.7
 loadingValues[4:6, 2] <- 0.7
-LX <- bind(loading, loadingValues)
-summary(LX)
+LY <- bind(loading, loadingValues)
+summary(LY)
 
 latent.cor <- matrix(NA, 2, 2)
 diag(latent.cor) <- 1
-RPH <- binds(latent.cor, 0.5)
+RPS <- binds(latent.cor, 0.5)
 
 # Error Correlation Object
 error.cor <- matrix(0, 6, 6)
 diag(error.cor) <- 1
-RTD <- binds(error.cor)
+RTE <- binds(error.cor)
 
-CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA")
 summary(CFA.Model)
 
 
@@ -229,12 +246,12 @@ flush(stderr()); flush(stdout())
 ##D loading1[1:6, 1] <- NA
 ##D loading2 <- loading1
 ##D loading2[6,1] <- 0
-##D LX1 <- bind(loading1, 0.7)
-##D LX2 <- bind(loading2, 0.7)
-##D RPH <- binds(diag(1))
-##D RTD <- binds(diag(6))
-##D CFA.Model1 <- model(LY = LX1, RPS = RPH, RTE = RTD, modelType="CFA")
-##D CFA.Model2 <- model(LY = LX2, RPS = RPH, RTE = RTD, modelType="CFA")
+##D LY1 <- bind(loading1, 0.7)
+##D LY2 <- bind(loading2, 0.7)
+##D RPS <- binds(diag(1))
+##D RTE <- binds(diag(6))
+##D CFA.Model1 <- model(LY = LY1, RPS = RPS, RTE = RTE, modelType="CFA")
+##D CFA.Model2 <- model(LY = LY2, RPS = RPS, RTE = RTE, modelType="CFA")
 ##D 
 ##D # We make the examples running only 5 replications to save time.
 ##D # In reality, more replications are needed.
@@ -243,6 +260,7 @@ flush(stderr()); flush(stdout())
 ##D Output2 <- sim(5, n=500, model=CFA.Model2, generate=CFA.Model1, seed=123567)
 ##D anova(Output1, Output2)
 ##D 
+##D # The example when the sample size is varying
 ##D Output1b <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model1, generate=CFA.Model1, seed=123567)
 ##D Output2b <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model2, generate=CFA.Model1, seed=123567)
 ##D anova(Output1b, Output2b)
@@ -262,7 +280,6 @@ flush(stderr()); flush(stdout())
 ### Aliases: bind binds
 
 ### ** Examples
-
 
 loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA
@@ -285,7 +302,6 @@ RTE <- binds(error.cor,1,"runif(1,-.05,.05)")
 
 
 
-
 cleanEx()
 nameEx("bindDist")
 ### * bindDist
@@ -298,17 +314,20 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
+# Create three-dimensional distribution by gaussian copula with 
+# the following marginal distributions
+#   1. t-distribution with df = 2
+# 	2. chi-square distribution with df = 3
+#	3. normal distribution with mean = 0 and sd = 1
+
+# Setting the attribute of each marginal distribution
 d1 <- list(df=2)
 d2 <- list(df=3)
-d3 <- list(df=4)
-d4 <- list(df=5)
-d5 <- list(df=3)
-d6 <- list(df=4)
-d7 <- list(df=5)
-d8 <- list(df=6)
+d3 <- list(mean=0, sd=1)
 
-
-dist <- bindDist(c(rep("t", 4), rep("chisq", 8)), d1, d2, d3, d4, d5, d6, d7, d8, d5, d6, d7, d8)
+# Create a data distribution object by setting the names of each distribution
+# and their arguments
+dist <- bindDist(c("t", "chisq", "norm"), d1, d2, d3)
 
 
 
@@ -329,24 +348,23 @@ flush(stderr()); flush(stdout())
 ##D # Specify Sample Size by n
 ##D loading <- matrix(0, 6, 1)
 ##D loading[1:6, 1] <- NA
-##D LX <- bind(loading, 0.7)
-##D RPH <- binds(diag(1))
-##D RTD <- binds(diag(6))
-##D CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+##D LY <- bind(loading, 0.7)
+##D RPS <- binds(diag(1))
+##D RTE <- binds(diag(6))
+##D CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA")
 ##D dat <- generate(CFA.Model, 50)
 ##D out <- analyze(CFA.Model, dat)
 ##D 
-##D # We will use only 5 replications to save time.
-##D # In reality, more replications are needed.
-##D 
-##D # Specify both sample size and percent missing completely at random
-##D 
+##D # Specify both continuous sample size and percent missing completely at random. Note that more fine-grained 
+##D # values of n and pmMCAR is needed, e.g., n=seq(50, 500, 1) and pmMCAR=seq(0, 0.2, 0.01)
 ##D Output <- sim(NULL, CFA.Model, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2))
 ##D summary(Output)
 ##D 
+##D # Find the power of all combinations of different sample size and percent MCAR missing
 ##D Cpow <- continuousPower(Output, contN = TRUE, contMCAR = TRUE)
 ##D Cpow
 ##D 
+##D # Find the power of parameter estimates when sample size is 200 and percent MCAR missing is 0.3
 ##D Cpow2 <- continuousPower(Output, contN = TRUE, contMCAR = TRUE, pred=list(N = 200, pmMCAR = 0.3))
 ##D Cpow2
 ## End(Not run)
@@ -380,6 +398,7 @@ VY <- bind(rep(NA,6),2)
 
 CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
 
+# Draw a parameter set for data generation.
 param <- draw(CFA.Model)
 
 # Generate data from the first group in the paramList.
@@ -414,6 +433,7 @@ VY <- bind(rep(NA,6),2)
 
 CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
 
+# Draw a parameter set for data generation.
 param <- draw(CFA.Model)
 
 
@@ -430,12 +450,25 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-
-loading <- matrix(0, 6, 2)
+loading <- matrix(0, 12, 4)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
+loading[7:9, 3] <- NA
+loading[10:12, 4] <- NA
 
 CFA.Model <- estmodel(LY = loading, modelType = "CFA")
+
+path <- matrix(0, 4, 4)
+path[3, 1:2] <- NA
+path[4, 3] <- NA
+Path.Model <- estmodel(BE = path, modelType = "Path")
+
+SEM.Model <- estmodel(BE = path, LY = loading, modelType="SEM")
+
+# Shortcut
+CFA.Model <- estmodel.cfa(LY = loading)
+Path.Model <- estmodel.path(BE = path)
+SEM.Model <- estmodel.sem(BE = path, LY = loading)
 
 
 
@@ -699,14 +732,19 @@ flush(stderr()); flush(stdout())
 ##D # Specify Sample Size by n
 ##D loading <- matrix(0, 6, 1)
 ##D loading[1:6, 1] <- NA
-##D LX <- bind(loading, 0.4)
-##D RPH <- binds(diag(1))
-##D RTD <- binds(diag(6))
-##D CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+##D LY <- bind(loading, 0.4)
+##D RPS <- binds(diag(1))
+##D RTE <- binds(diag(6))
+##D CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA")
 ##D 
-##D # Specify both sample size and percent missing completely at random
+##D # Specify both sample size and percent missing completely at random. Note that more fine-grained 
+##D # values of n and pmMCAR is needed, e.g., n=seq(50, 500, 1) and pmMCAR=seq(0, 0.2, 0.01)
 ##D Output <- sim(NULL, model=CFA.Model, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2))
+##D 
+##D # Find the power of all possible combination of N and pmMCAR
 ##D pow <- getPower(Output)
+##D 
+##D # Find the sample size that provides the power of 0.8
 ##D findPower(pow, "N", 0.80)
 ## End(Not run)
 
@@ -785,22 +823,27 @@ flush(stderr()); flush(stdout())
 ##D loadingValues <- matrix(0, 6, 2)
 ##D loadingValues[1:3, 1] <- 0.7
 ##D loadingValues[4:6, 2] <- 0.7
-##D LX <- bind(loading, loadingValues)
+##D LY <- bind(loading, loadingValues)
 ##D latent.cor <- matrix(NA, 2, 2)
 ##D diag(latent.cor) <- 1
-##D RPH <- binds(latent.cor, 0.5)
+##D RPS <- binds(latent.cor, 0.5)
 ##D error.cor <- matrix(0, 6, 6)
 ##D diag(error.cor) <- 1
-##D RTD <- binds(error.cor)
-##D CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+##D RTE <- binds(error.cor)
+##D CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA")
 ##D 
 ##D # We make the examples running only 5 replications to save time.
 ##D # In reality, more replications are needed.
 ##D Output <- sim(5, n = 200, model=CFA.Model)
+##D 
+##D # Get the cutoff (critical value) when alpha is 0.05
 ##D getCutoff(Output, 0.05)
 ##D 
-##D # Finding the cutoff when the sample size is varied.
+##D # Finding the cutoff when the sample size is varied. Note that more fine-grained 
+##D # values of n is needed, e.g., n=seq(50, 500, 1)
 ##D Output2 <- sim(NULL, model=CFA.Model, n=seq(50, 100, 10))
+##D 
+##D # Get the fit index cutoff when sample size is 75.
 ##D getCutoff(Output2, 0.05, nVal = 75)
 ## End(Not run)
 
@@ -820,30 +863,34 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 ## Not run: 
+##D # Nested Model
 ##D loading.null <- matrix(0, 6, 1)
 ##D loading.null[1:6, 1] <- NA
-##D LX.NULL <- bind(loading.null, 0.7)
-##D RPH.NULL <- binds(diag(1))
+##D LY.NULL <- bind(loading.null, 0.7)
+##D RPS.NULL <- binds(diag(1))
 ##D 
 ##D error.cor.mis <- matrix("rnorm(1, 0, 0.1)", 6, 6)
 ##D diag(error.cor.mis) <- 1
-##D RTD <- binds(diag(6), misspec=error.cor.mis)
-##D CFA.Model.NULL <- model(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD, modelType="CFA")
+##D RTE <- binds(diag(6), misspec=error.cor.mis)
+##D CFA.Model.NULL <- model(LY = LY.NULL, RPS = RPS.NULL, RTE = RTE, modelType="CFA")
 ##D 
+##D # Parent Model
 ##D loading.alt <- matrix(0, 6, 2)
 ##D loading.alt[1:3, 1] <- NA
 ##D loading.alt[4:6, 2] <- NA
-##D LX.ALT <- bind(loading.alt, 0.7)
+##D LY.ALT <- bind(loading.alt, 0.7)
 ##D latent.cor.alt <- matrix(NA, 2, 2)
 ##D diag(latent.cor.alt) <- 1
-##D RPH.ALT <- binds(latent.cor.alt, "runif(1, 0.7, 0.9)")
-##D CFA.Model.ALT <- model(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD, modelType="CFA")
+##D RPS.ALT <- binds(latent.cor.alt, "runif(1, 0.7, 0.9)")
+##D CFA.Model.ALT <- model(LY = LY.ALT, RPS = RPS.ALT, RTE = RTE, modelType="CFA")
 ##D 
 ##D # The actual number of replications should be greater than 10.
 ##D Output.NULL.NULL <- sim(10, n=500, model=CFA.Model.NULL, generate=CFA.Model.NULL)
 ##D Output.NULL.ALT <- sim(10, n=500, model=CFA.Model.ALT, generate=CFA.Model.NULL)
 ##D 
-##D getCutoffNested(Output.NULL.NULL, Output.NULL.ALT)
+##D # Find the fix index cutoff from the sampling distribution of the difference
+##D # in fit index of nested models where the alpha is 0.05.
+##D getCutoffNested(Output.NULL.NULL, Output.NULL.ALT, alpha=0.05)
 ## End(Not run)
 
 
@@ -862,21 +909,23 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 ## Not run: 
+##D # Model A: Factor 1 with items 1-3 and Factor 2 with items 4-8
 ##D loading.A <- matrix(0, 8, 2)
 ##D loading.A[1:3, 1] <- NA
 ##D loading.A[4:8, 2] <- NA
-##D LX.A <- bind(loading.A, 0.7)
+##D LY.A <- bind(loading.A, 0.7)
 ##D latent.cor <- matrix(NA, 2, 2)
 ##D diag(latent.cor) <- 1
-##D RPH <- binds(latent.cor, "runif(1, 0.7, 0.9)")
-##D RTD <- binds(diag(8))
-##D CFA.Model.A <- model(LY = LX.A, RPS = RPH, RTE = RTD, modelType="CFA")
+##D RPS <- binds(latent.cor, "runif(1, 0.7, 0.9)")
+##D RTE <- binds(diag(8))
+##D CFA.Model.A <- model(LY = LY.A, RPS = RPS, RTE = RTE, modelType="CFA")
 ##D 
+##D # Model B: Factor 1 with items 1-4 and Factor 2 with items 5-8
 ##D loading.B <- matrix(0, 8, 2)
 ##D loading.B[1:4, 1] <- NA
 ##D loading.B[5:8, 2] <- NA
-##D LX.B <- bind(loading.B, 0.7)
-##D CFA.Model.B <- model(LY = LX.B, RPS = RPH, RTE = RTD, modelType="CFA")
+##D LY.B <- bind(loading.B, 0.7)
+##D CFA.Model.B <- model(LY = LY.B, RPS = RPS, RTE = RTE, modelType="CFA")
 ##D 
 ##D # The actual number of replications should be greater than 10.
 ##D Output.A.A <- sim(10, n=500, model=CFA.Model.A, generate=CFA.Model.A)
@@ -884,8 +933,14 @@ flush(stderr()); flush(stdout())
 ##D Output.B.A <- sim(10, n=500, model=CFA.Model.A, generate=CFA.Model.B)
 ##D Output.B.B <- sim(10, n=500, model=CFA.Model.B, generate=CFA.Model.B)
 ##D 
+##D # Find the cutoffs from the sampling distribution to reject model A (model 1)
+##D # and to reject model B (model 2)
 ##D getCutoffNonNested(Output.A.A, Output.A.B, Output.B.A, Output.B.B)
+##D 
+##D # Find the cutoffs from the sampling distribution to reject model A (model 1)
 ##D getCutoffNonNested(Output.A.A, Output.A.B)
+##D 
+##D # Find the cutoffs from the sampling distribution to reject model B (model 1)
 ##D getCutoffNonNested(Output.B.B, Output.B.A)
 ## End(Not run)
 
@@ -904,23 +959,23 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 ## Not run: 
-##D # Specify Sample Size by n
 ##D loading <- matrix(0, 6, 1)
 ##D loading[1:6, 1] <- NA
-##D LX <- bind(loading, 0.7)
-##D RPH <- binds(diag(1))
-##D RTD <- binds(diag(6))
-##D CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+##D LY <- bind(loading, 0.7)
+##D RPS <- binds(diag(1))
+##D RTE <- binds(diag(6))
+##D CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA")
 ##D 
-##D # We will use only 5 replications to save time.
-##D # In reality, more replications are needed.
-##D 
+##D # Write a function to extract the modification index from lavaan object
 ##D outfun <- function(out) {
 ##D 	result <- inspect(out, "mi")
 ##D }
 ##D 
-##D # Specify both sample size and percent missing completely at random
+##D # We will use only 5 replications to save time.
+##D # In reality, more replications are needed.
 ##D Output <- sim(5, n=200, model=CFA.Model, outfun=outfun)
+##D 
+##D # Get the modification index of each replication
 ##D getExtraOutput(Output)
 ## End(Not run)
 
@@ -942,14 +997,16 @@ flush(stderr()); flush(stdout())
 ## Not run: 
 ##D loading <- matrix(0, 6, 1)
 ##D loading[1:6, 1] <- NA
-##D LX <- bind(loading, "runif(1, 0.4, 0.9)")
-##D RPH <- binds(diag(1))
-##D RTD <- binds(diag(6))
-##D CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+##D LY <- bind(loading, "runif(1, 0.4, 0.9)")
+##D RPS <- binds(diag(1))
+##D RTE <- binds(diag(6))
+##D CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA")
 ##D 
 ##D # We will use only 10 replications to save time.
 ##D # In reality, more replications are needed.
 ##D Output <- sim(10, n=200, model=CFA.Model)
+##D 
+##D # Get the population parameters
 ##D getPopulation(Output)
 ## End(Not run)
 
@@ -968,23 +1025,22 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 ## Not run: 
-##D # Specify Sample Size by n
 ##D loading <- matrix(0, 6, 1)
 ##D loading[1:6, 1] <- NA
-##D LX <- bind(loading, 0.7)
-##D RPH <- binds(diag(1))
-##D RTD <- binds(diag(6))
-##D CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+##D LY <- bind(loading, 0.7)
+##D RPS <- binds(diag(1))
+##D RTE <- binds(diag(6))
+##D CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA")
 ##D 
-##D # We will use only 5 replications to save time.
-##D # In reality, more replications are needed.
-##D 
-##D # Specify both sample size and percent missing completely at random
+##D # Specify both sample size and percent missing completely at random. Note that more fine-grained 
+##D # values of n and pmMCAR is needed, e.g., n=seq(50, 500, 1) and pmMCAR=seq(0, 0.2, 0.01)
 ##D Output <- sim(NULL, model=CFA.Model, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2))
 ##D summary(Output)
 ##D 
+##D # Get the power of all possible combinations of n and pmMCAR
 ##D getPower(Output)
 ##D 
+##D # Get the power of the combinations of n of 100 and 200 and pmMCAR of 0, 0.1, and 0.2
 ##D getPower(Output, nVal=c(100, 200), pmMCARval=c(0, 0.1, 0.2))
 ## End(Not run)
 
@@ -1007,34 +1063,48 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 ## Not run: 
+##D # Null model with one factor
 ##D loading.null <- matrix(0, 6, 1)
 ##D loading.null[1:6, 1] <- NA
-##D LX.NULL <- bind(loading.null, 0.7)
-##D RPH.NULL <- binds(diag(1))
-##D RTD <- binds(diag(6))
-##D CFA.Model.NULL <- model(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD, modelType="CFA")
+##D LY.NULL <- bind(loading.null, 0.7)
+##D RPS.NULL <- binds(diag(1))
+##D RTE <- binds(diag(6))
+##D CFA.Model.NULL <- model(LY = LY.NULL, RPS = RPS.NULL, RTE = RTE, modelType="CFA")
 ##D 
 ##D # We make the examples running only 5 replications to save time.
 ##D # In reality, more replications are needed.
 ##D Output.NULL <- sim(5, n=500, model=CFA.Model.NULL)
-##D Cut.NULL <- getCutoff(Output.NULL, 0.95)
 ##D 
+##D # Get the fit index cutoff from the null model
+##D Cut.NULL <- getCutoff(Output.NULL, 0.05)
+##D 
+##D # Alternative model with two factor
 ##D loading.alt <- matrix(0, 6, 2)
 ##D loading.alt[1:3, 1] <- NA
 ##D loading.alt[4:6, 2] <- NA
-##D LX.ALT <- bind(loading.alt, 0.7)
+##D LY.ALT <- bind(loading.alt, 0.7)
 ##D latent.cor.alt <- matrix(NA, 2, 2)
 ##D diag(latent.cor.alt) <- 1
-##D RPH.ALT <- binds(latent.cor.alt, "runif(1, 0.7, 0.9)")
-##D CFA.Model.ALT <- model(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD, modelType="CFA")
+##D RPS.ALT <- binds(latent.cor.alt, "runif(1, 0.7, 0.9)")
+##D CFA.Model.ALT <- model(LY = LY.ALT, RPS = RPS.ALT, RTE = RTE, modelType="CFA")
 ##D 
+##D # We make the examples running only 5 replications to save time.
+##D # In reality, more replications are needed.
 ##D Output.ALT <- sim(5, n=500, model=CFA.Model.NULL, generate=CFA.Model.ALT)
+##D 
+##D # Get the power based on the derived cutoff
 ##D getPowerFit(Output.ALT, cutoff=Cut.NULL)
+##D 
+##D # Get the power based on the rule of thumb proposed by Hu & Bentler (1999)
 ##D Rule.of.thumb <- c(RMSEA=0.05, CFI=0.95, TLI=0.95, SRMR=0.06)
 ##D getPowerFit(Output.ALT, cutoff=Rule.of.thumb, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
 ##D 
+##D # The example of continous varying sample size. Note that more fine-grained 
+##D # values of n is needed, e.g., n=seq(50, 500, 1)
 ##D Output.NULL2 <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model.NULL, generate=CFA.Model.NULL)
 ##D Output.ALT2 <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model.NULL, generate=CFA.Model.ALT)
+##D 
+##D # Get the power based on the derived cutoff from the null model at the sample size of 250
 ##D getPowerFit(Output.ALT2, nullObject=Output.NULL2, nVal=250)
 ## End(Not run)
 
@@ -1056,36 +1126,49 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 ## Not run: 
+##D # Null model (Nested model) with one factor
 ##D loading.null <- matrix(0, 6, 1)
 ##D loading.null[1:6, 1] <- NA
-##D LX.NULL <- bind(loading.null, 0.7)
-##D RPH.NULL <- binds(diag(1))
-##D RTD <- binds(diag(6))
-##D CFA.Model.NULL <- model(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD, modelType="CFA")
+##D LY.NULL <- bind(loading.null, 0.7)
+##D RPS.NULL <- binds(diag(1))
+##D RTE <- binds(diag(6))
+##D CFA.Model.NULL <- model(LY = LY.NULL, RPS = RPS.NULL, RTE = RTE, modelType="CFA")
 ##D 
+##D # Alternative model (Parent model) with two factors
 ##D loading.alt <- matrix(0, 6, 2)
 ##D loading.alt[1:3, 1] <- NA
 ##D loading.alt[4:6, 2] <- NA
-##D LX.ALT <- bind(loading.alt, 0.7)
+##D LY.ALT <- bind(loading.alt, 0.7)
 ##D latent.cor.alt <- matrix(NA, 2, 2)
 ##D diag(latent.cor.alt) <- 1
-##D RPH.ALT <- binds(latent.cor.alt, 0.7)
-##D CFA.Model.ALT <- model(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD, modelType="CFA")
+##D RPS.ALT <- binds(latent.cor.alt, 0.7)
+##D CFA.Model.ALT <- model(LY = LY.ALT, RPS = RPS.ALT, RTE = RTE, modelType="CFA")
 ##D 
+##D # We make the examples running only 10 replications to save time.
+##D # In reality, more replications are needed.
 ##D Output.NULL.NULL <- sim(10, n=500, model=CFA.Model.NULL, generate=CFA.Model.NULL) 
 ##D Output.ALT.NULL <- sim(10, n=500, model=CFA.Model.NULL, generate=CFA.Model.ALT) 
 ##D Output.NULL.ALT <- sim(10, n=500, model=CFA.Model.ALT, generate=CFA.Model.NULL) 
 ##D Output.ALT.ALT <- sim(10, n=500, model=CFA.Model.ALT, generate=CFA.Model.ALT) 
 ##D 
+##D # Find the power based on the derived cutoff from the models analyzed on the null datasets
 ##D getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT)
+##D 
+##D # Find the power based on the chi-square value at df=1 and the CFI change (intentionally
+##D # use a cutoff from Cheung and Rensvold (2002) in an appropriate situation).
 ##D getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, cutoff=c(Chi=3.84, CFI=-0.10))
 ##D 
+##D # The example of continous varying sample size. Note that more fine-grained 
+##D # values of n is needed, e.g., n=seq(50, 500, 1)
 ##D Output.NULL.NULL2 <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model.NULL, generate=CFA.Model.NULL) 
 ##D Output.ALT.NULL2 <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model.NULL, generate=CFA.Model.ALT) 
 ##D Output.NULL.ALT2 <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model.ALT, generate=CFA.Model.NULL) 
 ##D Output.ALT.ALT2 <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model.ALT, generate=CFA.Model.ALT) 
 ##D 
+##D # Get the power based on the derived cutoff from the null model at the sample size of 250
 ##D getPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNested=Output.NULL.NULL2, nullParent=Output.NULL.ALT2, nVal = 250)
+##D 
+##D # Get the power based on the rule of thumb from the null model at the sample size of 250
 ##D getPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, cutoff=c(Chi=3.84, CFI=-0.10), nVal = 250)
 ## End(Not run)
 
@@ -1107,21 +1190,23 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 ## Not run: 
+##D # Model A: Factor 1 on Items 1-3 and Factor 2 on Items 4-8
 ##D loading.A <- matrix(0, 8, 2)
 ##D loading.A[1:3, 1] <- NA
 ##D loading.A[4:8, 2] <- NA
-##D LX.A <- bind(loading.A, 0.7)
+##D LY.A <- bind(loading.A, 0.7)
 ##D latent.cor <- matrix(NA, 2, 2)
 ##D diag(latent.cor) <- 1
-##D RPH <- binds(latent.cor, "runif(1, 0.7, 0.9)")
-##D RTD <- binds(diag(8))
-##D CFA.Model.A <- model(LY = LX.A, RPS = RPH, RTE = RTD, modelType="CFA")
+##D RPS <- binds(latent.cor, "runif(1, 0.7, 0.9)")
+##D RTE <- binds(diag(8))
+##D CFA.Model.A <- model(LY = LY.A, RPS = RPS, RTE = RTE, modelType="CFA")
 ##D 
+##D # Model B: Factor 1 on Items 1-4 and Factor 2 on Items 5-8
 ##D loading.B <- matrix(0, 8, 2)
 ##D loading.B[1:4, 1] <- NA
 ##D loading.B[5:8, 2] <- NA
-##D LX.B <- bind(loading.B, 0.7)
-##D CFA.Model.B <- model(LY = LX.B, RPS = RPH, RTE = RTD, modelType="CFA")
+##D LY.B <- bind(loading.B, 0.7)
+##D CFA.Model.B <- model(LY = LY.B, RPS = RPS, RTE = RTE, modelType="CFA")
 ##D 
 ##D # The actual number of replications should be greater than 10.
 ##D Output.A.A <- sim(10, n=500, model=CFA.Model.A, generate=CFA.Model.A) 
@@ -1129,7 +1214,10 @@ flush(stderr()); flush(stdout())
 ##D Output.B.A <- sim(10, n=500, model=CFA.Model.A, generate=CFA.Model.B) 
 ##D Output.B.B <- sim(10, n=500, model=CFA.Model.B, generate=CFA.Model.B) 
 ##D 
+##D # Find the power based on the derived cutoff for both models
 ##D getPowerFitNonNested(Output.B.A, Output.B.B, dat1Mod1=Output.A.A, dat1Mod2=Output.A.B)
+##D 
+##D # Find the power based on the AIC and BIC of 0 (select model B if Output.B.B has lower AIC or BIC)
 ##D getPowerFitNonNested(Output.B.A, Output.B.B, cutoff=c(AIC=0, BIC=0))
 ## End(Not run)
 
@@ -1159,13 +1247,23 @@ flush(stderr()); flush(stdout())
   imposeMissing(data,nforms=0)
 
   #Some more usage examples
+  
+  # No missing at variables 1 and 2
   imposeMissing(data,cov=c(1,2),pmMCAR=.1)
   
- 
+  # 3-Form design
   imposeMissing(data,nforms=3)
+  
+  # 3-Form design with specified groups of items (XABC)
   imposeMissing(data,nforms=3,itemGroups=list(c(1,2,3,4,5),c(6,7,8,9,10),c(11,12,13,14,15),c(16,17,18,19)))
+  
+  # 3-Form design when variables 20 and 21 are not missing
   imposeMissing(datac,cov=c(20,21),nforms=3)
+  
+  # 2 method design where the expensive measure is on Variable 19
   imposeMissing(data,twoMethod=c(19,.8))
+  
+  # Impose missing data with percent attrition of 0.1 in 5 time points
   imposeMissing(datac,cov=21,prAttr=.1,timePoints=5)
 
 
@@ -1185,21 +1283,23 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 ## Not run: 
+##D # Model A; Factor 1 --> Factor 2; Factor 2 --> Factor 3
 ##D library(lavaan)
 ##D loading <- matrix(0, 11, 3)
 ##D loading[1:3, 1] <- NA
 ##D loading[4:7, 2] <- NA
 ##D loading[8:11, 3] <- NA
 ##D path.A <- matrix(0, 3, 3)
-##D path.A[2:3, 1] <- NA
+##D path.A[2, 1] <- NA
 ##D path.A[3, 2] <- NA
 ##D model.A <- estmodel(LY=loading, BE=path.A, modelType="SEM", indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
 ##D 
 ##D out.A <- analyze(model.A, PoliticalDemocracy)
 ##D 
+##D # Model A; Factor 1 --> Factor 3; Factor 3 --> Factor 2
 ##D path.B <- matrix(0, 3, 3)
-##D path.B[1:2, 3] <- NA
-##D path.B[1, 2] <- NA
+##D path.B[3, 1] <- NA
+##D path.B[2, 3] <- NA
 ##D model.B <- estmodel(LY=loading, BE=path.B, modelType="SEM", indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
 ##D 
 ##D out.B <- analyze(model.B, PoliticalDemocracy)
@@ -1207,17 +1307,21 @@ flush(stderr()); flush(stdout())
 ##D loading.mis <- matrix("runif(1, -0.2, 0.2)", 11, 3)
 ##D loading.mis[is.na(loading)] <- 0
 ##D 
+##D # Create SimSem object for data generation and data analysis template
 ##D datamodel.A <- model.lavaan(out.A, std=TRUE, LY=loading.mis)
 ##D datamodel.B <- model.lavaan(out.B, std=TRUE, LY=loading.mis)
 ##D 
+##D # Get sample size
 ##D n <- nrow(PoliticalDemocracy)
 ##D 
+##D # The actual number of replications should be greater than 20.
 ##D output.A.A <- sim(20, n=n, model.A, generate=datamodel.A) 
 ##D output.A.B <- sim(20, n=n, model.B, generate=datamodel.A)
 ##D output.B.A <- sim(20, n=n, model.A, generate=datamodel.B)
 ##D output.B.B <- sim(20, n=n, model.B, generate=datamodel.B)
 ##D 
-##D # The output may contain some warnings here. When the number of replications increases (e.g., 1000), the warnings should disappear.
+##D # Find the likelihood ratio ;The output may contain some warnings here. 
+##D # When the number of replications increases (e.g., 1000), the warnings should disappear.
 ##D likRatioFit(out.A, out.B, output.A.A, output.A.B, output.B.A, output.B.B)
 ## End(Not run)
 
@@ -1241,10 +1345,10 @@ summary(Missing)
 
 loading <- matrix(0, 6, 1)
 loading[1:6, 1] <- NA
-LX <- bind(loading, 0.7)
-RPH <- binds(diag(1))
-RTD <- binds(diag(6))
-CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+LY <- bind(loading, 0.7)
+RPS <- binds(diag(1))
+RTE <- binds(diag(6))
+CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA")
 
 #Create data
 dat <- generate(CFA.Model, n = 20)
@@ -1274,7 +1378,7 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-
+# Example 1: Confirmatory factor analysis
 loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
@@ -1289,6 +1393,96 @@ RTE <- binds(diag(6))
 VY <- bind(rep(NA,6),2)
 
 CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
+
+# Example 2: Multiple-group CFA with weak invariance
+loading <- matrix(0, 6, 2)
+loading[1:3, 1] <- paste0("con", 1:3)
+loading[4:6, 2] <- paste0("con", 4:6)
+LY <- bind(loading, 0.7)
+
+latent.cor <- matrix(NA, 2, 2)
+diag(latent.cor) <- 1
+RPS <- binds(latent.cor, 0.5)
+
+RTE <- binds(diag(6))
+
+VTE <- bind(rep(NA, 6), 0.51)
+
+CFA.Model <- model(LY = LY, RPS = list(RPS, RPS), RTE = list(RTE, RTE), VTE=list(VTE, VTE), ngroups=2, modelType = "CFA")
+
+# Example 3: Linear growth curve model with model misspecification
+factor.loading <- matrix(NA, 4, 2)
+factor.loading[,1] <- 1
+factor.loading[,2] <- 0:3
+LY <- bind(factor.loading)
+
+factor.mean <- rep(NA, 2)
+factor.mean.starting <- c(5, 2)
+AL <- bind(factor.mean, factor.mean.starting)
+
+factor.var <- rep(NA, 2)
+factor.var.starting <- c(1, 0.25)
+VPS <- bind(factor.var, factor.var.starting)
+
+factor.cor <- matrix(NA, 2, 2)
+diag(factor.cor) <- 1
+RPS <- binds(factor.cor, 0.5)
+
+VTE <- bind(rep(NA, 4), 1.2)
+
+RTE <- binds(diag(4))
+
+TY <- bind(rep(0, 4))
+
+LCA.Model <- model(LY=LY, RPS=RPS, VPS=VPS, AL=AL, VTE=VTE, RTE=RTE, TY=TY, modelType="CFA")
+
+# Example 4: Path analysis model with misspecified direct effect
+path.BE <- matrix(0, 4, 4)
+path.BE[3, 1:2] <- NA
+path.BE[4, 3] <- NA
+starting.BE <- matrix("", 4, 4)
+starting.BE[3, 1:2] <- "runif(1, 0.3, 0.5)"
+starting.BE[4, 3] <- "runif(1,0.5,0.7)"
+mis.path.BE <- matrix(0, 4, 4)
+mis.path.BE[4, 1:2] <- "runif(1,-0.1,0.1)"
+BE <- bind(path.BE, starting.BE, misspec=mis.path.BE)
+
+residual.error <- diag(4)
+residual.error[1,2] <- residual.error[2,1] <- NA
+RPS <- binds(residual.error, "rnorm(1,0.3,0.1)")
+
+ME <- bind(rep(NA, 4), 0)
+
+Path.Model <- model(RPS = RPS, BE = BE, ME = ME, modelType="Path")
+
+# Example 5: Full SEM model 
+loading <- matrix(0, 8, 3)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+loading[7:8, 3] <- "con1"
+loading.start <- matrix("", 8, 3)
+loading.start[1:3, 1] <- 0.7
+loading.start[4:6, 2] <- 0.7
+loading.start[7:8, 3] <- "rnorm(1,0.6,0.05)"
+LY <- bind(loading, loading.start)
+
+RTE <- binds(diag(8))
+
+factor.cor <- diag(3)
+factor.cor[1, 2] <- factor.cor[2, 1] <- NA
+RPS <- binds(factor.cor, 0.5)
+
+path <- matrix(0, 3, 3)
+path[3, 1:2] <- NA
+path.start <- matrix(0, 3, 3)
+path.start[3, 1] <- "rnorm(1,0.6,0.05)"
+path.start[3, 2] <- "runif(1,0.3,0.5)"
+BE <- bind(path, path.start)
+
+SEM.model <- model(BE=BE, LY=LY, RPS=RPS, RTE=RTE, modelType="SEM")
+
+# Shortcut example
+SEM.model <- model.sem(BE=BE, LY=LY, RPS=RPS, RTE=RTE)
 
 
 
@@ -1310,7 +1504,20 @@ HS.model <- ' visual  =~ x1 + x2 + x3
              speed   =~ x7 + x8 + x9 '
 
 fit <- cfa(HS.model, data=HolzingerSwineford1939)
-datamodel <- model.lavaan(fit, std=TRUE)
+
+# Create data generation and data analysis model from lavaan
+# Data generation is based on standardized parameters
+datamodel1 <- model.lavaan(fit, std=TRUE)
+
+# Data generation is based on unstandardized parameters
+datamodel2 <- model.lavaan(fit, std=FALSE)
+
+# Data generation model with misspecification on cross-loadings
+crossload <- matrix("runif(1, -0.1, 0.1)", 9, 3)
+crossload[1:3, 1] <- 0
+crossload[4:6, 2] <- 0
+crossload[7:9, 3] <- 0
+datamodel3 <- model.lavaan(fit, std=TRUE, LY=crossload)
 
 
 
@@ -1326,8 +1533,8 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-multipleAllEqual(1:5, 1:5, seq(2, 10, 2)/2)
-multipleAllEqual(1:5, 1:6, seq(2, 10, 2)/2)
+multipleAllEqual(1:5, 1:5, seq(2, 10, 2)/2) # Should be TRUE
+multipleAllEqual(1:5, 1:6, seq(2, 10, 2)/2) # Should be FALSE
 
 
 
@@ -1365,7 +1572,11 @@ flush(stderr()); flush(stdout())
 ##D loading.trivial[is.na(loading)] <- 0
 ##D mismodel <- model.lavaan(out, std=TRUE, LY=loading.trivial)
 ##D 
+##D # The actual number of replications should be much greater than 20.
 ##D simout <- sim(20, n=nrow(HolzingerSwineford1939), mismodel)
+##D 
+##D # Find the p-value comparing the observed fit indices against the simulated 
+##D # sampling distribution of fit indices
 ##D pValue(out, simout)
 ## End(Not run)
 
@@ -1386,6 +1597,7 @@ flush(stderr()); flush(stdout())
 ## Not run: 
 ##D library(lavaan)
 ##D 
+##D # Nested Model: Linear growth curve model
 ##D LY <- matrix(1, 4, 2)
 ##D LY[,2] <- 0:3
 ##D PS <- matrix(NA, 2, 2)
@@ -1394,22 +1606,29 @@ flush(stderr()); flush(stdout())
 ##D TE <- diag(NA, 4)
 ##D nested <- estmodel(LY=LY, PS=PS, TY=TY, AL=AL, TE=TE, modelType="CFA", indLab=paste("t", 1:4, sep=""))
 ##D 
+##D # Parent Model: Unconditional growth curve model
 ##D LY2 <- matrix(1, 4, 2)
 ##D LY2[,2] <- c(0, NA, NA, 3)
 ##D parent <- estmodel(LY=LY2, PS=PS, TY=TY, AL=AL, TE=TE, modelType="CFA", indLab=paste("t", 1:4, sep=""))
 ##D 
+##D # Analyze the output
 ##D outNested <- analyze(nested, Demo.growth)
 ##D outParent <- analyze(parent, Demo.growth)
 ##D 
+##D # Create data template from the nested model with small misfit on the linear curve
 ##D loadingMis <- matrix(0, 4, 2)
 ##D loadingMis[2:3, 2] <- "runif(1, -0.1, 0.1)"
 ##D datamodel <- model.lavaan(outNested, LY=loadingMis)
 ##D 
+##D # Get the sample size
 ##D n <- nrow(Demo.growth)
 ##D 
+##D # The actual replications should be much greater than 30.
 ##D simNestedNested <- sim(30, n=n, nested, generate=datamodel) 
 ##D simNestedParent <- sim(30, n=n, parent, generate=datamodel)
 ##D 
+##D # Find the p-value comparing the observed fit indices against the simulated 
+##D # sampling distribution of fit indices
 ##D pValueNested(outNested, outParent, simNestedNested, simNestedParent)
 ## End(Not run)
 
@@ -1428,21 +1647,23 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 ## Not run: 
+##D # Model A; Factor 1 --> Factor 2; Factor 2 --> Factor 3
 ##D library(lavaan)
 ##D loading <- matrix(0, 11, 3)
 ##D loading[1:3, 1] <- NA
 ##D loading[4:7, 2] <- NA
 ##D loading[8:11, 3] <- NA
 ##D path.A <- matrix(0, 3, 3)
-##D path.A[2:3, 1] <- NA
+##D path.A[2, 1] <- NA
 ##D path.A[3, 2] <- NA
 ##D model.A <- estmodel(LY=loading, BE=path.A, modelType="SEM", indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
 ##D 
 ##D out.A <- analyze(model.A, PoliticalDemocracy)
 ##D 
+##D # Model A; Factor 1 --> Factor 3; Factor 3 --> Factor 2
 ##D path.B <- matrix(0, 3, 3)
-##D path.B[1:2, 3] <- NA
-##D path.B[1, 2] <- NA
+##D path.B[3, 1] <- NA
+##D path.B[2, 3] <- NA
 ##D model.B <- estmodel(LY=loading, BE=path.B, modelType="SEM", indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
 ##D 
 ##D out.B <- analyze(model.B, PoliticalDemocracy)
@@ -1450,18 +1671,26 @@ flush(stderr()); flush(stdout())
 ##D loading.mis <- matrix("runif(1, -0.2, 0.2)", 11, 3)
 ##D loading.mis[is.na(loading)] <- 0
 ##D 
+##D # Create SimSem object for data generation and data analysis template
 ##D datamodel.A <- model.lavaan(out.A, std=TRUE, LY=loading.mis)
 ##D datamodel.B <- model.lavaan(out.B, std=TRUE, LY=loading.mis)
 ##D 
+##D # Get sample size
 ##D n <- nrow(PoliticalDemocracy)
 ##D 
-##D output.A.A <- sim(5, n=n, model.A, generate=datamodel.A) 
-##D output.A.B <- sim(5, n=n, model.B, generate=datamodel.A)
-##D output.B.A <- sim(5, n=n, model.A, generate=datamodel.B)
-##D output.B.B <- sim(5, n=n, model.B, generate=datamodel.B)
+##D # The actual number of replications should be greater than 20.
+##D output.A.A <- sim(20, n=n, model.A, generate=datamodel.A) 
+##D output.A.B <- sim(20, n=n, model.B, generate=datamodel.A)
+##D output.B.A <- sim(20, n=n, model.A, generate=datamodel.B)
+##D output.B.B <- sim(20, n=n, model.B, generate=datamodel.B)
 ##D 
-##D # The output may contain some warnings here. When the number of replications increases (e.g., 1000), the warnings should disappear.
+##D # Find the p-value comparing the observed fit indices against the simulated 
+##D # sampling distribution of fit indices
+##D 
 ##D pValueNonNested(out.A, out.B, output.A.A, output.A.B, output.B.A, output.B.B)
+##D 
+##D # If the p-value for model A is significant but the p-value for model B is not
+##D # significant, model B is preferred.
 ## End(Not run)
 
 
@@ -1487,25 +1716,35 @@ flush(stderr()); flush(stdout())
 ##D loadingValues <- matrix(0, 6, 2)
 ##D loadingValues[1:3, 1] <- 0.7
 ##D loadingValues[4:6, 2] <- 0.7
-##D LX <- bind(loading, loadingValues)
+##D LY <- bind(loading, loadingValues)
 ##D latent.cor <- matrix(NA, 2, 2)
 ##D diag(latent.cor) <- 1
-##D RPH <- binds(latent.cor, 0.5)
+##D RPS <- binds(latent.cor, 0.5)
 ##D error.cor <- matrix(0, 6, 6)
 ##D diag(error.cor) <- 1
-##D RTD <- binds(error.cor)
-##D CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+##D RTE <- binds(error.cor)
+##D CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA")
+##D 
 ##D # We make the examples running only 5 replications to save time.
 ##D # In reality, more replications are needed.
 ##D Output <- sim(5, n=200, model=CFA.Model) 
+##D 
+##D # Plot the cutoffs with desired fit indices
 ##D plotCutoff(Output, 0.05, usedFit=c("RMSEA", "SRMR", "CFI", "TLI"))
 ##D 
-##D # Varying N
+##D # The example of continous varying sample size. Note that more fine-grained 
+##D # values of n is needed, e.g., n=seq(50, 500, 1)
 ##D Output2 <- sim(NULL, n=seq(450, 500, 10), model=CFA.Model)
+##D 
+##D # Plot the cutoffs along sample size value
 ##D plotCutoff(Output2, 0.05)
 ##D 
-##D # Varying N and pmMCAR
+##D # Specify both continuoussample size and percent missing completely at random. Note that more fine-grained 
+##D # values of n and pmMCAR is needed, e.g., n=seq(50, 500, 1) and pmMCAR=seq(0, 0.2, 0.01)
 ##D Output3 <- sim(NULL, n=seq(450, 500, 10), pmMCAR=c(0, 0.05, 0.1, 0.15), model=CFA.Model)
+##D 
+##D # Plot the contours that each contour represents the value of cutoff at each level
+##D # of sample size and percent missing completely at random
 ##D plotCutoff(Output3, 0.05)
 ## End(Not run)
 
@@ -1525,26 +1764,29 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 ## Not run: 
+##D # Nested model: One factor
 ##D loading.null <- matrix(0, 6, 1)
 ##D loading.null[1:6, 1] <- NA
-##D LX.NULL <- bind(loading.null, 0.7)
-##D RPH.NULL <- binds(diag(1))
-##D RTD <- binds(diag(6))
-##D CFA.Model.NULL <- model(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD, modelType="CFA")
+##D LY.NULL <- bind(loading.null, 0.7)
+##D RPS.NULL <- binds(diag(1))
+##D RTE <- binds(diag(6))
+##D CFA.Model.NULL <- model(LY = LY.NULL, RPS = RPS.NULL, RTE = RTE, modelType="CFA")
 ##D 
+##D # Parent model: two factors
 ##D loading.alt <- matrix(0, 6, 2)
 ##D loading.alt[1:3, 1] <- NA
 ##D loading.alt[4:6, 2] <- NA
-##D LX.ALT <- bind(loading.alt, 0.7)
+##D LY.ALT <- bind(loading.alt, 0.7)
 ##D latent.cor.alt <- matrix(NA, 2, 2)
 ##D diag(latent.cor.alt) <- 1
-##D RPH.ALT <- binds(latent.cor.alt, "runif(1, 0.7, 0.9)")
-##D CFA.Model.ALT <- model(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD, modelType="CFA")
+##D RPS.ALT <- binds(latent.cor.alt, "runif(1, 0.7, 0.9)")
+##D CFA.Model.ALT <- model(LY = LY.ALT, RPS = RPS.ALT, RTE = RTE, modelType="CFA")
 ##D 
 ##D # The actual number of replications should be greater than 10.
 ##D Output.NULL.NULL <- sim(10, n=500, model=CFA.Model.NULL) 
 ##D Output.NULL.ALT <- sim(10, n=500, model=CFA.Model.ALT, generate=CFA.Model.NULL)
 ##D 
+##D # Plot the cutoffs in nested model comparison
 ##D plotCutoffNested(Output.NULL.NULL, Output.NULL.ALT, alpha=0.05)
 ## End(Not run)
 
@@ -1564,21 +1806,23 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 ## Not run: 
+##D # Model A: Factor 1 on Items 1-3 and Factor 2 on Items 4-8
 ##D loading.A <- matrix(0, 8, 2)
 ##D loading.A[1:3, 1] <- NA
 ##D loading.A[4:8, 2] <- NA
-##D LX.A <- bind(loading.A, 0.7)
+##D LY.A <- bind(loading.A, 0.7)
 ##D latent.cor <- matrix(NA, 2, 2)
 ##D diag(latent.cor) <- 1
-##D RPH <- binds(latent.cor, "runif(1, 0.7, 0.9)")
-##D RTD <- binds(diag(8))
-##D CFA.Model.A <- model(LY = LX.A, RPS = RPH, RTE = RTD, modelType="CFA")
+##D RPS <- binds(latent.cor, "runif(1, 0.7, 0.9)")
+##D RTE <- binds(diag(8))
+##D CFA.Model.A <- model(LY = LY.A, RPS = RPS, RTE = RTE, modelType="CFA")
 ##D 
+##D # Model B: Factor 1 on Items 1-4 and Factor 2 on Items 5-8
 ##D loading.B <- matrix(0, 8, 2)
 ##D loading.B[1:4, 1] <- NA
 ##D loading.B[5:8, 2] <- NA
-##D LX.B <- bind(loading.B, 0.7)
-##D CFA.Model.B <- model(LY = LX.B, RPS = RPH, RTE = RTD, modelType="CFA")
+##D LY.B <- bind(loading.B, 0.7)
+##D CFA.Model.B <- model(LY = LY.B, RPS = RPS, RTE = RTE, modelType="CFA")
 ##D 
 ##D # The actual number of replications should be greater than 10.
 ##D Output.A.A <- sim(10, n=500, model=CFA.Model.A, generate=CFA.Model.A)
@@ -1586,8 +1830,13 @@ flush(stderr()); flush(stdout())
 ##D Output.B.A <- sim(10, n=500, model=CFA.Model.A, generate=CFA.Model.B)
 ##D Output.B.B <- sim(10, n=500, model=CFA.Model.B, generate=CFA.Model.B)
 ##D 
+##D # Plot cutoffs for both model A and model B
 ##D plotCutoffNonNested(Output.A.A, Output.A.B, Output.B.A, Output.B.B)
+##D 
+##D # Plot cutoffs for the model A only
 ##D plotCutoffNonNested(Output.A.A, Output.A.B)
+##D 
+##D # Plot cutoffs for the model A with one-tailed test
 ##D plotCutoffNonNested(Output.A.A, Output.A.B, onetailed=TRUE)
 ## End(Not run)
 
@@ -1606,7 +1855,11 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 datadist <- bindDist(c("chisq", "t", "f"), list(df=5), list(df=3), list(df1=3, df2=5))
+
+# Plot the joint distribution of Variables 1 and 2 with correlation of 0.5
 plotDist(datadist, r=0.5, var=1:2)
+
+# Plot the marginal distribution of the variable 3
 plotDist(datadist, var=3)
 
 
@@ -1641,11 +1894,17 @@ ME <- bind(rep(NA, 4), 0)
 
 Path.Model <- model(RPS = RPS, BE = BE, ME = ME, modelType="Path")
 
-# The number of replications in actual analysis should be much more than 5
-ParamObject <- sim(20, n=500, Path.Model)
-plotMisfit(ParamObject)
+# The number of replications in actual analysis should be much more than 20
+Output <- sim(20, n=500, Path.Model)
 
-plotMisfit(ParamObject, misParam=1:2)
+# Plot the distribution of population misfit
+plotMisfit(Output)
+
+# Plot the relationship between population RMSEA and all misspecified direct effects
+plotMisfit(Output, misParam=1:2)
+
+# Plot the relationship between sample CFI and all misspecified direct effects 
+plotMisfit(Output, usedFit="CFI", misParam=1:2)
 
 
 
@@ -1662,18 +1921,23 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 ## Not run: 
-##D # Specify Sample Size by n
 ##D loading <- matrix(0, 6, 1)
 ##D loading[1:6, 1] <- NA
-##D LX <- bind(loading, 0.4)
-##D RPH <- binds(diag(1))
-##D RTD <- binds(diag(6))
-##D CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+##D LY <- bind(loading, 0.4)
+##D RPS <- binds(diag(1))
+##D RTE <- binds(diag(6))
+##D CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA")
 ##D 
+##D # Specify both continuous sample size and percent missing completely at random. Note that more fine-grained 
+##D # values of n and pmMCAR is needed, e.g., n=seq(50, 500, 1) and pmMCAR=seq(0, 0.2, 0.01)
 ##D 
-##D # Specify both sample size and percent missing completely at random
 ##D Output <- sim(NULL, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2), model=CFA.Model)
-##D plotPower(Output, "1.LY1_1", contMCAR=FALSE)
+##D 
+##D # Plot the power of the first factor loading along the sample size value
+##D plotPower(Output, "1.f1=~y1", contMCAR=FALSE)
+##D 
+##D # Plot the power of the correlation along the sample size and percent missing completely at random
+##D plotPower(Output, "1.f1=~y1")
 ## End(Not run)
 
 
@@ -1692,41 +1956,45 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 ## Not run: 
+##D # Null model: One factor model
 ##D loading.null <- matrix(0, 6, 1)
 ##D loading.null[1:6, 1] <- NA
-##D LX.NULL <- bind(loading.null, 0.7)
-##D RPH.NULL <- binds(diag(1))
-##D RTD <- binds(diag(6))
-##D CFA.Model.NULL <- model(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD, modelType="CFA")
+##D LY.NULL <- bind(loading.null, 0.7)
+##D RPS.NULL <- binds(diag(1))
+##D RTE <- binds(diag(6))
+##D CFA.Model.NULL <- model(LY = LY.NULL, RPS = RPS.NULL, RTE = RTE, modelType="CFA")
+##D 
 ##D # We make the examples running only 5 replications to save time.
 ##D # In reality, more replications are needed.
 ##D Output.NULL <- sim(50, n=50, model=CFA.Model.NULL, generate=CFA.Model.NULL) 
 ##D 
+##D # Alternative model: Two-factor model
 ##D loading.alt <- matrix(0, 6, 2)
 ##D loading.alt[1:3, 1] <- NA
 ##D loading.alt[4:6, 2] <- NA
-##D LX.ALT <- bind(loading.alt, 0.7)
+##D LY.ALT <- bind(loading.alt, 0.7)
 ##D latent.cor.alt <- matrix(NA, 2, 2)
 ##D diag(latent.cor.alt) <- 1
-##D RPH.ALT <- binds(latent.cor.alt, 0.5)
-##D CFA.Model.ALT <- model(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD, modelType="CFA")
+##D RPS.ALT <- binds(latent.cor.alt, 0.5)
+##D CFA.Model.ALT <- model(LY = LY.ALT, RPS = RPS.ALT, RTE = RTE, modelType="CFA")
 ##D Output.ALT <- sim(50, n=50, model=CFA.Model.NULL, generate=CFA.Model.ALT)
 ##D 
-##D datNull <- generate(CFA.Model.NULL, n=50, params=TRUE)
-##D datAlt <- generate(CFA.Model.ALT, n=50, params=TRUE)
-##D outNull <- analyze(CFA.Model.NULL, datNull)
-##D outAlt <- analyze(CFA.Model.NULL, datAlt)
-##D summaryFit(Output.NULL)
-##D summaryFit(Output.ALT)
-##D  
+##D # Plot the power based on derived cutoff from the null model using four fit indices
 ##D plotPowerFit(Output.ALT, nullObject=Output.NULL, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+##D 
+##D # Plot the power of rejecting null model when the rule of thumb from Hu & Bentler (1999) is used
 ##D Rule.of.thumb <- c(RMSEA=0.05, CFI=0.95, TLI=0.95, SRMR=0.06)
 ##D plotPowerFit(Output.ALT, cutoff=Rule.of.thumb, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
 ##D 
+##D # The example of continous varying sample size. Note that more fine-grained 
+##D # values of n is needed, e.g., n=seq(50, 500, 1)
 ##D Output.NULL2 <- sim(NULL, n=seq(50, 250, 25), model=CFA.Model.NULL, generate=CFA.Model.NULL)
 ##D Output.ALT2 <- sim(NULL, n=seq(50, 250, 25), model=CFA.Model.NULL, generate=CFA.Model.ALT)
 ##D 
+##D # Plot the power based on derived cutoff from the null model using four fit indices along sample size
 ##D plotPowerFit(Output.ALT2, nullObject=Output.NULL2, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+##D 
+##D # Plot the power based on rule of thumb along sample size
 ##D plotPowerFit(Output.ALT2, cutoff=Rule.of.thumb, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
 ## End(Not run)
 
@@ -1746,39 +2014,50 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 ## Not run: 
+##D # Null model: One-factor model
 ##D loading.null <- matrix(0, 6, 1)
 ##D loading.null[1:6, 1] <- NA
-##D LX.NULL <- bind(loading.null, 0.7)
-##D RPH.NULL <- binds(diag(1))
-##D RTD <- binds(diag(6))
-##D CFA.Model.NULL <- model(LY = LX.NULL, RPS = RPH.NULL, RTE = RTD, modelType="CFA")
+##D LY.NULL <- bind(loading.null, 0.7)
+##D RPS.NULL <- binds(diag(1))
+##D RTE <- binds(diag(6))
+##D CFA.Model.NULL <- model(LY = LY.NULL, RPS = RPS.NULL, RTE = RTE, modelType="CFA")
 ##D 
+##D # Alternative model: Two-factor model
 ##D loading.alt <- matrix(0, 6, 2)
 ##D loading.alt[1:3, 1] <- NA
 ##D loading.alt[4:6, 2] <- NA
-##D LX.ALT <- bind(loading.alt, 0.7)
+##D LY.ALT <- bind(loading.alt, 0.7)
 ##D latent.cor.alt <- matrix(NA, 2, 2)
 ##D diag(latent.cor.alt) <- 1
-##D RPH.ALT <- binds(latent.cor.alt, 0.7)
-##D CFA.Model.ALT <- model(LY = LX.ALT, RPS = RPH.ALT, RTE = RTD, modelType="CFA")
+##D RPS.ALT <- binds(latent.cor.alt, 0.7)
+##D CFA.Model.ALT <- model(LY = LY.ALT, RPS = RPS.ALT, RTE = RTE, modelType="CFA")
 ##D 
+##D # In reality, more than 10 replications are needed
 ##D Output.NULL.NULL <- sim(10, n=500, model=CFA.Model.NULL, generate=CFA.Model.NULL) 
 ##D Output.ALT.NULL <- sim(10, n=500, model=CFA.Model.NULL, generate=CFA.Model.ALT) 
 ##D Output.NULL.ALT <- sim(10, n=500, model=CFA.Model.ALT, generate=CFA.Model.NULL) 
 ##D Output.ALT.ALT <- sim(10, n=500, model=CFA.Model.ALT, generate=CFA.Model.ALT) 
 ##D 
+##D # Plot the power based on the derived cutoff from the models analyzed on the null datasets
 ##D plotPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT)
+##D 
+##D # Plot the power by only CFI
 ##D plotPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT, usedFit="CFI")
 ##D 
+##D # The example of continous varying sample size. Note that more fine-grained 
+##D # values of n is needed, e.g., n=seq(50, 500, 1)
 ##D Output.NULL.NULL2 <- sim(NULL, n=seq(50, 500, 25), model=CFA.Model.NULL, generate=CFA.Model.NULL) 
 ##D Output.ALT.NULL2 <- sim(NULL, n=seq(50, 500, 25), model=CFA.Model.NULL, generate=CFA.Model.ALT) 
 ##D Output.NULL.ALT2 <- sim(NULL, n=seq(50, 500, 25), model=CFA.Model.ALT, generate=CFA.Model.NULL) 
 ##D Output.ALT.ALT2 <- sim(NULL, n=seq(50, 500, 25), model=CFA.Model.ALT, generate=CFA.Model.ALT) 
 ##D 
+##D # Plot logistic line for the power based on the derived cutoff from the null model along sample size values
 ##D plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNested=Output.NULL.NULL2, nullParent=Output.NULL.ALT2)
 ##D 
+##D # Plot scatterplot for the power based on the derived cutoff from the null model along sample size values
 ##D plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNested=Output.NULL.NULL2, nullParent=Output.NULL.ALT2, logistic=FALSE)
 ##D 
+##D # Plot scatterplot for the power based on the advanced CFI value
 ##D plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, cutoff=c(CFI=-0.1), logistic=FALSE)
 ## End(Not run)
 
@@ -1798,21 +2077,23 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 ## Not run: 
+##D # Model A: Factor 1 on Items 1-3 and Factor 2 on Items 4-8
 ##D loading.A <- matrix(0, 8, 2)
 ##D loading.A[1:3, 1] <- NA
 ##D loading.A[4:8, 2] <- NA
-##D LX.A <- bind(loading.A, 0.7)
+##D LY.A <- bind(loading.A, 0.7)
 ##D latent.cor <- matrix(NA, 2, 2)
 ##D diag(latent.cor) <- 1
-##D RPH <- binds(latent.cor, "runif(1, 0.7, 0.9)")
-##D RTD <- binds(diag(8))
-##D CFA.Model.A <- model(LY = LX.A, RPS = RPH, RTE = RTD, modelType="CFA")
+##D RPS <- binds(latent.cor, "runif(1, 0.7, 0.9)")
+##D RTE <- binds(diag(8))
+##D CFA.Model.A <- model(LY = LY.A, RPS = RPS, RTE = RTE, modelType="CFA")
 ##D 
+##D # Model B: Factor 1 on Items 1-4 and Factor 2 on Items 5-8
 ##D loading.B <- matrix(0, 8, 2)
 ##D loading.B[1:4, 1] <- NA
 ##D loading.B[5:8, 2] <- NA
-##D LX.B <- bind(loading.B, 0.7)
-##D CFA.Model.B <- model(LY = LX.B, RPS = RPH, RTE = RTD, modelType="CFA")
+##D LY.B <- bind(loading.B, 0.7)
+##D CFA.Model.B <- model(LY = LY.B, RPS = RPS, RTE = RTE, modelType="CFA")
 ##D 
 ##D # The actual number of replications should be greater than 10.
 ##D Output.A.A <- sim(10, n=500, model=CFA.Model.A, generate=CFA.Model.A)
@@ -1820,7 +2101,10 @@ flush(stderr()); flush(stdout())
 ##D Output.B.A <- sim(10, n=500, model=CFA.Model.A, generate=CFA.Model.B)
 ##D Output.B.B <- sim(10, n=500, model=CFA.Model.B, generate=CFA.Model.B)
 ##D 
+##D # Plot the power based on the derived cutoff for both models
 ##D plotPowerFitNonNested(Output.B.A, Output.B.B, dat1Mod1=Output.A.A, dat1Mod2=Output.A.B)
+##D 
+##D # Plot the power based on AIC and BIC cutoffs
 ##D plotPowerFitNonNested(Output.B.A, Output.B.B, cutoff=c(AIC=0, BIC=0))
 ## End(Not run)
 
@@ -1894,8 +2178,14 @@ loading.mis[,3] <- 0
 loading.mis[7,] <- 0
 loading[1:3, 1] <- "con1"
 LY <- bind(loading, loadingVal, misspec=loading.mis)
+
+# Draw values
 rawDraw(LY)
+
+# Draw only model parameters containing misspecification
 rawDraw(LY, parMisOnly=TRUE)
+
+# Draw only misspecification.
 rawDraw(LY, misOnly=TRUE)
 
 
@@ -1914,7 +2204,7 @@ flush(stderr()); flush(stdout())
 
 # See each class for an example.
 ## Not run: 
-##D 
+##D # Data generation model
 ##D loading <- matrix(0, 7, 3)
 ##D loading[1:3, 1] <- NA
 ##D loading[4:6, 2] <- NA
@@ -1942,6 +2232,7 @@ flush(stderr()); flush(stdout())
 ##D 
 ##D datamodel <- model(LY=LY, RPS=RPS, BE=BE, RTE=RTE, VY=VY, modelType="SEM")
 ##D 
+##D # Data analysis model
 ##D loading <- matrix(0, 7, 3)
 ##D loading[1:3, 1] <- NA
 ##D loading[4:6, 2] <- NA
@@ -1955,8 +2246,10 @@ flush(stderr()); flush(stdout())
 ##D facCov <- diag(3)
 ##D analysis <- estmodel(LY=loading, BE=path, TE=errorCov, PS=facCov, modelType="SEM", indLab=paste("y", 1:7, sep=""))
 ##D 
-##D Output <- sim(100, n=200, analysis, generate=datamodel)
+##D # In reality, more than 10 replications are needed.
+##D Output <- sim(10, n=200, analysis, generate=datamodel)
 ##D 
+##D # Population 
 ##D loadingVal <- matrix(0, 7, 3)
 ##D loadingVal[1:3, 1] <- 0.6
 ##D loadingVal[4:6, 2] <- 0.6
@@ -1972,7 +2265,11 @@ flush(stderr()); flush(stdout())
 ##D errorCovVal[7, 7] <- 0
 ##D TE <- binds(errorCov, errorCovVal)
 ##D population <- model(LY=LY, PS=PS, BE=BE, TE=TE, modelType="SEM")
+##D 
+##D # Set up the new population
 ##D Output <- setPopulation(Output, population) 
+##D 
+##D # This summary will contain the bias information
 ##D summary(Output)
 ## End(Not run)
 
@@ -2005,22 +2302,27 @@ VY <- bind(rep(NA,6),2)
 
 CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
 
+# In reality, more than 5 replications are needed.
 Output <- sim(5, CFA.Model,n=200)
 summary(Output)
 
-# Example of data transformation
+# Example of data transformation: Transforming to standard score
 fun1 <- function(data) {
 	temp <- scale(data)
 	temp[,"group"] <- data[,"group"]
 	as.data.frame(temp)
 }
 
-# Example of additional output
+# Example of additional output: Extract modification indices from lavaan
 fun2 <- function(out) {
 	inspect(out, "mi")
 }
+
+# In reality, more than 5 replications are needed.
 Output <- sim(5, CFA.Model,n=200,datafun=fun1, outfun=fun2)
 summary(Output)
+
+# Get modification indices
 getExtraOutput(Output)
 
 
@@ -2073,10 +2375,10 @@ flush(stderr()); flush(stdout())
 ##D 
 ##D facDist <- bindDist(c("chisq", "chisq", "norm", "norm"), chi5, chi5, n1, n1)
 ##D 
-##D dat <- generate(SEM.Model, n=500, sequential=TRUE, facDist=facDist)
-##D out <- analyze(SEM.Model, dat, estimator="mlr")
-##D 
+##D # In reality, more than 50 replications are needed.
 ##D simOut <- sim(50, n=500, SEM.Model, sequential=TRUE, facDist=facDist, estimator="mlr")
+##D 
+##D # Summary the convergent and nonconvergent replications
 ##D summaryConverge(simOut)
 ## End(Not run)
 
@@ -2096,14 +2398,16 @@ flush(stderr()); flush(stdout())
 
 loading <- matrix(0, 6, 1)
 loading[1:6, 1] <- NA
-LX <- bind(loading, 0.7)
-RPH <- binds(diag(1))
-RTD <- binds(diag(6))
-CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+LY <- bind(loading, 0.7)
+RPS <- binds(diag(1))
+RTE <- binds(diag(6))
+CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA")
 
 # We make the examples running only 5 replications to save time.
 # In reality, more replications are needed.
 Output <- sim(5, n=500, CFA.Model)
+
+# Summarize the sample fit indices
 summaryFit(Output)
 
 
@@ -2141,6 +2445,7 @@ flush(stderr()); flush(stdout())
 ##D # The number of replications in actual analysis should be much more than 5
 ##D ParamObject <- sim(5, n=200, Path.Model)
 ##D 
+##D # Summarize the model misspecification that is specified in the 'pathMis' object
 ##D summaryMisspec(ParamObject)
 ## End(Not run)
 
@@ -2162,15 +2467,19 @@ flush(stderr()); flush(stdout())
 showClass("SimResult")
 loading <- matrix(0, 6, 1)
 loading[1:6, 1] <- NA
-LX <- bind(loading, 0.7)
-RPH <- binds(diag(1))
-RTD <- binds(diag(6))
-CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+LY <- bind(loading, 0.7)
+RPS <- binds(diag(1))
+RTE <- binds(diag(6))
+CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA")
 
 # We make the examples running only 5 replications to save time.
 # In reality, more replications are needed.
 Output <- sim(5, n=500, CFA.Model)
+
+# Summary of the parameter estimates
 summaryParam(Output)
+
+# Summary of the parameter estimates with additional details
 summaryParam(Output, detail=TRUE)
 
 
@@ -2191,14 +2500,16 @@ flush(stderr()); flush(stdout())
 ## Not run: 
 ##D loading <- matrix(0, 6, 1)
 ##D loading[1:6, 1] <- NA
-##D LX <- bind(loading, "runif(1, 0.4, 0.9)")
-##D RPH <- binds(diag(1))
-##D RTD <- binds(diag(6))
-##D CFA.Model <- model(LY = LX, RPS = RPH, RTE = RTD, modelType="CFA")
+##D LY <- bind(loading, "runif(1, 0.4, 0.9)")
+##D RPS <- binds(diag(1))
+##D RTE <- binds(diag(6))
+##D CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA")
 ##D 
 ##D # We will use only 10 replications to save time.
 ##D # In reality, more replications are needed.
 ##D Output <- sim(10, n=200, model=CFA.Model)
+##D 
+##D # Get the summary of population model
 ##D summaryPopulation(Output)
 ## End(Not run)
 
@@ -2221,8 +2532,8 @@ loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
 loadingValues <- matrix(0, 6, 2)
-LX <- bind(loading, "runif(1, 0.8, 0.9)")
-summaryShort(LX)
+LY <- bind(loading, "runif(1, 0.8, 0.9)")
+summaryShort(LY)
 
 
 

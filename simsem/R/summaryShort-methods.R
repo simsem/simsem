@@ -58,7 +58,7 @@ setMethod("summaryShort", signature = "SimResult", definition = function(object,
 		cat(paste("Sample size:", unique(object@pmMAR),"\n"))
 	}
     cat("========= Fit Indices Cutoffs ============\n")
-    print(summaryFit(object, alpha = alpha), digits)
+    print(summaryFit(cleanObj, alpha = alpha), digits)
     if (!is.null(object@paramValue)) {
         if ((ncol(object@coef) != ncol(object@paramValue)) | ((ncol(object@coef) == 
             ncol(object@paramValue)) && any(sort(colnames(object@coef)) != sort(colnames(object@paramValue))))) 

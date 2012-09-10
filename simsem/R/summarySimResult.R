@@ -185,6 +185,7 @@ summaryFit <- function(object, alpha = NULL) {
         fit <- as.data.frame(cleanObj@fit[, usedFit])
         meanfit <- apply(fit, 2, mean, na.rm = TRUE)
         sdfit <- apply(fit, 2, sd, na.rm = TRUE)
+		if(length(alpha) == 1) cutoffs <- t(cutoffs)
         result <- cbind(cutoffs, meanfit, sdfit)
         colnames(result) <- c(alpha, "Mean", "SD")
         rownames(result) <- usedFit
