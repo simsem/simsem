@@ -21,6 +21,6 @@ setClass("SimResult", representation(modelType = "character", nRep = "numeric", 
     extraOut = "list", timing = "list"))
 
 setClass("SimMissing", representation(cov = "vector", pmMCAR = "numeric", pmMAR = "numeric", 
-    nforms = "numeric", itemGroups = "list", twoMethod = "vector", prAttr = "vector", 
-    package = "character", timePoints = "numeric", ignoreCols = "vector", threshold = "numeric", 
+    nforms = "numeric", itemGroups = "list", twoMethod = "vector", prAttr = "vector", m = "numeric", chi = "character", 
+    package = "character", convergentCutoff = "numeric", timePoints = "numeric", ignoreCols = "vector", threshold = "numeric", 
     covAsAux = "logical", logical = "matrix", args = "list")) 

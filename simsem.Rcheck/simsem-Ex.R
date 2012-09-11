@@ -1363,6 +1363,8 @@ summary(out)
 #Example to create simMissing object for 3 forms design at 3 timepoints with 10 imputations
 Missing <- miss(nforms=3, timePoints=3, numImps=10)
 
+#Missing template for data analysis with multiple imputation
+Missing <- miss(package="mice", m=10, chi="all", convergentCutoff=0.6)
 
 
 

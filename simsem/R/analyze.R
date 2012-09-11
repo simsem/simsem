@@ -22,8 +22,17 @@ analyze <- function(model, data, package = "lavaan", miss = NULL,
         data <- data.frame(data, group = 1)
         colnames(data)[ncol(data)] <- model@groupLab
     }
-    if (!is.null(miss) && length(miss@package) != 0 && miss@package == "Amelia") {
-        Output <- runMI(data, model, miss@args)
+    if (!is.null(miss) && length(miss@package) != 0 && miss@package %in% c("Amelia", "mice")) {
+		library(semTools)
+		miArgs <- miss@args
+		if(miss@package == "Amelia") {
+			if(!is.null(miArgs$idvars)) {
+				miArgs$idvars <- c(miArgs$idvars, model@groupLab)
+			} else {
+				miArgs <- c(miArgs, list(idvars=model@groupLab))
+			}
+		}
+        Output <- runMI(model@pt, data, m = miss@m, miArgs=miArgs, chi=miss@chi, miPackage=miss@package, fun="lavaan", ...)
     } else {
         missing <- "default"
         if (any(is.na(data))) 

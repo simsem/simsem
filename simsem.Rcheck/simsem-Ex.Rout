@@ -24,12 +24,15 @@ Type 'q()' to quit R.
 > options(pager = "console")
 > library('simsem')
 Loading required package: lavaan
-This is lavaan 0.4-14
-lavaan is BETA software! Please report any bugs.
 Loading required package: MASS
+Loading required package: boot
+Loading required package: mvtnorm
+Loading required package: quadprog
+This is lavaan 0.5-9
+lavaan is BETA software! Please report any bugs.
  
 ###############################################################################################
-This is simsem 0.3-4
+This is simsem 0.3-5
 simsem is BETA software! Please report any bugs.
 simsem was developed at the University of Kansas Center for Research Methods and Data Analysis.
 ###############################################################################################
@@ -2249,7 +2252,7 @@ Proportion of MCAR: 0.1
 > #Analyze data
 > out <- analyze(CFA.Model, dat)
 > summary(out)
-lavaan (0.4-14) converged normally after 26 iterations
+lavaan (0.5-9) converged normally after  27 iterations
 
   Number of observations                            20
 
@@ -2319,6 +2322,8 @@ Variances:
 > #Example to create simMissing object for 3 forms design at 3 timepoints with 10 imputations
 > Missing <- miss(nforms=3, timePoints=3, numImps=10)
 > 
+> #Missing template for data analysis with multiple imputation
+> Missing <- miss(package="mice", m=10, chi="all", convergentCutoff=0.6)
 > 
 > 
 > 
@@ -4063,7 +4068,7 @@ detaching 'package:parallel'
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  4.84 0.03 4.87 NA NA 
+Time elapsed:  5.43 0.1 5.6 NA NA 
 > grDevices::dev.off()
 null device 
           1 

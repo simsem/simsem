@@ -250,14 +250,18 @@ sim <- function(nRep, model, n, generate = NULL, rawData = NULL, miss = NULL, da
             FMI1 <- NULL
         if (nrow(unique(FMI1)) == 1) 
             FMI1 <- unique(FMI1)
-    }
+    } else {
+		FMI1 <- data.frame()
+	}
     if (!is.null(FMI2.l[[1]])) {
         FMI2 <- as.data.frame(do.call(rbind, FMI2.l))
         if (sum(dim(FMI2)) == 0) 
             FMI2 <- NULL
         if (nrow(unique(FMI2)) == 1) 
             FMI2 <- unique(FMI2)
-    }
+    } else {
+		FMI2 <- data.frame()
+	}
     if (!is.null(popMis.l[[1]])) {
         popMis <- as.data.frame(do.call(rbind, popMis.l))
         if (sum(dim(popMis)) == 0) 
@@ -286,7 +290,7 @@ sim <- function(nRep, model, n, generate = NULL, rawData = NULL, miss = NULL, da
     
     Result <- new("SimResult", modelType = model@modelType, nRep = nRep, coef = coef, 
         se = se, fit = fit, converged = converged, seed = seed, paramValue = param, 
-        misspecValue = popMis, popFit = misfitOut, FMI1 = data.frame(FMI1), FMI2 = data.frame(FMI2), 
+        misspecValue = popMis, popFit = misfitOut, FMI1 = FMI1, FMI2 = FMI2, 
         stdCoef = std, n = n, pmMCAR = pmMCAR, pmMAR = pmMAR, extraOut = extra, timing = timing)
     if (silent) 
         options(warn = warnT)
@@ -410,6 +414,9 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
         try(if (is.na(check) || check == 0 || negVar) {
             converged <- FALSE
         }, silent = TRUE)
+		if(is(out, "lavaanStar") && length(out@imputed) > 0) {
+			if(out@imputed[[1]][1] < miss@convergentCutoff) converged <- FALSE
+		}
     }
     
     if (is.null(indLab)) {
@@ -478,6 +485,18 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
         misfitOut <- NA  # Misfit indices for misspecification
     }
     
+	if(!is.null(miss) && miss@m > 0) {
+		if (converged) {
+			fmiOut <- out@imputed[[2]]
+			FMI1 <- fmiOut[,5]
+			FMI2 <- fmiOut[,6]
+			names(FMI1) <- paste0(fmiOut[,4], ".", fmiOut[,1], fmiOut[,2], fmiOut[,3]) 
+			names(FMI2) <- names(FMI1) 
+		} else {
+			FMI1 <- NA
+			FMI2 <- NA
+		}
+	}
     # Need FMI1 and FMI2
     
     timing$ParseOutput <- (proc.time()[3] - start.time)
@@ -508,7 +527,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 # }
 
 extractLavaanFit <- function(Output) {
-    Indices <- fitmeasures(Output)
+    Indices <- inspect(Output, "fit") # inspect function is needed to get the null model stats for lavaanStar*
     result <- c(Indices["chisq"], Indices["df"], Indices["pvalue"], Indices["baseline.chisq"], 
         Indices["baseline.df"], Indices["baseline.pvalue"], Indices["cfi"], Indices["tli"], 
         Indices["aic"], Indices["bic"], Indices["rmsea"], Indices["rmsea.ci.lower"], 

@@ -8,8 +8,9 @@ Specifying the missing template (\code{\linkS4class{SimMissing}}) to impose on a
 }
 \usage{
 miss(cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, itemGroups = list(), 
-timePoints = 1, twoMethod = 0, prAttr = 0, package="default", ignoreCols = 0, 
-threshold = 0, covAsAux = TRUE, logical = NULL, ...)
+    timePoints = 1, twoMethod = 0, prAttr = 0, m = 0, chi = "all", 
+	package = "default", convergentCutoff = 0.8, ignoreCols = 0, 
+    threshold = 0, covAsAux = TRUE, logical = NULL, ...)
 }
 \arguments{
 	\item{cov}{Column indices of any normally distributed covariates used in the data set.}
@@ -20,7 +21,10 @@ threshold = 0, covAsAux = TRUE, logical = NULL, ...)
     \item{timePoints}{Number of timepoints items were measured over. For longitudinal data, planned missing designs will be implemented within each timepoint.}
     \item{twoMethod}{With missing on one variable: vector of (column index, percent missing). Will put a given percent missing on that column in the matrix to simulate a two method planned missing data research design. With missing on two or more variables: list of (column indices, percent missing). }
 	\item{prAttr}{Probability (or vector of probabilities) of an entire case being removed due to attrition at a given time point. See \code{\link{imposeMissing}} for further details.}
-    \item{package}{The package to be used in multiple imputation. This feature currently does not work now.}
+    \item{m}{The number of imputations. The default is 0 such that the full information maximum likelihood is used.}
+    \item{chi}{The chi-square pooling method. See \code{\link[semTools]{runMI}} function for further details.}
+    \item{package}{The package to be used in multiple imputation. The default value of this function is \code{"default"}. For the default option, if \code{m} is 0, the full information maximum likelihood is used. If \code{m} is greater than 0, the Amelia package is used. The possible inputs are \code{"default"}, \code{"Amelia"}, or \code{"mice"}.}
+    \item{convergentCutoff}{If the proportion of convergent results across imputations are greater than the specified value (the default is 80\%), the analysis on the dataset is considered as convergent. Otherwise, the analysis is considered as nonconvergent. This attribute is applied for multiple imputation only. }
 	\item{ignoreCols}{The columns not imposed any missing values for any missing data patterns} 
 	\item{threshold}{The threshold of covariates that divide between the area to impose missing and the area not to impose missing. The default threshold is the mean of the covariate.}
 	\item{covAsAux}{If \code{TRUE}, the covariate listed in the object will be used as auxiliary variables when putting in the model object. If \code{FALSE}, the covariate will be included in the analysis.}
@@ -64,4 +68,6 @@ summary(out)
 #Example to create simMissing object for 3 forms design at 3 timepoints with 10 imputations
 Missing <- miss(nforms=3, timePoints=3, numImps=10)
 
+#Missing template for data analysis with multiple imputation
+Missing <- miss(package="mice", m=10, chi="all", convergentCutoff=0.6)
 }

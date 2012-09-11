@@ -80,7 +80,11 @@ summaryParam <- function(object, alpha = 0.05, detail = FALSE) {
         
         resultFMI <- cbind(average.FMI1, sd.FMI1, average.FMI2, sd.FMI2)
         colnames(resultFMI) <- c("Average FMI1", "SD FMI1", "Average FMI2", "SD FMI2")
-        result <- data.frame(result, resultFMI)
+
+		targetParam <- matchLavaanName(rownames(result), rownames(resultFMI))
+		targetParam <- targetParam[!is.na(targetParam)]
+
+        result <- data.frame(result, resultFMI[targetParam,])
     }
     if (length(unique(object@n)) > 1) {
         corCoefN <- cor(cbind(object@coef, object@n), use = "pairwise.complete.obs")[colnames(object@coef), 
@@ -105,6 +109,24 @@ summaryParam <- function(object, alpha = 0.05, detail = FALSE) {
     }
     return(as.data.frame(result))
 } 
+
+matchLavaanName <- function(name1, name2) {
+	result1 <- match(name1, name2)
+	result2 <- match(name1, switchLavaanName(name2))
+	result1[is.na(result1)] <- result2[is.na(result1)]
+	result1
+}
+
+switchLavaanName <- function(name) {
+	nameX <- strsplit(name, "\\.")
+	nameGroup <- sapply(nameX, "[", 1)
+	nameParam <- sapply(nameX, "[", 2)
+	target <- grep("~~", nameParam)
+	varTarget <- strsplit(nameParam[target], "~~")
+	nameParam[target] <- paste0(sapply(varTarget, "[", 2), "~~", sapply(varTarget, "[", 1))
+	nameX <- paste0(nameGroup, ".", nameParam)
+	nameX
+}
 
 # summaryMisspec: This function will summarize the obtained fit indices and
 # generate a data frame.
