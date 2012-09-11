@@ -53,7 +53,7 @@ generate(model, n, maxDraw=50, misfitBounds=NULL, misfitType="f0",
 	A vector of indicator labels. When not specified, the variable names are \code{x1, x2, ... xN}.
 }
   \item{modelBoot}{ 
-	 When specified, a model-based bootstrap is used for data generation. See details for further information. This argument requires real data to be passed to \code{readData}.
+	 When specified, a model-based bootstrap is used for data generation. See details for further information. This argument requires real data to be passed to \code{realData}.
 }
   \item{realData}{ 
 	A data.frame containing real data. The data generated will follow the distribution of this data set.

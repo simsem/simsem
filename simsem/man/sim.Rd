@@ -25,7 +25,7 @@ paramOnly = FALSE, dataOnly=FALSE, ...)
 	Sample size. This argument is not necessary except the user wish to vary sample size across replications. The sample size here is a vector of sample size in integers. For the random distribution object, if the resulting value has decimal, the value will be rounded. 
 }
   \item{generate}{
-	\code{\linkS4class{SimSem}} object created by \code{\link{model}}. If included, this will be used to generate data instead of 
+	\code{\linkS4class{SimSem}} object created by \code{\link{model}}. If included, this will be used to generate data instead of the code{\linkS4class{SimSem}} object specified in the \code{model} option.
 }
   \item{rawData}{
 	If included, this data is used for simulations instead of being generated from the \code{SimSem} template. Should be a list of length nRep.
