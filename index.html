@@ -33,10 +33,10 @@
       <section id="main_content" class="inner">
         <h1>simsem: SIMulated Structural Equation Modeling</h1>
 
-<p>This R package has been developed for facilitating analysts to simulate and analyze data within the structural equation modeling (SEM) framework. This package aims to help analysts create simulated data from their hypotheses or their analytic results from obtained data. The simulated data can be used for different purposes, such as power analysis, model fit evaluation, and planned missing design. This highlights of the current version is</p>
+<p>This R package has been developed for facilitating simulation and analysis of data within the structural equation modeling (SEM) framework. This package aims to help analysts create simulated data from hypotheses or analytic results from obtained data. The simulated data can be used for different purposes, such as power analysis, model fit evaluation, and planned missing design.</p>
 
 <ol>
-<li><em>Building simulated sampling distribution for fit indices.</em> This package will help researchers tailor their fit indices cutoff based on a priori alpha level and a priori definition of trivial model misspecification. In other words, this package will help researchers simulate data based on their actual model with their defined trivial model misspecification. Then, the fit indices from the simulated data can be used to create empirical sampling distribution and find the fit indices cutoff based on the sampling distribution. The actual parameters can be specified manually or obtained from the result of data analysis. If the actual parameters are obtained from the result of data analysis, this approach may be called parametric bootstrap or Monte Carlo approach. The Bollen-Stine bootstrap approach for data generation is also available, as well as creating nonnormal distribution by Gaussian copula. </li>
+<li><em>Building simulated sampling distribution for fit indices.</em> This package will help researchers tailor fit indices cutoffs based on a priori alpha level and a priori definition of trivial model misspecification. In other words, this package will help researchers simulate data based on their actual model with their defined trivial model misspecification. Then, the fit indices from the simulated data can be used to create empirical sampling distributions and find the fit indices cutoff based on the sampling distributions. Model parameters can be specified manually or obtained from the results of data analysis. If model parameters are obtained from the results of data analysis, this approach is also called the parametric bootstrap or Monte Carlo approach. The Bollen-Stine bootstrap approach for data generation is also available, as well as creating nonnormal distribution by Gaussian copula. </li>
 <li><em>Power analysis.</em> This package will help analysts find power of both parameter estimates and model evaluation. This package can find power when data are missing. Missing data imposed into simulated data can be 1) missing completely at random (MCAR), 2) missing at random (MAR), 3) missing not at random (NMAR), and 4) planned missing data (<em>n</em>-form design or two-method design). Longitudinal missing data (i.e., attrition) can be modeled as a MCAR or MAR process. Missing data can be handled through multiple imputation of Full Information Maximum Liklihood. Sample size and percent missing can be varied continuously and power plots given values of sample size or percent missing can be built.</li>
 <li><em>Methodological investigations.</em> This package can be used for methodological studies concerning SEM. Researchers can easily vary parameter values and model misspecification across parameters and easily summarize results from simulations. Nested models can be easily tested by comparing the results from two simulation runs. The powerful and flexible missing data options available in simsem make the package extremely useful in methodological investigations concerning SEM and missing data.</li>
 </ol><h2>Announcements</h2>
@@ -46,26 +46,26 @@
 <p>This version is available in both CRAN and KRAN. We have rewriten the whole package. simsem 0.2-* code cannot be run in the current version. Here is a list of major updates: </p>
 
 <ol>
-<li>All function names are changed so that the package is much more intuitive. The main idea is that users need to build their target models by the <strong>model</strong> function. This model is built by matrices and vectors in LISREL notation via <strong>bind</strong> and <strong>binds</strong> functions. Then, the model can be used for data generation by the <strong>generate</strong> function, for data analysis by the <strong>analysis</strong> function, and for Monte Carlo simulation by the <strong>sim</strong> function. This version no longer have data and model objects.</li>
-<li>The multiple group feature is available now. Users can put a list of multiple matrix or vector objects (e.g., multiple matrices for LY attribute) for specifying a multiple group. Click <a href="https://github.com/simsem/simsem/blob/master/SupportingDocs/multiplegroup.R">here</a> to see the examples for multiple group codes.</li>
-<li><i>Faster</i>. From a brief test, this package is faster than the 0.2 family around 30 percent.</li>
-<li>The X-side LISREL notation is no longer supported (e.g., no LX, PH, or TD).</li>
-<li>Equality constraints are set by putting the same character on the free elements in the matrix or vector objects. This version will not have equality constraint object anymore.</li>
-<li>Random parameters are specified by a quote of command that users use to draw one random number (such as "runif(1, -0.2, 0.2)" instead of using distribution objects in the previous version). This version no longer have distribution objects.</li>
-<li>Model misspecification is set in the <strong>bind</strong> and <strong>binds</strong> functions in making the matrix or vector objects by the <em>misspec</em> attribute. The misspecification object is not longer supported.</li>
-<li>This pacakge does not contain any codes for the auxiliary variables in FIML and multiple-imputation. Instead, this package will call commands from the semTools package which is more efficient.</li>
+<li>All function names are changed so that the package is much more intuitive. The main idea is that users need to build their target models by the <strong>model</strong> function. This model is built by matrices and vectors in LISREL notation via the <strong>bind</strong> and <strong>binds</strong> functions. Then, the model can be used for data generation by the <strong>generate</strong> function, for data analysis by the <strong>analysis</strong> function, and for Monte Carlo simulation by the <strong>sim</strong> function. This version no longer requires data or model objects.</li>
+<li>The multiple group feature is available now. Users can put a list of multiple matrix or vector objects (e.g., multiple matrices for LY attribute) for specifying a multiple groups model. Click <a href="https://github.com/simsem/simsem/blob/master/SupportingDocs/multiplegroup.R">here</a> to see example  multiple group codes.</li>
+<li><i>Faster</i>. From a brief test, this package is about 30% faster than the 0.2 family.</li>
+<li>X-side LISREL notation is no longer supported (e.g., no LX, PH, or TD).</li>
+<li>Equality constraints are set by putting the same character as the free elements in the matrix or vector objects. This version does not have the equality constraint object.</li>
+<li>Random parameters are specified by a quote of command that users use to draw one random number (such as "runif(1, -0.2, 0.2)" instead of using distribution objects in the previous version). This version no longer has distribution objects.</li>
+<li>Model misspecification is set in the <strong>bind</strong> and <strong>binds</strong> functions when making the matrix or vector objects by the <em>misspec</em> attribute. The misspecification object is not longer supported.</li>
+<li>This pacakge does not contain any native code for the auxiliary variables in FIML and multiple-imputation. Instead, this package will call commands from the semTools package which is more efficient. NOTE: auxiliary variables in FIML and multiple-impuation are still supported, the code has simply been moved.</li>
 <li>And much more...</li>
 </ol>
-<p>Please click <a href="https://github.com/simsem/simsem/blob/master/SupportingDocs/simsem.v0.3.code.transfer.pdf?raw=true">here</a> for the brief introduction of the change from the 0.2 family to 0.3 family. We will gradually update the online wiki pages (currently Examples 1-5 has been fixed) and all attachment of our papers and presentations. There are two things that this version cannot handle whereas the 0.2-family can handle:</p>
+<p>Please click <a href="https://github.com/simsem/simsem/blob/master/SupportingDocs/simsem.v0.3.code.transfer.pdf?raw=true">here</a> for a brief introduction of the changes from the 0.2 family to 0.3 family. We will gradually update the online wiki pages (currently Examples 1-5 has been fixed) and all example code from our papers and presentations. There are two things that the current version cannot handle whereas the 0.2-family can handle:</p>
 <ol>
-<li>The flexible order of filling parameters, equality constraints, and adding model misspecification. This current version supports only 1) impose equality constraints, 2) add model misspecification, and 3) filling parameters (such as residual variances when the total variances are specified).</li>
+<li>The flexible order of filling parameters, equality constraints, and adding model misspecification. This current version supports a single order: 1) impose equality constraints, 2) add model misspecification, and 3) fill parameters (such as residual variances when the total variances are specified).</li>
 <li>The maximal method and interval method of model misspecification.</li>
 </ol>
-<p>We will update the current version to do these features soon. For those people who are working on the old version of simsem, we still provide the old version of simsem but the name is changed to simsemClassic. The simsemClassic is available on KRAN only. Please let us know if you have any questions, find any bugs, or provide any feedbacks. Thank you!</p>
+<p>We will update the current version with these features soon. For those people who are working on the old version of simsem, we still provide the old version of simsem but the name is changed to simsemClassic. <strong>simsemClassic is available on KRAN only.<strong> Please let us know if you have any questions, find any bugs, or provide any feedbacks. Thank you!</p>
 
 <h2>[September 12, 2012] New Package: simsemClassic, Version 0.2-9</h2>
 
-<p>This package is the update version of the simsem 0.2-8. The change reflects the update in the copula package.</p>
+<p>This package is the updated version of simsem 0.2-8. This is the last up date in the 0.2-* series! The change reflects the update in the copula package.</p>
 
 <h2>Developers</h2>
 
@@ -93,7 +93,7 @@
 <pre><code>install.packages("simsem", repos="http://rweb.quant.ku.edu/kran")
 </code></pre>
 
-<p>Here is how to install the simsemClassic (the original version of simsem) from KRAN only:</p>
+<p>Here is how to install the simsemClassic (version 0.2-8 of simsem) from KRAN only:</p>
 
 <pre><code>install.packages("simsemClassic", repos="http://rweb.quant.ku.edu/kran")
 </code></pre>
