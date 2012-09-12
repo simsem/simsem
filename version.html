@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="simsem : Version History (Official)" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>simsem: Version History (Official)</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/simsem/simsem">View on GitHub</a>
+
+          <h1 id="project_title"> simsem</h1>
+          <h2 id="project_tagline">R package for simulated structural equation modeling</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/simsem/simsem/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/simsem/simsem/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>Version History (Official)</h1>
+
+<h2>Version 0.3-5 09/06/12</h2>
+
+<p>This version is available in both CRAN and KRAN. We have rewriten the whole package. simsem 0.2-* code cannot be run in the current version. Here is a list of major updates: </p>
+
+<ol>
+<li>All function names are changed so that the package is much more intuitive. The main idea is that users need to build their target models by the <strong>model</strong> function. This model is built by matrices and vectors in LISREL notation via the <strong>bind</strong> and <strong>binds</strong> functions. Then, the model can be used for data generation by the <strong>generate</strong> function, for data analysis by the <strong>analysis</strong> function, and for Monte Carlo simulation by the <strong>sim</strong> function. This version no longer requires data or model objects.</li>
+<li>The multiple group feature is available now. Users can put a list of multiple matrix or vector objects (e.g., multiple matrices for LY attribute) for specifying a multiple groups model. Click <a href="https://github.com/simsem/simsem/blob/master/SupportingDocs/multiplegroup.R">here</a> to see example  multiple group codes.</li>
+<li><i>Faster</i>. From a brief test, this package is about 30% faster than the 0.2 family.</li>
+<li>X-side LISREL notation is no longer supported (e.g., no LX, PH, or TD).</li>
+<li>Equality constraints are set by putting the same character as the free elements in the matrix or vector objects. This version does not have the equality constraint object.</li>
+<li>Random parameters are specified by a quote of command that users use to draw one random number (such as "runif(1, -0.2, 0.2)" instead of using distribution objects in the previous version). This version no longer has distribution objects.</li>
+<li>Model misspecification is set in the <strong>bind</strong> and <strong>binds</strong> functions when making the matrix or vector objects by the <em>misspec</em> attribute. The misspecification object is not longer supported.</li>
+<li>This pacakge does not contain any native code for the auxiliary variables in FIML and multiple-imputation. Instead, this package will call commands from the semTools package which is more efficient. NOTE: auxiliary variables in FIML and multiple-impuation are still supported, the code has simply been moved.</li>
+<li>And much more...</li>
+</ol>
+<p>Please click <a href="https://github.com/simsem/simsem/blob/master/SupportingDocs/simsem.v0.3.code.transfer.pdf?raw=true">here</a> for a brief introduction of the changes from the 0.2 family to 0.3 family. We will gradually update the online wiki pages (currently Examples 1-5 has been fixed) and all example code from our papers and presentations. There are two things that the current version cannot handle whereas the 0.2-family can handle:</p>
+<ol>
+<li>The flexible order of filling parameters, equality constraints, and adding model misspecification. This current version supports a single order: 1) impose equality constraints, 2) add model misspecification, and 3) fill parameters (such as residual variances when the total variances are specified).</li>
+<li>The maximal method and interval method of model misspecification.</li>
+</ol>
+<p>We will update the current version with these features soon. For those people who are working on the old version of simsem, we still provide the old version of simsem but the name is changed to simsemClassic. <strong>simsemClassic is available on KRAN only.<strong> Please let us know if you have any questions, find any bugs, or provide any feedbacks. Thank you!</p>
+
+
+<h2>simsemClassic Version 0.2-9 09/12/12</h2>
+
+<p>This package is the updated version of the simsem 0.2-8. This is the last up date in the 0.2-* series! The change reflects the update in the copula package.</p>
+
+<h2>Version 0.2-8 07/06/12</h2>
+
+
+<p>This version is available in both CRAN and KRAN. We have fixed some minor bugs in the program and move <strong>indProd</strong> and <strong>residualCovariate</strong> functions to the <strong>semTools</strong> package. Hopefully, this is the last version in the 0.2 family. We are looking forward to a huge update soon. The (new!) simsem homepage can also be accessed directly from <a href="http://www.simsem.org">http://www.simsem.org</a> </p>
+
+<h2>Version 0.2-7 06/22/12</h2>
+
+<p>This version is only available in KRAN. We have fixed some minor bugs in the program. We also add four new examples about how to specify trivial misspecification (Example 22) and nested model comparison (Example 23, 24, and 25).</p>
+
+
+<h2>Version 0.2-6 06/17/12</h2>
+
+This version is only available in KRAN. This version allows users to compare nested or nonnested models using the Monte Carlo approach (see the <strong>pValueNested</strong> and <strong>pValueNonNested</strong> functions), as well as comparing nonnested model based on likelihood-ratio test (see the <strong>likRatioFit</strong> function). The functions to find and plot the fit indices cutoff and power in nonnested model comparison are also available (see the <strong>getCutoffNonNested</strong>, <strong>plotCutoffNonNested</strong>, <strong>getPowerFitNonNested</strong>, and <strong>plotPowerFitNonNested</strong> functions). The varying parameter feature (e.g., continuous sample size) for the nonnested model comparison, however, is not ready yet. We also fixed some minor bugs we found in the program and change the output styles of some functions.  
+
+<h2>Version 0.2-5 06/13/12</h2>
+
+This version is only available in KRAN. We have fixed some minor bugs we found in the program, including the bug when passing a list of datasets in the <strong>simResult</strong> command. We also added two more examples about power of rejecting misspecified models when sample size or percent missing are varying within a simulation. 
+
+<h2>Version 0.2-4 06/11/12</h2>
+
+This version is only available in KRAN. This version allows users to find the statistical power in rejecting a misspecified model with varying parameters (such as varying sample size or percent missing). Please see the documentation of <strong>getPowerFit</strong> and <strong>plotPowerFit</strong> functions for further details. The <strong>anova</strong> function is also accounted for the varying parameters. This version also allows users to find the fit indices cutoffs in nested model comparison. For example, find the cutoff of the difference in CFI when trivial misspecification is added to the datasets created from the nested model (e.g., if CFI drops less than .004, retain the nested model). Please see the documentation of <strong>getCutoffNested</strong> and <strong>plotCutoffNested</strong> for further details. We also add <strong>getPowerFitNested</strong> and <strong>plotPowerFitNested</strong> functions to find the power in nested model comparison. All functions in nested model comparison are also accounted for the varying parameters.
+
+<h2>Version 0.2-3 06/06/12</h2>
+
+This version is only available in KRAN. We add the <strong>summaryFit</strong> function to directly obtain the fit indices information that is provided in the <strong>summary</strong> function. We also fix some minor bugs in the package. 
+
+<h2>Version 0.2-2 06/05/12</h2>
+
+This version is only available in KRAN. We implemented the L'Ecuyer (1999) of random number generation to make sure that the simulated datasets in each replication are completely nonoverlapping. We also change the <strong>simMissing</strong> function to take additional arguments to be passed to <em>Amelia</em> for imputation. 
+
+<h2>Version 0.2-1 05/28/12</h2>
+
+This version is only available in KRAN. We added more functions used for the simulation with varying parameters (e.g., sample size or percent missing completely at random), such as finding fit indices cutoffs, getting power of each parameter estimate, finding the values of varying parameters (e.g., sample size) that provides a specified power, or plot the powers of each parameter against varying parameter. We also added the Example 17 to 19 that shows how <em>simsem</em> deals with the simulation with varying parameters. 
+
+<h2>Version 0.2-0 05/18/12</h2>
+
+This version is the first version uploaded into CRAN. Mostly, this version is similar to the previous version. The vignette is updated by adding a new example. The R documentation are changed so that the amount of time running through all examples dramatically reduced. All comments in the package are clean up.
+
+<h2>Version 0.1-6 05/15/12</h2>
+
+The internal codes of this version are changed in order to deal with distribution objects differently. By the new method, the problem of using distribution object in hpc is fixable. This version also allows users to specify parameter values only and the program will make nonzero values as free parameters (except 1 in symmetric matrix object). See the documentation of the <strong>simMatrix</strong>, <strong>symMatrix</strong>, and <strong>simVector</strong> functions.
+
+<h2>Version 0.1-5 05/14/12</h2>
+
+This version allows users to use the maximal (or minimal) method for the misspecified parameters. That is, users can specify the range of values in misspecified parameters regarding as trivial misspecification. Then, the program will draw multiple sets of misspecified parameters and pick the set that provides the maximum (or minimum) of population misfit. See the help page of the <strong>simResultParam</strong> or <strong>SimMisspec</strong> for further details. A minor bug is also fixed in this version. 
+
+<h2>Version 0.1-4 05/10/12</h2>
+
+This version is just a bug-fixed version from the previous version. The package currently is available on KRAN.
+
+<h2>Version 0.1-3 05/06/12</h2>
+
+This version will allow us to calculate population misfit (<em>f0</em>, <em>rmsea</em>, and <em>srmr</em>), constrain the specified misspecification by a range of population misfit, such as rmsea from 0.05 to 0.10. In other words, create data that parameters have RMSEA from .05 to .10. We also make the new class called <strong>SimResultParam</strong>, which save all actual and misspecified parameters across replications before generating data. Therefore, this class can be used to investigating the population misfit by the <strong>summary</strong> or <strong>plotMisfit</strong> function across replications. See the documentation of <strong>popMisfit</strong>, <strong>simResultParam</strong>, and <strong>plotMisfit</strong> for further details.
+
+<h2>Version 0.1-2 05/03/12</h2>
+
+We made a minor change in the code. The documentations about almost all private functions are added. 
+
+<h2>Version 0.1-1 04/20/12</h2>
+
+This version allows users to create simulated data using the Bollen-Stine bootstrap approach which uses the real data distribution as a template to create new data with similar observed distributions. See the <strong>simData</strong> function or the <strong>runFit</strong> function documentations for further details.
+
+<h2>Version 0.1-0 04/19/12</h2>
+
+This update includes several new features:
+
+1. The code is easier to analyze real data. The result of the real data can be used as parameter values to run a simulation, which means the Monte Carlo approach for model evaluation can be done easily. See Examples 13 and 14 in the manual for further details.
+2. Add continuous varying sample size and percent missing feature. Users can make a simulation with varying sample size and see the change of power by logistic curve. Check the <strong>continuousPower</strong> function for further details.
+3. The simsem can set percent attrition that can simulate participants drop out from a study. See <strong>imposeMissing</strong> function for further details.
+4. Add a new feature call function object that can transform data after generating data in the simulation study. See Example 15 in the manual for an example of residual centering for controlling covariates.
+
+<h2>Version 0.0-9 03/11/12</h2>
+
+The new features are
+
+1) The package can take either correlation/variance inputs or covariance inputs. See Example 1 vs. 2 for a comparison.
+2) The <strong>anova</strong> method is built for comparing two analysis results together (either data analysis or simulation result). 
+
+<h2>Version 0.0-8 03/05/12</h2>
+
+We have added some new features.
+
+1) simsem can account for auxiliary variable by just identifying the column index of the auxiliary variable. The package will make the model accounting the auxiliary variable in FIML for you. For MI, the auxiliary variables will be excluded in the analysis part.
+2) We have changed how to impose the MAR missing to the 'threshold' method. See the Example 11 for the detail.
+3) We changed the matrix name of all correlation matrices to begin with 'R', such as PS --> RPS, PH --> RPH, or TE --> RTE. The reason of this change is that we will make the simsem package to be able to be set by covariance matrices in the near future.
+
+<h2>Version 0.0-7 02/26/12</h2>
+
+There are two major updates on this version.
+
+1. The alternative method for data generation is available, which is referred as <em>sequential</em> method. The data will create from exogenous factors first. Then, the data will be passed along the arrows in SEM diagram and adding the generated residuals until we get the observed variables data. 
+2. The nonnormal distribution data generation is available. The nonnormal data can be modeled on the indicator distributions directly or on the factor distributions (and error distributions). The package uses Gaussian copula for nonnormal data generation. See the details of <em>Gaussian copula</em> in the provided examples.
+
+
+
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">simsem maintained by <a href="https://github.com/simsem">simsem</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-33333704-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+
+  </body>
+</html>

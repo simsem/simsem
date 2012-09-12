@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="simsem : Version History (Official)" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>simsem: Version History (Technical)</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/simsem/simsem">View on GitHub</a>
+
+          <h1 id="project_title"> simsem</h1>
+          <h2 id="project_tagline">R package for simulated structural equation modeling</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/simsem/simsem/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/simsem/simsem/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>Version History (Technical)</h1>
+
+<h2>Version 0.3-5 09/06/12</h2>
+
+We have too many changes so that we cannot list them all. In short, more than 50% of the codes in 0.2 family are rewritten including almost all of the core functions. <a href="http://simsem.org/version">Here</a> are a short list of changes.
+
+<h2>Version 0.2-9 09/12/12 </h2>
+
+- Update the code that reflects the change in the <em>copula</em> package.
+
+<h2>Version 0.2-8 07/06/12 </h2>
+
+- Fix bugs in the <strong>validatePath</strong> function
+- Delete the <strong>indProd</strong> and <strong>residualCovariate</strong> functions from the package (move to the semTools package)
+
+<h2>Version 0.2-7 06/17/12</h2>
+
+- Fix bugs in the <strong>cov2corMod</strong>, <strong>writeLavaanCode</strong>, <strong>runLavaan</strong>, and <strong>likRatioFit</strong>
+- Add three new examples on nested model comparison
+
+<h2>Version 0.2-6 06/17/12</h2>
+
+- Make the <strong>anova</strong> method comparing <strong>SimModelOut</strong> to report difference in AIC and BIC.
+- Add the <strong>pValueNested</strong> to provide the <em>p</em>-value for nested model comparison using Monte Carlo approach
+- Add the <strong>runFitParam</strong> method to create <strong>SimResultParam</strong> directly from the data analysis
+- Add the <strong>summaryMisspec</strong> function to report the misspecification containing in the parameter result object
+- Fix the <strong>summary</strong> and <strong>summaryFit</strong> method for a bug in printing fit indices cutoffs
+- Make the <strong>simResultParam</strong> function to be less time-consuming
+- Fix the bug in <strong>getCondQtile</strong> function when multiple values of <em>xval</em> is passed
+- Fix a bug in <strong>cov2corMod</strong> when sometimes it reads the target matrix as a vector
+- Make <strong>getPowerFitNested</strong> function to be much quicker
+- Add <strong>getCutoffNonNested</strong>, <strong>plotCutoffNonNested</strong>, <strong>getPowerFitNonNested</strong>, and <strong>plotPowerFitNonNested</strong> for non-nested model comparison. The varying parameter feature are not implemented in these functions yet.
+- Add <strong>pValueNonNested</strong> and <strong>likRatioFit</strong> for non-nested model comparison based on two analysis results
+- Fix the bug involving <strong>all.equal</strong> functions that does not provide a FALSE value
+
+<h2>Version 0.2-5 06/13/12</h2>
+
+- Make the <strong>getPowerFit</strong> and <strong>plotPowerFit</strong> function to be much quicker
+- The <em>xval</em> argument in the getCondQtile can be specified as <em>"all"</em> in order to find the conditional quantiles of all independent variables values.
+- Fix the bug in the <strong>summaryFit</strong> function
+- Fix the bug in the <strong>runRep</strong> and <strong>simResult</strong> when a list of <strong>data.frame</strong> is passed in the <em>objData</em> argument.
+- Provide an error message when a result object has no converged replication. 
+- Add two examples about power in rejecting misspecified models
+
+<h2>Version 0.2-4 06/11/12</h2>
+
+- Add the <strong>pMiss</strong> slot in the <strong>SimModelOut</strong> class to save the percent missing of each variable
+- Change the <strong>clean</strong> function to extract multiple result objects by simultaneously convergent replications.
+- Change the output style of the <strong>anova</strong> method and adding the result when a varying parameter exists.
+- Improve the <strong>getPowerFit</strong> and <strong>plotPowerFit</strong> functions to account for a varying parameter.
+- Add the <strong>getCutoffNested</strong> and <strong>plotCutoffNested</strong> functions to find the cutoffs in nested model comparison
+- Add the <strong>getPowerFitNested</strong> and <strong>plotPowerFitNested</strong> functions to find the power in rejecting nested model when the nested model is not true.
+
+<h2>Version 0.2-3 06/06/12</h2>
+
+- Fix the <strong>runRep</strong> method to assign the random seed to the appropriate environment
+- Fix the <strong>writeLavaanConstraint</strong> function to account for mean constraints
+- Rewrite the <strong>summary</strong> method for the <strong>SimResult</strong> class by calling <strong>summaryFit</strong> function
+- Add the <strong>summaryFit</strong> function to directly provide the information about fit indices 
+
+<h2>Version 0.2-2 06/05/12</h2>
+
+- Change the <strong>simMissing</strong> function and <strong>SimMissing</strong> class to save the additional arguments to be passed to <em>Amelia</em> package.
+- Change the <strong>runMI</strong> function to take additional arguments to be passed to <em>Amelia</em> package
+- Change the <strong>simResult</strong> function to create L'Ecuyer method of random number seed and pass to <strong>runRep</strong> function. Then, the <strong>runRep</strong> function will change the seed based on the L'Ecuyer random number.
+- (To be released) The functions in <strong>bind.R</strong> and <strong>parTable.R</strong> files will be used for the new design of <em>simsem</em> 
+
+<h2>Version 0.2-1 05/28/12</h2>
+
+- Change the names of <strong>getPower</strong> and <strong>plotPower</strong> functions to <strong>getPowerFit</strong> and <strong>plotPowerFit</strong>
+- Add the <em>pred</em> argument for the <strong>continuousPower</strong> function to take the independent variables' values
+- Add the <strong>getCondQtile</strong> function to find the conditional quantile value
+- Improve the <strong>getCutoff</strong> function to find conditional fit indices
+- Change the <strong>summary</strong> method for the <strong>SimResult</strong> class when the sample size or percent missing is varied: providing conditional fit indices' cutoffs.
+- Fix the bug in the <strong>plotCutoff</strong> function
+- Add the <strong>findPower</strong> and <strong>findTargetPower</strong> functions to give the value of varying parameters that provides the desired power.
+- Add the <strong>getPower</strong> function as the automated function for the <strong>continuousPower</strong> function
+- Add the <strong>plotPower</strong> function to plot the power of parameters against varying parameters
+- Fix the bug in <strong>standardize</strong> function
+- Change the <em>keepScale</em> argument in the <strong>SimDataDist</strong> class to take a vector of logical values instead of a single logical value
+- Change the <strong>run-SimDataDist</strong> and <strong>extract-SimDataDist</strong> methods to handle multiple logical values in the <em>keepScale</em> attribute
+- Add and fix all documentation
+- Add Example 17, 18, and 19 to illustrate the varying parameter simulation in the vignette
+
+<h2>Version 0.2-0 05/18/12</h2>
+
+- The version is the first uploaded into CRAN.
+- All examples in the documentations are edited to reduce the amount of time running through all examples. For example, the numbers of replications in most examples are 5.
+- Add <em>Example 16</em> in the vignette and proofread all examples in the vignette
+
+<h2>Version 0.1-6 05/15/12</h2>
+
+- Change the second argument of the <strong>SimMatrix</strong>, <strong>SimVector</strong>, and <strong>SymMatrix</strong> classes from <em>param</em> to <em>value</em>. 
+- Change the second argument of the constructor of those classes to <em>value</em>, as well as the <strong>adjust</strong> function.
+- Change the way to save the distribution objects in those classes as a text containing an expression that can be evaluated directly, instead of an object name. By this way, the random distribution object can be built and run in hpc.
+- Add <strong>checkInputValue</strong>, <strong>checkInputValueVector</strong>, and <strong>toFunction</strong> functions to change a distribution object name to an expression
+- Add <em>suppressWarnings</em> to all codes involving with the <em>cor2cov</em> function.
+
+<h2>Version 0.1-5 05/14/12</h2>
+
+- Add the <em>optMisfit</em> and <em>numIter</em> attributes in the <strong>SimMisspec</strong> class to account for the optimization method for selecting the set of misspecified parameters
+- Change <strong>simMisspecCFA</strong>, <strong>simMisspecPath</strong>, and <strong>simMisspecSEM</strong> to account for the new attributes
+- Change the <strong>runMisspec</strong> function to account for the optimization method to find a set of misspecification
+- Add <strong>isRandom</strong> function to check whether an object has a random parameter
+- Optimize the <strong>simResult</strong> function to draw parameter only once if there is no random parameter
+- Fix the bug on the <strong>validatePath</strong> function
+- Add <em>optMax</em>, <em>optMin</em>, and <em>optNone</em> keywords in the <strong>getKeywords</strong> functions to list the words for minimization, maximization, and none in the <em>optMisfit</em> argument.
+
+<h2>Version 0.1-4 05/10/12</h2>
+
+- Add <strong>toSimSet</strong> and <strong>simData</strong> methods using <strong>SimRSet</strong> class, as well as change the documentation
+- Fix a minor bug in <strong>popMisfit</strong>
+- Fix the error in documentation of <strong>popMisfitMACS</strong> and <strong>popDiscrepancy</strong>
+
+<h2>Version 0.1-3 05/06/12</h2>
+
+- Use <strong>cor2cov</strong> in the <em>lavaan</em> package
+- Fix the bugs in <strong>findFactorTotalVar</strong>, <strong>findFactorToalCov</strong>, and <strong>findFactorResidualVar</strong> functions when using the <strong>cor2cov</strong> from <em>lavaan</em>
+- Add the <strong>show</strong> method to prevent flooding of all objects in the screen when users typing an object name
+- Add <em>usedFitPop</em> in the <strong>getKeywords</strong> to set the default of the used population misfit
+- Fix the <strong>constrainMatrices</strong> function to getting rid of inaccurate object when the target object is equally constrained (such as delete RTE when TE is constrained).
+- Fix the <strong>run(SimSet)</strong> method to use the <em>misBeforeFill</em> argument
+- Fix the <strong>runMisspec</strong> function to make six different orders of <em>misBeforeFill</em>, <em>conBeforeMis</em>, and <em>conBeforeFill</em>
+- Change the <em>conBeforeMis</em> and <em>misFitBound</em> arguments from the <strong>SimData</strong> class (as well as the <strong>simData</strong> and <strong>runFit</strong> functions) to <strong>SimMisspec</strong> class (as well as <strong>simMisspecCFA</strong>, <strong>simMisspecPath</strong>, and <strong>simMisspecSEM</strong> functions)
+- Add <em>misfitType</em> and <em>misBeforeFill</em> arguments in the <strong>SimMisspec</strong> class (as well as <strong>simMisspecCFA</strong>, <strong>simMisspecPath</strong>, and <strong>simMisspecSEM</strong> functions)
+- Add <em>conBeforeFill</em> argument in the <strong>SimEqualCon</strong> class
+- Add <strong>vectorizeObject</strong> method for the <strong>MatrixSet</strong> class
+- Add two new classes: <strong>SimGenLabels</strong> and <strong>SimResultParam</strong>
+- Add the <strong>makeLabels</strong> method for the <strong>SimSet</strong> class and provide the <strong>SimGenLabels</strong> that saves the labels in the data generation parameterization
+- Add <strong>countMACS</strong>, <strong>plotMisfit</strong>, and <strong>simResultParam</strong> functions
+- Fix the bug in <strong>countFreeParameters</strong>, as well as adding the method for <strong>SimEqualCon</strong> and <strong>SimREqualCon</strong> 
+- Separate the <strong>drawParameters</strong> function into <strong>drawParameters</strong> and <strong>drawParametersMisspec</strong> functions
+- Add <strong>popMisfit</strong> methods as well as <strong>popMisfitMACS</strong> and <strong>popDiscrepancy</strong> function
+- Fix the <strong>summary</strong> method for <strong>SimModel</strong> to provide the accurate value of free parameters.
+- Change the documentation accordingly
+- Use <em>formatR</em> for all codes
+- <strong>To do: Connect SimResultParam to SimResult</strong>
+
+<h2>Version 0.1-2 05/03/12</h2>
+
+- Write documentations of almost all functions 
+- Change the name of <strong>fitMeasures</strong> function to <strong>fitMeasuresChi</strong>
+- Get rid of the header of the R folders
+- Use formatR to make code look pretty
+
+<h2>Version 0.1-1 04/20/12</h2>
+
+- Add <em>modelBoot</em> and <em>realData</em> attribute in the <strong>SimData</strong> class. Change the <strong>runFit</strong> and <strong>simData</strong> to take these arguments accordingly.
+- Change the <strong>createData</strong> function to implement the Bollen-Stine bootstrap approach for data generation.
+- Change the documentation for this change accordingly
+- Fix the <strong>simResult</strong> function bug when using the <em>objSet</em> argument
+
+<h2>Version 0.1-0 04/19/12</h2>
+
+- Change order of the <strong>simData</strong> function from <em>(n, param, ...)</em> to <em>(param, n, ...)</em> and change the <strong>simData</strong> function to <strong>simData</strong> methods
+- Allow <strong>SimModelOu</strong>t (instead of <strong>SimSet</strong>) as the output of the <strong>simData</strong> methods
+- Allow <strong>SimModelOut</strong> (instead of <strong>SimSet</strong>) as the output of the <strong>simModel</strong> methods
+- Add <strong>toSimSet</strong> function to change <strong>SimModelOut</strong> to <strong>SimSet</strong>
+- Add <em>indicatorLab</em> as the attribute of <strong>SimData</strong>, <strong>SimDataOut</strong>, <strong>SimModelOut</strong>
+- Change how to create <strong>SimParam</strong> class in the <strong>createFreeParameters</strong> function
+- Add logical argument in the <strong>imposeMissing</strong> function to impose missing by the matrix of logicals
+- Add <strong>SimFunction</strong> and <strong>NullSimFunction</strong> Classes for transforming data during the simulation
+- Add <strong>summary</strong>, <strong>isNullObject</strong> and <strong>run</strong> methods for the <strong>SimFunction</strong> class
+- Change <strong>simResult</strong> and <strong>runRep</strong> functions to account for <strong>SimFunction</strong> class
+- Add <strong>simFit</strong> methods to run a Monte Carlo simulation based on the result of data analysis
+- Add <strong>continuousPower</strong> function to calculate the power of each parameter with respect to sample size and percent missing
+- Add <strong>indProd</strong> function to make the products of indicators in order to make latent interaction construct
+- Add <strong>residualCovariate</strong> function to residualize variables to control the covariate
+- Fix <strong>WriteLavaanCode</strong> bug that cannot analyze the data with covariate
+- Change <em>indicatorLab</em> argument name to <em>indLab</em>
+- Write and fix all documentations for the this version
+- Add <em>covAsAux</em> in the <strong>simMissing</strong> function and class to choose whether using the covariate as auxiliary variables
+- Change the name of <strong>SimFreeParam</strong> class to <strong>SimParam</strong>
+- Add <em>prAttr</em> argument in the <strong>imposeMissing</strong> function for percent attrition
+- Change the way to specify the default fit indices by putting into <strong>getKeywords</strong> function instead of listing it all the time
+- Change <strong>pValu</strong>e function to methods and add the routine to compare between the <strong>SimModelOut</strong> class and the <strong>SimResult</strong> class
+- Change the <strong>runRep</strong> and <strong>simResult</strong> function to save the data generation model and pass it to the result object
+- Add <strong>extract</strong> methods for data frame to extract selected indicators or factors
+- Add <strong>cov2corMod</strong> function and Change <strong>cov2cor</strong> to <strong>cov2corMod</strong> in the code to handle zero variances
+- Add <strong>summaryPopulation</strong>, <strong>getPopulation</strong>, and <strong>setPopulation</strong> methods as well as their documentations.
+- Fix a bug in the <strong>reduceMatrices</strong> function
+- Rename 8 files that use to find indicators/factors means/totalVar/ResidualVar/Intercept. Change attribute names to make more sense. Make all eight functions public and write the documentation accordingly.
+- <strong>IMPORTANT BUG</strong>: fix a problem in <strong>findIndResidualVar</strong> and <strong>findIndTotalVar</strong> that use PS instead of model-implied factor covariance in the package. Fix the <strong>fillParam</strong> function accordingly. Fix the bug in <strong>expandMatrices</strong> as well.
+- Fix a minor bug in <strong>fillParam</strong> that do not calculate VPS in CFA model.
+- Add <strong>findFactorTotalCov</strong> to find model-implied covariance from regression coefficient matrix and residual covariance matrix.
+- Make <strong>findPossibleFactorCor</strong> and <strong>findRecursiveSet</strong> public and make the documentation accordingly.
+- Delete <strong>combineVectorExoEndo</strong>, <strong>contain</strong>, <strong>cor2cov</strong>, <strong>equalWhich</strong>, <strong>extractDiag</strong>, <strong>extractLine</strong>, <strong>isNAVector</strong>, <strong>writeLavaanConstraint</strong>
+- Rename <strong>countRandomObject</strong> to <strong>countFreeParameters</strong>
+- Rename <strong>extractLavaanSummary</strong> to <strong>extractLavaanFit</strong>
+- Rename <strong>transform.constraint</strong> to <strong>writeLavaanConstraint</strong>
+- Rename <strong>findOpenMxValues</strong> to <strong>setOpenMxObject</strong>
+- Rename <strong>findFitIndicesOpenMx</strong> to <strong>extractOpenMxFit</strong>
+- Rename <strong>transformConstraint</strong> to <strong>writeLavaanConstraint</strong>
+- Rename <strong>typeConstraint</strong> to <strong>writeLavaanIndividualConstraint</strong>
+- Add and update code description of all files; Change some function code to make them more elegant
+
+<h2>Version 0.0-11 04/05/12</h2>
+
+- Add clean function to remove nonconverged replications from the simResult before computing the output.
+- Use clean function for getCutoff, getPower, plotCutoff, plotPower, summary, and summaryParam functions/methods before analyzing SimResult object
+- Add plotQtile function to plot a quantile of Y given a value of X
+- Add plot3DQtile function to plot a quantile of Z given a value of X and Y (can be either contour plot or perspective plot)
+- Add n, pmMCAR, pmMAR, objSet arguments for simResult for varying n, pmMCAR, pmMAR in the simResult and an option to specify simSet instead of specifying simData and simModel
+- Change name simData, simModel, simMissing to objData, objModel, objMissing in simResult and runRep function
+- For run-SimMissing, add pmMCAR and pmMAR arguments to post hocly overwrite the percent missing
+- Add n, pmMCAR, and pmMAR as attributes of the SimResult class
+- Specify data.frame with 0 row or 0 column as null object in data.frame class
+- Add correlation between n/pmMCAR/pmMAR and parameter estimate and standard error in summaryParam-SimResult method
+- Add correlation between fit indices and n/pmMCAR/pmMAR in summary-SimResult method
+- Change the documentation of SimResult and plotCutoff for the changes.
+- Change all function names containing dots into camelCase.
+- Change to be compatible with R 2.15
+- Add simParamCFA, simParamPath, simParamSEM functions to create parameters for data analysis (no starting values for creating data).
+
+<h2>Version 0.0-10 03/31/12</h2>
+
+- Make SimDataOut, SimModelOut, and SimResult have sample size argument (n).
+- Change run, createData, simResult functions to save sample size in the returning class.
+- Add miPoolChi to pool chi-square statistics
+- Change miPool to pool chi-square statistics by the previous functions and add compute fit indices
+- Add fitMeasures function to compute fit indices
+- Explain the pooling procedure in miPool.Rd
+
+<h2>Version 0.0-9.1 03/31/12</h2>
+
+- Fixing the bug that free the exogenous factor correlation when we actually fixed it.
+
+<h2>Version 0.0-9 03/11/12</h2>
+
+- Adding anova method for nested and nonnested comparison and its help page.
+- Changing code in run(SimSet), run(SimMisspec), run.misspecified to be more efficient by adding fillParam function
+- Change the get.keywords function to provide only necessary code (do not provide different inputs for different in lower or upper cases)
+- Make match.keyword code to be case-insensitive
+- Adding PS, TE, TD, PH, TH for covariance matrix in SimSet and MatrixSet classes. The reassign.names, constrain.matrices, all SimSet and SimMisspec constructors, reduce.matrices, expand.matrices, create.free.parameters are changed accordingly.
+- The help page of SimSet-class, SimMisspec-class, and all of their constructors.
+- Debug miPool.R that has a problem when a matrix or a vector contains only one element.
+- Debug imposeMissing.R that has a problem when there is no covariate.
+
+<h2>Version 0.0-8 03/05/12</h2>
+
+- Change the write.lavaan.code function to handling auxiliary variables
+- Make the writeLavaanNullCode function to write a null model
+- Add the indicatorLab, factorLab, and auxiliary arguments in simModel function and SimModel class
+- Make the run-SimModel method to be able to select some variables to analyze
+- Fix a bug in the imposeMissing, summary-SimSet, miPool, and createData function
+- Make runMI be able to select some variables as auxiliary variables
+- Add extract method to select a part of the SimMatrix, SimVector, and SimSet.
+- Fix the help page for simModel and add the help page for the extract method
+- Change SimSet and SimMisspec correlation arguments to have leading R (PH -> RPH, PS -> RPS, TD -> RTD, TE -> RTE)
+- Allow setting the overall variance as 0 to mean no residual or measurement errors.
+- Changing how to handle MAR to threshold method
+- Adding two examples on auxiliary variable/MAR and single-indicator factor
+- Make the miPoolVector function public and make the manual page.
+
+<h2>Version 0.0-7.1 02/27/12</h2>
+
+- Fix a bug in validate.covariance, runRep, run-SimDataDist
+
+<h2>Version 0.0-7 02/26/12</h2>
+
+- Add the indicatorLab, errorLab, and factorLab arguments in the run-SimModel method to analyze real data
+- Fix a bug in the runRep function
+- For a complete data, listwise is used as default, instead of fiml.
+- Add the SimDataDist class for modeling data distribution in factors, errors, or indicators (including its null class)
+- Adding sequential method to create data starting from factors and adding up until getting the values of indicators.
+- Adding extract method for extract elements of SimDataDist or matrix
+- Adding many new distributions: imBeta, SimBinom, SimCauchy, SimChisq, SimExp, SimF, SimGamma, SimGeom, SimHyper, SimLnorm, SimLogis, SimNbinom, SimPois, SimT, SimWeibull. Including classes, constructors, summary, summaryShort, and run methods
+- Adding plotDist function for plot distribution or plot SimDataDist
+- Adding make.labels method for distribution objects
+- Change the name of create.implied.MACS to createImpliedMACS and make it public
+- Adding Examples 8 and 9 in the introduction manual for accounting for nonnormal distributed data.
+- Adding the estimator option in the SimModel object
+- Change runLavaan to put default values for all outputs first.
+- Add functiions to find skewness and excessive kurtosis from data and distribution object
+
+<h2>Version 0.0-6 02/21/12</h2>
+
+- Add standardized coefficient in the SimModelOut summary and in the SimResult attribute.
+- Fix the bug that data does not contain model misspecification when users actually specify
+- simResult will not parallelize in generating parameters but parallelize in generating data.
+- use clusterApplyLB for parallization in Windows but mclapply for other OS platforms
+- Fix minor bugs in the overlap.hist function and write.lavaan.code function
+- Change how to write code in the run-SimData method
+- Add welcome message when loading the program!
+- Fix for passing any non-positive definite data
+# Error: Unserialize example 3 with X-side
+
+<h2>Version 0.0-5.0 02/09/12</h2>
+
+- Handle warnings from the summaryParam function
+- Handle warnings and errors from the examples of imposeMissing function
+- Change the way to run simResult function to facilitate Rmpi in the future (using the runRep function)
+- Change miPool to pool the SimModelOut class
+- Change the order of the simResult function from (simData, simModel, simMissing, nRep) to (nRep, simData, simModel, simMissing). The examples and manual are changed accordingly.
+- Add the SimModelMIOut (with NullSimModelOut) class which is the child class of the SimModelOut class
+- Change the is.null.object and summaryParam functions for the SimModelMIOut class
+- Add two new examples on the introduction about missing data
+- Comment out the runOpenMx function because we will not implement OpenMx now
+- Fix bugs in reduce.matrices
+- Add SimMissing class with the run and the summary functions
+- Adjust the convergence checking in the runLavaan function according to the lavaan chagnes
+- Add the simResult function parallelizable
+
+<h2>Version 0.0-4.0 11/17/11</h2>
+
+- Add imposeMissing.R to package for imposing missing data.
+- Add runMI.R to package for running multiple imputation on missing data sets
+  and managing the result pooling
+- Add miPool.R: pools MI results
+
+<h2>Version 0.0-3.0 11/17/11</h2>
+
+- Patrick builds simsem and haphazardly increases the version number without
+  documenting the additional functionality.
+
+<h2>Version 0.0-2.1 11/16/11</h2>
+
+- Add SimDataOut class. The constructor of this class is run(simData, dataOnly=FALSE). 
+- run-simModel.c can take objects from SimDataOut class and analyze bias in parameter estimates and whether confidence intervals cover the underlying parameter values.
+- All summary methods are improved to be more readable and more informative.
+- summary-SimDataOut.c is added
+- summaryParam-SimModelOut.c is added.
+- summaryParam-SimResult.c is modified to provide average parameter values, standard deviation of parameter values, average bias, standard deviation of bias, percentage coverage, relative bias, relative bias of SE, and standardized bias. Last three is provided if setting detail=TRUE.
+- summaryParam documentation file is modified accordingly.
+- SimModelOut.c and SimResult.c are changed to have paramValue attributes.
+- subtractObject.f is written to subtract two sets of parameter values. 
+- Update the vignette by explaining the output from summary.f 
+- Bug fixes in create.free.parameters.f, simSetCFA.f, simSetPath.f, simSetSEM.f that did not free error variances and measurement intercepts when using default.
+- Change the name of constant.vector.f --> constantVector.f
+- Add freeVector.f to create vector of free parameters with starting values.
+
+<em>Existing Problem: In SEM model, total endogenous factor variances are fixed as 1 in data model but, instead, residual factor variances are fixed as 1 in the estimation. Therefore, high bias in factor loading and measurement error variances in endogenous side. Change in parameter values are needed. (Fixed by the standardize method 03/05/12)</em>
+
+simsem, Version 0.0-2.0 11/15/11</h2>
+
+- Change all public function names and public function arguments to camelCase (private functions still have bad naming)
+- Change the names and attributes of all public and private classes.
+- Change file names according to the name changes. All names changes details are in the simsemNameChangeToV0.0-2.xls
+- All documentation are changed according to the name changes.
+- Use \itemize and \enumerate appropriate to the context in documentation files
+- simResult.f can take list of data frame
+- Make silent argument in simResult.f to be better (some error messages still appear)
+- Update the vignette according to the name changes and comments from Maurico
+- Add the function recap section in each example in the vignette.
+
+<h2>Version 0.0-1.8 10/12/11</h2>
+
+* Add <strong>simAnalysis</strong> class into the package
+* debug <strong>constrain.matrices(list, simConstraint)</strong> when constrained <strong>LX</strong> matrix
+* Add <strong>vectorize</strong> functions
+* Add <strong>combine.object(freeParamSet, list)</strong> where <strong>list</strong> is the lavaan object
+* Change <strong>simResult</strong> class to save parameter estimates and standard errors
+* Change <strong>find.cutoff</strong>, <strong>find.power</strong>, <strong>plot.cutoff</strong>, and <strong>plot.power</strong> according to the change in the <strong>simResult</strong> class
+* Add the <strong>summary.parameters</strong> function for the <strong>SimResult</strong> class
+* Add the documentation of the <strong>simAnalysis</strong> class and the <strong>summary.parameters</strong> function
+* Update the vignette on the <strong>summary.parameters</strong> function
+
+<h2>Version 0.0-1.7 10/11/11</h2>
+
+* Write all documents of public functions and public classes, including all links within the help files.
+* Write comments on some functions about the purposes, arguments, and return values.
+* Write comments on all classes about the purposes, constructor, and its arguments.
+* Delete <strong>visualize</strong> method and write <strong>plot.cutoff</strong> instead.
+* Add <strong>find.power</strong> and <strong>plot.power</strong> methods.
+* Add summary of simModel and simResult
+* Update the vignette, including the example of power analysis, add sections on help files and give us feedback. Update object diagram.
+
+
+
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">simsem maintained by <a href="https://github.com/simsem">simsem</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-33333704-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+
+  </body>
+</html>
