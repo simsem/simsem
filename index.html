@@ -56,16 +56,16 @@
 <li>This pacakge does not contain any codes for the auxiliary variables in FIML and multiple-imputation. Instead, this package will call commands from the semTools package which is more efficient.</li>
 <li>And much more...</li>
 </ol>
-<p>Please click <a href="https://github.com/simsem/simsem/blob/master/SupportingDocs/simsem.v0.3.code.transfer.pdf?raw=true">here</a> for the brief introduction of the change from the 0.2 family to 0.3 family. We will gradually update the online wiki pages and all attachment of our papers and presentations. There are two things that this version cannot handle whereas the 0.2-family can handle:</p>
+<p>Please click <a href="https://github.com/simsem/simsem/blob/master/SupportingDocs/simsem.v0.3.code.transfer.pdf?raw=true">here</a> for the brief introduction of the change from the 0.2 family to 0.3 family. We will gradually update the online wiki pages (currently Examples 1-5 has been fixed) and all attachment of our papers and presentations. There are two things that this version cannot handle whereas the 0.2-family can handle:</p>
 <ol>
 <li>The flexible order of filling parameters, equality constraints, and adding model misspecification. This current version supports only 1) impose equality constraints, 2) add model misspecification, and 3) filling parameters (such as residual variances when the total variances are specified).</li>
 <li>The maximal method and interval method of model misspecification.</li>
 </ol>
-<p>We will update the current version to do these features soon. Please let us know if you have any questions, find any bugs, or provide any feedbacks. Thank you!</p>
+<p>We will update the current version to do these features soon. For those people who are working on the old version of simsem, we still provide the old version of simsem but the name is changed to simsemClassic. The simsemClassic is available on KRAN only. Please let us know if you have any questions, find any bugs, or provide any feedbacks. Thank you!</p>
 
-<h3>[July 06, 2012] Latest Update: simsem, Version 0.2-8</h3>
+<h2>[September 12, 2012] New Package: simsemClassic, Version 0.2-9</h2>
 
-<p>This version is available in both CRAN and KRAN. We have fixed some minor bugs in the program and move <strong>indProd</strong> and <strong>residualCovariate</strong> functions to the <strong>semTools</strong> package. Hopefully, this is the last version in the 0.2 family. Please look forward to see the huge update soon. The (new!) simsem web page can  be accessed directly from <a href="http://www.simsem.org">http://www.simsem.org</a> </p>
+<p>This package is the update version of the simsem 0.2-8. The change reflects the update in the copula package.</p>
 
 <h2>Developers</h2>
 
@@ -91,6 +91,11 @@
 <p>You may install the recently developed test version from KRAN (KU R Archive Network) by copying this line into R:</p>
 
 <pre><code>install.packages("simsem", repos="http://rweb.quant.ku.edu/kran")
+</code></pre>
+
+<p>Here is how to install the simsemClassic (the original version of simsem) from KRAN only:</p>
+
+<pre><code>install.packages("simsemClassic", repos="http://rweb.quant.ku.edu/kran")
 </code></pre>
 
 <p>Please report any bugs or give me any suggestions by <a href="mailto:psunthud@ku.edu">email</a>.</p>
