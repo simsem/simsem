@@ -21,12 +21,14 @@ Objects can be created by \code{\link{sim}}.
     \item{\code{converged}:}{Number of convergence replications }
     \item{\code{seed}:}{Seed number. }
 	\item{\code{paramValue}:}{Population model underlying each simulated dataset.}
+	\item{\code{paramOnly}:}{If \code{TRUE}, the result object saves only population characteristics and do not save sample characteristics (e.g., parameter estimates and standard errors.}
 	\item{\code{misspecValue}:}{Misspecified-parameter values that are imposed on the population model in each replication.}
 	\item{\code{popFit}:}{The amount of population misfit. See details at \code{\link{summaryMisspec}}}
 	\item{\code{FMI1}:}{Fraction Missing Method 1.}
 	\item{\code{FMI2}:}{Fraction Missing Method 2.}
 	\item{\code{stdCoef}:}{Standardized coefficients from each replication}
-	\item{\code{n}:}{Sample size of the analyzed data.}
+	\item{\code{n}:}{The total sample size of the analyzed data.}
+	\item{\code{nobs}:}{The sample size within each group.}
 	\item{\code{pmMCAR}:}{Percent missing completely at random.}
 	\item{\code{pmMAR}:}{Percent missing at random.}
 	\item{\code{extraOut}:}{Extra outputs obtained from running the function specified in \code{outfun} argument in the \code{\link{sim}} function.}

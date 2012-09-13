@@ -32,7 +32,7 @@ This is lavaan 0.5-9
 lavaan is BETA software! Please report any bugs.
  
 ###############################################################################################
-This is simsem 0.3-5
+This is simsem 0.3-6
 simsem is BETA software! Please report any bugs.
 simsem was developed at the University of Kansas Center for Research Methods and Data Analysis.
 ###############################################################################################
@@ -301,11 +301,11 @@ Class:    character      numeric   data.frame   data.frame   data.frame
 Name:     converged   paramValue misspecValue       popFit         FMI1
 Class:       vector   data.frame   data.frame   data.frame   data.frame
                                                                        
-Name:          FMI2      stdCoef         seed            n       pmMCAR
-Class:   data.frame   data.frame      numeric       vector       vector
-                                             
-Name:         pmMAR     extraOut       timing
-Class:       vector         list         list
+Name:          FMI2      stdCoef         seed            n         nobs
+Class:   data.frame   data.frame      numeric       vector   data.frame
+                                                                       
+Name:        pmMCAR        pmMAR     extraOut    paramOnly       timing
+Class:       vector       vector         list      logical         list
 > loading <- matrix(0, 6, 1)
 > loading[1:6, 1] <- NA
 > LY <- bind(loading, 0.7)
@@ -455,10 +455,12 @@ Fit Indices     0.05     Mean       SD
 > 
 > # Summary of population parameters
 > summaryPopulation(Output)
-                 [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12]
-Population Value 0.7  0.7  0.7  0.7  0.7  0.7  0.51 0.51 0.51 0.51  0.51  0.51 
-                 [,13] [,14] [,15] [,16] [,17] [,18]
-Population Value 0     0     0     0     0     0    
+                 1.f1=~y1 1.f1=~y2 1.f1=~y3 1.f1=~y4 1.f1=~y5 1.f1=~y6 1.y1~~y1
+Population Value 0.7      0.7      0.7      0.7      0.7      0.7      0.51    
+                 1.y2~~y2 1.y3~~y3 1.y4~~y4 1.y5~~y5 1.y6~~y6 1.y1~1 1.y2~1
+Population Value 0.51     0.51     0.51     0.51     0.51     0      0     
+                 1.y3~1 1.y4~1 1.y5~1 1.y6~1
+Population Value 0      0      0      0     
 > 
 > 
 > 
@@ -3882,11 +3884,11 @@ Class:    character      numeric   data.frame   data.frame   data.frame
 Name:     converged   paramValue misspecValue       popFit         FMI1
 Class:       vector   data.frame   data.frame   data.frame   data.frame
                                                                        
-Name:          FMI2      stdCoef         seed            n       pmMCAR
-Class:   data.frame   data.frame      numeric       vector       vector
-                                             
-Name:         pmMAR     extraOut       timing
-Class:       vector         list         list
+Name:          FMI2      stdCoef         seed            n         nobs
+Class:   data.frame   data.frame      numeric       vector   data.frame
+                                                                       
+Name:        pmMCAR        pmMAR     extraOut    paramOnly       timing
+Class:       vector       vector         list      logical         list
 > loading <- matrix(0, 6, 1)
 > loading[1:6, 1] <- NA
 > LY <- bind(loading, 0.7)
@@ -4068,7 +4070,7 @@ detaching 'package:parallel'
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  5.76 0.09 5.88 NA NA 
+Time elapsed:  5.89 0.08 6.05 NA NA 
 > grDevices::dev.off()
 null device 
           1 
