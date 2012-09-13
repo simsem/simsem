@@ -154,9 +154,10 @@ summaryPopulation <- function(object) {
     nRep <- nrow(paramValue)
     nParam <- ncol(paramValue)
     result <- NULL
-    if (nrow(object@paramValue) == 1) {
+    if (nrow(paramValue) == 1) {
         result <- matrix(paramValue, nrow = 1)
         rownames(result) <- "Population Value"
+		colnames(result) <- colnames(paramValue)
     } else {
         average.param <- apply(paramValue, 2, mean, na.rm = TRUE)
         sd.param <- apply(paramValue, 2, sd, na.rm = TRUE)

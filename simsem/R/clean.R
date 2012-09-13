@@ -20,13 +20,16 @@
 
 clean <- function(...) {
     object.l <- list(...)
-    converged <- sapply(object.l, slot, name = "converged")
-    allConverged <- apply(converged, 1, all)
-    if (all(!allConverged)) 
-        stop("All replications in the result object are not convergent. Thus, the result object cannot be used.")
-    object.l <- lapply(object.l, cleanSimResult, converged = allConverged)
-    if (length(object.l) == 1) 
-        object.l <- object.l[[1]]
+	paramOnly <- sapply(object.l, slot, name = "paramOnly")
+	if(all(!paramOnly)) {
+		converged <- sapply(object.l, slot, name = "converged")
+		allConverged <- apply(converged, 1, all)
+		if (all(!allConverged)) 
+			stop("All replications in the result object are not convergent. Thus, the result object cannot be used.")
+		object.l <- lapply(object.l, cleanSimResult, converged = allConverged)
+	}
+	if (length(object.l) == 1) 
+		object.l <- object.l[[1]]
     return(object.l)
 }
 

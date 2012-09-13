@@ -40,28 +40,32 @@ setMethod("summaryShort", signature = "SimVector", definition = function(object)
 setMethod("summaryShort", signature = "SimResult", definition = function(object, alpha=0.05, digits=3) {
     cat("RESULT OBJECT\n")
     cat(paste("Model Type:", print(object@modelType),"\n"))
-    cleanObj <- clean(object)
-	cat(paste("Convergence", sum(object@converged == TRUE), "/", object@nRep, "\n"))
-	if (length(unique(object@n)) > 1) {
-        cat(paste("Sample size:", min(object@n), "to", max(object@n),"\n"))
+	if(object@paramOnly) {
+		cat("This object contains only real and misspecified parameter values.\nUsers may use 'summaryPopulation', 'summaryMisspec', and 'plotMisfit' functions to investigate the parmeter values.\n")
 	} else {
-		cat(paste("Sample size:", unique(object@n),"\n"))
+		cleanObj <- clean(object)
+		cat(paste("Convergence", sum(object@converged == TRUE), "/", object@nRep, "\n"))
+		if (length(unique(object@n)) > 1) {
+			cat(paste("Sample size:", min(object@n), "to", max(object@n),"\n"))
+		} else {
+			cat(paste("Sample size:", unique(object@n),"\n"))
+		}
+		if (length(unique(object@pmMCAR)) > 1) {
+			cat(paste("Sample size:", min(object@pmMCAR), "to", max(object@pmMCAR),"\n"))
+		} else {
+			cat(paste("Sample size:", unique(object@pmMCAR),"\n"))
+		}
+		if (length(unique(object@pmMAR)) > 1) {
+			cat(paste("Sample size:", min(object@pmMAR), "to", max(object@pmMAR),"\n"))
+		} else {
+			cat(paste("Sample size:", unique(object@pmMAR),"\n"))
+		}
+		cat("========= Fit Indices Cutoffs ============\n")
+		print(summaryFit(cleanObj, alpha = alpha), digits)
+		if (!is.null(object@paramValue)) {
+			if ((ncol(object@coef) != ncol(object@paramValue)) | ((ncol(object@coef) == 
+				ncol(object@paramValue)) && any(sort(colnames(object@coef)) != sort(colnames(object@paramValue))))) 
+				cat("NOTE: The data generation model is not the same as the analysis model. See the summary of the population underlying data generation by the summaryPopulation function.\n")
+		}
 	}
-	if (length(unique(object@pmMCAR)) > 1) {
-        cat(paste("Sample size:", min(object@pmMCAR), "to", max(object@pmMCAR),"\n"))
-	} else {
-		cat(paste("Sample size:", unique(object@pmMCAR),"\n"))
-	}
-	if (length(unique(object@pmMAR)) > 1) {
-        cat(paste("Sample size:", min(object@pmMAR), "to", max(object@pmMAR),"\n"))
-	} else {
-		cat(paste("Sample size:", unique(object@pmMAR),"\n"))
-	}
-    cat("========= Fit Indices Cutoffs ============\n")
-    print(summaryFit(cleanObj, alpha = alpha), digits)
-    if (!is.null(object@paramValue)) {
-        if ((ncol(object@coef) != ncol(object@paramValue)) | ((ncol(object@coef) == 
-            ncol(object@paramValue)) && any(sort(colnames(object@coef)) != sort(colnames(object@paramValue))))) 
-            cat("NOTE: The data generation model is not the same as the analysis model. See the summary of the population underlying data generation by the summaryPopulation function.\n")
-    }
 }) 
