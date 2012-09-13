@@ -35,29 +35,30 @@
 
 <h2>Version 0.3-5 09/06/12</h2>
 
-<p>This version is available in both CRAN and KRAN. We have been rewriten the whole package. The simsem 0.2-* code cannot be run in the current version. Here are the list of major updates: </p>
+<p>This version is available in both CRAN and KRAN. We have rewriten the whole package. simsem 0.2-* code cannot be run in the current version. Here is a list of major updates: </p>
 
 <ol>
-<li>All function names are changed so that the package is much more intuitive. The main idea is that users need to build their target models by the <strong>model</strong> function. This model is built by matrices and vectors in LISREL notation via <strong>bind</strong> and <strong>binds</strong> functions. Then, the model can be used for data generation by the <strong>generate</strong> function, for data analysis by the <strong>analysis</strong> function, and for Monte Carlo simulation by the <strong>sim</strong> function. This version no longer have data and model objects.</li>
-<li>The multiple group feature is available now. Users can put a list of multiple matrix or vector objects (e.g., multiple matrices for LY attribute) for specifying a multiple group. Click <a href="https://github.com/simsem/simsem/blob/master/SupportingDocs/multiplegroup.R">here</a> to see the examples for multiple group codes.</li>
-<li><i>Faster</i>. From a brief test, this package is faster than the 0.2 family around 30 percent.</li>
-<li>The X-side LISREL notation is no longer supported (e.g., no LX, PH, or TD).</li>
-<li>Equality constraints are set by putting the same character on the free elements in the matrix or vector objects. This version will not have equality constraint object anymore.</li>
-<li>Random parameters are specified by a quote of command that users use to draw one random number (such as "runif(1, -0.2, 0.2)" instead of using distribution objects in the previous version). This version no longer have distribution objects.</li>
-<li>Model misspecification is set in the <strong>bind</strong> and <strong>binds</strong> functions in making the matrix or vector objects by the <em>misspec</em> attribute. The misspecification object is not longer supported.</li>
-<li>This pacakge does not contain any codes for the auxiliary variables in FIML and multiple-imputation. Instead, this package will call commands from the semTools package which is more efficient.</li>
+<li>All function names are changed so that the package is much more intuitive. The main idea is that users need to build their target models by the <strong>model</strong> function. This model is built by matrices and vectors in LISREL notation via the <strong>bind</strong> and <strong>binds</strong> functions. Then, the model can be used for data generation by the <strong>generate</strong> function, for data analysis by the <strong>analysis</strong> function, and for Monte Carlo simulation by the <strong>sim</strong> function. This version no longer requires data or model objects.</li>
+<li>The multiple group feature is available now. Users can put a list of multiple matrix or vector objects (e.g., multiple matrices for LY attribute) for specifying a multiple groups model. Click <a href="https://github.com/simsem/simsem/blob/master/SupportingDocs/multiplegroup.R">here</a> to see example  multiple group codes.</li>
+<li><i>Faster</i>. From a brief test, this package is about 30% faster than the 0.2 family.</li>
+<li>X-side LISREL notation is no longer supported (e.g., no LX, PH, or TD).</li>
+<li>Equality constraints are set by putting the same character as the free elements in the matrix or vector objects. This version does not have the equality constraint object.</li>
+<li>Random parameters are specified by a quote of command that users use to draw one random number (such as "runif(1, -0.2, 0.2)" instead of using distribution objects in the previous version). This version no longer has distribution objects.</li>
+<li>Model misspecification is set in the <strong>bind</strong> and <strong>binds</strong> functions when making the matrix or vector objects by the <em>misspec</em> attribute. The misspecification object is not longer supported.</li>
+<li>This pacakge does not contain any native code for the auxiliary variables in FIML and multiple-imputation. Instead, this package will call commands from the semTools package which is more efficient. NOTE: auxiliary variables in FIML and multiple-impuation are still supported, the code has simply been moved.</li>
 <li>And much more...</li>
 </ol>
-<p>Please click <a href="https://github.com/simsem/simsem/blob/master/SupportingDocs/simsem.v0.3.code.transfer.pdf?raw=true">here</a> for the brief introduction of the change from the 0.2 family to 0.3 family. We will gradually update the online wiki pages (currently Examples 1-5 has been fixed) and all attachment of our papers and presentations. There are two things that this version cannot handle whereas the 0.2-family can handle:</p>
+<p>Please click <a href="https://github.com/simsem/simsem/blob/master/SupportingDocs/simsem.v0.3.code.transfer.pdf?raw=true">here</a> for a brief introduction of the changes from the 0.2 family to 0.3 family. We will gradually update the online wiki pages (currently Examples 1-5 has been fixed) and all example code from our papers and presentations. There are two things that the current version cannot handle whereas the 0.2-family can handle:</p>
 <ol>
-<li>The flexible order of filling parameters, equality constraints, and adding model misspecification. This current version supports only 1) impose equality constraints, 2) add model misspecification, and 3) filling parameters (such as residual variances when the total variances are specified).</li>
+<li>The flexible order of filling parameters, equality constraints, and adding model misspecification. This current version supports a single order: 1) impose equality constraints, 2) add model misspecification, and 3) fill parameters (such as residual variances when the total variances are specified).</li>
 <li>The maximal method and interval method of model misspecification.</li>
 </ol>
-<p>We will update the current version to do these features soon. For those people who are working on the old version of simsem, we still provide the old version of simsem but the name is changed to simsemClassic. The simsemClassic is available on KRAN only. Please let us know if you have any questions, find any bugs, or provide any feedbacks. Thank you!</p>
+<p>We will update the current version with these features soon. For those people who are working on the old version of simsem, we still provide the old version of simsem but the name is changed to simsemClassic. <strong>simsemClassic is available on KRAN only.<strong> Please let us know if you have any questions, find any bugs, or provide any feedbacks. Thank you!</p>
+
 
 <h2>simsemClassic Version 0.2-9 09/12/12</h2>
 
-<p>This package is the update version of the simsem 0.2-8. The change reflects the update in the copula package.</p>
+<p>This package is the updated version of the simsem 0.2-8. This is the last up date in the 0.2-* series! The change reflects the update in the copula package.</p>
 
 <h2>Version 0.2-8 07/06/12</h2>
 
