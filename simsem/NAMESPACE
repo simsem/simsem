@@ -5,7 +5,7 @@ exportClasses(SimMatrix,
 	SimResult, 
 	SimDataDist, 
 	SimMissing)
-exportMethods(summary, 	summaryShort, #summaryMisspec, 
+exportMethods(summary, 	summaryShort, 
 	getCutoff, plotCutoff, 
 	getPowerFit, getPowerFitNested, getPowerFitNonNested, 
 	pValue, 

@@ -1,41 +1,36 @@
 library(simsem)
 
-u2 <- simUnif(-0.2, 0.2)
-u5 <- simUnif(-0.5, 0.5)
-t2 <- simT(2)
-t3 <- simT(3)
-t4 <- simT(4)
-t5 <- simT(5)
-chi3 <- simChisq(3)
-chi4 <- simChisq(4)
-chi5 <- simChisq(5)
-chi6 <- simChisq(6)
+loading.null <- matrix(0, 6, 1)
+loading.null[1:6, 1] <- NA
+LY.NULL <- bind(loading.null, 0.7)
+RPS.NULL <- binds(diag(1))
+RTE <- binds(diag(6), misspec=matrix("rnorm(1,0,0.1)", 6, 6))
 
-loading <- matrix(0, 12, 3)
-loading[1:4, 1] <- NA
-loading[5:8, 2] <- NA
-loading[9:12, 3] <- NA
-LX <- simMatrix(loading, 0.7)
+CFA.NULL <- model(LY = LY.NULL, RPS = RPS.NULL, RTE = RTE, modelType="CFA")
 
-latent.cor <- matrix(NA, 3, 3)
-diag(latent.cor) <- 1
-RPH <- symMatrix(latent.cor, "u5")
+Output.NULL <- sim(1000, n=500, CFA.NULL)
 
-error.cor <- matrix(0, 12, 12)
-diag(error.cor) <- 1
-RTD <- symMatrix(error.cor)
+loading.alt <- matrix(0, 6, 2)
+loading.alt[1:3, 1] <- NA
+loading.alt[4:6, 2] <- NA
+loading.alt.mis <- matrix("runif(1,-.2,.2)", 6, 2)
+loading.alt.mis[is.na(loading.alt)] <- 0
+LY.ALT <- bind(loading.alt, 0.7, misspec=loading.alt.mis)
+latent.cor.alt <- matrix(NA, 2, 2)
+diag(latent.cor.alt) <- 1
+RPS.ALT <- binds(latent.cor.alt, "runif(1,0.7,0.9)")
+CFA.ALT <- model(LY = LY.ALT, RPS = RPS.ALT, RTE = RTE, modelType="CFA")
 
-CFA.Model <- simSetCFA(LX = LX, RPH = RPH, RTD = RTD) 
+Output.ALT <- sim(1000, n=500, model=CFA.NULL, generate=CFA.ALT)
 
-loading.mis <- matrix(NA, 12, 3)
-loading.mis[is.na(loading)] <- 0
-LY.mis <- simMatrix(loading.mis, "u2")
-CFA.model.mis <- simMisspecCFA(LY=LY.mis)
+cutoff <- getCutoff(Output.NULL, 0.05)
+getPowerFit(Output.ALT, cutoff)
+plotPowerFit(Output.ALT, Output.NULL, alpha=0.05)
+plotPowerFit(Output.ALT, Output.NULL, alpha=0.05, usedFit=c("RMSEA", "SRMR", "CFI"))
 
-SimDataDist <- simDataDist(t2, t3, t4, t5, chi3, chi4, chi5, chi6, chi3, chi4, chi5, chi6, reverse=c(rep(FALSE, 8), rep(TRUE, 4)))
-SimData <- simData(CFA.Model, 200, misspec=CFA.model.mis, indDist=SimDataDist)
-SimModel <- simModel(CFA.Model, estimator="mlm")
-Output <- simResult(1000, SimData, SimModel)
-getCutoff(Output, 0.05)
-plotCutoff(Output, 0.05)
-summary(Output)
+cutoff2 <- c(RMSEA = 0.05, CFI = 0.95, TLI = 0.95, SRMR = 0.06)
+getPowerFit(Output.ALT, cutoff2)
+plotPowerFit(Output.ALT, cutoff=cutoff2)
+plotPowerFit(Output.ALT, cutoff=cutoff2, usedFit=c("RMSEA", "SRMR", "CFI"))
+
+plotPowerFit(Output.ALT, Output.NULL, cutoff=cutoff2, usedFit=c("RMSEA", "SRMR", "CFI"))

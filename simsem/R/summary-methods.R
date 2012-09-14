@@ -57,36 +57,44 @@ setMethod("summary", signature = "SimResult", definition = function(object, digi
     cat("Model Type\n")
     print(object@modelType)
     cleanObj <- clean(object)
-    
-    cat("========= Fit Indices Cutoffs ============\n")
-    print(summaryFit(object, alpha = alpha), digits)
-    cat("========= Parameter Estimates and Standard Errors ============\n")
-    print(round(summaryParam(object), digits))
-    cat("========= Correlation between Fit Indices ============\n")
-    fit <- cleanObj@fit[, usedFit]
-    if (length(unique(object@n)) > 1) 
-        fit <- data.frame(fit, n = cleanObj@n)
-    if (length(unique(object@pmMCAR)) > 1) 
-        fit <- data.frame(fit, pmMCAR = cleanObj@pmMCAR)
-    if (length(unique(object@pmMAR)) > 1) 
-        fit <- data.frame(fit, pmMAR = cleanObj@pmMAR)
-    print(round(cor(fit), digits))
-    cat("================== Replications =====================\n")
-    cat("Number of Replications\n")
-    print(object@nRep)
-    cat("Number of Converged Replications\n")
-    print(sum(object@converged == TRUE))
-    if (length(unique(object@n)) > 1) 
-        cat("NOTE: The sample size is varying.\n")
-    if (length(unique(object@pmMCAR)) > 1) 
-        cat("NOTE: The percent of MCAR is varying.\n")
-    if (length(unique(object@pmMAR)) > 1) 
-        cat("NOTE: The percent of MAR is varying.\n")
-    if (!is.null(object@paramValue)) {
-        if ((ncol(object@coef) != ncol(object@paramValue)) | ((ncol(object@coef) == 
-            ncol(object@paramValue)) && any(sort(colnames(object@coef)) != sort(colnames(object@paramValue))))) 
-            cat("NOTE: The data generation model is not the same as the analysis model. See the summary of the population underlying data generation by the summaryPopulation function.\n")
-    }
+    if(!object@paramOnly) {
+		cat("========= Fit Indices Cutoffs ============\n")
+		print(summaryFit(object, alpha = alpha), digits)	
+		cat("========= Parameter Estimates and Standard Errors ============\n")
+		print(round(summaryParam(object), digits))
+		cat("========= Correlation between Fit Indices ============\n")
+		fit <- cleanObj@fit[, usedFit]
+		if (length(unique(object@n)) > 1) 
+			fit <- data.frame(fit, n = cleanObj@n)
+		if (length(unique(object@pmMCAR)) > 1) 
+			fit <- data.frame(fit, pmMCAR = cleanObj@pmMCAR)
+		if (length(unique(object@pmMAR)) > 1) 
+			fit <- data.frame(fit, pmMAR = cleanObj@pmMAR)
+		print(round(cor(fit), digits))
+		cat("================== Replications =====================\n")
+		cat("Number of Replications\n")
+		print(object@nRep)
+		cat("Number of Converged Replications\n")
+		print(sum(object@converged == TRUE))
+		if (length(unique(object@n)) > 1) 
+			cat("NOTE: The sample size is varying.\n")
+		if (length(unique(object@pmMCAR)) > 1) 
+			cat("NOTE: The percent of MCAR is varying.\n")
+		if (length(unique(object@pmMAR)) > 1) 
+			cat("NOTE: The percent of MAR is varying.\n")
+		if (!is.null(object@paramValue)) {
+			if ((ncol(object@coef) != ncol(object@paramValue)) | ((ncol(object@coef) == 
+				ncol(object@paramValue)) && any(sort(colnames(object@coef)) != sort(colnames(object@paramValue))))) 
+				cat("NOTE: The data generation model is not the same as the analysis model. See the summary of the population underlying data generation by the summaryPopulation function.\n")
+		}
+	} else {
+		cat("========= Population Values ============\n")
+		print(summaryPopulation(object), digits)	
+		if(!(all(dim(object@misspecValue) == 0))) {
+			cat("========= Model Misspecification ============\n")
+			print(round(summaryMisspec(object), digits))	
+		}
+	}
 })
 
 setMethod("summary", signature = "SimMissing", definition = function(object) {

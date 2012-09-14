@@ -27,14 +27,15 @@ generate <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "
         errorDist <- rep(list(errorDist), ngroups)
     }
     
+	if(ngroups > 1 && length(n) == 1) n <- rep(n, ngroups)
     
     draws <- draw(model, maxDraw = maxDraw, misfitBounds = misfitBounds, misfitType = misfitType, 
         averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws)
-    datal <- mapply(FUN = createData, draws, indDist, facDist, errorDist, MoreArgs = list(n = n, 
+    datal <- mapply(FUN = createData, draws, indDist, facDist, errorDist, n = n, MoreArgs = list(
         sequential = sequential, modelBoot = modelBoot, realData = realData, indLab = indLab), 
         SIMPLIFY = FALSE)
     data <- do.call("rbind", datal)
-    data <- cbind(data, group = rep(1:ngroups, each = n))
+    data <- cbind(data, group = rep(1:ngroups, n))
     colnames(data)[ncol(data)] <- model@groupLab
     
     if (params) {
