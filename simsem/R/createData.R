@@ -83,7 +83,7 @@ createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist 
                   usedParam2$PS[iv, iv])
                 for (i in 2:length(set)) {
                   dv <- set[[i]]
-                  pred <- fac %*% t(extract(usedParam2$BE, dv, iv))
+                  pred <- fac %*% t(usedParam2$BE[dv, iv, drop = FALSE])
                   res <- dataGen(extractSimDataDist(facDist, dv), n, usedParam2$AL[dv], 
                     usedParam2$PS[dv, dv])
                   new <- pred + res
@@ -132,7 +132,7 @@ dataGen <- function(dataDist, n, m, cm) {
             cm2 <- cm
             if (sum(varNotZeros) < dataDist@p) {
                 dataDist2 <- extractSimDataDist(dataDist, which(varNotZeros))
-                cm2 <- extract(cm, which(varNotZeros), which(varNotZeros))
+                cm2 <- cm[which(varNotZeros), which(varNotZeros), drop=FALSE]
             }
             r <- cov2cor(as.matrix(cm2))
             for (i in 1:dataDist2@p) {

@@ -6,6 +6,7 @@
 # Fix the starting values for each rep. It would be faster.
 # Reparameterize the population value to be suitable with the parameter estimates
 # Sample size cannot be varied across groups --> simResult is needed to be fixed for different sample sizes; maybe another slot called ngroups
+# Indicator and factor labels do not work.
 
 
 
@@ -34,7 +35,6 @@ createImpliedMACS <- function(reducedParamSet) {
     }
     return(list(M = as.vector(implied.mean), CM = implied.covariance))
 }
-
 
 #####Result
 # Coverage by confidence interval
@@ -111,7 +111,7 @@ RTE <- binds(diag(6))
 
 VTE <- bind(rep(NA, 6), 0.51)
 
-CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, VTE=VTE, modelType = "CFA")
+CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, VTE=VTE, modelType = "CFA", indLab=c("pos1", "pos2", "pos3", "neg1", "neg2", "neg3"), facLab=c("posaffect", "negaffect"))
 
 param <- draw(CFA.Model)
 dat <- createData(param[[1]], n = 200)
@@ -301,6 +301,8 @@ getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
 
+
+
 # It does not stop at the ParamOnly
 # paramOut <- sim(100, n=500, Path.Model, paramOnly=TRUE)
 
@@ -332,10 +334,77 @@ BE <- bind(path, path.start)
 
 SEM.model <- model(BE=BE, LY=LY, RPS=RPS, RTE=RTE, modelType="SEM")
 
+param <- draw(SEM.model)
+dat <- createData(param[[1]], n = 200)
+
+
+changeScaleSEM(lapply(param, "[[", 1), SEM.model)
+
+
 dat <- generate(SEM.model, n=300)
 out <- analyze(SEM.model, dat)
 
 Output <- sim(200, n=300, SEM.model) # Data.Mis.Con, Model.Con) #, multicore=TRUE)
+getCutoff(Output, 0.05)
+plotCutoff(Output, 0.05)
+summaryParam(Output)
+
+
+
+# TRY
+
+
+loading <- matrix(0, 8, 3)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+loading[7:8, 3] <- NA
+LY <- bind(loading, 0.7)
+
+RTE <- binds(diag(8))
+
+factor.cor <- diag(3)
+factor.cor[1, 2] <- factor.cor[2, 1] <- NA
+RPS <- binds(factor.cor, 0.5)
+
+path <- matrix(0, 3, 3)
+path[3, 1:2] <- NA
+path.start <- matrix(0, 3, 3)
+path.start[3, 1] <- 0.6
+path.start[3, 2] <- 0.4
+BE <- bind(path, path.start)
+
+SEM.model <- model(BE=BE, LY=LY, RPS=RPS, RTE=RTE, modelType="SEM")
+
+Output <- sim(1000, n=300, SEM.model) # Data.Mis.Con, Model.Con) #, multicore=TRUE)
+getCutoff(Output, 0.05)
+plotCutoff(Output, 0.05)
+summaryParam(Output)
+
+# TRY2
+
+
+loading <- matrix(0, 8, 3)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+loading[7:8, 3] <- NA
+LY <- bind(loading, 0.7)
+
+TE <- binds(diag(NA, 8), diag(0.51, 8))
+
+factor.cor <- diag(3)
+factor.cor[1, 2] <- factor.cor[2, 1] <- NA
+PS <- binds(factor.cor, 0.5)
+
+path <- matrix(0, 3, 3)
+path[3, 1:2] <- NA
+path.start <- matrix(0, 3, 3)
+path.start[3, 1] <- 0.6
+path.start[3, 2] <- 0.4
+BE <- bind(path, path.start)
+
+SEM.model <- model(BE=BE, LY=LY, PS=PS, TE=TE, modelType="SEM")
+
+Output <- sim(1000, n=300, SEM.model) # Data.Mis.Con, Model.Con) #, multicore=TRUE)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
@@ -453,44 +522,6 @@ getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
 
-################### Example 6 ##################################
-
-#library(simsem)
-
-loading.null <- matrix(0, 6, 1)
-loading.null[1:6, 1] <- NA
-LY.NULL <- bind(loading.null, 0.7)
-RPS.NULL <- binds(diag(1))
-RTE <- binds(diag(6), misspec=matrix("rnorm(1,0,0.1)", 6, 6))
-
-CFA.NULL <- model(LY = LY.NULL, RPS = RPS.NULL, RTE = RTE, modelType="CFA")
-
-Output.NULL <- sim(20, n=500, CFA.NULL)
-
-loading.alt <- matrix(0, 6, 2)
-loading.alt[1:3, 1] <- NA
-loading.alt[4:6, 2] <- NA
-loading.alt.mis <- matrix("runif(1,-.2,.2)", 6, 2)
-loading.alt.mis[is.na(loading.alt)] <- 0
-LY.ALT <- bind(loading.alt, 0.7, misspec=loading.alt.mis)
-latent.cor.alt <- matrix(NA, 2, 2)
-diag(latent.cor.alt) <- 1
-RPS.ALT <- binds(latent.cor.alt, "runif(1,0.7,0.9)")
-CFA.ALT <- model(LY = LY.ALT, RPS = RPS.ALT, RTE = RTE, modelType="CFA")
-
-Output.ALT <- sim(20, n=500, model=CFA.NULL, generate=CFA.ALT)
-
-cutoff <- getCutoff(Output.NULL, 0.05)
-getPowerFit(Output.ALT, cutoff)
-plotPowerFit(Output.ALT, Output.NULL, alpha=0.05)
-plotPowerFit(Output.ALT, Output.NULL, alpha=0.05, usedFit=c("RMSEA", "SRMR", "CFI"))
-
-cutoff2 <- c(RMSEA = 0.05, CFI = 0.95, TLI = 0.95, SRMR = 0.06)
-getPowerFit(Output.ALT, cutoff2)
-plotPowerFit(Output.ALT, cutoff=cutoff2)
-plotPowerFit(Output.ALT, cutoff=cutoff2, usedFit=c("RMSEA", "SRMR", "CFI"))
-
-plotPowerFit(Output.ALT, Output.NULL, cutoff=cutoff2, usedFit=c("RMSEA", "SRMR", "CFI"))
 
 ################################## Example 7 ##########################################
 #library(simsem)
@@ -548,6 +579,7 @@ getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summary(Output)
 
+
 ################################## Example 8 ##########################################
 #library(simsem)
 
@@ -585,6 +617,45 @@ Output <- sim(5, n=1000, CFA.model, miss=missModel)#, multicore=TRUE)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summary(Output)
+
+################### Example 6 ##################################
+
+#library(simsem)
+
+loading.null <- matrix(0, 6, 1)
+loading.null[1:6, 1] <- NA
+LY.NULL <- bind(loading.null, 0.7)
+RPS.NULL <- binds(diag(1))
+RTE <- binds(diag(6), misspec=matrix("rnorm(1,0,0.1)", 6, 6))
+
+CFA.NULL <- model(LY = LY.NULL, RPS = RPS.NULL, RTE = RTE, modelType="CFA")
+
+Output.NULL <- sim(20, n=500, CFA.NULL)
+
+loading.alt <- matrix(0, 6, 2)
+loading.alt[1:3, 1] <- NA
+loading.alt[4:6, 2] <- NA
+loading.alt.mis <- matrix("runif(1,-.2,.2)", 6, 2)
+loading.alt.mis[is.na(loading.alt)] <- 0
+LY.ALT <- bind(loading.alt, 0.7, misspec=loading.alt.mis)
+latent.cor.alt <- matrix(NA, 2, 2)
+diag(latent.cor.alt) <- 1
+RPS.ALT <- binds(latent.cor.alt, "runif(1,0.7,0.9)")
+CFA.ALT <- model(LY = LY.ALT, RPS = RPS.ALT, RTE = RTE, modelType="CFA")
+
+Output.ALT <- sim(20, n=500, model=CFA.NULL, generate=CFA.ALT)
+
+cutoff <- getCutoff(Output.NULL, 0.05)
+getPowerFit(Output.ALT, cutoff)
+plotPowerFit(Output.ALT, Output.NULL, alpha=0.05)
+plotPowerFit(Output.ALT, Output.NULL, alpha=0.05, usedFit=c("RMSEA", "SRMR", "CFI"))
+
+cutoff2 <- c(RMSEA = 0.05, CFI = 0.95, TLI = 0.95, SRMR = 0.06)
+getPowerFit(Output.ALT, cutoff2)
+plotPowerFit(Output.ALT, cutoff=cutoff2)
+plotPowerFit(Output.ALT, cutoff=cutoff2, usedFit=c("RMSEA", "SRMR", "CFI"))
+
+plotPowerFit(Output.ALT, Output.NULL, cutoff=cutoff2, usedFit=c("RMSEA", "SRMR", "CFI"))
 
 
 ############################# Example 9 #############################

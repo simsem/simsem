@@ -44,7 +44,7 @@ validatePath <- function(path, var.iv, var.dv) {
     if (all(singleIV == 0)) {
         return(TRUE)
     } else {
-        path <- extract(path, row = which(singleIV))
+        path <- path[which(singleIV), , drop=FALSE]
         var.dv <- var.dv[singleIV]
         inv.var.iv <- 1/var.iv
         max.path <- sqrt(var.dv) %o% sqrt(inv.var.iv)
@@ -69,7 +69,7 @@ validateCovariance <- function(resVar, correlation, totalVar = NULL) {
         return(FALSE)
     zero.row <- resVar == 0
     if (sum(zero.row) > 0) {
-        target.rows <- extract(correlation, row = which(zero.row), col = NULL)
+        target.rows <- correlation[which(zero.row), , drop = FALSE]
         for (i in 1:nrow(target.rows)) {
             temp <- target.rows[i, -zero.row[i]]
             if (sum(temp != 0) > 0) 
@@ -87,30 +87,3 @@ validateCovariance <- function(resVar, correlation, totalVar = NULL) {
     }
     return(TRUE)
 }
-
-# Extract: extract elements from a matrix without changing to a vector
-
-# arguments: a) object a target matrix
-#			b) row a target row
-#			c) col a target column
-
-# value: The resulting matrix with extracted elements
-
-extract <- function(object, row = NULL, col = NULL) {
-    if (class(object) == "matrix") {
-        if (is.null(row)) 
-            row <- 1:nrow(object)
-        if (is.null(col)) 
-            col <- 1:ncol(object)
-        if (length(row) > 1 & length(col) > 1) {
-            return(object[row, col])
-        } else {
-            if (length(col) == 1) 
-                return(as.matrix(object[row, col]))
-            if (length(row) == 1) 
-                return(t(as.matrix(object[row, col])))
-        }
-    } else {
-        stop("This function can be used for a matrix only.")
-    }
-} 

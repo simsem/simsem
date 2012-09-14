@@ -378,12 +378,11 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
                 facDist = facDist, errorDist = errorDist, indLab = indLab, modelBoot = modelBoot, 
                 realData = realData, params = TRUE)
             data <- genout[[1]]
-            psl <- genout[[2]]  # Indexing: Group -> param/misParam/misOnly -> paramSet (reduced)
-            if (!is.null(psl[[1]]$misspec)) {
-                paramSet <- lapply(psl, "[[", 2)  # Group -> misParam -> paramSet (by group)
-            } else {
-                paramSet <- lapply(psl, "[[", 1)  # Group -> param -> paramSet (by group)
-            }
+            psl <- genout[[2]]  
+			
+			# We need the real parameter values regardless of having model misspecification 
+			# because the real parameter values are what we really need to infer
+            paramSet <- lapply(psl, "[[", 1)  
         }  # else: do nothing. Raw data.
     timing$GenerateData <- (proc.time()[3] - start.time)
     start.time <- proc.time()[3]
@@ -489,6 +488,9 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 			facLabGen <- NULL
 			if (generate@modelType != "Path") {
 				facLabGen <- unique(generate@pt$lhs[generate@pt$op == "=~"])
+			}
+			if (generate@modelType == "SEM") {
+				paramSet <- changeScaleSEM(paramSet, generate)
 			}
 			popParam <- reduceParamSet(paramSet, generate@dgen, indLabGen, facLabGen, 
 				aux)
@@ -1000,3 +1002,101 @@ checkVar <- function(object) {
     covGLIST <- GLIST[names(GLIST) %in% c("theta", "psi")]
     return(any(sapply(covGLIST, function(x) any(diag(x) < 0))))
 } 
+				
+changeScaleSEM <- function(param, gen) {
+	# Find the scales that are based on fixed factor 
+	dgen <- gen@dgen
+	pt <- gen@pt
+	ptgroup <- split(as.data.frame(pt), pt$group)
+	facLab <- lapply(ptgroup, function(x) unique(x$lhs[x$op == "=~"]))
+	nfac <- lapply(facLab, length)
+	scale <- lapply(nfac, diag)
+
+	# Find which fixed factor
+	ptgroup <- split(as.data.frame(pt), pt$group)
+	
+	facPos <- mapply(function(temppt, templab) which((temppt$lhs %in% templab) & (as.character(temppt$rhs) == as.character(temppt$lhs)) & (temppt$op == "~~")), temppt = ptgroup, templab = facLab, SIMPLIFY=FALSE) # assume that the order is good
+	fixedPos <- mapply(function(temppt, temppos) temppt$free[temppos] == 0, temppt=ptgroup, temppos=facPos, SIMPLIFY=FALSE)
+	fixedValue <- mapply(function(temppt, temppos) temppt$ustart[temppos], temppt=ptgroup, temppos=facPos, SIMPLIFY=FALSE)	
+
+	
+	for(g in 1:length(ptgroup)) {
+		# dgengroup <- dgen[[g]]
+		# set <- findRecursiveSet(dgengroup$BE@free)
+		select <- fixedPos[[g]]
+		supposedVal <- fixedValue[[g]][select]
+		tempscale <- scale[[g]]
+		diag(tempscale)[select] <- diag(solve(sqrt(diag(diag(param[[g]]$PS[select, select, drop=FALSE])))) %*% sqrt(diag(supposedVal)))
+		scale[[g]] <- tempscale
+		
+		# ivvar <- set[[1]]
+		# ivtotalcov <- param$PS[ivvar, ivvar, drop=FALSE]
+		# nfac <- ncol(dgengroup$BE@free)
+		# for(i in 1:length(set)) {
+			# dvvar <- set[[i]]
+			# currentPS <- param$PS[dvvar, dvvar, drop=FALSE]
+			# diag(scaleMat)[dvvar] <- 1/sqrt(diag(currentPS))
+			# if(length(scalePS) > 1) {
+				# scalePSmat <- diag(scalePS)
+			# } else {
+				# scalePSmat <- matrix(scalePS, 1, 1)
+			# }
+			
+			
+			# param$BE[dvvar, ivvar] <- scalePSmat %*% param$BE[dvvar, ivvar, drop=FALSE] 
+			# param$PS[dvvar, dvvar] <- scalePSmat %*% currentPS %*% scalePSmat
+
+			
+		# }
+		# totalCov <- solve(diag(nfac) - param$BE) %*% param$PS %*% t(solve(diag(nfac) - param$BE))
+		# scaleLY <- diag(1/sqrt(diag(totalCov)))
+		# param$LY <- param$LY %*% scaleLY
+	}
+	
+	for(g in 1:length(ptgroup)) {
+		param[[g]]$LY <- param[[g]]$LY %*% solve(scale[[g]])
+		param[[g]]$PS <- scale[[g]] %*% param[[g]]$PS %*% scale[[g]]
+		#param[[g]]$BE <- scale[[g]] %*% param[[g]]$BE
+		param[[g]]$BE <- scale[[g]] %*% param[[g]]$BE %*% solve(scale[[g]])
+	}
+	return(param)
+	# Find which manifest variable
+	
+	
+	# Find which equality --> Then borrow from fixed or manifest
+	
+	
+	
+	
+	
+	
+	# if("PS" %in% names(dgen)) dgen <- list(dgen)
+	# param <- param$param
+	# for(g in 1:length(param)) {
+		# dgengroup <- dgen[[g]]
+		# set <- findRecursiveSet(dgengroup$BE@free)
+		
+		# ivvar <- set[[1]]
+		# ivtotalcov <- param$PS[ivvar, ivvar, drop=FALSE]
+		# nfac <- ncol(dgengroup$BE@free)
+		# for(i in 2:length(set)) {
+			# dvvar <- set[[i]]
+			# currentPS <- param$PS[dvvar, dvvar, drop=FALSE]
+			# diag(scaleMat)[dvvar] <- 1/sqrt(diag(currentPS))
+			# if(length(scalePS) > 1) {
+				# scalePSmat <- diag(scalePS)
+			# } else {
+				# scalePSmat <- matrix(scalePS, 1, 1)
+			# }
+			
+			
+			# param$BE[dvvar, ivvar] <- scalePSmat %*% param$BE[dvvar, ivvar, drop=FALSE] 
+			# param$PS[dvvar, dvvar] <- scalePSmat %*% currentPS %*% scalePSmat
+
+			
+		# }
+		# totalCov <- solve(diag(nfac) - param$BE) %*% param$PS %*% t(solve(diag(nfac) - param$BE))
+		# scaleLY <- diag(1/sqrt(diag(totalCov)))
+		# param$LY <- param$LY %*% scaleLY
+	# }
+}
