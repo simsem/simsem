@@ -31,6 +31,11 @@ generate <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "
     
     draws <- draw(model, maxDraw = maxDraw, misfitBounds = misfitBounds, misfitType = misfitType, 
         averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws)
+	
+	if (model@modelType == "SEM") {
+		draws <- changeScaleSEM(draws, model)
+	}	
+	
     datal <- mapply(FUN = createData, draws, indDist, facDist, errorDist, n = n, MoreArgs = list(
         sequential = sequential, modelBoot = modelBoot, realData = realData, indLab = indLab), 
         SIMPLIFY = FALSE)
@@ -57,3 +62,271 @@ popMisfitParams <- function(psl, df = NULL) {
         "[[", 2), fit.measures = "all", dfParam = df)
     return(misfit)
 } 
+
+		
+changeScaleSEM <- function(drawResult, gen) {
+	# Find the scales that are based on fixed factor 
+	dgen <- gen@dgen
+	pt <- gen@pt
+	ptgroup <- split(as.data.frame(pt), pt$group)
+	indLab <- lapply(ptgroup, function(x) unique(x$rhs[x$op == "=~"]))
+	facLab <- lapply(ptgroup, function(x) unique(x$lhs[x$op == "=~"]))
+	nfac <- lapply(facLab, length)
+	scale <- lapply(nfac, diag)
+	# Find which fixed factor
+	ptgroup <- split(as.data.frame(pt), pt$group)
+	ngroup <- length(ptgroup)
+	
+	facPos <- mapply(function(temppt, templab) which((temppt$lhs %in% templab) & (as.character(temppt$rhs) == as.character(temppt$lhs)) & (temppt$op == "~~")), temppt = ptgroup, templab = facLab, SIMPLIFY=FALSE) # assume that the order is good
+	fixedPos <- mapply(function(temppt, temppos) temppt$free[temppos] == 0, temppt=ptgroup, temppos=facPos, SIMPLIFY=FALSE)
+	fixedValue <- mapply(function(temppt, temppos) temppt$ustart[temppos], temppt=ptgroup, temppos=facPos, SIMPLIFY=FALSE)	
+	
+	param <- lapply(drawResult, "[[", "param")
+	misspec <- lapply(drawResult, "[[", "misspec")
+	
+	for(g in 1:ngroup) {
+		select <- fixedPos[[g]]
+		if(any(select)) {
+			supposedVal <- fixedValue[[g]][select]
+			tempscale <- scale[[g]]
+			if(length(supposedVal) > 1) {
+				diag(tempscale)[select] <- diag(solve(sqrt(diag(diag(param[[g]]$PS[select, select, drop=FALSE])))) %*% sqrt(diag(supposedVal)))
+			} else {
+				temp <- as.matrix(supposedVal)
+				temp2 <- as.matrix(diag(param[[g]]$PS[select, select, drop=FALSE]))
+				diag(tempscale)[select] <- diag(solve(sqrt(temp2)) %*% sqrt(temp))
+			}
+			scale[[g]] <- tempscale
+		}
+	}
+
+	# Find which manifest variable
+	
+	manifestPos <- vector("list", ngroup)
+	manifestValue <- vector("list", ngroup)
+	for(g in 1:ngroup) {
+		for(i in 1:length(facLab[[g]])) {
+			rowLoad <- (ptgroup[[g]]$lhs == facLab[[g]][i]) & (ptgroup[[g]]$op == "=~") & (ptgroup[[g]]$free == 0) & (ptgroup[[g]]$ustart != 0)
+			if(any(rowLoad)) {
+				targetrow <- which(rowLoad)[1]
+				manifestPos[[g]] <- rbind(manifestPos[[g]], c(which(ptgroup[[g]]$rhs[targetrow] == indLab[[g]]), i))
+				manifestValue[[g]] <- c(manifestValue[[g]], ptgroup[[g]]$ustart[which(rowLoad)[1]])
+			}
+		}
+	}
+	
+	for(g in 1:ngroup) {
+		if(!is.null(manifestPos[[g]])) {
+			select <- manifestPos[[g]][,2]
+			supposedVal <- manifestValue[[g]]
+			tempscale <- scale[[g]]
+			for(i in 1:length(select)) {
+				# Note that the LY is multiplied by solve(scale) not scale
+				tempscale[select[i], select[i]] <- param[[g]]$LY[manifestPos[[g]][i, 1], manifestPos[[g]][i, 2]] / manifestValue[[g]][i]
+			}
+			scale[[g]] <- tempscale
+		}
+	}
+
+	# Find which equality --> Then borrow from fixed or manifest
+	conLoad <- (duplicated(pt$free) | duplicated(pt$free, fromLast=TRUE)) & (pt$free != 0) & (pt$op == "=~")
+	if(any(conLoad)) {
+		conPos <- unique(pt$free[conLoad])
+		for(i in length(conPos)) {
+			eachPos <- conPos[i] == pt$free
+			tempFacName <- pt$lhs[eachPos]
+			tempGroup <- pt$group[eachPos]
+			scaleVal <- NA
+			for(j in 1:length(tempFacName)) {
+				pos <- which(tempFacName[j] == facLab[[tempGroup[j]]])
+				isFixed <- fixedPos[[tempGroup[j]]][pos]
+				if(isFixed) scaleVal <- scale[[tempGroup[j]]][pos, pos]
+			}
+			# Impose scale only when the fixed factor method is used in some factors
+			if(!is.na(scaleVal)) {
+				for(j in length(tempFacName)) {
+					pos <- which(tempFacName[j] == facLab[[tempGroup[j]]])
+					scale[[tempGroup[j]]][pos, pos] <- scaleVal
+				}
+			}
+		}
+	}
+	
+	for(g in 1:ngroup) {
+		param[[g]]$LY <- param[[g]]$LY %*% solve(scale[[g]])
+		param[[g]]$PS <- scale[[g]] %*% param[[g]]$PS %*% scale[[g]]
+		param[[g]]$BE <- scale[[g]] %*% param[[g]]$BE %*% solve(scale[[g]])
+		param[[g]]$AL <- scale[[g]] %*% param[[g]]$AL
+		if(!is.null(misspec[[g]])) {
+			misspec[[g]]$LY <- misspec[[g]]$LY %*% solve(scale[[g]])
+			misspec[[g]]$PS <- scale[[g]] %*% misspec[[g]]$PS %*% scale[[g]]
+			misspec[[g]]$BE <- scale[[g]] %*% misspec[[g]]$BE %*% solve(scale[[g]])
+			misspec[[g]]$AL <- scale[[g]] %*% misspec[[g]]$AL		
+		}
+	}
+	for(g in 1:ngroup) {
+		drawResult[[g]]$param <- param[[g]]
+		if(!is.null(misspec[[g]])) drawResult[[g]]$misspec <- misspec[[g]]
+	}
+	return(drawResult)
+}
+
+test.changeScaleSEM <- function() {
+	loading <- matrix(0, 8, 3)
+	loading[1:3, 1] <- NA
+	loading[4:6, 2] <- NA
+	loading[7:8, 3] <- "con1"
+	loading.start <- matrix("", 8, 3)
+	loading.start[1:3, 1] <- 0.7
+	loading.start[4:6, 2] <- 0.7
+	loading.start[7:8, 3] <- "rnorm(1,0.6,0.05)"
+	LY <- bind(loading, loading.start)
+
+	RTE <- binds(diag(8))
+
+	factor.cor <- diag(3)
+	factor.cor[1, 2] <- factor.cor[2, 1] <- NA
+	RPS <- binds(factor.cor, 0.5)
+
+	path <- matrix(0, 3, 3)
+	path[3, 1:2] <- NA
+	path.start <- matrix(0, 3, 3)
+	path.start[3, 1] <- "rnorm(1,0.6,0.05)"
+	path.start[3, 2] <- "runif(1,0.3,0.5)"
+	BE <- bind(path, path.start)
+
+	SEM.model <- model(BE=BE, LY=LY, RPS=RPS, RTE=RTE, modelType="SEM")
+
+	dat <- generate(SEM.model, n=300)
+
+	# Manifest variable approach
+
+
+
+	loading <- matrix(0, 8, 3)
+	loading[1:3, 1] <- c(1, "con1", "con1")
+	loading[4:6, 2] <- c(1, "con2", "con2")
+	loading[7:8, 3] <- c(1, 1)
+	loading.start <- matrix("", 8, 3)
+	LY <- bind(loading, 0.9)
+
+	RTE <- binds(diag(8))
+
+	factor.cor <- diag(3)
+	factor.cor[1, 2] <- factor.cor[2, 1] <- NA
+	RPS <- binds(factor.cor, 0.5)
+
+	VPS <- bind(rep(NA, 3), c(1.3, 1.6, 0.9))
+
+	path <- matrix(0, 3, 3)
+	path[3, 1:2] <- NA
+	path.start <- matrix(0, 3, 3)
+	path.start[3, 1] <- "rnorm(1,0.6,0.05)"
+	path.start[3, 2] <- "runif(1,0.3,0.5)"
+	BE <- bind(path, path.start)
+
+	VTE <- bind(rep(NA, 8), 1)
+	SEM.model <- model(BE=BE, LY=LY, RPS=RPS, RTE=RTE, VPS=VPS, VTE=VTE, modelType="SEM")
+
+	dat <- generate(SEM.model, n=300)
+
+	# Mixed approach
+
+	loading <- matrix(0, 8, 3)
+	loading[1:3, 1] <- c(1, "con1", "con1")
+	loading[4:6, 2] <- c(1, "con2", "con2")
+	loading[7:8, 3] <- c("con3", "con3")
+	loading.start <- matrix("", 8, 3)
+	LY <- bind(loading, 0.7)
+
+	RTE <- binds(diag(8))
+
+	factor.cor <- diag(3)
+	factor.cor[1, 2] <- factor.cor[2, 1] <- NA
+	RPS <- binds(factor.cor, 0.5)
+
+	VPS <- bind(c(NA, NA, 0.9), c(1.3, 0.7, ""))
+
+	path <- matrix(0, 3, 3)
+	path[3, 1:2] <- NA
+	path.start <- matrix(0, 3, 3)
+	path.start[3, 1] <- "rnorm(1,0.6,0.05)"
+	path.start[3, 2] <- "runif(1,0.3,0.5)"
+	BE <- bind(path, path.start)
+
+	VTE <- bind(rep(NA, 8), 1)
+	SEM.model <- model(BE=BE, LY=LY, RPS=RPS, RTE=RTE, VPS=VPS, VTE=VTE, modelType="SEM")
+
+	dat <- generate(SEM.model, n=300)
+	
+	
+	# Constrain
+
+
+	loading <- matrix(0, 9, 3)
+	loading[1:3, 1] <- c("con1", "con2", "con3")
+	loading[4:6, 2] <- c("con1", "con2", "con3")
+	loading[7:9, 3] <- c("con1", "con2", "con3")
+	LY <- bind(loading, 0.7)
+
+	RTE <- binds(diag(9))
+
+	RPS <- binds(diag(3))
+
+	VPS <- bind(c(1, NA, NA), c("", 0.75, 0.75))
+
+	path <- matrix(0, 3, 3)
+	path[2, 1] <- NA
+	path[3, 2] <- NA
+	BE <- bind(path, 0.5)
+
+	VTE <- bind(rep(NA, 9), 1)
+	SEM.model <- model(BE=BE, LY=LY, RPS=RPS, RTE=RTE, VPS=VPS, VTE=VTE, modelType="SEM")
+
+	dat <- generate(SEM.model, n=300)
+
+	# Constrain Group
+
+	loading.in <- matrix(0, 9, 3)
+	loading.in[1:3, 1] <- paste0("load", 1:3)
+	loading.in[4:6, 2] <- paste0("load", 4:6)
+	loading.in[7:9, 3] <- paste0("load", 7:9)
+	LY.in <- bind(loading.in, 0.7)
+
+	RPS <- binds(diag(3))
+
+	RTE <- binds(diag(9))
+
+	VTE <- bind(rep(NA, 9), 0.51)
+
+	TY.in <- bind(paste0("int", 1:9), 0)
+
+	VPS1 <- bind(rep(1, 3))
+	VPS2 <- bind(rep(NA, 3), c(1.1, 1.2, 1.3))
+
+	AL1 <- bind(rep(0, 3))
+	AL2 <- bind(rep(NA, 3), c(-0.5, 0.2, 0.3))
+
+	path <- matrix(0, 3, 3)
+	path[2, 1] <- NA
+	path[3, 2] <- NA
+	BE <- bind(path, 0.5)
+
+	strong <- model(LY = LY.in, RPS = RPS, VPS=list(VPS1, VPS2), RTE = RTE, VTE=VTE, TY=TY.in, AL=list(AL1, AL2), BE=list(BE,BE), ngroups=2, modelType = "SEM")
+
+	dat <- generate(strong,200)
+}
+
+semMACS <- function(param) {
+	ID <- matrix(0, nrow(param$PS), nrow(param$PS))
+    diag(ID) <- 1
+	implied.mean <- solve(ID - param$BE) %*% param$AL
+        implied.covariance <- solve(ID - param$BE) %*% param$PS %*% 
+            t(solve(ID - param$BE))
+        if (!is.null(param$LY)) {
+            implied.mean <- param$TY + (param$LY %*% implied.mean)
+            implied.covariance <- (param$LY %*% implied.covariance %*% 
+                t(param$LY)) + param$TE
+        }
+		return(list(implied.mean, implied.covariance))
+}

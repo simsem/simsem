@@ -12,15 +12,15 @@
 \usage{
 model(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = NULL, 
 	VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, MY = NULL, 
-	ME = NULL, modelType, indLab=NULL, facLab=NULL, groupLab="group", ngroups=1, smartStart=TRUE)
+	ME = NULL, modelType, indLab=NULL, facLab=NULL, groupLab="group", ngroups=1)
 model.cfa(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, VTE = NULL, 
 	VY = NULL, VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, 
-	indLab=NULL, facLab=NULL, groupLab="group", ngroups=1, smartStart=TRUE)
+	indLab=NULL, facLab=NULL, groupLab="group", ngroups=1)
 model.path(PS = NULL, RPS = NULL, BE = NULL, VPS = NULL, VE=NULL, AL = NULL, 
-	ME = NULL, indLab=NULL, facLab=NULL, groupLab="group", ngroups=1, smartStart=TRUE)
+	ME = NULL, indLab=NULL, facLab=NULL, groupLab="group", ngroups=1)
 model.sem(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL, 
 	VTE = NULL, VY = NULL, VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NULL, 
-	ME = NULL, indLab=NULL, facLab=NULL, groupLab="group", ngroups=1, smartStart=TRUE)
+	ME = NULL, indLab=NULL, facLab=NULL, groupLab="group", ngroups=1)
 }
 \arguments{
   \item{LY}{
@@ -79,9 +79,6 @@ model.sem(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL,
 }
   \item{ngroups}{
 	Integer. Number of groups for data generation, defaults to 1. If larger than one, all specified matrices will be repeated for each additional group. If any matrix argument is a list, the length of this list will be the number of groups and ngroups is ignored.
-}
-  \item{smartStart}{
-	Defaults to FALSE. If TRUE, population parameter values that are real numbers will be used as starting values.
 }
 }
 

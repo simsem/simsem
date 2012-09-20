@@ -1,40 +1,41 @@
 library(simsem)
 
-u57 <- simUnif(0.5, 0.7)
-u4 <- simUnif(-0.4, 0.4)
-u35 <- simUnif(0.3, 0.5)
-u2 <- simUnif(-0.2, 0.2)
-n01 <- simNorm(0, 1)
-
 loading <- matrix(0, 7, 2)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
-LX <- simMatrix(loading, "u57")
+mis.loading <- matrix(0, 7, 2)
+mis.loading[1:3, 2] <- "runif(1, -0.2, 0.2)"
+mis.loading[4:6, 1] <- "runif(1, -0.2, 0.2)"
+LY <- bind(loading, "runif(1, 0.5, 0.7)", misspec=mis.loading)
+
 latent.cor <- matrix(NA, 2, 2)
 diag(latent.cor) <- 1
-RPH <- symMatrix(latent.cor, "u35")
+RPS <- binds(latent.cor, "runif(1, 0.3, 0.5)")
+
 error.cor <- diag(7)
 error.cor[1:6, 7] <- NA
 error.cor[7, 1:6] <- NA
-RTD <- symMatrix(error.cor, "u4")
-VX <- simVector(rep(NA, 7), 1)
-CFA.Model.Aux <- simSetCFA(LX = LX, RPH = RPH, RTD = RTD, VX = VX) 
+RTE <- binds(error.cor, "runif(1, -0.4, 0.4)")
 
-mis.loading <- matrix(0, 7, 2)
-mis.loading[1:3, 2] <- NA
-mis.loading[4:6, 1] <- NA
-mis.LY <- simMatrix(mis.loading, "u2")
-CFA.Mis.Model <- simMisspecCFA(LY = mis.LY)
+VX <- bind(rep(NA, 7), 1)
 
-SimData <- simData(CFA.Model.Aux, 200, misspec = CFA.Mis.Model)
+CFA.Model.Aux <- model(LY = LY, RPS = RPS, RTE = RTE, VY = VX, modelType="CFA") 
 
-CFA.Model <- extract(CFA.Model.Aux, y=1:6)
+missmodel <- miss(pmMAR=0.1, cov=7, ignoreCols=8, threshold = 0.5)
 
-SimMissing <- simMissing(pmMAR=0.1, cov=7, numImps=5, threshold=0.5)
+loading2 <- matrix(0, 6, 2)
+loading2[1:3, 1] <- NA
+loading2[4:6, 2] <- NA
 
-SimModel <- simModel(CFA.Model)
+latent.cor2 <- matrix(NA, 2, 2)
+diag(latent.cor2) <- 1
 
-Output <- simResult(1000, SimData, SimModel, SimMissing)
+error.cor2 <- diag(NA, 6)
+
+CFA.Model <- estmodel(LY = loading2, PS = latent.cor2, TE = error.cor2, modelType="CFA", indLab=paste0("y", 1:6))
+out <- analyze(CFA.Model, dat, aux="y7")
+
+Output <- sim(1000, n=200, model=CFA.Model, generate=CFA.Model.Aux, miss=missmodel)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
-summaryParam(Output)
+summary(Output)

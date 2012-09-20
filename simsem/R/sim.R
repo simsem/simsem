@@ -4,7 +4,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
     sequential = FALSE, modelBoot = FALSE, realData = NULL, maxDraw = 50, misfitType = "f0", 
     misfitBounds = NULL, averageNumMisspec = NULL, optMisfit = NULL, optDraws = 50, 
     aux = NULL, seed = 123321, silent = FALSE, multicore = FALSE, cluster = FALSE, 
-    numProc = NULL, paramOnly = FALSE, dataOnly = FALSE, ...) {
+    numProc = NULL, paramOnly = FALSE, dataOnly = FALSE, smartStart = FALSE, ...) {
     start.time0 <- start.time <- proc.time()[3]
     timing <- list()
     require(parallel)
@@ -17,7 +17,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 	# Find the number of groups
 	ngroups <- 1
 	if(!is.null(generate)) {
-		ngroups <- max(model@generate$group)
+		ngroups <- max(generate@pt$group)
 	} else {
 		ngroups <- max(model@pt$group)
 	}
@@ -173,7 +173,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
                 facDist = facDist, indDist = indDist, errorDist = errorDist, sequential = sequential, 
                 realData = realData, maxDraw = maxDraw, misfitBounds = misfitBounds, 
                 averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, 
-                misfitType = misfitType, aux = aux, paramOnly = paramOnly, dataOnly = dataOnly, ...)
+                misfitType = misfitType, aux = aux, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart, ...)
             stopCluster(cl)
         } else {
             Result.l <- mclapply(simConds, runRep, model = model, generate = generate, 
@@ -181,7 +181,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
                 facDist = facDist, indDist = indDist, errorDist = errorDist, sequential = sequential, 
                 realData = realData, maxDraw = maxDraw, misfitBounds = misfitBounds, 
                 averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, 
-                misfitType = misfitType, aux = aux, mc.cores = numProc, paramOnly = paramOnly, dataOnly = dataOnly, ...)
+                misfitType = misfitType, aux = aux, mc.cores = numProc, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart, ...)
         }
     } else {
         Result.l <- lapply(simConds, runRep, model = model, generate = generate, 
@@ -189,7 +189,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
             indDist = indDist, errorDist = errorDist, sequential = sequential, realData = realData, 
             maxDraw = maxDraw, misfitBounds = misfitBounds, averageNumMisspec = averageNumMisspec, 
             optMisfit = optMisfit, optDraws = optDraws, misfitType = misfitType, 
-            aux = aux, paramOnly = paramOnly, dataOnly = dataOnly, ...)
+            aux = aux, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart, ...)
     }
     
 	if(dataOnly) {
@@ -327,7 +327,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
     outfun = NULL, facDist = NULL, indDist = NULL, indLab = NULL, errorDist = NULL, 
     sequential = FALSE, realData = NULL, silent = FALSE, modelBoot = FALSE, maxDraw = 50, 
     misfitType = "f0", misfitBounds = NULL, averageNumMisspec = NULL, optMisfit = NULL, 
-    optDraws = 50, timing = NULL, aux = NULL, paramOnly = FALSE, dataOnly = FALSE, ...) {
+    optDraws = 50, timing = NULL, aux = NULL, paramOnly = FALSE, dataOnly = FALSE, smartStart = TRUE, ...) {
     start.time0 <- start.time <- proc.time()[3]
     timing <- list()
     param <- NULL
@@ -350,7 +350,18 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
     if (is.null(generate)) {
         generate <- model
     }
-    
+	
+    indLabGen <- NULL
+	if (generate@modelType == "Path") {
+		indLabGen <- unique(generate@pt$lhs)
+	} else {
+		indLabGen <- unique(generate@pt$rhs[generate@pt$op == "=~"])
+	}
+	facLabGen <- NULL
+	if (generate@modelType != "Path") {
+		facLabGen <- unique(generate@pt$lhs[generate@pt$op == "=~"])
+	}
+			
     ## 1. Create a missing data template from simulation parameters.
     if (is.null(miss)) {
         if (!is.null(pmMAR) | !is.null(pmMCAR)) {
@@ -369,21 +380,23 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
     
     ## 2. Generate data (data) & store parameter values (paramSet)
     data <- simConds[[1]]  # either a paramSet or raw data
-    if (is.null(data)) 
-        {
-            # Need to draw parameters
-            genout <- generate(model = generate, n = n, maxDraw = maxDraw, misfitBounds = misfitBounds, 
-                misfitType = misfitType, averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, 
-                optDraws = optDraws, indDist = indDist, sequential = sequential, 
-                facDist = facDist, errorDist = errorDist, indLab = indLab, modelBoot = modelBoot, 
-                realData = realData, params = TRUE)
-            data <- genout[[1]]
-            psl <- genout[[2]]  
-			
-			# We need the real parameter values regardless of having model misspecification 
-			# because the real parameter values are what we really need to infer
-            paramSet <- lapply(psl, "[[", 1)  
-        }  # else: do nothing. Raw data.
+    if (is.null(data)) {
+		# Need to draw parameters
+		genout <- generate(model = generate, n = n, maxDraw = maxDraw, misfitBounds = misfitBounds, 
+			misfitType = misfitType, averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, 
+			optDraws = optDraws, indDist = indDist, sequential = sequential, 
+			facDist = facDist, errorDist = errorDist, indLab = indLab, modelBoot = modelBoot, 
+			realData = realData, params = TRUE)
+		data <- genout[[1]]
+		psl <- genout[[2]]  
+		
+		# We need the real parameter values regardless of having model misspecification 
+		# because the real parameter values are what we really need to infer
+		paramSet <- lapply(psl, "[[", 1) 
+		if(smartStart) {
+			model <- imposeSmartStart(model, paramSet, indLabGen, facLabGen, latent=(generate@modelType != "Path"))
+		}
+    }  # else: do nothing. Raw data.
     timing$GenerateData <- (proc.time()[3] - start.time)
     start.time <- proc.time()[3]
     ## 3. Impose Missing (if any)
@@ -479,19 +492,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 		## Keep parameters regardless of convergence - may want to examine
 		## non-convergent sets
 		if (!is.null(paramSet)) {
-			indLabGen <- NULL
-			if (generate@modelType == "Path") {
-				indLabGen <- unique(generate@pt$lhs)
-			} else {
-				indLabGen <- unique(generate@pt$rhs[generate@pt$op == "=~"])
-			}
-			facLabGen <- NULL
-			if (generate@modelType != "Path") {
-				facLabGen <- unique(generate@pt$lhs[generate@pt$op == "=~"])
-			}
-			if (generate@modelType == "SEM") {
-				paramSet <- changeScaleSEM(paramSet, generate)
-			}
+			
 			popParam <- reduceParamSet(paramSet, generate@dgen, indLabGen, facLabGen, 
 				aux)
 			
@@ -1002,101 +1003,64 @@ checkVar <- function(object) {
     covGLIST <- GLIST[names(GLIST) %in% c("theta", "psi")]
     return(any(sapply(covGLIST, function(x) any(diag(x) < 0))))
 } 
-				
-changeScaleSEM <- function(param, gen) {
-	# Find the scales that are based on fixed factor 
-	dgen <- gen@dgen
-	pt <- gen@pt
-	ptgroup <- split(as.data.frame(pt), pt$group)
-	facLab <- lapply(ptgroup, function(x) unique(x$lhs[x$op == "=~"]))
-	nfac <- lapply(facLab, length)
-	scale <- lapply(nfac, diag)
 
-	# Find which fixed factor
-	ptgroup <- split(as.data.frame(pt), pt$group)
-	
-	facPos <- mapply(function(temppt, templab) which((temppt$lhs %in% templab) & (as.character(temppt$rhs) == as.character(temppt$lhs)) & (temppt$op == "~~")), temppt = ptgroup, templab = facLab, SIMPLIFY=FALSE) # assume that the order is good
-	fixedPos <- mapply(function(temppt, temppos) temppt$free[temppos] == 0, temppt=ptgroup, temppos=facPos, SIMPLIFY=FALSE)
-	fixedValue <- mapply(function(temppt, temppos) temppt$ustart[temppos], temppt=ptgroup, temppos=facPos, SIMPLIFY=FALSE)	
+imposeSmartStart <- function(model, paramSet, indLab, facLab, latent) {
+	pt <- as.data.frame(model@pt)
+	param <- mapply(collapseParamSet, paramSet, unique(pt$group), MoreArgs=list(indLab=indLab, facLab=facLab, latent=latent), SIMPLIFY=FALSE)
+	param <- do.call(rbind, param)
+	temp <- merge(pt, param, by=c("group", "op", "lhs", "rhs"))
+	temp <- temp[order(temp$id),]
+	model@pt$ustart <- temp$ustart2
+	model
+}
 
-	
-	for(g in 1:length(ptgroup)) {
-		# dgengroup <- dgen[[g]]
-		# set <- findRecursiveSet(dgengroup$BE@free)
-		select <- fixedPos[[g]]
-		supposedVal <- fixedValue[[g]][select]
-		tempscale <- scale[[g]]
-		diag(tempscale)[select] <- diag(solve(sqrt(diag(diag(param[[g]]$PS[select, select, drop=FALSE])))) %*% sqrt(diag(supposedVal)))
-		scale[[g]] <- tempscale
-		
-		# ivvar <- set[[1]]
-		# ivtotalcov <- param$PS[ivvar, ivvar, drop=FALSE]
-		# nfac <- ncol(dgengroup$BE@free)
-		# for(i in 1:length(set)) {
-			# dvvar <- set[[i]]
-			# currentPS <- param$PS[dvvar, dvvar, drop=FALSE]
-			# diag(scaleMat)[dvvar] <- 1/sqrt(diag(currentPS))
-			# if(length(scalePS) > 1) {
-				# scalePSmat <- diag(scalePS)
-			# } else {
-				# scalePSmat <- matrix(scalePS, 1, 1)
-			# }
-			
-			
-			# param$BE[dvvar, ivvar] <- scalePSmat %*% param$BE[dvvar, ivvar, drop=FALSE] 
-			# param$PS[dvvar, dvvar] <- scalePSmat %*% currentPS %*% scalePSmat
-
-			
-		# }
-		# totalCov <- solve(diag(nfac) - param$BE) %*% param$PS %*% t(solve(diag(nfac) - param$BE))
-		# scaleLY <- diag(1/sqrt(diag(totalCov)))
-		# param$LY <- param$LY %*% scaleLY
+collapseParamSet <- function(param, group, indLab, facLab, latent) {
+	op <- NULL
+	lhs <- NULL
+	rhs <- NULL
+	ustart <- NULL
+	psLab <- NULL
+    if (latent) {
+        psLab <- facLab
+    } else {
+        psLab <- indLab
+    }
+	if(!is.null(param$LY)) {
+		lhs <- c(lhs, facLab[as.vector(col(param$LY))])
+		rhs <- c(rhs, indLab[as.vector(row(param$LY))])
+		op <- c(op, rep("=~", prod(dim(param$LY))))
+		ustart <- c(ustart, as.vector(param$LY))
 	}
-	
-	for(g in 1:length(ptgroup)) {
-		param[[g]]$LY <- param[[g]]$LY %*% solve(scale[[g]])
-		param[[g]]$PS <- scale[[g]] %*% param[[g]]$PS %*% scale[[g]]
-		#param[[g]]$BE <- scale[[g]] %*% param[[g]]$BE
-		param[[g]]$BE <- scale[[g]] %*% param[[g]]$BE %*% solve(scale[[g]])
+	if(!is.null(param$PS)) {
+		lhs <- c(lhs, psLab[col(param$PS)[lower.tri(param$PS, diag = TRUE)]])
+		rhs <- c(rhs, psLab[row(param$PS)[lower.tri(param$PS, diag = TRUE)]])
+		op <- c(op, rep("~~", sum(lower.tri(param$PS, diag = TRUE))))
+		ustart <- c(ustart, param$PS[lower.tri(param$PS, diag = TRUE)])
 	}
-	return(param)
-	# Find which manifest variable
-	
-	
-	# Find which equality --> Then borrow from fixed or manifest
-	
-	
-	
-	
-	
-	
-	# if("PS" %in% names(dgen)) dgen <- list(dgen)
-	# param <- param$param
-	# for(g in 1:length(param)) {
-		# dgengroup <- dgen[[g]]
-		# set <- findRecursiveSet(dgengroup$BE@free)
-		
-		# ivvar <- set[[1]]
-		# ivtotalcov <- param$PS[ivvar, ivvar, drop=FALSE]
-		# nfac <- ncol(dgengroup$BE@free)
-		# for(i in 2:length(set)) {
-			# dvvar <- set[[i]]
-			# currentPS <- param$PS[dvvar, dvvar, drop=FALSE]
-			# diag(scaleMat)[dvvar] <- 1/sqrt(diag(currentPS))
-			# if(length(scalePS) > 1) {
-				# scalePSmat <- diag(scalePS)
-			# } else {
-				# scalePSmat <- matrix(scalePS, 1, 1)
-			# }
-			
-			
-			# param$BE[dvvar, ivvar] <- scalePSmat %*% param$BE[dvvar, ivvar, drop=FALSE] 
-			# param$PS[dvvar, dvvar] <- scalePSmat %*% currentPS %*% scalePSmat
-
-			
-		# }
-		# totalCov <- solve(diag(nfac) - param$BE) %*% param$PS %*% t(solve(diag(nfac) - param$BE))
-		# scaleLY <- diag(1/sqrt(diag(totalCov)))
-		# param$LY <- param$LY %*% scaleLY
-	# }
+	if(!is.null(param$TE)) {
+		lhs <- c(lhs, indLab[col(param$TE)[lower.tri(param$TE, diag = TRUE)]])
+		rhs <- c(rhs, indLab[row(param$TE)[lower.tri(param$TE, diag = TRUE)]])
+		op <- c(op, rep("~~", sum(lower.tri(param$TE, diag = TRUE))))
+		ustart <- c(ustart, param$TE[lower.tri(param$TE, diag = TRUE)])
+	}
+	if(!is.null(param$BE)) {
+		lhs <- c(lhs, psLab[as.vector(row(param$BE))])
+		rhs <- c(rhs, psLab[as.vector(col(param$BE))])
+		op <- c(op, rep("~", prod(dim(param$BE))))
+		ustart <- c(ustart, as.vector(param$BE))
+	}
+	if(!is.null(param$AL)) {
+		lhs <- c(lhs, psLab)
+		rhs <- c(rhs, rep("", length(psLab)))
+		op <- c(op, rep("~1", length(psLab)))
+		ustart <- c(ustart, param$AL)
+	}
+	if(!is.null(param$TY)) {
+		lhs <- c(lhs, indLab)
+		rhs <- c(rhs, rep("", length(indLab)))
+		op <- c(op, rep("~1", length(indLab)))
+		ustart <- c(ustart, param$TY)
+	}
+	group <- rep(group, length(lhs))
+	data.frame(lhs=lhs, op=op, rhs=rhs, group=group, ustart2=ustart)
 }

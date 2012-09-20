@@ -9,7 +9,7 @@
 \usage{
 model.lavaan(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
 	TE = NULL, RTE = NULL, BE = NULL, VTE = NULL, VY = NULL, VPS = NULL, 
-	VE=NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, smartStart=TRUE)
+	VE=NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL)
 }
 \arguments{
   \item{object}{
@@ -59,9 +59,6 @@ model.lavaan(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL,
 }
   \item{ME}{
 	Model misspecification in total mean of endogenous factors (need to be a vector or a list of vectors). NOTE: Either endogenous factor intercept or total mean of endogenous factor is specified. Both cannot be simultaneously specified.
-}
-  \item{smartStart}{
-	Defaults to FALSE. If TRUE, population parameter values that are real numbers will be used as starting values.
 }
 }
 \value{

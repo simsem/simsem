@@ -265,7 +265,7 @@ rawDraw <- function(simDat, constraint = TRUE, misSpec = TRUE, parMisOnly = FALS
         missRaw <- rep(0, length(free))
         
         
-        if (constraint && misSpec) {
+        if (constraint) {
             conList <- NULL
             isLabel <- is.label(free)
             for (i in seq_along(free)) {
@@ -286,10 +286,12 @@ rawDraw <- function(simDat, constraint = TRUE, misSpec = TRUE, parMisOnly = FALS
                 }
                 # Any entry (fixed or freed) can optionally have misspecification, even free
                 # random parameters.
-                if (!is.nan(misspec) && length(misspec) > 0 && !is.empty(misspec[i])) {
-                  missRaw[i] <- eval(parse(text = misspec[i]))
-                  paramMis[i] <- param[i] + missRaw[i]
-                }
+				if (misSpec) {
+					if (!is.nan(misspec) && length(misspec) > 0 && !is.empty(misspec[i])) {
+					  missRaw[i] <- eval(parse(text = misspec[i]))
+					  paramMis[i] <- param[i] + missRaw[i]
+					}
+				}
             }
         } else if (misSpec) {
             # Don't apply constraints but apply misspecification

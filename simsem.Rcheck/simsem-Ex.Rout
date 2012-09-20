@@ -32,7 +32,7 @@ This is lavaan 0.5-9
 lavaan is BETA software! Please report any bugs.
  
 ###############################################################################################
-This is simsem 0.3-6
+This is simsem 0.3-7
 simsem is BETA software! Please report any bugs.
 simsem was developed at the University of Kansas Center for Research Methods and Data Analysis.
 ###############################################################################################
@@ -132,12 +132,12 @@ Class:    matrix    matrix    matrix   logical
 [6,]    0   NA
 [1] "Population Parameters/Starting Values:"
      [,1]  [,2] 
-[1,] "0.7" "0"  
-[2,] "0.7" "0"  
-[3,] "0.7" "0"  
-[4,] "0"   "0.7"
-[5,] "0"   "0.7"
-[6,] "0"   "0.7"
+[1,] "0.7" ""   
+[2,] "0.7" ""   
+[3,] "0.7" ""   
+[4,] ""    "0.7"
+[5,] ""    "0.7"
+[6,] ""    "0.7"
 [1] "Model misspecification"
      [,1]
 [1,]  NaN
@@ -506,12 +506,12 @@ Class:      list      list character character
 [6,]    0   NA
 [1] "Population Parameters/Starting Values:"
      [,1]  [,2] 
-[1,] "0.7" "0"  
-[2,] "0.7" "0"  
-[3,] "0.7" "0"  
-[4,] "0"   "0.7"
-[5,] "0"   "0.7"
-[6,] "0"   "0.7"
+[1,] "0.7" ""   
+[2,] "0.7" ""   
+[3,] "0.7" ""   
+[4,] ""    "0.7"
+[5,] ""    "0.7"
+[6,] ""    "0.7"
 [1] "Model misspecification"
      [,1]
 [1,]  NaN
@@ -544,7 +544,7 @@ Model Type
 11 11  f2 =~  y5    0     1    5    0.7   0     0          5
 12 12  f2 =~  y6    0     1    6    0.7   0     0          6
 13 13  f1 ~~  f1    0     1    0    1.0   0     0          0
-14 14  f1 ~~  f2    0     1    7     NA   0     0          7
+14 14  f1 ~~  f2    0     1    7    0.5   0     0          7
 15 15  f2 ~~  f2    0     1    0    1.0   0     0          0
 16 16  y1 ~~  y1    0     1    8     NA   0     0          8
 17 17  y1 ~~  y2    0     1    0    0.0   0     0          0
@@ -771,12 +771,12 @@ logical(0)
 [6,]    0   NA
 [1] "Population Parameters/Starting Values:"
      [,1]  [,2] 
-[1,] "0.7" "0"  
-[2,] "0.7" "0"  
-[3,] "0.7" "0"  
-[4,] "0"   "0.7"
-[5,] "0"   "0.7"
-[6,] "0"   "0.7"
+[1,] "0.7" ""   
+[2,] "0.7" ""   
+[3,] "0.7" ""   
+[4,] ""    "0.7"
+[5,] ""    "0.7"
+[6,] ""    "0.7"
 [1] "Model misspecification"
      [,1]
 [1,]  NaN
@@ -4070,7 +4070,7 @@ detaching 'package:parallel'
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  5.89 0.08 6.05 NA NA 
+Time elapsed:  6.01 0.11 6.29 NA NA 
 > grDevices::dev.off()
 null device 
           1 

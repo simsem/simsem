@@ -40,7 +40,7 @@ bind <- function(free = NULL, popParam = NULL, misspec = NULL, symmetric = FALSE
         if (symmetric) {
             stopifnot(isSymmetric(free))
         }
-        
+		
         ## PopParam Must be either character or numeric
         if (is.character(popParam)) {
             tryCatch(eval(parse(text = popParam)), error = function(e) stop(e))
@@ -58,7 +58,8 @@ bind <- function(free = NULL, popParam = NULL, misspec = NULL, symmetric = FALSE
             }
             if (!all(dim(free) == dim(popParam))) 
                 stop("Free matrix and popParam are not of same dimension")
-            if (all(!is.empty(popParam) != is.free(free))) {
+			popParam[!is.free(free)] <- ""
+            if (any(!is.empty(popParam) != is.free(free))) {
                 stop("Please assign a value for any free parameters")
             }
             paramMat <- matrix(as.character(popParam), nrow = nrow(popParam), ncol = ncol(popParam))
@@ -110,7 +111,8 @@ bind <- function(free = NULL, popParam = NULL, misspec = NULL, symmetric = FALSE
         } else if (is.vector(popParam)) {
             if ((length(free) != length(popParam)) && length(popParam) > 1) 
                 stop("Free vector and popParam are not the same length")
-            if (!all(!is.empty(popParam) & is.free(free))) {
+			popParam[!is.free(free)] <- ""			
+            if (any(!is.empty(popParam) != is.free(free))) {
                 stop("Please assign a value for any free parameters")
             }
             paramVec <- as.character(popParam)

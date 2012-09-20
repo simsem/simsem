@@ -2,70 +2,21 @@
 #TRUE and FALSE + Number of starting values\
 #Summary function put star for fixed parameters (Any nonzero values that is fixed is labelled as stars)
 
+# Current problems
+
 # Fix misfitType="rmsea", optMisfit="max", optDraws=10,  in example 4
-# Fix the starting values for each rep. It would be faster.
-# Reparameterize the population value to be suitable with the parameter estimates
-# Sample size cannot be varied across groups --> simResult is needed to be fixed for different sample sizes; maybe another slot called ngroups
 # Indicator and factor labels do not work.
+# Get type I and type II error ... ROC curve?
+# Reasons of nonconvergence
+# 	# Nonconvergence / Improper parameter estimates / Improper Standard Errors
+
+# Find non ASCII
+
+# library(tools)
+# dirMan <- "C:/Users/student/Dropbox/simsem/simsem/man/runMI.Rd"
+# showNonASCIIfile(dirMan)
 
 
-
-createImpliedMACS <- function(reducedParamSet) {
-    implied.mean <- NULL
-    implied.covariance <- NULL
-    ID <- matrix(0, nrow(reducedParamSet$PS), nrow(reducedParamSet$PS))
-    diag(ID) <- 1
-    if (!is.null(reducedParamSet$BE)) {
-        # Path or SEM
-        implied.mean <- solve(ID - reducedParamSet$BE) %*% reducedParamSet$AL
-        implied.covariance <- solve(ID - reducedParamSet$BE) %*% reducedParamSet$PS %*% 
-            t(solve(ID - reducedParamSet$BE))
-        if (!is.null(reducedParamSet$LY)) {
-            # SEM
-            implied.mean <- reducedParamSet$TY + (reducedParamSet$LY %*% implied.mean)
-            implied.covariance <- (reducedParamSet$LY %*% implied.covariance %*% 
-                t(reducedParamSet$LY)) + reducedParamSet$TE
-        }
-        
-    } else {
-        # CFA
-        implied.mean <- reducedParamSet$LY %*% reducedParamSet$AL + reducedParamSet$TY
-        implied.covariance <- (reducedParamSet$LY %*% reducedParamSet$PS %*% t(reducedParamSet$LY)) + 
-            reducedParamSet$TE
-    }
-    return(list(M = as.vector(implied.mean), CM = implied.covariance))
-}
-
-#####Result
-# Coverage by confidence interval
-# Bias from its expected value of random distribution
-# Trimed means #
-
-################################## Example 1 ##############################################
-##library(simsem)
-
-#install.packages("C:/Users/Sunthud/Desktop/My Dropbox/simsem/simsem_0.0-11.tar.gz", repos=NULL, type="source")
-#install.packages("C:/Users/student/Dropbox/simsem/simsem_0.1-1.tar.gz", repos=NULL, type="source")
-
-library(tools)
-dirMan <- "C:/Users/student/Dropbox/simsem/simsem/man/runMI.Rd"
-showNonASCIIfile(dirMan)
-
-myTry <- function(expr) {
-    withRestarts(
-        withCallingHandlers(expr,
-                            error = function(e) {
-                                t <- sys.calls()
-                                invokeRestart("myAbort", e, t)
-                            }),
-        myAbort = function(e, t)
-            list(error = e, traceback = t))
-}
-
-#test1 <- function(a, b) test2(a, a) + test2(b,b)
-#test2 <- function(a, b) (a+b)^2
-
-#myTry(test1(2, "2"))
 
 sourceDir <- function(path, trace = TRUE, ...) {
      for (nm in list.files(path, pattern = "\\.[RrSsQq]$")) {
@@ -92,6 +43,13 @@ dir <- "C:/Users/student/Dropbox/simsem/simsem/R/"
  sourceDir(dir)
 
 
+loading <- matrix(0, 6, 2)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+loadingVal <- matrix(0.7, 6, 2)
+LY <- bind(loading, loadingVal)
+
+intcept <- bind(c(NA, NA, NA, 0, 0, 0), rep(0.7, 6))
 
 # library(formatR)
 # tidy.dir(dir)
@@ -135,6 +93,7 @@ summaryParam(Output)
 # Try auxiliary
 m <- miss(pmMCAR=0.1, cov="group")
 Output <- sim(20, CFA.Model,n=200, miss=m)
+Output2 <- sim(20, CFA.Model,n=200, miss=m, smartStart=FALSE)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
@@ -309,6 +268,7 @@ summaryParam(Output)
 ############# Example 5 ################################
 #library(simsem)
 
+
 loading <- matrix(0, 8, 3)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
@@ -317,9 +277,13 @@ loading.start <- matrix("", 8, 3)
 loading.start[1:3, 1] <- 0.7
 loading.start[4:6, 2] <- 0.7
 loading.start[7:8, 3] <- "rnorm(1,0.6,0.05)"
-LY <- bind(loading, loading.start)
+loading.trivial <- matrix("runif(1, -0.2, 0.2)", 8, 3)
+loading.trivial[is.na(loading)] <- 0
+LY <- bind(loading, loading.start, misspec=loading.trivial)
 
-RTE <- binds(diag(8))
+error.cor.trivial <- matrix("rnorm(1, 0, 0.1)", 8, 8)
+diag(error.cor.trivial) <- 1
+RTE <- binds(diag(8), misspec=error.cor.trivial)
 
 factor.cor <- diag(3)
 factor.cor[1, 2] <- factor.cor[2, 1] <- NA
@@ -334,31 +298,27 @@ BE <- bind(path, path.start)
 
 SEM.model <- model(BE=BE, LY=LY, RPS=RPS, RTE=RTE, modelType="SEM")
 
-param <- draw(SEM.model)
-dat <- createData(param[[1]], n = 200)
-
-
-changeScaleSEM(lapply(param, "[[", 1), SEM.model)
-
-
 dat <- generate(SEM.model, n=300)
 out <- analyze(SEM.model, dat)
 
-Output <- sim(200, n=300, SEM.model) # Data.Mis.Con, Model.Con) #, multicore=TRUE)
+Output <- sim(200, n=300, SEM.model, smartStart=FALSE) 
+Output2 <- sim(200, n=300, SEM.model) #, smartStart=FALSE) 
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
-summaryParam(Output)
+summary(Output)
 
-
-
-# TRY
+# No misspecification
 
 
 loading <- matrix(0, 8, 3)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
-loading[7:8, 3] <- NA
-LY <- bind(loading, 0.7)
+loading[7:8, 3] <- "con1"
+loading.start <- matrix("", 8, 3)
+loading.start[1:3, 1] <- 0.7
+loading.start[4:6, 2] <- 0.7
+loading.start[7:8, 3] <- 0.6
+LY <- bind(loading, loading.start)
 
 RTE <- binds(diag(8))
 
@@ -369,31 +329,40 @@ RPS <- binds(factor.cor, 0.5)
 path <- matrix(0, 3, 3)
 path[3, 1:2] <- NA
 path.start <- matrix(0, 3, 3)
-path.start[3, 1] <- 0.6
-path.start[3, 2] <- 0.4
+path.start[3, 1] <- 0.4
+path.start[3, 2] <- 0.2
 BE <- bind(path, path.start)
 
 SEM.model <- model(BE=BE, LY=LY, RPS=RPS, RTE=RTE, modelType="SEM")
 
-Output <- sim(1000, n=300, SEM.model) # Data.Mis.Con, Model.Con) #, multicore=TRUE)
+draw(SEM.model)
+
+Output <- sim(1000, n=300, SEM.model, smartStart=TRUE) 
+Output2 <- sim(1000, n=300, SEM.model)#, smartStart=FALSE) 
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
-summaryParam(Output)
+summary(Output)
 
-# TRY2
+# No fillParam
 
 
 loading <- matrix(0, 8, 3)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
-loading[7:8, 3] <- NA
-LY <- bind(loading, 0.7)
+loading[7:8, 3] <- "con1"
+loading.start <- matrix("", 8, 3)
+loading.start[1:3, 1] <- 0.7
+loading.start[4:6, 2] <- 0.7
+loading.start[7:8, 3] <- 0.6
+LY <- bind(loading, loading.start)
 
-TE <- binds(diag(NA, 8), diag(0.51, 8))
+TE <- binds(diag(NA, 8), 0.51)
 
-factor.cor <- diag(3)
+factor.cor <- diag(1, 3)
 factor.cor[1, 2] <- factor.cor[2, 1] <- NA
-PS <- binds(factor.cor, 0.5)
+factor.cor.val <- matrix("", 3, 3)
+factor.cor.val[1, 2] <- factor.cor.val[2, 1] <- 0.5
+PS <- binds(factor.cor, factor.cor.val)
 
 path <- matrix(0, 3, 3)
 path[3, 1:2] <- NA
@@ -403,11 +372,11 @@ path.start[3, 2] <- 0.4
 BE <- bind(path, path.start)
 
 SEM.model <- model(BE=BE, LY=LY, PS=PS, TE=TE, modelType="SEM")
-
-Output <- sim(1000, n=300, SEM.model) # Data.Mis.Con, Model.Con) #, multicore=TRUE)
+Output <- sim(1000, n=300, SEM.model, smartStart=FALSE) 
+Output2 <- sim(1000, n=300, SEM.model)#, smartStart=FALSE) 
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
-summaryParam(Output)
+summary(Output)
 
 ################################# Example 6 Multiple Groups
 
@@ -522,17 +491,32 @@ getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
 
+########################################## Example 7 ###################
+#library(simsem)
+library(lavaan)
+loading <- matrix(0, 9, 3)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+loading[7:9, 3] <- NA
+cfamodel <- estmodel(LY=loading, modelType="CFA", indLab=paste("x", 1:9, sep=""))
+out <- analyze(cfamodel, HolzingerSwineford1939)
 
-################################## Example 7 ##########################################
+datamodel.nomis <- model.lavaan(out, std=TRUE, LY=loading.mis)
+output.nomis <- sim(200, n=nrow(HolzingerSwineford1939), datamodel.nomis)
+
+pValue(out, output.nomis)
+
+loading.mis <- matrix("runif(1, -0.2, 0.2)", 9, 3)
+loading.mis[is.na(loading)] <- 0
+
+datamodel.mis <- model.lavaan(out, std=TRUE, LY=loading.mis)
+output.mis <- sim(200, n=nrow(HolzingerSwineford1939), datamodel.mis)
+
+pValue(out, output.mis)
+
+################################## Example 8 ##########################################
 #library(simsem)
 
-#u2 <- simUnif(-0.2, 0.2)
-#u49 <- simUnif(0.4, 0.9)
-#u36 <- simUnif(0.3, 0.6)
-#n1 <- simNorm(0, 0.1)
-#n21 <- simNorm(0.2, 0.1)
-#n31 <- simNorm(0.3, 0.1)
-#n41 <- simNorm(0.4, 0.1)
 loading <- matrix(0, 9, 4)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
@@ -580,7 +564,7 @@ plotCutoff(Output, 0.05)
 summary(Output)
 
 
-################################## Example 8 ##########################################
+################################## Example 9 ##########################################
 #library(simsem)
 
 loading <- matrix(0, 48, 4)
@@ -618,7 +602,7 @@ getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summary(Output)
 
-################################### Example 9 ######################################
+################################### Example 10 ######################################
 
 #library(simsem)
 
@@ -671,8 +655,7 @@ getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
 
-
-################### Example 10 ##################################
+################### Example 11 ##################################
 
 #library(simsem)
 
@@ -712,7 +695,7 @@ plotPowerFit(Output.ALT, cutoff=cutoff2, usedFit=c("RMSEA", "SRMR", "CFI"))
 plotPowerFit(Output.ALT, Output.NULL, cutoff=cutoff2, usedFit=c("RMSEA", "SRMR", "CFI"))
 
 
-############################# Example 9 #############################
+############################# Example 12 #############################
 
 #library(simsem)
 
@@ -734,13 +717,7 @@ RTE <- binds(error.cor)
 
 CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA") 
 
-# margins 	
-
-# a character vector specifying all the marginal distributions. See details below.
-
-# paramMargins 	
-
-# a list whose each component is a list of named components, giving the parameter values of the marginal distributions. See details below.
+distname <- c(rep("t", 4), rep("chisq", 8))
 
 d1 <- list(df=2)
 d2 <- list(df=3)
@@ -750,9 +727,12 @@ d5 <- list(df=3)
 d6 <- list(df=4)
 d7 <- list(df=5)
 d8 <- list(df=6)
+d9 <- list(df=3)
+d10 <- list(df=4)
+d11 <- list(df=5)
+d12 <- list(df=6)
 
-
-dist <- bindDist(c(rep("t", 4), rep("chisq", 8)), d1, d2, d3, d4, d5, d6, d7, d8, d5, d6, d7, d8)
+dist <- bindDist(distname, d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12, reverse=c(rep(FALSE, 8), rep(TRUE, 4)))
 
 dat <- generate(CFA.Model, n=200, indDist=dist)
 out <- analyze(CFA.Model, dat, estimator="mlr")
@@ -762,7 +742,7 @@ getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summary(Output)
 
-##################################### Example 10 #######################
+##################################### Example 13 #######################
 
 #library(simsem)
 
@@ -859,27 +839,6 @@ summaryParam(Output)
 
 
 
-########################################## Example 13 ###################
-#library(simsem)
-library(lavaan)
-loading <- matrix(0, 9, 3)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-loading[7:9, 3] <- NA
-cfamodel <- estmodel(LY=loading, modelType="CFA", indLab=paste("x", 1:9, sep=""))
-out <- analyze(cfamodel, HolzingerSwineford1939)
-
-### Making result object without trivial model misspecification
-#output <- runFit(SimModel, HolzingerSwineford1939, 1000)
-#pValue(out, output)
-
-loading.mis <- matrix("runif(1, -0.2, 0.2)", 9, 3)
-loading.mis[is.na(loading)] <- 0
-
-datamodel <- model.lavaan(out, std=TRUE, LY=loading.mis)
-output <- sim(200, n=nrow(HolzingerSwineford1939), datamodel)
-
-pValue(out, output)
 
 ############################### Example 14 #######################
 

@@ -12,7 +12,7 @@ pmMCAR = NULL, pmMAR = NULL, facDist = NULL, indDist = NULL, errorDist = NULL, s
 modelBoot = FALSE, realData = NULL, maxDraw = 50, misfitType = "f0", 
 misfitBounds = NULL, averageNumMisspec = NULL, optMisfit=NULL, optDraws = 50, 
 aux = NULL, seed = 123321, silent = FALSE, multicore = FALSE, cluster = FALSE, numProc = NULL,  
-paramOnly = FALSE, dataOnly=FALSE, ...)
+paramOnly = FALSE, dataOnly=FALSE, smartStart=FALSE, ...)
 }
 \arguments{
   \item{nRep}{
@@ -105,6 +105,9 @@ paramOnly = FALSE, dataOnly=FALSE, ...)
 }
   \item{dataOnly}{ 
 	If \code{TRUE}, only the data generated from each replication will be returned.
+}
+  \item{smartStart}{
+	Defaults to FALSE. If TRUE, population parameter values that are real numbers will be used as starting values. From testing in small models, the time elapsed for putting population values as starting values was greater than the time reduced during the analysis part. The convergence rates are the same in smartStart of TRUE or FALSE. 
 }
   \item{\dots}{ 
 	Additional arguments to be passed to lavaan.
