@@ -33,6 +33,10 @@
       <section id="main_content" class="inner">
         <h1>Version History (Official)</h1>
 
+<h2>Version 0.3-7 09/19/12</h2>
+
+<p>This version is availabe on KRAN only. The <strong>sim</strong> function has the option, <em>smartStart</em>, to use population values as starting values in data analysis. The default is FALSE (not use the population values as starting values). From brief testing, using the population values could make the simulation time longer because of the data management in parsing population values as starting values. We also found the bug that the equality constraints are not applied when there are equality constraints in the model but model misspecification is not specified (when the model misspecification is specified, the previous version did correctly). We fix this bug now. This bug will be applied for those people who use random-parameter data generation model. If any current users have equality constraints in their models, the parameters in the equally constrained values are random, and model misspecification is not specified, the accuracy of the results might be compromised. We also fix the problem in all full SEM models that the population parameters did not match with the parameter estimates. In this version, the parameters are reparameterized to match the analysis result (e.g., change the residual variances of the data-generation population to 1 to match the fixed values in the analysis model). We also fix a couple of minor bugs in this version too. Finally, we still keep updating the documentation. Currently, Example 12 of the new version is posted.</p>
+
 <h2>Version 0.3-6 09/13/12</h2>
 
 <p>Fix the errors in the sim function when the noninvariance model is run and when the <em>dataOnly</em> and <em>paramOnly</em> arguments are used. This version also allows the number of observations to be unequal across groups.</p>

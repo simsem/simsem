@@ -33,6 +33,15 @@
       <section id="main_content" class="inner">
         <h1>Version History (Technical)</h1>
 
+<h2>Version 0.3-7 09/19/12</h2>
+
+- Delete the <em>smartStart</em> argument from the <strong>model</strong> family of functions
+- Add the <em>smartStart</em> argument from in the <strong>sim</strong> function, as well as adding the <strong>imposeSmartStart</strong> function to impose parameter values to the parameter table and the <strong>collapseParamSet function to vectorize parameter matrices.
+- Add the <strong>changeScaleSEM</strong> function to reparameterize the population values. In SEM type of model, the parameter values of residual variance are less than 1 whereas the analysis model fix the residual variance as 1. The parameter values are reparameterized to make the residual variance equals 1. Then add the <strong>changeScaleSEM</strong> function inside the <strong>generate</strong> function in order to generate data from the reparameterized parameters. The <strong>changeScaleSEM</strong> function works for fixed-factor method, manifest-variable method, and constraints in loadings across factor.
+- Fix the bug in the <strong>rawDraw</strong> function that the model constraints does not work when the constraints are specified but the model misspecification is not specified.
+- Delete the <strong>extract</strong> function and use the <em>drop=FALSE</em> in the <strong>"["</strong> function instead
+- Fix the bug in the <strong>bind</strong> function when fixed values are specified with <em>popParam</em>.
+
 <h2>Version 0.3-6 09/13/12</h2>
 
 - Fix the bug in the <strong>sim</strong> function when the number of factors are not equal across groups.
