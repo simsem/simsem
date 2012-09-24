@@ -579,7 +579,7 @@ eqIdx <- function(mat, id) {
 }
 
 ## Calculate starting values. Needs work, but no time to finish yet.
-startingVal <- function(free, popParam, smart = TRUE) {
+startingVal <- function(free, popParam, smart = FALSE) {
 	# smartStart & smart are depreciated from the model set of functions. Will be provided in the sim function instead.
     if (is.matrix(free) && isSymmetric(free)) {
         flat <- as.vector(free[lower.tri(free, diag = TRUE)])
