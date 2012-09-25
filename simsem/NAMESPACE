@@ -26,4 +26,4 @@ export(bindDist, rawDraw,
 	plotDist, 
 	summaryPopulation, getPopulation, setPopulation, 
 	getCutoffNonNested, plotCutoffNonNested, plotPowerFitNonNested, likRatioFit, pValueNested, pValueNonNested,
-	bind, binds, generate, analyze, sim, draw, createData, miss)
+	bind, binds, generate, analyze, sim, draw, createData, miss, exportData)

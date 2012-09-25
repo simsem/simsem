@@ -17,6 +17,8 @@ createData              Create data from a set of drawn parameters.
 draw                    Draw parameters from a 'SimSem' object.
 estmodel                Shortcut for data analysis template for
                         simulation.
+exportData              Export data sets for analysis with outside SEM
+                        program.
 findFactorIntercept     Find factor intercept from regression
                         coefficient matrix and factor total means
 findFactorMean          Find factor total means from regression

@@ -32,7 +32,7 @@ This is lavaan 0.5-9
 lavaan is BETA software! Please report any bugs.
  
 ###############################################################################################
-This is simsem 0.3-8
+This is simsem 0.3-9
 simsem is BETA software! Please report any bugs.
 simsem was developed at the University of Kansas Center for Research Methods and Data Analysis.
 ###############################################################################################
@@ -325,14 +325,14 @@ Model Type
 [1] "CFA"
 ========= Fit Indices Cutoffs ============
            Alpha
-Fit Indices      0.1     0.05     0.01    0.001     Mean       SD
-      Chi   1.71e+01 1.73e+01 1.75e+01 1.75e+01 1.16e+01  5.62615
-      AIC   7.51e+03 7.51e+03 7.51e+03 7.51e+03 7.45e+03 69.16470
-      BIC   7.58e+03 7.59e+03 7.59e+03 7.59e+03 7.52e+03 69.16470
-      RMSEA 4.25e-02 4.30e-02 4.34e-02 4.35e-02 2.23e-02  0.02130
-      CFI   9.92e-01 9.92e-01 9.91e-01 9.91e-01 9.96e-01  0.00402
-      TLI   9.87e-01 9.86e-01 9.85e-01 9.85e-01 9.96e-01  0.00918
-      SRMR  1.87e-02 1.89e-02 1.90e-02 1.90e-02 1.47e-02  0.00407
+Fit Indices      0.1     0.05     0.01    0.001     Mean     SD
+      Chi     17.123   17.314   17.468   17.502   11.619  5.626
+      AIC   7506.931 7510.452 7513.269 7513.903 7448.091 69.165
+      BIC   7582.794 7586.315 7589.132 7589.766 7523.954 69.165
+      RMSEA    0.042    0.043    0.043    0.043    0.022  0.021
+      CFI      0.992    0.992    0.991    0.991    0.996  0.004
+      TLI      0.987    0.986    0.985    0.985    0.996  0.009
+      SRMR     0.019    0.019    0.019    0.019    0.015  0.004
 ========= Parameter Estimates and Standard Errors ============
          Estimate.Average Estimate.SD Average.SE Power..Not.equal.0. Std.Est
 1.f1=~y1            0.691       0.028      0.041                   1   0.697
@@ -382,10 +382,13 @@ CFI   -0.977  0.791  0.791 -0.966  1.000  0.985 -0.978
 TLI   -0.998  0.710  0.710 -0.990  0.985  1.000 -0.997
 SRMR   1.000 -0.667 -0.667  0.997 -0.978 -0.997  1.000
 ================== Replications =====================
-Number of Replications
-[1] 5
-Number of Converged Replications
-[1] 5
+Number of replications = 5 
+Number of converged replications = 5 
+Number of nonconverged replications: 
+   1. Nonconvergent Results = 0 
+   2. At least one SE were negative or NA = 0 
+   3. At least one variance estimates were negative = 0 
+   4. Nonconvergent results from multiple imputation = 0 
 > 
 > # Short summary of the simulation result
 > summaryShort(Output)
@@ -394,18 +397,18 @@ RESULT OBJECT
 Model Type: CFA 
 Convergence 5 / 5 
 Sample size: 500 
-Sample size: 0 
-Sample size: 0 
+Percent Completely Missing at Random: 0 
+Percent Missing at Random: 0 
 ========= Fit Indices Cutoffs ============
            Alpha
-Fit Indices     0.05     Mean       SD
-      Chi   1.73e+01 1.16e+01  5.62615
-      AIC   7.51e+03 7.45e+03 69.16470
-      BIC   7.59e+03 7.52e+03 69.16470
-      RMSEA 4.30e-02 2.23e-02  0.02130
-      CFI   9.92e-01 9.96e-01  0.00402
-      TLI   9.86e-01 9.96e-01  0.00918
-      SRMR  1.89e-02 1.47e-02  0.00407
+Fit Indices     0.05     Mean     SD
+      Chi     17.314   11.619  5.626
+      AIC   7510.452 7448.091 69.165
+      BIC   7586.315 7523.954 69.165
+      RMSEA    0.043    0.022  0.021
+      CFI      0.992    0.996  0.004
+      TLI      0.986    0.996  0.009
+      SRMR     0.019    0.015  0.004
 > 
 > # Find the fit index cutoff
 > getCutoff(Output, 0.05)
@@ -960,6 +963,38 @@ logical(0)
 > CFA.Model <- estmodel.cfa(LY = loading)
 > Path.Model <- estmodel.path(BE = path)
 > SEM.Model <- estmodel.sem(BE = path, LY = loading)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("exportData")
+> ### * exportData
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: exportData
+> ### Title: Export data sets for analysis with outside SEM program.
+> ### Aliases: exportData
+> 
+> ### ** Examples
+> 
+> loading <- matrix(0, 6, 2)
+> loading[1:3, 1] <- NA
+> loading[4:6, 2] <- NA
+> LY <- bind(loading, 0.7)
+> 
+> latent.cor <- matrix(NA, 2, 2)
+> diag(latent.cor) <- 1
+> RPS <- binds(latent.cor, 0.5)
+> 
+> RTE <- binds(diag(6))
+> 
+> VY <- bind(rep(NA,6),2)
+> 
+> CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
+> 
+> ## Export 20 replications to an external data file (not run).
+> #exportData(20, CFA.Model, 200)
 > 
 > 
 > 
@@ -3323,14 +3358,14 @@ Model Type
 [1] "CFA"
 ========= Fit Indices Cutoffs ============
            Alpha
-Fit Indices      0.1     0.05     0.01    0.001     Mean       SD
-      Chi   1.71e+01 1.86e+01 1.99e+01 2.02e+01 1.08e+01  5.76562
-      AIC   3.15e+03 3.16e+03 3.17e+03 3.17e+03 3.11e+03 39.64869
-      BIC   3.21e+03 3.22e+03 3.23e+03 3.23e+03 3.17e+03 39.64869
-      RMSEA 7.35e-02 8.04e-02 8.59e-02 8.72e-02 2.80e-02  0.04027
-      CFI   9.71e-01 9.65e-01 9.61e-01 9.60e-01 9.89e-01  0.01736
-      TLI   9.45e-01 9.35e-01 9.27e-01 9.25e-01 9.84e-01  0.03558
-      SRMR  3.78e-02 3.85e-02 3.91e-02 3.92e-02 3.01e-02  0.00759
+Fit Indices      0.1     0.05     0.01    0.001     Mean     SD
+      Chi     17.106   18.649   19.884   20.162   10.783  5.766
+      AIC   3146.715 3157.195 3165.578 3167.465 3110.139 39.649
+      BIC   3209.384 3219.863 3228.246 3230.133 3172.807 39.649
+      RMSEA    0.074    0.080    0.086    0.087    0.028  0.040
+      CFI      0.971    0.965    0.961    0.960    0.989  0.017
+      TLI      0.945    0.935    0.927    0.925    0.984  0.036
+      SRMR     0.038    0.039    0.039    0.039    0.030  0.008
 ========= Parameter Estimates and Standard Errors ============
          Estimate.Average Estimate.SD Average.SE Power..Not.equal.0. Std.Est
 1.f1=~y1            0.649       0.107      0.073                 1.0   0.671
@@ -3382,10 +3417,13 @@ CFI   -0.994  0.108  0.108 -0.961  1.000  0.996 -0.831
 TLI   -0.999  0.055  0.055 -0.973  0.996  1.000 -0.873
 SRMR   0.881  0.072  0.072  0.893 -0.831 -0.873  1.000
 ================== Replications =====================
-Number of Replications
-[1] 5
-Number of Converged Replications
-[1] 5
+Number of replications = 5 
+Number of converged replications = 5 
+Number of nonconverged replications: 
+   1. Nonconvergent Results = 0 
+   2. At least one SE were negative or NA = 0 
+   3. At least one variance estimates were negative = 0 
+   4. Nonconvergent results from multiple imputation = 0 
 > 
 > # Example of data transformation: Transforming to standard score
 > fun1 <- function(data) {
@@ -3407,14 +3445,14 @@ Model Type
 [1] "CFA"
 ========= Fit Indices Cutoffs ============
            Alpha
-Fit Indices      0.1     0.05     0.01    0.001     Mean       SD
-      Chi   1.71e+01 1.86e+01 1.99e+01 2.02e+01 1.08e+01  5.76562
-      AIC   3.16e+03 3.16e+03 3.16e+03 3.16e+03 3.14e+03 31.77623
-      BIC   3.22e+03 3.22e+03 3.22e+03 3.22e+03 3.20e+03 31.77623
-      RMSEA 7.35e-02 8.04e-02 8.59e-02 8.72e-02 2.80e-02  0.04027
-      CFI   9.71e-01 9.65e-01 9.61e-01 9.60e-01 9.89e-01  0.01736
-      TLI   9.45e-01 9.35e-01 9.27e-01 9.25e-01 9.84e-01  0.03558
-      SRMR  3.78e-02 3.85e-02 3.91e-02 3.92e-02 3.01e-02  0.00759
+Fit Indices      0.1     0.05     0.01    0.001     Mean     SD
+      Chi     17.106   18.649   19.884   20.162   10.783  5.766
+      AIC   3160.829 3161.240 3161.569 3161.643 3140.326 31.776
+      BIC   3223.497 3223.908 3224.237 3224.311 3202.994 31.776
+      RMSEA    0.074    0.080    0.086    0.087    0.028  0.040
+      CFI      0.971    0.965    0.961    0.960    0.989  0.017
+      TLI      0.945    0.935    0.927    0.925    0.984  0.036
+      SRMR     0.038    0.039    0.039    0.039    0.030  0.008
 ========= Parameter Estimates and Standard Errors ============
          Estimate.Average Estimate.SD Average.SE Power..Not.equal.0. Std.Est
 1.f1=~y1            0.669       0.074      0.076                   1   0.671
@@ -3466,10 +3504,13 @@ CFI   -0.994  0.363  0.363 -0.961  1.000  0.996 -0.831
 TLI   -0.999  0.409  0.409 -0.973  0.996  1.000 -0.873
 SRMR   0.881 -0.595 -0.595  0.893 -0.831 -0.873  1.000
 ================== Replications =====================
-Number of Replications
-[1] 5
-Number of Converged Replications
-[1] 5
+Number of replications = 5 
+Number of converged replications = 5 
+Number of nonconverged replications: 
+   1. Nonconvergent Results = 0 
+   2. At least one SE were negative or NA = 0 
+   3. At least one variance estimates were negative = 0 
+   4. Nonconvergent results from multiple imputation = 0 
 > 
 > # Get modification indices
 > getExtraOutput(Output)
@@ -4070,7 +4111,7 @@ detaching 'package:parallel'
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  5.55 0.03 5.73 NA NA 
+Time elapsed:  5.5 0.06 5.66 NA NA 
 > grDevices::dev.off()
 null device 
           1 

@@ -1,5 +1,5 @@
 \name{exportData}
-\alias{exporeData}
+\alias{exportData}
 \title{
 	Export data sets for analysis with outside SEM program.
 }

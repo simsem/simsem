@@ -7,8 +7,7 @@
 # Fix misfitType="rmsea", optMisfit="max", optDraws=10,  in example 4
 # Indicator and factor labels do not work.
 # Get type I and type II error ... ROC curve?
-# Reasons of nonconvergence
-# 	# Nonconvergence / Improper parameter estimates / Improper Standard Errors
+# Check improper covariance values
 
 # Find non ASCII
 

@@ -10,6 +10,7 @@ estmodel	estmodel
 estmodel.cfa	estmodel
 estmodel.path	estmodel
 estmodel.sem	estmodel
+exportData	exportData
 findFactorIntercept	findFactorIntercept
 findFactorMean	findFactorMean
 findFactorResidualVar	findFactorResidualVar

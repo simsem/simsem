@@ -18,7 +18,7 @@ seed = 123321, silent = FALSE, multicore = FALSE, numProc = NULL,  params = FALS
 dat <- sim(nRep=nRep, model=model, n=n, program = program, fileStem = fileStem, miss = miss, datafun = datafun, 
 pmMCAR = pmMCAR, pmMAR = pmMAR, facDist = facDist, indDist = indDist, errorDist = errorDist, sequential = sequential, 
 modelBoot = modelBoot, realData = realData, maxDraw = maxDraw, misfitType = misfitType, 
-misfitBounds = misfitBouds, averageNumMisspec = averageNumMisspec, optMisfit=optMisfit, optDraws = optDraws, 
+misfitBounds = misfitBounds, averageNumMisspec = averageNumMisspec, optMisfit=optMisfit, optDraws = optDraws, 
 seed = seed, silent = silent, multicore = multicore, numProc = numProc, dataOnly=TRUE)
 
 #Replace missing data with NA with -999
@@ -53,7 +53,7 @@ if(params) {
 datP <- sim(nRep=nRep, model=model, n=n, program = program, fileStem = fileStem, miss = miss, datafun = datafun, 
 pmMCAR = pmMCAR, pmMAR = pmMAR, facDist = facDist, indDist = indDist, errorDist = errorDist, sequential = sequential, 
 modelBoot = modelBoot, realData = realData, maxDraw = maxDraw, misfitType = misfitType, 
-misfitBounds = misfitBouds, averageNumMisspec = averageNumMisspec, optMisfit=optMisfit, optDraws = optDraws, 
+misfitBounds = misfitBounds, averageNumMisspec = averageNumMisspec, optMisfit=optMisfit, optDraws = optDraws, 
 seed = seed, silent = silent, multicore = multicore, numProc = numProc, paramOnly=TRUE)
 
 datP
