@@ -338,7 +338,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
     extra <- NA
     FMI1 <- NULL
     FMI2 <- NULL
-    converged <- FALSE
+    converged <- 1
     n <- simConds[[2]]
     pmMCAR <- simConds[[3]]
     pmMAR <- simConds[[4]]
@@ -447,14 +447,17 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 	if (!dataOnly) {
 		if (!is.null(out)) {
 			try(se <- inspect(out, "se"))
-			try(converged <- inspect(out, "converged"))
+			try(converged <- as.numeric(!inspect(out, "converged")))
 			try(check <- sum(unlist(lapply(se, sum))))
 			try(negVar <- checkVar(out))
-			try(if (is.na(check) || check == 0 || negVar) {
-				converged <- FALSE
+			try(if (is.na(check) || check == 0) {
+				converged <- 2
+			}, silent = TRUE)
+			try(if (negVar) {
+				converged <- 3
 			}, silent = TRUE)
 			if(is(out, "lavaanStar") && length(out@imputed) > 0) {
-				if(out@imputed[[1]][1] < miss@convergentCutoff) converged <- FALSE
+				if(out@imputed[[1]][1] < miss@convergentCutoff) converged <- 4
 			}
 		}
 		
@@ -471,7 +474,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 			facLab <- unique(model@pt$lhs[model@pt$op == "=~"])
 		}
 		
-		if (converged) {
+		if (converged == 0) {
 			outLab <- out@Model@dimNames
 			fit <- extractLavaanFit(out)
 			coef <- reduceLavaanParam(inspect(out, "coef"), dgen, indLab, facLab)
@@ -516,7 +519,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 		}
 		
 		if(!is.null(miss) && miss@m > 0) {
-			if (converged) {
+			if (converged == 0) {
 				fmiOut <- out@imputed[[2]]
 				FMI1 <- fmiOut[,5]
 				FMI2 <- fmiOut[,6]

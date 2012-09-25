@@ -224,7 +224,7 @@ summaryFit <- function(object, alpha = NULL) {
 
 summaryConverge <- function(object) {
     result <- list()
-    converged <- object@converged
+    converged <- object@converged == 0
     numnonconverged <- sum(!converged)
     if (numnonconverged == 0) 
         stop("You are good! All replications were converged!")
@@ -322,6 +322,6 @@ getExtraOutput <- function(object) {
     if (length(object@extraOut) == 0) {
         stop("This simulation result does not contain any extra results")
     } else {
-        return(object@extraOut[object@converged])
+        return(object@extraOut[object@converged == 0])
     }
 } 

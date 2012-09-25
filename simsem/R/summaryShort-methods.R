@@ -44,24 +44,24 @@ setMethod("summaryShort", signature = "SimResult", definition = function(object,
 		cat("This object contains only real and misspecified parameter values.\nUsers may use 'summaryPopulation', 'summaryMisspec', and 'plotMisfit' functions to investigate the parmeter values.\n")
 	} else {
 		cleanObj <- clean(object)
-		cat(paste("Convergence", sum(object@converged == TRUE), "/", object@nRep, "\n"))
+		cat(paste("Convergence", sum(object@converged == 0), "/", object@nRep, "\n"))
 		if (length(unique(object@n)) > 1) {
 			cat(paste("Sample size:", min(object@n), "to", max(object@n),"\n"))
 		} else {
 			cat(paste("Sample size:", unique(object@n),"\n"))
 		}
 		if (length(unique(object@pmMCAR)) > 1) {
-			cat(paste("Sample size:", min(object@pmMCAR), "to", max(object@pmMCAR),"\n"))
+			cat(paste("Percent Completely Missing at Random:", min(object@pmMCAR), "to", max(object@pmMCAR),"\n"))
 		} else {
-			cat(paste("Sample size:", unique(object@pmMCAR),"\n"))
+			cat(paste("Percent Completely Missing at Random:", unique(object@pmMCAR),"\n"))
 		}
 		if (length(unique(object@pmMAR)) > 1) {
-			cat(paste("Sample size:", min(object@pmMAR), "to", max(object@pmMAR),"\n"))
+			cat(paste("Percent Missing at Random:", min(object@pmMAR), "to", max(object@pmMAR),"\n"))
 		} else {
-			cat(paste("Sample size:", unique(object@pmMAR),"\n"))
+			cat(paste("Percent Missing at Random:", unique(object@pmMAR),"\n"))
 		}
 		cat("========= Fit Indices Cutoffs ============\n")
-		print(summaryFit(cleanObj, alpha = alpha), digits)
+		print(round(summaryFit(cleanObj, alpha = alpha), digits))
 		if (!is.null(object@paramValue)) {
 			if ((ncol(object@coef) != ncol(object@paramValue)) | ((ncol(object@coef) == 
 				ncol(object@paramValue)) && any(sort(colnames(object@coef)) != sort(colnames(object@paramValue))))) 

@@ -23,7 +23,7 @@ clean <- function(...) {
 	paramOnly <- sapply(object.l, slot, name = "paramOnly")
 	if(all(!paramOnly)) {
 		converged <- sapply(object.l, slot, name = "converged")
-		allConverged <- apply(converged, 1, all)
+		allConverged <- apply(converged == 0, 1, all)
 		if (all(!allConverged)) 
 			stop("All replications in the result object are not convergent. Thus, the result object cannot be used.")
 		object.l <- lapply(object.l, cleanSimResult, converged = allConverged)
@@ -58,12 +58,11 @@ clean <- function(...) {
 
 cleanSimResult <- function(object, converged = NULL) {
     if (is.null(converged)) 
-        converged <- object@converged
+        converged <- object@converged == 0
     object@nRep <- sum(converged)
     object@coef <- object@coef[converged, , drop=FALSE]
     object@se <- object@se[converged, , drop=FALSE]
     object@fit <- object@fit[converged, , drop=FALSE]
-    object@converged <- rep(TRUE, object@nRep)
     if (!is.null(object@paramValue) && (nrow(object@paramValue) > 1)) 
         object@paramValue <- object@paramValue[converged, , drop=FALSE]
     if (!is.null(object@misspecValue) && (nrow(object@misspecValue) > 1)) 
@@ -84,6 +83,6 @@ cleanSimResult <- function(object, converged = NULL) {
         object@pmMCAR <- object@pmMCAR[converged]
     if (length(object@pmMAR) > 1) 
         object@pmMAR <- object@pmMAR[converged]
-    object@converged <- rep(TRUE, sum(converged))
+    object@converged <- rep(0, sum(converged))
     return(object)
 } 
