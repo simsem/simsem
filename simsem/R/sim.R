@@ -450,14 +450,19 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 			try(converged <- as.numeric(!inspect(out, "converged")))
 			try(check <- sum(unlist(lapply(se, sum))))
 			try(negVar <- checkVar(out))
+			improperCov <- FALSE
+			try(if(!negVar) {improperCov <- checkCov(out) })
 			try(if (is.na(check) || check == 0) {
-				converged <- 2
-			}, silent = TRUE)
-			try(if (negVar) {
 				converged <- 3
 			}, silent = TRUE)
+			try(if (negVar) {
+				converged <- 4
+			}, silent = TRUE)
+			try(if (improperCov) {
+				converged <- 5
+			}, silent = TRUE)
 			if(is(out, "lavaanStar") && length(out@imputed) > 0) {
-				if(out@imputed[[1]][1] < miss@convergentCutoff) converged <- 4
+				if(out@imputed[[1]][1] < miss@convergentCutoff) converged <- 2
 			}
 		}
 		
@@ -474,7 +479,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 			facLab <- unique(model@pt$lhs[model@pt$op == "=~"])
 		}
 		
-		if (converged == 0) {
+		if (converged %in% c(0, 3:5)) {
 			outLab <- out@Model@dimNames
 			fit <- extractLavaanFit(out)
 			coef <- reduceLavaanParam(inspect(out, "coef"), dgen, indLab, facLab)
@@ -519,7 +524,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 		}
 		
 		if(!is.null(miss) && miss@m > 0) {
-			if (converged == 0) {
+			if (converged %in% c(0, 3:5)) {
 				fmiOut <- out@imputed[[2]]
 				FMI1 <- fmiOut[,5]
 				FMI2 <- fmiOut[,6]
@@ -1005,6 +1010,13 @@ checkVar <- function(object) {
     GLIST <- object@Model@GLIST
     covGLIST <- GLIST[names(GLIST) %in% c("theta", "psi")]
     return(any(sapply(covGLIST, function(x) any(diag(x) < 0))))
+} 
+
+checkCov <- function(object) {
+    GLIST <- object@Model@GLIST
+    covGLIST <- GLIST[names(GLIST) %in% c("theta", "psi")]
+	reducedCov <- lapply(covGLIST, function(x) {improper <- (diag(x) > 0); x[improper, improper]})
+    return(any(sapply(reducedCov, function(x) { y <- lower.tri(cov2cor(x)); any((y < -1) | (y > 1))})))
 } 
 
 imposeSmartStart <- function(model, paramSet, indLab, facLab, latent) {

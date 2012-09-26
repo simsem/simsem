@@ -7,11 +7,14 @@
 	Get extra outputs from a simulation result object (\code{\linkS4class{SimResult}}). Users can ask this package to extra output from the \code{\linkS4class{lavaan}} object in each iteration by setting the \code{outfun} argument (in the \code{sim} function). See the example below.
 }
 \usage{
-getExtraOutput(object)
+getExtraOutput(object, improper = FALSE)
 }
 \arguments{
   \item{object}{
 	\code{\linkS4class{SimResult}} that have the extra output extracted by the function defined in the \code{outfun} argument (in the \code{sim} function)
+}
+  \item{improper}{
+	If TRUE, include the replications that provided improper solutions
 }
 }
 \value{

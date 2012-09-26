@@ -12,7 +12,7 @@
 	Find the proportion of fit indices that indicate worse fit than a specified cutoffs. The cutoffs may be calculated from \code{\link{getCutoff}} of the null model.
 }
 \usage{
-getPowerFit(altObject, cutoff, revDirec = FALSE, usedFit=NULL, ...)
+getPowerFit(altObject, cutoff, ...)
 }
 \arguments{
   \item{altObject}{
@@ -21,19 +21,15 @@ getPowerFit(altObject, cutoff, revDirec = FALSE, usedFit=NULL, ...)
   \item{cutoff}{
 	Fit indices cutoffs from null model or users. This should be a vector with a specified fit indices names as the name of vector elements. This argument can be missing if the \code{\linkS4class{SimResult}} is specified in the \code{altObject} and the \code{\linkS4class{SimResult}} of the null model is specified.
 }
-  \item{revDirec}{
-	The default is to count the proportion of fit indices that indicates lower fit to the model, such as 
-	how many RMSEA in the alternative model that is worse than cutoffs. The direction can be reversed by setting as \code{TRUE}.
-}
-  \item{usedFit}{
-	Vector of names of fit indices that researchers wish to getCutoffs from. The default is to getCutoffs of all fit indices.  
-  }
   \item{\dots}{
-	Additional arguments 
+	Additional arguments. 
   }
 }
 \section{Methods}{
 	\describe{
+	\item{Common arguments}{
+		The \code{revDirec} argument is to reverse direction of deciding a power by fit indices (e.g., less than --> greater than). The default is to count the proportion of fit indices that indicates lower fit to the model, such as how many RMSEA in the alternative model that is worse than cutoffs. The direction can be reversed by setting as \code{TRUE}. The \code{usedFit} argument is the vector of names of fit indices that researchers wish to getCutoffs from. The default is to getCutoffs of all fit indices.  
+	}
 	\item{signature(altObject="data.frame", cutoff="vector")}{
 		This method will find the fit indices indicated in the \code{altObject} that provides worse fit than the \code{cutoff}. The additional arguments are \code{predictor}, \code{predictorVal}, \code{condCutoff}, and \code{df}, which allows the fit indices predicted by any arbitrary independent variables (such as sample size or percent MCAR). The \code{predictor} is the \code{data.frame} of the predictor values. The number of rows of the \code{predictor} argument should be equal to the number of rows in the \code{object}. The \code{predictorVal} is the values of predictor that researchers would like to find the power from. The \code{condCutoff} is a logical. If \code{TRUE}, the cutoff is applicable only a given value of \code{predictorVal}. If \code{FALSE}, the cutoff is applicable in any values of \code{predictor}. The \code{df} is the degree of freedom used in spline method in predicting the fit indices by the predictors. If \code{df} is 0, the spline method will not be applied. 
 	}

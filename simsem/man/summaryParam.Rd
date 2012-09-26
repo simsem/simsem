@@ -7,7 +7,7 @@
 	This function will provide averages of parameter estimates, standard deviations of parameter estimates, averages of standard errors, and power of rejection with a priori alpha level for the null hypothesis of parameters equal 0.
 }
 \usage{
-summaryParam(object, alpha = 0.05, detail = FALSE)
+summaryParam(object, alpha = 0.05, detail = FALSE, improper = FALSE)
 }
 \arguments{
   \item{object}{
@@ -18,6 +18,9 @@ summaryParam(object, alpha = 0.05, detail = FALSE)
 }
   \item{detail}{
 	If TRUE, more details about each parameter estimate are provided, such as relative bias, standardized bias, or relative standard error bias.
+}
+  \item{improper}{
+	If TRUE, include the replications that provided improper solutions
 }
 }
 \value{

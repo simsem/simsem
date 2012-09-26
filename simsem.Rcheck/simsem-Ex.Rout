@@ -32,7 +32,7 @@ This is lavaan 0.5-9
 lavaan is BETA software! Please report any bugs.
  
 ###############################################################################################
-This is simsem 0.3-9
+This is simsem 0.3-10
 simsem is BETA software! Please report any bugs.
 simsem was developed at the University of Kansas Center for Research Methods and Data Analysis.
 ###############################################################################################
@@ -317,6 +317,11 @@ Class:       vector       vector         list      logical         list
 > # In reality, more replications are needed.
 > Output <- sim(5, n=500, CFA.Model)
 Loading required package: parallel
+Error in cov2cor(x) : 'V' is not a square numeric matrix
+Error in cov2cor(x) : 'V' is not a square numeric matrix
+Error in cov2cor(x) : 'V' is not a square numeric matrix
+Error in cov2cor(x) : 'V' is not a square numeric matrix
+Error in cov2cor(x) : 'V' is not a square numeric matrix
 > 
 > # Summary the simulation result
 > summary(Output)
@@ -386,9 +391,10 @@ Number of replications = 5
 Number of converged replications = 5 
 Number of nonconverged replications: 
    1. Nonconvergent Results = 0 
-   2. At least one SE were negative or NA = 0 
-   3. At least one variance estimates were negative = 0 
-   4. Nonconvergent results from multiple imputation = 0 
+   2. Nonconvergent results from multiple imputation = 0 
+   3. At least one SE were negative or NA = 0 
+   4. At least one variance estimates were negative = 0 
+   5. At least one correlation estimates were greater than 1 or less than -1 = 0 
 > 
 > # Short summary of the simulation result
 > summaryShort(Output)
@@ -2900,6 +2906,26 @@ detaching 'package:copula'
 > # The number of replications in actual analysis should be much more than 20
 > Output <- sim(20, n=500, Path.Model)
 Loading required package: parallel
+Error in cov2cor(x) : subscript out of bounds
+Error in cov2cor(x) : subscript out of bounds
+Error in cov2cor(x) : subscript out of bounds
+Error in cov2cor(x) : subscript out of bounds
+Error in cov2cor(x) : subscript out of bounds
+Error in cov2cor(x) : subscript out of bounds
+Error in cov2cor(x) : subscript out of bounds
+Error in cov2cor(x) : subscript out of bounds
+Error in cov2cor(x) : subscript out of bounds
+Error in cov2cor(x) : subscript out of bounds
+Error in cov2cor(x) : subscript out of bounds
+Error in cov2cor(x) : subscript out of bounds
+Error in cov2cor(x) : subscript out of bounds
+Error in cov2cor(x) : subscript out of bounds
+Error in cov2cor(x) : subscript out of bounds
+Error in cov2cor(x) : subscript out of bounds
+Error in cov2cor(x) : subscript out of bounds
+Error in cov2cor(x) : subscript out of bounds
+Error in cov2cor(x) : subscript out of bounds
+Error in cov2cor(x) : subscript out of bounds
 > 
 > # Plot the distribution of population misfit
 > plotMisfit(Output)
@@ -3421,9 +3447,10 @@ Number of replications = 5
 Number of converged replications = 5 
 Number of nonconverged replications: 
    1. Nonconvergent Results = 0 
-   2. At least one SE were negative or NA = 0 
-   3. At least one variance estimates were negative = 0 
-   4. Nonconvergent results from multiple imputation = 0 
+   2. Nonconvergent results from multiple imputation = 0 
+   3. At least one SE were negative or NA = 0 
+   4. At least one variance estimates were negative = 0 
+   5. At least one correlation estimates were greater than 1 or less than -1 = 0 
 > 
 > # Example of data transformation: Transforming to standard score
 > fun1 <- function(data) {
@@ -3508,9 +3535,10 @@ Number of replications = 5
 Number of converged replications = 5 
 Number of nonconverged replications: 
    1. Nonconvergent Results = 0 
-   2. At least one SE were negative or NA = 0 
-   3. At least one variance estimates were negative = 0 
-   4. Nonconvergent results from multiple imputation = 0 
+   2. Nonconvergent results from multiple imputation = 0 
+   3. At least one SE were negative or NA = 0 
+   4. At least one variance estimates were negative = 0 
+   5. At least one correlation estimates were greater than 1 or less than -1 = 0 
 > 
 > # Get modification indices
 > getExtraOutput(Output)
@@ -3835,6 +3863,11 @@ detaching 'package:parallel'
 > # In reality, more replications are needed.
 > Output <- sim(5, n=500, CFA.Model)
 Loading required package: parallel
+Error in cov2cor(x) : 'V' is not a square numeric matrix
+Error in cov2cor(x) : 'V' is not a square numeric matrix
+Error in cov2cor(x) : 'V' is not a square numeric matrix
+Error in cov2cor(x) : 'V' is not a square numeric matrix
+Error in cov2cor(x) : 'V' is not a square numeric matrix
 > 
 > # Summarize the sample fit indices
 > summaryFit(Output)
@@ -3941,6 +3974,11 @@ Class:       vector       vector         list      logical         list
 > # In reality, more replications are needed.
 > Output <- sim(5, n=500, CFA.Model)
 Loading required package: parallel
+Error in cov2cor(x) : 'V' is not a square numeric matrix
+Error in cov2cor(x) : 'V' is not a square numeric matrix
+Error in cov2cor(x) : 'V' is not a square numeric matrix
+Error in cov2cor(x) : 'V' is not a square numeric matrix
+Error in cov2cor(x) : 'V' is not a square numeric matrix
 > 
 > # Summary of the parameter estimates
 > summaryParam(Output)
@@ -4111,7 +4149,7 @@ detaching 'package:parallel'
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  5.5 0.06 5.66 NA NA 
+Time elapsed:  5.56 0.09 5.66 NA NA 
 > grDevices::dev.off()
 null device 
           1 

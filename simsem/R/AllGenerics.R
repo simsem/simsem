@@ -11,8 +11,7 @@ setGeneric("plotCutoff", function(object, ...) {
     return(standardGeneric("plotCutoff"))
 })
 
-setGeneric("getPowerFit", function(altObject, cutoff, revDirec = FALSE, usedFit = NULL, 
-    ...) {
+setGeneric("getPowerFit", function(altObject, cutoff, ...) {
     return(standardGeneric("getPowerFit"))
 })
 

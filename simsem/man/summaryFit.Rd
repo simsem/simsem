@@ -7,7 +7,7 @@
 	This function will provide fit index cutoffs for values of alpha, and mean fit index values across all replications.
 }
 \usage{
-summaryFit(object, alpha = NULL)
+summaryFit(object, alpha = NULL, improper = FALSE)
 }
 \arguments{
   \item{object}{
@@ -15,6 +15,9 @@ summaryFit(object, alpha = NULL)
 }
   \item{alpha}{
 	The alpha level used to find the fit indices cutoff. If there is no varying condition, a vector of different alpha levels can be provided.
+}
+  \item{improper}{
+	If TRUE, include the replications that provided improper solutions
 }
 }
 \value{

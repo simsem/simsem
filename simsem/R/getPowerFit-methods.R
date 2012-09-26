@@ -75,11 +75,12 @@ setMethod("getPowerFit", signature(altObject = "matrix", cutoff = "vector"), def
 })
 
 setMethod("getPowerFit", signature(altObject = "SimResult", cutoff = "missing"), 
-    definition = function(altObject, cutoff = NULL, nullObject, revDirec = FALSE, 
+    definition = function(altObject, cutoff = NULL, nullObject = NULL, revDirec = FALSE, 
         usedFit = NULL, alpha = 0.05, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, 
         df = 0) {
         if (is.null(usedFit)) 
             usedFit <- getKeywords()$usedFit
+		if(is.null(nullObject)) nullObject <- altObject
         mod <- clean(altObject, nullObject)
         altObject <- mod[[1]]
         nullObject <- mod[[2]]
@@ -136,5 +137,10 @@ setMethod("getPowerFit", signature(altObject = "SimResult", cutoff = "missing"),
             }
         }
         names(temp) <- usedFit
+		
+		# Find cutoff based on chi-square test
+		cutoffChisq <- qchisq(1 - alpha, df=nullObject@fit[,"df"])
+		powerChi <- mean(altObject@fit[,"Chi"] > cutoffChisq)
+		temp <- c("TraditionalChi" = powerChi, temp)
         return(temp)
     }) 

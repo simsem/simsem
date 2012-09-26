@@ -7,11 +7,14 @@
 	Summarize the population model used for data generation underlying a result object
 }
 \usage{
-summaryPopulation(object)
+summaryPopulation(object, improper = FALSE)
 }
 \arguments{
   \item{object}{
 	The result object that you wish to extract the data generation population model from (\code{linkS4class{SimResult}}).
+}
+  \item{improper}{
+	If TRUE, include the replications that provided improper solutions
 }
 }
 \value{

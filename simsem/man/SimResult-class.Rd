@@ -18,7 +18,7 @@ Objects can be created by \code{\link{sim}}.
     \item{\code{coef}:}{Parameter estimates from each replication}
     \item{\code{se}:}{Standard errors of parameter estimates from each replication}
     \item{\code{fit}:}{Fit Indices values from each replication}
-    \item{\code{converged}:}{The convergence status of each replication: 0 = convergent, 1 = not convergent, 2 = improper solutions for SE, 3 = improper solution for variance, 4 = nonconvergent in multiple imputed results }
+    \item{\code{converged}:}{The convergence status of each replication: 0 = convergent, 1 = not convergent, 2 = nonconvergent in multiple imputed results, 3 = improper solutions for SE (less than 0 or NA), 4 = improper solution for variance (less than 0), 5 = improper solution for correlation (greater than 1 or less than -1) }
     \item{\code{seed}:}{Seed number. }
 	\item{\code{paramValue}:}{Population model underlying each simulated dataset.}
 	\item{\code{paramOnly}:}{If \code{TRUE}, the result object saves only population characteristics and do not save sample characteristics (e.g., parameter estimates and standard errors.}

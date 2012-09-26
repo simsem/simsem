@@ -18,15 +18,19 @@
 	# The cleaned result objects
 # }
 
-clean <- function(...) {
+clean <- function(..., improper = FALSE) {
     object.l <- list(...)
 	paramOnly <- sapply(object.l, slot, name = "paramOnly")
 	if(all(!paramOnly)) {
 		converged <- sapply(object.l, slot, name = "converged")
-		allConverged <- apply(converged == 0, 1, all)
+		targetRep <- 0
+		if(improper) targetRep <- c(0, 3:5)
+		allConverged <- matrix(converged %in% targetRep, nrow(converged), ncol(converged))
+		allConverged <- apply(allConverged, 1, all)
+
 		if (all(!allConverged)) 
 			stop("All replications in the result object are not convergent. Thus, the result object cannot be used.")
-		object.l <- lapply(object.l, cleanSimResult, converged = allConverged)
+		object.l <- lapply(object.l, cleanSimResult, converged = allConverged, improper = improper)
 	}
 	if (length(object.l) == 1) 
 		object.l <- object.l[[1]]
@@ -56,9 +60,12 @@ clean <- function(...) {
 	# The cleaned result object
 # }
 
-cleanSimResult <- function(object, converged = NULL) {
-    if (is.null(converged)) 
-        converged <- object@converged == 0
+cleanSimResult <- function(object, converged = NULL, improper = FALSE) {
+    if (is.null(converged)) {
+		targetRep <- 0
+		if(improper) targetRep <- c(0, 3:5)
+        converged <- object@converged %in% targetRep
+	}
     object@nRep <- sum(converged)
     object@coef <- object@coef[converged, , drop=FALSE]
     object@se <- object@se[converged, , drop=FALSE]
@@ -83,6 +90,6 @@ cleanSimResult <- function(object, converged = NULL) {
         object@pmMCAR <- object@pmMCAR[converged]
     if (length(object@pmMAR) > 1) 
         object@pmMAR <- object@pmMAR[converged]
-    object@converged <- rep(0, sum(converged))
+    object@converged <- object@converged[converged]
     return(object)
 } 

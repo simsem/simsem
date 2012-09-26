@@ -53,10 +53,12 @@ setMethod("getPowerFitNested", signature(altNested = "SimResult", altParent = "S
 
 setMethod("getPowerFitNested", signature(altNested = "SimResult", altParent = "SimResult", 
     cutoff = "missing"), definition = function(altNested, altParent, cutoff = NULL, 
-    nullNested, nullParent, revDirec = FALSE, usedFit = NULL, alpha = 0.05, nVal = NULL, 
+    nullNested = NULL, nullParent = NULL, revDirec = FALSE, usedFit = NULL, alpha = 0.05, nVal = NULL, 
     pmMCARval = NULL, pmMARval = NULL, df = 0) {
     if (is.null(usedFit)) 
         usedFit <- getKeywords()$usedFit
+	if(is.null(nullNested)) nullNested <- altNested
+	if(is.null(nullParent)) nullParent <- altParent
     mod1 <- clean(altNested, altParent)
     altNested <- mod1[[1]]
     altParent <- mod1[[2]]
@@ -123,6 +125,10 @@ setMethod("getPowerFitNested", signature(altNested = "SimResult", altParent = "S
         }
     }
     names(temp) <- usedFit
+	
+	cutoffChisq <- qchisq(1 - alpha, df=(nullNested@fit - nullParent@fit)[,"df"])
+	powerChi <- mean((altNested@fit - altParent@fit)[,"Chi"] > cutoffChisq)
+	temp <- c("TraditionalChi" = powerChi, temp)
     return(temp)
 })
 

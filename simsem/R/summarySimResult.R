@@ -4,8 +4,8 @@
 # summaryParam: This function will summarize the obtained parameter estimates
 # and standard error.
 
-summaryParam <- function(object, alpha = 0.05, detail = FALSE) {
-    object <- clean(object)
+summaryParam <- function(object, alpha = 0.05, detail = FALSE, improper = FALSE) {
+    object <- clean(object, improper = improper)
     coef <- colMeans(object@coef, na.rm = TRUE)
     real.se <- sapply(object@coef, sd, na.rm = TRUE)
     estimated.se <- colMeans(object@se, na.rm = TRUE)
@@ -131,8 +131,8 @@ switchLavaanName <- function(name) {
 # summaryMisspec: This function will summarize the obtained fit indices and
 # generate a data frame.
 
-summaryMisspec <- function(object) {
-    object <- clean(object)
+summaryMisspec <- function(object, improper = FALSE) {
+    object <- clean(object, improper = improper)
     if (all(dim(object@misspecValue) == 0)) {
         stop("This object does not have any model misspecification.")
     } else {
@@ -148,8 +148,8 @@ summaryMisspec <- function(object) {
 
 # summaryPopulation: Summarize population values behind data generation model
 
-summaryPopulation <- function(object) {
-    object <- clean(object)
+summaryPopulation <- function(object, improper = FALSE) {
+    object <- clean(object, improper = improper)
     paramValue <- object@paramValue
     nRep <- nrow(paramValue)
     nParam <- ncol(paramValue)
@@ -170,8 +170,8 @@ summaryPopulation <- function(object) {
 # summaryFit: This function will summarize the obtained fit indices and
 # generate a data frame.
 
-summaryFit <- function(object, alpha = NULL) {
-    cleanObj <- clean(object)
+summaryFit <- function(object, alpha = NULL, improper = FALSE) {
+    cleanObj <- clean(object, improper = improper)
     usedFit <- getKeywords()$usedFit
     
     condition <- c(length(unique(object@pmMCAR)) > 1, length(unique(object@pmMAR)) > 
@@ -222,70 +222,129 @@ summaryFit <- function(object, alpha = NULL) {
 # summaryMisspec: This function will summarize the obtained fit indices and
 # generate a data frame.
 
-summaryConverge <- function(object) {
+summaryConverge <- function(object, improper = FALSE) {
     result <- list()
     converged <- object@converged == 0
     numnonconverged <- sum(!converged)
     if (numnonconverged == 0) 
         stop("You are good! All replications were converged!")
     result <- c(result, list(Converged = c(num.converged = sum(converged), num.nonconverged = numnonconverged)))
+	reasons <- list("Nonconvergent Reasons" = c("Nonconvergent" = sum(object@converged %in% 1:2), "Improper SE" = sum(object@converged == 3), "Improper Variance" = sum(object@converged == 4), "Improper Correlation" = sum(object@converged == 5)))
+	result <- c(result, reasons)
     n <- object@n
     pmMCAR <- object@pmMCAR
     pmMAR <- object@pmMAR
     paramValue <- object@paramValue
     misspecValue <- object@misspecValue
     popFit <- object@popFit
+	nonconverged <- !converged
+	improprep <- rep(FALSE, length(converged))
+	if(improper) {
+		nonconverged <- object@converged %in% 1:2
+		improprep <- object@converged %in% 3:5
+	}
     if (length(unique(n)) > 1) {
         temp1 <- n[converged]
-        temp2 <- n[!converged]
-        resultTemp <- c(mean.convergence = mean(temp1), sd.convergence = sd(temp1), 
-            mean.nonconvergence = mean(temp2), sd.nonconvergence = sd(temp2), diff.mean = mean(temp1) - 
-                mean(temp2), diff.sd = sd(temp1) - sd(temp2))
-        result <- c(result, list(n = resultTemp))
+        temp2 <- n[nonconverged]
+		temp3 <- n[improprep]
+		resultTemp <- c(mean.convergence = mean(temp1), sd.convergence = sd(temp1))
+		resultDiff <- NULL
+		if(length(temp2) > 0) {
+			resultTemp <- c(resultTemp, mean.nonconvergence = mean(temp2), sd.nonconvergence = sd(temp2))
+			resultDiff <- c(resultDiff, diff.non.mean = mean(temp2) - mean(temp1), diff.non.sd = sd(temp2) - sd(temp1))
+		}
+		if(length(temp3) > 0) {
+			resultTemp <- c(resultTemp, mean.improper = mean(temp3), sd.improper = sd(temp3))
+			resultDiff <- c(resultDiff, diff.improper.mean = mean(temp3) - mean(temp1), diff.improper.sd = sd(temp3) - sd(temp1))
+		}
+        result <- c(result, list(n = c(resultTemp, resultDiff)))
     }
     if (length(unique(pmMCAR)) > 1) {
         temp1 <- pmMCAR[converged]
-        temp2 <- pmMCAR[!converged]
-        resultTemp <- c(mean.convergence = mean(temp1), sd.convergence = sd(temp1), 
-            mean.nonconvergence = mean(temp2), sd.nonconvergence = sd(temp2), diff.mean = mean(temp1) - 
-                mean(temp2), diff.sd = sd(temp1) - sd(temp2))
-        result <- c(result, list(pmMCAR = resultTemp))
+        temp2 <- pmMCAR[nonconverged]
+		temp3 <- pmMCAR[improprep]
+		resultTemp <- c(mean.convergence = mean(temp1), sd.convergence = sd(temp1))
+		resultDiff <- NULL
+		if(length(temp2) > 0) {
+			resultTemp <- c(resultTemp, mean.nonconvergence = mean(temp2), sd.nonconvergence = sd(temp2))
+			resultDiff <- c(resultDiff, diff.non.mean = mean(temp2) - mean(temp1), diff.non.sd = sd(temp2) - sd(temp1))
+		}
+		if(length(temp3) > 0) {
+			resultTemp <- c(resultTemp, mean.improper = mean(temp3), sd.improper = sd(temp3))
+			resultDiff <- c(resultDiff, diff.improper.mean = mean(temp3) - mean(temp1), diff.improper.sd = sd(temp3) - sd(temp1))
+		}
+        result <- c(result, list(pmMCAR = c(resultTemp, resultDiff)))
     }
     if (length(unique(pmMAR)) > 1) {
         temp1 <- pmMAR[converged]
-        temp2 <- pmMAR[!converged]
-        resultTemp <- c(mean.convergence = mean(temp1), sd.convergence = sd(temp1), 
-            mean.nonconvergence = mean(temp2), sd.nonconvergence = sd(temp2), diff.mean = mean(temp1) - 
-                mean(temp2), diff.sd = sd(temp1) - sd(temp2))
-        result <- c(result, list(pmMAR = resultTemp))
+        temp2 <- pmMAR[nonconverged]
+		temp3 <- pmMAR[improprep]
+		resultTemp <- c(mean.convergence = mean(temp1), sd.convergence = sd(temp1))
+		resultDiff <- NULL
+		if(length(temp2) > 0) {
+			resultTemp <- c(resultTemp, mean.nonconvergence = mean(temp2), sd.nonconvergence = sd(temp2))
+			resultDiff <- c(resultDiff, diff.non.mean = mean(temp2) - mean(temp1), diff.non.sd = sd(temp2) - sd(temp1))
+		}
+		if(length(temp3) > 0) {
+			resultTemp <- c(resultTemp, mean.improper = mean(temp3), sd.improper = sd(temp3))
+			resultDiff <- c(resultDiff, diff.improper.mean = mean(temp3) - mean(temp1), diff.improper.sd = sd(temp3) - sd(temp1))
+		}
+        result <- c(result, list(pmMAR = c(resultTemp, resultDiff)))
     }
     temp1 <- paramValue[converged, ]
-    temp2 <- paramValue[!converged, ]
-    resultTemp <- cbind(mean.convergence = apply(temp1, 2, mean), sd.convergence = apply(temp1, 
-        2, sd), mean.nonconvergence = apply(temp2, 2, mean), sd.nonconvergence = apply(temp2, 
+    temp2 <- paramValue[nonconverged, ]
+	temp3 <- paramValue[improprep, ]
+	resultTemp <- cbind(mean.convergence = apply(temp1, 2, mean), sd.convergence = apply(temp1, 
         2, sd))
-    resultTemp <- cbind(resultTemp, diff.mean = resultTemp[, 1] - resultTemp[, 3], 
-        diff.sd = resultTemp[, 2] - resultTemp[, 4])
-    result <- c(result, list(paramValue = resultTemp))
+	resultDiff <- NULL
+	if(nrow(temp2) > 0) {
+		resultTemp <- cbind(resultTemp, mean.nonconvergence = apply(temp2, 2, mean), sd.nonconvergence = apply(temp2, 2, sd))
+		resultDiff <- cbind(resultDiff, diff.non.mean = apply(temp2, 2, mean) - apply(temp1, 2, mean), 
+        diff.non.sd = apply(temp2, 2, sd) - apply(temp1, 2, sd))
+	}
+	if(nrow(temp3) > 0) {
+		resultTemp <- cbind(resultTemp, mean.improper = apply(temp3, 2, mean), sd.improper = apply(temp3, 2, sd))
+		resultDiff <- cbind(resultDiff, diff.improper.mean = apply(temp3, 2, mean) - apply(temp1, 2, mean), 
+        diff.improper.sd = apply(temp3, 2, sd) - apply(temp1, 2, sd))
+	}
+    result <- c(result, list(paramValue = cbind(resultTemp, resultDiff)))
     if (!all(dim(misspecValue) == 0)) {
-        temp1 <- misspecValue[converged, ]
-        temp2 <- misspecValue[!converged, ]
-        resultTemp <- cbind(mean.convergence = apply(temp1, 2, mean), sd.convergence = apply(temp1, 
-            2, sd), mean.nonconvergence = apply(temp2, 2, mean), sd.nonconvergence = apply(temp2, 
-            2, sd))
-        resultTemp <- cbind(resultTemp, diff.mean = resultTemp[, 1] - resultTemp[, 
-            3], diff.sd = resultTemp[, 2] - resultTemp[, 4])
-        result <- c(result, list(misspecValue = resultTemp))
+		temp1 <- misspecValue[converged, ]
+		temp2 <- misspecValue[nonconverged, ]
+		temp3 <- misspecValue[improprep, ]
+		resultTemp <- cbind(mean.convergence = apply(temp1, 2, mean), sd.convergence = apply(temp1, 
+			2, sd))
+		resultDiff <- NULL
+		if(nrow(temp2) > 0) {
+			resultTemp <- cbind(resultTemp, mean.nonconvergence = apply(temp2, 2, mean), sd.nonconvergence = apply(temp2, 2, sd))
+			resultDiff <- cbind(resultDiff, diff.non.mean = apply(temp2, 2, mean) - apply(temp1, 2, mean), 
+			diff.non.sd = apply(temp2, 2, sd) - apply(temp1, 2, sd))
+		}
+		if(nrow(temp3) > 0) {
+			resultTemp <- cbind(resultTemp, mean.improper = apply(temp3, 2, mean), sd.improper = apply(temp3, 2, sd))
+			resultDiff <- cbind(resultDiff, diff.improper.mean = apply(temp3, 2, mean) - apply(temp1, 2, mean), 
+			diff.improper.sd = apply(temp3, 2, sd) - apply(temp1, 2, sd))
+		}
+		result <- c(result, list(misspecValue = cbind(resultTemp, resultDiff)))
     }
     if (!all(dim(popFit) == 0)) {
-        temp1 <- popFit[converged, ]
-        temp2 <- popFit[!converged, ]
-        resultTemp <- cbind(mean.convergence = apply(temp1, 2, mean), sd.convergence = apply(temp1, 
-            2, sd), mean.nonconvergence = apply(temp2, 2, mean), sd.nonconvergence = apply(temp2, 
-            2, sd))
-        resultTemp <- cbind(resultTemp, diff.mean = resultTemp[, 1] - resultTemp[, 
-            3], diff.sd = resultTemp[, 2] - resultTemp[, 4])
-        result <- c(result, list(popFit = resultTemp))
+		temp1 <- popFit[converged, ]
+		temp2 <- popFit[nonconverged, ]
+		temp3 <- popFit[improprep, ]
+		resultTemp <- cbind(mean.convergence = apply(temp1, 2, mean), sd.convergence = apply(temp1, 
+			2, sd))
+		resultDiff <- NULL
+		if(nrow(temp2) > 0) {
+			resultTemp <- cbind(resultTemp, mean.nonconvergence = apply(temp2, 2, mean), sd.nonconvergence = apply(temp2, 2, sd))
+			resultDiff <- cbind(resultDiff, diff.non.mean = apply(temp2, 2, mean) - apply(temp1, 2, mean), 
+			diff.non.sd = apply(temp2, 2, sd) - apply(temp1, 2, sd))
+		}
+		if(nrow(temp3) > 0) {
+			resultTemp <- cbind(resultTemp, mean.improper = apply(temp3, 2, mean), sd.improper = apply(temp3, 2, sd))
+			resultDiff <- cbind(resultDiff, diff.improper.mean = apply(temp3, 2, mean) - apply(temp1, 2, mean), 
+			diff.improper.sd = apply(temp3, 2, sd) - apply(temp1, 2, sd))
+		}
+		result <- c(result, list(popFit = cbind(resultTemp, resultDiff)))
     }
     return(result)
 } 
@@ -318,10 +377,12 @@ getPopulation <- function(object) {
 
 # getExtraOutput: Extract the extra output that users set in the 'outfun' argument
 
-getExtraOutput <- function(object) {
+getExtraOutput <- function(object, improper = FALSE) {
+	targetRep <- 0
+	if(improper) targetRep <- c(0, 3:5)
     if (length(object@extraOut) == 0) {
         stop("This simulation result does not contain any extra results")
     } else {
-        return(object@extraOut[object@converged == 0])
+        return(object@extraOut[object@converged %in% targetRep])
     }
 } 
