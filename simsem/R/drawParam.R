@@ -56,7 +56,6 @@ drawParam <- function(paramSet, maxDraw = 50, numFree, misfitBounds = NULL, aver
                 fullmls[[i]] <- mapply("-", lapply(rpls[[i]], "[[", 2), lapply(rpls[[i]], 
                   "[[", 1))
             }
-            
             if (!is.null(optMisfit)) 
                 {
                   # if misfit needs to be optimized
@@ -141,6 +140,7 @@ drawParam <- function(paramSet, maxDraw = 50, numFree, misfitBounds = NULL, aver
                   fullmpls <- mls[[iter]]
                   rawDrawResult <- temp[[iter]]
                   for (i in groupLoop) {
+
                     fullmls[[i]] <- mapply("-", lapply(rawDrawResult[[i]], "[[", 
                       2), rawDrawResult(rpls[[i]], "[[", 1))
                   }
@@ -150,7 +150,7 @@ drawParam <- function(paramSet, maxDraw = 50, numFree, misfitBounds = NULL, aver
             if (all(sapply(fullpls, validateObject))) {
                 redpls <- lapply(fullpls, reduceMatrices)
                 redmpls <- lapply(fullmpls, reduceMatrices)
-                redmls <- lapply(fullmls, reduceMatrices)
+                redmls <- fullmls #lapply(fullmls, reduceMatrices)
                 
                 # if (!is.null(param) && !is.null(misspec)) {
                 macsPopls <- lapply(redpls, createImpliedMACS)
@@ -346,6 +346,7 @@ fillParam <- function(rawParamSet) {
     VTE <- rawParamSet$VTE
     TE <- rawParamSet$TE
     RTE <- rawParamSet$RTE
+	if(!is.null(RTE)) diag(RTE) <- 1
     VY <- rawParamSet$VY
     TY <- rawParamSet$TY
     MY <- rawParamSet$MY
@@ -353,6 +354,7 @@ fillParam <- function(rawParamSet) {
     VPS <- rawParamSet$VPS
     PS <- rawParamSet$PS
     RPS <- rawParamSet$RPS
+	if(!is.null(RPS)) diag(RPS) <- 1
     VE <- rawParamSet$VE
     AL <- rawParamSet$AL
     ME <- rawParamSet$ME

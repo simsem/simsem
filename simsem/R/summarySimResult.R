@@ -187,12 +187,14 @@ summaryFit <- function(object, alpha = NULL, improper = FALSE) {
         ifelse(condition[2], values[[2]] <- seq(min(object@pmMAR), max(object@pmMAR), 
             length.out = 5), values[[2]] <- NA)
         m <- do.call(expand.grid, values)
-        FUN <- function(vec, obj, alpha, usedFit) getCutoff(obj, alpha, revDirec = FALSE, 
-            usedFit = usedFit, nVal = vec[3], pmMCARval = vec[1], pmMARval = vec[2])
+        FUN <- function(vec, obj, alpha, usedFit) as.numeric(getCutoff(obj, alpha, revDirec = FALSE, 
+            usedFit = usedFit, nVal = vec[3], pmMCARval = vec[1], pmMARval = vec[2]))
         cutoffs <- sapply(as.data.frame(t(m)), FUN, obj = object, alpha = alpha, 
             usedFit = usedFit)
         mSelect <- as.matrix(m[, condition])
         colnames(mSelect) <- c("%MCAR", "%MAR", "N")[condition]
+		rownames(cutoffs) <- usedFit
+		colnames(cutoffs) <- NULL
         result <- data.frame(mSelect, t(cutoffs))
         rownames(result) <- NULL
     } else {

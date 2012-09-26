@@ -499,13 +499,12 @@ loading[7:9, 3] <- NA
 cfamodel <- estmodel(LY=loading, modelType="CFA", indLab=paste("x", 1:9, sep=""))
 out <- analyze(cfamodel, HolzingerSwineford1939)
 
+loading.mis <- matrix("runif(1, -0.2, 0.2)", 9, 3)
+loading.mis[is.na(loading)] <- 0
 datamodel.nomis <- model.lavaan(out, std=TRUE, LY=loading.mis)
 output.nomis <- sim(200, n=nrow(HolzingerSwineford1939), datamodel.nomis)
 
 pValue(out, output.nomis)
-
-loading.mis <- matrix("runif(1, -0.2, 0.2)", 9, 3)
-loading.mis[is.na(loading)] <- 0
 
 datamodel.mis <- model.lavaan(out, std=TRUE, LY=loading.mis)
 output.mis <- sim(200, n=nrow(HolzingerSwineford1939), datamodel.mis)
@@ -782,13 +781,12 @@ facDist <- bindDist(c("chisq", "chisq", "norm", "norm"), chi5, chi5, n1, n1)
 dat <- generate(SEM.Model, n=500, sequential=TRUE, facDist=facDist)
 out <- analyze(SEM.Model, dat, estimator="mlr")
 
-# Need to be fixed!!! Sequential
 simOut <- sim(100, n=500, SEM.Model, sequential=TRUE, facDist=facDist, estimator="mlr") #, multicore=TRUE)
 getCutoff(simOut, 0.05)
 plotCutoff(simOut, 0.05)
-summaryParam(simOut)
+summary(simOut)
 
-####################################### Example 11 ############################
+####################################### Example 14 ############################
 
 #library(simsem)
 
@@ -814,7 +812,7 @@ BE <- bind(path, "runif(1, -0.5, 0.5)")
 
 errorCorMis <- diag(5)
 errorCorMis[1:3, 1:3] <- "rnorm(1, 0, 0.1)"
-errorCorMis <- diag(5)
+diag(errorCorMis) <- 1
 RTE <- binds(diag(5), misspec=errorCorMis)
 
 VY <- bind(c(NA, NA, NA, 0, 0), 1)
@@ -832,13 +830,9 @@ out <- analyze(SEM.Model, dat, estimator="mlm")
 Output <- sim(100, n=200, SEM.Model, sequential=TRUE, facDist=facDist, estimator="mlm")
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
-summaryParam(Output)
+summary(Output)
 
-
-
-
-
-############################### Example 14 #######################
+############################### Example 15 #######################
 
 #library(simsem)
 #library(lavaan)

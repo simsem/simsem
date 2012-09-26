@@ -116,6 +116,10 @@ setMethod("getPowerFitNested", signature(altNested = "SimResult", altParent = "S
         usedCutoff <- as.vector(t(getCutoff(nullFit, alpha = alpha, usedFit = usedFit)))
         names(usedCutoff) <- usedFit
         temp <- pValue(usedCutoff, usedDist, revDirec = usedDirec)
+		names(temp) <- usedFit
+		cutoffChisq <- qchisq(1 - alpha, df=(nullNested@fit - nullParent@fit)[,"df"])
+		powerChi <- mean((altNested@fit - altParent@fit)[,"Chi"] > cutoffChisq)
+		temp <- c("TraditionalChi" = powerChi, temp)		
     } else {
         varyingCutoff <- getCutoff(object = nullFit, alpha = alpha, revDirec = FALSE, 
             usedFit = usedFit, predictor = condValue, df = df, predictorVal = "all")
@@ -123,12 +127,8 @@ setMethod("getPowerFitNested", signature(altNested = "SimResult", altParent = "S
             temp[i] <- pValueVariedCutoff(varyingCutoff[, i], usedDist[, i], revDirec = usedDirec[i], 
                 x = condValue, xval = predictorVal)
         }
+		names(temp) <- usedFit
     }
-    names(temp) <- usedFit
-	
-	cutoffChisq <- qchisq(1 - alpha, df=(nullNested@fit - nullParent@fit)[,"df"])
-	powerChi <- mean((altNested@fit - altParent@fit)[,"Chi"] > cutoffChisq)
-	temp <- c("TraditionalChi" = powerChi, temp)
     return(temp)
 })
 

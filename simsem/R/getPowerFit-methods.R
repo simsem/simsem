@@ -128,6 +128,11 @@ setMethod("getPowerFit", signature(altObject = "SimResult", cutoff = "missing"),
             usedCutoff <- as.vector(t(getCutoff(nullObject, alpha = alpha, usedFit = usedFit)))
             names(usedCutoff) <- usedFit
             temp <- pValue(usedCutoff, as.data.frame(usedDist), revDirec = usedDirec)
+			names(temp) <- usedFit
+			# Find cutoff based on chi-square test
+			cutoffChisq <- qchisq(1 - alpha, df=nullObject@fit[,"df"])
+			powerChi <- mean(altObject@fit[,"Chi"] > cutoffChisq)
+			temp <- c("TraditionalChi" = powerChi, temp)
         } else {
             varyingCutoff <- getCutoff(object = nullFit, alpha = alpha, revDirec = FALSE, 
                 usedFit = usedFit, predictor = condValue, df = df, predictorVal = "all")
@@ -135,12 +140,7 @@ setMethod("getPowerFit", signature(altObject = "SimResult", cutoff = "missing"),
                 temp[i] <- pValueVariedCutoff(varyingCutoff[, i], usedDist[, i], 
                   revDirec = usedDirec[i], x = condValue, xval = predictorVal)
             }
+			names(temp) <- usedFit
         }
-        names(temp) <- usedFit
-		
-		# Find cutoff based on chi-square test
-		cutoffChisq <- qchisq(1 - alpha, df=nullObject@fit[,"df"])
-		powerChi <- mean(altObject@fit[,"Chi"] > cutoffChisq)
-		temp <- c("TraditionalChi" = powerChi, temp)
         return(temp)
     }) 

@@ -59,7 +59,8 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 			ifelse(is.null(pmMCAR), usedMCAR <- 1, usedMCAR <- pmMCAR)
 			ifelse(is.null(pmMAR), usedMAR <- 1, usedMAR <- pmMAR)
 			
-			indexN <- 1:length(n)
+			indexN <- 1:length(n[[1]])
+			
 			out <- expand.grid(indexN, usedMCAR, usedMAR)
 			
 			indexN <- out[, 1]
@@ -77,7 +78,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 			n <- NULL
 		}
 	}
-    
+	
     ## 3. Adjust pmMCAR and pmMAR
 
 	if(!is.null(pmMCAR)) {
@@ -1015,8 +1016,14 @@ checkVar <- function(object) {
 checkCov <- function(object) {
     GLIST <- object@Model@GLIST
     covGLIST <- GLIST[names(GLIST) %in% c("theta", "psi")]
-	reducedCov <- lapply(covGLIST, function(x) {improper <- (diag(x) > 0); x[improper, improper]})
-    return(any(sapply(reducedCov, function(x) { y <- lower.tri(cov2cor(x)); any((y < -1) | (y > 1))})))
+	reducedCov <- lapply(covGLIST, function(x) {improper <- (diag(x) > 0); x[improper, improper, drop=FALSE]})
+    return(any(sapply(reducedCov, function(x) { 
+		if(nrow(x) > 1) {
+		y <- lower.tri(cov2cor(x)); any((y < -1) | (y > 1))
+		} else {
+		return(FALSE)
+		}
+	})))
 } 
 
 imposeSmartStart <- function(model, paramSet, indLab, facLab, latent) {

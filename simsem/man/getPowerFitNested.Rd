@@ -36,7 +36,7 @@ getPowerFitNested(altNested, altParent, cutoff, ...)
 	}
 }}
 \value{
-	List of power given different fit indices.
+	List of power given different fit indices. The \code{TraditionalChi} means the proportion of replications that are rejected by the traditional chi-square difference test.
 }
 \author{
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
