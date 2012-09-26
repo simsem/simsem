@@ -262,32 +262,33 @@ plannedMissing <- function(dims = c(0, 0), nforms = NULL, itemGroups = NULL, two
         
         # 5) Sort the column names
         
-        # 6) Convert back to matrix
-        
-        excl <- setdiff(excl, 0)
-        if (length(excl) != 0) {
-            exclMat <- matrix(rep(FALSE, nobs * length(excl)), ncol = length(excl))
-            log.df <- as.data.frame(cbind(log.mat, exclMat))
-            colnames(log.df) <- (c(itemList, excl))
-            
-            # The column names need to be coerced to integers for the sort to work
-            # correctly, and then coerced back to strings for the data frame subsetting to
-            # work correctly.
-            log.df <- log.df[, paste(sort(as.integer(colnames(log.df))), sep = "")]
-            
-            log.mat <- as.matrix(log.df)
-            colnames(log.mat) <- NULL
-            
-        }
+
         
     }
+	# 6) Convert back to matrix
+        
+	excl <- setdiff(excl, 0)
+	if (length(excl) != 0) {
+		exclMat <- matrix(rep(FALSE, nobs * length(excl)), ncol = length(excl))
+		log.df <- as.data.frame(cbind(log.mat, exclMat))
+		colnames(log.df) <- (c(itemList, excl))
+		
+		# The column names need to be coerced to integers for the sort to work
+		# correctly, and then coerced back to strings for the data frame subsetting to
+		# work correctly.
+		log.df <- log.df[, paste(sort(as.integer(colnames(log.df))), sep = "")]
+		
+		log.mat <- as.matrix(log.df)
+		colnames(log.mat) <- NULL
+		
+	}
     if (!is.null(twoMethod)) {
+		log.mat <- matrix(FALSE, dims[1], dims[2])
         col <- unlist(twoMethod[1])
         percent <- unlist(twoMethod[2])
         toDelete <- 1:((percent) * nobs)
         log.mat[toDelete, col] <- TRUE
     }
-    
     return(log.mat)
 }
 

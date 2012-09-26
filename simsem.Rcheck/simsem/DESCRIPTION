@@ -17,4 +17,4 @@ Description: This package can be used to generate data using the structural equa
 License: GPL (>= 2)
 LazyLoad: yes
 URL: http://www.simsem.org
-Built: R 2.15.1; ; 2012-09-26 04:27:57 UTC; windows
+Built: R 2.15.1; ; 2012-09-26 05:16:27 UTC; windows
