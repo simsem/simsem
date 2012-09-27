@@ -41,13 +41,13 @@
 <li><em>Methodological investigations.</em> This package can be used for methodological studies concerning SEM. Researchers can easily vary parameter values and model misspecification across parameters and easily summarize results from simulations. Nested models can be easily tested by comparing the results from two simulation runs. The powerful and flexible missing data options available in simsem make the package extremely useful in methodological investigations concerning SEM and missing data.</li>
 </ol><h2>Announcements</h2>
 
+<h3>[September 26, 2012] Latest Update: simsem, Version 0.3-11</h3>
+
+<p>This version is available on KRAN only. The <strong>getPowerFit</strong> and <strong>getPowerFitNested</strong> functions provide the power of traditional chi-square (absolute or difference) tests. The convergent status is recoded and expanded to account for improper correlation solutions. Most summary function family (e.g., <strong>summaryFit</strong> or <strong>summaryParam</strong>) provides an <em>improper</em> argument to include the replications providing improper solutions in the summary. The bugs on the simulation with varying sample size and on two-method designs have been fixed.</p>
+
 <h3>[September 24, 2012] Latest Update: simsem, Version 0.3-9</h3>
 
 <p>This version is available on KRAN only. The problem on the high rate of convergence results has been resolved. The <strong>exportData</strong> function is introduced to export datasets generated from the model template into data files that are ready to be analyzed by LISREL or Mplus. This version also classify the reasons behind nonconvergent results as can be seen in the <strong>summary</strong> function. The output format is also slightly modified.
-
-<h3>[September 19, 2012] Latest Update: simsem, Version 0.3-7</h3>
-
-<p>This version is availabe on KRAN only. The <strong>sim</strong> function has the option, <em>smartStart</em>, to use population values as starting values in data analysis. The default is FALSE (not use the population values as starting values). From brief testing, using the population values could make the simulation time longer because of the data management in parsing population values as starting values. We also found the bug that the equality constraints are not applied when there are equality constraints in the model but model misspecification is not specified (when the model misspecification is specified, the previous version did correctly). We fix this bug now. This bug will be applied for those people who use random-parameter data generation model. If any current users have equality constraints in their models, the parameters in the equally constrained values are random, and model misspecification is not specified, the accuracy of the results might be compromised. We also fix the problem in all full SEM models that the population parameters did not match with the parameter estimates. In this version, the parameters are reparameterized to match the analysis result (e.g., change the residual variances of the data-generation population to 1 to match the fixed values in the analysis model). We also fix a couple of minor bugs in this version too. Finally, we still keep updating the documentation. Currently, Example 12 of the new version is posted.</p>
 
 <h2>Developers</h2>
 
