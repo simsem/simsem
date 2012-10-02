@@ -33,11 +33,59 @@
       <section id="main_content" class="inner">
         <h1>Version History (Technical)</h1>
 
+<h2>Version 0.3-11 09/26/12</h2>
+
+<ul>
+<li>Fix the problem in running <strong>sim</strong> when the sample size is varying (only one replication provided)
+<li>Add the code in <strong>fillParam</strong> to make sure that the diagonal elements of <em>RTE</em> and <em>RPS</em> are not read.
+<li>Fix the <strong>summaryFit</strong> function to provide the output that is executable by <strong>round</strong>
+<li>Make the power of traditional chi-square test to be provided only when the sample size, pmMCAR, and pmMCAR are not varying.
+</ul>
+
+<h2>Version 0.3-10 09/25/12</h2>
+
+<ul>
+<li>Make the <strong>getPowerFit</strong> and <strong>getPowerFitNested</strong> to provide the power based on traditional chi-square test. Also if the null object and cutoff are not provided, the alternative object will be used as the null object. This is useful when researchers wish to find a type I error.
+<li>Swap the convergent code a little bit, such that 0 = convergent, 1 = nonconvergent, 2 = nonconvergent in MI, 3 = improper SE, 4 = improper variance, and 5 = improper correlation
+<li>Add the <em>improper</em> argument to <strong>summaryFit</strong>, <strong>summaryParam</strong>, <strong>summaryMisspec</strong>, <strong>summaryPopulation</strong>, and <strong>getExtraOutput</strong> to summarize the output with the improper solutions.
+<li>Add the <em>improper</em> argument to <strong>summaryConverge</strong> to separate the nonconvergent summary to improper-solution summary.
+<li>Add the <em>improper</em> argument to <strong>clean</strong> to handle improper solutions appropriately.
+<li>Fix the bug in <strong>plannedMissing</strong> such that the <em>ignoreCols</em> argument does not work with <em>twoMethod</em>
+</ul>
+
+<h2>Version 0.3-9 09/24/12</h2>
+
+<ul>
+<li>Add <strong>exportData</strong> function to export datasets generated from the model template into data files that are ready to be analyzed by LISREL or Mplus.
+<li>Change the <em>converged</em> argument in the result object into number codes and use 0 as convergent.
+<li>Change the wrong description in <strong>summaryShort</strong> function of result object in describing <em>pmMAR</em> and <em>pmMCAR</em>.
+<li>Make the fit index summary in the <strong>summary</strong> and <strong>summaryShort</strong> functions not show the scientific numbers.
+</ul>
+
+<h2>Version 0.3-8 09/24/12</h2>
+
+<ul>
+<li>Change the default of the <em>smart</em> argument in the <strong>startingVal</strong> as FALSE. The problem of high nonconvergent rates should be solved.
+</ul>
+
+<h2>Version 0.3-7 09/19/12</h2>
+
+<ul>
+<li>Delete the <em>smartStart</em> argument from the <strong>model</strong> family of functions
+<li>Add the <em>smartStart</em> argument from in the <strong>sim</strong> function, as well as adding the <strong>imposeSmartStart</strong> function to impose parameter values to the parameter table and the <strong>collapseParamSet</strong> function to vectorize parameter matrices.
+<li>Add the <strong>changeScaleSEM</strong> function to reparameterize the population values. In SEM type of model, the parameter values of residual variance are less than 1 whereas the analysis model fix the residual variance as 1. The parameter values are reparameterized to make the residual variance equals 1. Then add the <strong>changeScaleSEM</strong> function inside the <strong>generate</strong> function in order to generate data from the reparameterized parameters. The <strong>changeScaleSEM</strong> function works for fixed-factor method, manifest-variable method, and constraints in loadings across factor.
+<li>Fix the bug in the <strong>rawDraw</strong> function that the model constraints does not work when the constraints are specified but the model misspecification is not specified.
+<li>Delete the <strong>extract</strong> function and use the <em>drop=FALSE</em> in the <strong>"["</strong> function instead
+<li>Fix the bug in the <strong>bind</strong> function when fixed values are specified with <em>popParam</em>.
+</ul>
+
 <h2>Version 0.3-6 09/13/12</h2>
 
-- Fix the bug in the <strong>sim</strong> function when the number of factors are not equal across groups.
-- Allow sample sizes to be unequal across groups by fixing the <strong>generate</strong> and <strong>sim</strong> functions.
-- The <em>dataOnly</em> and <em>paramOnly</em> attribute in the <strong>sim</strong> function are fixed.
+<ul>
+<li>Fix the bug in the <strong>sim</strong> function when the number of factors are not equal across groups.
+<li>Allow sample sizes to be unequal across groups by fixing the <strong>generate</strong> and <strong>sim</strong> functions.
+<li>The <em>dataOnly</em> and <em>paramOnly</em> attribute in the <strong>sim</strong> function are fixed.
+</ul>
 
 <h2>Version 0.3-5 09/06/12</h2>
 

@@ -41,35 +41,13 @@
 <li><em>Methodological investigations.</em> This package can be used for methodological studies concerning SEM. Researchers can easily vary parameter values and model misspecification across parameters and easily summarize results from simulations. Nested models can be easily tested by comparing the results from two simulation runs. The powerful and flexible missing data options available in simsem make the package extremely useful in methodological investigations concerning SEM and missing data.</li>
 </ol><h2>Announcements</h2>
 
-<h3>[September 13, 2012] Latest Update: simsem, Version 0.3-6</h3>
+<h3>[September 26, 2012] Latest Update: simsem, Version 0.3-11</h3>
 
-<p>This version is available in both KRAN only. Fix the errors in the sim function when the noninvariance model is run and when the <em>dataOnly</em> and <em>paramOnly</em> arguments are used. This version also allows the number of observations to be unequal across groups.</p>
+<p>This version is available on KRAN only. The <strong>getPowerFit</strong> and <strong>getPowerFitNested</strong> functions provide the power of traditional chi-square (absolute or difference) tests. The convergent status is recoded and expanded to account for improper correlation solutions. Most summary function family (e.g., <strong>summaryFit</strong> or <strong>summaryParam</strong>) provides an <em>improper</em> argument to include the replications providing improper solutions in the summary. The bugs on the simulation with varying sample size and on two-method designs have been fixed.</p>
 
-<h3>[September 12, 2012] Latest Update: simsem, Version 0.3-5</h3>
+<h3>[September 24, 2012] Latest Update: simsem, Version 0.3-9</h3>
 
-<p>This version is available in both CRAN and KRAN. We have rewriten the whole package. simsem 0.2-* code cannot be run in the current version. Here is a list of major updates: </p>
-
-<ol>
-<li>All function names are changed so that the package is much more intuitive. The main idea is that users need to build their target models by the <strong>model</strong> function. This model is built by matrices and vectors in LISREL notation via the <strong>bind</strong> and <strong>binds</strong> functions. Then, the model can be used for data generation by the <strong>generate</strong> function, for data analysis by the <strong>analysis</strong> function, and for Monte Carlo simulation by the <strong>sim</strong> function. This version no longer requires data or model objects.</li>
-<li>The multiple group feature is available now. Users can put a list of multiple matrix or vector objects (e.g., multiple matrices for LY attribute) for specifying a multiple groups model. Click <a href="https://github.com/simsem/simsem/blob/master/SupportingDocs/multiplegroup.R">here</a> to see example  multiple group codes.</li>
-<li><i>Faster</i>. From a brief test, this package is about 30% faster than the 0.2 family.</li>
-<li>X-side LISREL notation is no longer supported (e.g., no LX, PH, or TD).</li>
-<li>Equality constraints are set by putting the same character as the free elements in the matrix or vector objects. This version does not have the equality constraint object.</li>
-<li>Random parameters are specified by a quote of command that users use to draw one random number (such as "runif(1, -0.2, 0.2)" instead of using distribution objects in the previous version). This version no longer has distribution objects.</li>
-<li>Model misspecification is set in the <strong>bind</strong> and <strong>binds</strong> functions when making the matrix or vector objects by the <em>misspec</em> attribute. The misspecification object is not longer supported.</li>
-<li>This package does not contain any native code for the auxiliary variables in FIML and multiple-imputation. Instead, this package will call commands from the semTools package which is more efficient. NOTE: auxiliary variables in FIML and multiple-impuation are still supported, the code has simply been moved.</li>
-<li>And much more...</li>
-</ol>
-<p>Please click <a href="https://github.com/simsem/simsem/blob/master/SupportingDocs/simsem.v0.3.code.transfer.pdf?raw=true">here</a> for a brief introduction of the changes from the 0.2 family to 0.3 family. We will gradually update the online wiki pages (currently Examples 1-5 has been fixed) and all example code from our papers and presentations. There are two things that the current version cannot handle whereas the 0.2-family can handle:</p>
-<ol>
-<li>The flexible order of filling parameters, equality constraints, and adding model misspecification. This current version supports a single order: 1) impose equality constraints, 2) add model misspecification, and 3) fill parameters (such as residual variances when the total variances are specified).</li>
-<li>The maximal method and interval method of model misspecification.</li>
-</ol>
-<p>We will update the current version with these features soon. For those people who are working on the old version of simsem, we still provide the old version of simsem but the name is changed to simsemClassic. <strong>simsemClassic is available on KRAN only.</strong> Please let us know if you have any questions, find any bugs, or provide any feedbacks. Thank you!</p>
-
-<h3>[September 12, 2012] New Package: simsemClassic, Version 0.2-9</h3>
-
-<p>This package is the updated version of simsem 0.2-8. This is the last update in the 0.2-* series! The change reflects the update in the copula package.</p>
+<p>This version is available on KRAN only. The problem on the high rate of convergence results has been resolved. The <strong>exportData</strong> function is introduced to export datasets generated from the model template into data files that are ready to be analyzed by LISREL or Mplus. This version also classify the reasons behind nonconvergent results as can be seen in the <strong>summary</strong> function. The output format is also slightly modified.
 
 <h2>Developers</h2>
 
@@ -97,7 +75,7 @@
 <pre><code>install.packages("simsem", repos="http://rweb.quant.ku.edu/kran")
 </code></pre>
 
-<p>Here is how to install the simsemClassic (version 0.2-8 of simsem) from KRAN only:</p>
+<p>Here is how to install simsemClassic (version 0.2-8 of simsem) from KRAN only:</p>
 
 <pre><code>install.packages("simsemClassic", repos="http://rweb.quant.ku.edu/kran")
 </code></pre>
@@ -113,8 +91,7 @@
 
 <p class="hang">Little, T. D., Schoemann, A. M., Pornprasertmanit, S., &amp; Miller, P. (October, 2012). <em>simsem: SIMulated Structural Equation Modeling in R.</em> Paper to be presented at the Tenth Annual Society of Multivariate Experimental Psychology, Vancouver, Canada. 
 
-<p class="hang">Pornprasertmanit, S., Wu, W., &amp; Little, T. D. (October, 2012). <em>Taking into account sampling variability of model selection indices: A parametric bootstrap approach.</em> Poster (with honorable mention) to be presented at the Tenth Annual Society of Multivariate Experimental Psychology Graduate Student Pre-conference, Vancouver, Canada. <a href="https://github.com/simsem/simsem/raw/master/Conference%20presentations/Nonnested%20model%20comparison%20abstract%20for%20SMEP%20with%20authors%20name.pdf">Abstract</a>, <a href="https://github.com/simsem/simsem/blob/master/Conference%20presentations/SMEPexample.R">Example Code</a>.</p>
-
+<p class="hang">Pornprasertmanit, S., Wu, W., &amp; Little, T. D. (October, 2012). <em>Taking into account sampling variability of model selection indices: A parametric bootstrap approach.</em> Poster (with honorable mention) to be presented at the Tenth Annual Society of Multivariate Experimental Psychology Graduate Student Pre-conference, Vancouver, Canada. <a href="https://github.com/simsem/simsem/raw/master/Conference%20presentations/SMEP%20nonnested%20model%20comparison%20writeup.pdf">Presentation</a>, <a href="https://github.com/simsem/simsem/blob/master/Conference%20presentations/SMEP%20nonnested%20model%20comparison%20example%20v3.R">Example Code</a>.</p>
 
 <p class="hang">Pornprasertmanit, S., Wu, W., &amp; Little, T. D. (July, 2012). <em>Using a parametric bootstrap approach for nested model comparisons in structural equation modeling.</em> Presentation at the International Meeting of the Psychometric Society, Lincoln, NE. <a href="https://github.com/simsem/simsem/raw/master/Conference%20presentations/IMPS%20nested%20model%20comparison.pdf">Presentation</a>, <a href="https://github.com/simsem/simsem/blob/master/Conference%20presentations/IMPS%20nested%20model%20comparison%20example.R">Example Code</a>.</p>
 

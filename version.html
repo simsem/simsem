@@ -33,6 +33,22 @@
       <section id="main_content" class="inner">
         <h1>Version History (Official)</h1>
 
+<h2>Version 0.3-11 09/26/12</h2>
+
+<p>This version is available on KRAN only. The <strong>getPowerFit</strong> and <strong>getPowerFitNested</strong> functions provide the power of traditional chi-square (absolute or difference) tests. The convergent status is recoded and expanded to account for improper correlation solutions. Most summary function family (e.g., <strong>summaryFit</strong> or <strong>summaryParam</strong>) provides an <em>improper</em> argument to include the replications providing improper solutions in the summary. The bugs on the simulation with varying sample size and on two-method designs have been fixed.</p>
+
+<h2>Version 0.3-9 09/24/12</h2>
+
+<p>This version is available on KRAN only. The problem on the high rate of convergence results has been resolved. The <strong>exportData</strong> function is introduced to export datasets generated from the model template into data files that are ready to be analyzed by LISREL or Mplus. This version also classify the reasons behind nonconvergent results as can be seen in the <strong>summary</strong> function. The output format is also slightly modified.
+
+<h2>Version 0.3-8 09/24/12</h2>
+
+<p>Change the default of the <em>smart</em> argument in the <strong>startingVal</strong> as FALSE. The problem of high nonconvergent rates should be solved.</p>
+
+<h2>Version 0.3-7 09/19/12</h2>
+
+<p>This version is availabe on KRAN only. The <strong>sim</strong> function has the option, <em>smartStart</em>, to use population values as starting values in data analysis. The default is FALSE (not use the population values as starting values). From brief testing, using the population values could make the simulation time longer because of the data management in parsing population values as starting values. We also found the bug that the equality constraints are not applied when there are equality constraints in the model but model misspecification is not specified (when the model misspecification is specified, the previous version did correctly). We fix this bug now. This bug will be applied for those people who use random-parameter data generation model. If any current users have equality constraints in their models, the parameters in the equally constrained values are random, and model misspecification is not specified, the accuracy of the results might be compromised. We also fix the problem in all full SEM models that the population parameters did not match with the parameter estimates. In this version, the parameters are reparameterized to match the analysis result (e.g., change the residual variances of the data-generation population to 1 to match the fixed values in the analysis model). We also fix a couple of minor bugs in this version too. Finally, we still keep updating the documentation. Currently, Example 12 of the new version is posted.</p>
+
 <h2>Version 0.3-6 09/13/12</h2>
 
 <p>Fix the errors in the sim function when the noninvariance model is run and when the <em>dataOnly</em> and <em>paramOnly</em> arguments are used. This version also allows the number of observations to be unequal across groups.</p>
