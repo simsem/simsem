@@ -109,7 +109,7 @@ setMethod("anova", signature(object = "SimResult"), function(object, ...) {
     BIC.delta <- (apply(BIC, 1, diff))
     
     # Power of test. 0 = not siginficant, 1 = sig.
-    Power.delta <- pchisq(Chi.delta, Df.delta, lower = FALSE) < 0.05
+    Power.delta <- pchisq(Chi.delta, Df.delta, lower.tail = FALSE) < 0.05
     
     # Need to think about what we want out of this. Maybe just mean differences
     # across models? Lets do that for now
