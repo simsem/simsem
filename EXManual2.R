@@ -128,10 +128,16 @@ CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, VTE=VTE, modelType = "CFA")
 param <- draw(CFA.Model)
 dat <- createData(param[[1]], n = 200)
 
+script <- "
+x1 ~ 0.5 + 0.3*x2 + 0.4*x4
+#y3 ~ 0.7 + 0.4*y2 + 0.1*y4
+#y2 ~ 1
+#y4 ~ -0.5 + 0.2*y2
+x4 ~ -3
+"
 
-
-
-
+missthing <- miss(logit=script, pmMCAR=0.2, ignoreCols="group")
+impose(missthing, dat)
 
 #################################### Example 2 #######################
 
@@ -336,7 +342,7 @@ SEM.model <- model(BE=BE, LY=LY, RPS=RPS, RTE=RTE, modelType="SEM")
 draw(SEM.model)
 
 #Output2 <- sim(1000, n=300, SEM.model, smartStart=TRUE) 
-Output <- sim(1000, n=300, SEM.model)#, smartStart=FALSE) 
+Output <- sim(100, n=300, SEM.model)#, smartStart=FALSE) 
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summary(Output)
@@ -370,8 +376,8 @@ path.start[3, 2] <- 0.4
 BE <- bind(path, path.start)
 
 SEM.model <- model(BE=BE, LY=LY, PS=PS, TE=TE, modelType="SEM")
-Output <- sim(1000, n=300, SEM.model, smartStart=FALSE) 
-Output2 <- sim(1000, n=300, SEM.model)#, smartStart=FALSE) 
+Output <- sim(100, n=300, SEM.model, smartStart=FALSE) 
+Output2 <- sim(100, n=300, SEM.model)#, smartStart=FALSE) 
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summary(Output)

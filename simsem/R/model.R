@@ -254,7 +254,12 @@ buildPT <- function(paramSet, pt = NULL, group = 1, facLab = NULL, indLab = NULL
     
     ## Convert a chunk at a time - starting with LY - factor loading. At least
     ## LY,PS/RPS must be specified.
+	psLab <- indLab
+	psLetter <- "y"
+	
     if (!is.null(paramSet$LY)) {
+		psLab <- facLab
+		psLetter <- "f"
         nf <- ncol(paramSet$LY@free)
         ni <- nrow(paramSet$LY@free)
         if (is.null(facLab)) {
@@ -273,12 +278,12 @@ buildPT <- function(paramSet, pt = NULL, group = 1, facLab = NULL, indLab = NULL
     ## PS - factor covariance: Symmetric
     if (!is.null(paramSet$PS)) {
         nf <- ncol(paramSet$PS@free)
-        if (is.null(facLab)) {
-            lhs <- paste0("f", rep(1:nf, nf:1))
-            rhs <- paste0("f", unlist(lapply(1:nf, function(k) (1:nf)[k:nf])))
+        if (is.null(psLab)) {
+            lhs <- paste0(psLetter, rep(1:nf, nf:1))
+            rhs <- paste0(psLetter, unlist(lapply(1:nf, function(k) (1:nf)[k:nf])))
         } else {
-            lhs <- rep(facLab, nf:1)
-            rhs <- unlist(lapply(1:nf, function(k) facLab[k:nf]))
+            lhs <- rep(psLab, nf:1)
+            rhs <- unlist(lapply(1:nf, function(k) psLab[k:nf]))
         }
         if (!is.null(pt)) {
             if (!is.null(paramSet$LY)) {
@@ -293,7 +298,7 @@ buildPT <- function(paramSet, pt = NULL, group = 1, facLab = NULL, indLab = NULL
                 rhs)
         }
     }
-    
+
     ## RPS - factor correlation (same as PS): Symmetric
     if (!is.null(paramSet$RPS)) {
         # Step 1: parse variance information to the RPS
@@ -306,12 +311,12 @@ buildPT <- function(paramSet, pt = NULL, group = 1, facLab = NULL, indLab = NULL
         
         # Step 2: create pt
         nf <- ncol(paramSet$RPS@free)
-        if (is.null(facLab)) {
-            lhs <- paste0("f", rep(1:nf, nf:1))
-            rhs <- paste0("f", unlist(lapply(1:nf, function(k) (1:nf)[k:nf])))
+        if (is.null(psLab)) {
+            lhs <- paste0(psLetter, rep(1:nf, nf:1))
+            rhs <- paste0(psLetter, unlist(lapply(1:nf, function(k) (1:nf)[k:nf])))
         } else {
-            lhs <- rep(facLab, nf:1)
-            rhs <- unlist(lapply(1:nf, function(k) facLab[k:nf]))
+            lhs <- rep(psLab, nf:1)
+            rhs <- unlist(lapply(1:nf, function(k) psLab[k:nf]))
         }
         if (!is.null(pt)) {
             if (!is.null(paramSet$LY)) {
@@ -370,19 +375,18 @@ buildPT <- function(paramSet, pt = NULL, group = 1, facLab = NULL, indLab = NULL
             lhs, rhs), FUN = c, SIMPLIFY = FALSE)
     }
     
-    
     ## BE - Regressions among factors
     if (!is.null(paramSet$BE)) {
         nf <- ncol(paramSet$BE@free)
-        if (is.null(facLab)) {
-            lhs <- rep(paste("f", 1:nf, sep = ""), each = nf)
-            rhs <- rep(paste("f", 1:nf, sep = ""), times = nf)
+        if (is.null(psLab)) {
+            lhs <- rep(paste(psLetter, 1:nf, sep = ""), each = nf)
+            rhs <- rep(paste(psLetter, 1:nf, sep = ""), times = nf)
         } else {
-            lhs <- rep(facLab, each = nf)
-            rhs <- rep(facLab, times = nf)
+            lhs <- rep(psLab, each = nf)
+            rhs <- rep(psLab, times = nf)
         }
         pt <- mapply(pt, parseFree(paramSet$BE, group = group, pt = pt, op = "~", 
-            lhs, rhs, swap = TRUE), FUN = c, SIMPLIFY = FALSE)
+            lhs, rhs), FUN = c, SIMPLIFY = FALSE)
     }
     
     
@@ -396,11 +400,11 @@ buildPT <- function(paramSet, pt = NULL, group = 1, facLab = NULL, indLab = NULL
     # Create pt
     if (!is.null(paramSet$AL)) {
         nf <- length(paramSet$AL@free)
-        if (is.null(facLab)) {
-            lhs <- paste("f", 1:nf, sep = "")
+        if (is.null(psLab)) {
+            lhs <- paste(psLetter, 1:nf, sep = "")
             rhs <- rep("", times = nf)
         } else {
-            lhs <- facLab
+            lhs <- psLab
             rhs <- rep("", times = nf)
         }
         pt <- mapply(pt, parseFree(paramSet$AL, group = group, pt = pt, op = "~1", 
@@ -455,7 +459,7 @@ parseFree <- function(simDat, group, pt, op, lhs = NULL, rhs = NULL,
     
     if (class(simDat) == "SimVector") {
         numElem <- length(freeDat)
-    } else if (simDat@symmetric) {
+    } else if (simDat@symmetric && op == "~~") {
         # Just get lower tri
         numElem <- nrow(freeDat) * (nrow(freeDat) + 1)/2
     } else {
@@ -466,13 +470,13 @@ parseFree <- function(simDat, group, pt, op, lhs = NULL, rhs = NULL,
     op <- rep(op, length(id))
     user <- rep(0, numElem)
     group <- rep(group, numElem)
-    free <- freeIdx(freeDat, start = startFree)
-    ustart <- startingVal(freeDat, popParamDat)
+    free <- freeIdx(freeDat, start = startFree, symm = (op == "~~"))
+    ustart <- startingVal(freeDat, popParamDat, symm = (op == "~~"))
     exo <- rep(0, length(id))
-    eq.id <- eqIdx(freeDat, id)
+    eq.id <- eqIdx(freeDat, id, symm = (op == "~~"))
     label <- names(eq.id)
     eq.id <- as.vector(eq.id)
-    unco <- uncoIdx(freeDat, start = startUnco)
+    unco <- uncoIdx(freeDat, start = startUnco, symm = (op == "~~"))
     return(list(id = id, lhs = as.character(lhs), op = as.character(op), rhs = as.character(rhs), 
         user = user, group = as.integer(group), free = as.integer(free), ustart = ustart, 
         exo = exo, eq.id = eq.id, label = as.character(label), unco = as.integer(unco)))
@@ -482,8 +486,8 @@ parseFree <- function(simDat, group, pt, op, lhs = NULL, rhs = NULL,
 ## free parameter (NA) gets a unique index 2. The first constrained free
 ## parameter gets a unique index 3. Constrained parameters with identical
 ## labels get identical indices 4. Fixed parameters are 0
-freeIdx <- function(mat, start = 1) {
-    if (is.matrix(mat) && isSymmetric(mat)) {
+freeIdx <- function(mat, start = 1, symm = FALSE) {
+    if (is.matrix(mat) && symm) {
         flat <- as.vector(mat[lower.tri(mat, diag = TRUE)])
     } else {
         flat <- as.vector(mat)
@@ -519,9 +523,9 @@ freeIdx <- function(mat, start = 1) {
 }
 
 ## Calculates the indices for unconstrained parameters
-uncoIdx <- function(mat, start = 1) {
+uncoIdx <- function(mat, start = 1, symm = FALSE) {
     
-    if (is.matrix(mat) && isSymmetric(mat)) {
+    if (is.matrix(mat) && symm) {
         flat <- as.vector(mat[lower.tri(mat, diag = TRUE)])
     } else {
         flat <- as.vector(mat)
@@ -546,9 +550,9 @@ uncoIdx <- function(mat, start = 1) {
 }
 
 ## The parameter index of labels that are the same
-eqIdx <- function(mat, id) {
+eqIdx <- function(mat, id, symm = FALSE) {
     
-    if (is.matrix(mat) && isSymmetric(mat)) {
+    if (is.matrix(mat) && symm) {
         flat <- as.vector(mat[lower.tri(mat, diag = TRUE)])
     } else {
         flat <- as.vector(mat)
@@ -579,9 +583,9 @@ eqIdx <- function(mat, id) {
 }
 
 ## Calculate starting values. Needs work, but no time to finish yet.
-startingVal <- function(free, popParam, smart = FALSE) {
+startingVal <- function(free, popParam, smart = FALSE, symm = FALSE) {
 	# smartStart & smart are depreciated from the model set of functions. Will be provided in the sim function instead.
-    if (is.matrix(free) && isSymmetric(free)) {
+    if (is.matrix(free) && symm) {
         flat <- as.vector(free[lower.tri(free, diag = TRUE)])
         flat[is.label(flat)] <- NA
         flat <- as.numeric(flat)
@@ -1004,7 +1008,6 @@ estmodel.sem <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL
         indLab = indLab, facLab = facLab, groupLab = groupLab, ngroups = ngroups)
 }
 
-# Not finish
 model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, TE = NULL, 
     RTE = NULL, BE = NULL, VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL, 
     AL = NULL, MY = NULL, ME = NULL) {

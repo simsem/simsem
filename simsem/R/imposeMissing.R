@@ -9,14 +9,14 @@ impose <- function(miss, data.mat, pmMCAR = NULL, pmMAR = NULL) {
         if (!("data" %in% names(data.mat))) 
             stop("The list does not contain any dataset.")
         data.mat$data <- as.data.frame(imposeMissing(data.mat$data, cov = miss@cov, 
-            pmMCAR = miss@pmMCAR, pmMAR = miss@pmMAR, nforms = miss@nforms, itemGroups = miss@itemGroups, 
+            pmMCAR = miss@pmMCAR, pmMAR = miss@pmMAR, logit = miss@logit, nforms = miss@nforms, itemGroups = miss@itemGroups, 
             twoMethod = miss@twoMethod, prAttr = miss@prAttr, timePoints = miss@timePoints, 
             logical = miss@logical, ignoreCols = miss@ignoreCols, threshold = miss@threshold))
     } else {
         if (is.matrix(data.mat)) 
             data.mat <- as.data.frame(data.mat)
         data.mat <- as.data.frame(imposeMissing(data.mat, cov = miss@cov, pmMCAR = miss@pmMCAR, 
-            pmMAR = miss@pmMAR, nforms = miss@nforms, itemGroups = miss@itemGroups, 
+            pmMAR = miss@pmMAR, logit = miss@logit, nforms = miss@nforms, itemGroups = miss@itemGroups, 
             twoMethod = miss@twoMethod, prAttr = miss@prAttr, timePoints = miss@timePoints, 
             logical = miss@logical, ignoreCols = miss@ignoreCols, threshold = miss@threshold))
     }
@@ -32,45 +32,55 @@ impose <- function(miss, data.mat, pmMCAR = NULL, pmMAR = NULL) {
 ## Currently, the function will delete x percent of eligible values for MAR and
 ## MCAR, if you mark colums to be ignored.
 imposeMissing <- function(data.mat, cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, itemGroups = list(), 
-    twoMethod = 0, prAttr = 0, timePoints = 1, ignoreCols = 0, threshold = 0, logical = NULL) {
+    twoMethod = 0, prAttr = 0, timePoints = 1, ignoreCols = 0, threshold = 0, logit = "", logical = NULL) {
     if (is.character(ignoreCols)) 
         ignoreCols <- match(ignoreCols, colnames(data.mat))
     if (is.character(cov)) 
         cov <- match(cov, colnames(data.mat))
+		
+	log.all <- matrix(FALSE, nrow(data.mat), ncol(data.mat))
     if (nforms != 0 | !isTRUE(all.equal(twoMethod, 0))) {
         # TRUE values are values to delete
         log.matpl <- plannedMissing(dim(data.mat), cov, nforms = nforms, twoMethod = twoMethod, 
             itemGroups = itemGroups, timePoints = timePoints, ignoreCols = ignoreCols)
-        data.mat[log.matpl] <- NA
+        log.all <- log.all | log.matpl
     }
     # Impose MAR and MCAR
     
     if (pmMCAR != 0) {
         log.mat1 <- makeMCAR(dim(data.mat), pmMCAR, cov, ignoreCols)
-        data.mat[log.mat1] <- NA
+		log.all <- log.all | log.mat1
     }
     
     if (pmMAR != 0) {
         log.mat2 <- makeMAR(data.mat, pmMAR, cov, ignoreCols, threshold)
-        data.mat[log.mat2] <- NA
+		log.all <- log.all | log.mat2
     }
     
+	if (!is.null(logit) & (nchar(logit) > 0)) {
+		log.mat2.1 <- logitMiss(data.mat, logit)
+		log.all <- log.all | log.mat2.1
+	}
+	
     if (prAttr != 0) {
         log.mat3 <- attrition(data.mat, prob = prAttr, timePoints, cov, threshold, 
             ignoreCols)
-        data.mat[log.mat3] <- NA
+		log.all <- log.all | log.mat3
     }
     
     if (!is.null(logical) && !is.null(dim(logical)) && !all(dim(logical) == 1)) {
         if (!(class(logical) %in% c("matrix", "data.frame"))) 
             stop("The logical argument must be matrix or data frame.")
         usecol <- setdiff(seq_len(ncol(data.mat)), ignoreCols)
-        data.mat2 <- data.mat[, usecol]
-        if ((dim(data.mat2)[1] != dim(logical)[1]) | (dim(data.mat2)[2] != dim(logical)[2])) 
+        log.all2 <- log.all[, usecol]
+        if ((dim(log.all2)[1] != dim(logical)[1]) | (dim(log.all2)[2] != dim(logical)[2])) 
             stop("The dimension in the logical argument is not equal to the dimension in the data")
-        data.mat2[logical] <- NA
-        data.mat[, usecol] <- data.mat2
+        log.all2 <- log.all2 | logical
+        log.all[, usecol] <- log.all2
     }
+	
+	data.mat[log.all] <- NA
+	
     return(data.mat)
     
 }
@@ -86,7 +96,7 @@ makeMAR <- function(data, pm = NULL, cov = NULL, ignoreCols = NULL, threshold = 
     colList <- seq_len(ncol)
     excl <- c(cov, ignoreCols)
     misCols <- setdiff(colList, excl)
-    
+
     # Calculate the probability of missing above the threshold,starting with the
     # mean of the covariate. If this probability is greater than or equal to 1,
     # lower the threshold by choosing thresholds at increasingly lower quantiles of
@@ -102,8 +112,7 @@ makeMAR <- function(data, pm = NULL, cov = NULL, ignoreCols = NULL, threshold = 
         if (i != 0) {
             threshold <- quantile(cov, qlist[i])
         }
-        
-        percent.eligible <- (sum(data[, cov] > threshold) * length(misCols))/length(as.matrix(data))
+        percent.eligible <- (sum(data[, cov] > threshold) * length(misCols))/length(as.matrix(data[,misCols]))
         pr.missing <- pm/percent.eligible
         i <- i + 1
     }
@@ -117,11 +126,12 @@ makeMAR <- function(data, pm = NULL, cov = NULL, ignoreCols = NULL, threshold = 
     # misrand <- runif(length(mismat)) < pr.missing
     
     # mismat <- matrix(mapply(`&&`,misrand,as.vector(mismat)),nrow=nrow)
-    
+
     rows.eligible <- data[, cov] > threshold
     total.elig <- rep(rows.eligible, 1, each = ncol)
     misrand <- runif(length(total.elig)) < pr.missing
     mismat <- matrix(mapply(`&&`, misrand, total.elig), nrow = nrow, byrow = TRUE)
+
     mismat[, excl] <- FALSE
     
     return(mismat)
@@ -141,11 +151,8 @@ makeMCAR <- function(dims, pm = 0, cov = 0, ignoreCols = 0) {
     
     excl <- c(cov, ignoreCols)
     misCols <- setdiff(colList, excl)
-    
-    percent.eligible <- (nrow * length(misCols))/(nrow * ncol)
-    pr.missing <- pm/percent.eligible
-    
-    R.mis <- matrix(runif(nrow * ncol) <= pr.missing, nrow = nrow)
+
+    R.mis <- matrix(runif(nrow * ncol) <= pm, nrow = nrow)
     R.mis[, excl] <- FALSE
     
     return(R.mis)
@@ -437,6 +444,71 @@ attrition <- function(data, prob = NULL, timePoints = 1, cov = NULL, threshold =
 }
 
 
+# Implementing logistic regression model for missing at random
+
+logitMiss <- function(data, script) {
+	# Most of the beginning of this codes are from lavaanify function in lavaan
+	
+    # break up in lines 
+    model <- unlist( strsplit(script, "\n") )
+
+    # remove comments starting with '#' or '!'
+    model <- gsub("#.*","", model); model <- gsub("!.*","", model)
+
+    # replace semicolons by newlines and split in lines again
+    model <- gsub(";","\n", model); model <- unlist( strsplit(model, "\n") )
+
+    # strip all white space
+    model <- gsub("[[:space:]]+", "", model)
+
+    # keep non-empty lines only
+    idx <- which(nzchar(model))
+    model <- model[idx]
+	
+    # check for multi-line formulas: they contain no "~" or "=" character
+    # but before we do that, we remove all modifiers
+    # to avoid confusion with for example equal("f1=~x1") statements
+    model.simple <- gsub("\\(.*\\)\\*", "MODIFIER*", model)
+
+    start.idx <- grep("[~=<>:]", model.simple)
+    end.idx <- c( start.idx[-1]-1, length(model) )
+    model.orig    <- model
+    model <- character( length(start.idx) )
+    for(i in 1:length(start.idx)) {
+        model[i] <- paste(model.orig[start.idx[i]:end.idx[i]], collapse="")
+    }
+
+    # ok, in all remaining lines, we should have a '~' operator
+    # OR one of '=', '<' '>' outside the ""
+    model.simple <- gsub("\\\".[^\\\"]*\\\"", "LABEL", model)
+    idx.wrong <- which(!grepl("~", model.simple))
+    if(length(idx.wrong) > 0) {
+        cat("Missing ~ operator in formula(s):\n")
+        print(model[idx.wrong])
+        stop("Syntax error in missing model syntax")
+    }
+	
+	logmat <- matrix(FALSE, nrow(data), ncol(data))
+	parsedModel <- lapply(model, strsplit, "~")
+	dv <- sapply(parsedModel, function(x) x[[1]][1])
+	if(length(dv) != length(unique(dv))) warnings("Some variables' missingnesses are defined more than once. The last expression will be used only")
+	iv <- sapply(parsedModel, function(x) x[[1]][2])
+	ivsep <- strsplit(iv, "\\+")
+	
+	for(i in 1:length(ivsep)) {
+		temp <- strsplit(ivsep[[i]], "\\*")
+		pred <- 0
+		for(j in 1:length(temp)) {
+			expr <- temp[[j]]
+			ivj <- rep(1, nrow(data))
+			if(length(expr) > 1) ivj <- data[,expr[2]]
+			pred <- pred + (as.numeric(expr[1]) * ivj)
+		}
+		predprob <- 1/(1 + exp(-pred))
+		logmat[,which(dv[i]== colnames(data))] <- runif(length(predprob)) < predprob
+	}
+	logmat
+}
 
 
  

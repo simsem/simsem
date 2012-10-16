@@ -8,7 +8,7 @@
 # MI.  Arguments for Amelia (including number of imputations) can then be
 # passed via ...  Later, support for other imputation packages will be
 # included.
-miss <- function(cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, itemGroups = list(), 
+miss <- function(cov = 0, pmMCAR = 0, pmMAR = 0, logit = "", nforms = 0, itemGroups = list(), 
     timePoints = 1, twoMethod = 0, prAttr = 0, m = 0, chi = "all", package = "default", convergentCutoff = 0.8, ignoreCols = 0, 
     threshold = 0, covAsAux = TRUE, logical = NULL, ...) {
     args <- list(...)
@@ -30,7 +30,7 @@ miss <- function(cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, itemGroups = list()
 	if (package == "default") {
 		if(m > 0) package <- "Amelia"
 	}
-    return(new("SimMissing", cov = cov, pmMCAR = pmMCAR, pmMAR = pmMAR, nforms = nforms, 
+    return(new("SimMissing", cov = cov, pmMCAR = pmMCAR, pmMAR = pmMAR, logit=logit, nforms = nforms, 
         itemGroups = itemGroups, twoMethod = twoMethod, prAttr = prAttr, timePoints = timePoints, 
         threshold = threshold, ignoreCols = ignoreCols, covAsAux = covAsAux, logical = logical, 
         m = m, chi = chi, package = package, convergentCutoff = convergentCutoff, args = args))

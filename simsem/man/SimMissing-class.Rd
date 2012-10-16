@@ -15,6 +15,7 @@ Objects can be created by \code{\link{miss}} function.
     \item{\code{cov}:}{Column indices of any normally distributed covariates used in the data set.}
     \item{\code{pmMCAR}:}{Decimal percent of missingness to introduce completely at random on all variables.}
     \item{\code{pmMAR}:}{Decimal percent of missingness to introduce using the listed covariates as predictors.}
+	\item{\code{logit}:}{The script used for imposing missing values by logistic regression. See \code{\link{miss}} for further details.}
     \item{\code{nforms}:}{The number of forms for planned missing data designs, not including the shared form.}
     \item{\code{itemGroups}:}{List of lists of item groupings for planned missing data forms. Without this, items will be divided into groups sequentially (e.g. 1-3,4-6,7-9,10-12)}
     \item{\code{twoMethod}:}{Vector of (percent missing, column index). Will put a given percent

@@ -105,18 +105,29 @@ setMethod("summary", signature = "SimMissing", definition = function(object) {
     cat("MISSING OBJECT\n")
     handling <- "Maximum Likelihood"
     cat(paste("The method of missing data handling:", handling, "\n"))
-    printcov <- "Covariates (will not impose any missing values):"
+    printcov <- "Covariates:"
     if (length(object@cov) == 1 && object@cov == 0) {
         printcov <- paste(printcov, "none", "\n")
     } else {
         printcov <- paste(printcov, paste(object@cov, collapse = ", "), "\n")
     }
-    cat(printcov)
+	cat(printcov)
+    printignorecol <- "Ignored Variables:"
+    if (length(object@ignoreCols) == 1 && object@ignoreCols == 0) {
+        printignorecol <- paste(printignorecol, "none", "\n")
+    } else {
+        printignorecol <- paste(printignorecol, paste(object@ignoreCols, collapse = ", "), "\n")
+    }
+    cat(printignorecol)
     if (object@pmMCAR != 0) {
         cat(paste("Proportion of MCAR:", round(object@pmMCAR, 3), "\n"))
     }
     if (object@pmMAR != 0) {
         cat(paste("Proportion of MAR:", round(object@pmMAR, 3), "\n"))
+    }
+    if (nchar(object@logit) > 0) {
+        cat("Logistic-regression MAR:\n")
+		cat(paste(object@logit, "\n"))
     }
     if (object@nforms != 0) {
         cat("==========PLANNED MISSING DATA==========\n")

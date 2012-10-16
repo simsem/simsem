@@ -402,11 +402,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
     start.time <- proc.time()[3]
     ## 3. Impose Missing (if any)
     if (!is.null(miss)) {
-        
-        data <- imposeMissing(data, cov = miss@cov, pmMCAR = pmMCAR, pmMAR = pmMAR, 
-            nforms = miss@nforms, itemGroups = miss@itemGroups, twoMethod = miss@twoMethod, 
-            prAttr = miss@prAttr, timePoints = miss@timePoints, logical = miss@logical, 
-            ignoreCols = miss@ignoreCols, threshold = miss@threshold)
+        data <- impose(miss, data, pmMCAR=pmMCAR, pmMAR=pmMAR)
     }
     
     timing$ImposeMissing <- (proc.time()[3] - start.time)

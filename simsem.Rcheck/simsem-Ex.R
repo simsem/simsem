@@ -1298,6 +1298,12 @@ flush(stderr()); flush(stdout())
   # Impose missing data with percent attrition of 0.1 in 5 time points
   imposeMissing(datac,cov=21,prAttr=.1,timePoints=5)
 
+  # Logistic-regression MAR
+  colnames(data) <- paste("y", 1:ncol(data), sep="")
+  script <- 'y1 ~ 0.05 + 0.1*y2 + 0.3*y3
+			y4 ~ -2 + 0.1*y4
+			y5 ~ -0.5'
+  imposeMissing(data, logit=script)
 
 
 
@@ -1386,11 +1392,19 @@ CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA")
 dat <- generate(CFA.Model, n = 20)
 
 #Impose missing
-dat <- impose(Missing, dat)
+datmiss <- impose(Missing, dat)
 
 #Analyze data
-out <- analyze(CFA.Model, dat)
+out <- analyze(CFA.Model, datmiss)
 summary(out)
+
+#Missing using logistic regression
+  script <- 'y1 ~ 0.05 + 0.1*y2 + 0.3*y3
+			y4 ~ -2 + 0.1*y4
+			y5 ~ -0.5' 
+Missing2 <- miss(logit=script, pmMCAR=0.1, ignoreCols="group")
+summary(Missing2)
+datmiss2 <- impose(Missing2, dat)
 
 #Example to create simMissing object for 3 forms design at 3 timepoints with 10 imputations
 Missing <- miss(nforms=3, timePoints=3, numImps=10)

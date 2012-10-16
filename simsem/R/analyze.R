@@ -34,16 +34,34 @@ analyze <- function(model, data, package = "lavaan", miss = NULL,
 		}
         Output <- runMI(model@pt, data, m = miss@m, miArgs=miArgs, chi=miss@chi, miPackage=miss@package, fun="lavaan", ...)
     } else {
-        missing <- "default"
-        if (any(is.na(data))) 
-            missing <- "fiml"
+		# If the missing argument is not specified and data have NAs, the default is fiml.
+		if(is.null(args$missing)) {
+			missing <- "default"
+			if (any(is.na(data))) {
+				missing <- "fiml"
+			}
+		} else {
+			missing <- args$missing
+			args$missing <- NULL
+		}
         if (!is.null(aux)) {
-            library(semTools)
-            Output <- auxiliary(model@pt, aux = aux, data = data, group = model@groupLab, 
-                model.type = model@modelType, missing = missing, ...)
+            library(semTools)	
+			
+			attribute <- list(object=model@pt, aux = aux, data = data, group = model@groupLab, 
+                model.type = model@modelType, missing = missing)
+			attribute <- c(attribute, args)
+			Output <- do.call(auxiliary, attribute)
+			
+            #Output <- auxiliary(model@pt, aux = aux, data = data, group = model@groupLab, 
+            #    model.type = model@modelType, missing = missing, ...)
         } else {
-            Output <- lavaan(model@pt, data = data, group = model@groupLab, model.type = model@modelType, 
-                missing = missing, ...)
+			attribute <- list(model=model@pt, data = data, group = model@groupLab, model.type = model@modelType, 
+                missing = missing)
+			attribute <- c(attribute, args)
+			Output <- do.call(lavaan, attribute)
+			
+            #Output <- lavaan(model@pt, data = data, group = model@groupLab, model.type = model@modelType, 
+             #   missing = missing, ...)
         }
     }
     
