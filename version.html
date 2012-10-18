@@ -33,6 +33,10 @@
       <section id="main_content" class="inner">
         <h1>Version History (Official)</h1>
 
+<h2>Version 0.3-13 10/17/12</h2>
+
+<p>This version is available on KRAN only. This version allows users to impose missing values by logistic regression approach even easier. Users can use a p() function in the intercept of each logistic equation to set the intercept so that the average missing proportion equals the specified value. For example, 'y1 ~ p(0.2) + 0.5*y2' means that the missing proportion increases when y2 increases and the average missing proportion is 0.2. Users may write the target variable without any independent variable, which would be the missing completely at random, such as 'y2 ~ p(0.3)'. The logistic script can be visualized by the <strong>plotLogitMiss</strong> function.</p>
+
 <h2>Version 0.3-12 10/15/12</h2>
 
 <p>This version is available on CRAN and KRAN. This version allows users to impose missing values by logistic regression approach. Users can write a script similar to regression equation in lavaan syntax such that (a) each line begins with the imposed variable, (b) '~' is used to represent 'is regressed by', and (c) each line ends with the linear combination of other variables or a constant, such as 'y1 ~ 0.3 + 0.2*y2 + 0.1*y3'. The logistic regression approach can be used with other types of missing data, such as missing completely at random. See the help page of the <strong>miss</strong> function for further details. We also fix minor bugs in parameter table generation.</p>
