@@ -129,15 +129,24 @@ param <- draw(CFA.Model)
 dat <- createData(param[[1]], n = 200)
 
 script <- "
-x1 ~ 0.5 + 0.3*x2 + 0.4*x4
+x1 ~ p(0.5) + 0.3*x2 + 0.4*x4
 #y3 ~ 0.7 + 0.4*y2 + 0.1*y4
 #y2 ~ 1
 #y4 ~ -0.5 + 0.2*y2
 x4 ~ -3
+x2 ~ p(0.1) + 0.3*x2
+x3 ~ p(0.05)
 "
 
-missthing <- miss(logit=script, pmMCAR=0.2, ignoreCols="group")
+missthing <- miss(logit=script, ignoreCols="group")
 impose(missthing, dat)
+
+script <- "
+	y1 ~ p(0.5) + 0.7*y2 + 0.4*y4
+	y2 ~ p(0.2) + -1*zebra
+	y3 ~ 0.7*zx
+"
+plotLogitMiss(script)
 
 #################################### Example 2 #######################
 

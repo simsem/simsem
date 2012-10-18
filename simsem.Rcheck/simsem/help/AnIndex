@@ -66,6 +66,7 @@ plotCutoffNested	plotCutoffNested
 plotCutoffNonNested	plotCutoffNonNested
 plotDist	plotDist
 plotDist,SimDataDist-method	SimDataDist-class
+plotLogitMiss	plotLogitMiss
 plotMisfit	plotMisfit
 plotPower	plotPower
 plotPowerFit	plotPowerFit

@@ -65,7 +65,7 @@ imposeMissing(data.mat, cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0,
     deleted. The default threshold is the mean of the variable.
 }
  \item{logit}{
-    The script used for imposing missing values by logistic regression. The script is similar to the specification of regression in \code{lavaan} such that each line begins with a dependent variable, then '~' is used as regression sign, and the formula of a linear combination of independent variable plus constant, such as y1 ~ 0.5 + 0.2*y2. '#' and '!' can be used as a comment (like \code{lavaan}).
+    The script used for imposing missing values by logistic regression. The script is similar to the specification of regression in \code{lavaan} such that each line begins with a dependent variable, then '~' is used as regression sign, and the formula of a linear combination of independent variable plus constant, such as y1 ~ 0.5 + 0.2*y2. '#' and '!' can be used as a comment (like \code{lavaan}). For the intercept, users may use 'p()' to specify the average proportion of missing, such as y1 ~ p(0.2) + 0.3*y2, which the average missing proportion of y1 is 0.2 and the missing of y1 depends on y2. Users may visualize the missing proportion from the logistic specification by the \code{\link{plotLogitMiss}} function.
 }
  \item{logical}{
     A matrix of logical values (\code{TRUE/FALSE}). If a value in the dataset is corresponding to the \code{TRUE} in the logical matrix, the value will be missing.

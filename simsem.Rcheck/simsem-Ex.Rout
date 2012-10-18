@@ -32,7 +32,7 @@ This is lavaan 0.5-9
 lavaan is BETA software! Please report any bugs.
  
 ###############################################################################################
-This is simsem 0.3-12
+This is simsem 0.3-13
 simsem is BETA software! Please report any bugs.
 simsem was developed at the University of Kansas Center for Research Methods and Data Analysis.
 ###############################################################################################
@@ -2399,9 +2399,9 @@ Variances:
 
 > 
 > #Missing using logistic regression
->   script <- 'y1 ~ 0.05 + 0.1*y2 + 0.3*y3
-+ 			y4 ~ -2 + 0.1*y4
-+ 			y5 ~ -0.5' 
+> script <- 'y1 ~ 0.05 + 0.1*y2 + 0.3*y3
++ 	y4 ~ -2 + 0.1*y4
++ 	y5 ~ -0.5' 
 > Missing2 <- miss(logit=script, pmMCAR=0.1, ignoreCols="group")
 > summary(Missing2)
 MISSING OBJECT
@@ -2411,8 +2411,28 @@ Ignored Variables: group
 Proportion of MCAR: 0.1 
 Logistic-regression MAR:
 y1 ~ 0.05 + 0.1*y2 + 0.3*y3
-			y4 ~ -2 + 0.1*y4
-			y5 ~ -0.5 
+	y4 ~ -2 + 0.1*y4
+	y5 ~ -0.5 
+> datmiss2 <- impose(Missing2, dat)
+> 
+> #Missing using logistic regression (2)
+> script <- 'y1 ~ 0.05 + 0.5*y3
++ 	y2 ~ p(0.2)
++ 	y3 ~ p(0.1) + -1*y1
++ 	y4 ~ p(0.3) + 0.2*y1 + -0.3*y2
++ 	y5 ~ -0.5' 
+> Missing2 <- miss(logit=script)
+> summary(Missing2)
+MISSING OBJECT
+The method of missing data handling: Maximum Likelihood 
+Covariates: none 
+Ignored Variables: none 
+Logistic-regression MAR:
+y1 ~ 0.05 + 0.5*y3
+	y2 ~ p(0.2)
+	y3 ~ p(0.1) + -1*y1
+	y4 ~ p(0.3) + 0.2*y1 + -0.3*y2
+	y5 ~ -0.5 
 > datmiss2 <- impose(Missing2, dat)
 > 
 > #Example to create simMissing object for 3 forms design at 3 timepoints with 10 imputations
@@ -2927,6 +2947,33 @@ y1 ~ 0.05 + 0.1*y2 + 0.3*y3
 
 detaching 'package:copula'
 
+> nameEx("plotLogitMiss")
+> ### * plotLogitMiss
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: plotLogitMiss
+> ### Title: Visualize the missing proportion when the logistic regression
+> ###   method is used.
+> ### Aliases: plotLogitMiss
+> 
+> ### ** Examples
+> 
+> script <- 'y1 ~ 0.05 + 0.1*y2 + 0.3*y3
++ 	y4 ~ -2 + 0.1*y4
++ 	y5 ~ -0.5' 
+> plotLogitMiss(script)
+> 
+> script2 <- 'y1 ~ 0.05 + 0.5*y3
++ 	y2 ~ p(0.2)
++ 	y3 ~ p(0.1) + -1*y1
++ 	y4 ~ p(0.3) + 0.2*y1 + -0.3*y2
++ 	y5 ~ -0.5' 
+> plotLogitMiss(script2)
+> 
+> 
+> 
+> cleanEx()
 > nameEx("plotMisfit")
 > ### * plotMisfit
 > 
@@ -4172,7 +4219,7 @@ detaching 'package:parallel'
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  5.24 0.03 5.27 NA NA 
+Time elapsed:  5.5 0.06 6.02 NA NA 
 > grDevices::dev.off()
 null device 
           1 

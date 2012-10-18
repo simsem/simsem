@@ -447,7 +447,59 @@ attrition <- function(data, prob = NULL, timePoints = 1, cov = NULL, threshold =
 # Implementing logistic regression model for missing at random
 
 logitMiss <- function(data, script) {
-	# Most of the beginning of this codes are from lavaanify function in lavaan
+	model <- parseSyntaxLogitMiss(script)
+	logmat <- matrix(FALSE, nrow(data), ncol(data))
+	parsedModel <- lapply(model, strsplit, "~")
+	dv <- sapply(parsedModel, function(x) x[[1]][1])
+	if(length(dv) != length(unique(dv))) warnings("Some variables' missingnesses are defined more than once. The last expression will be used only")
+	iv <- sapply(parsedModel, function(x) x[[1]][2])
+	ivsep <- strsplit(iv, "\\+")
+	
+	for(i in 1:length(ivsep)) {
+		temp <- strsplit(ivsep[[i]], "\\*")
+		ivj <- matrix(1, nrow(data), length(temp))
+		for(j in 1:length(temp)) {
+			if(length(temp[[j]]) > 1) { 
+				ivj[,j] <- data[,temp[[j]][2]]
+			}
+		}
+		indexp <- which(sapply(temp, function(x) length(grep("p", x[1])) > 0))
+		if(length(indexp) > 1) {
+			stop(paste("In the following line:\n", model[i], "\nhas the probability specification more than once"))
+		} else if (length(indexp) == 1) {
+			expectediv <- 0
+			if(length(temp) > 1) {
+				meaniv <- colMeans(ivj[,-indexp, drop=FALSE], na.rm=TRUE)
+				expectediv <- sum(as.numeric(sapply(temp, function(x) x[1])[-indexp]) * meaniv)
+			}
+			expectedprob <- temp[[indexp]][1]
+			expectedprob <- gsub("p\\(", "", expectedprob)
+			expectedprob <- gsub("\\)", "", expectedprob)
+			expectedprob <- 1 - as.numeric(expectedprob)
+			
+			# NOTE
+			
+			# 1/(1 + exp(-(intcept + expectslope))) = p
+			
+			# (1 - p)/p = exp(-(intcept + expectslope))
+			
+			# intcept = -log((1 - p)/p) - expectslope 
+			
+			temp[[indexp]][1] <- -log(expectedprob/(1 - expectedprob)) - expectediv
+		} 
+		if(all(sapply(temp, length) != 1)) {
+			temp <- c(list(0), temp)
+		}
+		coef <- matrix(rep(as.numeric(sapply(temp, function(x) x[1])), nrow(data)), nrow=nrow(data), byrow=TRUE)
+		pred <- apply(coef * ivj, 1, sum)
+		predprob <- 1/(1 + exp(-pred))
+		logmat[,which(dv[i]== colnames(data))] <- runif(length(predprob)) < predprob
+	}
+	logmat
+}
+
+parseSyntaxLogitMiss <- function(script) {
+# Most of the beginning of this codes are from lavaanify function in lavaan
 	
     # break up in lines 
     model <- unlist( strsplit(script, "\n") )
@@ -487,28 +539,110 @@ logitMiss <- function(data, script) {
         print(model[idx.wrong])
         stop("Syntax error in missing model syntax")
     }
+	model
+}
+
+plotLogitMiss <- function(script, ylim=c(0,1), x1lim=c(-3,3), x2lim=c(-3,3), otherx=0, useContour=TRUE) {
+	warnT <- as.numeric(options("warn"))
+    options(warn = -1)
+	model <- parseSyntaxLogitMiss(script)
 	
-	logmat <- matrix(FALSE, nrow(data), ncol(data))
 	parsedModel <- lapply(model, strsplit, "~")
 	dv <- sapply(parsedModel, function(x) x[[1]][1])
 	if(length(dv) != length(unique(dv))) warnings("Some variables' missingnesses are defined more than once. The last expression will be used only")
 	iv <- sapply(parsedModel, function(x) x[[1]][2])
 	ivsep <- strsplit(iv, "\\+")
 	
+    if (length(ivsep) == 2) {
+        obj <- par(mfrow = c(1, 2))
+    } else if (length(ivsep) == 3) {
+        obj <- par(mfrow = c(1, 3))
+    } else if (length(ivsep) > 3) {
+        obj <- par(mfrow = c(2, ceiling(length(ivsep)/2)))
+    } else if (length(ivsep) == 1) {
+        # Intentionally leaving as blank
+    } else {
+        stop("Some errors occur")
+    }
+	
 	for(i in 1:length(ivsep)) {
 		temp <- strsplit(ivsep[[i]], "\\*")
-		pred <- 0
-		for(j in 1:length(temp)) {
-			expr <- temp[[j]]
-			ivj <- rep(1, nrow(data))
-			if(length(expr) > 1) ivj <- data[,expr[2]]
-			pred <- pred + (as.numeric(expr[1]) * ivj)
+		
+		iv1 <- seq(x1lim[1], x1lim[2], length.out=100)
+		iv2 <- seq(x2lim[1], x2lim[2], length.out=100)
+		
+		indexp <- which(sapply(temp, function(x) length(grep("p", x[1])) > 0))
+		if(length(indexp) > 1) {
+			stop(paste("In the following line:\n", model[i], "\nhas the probability specification more than once"))
+		} else if (length(indexp) == 1) {
+			expectediv <- 0
+			if(length(temp) > 1) {
+				meaniv <- rep(otherx, length(temp) - 1)
+				meaniv[1] <- mean(iv1)
+				if(length(meaniv) > 1) meaniv[2] <- mean(iv2)
+				expectediv <- sum(as.numeric(sapply(temp, function(x) x[1])[-indexp]) * meaniv)
+			}
+			
+			expectedprob <- temp[[indexp]][1]
+			expectedprob <- gsub("p\\(", "", expectedprob)
+			expectedprob <- gsub("\\)", "", expectedprob)
+			expectedprob <- 1 - as.numeric(expectedprob)
+			
+			# NOTE
+			
+			# 1/(1 + exp(-(intcept + expectslope))) = p
+			
+			# (1 - p)/p = exp(-(intcept + expectslope))
+			
+			# intcept = -log((1 - p)/p) - expectslope 
+			
+			temp[[indexp]][1] <- -log(expectedprob/(1 - expectedprob)) - expectediv
+		} 
+		if(all(sapply(temp, length) != 1)) {
+			temp <- c(list(0), temp)
 		}
-		predprob <- 1/(1 + exp(-pred))
-		logmat[,which(dv[i]== colnames(data))] <- runif(length(predprob)) < predprob
+		
+		coef <- as.numeric(sapply(temp, function(x) x[1]))
+			
+			#pred <- apply(coef * ivj, 1, sum)
+			#predprob <- 1/(1 + exp(-pred))
+			#logmat[,which(dv[i]== colnames(data))] <- runif(length(predprob)) < predprob
+			#mod <- invisible(try(glm(sig[, i] ~ x, family = binomial(link = "logit")), 
+			#	silent = TRUE))
+		
+		ivname <- sapply(temp, "[", 2)[sapply(temp, length) != 1]
+		title <- paste("Missing Proportion of", dv[i])
+        if (length(temp) == 1) {
+            predVal <- 1/(1 + exp(-coef))
+			barplot(c("Missing" = predVal, "Not Missing" = 1-predVal), ylab = "Missing Proportion", main = title, ylim=ylim)
+        } else if (length(temp) == 2) {
+			pred <- coef[1] + (coef[2] * iv1)
+			predVal <- 1/(1 + exp(-pred))
+            plot(iv1, predVal, type = "n", xlab = ivname[1], ylab = "Missing Proportion", 
+                main = title, ylim = ylim)
+            lines(iv1, predVal)
+        } else if (length(temp) > 2) {
+            FUN <- function(x, y) {
+                logi <- coef[1] + coef[2] * x + coef[3] * y
+				if(length(coef) > 3) logi <- logi + sum(coef[4:length(coef)] * otherx)
+                pp <- 1/(1 + exp(-logi))
+                return(pp)
+            }
+            zpred <- outer(iv1, iv2, FUN)
+            if (useContour) {
+                contour(iv1, iv2, zpred, xlab = ivname[1], ylab = ivname[2], 
+                  main = title)
+            } else {
+                persp(iv1, iv2, zpred, zlim = ylim, theta = 30, phi = 30, 
+                  expand = 0.5, col = "lightblue", ltheta = 120, shade = 0.75, ticktype = "detailed", 
+                  xlab = ivname[1], ylab = ivname[2], main = title, 
+                  zlab = "Missing Proportion")
+            }
+		} else {
+            stop("Something is wrong!")
+        }
 	}
-	logmat
+	if (length(ivsep) > 1) 
+        par(obj)
+    options(warn = warnT)
 }
-
-
- 

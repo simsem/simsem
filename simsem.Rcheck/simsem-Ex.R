@@ -1399,10 +1399,20 @@ out <- analyze(CFA.Model, datmiss)
 summary(out)
 
 #Missing using logistic regression
-  script <- 'y1 ~ 0.05 + 0.1*y2 + 0.3*y3
-			y4 ~ -2 + 0.1*y4
-			y5 ~ -0.5' 
+script <- 'y1 ~ 0.05 + 0.1*y2 + 0.3*y3
+	y4 ~ -2 + 0.1*y4
+	y5 ~ -0.5' 
 Missing2 <- miss(logit=script, pmMCAR=0.1, ignoreCols="group")
+summary(Missing2)
+datmiss2 <- impose(Missing2, dat)
+
+#Missing using logistic regression (2)
+script <- 'y1 ~ 0.05 + 0.5*y3
+	y2 ~ p(0.2)
+	y3 ~ p(0.1) + -1*y1
+	y4 ~ p(0.3) + 0.2*y1 + -0.3*y2
+	y5 ~ -0.5' 
+Missing2 <- miss(logit=script)
 summary(Missing2)
 datmiss2 <- impose(Missing2, dat)
 
@@ -1909,6 +1919,33 @@ plotDist(datadist, r=0.5, var=1:2)
 
 # Plot the marginal distribution of the variable 3
 plotDist(datadist, var=3)
+
+
+
+cleanEx()
+nameEx("plotLogitMiss")
+### * plotLogitMiss
+
+flush(stderr()); flush(stdout())
+
+### Name: plotLogitMiss
+### Title: Visualize the missing proportion when the logistic regression
+###   method is used.
+### Aliases: plotLogitMiss
+
+### ** Examples
+
+script <- 'y1 ~ 0.05 + 0.1*y2 + 0.3*y3
+	y4 ~ -2 + 0.1*y4
+	y5 ~ -0.5' 
+plotLogitMiss(script)
+
+script2 <- 'y1 ~ 0.05 + 0.5*y3
+	y2 ~ p(0.2)
+	y3 ~ p(0.1) + -1*y1
+	y4 ~ p(0.3) + 0.2*y1 + -0.3*y2
+	y5 ~ -0.5' 
+plotLogitMiss(script2)
 
 
 

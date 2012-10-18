@@ -16,7 +16,7 @@ miss(cov = 0, pmMCAR = 0, pmMAR = 0, logit = "", nforms = 0, itemGroups = list()
 	\item{cov}{Column indices of any normally distributed covariates used in the data set.}
     \item{pmMCAR}{Decimal percent of missingness to introduce completely at random on all variables.}
     \item{pmMAR}{Decimal percent of missingness to introduce using the listed covariates as predictors.}
-	\item{logit}{The script used for imposing missing values by logistic regression. The script is similar to the specification of regression in \code{lavaan} such that each line begins with a dependent variable, then '~' is used as regression sign, and the formula of a linear combination of independent variable plus constant, such as y1 ~ 0.5 + 0.2*y2. '#' and '!' can be used as a comment (like \code{lavaan}).}
+	\item{logit}{The script used for imposing missing values by logistic regression. The script is similar to the specification of regression in \code{lavaan} such that each line begins with a dependent variable, then '~' is used as regression sign, and the formula of a linear combination of independent variable plus constant, such as y1 ~ 0.5 + 0.2*y2. '#' and '!' can be used as a comment (like \code{lavaan}). For the intercept, users may use 'p()' to specify the average proportion of missing, such as y1 ~ p(0.2) + 0.3*y2, which the average missing proportion of y1 is 0.2 and the missing of y1 depends on y2. Users may visualize the missing proportion from the logistic specification by the \code{\link{plotLogitMiss}} function.}
     \item{nforms}{The number of forms for planned missing data designs, not including the shared form.}
     \item{itemGroups}{List of lists of item groupings for planned missing data forms. Without this, items will be divided into groups sequentially (e.g. 1-3,4-6,7-9,10-12)}
     \item{timePoints}{Number of timepoints items were measured over. For longitudinal data, planned missing designs will be implemented within each timepoint.}
@@ -67,10 +67,20 @@ out <- analyze(CFA.Model, datmiss)
 summary(out)
 
 #Missing using logistic regression
-  script <- 'y1 ~ 0.05 + 0.1*y2 + 0.3*y3
-			y4 ~ -2 + 0.1*y4
-			y5 ~ -0.5' 
+script <- 'y1 ~ 0.05 + 0.1*y2 + 0.3*y3
+	y4 ~ -2 + 0.1*y4
+	y5 ~ -0.5' 
 Missing2 <- miss(logit=script, pmMCAR=0.1, ignoreCols="group")
+summary(Missing2)
+datmiss2 <- impose(Missing2, dat)
+
+#Missing using logistic regression (2)
+script <- 'y1 ~ 0.05 + 0.5*y3
+	y2 ~ p(0.2)
+	y3 ~ p(0.1) + -1*y1
+	y4 ~ p(0.3) + 0.2*y1 + -0.3*y2
+	y5 ~ -0.5' 
+Missing2 <- miss(logit=script)
 summary(Missing2)
 datmiss2 <- impose(Missing2, dat)
 

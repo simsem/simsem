@@ -93,6 +93,8 @@ plotCutoffNonNested     Plot sampling distributions of the differences
                         fit indices cutoffs
 plotDist                Plot a distribution of a data distribution
                         object
+plotLogitMiss           Visualize the missing proportion when the
+                        logistic regression method is used.
 plotMisfit              Plot the population misfit in the result object
 plotPower               Make a power plot of a parameter given varying
                         parameters
