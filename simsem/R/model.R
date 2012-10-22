@@ -386,7 +386,7 @@ buildPT <- function(paramSet, pt = NULL, group = 1, facLab = NULL, indLab = NULL
             rhs <- rep(psLab, times = nf)
         }
         pt <- mapply(pt, parseFree(paramSet$BE, group = group, pt = pt, op = "~", 
-            lhs, rhs), FUN = c, SIMPLIFY = FALSE)
+            rhs, lhs), FUN = c, SIMPLIFY = FALSE)
     }
     
     
