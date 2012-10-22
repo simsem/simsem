@@ -32,7 +32,7 @@ This is lavaan 0.5-9
 lavaan is BETA software! Please report any bugs.
  
 ###############################################################################################
-This is simsem 0.3-13
+This is simsem 0.3-14
 simsem is BETA software! Please report any bugs.
 simsem was developed at the University of Kansas Center for Research Methods and Data Analysis.
 ###############################################################################################
@@ -4219,7 +4219,7 @@ detaching 'package:parallel'
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  5.5 0.06 6.02 NA NA 
+Time elapsed:  5.19 0.11 5.71 NA NA 
 > grDevices::dev.off()
 null device 
           1 

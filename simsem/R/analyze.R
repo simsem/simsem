@@ -4,6 +4,7 @@ analyze <- function(model, data, package = "lavaan", miss = NULL,
     aux = NULL, ...) {
     Output <- NULL
     DataOut <- NULL
+	groupLab <- model@groupLab
     args <- list(...)
     if (is(data, "list")) {
         if ("data" %in% names(data)) {
@@ -18,18 +19,22 @@ analyze <- function(model, data, package = "lavaan", miss = NULL,
         if (!is.null(miss) && !(length(miss@cov) == 1 && miss@cov == 0) && miss@covAsAux) 
             auxiliy <- miss@cov
     }
-    if (!(model@groupLab %in% colnames(data))) {
-        data <- data.frame(data, group = 1)
-        colnames(data)[ncol(data)] <- model@groupLab
-    }
+	if(length(unique(model@pt$group)) == 1) {
+		args$group <- NULL
+		groupLab <- NULL
+	}
+    # if (!(model@groupLab %in% colnames(data))) {
+        # data <- data.frame(data, group = 1)
+        # colnames(data)[ncol(data)] <- model@groupLab
+    # }
     if (!is.null(miss) && length(miss@package) != 0 && miss@package %in% c("Amelia", "mice")) {
 		library(semTools)
 		miArgs <- miss@args
 		if(miss@package == "Amelia") {
 			if(!is.null(miArgs$idvars)) {
-				miArgs$idvars <- c(miArgs$idvars, model@groupLab)
+				miArgs$idvars <- c(miArgs$idvars, groupLab)
 			} else {
-				miArgs <- c(miArgs, list(idvars=model@groupLab))
+				miArgs <- c(miArgs, list(idvars=groupLab))
 			}
 		}
         Output <- runMI(model@pt, data, m = miss@m, miArgs=miArgs, chi=miss@chi, miPackage=miss@package, fun="lavaan", ...)
@@ -47,7 +52,7 @@ analyze <- function(model, data, package = "lavaan", miss = NULL,
         if (!is.null(aux)) {
             library(semTools)	
 			
-			attribute <- list(object=model@pt, aux = aux, data = data, group = model@groupLab, 
+			attribute <- list(object=model@pt, aux = aux, data = data, group = groupLab, 
                 model.type = model@modelType, missing = missing)
 			attribute <- c(attribute, args)
 			Output <- do.call(auxiliary, attribute)
@@ -55,7 +60,7 @@ analyze <- function(model, data, package = "lavaan", miss = NULL,
             #Output <- auxiliary(model@pt, aux = aux, data = data, group = model@groupLab, 
             #    model.type = model@modelType, missing = missing, ...)
         } else {
-			attribute <- list(model=model@pt, data = data, group = model@groupLab, model.type = model@modelType, 
+			attribute <- list(model=model@pt, data = data, group = groupLab, model.type = model@modelType, 
                 missing = missing)
 			attribute <- c(attribute, args)
 			Output <- do.call(lavaan, attribute)
@@ -70,8 +75,11 @@ analyze <- function(model, data, package = "lavaan", miss = NULL,
 
 # To be used internally
 anal <- function(model, data, package = "lavaan", ...) {
-    args <- list(...)
-    Output <- lavaan(model@pt, data = data, group = "group", model.type = model@modelType, 
+	groupLab <- "group"
+	if(length(unique(model@pt$group)) == 1) {
+		groupLab <- NULL
+	}
+    Output <- lavaan(model@pt, data = data, group = groupLab, model.type = model@modelType, 
         ...)
     return(Output)
 } 

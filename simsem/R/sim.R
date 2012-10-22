@@ -404,7 +404,6 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
     if (!is.null(miss)) {
         data <- impose(miss, data, pmMCAR=pmMCAR, pmMAR=pmMAR)
     }
-    
     timing$ImposeMissing <- (proc.time()[3] - start.time)
     start.time <- proc.time()[3]
     ## 4. Call user function (if exists)
