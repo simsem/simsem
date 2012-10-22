@@ -410,7 +410,6 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
     if (!is.null(datafun)) {
         data <- datafun(data)
     }
-    
     timing$UserFun <- (proc.time()[3] - start.time)
     start.time <- proc.time()[3]
     

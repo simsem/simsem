@@ -5,7 +5,6 @@
 # Current problems
 
 # Fix misfitType="rmsea", optMisfit="max", optDraws=10,  in example 4
-# Indicator and factor labels do not work.
 # ROC curve?
 
 # Find non ASCII

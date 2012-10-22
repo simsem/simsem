@@ -75,7 +75,7 @@ model <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = 
         } else {
             # ngroups = 1, and no matrices are lists
             paramSet <- buildModel(paramSet, modelType)
-            pt <- buildPT(paramSet)
+            pt <- buildPT(paramSet, facLab = facLab, indLab = indLab)
             # nullpt <- nullpt(paramSet)
             return(new("SimSem", pt = pt, dgen = paramSet, modelType = modelType, 
                 groupLab = groupLab))
