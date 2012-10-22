@@ -33,6 +33,10 @@
       <section id="main_content" class="inner">
         <h1>Version History (Official)</h1>
 
+<h2>Version 0.3-14 10/22/12</h2>
+
+<p>This version is available on KRAN only. In this version, <a style="color: #FF0000"><strong>A serious bug was fixed</strong></a>. The previous versions of 0.3-*, including one currently on CRAN, have the problem on any models with the beta matrix (regression coefficients). The independent varaible is swapped with the dependent variable during the matrix translation into a parameter table for lavaan. Therefore, in the previous versions, BE[2,1] are interpreted as BE[1,2] and vice versus. Therefore, any results with a beta matrix from the previous versions cannot be trusted. We are really sorry for this bug. In addition, the problems with indicator and factor labels have been fixed, as well as other minor bugs.</p>
+
 <h2>Version 0.3-13 10/17/12</h2>
 
 <p>This version is available on KRAN only. This version allows users to impose missing values by logistic regression approach even easier. Users can use a p() function in the intercept of each logistic equation to set the intercept so that the average missing proportion equals the specified value. For example, 'y1 ~ p(0.2) + 0.5*y2' means that the missing proportion increases when y2 increases and the average missing proportion is 0.2. Users may write the target variable without any independent variable, which would be the missing completely at random, such as 'y2 ~ p(0.3)'. The logistic script can be visualized by the <strong>plotLogitMiss</strong> function.</p>

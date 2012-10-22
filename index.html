@@ -42,17 +42,13 @@
 
 </ol><h2>Announcements</h2>
 
+<h3>[October 22, 2012] Latest Update: simsem, Version 0.3-14</h3>
+
+<p>This version is available on KRAN only. In this version, <a style="color: #FF0000"><strong>A serious bug was fixed</strong></a>. The previous versions of 0.3-*, including one currently on CRAN, have the problem on any models with the beta matrix (regression coefficients). The independent varaible is swapped with the dependent variable during the matrix translation into a parameter table for lavaan. Therefore, in the previous versions, BE[2,1] are interpreted as BE[1,2] and vice versus. Therefore, any results with a beta matrix from the previous versions cannot be trusted. We are really sorry for this bug. In addition, the problems with indicator and factor labels have been fixed, as well as other minor bugs.</p>
+
 <h3>[October 17, 2012] Latest Update: simsem, Version 0.3-13</h3>
 
 <p>This version is available on KRAN only. This version allows users to impose missing values by logistic regression approach even easier. Users can use a p() function in the intercept of each logistic equation to set the intercept so that the average missing proportion equals the specified value. For example, 'y1 ~ p(0.2) + 0.5*y2' means that the missing proportion increases when y2 increases and the average missing proportion is 0.2. Users may write the target variable without any independent variable, which would be the missing completely at random, such as 'y2 ~ p(0.3)'. The logistic script can be visualized by the <strong>plotLogitMiss</strong> function.</p>
-
-<h3>[October 15, 2012] Latest Update: simsem, Version 0.3-12</h3>
-
-<p>This version is available on CRAN and KRAN. This version allows users to impose missing values by logistic regression approach. Users can write a script similar to regression equation in lavaan syntax such that (a) each line begins with the imposed variable, (b) '~' is used to represent 'is regressed by', and (c) each line ends with the linear combination of other variables or a constant, such as 'y1 ~ 0.3 + 0.2*y2 + 0.1*y3'. The logistic regression approach can be used with other types of missing data, such as missing completely at random. See the help page of the <strong>miss</strong> function for further details. We also fix minor bugs in parameter table generation.</p>
-
-<h3>[September 26, 2012] Latest Update: simsem, Version 0.3-11</h3>
-
-<p>This version is available on KRAN only. The <strong>getPowerFit</strong> and <strong>getPowerFitNested</strong> functions provide the power of traditional chi-square (absolute or difference) tests. The convergent status is recoded and expanded to account for improper correlation solutions. Most summary function family (e.g., <strong>summaryFit</strong> or <strong>summaryParam</strong>) provides an <em>improper</em> argument to include the replications providing improper solutions in the summary. The bugs on the simulation with varying sample size and on two-method designs have been fixed.</p>
 
 <h2>Developers</h2>
 
