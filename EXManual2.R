@@ -4,7 +4,7 @@
 
 # Current problems
 
-# Fix misfitType="rmsea", optMisfit="max", optDraws=10,  in example 4
+# order of misfits / constraint / fillParam
 # ROC curve?
 
 # Find non ASCII
@@ -103,6 +103,11 @@ outfun <- function(out) {
 Output <- sim(20, CFA.Model,n=200, outfun=outfun)
 getExtraOutput(Output)
 
+####### To be used in the improved max, min, or equal
+
+FUN <- function(param) abs(param[1] - param[2])
+
+nlminb(c(2, 8), FUN)
 
 ################################ Try misspec ############
 
@@ -255,7 +260,7 @@ ME <- bind(rep(NA, 4), 0)
 
 Path.Model <- model(RPS = RPS, BE = BE, ME = ME, modelType="Path")
 
-param <- draw(Path.Model)
+param <- draw(Path.Model, misfitBound = c(0.10, 0.11), misfitType="rmsea")
 dat <- createData(param[[1]], n = 200)
 
 
@@ -447,7 +452,9 @@ summaryParam(Output)
 loading.in <- matrix(0, 6, 2)
 loading.in[1:3, 1] <- c("load1", "load2", "load3")
 loading.in[4:6, 2] <- c("load4", "load5", "load6")
-LY.in <- bind(loading.in, 0.7)
+mis <- matrix(0,6,2)
+mis[loading.in == "0"] <- "runif(1, -0.1, 0.1)"
+LY.in <- bind(loading.in, "runif(1, 0.7, 0.8)", mis)
 
 latent.cor <- matrix(NA, 2, 2)
 diag(latent.cor) <- 1
