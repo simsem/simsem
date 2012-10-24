@@ -63,7 +63,7 @@ setMethod("summary", signature = "SimResult", definition = function(object, digi
 		cat("========= Fit Indices Cutoffs ============\n")
 		print(round(summaryFit(object, alpha = alpha), digits))
 		cat("========= Parameter Estimates and Standard Errors ============\n")
-		print(round(summaryParam(object), digits))
+		print(summaryParam(object, digits=digits))
 		cat("========= Correlation between Fit Indices ============\n")
 		fit <- cleanObj@fit[, usedFit]
 		if (length(unique(object@n)) > 1) 

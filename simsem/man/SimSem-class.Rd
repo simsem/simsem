@@ -16,6 +16,7 @@
     \item{\code{dgen}:}{ Data generation template }
     \item{\code{modelType}:}{ Type of models (CFA, Path, or SEM) contained in this object }
     \item{\code{groupLab}:}{ The label of grouping variable }
+	\item{\code{con}:}{ The list of defined parameters, equality constraints, or inequality constraints specified in the model }
   }
 }
 \section{Methods}{

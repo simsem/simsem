@@ -4,7 +4,7 @@
 # summaryParam: This function will summarize the obtained parameter estimates
 # and standard error.
 
-summaryParam <- function(object, alpha = 0.05, detail = FALSE, improper = FALSE) {
+summaryParam <- function(object, alpha = 0.05, detail = FALSE, improper = FALSE, digits = NULL) {
     object <- clean(object, improper = improper)
     coef <- colMeans(object@coef, na.rm = TRUE)
     real.se <- sapply(object@coef, sd, na.rm = TRUE)
@@ -16,9 +16,10 @@ summaryParam <- function(object, alpha = 0.05, detail = FALSE, improper = FALSE)
     pow <- apply(sig, 2, mean, na.rm = TRUE)
     stdCoef <- colMeans(object@stdCoef, na.rm = TRUE)
     stdRealSE <- sapply(object@stdCoef, sd, na.rm = TRUE)
-    result <- cbind(coef, real.se, estimated.se, pow, stdCoef, stdRealSE)
-    colnames(result) <- c("Estimate Average", "Estimate SD", "Average SE", "Power (Not equal 0)", 
-        "Std Est", "Std Est SD")
+	result <- cbind(coef, real.se, estimated.se, pow, stdCoef, stdRealSE)
+	colnames(result) <- c("Estimate Average", "Estimate SD", "Average SE", "Power (Not equal 0)", 
+		"Std Est", "Std Est SD")
+
     if (!is.null(object@paramValue)) {
         targetVar <- match(colnames(object@coef), colnames(object@paramValue))
         targetVar <- targetVar[!is.na(targetVar)]
@@ -107,6 +108,14 @@ summaryParam <- function(object, alpha = 0.05, detail = FALSE, improper = FALSE)
             "object@pmMAR"]
         result <- data.frame(result, r_coef.pmMAR = corCoefMAR, r_se.pmMAR = corSeMAR)
     }
+	if(!is.null(digits)) {
+		result <- round(result, digits)
+	}
+	lab <- abbreviate(object@labelParam[match(names(object@labelParam), names(coef))], 4)
+	if(!all(lab == "")) {
+		lab[lab != ""] <- paste0("(", lab[lab != ""], ")")
+		result <- data.frame("Labels" = lab, result)
+	}
     return(as.data.frame(result))
 } 
 

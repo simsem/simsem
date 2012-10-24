@@ -8,9 +8,10 @@
 }
 \usage{
 generate(model, n, maxDraw=50, misfitBounds=NULL, misfitType="f0",
-	averageNumMisspec=FALSE, optMisfit=NULL, optDraws=50,
-	indDist=NULL, sequential=FALSE,	facDist=NULL, errorDist=NULL, 
-	indLab=NULL, modelBoot=FALSE, realData=NULL, params=FALSE)
+	averageNumMisspec=FALSE, optMisfit=NULL, optDraws=50, 
+	createOrder = c(1, 2, 3), indDist=NULL, sequential=FALSE,	
+	facDist=NULL, errorDist=NULL, indLab=NULL, modelBoot=FALSE, 
+	realData=NULL, params=FALSE)
 }
 \arguments{
   \item{model}{
@@ -36,6 +37,9 @@ generate(model, n, maxDraw=50, misfitBounds=NULL, misfitType="f0",
 }
   \item{optDraws}{ 
 	Number of parameter sets to draw if optMisfit is not null. The set of parameters with the maximum or minimum misfit will be returned.
+}
+  \item{createOrder}{
+    The order of 1) applying equality/inequality constraints, 2) applying misspecification, and 3) fill unspecified parameters (e.g., residual variances when total variances are specified). The specification of this argument is a vector of different orders of 1 (constraint), 2 (misspecification), and 3 (filling parameters). For example, \code{c(1, 2, 3)} is to apply constraints first, then add the misspecification, and finally fill all parameters. See the example of how to use it in the \code{\link{draw}} function. 
 }
   \item{indDist}{ 
 	A \code{\linkS4class{SimDataDist}} object or list of objects for a distribution of indicators. If one object is passed, each indicator will have the same distribution. Use when \code{sequential} is \code{FALSE}.

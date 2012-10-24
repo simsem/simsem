@@ -1,11 +1,7 @@
-#Include Gamma Hat and Adjusted Gamma Hat in Fit Indices
-#TRUE and FALSE + Number of starting values\
-#Summary function put star for fixed parameters (Any nonzero values that is fixed is labelled as stars)
 
 # To be developed soon
 
 # ROC curve?
-# Attach Labels in the summary(simResult)
 
 
 # Find non ASCII

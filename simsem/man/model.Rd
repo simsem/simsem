@@ -12,15 +12,18 @@
 \usage{
 model(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = NULL, 
 	VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, MY = NULL, 
-	ME = NULL, modelType, indLab=NULL, facLab=NULL, groupLab="group", ngroups=1)
+	ME = NULL, modelType, indLab = NULL, facLab = NULL, groupLab = "group", 
+	ngroups = 1, con = NULL)
 model.cfa(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, VTE = NULL, 
 	VY = NULL, VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, 
-	indLab=NULL, facLab=NULL, groupLab="group", ngroups=1)
+	indLab = NULL, facLab = NULL, groupLab = "group", ngroups = 1, con = NULL)
 model.path(PS = NULL, RPS = NULL, BE = NULL, VPS = NULL, VE=NULL, AL = NULL, 
-	ME = NULL, indLab=NULL, facLab=NULL, groupLab="group", ngroups=1)
+	ME = NULL, indLab = NULL, facLab = NULL, groupLab = "group", ngroups = 1, 
+	con = NULL)
 model.sem(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL, 
 	VTE = NULL, VY = NULL, VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NULL, 
-	ME = NULL, indLab=NULL, facLab=NULL, groupLab="group", ngroups=1)
+	ME = NULL, indLab = NULL, facLab = NULL, groupLab = "group", ngroups = 1,
+	con = NULL)
 }
 \arguments{
   \item{LY}{
@@ -79,6 +82,9 @@ model.sem(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL,
 }
   \item{ngroups}{
 	Integer. Number of groups for data generation, defaults to 1. If larger than one, all specified matrices will be repeated for each additional group. If any matrix argument is a list, the length of this list will be the number of groups and ngroups is ignored.
+}
+  \item{con}{
+	Additional parameters (phantom variables), equality constraints, and inequality constraints that users wish to specify in the model. The additional parameters are specified in lavaan syntax. The allowed operator are ":=" (is defined as), "==" (is equal to), "<" (is less than), and ">" (is greater than). Names used in the syntax are the labels defined on free parameters in the model except that the left-handed-side name of ":=" is a new parameter name. On the right hand side of all operators, any mathematical expressions are allowed, e.g., \code{"newparam := (load1 + load2 + load3)/3"}. For the "<" and ">" operators in data generation, if the parameters relation is not hold (e.g., the left hand side is less than the right hand side in the ">" operator), the left hand side parameters will be changed such that the relation holds with a very small difference (i.e., 0.000001). For example, in "load1 > load2", if load1 is 0.5 and load2 is 0.6, load1 will be changed to 0.6 + 0.000001 = 0.600001. 
 }
 }
 
@@ -213,4 +219,56 @@ SEM.model <- model(BE=BE, LY=LY, RPS=RPS, RTE=RTE, modelType="SEM")
 
 # Shortcut example
 SEM.model <- model.sem(BE=BE, LY=LY, RPS=RPS, RTE=RTE)
+
+# Example 6: Multiple Group Model
+loading1 <- matrix(NA, 6, 1)
+LY1 <- bind(loading1, 0.7)
+loading2 <- matrix(0, 6, 2)
+loading2[1:3, 1] <- NA
+loading2[4:6, 2] <- NA
+LY2 <- bind(loading2, 0.7)
+
+latent.cor2 <- matrix(NA, 2, 2)
+diag(latent.cor2) <- 1
+RPS1 <- binds(as.matrix(1))
+RPS2 <- binds(latent.cor2, 0.5)
+
+RTE <- binds(diag(6))
+
+VTE <- bind(rep(NA, 6), 0.51)
+
+noninvariance <- model(LY = list(LY1, LY2), RPS = list(RPS1, RPS2), RTE = list(RTE, RTE), VTE=list(VTE, VTE), ngroups=2, modelType = "CFA")
+
+# Example 7: Inequality Constraints
+
+loading.in <- matrix(0, 6, 2)
+loading.in[1:3, 1] <- c("load1", "load2", "load3")
+loading.in[4:6, 2] <- c("load4", "load5", "load6")
+mis <- matrix(0,6,2)
+mis[loading.in == "0"] <- "runif(1, -0.1, 0.1)"
+LY.in <- bind(loading.in, "runif(1, 0.7, 0.8)", mis)
+
+latent.cor <- matrix(NA, 2, 2)
+diag(latent.cor) <- 1
+RPS <- binds(latent.cor, 0.5)
+
+RTE <- binds(diag(6))
+
+VTE <- bind(rep(NA, 6), 0.51)
+
+VPS1 <- bind(rep(1, 2))
+
+VPS2 <- bind(rep(NA, 2), c(1.1, 1.2))
+
+# Inequality constraint
+script <- "
+sth := load1 + load2 + load3
+load4 == (load5 + load6) / 2
+load4 > 0
+load5 > 0
+sth2 := load1 - load2
+"
+
+# Model Template
+weak <- model(LY = LY.in, RPS = RPS, VPS=list(VPS1, VPS2), RTE = RTE, VTE=VTE, ngroups=2, modelType = "CFA", con=script)
 }

@@ -250,6 +250,18 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 		fit <- as.data.frame(do.call(rbind, fit.l))
 		std <- as.data.frame(do.call(rbind, std.l))
 		converged <- as.vector(unlist(converged.l))
+		
+		name <- colnames(coef)
+		haveName <- which(!sapply(Result.l, is.null))
+		lab <- NULL
+		if(length(haveName) > 0) {
+			lab <- Result.l[[haveName[1]]]$labelParam
+			lab[is.na(lab)] <- ""
+			names(lab) <- name
+		} else {
+			lab <- rep("", length(name))
+			names(lab) <- name
+		}
 		if(paramOnly) converged <- rep(TRUE, length(converged))
 		param <- NULL
 		FMI1 <- NULL
@@ -315,7 +327,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 			se = se, fit = fit, converged = converged, seed = seed, paramValue = param, 
 			misspecValue = popMis, popFit = misfitOut, FMI1 = FMI1, FMI2 = FMI2, 
 			stdCoef = std, n = n, nobs=nobs, pmMCAR = pmMCAR, pmMAR = pmMAR, extraOut = extra,
-			paramOnly=paramOnly, timing = timing)
+			paramOnly=paramOnly, labelParam = lab, timing = timing)
 		if (silent) 
 			options(warn = warnT)
 		return <- Result
@@ -339,6 +351,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
     extra <- NA
     FMI1 <- NULL
     FMI2 <- NULL
+	labelParam <- NULL
     converged <- 1
     n <- simConds[[2]]
     pmMCAR <- simConds[[3]]
@@ -480,6 +493,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 			coef <- reduceLavaanParam(inspect(out, "coef"), dgen, indLab, facLab)
 			se <- reduceLavaanParam(se, dgen, indLab, facLab)
 			std <- reduceLavaanParam(standardize(out), dgen, indLab, facLab)
+			labelParam <- getLavaanLabels(inspect(out, "coef"), dgen, indLab, facLab)
 			
 			indexExtraParam <- out@ParTable$op %in% c(":=", ">", "<", "==")
 			if(any(indexExtraParam)) {
@@ -494,6 +508,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 				coef <- c(coef, extracoef)
 				se <- c(se, extrase)
 				std <- c(std, extrastd)
+				labelParam <- c(labelParam, nameExtraParam)
 			}
 			## 6.1. Call output function (if exists)
 			if (!is.null(outfun)) {
@@ -555,7 +570,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
     	
 		Result <- list(coef = coef, se = se, fit = fit, converged = converged, param = popParam, 
         FMI1 = FMI1, FMI2 = FMI2, std = std, timing = timing, extra = extra, popMis = popMis, 
-        misfitOut = misfitOut)
+        misfitOut = misfitOut, labelParam = labelParam)
 		return(Result)
 	} else {
 		return(data)
@@ -869,6 +884,7 @@ reduceLavaanParam <- function(glist, dgen, indLab, facLab) {
 	} else {
 		facLab <- list(facLab)
 	}
+	
     if ("lambda" %in% names && !is.null(dgen[[1]]$LY)) {
         idx <- which(names == "lambda")
         for (i in seq_along(idx)) {
@@ -986,6 +1002,106 @@ reduceLavaanParam <- function(glist, dgen, indLab, facLab) {
     }
     
     return(final)
+}
+
+## GLIST -> Re-labeled Parameter Estimates
+getLavaanLabels <- function(glist, dgen, indLab, facLab) {
+    # Chunk at a time approach
+    names <- names(glist)
+	label <- NULL
+    if (!is.list(dgen[[1]])) {
+        dgen <- list(dgen)
+    }
+    if ("lambda" %in% names && !is.null(dgen[[1]]$LY)) {
+        idx <- which(names == "lambda")
+        for (i in seq_along(idx)) {
+            free <- is.free(dgen[[i]]$LY@free)
+			label <- c(label, dgen[[i]]$LY@free[free])
+        }
+    }
+    
+    if ("theta" %in% names && (!is.null(dgen[[1]]$TE) || !is.null(dgen[[1]]$RTE))) {
+        idx <- which(names == "theta")
+        for (i in seq_along(idx)) {
+			targetLab <- NULL
+            if (!is.null(dgen[[i]]$TE)) {
+                free <- is.free(dgen[[i]]$TE@free) & lower.tri(dgen[[i]]$TE@free, 
+                  diag = TRUE)
+				targetLab <- dgen[[i]]$TE@free
+            } else {
+                free <- is.free(dgen[[i]]$RTE@free) & lower.tri(dgen[[i]]$RTE@free, 
+                  diag = FALSE)
+				targetLab <- dgen[[i]]$RTE@free
+                if (!is.null(dgen[[i]]$VTE)) {
+                  diag(free) <- is.free(dgen[[i]]$VTE@free)
+				  diag(targetLab) <- dgen[[i]]$VTE@free
+                } else if (!is.null(dgen[[i]]$VY)) {
+                  diag(free) <- is.free(dgen[[i]]$VY@free)
+				  diag(targetLab) <- dgen[[i]]$VY@free
+                }
+            }
+			label <- c(label, targetLab[free])
+        }
+    }
+    if ("psi" %in% names) {
+        idx <- which(names == "psi")
+        for (i in seq_along(idx)) {
+			targetLab <- NULL
+            if (!is.null(dgen[[i]]$PS)) {
+                free <- is.free(dgen[[i]]$PS@free) & lower.tri(dgen[[i]]$PS@free, 
+                  diag = TRUE)
+				targetLab <- dgen[[i]]$PS@free
+            } else {
+                free <- is.free(dgen[[i]]$RPS@free) & lower.tri(dgen[[i]]$RPS@free, 
+                  diag = FALSE)
+				targetLab <- dgen[[i]]$RPS@free
+                if (!is.null(dgen[[i]]$VPS)) {
+                  diag(free) <- is.free(dgen[[i]]$VPS@free)
+				  diag(targetLab) <- dgen[[i]]$VPS@free
+                } else if (!is.null(dgen[[i]]$VE)) {
+                  diag(free) <- is.free(dgen[[i]]$VE@free)
+				  diag(targetLab) <- dgen[[i]]$VE@free
+                }
+            }
+            label <- c(label, targetLab[free])
+        }
+    }
+    
+    if ("beta" %in% names) {
+        idx <- which(names == "beta")
+        for (i in seq_along(idx)) {
+            free <- is.free(dgen[[i]]$BE@free)
+            label <- c(label, dgen[[i]]$BE@free[free])
+        }
+    }
+    
+    if ("alpha" %in% names && (!is.null(dgen[[i]]$AL) || !is.null(dgen[[i]]$ME))) {
+        idx <- which(names == "alpha")
+        for (i in seq_along(idx)) {
+            if (!is.null(dgen[[i]]$AL)) {
+                free <- is.free(dgen[[i]]$AL@free)
+				label <- c(label, dgen[[i]]$AL@free[free])
+            } else {
+                free <- is.free(dgen[[i]]$ME@free)
+				label <- c(label, dgen[[i]]$ME@free[free])
+            }
+        }
+    }
+    
+    if ("nu" %in% names && (!is.null(dgen[[i]]$TY) || !is.null(dgen[[i]]$MY))) {
+        idx <- which(names == "nu")
+        for (i in seq_along(idx)) {
+            if (!is.null(dgen[[i]]$TY)) {
+                free <- is.free(dgen[[i]]$TY@free)
+				label <- c(label, dgen[[i]]$TY@free[free])
+            } else {
+                free <- is.free(dgen[[i]]$MY@free)
+				label <- c(label, dgen[[i]]$MY@free[free])
+            }
+        }
+    }
+    
+    return(label)
 }
 
 is.random <- function(dat) {

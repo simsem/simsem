@@ -18,7 +18,7 @@ setClass("SimResult", representation(modelType = "character", nRep = "numeric", 
     se = "data.frame", fit = "data.frame", converged = "vector", paramValue = "data.frame", 
     misspecValue = "data.frame", popFit = "data.frame", FMI1 = "data.frame", FMI2 = "data.frame", 
     stdCoef = "data.frame", seed = "numeric", n = "vector", nobs="data.frame", pmMCAR = "vector", pmMAR = "vector", 
-    extraOut = "list", paramOnly = "logical", timing = "list"))
+    extraOut = "list", paramOnly = "logical", labelParam = "vector", timing = "list"))
 
 setClass("SimMissing", representation(cov = "vector", pmMCAR = "numeric", pmMAR = "numeric", logit = "character", 
     nforms = "numeric", itemGroups = "list", twoMethod = "vector", prAttr = "vector", m = "numeric", chi = "character", 
