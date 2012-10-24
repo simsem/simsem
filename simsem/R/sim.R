@@ -481,6 +481,20 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 			se <- reduceLavaanParam(se, dgen, indLab, facLab)
 			std <- reduceLavaanParam(standardize(out), dgen, indLab, facLab)
 			
+			indexExtraParam <- out@ParTable$op %in% c(":=", ">", "<", "==")
+			if(any(indexExtraParam)) {
+				nameExtraParam <- renameExtraParam(out@ParTable$lhs[indexExtraParam], out@ParTable$op[indexExtraParam], out@ParTable$rhs[indexExtraParam])
+				len <- length(nameExtraParam)
+				lenout <- length(out@Fit@est)
+				indexout <- (lenout-len+1):lenout
+				extracoef <- out@Fit@est[indexout]
+				extrase <- out@Fit@se[indexout]
+				extrastd <- rep(NA, len)
+				names(extracoef) <- names(extrase) <- names(extrastd) <- nameExtraParam
+				coef <- c(coef, extracoef)
+				se <- c(se, extrase)
+				std <- c(std, extrastd)
+			}
 			## 6.1. Call output function (if exists)
 			if (!is.null(outfun)) {
 				extra <- outfun(out)
@@ -511,6 +525,12 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 			} else {
 				popMis <- NA
 				misfitOut <- NA
+			}
+			
+			if(!is.null(generate@con[[1]])) {
+				extraparam <- collapseExtraParam(paramSet, generate@dgen, fill=TRUE, con=generate@con)
+				names(extraparam) <- renameExtraParam(generate@con$lhs, generate@con$op, generate@con$rhs)
+				popParam <- c(popParam, extraparam)
 			}
 		} else {
 			popParam <- NA  # Real Data
@@ -1079,4 +1099,43 @@ collapseParamSet <- function(param, group, indLab, facLab, latent) {
 	}
 	group <- rep(group, length(lhs))
 	data.frame(lhs=lhs, op=op, rhs=rhs, group=group, ustart2=ustart)
+}
+
+collapseExtraParam <- function(pls, dgen, fill=TRUE, con=NULL) {
+	# Collapse all labels
+	temp <- extractLab(pls, dgen, fill=fill, con=con)
+	target <- temp[[1]]
+	realval <- temp[[2]]
+	
+	oldop <- con$op
+	for(i in 1:length(con[[1]])) {
+		if(con[[2]][i] %in% c(">", "==")) {
+			con[[3]][i] <- paste(con[[1]][i], "-", con[[3]][i])
+			con[[1]][i] <- paste0("diff", i)
+			con[[2]][i] <- ":="
+		} else if (con[[2]][i] == "<") {
+			con[[3]][i] <- paste(con[[3]][i], "-", con[[1]][i])
+			con[[1]][i] <- paste0("diff", i)
+			con[[2]][i] <- ":="
+		}
+	}
+	temp <- applyConScript(target, realval, con)
+	target <- temp[[1]]
+	realval <- temp[[2]]
+	pos <- match(con$lhs, target)
+	result <- realval[pos]
+	names(result) <- target[pos]
+	result
+	
+}
+
+renameExtraParam <- function(lhs, op, rhs) {
+	for(i in 1:length(lhs)) {
+		if(op[i] %in% c(">", "==")) {
+			lhs[i] <- paste(lhs[i], "-", rhs[i])
+		} else if (op[i] == "<") {
+			lhs[i] <- paste(rhs[i], "-", lhs[i])
+		}
+	}
+	lhs	
 }

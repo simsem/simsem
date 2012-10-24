@@ -2,10 +2,16 @@
 #TRUE and FALSE + Number of starting values\
 #Summary function put star for fixed parameters (Any nonzero values that is fixed is labelled as stars)
 
-# Current problems
+# To be developed soon
 
 # order of misfits / constraint / fillParam
 # ROC curve?
+# Unequality constraint
+# Phantom variable (New parameters)
+
+# Report Phantom Variable in the sim function
+# Attach Labels in the summary(simResult)
+
 
 # Find non ASCII
 
@@ -469,10 +475,12 @@ VPS2 <- bind(rep(NA, 2), c(1.1, 1.2))
 
 weak <- model(LY = LY.in, RPS = RPS, VPS=list(VPS1, VPS2), RTE = RTE, VTE=VTE, ngroups=2, modelType = "CFA")
 
+
+
 dat <- generate(weak, 200)
 out <- analyze(weak, dat)
 
-Output <- sim(20, weak, n=200) # 
+Output <- sim(20, weak, n=200) 
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)

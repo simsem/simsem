@@ -9,7 +9,7 @@ setClass("SimVector", representation(free = "vector", popParam = "vector", missp
 # Waiting to put prior
 
 setClass("SimSem", representation(pt = "list", dgen = "list", modelType = "character", 
-    groupLab = "character"))
+    groupLab = "character", con = "list"))
 
 setClass("SimDataDist", representation(p = "numeric", margins = "character", paramMargins = "list", 
     keepScale = "logical", reverse = "vector"), prototype(keepScale = TRUE, reverse = FALSE))

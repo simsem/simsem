@@ -3,8 +3,10 @@
 ## templates for data generation and analyis.
 model <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = NULL, 
     VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, MY = NULL, 
-    ME = NULL, modelType, indLab = NULL, facLab = NULL, groupLab = "group", ngroups = 1) {
+    ME = NULL, modelType, indLab = NULL, facLab = NULL, groupLab = "group", ngroups = 1,
+	con = NULL) {
     
+	con <- parseSyntaxCon(con)
     paramSet <- list(LY = LY, PS = PS, RPS = RPS, TE = TE, RTE = RTE, BE = BE, VTE = VTE, 
         VY = VY, VPS = VPS, VE = VE, TY = TY, AL = AL, MY = MY, ME = ME)
     if (!is.null(modelType)) {
@@ -69,16 +71,19 @@ model <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = 
             # Adjust indices for between group constraints
             pt <- btwGroupCons(pt)
             # nullpt <- nullpt(psl[[1]], ngroups=n)
+			pt <- attachConPt(pt, con)
             
-            return(new("SimSem", pt = pt, dgen = psl, modelType = modelType, groupLab = groupLab))
+            return(new("SimSem", pt = pt, dgen = psl, modelType = modelType, groupLab = groupLab, con=con))
             
         } else {
             # ngroups = 1, and no matrices are lists
             paramSet <- buildModel(paramSet, modelType)
             pt <- buildPT(paramSet, facLab = facLab, indLab = indLab)
             # nullpt <- nullpt(paramSet)
+			pt <- attachConPt(pt, con)
+
             return(new("SimSem", pt = pt, dgen = paramSet, modelType = modelType, 
-                groupLab = groupLab))
+                groupLab = groupLab, con=con))
         }
     } else {
         stop("Must specify model type")
@@ -645,30 +650,30 @@ btwGroupCons <- function(pt) {
 
 model.cfa <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, VTE = NULL, 
     VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, 
-    indLab = NULL, facLab = NULL, groupLab = "group", ngroups = 1) {
+    indLab = NULL, facLab = NULL, groupLab = "group", ngroups = 1, con = NULL) {
     model(LY = LY, PS = PS, RPS = RPS, TE = TE, RTE = RTE, BE = NULL, VTE = VTE, 
         VY = VY, VPS = VPS, VE = VE, TY = TY, AL = AL, MY = MY, ME = ME, modelType = "CFA", 
-        indLab = indLab, facLab = facLab, groupLab = groupLab, ngroups = ngroups)
+        indLab = indLab, facLab = facLab, groupLab = groupLab, ngroups = ngroups, con = con)
 }
 
 model.path <- function(PS = NULL, RPS = NULL, BE = NULL, VPS = NULL, VE = NULL, AL = NULL, 
-    ME = NULL, indLab = NULL, facLab = NULL, groupLab = "group", ngroups = 1) {
+    ME = NULL, indLab = NULL, facLab = NULL, groupLab = "group", ngroups = 1, con = NULL) {
     model(LY = NULL, PS = PS, RPS = RPS, TE = NULL, RTE = NULL, BE = BE, VTE = NULL, 
         VY = NULL, VPS = VPS, VE = VE, TY = NULL, AL = AL, MY = NULL, ME = ME, modelType = "Path", 
-        indLab = indLab, facLab = facLab, groupLab = groupLab, ngroups = ngroups)
+        indLab = indLab, facLab = facLab, groupLab = groupLab, ngroups = ngroups, con = con)
 }
 
 model.sem <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = NULL, 
     VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, MY = NULL, 
-    ME = NULL, indLab = NULL, facLab = NULL, groupLab = "group", ngroups = 1) {
+    ME = NULL, indLab = NULL, facLab = NULL, groupLab = "group", ngroups = 1, con = NULL) {
     model(LY = LY, PS = PS, RPS = RPS, TE = TE, RTE = RTE, BE = BE, VTE = VTE, VY = VY, 
         VPS = VPS, VE = VE, TY = TY, AL = AL, MY = MY, ME = ME, modelType = "SEM", 
-        indLab = indLab, facLab = facLab, groupLab = groupLab, ngroups = ngroups)
+        indLab = indLab, facLab = facLab, groupLab = groupLab, ngroups = ngroups, con = con)
 }
 
 estmodel <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = NULL, 
     VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, MY = NULL, 
-    ME = NULL, modelType, indLab = NULL, facLab = NULL, groupLab = "group", ngroups = 1) {
+    ME = NULL, modelType, indLab = NULL, facLab = NULL, groupLab = "group", ngroups = 1, con = NULL) {
     if (is.null(modelType)) 
         stop("Must specify model type")
     if (modelType == "CFA") {
@@ -982,30 +987,30 @@ estmodel <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE
     
     model(LY = LY, PS = PS, RPS = RPS, TE = TE, RTE = RTE, BE = BE, VTE = VTE, VY = VY, 
         VPS = VPS, VE = VE, TY = TY, AL = AL, MY = MY, ME = ME, modelType = modelType, 
-        indLab = indLab, facLab = facLab, groupLab = groupLab, ngroups = ngroups)
+        indLab = indLab, facLab = facLab, groupLab = groupLab, ngroups = ngroups, con = con)
 }
 
 estmodel.cfa <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, 
     VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, MY = NULL, 
-    ME = NULL, indLab = NULL, facLab = NULL, groupLab = "group", ngroups = 1) {
+    ME = NULL, indLab = NULL, facLab = NULL, groupLab = "group", ngroups = 1, con = NULL) {
     estmodel(LY = LY, PS = PS, RPS = RPS, TE = TE, RTE = RTE, BE = NULL, VTE = VTE, 
         VY = VY, VPS = VPS, VE = VE, TY = TY, AL = AL, MY = MY, ME = ME, modelType = "CFA", 
-        indLab = indLab, facLab = facLab, groupLab = groupLab, ngroups = ngroups)
+        indLab = indLab, facLab = facLab, groupLab = groupLab, ngroups = ngroups, con = con)
 }
 
 estmodel.path <- function(PS = NULL, RPS = NULL, BE = NULL, VPS = NULL, VE = NULL, 
-    AL = NULL, ME = NULL, indLab = NULL, facLab = NULL, groupLab = "group", ngroups = 1) {
+    AL = NULL, ME = NULL, indLab = NULL, facLab = NULL, groupLab = "group", ngroups = 1, con = NULL) {
     estmodel(LY = NULL, PS = PS, RPS = RPS, TE = NULL, RTE = NULL, BE = BE, VTE = NULL, 
         VY = NULL, VPS = VPS, VE = VE, TY = NULL, AL = AL, MY = NULL, ME = ME, modelType = "Path", 
-        indLab = indLab, facLab = facLab, groupLab = groupLab, ngroups = ngroups)
+        indLab = indLab, facLab = facLab, groupLab = groupLab, ngroups = ngroups, con = con)
 }
 
 estmodel.sem <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, 
     BE = NULL, VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, 
-    MY = NULL, ME = NULL, indLab = NULL, facLab = NULL, groupLab = "group", ngroups = 1) {
+    MY = NULL, ME = NULL, indLab = NULL, facLab = NULL, groupLab = "group", ngroups = 1, con = NULL) {
     estmodel(LY = LY, PS = PS, RPS = RPS, TE = TE, RTE = RTE, BE = BE, VTE = VTE, 
         VY = VY, VPS = VPS, VE = VE, TY = TY, AL = AL, MY = MY, ME = ME, modelType = "SEM", 
-        indLab = indLab, facLab = facLab, groupLab = groupLab, ngroups = ngroups)
+        indLab = indLab, facLab = facLab, groupLab = groupLab, ngroups = ngroups, con = con)
 }
 
 model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, TE = NULL, 
@@ -1218,9 +1223,19 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
     groupLab <- object@Options$group
     if (is.null(groupLab)) 
         groupLab <- "group"
+		
+	# Get the nonlinear constraints
+	pt <- object@ParTable
+	pos <- (pt$op %in% c(":=", "==", ">", "<"))
+	conList <- NULL
+	if(any(pos)) {
+		conList <- list(lhs = pt$lhs[pos], op = pt$op[pos], con = pt$rhs[pos])
+	}
+	
+	# Make the con right here
     result <- model(LY = LY, PS = PS, RPS = RPS, TE = TE, RTE = RTE, BE = BE, VTE = VTE, 
         VY = VY, VPS = VPS, VE = VE, TY = TY, AL = AL, MY = MY, ME = ME, modelType = modelType, 
-        indLab = indLab, facLab = facLab, groupLab = groupLab, ngroups = ngroups)
+        indLab = indLab, facLab = facLab, groupLab = groupLab, ngroups = ngroups, con = conList)
     return(result)
 }
 
@@ -1287,6 +1302,104 @@ test.estmodel <- function() {
     
 }
 
+parseSyntaxCon <- function(script) {
+	if(is.null(script)) return(list(NULL))
+	if(is(script, "list")) return(script)
+
+# Most of the beginning of this codes are from lavaanify function in lavaan
+	
+    # break up in lines 
+    model <- unlist( strsplit(script, "\n") )
+
+    # remove comments starting with '#' or '!'
+    model <- gsub("#.*","", model); model <- gsub("!.*","", model)
+
+    # replace semicolons by newlines and split in lines again
+    model <- gsub(";","\n", model); model <- unlist( strsplit(model, "\n") )
+
+    # strip all white space
+    model <- gsub("[[:space:]]+", "", model)
+
+    # keep non-empty lines only
+    idx <- which(nzchar(model))
+    model <- model[idx]
+	
+    # check for multi-line formulas: they contain no "~" or "=" character
+    # but before we do that, we remove all modifiers
+    # to avoid confusion with for example equal("f1=~x1") statements
+    model.simple <- gsub("\\(.*\\)\\*", "MODIFIER*", model)
+
+    start.idx <- grep("[~=<>:]", model.simple)
+    end.idx <- c( start.idx[-1]-1, length(model) )
+    model.orig    <- model
+    model <- character( length(start.idx) )
+    for(i in 1:length(start.idx)) {
+        model[i] <- paste(model.orig[start.idx[i]:end.idx[i]], collapse="")
+    }
+    # ok, in all remaining lines, we should have a '~' operator
+    # OR one of '=', '<' '>' outside the ""
+    model.simple <- gsub("\\\".[^\\\"]*\\\"", "LABEL", model)
+    idx.wrong <- which(!grepl("[=:<>]", model.simple))
+    if(length(idx.wrong) > 0) {
+        cat("Missing ~ operator in formula(s):\n")
+        print(model[idx.wrong])
+        stop("Syntax error in missing model syntax")
+    }
+	
+	lhs <- NULL
+	op <- NULL
+	rhs <- NULL
+    for(i in 1:length(model)) {
+        x <- model[i]
+		currentop <- NULL
+        # 1. which operator is used?
+        line.simple <- gsub("\\\".[^\\\"]*\\\"", "LABEL", x)
+        # "=~" operator?
+        if(grepl("==", line.simple, fixed=TRUE)) {
+            currentop <- "=="  
+        # ":=" operator?
+        } else if(grepl(":=", line.simple, fixed=TRUE)) {
+            currentop <- ":="
+        # "<" operator?
+        } else if(grepl("<", line.simple, fixed=TRUE)) {
+            currentop <- "<"
+        # ">" operator?
+        } else if(grepl(">", line.simple, fixed=TRUE)) {
+            currentop <- ">"
+		} else {
+            stop("unknown operator in ", model[i])
+        }
+		op <- c(op, currentop)
+        # 2. split by operator (only the *first* occurence!)
+        # check first if equal/label modifier has been used on the LEFT!
+        if(substr(x,1,5) == "label") stop("label modifier can not be used on the left-hand side of the operator")
+        op.idx <- regexpr(currentop, x)
+        lhs <- c(lhs, substr(x, 1L, op.idx-1L))
+        rhs <- c(rhs, substr(x, op.idx+attr(op.idx, "match.length"), nchar(x)))
+    }
+	list(lhs=lhs, op=op, rhs=rhs)
+}
+
+attachConPt <- function(pt, con) {
+	if(is.null(con) || is.null(con[[1]])) return(pt)
+	len <- length(con[[1]])
+	pt$id <- c(pt$id, length(pt$id) + (1:len))
+	pt$lhs <- c(pt$lhs, con$lhs)
+	pt$op <- c(pt$op, con$op)
+	pt$rhs <- c(pt$rhs, con$rhs)
+	pt$user <- c(pt$user, rep(as.integer(1), len))
+	pt$group <- c(pt$group, rep(as.integer(0), len))
+	pt$free <- c(pt$free, rep(as.integer(0), len))
+	pt$ustart <- c(pt$ustart, rep(NA, len))
+	pt$exo <- c(pt$exo, rep(as.integer(0), len))
+	lab <- rep("", len)
+	lab[con$op == ":="] <- con$lhs[con$op == ":="]
+	pt$label <- c(pt$label, lab)
+	pt$eq.id <- c(pt$eq.id, rep(as.integer(0), len))
+	pt$unco <- c(pt$unco, rep(as.integer(0), len))
+	pt
+}
+
 test.model.lavaan <- function() {
     
     HS.model <- " visual  =~ x1 + x2 + x3\ntextual =~ x4 + x5 + x6\nspeed   =~ x7 + x8 + x9 "
@@ -1311,7 +1424,7 @@ test.model.lavaan <- function() {
     
     dat2 <- data.frame(PoliticalDemocracy, z = rnorm(nrow(PoliticalDemocracy), 0, 
         1))
-    model1 <- "\ninvisible(\".BeGiN_TiDy_IdEnTiFiEr_HaHaHa# latent variable definitions.HaHaHa_EnD_TiDy_IdEnTiFiEr\")\nind60 =~ x1 + x2 + x3\ndem60 =~ y1 + a*y2 + b*y3 + c*y4\ndem65 =~ y5 + a*y6 + b*y7 + c*y8\ninvisible(\".BeGiN_TiDy_IdEnTiFiEr_HaHaHa.HaHaHa_EnD_TiDy_IdEnTiFiEr\")\ninvisible(\".BeGiN_TiDy_IdEnTiFiEr_HaHaHa# regressions.HaHaHa_EnD_TiDy_IdEnTiFiEr\")\ndem60 ~ ind60\ndem65 ~ ind60 + dem60\ninvisible(\".BeGiN_TiDy_IdEnTiFiEr_HaHaHa.HaHaHa_EnD_TiDy_IdEnTiFiEr\")\ninvisible(\".BeGiN_TiDy_IdEnTiFiEr_HaHaHa# residual correlations.HaHaHa_EnD_TiDy_IdEnTiFiEr\")\ny1 ~~ y5\ny2 ~~ y4 + y6\ny3 ~~ y7\ny4 ~~ y8\ny6 ~~ y8\n"
+    model1 <- "\nind60 =~ x1 + x2 + x3\ndem60 =~ y1 + a*y2 + b*y3 + c*y4\ndem65 =~ y5 + a*y6 + b*y7 + c*y8\ndem60 ~ ind60\ndem65 ~ ind60 + dem60\ny1 ~~ y5\ny2 ~~ y4 + y6\ny3 ~~ y7\ny4 ~~ y8\ny6 ~~ y8\n"
     fitsem <- sem(model1, data = dat2, meanstructure = TRUE)
     dat3 <- generate(model.lavaan(fitsem), n = 200)
     dat3 <- generate(model.lavaan(fitsem, std = TRUE), n = 200)
