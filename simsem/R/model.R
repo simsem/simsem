@@ -1239,69 +1239,6 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
     return(result)
 }
 
-
-test.estmodel <- function() {
-    loading <- matrix(0, 6, 2)
-    loading[1:3, 1] <- NA
-    loading[4:6, 2] <- NA
-    cfa1 <- estmodel(LY = loading, ngroups = 1, modelType = "CFA")
-    cfa2 <- estmodel(LY = loading, ngroups = 2, modelType = "CFA")
-    
-    loading <- matrix(0, 6, 2)
-    loading[1:3, 1] <- c(1, "con1", "con2")
-    loading[4:6, 2] <- c(1, "con3", "con4")
-    latent <- matrix(NA, 2, 2)
-    intcept <- paste0("int", 1:6)
-    facmean <- rep(0, 2)
-    error <- diag(NA, 6)
-    cfa3 <- estmodel(LY = loading, PS = list(latent, latent), TE = error, AL = facmean, 
-        TY = intcept, ngroups = 2, modelType = "CFA")
-    
-    
-    path <- matrix(0, 4, 4)
-    path[3, 1:2] <- NA
-    path[4, 3] <- NA
-    path1 <- estmodel(BE = path, ngroups = 1, modelType = "Path")
-    path2 <- estmodel(BE = path, ngroups = 2, modelType = "Path")
-    
-    path <- matrix(0, 4, 4)
-    path[3, 1:2] <- c("con1", "con2")
-    path[4, 3] <- "con3"
-    faccov <- diag(NA, 4)
-    faccov[2, 1] <- faccov[1, 2] <- NA
-    facmean <- rep(NA, 4)
-    path3 <- estmodel(BE = path, PS = list(faccov, faccov), AL = facmean, ngroups = 2, 
-        modelType = "Path")
-    
-    path <- matrix(0, 4, 4)
-    path[3, 1:2] <- NA
-    path[4, 3] <- NA
-    loading <- matrix(0, 12, 4)
-    loading[1:3, 1] <- NA
-    loading[4:6, 2] <- NA
-    loading[7:9, 3] <- NA
-    loading[10:12, 4] <- NA
-    sem1 <- estmodel(LY = loading, BE = path, ngroups = 1, modelType = "SEM")
-    sem2 <- estmodel(LY = loading, BE = path, ngroups = 2, modelType = "SEM")
-    
-    path <- matrix(0, 4, 4)
-    path[3, 1:2] <- NA
-    path[4, 3] <- NA
-    loading <- matrix(0, 12, 4)
-    loading[1:3, 1] <- paste0("con", 1:3)
-    loading[4:6, 2] <- paste0("con", 4:6)
-    loading[7:9, 3] <- paste0("con", 7:9)
-    loading[10:12, 4] <- paste0("con", 10:12)
-    faccov <- diag(1, 4)
-    faccov[2, 1] <- faccov[1, 2] <- NA
-    intcept <- paste0("int", 1:12)
-    facmean <- rep(0, 4)
-    error <- diag(NA, 12)
-    sem3 <- estmodel(LY = loading, BE = path, PS = faccov, TY = intcept, AL = facmean, 
-        TE = error, ngroups = 2, modelType = "SEM")
-    
-}
-
 parseSyntaxCon <- function(script) {
 	if(is.null(script)) return(list(NULL))
 	if(is(script, "list")) return(script)
@@ -1400,6 +1337,69 @@ attachConPt <- function(pt, con) {
 	pt
 }
 
+
+test.estmodel <- function() {
+    loading <- matrix(0, 6, 2)
+    loading[1:3, 1] <- NA
+    loading[4:6, 2] <- NA
+    cfa1 <- estmodel(LY = loading, ngroups = 1, modelType = "CFA")
+    cfa2 <- estmodel(LY = loading, ngroups = 2, modelType = "CFA")
+    
+    loading <- matrix(0, 6, 2)
+    loading[1:3, 1] <- c(1, "con1", "con2")
+    loading[4:6, 2] <- c(1, "con3", "con4")
+    latent <- matrix(NA, 2, 2)
+    intcept <- paste0("int", 1:6)
+    facmean <- rep(0, 2)
+    error <- diag(NA, 6)
+    cfa3 <- estmodel(LY = loading, PS = list(latent, latent), TE = error, AL = facmean, 
+        TY = intcept, ngroups = 2, modelType = "CFA")
+    
+    
+    path <- matrix(0, 4, 4)
+    path[3, 1:2] <- NA
+    path[4, 3] <- NA
+    path1 <- estmodel(BE = path, ngroups = 1, modelType = "Path")
+    path2 <- estmodel(BE = path, ngroups = 2, modelType = "Path")
+    
+    path <- matrix(0, 4, 4)
+    path[3, 1:2] <- c("con1", "con2")
+    path[4, 3] <- "con3"
+    faccov <- diag(NA, 4)
+    faccov[2, 1] <- faccov[1, 2] <- NA
+    facmean <- rep(NA, 4)
+    path3 <- estmodel(BE = path, PS = list(faccov, faccov), AL = facmean, ngroups = 2, 
+        modelType = "Path")
+    
+    path <- matrix(0, 4, 4)
+    path[3, 1:2] <- NA
+    path[4, 3] <- NA
+    loading <- matrix(0, 12, 4)
+    loading[1:3, 1] <- NA
+    loading[4:6, 2] <- NA
+    loading[7:9, 3] <- NA
+    loading[10:12, 4] <- NA
+    sem1 <- estmodel(LY = loading, BE = path, ngroups = 1, modelType = "SEM")
+    sem2 <- estmodel(LY = loading, BE = path, ngroups = 2, modelType = "SEM")
+    
+    path <- matrix(0, 4, 4)
+    path[3, 1:2] <- NA
+    path[4, 3] <- NA
+    loading <- matrix(0, 12, 4)
+    loading[1:3, 1] <- paste0("con", 1:3)
+    loading[4:6, 2] <- paste0("con", 4:6)
+    loading[7:9, 3] <- paste0("con", 7:9)
+    loading[10:12, 4] <- paste0("con", 10:12)
+    faccov <- diag(1, 4)
+    faccov[2, 1] <- faccov[1, 2] <- NA
+    intcept <- paste0("int", 1:12)
+    facmean <- rep(0, 4)
+    error <- diag(NA, 12)
+    sem3 <- estmodel(LY = loading, BE = path, PS = faccov, TY = intcept, AL = facmean, 
+        TE = error, ngroups = 2, modelType = "SEM")
+    
+}
+
 test.model.lavaan <- function() {
     
     HS.model <- " visual  =~ x1 + x2 + x3\ntextual =~ x4 + x5 + x6\nspeed   =~ x7 + x8 + x9 "
@@ -1428,5 +1428,4 @@ test.model.lavaan <- function() {
     fitsem <- sem(model1, data = dat2, meanstructure = TRUE)
     dat3 <- generate(model.lavaan(fitsem), n = 200)
     dat3 <- generate(model.lavaan(fitsem, std = TRUE), n = 200)
-    
 } 

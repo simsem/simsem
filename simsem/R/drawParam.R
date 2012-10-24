@@ -838,8 +838,8 @@ ME <- bind(rep(NA, 4), 0)
 
 Path.Model <- model(RPS = RPS, BE = BE, ME = ME, modelType="Path")
 
-param1 <- draw(Path.Model, misfitBound = c(0.10, 0.12), misfitType="rmsea")
-param2 <- draw(Path.Model, misfitBound = c(0.03, 0.05), misfitType="f0")
+param1 <- draw(Path.Model, misfitBounds = c(0.10, 0.12), misfitType="rmsea")
+param2 <- draw(Path.Model, misfitBounds = c(0.03, 0.05), misfitType="f0")
 param3 <- draw(Path.Model, optMisfit = "max", misfitType="f0")
 param4 <- draw(Path.Model, optMisfit = "min", misfitType="f0")
 param5 <- draw(Path.Model, optMisfit = "max", misfitType="f0", optDraws = 10)
