@@ -4,12 +4,7 @@
 
 # To be developed soon
 
-# order of misfits / constraint / fillParam
 # ROC curve?
-# Unequality constraint
-# Phantom variable (New parameters)
-
-# Report Phantom Variable in the sim function
 # Attach Labels in the summary(simResult)
 
 

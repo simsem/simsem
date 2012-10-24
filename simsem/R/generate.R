@@ -3,7 +3,7 @@
 ## optionally with the drawn parameter values.
 
 generate <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "f0", 
-    averageNumMisspec = FALSE, optMisfit = NULL, optDraws = 50, indDist = NULL, sequential = FALSE, 
+    averageNumMisspec = FALSE, optMisfit = NULL, optDraws = 50, createOrder = c(1, 2, 3), indDist = NULL, sequential = FALSE, 
     facDist = NULL, errorDist = NULL, indLab = NULL, modelBoot = FALSE, realData = NULL, 
     params = FALSE) {
     if (is.null(indLab)) {
@@ -30,7 +30,7 @@ generate <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "
 	if(ngroups > 1 && length(n) == 1) n <- rep(n, ngroups)
     
     draws <- draw(model, maxDraw = maxDraw, misfitBounds = misfitBounds, misfitType = misfitType, 
-        averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws)
+        averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, createOrder = createOrder)
 	
 	if (model@modelType == "SEM") {
 		draws <- changeScaleSEM(draws, model)

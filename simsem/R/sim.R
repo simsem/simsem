@@ -2,7 +2,7 @@
 sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = NULL, miss = NULL, datafun = NULL, 
     outfun = NULL, pmMCAR = NULL, pmMAR = NULL, facDist = NULL, indDist = NULL, errorDist = NULL, 
     sequential = FALSE, modelBoot = FALSE, realData = NULL, maxDraw = 50, misfitType = "f0", 
-    misfitBounds = NULL, averageNumMisspec = NULL, optMisfit = NULL, optDraws = 50, 
+    misfitBounds = NULL, averageNumMisspec = NULL, optMisfit = NULL, optDraws = 50, createOrder = c(1, 2, 3), 
     aux = NULL, seed = 123321, silent = FALSE, multicore = FALSE, cluster = FALSE, 
     numProc = NULL, paramOnly = FALSE, dataOnly = FALSE, smartStart = FALSE, ...) {
     start.time0 <- start.time <- proc.time()[3]
@@ -173,7 +173,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
                 miss = miss, datafun = datafun, outfun = outfun, silent = silent, 
                 facDist = facDist, indDist = indDist, errorDist = errorDist, sequential = sequential, 
                 realData = realData, maxDraw = maxDraw, misfitBounds = misfitBounds, 
-                averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, 
+                averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, createOrder = createOrder,
                 misfitType = misfitType, aux = aux, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart, ...)
             stopCluster(cl)
         } else {
@@ -181,7 +181,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
                 miss = miss, datafun = datafun, outfun = outfun, silent = silent, 
                 facDist = facDist, indDist = indDist, errorDist = errorDist, sequential = sequential, 
                 realData = realData, maxDraw = maxDraw, misfitBounds = misfitBounds, 
-                averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, 
+                averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, createOrder = createOrder, 
                 misfitType = misfitType, aux = aux, mc.cores = numProc, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart, ...)
         }
     } else {
@@ -189,7 +189,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
             miss = miss, datafun = datafun, outfun = outfun, silent = silent, facDist = facDist, 
             indDist = indDist, errorDist = errorDist, sequential = sequential, realData = realData, 
             maxDraw = maxDraw, misfitBounds = misfitBounds, averageNumMisspec = averageNumMisspec, 
-            optMisfit = optMisfit, optDraws = optDraws, misfitType = misfitType, 
+            optMisfit = optMisfit, optDraws = optDraws,  createOrder = createOrder, misfitType = misfitType, 
             aux = aux, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart, ...)
     }
     
@@ -328,7 +328,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
     outfun = NULL, facDist = NULL, indDist = NULL, indLab = NULL, errorDist = NULL, 
     sequential = FALSE, realData = NULL, silent = FALSE, modelBoot = FALSE, maxDraw = 50, 
     misfitType = "f0", misfitBounds = NULL, averageNumMisspec = NULL, optMisfit = NULL, 
-    optDraws = 50, timing = NULL, aux = NULL, paramOnly = FALSE, dataOnly = FALSE, smartStart = TRUE, ...) {
+    optDraws = 50, createOrder = c(1, 2, 3), timing = NULL, aux = NULL, paramOnly = FALSE, dataOnly = FALSE, smartStart = TRUE, ...) {
     start.time0 <- start.time <- proc.time()[3]
     timing <- list()
     param <- NULL
@@ -385,7 +385,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 		# Need to draw parameters
 		genout <- generate(model = generate, n = n, maxDraw = maxDraw, misfitBounds = misfitBounds, 
 			misfitType = misfitType, averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, 
-			optDraws = optDraws, indDist = indDist, sequential = sequential, 
+			optDraws = optDraws, createOrder = createOrder, indDist = indDist, sequential = sequential, 
 			facDist = facDist, errorDist = errorDist, indLab = indLab, modelBoot = modelBoot, 
 			realData = realData, params = TRUE)
 		data <- genout[[1]]
