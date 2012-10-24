@@ -33,7 +33,18 @@
       <section id="main_content" class="inner">
         <h1>Version History (Technical)</h1>
 
-<h2>Version 0.3-14 10/21/12</h2>
+<h2>Version 0.4-0 10/24/12</h2>
+
+<ul>
+<li>Fix the <em>optMisfit</em> and <em>misfitBound</em> in the <strong>draw</strong> function to work. Thus, these arguments in the <strong>createData</strong> and <strong>sim</strong> will work as well. 
+<li>Write the <strong>equalCon</strong> and <strong>applyConScript</strong> functions to fix the equality/inequality constraints in data generation. Thus, the problem that equality constraint cannot be applied across groups or matrices is fixed.
+<li>Add the <em>con</em> argument in the <strong>model</strong> function to take phantom variables/equality constraint/inequality constraint. The simsem object has the <em>con</em> attribute that saves the phantom variables/constraints definition.
+<li>Make the result object to contain additional parameters. The <strong>summaryParam</strong> function can compare the parameter estimates on additional parameters.
+<li>The result object contains the labels of each parameter. Then, the <strong>summaryParam</strong> also provides the labels of each parameter.
+<li>The order of data generation is implemented. The order of 1) imposing equality constraints, 2) imposing trivial misspecification, and 3) filling unspecified parameters can be specified by the <em>createOrder</em> argument in the <strong>draw</strong>, <strong>generate</strong> and <strong>sim</strong> functions. The <strong>misspecOrder</strong> is built to implement the order of data generation.
+</ul>
+
+<h2>Version 0.3-14 10/22/12</h2>
 
 <ul>
 <li>Fix the <strong>analyze</strong> and <strong>anal</strong> functions to ignore grouping variable when there is only one group
