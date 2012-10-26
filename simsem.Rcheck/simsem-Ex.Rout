@@ -26,13 +26,13 @@ Type 'q()' to quit R.
 Loading required package: lavaan
 Loading required package: MASS
 Loading required package: boot
-Loading required package: mvtnorm
+Loading required package: mnormt
 Loading required package: quadprog
-This is lavaan 0.5-9
+This is lavaan 0.5-11
 lavaan is BETA software! Please report any bugs.
  
 ###############################################################################################
-This is simsem 0.4-0
+This is simsem 0.4-1
 simsem is BETA software! Please report any bugs.
 simsem was developed at the University of Kansas Center for Research Methods and Data Analysis.
 ###############################################################################################
@@ -3953,7 +3953,7 @@ Proportion of MCAR: 0.1
 > #Analyze data
 > out <- analyze(CFA.Model, datmiss)
 > summary(out)
-lavaan (0.5-9) converged normally after  29 iterations
+lavaan (0.5-11) converged normally after  29 iterations
 
   Number of observations                            20
 
@@ -5906,7 +5906,7 @@ detaching 'package:parallel'
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  5.76 0.06 5.85 NA NA 
+Time elapsed:  5.63 0.07 5.91 NA NA 
 > grDevices::dev.off()
 null device 
           1 

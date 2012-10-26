@@ -75,7 +75,7 @@ analyze <- function(model, data, package = "lavaan", miss = NULL,
 
 # To be used internally
 anal <- function(model, data, package = "lavaan", ...) {
-	groupLab <- "group"
+	groupLab <- model@groupLab
 	if(length(unique(model@pt$group)) == 1) {
 		groupLab <- NULL
 	}

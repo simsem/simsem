@@ -10,7 +10,7 @@
 # dirMan <- "C:/Users/student/Dropbox/simsem/simsem/man/runMI.Rd"
 # showNonASCIIfile(dirMan)
 
-
+install.packages("lavaan", repos="http://www.da.ugent.be", type="source")
 
 sourceDir <- function(path, trace = TRUE, ...) {
      for (nm in list.files(path, pattern = "\\.[RrSsQq]$")) {

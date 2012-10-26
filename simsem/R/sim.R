@@ -454,23 +454,25 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
     ## 6. Parse Lavaan Output
 	if (!dataOnly) {
 		if (!is.null(out)) {
-			try(se <- inspect(out, "se"))
 			try(converged <- as.numeric(!inspect(out, "converged")))
-			try(check <- sum(unlist(lapply(se, sum))))
-			try(negVar <- checkVar(out))
-			improperCov <- FALSE
-			try(if(!negVar) {improperCov <- checkCov(out) })
-			try(if (is.na(check) || check == 0) {
-				converged <- 3
-			}, silent = TRUE)
-			try(if (negVar) {
-				converged <- 4
-			}, silent = TRUE)
-			try(if (improperCov) {
-				converged <- 5
-			}, silent = TRUE)
-			if(is(out, "lavaanStar") && length(out@imputed) > 0) {
-				if(out@imputed[[1]][1] < miss@convergentCutoff) converged <- 2
+			if(converged == 0) {
+				try(se <- inspect(out, "se"))
+				try(check <- sum(unlist(lapply(se, sum))))
+				try(negVar <- checkVar(out))
+				improperCov <- FALSE
+				try(if(!negVar) {improperCov <- checkCov(out) })
+				try(if (is.na(check) || check == 0) {
+					converged <- 3
+				}, silent = TRUE)
+				try(if (negVar) {
+					converged <- 4
+				}, silent = TRUE)
+				try(if (improperCov) {
+					converged <- 5
+				}, silent = TRUE)
+				if(is(out, "lavaanStar") && length(out@imputed) > 0) {
+					if(out@imputed[[1]][1] < miss@convergentCutoff) converged <- 2
+				}
 			}
 		}
 		
