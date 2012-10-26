@@ -53,6 +53,7 @@
 <li>The <em>createOrder</em> arguments in the <strong>draw</strong>, <strong>generate</strong>, and <strong>sim</strong> functions are added. This argument is used to specify the order of each of three tasks in data generation process: 1) imposing equality/inequality constraints, 2) imposing model misspecifications, and 3) filling the unspecified parameters (e.g., filling the residual variances when the total variances are specified). For example, createOrder = c(1, 2, 3), which is the default, means that data-generation parameters will be 1) imposed by constraints, 2) imposed by model misspecification, and 3) filled on the unspecified parameters. See the help page of the <strong>draw</strong> function for further details.
 <li>The labels of free parameters are provided in the <strong>summary</strong> and <strong>summaryParam</strong> function of a result object.
 <li>Minor bugs have been fixed.
+<li>The package is updated to be compatible with the lavaan package version 0.5-10.
 </ol>
 <p>From this update, all functionalities in the <strong>simsemClassic</strong> are avaiable in the current version of simsem. Please let us know if you have any questions, find any bugs, or provide any feedbacks. Thank you!</p>
 
