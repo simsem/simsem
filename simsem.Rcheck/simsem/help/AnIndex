@@ -35,15 +35,7 @@ getExtraOutput	getExtraOutput
 getPopulation	getPopulation
 getPower	getPower
 getPowerFit	getPowerFit
-getPowerFit,data.frame,vector-method	getPowerFit
-getPowerFit,matrix,vector-method	getPowerFit
-getPowerFit,SimResult,missing-method	getPowerFit
-getPowerFit,SimResult,vector-method	getPowerFit
-getPowerFit-methods	getPowerFit
 getPowerFitNested	getPowerFitNested
-getPowerFitNested,SimResult,SimResult,missing-method	getPowerFitNested
-getPowerFitNested,SimResult,SimResult,vector-method	getPowerFitNested
-getPowerFitNested-methods	getPowerFitNested
 getPowerFitNonNested	getPowerFitNonNested
 getPowerFitNonNested,SimResult,SimResult,missing-method	getPowerFitNonNested
 getPowerFitNonNested,SimResult,SimResult,vector-method	getPowerFitNonNested

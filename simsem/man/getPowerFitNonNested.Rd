@@ -10,7 +10,9 @@
 	Find the proportion of the difference in fit indices from one model that does not in the range of sampling distribution from another model (reject that the dataset comes from the second model) or indicates worse fit than a specified cutoff. 
 }
 \usage{
-getPowerFitNonNested(dat2Mod1, dat2Mod2, cutoff, ...)
+getPowerFitNonNested(dat2Mod1, dat2Mod2, cutoff = NULL, dat1Mod1 = NULL, 
+dat1Mod2 = NULL, revDirec = FALSE, usedFit = NULL, alpha = 0.05, nVal = NULL, 
+pmMCARval = NULL, pmMARval = NULL, condCutoff = TRUE, df = 0, onetailed = FALSE)
 }
 \arguments{
   \item{dat2Mod1}{
@@ -20,21 +22,42 @@ getPowerFitNonNested(dat2Mod1, dat2Mod2, cutoff, ...)
 	\code{\linkS4class{SimResult}} that saves the simulation of analyzing Model 2 by datasets created from Model 2
 }
   \item{cutoff}{
-	A vector of priori cutoffs for fit indices.
+	A vector of priori cutoffs for fit indices. The \code{cutoff} cannot be specified if the \code{dat1Mod1} and \code{dat1Mod2} are specified.
 }
-  \item{\dots}{
-	Additional arguments 
-  }
+  \item{dat1Mod1}{
+	The \code{\linkS4class{SimResult}} that saves the simulation of analyzing Model 1 by datasets created from Model 1. This argument must be specified with \code{dat1Mod2}. The \code{dat1Mod1} cannot be specified if the \code{cutoff} is specified.
 }
-\section{Methods}{
-	\describe{
-	\item{signature(dat2Mod1="SimResult", dat2Mod2="SimResult", cutoff="vector")}{
-		This method will find the the differences in fit indices from \code{dat2Mod1} and \code{dat2Mod2} that provides worse fit than the \code{cutoff}. The additional arguments are \code{revDirec}, \code{usedFit}, \code{nVal}, \code{pmMCARval}, \code{pmMARval}, \code{condCutoff}, and \code{df}, which are needed when using varying sample sizes or percent missing across replications in \code{\linkS4class{SimResult}}. The \code{revDirec} is whether to reverse a direction. The default is to count the proportion of the difference of fit indices that lower than the specified cutoffs, such as how many the difference in RMSEA in the alternative model that is lower than cutoffs. The direction can be reversed by setting as \code{TRUE}. The \code{usedFit} is the vector of names of fit indices that researchers wish to get power from. The default is to get the powers of all fit indices. The \code{nVal} is the sample size value that researchers wish to find the fit indices cutoffs from. The \code{pmMCARval} is the percent missing completely at random value that researchers wish to find the fit indices cutoffs from. The \code{pmMARval} is the percent missing at random value that researchers wish to find the fit indices cutoffs from. The \code{condCutoff} is a logical. If \code{TRUE}, the cutoff is applicable only a given set of \code{nVal}, \code{pmMCARval}, and \code{pmMARval}. If \code{FALSE}, the cutoff is applicable in any values of sample size and percent missing. The \code{df} is the degree of freedom used in spline method in predicting the fit indices by the predictors. If \code{df} is 0, the spline method will not be applied.
-	}
-	\item{signature(dat2Mod1="SimResult", dat2Mod2="SimResult", cutoff="missing")}{
-		The details are similar to the method for \code{dat2Mod1="SimResult"}, \code{dat2Mod2="SimResult"}, and \code{cutoff="vector"}. The \code{cutoff} argument must not be specified. Rather, the \code{dat1Mod1} and \code{dat1Mod2}, which are additional arguments of this method, are required. The \code{dat1Mod1} is the \code{\linkS4class{SimResult}} that saves the simulation of analyzing Model 1 by datasets created from Model 1. The \code{dat1Mod2} is the \code{\linkS4class{SimResult}} that saves the simulation of analyzing Model 2 by datasets created from Model 1. The another additional argument is \code{onetailed} that is to derive the cutoff by using one-tailed test if specified as \code{TRUE}.
-	}
-}}
+  \item{dat1Mod2}{
+	The \code{\linkS4class{SimResult}} that saves the simulation of analyzing Model 2 by datasets created from Model 1. This argument must be specified with \code{dat1Mod1}. The \code{dat1Mod2} cannot be specified if the \code{cutoff} is specified.
+}
+  \item{revDirec}{
+	Reverse the direction of deciding a power by fit indices (e.g., less than --> greater than). The default is to count the proportion of fit indices that indicates lower fit to the model, such as how many RMSEA in the alternative model that is worse than cutoffs. The direction can be reversed by setting as \code{TRUE}.
+}
+  \item{usedFit}{
+	The vector of names of fit indices that researchers wish to get powers from. The default is to get powers of all fit indices
+}
+  \item{alpha}{
+	The alpha level used to find the cutoff if the \code{nullObject} is specified. This argument is not applicable if the \code{cutoff} is specified.
+}
+  \item{nVal}{
+	The sample size value that researchers wish to find the power from. This argument is applicable when \code{altObject} has a random sample size. 
+}
+  \item{pmMCARval}{
+	The percent missing completely at random value that researchers wish to find the power from. This argument is applicable when \code{altObject} has a random percent missing completely at random. 
+}
+  \item{pmMARval}{
+	The percent missing at random value that researchers wish to find the power from. This argument is applicable when \code{altObject} has a random percent missing at random. 
+}
+  \item{condCutoff}{
+	A logical value to use a conditional quantile method (if \code{TRUE}) or logistic regression method (if \code{FALSE}) to find the power. The conditional quantile method use quantile regression to find the quantile of the cutoff on the alternative sampling distribution that varies \code{nVal}, \code{pmMCARval}, or \code{pmMARval}. The value of 1 - quantile will be reported as the power given the set of \code{nVal}, \code{pmMCARval}, and \code{pmMARval}. The logistic regression method is based on transforming the fit indices value to reject/retain decision first. Then, the logistic regression is used to predict reject/retain decision given the set of \code{nVal}, \code{pmMCARval}, and \code{pmMARval}. The predicted probability is reported as a power. This argument is applicable for specification of \code{cutoff} only.
+}
+  \item{df}{
+	The degree of freedom used in spline method in quantile regression (\code{condCutoff = TRUE}). If \code{df} is 0, which is the default, the spline method will not be applied.
+}
+  \item{onetailed}{
+	Derive the cutoff by using one-tailed test if specified as \code{TRUE}. This argument is applicable only when \code{dat1Mod1} and \code{dat1Mod2} are specified.
+}
+}
 \value{
 	List of power given different fit indices.
 }

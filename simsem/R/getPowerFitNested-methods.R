@@ -1,8 +1,25 @@
 # getPowerFitNested: This function will find a power of each fit index in
 # nested model comparison based on specified cutoffs of each fit index
 
-setMethod("getPowerFitNested", signature(altNested = "SimResult", altParent = "SimResult", 
-    cutoff = "vector"), definition = function(altNested, altParent, cutoff, revDirec = FALSE, 
+getPowerFitNested <- function(altNested, altParent, cutoff = NULL, nullNested = NULL, nullParent = NULL, revDirec = FALSE, usedFit = NULL, alpha = 0.05, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, condCutoff = TRUE, df = 0) {
+	result <- NULL
+	if(is.null(cutoff)) {
+		if(!is.null(nullNested) & !is.null(nullParent)) {
+			result <- getPowerFitNestedNullObj(altNested = altNested, altParent = altParent, nullNested = nullNested, nullParent = nullParent, revDirec = revDirec, usedFit = usedFit, alpha = alpha, nVal = nVal, pmMCARval = pmMCARval, pmMARval = pmMARval, df = df)
+		} else {
+			stop("Please specify fit index cutoff, 'cutoff', or the result object representing the null model, 'nullObject'.")
+		}
+	} else {
+		if(is.null(nullNested) & is.null(nullParent)) {
+			result <- getPowerFitNestedCutoff(altNested = altNested, altParent = altParent, cutoff = cutoff, revDirec = revDirec, usedFit = usedFit, nVal = nVal, pmMCARval = pmMCARval, pmMARval = pmMARval, condCutoff = condCutoff, df = df)
+		} else {
+			stop("Please specify either fit index cutoff, 'cutoff', or the result object representing the null model, 'nullObject', but not both.")
+		}
+	}
+	result
+}
+
+getPowerFitNestedCutoff <- function(altNested, altParent, cutoff, revDirec = FALSE, 
     usedFit = NULL, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, condCutoff = TRUE, 
     df = 0) {
     if (is.null(nVal) || is.na(nVal)) 
@@ -46,14 +63,13 @@ setMethod("getPowerFitNested", signature(altNested = "SimResult", altParent = "S
     predictorVal <- predictorVal[condition]
     
     
-    output <- getPowerFit(Data, cutoff, revDirec, usedFit, predictor = condValue, 
+    output <- getPowerFitDataFrame(Data, cutoff, revDirec, usedFit, predictor = condValue, 
         predictorVal = predictorVal, condCutoff = condCutoff, df = df)
     return(output)
-})
+}
 
-setMethod("getPowerFitNested", signature(altNested = "SimResult", altParent = "SimResult", 
-    cutoff = "missing"), definition = function(altNested, altParent, cutoff = NULL, 
-    nullNested = NULL, nullParent = NULL, revDirec = FALSE, usedFit = NULL, alpha = 0.05, nVal = NULL, 
+getPowerFitNestedNullObj <- function(altNested, altParent, 
+    nullNested, nullParent, revDirec = FALSE, usedFit = NULL, alpha = 0.05, nVal = NULL, 
     pmMCARval = NULL, pmMARval = NULL, df = 0) {
     if (is.null(usedFit)) 
         usedFit <- getKeywords()$usedFit
@@ -130,7 +146,7 @@ setMethod("getPowerFitNested", signature(altNested = "SimResult", altParent = "S
 		names(temp) <- usedFit
     }
     return(temp)
-})
+}
 
 # multipleAllEqual: Check whether all objects are equal by using all.equal
 # function

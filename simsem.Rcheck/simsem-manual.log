@@ -1,7 +1,7 @@
-This is pdfTeX, Version 3.1415926-1.40.11 (MiKTeX 2.9) (preloaded format=pdflatex 2011.7.1)  26 OCT 2012 14:22
+This is pdfTeX, Version 3.1415926-1.40.11 (MiKTeX 2.9) (preloaded format=pdflatex 2011.7.1)  26 OCT 2012 22:17
 entering extended mode
-**C:/Users/Sunthud/AppData/Local/Temp/Rtmpmk73jR/Rd2pdf35c6a264caa/Rd2.tex
-(C:/Users/Sunthud/AppData/Local/Temp/Rtmpmk73jR/Rd2pdf35c6a264caa/Rd2.tex
+**C:/Users/Sunthud/AppData/Local/Temp/RtmpIha4lv/Rd2pdf1fa45ff2708f/Rd2.tex
+(C:/Users/Sunthud/AppData/Local/Temp/RtmpIha4lv/Rd2pdf1fa45ff2708f/Rd2.tex
 LaTeX2e <2009/09/24>
 Babel <v3.8l> and hyphenation patterns for english, afrikaans, ancientgreek, ar
 abic, armenian, assamese, basque, bengali, bokmal, bulgarian, catalan, coptic, 
@@ -601,7 +601,7 @@ File: latin1.def 2008/03/30 v1.1d Input encoding file
 \@indexfile=\write3
 
 Writing index file Rd2.idx
-(C:\Users\Sunthud\AppData\Local\Temp\Rtmpmk73jR\Rd2pdf35c6a264caa\Rd2.aux)
+(C:\Users\Sunthud\AppData\Local\Temp\RtmpIha4lv\Rd2pdf1fa45ff2708f\Rd2.aux)
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 8.
 LaTeX Font Info:    ... okay on input line 8.
 LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 8.
@@ -656,8 +656,8 @@ LaTeX Info: Redefining \ref on input line 8.
 LaTeX Info: Redefining \pageref on input line 8.
 LaTeX Info: Redefining \nameref on input line 8.
 
-(C:\Users\Sunthud\AppData\Local\Temp\Rtmpmk73jR\Rd2pdf35c6a264caa\Rd2.out)
-(C:\Users\Sunthud\AppData\Local\Temp\Rtmpmk73jR\Rd2pdf35c6a264caa\Rd2.out)
+(C:\Users\Sunthud\AppData\Local\Temp\RtmpIha4lv\Rd2pdf1fa45ff2708f\Rd2.out)
+(C:\Users\Sunthud\AppData\Local\Temp\RtmpIha4lv\Rd2pdf1fa45ff2708f\Rd2.out)
 \@outlinefile=\write4
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <24.88> not available
 (Font)              Font shape `T1/ptm/b/n' tried instead on input line 9.
@@ -681,7 +681,7 @@ LaTeX Font Info:    Try loading font information for T1+phv on input line 31.
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\t1phv.fd"
 File: t1phv.fd 2001/06/04 scalable font definitions for T1/phv.
 )
-(C:\Users\Sunthud\AppData\Local\Temp\Rtmpmk73jR\Rd2pdf35c6a264caa\Rd2.toc
+(C:\Users\Sunthud\AppData\Local\Temp\RtmpIha4lv\Rd2pdf1fa45ff2708f\Rd2.toc
 [1
 
 
@@ -914,131 +914,120 @@ d pmMCAR=seq(0, 0.2, 0.01)[]
 
 [42] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-)
-Overfull \hbox (83.77681pt too wide) in paragraph at lines 2358--2359
-[]\T1/ptm/m/n/10 The de-tails are sim-i-lar to the method for \T1/fi4/m/n/10 al
-tObject="data.frame"
+) [43]
+Overfull \hbox (41.75859pt too wide) in paragraph at lines 2360--2361
+[]\T1/ptm/m/n/10 The de-gree of free-dom used in spline method in quan-tile re-
+gres-sion (\T1/fi4/m/n/10 condCutoff = TRUE\T1/ptm/m/n/10 ).
  []
 
-[43] [44]
-Overfull \hbox (18.78088pt too wide) in paragraph at lines 2425--2425
+[44]
+Overfull \hbox (18.78088pt too wide) in paragraph at lines 2424--2424
  []\T1/fi4/m/n/9 Output.NULL2 <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model.
 NULL, generate=CFA.Model.NULL)[] 
  []
 
 
-Overfull \hbox (9.78088pt too wide) in paragraph at lines 2426--2426
+Overfull \hbox (9.78088pt too wide) in paragraph at lines 2425--2425
  []\T1/fi4/m/n/9 Output.ALT2 <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model.N
 ULL, generate=CFA.Model.ALT)[] 
  []
 
 
-Overfull \hbox (5.28088pt too wide) in paragraph at lines 2428--2428
+Overfull \hbox (5.28088pt too wide) in paragraph at lines 2427--2427
  []\T1/fi4/m/n/9 # Get the power based on the derived cutoff from the null mode
 l at the sample size of 250[] 
  []
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-)
-Overfull \hbox (2.81636pt too wide) in paragraph at lines 2475--2476
-[]\T1/ptm/m/n/10 This method will
- []
-
-[45]
-Overfull \hbox (38.59973pt too wide) in paragraph at lines 2478--2479
-\T1/ptm/m/n/10 sim-i-lar to the method for \T1/fi4/m/n/10 altNested="SimResult"
-\T1/ptm/m/n/10 , \T1/fi4/m/n/10 altParent="SimResult"\T1/ptm/m/n/10 , and \T1/f
-i4/m/n/10 cutoff="vector"\T1/ptm/m/n/10 .
+) [45]
+Overfull \hbox (41.75859pt too wide) in paragraph at lines 2487--2488
+[]\T1/ptm/m/n/10 The de-gree of free-dom used in spline method in quan-tile re-
+gres-sion (\T1/fi4/m/n/10 condCutoff = TRUE\T1/ptm/m/n/10 ).
  []
 
 [46]
-Overfull \hbox (9.78088pt too wide) in paragraph at lines 2526--2526
+Overfull \hbox (9.78088pt too wide) in paragraph at lines 2538--2538
  []\T1/fi4/m/n/9 # Find the power based on the derived cutoff from the models a
 nalyzed on the null datasets[] 
  []
 
 
-Overfull \hbox (86.28088pt too wide) in paragraph at lines 2527--2527
+Overfull \hbox (86.28088pt too wide) in paragraph at lines 2539--2539
  []\T1/fi4/m/n/9 getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=
 Output.NULL.NULL, nullParent=Output.NULL.ALT)[] 
  []
 
 
-Overfull \hbox (0.78088pt too wide) in paragraph at lines 2529--2529
+Overfull \hbox (0.78088pt too wide) in paragraph at lines 2541--2541
  []\T1/fi4/m/n/9 # Find the power based on the chi-square value at df=1 and the
  CFI change (intentionally[] 
  []
 
 
-Overfull \hbox (41.28088pt too wide) in paragraph at lines 2535--2535
+Overfull \hbox (41.28088pt too wide) in paragraph at lines 2547--2547
  []\T1/fi4/m/n/9 Output.NULL.NULL2 <- sim(NULL, n=seq(50, 500, 50), model=CFA.M
 odel.NULL, generate=CFA.Model.NULL)[] 
  []
 
 
-Overfull \hbox (32.28088pt too wide) in paragraph at lines 2536--2536
+Overfull \hbox (32.28088pt too wide) in paragraph at lines 2548--2548
  []\T1/fi4/m/n/9 Output.ALT.NULL2 <- sim(NULL, n=seq(50, 500, 50), model=CFA.Mo
 del.NULL, generate=CFA.Model.ALT)[] 
  []
 
 
-Overfull \hbox (32.28088pt too wide) in paragraph at lines 2537--2537
+Overfull \hbox (32.28088pt too wide) in paragraph at lines 2549--2549
  []\T1/fi4/m/n/9 Output.NULL.ALT2 <- sim(NULL, n=seq(50, 500, 50), model=CFA.Mo
 del.ALT, generate=CFA.Model.NULL)[] 
  []
 
 
-Overfull \hbox (23.28088pt too wide) in paragraph at lines 2538--2538
+Overfull \hbox (23.28088pt too wide) in paragraph at lines 2550--2550
  []\T1/fi4/m/n/9 Output.ALT.ALT2 <- sim(NULL, n=seq(50, 500, 50), model=CFA.Mod
 el.ALT, generate=CFA.Model.ALT)[] 
  []
 
 
-Overfull \hbox (5.28088pt too wide) in paragraph at lines 2540--2540
+Overfull \hbox (5.28088pt too wide) in paragraph at lines 2552--2552
  []\T1/fi4/m/n/9 # Get the power based on the derived cutoff from the null mode
 l at the sample size of 250[] 
  []
 
 
-Overfull \hbox (158.28088pt too wide) in paragraph at lines 2541--2541
+Overfull \hbox (158.28088pt too wide) in paragraph at lines 2553--2553
  []\T1/fi4/m/n/9 getPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNeste
 d=Output.NULL.NULL2, nullParent=Output.NULL.ALT2, nVal = 250)[] 
  []
 
 
-Overfull \hbox (0.78088pt too wide) in paragraph at lines 2543--2543
+Overfull \hbox (0.78088pt too wide) in paragraph at lines 2555--2555
  []\T1/fi4/m/n/9 # Get the power based on the rule of thumb from the null model
  at the sample size of 250[] 
  []
 
 
-Overfull \hbox (32.28088pt too wide) in paragraph at lines 2544--2544
+Overfull \hbox (32.28088pt too wide) in paragraph at lines 2556--2556
  []\T1/fi4/m/n/9 getPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, cutoff=c(
 Chi=3.84, CFI=-0.10), nVal = 250)[] 
  []
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [47]
-Overfull \hbox (10.89673pt too wide) in paragraph at lines 2590--2591
-[]\T1/ptm/m/n/10 This method will
+)
+Overfull \hbox (4.78088pt too wide) in paragraph at lines 2575--2575
+ []\T1/fi4/m/n/10 pmMCARval = NULL, pmMARval = NULL, condCutoff = TRUE, df = 0,
+ onetailed = FALSE)[] 
  []
 
-
-Overfull \hbox (7.10648pt too wide) in paragraph at lines 2593--2594
-[]\T1/ptm/m/n/10 The de-tails are
- []
-
-
-Overfull \hbox (28.59973pt too wide) in paragraph at lines 2593--2594
-\T1/ptm/m/n/10 sim-i-lar to the method for \T1/fi4/m/n/10 dat2Mod1="SimResult"\
-T1/ptm/m/n/10 , \T1/fi4/m/n/10 dat2Mod2="SimResult"\T1/ptm/m/n/10 , and \T1/fi4
-/m/n/10 cutoff="vector"\T1/ptm/m/n/10 .
+[47]
+Overfull \hbox (41.75859pt too wide) in paragraph at lines 2618--2619
+[]\T1/ptm/m/n/10 The de-gree of free-dom used in spline method in quan-tile re-
+gres-sion (\T1/fi4/m/n/10 condCutoff = TRUE\T1/ptm/m/n/10 ).
  []
 
 [48]
-Overfull \hbox (45.78088pt too wide) in paragraph at lines 2643--2643
+Overfull \hbox (45.78088pt too wide) in paragraph at lines 2674--2674
  []\T1/fi4/m/n/9 # Find the power based on the AIC and BIC of 0 (select model B
  if Output.B.B has lower AIC or BIC)[] 
  []
@@ -1046,47 +1035,48 @@ Overfull \hbox (45.78088pt too wide) in paragraph at lines 2643--2643
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [49] [50]
-Overfull \hbox (86.28088pt too wide) in paragraph at lines 2810--2810
+[51]
+Overfull \hbox (86.28088pt too wide) in paragraph at lines 2841--2841
  []  \T1/fi4/m/n/9 imposeMissing(data,nforms=3,itemGroups=list(c(1,2,3,4,5),c(6
 ,7,8,9,10),c(11,12,13,14,15),c(16,17,18,19)))[] 
  []
 
-[51] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [52]
-Overfull \hbox (140.28088pt too wide) in paragraph at lines 2898--2898
+Overfull \hbox (140.28088pt too wide) in paragraph at lines 2929--2929
  []\T1/fi4/m/n/9 model.A <- estmodel(LY=loading, BE=path.A, modelType="SEM", in
 dLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))[] 
  []
 
 
-Overfull \hbox (140.28088pt too wide) in paragraph at lines 2906--2906
+Overfull \hbox (140.28088pt too wide) in paragraph at lines 2937--2937
  []\T1/fi4/m/n/9 model.B <- estmodel(LY=loading, BE=path.B, modelType="SEM", in
 dLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))[] 
  []
 
 
-Overfull \hbox (0.78088pt too wide) in paragraph at lines 2927--2927
+Overfull \hbox (0.78088pt too wide) in paragraph at lines 2958--2958
  []\T1/fi4/m/n/9 # When the number of replications increases (e.g., 1000), the 
 warnings should disappear.[] 
  []
 
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+[53] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
-Overfull \hbox (9.78088pt too wide) in paragraph at lines 2942--2942
+Overfull \hbox (9.78088pt too wide) in paragraph at lines 2973--2973
  []\T1/fi4/m/n/10 miss(cov = 0, pmMCAR = 0, pmMAR = 0, logit = "", nforms = 0, 
 itemGroups = list(),[] 
  []
 
-[53] [54]
-Overfull \hbox (0.78088pt too wide) in paragraph at lines 2993--2993
+[54]
+Overfull \hbox (0.78088pt too wide) in paragraph at lines 3024--3024
  []\T1/fi4/m/n/9 #Example of imposing 10% MCAR missing in all variables with no
  imputations (FIML method)[] 
  []
 
 [55]
-Overfull \hbox (14.28088pt too wide) in paragraph at lines 3032--3032
+Overfull \hbox (14.28088pt too wide) in paragraph at lines 3063--3063
  []\T1/fi4/m/n/9 #Example to create simMissing object for 3 forms design at 3 t
 imepoints with 10 imputations[] 
  []
@@ -1094,19 +1084,19 @@ imepoints with 10 imputations[]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [56]
-Overfull \hbox (2.23773pt too wide) in paragraph at lines 3080--3081
+Overfull \hbox (2.23773pt too wide) in paragraph at lines 3111--3112
 []\T1/ptm/m/n/10 Measurement er-ror co-vari-ance ma-trix among Y in-di-ca-tors 
 (need to be [][]\T1/fi4/m/n/10 SimMatrix[][][]
  []
 
 
-Overfull \hbox (2.64749pt too wide) in paragraph at lines 3083--3084
+Overfull \hbox (2.64749pt too wide) in paragraph at lines 3114--3115
 []\T1/ptm/m/n/10 Measurement er-ror cor-re-la-tion ma-trix among Y in-di-ca-tor
 s (need to be [][]\T1/fi4/m/n/10 SimMatrix[][][]
  []
 
 [57]
-Overfull \hbox (14.11954pt too wide) in paragraph at lines 3140--3141
+Overfull \hbox (14.11954pt too wide) in paragraph at lines 3171--3172
 []\T1/ptm/m/n/10 The \T1/fi4/m/n/10 model.cfa\T1/ptm/m/n/10 , \T1/fi4/m/n/10 mo
 del.path\T1/ptm/m/n/10 , and \T1/fi4/m/n/10 model.sem \T1/ptm/m/n/10 are the sh
 ort-cuts for the \T1/fi4/m/n/10 model \T1/ptm/m/n/10 func-tion when \T1/fi4/m/n
@@ -1114,13 +1104,16 @@ ort-cuts for the \T1/fi4/m/n/10 model \T1/ptm/m/n/10 func-tion when \T1/fi4/m/n
  []
 
 [58]
-Overfull \hbox (149.28088pt too wide) in paragraph at lines 3195--3195
+Overfull \hbox (149.28088pt too wide) in paragraph at lines 3226--3226
  []\T1/fi4/m/n/9 CFA.Model <- model(LY = LY, RPS = list(RPS, RPS), RTE = list(R
 TE, RTE), VTE=list(VTE, VTE), ngroups=2, modelType = "CFA")[] 
  []
 
 
-Overfull \hbox (18.78088pt too wide) in paragraph at lines 3221--3221
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [59]
+Overfull \hbox (18.78088pt too wide) in paragraph at lines 3252--3252
  []\T1/fi4/m/n/9 LCA.Model <- model(LY=LY, RPS=RPS, VPS=VPS, AL=AL, VTE=VTE, RT
 E=RTE, TY=TY, modelType="CFA")[] 
  []
@@ -1128,49 +1121,46 @@ E=RTE, TY=TY, modelType="CFA")[]
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [59]
-Overfull \hbox (230.28088pt too wide) in paragraph at lines 3288--3288
+ [60]
+Overfull \hbox (230.28088pt too wide) in paragraph at lines 3319--3319
  []\T1/fi4/m/n/9 noninvariance <- model(LY = list(LY1, LY2), RPS = list(RPS1, R
 PS2), RTE = list(RTE, RTE), VTE=list(VTE, VTE), ngroups=2, modelType = "CFA")[]
  
  []
 
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [60]
-Overfull \hbox (144.78088pt too wide) in paragraph at lines 3321--3321
+Overfull \hbox (144.78088pt too wide) in paragraph at lines 3352--3352
  []\T1/fi4/m/n/9 weak <- model(LY = LY.in, RPS = RPS, VPS=list(VPS1, VPS2), RTE
  = RTE, VTE=VTE, ngroups=2, modelType = "CFA", con=script)[] 
  []
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-)
-Overfull \hbox (5.78783pt too wide) in paragraph at lines 3345--3346
+) [61]
+Overfull \hbox (5.78783pt too wide) in paragraph at lines 3376--3377
 []\T1/ptm/m/n/10 If TRUE, use the re-sult-ing stan-dard-ized pa-ram-e-ters for 
 data gen-er-a-tion. If FALSE,
  []
 
-[61] [62] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+[62] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-)
+) [63]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [63] [64]
-Overfull \hbox (81.78088pt too wide) in paragraph at lines 3562--3562
+) [64]
+Overfull \hbox (81.78088pt too wide) in paragraph at lines 3593--3593
  []\T1/fi4/m/n/9 # Specify both continuoussample size and percent missing compl
 etely at random. Note that more fine-grained[] 
  []
 
 
-Overfull \hbox (0.78088pt too wide) in paragraph at lines 3563--3563
+Overfull \hbox (0.78088pt too wide) in paragraph at lines 3594--3594
  []\T1/fi4/m/n/9 # values of n and pmMCAR is needed, e.g., n=seq(50, 500, 1) an
 d pmMCAR=seq(0, 0.2, 0.01)[] 
  []
 
 
-Overfull \hbox (0.78088pt too wide) in paragraph at lines 3564--3564
+Overfull \hbox (0.78088pt too wide) in paragraph at lines 3595--3595
  []\T1/fi4/m/n/9 Output3 <- sim(NULL, n=seq(450, 500, 10), pmMCAR=c(0, 0.05, 0.
 1, 0.15), model=CFA.Model)[] 
  []
@@ -1193,19 +1183,19 @@ File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [71] [72]
-Overfull \hbox (86.28088pt too wide) in paragraph at lines 4039--4039
+Overfull \hbox (86.28088pt too wide) in paragraph at lines 4070--4070
  []\T1/fi4/m/n/9 # Specify both continuous sample size and percent missing comp
 letely at random. Note that more fine-grained[] 
  []
 
 
-Overfull \hbox (0.78088pt too wide) in paragraph at lines 4040--4040
+Overfull \hbox (0.78088pt too wide) in paragraph at lines 4071--4071
  []\T1/fi4/m/n/9 # values of n and pmMCAR is needed, e.g., n=seq(50, 500, 1) an
 d pmMCAR=seq(0, 0.2, 0.01)[] 
  []
 
 
-Overfull \hbox (45.78088pt too wide) in paragraph at lines 4047--4047
+Overfull \hbox (45.78088pt too wide) in paragraph at lines 4078--4078
  []\T1/fi4/m/n/9 # Plot the power of the correlation along the sample size and 
 percent missing completely at random[] 
  []
@@ -1213,49 +1203,49 @@ percent missing completely at random[]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [73]
-Overfull \hbox (63.78088pt too wide) in paragraph at lines 4149--4149
+Overfull \hbox (63.78088pt too wide) in paragraph at lines 4180--4180
  []\T1/fi4/m/n/9 plotPowerFit(Output.ALT, nullObject=Output.NULL, alpha=0.05, u
 sedFit=c("RMSEA", "CFI", "TLI", "SRMR"))[] 
  []
 
 
-Overfull \hbox (36.78088pt too wide) in paragraph at lines 4151--4151
+Overfull \hbox (36.78088pt too wide) in paragraph at lines 4182--4182
  []\T1/fi4/m/n/9 # Plot the power of rejecting null model when the rule of thum
 b from Hu & Bentler (1999) is used[] 
  []
 
 [74]
-Overfull \hbox (54.78088pt too wide) in paragraph at lines 4153--4153
+Overfull \hbox (54.78088pt too wide) in paragraph at lines 4184--4184
  []\T1/fi4/m/n/9 plotPowerFit(Output.ALT, cutoff=Rule.of.thumb, alpha=0.05, use
 dFit=c("RMSEA", "CFI", "TLI", "SRMR"))[] 
  []
 
 
-Overfull \hbox (18.78088pt too wide) in paragraph at lines 4157--4157
+Overfull \hbox (18.78088pt too wide) in paragraph at lines 4188--4188
  []\T1/fi4/m/n/9 Output.NULL2 <- sim(NULL, n=seq(50, 250, 25), model=CFA.Model.
 NULL, generate=CFA.Model.NULL)[] 
  []
 
 
-Overfull \hbox (9.78088pt too wide) in paragraph at lines 4158--4158
+Overfull \hbox (9.78088pt too wide) in paragraph at lines 4189--4189
  []\T1/fi4/m/n/9 Output.ALT2 <- sim(NULL, n=seq(50, 250, 25), model=CFA.Model.N
 ULL, generate=CFA.Model.ALT)[] 
  []
 
 
-Overfull \hbox (59.28088pt too wide) in paragraph at lines 4160--4160
+Overfull \hbox (59.28088pt too wide) in paragraph at lines 4191--4191
  []\T1/fi4/m/n/9 # Plot the power based on derived cutoff from the null model u
 sing four fit indices along sample size[] 
  []
 
 
-Overfull \hbox (72.78088pt too wide) in paragraph at lines 4161--4161
+Overfull \hbox (72.78088pt too wide) in paragraph at lines 4192--4192
  []\T1/fi4/m/n/9 plotPowerFit(Output.ALT2, nullObject=Output.NULL2, alpha=0.05,
  usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))[] 
  []
 
 
-Overfull \hbox (59.28088pt too wide) in paragraph at lines 4164--4164
+Overfull \hbox (59.28088pt too wide) in paragraph at lines 4195--4195
  []\T1/fi4/m/n/9 plotPowerFit(Output.ALT2, cutoff=Rule.of.thumb, alpha=0.05, us
 edFit=c("RMSEA", "CFI", "TLI", "SRMR"))[] 
  []
@@ -1263,73 +1253,73 @@ edFit=c("RMSEA", "CFI", "TLI", "SRMR"))[]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [75] [76]
-Overfull \hbox (9.78088pt too wide) in paragraph at lines 4273--4273
+Overfull \hbox (9.78088pt too wide) in paragraph at lines 4304--4304
  []\T1/fi4/m/n/9 # Plot the power based on the derived cutoff from the models a
 nalyzed on the null datasets[] 
  []
 
 
-Overfull \hbox (90.78088pt too wide) in paragraph at lines 4274--4274
+Overfull \hbox (90.78088pt too wide) in paragraph at lines 4305--4305
  []\T1/fi4/m/n/9 plotPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested
 =Output.NULL.NULL, nullParent=Output.NULL.ALT)[] 
  []
 
 
-Overfull \hbox (158.28088pt too wide) in paragraph at lines 4277--4277
+Overfull \hbox (158.28088pt too wide) in paragraph at lines 4308--4308
  []\T1/fi4/m/n/9 plotPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested
 =Output.NULL.NULL, nullParent=Output.NULL.ALT, usedFit="CFI")[] 
  []
 
 
-Overfull \hbox (41.28088pt too wide) in paragraph at lines 4281--4281
+Overfull \hbox (41.28088pt too wide) in paragraph at lines 4312--4312
  []\T1/fi4/m/n/9 Output.NULL.NULL2 <- sim(NULL, n=seq(50, 500, 25), model=CFA.M
 odel.NULL, generate=CFA.Model.NULL)[] 
  []
 
 
-Overfull \hbox (32.28088pt too wide) in paragraph at lines 4282--4282
+Overfull \hbox (32.28088pt too wide) in paragraph at lines 4313--4313
  []\T1/fi4/m/n/9 Output.ALT.NULL2 <- sim(NULL, n=seq(50, 500, 25), model=CFA.Mo
 del.NULL, generate=CFA.Model.ALT)[] 
  []
 
 
-Overfull \hbox (32.28088pt too wide) in paragraph at lines 4283--4283
+Overfull \hbox (32.28088pt too wide) in paragraph at lines 4314--4314
  []\T1/fi4/m/n/9 Output.NULL.ALT2 <- sim(NULL, n=seq(50, 500, 25), model=CFA.Mo
 del.ALT, generate=CFA.Model.NULL)[] 
  []
 
 
-Overfull \hbox (23.28088pt too wide) in paragraph at lines 4284--4284
+Overfull \hbox (23.28088pt too wide) in paragraph at lines 4315--4315
  []\T1/fi4/m/n/9 Output.ALT.ALT2 <- sim(NULL, n=seq(50, 500, 25), model=CFA.Mod
 el.ALT, generate=CFA.Model.ALT)[] 
  []
 
 
-Overfull \hbox (86.28088pt too wide) in paragraph at lines 4286--4286
+Overfull \hbox (86.28088pt too wide) in paragraph at lines 4317--4317
  []\T1/fi4/m/n/9 # Plot logistic line for the power based on the derived cutoff
  from the null model along sample size values[] 
  []
 
 
-Overfull \hbox (108.78088pt too wide) in paragraph at lines 4287--4287
+Overfull \hbox (108.78088pt too wide) in paragraph at lines 4318--4318
  []\T1/fi4/m/n/9 plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNest
 ed=Output.NULL.NULL2, nullParent=Output.NULL.ALT2)[] 
  []
 
 
-Overfull \hbox (77.28088pt too wide) in paragraph at lines 4289--4289
+Overfull \hbox (77.28088pt too wide) in paragraph at lines 4320--4320
  []\T1/fi4/m/n/9 # Plot scatterplot for the power based on the derived cutoff f
 rom the null model along sample size values[] 
  []
 
 
-Overfull \hbox (180.78088pt too wide) in paragraph at lines 4290--4290
+Overfull \hbox (180.78088pt too wide) in paragraph at lines 4321--4321
  []\T1/fi4/m/n/9 plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNest
 ed=Output.NULL.NULL2, nullParent=Output.NULL.ALT2, logistic=FALSE)[] 
  []
 
 
-Overfull \hbox (5.28088pt too wide) in paragraph at lines 4293--4293
+Overfull \hbox (5.28088pt too wide) in paragraph at lines 4324--4324
  []\T1/fi4/m/n/9 plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, cutoff=c
 (CFI=-0.1), logistic=FALSE)[] 
  []
@@ -1343,7 +1333,7 @@ File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
-Overfull \hbox (29.78088pt too wide) in paragraph at lines 4473--4473
+Overfull \hbox (29.78088pt too wide) in paragraph at lines 4504--4504
  []\T1/fi4/m/n/10 popMisfitMACS(paramM, paramCM, misspecM, misspecCM, dfParam=N
 ULL, fit.measures="all")[] 
  []
@@ -1351,13 +1341,13 @@ ULL, fit.measures="all")[]
 [80] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [81]
-Overfull \hbox (13.50696pt too wide) in paragraph at lines 4568--4569
+Overfull \hbox (13.50696pt too wide) in paragraph at lines 4599--4600
 []\T1/ptm/m/n/10 This method will find the \T1/ptm/m/it/10 p \T1/ptm/m/n/10 val
 ue of each columns
  []
 
 
-Overfull \hbox (2.4684pt too wide) in paragraph at lines 4568--4569
+Overfull \hbox (2.4684pt too wide) in paragraph at lines 4599--4600
 \T1/ptm/m/n/10 in the \T1/fi4/m/n/10 dist \T1/ptm/m/n/10 based on the value spe
 c-i-fied in the \T1/fi4/m/n/10 target\T1/ptm/m/n/10 . The ad-di-tional ar-gu-me
 nts are \T1/fi4/m/n/10 revDirec\T1/ptm/m/n/10 ,
@@ -1366,13 +1356,13 @@ nts are \T1/fi4/m/n/10 revDirec\T1/ptm/m/n/10 ,
 [82] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [83]
-Overfull \hbox (63.78088pt too wide) in paragraph at lines 4703--4703
+Overfull \hbox (63.78088pt too wide) in paragraph at lines 4734--4734
  []\T1/fi4/m/n/9 nested <- estmodel(LY=LY, PS=PS, TY=TY, AL=AL, TE=TE, modelTyp
 e="CFA", indLab=paste("t", 1:4, sep=""))[] 
  []
 
 
-Overfull \hbox (68.28088pt too wide) in paragraph at lines 4708--4708
+Overfull \hbox (68.28088pt too wide) in paragraph at lines 4739--4739
  []\T1/fi4/m/n/9 parent <- estmodel(LY=LY2, PS=PS, TY=TY, AL=AL, TE=TE, modelTy
 pe="CFA", indLab=paste("t", 1:4, sep=""))[] 
  []
@@ -1380,13 +1370,13 @@ pe="CFA", indLab=paste("t", 1:4, sep=""))[]
 [84] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [85]
-Overfull \hbox (140.28088pt too wide) in paragraph at lines 4824--4824
+Overfull \hbox (140.28088pt too wide) in paragraph at lines 4855--4855
  []\T1/fi4/m/n/9 model.A <- estmodel(LY=loading, BE=path.A, modelType="SEM", in
 dLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))[] 
  []
 
 
-Overfull \hbox (140.28088pt too wide) in paragraph at lines 4832--4832
+Overfull \hbox (140.28088pt too wide) in paragraph at lines 4863--4863
  []\T1/fi4/m/n/9 model.B <- estmodel(LY=loading, BE=path.B, modelType="SEM", in
 dLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))[] 
  []
@@ -1397,7 +1387,7 @@ File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [88]
-Overfull \hbox (117.78088pt too wide) in paragraph at lines 5018--5018
+Overfull \hbox (117.78088pt too wide) in paragraph at lines 5049--5049
  []\T1/fi4/m/n/9 analysis <- estmodel(LY=loading, BE=path, TE=errorCov, PS=facC
 ov, modelType="SEM", indLab=paste("y", 1:7, sep=""))[] 
  []
@@ -1405,37 +1395,37 @@ ov, modelType="SEM", indLab=paste("y", 1:7, sep=""))[]
 [89] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
-Overfull \hbox (64.78088pt too wide) in paragraph at lines 5058--5058
+Overfull \hbox (64.78088pt too wide) in paragraph at lines 5089--5089
  []\T1/fi4/m/n/10 sim(nRep, model, n, generate = NULL, rawData = NULL, miss = N
 ULL, datafun=NULL, outfun=NULL,[] 
  []
 
 
-Overfull \hbox (94.78088pt too wide) in paragraph at lines 5059--5059
+Overfull \hbox (94.78088pt too wide) in paragraph at lines 5090--5090
  []\T1/fi4/m/n/10 pmMCAR = NULL, pmMAR = NULL, facDist = NULL, indDist = NULL, 
 errorDist = NULL, sequential = FALSE,[] 
  []
 
 
-Overfull \hbox (119.78088pt too wide) in paragraph at lines 5061--5061
+Overfull \hbox (119.78088pt too wide) in paragraph at lines 5092--5092
  []\T1/fi4/m/n/10 misfitBounds = NULL, averageNumMisspec = NULL, optMisfit=NULL
 , optDraws = 50, createOrder = c(1, 2, 3),[] 
  []
 
 
-Overfull \hbox (74.78088pt too wide) in paragraph at lines 5062--5062
+Overfull \hbox (74.78088pt too wide) in paragraph at lines 5093--5093
  []\T1/fi4/m/n/10 aux = NULL, seed = 123321, silent = FALSE, multicore = FALSE,
  cluster = FALSE, numProc = NULL,[] 
  []
 
 [90]
-Overfull \hbox (10.86781pt too wide) in paragraph at lines 5091--5092
+Overfull \hbox (10.86781pt too wide) in paragraph at lines 5122--5123
 \T1/ptm/m/n/10 this func-tion in each repli-ca-tion will be saved in the sim-u-
 la-tion out-put ([][]\T1/fi4/m/n/10 SimResult[][][]\T1/ptm/m/n/10 ).
  []
 
 
-Overfull \hbox (7.82811pt too wide) in paragraph at lines 5113--5114
+Overfull \hbox (7.82811pt too wide) in paragraph at lines 5144--5145
 \T1/ptm/m/n/10 for fur-ther in-for-ma-tion. This ar-gu-ment re-quires real data
  to be passed to \T1/fi4/m/n/10 realData\T1/ptm/m/n/10 . 
  []
@@ -1443,14 +1433,14 @@ Overfull \hbox (7.82811pt too wide) in paragraph at lines 5113--5114
 [91] [92] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
-Overfull \hbox (40.86832pt too wide) in paragraph at lines 5242--5243
+Overfull \hbox (40.86832pt too wide) in paragraph at lines 5273--5274
 []\T1/ptm/m/n/10 Objects can be cre-ated by [][]\T1/fi4/m/n/10 bindDist[][][] \
 T1/ptm/m/n/10 func-tion. It can also be called from the form \T1/fi4/m/n/10 new
 ("SimDataDist", ...)\T1/ptm/m/n/10 . 
  []
 
 [93]
-Overfull \hbox (41.28088pt too wide) in paragraph at lines 5294--5294
+Overfull \hbox (41.28088pt too wide) in paragraph at lines 5325--5325
  []\T1/fi4/m/n/9 dist <- bindDist(c(rep("t", 4), rep("chisq", 8)), d1, d2, d3, 
 d4, d5, d6, d7, d8, d5, d6, d7, d8)[] 
  []
@@ -1473,7 +1463,7 @@ File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [101]
-Overfull \hbox (5.39653pt too wide) in paragraph at lines 5708--5709
+Overfull \hbox (5.39653pt too wide) in paragraph at lines 5739--5740
 \T1/ptm/m/n/10 pletely at ran-dom (if vary-ing), per-cent miss-ing at ran-dom (
 if vary-ing), pa-ram-e-ter val-ues, misspecified-
  []
@@ -1487,20 +1477,20 @@ File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
-Overfull \hbox (19.78088pt too wide) in paragraph at lines 5963--5963
+Overfull \hbox (19.78088pt too wide) in paragraph at lines 5994--5994
  []\T1/fi4/m/n/10 summaryParam(object, alpha = 0.05, detail = FALSE, improper =
  FALSE, digits = NULL)[] 
  []
 
 [106]
-Overfull \hbox (2.46945pt too wide) in paragraph at lines 6005--6010
+Overfull \hbox (2.46945pt too wide) in paragraph at lines 6036--6041
 []\T1/fi4/m/n/10 Std.Bias: \T1/ptm/m/n/10 Stan-dard-ized Bias, which is (\T1/fi
 4/m/n/10 Estimate.Average \T1/ptm/m/n/10 - \T1/fi4/m/n/10 Average.Param\T1/ptm/
 m/n/10 )/\T1/fi4/m/n/10 Estimate.SD
  []
 
 
-Overfull \hbox (24.57841pt too wide) in paragraph at lines 6010--6014
+Overfull \hbox (24.57841pt too wide) in paragraph at lines 6041--6045
 []\T1/fi4/m/n/10 Rel.SE.Bias: \T1/ptm/m/n/10 Rel-a-tive Bias in stan-dard er-ro
 r, which is (\T1/fi4/m/n/10 Average.SE \T1/ptm/m/n/10 - \T1/fi4/m/n/10 Estimate
 .SD\T1/ptm/m/n/10 )/\T1/fi4/m/n/10 Estimate.SD
@@ -1512,7 +1502,7 @@ File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [109]
-(C:\Users\Sunthud\AppData\Local\Temp\Rtmpmk73jR\Rd2pdf35c6a264caa\Rd2.ind
+(C:\Users\Sunthud\AppData\Local\Temp\RtmpIha4lv\Rd2pdf1fa45ff2708f\Rd2.ind
 [110]
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <12> not available
 (Font)              Font shape `T1/ptm/b/n' tried instead on input line 3.
@@ -1522,34 +1512,24 @@ LaTeX Font Warning: Font shape `T1/fi4/m/it' undefined
 (Font)              using `T1/fi4/m/n' instead on input line 19.
 
 
-Overfull \hbox (70.8567pt too wide) in paragraph at lines 143--145
-[]\T1/fi4/m/it/10 getPowerFitNested,SimResult,SimResult,missing-method 
- []
-
-
-Overfull \hbox (65.8567pt too wide) in paragraph at lines 145--147
-[]\T1/fi4/m/it/10 getPowerFitNested,SimResult,SimResult,vector-method 
- []
-
-
-Overfull \hbox (85.8567pt too wide) in paragraph at lines 152--154
+Overfull \hbox (85.8567pt too wide) in paragraph at lines 136--138
 []\T1/fi4/m/it/10 getPowerFitNonNested,SimResult,SimResult,missing-method 
  []
 
 
-Overfull \hbox (80.8567pt too wide) in paragraph at lines 154--156
+Overfull \hbox (80.8567pt too wide) in paragraph at lines 138--140
 []\T1/fi4/m/it/10 getPowerFitNonNested,SimResult,SimResult,vector-method 
  []
 
 [111
 
 ] [112])
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 6173.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 6173.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 6204.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 6204.
 
-(C:\Users\Sunthud\AppData\Local\Temp\Rtmpmk73jR\Rd2pdf35c6a264caa\Rd2.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 6173.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 6173.
+(C:\Users\Sunthud\AppData\Local\Temp\RtmpIha4lv\Rd2pdf1fa45ff2708f\Rd2.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 6204.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 6204.
 
 Package rerunfilecheck Info: File `Rd2.out' has not changed.
 (rerunfilecheck)             Checksum: C61B8C340A60C443E021B76AD53EF117;4045.
@@ -1557,16 +1537,16 @@ Package rerunfilecheck Info: File `Rd2.out' has not changed.
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 6173.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 6204.
  ) 
 Here is how much of TeX's memory you used:
- 7135 strings out of 494053
- 108315 string characters out of 3146180
- 173693 words of memory out of 3000000
+ 7124 strings out of 494053
+ 107928 string characters out of 3146180
+ 174332 words of memory out of 3000000
  9403 multiletter control sequences out of 15000+200000
  43888 words of font info for 52 fonts, out of 3000000 for 9000
  715 hyphenation exceptions out of 8191
- 38i,6n,27p,1751b,588s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 38i,6n,27p,1426b,588s stack positions out of 5000i,500n,10000p,200000b,50000s
 pdfTeX warning (dest): name{Rfn.anova\\unhbox\040\\voidb@x\040\\kern\040\\z@\
 040\\char\040`\\protect\040\\relax\040\\kern\040.16667em\040SimResult.Rdash.met
 hod} has been referenced but does not exist, replaced by a fixed one
@@ -1607,9 +1587,9 @@ onts/type1/urw/helvetic/uhvr8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/typ
 e1/urw/times/utmb8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/time
 s/utmr8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.pf
 b><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Rd2.pdf (112 pages, 663906 bytes).
+Output written on Rd2.pdf (112 pages, 659225 bytes).
 PDF statistics:
- 2377 PDF objects out of 2487 (max. 8388607)
- 792 named destinations out of 1000 (max. 500000)
+ 2353 PDF objects out of 2487 (max. 8388607)
+ 781 named destinations out of 1000 (max. 500000)
  545 words of extra memory for PDF output out of 10000 (max. 10000000)
 

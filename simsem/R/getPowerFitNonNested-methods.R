@@ -1,19 +1,31 @@
 # getPowerFitNested: This function will find a power of each fit index in
 # nested model comparison based on specified cutoffs of each fit index
 
-setMethod("getPowerFitNonNested", signature(dat2Mod1 = "SimResult", dat2Mod2 = "SimResult", 
-    cutoff = "vector"), definition = function(dat2Mod1, dat2Mod2, cutoff, usedFit = NULL, 
-    revDirec = FALSE, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, condCutoff = TRUE, 
-    df = 0) {
+getPowerFitNonNested <- function(dat2Mod1, dat2Mod2, cutoff = NULL, dat1Mod1 = NULL, dat1Mod2 = NULL, revDirec = FALSE, usedFit = NULL, alpha = 0.05, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, condCutoff = TRUE, df = 0, onetailed = FALSE) {
+	result <- NULL
+	if(is.null(cutoff)) {
+		if(!is.null(dat1Mod1) & !is.null(dat1Mod2)) {
+			result <- getPowerFitNonNestedNullObj(dat2Mod1 = dat2Mod1, dat2Mod2 = dat2Mod2, dat1Mod1 = dat1Mod1, dat1Mod2 = dat1Mod2, usedFit = usedFit, alpha = alpha, revDirec = revDirec, nVal = nVal, pmMCARval = pmMCARval, pmMARval = pmMARval, df = df, onetailed = onetailed)
+		} else {
+			stop("Please specify fit index cutoff, 'cutoff', or the result object representing the null model, 'nullObject'.")
+		}
+	} else {
+		if(is.null(dat1Mod1) & is.null(dat1Mod2)) {
+			result <- getPowerFitNonNestedCutoff(dat2Mod1 = dat2Mod1, dat2Mod2 = dat2Mod2, cutoff = cutoff, usedFit = usedFit, revDirec = revDirec, nVal = nVal, pmMCARval = pmMCARval, pmMARval = pmMARval, condCutoff = condCutoff, df = df)
+		} else {
+			stop("Please specify either fit index cutoff, 'cutoff', or the result object representing the null model, 'nullObject', but not both.")
+		}
+	}
+	result
+}
+
+getPowerFitNonNestedCutoff <- function(dat2Mod1, dat2Mod2, cutoff, usedFit = NULL, revDirec = FALSE, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, condCutoff = TRUE, df = 0) {
     getPowerFitNested(altNested = dat2Mod1, altParent = dat2Mod2, cutoff = cutoff, 
         revDirec = revDirec, usedFit = usedFit, nVal = nVal, pmMCARval = pmMCARval, 
         pmMARval = pmMARval, condCutoff = condCutoff, df = df)
-})
+}
 
-setMethod("getPowerFitNonNested", signature(dat2Mod1 = "SimResult", dat2Mod2 = "SimResult", 
-    cutoff = "missing"), definition = function(dat2Mod1, dat2Mod2, cutoff = NULL, 
-    dat1Mod1, dat1Mod2, usedFit = NULL, alpha = 0.05, revDirec = FALSE, nVal = NULL, 
-    pmMCARval = NULL, pmMARval = NULL, df = 0, onetailed = FALSE) {
+getPowerFitNonNestedNullObj <- function(dat2Mod1, dat2Mod2, dat1Mod1, dat1Mod2, usedFit = NULL, alpha = 0.05, revDirec = FALSE, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, df = 0, onetailed = FALSE) {
     
     if (is.null(usedFit)) 
         usedFit <- getKeywords()$usedFit
@@ -130,7 +142,7 @@ setMethod("getPowerFitNonNested", signature(dat2Mod1 = "SimResult", dat2Mod2 = "
     names(power1) <- usedFit
     names(power2) <- usedFit
     return(list(reject1FromNull2 = power1, reject2FromNull1 = power2))
-})
+}
 
 # \title{
 # Sort two objects in a list 

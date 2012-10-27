@@ -3242,10 +3242,7 @@ NULL
 > ### Name: getPowerFit
 > ### Title: Find power in rejecting alternative models based on fit indices
 > ###   criteria
-> ### Aliases: getPowerFit getPowerFit-methods
-> ###   getPowerFit,data.frame,vector-method getPowerFit,matrix,vector-method
-> ###   getPowerFit,SimResult,vector-method
-> ###   getPowerFit,SimResult,missing-method
+> ### Aliases: getPowerFit
 > 
 > ### ** Examples
 > 
@@ -3306,9 +3303,7 @@ NULL
 > ### Name: getPowerFitNested
 > ### Title: Find power in rejecting nested models based on the differences
 > ###   in fit indices
-> ### Aliases: getPowerFitNested getPowerFitNested-methods
-> ###   getPowerFitNested,SimResult,SimResult,vector-method
-> ###   getPowerFitNested,SimResult,SimResult,missing-method
+> ### Aliases: getPowerFitNested
 > 
 > ### ** Examples
 > 
@@ -5906,7 +5901,7 @@ detaching 'package:parallel'
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  5.63 0.07 5.91 NA NA 
+Time elapsed:  5.41 0.09 5.55 NA NA 
 > grDevices::dev.off()
 null device 
           1 

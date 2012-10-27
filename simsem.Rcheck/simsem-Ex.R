@@ -1138,10 +1138,7 @@ flush(stderr()); flush(stdout())
 ### Name: getPowerFit
 ### Title: Find power in rejecting alternative models based on fit indices
 ###   criteria
-### Aliases: getPowerFit getPowerFit-methods
-###   getPowerFit,data.frame,vector-method getPowerFit,matrix,vector-method
-###   getPowerFit,SimResult,vector-method
-###   getPowerFit,SimResult,missing-method
+### Aliases: getPowerFit
 
 ### ** Examples
 
@@ -1202,9 +1199,7 @@ flush(stderr()); flush(stdout())
 ### Name: getPowerFitNested
 ### Title: Find power in rejecting nested models based on the differences
 ###   in fit indices
-### Aliases: getPowerFitNested getPowerFitNested-methods
-###   getPowerFitNested,SimResult,SimResult,vector-method
-###   getPowerFitNested,SimResult,SimResult,missing-method
+### Aliases: getPowerFitNested
 
 ### ** Examples
 
