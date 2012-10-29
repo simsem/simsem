@@ -33,11 +33,18 @@
       <section id="main_content" class="inner">
         <h1>Version History (Technical)</h1>
 
+<h2>Version 0.4-2 10/29/12</h2>
+
+<ul>
+<li>Fix the multiple imputation problem that cannot be run because of the group label problem
+</ul>
+
 <h2>Version 0.4-1 10/24/12</h2>
 
 <ul>
 <li>Fix the group name default in the <strong>anal</strong> function to the name specified in the model template.
 <li>Do not try to extract standard errors when the lavaan object is not convergent in the <strong>runRep</strong> function, which will be crashed in the lavaan 0.5-10 or later.
+<li><strong>getPowerFit</strong>, <strong>getPowerFitNested</strong>, and <strong>getPowerFitNonNested</strong> are changed from methods to functions because the request from CRAN that does not allow the method that cutoff is missing. 
 </ul>
 
 <h2>Version 0.4-0 10/24/12</h2>
