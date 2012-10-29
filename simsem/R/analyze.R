@@ -32,9 +32,9 @@ analyze <- function(model, data, package = "lavaan", miss = NULL,
 		miArgs <- miss@args
 		if(miss@package == "Amelia") {
 			if(!is.null(miArgs$idvars)) {
-				miArgs$idvars <- c(miArgs$idvars, groupLab)
+				miArgs$idvars <- c(miArgs$idvars, model@groupLab)
 			} else {
-				miArgs <- c(miArgs, list(idvars=groupLab))
+				miArgs <- c(miArgs, list(idvars=model@groupLab))
 			}
 		}
         Output <- runMI(model@pt, data, m = miss@m, miArgs=miArgs, chi=miss@chi, miPackage=miss@package, fun="lavaan", ...)
