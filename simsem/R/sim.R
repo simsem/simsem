@@ -360,7 +360,6 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
     RNGkind("L'Ecuyer-CMRG")
     assign(".Random.seed", simConds[[5]], envir = .GlobalEnv)
     
-    
     if (is.null(generate)) {
         generate <- model
     }
@@ -1221,18 +1220,18 @@ collapseParamSet <- function(param, group, indLab, facLab, latent) {
 
 collapseExtraParam <- function(pls, dgen, fill=TRUE, con=NULL) {
 	# Collapse all labels
+	if(length(pls) == 1) dgen <- list(dgen)
 	temp <- extractLab(pls, dgen, fill=fill, con=con)
 	target <- temp[[1]]
 	realval <- temp[[2]]
-	
 	oldop <- con$op
 	for(i in 1:length(con[[1]])) {
 		if(con[[2]][i] %in% c(">", "==")) {
-			con[[3]][i] <- paste(con[[1]][i], "-", con[[3]][i])
+			con[[3]][i] <- paste("(", con[[1]][i], ")", "-", "(", con[[3]][i], ")")
 			con[[1]][i] <- paste0("diff", i)
 			con[[2]][i] <- ":="
 		} else if (con[[2]][i] == "<") {
-			con[[3]][i] <- paste(con[[3]][i], "-", con[[1]][i])
+			con[[3]][i] <- paste("(", con[[3]][i], ")", "-", "(", con[[1]][i], ")")
 			con[[1]][i] <- paste0("diff", i)
 			con[[2]][i] <- ":="
 		}
@@ -1250,9 +1249,9 @@ collapseExtraParam <- function(pls, dgen, fill=TRUE, con=NULL) {
 renameExtraParam <- function(lhs, op, rhs) {
 	for(i in 1:length(lhs)) {
 		if(op[i] %in% c(">", "==")) {
-			lhs[i] <- paste(lhs[i], "-", rhs[i])
+			lhs[i] <- paste("[", lhs[i], "]", "-", "[", rhs[i], "]")
 		} else if (op[i] == "<") {
-			lhs[i] <- paste(rhs[i], "-", lhs[i])
+			lhs[i] <- paste("[", rhs[i], "]", "-", "[", lhs[i], "]")
 		}
 	}
 	lhs	

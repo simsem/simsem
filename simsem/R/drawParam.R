@@ -658,8 +658,8 @@ equalCon <- function(pls, dgen, fill=FALSE, con=NULL) {
 
 
 extractLab <- function(pls, dgen, fill=FALSE, con=NULL) {
+
 	free <- lapply(dgen, function(x) lapply(x, function(y) if(is.null(y)) { return(NULL) } else { return(slot(y, "free")) }))
-	
 	if(fill) {
 		
 		for(i in 1:length(free)) {
@@ -714,9 +714,9 @@ extractLab <- function(pls, dgen, fill=FALSE, con=NULL) {
 	free2 <- do.call(c, lapply(free, function(x) do.call(c, x)))
 	lab <- free2[is.na(suppressWarnings(as.numeric(as.vector(free2)))) & !is.na(free2)]
 	target <- unique(lab) #[duplicated(lab)])
-	
 	val <- lapply(pls, function(x) lapply(x, function(y) if(is.null(y)) { return(NULL) } else { return(y) }))
 	val2 <- do.call(c, lapply(val, function(x) do.call(c, x)))
+	val2 <- val2[match(names(free2), names(val2))]
 	realval <- val2[is.na(suppressWarnings(as.numeric(as.vector(free2)))) & !is.na(free2)]
 	realval <- realval[match(target, lab)]
 	list(target, realval, dgen)

@@ -2,6 +2,7 @@
 # To be developed soon
 
 # ROC curve?
+# Fix the first rows the same when sample size is increasing
 
 
 # Find non ASCII
