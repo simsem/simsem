@@ -252,7 +252,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 		converged <- as.vector(unlist(converged.l))
 		
 		name <- colnames(coef)
-		haveName <- which(!sapply(Result.l, is.null))
+		haveName <- which(!sapply(Result.l, function(x) { if(is.null(x)) {return(TRUE)} else {return(is.null(x$labelParam))} }))
 		lab <- NULL
 		if(length(haveName) > 0) {
 			lab <- Result.l[[haveName[1]]]$labelParam

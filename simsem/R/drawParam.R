@@ -249,29 +249,32 @@ drawParam <- function(paramSet, maxDraw = 50, numFree = 1, misfitBounds = NULL, 
             if (all(sapply(fullpls, validateObject))) {
                 redpls <- lapply(fullpls, reduceMatrices)
                 macsPopls <- lapply(redpls, createImpliedMACS)
-                if (!(all(is.finite(unlist(lapply(macsPopls, "[[", 2)))) && (sum(unlist(lapply(lapply(lapply(macsPopls, 
-                  "[[", 2), eigen), "[[", 1)) <= 0) == 0))) {
+                if (all(is.finite(unlist(lapply(macsPopls, "[[", 2)))) && all(unlist(lapply(lapply(lapply(macsPopls, 
+                  "[[", 2), eigen), "[[", 1)) > 0)) {
                   break
                 }
-            } else {
-                draw <- draw + 1
-                if (draw > maxDraw) {
-                  stop("Cannot obtain valid parameter set within maximum number of draws.")
-                }
-                next
-            }
-            final <- list()
-            for (i in groupLoop) {
-                final[[i]] <- list(param = redpls[[i]], misspec = NULL, misOnly = NULL)
-            }
-            return(final)
+            } 
+			draw <- draw + 1
+			if (draw > maxDraw) {
+			  stop("Cannot obtain valid parameter set within maximum number of draws.")
+			}
+			next
+            # final <- list()
+            # for (i in groupLoop) {
+                # final[[i]] <- list(param = redpls[[i]], misspec = NULL, misOnly = NULL)
+            # }
+            # return(final)
         }
         
     }
     if (draw < maxDraw) {
         final <- list()
         for (i in groupLoop) {
-            final[[i]] <- list(param = redpls[[i]], misspec = redmpls[[i]], misOnly = redmls[[i]])
+			if (misspec) {
+				final[[i]] <- list(param = redpls[[i]], misspec = redmpls[[i]], misOnly = redmls[[i]])
+			} else {
+				final[[i]] <- list(param = redpls[[i]], misspec = NULL, misOnly = NULL)
+			}
         }
         return(final)
     } else {

@@ -37,7 +37,8 @@ dir <- "C:/Users/student/Dropbox/simsem/simsem/R/"
  source(paste(dir, "AllGenerics.R", sep=""))
  sourceDir(dir)
 
-
+ 
+ 
 loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
@@ -187,6 +188,51 @@ getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
 
+### Effect coding example
+
+loading <- matrix(0, 9, 3)
+loading[1:3, 1] <- paste0("load", 1:3)
+loading[4:6, 2] <- paste0("load", 4:6)
+loading[7:9, 3] <- paste0("load", 7:9)
+loadingVal <- matrix(0, 9, 3)
+loadingVal[2:3, 1] <- c(0.9, 0.7)
+loadingVal[5:6, 2] <- c(1.1, 0.9)
+loadingVal[8:9, 3] <- c(1.2, 1.1)
+LY <- bind(loading, loadingVal)
+
+facCov <- matrix(NA, 3, 3)
+facCovVal <- diag(c(0.8, 0.9, 0.4))
+facCovVal[lower.tri(facCovVal)] <- c(0.4, 0.2, 0.3)
+facCovVal[upper.tri(facCovVal)] <- c(0.4, 0.2, 0.3)
+PS <- binds(facCov, facCovVal)
+
+errorCov <- diag(NA, 9)
+errorCovVal <- diag(c(0.5, 1.1, 0.8, 0.4, 0.4, 0.8, 0.8, 0.5, 0.6))
+TE <- binds(errorCov, errorCovVal)
+
+AL <- bind(rep(NA, 3), c(0.2, 0.3, 0.1))
+TY <- bind(paste0("int", 1:9), c(0, 0.1, 0.2, 0, -0.2, 0.1, 0, -0.1, -0.2))
+
+con <- "
+load1 == 3 - load2 - load3
+load4 == 3 - load5 - load6
+load7 == 3 - load8 - load9
+int1 == 0 - int2 - int3
+int4 == 0 - int5 - int6
+int7 == 0 - int8 - int9
+"
+
+HS.Model <- model(LY=LY, PS=PS, TE=TE, AL=AL, TY=TY, modelType="CFA", con=con)
+
+out <- analyze(HS.Model,generate(HS.Model,200))
+
+Output <- sim(20, HS.Model, n=200)
+
+getCutoff(Output, 0.05)
+plotCutoff(Output, 0.05)
+summaryParam(Output)
+
+
 ########################## Example 3 ##########################################
 
 ##library(simsem)
@@ -236,6 +282,7 @@ Output.Mis <- sim(100, n=300, model=LCA.Mis)#, multicore=TRUE)
 getCutoff(Output.Mis, 0.05)
 plotCutoff(Output.Mis, 0.05)
 summaryParam(Output.Mis)
+
 
 ################################# Example 4 ##################################
 ##library(simsem)

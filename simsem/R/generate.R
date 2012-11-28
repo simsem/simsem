@@ -68,6 +68,8 @@ changeScaleSEM <- function(drawResult, gen) {
 	# Find the scales that are based on fixed factor 
 	dgen <- gen@dgen
 	pt <- gen@pt
+	addcon <- pt$op %in% c("==", "<", ">", ":=")
+	pt <- lapply(pt, function(x) x[!addcon])
 	ptgroup <- split(as.data.frame(pt), pt$group)
 	indLab <- lapply(ptgroup, function(x) unique(x$rhs[x$op == "=~"]))
 	facLab <- lapply(ptgroup, function(x) unique(x$lhs[x$op == "=~"]))
