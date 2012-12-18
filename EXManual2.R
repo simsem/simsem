@@ -38,15 +38,6 @@ dir <- "C:/Users/student/Dropbox/simsem/simsem/R/"
  sourceDir(dir)
 
  
- 
-loading <- matrix(0, 6, 2)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-loadingVal <- matrix(0.7, 6, 2)
-LY <- bind(loading, loadingVal)
-
-intcept <- bind(c(NA, NA, NA, 0, 0, 0), rep(0.7, 6))
-
 # library(formatR)
 # tidy.dir(dir)
 
