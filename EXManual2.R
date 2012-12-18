@@ -58,21 +58,8 @@ VTE <- bind(rep(NA, 6), 0.51)
 
 CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, VTE=VTE, modelType = "CFA", indLab=c("pos1", "pos2", "pos3", "neg1", "neg2", "neg3"), facLab=c("posaffect", "negaffect"))
 
-param <- draw(CFA.Model)
-dat <- createData(param[[1]], n = 200)
-
-dat <- generate(CFA.Model,200)
-dat2 <- generate(CFA.Model, 200, params=TRUE)
-out <- analyze(CFA.Model,dat)
-
-# Try auxiliary
-datm <- imposeMissing(dat, cov="group", pmMCAR=0.2)
-datx <- data.frame(datm, z=rnorm(nrow(dat), 0, 1))
-out <- analyze(CFA.Model,aux="z",datx)
-
-
 #SimMissing <- simMissing(pmMCAR=0.1, numImps=5)
-Output <- sim(20, CFA.Model,n=200)
+Output <- sim(NULL, CFA.Model,n=500:510, pmMCAR=.1)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
@@ -355,7 +342,7 @@ dat <- generate(SEM.model, n=300)
 out <- analyze(SEM.model, dat)
 
 #Output2 <- sim(200, n=300, SEM.model, smartStart=TRUE) 
-Output <- sim(200, n=300, SEM.model) #, smartStart=FALSE) 
+Output <- sim(200, n=300, SEM.model, silent=TRUE) #, smartStart=FALSE) 
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summary(Output)
@@ -391,7 +378,7 @@ SEM.model <- model(BE=BE, LY=LY, RPS=RPS, RTE=RTE, modelType="SEM")
 draw(SEM.model)
 
 #Output2 <- sim(1000, n=300, SEM.model, smartStart=TRUE) 
-Output <- sim(100, n=300, SEM.model)#, smartStart=FALSE) 
+Output <- sim(100, n=300, SEM.model, silent=TRUE)#, smartStart=FALSE) 
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summary(Output)

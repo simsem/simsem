@@ -3,7 +3,7 @@
 ## templates for data generation and analyis.
 model <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = NULL, 
     VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, MY = NULL, 
-    ME = NULL, modelType, indLab = NULL, facLab = NULL, groupLab = "group", ngroups = 1,
+    ME = NULL, modelType = NULL, indLab = NULL, facLab = NULL, groupLab = "group", ngroups = 1,
 	con = NULL) {
     
 	con <- parseSyntaxCon(con)
@@ -32,7 +32,7 @@ model <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = 
                 # 1 or more matrices is a list
                 
                 if (!length(unique(sapply(paramSet[mgidx], length))) == 1) 
-                  stop("Multiple group lists have differing lengths")
+                  stop("You must specify the same number of matrices for all groups.")
                 
                 # Repeat single matrices
                 for (i in seq_along(sgidx)) {
@@ -86,7 +86,7 @@ model <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = 
                 groupLab = groupLab, con=con))
         }
     } else {
-        stop("Must specify model type")
+        stop("modelType has not been specified. Options are: \"CFA\", \"SEM\", or \"Path\"")
     }
 }
 
@@ -99,23 +99,25 @@ buildModel <- function(paramSet, modelType) {
     if (modelType == "CFA") {
         
         if (is.null(paramSet$LY)) 
-            stop("No loading object in CFA")
+            stop("A loading (LY) matrix must be specified in CFA models.")
         
         ni <- nrow(paramSet$LY@free)
         nk <- ncol(paramSet$LY@free)
         
         if (!is.null(paramSet$TE)) {
-            stopifnot(paramSet$TE@symmetric)
+            if (!paramSet$TE@symmetric)
+				stop("The error covariance (TE) matrix must be symmetric.")
             if (!is.null(paramSet$RTE)) 
-                stop("Error covariance and error correlation cannot be specified at the same time!")
+                stop("Conflict: You cannot specify both error covariance (TE) and error correlation (RTE)!")
             if (!is.null(paramSet$VTE)) 
-                stop("Error covariance and error variance cannot be specified at the same time!")
+                stop("Conflict: You cannot specify both error covariance (TE) and error variance (RTE)!")
             if (!is.null(paramSet$VY)) 
-                stop("Error covariance and total indicator variance cannot be specified at the same time!")
+                stop("Conflict: You cannot specify both error covariance (TE) and total indicator variance (VY)!")
         } else {
             if (is.null(paramSet$RTE)) 
-                stop("No error correlation object in CFA")
-            stopifnot(paramSet$RTE@symmetric)
+                stop("Either error correlation (RTE) or error covariance (TE) must be specified in CFA models.")
+            if (!paramSet$RTE@symmetric)
+				stop("The error correlation (RTE) matrix must be symmetric.")
             if (is.null(paramSet$VTE) && is.null(paramSet$VY)) 
                 {
                   paramSet$VY <- bind(rep(NA, ni), popParam = 1)
@@ -123,15 +125,17 @@ buildModel <- function(paramSet, modelType) {
         }
         
         if (!is.null(paramSet$PS)) {
-            stopifnot(paramSet$PS@symmetric)
+			if (!paramSet$PS@symmetric)
+				stop("The factor covariance (PS) matrix must be symmetric.")
             if (!is.null(paramSet$RPS)) 
-                stop("Factor covariance and factor correlation cannot be specified at the same time!")
+                stop("Conflict: You cannot specify both factor covariance (PS) and factor correlation (RPS)!")
             if (!is.null(paramSet$VE)) 
-                stop("Factor covariance and total factor variance cannot be specified at the same time!")
+                stop("Conflict: You cannot specify both factor covariance (PS) and total factor variance (VE)!")
         } else {
             if (is.null(paramSet$RPS)) 
-                stop("In CFA, must specify either PS or RPS")
-            stopifnot(paramSet$RPS@symmetric)
+                stop("Either factor covariance (PS) or factor correlation (RPS) must be specified in CFA models!")
+            if (!paramSet$RPS@symmetric)
+				stop("The factor correlation (RPS) matrix must be symmetric!")
             if (!is.null(paramSet$VPS)) {
                 paramSet$VE <- paramSet$VPS
             }
@@ -163,20 +167,22 @@ buildModel <- function(paramSet, modelType) {
     } else if (modelType == "Path") {
         
         if (is.null(paramSet$BE)) 
-            stop("No path coefficient object between factor.ETA")
+            stop("The path coefficient (BE) matrix has not been specified.")
         ne <- ncol(paramSet$BE@free)
         if (!is.null(paramSet$PS)) {
-            stopifnot(paramSet$PS@symmetric)
+			if (!paramSet$PS@symmetric)
+				stop("The covariance (PS) matrix must be symmetric.")
             if (!is.null(paramSet$RPS)) 
-                stop("Covariance and correlation cannot be specified at the same time!")
+                stop("Conflict: You cannot specify both covariance (PS) and correlation (RPS)!")
             if (!is.null(paramSet$VPS)) 
-                stop("Covariance and variance cannot be specified at the same time!")
+                stop("Conflict: You cannot specify both covariance (PS) and variance (VPS)!")
             if (!is.null(paramSet$VE)) 
-                stop("Covariance and total factor variance cannot be specified at the same time!")
+                stop("Conflict: You cannot specify both covariance (PS) and total variance (VE)!")
         } else {
             if (is.null(paramSet$RPS)) 
-                stop("No residual correlation object between factor.ETA")
-            stopifnot(paramSet$RPS@symmetric)
+                stop("The residual correlation (RPS) matrix has not been specified.")
+            if (!paramSet$RPS@symmetric)
+				stop("The correlation (RPS) matrix must be symmetric!")
             if (is.null(paramSet$VPS) && is.null(paramSet$VE)) 
                 {
                   paramSet$VE <- bind(free = rep(NA, ne), popParam = 1)
@@ -190,22 +196,24 @@ buildModel <- function(paramSet, modelType) {
     } else if (modelType == "SEM") {
         
         if (is.null(paramSet$LY)) 
-            stop("No loading object of indicator.Y from factor.ETA in SEM")
+            stop("A loading (LY) matrix must be specified in SEM models.")
         ny <- nrow(paramSet$LY@free)
         ne <- ncol(paramSet$LY@free)
         
         if (!is.null(paramSet$TE)) {
-            stopifnot(paramSet$TE@symmetric)
+            if (!paramSet$TE@symmetric)
+				stop("The error covariance (TE) matrix must be symmetric!")
             if (!is.null(paramSet$RTE)) 
-                stop("Error covariance and error correlation cannot be specified at the same time!")
+                stop("Conflict: You cannot specify both error covariance (TE) and error correlation (RTE)!")
             if (!is.null(paramSet$VTE)) 
-                stop("Error covariance and error variance cannot be specified at the same time!")
+                stop("Conflict: You cannot specify both error covariance (TE) and error variance (VTE)!")
             if (!is.null(paramSet$VY)) 
-                stop("Error covariance and total indicator variance cannot be specified at the same time!")
+                stop("Conflict: You cannot specify both error covariance (TE) and total indicator variance (VY)!")
         } else {
             if (is.null(paramSet$RTE)) 
-                stop("No measurement error correlation object between indicator.Y")
-            stopifnot(paramSet$RTE@symmetric)
+                stop("Either measurement error correlation (RTE) or measurement error covariance (TE) must be specified in SEM models.")
+            if(!paramSet$RTE@symmetric)
+				stop("The error correlation (RTE) matrix must be symmetric!")
             if (is.null(paramSet$VTE) && is.null(paramSet$VY)) 
                 {
                   paramSet$VY <- bind(rep(NA, ny), popParam = 1)
@@ -218,20 +226,22 @@ buildModel <- function(paramSet, modelType) {
             }  ## Set measurement intercepts to be free, pop value at 0
         
         if (is.null(paramSet$BE)) 
-            stop("No path coefficient object between factor.ETA")
+            stop("A path coefficient (BE) matrix must be specified in SEM models.")
         
         if (!is.null(paramSet$PS)) {
-            stopifnot(paramSet$PS@symmetric)
+            if(!paramSet$PS@symmetric)
+				stop("The residual covariance (PS) matrix must be symmetric.")
             if (!is.null(paramSet$RPS)) 
-                stop("Error covariance and error correlation cannot be specified at the same time!")
+                stop("Conflict: You cannot specify both residual covariance (PS) and residual correlation (RPS)!")
             if (!is.null(paramSet$VPS)) 
-                stop("Error covariance and error variance cannot be specified at the same time!")
+                stop("Conflict: You cannot specify both residual covariance (PS) and residual variance (VPS)!")
             if (!is.null(paramSet$VE)) 
-                stop("Error covariance and total indicator variance cannot be specified at the same time!")
+                stop("Conflict: You cannot specify both residual covariance (PS) and total indicator variance (VE)!")
         } else {
             if (is.null(paramSet$RPS)) 
-                stop("No measurement error correlation object between indicator.Y")
-            stopifnot(paramSet$RPS@symmetric)
+                stop("Either error covariance (PS) or error correlation (RPS) must be specified in SEM models.")
+            if(paramSet$RPS@symmetric)
+				stop("The error correlation (RPS) matrix must be symmetric.")
             if (is.null(paramSet$VPS) && is.null(paramSet$VE)) 
                 {
                   paramSet$VE <- bind(rep(1, ne))
@@ -244,7 +254,7 @@ buildModel <- function(paramSet, modelType) {
         # if(is.null(paramSet$AL)) { AL <- bind(rep(0,ne)) } ## Set factor intercepts
         # to be fixed at 0
     } else {
-        stop("modelType not recognized. Possible options are: \"CFA\", \"SEM\", or \"Path\"")
+        stop("modelType not recognized. Options are: \"CFA\", \"SEM\", or \"Path\"")
     }
     
     return(paramSet)
@@ -675,7 +685,7 @@ estmodel <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE
     VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, MY = NULL, 
     ME = NULL, modelType, indLab = NULL, facLab = NULL, groupLab = "group", ngroups = 1, con = NULL) {
     if (is.null(modelType)) 
-        stop("Must specify model type")
+        stop("modelType has not been specified. Options are: \"CFA\", \"SEM\", or \"Path\"")
     if (modelType == "CFA") {
         if (!is.list(LY)) 
             LY <- list(LY)
