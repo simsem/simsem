@@ -240,7 +240,7 @@ buildModel <- function(paramSet, modelType) {
         } else {
             if (is.null(paramSet$RPS)) 
                 stop("Either error covariance (PS) or error correlation (RPS) must be specified in SEM models.")
-            if(paramSet$RPS@symmetric)
+            if(!paramSet$RPS@symmetric)
 				stop("The error correlation (RPS) matrix must be symmetric.")
             if (is.null(paramSet$VPS) && is.null(paramSet$VE)) 
                 {

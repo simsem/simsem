@@ -30,7 +30,7 @@ sourceDir <- function(path, trace = TRUE, ...) {
 
 #get
 #assign
-#dir <- "C:/Users/Sunthud/Desktop/My Dropbox/simsem/simsem/R/"
+dir <- "C:/Users/Sunthud/Dropbox/simsem/simsem/R/"
 #dir <- "C:/Users/Sunthud/simsem_backup/simsem/R/"
 dir <- "C:/Users/student/Dropbox/simsem/simsem/R/"
  source(paste(dir, "AllClass.R", sep=""))
@@ -59,7 +59,7 @@ VTE <- bind(rep(NA, 6), 0.51)
 CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, VTE=VTE, modelType = "CFA", indLab=c("pos1", "pos2", "pos3", "neg1", "neg2", "neg3"), facLab=c("posaffect", "negaffect"))
 
 #SimMissing <- simMissing(pmMCAR=0.1, numImps=5)
-Output <- sim(NULL, CFA.Model,n=500:510, pmMCAR=.1)
+Output <- sim(20, CFA.Model,n=200)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)

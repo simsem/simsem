@@ -47,8 +47,10 @@ setMethod("summary", signature = "SimSem", definition = function(object) {
 		printIfNotNull(dgen$ME, "\nME: mean of Factor.ETA")
 		cat("--------------------------", "\n")
 	}
-	cat("========================Model Constraints========================\n")
-	if(!is.null(object@con)) print(as.data.frame(object@con))
+	if(any(!(dim(object@con) == 0))) {
+		cat("========================Model Constraints========================\n")
+		print(as.data.frame(object@con))
+	}
 })
 
 setMethod("summary", signature = "SimResult", definition = function(object, digits = 3, 
