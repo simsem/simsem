@@ -52,7 +52,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 			# If n is a list, thus multiple groups, make sure that the length is equal.
 			#Length for each group can be 1 or nRep
 			if(length(unique(sapply(n, length))) != 1) {
-				stop("The length of sample sizes in each group are not equal")
+				stop("You must specify the same number of sample sizes for each group; each list component in the 'n' argument must have the same length.")
 			} else {
 			#This is for when there is a single sample size for all reps.
 				if (length(n[[1]]) == 1 && !is.null(nRep)) { 
@@ -61,12 +61,12 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 			}
 		}
 		# If the nRep is not NULL, the length of sample size currently must equal to the number of replications.
-		if (!is.null(nRep) && (length(n[[1]]) != nRep)) stop("n can only be of length 1, of length nRep, or a multiple of nRep")
+		if (!is.null(nRep) && (length(n[[1]]) != nRep)) stop("When the number of replications argument 'nRep' is used, sample size 'n' must be a single value, a vector with length equal to 'nRep', or a vector with length equal to a multiple of 'nRep'")
 		if (is.null(nRep)) {
 			if (!is.null(pmMCAR) && !is.vector(pmMCAR)) 
-				stop("Please specify the number of replications")
+				stop("Please specify the number of replications 'nRep'")
 			if (!is.null(pmMAR) && !is.vector(pmMAR)) 
-				stop("Please specify the number of replications")
+				stop("Please specify the number of replications 'nRep'")
 			
 			usedMCAR <- NULL
 			usedMAR <- NULL
@@ -85,7 +85,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 	} else {
 		nRep <- length(rawData)
 		if(!is.null(n)) {
-			warning("The n argument is suppressed when the rawData argument is used.")
+			warning("The sample size argument 'n' is suppressed when 'rawData' is specified")
 			n <- NULL
 		}
 	}
@@ -99,7 +99,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 		} else if (length(pmMCAR) == nRep) {
 			# Do nothing
 		} else {
-			stop("The percent missing completely at random must have the length of 1 or equal to the number of datasets when the 'rawData' argument is specified")
+			stop("When the 'rawData' argument is specified, the percent missing completely at random 'pmMCAR' must either be a single value, or a vector with length equal to the number of datasets")
 		}
 	}
 	if(!is.null(pmMAR)) {
@@ -108,7 +108,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 		} else if (length(pmMAR) == nRep) {
 			# Do nothing
 		} else {
-			stop("The percent missing at random must have the length of 1 or equal to the number of datasets when the 'rawData' argument is specified")
+			stop("When the 'rawData' argument is specified, the percent missing at random 'pmMCAR' must either be a single value, or a vector with length equal to the number of datasets")
 		}		
 	}
     
@@ -148,7 +148,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
         } else if (is.matrix(rawData[[1]])) {
             rawData <- lapply(rawData, data.frame)
         } else {
-            stop("The list in the rawData argument does not contain matrices or data frames.")
+            stop("Check the list object specified in the 'rawData' argument; list must either contain matrices or data frames")
         }
 		
         for (i in seq_along(rawData)) {
@@ -160,7 +160,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
             simConds[[i]][[5]] <- numseed[[i]]
         }
     } else {
-        stop("The rawData argument is not a SimData class or a list of data frames.")
+        stop("Check the object specified in 'rawData' argument; object must either be a SimData class or a list of data frames.")
     }
     
     timing$SimConditions <- (proc.time()[3] - start.time)
