@@ -461,7 +461,6 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 			}
 		}
     }
-	
     timing$Analyze <- (proc.time()[3] - start.time)
     start.time <- proc.time()[3]
     
@@ -1179,8 +1178,9 @@ imposeSmartStart <- function(model, paramSet, indLab, facLab, latent) {
 	param <- mapply(collapseParamSet, paramSet, unique(pt$group), MoreArgs=list(indLab=indLab, facLab=facLab, latent=latent), SIMPLIFY=FALSE)
 	param <- do.call(rbind, param)
 	temp <- merge(pt, param, by=c("group", "op", "lhs", "rhs"))
-	temp <- temp[order(temp$id),]
-	model@pt$ustart <- temp$ustart2
+	temp2 <- c(temp$ustart2, pt$ustart[setdiff(pt$id, temp$id)])
+	ordertemp <- order(c(temp$id, setdiff(pt$id, temp$id)))
+	model@pt$ustart <- temp2[ordertemp]
 	model
 }
 
