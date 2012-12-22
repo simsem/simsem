@@ -132,19 +132,25 @@ dataGen <- function(dataDist, n, m, cm) {
                 dataDist2 <- extractSimDataDist(dataDist, which(varNotZeros))
                 cm2 <- cm[which(varNotZeros), which(varNotZeros), drop=FALSE]
             }
-            r <- cov2cor(as.matrix(cm2))
-            for (i in 1:dataDist2@p) {
-                if (dataDist2@reverse[i] == TRUE) {
-                  r[i, ] <- -1 * r[i, ]
-                  r[, i] <- -1 * r[, i]
-                }
-            }
-            listR <- r[lower.tri(diag(dataDist2@p))]
-            CopNorm <- ellipCopula(family = "normal", dim = dataDist2@p, dispstr = "un", 
-                param = listR)
-            
-            Mvdc <- mvdc(CopNorm, dataDist2@margins, dataDist2@paramMargins)
-            Data <- rMvdc(n, Mvdc)
+			for (i in 1:dataDist2@p) {
+				if (dataDist2@reverse[i] == TRUE) {
+				  cm2[i, ] <- -1 * cm2[i, ]
+				  cm2[, i] <- -1 * cm2[, i]
+				}
+			}
+			
+			if(!is(dataDist@copula, "nullCopula")) {
+				Mvdc <- mvdc(dataDist@copula, dataDist2@margins, dataDist2@paramMargins)
+				Data <- CopSEM(Mvdc, cm2, nw = n * 100, np = n)
+			} else {
+				r <- cov2cor(as.matrix(cm2))
+				listR <- r[lower.tri(diag(dataDist2@p))]
+				CopNorm <- ellipCopula(family = "normal", dim = dataDist2@p, dispstr = "un", 
+					param = listR)
+				
+				Mvdc <- mvdc(CopNorm, dataDist2@margins, dataDist2@paramMargins)
+				Data <- rMvdc(n, Mvdc)
+			}
             if (sum(varNotZeros) < dataDist@p) {
                 varZeros <- diag(cm) == 0
                 constant <- matrix(0, n, sum(varZeros))
@@ -195,3 +201,20 @@ extractSimDataDist <- function(object, pos) {
     return(new("SimDataDist", margins = object@margins[pos], paramMargins = object@paramMargins[pos], 
         p = length(pos), keepScale = object@keepScale[pos], reverse = object@reverse[pos]))
 } 
+
+# The function from Mair et al. (2012)
+CopSEM <- function(copmvdc, Sigma, nw = 100000, np = 1000) {
+	## copmvdc ... joint density from mvdc()
+	## Sigma ... model VC-matrix to be approximated
+	## nw ... sample size for warm-up sample
+	## np ... sample size for production sample
+	Xw <- rMvdc(nw, copmvdc) ## draw warm-up sample
+	Sw <- cov(Xw) ## warm-up VC matrix
+	Sigma.eigen <- eigen(Sigma) ## EV decomposition Sigma
+	Sigmaroot <- Sigma.eigen$vectors%*%sqrt(diag(Sigma.eigen$values)) %*%t(Sigma.eigen$vectors) ## root Sigma
+	Sx.eigen <- eigen(solve(Sw)) ## EV decomposition S
+	Sxroot <- Sx.eigen$vectors%*%sqrt(diag(Sx.eigen$values)) %*% t(Sx.eigen$vectors) ## root S
+	X <- rMvdc(np, copmvdc) ## draw production sample
+	Y <- (X %*% (Sxroot) %*% Sigmaroot) ## linear combination for Y
+	Y
+}

@@ -2168,3 +2168,4 @@ plotPowerFit(Output.ALT, Output.NULL, cutoff=cutoff2, alpha=0.05, logistic = FAL
 
 # Fix Example 6 Wiki
 # Make sim to save nonconvergent param value and # of replications
+

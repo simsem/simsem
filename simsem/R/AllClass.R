@@ -11,8 +11,11 @@ setClass("SimVector", representation(free = "vector", popParam = "vector", missp
 setClass("SimSem", representation(pt = "list", dgen = "list", modelType = "character", 
     groupLab = "character", con = "list"))
 
+# Set a null class to make sure that the default setting is used in data distribution object
+setClass("nullCopula", contains="copula")
+	  
 setClass("SimDataDist", representation(p = "numeric", margins = "character", paramMargins = "list", 
-    keepScale = "logical", reverse = "vector"), prototype(keepScale = TRUE, reverse = FALSE))
+    keepScale = "logical", reverse = "vector", copula = "copula"), prototype(keepScale = TRUE, reverse = FALSE, copula = new("nullCopula")))
 
 setClass("SimResult", representation(modelType = "character", nRep = "numeric", coef = "data.frame", 
     se = "data.frame", fit = "data.frame", converged = "vector", paramValue = "data.frame", 

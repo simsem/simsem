@@ -1,6 +1,7 @@
 # bindDist: A constructor of data distribution object
 
-bindDist <- function(margins, ..., p = NULL, keepScale = TRUE, reverse = FALSE) {
+bindDist <- function(margins, ..., p = NULL, keepScale = TRUE, reverse = FALSE, copula = new("nullCopula")) {
+	library(copula)
     List <- list(...)
     if (is.null(p)) 
         p <- length(List)
@@ -18,7 +19,10 @@ bindDist <- function(margins, ..., p = NULL, keepScale = TRUE, reverse = FALSE) 
         stop("Please specify the keepScale option as TRUE or FALSE or the vector of TRUE/FALSE with the length of the number of the marginal distributions.")
     if (length(List) != p) 
         List <- rep(List, length.out = p)
+	if (!is(copula, "nullCopula")) {
+		copula@dimension <- as.integer(p)
+	}
     return(new("SimDataDist", margins = margins, paramMargins = List, p = p, keepScale = keepScale, 
-        reverse = reverse))
+        reverse = reverse, copula = copula))
 }
  
