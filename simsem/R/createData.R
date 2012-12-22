@@ -211,9 +211,9 @@ CopSEM <- function(copmvdc, Sigma, nw = 100000, np = 1000) {
 	Xw <- rMvdc(nw, copmvdc) ## draw warm-up sample
 	Sw <- cov(Xw) ## warm-up VC matrix
 	Sigma.eigen <- eigen(Sigma) ## EV decomposition Sigma
-	Sigmaroot <- Sigma.eigen$vectors%*%sqrt(diag(Sigma.eigen$values)) %*%t(Sigma.eigen$vectors) ## root Sigma
+	Sigmaroot <- Sigma.eigen$vectors %*% sqrt(diag(Sigma.eigen$values)) %*% t(Sigma.eigen$vectors) ## root Sigma
 	Sx.eigen <- eigen(solve(Sw)) ## EV decomposition S
-	Sxroot <- Sx.eigen$vectors%*%sqrt(diag(Sx.eigen$values)) %*% t(Sx.eigen$vectors) ## root S
+	Sxroot <- Sx.eigen$vectors %*% sqrt(diag(Sx.eigen$values)) %*% t(Sx.eigen$vectors) ## root S
 	X <- rMvdc(np, copmvdc) ## draw production sample
 	Y <- (X %*% (Sxroot) %*% Sigmaroot) ## linear combination for Y
 	Y
