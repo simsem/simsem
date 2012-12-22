@@ -9,7 +9,6 @@
 
 createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist = NULL, 
     errorDist = NULL, indLab = NULL, modelBoot = FALSE, realData = NULL) {
-    require(MASS)
     if (modelBoot) {
         if (sequential) 
             stop("The model-based bootstrap and sequential cannot be used at the same time.")
@@ -121,7 +120,6 @@ createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist 
 }
 
 dataGen <- function(dataDist, n, m, cm) {
-    require(MASS)
     Data <- NULL
     # Check dim(M) dim(CM) dim(copula) are equal
     if (!is.null(dataDist)) {

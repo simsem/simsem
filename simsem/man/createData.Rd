@@ -43,7 +43,9 @@ errorDist=NULL, indLab=NULL, modelBoot=FALSE, realData=NULL)
 	A data.frame containing simulated data from the data generation template. A variable "group" is appended indicating group membership.
 }
 \details{
-	This function will use \code{mvrnorm} function in \code{MASS} package to create data from model implied covariance matrix if the data distribution object (\code{\linkS4class{SimDataDist}}) is not specified. It the data distribution object is specified, the Gaussian copula model is used. See \code{\linkS4class{SimDataDist}} for further details. For the model-based bootstrap, the transformation proposed by Yung & Bentler (1996) is used. This procedure is the expansion from the Bollen and Stine (1992) bootstrap including a mean structure. The model-implied mean vector and covariance matrix with trivial misspecification will be used in the model-based bootstrap if \code{misspec} is specified. See page 133 of Bollen and Stine (1992) for a reference. 
+This function will use the modified \code{mvrnorm} function (from the MASS package) by Paul E. Johnson  to create data from model implied covariance matrix if the data distribution object (\code{\linkS4class{SimDataDist}}) is not specified. The modified function is just a small modification from the original \code{mvrnorm} function such that the data generated with the sample sizes of n and n + k (where k > 0) will be replicable in the first n rows.
+
+It the data distribution object is specified, the Gaussian copula model is used. See \code{\linkS4class{SimDataDist}} for further details. For the model-based bootstrap, the transformation proposed by Yung & Bentler (1996) is used. This procedure is the expansion from the Bollen and Stine (1992) bootstrap including a mean structure. The model-implied mean vector and covariance matrix with trivial misspecification will be used in the model-based bootstrap if \code{misspec} is specified. See page 133 of Bollen and Stine (1992) for a reference. 
 
 Internally, parameters are first drawn, and data is then created from these parameters. Both of these steps are available via the \code{\link{draw}} and \code{\link{createData}} functions respectively.
 }
@@ -53,7 +55,7 @@ Bollen, K. A., & Stine, R. A. (1992). Bootstrapping goodness-of-fit measures in 
 Yung, Y.-F., & Bentler, P. M. (1996). Bootstrapping techniques in analysis of mean and covariance structures. In G. A. Marcoulides & R. E. Schumacker (Eds.), \emph{Advanced structural equation modeling: Issues and techniques} (pp. 195-226). Mahwah, NJ: Erlbaum.
 }
 \author{	
-    Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu}), Patrick Miller (Univeristy of Notre Dame; \email{pmille13@nd.edu}) 
+    Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu}), Patrick Miller (Univeristy of Notre Dame; \email{pmille13@nd.edu}). The original code of \code{mvrnorm} function is based on the \code{MASS} package slightly modified by Paul E. Johnson. 
 }
 \examples{
 loading <- matrix(0, 6, 2)
