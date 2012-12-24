@@ -139,7 +139,7 @@ dataGen <- function(dataDist, n, m, cm) {
 				}
 			}
 			
-			if(!is(dataDist@copula, "nullCopula")) {
+			if(!is(dataDist@copula, "NullCopula")) {
 				Mvdc <- mvdc(dataDist@copula, dataDist2@margins, dataDist2@paramMargins)
 				Data <- CopSEM(Mvdc, cm2, nw = n * 100, np = n)
 			} else {
@@ -198,8 +198,12 @@ dataGen <- function(dataDist, n, m, cm) {
 }
 
 extractSimDataDist <- function(object, pos) {
+	copula <- object@copula
+	if (!is(copula, "NullCopula")) {
+		copula@dimension <- 2L
+	} 
     return(new("SimDataDist", margins = object@margins[pos], paramMargins = object@paramMargins[pos], 
-        p = length(pos), keepScale = object@keepScale[pos], reverse = object@reverse[pos]))
+        p = length(pos), keepScale = object@keepScale[pos], reverse = object@reverse[pos], copula = copula))
 } 
 
 # The function from Mair et al. (2012)

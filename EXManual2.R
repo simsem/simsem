@@ -27,7 +27,8 @@ sourceDir <- function(path, trace = TRUE, ...) {
  # source(paste(dir2, "00Class.R", sep=""))
  # source(paste(dir2, "00Generic.R", sep=""))
  # sourceDir(dir2)
-
+library(lavaan)
+library(copula)
 #get
 #assign
 dir <- "C:/Users/Sunthud/Dropbox/simsem/simsem/R/"
@@ -785,6 +786,19 @@ Output <- sim(50, n=200, CFA.Model, indDist=dist, estimator="mlm")
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summary(Output)
+
+# Example of gumbelCopula
+
+dist <- bindDist(distname, d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12, reverse=c(rep(FALSE, 8), rep(TRUE, 4)), copula = gumbelCopula(2, dim = 12))
+
+dat <- generate(CFA.Model, n=200, indDist=dist)
+out <- analyze(CFA.Model, dat, estimator="mlr")
+
+Output <- sim(50, n=200, CFA.Model, indDist=dist, estimator="mlm")
+getCutoff(Output, 0.05)
+plotCutoff(Output, 0.05)
+summary(Output)
+
 
 ##################################### Example 13 #######################
 

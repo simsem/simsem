@@ -171,6 +171,10 @@ setMethod("summary", signature = "SimDataDist", definition = function(object) {
     }
     cat(paste("Reverse (mirror) distribution:", paste(object@reverse, collapse = " / "), 
         "\n"))
+	if(!is(object@copula, "NullCopula")) {
+		cat(paste("Multivariate Copula:\n"))
+		show(object@copula)
+	}
 }) 
 
 # printIfNotNull: Provide basic summary of each object if that object is not

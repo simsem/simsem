@@ -23,7 +23,7 @@ bindDist <- function(margins, ..., p = NULL, keepScale = TRUE, reverse = FALSE, 
 		if(!is(copula, "copula")) stop("The 'copula' argument is not a multivariate copula")
 		copula@dimension <- as.integer(p)
 	} else {
-		copula <- new("nullCopula")
+		copula <- new("NullCopula")
 	}
     return(new("SimDataDist", margins = margins, paramMargins = List, p = p, keepScale = keepScale, 
         reverse = reverse, copula = copula))

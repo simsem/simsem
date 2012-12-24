@@ -96,10 +96,10 @@ findphist <- function(value, hist) {
 	# The 2D Kernel Density Estimate based on each pair of values in \code{vec1} and \code{vec2}
 # }
 
-find2Dhist <- function(vec1, vec2) {
+find2Dhist <- function(vec1, vec2, gridsize = c(51L, 51L)) {
     library(KernSmooth)
     result <- NA
-    try(result <- suppressWarnings(bkde2D(cbind(vec1, vec2), c(dpik(vec1), dpik(vec2)))), 
+    try(result <- suppressWarnings(bkde2D(cbind(vec1, vec2), c(dpik(vec1), dpik(vec2)), gridsize = gridsize)), 
         silent = TRUE)
     return(result)
 } 
