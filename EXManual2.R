@@ -1144,9 +1144,7 @@ Cpow2 <- getPower(Output, nVal = 200)
 findPower(Cpow, "N", 0.80)
 plotPower(Output, powerParam=c("1.f1=~y1", "1.f2~~f1"))
 
-#Output <- sim(1000, SimData, SimModel, n=simUnif(50, 1000))
-
-############################## Example 18 ###########################
+############################## Example 19 ###########################
 
 # To be checked
 
@@ -1197,16 +1195,16 @@ facDist <- bindDist(c("binom", "norm", "norm"), group, n01, n01, keepScale=c(FAL
 Output <- sim(NULL, n=seq(50, 500, 5), LCA.Model, pmMCAR=seq(0, 0.4, 0.1), sequential=TRUE, facDist=facDist)
 
 plotCutoff(Output, 0.05)
-getCutoff(Output, 0.05, nVal = 200, pmMCARval=0)
-getCutoff(Output, 0.05, nVal = 300, pmMCARval=0.33)	
+getCutoff(Output, 0.05, nVal = 200, pmMCARval = 0)
+getCutoff(Output, 0.05, nVal = 300, pmMCARval = 0.33)	
 
 Cpow <- getPower(Output)
-Cpow2 <- getPower(Output, nVal = 200, pmMCARval=0.35)
+Cpow2 <- getPower(Output, nVal = 200, pmMCARval = 0.35)
 findPower(Cpow, "N", 0.80)
 findPower(Cpow, "MCAR", 0.80)
-plotPower(Output, powerParam=c("1.f2~y1", "1.f3~y1"))
+plotPower(Output, powerParam=c("1.f2~f1", "1.f3~f1"))
 
-###################################### Example 19 #################################
+###################################### Example 20 #################################
 
 #library(simsem)
 loading <- matrix(0, 10, 2)
@@ -1222,7 +1220,7 @@ path <- matrix(0, 2, 2)
 path[2, 1] <- NA
 BE <- bind(path, "runif(1, 0, 0.9)")
 
-latentReg <- simSetSEM(LY = LY, RPS = RPS, RTE = RTE, BE = BE)
+latentReg <- model(LY = LY, RPS = RPS, RTE = RTE, BE = BE, modelType = "SEM")
 
 Output <- sim(NULL, n=25:500, latentReg)
 summary(Output)
@@ -1240,11 +1238,9 @@ findPower(Cpow, 2, 0.80)
 
 plotPower(Output, powerParam=c("1.f2~f1", "1.f2=~y10"), contParam="1.f2~f1")
 
-###################################### Example 20 Get power fit continutous N ################################# 
+#################################### Example 21 Get power fit continutous N ################################# 
 
 #library(simsem)
-
-n1 <- simNorm(0, 0.1)
 
 loading.null <- matrix(0, 8, 2)
 loading.null[1:5, 1] <- NA
@@ -1264,11 +1260,6 @@ loading.alt[5:8, 2] <- NA
 LY.ALT <- bind(loading.alt, 0.7)
 CFA.Model.ALT <- model(LY = LY.ALT, RPS = RPS, RTE = RTE, modelType="CFA")
 
-SimData.NULL <- simData(CFA.Model.NULL, 500, misspec=CFA.Model.Mis)
-SimData.ALT <- simData(CFA.Model.ALT, 500, misspec=CFA.Model.Mis)
-
-SimModel <- simModel(CFA.Model.NULL)
-
 Output.NULL <- sim(NULL, n=25:500, CFA.Model.NULL)
 Output.ALT <- sim(NULL, n=25:500, CFA.Model.NULL, generate=CFA.Model.ALT)
 
@@ -1285,11 +1276,9 @@ plotPowerFit(Output.ALT, cutoff=cutoff2)
 plotPowerFit(Output.ALT, cutoff=cutoff2, logistic=FALSE)
 
 
-###################################### Example 21 Get power continutous N and pmMCAR ################################# 
+################################ Example 22 Get power continutous N and pmMCAR ################################# 
 
 #library(simsem)
-
-n05 <- simNorm(0, 0.05)
 
 path.null <- matrix(0, 5, 5)
 path.null[2, 1] <- NA
@@ -1317,11 +1306,6 @@ path.alt.mis[5, 2:3] <- "rnorm(1, 0, 0.05)"
 BE.alt <- bind(path.alt, 0.4, misspec=path.alt.mis)
 path.model.alt <- model(RPS = RPS, BE = BE.alt, modelType="Path")
 
-SimData.NULL <- simData(path.model.null, 500, misspec=path.model.null.mis)
-SimData.ALT <- simData(path.model.alt, 500, misspec=path.model.alt.mis)
-
-SimModel <- simModel(path.model.null)
-
 Output.NULL <- sim(NULL, n=25:500, path.model.null, pmMCAR=seq(0, 0.3, 0.1))
 Output.ALT <- sim(NULL, n=25:500, path.model.null, generate=path.model.alt, pmMCAR=seq(0, 0.3, 0.1))
 
@@ -1335,7 +1319,7 @@ cutoff2 <- c(RMSEA = 0.05, CFI = 0.95, TLI = 0.95, SRMR = 0.06)
 getPowerFit(Output.ALT, cutoff=cutoff2, nVal=250, pmMCARval = 0.2, condCutoff=FALSE)
 plotPowerFit(Output.ALT, cutoff=cutoff2)
 
-###################################### Example 22 Specifying misspecification ################################# 
+###################################### Example 23 Specifying misspecification ################################# 
 
 #library(simsem)
 library(lavaan)
@@ -1343,86 +1327,79 @@ loading <- matrix(0, 9, 3)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
 loading[7:9, 3] <- NA
-model <- simParamCFA(LY=loading)
-analyzeModel <- simModel(model, indLab=paste("x", 1:9, sep=""))
-out <- run(analyzeModel, HolzingerSwineford1939)
+targetmodel <- estmodel(LY=loading, modelType = "CFA", indLab = paste("x", 1:9, sep=""))
+out <- analyze(targetmodel, HolzingerSwineford1939)
 
-simOut1 <- runFit(model=analyzeModel, data=HolzingerSwineford1939, nRep=1000)
-getCutoff(simOut1, alpha=0.05)
+samplesize <- nrow(HolzingerSwineford1939)
+
+template1 <- model.lavaan(out, std = TRUE)
+simOut1 <- sim(1000, n = samplesize, template1)
+getCutoff(simOut1, alpha = 0.05)
 pValue(out, simOut1)
 
 loadingMis2 <- matrix(0, 9, 3)
-loadingMis2[1,2] <- NA
-loadingMis2[4,3] <- NA
-LYMis2 <- bind(loadingMis2, 0.3)
-misspec2 <- simMisspecCFA(LY=LYMis2, misBeforeFill=FALSE)
-simOut2 <- runFit(model=analyzeModel, data=HolzingerSwineford1939, nRep=1000, misspec=misspec2) 
-getCutoff(simOut2, alpha=0.05)
+loadingMis2[1,2] <- 0.3
+loadingMis2[4,3] <- 0.3
+template2 <- model.lavaan(out, LY=loadingMis2, std = TRUE)
+simOut2 <- sim(1000, n = samplesize, template2, createOrder = c(1, 3, 2))
+getCutoff(simOut2, alpha = 0.05)
 pValue(out, simOut2)
 
 loadingMis3 <- matrix(0, 9, 3)
-loadingMis3[6,1] <- NA
-loadingMis3[9,2] <- NA
-LYMis3 <- bind(loadingMis3, 0.3)
-misspec3 <- simMisspecCFA(LY=LYMis3, misBeforeFill=FALSE)
-simOut3 <- runFit(model=analyzeModel, data=HolzingerSwineford1939, nRep=1000, misspec=misspec3) 
-getCutoff(simOut3, alpha=0.05)
+loadingMis3[6,1] <- 0.3
+loadingMis3[9,2] <- 0.3
+template3 <- model.lavaan(out, LY=loadingMis3, std = TRUE)
+simOut3 <- sim(1000, n = samplesize, template3, createOrder = c(1, 3, 2))
+getCutoff(simOut3, alpha = 0.05)
 pValue(out, simOut3)
 
-u3 <- simUnif(-0.3, 0.3)
 loadingMis4 <- matrix(0, 9, 3)
-loadingMis4[4:9, 1] <- NA
-loadingMis4[c(1:3, 7:9),2] <- NA
-loadingMis4[1:6,3] <- NA
-LYMis4 <- bind(loadingMis4, "u3")
-misspec4 <- simMisspecCFA(LY=LYMis4, misBeforeFill=FALSE)
-simOut4 <- runFit(model=analyzeModel, data=HolzingerSwineford1939, nRep=1000, misspec=misspec4) 
-getCutoff(simOut4, alpha=0.05)
+loadingMis4[4:9, 1] <- "runif(1, -0.3, 0.3)"
+loadingMis4[c(1:3, 7:9),2] <- "runif(1, -0.3, 0.3)"
+loadingMis4[1:6,3] <- "runif(1, -0.3, 0.3)"
+template4 <- model.lavaan(out, LY=loadingMis4, std = TRUE)
+simOut4 <- sim(1000, n = samplesize, template4, createOrder = c(1, 3, 2))
+getCutoff(simOut4, alpha = 0.05)
 pValue(out, simOut4)
 
-n3 <- simNorm(0, 0.15)
 loadingMis5 <- matrix(0, 9, 3)
-loadingMis5[4:9, 1] <- NA
-loadingMis5[c(1:3, 7:9),2] <- NA
-loadingMis5[1:6,3] <- NA
-LYMis5 <- bind(loadingMis5, "n3")
-misspec5 <- simMisspecCFA(LY=LYMis5, misBeforeFill=FALSE)
-simOut5 <- runFit(model=analyzeModel, data=HolzingerSwineford1939, nRep=1000, misspec=misspec5) 
-getCutoff(simOut5, alpha=0.05)
+loadingMis5[4:9, 1] <- "rnorm(1, 0, 0.15)"
+loadingMis5[c(1:3, 7:9),2] <- "rnorm(1, 0, 0.15)"
+loadingMis5[1:6,3] <- "rnorm(1, 0, 0.15)"
+template5 <- model.lavaan(out, LY=loadingMis5, std = TRUE)
+simOut5 <- sim(1000, n = samplesize, template5, createOrder = c(1, 3, 2))
+getCutoff(simOut5, alpha = 0.05)
 pValue(out, simOut5)
 
-u3 <- simUnif(-0.3, 0.3)
 loadingMis6 <- matrix(0, 9, 3)
-loadingMis6[4:9, 1] <- NA
-loadingMis6[c(1:3, 7:9),2] <- NA
-loadingMis6[1:6,3] <- NA
-LYMis6 <- bind(loadingMis6, "u3")
-misspec6 <- simMisspecCFA(LY=LYMis6, optMisfit="max", numIter=100, misBeforeFill=FALSE)
-simOut6 <- runFit(model=analyzeModel, data=HolzingerSwineford1939, nRep=1000, misspec=misspec6) 
-getCutoff(simOut6, alpha=0.05)
+loadingMis6[4:9, 1] <- "runif(1, -0.3, 0.3)"
+loadingMis6[c(1:3, 7:9),2] <- "runif(1, -0.3, 0.3)"
+loadingMis6[1:6,3] <- "runif(1, -0.3, 0.3)"
+template6 <- model.lavaan(out, LY=loadingMis6, std = TRUE)
+simOut6 <- sim(1000, n = samplesize, template6, createOrder = c(1, 3, 2), optMisfit="max", optDraws = 100)
+getCutoff(simOut6, alpha = 0.05)
 pValue(out, simOut6)
 
 u1 <- simUnif(-0.1, 0.1)
 loadingMis7 <- matrix(0, 9, 3)
-loadingMis7[4:9, 1] <- NA
-loadingMis7[c(1:3, 7:9),2] <- NA
-loadingMis7[1:6,3] <- NA
-LYMis7 <- bind(loadingMis7, "u1")
-misspec7 <- simMisspecCFA(LY=LYMis7, misfitBound=c(0.02, 0.05), numIter=200, misBeforeFill=FALSE)
-
-simOut7 <- runFit(model=analyzeModel, data=HolzingerSwineford1939, nRep=1000, misspec=misspec7) 
-getCutoff(simOut7, alpha=0.05)
+loadingMis7[4:9, 1] <- "runif(1, -0.1, 0.1)"
+loadingMis7[c(1:3, 7:9),2] <- "runif(1, -0.1, 0.1)"
+loadingMis7[1:6,3] <- "runif(1, -0.1, 0.1)"
+template7 <- model.lavaan(out, LY=loadingMis7, std = TRUE)
+simOut7 <- sim(1000, n = samplesize, template7, createOrder = c(1, 3, 2), misfitBounds = c(0.02, 0.05), maxDraw = 200)
+getCutoff(simOut7, alpha = 0.05)
 pValue(out, simOut7)
 
 # To be rejected
-u69 <- simUnif(0.6, 0.9)
 loadingMisAlt <- matrix(0, 9, 3)
-loadingMisAlt[4, 1] <- NA
-loadingMisAlt[7, 2] <- NA
-loadingMisAlt[1, 3] <- NA
-LYMisAlt <- bind(loadingMisAlt, "u69")
-misspecAlt <- simMisspecCFA(LY=LYMisAlt, optMisfit="min", numIter=100, misBeforeFill=FALSE)
-simOutAlt <- runFit(model=analyzeModel, data=HolzingerSwineford1939, nRep=1000, misspec=misspecAlt) 
+loadingMisAlt[4, 1] <- "runif(1, 0.6, 0.9)"
+loadingMisAlt[7, 2] <- "runif(1, 0.6, 0.9)"
+loadingMisAlt[1, 3] <- "runif(1, 0.6, 0.9)"
+templateAlt <- model.lavaan(out, LY = loadingMisAlt, std = TRUE)
+simOutAlt <- sim(1000, n = samplesize, templateAlt, createOrder = c(1, 3, 2), optMisfit="min", optDraws = 100)
+getCutoff(simOutAlt, alpha = 0.05)
+pValue(out, simOutAlt)
+
 getPowerFit(simOutAlt, nullObject=simOut1) 
 getPowerFit(simOutAlt, nullObject=simOut2) 
 getPowerFit(simOutAlt, nullObject=simOut3) 
@@ -1431,36 +1408,41 @@ getPowerFit(simOutAlt, nullObject=simOut5)
 getPowerFit(simOutAlt, nullObject=simOut6) 
 getPowerFit(simOutAlt, nullObject=simOut7) 
 
-# Population Misfit Investigation
+summaryPopulation(simOut4)
+summaryMisspec(simOut4)
+summaryFit(simOut4)
+plotMisfit(simOut4, misParam="1.f1=~x9")
 
-param1 <- runFitParam(analyzeModel, data=HolzingerSwineford1939)
-param2 <- runFitParam(analyzeModel, data=HolzingerSwineford1939, misspec=misspec2)
-param3 <- runFitParam(analyzeModel, data=HolzingerSwineford1939, misspec=misspec3)
-param4 <- runFitParam(analyzeModel, data=HolzingerSwineford1939, misspec=misspec4)
-param5 <- runFitParam(analyzeModel, data=HolzingerSwineford1939, misspec=misspec5)
-param6 <- runFitParam(analyzeModel, data=HolzingerSwineford1939, misspec=misspec6)
-param7 <- runFitParam(analyzeModel, data=HolzingerSwineford1939, misspec=misspec7)
-paramAlt <- runFitParam(analyzeModel, data=HolzingerSwineford1939, misspec=misspecAlt)
-
-summary(param4)
-summaryParam(param4)
-summaryMisspec(param4)
-summaryFit(param4)
-plotMisfit(param4, misParam="LY9_1")
-
-###################################### Example 23 nested model comparison and power ################################# 
+################################# Example 24 nested model comparison and power ################################# 
 
 # longitudinal weak invariance
 #library(simsem)
 
-loading <- matrix(0, 9, 3)
-loading[1, 1] <- 1
-loading[2:3, 1] <- NA
-loading[4, 2] <- 1
-loading[5:6, 2] <- NA
-loading[7, 3] <- 1
-loading[8:9, 3] <- NA
-LY <- bind(loading, "runif(1, 0.5, 1.5)")
+loadingNested <- matrix(0, 9, 3)
+loadingNested[1, 1] <- 1
+loadingNested[2:3, 1] <- c("con1", "con2")
+loadingNested[4, 2] <- 1
+loadingNested[5:6, 2] <- c("con1", "con2")
+loadingNested[7, 3] <- 1
+loadingNested[8:9, 3] <- c("con1", "con2")
+loadingMis <- matrix(0, 9, 3)
+loadingMis[2:3, 1] <- "runif(1, -0.1, 0.1)"
+loadingMis[5:6, 2] <- "runif(1, -0.1, 0.1)"
+loadingMis[8:9, 3] <- "runif(1, -0.1, 0.1)"
+LYnested <- bind(loadingNested, "runif(1, 0.5, 1.5)", misspec = loadingMis)
+
+loadingParent <- matrix(0, 9, 3)
+loadingParent[1, 1] <- 1
+loadingParent[2:3, 1] <- NA
+loadingParent[4, 2] <- 1
+loadingParent[5:6, 2] <- NA
+loadingParent[7, 3] <- 1
+loadingParent[8:9, 3] <- NA
+loadingMis <- matrix(0, 9, 3)
+loadingMis[2:3, 1] <- "runif(1, -0.1, 0.1)"
+loadingMis[5:6, 2] <- "runif(1, -0.1, 0.1)"
+loadingMis[8:9, 3] <- "runif(1, -0.1, 0.1)"
+LYparent <- bind(loadingParent, "runif(1, 0.5, 1.5)", misspec = loadingMis)
 
 facCor <- matrix(NA, 3, 3)
 diag(facCor) <- 1
@@ -1470,7 +1452,7 @@ facCorVal[2, 3] <- facCorVal[3, 2] <- 0.7
 facCorVal[1, 3] <- facCorVal[3, 1] <- 0.49
 RPS <- binds(facCor, facCorVal)
 
-VE <- simVector(rep(NA, 3), c(1, 1.2, 1.4))
+VE <- bind(rep(NA, 3), c(1, 1.2, 1.4))
 
 error <- diag(9)
 error[1, 4] <- error[4, 7] <- error[4, 1] <- error[7, 4] <- NA
@@ -1488,46 +1470,20 @@ errorVal[2, 8] <- errorVal[8, 2] <- 0.04
 errorVal[3, 9] <- errorVal[9, 3] <- 0.04
 RTE <- binds(error, errorVal)
 
-VTE <- simVector(rep(NA, 9), 0.4)
+VTE <- bind(rep(NA, 9), 0.4)
 
-longCFA <- simSetCFA(LY=LY, RPS=RPS, VE=VE, RTE=RTE, VTE=VTE)
+longNested <- model(LY=LYnested, RPS=RPS, VE=VE, RTE=RTE, VTE=VTE, modelType = "CFA")
+longParent <- model(LY=LYparent, RPS=RPS, VE=VE, RTE=RTE, VTE=VTE, modelType = "CFA")
 
-con1 <- matrix(0, 3, 2)
-con1[1,] <- c(2, 1)
-con1[2,] <- c(5, 2)
-con1[3,] <- c(8, 3)
-rownames(con1) <- rep("LY", 3)
-con2 <- matrix(0, 3, 2)
-con2[1,] <- c(3, 1)
-con2[2,] <- c(6, 2)
-con2[3,] <- c(9, 3)
-rownames(con2) <- rep("LY", 3)
-equalCon <- simEqualCon(con1, con2, modelType="CFA")
-
-# Trivial misspecification
-loadingMis <- matrix(0, 9, 3)
-loadingMis[2:3, 1] <- NA
-loadingMis[5:6, 2] <- NA
-loadingMis[8:9, 3] <- NA
-LYMis <- bind(loadingMis, "runif(1, -0.1, 0.1)") 
-
-longCFAMis <- simMisspecCFA(LY=LYMis)
-
-datNested <- simData(longCFA, 200, misspec=longCFAMis, equalCon=equalCon)
-datParent <- simData(longCFA, 200, misspec=longCFAMis)
-
-modNested <- simModel(longCFA, equalCon=equalCon)
-modParent <- simModel(longCFA)
-
-outDatNestedModNested <- sim(1000, datNested, modNested)
-outDatNestedModParent <- sim(1000, datNested, modParent)
+outDatNestedModNested <- sim(1000, n = 200, longNested, generate = longNested)
+outDatNestedModParent <- sim(1000, n = 200, longParent, generate = longNested)
 
 anova(outDatNestedModNested, outDatNestedModParent)
 cutoff <- getCutoffNested(outDatNestedModNested, outDatNestedModParent)
 plotCutoffNested(outDatNestedModNested, outDatNestedModParent, alpha=0.05)
 
-outDatParentModNested <- sim(1000, datParent, modNested)
-outDatParentModParent <- sim(1000, datParent, modParent)
+outDatParentModNested <- sim(1000, n = 200, longNested, generate = longParent)
+outDatParentModParent <- sim(1000, n = 200, longParent, generate = longParent)
 
 anova(outDatParentModNested, outDatParentModParent)
 
@@ -1543,7 +1499,7 @@ plotPowerFitNested(outDatParentModNested, outDatParentModParent, nullNested=outD
 
 
 
-###################################### Example 24 nested model comparison and power continuous N ################################# 
+#################### Example 25 nested model comparison and power continuous N ################################# 
 
 # longitudinal strong invariance
 
@@ -1551,12 +1507,16 @@ plotPowerFitNested(outDatParentModNested, outDatParentModParent, nullNested=outD
 
 loading <- matrix(0, 9, 3)
 loading[1, 1] <- 1
-loading[2:3, 1] <- NA
+loading[2:3, 1] <- c("con1", "con2")
 loading[4, 2] <- 1
-loading[5:6, 2] <- NA
+loading[5:6, 2] <- c("con1", "con2")
 loading[7, 3] <- 1
-loading[8:9, 3] <- NA
-LY <- bind(loading, "runif(1, 0.5, 1.5)")
+loading[8:9, 3] <- c("con1", "con2")
+loadingMis <- matrix(0, 9, 3)
+loadingMis[2:3, 1] <- "runif(1, -0.1, 0.1)"
+loadingMis[5:6, 2] <- "runif(1, -0.1, 0.1)"
+loadingMis[8:9, 3] <- "runif(1, -0.1, 0.1)"
+LY <- bind(loading, "runif(1, 0.5, 1.5)", misspec = loadingMis)
 
 facCor <- matrix(NA, 3, 3)
 diag(facCor) <- 1
@@ -1566,7 +1526,7 @@ facCorVal[2, 3] <- facCorVal[3, 2] <- 0.7
 facCorVal[1, 3] <- facCorVal[3, 1] <- 0.49
 RPS <- binds(facCor, facCorVal)
 
-VE <- simVector(rep(NA, 3), c(1, 1.2, 1.4))
+VE <- bind(rep(NA, 3), c(1, 1.2, 1.4))
 
 error <- diag(9)
 error[1, 4] <- error[4, 7] <- error[4, 1] <- error[7, 4] <- NA
@@ -1584,59 +1544,27 @@ errorVal[2, 8] <- errorVal[8, 2] <- 0.04
 errorVal[3, 9] <- errorVal[9, 3] <- 0.04
 RTE <- binds(error, errorVal)
 
-VTE <- simVector(rep(NA, 9), 0.4)
+VTE <- bind(rep(NA, 9), 0.4)
 
-TY <- simVector(c(0, NA, NA, 0, NA, NA, 0, NA, NA), "runif(1, -0.5, 0.5)")
+intceptMis <- c(0, "runif(1, -0.1, 0.1)", "runif(1, -0.1, 0.1)", 0, "runif(1, -0.1, 0.1)", "runif(1, -0.1, 0.1)", 0, "runif(1, -0.1, 0.1)", "runif(1, -0.1, 0.1)")
+TYnested <- bind(c(0, "con3", "con4", 0, "con3", "con4", 0, "con3", "con4"), "runif(1, -0.5, 0.5)", misspec = intceptMis)
+TYparent <- bind(c(0, NA, NA, 0, NA, NA, 0, NA, NA), "runif(1, -0.5, 0.5)", misspec = intceptMis)
 
-AL <- simVector(rep(NA, 3), c(0, 0.5, 1))
+AL <- bind(rep(NA, 3), c(0, 0.5, 1))
 
-longCFA <- simSetCFA(LY=LY, RPS=RPS, VE=VE, RTE=RTE, VTE=VTE, TY=TY, AL=AL)
+longNested <- model(LY=LY, RPS=RPS, VE=VE, RTE=RTE, VTE=VTE, TY=TYnested, AL=AL, modelType = "CFA")
+longParent <- model(LY=LY, RPS=RPS, VE=VE, RTE=RTE, VTE=VTE, TY=TYparent, AL=AL, modelType = "CFA")
 
-con1 <- matrix(0, 3, 2)
-con1[1,] <- c(2, 1)
-con1[2,] <- c(5, 2)
-con1[3,] <- c(8, 3)
-rownames(con1) <- rep("LY", 3)
-con2 <- matrix(0, 3, 2)
-con2[1,] <- c(3, 1)
-con2[2,] <- c(6, 2)
-con2[3,] <- c(9, 3)
-rownames(con2) <- rep("LY", 3)
-con3 <- matrix(c(2, 5, 8), ncol=1)
-rownames(con3) <- rep("TY", 3)
-con4 <- matrix(c(3, 6, 9), ncol=1)
-rownames(con4) <- rep("TY", 3)
-
-equalCon1 <- simEqualCon(con1, con2, modelType="CFA")
-equalCon2 <- simEqualCon(con1, con2, con3, con4, modelType="CFA")
-
-# Trivial misspecification
-loadingMis <- matrix(0, 9, 3)
-loadingMis[2:3, 1] <- NA
-loadingMis[5:6, 2] <- NA
-loadingMis[8:9, 3] <- NA
-LYMis <- bind(loadingMis, "runif(1, -0.1, 0.1)") 
-
-TYMis <- simVector(c(0, NA, NA, 0, NA, NA, 0, NA, NA), "runif(1, -0.1, 0.1)")
-
-longCFAMis <- simMisspecCFA(LY=LYMis, TY=TYMis)
-
-datNested <- simData(longCFA, 200, misspec=longCFAMis, equalCon=equalCon2)
-datParent <- simData(longCFA, 200, misspec=longCFAMis, equalCon=equalCon1)
-
-modNested <- simModel(longCFA, equalCon=equalCon2)
-modParent <- simModel(longCFA, equalCon=equalCon1)
-
-outDatNestedModNested <- sim(NULL, datNested, modNested, n=50:500)
-outDatNestedModParent <- sim(NULL, datNested, modParent, n=50:500)
+outDatNestedModNested <- sim(NULL, n=50:500, longNested, generate = longNested)
+outDatNestedModParent <- sim(NULL, n=50:500, longParent, generate = longNested)
 
 anova(outDatNestedModNested, outDatNestedModParent)
 
 cutoff <- getCutoffNested(outDatNestedModNested, outDatNestedModParent, nVal=250)
 plotCutoffNested(outDatNestedModNested, outDatNestedModParent, alpha=0.05)
 
-outDatParentModNested <- sim(NULL, datParent, modNested, n=50:500)
-outDatParentModParent <- sim(NULL, datParent, modParent, n=50:500)
+outDatParentModNested <- sim(NULL, n=50:500, longNested, generate = longParent)
+outDatParentModParent <- sim(NULL, n=50:500, longParent, generate = longParent)
 
 anova(outDatParentModNested, outDatParentModParent)
 
@@ -1653,56 +1581,51 @@ plotPowerFitNested(outDatParentModNested, outDatParentModParent, cutoff=cutoff2)
 plotPowerFitNested(outDatParentModNested, outDatParentModParent, cutoff=cutoff2, logistic=FALSE)
 plotPowerFitNested(outDatParentModNested, outDatParentModParent, nullNested=outDatNestedModNested, nullParent=outDatNestedModParent, cutoff=cutoff2, logistic=FALSE)
 
-###################################### Example 25 nested model comparison and power continuous N and pmMCAR ######################
+#################### Example 26 nested model comparison and power continuous N and pmMCAR ######################
 
 # Equal first-order effect
 #library(simsem)
 
-path <- matrix(0, 5, 5)
-path[2, 1] <- NA
-path[3, 2] <- NA
-path[4, 3] <- NA
-path[5, 4] <- NA
-BE <- bind(path, "runif(1, 0.3, 0.7)")
+pathNested <- matrix(0, 5, 5)
+pathNested[2, 1] <- "con"
+pathNested[3, 2] <- "con"
+pathNested[4, 3] <- "con"
+pathNested[5, 4] <- "con"
+pathMis <- matrix(0, 5, 5)
+pathMis[2:5, 1] <- "rnorm(1, 0, 0.05)"
+pathMis[3:5, 2] <- "rnorm(1, 0, 0.05)"
+pathMis[4:5, 3] <- "rnorm(1, 0, 0.05)"
+pathMis[5, 4] <- "rnorm(1, 0, 0.05)"
+BEnested <- bind(pathNested, "runif(1, 0.3, 0.7)", misspec = pathMis)
+
+pathParent <- matrix(0, 5, 5)
+pathParent[2, 1] <- NA
+pathParent[3, 2] <- NA
+pathParent[4, 3] <- NA
+pathParent[5, 4] <- NA
+pathMis <- matrix(0, 5, 5)
+pathMis[2:5, 1] <- "rnorm(1, 0, 0.05)"
+pathMis[3:5, 2] <- "rnorm(1, 0, 0.05)"
+pathMis[4:5, 3] <- "rnorm(1, 0, 0.05)"
+pathMis[5, 4] <- "rnorm(1, 0, 0.05)"
+BEparent <- bind(pathParent, "runif(1, 0.3, 0.7)", misspec = pathMis)
 
 residual <- diag(5)
 RPS <- binds(residual)
 
-pathModel <- simSetPath(RPS = RPS, BE = BE)
+pathNested <- model(RPS = RPS, BE = BEnested, modelType="Path")
+pathParent <- model(RPS = RPS, BE = BEparent, modelType="Path")
 
-con <- matrix(0, 4, 2)
-con[1,] <- c(2, 1)
-con[2,] <- c(3, 2)
-con[3,] <- c(4, 3)
-con[4,] <- c(5, 4)
-rownames(con) <- rep("BE", 4)
-equalCon <- simEqualCon(con, modelType="Path")
-
-pathMis <- matrix(0, 5, 5)
-pathMis[2:5, 1] <- NA
-pathMis[3:5, 2] <- NA
-pathMis[4:5, 3] <- NA
-pathMis[5, 4] <- NA
-BEMis <- bind(pathMis, "rnorm(1, 0, 0.05)")
-
-pathModelMis <- simMisspecPath(BE = BEMis)
-
-datNested <- simData(pathModel, 200, misspec=pathModelMis, equalCon=equalCon)
-datParent <- simData(pathModel, 200, misspec=pathModelMis)
-
-modNested <- simModel(pathModel, equalCon=equalCon)
-modParent <- simModel(pathModel)
-
-outDatNestedModNested <- sim(NULL, datNested, modNested, n=50:500, pmMCAR=seq(0, 0.3, 0.1))
-outDatNestedModParent <- sim(NULL, datNested, modParent, n=50:500, pmMCAR=seq(0, 0.3, 0.1))
+outDatNestedModNested <- sim(NULL, n=50:500, pathNested, generate = pathNested, pmMCAR=seq(0, 0.3, 0.1))
+outDatNestedModParent <- sim(NULL, n=50:500, pathParent, generate = pathNested, pmMCAR=seq(0, 0.3, 0.1))
 
 anova(outDatNestedModNested, outDatNestedModParent)
 
 cutoff <- getCutoffNested(outDatNestedModNested, outDatNestedModParent, nVal=250, pmMCARval=0.2)
 plotCutoffNested(outDatNestedModNested, outDatNestedModParent, alpha=0.05)
 
-outDatParentModNested <- sim(NULL, datParent, modNested, n=50:500, pmMCAR=seq(0, 0.3, 0.1))
-outDatParentModParent <- sim(NULL, datParent, modParent, n=50:500, pmMCAR=seq(0, 0.3, 0.1))
+outDatParentModNested <- sim(NULL, n=50:500, pathNested, generate = pathParent, pmMCAR=seq(0, 0.3, 0.1))
+outDatParentModParent <- sim(NULL, n=50:500, pathParent, generate = pathParent, pmMCAR=seq(0, 0.3, 0.1))
 
 anova(outDatParentModNested, outDatParentModParent)
 
@@ -1718,7 +1641,10 @@ getPowerFitNested(outDatParentModNested, outDatParentModParent, cutoff=cutoff2, 
 plotPowerFitNested(outDatParentModNested, outDatParentModParent, cutoff=cutoff2)
 plotPowerFitNested(outDatParentModNested, outDatParentModParent, cutoff=cutoff2, useContour=FALSE)
 
-###################################### Example 26 Analyzing Real Data with Nested Model Comparison ###################################
+
+#################################### Not in examples yet
+
+###################################### Example 27 Analyzing Real Data with Nested Model Comparison ###################################
 
 #library(simsem)
 library(lavaan)
@@ -1762,7 +1688,7 @@ simParentParent <- runFit(model=parent, data=Demo.growth, nRep=1000)
 pValueNested(outNested, outParent, simNestedNested, simNestedParent)
 getPowerFitNested(simParentNested, simParentParent, nullNested=simNestedNested, nullParent=simNestedParent)
 
-###################################### Example 27 nonnested model comparison ################################# 
+###################################### Example 28 nonnested model comparison ################################# 
 
 #library(simsem)
 
@@ -1828,7 +1754,7 @@ getPowerFitNonNested(outBA, outBB, cutoff=cutoff2)
 plotPowerFitNonNested(outBA, outBB, cutoff=cutoff2)
 plotPowerFitNonNested(outBA, outBB, dat1Mod1=outAA, dat1Mod2=outAB, cutoff=cutoff2)
 
-###################################### Example 28 nonnested model comparison and power continuous N #################################
+###################################### Example 29 nonnested model comparison and power continuous N #################################
 
 # Quadratic and unconstrained change
 #library(simsem)
@@ -1881,7 +1807,7 @@ outBA <- sim(NULL, dataB, analyzeA, n = 50:500)
 outAB <- sim(NULL, dataA, analyzeB, n = 50:500)
 outBB <- sim(NULL, dataB, analyzeB, n = 50:500)
 
-###################################### Example 29 nonnested model comparison and power continuous N and pmMCAR ####################
+###################################### Example 30 nonnested model comparison and power continuous N and pmMCAR ####################
 
 # This example is simple. Should be in N and pmMCAR
 
@@ -1936,7 +1862,7 @@ plotPowerFitNonNested(out21, out22, out11, out12)
 
 pValueNonNested(result11, result12, out11, out12, out21, out22)
 
-###################################### Example 30 Nonnested model by the real data ####################
+###################################### Example 31 Nonnested model by the real data ####################
 
 #library(simsem)
 library(lavaan)
@@ -1977,197 +1903,4 @@ pValueNonNested(out.A, out.B, output.A.A, output.A.B, output.B.A, output.B.B)
 ##################################### Add the nonconvergence paramValue ########################################
 ###################################### Double bootstrap, Bollen-Stine boot, double bollen-stine boot, residual bootstrap
 
-
-#library(simsem)
-
-u2 <- simUnif(-0.2, 0.2)
-n1 <- simNorm(0, 0.1)
-u79 <- simUnif(0.7, 0.9)
-
-loading.null <- matrix(0, 6, 1)
-loading.null[1:6, 1] <- NA
-LY.NULL <- bind(loading.null, 0.7)
-RPS.NULL <- binds(diag(1))
-RTE <- binds(diag(6))
-CFA.Model.NULL <- simSetCFA(LY = LY.NULL, RPS = RPS.NULL, RTE = RTE)
-
-error.cor.mis <- matrix(NA, 6, 6)
-diag(error.cor.mis) <- 1
-RTE.Mis <- binds(error.cor.mis, "rnorm(1,0,0.1)")
-CFA.Model.NULL.Mis <- simMisspecCFA(RTE = RTE.Mis)
-
-loading.alt <- matrix(0, 6, 2)
-loading.alt[1:3, 1] <- NA
-loading.alt[4:6, 2] <- NA
-LY.ALT <- bind(loading.alt, 0.7)
-latent.cor.alt <- matrix(NA, 2, 2)
-diag(latent.cor.alt) <- 1
-RPS.ALT <- binds(latent.cor.alt, 0.7)
-CFA.Model.ALT <- simSetCFA(LY = LY.ALT, RPS = RPS.ALT, RTE = RTE)
-
-# loading.alt.mis <- matrix(NA, 6, 2)
-# loading.alt.mis[is.na(loading.alt)] <- 0
-# LY.alt.mis <- bind(loading.alt.mis, "runif(1,-.2,.2)")
-# CFA.Model.alt.mis <- simMisspecCFA(LY = LY.alt.mis, RTE=RTE.Mis)
-
-SimData.NULL <- simData(CFA.Model.NULL, 500)
-SimData.ALT <- simData(CFA.Model.ALT, 500)
-
-SimModel.NULL <- simModel(CFA.Model.NULL)
-SimModel.ALT <- simModel(CFA.Model.ALT)
-
-Output.NULL.NULL <- sim(1000, SimData.NULL, SimModel.NULL)
-Output.ALT.NULL <- sim(1000, SimData.ALT, SimModel.NULL)
-Output.NULL.ALT <- sim(1000, SimData.NULL, SimModel.ALT)
-Output.ALT.ALT <- sim(1000, SimData.ALT, SimModel.ALT)
-
-anova(Output.NULL.NULL, Output.NULL.ALT)
-anova(Output.ALT.NULL, Output.ALT.ALT)
-getCutoffNested(Output.NULL.NULL, Output.NULL.ALT)
-getCutoffNested(Output.ALT.NULL, Output.ALT.ALT)
-
-plotCutoffNested(Output.ALT.NULL, Output.ALT.ALT, alpha=0.05)
-
-getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT)
-getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, cutoff=c(Chi=3.84, CFI=-0.10))
-
-plotPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT)
-plotPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT, usedFit="CFI")
-
-# Continuous N
-
-
-Output.NULL.NULL <- sim(NULL, SimData.NULL, SimModel.NULL, n=50:500)
-Output.ALT.NULL <- sim(NULL, SimData.ALT, SimModel.NULL, n=50:500)
-Output.NULL.ALT <- sim(NULL, SimData.NULL, SimModel.ALT, n=50:500)
-Output.ALT.ALT <- sim(NULL, SimData.ALT, SimModel.ALT, n=50:500)
-
-anova(Output.NULL.NULL, Output.NULL.ALT)
-anova(Output.ALT.NULL, Output.ALT.ALT)
-getCutoffNested(Output.NULL.NULL, Output.NULL.ALT, nVal = 100)
-getCutoffNested(Output.ALT.NULL, Output.ALT.ALT, nVal = 100)
-
-plotCutoffNested(Output.ALT.NULL, Output.ALT.ALT, alpha=0.05)
-
-getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT, nVal = 250)
-getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, cutoff=c(Chi=3.84, CFI=-0.10), nVal = 250)
-
-plotPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT)
-plotPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT, usedFit="CFI")
-
-plotPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT, logistic=FALSE)
-plotPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT, usedFit="CFI", logistic=FALSE)
-
-###################### Continuous getPower ################################
-
-u2 <- simUnif(-0.2, 0.2)
-n1 <- simNorm(0, 0.1)
-u79 <- simUnif(0.7, 0.9)
-
-loading.null <- matrix(0, 6, 1)
-loading.null[1:6, 1] <- NA
-LY.NULL <- bind(loading.null, 0.7)
-RPS.NULL <- binds(diag(1))
-RTE <- binds(diag(6))
-CFA.Model.NULL <- simSetCFA(LY = LY.NULL, RPS = RPS.NULL, RTE = RTE)
-
-error.cor.mis <- matrix(NA, 6, 6)
-diag(error.cor.mis) <- 1
-RTE.Mis <- binds(error.cor.mis, "rnorm(1,0,0.1)")
-CFA.Model.NULL.Mis <- simMisspecCFA(RTE = RTE.Mis)
-
-SimData.NULL <- simData(CFA.Model.NULL, 500, misspec = CFA.Model.NULL.Mis)
-SimModel <- simModel(CFA.Model.NULL)
-Output.NULL <- sim(NULL, SimData.NULL, SimModel, n=50:500)
-
-loading.alt <- matrix(0, 6, 2)
-loading.alt[1:3, 1] <- NA
-loading.alt[4:6, 2] <- NA
-LY.ALT <- bind(loading.alt, 0.7)
-latent.cor.alt <- matrix(NA, 2, 2)
-diag(latent.cor.alt) <- 1
-RPS.ALT <- binds(latent.cor.alt, 0.7)
-CFA.Model.ALT <- simSetCFA(LY = LY.ALT, RPS = RPS.ALT, RTE = RTE)
-
-loading.alt.mis <- matrix(NA, 6, 2)
-loading.alt.mis[is.na(loading.alt)] <- 0
-LY.alt.mis <- bind(loading.alt.mis, "runif(1,-.2,.2)")
-CFA.Model.alt.mis <- simMisspecCFA(LY = LY.alt.mis, RTE=RTE.Mis)
-
-SimData.ALT <- simData(CFA.Model.ALT, 500, misspec = CFA.Model.alt.mis)
-Output.ALT <- sim(NULL, SimData.ALT, SimModel, n=50:500)
-
-getPowerFit(Output.ALT, nullObject=Output.NULL, nVal=250)
-
-cutoff <- getCutoff(Output.NULL, 0.05, nVal=250)
-getPowerFit(Output.ALT, cutoff, nVal=250)
-
-cutoff2 <- c(RMSEA = 0.05, CFI = 0.95, TLI = 0.95, SRMR = 0.06)
-getPowerFit(Output.ALT, cutoff, nVal=250, condCutoff=FALSE)
-
-plotPowerFit(Output.ALT, Output.NULL, alpha=0.05)
-plotPowerFit(Output.ALT, Output.NULL, alpha=0.05, usedFit=c("RMSEA", "SRMR", "CFI"))
-plotPowerFit(Output.ALT, Output.NULL, alpha=0.05, logistic = FALSE)
-plotPowerFit(Output.ALT, Output.NULL, alpha=0.05, usedFit=c("RMSEA", "SRMR", "CFI"), logistic = FALSE)
-
-plotPowerFit(Output.ALT, Output.NULL, cutoff=cutoff2, alpha=0.05)
-plotPowerFit(Output.ALT, Output.NULL, cutoff=cutoff2, alpha=0.05, logistic = FALSE)
-
-###################### Continuous getPower ################################
-
-u2 <- simUnif(-0.2, 0.2)
-n1 <- simNorm(0, 0.1)
-u79 <- simUnif(0.7, 0.9)
-
-loading.null <- matrix(0, 6, 1)
-loading.null[1:6, 1] <- NA
-LY.NULL <- bind(loading.null, 0.7)
-RPS.NULL <- binds(diag(1))
-RTE <- binds(diag(6))
-CFA.Model.NULL <- simSetCFA(LY = LY.NULL, RPS = RPS.NULL, RTE = RTE)
-
-error.cor.mis <- matrix(NA, 6, 6)
-diag(error.cor.mis) <- 1
-RTE.Mis <- binds(error.cor.mis, "rnorm(1,0,0.1)")
-CFA.Model.NULL.Mis <- simMisspecCFA(RTE = RTE.Mis)
-
-SimData.NULL <- simData(CFA.Model.NULL, 500, misspec = CFA.Model.NULL.Mis)
-SimModel <- simModel(CFA.Model.NULL)
-Output.NULL <- sim(NULL, SimData.NULL, SimModel, n=50:500, pmMCAR=seq(0, 0.4, 0.1))
-
-loading.alt <- matrix(0, 6, 2)
-loading.alt[1:3, 1] <- NA
-loading.alt[4:6, 2] <- NA
-LY.ALT <- bind(loading.alt, 0.7)
-latent.cor.alt <- matrix(NA, 2, 2)
-diag(latent.cor.alt) <- 1
-RPS.ALT <- binds(latent.cor.alt, 0.7)
-CFA.Model.ALT <- simSetCFA(LY = LY.ALT, RPS = RPS.ALT, RTE = RTE)
-
-loading.alt.mis <- matrix(NA, 6, 2)
-loading.alt.mis[is.na(loading.alt)] <- 0
-LY.alt.mis <- bind(loading.alt.mis, "runif(1,-.2,.2)")
-CFA.Model.alt.mis <- simMisspecCFA(LY = LY.alt.mis, RTE=RTE.Mis)
-
-SimData.ALT <- simData(CFA.Model.ALT, 500, misspec = CFA.Model.alt.mis)
-Output.ALT <- sim(NULL, SimData.ALT, SimModel, n=50:500, pmMCAR=seq(0, 0.4, 0.1))
-
-getPowerFit(Output.ALT, Output.NULL, nVal=250)
-
-cutoff <- getCutoff(Output.NULL, 0.05, nVal=250)
-getPowerFit(Output.ALT, cutoff, nVal=250)
-
-cutoff2 <- c(RMSEA = 0.05, CFI = 0.95, TLI = 0.95, SRMR = 0.06)
-getPowerFit(Output.ALT, cutoff, nVal=250, condCutoff=FALSE)
-
-plotPowerFit(Output.ALT, Output.NULL, alpha=0.05)
-plotPowerFit(Output.ALT, Output.NULL, alpha=0.05, usedFit=c("RMSEA", "SRMR", "CFI"))
-plotPowerFit(Output.ALT, Output.NULL, alpha=0.05, logistic = FALSE)
-plotPowerFit(Output.ALT, Output.NULL, alpha=0.05, usedFit=c("RMSEA", "SRMR", "CFI"), logistic = FALSE)
-
-plotPowerFit(Output.ALT, Output.NULL, cutoff=cutoff2, alpha=0.05)
-plotPowerFit(Output.ALT, Output.NULL, cutoff=cutoff2, alpha=0.05, logistic = FALSE)
-
-# Fix Example 6 Wiki
-# Make sim to save nonconvergent param value and # of replications
 
