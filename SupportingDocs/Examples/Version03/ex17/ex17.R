@@ -1,37 +1,37 @@
 library(simsem)
-u35 <- simUnif(0.1, 0.3)
-u57 <- simUnif(0.5, 0.7)
-u2 <- simUnif(-0.2, 0.2)
 
 path <- matrix(0, 9, 9)
-path[4, 1] <- path[7, 4] <- NA
-path[5, 2] <- path[8, 5] <- NA
-path[6, 3] <- path[9, 6] <- NA
-path[5, 1] <- path[8, 4] <- NA
-path[6, 2] <- path[9, 5] <- NA
+path[4, 1] <- path[7, 4] <- "con1"
+path[5, 2] <- path[8, 5] <- "con2"
+path[6, 3] <- path[9, 6] <- "con3"
+path[5, 1] <- path[8, 4] <- "con4"
+path[6, 2] <- path[9, 5] <- "con5"
 pathVal <- matrix(0, 9, 9)
-pathVal[4, 1] <- pathVal[7, 4] <- "u57"
-pathVal[5, 2] <- pathVal[8, 5] <- "u57"
-pathVal[6, 3] <- pathVal[9, 6] <- "u57"
-pathVal[5, 1] <- pathVal[8, 4] <- "u35"
-pathVal[6, 2] <- pathVal[9, 5] <- "u35"
-BE <- simMatrix(path, pathVal)
+pathVal[4, 1] <- pathVal[7, 4] <- "runif(1, 0.5, 0.7)"
+pathVal[5, 2] <- pathVal[8, 5] <- "runif(1, 0.5, 0.7)"
+pathVal[6, 3] <- pathVal[9, 6] <- "runif(1, 0.5, 0.7)"
+pathVal[5, 1] <- pathVal[8, 4] <- "runif(1, 0.3, 0.5)"
+pathVal[6, 2] <- pathVal[9, 5] <- "runif(1, 0.3, 0.5)"
+BE <- bind(path, pathVal)
+
 facCor <- diag(9)
 facCor[1, 2] <- facCor[2, 1] <- NA
 facCor[1, 3] <- facCor[3, 1] <- NA
 facCor[2, 3] <- facCor[3, 2] <- NA
-RPS <- symMatrix(facCor, "u35")
+RPS <- binds(facCor, "runif(1, 0.3, 0.5)")
+
 loading <- matrix(0, 27, 9)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-loading[7:9, 3] <- NA
-loading[10:12, 4] <- NA
-loading[13:15, 5] <- NA
-loading[16:18, 6] <- NA
-loading[19:21, 7] <- NA
-loading[22:24, 8] <- NA
-loading[25:27, 9] <- NA
-LY <- simMatrix(loading, "u57")
+loading[1:3, 1] <- c("con6", "con7", "con8")
+loading[4:6, 2] <- c("con9", "con10", "con11")
+loading[7:9, 3] <- c("con12", "con13", "con14")
+loading[10:12, 4] <- c("con6", "con7", "con8")
+loading[13:15, 5] <- c("con9", "con10", "con11")
+loading[16:18, 6] <- c("con12", "con13", "con14")
+loading[19:21, 7] <- c("con6", "con7", "con8")
+loading[22:24, 8] <- c("con9", "con10", "con11")
+loading[25:27, 9] <- c("con12", "con13", "con14")
+LY <- bind(loading, "runif(1, 0.5, 0.7)")
+
 errorCor <- diag(27)
 errorCor[1, 10] <- errorCor[10, 19] <- NA
 errorCor[2, 11] <- errorCor[11, 20] <- NA
@@ -74,105 +74,13 @@ errorCorVal[8, 26] <- 0.04
 errorCorVal[9, 27] <- 0.04
 errorCorVal <- errorCorVal + t(errorCorVal)
 diag(errorCorVal) <- 1
-TE <- symMatrix(errorCor, errorCorVal)
-longMed <- simSetSEM(BE=BE, RPS=RPS, LY=LY, RTE=TE)
+RTE <- binds(errorCor, errorCorVal)
 
-c1 <- matrix(NA, 2, 1)
-c1[,1] <- c(4, 7)
-rownames(c1) <- rep("VPS", 2)
+VE <- bind(c(NA, NA, NA, "con15", "con16", "con17", "con15", "con16", "con17"), 1)
 
-c2 <- matrix(NA, 2, 1)
-c2[,1] <- c(5, 8)
-rownames(c2) <- rep("VPS", 2)
+longMed <- model(BE=BE, RPS=RPS, LY=LY, RTE=RTE, VE=VE, modelType="SEM")
 
-c3 <- matrix(NA, 2, 1)
-c3[,1] <- c(6, 9)
-rownames(c3) <- rep("VPS", 2)
-
-c4 <- matrix(NA, 2, 2)
-c4[1,] <- c(4, 1)
-c4[2,] <- c(7, 4)
-rownames(c4) <- rep("BE", 2)
-
-c5 <- matrix(NA, 2, 2)
-c5[1,] <- c(5, 2)
-c5[2,] <- c(8, 5)
-rownames(c5) <- rep("BE", 2)
-
-c6 <- matrix(NA, 2, 2)
-c6[1,] <- c(6, 3)
-c6[2,] <- c(9, 6)
-rownames(c6) <- rep("BE", 2)
-
-c7 <- matrix(NA, 2, 2)
-c7[1,] <- c(5, 1)
-c7[2,] <- c(8, 4)
-rownames(c7) <- rep("BE", 2)
-
-c8 <- matrix(NA, 2, 2)
-c8[1,] <- c(6, 2)
-c8[2,] <- c(9, 5)
-rownames(c8) <- rep("BE", 2)
-
-c9 <- matrix(NA, 3, 2)
-c9[1,] <- c(1, 1)
-c9[2,] <- c(10, 4)
-c9[3,] <- c(19, 7)
-rownames(c9) <- rep("LY", 3)
-
-c10 <- matrix(NA, 3, 2)
-c10[1,] <- c(2, 1)
-c10[2,] <- c(11, 4)
-c10[3,] <- c(20, 7)
-rownames(c10) <- rep("LY", 3)
-
-c11 <- matrix(NA, 3, 2)
-c11[1,] <- c(3, 1)
-c11[2,] <- c(12, 4)
-c11[3,] <- c(21, 7)
-rownames(c11) <- rep("LY", 3)
-
-c12 <- matrix(NA, 3, 2)
-c12[1,] <- c(4, 2)
-c12[2,] <- c(13, 5)
-c12[3,] <- c(22, 8)
-rownames(c12) <- rep("LY", 3)
-
-c13 <- matrix(NA, 3, 2)
-c13[1,] <- c(5, 2)
-c13[2,] <- c(14, 5)
-c13[3,] <- c(23, 8)
-rownames(c13) <- rep("LY", 3)
-
-c14 <- matrix(NA, 3, 2)
-c14[1,] <- c(6, 2)
-c14[2,] <- c(15, 5)
-c14[3,] <- c(24, 8)
-rownames(c14) <- rep("LY", 3)
-
-c15 <- matrix(NA, 3, 2)
-c15[1,] <- c(7, 3)
-c15[2,] <- c(16, 6)
-c15[3,] <- c(25, 9)
-rownames(c15) <- rep("LY", 3)
-
-c16 <- matrix(NA, 3, 2)
-c16[1,] <- c(8, 3)
-c16[2,] <- c(17, 6)
-c16[3,] <- c(26, 9)
-rownames(c16) <- rep("LY", 3)
-
-c17 <- matrix(NA, 3, 2)
-c17[1,] <- c(9, 3)
-c17[2,] <- c(18, 6)
-c17[3,] <- c(27, 9)
-rownames(c17) <- rep("LY", 3)
-
-con <- simEqualCon(c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15, c16, c17, modelType="SEM", conBeforeFill=FALSE)
-
-datModel <- simData(longMed, 200, equalCon=con)
-SimModel <- simModel(longMed, equalCon=con)
-output <- simResult(1000, datModel, SimModel)
+output <- sim(1000, n=200, longMed, createOrder = c(3, 2, 1))
 getCutoff(output, 0.05)
 plotCutoff(output, 0.05)
 summary(output)
@@ -184,9 +92,9 @@ LY2[7:9, 3] <- NA
 BE2 <- matrix(0, 3, 3)
 BE2[2,1] <- NA
 BE2[3,2] <- NA
-crossMed <- simParamSEM(LY=LY2, BE=BE2)
-SimModel2 <- simModel(crossMed, indLab=19:27) 
-output2 <- simResult(1000, datModel, SimModel2)
+crossMed <- estmodel(LY=LY2, BE=BE2, indLab=paste0("y", 19:27), modelType="SEM")
+
+output2 <- sim(1000, n=200, crossMed, generate=longMed, createOrder = c(3, 2, 1))
 getCutoff(output2, 0.05)
 plotCutoff(output2, 0.05)
 summary(output2)

@@ -1019,20 +1019,14 @@ population <- model(LY=LY, PS=PS, BE=BE, TE=TE, modelType="SEM")
 Output4 <- setPopulation(Output4, population) 
 summary(Output4)
 
-############################# Example 16 ############################################
-
-# install.packages("semTools", repos="http://rweb.quant.ku.edu/kran")
-# install.packages("simsem", repos="http://rweb.quant.ku.edu/kran")
-
-# Need to be done: Fill, Constraint, and Misspec
-#library(simsem)
+############################# Example 17 ############################################
 
 path <- matrix(0, 9, 9)
-path[4, 1] <- path[7, 4] <- "con4"
-path[5, 2] <- path[8, 5] <- "con5"
-path[6, 3] <- path[9, 6] <- "con6"
-path[5, 1] <- path[8, 4] <- "con7"
-path[6, 2] <- path[9, 5] <- "con8"
+path[4, 1] <- path[7, 4] <- "con1"
+path[5, 2] <- path[8, 5] <- "con2"
+path[6, 3] <- path[9, 6] <- "con3"
+path[5, 1] <- path[8, 4] <- "con4"
+path[6, 2] <- path[9, 5] <- "con5"
 pathVal <- matrix(0, 9, 9)
 pathVal[4, 1] <- pathVal[7, 4] <- "runif(1, 0.5, 0.7)"
 pathVal[5, 2] <- pathVal[8, 5] <- "runif(1, 0.5, 0.7)"
@@ -1047,16 +1041,17 @@ facCor[2, 3] <- facCor[3, 2] <- NA
 RPS <- binds(facCor, "runif(1, 0.3, 0.5)")
 
 loading <- matrix(0, 27, 9)
-loading[1:3, 1] <- c("con9", "con10", "con11")
-loading[4:6, 2] <- c("con12", "con13", "con14")
-loading[7:9, 3] <- c("con15", "con16", "con17")
-loading[10:12, 4] <- c("con9", "con10", "con11")
-loading[13:15, 5] <- c("con12", "con13", "con14")
-loading[16:18, 6] <- c("con15", "con16", "con17")
-loading[19:21, 7] <- c("con9", "con10", "con11")
-loading[22:24, 8] <- c("con12", "con13", "con14")
-loading[25:27, 9] <- c("con15", "con16", "con17")
+loading[1:3, 1] <- c("con6", "con7", "con8")
+loading[4:6, 2] <- c("con9", "con10", "con11")
+loading[7:9, 3] <- c("con12", "con13", "con14")
+loading[10:12, 4] <- c("con6", "con7", "con8")
+loading[13:15, 5] <- c("con9", "con10", "con11")
+loading[16:18, 6] <- c("con12", "con13", "con14")
+loading[19:21, 7] <- c("con6", "con7", "con8")
+loading[22:24, 8] <- c("con9", "con10", "con11")
+loading[25:27, 9] <- c("con12", "con13", "con14")
 LY <- bind(loading, "runif(1, 0.5, 0.7)")
+
 errorCor <- diag(27)
 errorCor[1, 10] <- errorCor[10, 19] <- NA
 errorCor[2, 11] <- errorCor[11, 20] <- NA
@@ -1101,13 +1096,12 @@ errorCorVal <- errorCorVal + t(errorCorVal)
 diag(errorCorVal) <- 1
 RTE <- binds(errorCor, errorCorVal)
 
-
-VE <- bind(c(NA, NA, NA, "con1", "con2", "con3", "con1", "con2", "con3"), 1)
+VE <- bind(c(NA, NA, NA, "con15", "con16", "con17", "con15", "con16", "con17"), 1)
 
 longMed <- model(BE=BE, RPS=RPS, LY=LY, RTE=RTE, VE=VE, modelType="SEM")
 
-dat <- generate(longMed, 200, params=TRUE)
-# output <- sim(10, n=200, longMed)
+dat <- generate(longMed, 200, params=TRUE, createOrder =c(3, 2, 1))
+output <- sim(10, n=200, longMed, createOrder =c(3, 2, 1))
 
 LY2 <- matrix(0, 9, 3)
 LY2[1:3, 1] <- NA
@@ -1117,18 +1111,12 @@ BE2 <- matrix(0, 3, 3)
 BE2[2,1] <- NA
 BE2[3,2] <- NA
 crossMed <- estmodel(LY=LY2, BE=BE2, indLab=paste0("y", 19:27), modelType="SEM")
-# output2 <- sim(10, n=200, crossMed, generate=longMed)
+output2 <- sim(10, n=200, crossMed, generate=longMed, createOrder = c(3, 2, 1))
+getCutoff(output2, 0.05)
+plotCutoff(output2, 0.05)
+summary(output2)
 
-# Need conBeforeFill, misBeforeFill, and misBeforeCon
-
-# n05 <- simNorm(0, 0.05)
-# pathMis <- matrix(0, 9, 9)
-# pathMis[6, 1] <- pathMis[9, 4] <- NA
-# BEMis <- bind(pathMis, "n05")
-# longMedMis <- simMisspecSEM(BE=BEMis, misBeforeFill=FALSE, misBeforeCon=FALSE)
-# datModel <- simData(longMed, 200, misspec=longMedMis, equalCon=con)
-
-############################## Example 17 ###########################
+############################## Example 18 ###########################
 
 #library(simsem)
 loading <- matrix(0, 6, 2)
