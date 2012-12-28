@@ -7,7 +7,7 @@
 	Data generation template and analysis template for simulation.
 }
 \description{
-	Creates a data generation and analysis template (lavaan parameter table) for simulations with structural equation models based on Y-side LISREL design matrices. Each corresponds to a LISREL matrix, but must be a \code{\linkS4class{SimMatrix}} or \code{\linkS4class{SimVector}} built using \code{bind}. In addition to the usual Y-side matrices in LISREL, both PS and TE can be specified using correlations (RPS, RTE) and scaled by a vector of residual variances (VTE, VPS) or total variances (VY, VE). Multiple groups are supported by passing lists of \code{\linkS4class{SimMatrix}} or \code{\linkS4class{SimVector}} to arguments, or by specifying the number of groups. 
+	This function creates a model template (lavaan parameter table), which can be used for data generation and/or analysis for simulated structural equation modeling using simsem. Models are specified using Y-side parameter matrices with LISREL syntax notation. Each parameter matrix must be a \code{\linkS4class{SimMatrix}} or \code{\linkS4class{SimVector}} built using \code{bind}. In addition to the usual Y-side matrices in LISREL, both PS and TE can be specified using correlation matrices (RPS, RTE) and scaled by a vector of residual variances (VTE, VPS) or total variances (VY, VE). Multiple group models can be created by passing lists of \code{\linkS4class{SimMatrix}} or \code{\linkS4class{SimVector}} to arguments, or by simply specifying the number of groups when all group models are identical. 
 }
 \usage{
 model(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = NULL, 
@@ -27,49 +27,49 @@ model.sem(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL,
 }
 \arguments{
   \item{LY}{
-	Factor loading matrix from endogenous factors to Y indicators (need to be \code{\linkS4class{SimMatrix}} object).
+	Factor loading matrix from endogenous factors to Y indicators (must be \code{\linkS4class{SimMatrix}} object).
 }
   \item{PS}{
-	Residual covariance matrix among endogenous factors (need to be \code{\linkS4class{SimMatrix}} object).
+	Residual variance-covariance matrix among endogenous factors (must be \code{\linkS4class{SimMatrix}} object). Either RPS or PS (but not both) must be specified in SEM and CFA models.
 }
   \item{RPS}{
-	Residual correlation matrix among endogenous factors (need to be \code{\linkS4class{SimMatrix}} object).
+	Residual correlation matrix among endogenous factors (must be \code{\linkS4class{SimMatrix}} object). Either RPS or PS (but not both) must be specified in SEM and CFA models.
 }
   \item{TE}{
-	Measurement error covariance matrix among Y indicators (need to be \code{\linkS4class{SimMatrix}} object).
+	Measurement error variance-covariance matrix among Y indicators (must be \code{\linkS4class{SimMatrix}} object). Either RTE or TE (but not both) must be specified in SEM and CFA models.
 }
   \item{RTE}{
-	Measurement error correlation matrix among Y indicators (need to be \code{\linkS4class{SimMatrix}} object).
+	Measurement error correlation matrix among Y indicators (must be \code{\linkS4class{SimMatrix}} object). Either RTE or TE (but not both) must be specified in SEM and CFA models.
 }
   \item{BE}{
-	Regression coefficient matrix among endogenous factors (need to be \code{\linkS4class{SimMatrix}} object).
+	Regression coefficient matrix among endogenous factors (must be \code{\linkS4class{SimMatrix}} object). BE must be specified in path analysis and SEM models. 
 }
   \item{VTE}{
-	Measurement error variance of indicators (need to be \code{\linkS4class{SimVector}} object).
+	Measurement error variance of indicators (must be \code{\linkS4class{SimVector}} object). Either VTE or VY (but not both) can be specified when RTE (instead of TE) is specified.
 }
   \item{VY}{
-	Total variance of indicators (need to be \code{\linkS4class{SimVector}} object). NOTE: Either measurement error variance or indicator variance is specified. Both cannot be simultaneously specified.
+	Total variance of indicators (must be \code{\linkS4class{SimVector}} object). Either VTE or VY (but not both) can be specified when RTE (instead of TE) is specified.
 }
   \item{VPS}{
-	Residual variance of factors (need to be \code{\linkS4class{SimVector}} object).
+	Residual variance of factors (must be \code{\linkS4class{SimVector}} object). Either VPS or VE (but not both) can be specified when RPS (instead of PS) is specified.
 }
   \item{VE}{
-  Total variance of of factors (need to be \code{\linkS4class{SimVector}} object). NOTE: Either residual variance of factors or total variance of factors is specified. Both cannot be simulatneously specified.
+  Total variance of of factors (must be \code{\linkS4class{SimVector}} object). Either VPS or VE (but not both) can be specified when RPS (instead of PS) is specified.
 }  
   \item{TY}{
-	Measurement intercepts of Y indicators. (need to be \code{\linkS4class{SimVector}} object).
+	Measurement intercepts of Y indicators (must be \code{\linkS4class{SimVector}} object). Either TY or MY (but not both) can be specified. 
 }
   \item{AL}{
-	Endogenous factor intercept (need to be \code{\linkS4class{SimVector}} object).
+	Endogenous factor intercepts (must be \code{\linkS4class{SimVector}} object). Either AL or ME (but not both) can be specified. 
 }
   \item{MY}{
-	Overall Y indicator means. (need to be \code{\linkS4class{SimVector}} object). NOTE: Either measurement intercept of indicator mean can be specified. Both cannot be specified simultaneously.
+	Y indicator means (must be \code{\linkS4class{SimVector}} object). Either TY or MY (but not both) can be specified. 
 }
   \item{ME}{
-	Total mean of endogenous factors (need to be \code{\linkS4class{SimVector}} object). NOTE: Either endogenous factor intercept or total mean of endogenous factor is specified. Both cannot be simultaneously specified.
+	Total mean of endogenous factors (must be \code{\linkS4class{SimVector}} object). Either AL or ME (but not both) can be specified. 
 }
   \item{modelType}{
-	"CFA", "Sem", or "Path". This is specified to ensure that the analysis and data generation template created based on specified matrices in model correspond to what the user intends.
+	"CFA", "Sem", or "Path". Model type must be specified to ensure that the matrices specified in model templates for data generation and analysis correspond to what the user intends.
 }
   \item{indLab}{
 	Character vector of indicator labels. If left blank, automatic labels will be generated as  \code{y1}, \code{y2}, ... \code{yy}.
@@ -81,19 +81,19 @@ model.sem(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL,
 	Character of group-variable label (not the names of each group). If left blank, automatic labels will be generated as \code{group}
 }
   \item{ngroups}{
-	Integer. Number of groups for data generation, defaults to 1. If larger than one, all specified matrices will be repeated for each additional group. If any matrix argument is a list, the length of this list will be the number of groups and ngroups is ignored.
+	Number of groups for data generation (defaults to 1). Should only be specified for multiple group models in which all parameter matrices are identical across groups (when ngroups > 1, specified matrices are replicated for all groups). For multiple group models in which parameter matrices differ among groups, parameter matrices should instead be specified as a list (if any matrix argument is a list, the number of groups will be equal to the list's length, and the ngroups argument will be ignored).
 }
   \item{con}{
-	Additional parameters (phantom variables), equality constraints, and inequality constraints that users wish to specify in the model. The additional parameters are specified in lavaan syntax. The allowed operator are ":=" (is defined as), "==" (is equal to), "<" (is less than), and ">" (is greater than). Names used in the syntax are the labels defined on free parameters in the model except that the left-handed-side name of ":=" is a new parameter name. On the right hand side of all operators, any mathematical expressions are allowed, e.g., \code{"newparam := (load1 + load2 + load3)/3"}. For the "<" and ">" operators in data generation, if the parameters relation is not hold (e.g., the left hand side is less than the right hand side in the ">" operator), the left hand side parameters will be changed such that the relation holds with a very small difference (i.e., 0.000001). For example, in "load1 > load2", if load1 is 0.5 and load2 is 0.6, load1 will be changed to 0.6 + 0.000001 = 0.600001. 
+	Additional parameters (phantom variables), equality constraints, and inequality constraints. Additional parameters must be specified using lavaan syntax. Allowed operators are ":=" (is defined as), "==" (is equal to), "<" (is less than), and ">" (is greater than). Names used in syntax must correspond to labels defined on free parameters in the model (with the exception that the name to the left of ":=" is a new parameter name). On the right hand side of all operators, any mathematical expressions are allowed, e.g., \code{"newparam := (load1 + load2 + load3)/3"}. For the "<" and ">" operators in data generation, if the specified relation is at odds with parameter specifications (e.g., the parameter to the left of the ">" operator is less that the parameter to the right), the left hand side parameter will be changed so that the relation holds with a very small difference (i.e., 0.000001). For example, in "load1 > load2", if load1 is 0.5 and load2 is 0.6, load1 will be changed to 0.6 + 0.000001 = 0.600001. 
 }
 }
 
 \details{
 The \emph{simsem} package is intricately tied to the \emph{lavaan} package for analysis of structural equation models. The analysis template that is generated by \code{model} is a lavaan parameter table, a low-level access point to lavaan that allows repeated analyses to happen more rapidly. If desired, the parameter table generated can be used directly with lavaan for many analyses.
 
-The data generation template is simply a list of \code{SimMatrix} or \code{SimVector}. The \code{SimSem} object can be passed to the function \code{generate} to generate data.
+The data generation template is simply a list of \code{SimMatrix} or \code{SimVector} objects. The \code{SimSem} object can be passed to the function \code{generate} to generate data, or can be passed to the function \code{sim} to generate and/or analyze data.
 
-If multiple group data is desired, the user can optionally either specify the number of groups argument, or pass a list of  \code{SimMatrix} or \code{SimVector} to any of the matrix arguments. The length of this list will be the number of groups. If only one argument is a list, all other arguments will be automatically replicated to that length, parameters will be identified in the same way, have the same population parameter value/distribution, and have the same misspecification. If only ngroups is specified, all arguments will be replicated in this fashion. If equality constraints are present during the automatic replication, these parameters will be constrained to be equal across groups.	
+To simulate multiple group data, users can either specify a integer in the ngroups argument (which creates a list of identical model arguments for each group), or pass a list of  \code{SimMatrix} or \code{SimVector} to any of the matrix arguments with length(s) equal to the number of groups desired (this approach will cause the ngroups argument to be ignored). If only one argument is a list, all other arguments will be replicated across groups (with the same parameter identification, population parameter values/distributions, and misspecification). If equality constraints are specified, these parameters will be constrained to be equal across groups.	
 
 The \code{model.cfa}, \code{model.path}, and \code{model.sem} are the shortcuts for the \code{model} function when \code{modelType} are \code{"CFA"}, \code{"Path"}, and \code{"SEM"}, respectively.
 }
