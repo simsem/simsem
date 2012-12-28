@@ -7,7 +7,7 @@
 	Create a data distribution object
 }
 \usage{
-bindDist(margins, ..., p = NULL, keepScale = TRUE, reverse = FALSE, copula = NULL)
+bindDist(margins, ..., p = NULL, keepScale = TRUE, reverse = FALSE)
 }
 \arguments{
   \item{margins}{
@@ -25,15 +25,9 @@ bindDist(margins, ..., p = NULL, keepScale = TRUE, reverse = FALSE, copula = NUL
   \item{reverse}{
 	A vector representing whether each variable is mirrored or not. If \code{TRUE}, reverse the distribution of a variable (e.g., from positive skewed to negative skewed. If one logical value is specified, it will apply to all variables.
 }
-  \item{copula}{
-	A copula class that represents the multivariate distribution, such as \code{\link[copula]{ellipCopula}}, \code{\link[copula]{normalCopula}, or \code{\link[copula]{archmCopula}}. When this copula argument is specified, the data-transformation method from Mair, Satorra, and Bentler (2012) is used. If this copula argument is not specified, the naive Gaussian copula is used such that the correlation matrix is direct applied to the multivariate Gaussian copula. The correlation matrix will be equivalent to the Spearman's correlation (rank correlation) of the resulting data. 
-}
 }
 \value{
 	\code{\linkS4class{SimDataDist}} that saves analysis result from simulate data.
-}
-\references{
-Mair, P., Satorra, A., & Bentler, P. M. (2012). Generating nonnormal multivariate data using copulas: Applications to SEM. \emph{Multivariate Behavioral Research, 47}, 547-565.
 }
 \author{
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
@@ -44,8 +38,6 @@ Mair, P., Satorra, A., & Bentler, P. M. (2012). Generating nonnormal multivariat
 	}
 }
 \examples{
-library(copula)
-
 # Create three-dimensional distribution by gaussian copula with 
 # the following marginal distributions
 #   1. t-distribution with df = 2
@@ -60,11 +52,4 @@ d3 <- list(mean=0, sd=1)
 # Create a data distribution object by setting the names of each distribution
 # and their arguments
 dist <- bindDist(c("t", "chisq", "norm"), d1, d2, d3)
-
-# Create data by using Gumbel Copula as the multivariate distribution
-dist <- bindDist(c("t", "chisq", "norm"), d1, d2, d3, copula = gumbelCopula(2, dim = 3))
-
-# Reverse the direction of chi-square distribution from positively skew to negatively skew
-dist <- bindDist(c("t", "chisq", "norm"), d1, d2, d3, copula = gumbelCopula(2, dim = 3),
-	reverse = c(FALSE, TRUE, FALSE))
 }
