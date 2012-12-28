@@ -4,7 +4,7 @@
 	Run a monte carlo simulation with a structural equation model.
 }
 \description{
-	This function can be used to generate and analyze simulated data from \code{\linkS4class{SimSem}} objects created with the \code{\link{model}} function. In this function, parameters are drawn from the specified data-generation model and used to create data, specified missingness (if any) is imposed, and data are analyzed using the specified \code{\linkS4class{SimSem}} analysis model object. Provides a \code{\linkS4class{SimResult}}) object as ouput, which summarizes analyses across replications. Data can be transformed using the \code{datafun} argument. Additional output can be extracted using the \code{outfun} argument. Paralleled processing can be enabled using the \code{multicore} argument. The \code{sim} function can also be used to obtain raw data using the \code{dataOnly} argument, to analyze pre-existing data using the \code{rawData} argument, and to simulate data that follows the distribution of a real data set using the \code{rawData} argument.
+	This function will draw parameters in data-generation model, create data, impose missing, analyze data by the target model, and summarize the outputs across replications. Data can be transformed by the \code{datafun} argument. The additional output can be extracted by the \code{outfun} argument. Paralleled processing is also availabe by the \code{multicore} argument.
 }
 \usage{
 sim(nRep, model, n, generate = NULL, rawData = NULL, miss = NULL, datafun=NULL, outfun=NULL,
@@ -16,56 +16,56 @@ paramOnly = FALSE, dataOnly=FALSE, smartStart=FALSE, ...)
 }
 \arguments{
   \item{nRep}{
-	Number of replications. If any of the \code{n}, \code{pmMCAR}, or \code{pmMAR} arguments are specified as lists, the number of replications will default to the length of the list(s), and \code{nRep} need not be specified.
+	Number of replications. Users can specify as \code{NULL} and specify \code{n}, \code{pmMCAR}, and \code{pmMAR}
 }
   \item{model}{
-	\code{\linkS4class{SimSem}} object created by \code{\link{model}}. If the \code{generate} argument is not specified, then the object in the \code{model} argument will be used for both data generation and analysis. If \code{generate} is specified, then the \code{model} argument will be used for data analysis only.
+	\code{\linkS4class{SimSem}} object created by \code{\link{model}}. Will be used to generate data and analyze it.
 }
   \item{n}{
-	Sample size. Either a single value, or a list of values to vary sample size across replications. The \code{n} argument can also be specified as a random distribution object; if any resulting values are non-integers, the decimal will be rounded. 
+	Sample size. This argument is not necessary except the user wish to vary sample size across replications. The sample size here is a vector of sample size in integers. For the random distribution object, if the resulting value has decimal, the value will be rounded. 
 }
   \item{generate}{
-	\code{\linkS4class{SimSem}} object created using the \code{\link{model}} function. If included, this argument will be used to generate data instead of the code{\linkS4class{SimSem}} object specified in the \code{model} option.
+	\code{\linkS4class{SimSem}} object created by \code{\link{model}}. If included, this will be used to generate data instead of the code{\linkS4class{SimSem}} object specified in the \code{model} option.
 }
   \item{rawData}{
-	If specified, a list of data objects to be used in simulations instead of generating data from a \code{SimSem} template.
+	If included, this data is used for simulations instead of being generated from the \code{SimSem} template. Should be a list of length nRep.
 }
   \item{miss}{
-	A missing data template created using the \code{\link{miss}} function.
+	Missing data handling template, created by the function \code{\link{miss}}.
 }
   \item{datafun}{
-	A function to be applied to each generated data set across replications.
+	Function to be applied to generated data set at each replication.
 }
   \item{outfun}{
-	A function to be applied to the \code{\linkS4class{lavaan}} output at each replication. Output from this function in each replication will be saved in the simulation output (\code{\linkS4class{SimResult}}), and can be obtained using the \code{\link{getExtraOutput}} function.
+	Function to be applied to the \code{\linkS4class{lavaan}} output at each replication. The output of this function in each replication will be saved in the simulation output (\code{\linkS4class{SimResult}}). The extra outputs can be obtained by the \code{\link{getExtraOutput}} function.
 }
   \item{pmMCAR}{
-	The percentage of data completely missing at random (0 <= pmMCAR < 1). Either a single value or a vector of values in order to vary pmMCAR across replications (with length equal to nRep or a divisor of nRep). The \code{objMissing} argument is only required when specifying complex missing value data generation, or when using multiple imputation. 
+	The percent completely missing at random. This argument is not necessary except the user wish to vary percent missing completely at random across replications. The \code{pmMCAR} here is a vector of percent missing, which the values can be in between 0 and 1 only. The specification of \code{objMissing} is not needed (but is needed if users wish to specify complex missing value data generation or wish to use multiple imputation). 
 }
   \item{pmMAR}{
-	The percentage of data missing at random (0 <= pmCAR < 1). Either a single value or a vector of values in order to vary pmCAR across replications (with length equal to nRep or a divisor of nRep). The \code{objMissing} argument is only required when specifying complex missing value data generation, or when using multiple imputation. 
+	The percent missing at random. This argument is not necessary except the user wish to vary percent missing at random across replications. The \code{pmMAR} here is a vector of percent missing, which the values can be in between 0 and 1 only. The specification of \code{objMissing} is not needed (but is needed if users wish to specify complex missing value data generation or wish to use multiple imputation). 
 
 }
   \item{facDist}{ 
-	Factor distributions. Either a list of \code{\linkS4class{SimDataDist}} objects or a single \code{\linkS4class{SimDataDist}} object to give all factors the same distribution. Use when \code{sequential} is \code{TRUE}.
+	A \code{\linkS4class{SimDataDist}} object or list of objects for the distribution of factors. If one object is passed, all factors will have the same distribution. Use when \code{sequential} is \code{TRUE}.
 }
   \item{indDist}{ 
-	Indicator distributions. Either a list of \code{\linkS4class{SimDataDist}} objects or a single \code{\linkS4class{SimDataDist}} object to give all indicators the same distribution. Use when \code{sequential} is \code{FALSE}.
+	A \code{\linkS4class{SimDataDist}} object or list of objects for a distribution of indicators. If one object is passed, each indicator will have the same distribution. Use when \code{sequential} is \code{FALSE}.
 }
   \item{errorDist}{ 
 	An object or list of objects of type \code{SimDataDist} indicating the distribution of errors. If a single \code{SimDataDist} is specified, each error will be genrated with that distribution.
 }
   \item{sequential}{ 
-	If \code{TRUE}, a sequential method is used to generate data in which factor data is generated first, and is subsequently applied to a set of equations to obtain the indicator data. If \code{FALSE}, data is generated directly from model-implied mean and covariance of the indicators.
+	If \code{TRUE}, use a sequential method to create data such that the data from factor are generated first and apply to a set of equations to obtain the data of indicators. If \code{FALSE}, create data directly from model-implied mean and covariance of indicators.
 }
   \item{modelBoot}{ 
-	 When specified, a model-based bootstrap is used for data generation (for use with the \code{realData} argument). See \code{\link{draw}} for further information.
+	 When specified, a model-based bootstrap is used for data generation. See \code{\link{draw}} for further information. This argument requires real data to be passed to \code{realData}.
 }
   \item{realData}{ 
-	A data.frame containing real data. Generated data will follow the distribution of this data set.
+	A data.frame containing real data. The data generated will follow the distribution of this data set.
 }
   \item{maxDraw}{ 
-	The maximum number of attempts to draw a valid set of parameters (no negative error variance, standardized coefficients over 1).
+	Integer specifying the maximum number of attempts to draw a valid set of parameters (no negative error variance, standardized coefficients over 1).
 }
   \item{misfitType}{ 
 	Character vector indicating the fit measure used to assess the misfit of a set of parameters. Can be "f0", "rmsea", "srmr", or "all". 
@@ -86,7 +86,7 @@ paramOnly = FALSE, dataOnly=FALSE, smartStart=FALSE, ...)
     The order of 1) applying equality/inequality constraints, 2) applying misspecification, and 3) fill unspecified parameters (e.g., residual variances when total variances are specified). The specification of this argument is a vector of different orders of 1 (constraint), 2 (misspecification), and 3 (filling parameters). For example, \code{c(1, 2, 3)} is to apply constraints first, then add the misspecification, and finally fill all parameters. See the example of how to use it in the \code{\link{draw}} function.
 }
   \item{aux}{
-    The names of auxiliary variables saved in a vector.
+    The names of auxiliary variables saved in a vector
 }
   \item{seed}{ 
 	Random number seed. Reproducibility across multiple cores or clusters is ensured using R'Lecuyer package.
@@ -95,10 +95,10 @@ paramOnly = FALSE, dataOnly=FALSE, smartStart=FALSE, ...)
 	If \code{TRUE}, suppress warnings.
 }
   \item{multicore}{ 
-	If \code{TRUE}, multiple processors within a computer will be utilized.
+	Use multiple processors within a computer. Specify as TRUE to use it.
 }
   \item{cluster}{ 
-	Not applicable now. Used to specify nodes in hpc in order to be parallelizable.
+	Not applicable now. Use for specify nodes in hpc in order to be parallelizable.
 }
   \item{numProc}{ 
 	Number of processors for using multiple processors. If it is \code{NULL}, the package will find the maximum number of processors.
@@ -107,10 +107,10 @@ paramOnly = FALSE, dataOnly=FALSE, smartStart=FALSE, ...)
 	If \code{TRUE}, only the parameters from each replication will be returned.
 }
   \item{dataOnly}{ 
-	If \code{TRUE}, only the raw data generated from each replication will be returned.
+	If \code{TRUE}, only the data generated from each replication will be returned.
 }
   \item{smartStart}{
-	Defaults to FALSE. If TRUE, population parameter values that are real numbers will be used as starting values. When tested in small models, the time elapsed when using population values as starting values was greater than the time reduced during analysis, and convergence rates were not affected. 
+	Defaults to FALSE. If TRUE, population parameter values that are real numbers will be used as starting values. From testing in small models, the time elapsed for putting population values as starting values was greater than the time reduced during the analysis part. The convergence rates are the same in smartStart of TRUE or FALSE. 
 }
   \item{\dots}{ 
 	Additional arguments to be passed to lavaan.

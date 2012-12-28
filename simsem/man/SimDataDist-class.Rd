@@ -18,6 +18,7 @@ Objects can be created by \code{\link{bindDist}} function. It can also be called
     \item{\code{paramMargins}:}{A list whose each component is a list of named components, giving the parameter values of the marginal distributions.}
     \item{\code{keepScale}:}{Transform back to retain the mean and standard deviation of a variable equal to the model implied mean and standard deviation (with sampling error)}
     \item{\code{reverse}:}{To mirror each variable or not. If \code{TRUE}, reverse the distribution of a variable (e.g., from positive skewed to negative skewed).}
+    \item{\code{copula}:}{The multivariate copula template for data generation. See \code{\link{bindDist}}}
   }
 }
 \section{Methods}{
