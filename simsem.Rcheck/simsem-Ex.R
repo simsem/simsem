@@ -314,6 +314,8 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
+library(copula)
+
 # Create three-dimensional distribution by gaussian copula with 
 # the following marginal distributions
 #   1. t-distribution with df = 2
@@ -328,6 +330,13 @@ d3 <- list(mean=0, sd=1)
 # Create a data distribution object by setting the names of each distribution
 # and their arguments
 dist <- bindDist(c("t", "chisq", "norm"), d1, d2, d3)
+
+# Create data by using Gumbel Copula as the multivariate distribution
+dist <- bindDist(c("t", "chisq", "norm"), d1, d2, d3, copula = gumbelCopula(2, dim = 3))
+
+# Reverse the direction of chi-square distribution from positively skew to negatively skew
+dist <- bindDist(c("t", "chisq", "norm"), d1, d2, d3, copula = gumbelCopula(2, dim = 3),
+	reverse = c(FALSE, TRUE, FALSE))
 
 
 

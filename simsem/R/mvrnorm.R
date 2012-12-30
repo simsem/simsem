@@ -88,8 +88,6 @@ mvrnorm <-
     dimnames(X) <- list(nm, NULL)
     if(n == 1) drop(X) else t(X)
 }
-NULL
-
 
 ##' Convert the vech (column of strictly lower trianglar values from a matrix) into a correlation matrix.
 ##'
@@ -125,11 +123,6 @@ vech2Corr <- function(vech){
     diag(X) <- 1
     X
 }
-
-NULL
-
-
-NULL
 
 ##' Create covariance matrix from correlation and standard deviation information
 ##'

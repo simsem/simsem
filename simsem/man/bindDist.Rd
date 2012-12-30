@@ -26,7 +26,7 @@ bindDist(margins, ..., p = NULL, keepScale = TRUE, reverse = FALSE, copula = NUL
 	A vector representing whether each variable is mirrored or not. If \code{TRUE}, reverse the distribution of a variable (e.g., from positive skewed to negative skewed. If one logical value is specified, it will apply to all variables.
 }
   \item{copula}{
-	A copula class that represents the multivariate distribution, such as \code{\link[copula]{ellipCopula}}, \code{\link[copula]{normalCopula}, or \code{\link[copula]{archmCopula}}. When this copula argument is specified, the data-transformation method from Mair, Satorra, and Bentler (2012) is used. If this copula argument is not specified, the naive Gaussian copula is used such that the correlation matrix is direct applied to the multivariate Gaussian copula. The correlation matrix will be equivalent to the Spearman's correlation (rank correlation) of the resulting data. 
+	A copula class that represents the multivariate distribution, such as \code{\link[copula]{ellipCopula}}, \code{\link[copula]{normalCopula}}, or \code{\link[copula]{archmCopula}}. When this copula argument is specified, the data-transformation method from Mair, Satorra, and Bentler (2012) is used. If this copula argument is not specified, the naive Gaussian copula is used such that the correlation matrix is direct applied to the multivariate Gaussian copula. The correlation matrix will be equivalent to the Spearman's correlation (rank correlation) of the resulting data. 
 }
 }
 \value{

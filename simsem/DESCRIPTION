@@ -1,17 +1,17 @@
 Package: simsem
 Type: Package
 Title: SIMulated Structural Equation Modeling.
-Version: 0.4-5
-Date: 2012-12-22
+Version: 0.4-6
+Date: 2012-12-30
 Authors@R: c(person("Sunthud", "Pornprasertmanit", role = c("aut", "cre"), email = "psunthud@ku.edu"), 
 		person("Patrick", "Miller", role = "aut", email="patr1ckm@ku.edu"), 
 		person("Alexander", "Schoemann", role = "aut", email="schoemann@ku.edu"),
-		person("Corbin", "Quick", role = "ctb", email="corbinq@gmail.com")
+		person("Corbin", "Quick", role = "ctb", email="corbinq@gmail.com"))
 Author: Sunthud Pornprasertmanit <psunthud@ku.edu>, Patrick Miller
         <patr1ckm@ku.edu>, Alexander Schoemann <schoemann@ku.edu>
 Maintainer: Sunthud Pornprasertmanit <psunthud@ku.edu>
-Depends: R(>= 2.15), methods, lavaan
-Suggests: parallel, Amelia, copula, quantreg, splines, foreign, KernSmooth, semTools
+Depends: R(>= 2.15), methods, lavaan, copula
+Suggests: parallel, Amelia, quantreg, splines, foreign, KernSmooth, semTools
 Description: This package can be used to generate data using the structural equation modeling framework. This package is tailored to use those simulated data for various purposes, such as model fit evaluation, power analysis, or missing data handling and planning.
 License: GPL (>= 2)
 LazyLoad: yes
