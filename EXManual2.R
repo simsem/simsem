@@ -1260,8 +1260,8 @@ loading.alt[5:8, 2] <- NA
 LY.ALT <- bind(loading.alt, 0.7)
 CFA.Model.ALT <- model(LY = LY.ALT, RPS = RPS, RTE = RTE, modelType="CFA")
 
-Output.NULL <- sim(NULL, n=25:500, CFA.Model.NULL)
-Output.ALT <- sim(NULL, n=25:500, CFA.Model.NULL, generate=CFA.Model.ALT)
+Output.NULL <- sim(NULL, n = 25:500, CFA.Model.NULL)
+Output.ALT <- sim(NULL, n = 25:500, CFA.Model.NULL, generate=CFA.Model.ALT)
 
 cutoff <- getCutoff(Output.NULL, alpha=0.05, nVal=250)
 plotCutoff(Output.NULL, alpha=0.05)
@@ -1289,12 +1289,12 @@ path.null.mis <- matrix(0, 5, 5)
 path.null.mis[3:5, 1] <- "rnorm(1, 0, 0.05)"
 path.null.mis[4:5, 2] <- "rnorm(1, 0, 0.05)"
 path.null.mis[5, 3] <- "rnorm(1, 0, 0.05)"
-BE.null <- bind(path.null, 0.4, misspec=path.null.mis)
+BE.null <- bind(path.null, 0.4, misspec = path.null.mis)
 
 residual <- diag(5)
 RPS <- binds(residual)
 
-path.model.null <- model(RPS = RPS, BE = BE.null, modelType="Path")
+path.model.null <- model(RPS = RPS, BE = BE.null, modelType = "Path")
 
 path.alt <- matrix(0, 5, 5)
 path.alt[2:3, 1] <- NA
@@ -1303,21 +1303,21 @@ path.alt[5, 4] <- NA
 path.alt.mis <- matrix(0, 5, 5)
 path.alt.mis[4:5, 1] <- "rnorm(1, 0, 0.05)"
 path.alt.mis[5, 2:3] <- "rnorm(1, 0, 0.05)"
-BE.alt <- bind(path.alt, 0.4, misspec=path.alt.mis)
+BE.alt <- bind(path.alt, 0.4, misspec = path.alt.mis)
 path.model.alt <- model(RPS = RPS, BE = BE.alt, modelType="Path")
 
-Output.NULL <- sim(NULL, n=25:500, path.model.null, pmMCAR=seq(0, 0.3, 0.1))
-Output.ALT <- sim(NULL, n=25:500, path.model.null, generate=path.model.alt, pmMCAR=seq(0, 0.3, 0.1))
+Output.NULL <- sim(NULL, n = 25:500, path.model.null, pmMCAR = seq(0, 0.3, 0.1))
+Output.ALT <- sim(NULL, n = 25:500, path.model.null, generate = path.model.alt, pmMCAR = seq(0, 0.3, 0.1))
 
-cutoff <- getCutoff(Output.NULL, alpha=0.05, nVal=250, pmMCARval = 0.2)
-plotCutoff(Output.NULL, alpha=0.05)
-getPowerFit(Output.ALT, nullObject=Output.NULL, alpha=0.05, nVal=250, pmMCARval = 0.2)
-getPowerFit(Output.ALT, cutoff=cutoff, nVal=250, pmMCARval = 0.2, condCutoff=TRUE)
-plotPowerFit(Output.ALT, Output.NULL, alpha=0.05)
+cutoff <- getCutoff(Output.NULL, alpha = 0.05, nVal = 250, pmMCARval = 0.2)
+plotCutoff(Output.NULL, alpha = 0.05)
+getPowerFit(Output.ALT, nullObject = Output.NULL, alpha = 0.05, nVal = 250, pmMCARval = 0.2)
+getPowerFit(Output.ALT, cutoff = cutoff, nVal = 250, pmMCARval = 0.2, condCutoff = TRUE)
+plotPowerFit(Output.ALT, Output.NULL, alpha = 0.05)
 
 cutoff2 <- c(RMSEA = 0.05, CFI = 0.95, TLI = 0.95, SRMR = 0.06)
-getPowerFit(Output.ALT, cutoff=cutoff2, nVal=250, pmMCARval = 0.2, condCutoff=FALSE)
-plotPowerFit(Output.ALT, cutoff=cutoff2)
+getPowerFit(Output.ALT, cutoff = cutoff2, nVal = 250, pmMCARval = 0.2, condCutoff = FALSE)
+plotPowerFit(Output.ALT, cutoff = cutoff2)
 
 ###################################### Example 23 Specifying misspecification ################################# 
 
@@ -1380,7 +1380,6 @@ simOut6 <- sim(1000, n = samplesize, template6, createOrder = c(1, 3, 2), optMis
 getCutoff(simOut6, alpha = 0.05)
 pValue(out, simOut6)
 
-u1 <- simUnif(-0.1, 0.1)
 loadingMis7 <- matrix(0, 9, 3)
 loadingMis7[4:9, 1] <- "runif(1, -0.1, 0.1)"
 loadingMis7[c(1:3, 7:9),2] <- "runif(1, -0.1, 0.1)"
@@ -1390,7 +1389,6 @@ simOut7 <- sim(1000, n = samplesize, template7, createOrder = c(1, 3, 2), misfit
 getCutoff(simOut7, alpha = 0.05)
 pValue(out, simOut7)
 
-# To be rejected
 loadingMisAlt <- matrix(0, 9, 3)
 loadingMisAlt[4, 1] <- "runif(1, 0.6, 0.9)"
 loadingMisAlt[7, 2] <- "runif(1, 0.6, 0.9)"
@@ -1431,19 +1429,6 @@ loadingMis[5:6, 2] <- "runif(1, -0.1, 0.1)"
 loadingMis[8:9, 3] <- "runif(1, -0.1, 0.1)"
 LYnested <- bind(loadingNested, "runif(1, 0.5, 1.5)", misspec = loadingMis)
 
-loadingParent <- matrix(0, 9, 3)
-loadingParent[1, 1] <- 1
-loadingParent[2:3, 1] <- NA
-loadingParent[4, 2] <- 1
-loadingParent[5:6, 2] <- NA
-loadingParent[7, 3] <- 1
-loadingParent[8:9, 3] <- NA
-loadingMis <- matrix(0, 9, 3)
-loadingMis[2:3, 1] <- "runif(1, -0.1, 0.1)"
-loadingMis[5:6, 2] <- "runif(1, -0.1, 0.1)"
-loadingMis[8:9, 3] <- "runif(1, -0.1, 0.1)"
-LYparent <- bind(loadingParent, "runif(1, 0.5, 1.5)", misspec = loadingMis)
-
 facCor <- matrix(NA, 3, 3)
 diag(facCor) <- 1
 facCorVal <- diag(3)
@@ -1473,6 +1458,20 @@ RTE <- binds(error, errorVal)
 VTE <- bind(rep(NA, 9), 0.4)
 
 longNested <- model(LY=LYnested, RPS=RPS, VE=VE, RTE=RTE, VTE=VTE, modelType = "CFA")
+
+loadingParent <- matrix(0, 9, 3)
+loadingParent[1, 1] <- 1
+loadingParent[2:3, 1] <- NA
+loadingParent[4, 2] <- 1
+loadingParent[5:6, 2] <- NA
+loadingParent[7, 3] <- 1
+loadingParent[8:9, 3] <- NA
+loadingMis <- matrix(0, 9, 3)
+loadingMis[2:3, 1] <- "runif(1, -0.1, 0.1)"
+loadingMis[5:6, 2] <- "runif(1, -0.1, 0.1)"
+loadingMis[8:9, 3] <- "runif(1, -0.1, 0.1)"
+LYparent <- bind(loadingParent, "runif(1, 0.5, 1.5)", misspec = loadingMis)
+
 longParent <- model(LY=LYparent, RPS=RPS, VE=VE, RTE=RTE, VTE=VTE, modelType = "CFA")
 
 outDatNestedModNested <- sim(1000, n = 200, longNested, generate = longNested)
@@ -1546,13 +1545,15 @@ RTE <- binds(error, errorVal)
 
 VTE <- bind(rep(NA, 9), 0.4)
 
-intceptMis <- c(0, "runif(1, -0.1, 0.1)", "runif(1, -0.1, 0.1)", 0, "runif(1, -0.1, 0.1)", "runif(1, -0.1, 0.1)", 0, "runif(1, -0.1, 0.1)", "runif(1, -0.1, 0.1)")
-TYnested <- bind(c(0, "con3", "con4", 0, "con3", "con4", 0, "con3", "con4"), "runif(1, -0.5, 0.5)", misspec = intceptMis)
-TYparent <- bind(c(0, NA, NA, 0, NA, NA, 0, NA, NA), "runif(1, -0.5, 0.5)", misspec = intceptMis)
+intceptMis <- rep(c(0, "runif(1, -0.1, 0.1)", "runif(1, -0.1, 0.1)"), 3)
+TYnested <- bind(rep(c(0, "con3", "con4"), 3), "runif(1, -0.5, 0.5)", misspec = intceptMis)
 
 AL <- bind(rep(NA, 3), c(0, 0.5, 1))
 
 longNested <- model(LY=LY, RPS=RPS, VE=VE, RTE=RTE, VTE=VTE, TY=TYnested, AL=AL, modelType = "CFA")
+
+TYparent <- bind(rep(c(0, NA, NA), 3), "runif(1, -0.5, 0.5)", misspec = intceptMis)
+
 longParent <- model(LY=LY, RPS=RPS, VE=VE, RTE=RTE, VTE=VTE, TY=TYparent, AL=AL, modelType = "CFA")
 
 outDatNestedModNested <- sim(NULL, n=50:500, longNested, generate = longNested)
@@ -1598,6 +1599,11 @@ pathMis[4:5, 3] <- "rnorm(1, 0, 0.05)"
 pathMis[5, 4] <- "rnorm(1, 0, 0.05)"
 BEnested <- bind(pathNested, "runif(1, 0.3, 0.7)", misspec = pathMis)
 
+residual <- diag(5)
+RPS <- binds(residual)
+
+modelNested <- model(RPS = RPS, BE = BEnested, modelType="Path")
+
 pathParent <- matrix(0, 5, 5)
 pathParent[2, 1] <- NA
 pathParent[3, 2] <- NA
@@ -1610,22 +1616,18 @@ pathMis[4:5, 3] <- "rnorm(1, 0, 0.05)"
 pathMis[5, 4] <- "rnorm(1, 0, 0.05)"
 BEparent <- bind(pathParent, "runif(1, 0.3, 0.7)", misspec = pathMis)
 
-residual <- diag(5)
-RPS <- binds(residual)
+modelParent <- model(RPS = RPS, BE = BEparent, modelType="Path")
 
-pathNested <- model(RPS = RPS, BE = BEnested, modelType="Path")
-pathParent <- model(RPS = RPS, BE = BEparent, modelType="Path")
-
-outDatNestedModNested <- sim(NULL, n=50:500, pathNested, generate = pathNested, pmMCAR=seq(0, 0.3, 0.1))
-outDatNestedModParent <- sim(NULL, n=50:500, pathParent, generate = pathNested, pmMCAR=seq(0, 0.3, 0.1))
+outDatNestedModNested <- sim(NULL, n=50:500, modelNested, generate = modelNested, pmMCAR=seq(0, 0.3, 0.1))
+outDatNestedModParent <- sim(NULL, n=50:500, modelParent, generate = modelNested, pmMCAR=seq(0, 0.3, 0.1))
 
 anova(outDatNestedModNested, outDatNestedModParent)
 
 cutoff <- getCutoffNested(outDatNestedModNested, outDatNestedModParent, nVal=250, pmMCARval=0.2)
 plotCutoffNested(outDatNestedModNested, outDatNestedModParent, alpha=0.05)
 
-outDatParentModNested <- sim(NULL, n=50:500, pathNested, generate = pathParent, pmMCAR=seq(0, 0.3, 0.1))
-outDatParentModParent <- sim(NULL, n=50:500, pathParent, generate = pathParent, pmMCAR=seq(0, 0.3, 0.1))
+outDatParentModNested <- sim(NULL, n=50:500, modelNested, generate = modelParent, pmMCAR=seq(0, 0.3, 0.1))
+outDatParentModParent <- sim(NULL, n=50:500, modelParent, generate = modelParent, pmMCAR=seq(0, 0.3, 0.1))
 
 anova(outDatParentModNested, outDatParentModParent)
 

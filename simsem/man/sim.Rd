@@ -10,7 +10,7 @@
 sim(nRep, model, n, generate = NULL, rawData = NULL, miss = NULL, datafun=NULL, outfun=NULL,
 pmMCAR = NULL, pmMAR = NULL, facDist = NULL, indDist = NULL, errorDist = NULL, sequential = FALSE, 
 modelBoot = FALSE, realData = NULL, maxDraw = 50, misfitType = "f0", 
-misfitBounds = NULL, averageNumMisspec = NULL, optMisfit=NULL, optDraws = 50, createOrder = c(1, 2, 3), 
+misfitBounds = NULL, averageNumMisspec = FALSE, optMisfit=NULL, optDraws = 50, createOrder = c(1, 2, 3), 
 aux = NULL, seed = 123321, silent = FALSE, multicore = FALSE, cluster = FALSE, numProc = NULL,  
 paramOnly = FALSE, dataOnly=FALSE, smartStart=FALSE, ...)
 }

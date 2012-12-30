@@ -30,7 +30,7 @@ drawParam <- function(paramSet, maxDraw = 50, numFree = 1, misfitBounds = NULL, 
             }
         })
     }))
-    
+    misfitType <- tolower(misfitType)
     stopifnot(misfitType == "f0" || misfitType == "rmsea" || misfitType == "srmr" || 
         misfitType == "all")
     
