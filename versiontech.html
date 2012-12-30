@@ -33,6 +33,22 @@
       <section id="main_content" class="inner">
         <h1>Version History (Technical)</h1>
 
+<h2>Version 0.4-6 12/30/12</h2>
+
+<ul>
+<li>Edit the documentation of the <strong>model</strong> and <strong>sim</strong> functions
+<li>Add the <strong>mvrnorm</strong> function to create data row-wise such that the first <em>p</em> rows are the same when data with <em>p</em> and <em>p + n</em> rows are generated with the same random number seed.
+<li>The <em>copula</em> argument is added to the <strong>bindDist</strong> function in order to save the multivariate copula template, which will implement the Mair and colleagues' method for data gneeration. The <strong>SimDataDist</strong> class and <strong>createData</strong> function are modified to implement the method. 
+<li>The <strong>summary</strong> method for the <strong>SimDataDist</strong> class and the <strong>plotDist</strong> function support the Mair and colleagues' method.
+</ul>
+
+<h2>Version 0.4-5 12/18/12</h2>
+
+<ul>
+<li>Change the error messages in <strong>model</strong> and <strong>sim</strong> to be more useful.
+<li>Go over the <strong>sim</strong> and <strong>runRep</strong> functions to make them more efficient
+</ul>
+
 <h2>Version 0.4-4 11/28/12</h2>
 
 <ul>
