@@ -244,8 +244,6 @@ LCA.Model <- model(LY=LY, RPS=RPS, VPS=VPS, AL=AL, VTE=VTE, RTE=RTE, TY=TY, mode
 Data.True <- generate(LCA.Model, 300)
 out <- analyze(LCA.Model, Data.True)
 
-#Output.True <- sim(100, n=300, LCA.Model)
-
 loading.trivial <- matrix(0, 4, 2)
 loading.trivial[2:3, 2] <- "runif(1,-0.1,0.1)"
 
@@ -342,8 +340,7 @@ SEM.model <- model(BE=BE, LY=LY, RPS=RPS, RTE=RTE, modelType="SEM")
 dat <- generate(SEM.model, n=300)
 out <- analyze(SEM.model, dat)
 
-#Output2 <- sim(200, n=300, SEM.model, smartStart=TRUE) 
-Output <- sim(200, n=300, SEM.model, silent=TRUE) #, smartStart=FALSE) 
+Output <- sim(200, n=300, SEM.model, silent=TRUE) 
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summary(Output)
@@ -378,8 +375,7 @@ SEM.model <- model(BE=BE, LY=LY, RPS=RPS, RTE=RTE, modelType="SEM")
 
 draw(SEM.model)
 
-#Output2 <- sim(1000, n=300, SEM.model, smartStart=TRUE) 
-Output <- sim(100, n=300, SEM.model, silent=TRUE)#, smartStart=FALSE) 
+Output <- sim(100, n=300, SEM.model, silent=TRUE)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summary(Output)
@@ -1134,7 +1130,7 @@ RTE <- binds(error.cor)
 
 CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA")
 
-Output <- sim(NULL, n=50:1000, CFA.Model)
+Output <- sim(NULL, n=seq(50, 1000, 5), CFA.Model)
 summary(Output)
 plotCutoff(Output, 0.05)
 getCutoff(Output, 0.05, nVal = 200)	
@@ -1222,7 +1218,7 @@ BE <- bind(path, "runif(1, 0, 0.9)")
 
 latentReg <- model(LY = LY, RPS = RPS, RTE = RTE, BE = BE, modelType = "SEM")
 
-Output <- sim(NULL, n=25:500, latentReg)
+Output <- sim(NULL, n=seq(25, 500, 5), latentReg)
 summary(Output)
 plotCutoff(Output, 0.05)
 getCutoff(Output, 0.05, n = 200)	
@@ -1260,8 +1256,8 @@ loading.alt[5:8, 2] <- NA
 LY.ALT <- bind(loading.alt, 0.7)
 CFA.Model.ALT <- model(LY = LY.ALT, RPS = RPS, RTE = RTE, modelType="CFA")
 
-Output.NULL <- sim(NULL, n = 25:500, CFA.Model.NULL)
-Output.ALT <- sim(NULL, n = 25:500, CFA.Model.NULL, generate=CFA.Model.ALT)
+Output.NULL <- sim(NULL, n = seq(25, 500, 5), CFA.Model.NULL)
+Output.ALT <- sim(NULL, n = seq(25, 500, 5), CFA.Model.NULL, generate=CFA.Model.ALT)
 
 cutoff <- getCutoff(Output.NULL, alpha=0.05, nVal=250)
 plotCutoff(Output.NULL, alpha=0.05)
@@ -1306,8 +1302,8 @@ path.alt.mis[5, 2:3] <- "rnorm(1, 0, 0.05)"
 BE.alt <- bind(path.alt, 0.4, misspec = path.alt.mis)
 path.model.alt <- model(RPS = RPS, BE = BE.alt, modelType="Path")
 
-Output.NULL <- sim(NULL, n = 25:500, path.model.null, pmMCAR = seq(0, 0.3, 0.1))
-Output.ALT <- sim(NULL, n = 25:500, path.model.null, generate = path.model.alt, pmMCAR = seq(0, 0.3, 0.1))
+Output.NULL <- sim(NULL, n = seq(25, 500, 5), path.model.null, pmMCAR = seq(0, 0.3, 0.1))
+Output.ALT <- sim(NULL, n = seq(25, 500, 5), path.model.null, generate = path.model.alt, pmMCAR = seq(0, 0.3, 0.1))
 
 cutoff <- getCutoff(Output.NULL, alpha = 0.05, nVal = 250, pmMCARval = 0.2)
 plotCutoff(Output.NULL, alpha = 0.05)
@@ -1333,7 +1329,7 @@ out <- analyze(targetmodel, HolzingerSwineford1939)
 samplesize <- nrow(HolzingerSwineford1939)
 
 template1 <- model.lavaan(out, std = TRUE)
-simOut1 <- sim(1000, n = samplesize, template1)
+simOut1 <- sim(100, n = samplesize, template1)
 getCutoff(simOut1, alpha = 0.05)
 pValue(out, simOut1)
 
@@ -1341,7 +1337,7 @@ loadingMis2 <- matrix(0, 9, 3)
 loadingMis2[1,2] <- 0.3
 loadingMis2[4,3] <- 0.3
 template2 <- model.lavaan(out, LY=loadingMis2, std = TRUE)
-simOut2 <- sim(1000, n = samplesize, template2, createOrder = c(1, 3, 2))
+simOut2 <- sim(100, n = samplesize, template2, createOrder = c(1, 3, 2))
 getCutoff(simOut2, alpha = 0.05)
 pValue(out, simOut2)
 
@@ -1349,7 +1345,7 @@ loadingMis3 <- matrix(0, 9, 3)
 loadingMis3[6,1] <- 0.3
 loadingMis3[9,2] <- 0.3
 template3 <- model.lavaan(out, LY=loadingMis3, std = TRUE)
-simOut3 <- sim(1000, n = samplesize, template3, createOrder = c(1, 3, 2))
+simOut3 <- sim(100, n = samplesize, template3, createOrder = c(1, 3, 2))
 getCutoff(simOut3, alpha = 0.05)
 pValue(out, simOut3)
 
@@ -1358,7 +1354,7 @@ loadingMis4[4:9, 1] <- "runif(1, -0.3, 0.3)"
 loadingMis4[c(1:3, 7:9),2] <- "runif(1, -0.3, 0.3)"
 loadingMis4[1:6,3] <- "runif(1, -0.3, 0.3)"
 template4 <- model.lavaan(out, LY=loadingMis4, std = TRUE)
-simOut4 <- sim(1000, n = samplesize, template4, createOrder = c(1, 3, 2))
+simOut4 <- sim(100, n = samplesize, template4, createOrder = c(1, 3, 2))
 getCutoff(simOut4, alpha = 0.05)
 pValue(out, simOut4)
 
@@ -1367,7 +1363,7 @@ loadingMis5[4:9, 1] <- "rnorm(1, 0, 0.15)"
 loadingMis5[c(1:3, 7:9),2] <- "rnorm(1, 0, 0.15)"
 loadingMis5[1:6,3] <- "rnorm(1, 0, 0.15)"
 template5 <- model.lavaan(out, LY=loadingMis5, std = TRUE)
-simOut5 <- sim(1000, n = samplesize, template5, createOrder = c(1, 3, 2))
+simOut5 <- sim(100, n = samplesize, template5, createOrder = c(1, 3, 2))
 getCutoff(simOut5, alpha = 0.05)
 pValue(out, simOut5)
 
@@ -1376,7 +1372,7 @@ loadingMis6[4:9, 1] <- "runif(1, -0.3, 0.3)"
 loadingMis6[c(1:3, 7:9),2] <- "runif(1, -0.3, 0.3)"
 loadingMis6[1:6,3] <- "runif(1, -0.3, 0.3)"
 template6 <- model.lavaan(out, LY=loadingMis6, std = TRUE)
-simOut6 <- sim(1000, n = samplesize, template6, createOrder = c(1, 3, 2), optMisfit="max", optDraws = 100)
+simOut6 <- sim(100, n = samplesize, template6, createOrder = c(1, 3, 2), optMisfit="max", optDraws = 100)
 getCutoff(simOut6, alpha = 0.05)
 pValue(out, simOut6)
 
@@ -1385,7 +1381,7 @@ loadingMis7[4:9, 1] <- "runif(1, -0.1, 0.1)"
 loadingMis7[c(1:3, 7:9),2] <- "runif(1, -0.1, 0.1)"
 loadingMis7[1:6,3] <- "runif(1, -0.1, 0.1)"
 template7 <- model.lavaan(out, LY=loadingMis7, std = TRUE)
-simOut7 <- sim(1000, n = samplesize, template7, createOrder = c(1, 3, 2), misfitBounds = c(0.02, 0.05), maxDraw = 200)
+simOut7 <- sim(100, n = samplesize, template7, createOrder = c(1, 3, 2), misfitBounds = c(0.02, 0.05), maxDraw = 200)
 getCutoff(simOut7, alpha = 0.05)
 pValue(out, simOut7)
 
@@ -1394,7 +1390,7 @@ loadingMisAlt[4, 1] <- "runif(1, 0.6, 0.9)"
 loadingMisAlt[7, 2] <- "runif(1, 0.6, 0.9)"
 loadingMisAlt[1, 3] <- "runif(1, 0.6, 0.9)"
 templateAlt <- model.lavaan(out, LY = loadingMisAlt, std = TRUE)
-simOutAlt <- sim(1000, n = samplesize, templateAlt, createOrder = c(1, 3, 2), optMisfit="min", optDraws = 100)
+simOutAlt <- sim(100, n = samplesize, templateAlt, createOrder = c(1, 3, 2), optMisfit="min", optDraws = 100)
 getCutoff(simOutAlt, alpha = 0.05)
 pValue(out, simOutAlt)
 
@@ -1474,15 +1470,15 @@ LYparent <- bind(loadingParent, "runif(1, 0.5, 1.5)", misspec = loadingMis)
 
 longParent <- model(LY=LYparent, RPS=RPS, VE=VE, RTE=RTE, VTE=VTE, modelType = "CFA")
 
-outDatNestedModNested <- sim(1000, n = 200, longNested, generate = longNested)
-outDatNestedModParent <- sim(1000, n = 200, longParent, generate = longNested)
+outDatNestedModNested <- sim(100, n = 200, longNested, generate = longNested)
+outDatNestedModParent <- sim(100, n = 200, longParent, generate = longNested)
 
 anova(outDatNestedModNested, outDatNestedModParent)
 cutoff <- getCutoffNested(outDatNestedModNested, outDatNestedModParent)
 plotCutoffNested(outDatNestedModNested, outDatNestedModParent, alpha=0.05)
 
-outDatParentModNested <- sim(1000, n = 200, longNested, generate = longParent)
-outDatParentModParent <- sim(1000, n = 200, longParent, generate = longParent)
+outDatParentModNested <- sim(100, n = 200, longNested, generate = longParent)
+outDatParentModParent <- sim(100, n = 200, longParent, generate = longParent)
 
 anova(outDatParentModNested, outDatParentModParent)
 
@@ -1556,16 +1552,16 @@ TYparent <- bind(rep(c(0, NA, NA), 3), "runif(1, -0.5, 0.5)", misspec = intceptM
 
 longParent <- model(LY=LY, RPS=RPS, VE=VE, RTE=RTE, VTE=VTE, TY=TYparent, AL=AL, modelType = "CFA")
 
-outDatNestedModNested <- sim(NULL, n=50:500, longNested, generate = longNested)
-outDatNestedModParent <- sim(NULL, n=50:500, longParent, generate = longNested)
+outDatNestedModNested <- sim(NULL, n=seq(25, 500, 5), longNested, generate = longNested)
+outDatNestedModParent <- sim(NULL, n=seq(25, 500, 5), longParent, generate = longNested)
 
 anova(outDatNestedModNested, outDatNestedModParent)
 
 cutoff <- getCutoffNested(outDatNestedModNested, outDatNestedModParent, nVal=250)
 plotCutoffNested(outDatNestedModNested, outDatNestedModParent, alpha=0.05)
 
-outDatParentModNested <- sim(NULL, n=50:500, longNested, generate = longParent)
-outDatParentModParent <- sim(NULL, n=50:500, longParent, generate = longParent)
+outDatParentModNested <- sim(NULL, n=seq(25, 500, 5), longNested, generate = longParent)
+outDatParentModParent <- sim(NULL, n=seq(25, 500, 5), longParent, generate = longParent)
 
 anova(outDatParentModNested, outDatParentModParent)
 
@@ -1618,16 +1614,16 @@ BEparent <- bind(pathParent, "runif(1, 0.3, 0.7)", misspec = pathMis)
 
 modelParent <- model(RPS = RPS, BE = BEparent, modelType="Path")
 
-outDatNestedModNested <- sim(NULL, n=50:500, modelNested, generate = modelNested, pmMCAR=seq(0, 0.3, 0.1))
-outDatNestedModParent <- sim(NULL, n=50:500, modelParent, generate = modelNested, pmMCAR=seq(0, 0.3, 0.1))
+outDatNestedModNested <- sim(NULL, n=seq(25, 500, 5), modelNested, generate = modelNested, pmMCAR=seq(0, 0.3, 0.1))
+outDatNestedModParent <- sim(NULL, n=seq(25, 500, 5), modelParent, generate = modelNested, pmMCAR=seq(0, 0.3, 0.1))
 
 anova(outDatNestedModNested, outDatNestedModParent)
 
 cutoff <- getCutoffNested(outDatNestedModNested, outDatNestedModParent, nVal=250, pmMCARval=0.2)
 plotCutoffNested(outDatNestedModNested, outDatNestedModParent, alpha=0.05)
 
-outDatParentModNested <- sim(NULL, n=50:500, modelNested, generate = modelParent, pmMCAR=seq(0, 0.3, 0.1))
-outDatParentModParent <- sim(NULL, n=50:500, modelParent, generate = modelParent, pmMCAR=seq(0, 0.3, 0.1))
+outDatParentModNested <- sim(NULL, n=seq(25, 500, 5), modelNested, generate = modelParent, pmMCAR=seq(0, 0.3, 0.1))
+outDatParentModParent <- sim(NULL, n=seq(25, 500, 5), modelParent, generate = modelParent, pmMCAR=seq(0, 0.3, 0.1))
 
 anova(outDatParentModNested, outDatParentModParent)
 

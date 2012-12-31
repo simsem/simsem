@@ -31,10 +31,12 @@ analyze <- function(model, data, package = "lavaan", miss = NULL,
 		library(semTools)
 		miArgs <- miss@args
 		if(miss@package == "Amelia") {
-			if(!is.null(miArgs$idvars)) {
-				miArgs$idvars <- c(miArgs$idvars, model@groupLab)
-			} else {
-				miArgs <- c(miArgs, list(idvars=model@groupLab))
+			if(model@groupLab %in% colnames(data)) {
+				if(!is.null(miArgs$idvars)) {
+					miArgs$idvars <- c(miArgs$idvars, model@groupLab)
+				} else {
+					miArgs <- c(miArgs, list(idvars=model@groupLab))
+				}
 			}
 		}
         Output <- runMI(model@pt, data, m = miss@m, miArgs=miArgs, chi=miss@chi, miPackage=miss@package, fun="lavaan", ...)
