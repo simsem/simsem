@@ -229,10 +229,6 @@ drawParam <- function(paramSet, maxDraw = 50, numFree = 1, misfitBounds = NULL, 
 				unfillpls[[i]] <- lapply(paramSet[[i]], rawDraw, misSpec = FALSE, constraint = FALSE)
             }
 			fillFirst <- ord[1] == 3
-			# if(fillFirst) {
-				# unfillpls <- lapply(unfillpls, fillParam)
-			# } 
-			# unfillpls <- equalCon(unfillpls, paramSet, fill=fillFirst, con=con)
 			
 			if(fillFirst) {
 				fullpls <- lapply(unfillpls, fillParam)
@@ -663,44 +659,54 @@ equalCon <- function(pls, dgen, fill=FALSE, con=NULL) {
 extractLab <- function(pls, dgen, fill=FALSE, con=NULL) {
 
 	free <- lapply(dgen, function(x) lapply(x, function(y) if(is.null(y)) { return(NULL) } else { return(y$free) }))
+	
 	if(fill) {
-		
+		dgen2 <- list()
 		for(i in 1:length(free)) {
 			temp <- free[[i]]
+			temp2 <- list()
+			for(j in 1:length(dgen[[i]])) {
+				if(!is.null(dgen[[i]][[j]])) {
+					temp2[[j]] <- dgen[[i]][[j]]$copy()
+				} else {
+					temp2[[j]] <- NULL
+				}
+			}
+			names(temp2) <- names(dgen[[i]])
 			if(is.null(temp$PS)) {
 				if(!is.null(temp$RPS)) {
 					temp$PS <- temp$RPS
-					dgen[[i]]$PS <- dgen[[i]]$RPS
+					temp2$PS <- temp2$RPS
 					if(!is.null(temp$VPS)) {
 						diag(temp$PS) <- temp$VPS
 					} else if(!is.null(temp$VE)) {
 						diag(temp$PS) <- temp$VE
 					}
-					dgen[[i]]$PS$free <- temp$PS
+					temp2$PS$free <- temp$PS
 				}
 			}
 			if(is.null(temp$TE)) {
 				if(!is.null(temp$RTE)) {
 					temp$TE <- temp$RTE
-					dgen[[i]]$TE <- dgen[[i]]$RTE
+					temp2$TE <- temp2$RTE
 					if(!is.null(temp$VTE)) {
 						diag(temp$TE) <- temp$VTE
 					} else if(!is.null(temp$VY)) {
 						diag(temp$TE) <- temp$VY
 					}
-					dgen[[i]]$TE$free <- temp$TE
+					temp2$TE$free <- temp$TE
 				}
 			}
 			if(is.null(temp$AL)) {
 				if(!is.null(temp$ME)) {
 					temp$AL <- temp$ME
-					dgen[[i]]$AL <- dgen[[i]]$ME
+					temp2$AL <- temp2$ME
 				}
 			}
 			if(is.null(temp$TY)) {
 				if(!is.null(temp$MY)) {
 					temp$TY <- temp$MY
-					dgen[[i]]$TY <- dgen[[i]]$MY
+					temp2$TY <- temp2$MY
 				}
 			}
 			temp$RPS <- NULL
@@ -712,6 +718,7 @@ extractLab <- function(pls, dgen, fill=FALSE, con=NULL) {
 			temp$ME <- NULL
 			temp$MY <- NULL
 			free[[i]][names(temp)] <- temp
+			dgen2[[i]] <- temp2
 		}
 	}
 	free2 <- do.call(c, lapply(free, function(x) do.call(c, x)))
@@ -722,7 +729,11 @@ extractLab <- function(pls, dgen, fill=FALSE, con=NULL) {
 	val2 <- val2[match(names(free2), names(val2))]
 	realval <- val2[is.na(suppressWarnings(as.numeric(as.vector(free2)))) & !is.na(free2)]
 	realval <- realval[match(target, lab)]
-	list(target, realval, dgen)
+	if(fill) {
+		return(list(target, realval, dgen2))
+	} else {
+		return(list(target, realval, dgen))
+	}
 }
 
 # Make the variable name very very weird so that the assign and get functions will work by setting the labels in the internal environment

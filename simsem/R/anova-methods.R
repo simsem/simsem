@@ -18,18 +18,18 @@ setMethod("anova", signature(object = "SimResult"), function(object, ...) {
     names(mods) <- sapply(as.list(mcall)[c(FALSE, TRUE, modp)], as.character)
     
     # Make sure models come from the same seed else stop and give warning
-    nseed <- mods[[1]]@seed
+    nseed <- mods[[1]]$seed
     for (i in 2:length(mods)) {
-        nseed <- c(nseed, mods[[1]]@seed)
+        nseed <- c(nseed, mods[[1]]$seed)
     }
     if (any(!duplicated(nseed)[2:length(mods)])) 
         stop("simSEM ERROR: Models are based on different data and cannont be compared, check you random seed")
     
     # put them in order (using number of free parameters) nfreepar <-
     # sapply(lapply(mods, logLik), attr, 'df')
-    nfreepar <- mods[[1]]@fit$df[1]
+    nfreepar <- mods[[1]]$fit$df[1]
     for (i in 2:length(mods)) {
-        nfreepar <- c(nfreepar, mods[[i]]@fit$df[1])
+        nfreepar <- c(nfreepar, mods[[i]]$fit$df[1])
     }
     
     
@@ -55,31 +55,31 @@ setMethod("anova", signature(object = "SimResult"), function(object, ...) {
     if (!multipleAllEqualList(lapply(mods, function(x) unique(x$pmMAR)))) 
         stop("Models are based on different values of the percent missing at random")
     
-    nrep <- dim(object@fit)[[1]]
+    nrep <- dim(object$fit)[[1]]
     x <- NULL
     pred <- NULL
     
-    if (length(unique(object@n)) > 1) {
-        if (!length(object@n) == nrep) {
+    if (length(unique(object$n)) > 1) {
+        if (!length(object$n) == nrep) {
             stop("Number of random sample sizes is not the same as the number of replications, check to see if N varied across replications")
         }
-        x <- cbind(x, object@n)
-        pred$N <- unique(round(seq(min(object@n), max(object@n), length.out = 20)))
+        x <- cbind(x, object$n)
+        pred$N <- unique(round(seq(min(object$n), max(object$n), length.out = 20)))
     }
-    if (length(unique(object@pmMCAR)) > 1) {
-        if (!length(object@pmMCAR) == nrep) {
+    if (length(unique(object$pmMCAR)) > 1) {
+        if (!length(object$pmMCAR) == nrep) {
             stop("Number of random pmMCARs is not the same as the number of replications, check to see if pmMCAR varied across replications")
         }
-        x <- cbind(x, object@pmMCAR)
-        pred$MCAR <- seq(min(object@pmMCAR), max(object@pmMCAR), length.out = 20)
+        x <- cbind(x, object$pmMCAR)
+        pred$MCAR <- seq(min(object$pmMCAR), max(object$pmMCAR), length.out = 20)
         
     }
-    if (length(unique(object@pmMAR)) > 1) {
-        if (!length(object@pmMAR) == nrep) {
+    if (length(unique(object$pmMAR)) > 1) {
+        if (!length(object$pmMAR) == nrep) {
             stop("Number of random pmMARs is not the same as the number of replications, check to see if pmMAR varied across replications")
         }
-        x <- cbind(x, object@pmMAR)
-        pred$MAR <- seq(min(object@pmMAR), max(object@pmMAR), length.out = 20)
+        x <- cbind(x, object$pmMAR)
+        pred$MAR <- seq(min(object$pmMAR), max(object$pmMAR), length.out = 20)
         
     }
     # Need to pull fit statistics from each model, compare each one...
