@@ -2,8 +2,7 @@
 \Rdversion{1.1}
 \docType{class}
 \alias{SimVector-class}
-\alias{summaryShort,SimVector-method}
-\alias{summary,SimVector-method}
+\alias{SimVector}
 \title{Vector object: Random parameters vector}
 \description{
 This object can be used to represent a vector in SEM model. It contains free parameters, fixed values, starting values, and model misspecification. This object can be represented mean, intercept, or variance vectors.
@@ -11,7 +10,7 @@ This object can be used to represent a vector in SEM model. It contains free par
 \section{Objects from the Class}{
 This object is created by \code{\link{bind}} function. 
 }
-\section{Slots}{
+\section{Fields}{
   \describe{
     \item{\code{free}:}{The free-parameter vector. Any NA elements or character elements are free. Any numeric elements are fixed as the specified number. If any free elements have the same characters (except NA), the elements are equally constrained.}
     \item{\code{popParam}:}{Real population parameters of the free elements.}
@@ -31,7 +30,7 @@ This object is created by \code{\link{bind}} function.
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \seealso{
-\code{\linkS4class{SimMatrix}} for random parameter matrix 
+\code{\link{SimMatrix}} for random parameter matrix 
 }
 \examples{
 showClass("SimVector")

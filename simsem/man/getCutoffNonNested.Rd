@@ -13,16 +13,16 @@ pmMARval = NULL, df = 0)
 }
 \arguments{
   \item{dat1Mod1}{
-	\code{\linkS4class{SimResult}} that saves the simulation of analyzing Model 1 by datasets created from Model 1
+	\code{\link{SimResult}} that saves the simulation of analyzing Model 1 by datasets created from Model 1
 }
   \item{dat1Mod2}{
-	\code{\linkS4class{SimResult}} that saves the simulation of analyzing Model 2 by datasets created from Model 1
+	\code{\link{SimResult}} that saves the simulation of analyzing Model 2 by datasets created from Model 1
 }
   \item{dat2Mod1}{
-	\code{\linkS4class{SimResult}} that saves the simulation of analyzing Model 1 by datasets created from Model 2
+	\code{\link{SimResult}} that saves the simulation of analyzing Model 1 by datasets created from Model 2
 }
   \item{dat2Mod2}{
-	\code{\linkS4class{SimResult}} that saves the simulation of analyzing Model 2 by datasets created from Model 2
+	\code{\link{SimResult}} that saves the simulation of analyzing Model 2 by datasets created from Model 2
 }
   \item{alpha}{
 	A priori alpha level
@@ -53,7 +53,7 @@ pmMARval = NULL, df = 0)
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \seealso{
-	\code{\linkS4class{SimResult}} for a detail of simResult
+	\code{\link{SimResult}} for a detail of simResult
 	\code{\link{getCutoff}} for a detail of finding cutoffs for absolute fit
 	\code{\link{getCutoffNested}} for a detail of finding cutoffs for nested model comparison
 	\code{\link{plotCutoffNonNested}} Plot cutoffs for non-nested model comparison

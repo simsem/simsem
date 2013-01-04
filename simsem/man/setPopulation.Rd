@@ -11,10 +11,10 @@ setPopulation(target, population)
 }
 \arguments{
   \item{target}{
-	The result object that you wish to set the data generation population model (\code{linkS4class{SimResult}}).
+	The result object that you wish to set the data generation population model (\code{link{SimResult}}).
 }
   \item{population}{
-	The population parameters specified in the \code{linkS4class{SimSem}} object
+	The population parameters specified in the \code{link{SimSem}} object
 }
 }
 \value{
@@ -25,7 +25,7 @@ setPopulation(target, population)
 }
 \seealso{
 	\itemize{
-		\item \code{\linkS4class{SimResult}} for result object
+		\item \code{\link{SimResult}} for result object
 	}
 }
 \examples{

@@ -1,8 +1,8 @@
 SimDataDist-class       Class '"SimDataDist"': Data distribution object
 SimMatrix-class         Matrix object: Random parameters matrix
-SimMissing-class        Class '"SimMissing"'
+SimMissing-class        Class '"SimMissing"': Missing data object
 SimResult-class         Class '"SimResult"': Simulation Result Object
-SimSem-class            Class '"SimSem"'
+SimSem-class            Class '"SimSem"': Model template object
 SimVector-class         Vector object: Random parameters vector
 analyze                 Data analysis using the model specification
 anova,SimResult-method

@@ -14,16 +14,16 @@ logistic = TRUE)
 }
 \arguments{
   \item{altNested}{
-	\code{\linkS4class{SimResult}} that saves the simulation result of the nested model when the nested model is \code{FALSE}.
+	\code{\link{SimResult}} that saves the simulation result of the nested model when the nested model is \code{FALSE}.
 }
   \item{altParent}{
-	\code{\linkS4class{SimResult}} that saves the simulation result of the parent model when the nested model is \code{FALSE}.
+	\code{\link{SimResult}} that saves the simulation result of the parent model when the nested model is \code{FALSE}.
 }
   \item{nullNested}{
-	\code{\linkS4class{SimResult}} that saves the simulation result of the nested model when the nested model is \code{TRUE}. This argument may not be specified if the \code{cutoff} is specified.
+	\code{\link{SimResult}} that saves the simulation result of the nested model when the nested model is \code{TRUE}. This argument may not be specified if the \code{cutoff} is specified.
 }
   \item{nullParent}{
-	\code{\linkS4class{SimResult}} that saves the simulation result of the parent model when the nested model is \code{TRUE}. This argument may not be specified if the \code{cutoff} is specified.
+	\code{\link{SimResult}} that saves the simulation result of the parent model when the nested model is \code{TRUE}. This argument may not be specified if the \code{cutoff} is specified.
 }
   \item{cutoff}{
 	A vector of priori cutoffs for the differences in fit indices.
@@ -58,7 +58,7 @@ logistic = TRUE)
 }
 \seealso{
 	\itemize{
-		\item \code{\linkS4class{SimResult}} for simResult that used in this function.
+		\item \code{\link{SimResult}} for simResult that used in this function.
 		\item \code{\link{getCutoffNested}} to find the cutoffs of the differences in fit indices
 		\item \code{\link{plotCutoffNested}} to visualize the cutoffs of the differences in fit indices
 		\item \code{\link{getPowerFitNested}} to find the power in rejecting the nested model by the difference in fit indices cutoffs

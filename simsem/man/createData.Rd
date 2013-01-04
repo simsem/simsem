@@ -18,13 +18,13 @@ errorDist=NULL, indLab=NULL, modelBoot=FALSE, realData=NULL)
 	Integer of desired sample size.
 }
   \item{indDist}{
-	A \code{\linkS4class{SimDataDist}} object or list of objects for a distribution of indicators. If one object is passed, each indicator will have the same distribution. Use when \code{sequential} is \code{FALSE}.
+	A \code{\link{SimDataDist}} object or list of objects for a distribution of indicators. If one object is passed, each indicator will have the same distribution. Use when \code{sequential} is \code{FALSE}.
 }
   \item{sequential}{
 		If \code{TRUE}, use a sequential method to create data such that the data from factor are generated first and apply to a set of equations to obtain the data of indicators. If \code{FALSE}, create data directly from model-implied mean and covariance of indicators.
 }
   \item{facDist}{
-	A \code{\linkS4class{SimDataDist}} object or list of objects for the distribution of factors. If one object is passed, all factors will have the same distribution. Use when \code{sequential} is \code{TRUE}.
+	A \code{\link{SimDataDist}} object or list of objects for the distribution of factors. If one object is passed, all factors will have the same distribution. Use when \code{sequential} is \code{TRUE}.
 }
   \item{errorDist}{
 	An object or list of objects of type \code{SimDataDist} indicating the distribution of errors. If a single \code{SimDataDist} is specified, each error will be genrated with that distribution.
@@ -43,7 +43,7 @@ errorDist=NULL, indLab=NULL, modelBoot=FALSE, realData=NULL)
 	A data.frame containing simulated data from the data generation template. A variable "group" is appended indicating group membership.
 }
 \details{
-This function will use the modified \code{mvrnorm} function (from the MASS package) by Paul E. Johnson  to create data from model implied covariance matrix if the data distribution object (\code{\linkS4class{SimDataDist}}) is not specified. The modified function is just a small modification from the original \code{mvrnorm} function such that the data generated with the sample sizes of n and n + k (where k > 0) will be replicable in the first n rows.
+This function will use the modified \code{mvrnorm} function (from the MASS package) by Paul E. Johnson  to create data from model implied covariance matrix if the data distribution object (\code{\link{SimDataDist}}) is not specified. The modified function is just a small modification from the original \code{mvrnorm} function such that the data generated with the sample sizes of n and n + k (where k > 0) will be replicable in the first n rows.
 
 It the data distribution object is specified, the copula model is used. If the \code{copula} argument is not specified in the data distribution object, the naive Gaussian copula is used. The correlation matrix is direct applied to the multivariate Gaussian copula. The correlation matrix will be equivalent to the Spearman's correlation (rank correlation) of the resulting data. If the \code{copula} argument is specified, such as \code{\link[copula]{ellipCopula}}, \code{\link[copula]{normalCopula}}, or \code{\link[copula]{archmCopula}}, the data-transformation method from Mair, Satorra, and Bentler (2012) is used. In brief, the data (\eqn{X}) are created from the multivariate copula. The covariance from the generated data is used as the starting point (\eqn{S}). Then, the target data (\eqn{Y}) with the target covariance as model-implied covariance matrix (\eqn{\Sigma_0}) can be created:
 

@@ -13,8 +13,7 @@ flush(stderr()); flush(stdout())
 
 ### Name: SimDataDist-class
 ### Title: Class '"SimDataDist"': Data distribution object
-### Aliases: SimDataDist-class summary,SimDataDist-method
-###   plotDist,SimDataDist-method
+### Aliases: SimDataDist-class SimDataDist
 ### Keywords: classes
 
 ### ** Examples
@@ -43,8 +42,7 @@ flush(stderr()); flush(stdout())
 
 ### Name: SimMatrix-class
 ### Title: Matrix object: Random parameters matrix
-### Aliases: SimMatrix-class summaryShort,SimMatrix-method
-###   summary,SimMatrix-method
+### Aliases: SimMatrix-class SimMatrix
 ### Keywords: classes
 
 ### ** Examples
@@ -80,8 +78,8 @@ nameEx("SimMissing-class")
 flush(stderr()); flush(stdout())
 
 ### Name: SimMissing-class
-### Title: Class '"SimMissing"'
-### Aliases: SimMissing-class summary,SimMissing-method
+### Title: Class '"SimMissing"': Missing data object
+### Aliases: SimMissing-class SimMissing
 ### Keywords: classes
 
 ### ** Examples
@@ -99,8 +97,7 @@ flush(stderr()); flush(stdout())
 
 ### Name: SimResult-class
 ### Title: Class '"SimResult"': Simulation Result Object
-### Aliases: SimResult-class summary,SimResult-method
-###   summaryShort,SimResult-method
+### Aliases: SimResult-class SimResult
 ### Keywords: classes
 
 ### ** Examples
@@ -141,8 +138,8 @@ nameEx("SimSem-class")
 flush(stderr()); flush(stdout())
 
 ### Name: SimSem-class
-### Title: Class '"SimSem"'
-### Aliases: SimSem-class summary,SimSem-method
+### Title: Class '"SimSem"': Model template object
+### Aliases: SimSem-class SimSem
 
 ### ** Examples
 
@@ -179,8 +176,7 @@ flush(stderr()); flush(stdout())
 
 ### Name: SimVector-class
 ### Title: Vector object: Random parameters vector
-### Aliases: SimVector-class summaryShort,SimVector-method
-###   summary,SimVector-method
+### Aliases: SimVector-class SimVector
 ### Keywords: classes
 
 ### ** Examples
@@ -2716,7 +2712,9 @@ flush(stderr()); flush(stdout())
 ### Name: summaryShort
 ### Title: Provide short summary of an object.
 ### Aliases: summaryShort summaryShort-methods summaryShort,ANY-method
-###   summaryShort,vector-method summaryShort,matrix-method
+###   summaryShort,SimSemParentClass-method
+###   summary,SimSemParentClass-method summaryShort,vector-method
+###   summaryShort,matrix-method
 
 ### ** Examples
 

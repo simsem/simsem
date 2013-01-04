@@ -11,7 +11,7 @@ summaryConverge(object, improper = FALSE)
 }
 \arguments{
   \item{object}{
-		\code{\linkS4class{SimResult}} object being described
+		\code{\link{SimResult}} object being described
 }
   \item{improper}{
 	If TRUE, include the replications that provided improper solutions

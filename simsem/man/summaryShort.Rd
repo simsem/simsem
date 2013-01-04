@@ -2,6 +2,8 @@
 \alias{summaryShort}
 \alias{summaryShort-methods}
 \alias{summaryShort,ANY-method}
+\alias{summaryShort,SimSemParentClass-method}
+\alias{summary,SimSemParentClass-method}
 \alias{summaryShort,vector-method}
 \alias{summaryShort,matrix-method}
 \title{
@@ -30,8 +32,8 @@ summaryShort(object, ...)
 \seealso{
 	This is the list of classes that can use \code{summaryShort} method.
 	\itemize{
-		\item \code{\linkS4class{SimMatrix}}
-		\item \code{\linkS4class{SimVector}}
+		\item \code{\link{SimMatrix}}
+		\item \code{\link{SimVector}}
 	}
 }
 \examples{

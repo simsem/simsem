@@ -14,7 +14,7 @@ plotCutoff(object, ...)
 }
 \arguments{
   \item{object}{
-	The object (\code{\linkS4class{SimResult}} or \code{data.frame}) that contains values of fit indices in each distribution.
+	The object (\code{\link{SimResult}} or \code{data.frame}) that contains values of fit indices in each distribution.
 }
   \item{\dots}{
 	Other arguments specific to different types of object you pass in the function.
@@ -38,7 +38,7 @@ NONE. Only plot the fit indices distributions.
 }
 \seealso{
 	\itemize{
-		\item \code{\linkS4class{SimResult}} for simResult that used in this function.
+		\item \code{\link{SimResult}} for simResult that used in this function.
 		\item \code{\link{getCutoff}} to find values of cutoffs based on null hypothesis sampling distributions only
 	}
 }

@@ -12,10 +12,10 @@ usedFit = NULL, useContour = T)
 }
 \arguments{
   \item{nested}{
-	\code{\linkS4class{SimResult}} that saves the analysis results of nested model from multiple replications
+	\code{\link{SimResult}} that saves the analysis results of nested model from multiple replications
 }
   \item{parent}{
-	\code{\linkS4class{SimResult}} that saves the analysis results of parent model from multiple replications
+	\code{\link{SimResult}} that saves the analysis results of parent model from multiple replications
 }
   \item{alpha}{
 	A priori alpha level
@@ -38,7 +38,7 @@ usedFit = NULL, useContour = T)
 }
 \seealso{
 	\itemize{
-		\item \code{\linkS4class{SimResult}} for simResult that used in this function.
+		\item \code{\link{SimResult}} for simResult that used in this function.
 		\item \code{\link{getCutoffNested}} to find the difference in fit indices cutoffs
 	}
 }

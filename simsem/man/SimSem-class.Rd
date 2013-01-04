@@ -2,15 +2,15 @@
 \Rdversion{1.1}
 \docType{class}
 \alias{SimSem-class}
-\alias{summary,SimSem-method}
-\title{Class \code{"SimSem"}}
+\alias{SimSem}
+\title{Class \code{"SimSem"}: Model template object}
 \description{
 	The template containing data-generation and data-analysis specification
 }
 \section{Objects from the Class}{
 	Objects can be created by \code{\link{model}}. 
 }
-\section{Slots}{
+\section{Fields}{
   \describe{
     \item{\code{pt}:}{ Parameter table used in data analysis }
     \item{\code{dgen}:}{ Data generation template }

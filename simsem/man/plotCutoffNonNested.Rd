@@ -12,16 +12,16 @@ alpha=0.05, cutoff = NULL, usedFit = NULL, useContour = T, onetailed=FALSE)
 }
 \arguments{
   \item{dat1Mod1}{
-	\code{\linkS4class{SimResult}} that saves the simulation of analyzing Model 1 by datasets created from Model 1
+	\code{\link{SimResult}} that saves the simulation of analyzing Model 1 by datasets created from Model 1
 }
   \item{dat1Mod2}{
-	\code{\linkS4class{SimResult}} that saves the simulation of analyzing Model 2 by datasets created from Model 1
+	\code{\link{SimResult}} that saves the simulation of analyzing Model 2 by datasets created from Model 1
 }
   \item{dat2Mod1}{
-	\code{\linkS4class{SimResult}} that saves the simulation of analyzing Model 1 by datasets created from Model 2
+	\code{\link{SimResult}} that saves the simulation of analyzing Model 1 by datasets created from Model 2
 }
   \item{dat2Mod2}{
-	\code{\linkS4class{SimResult}} that saves the simulation of analyzing Model 2 by datasets created from Model 2
+	\code{\link{SimResult}} that saves the simulation of analyzing Model 2 by datasets created from Model 2
 }
   \item{alpha}{
 	A priori alpha level
@@ -47,7 +47,7 @@ alpha=0.05, cutoff = NULL, usedFit = NULL, useContour = T, onetailed=FALSE)
 }
 \seealso{
 	\itemize{
-		\item \code{\linkS4class{SimResult}} for simResult that used in this function.
+		\item \code{\link{SimResult}} for simResult that used in this function.
 		\item \code{\link{getCutoffNonNested}} to find the difference in fit indices cutoffs for non-nested model comparison
 	}
 }

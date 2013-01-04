@@ -71,10 +71,10 @@ model.lavaan(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL,
 \seealso{
 	\itemize{
 		\item \code{\link{model}} To build data generation and data analysis template for simulation.
-		\item \code{\link{sim}} for simulations using the \code{\linkS4class{SimSem}} template.
-		\item \code{\link{generate}} To generate data using the \code{\linkS4class{SimSem}} template.
-		\item \code{\link{analyze}} To analyze real or generated data using the \code{\linkS4class{SimSem}} template.
-		\item \code{\link{draw}} To draw parameters using the \code{\linkS4class{SimSem}} template.
+		\item \code{\link{sim}} for simulations using the \code{\link{SimSem}} template.
+		\item \code{\link{generate}} To generate data using the \code{\link{SimSem}} template.
+		\item \code{\link{analyze}} To analyze real or generated data using the \code{\link{SimSem}} template.
+		\item \code{\link{draw}} To draw parameters using the \code{\link{SimSem}} template.
 	}
 }
 \examples{

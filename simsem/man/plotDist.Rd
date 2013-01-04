@@ -11,7 +11,7 @@ plotDist(object, xlim = NULL, ylim = NULL, r = 0, var = NULL, contour = TRUE)
 }
 \arguments{
   \item{object}{
-	The data distribution object (\code{\linkS4class{SimDataDist}}) to plot a distribution 
+	The data distribution object (\code{\link{SimDataDist}}) to plot a distribution 
 }
   \item{xlim}{
 	A numeric vector with two elements specifying the lower and upper limit of the x-axis to be plotted. 
@@ -37,7 +37,7 @@ plotDist(object, xlim = NULL, ylim = NULL, r = 0, var = NULL, contour = TRUE)
 }
 \seealso{
 	\itemize{
-		\item \code{\linkS4class{SimDataDist}} for plotting a data distribution object
+		\item \code{\link{SimDataDist}} for plotting a data distribution object
 	}
 }
 \examples{

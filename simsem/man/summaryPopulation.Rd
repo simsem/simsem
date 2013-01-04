@@ -11,7 +11,7 @@ summaryPopulation(object, improper = FALSE)
 }
 \arguments{
   \item{object}{
-	The result object that you wish to extract the data generation population model from (\code{linkS4class{SimResult}}).
+	The result object that you wish to extract the data generation population model from (\code{link{SimResult}}).
 }
   \item{improper}{
 	If TRUE, include the replications that provided improper solutions
@@ -25,7 +25,7 @@ summaryPopulation(object, improper = FALSE)
 }
 \seealso{
 	\itemize{
-		\item \code{\linkS4class{SimResult}} for result object
+		\item \code{\link{SimResult}} for result object
 	}
 }
 \examples{

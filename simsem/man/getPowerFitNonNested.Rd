@@ -16,19 +16,19 @@ pmMCARval = NULL, pmMARval = NULL, condCutoff = TRUE, df = 0, onetailed = FALSE)
 }
 \arguments{
   \item{dat2Mod1}{
-	\code{\linkS4class{SimResult}} that saves the simulation of analyzing Model 1 by datasets created from Model 2
+	\code{\link{SimResult}} that saves the simulation of analyzing Model 1 by datasets created from Model 2
 }
   \item{dat2Mod2}{
-	\code{\linkS4class{SimResult}} that saves the simulation of analyzing Model 2 by datasets created from Model 2
+	\code{\link{SimResult}} that saves the simulation of analyzing Model 2 by datasets created from Model 2
 }
   \item{cutoff}{
 	A vector of priori cutoffs for fit indices. The \code{cutoff} cannot be specified if the \code{dat1Mod1} and \code{dat1Mod2} are specified.
 }
   \item{dat1Mod1}{
-	The \code{\linkS4class{SimResult}} that saves the simulation of analyzing Model 1 by datasets created from Model 1. This argument must be specified with \code{dat1Mod2}. The \code{dat1Mod1} cannot be specified if the \code{cutoff} is specified.
+	The \code{\link{SimResult}} that saves the simulation of analyzing Model 1 by datasets created from Model 1. This argument must be specified with \code{dat1Mod2}. The \code{dat1Mod1} cannot be specified if the \code{cutoff} is specified.
 }
   \item{dat1Mod2}{
-	The \code{\linkS4class{SimResult}} that saves the simulation of analyzing Model 2 by datasets created from Model 1. This argument must be specified with \code{dat1Mod1}. The \code{dat1Mod2} cannot be specified if the \code{cutoff} is specified.
+	The \code{\link{SimResult}} that saves the simulation of analyzing Model 2 by datasets created from Model 1. This argument must be specified with \code{dat1Mod1}. The \code{dat1Mod2} cannot be specified if the \code{cutoff} is specified.
 }
   \item{revDirec}{
 	Reverse the direction of deciding a power by fit indices (e.g., less than --> greater than). The default is to count the proportion of fit indices that indicates lower fit to the model, such as how many RMSEA in the alternative model that is worse than cutoffs. The direction can be reversed by setting as \code{TRUE}.
@@ -67,7 +67,7 @@ pmMCARval = NULL, pmMARval = NULL, condCutoff = TRUE, df = 0, onetailed = FALSE)
 \seealso{
 	\itemize{
 		\item \code{\link{getCutoffNonNested}} to find the cutoffs for non-nested model comparison
-		\item \code{\linkS4class{SimResult}} to see how to create simResult
+		\item \code{\link{SimResult}} to see how to create simResult
 	}
 }
 \examples{

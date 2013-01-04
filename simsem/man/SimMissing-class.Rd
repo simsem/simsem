@@ -2,15 +2,15 @@
 \Rdversion{1.1}
 \docType{class}
 \alias{SimMissing-class}
-\alias{summary,SimMissing-method}
-\title{Class \code{"SimMissing"}}
+\alias{SimMissing}
+\title{Class \code{"SimMissing"}: Missing data object}
 \description{
 Missing information imposing on the complete dataset
 }
 \section{Objects from the Class}{
 Objects can be created by \code{\link{miss}} function. 
 }
-\section{Slots}{
+\section{Fields}{
   \describe{
     \item{\code{cov}:}{Column indices of any normally distributed covariates used in the data set.}
     \item{\code{pmMCAR}:}{Decimal percent of missingness to introduce completely at random on all variables.}

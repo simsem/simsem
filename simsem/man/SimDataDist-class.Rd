@@ -2,8 +2,7 @@
 \Rdversion{1.1}
 \docType{class}
 \alias{SimDataDist-class}
-\alias{summary,SimDataDist-method}
-\alias{plotDist,SimDataDist-method}
+\alias{SimDataDist}
 \title{Class \code{"SimDataDist"}: Data distribution object}
 \description{
 This class will provide the distribution of a dataset.
@@ -11,7 +10,7 @@ This class will provide the distribution of a dataset.
 \section{Objects from the Class}{
 Objects can be created by \code{\link{bindDist}} function. It can also be called from the form \code{new("SimDataDist", ...)}.
 }
-\section{Slots}{
+\section{Fields}{
   \describe{
     \item{\code{p}:}{Number of variables}
     \item{\code{margins}:}{A character vector specifying all the marginal distributions}

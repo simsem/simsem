@@ -4,14 +4,14 @@
 	Extract the data generation population model underlying a result object
 }
 \description{
-This function will extract the data generation population model underlying a result object (\code{linkS4class{SimResult}}).
+This function will extract the data generation population model underlying a result object (\code{link{SimResult}}).
 }
 \usage{
 getPopulation(object)
 }
 \arguments{
   \item{object}{
-	The result object that you wish to extract the data generation population model from (\code{linkS4class{SimResult}}).
+	The result object that you wish to extract the data generation population model from (\code{link{SimResult}}).
 }
 }
 \value{
@@ -22,7 +22,7 @@ getPopulation(object)
 }
 \seealso{
 	\itemize{
-		\item \code{\linkS4class{SimResult}} for result object
+		\item \code{\link{SimResult}} for result object
 	}
 }
 \examples{

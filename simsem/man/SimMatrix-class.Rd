@@ -1,8 +1,8 @@
 \name{SimMatrix-class}
+\Rdversion{1.1}
 \docType{class}
 \alias{SimMatrix-class}
-\alias{summaryShort,SimMatrix-method}
-\alias{summary,SimMatrix-method}
+\alias{SimMatrix}
 \title{Matrix object: Random parameters matrix}
 \description{
 This object can be used to represent a matrix in SEM model. It contains free parameters, fixed values, starting values, and model misspecification. This object can be represented mean, intercept, or variance vectors.
@@ -10,7 +10,7 @@ This object can be used to represent a matrix in SEM model. It contains free par
 \section{Objects from the Class}{
 This object is created by \code{\link{bind}} or \code{\link{binds}} function. 
 }
-\section{Slots}{
+\section{Fields}{
   \describe{
     \item{\code{free}:}{ The free-parameter vector. Any NA elements or character elements are free. Any numeric elements are fixed as the specified number. If any free elements have the same characters (except NA), the elements are equally constrained. }
     \item{\code{popParam}:}{ Real population parameters of the free elements. }
@@ -31,7 +31,7 @@ This object is created by \code{\link{bind}} or \code{\link{binds}} function.
 }
 \seealso{
 	\itemize{
-		\item \code{\linkS4class{SimVector}} for random parameter vector.
+		\item \code{\link{SimVector}} for random parameter vector.
 	}
 }
 \examples{

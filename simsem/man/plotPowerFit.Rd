@@ -13,10 +13,10 @@ useContour = TRUE, logistic = TRUE)
 }
 \arguments{
   \item{altObject}{
-	The result object (\code{\linkS4class{SimResult}}) saves the simulation result of fitting the hypothesized model when the hypothesized model is \code{FALSE}.
+	The result object (\code{\link{SimResult}}) saves the simulation result of fitting the hypothesized model when the hypothesized model is \code{FALSE}.
 }
   \item{nullObject}{
-	The result object (\code{\linkS4class{SimResult}}) saves the simulation result of fitting the hypothesized model when the hypothesized model is \code{TRUE}. This argument may be not specified if the \code{cutoff} is specified.
+	The result object (\code{\link{SimResult}}) saves the simulation result of fitting the hypothesized model when the hypothesized model is \code{TRUE}. This argument may be not specified if the \code{cutoff} is specified.
 }
   \item{cutoff}{
 	A vector of priori cutoffs for fit indices.
@@ -51,7 +51,7 @@ NONE. Only plot the fit indices distributions.
 }
 \seealso{
 	\itemize{
-		\item \code{\linkS4class{SimResult}} for simResult that used in this function.
+		\item \code{\link{SimResult}} for simResult that used in this function.
 		\item \code{\link{getCutoff}} to find values of cutoffs based on null hypothesis sampling distributions only
 		\item \code{\link{getPowerFit}} to find power of rejecting the hypothesized model when the hypothesized model is \code{FALSE}.
 	}

@@ -18,16 +18,16 @@ usedFit=NULL, prior=1)
 	\code{\linkS4class{lavaan}} that saves the analysis result of the second model from the target dataset
 }
   \item{dat1Mod1}{
-	\code{\linkS4class{SimResult}} that saves the simulation of analyzing Model 1 by datasets created from Model 1
+	\code{\link{SimResult}} that saves the simulation of analyzing Model 1 by datasets created from Model 1
 }
   \item{dat1Mod2}{
-	\code{\linkS4class{SimResult}} that saves the simulation of analyzing Model 2 by datasets created from Model 1
+	\code{\link{SimResult}} that saves the simulation of analyzing Model 2 by datasets created from Model 1
 }
   \item{dat2Mod1}{
-	\code{\linkS4class{SimResult}} that saves the simulation of analyzing Model 1 by datasets created from Model 2
+	\code{\link{SimResult}} that saves the simulation of analyzing Model 1 by datasets created from Model 2
 }
   \item{dat2Mod2}{
-	\code{\linkS4class{SimResult}} that saves the simulation of analyzing Model 2 by datasets created from Model 2
+	\code{\link{SimResult}} that saves the simulation of analyzing Model 2 by datasets created from Model 2
 }
   \item{usedFit}{
 	Vector of names of fit indices that researchers wish to getCutoffs from. The default is to getCutoffs of all fit indices.
@@ -43,7 +43,7 @@ usedFit=NULL, prior=1)
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \seealso{
-	\code{\linkS4class{SimResult}} for a detail of simResult
+	\code{\link{SimResult}} for a detail of simResult
 	\code{\link{pValueNested}} for a nested model comparison by the difference in fit indices
 	\code{\link{pValueNonNested}} for a nonnested model comparison by the difference in fit indices
 }

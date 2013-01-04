@@ -109,10 +109,10 @@ The \code{estmodel.cfa}, \code{estmodel.path}, and \code{estmodel.sem} are the s
 \seealso{
 	\itemize{
 		\item \code{\link{model}} To build data generation and data analysis template for simulation.
-		\item \code{\link{sim}} For simulations using the \code{\linkS4class{SimSem}} template.
-		\item \code{\link{generate}} To generate data using the \code{\linkS4class{SimSem}} template.
-		\item \code{\link{analyze}} To analyze real or generated data using the \code{\linkS4class{SimSem}} template.
-		\item \code{\link{draw}} To draw parameters using the \code{\linkS4class{SimSem}} template.
+		\item \code{\link{sim}} For simulations using the \code{\link{SimSem}} template.
+		\item \code{\link{generate}} To generate data using the \code{\link{SimSem}} template.
+		\item \code{\link{analyze}} To analyze real or generated data using the \code{\link{SimSem}} template.
+		\item \code{\link{draw}} To draw parameters using the \code{\link{SimSem}} template.
 	}
 }
 \examples{

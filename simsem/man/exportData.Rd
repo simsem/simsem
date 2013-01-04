@@ -18,7 +18,7 @@ seed = 123321, silent = FALSE, multicore = FALSE, numProc = NULL,  params = FALS
 	Number of replications. Users can specify as \code{NULL} and specify \code{n}, \code{pmMCAR}, and \code{pmMAR}
 }
   \item{model}{
-	\code{\linkS4class{SimSem}} object created by \code{\link{model}}. Will be used to generate data and analyze it.
+	\code{\link{SimSem}} object created by \code{\link{model}}. Will be used to generate data and analyze it.
 }
   \item{n}{
 	Sample size. This argument is not necessary except the user wish to vary sample size across replications. The sample size here is a vector of sample size in integers. For the random distribution object, if the resulting value has decimal, the value will be rounded. 
@@ -46,10 +46,10 @@ seed = 123321, silent = FALSE, multicore = FALSE, numProc = NULL,  params = FALS
 
 }
   \item{facDist}{ 
-	A \code{\linkS4class{SimDataDist}} object or list of objects for the distribution of factors. If one object is passed, all factors will have the same distribution. Use when \code{sequential} is \code{TRUE}.
+	A \code{\link{SimDataDist}} object or list of objects for the distribution of factors. If one object is passed, all factors will have the same distribution. Use when \code{sequential} is \code{TRUE}.
 }
   \item{indDist}{ 
-	A \code{\linkS4class{SimDataDist}} object or list of objects for a distribution of indicators. If one object is passed, each indicator will have the same distribution. Use when \code{sequential} is \code{FALSE}.
+	A \code{\link{SimDataDist}} object or list of objects for a distribution of indicators. If one object is passed, each indicator will have the same distribution. Use when \code{sequential} is \code{FALSE}.
 }
   \item{errorDist}{ 
 	An object or list of objects of type \code{SimDataDist} indicating the distribution of errors. If a single \code{SimDataDist} is specified, each error will be genrated with that distribution.

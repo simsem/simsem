@@ -4,7 +4,7 @@
 Specifying the missing template to impose on a dataset
 }
 \description{
-Specifying the missing template (\code{\linkS4class{SimMissing}}) to impose on a dataset. The template will be used in Monte Carlo simulation such that, in the \code{\link{sim}} function, datasets are created and imposed by missing values created by this template. See \code{\link{imposeMissing}} for further details of each argument.
+Specifying the missing template (\code{\link{SimMissing}}) to impose on a dataset. The template will be used in Monte Carlo simulation such that, in the \code{\link{sim}} function, datasets are created and imposed by missing values created by this template. See \code{\link{imposeMissing}} for further details of each argument.
 }
 \usage{
 miss(cov = 0, pmMCAR = 0, pmMAR = 0, logit = "", nforms = 0, itemGroups = list(), 
@@ -33,7 +33,7 @@ miss(cov = 0, pmMCAR = 0, pmMAR = 0, logit = "", nforms = 0, itemGroups = list()
 	\item{\dots}{Additional arguments used in multiple imputation function. This feature currently does not work now.}
 }
 \value{
-	A missing object that contains missing-data template (\code{\linkS4class{SimMissing}})
+	A missing object that contains missing-data template (\code{\link{SimMissing}})
 }
 \author{
 	Alexander M. Schoemann (University of Kansas; \email{schoemann@ku.edu}), 
@@ -41,7 +41,7 @@ miss(cov = 0, pmMCAR = 0, pmMAR = 0, logit = "", nforms = 0, itemGroups = list()
 	Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})}
 \seealso{
 	\itemize{
-		\item \code{\linkS4class{SimMissing}} The resulting missing object
+		\item \code{\link{SimMissing}} The resulting missing object
 	}
 }
 \examples{

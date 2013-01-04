@@ -3,7 +3,7 @@
 \alias{binds}
 \title{Specify matrices for Monte Carlo simulation of structural equation models}
 \description{
-	Create \code{\linkS4class{SimMatrix}} or \code{\linkS4class{SimVector}} object that specifies
+	Create \code{\link{SimMatrix}} or \code{\link{SimVector}} object that specifies
 \enumerate{
 	\item{Pattern of fixed/freed parameters for analysis}
 	\item{Population parameter values for data generation}
@@ -31,16 +31,16 @@ To simplify the most common case, \code{popParam} can take 1 value or distributi
 \details{
 Bind is the first step in the \code{bind} -> \code{model} -> \code{sim} workflow of \emph{simsem}, and this document outlines the user interface or language used to describe these simulations. This interface, while complex, enables a wide array of simulation specifications for structural equation models by building on LISREL-style parameter specifications. 
 
-In simulations supported by \emph{simsem}, a given parameter may be either fixed or freed for analysis, but may optionally also have a population value or distribution for data generation, or a value or distribution of misspecification. The purpose of bind is to stack these multiple meanings of a parameter into an object recognized by \emph{simsem}, a \code{\linkS4class{SimMatrix}}. Each matrix in the Lisrel notation (e.g. LY, PS, TE, BE) becomes a \code{\linkS4class{SimMatrix}}, and is passed to the function \code{model}, which builds the data generation template and an analysis template (a lavaan parameter table), collectively forming a \code{SimSem} object, which can be passed to the function \code{sim} for simulation.
+In simulations supported by \emph{simsem}, a given parameter may be either fixed or freed for analysis, but may optionally also have a population value or distribution for data generation, or a value or distribution of misspecification. The purpose of bind is to stack these multiple meanings of a parameter into an object recognized by \emph{simsem}, a \code{\link{SimMatrix}}. Each matrix in the Lisrel notation (e.g. LY, PS, TE, BE) becomes a \code{\link{SimMatrix}}, and is passed to the function \code{model}, which builds the data generation template and an analysis template (a lavaan parameter table), collectively forming a \code{SimSem} object, which can be passed to the function \code{sim} for simulation.
 }
-\value{	\code{\linkS4class{SimMatrix}} or \code{\linkS4class{SimVector}} object that used for model specification for analysis and data generation in simsem.}
+\value{	\code{\link{SimMatrix}} or \code{\link{SimVector}} object that used for model specification for analysis and data generation in simsem.}
 
 \author{
     Patrick Miller (Univeristy of Notre Dame; \email{pmille13@nd.edu}), 
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \seealso{
-	\itemize{\item {\code{\link{model}} To combine simMatrix objects into a complete data analysis and data generation template, which is a \code{\linkS4class{SimSem}} object}
+	\itemize{\item {\code{\link{model}} To combine simMatrix objects into a complete data analysis and data generation template, which is a \code{\link{SimSem}} object}
 		\item \code{\link{generate}} To generate data using the simsem template.
 		\item \code{\link{analyze}} To analyze real or generated data using the simsem template.
 	}

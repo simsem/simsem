@@ -11,7 +11,7 @@ summaryFit(object, alpha = NULL, improper = FALSE)
 }
 \arguments{
   \item{object}{
-	\code{\linkS4class{SimResult}} to be summarized
+	\code{\link{SimResult}} to be summarized
 }
   \item{alpha}{
 	The alpha level used to find the fit indices cutoff. If there is no varying condition, a vector of different alpha levels can be provided.
@@ -23,7 +23,7 @@ summaryFit(object, alpha = NULL, improper = FALSE)
 \value{
 	A data frame that provides fit statistics cutoffs and means
 	
-	When \code{linkS4class{SimResult}} has fixed simulation parameters the first colmns are fit index cutoffs for values of alpha and the last column is the mean fit across all replications. Rows are
+	When \code{link{SimResult}} has fixed simulation parameters the first colmns are fit index cutoffs for values of alpha and the last column is the mean fit across all replications. Rows are
 	\itemize{
 		\item {Chi} Chi-square fit statistic
 		\item {AIC} Akaike Information Criterion
@@ -33,14 +33,14 @@ summaryFit(object, alpha = NULL, improper = FALSE)
 		\item {TLI} Tucker-Lewis Index
 		\item {SRMR} Standardized Root Mean Residual
 	}
-	When \code{linkS4class{SimResult}} has random simulation parameters (sample size or percent missing), columns are the fit indices listed above and rows are values of the random parameter.
+	When \code{link{SimResult}} has random simulation parameters (sample size or percent missing), columns are the fit indices listed above and rows are values of the random parameter.
 }
 \author{
     Alexander M. Schoemann (University of Kansas; \email{schoemann@ku.edu})
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \seealso{
-	\code{\linkS4class{SimResult}} for the result object input
+	\code{\link{SimResult}} for the result object input
 }
 \examples{
 loading <- matrix(0, 6, 1)

@@ -12,7 +12,7 @@ plotPower(object, powerParam, alpha = 0.05, contParam = NULL, contN = TRUE,
 }
 \arguments{
   \item{object}{
-	\code{\linkS4class{SimResult}} that includes at least one randomly varying parameter (e.g. sample size, percent missing, model parameters)
+	\code{\link{SimResult}} that includes at least one randomly varying parameter (e.g. sample size, percent missing, model parameters)
 }
   \item{powerParam}{
 	Vector of parameters names that the user wishes to find power for. This can be a vector of names (e.g., "LY1_1", "LY2_2").
@@ -47,7 +47,7 @@ plotPower(object, powerParam, alpha = 0.05, contParam = NULL, contN = TRUE,
 }
 \seealso{
 	\itemize{
-		\item \code{\linkS4class{SimResult}} to see how to create a simResult object with randomly varying parameters.
+		\item \code{\link{SimResult}} to see how to create a simResult object with randomly varying parameters.
 		\item \code{\link{getPower}} to obtain a statistical power given varying parameters values.
 	}
 }

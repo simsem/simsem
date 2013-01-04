@@ -11,7 +11,7 @@ plotMisfit(object, usedFit="default", misParam=NULL)
 }
 \arguments{
   \item{object}{
-	The result object, \code{\linkS4class{SimResult}}
+	The result object, \code{\link{SimResult}}
 }
   \item{usedFit}{
 	The sample fit indices or population misfit used to plot. All sample fit indices are available. The available population misfit are \code{"pop.f0"}, \code{"pop.rmsea"}, and \code{"pop.srmr"}. If the \code{misParam} is not specified, all population misfit are used. If the \code{misParam} is specified, the \code{"pop.rmsea"} is used in the plot.

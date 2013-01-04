@@ -8,7 +8,7 @@
 }
 \arguments{
   \item{object}{
-	\code{\linkS4class{SimResult}} object being described. Currently at least two objects must be included as arguments
+	\code{\link{SimResult}} object being described. Currently at least two objects must be included as arguments
 }
   \item{\dots}{
     any additional arguments, such as additional objects or for the function with result object
@@ -16,7 +16,7 @@
 }
 \value{
 	A data frame that provides the statistics described above from all parameters.
-	For using with \code{linkS4class{SimResult}}, the result is a list with two or three elements:
+	For using with \code{link{SimResult}}, the result is a list with two or three elements:
 	\itemize{
 		\item \code{summary:} Average of fit indices across all replications
 		\item \code{diff:} Average of the differences in fit indices across all replications
@@ -29,7 +29,7 @@
 }
 
 \seealso{
-	\code{\linkS4class{SimResult}} for the object input
+	\code{\link{SimResult}} for the object input
 }
 \examples{
 \dontrun{

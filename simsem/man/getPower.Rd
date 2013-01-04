@@ -12,7 +12,7 @@ getPower(simResult, alpha = 0.05, contParam = NULL, powerParam = NULL,
 }
 \arguments{
   \item{simResult}{
-	\code{\linkS4class{SimResult}} that may include at least one randomly varying parameter (e.g. sample size, percent missing, model parameters)
+	\code{\link{SimResult}} that may include at least one randomly varying parameter (e.g. sample size, percent missing, model parameters)
 }
   \item{alpha}{
 	Alpha level to use for power analysis.
@@ -50,7 +50,7 @@ Muthen, L. K., & Muthen, B. O. (2002). How to use a Monte Carlo study to decide 
 }
 \seealso{
 	\itemize{
-		\item \code{\linkS4class{SimResult}} to see how to create a simResult object with randomly varying parameters.
+		\item \code{\link{SimResult}} to see how to create a simResult object with randomly varying parameters.
 	}
 }
 \examples{

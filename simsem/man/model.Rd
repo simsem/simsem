@@ -7,7 +7,7 @@
 	Data generation template and analysis template for simulation.
 }
 \description{
-	This function creates a model template (lavaan parameter table), which can be used for data generation and/or analysis for simulated structural equation modeling using simsem. Models are specified using Y-side parameter matrices with LISREL syntax notation. Each parameter matrix must be a \code{\linkS4class{SimMatrix}} or \code{\linkS4class{SimVector}} built using \code{bind}. In addition to the usual Y-side matrices in LISREL, both PS and TE can be specified using correlation matrices (RPS, RTE) and scaled by a vector of residual variances (VTE, VPS) or total variances (VY, VE). Multiple group models can be created by passing lists of \code{\linkS4class{SimMatrix}} or \code{\linkS4class{SimVector}} to arguments, or by simply specifying the number of groups when all group models are identical. 
+	This function creates a model template (lavaan parameter table), which can be used for data generation and/or analysis for simulated structural equation modeling using simsem. Models are specified using Y-side parameter matrices with LISREL syntax notation. Each parameter matrix must be a \code{\link{SimMatrix}} or \code{\link{SimVector}} built using \code{bind}. In addition to the usual Y-side matrices in LISREL, both PS and TE can be specified using correlation matrices (RPS, RTE) and scaled by a vector of residual variances (VTE, VPS) or total variances (VY, VE). Multiple group models can be created by passing lists of \code{\link{SimMatrix}} or \code{\link{SimVector}} to arguments, or by simply specifying the number of groups when all group models are identical. 
 }
 \usage{
 model(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = NULL, 
@@ -27,46 +27,46 @@ model.sem(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL,
 }
 \arguments{
   \item{LY}{
-	Factor loading matrix from endogenous factors to Y indicators (must be \code{\linkS4class{SimMatrix}} object).
+	Factor loading matrix from endogenous factors to Y indicators (must be \code{\link{SimMatrix}} object).
 }
   \item{PS}{
-	Residual variance-covariance matrix among endogenous factors (must be \code{\linkS4class{SimMatrix}} object). Either RPS or PS (but not both) must be specified in SEM and CFA models.
+	Residual variance-covariance matrix among endogenous factors (must be \code{\link{SimMatrix}} object). Either RPS or PS (but not both) must be specified in SEM and CFA models.
 }
   \item{RPS}{
-	Residual correlation matrix among endogenous factors (must be \code{\linkS4class{SimMatrix}} object). Either RPS or PS (but not both) must be specified in SEM and CFA models.
+	Residual correlation matrix among endogenous factors (must be \code{\link{SimMatrix}} object). Either RPS or PS (but not both) must be specified in SEM and CFA models.
 }
   \item{TE}{
-	Measurement error variance-covariance matrix among Y indicators (must be \code{\linkS4class{SimMatrix}} object). Either RTE or TE (but not both) must be specified in SEM and CFA models.
+	Measurement error variance-covariance matrix among Y indicators (must be \code{\link{SimMatrix}} object). Either RTE or TE (but not both) must be specified in SEM and CFA models.
 }
   \item{RTE}{
-	Measurement error correlation matrix among Y indicators (must be \code{\linkS4class{SimMatrix}} object). Either RTE or TE (but not both) must be specified in SEM and CFA models.
+	Measurement error correlation matrix among Y indicators (must be \code{\link{SimMatrix}} object). Either RTE or TE (but not both) must be specified in SEM and CFA models.
 }
   \item{BE}{
-	Regression coefficient matrix among endogenous factors (must be \code{\linkS4class{SimMatrix}} object). BE must be specified in path analysis and SEM models. 
+	Regression coefficient matrix among endogenous factors (must be \code{\link{SimMatrix}} object). BE must be specified in path analysis and SEM models. 
 }
   \item{VTE}{
-	Measurement error variance of indicators (must be \code{\linkS4class{SimVector}} object). Either VTE or VY (but not both) can be specified when RTE (instead of TE) is specified.
+	Measurement error variance of indicators (must be \code{\link{SimVector}} object). Either VTE or VY (but not both) can be specified when RTE (instead of TE) is specified.
 }
   \item{VY}{
-	Total variance of indicators (must be \code{\linkS4class{SimVector}} object). Either VTE or VY (but not both) can be specified when RTE (instead of TE) is specified.
+	Total variance of indicators (must be \code{\link{SimVector}} object). Either VTE or VY (but not both) can be specified when RTE (instead of TE) is specified.
 }
   \item{VPS}{
-	Residual variance of factors (must be \code{\linkS4class{SimVector}} object). Either VPS or VE (but not both) can be specified when RPS (instead of PS) is specified.
+	Residual variance of factors (must be \code{\link{SimVector}} object). Either VPS or VE (but not both) can be specified when RPS (instead of PS) is specified.
 }
   \item{VE}{
-  Total variance of of factors (must be \code{\linkS4class{SimVector}} object). Either VPS or VE (but not both) can be specified when RPS (instead of PS) is specified.
+  Total variance of of factors (must be \code{\link{SimVector}} object). Either VPS or VE (but not both) can be specified when RPS (instead of PS) is specified.
 }  
   \item{TY}{
-	Measurement intercepts of Y indicators (must be \code{\linkS4class{SimVector}} object). Either TY or MY (but not both) can be specified. 
+	Measurement intercepts of Y indicators (must be \code{\link{SimVector}} object). Either TY or MY (but not both) can be specified. 
 }
   \item{AL}{
-	Endogenous factor intercepts (must be \code{\linkS4class{SimVector}} object). Either AL or ME (but not both) can be specified. 
+	Endogenous factor intercepts (must be \code{\link{SimVector}} object). Either AL or ME (but not both) can be specified. 
 }
   \item{MY}{
-	Y indicator means (must be \code{\linkS4class{SimVector}} object). Either TY or MY (but not both) can be specified. 
+	Y indicator means (must be \code{\link{SimVector}} object). Either TY or MY (but not both) can be specified. 
 }
   \item{ME}{
-	Total mean of endogenous factors (must be \code{\linkS4class{SimVector}} object). Either AL or ME (but not both) can be specified. 
+	Total mean of endogenous factors (must be \code{\link{SimVector}} object). Either AL or ME (but not both) can be specified. 
 }
   \item{modelType}{
 	"CFA", "Sem", or "Path". Model type must be specified to ensure that the matrices specified in model templates for data generation and analysis correspond to what the user intends.
@@ -107,10 +107,10 @@ The \code{model.cfa}, \code{model.path}, and \code{model.sem} are the shortcuts 
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \seealso{
-	\itemize{\item {\code{\link{sim}} for simulations using the \code{\linkS4class{SimSem}} template.}
-		\item \code{\link{generate}} To generate data using the \code{\linkS4class{SimSem}} template.
-		\item \code{\link{analyze}} To analyze real or generated data using the \code{\linkS4class{SimSem}} template.
-		\item \code{\link{draw}} To draw parameters using the \code{\linkS4class{SimSem}} template.
+	\itemize{\item {\code{\link{sim}} for simulations using the \code{\link{SimSem}} template.}
+		\item \code{\link{generate}} To generate data using the \code{\link{SimSem}} template.
+		\item \code{\link{analyze}} To analyze real or generated data using the \code{\link{SimSem}} template.
+		\item \code{\link{draw}} To draw parameters using the \code{\link{SimSem}} template.
 	}
 }
 \examples{

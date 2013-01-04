@@ -16,7 +16,7 @@ imposeMissing(data.mat, cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0,
 }
 \arguments{
   \item{miss}{
-    Missing data object (\code{\linkS4class{SimMissing}}) used as the template for impose missing values
+    Missing data object (\code{\link{SimMissing}}) used as the template for impose missing values
 }
   \item{data.mat}{
     Data to impose missing upon. Can be either a matrix or a data frame. 
@@ -122,7 +122,7 @@ Alexander M. Schoemann (University of Kansas; \email{schoemann@ku.edu})
 }
 \seealso{
 	\itemize{
-		\item \code{\linkS4class{SimMissing}} for the alternative way to save missing data feature for using in the \code{\link{sim}} function.
+		\item \code{\link{SimMissing}} for the alternative way to save missing data feature for using in the \code{\link{sim}} function.
 		%\item \code{\link{runMI}} for imputing missing data by multiple imputation and analyze the imputed data.
 	}
 }

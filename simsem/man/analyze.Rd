@@ -4,14 +4,14 @@
 	Data analysis using the model specification
 }
 \description{
-	Data analysis using the model specification (\code{linkS4class{SimSem}}). Data will be multiply imputed if the \code{miss} argument is specified.
+	Data analysis using the model specification (\code{link{SimSem}}). Data will be multiply imputed if the \code{miss} argument is specified.
 }
 \usage{
 analyze(model, data, package="lavaan", miss=NULL, aux=NULL, ...)
 }
 \arguments{
   \item{model}{
-	The model specification (\code{linkS4class{SimSem}})
+	The model specification (\code{link{SimSem}})
 }
   \item{data}{
 	The target dataset 

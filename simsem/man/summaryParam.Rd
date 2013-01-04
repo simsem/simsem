@@ -11,7 +11,7 @@ summaryParam(object, alpha = 0.05, detail = FALSE, improper = FALSE, digits = NU
 }
 \arguments{
   \item{object}{
-	\code{\linkS4class{SimResult}} object being described
+	\code{\link{SimResult}} object being described
 }
   \item{alpha}{
 	The alpha level used to find the statistical power of each parameter estimate
@@ -28,7 +28,7 @@ summaryParam(object, alpha = 0.05, detail = FALSE, improper = FALSE, digits = NU
 }
 \value{
 	A data frame that provides the statistics described above from all parameters.
-	For using with \code{linkS4class{SimResult}}, each column means
+	For using with \code{link{SimResult}}, each column means
 	\itemize{
 		\item \code{Estimate.Average:} Average of parameter estimates across all replications
 		\item \code{Estimate.SD:} Standard Deviation of parameter estimates across all replications
@@ -63,7 +63,7 @@ Collins, L. M., Schafer, J. L., & Kam, C. M. (2001). A comparison of inclusive a
 Hoogland, J. J., & Boomsma, A. (1998). Robustness studies in covariance structure modeling. \emph{Sociological Methods & Research, 26}, 329-367.
 }
 \seealso{
-	\code{\linkS4class{SimResult}} for the object input
+	\code{\link{SimResult}} for the object input
 }
 \examples{
 showClass("SimResult")

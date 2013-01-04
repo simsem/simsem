@@ -33,7 +33,7 @@ lavaan is BETA software! Please report any bugs.
 Loading required package: copula
  
 ###############################################################################################
-This is simsem 0.4-6
+This is simsem 0.4-999
 simsem is BETA software! Please report any bugs.
 simsem was developed at the University of Kansas Center for Research Methods and Data Analysis.
 ###############################################################################################
@@ -47,8 +47,7 @@ simsem was developed at the University of Kansas Center for Research Methods and
 > 
 > ### Name: SimDataDist-class
 > ### Title: Class '"SimDataDist"': Data distribution object
-> ### Aliases: SimDataDist-class summary,SimDataDist-method
-> ###   plotDist,SimDataDist-method
+> ### Aliases: SimDataDist-class SimDataDist
 > ### Keywords: classes
 > 
 > ### ** Examples
@@ -57,12 +56,17 @@ simsem was developed at the University of Kansas Center for Research Methods and
 Class "SimDataDist" [package "simsem"]
 
 Slots:
-                                                                       
-Name:             p      margins paramMargins    keepScale      reverse
-Class:      numeric    character         list      logical       vector
-                   
-Name:        copula
-Class:       copula
+                  
+Name:       .xData
+Class: environment
+
+Extends: 
+Class "SimSemParentClass", directly
+Class "envRefClass", by class "SimSemParentClass", distance 2
+Class ".environment", by class "SimSemParentClass", distance 3
+Class "refClass", by class "SimSemParentClass", distance 3
+Class "environment", by class "SimSemParentClass", distance 4, with explicit coerce
+Class "refObject", by class "SimSemParentClass", distance 4
 > 
 > d1 <- list(df=2)
 > d2 <- list(df=3)
@@ -103,8 +107,7 @@ Reverse (mirror) distribution: FALSE / FALSE / FALSE / FALSE / FALSE / FALSE / F
 > 
 > ### Name: SimMatrix-class
 > ### Title: Matrix object: Random parameters matrix
-> ### Aliases: SimMatrix-class summaryShort,SimMatrix-method
-> ###   summary,SimMatrix-method
+> ### Aliases: SimMatrix-class SimMatrix
 > ### Keywords: classes
 > 
 > ### ** Examples
@@ -113,9 +116,17 @@ Reverse (mirror) distribution: FALSE / FALSE / FALSE / FALSE / FALSE / FALSE / F
 Class "SimMatrix" [package "simsem"]
 
 Slots:
-                                              
-Name:       free  popParam   misspec symmetric
-Class:    matrix    matrix    matrix   logical
+                  
+Name:       .xData
+Class: environment
+
+Extends: 
+Class "SimSemParentClass", directly
+Class "envRefClass", by class "SimSemParentClass", distance 2
+Class ".environment", by class "SimSemParentClass", distance 3
+Class "refClass", by class "SimSemParentClass", distance 3
+Class "environment", by class "SimSemParentClass", distance 4, with explicit coerce
+Class "refObject", by class "SimSemParentClass", distance 4
 > 
 > loading <- matrix(0, 6, 2)
 > loading[1:3, 1] <- NA
@@ -292,8 +303,8 @@ $missRaw
 > flush(stderr()); flush(stdout())
 > 
 > ### Name: SimMissing-class
-> ### Title: Class '"SimMissing"'
-> ### Aliases: SimMissing-class summary,SimMissing-method
+> ### Title: Class '"SimMissing"': Missing data object
+> ### Aliases: SimMissing-class SimMissing
 > ### Keywords: classes
 > 
 > ### ** Examples
@@ -316,8 +327,7 @@ Proportion of MCAR: 0.2
 > 
 > ### Name: SimResult-class
 > ### Title: Class '"SimResult"': Simulation Result Object
-> ### Aliases: SimResult-class summary,SimResult-method
-> ###   summaryShort,SimResult-method
+> ### Aliases: SimResult-class SimResult
 > ### Keywords: classes
 > 
 > ### ** Examples
@@ -326,21 +336,17 @@ Proportion of MCAR: 0.2
 Class "SimResult" [package "simsem"]
 
 Slots:
-                                                                       
-Name:     modelType         nRep         coef           se          fit
-Class:    character      numeric   data.frame   data.frame   data.frame
-                                                                       
-Name:     converged   paramValue misspecValue       popFit         FMI1
-Class:       vector   data.frame   data.frame   data.frame   data.frame
-                                                                       
-Name:          FMI2      stdCoef         seed            n         nobs
-Class:   data.frame   data.frame      numeric       vector   data.frame
-                                                                       
-Name:        pmMCAR        pmMAR     extraOut    paramOnly   labelParam
-Class:       vector       vector         list      logical       vector
-                   
-Name:        timing
-Class:         list
+                  
+Name:       .xData
+Class: environment
+
+Extends: 
+Class "SimSemParentClass", directly
+Class "envRefClass", by class "SimSemParentClass", distance 2
+Class ".environment", by class "SimSemParentClass", distance 3
+Class "refClass", by class "SimSemParentClass", distance 3
+Class "environment", by class "SimSemParentClass", distance 4, with explicit coerce
+Class "refObject", by class "SimSemParentClass", distance 4
 > loading <- matrix(0, 6, 1)
 > loading[1:6, 1] <- NA
 > LY <- bind(loading, 0.7)
@@ -513,8 +519,8 @@ detaching 'package:parallel'
 > flush(stderr()); flush(stdout())
 > 
 > ### Name: SimSem-class
-> ### Title: Class '"SimSem"'
-> ### Aliases: SimSem-class summary,SimSem-method
+> ### Title: Class '"SimSem"': Model template object
+> ### Aliases: SimSem-class SimSem
 > 
 > ### ** Examples
 > 
@@ -522,9 +528,17 @@ detaching 'package:parallel'
 Class "SimSem" [package "simsem"]
 
 Slots:
-                                                        
-Name:         pt      dgen modelType  groupLab       con
-Class:      list      list character character      list
+                  
+Name:       .xData
+Class: environment
+
+Extends: 
+Class "SimSemParentClass", directly
+Class "envRefClass", by class "SimSemParentClass", distance 2
+Class ".environment", by class "SimSemParentClass", distance 3
+Class "refClass", by class "SimSemParentClass", distance 3
+Class "environment", by class "SimSemParentClass", distance 4, with explicit coerce
+Class "refObject", by class "SimSemParentClass", distance 4
 > 
 > loading <- matrix(0, 6, 2)
 > loading[1:3, 1] <- NA
@@ -669,8 +683,7 @@ ME: mean of Factor.ETA
 > 
 > ### Name: SimVector-class
 > ### Title: Vector object: Random parameters vector
-> ### Aliases: SimVector-class summaryShort,SimVector-method
-> ###   summary,SimVector-method
+> ### Aliases: SimVector-class SimVector
 > ### Keywords: classes
 > 
 > ### ** Examples
@@ -679,9 +692,17 @@ ME: mean of Factor.ETA
 Class "SimVector" [package "simsem"]
 
 Slots:
-                                 
-Name:      free popParam  misspec
-Class:   vector   vector   vector
+                  
+Name:       .xData
+Class: environment
+
+Extends: 
+Class "SimSemParentClass", directly
+Class "envRefClass", by class "SimSemParentClass", distance 2
+Class ".environment", by class "SimSemParentClass", distance 3
+Class "refClass", by class "SimSemParentClass", distance 3
+Class "environment", by class "SimSemParentClass", distance 4, with explicit coerce
+Class "refObject", by class "SimSemParentClass", distance 4
 > 
 > factor.mean <- rep(NA, 2)
 > factor.mean.starting <- c(5, 2)
@@ -5713,21 +5734,17 @@ detaching 'package:parallel'
 Class "SimResult" [package "simsem"]
 
 Slots:
-                                                                       
-Name:     modelType         nRep         coef           se          fit
-Class:    character      numeric   data.frame   data.frame   data.frame
-                                                                       
-Name:     converged   paramValue misspecValue       popFit         FMI1
-Class:       vector   data.frame   data.frame   data.frame   data.frame
-                                                                       
-Name:          FMI2      stdCoef         seed            n         nobs
-Class:   data.frame   data.frame      numeric       vector   data.frame
-                                                                       
-Name:        pmMCAR        pmMAR     extraOut    paramOnly   labelParam
-Class:       vector       vector         list      logical       vector
-                   
-Name:        timing
-Class:         list
+                  
+Name:       .xData
+Class: environment
+
+Extends: 
+Class "SimSemParentClass", directly
+Class "envRefClass", by class "SimSemParentClass", distance 2
+Class ".environment", by class "SimSemParentClass", distance 3
+Class "refClass", by class "SimSemParentClass", distance 3
+Class "environment", by class "SimSemParentClass", distance 4, with explicit coerce
+Class "refObject", by class "SimSemParentClass", distance 4
 > loading <- matrix(0, 6, 1)
 > loading[1:6, 1] <- NA
 > LY <- bind(loading, 0.7)
@@ -5886,7 +5903,9 @@ detaching 'package:parallel'
 > ### Name: summaryShort
 > ### Title: Provide short summary of an object.
 > ### Aliases: summaryShort summaryShort-methods summaryShort,ANY-method
-> ###   summaryShort,vector-method summaryShort,matrix-method
+> ###   summaryShort,SimSemParentClass-method
+> ###   summary,SimSemParentClass-method summaryShort,vector-method
+> ###   summaryShort,matrix-method
 > 
 > ### ** Examples
 > 
@@ -5909,7 +5928,7 @@ detaching 'package:parallel'
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  5.62 0.14 5.82 NA NA 
+Time elapsed:  6.36 0.08 6.91 NA NA 
 > grDevices::dev.off()
 null device 
           1 

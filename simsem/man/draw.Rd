@@ -1,10 +1,10 @@
 \name{draw}
 \alias{draw}
 \title{
-	Draw parameters from a \code{\linkS4class{SimSem}} object.
+	Draw parameters from a \code{\link{SimSem}} object.
 }
 \description{
-	This function draws parameters from a \code{\linkS4class{SimSem}} template, for debugging or other use. Used internally to create data. Data can be created in one step from a \code{SimSem} object using \code{\link{generate}}.
+	This function draws parameters from a \code{\link{SimSem}} template, for debugging or other use. Used internally to create data. Data can be created in one step from a \code{SimSem} object using \code{\link{generate}}.
 }
 \usage{
 draw(model, maxDraw=50, misfitBounds=NULL, averageNumMisspec=FALSE, 
@@ -12,7 +12,7 @@ optMisfit = NULL, optDraws=50, misfitType="f0", createOrder = c(1, 2, 3))
 }
 \arguments{
   \item{model}{
-	A \code{\linkS4class{SimSem}} object. 
+	A \code{\link{SimSem}} object. 
 }
   \item{maxDraw}{
 	Integer specifying the maximum number of attempts to draw a valid set of parameters (no negative error variance, standardized coefficients over 1).

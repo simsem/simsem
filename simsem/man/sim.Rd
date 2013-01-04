@@ -4,7 +4,7 @@
 	Run a monte carlo simulation with a structural equation model.
 }
 \description{
-	This function can be used to generate and analyze simulated data from \code{\linkS4class{SimSem}} objects created with the \code{\link{model}} function. In this function, parameters are drawn from the specified data-generation model and used to create data, specified missingness (if any) is imposed, and data are analyzed using the specified \code{\linkS4class{SimSem}} analysis model object. Provides a \code{\linkS4class{SimResult}}) object as ouput, which summarizes analyses across replications. Data can be transformed using the \code{datafun} argument. Additional output can be extracted using the \code{outfun} argument. Paralleled processing can be enabled using the \code{multicore} argument. The \code{sim} function can also be used to obtain raw data using the \code{dataOnly} argument, to analyze pre-existing data using the \code{rawData} argument, and to simulate data that follows the distribution of a real data set using the \code{rawData} argument.
+	This function can be used to generate and analyze simulated data from \code{\link{SimSem}} objects created with the \code{\link{model}} function. In this function, parameters are drawn from the specified data-generation model and used to create data, specified missingness (if any) is imposed, and data are analyzed using the specified \code{\link{SimSem}} analysis model object. Provides a \code{\link{SimResult}}) object as ouput, which summarizes analyses across replications. Data can be transformed using the \code{datafun} argument. Additional output can be extracted using the \code{outfun} argument. Paralleled processing can be enabled using the \code{multicore} argument. The \code{sim} function can also be used to obtain raw data using the \code{dataOnly} argument, to analyze pre-existing data using the \code{rawData} argument, and to simulate data that follows the distribution of a real data set using the \code{rawData} argument.
 }
 \usage{
 sim(nRep, model, n, generate = NULL, rawData = NULL, miss = NULL, datafun=NULL, outfun=NULL,
@@ -19,13 +19,13 @@ paramOnly = FALSE, dataOnly=FALSE, smartStart=FALSE, ...)
 	Number of replications. If any of the \code{n}, \code{pmMCAR}, or \code{pmMAR} arguments are specified as lists, the number of replications will default to the length of the list(s), and \code{nRep} need not be specified.
 }
   \item{model}{
-	\code{\linkS4class{SimSem}} object created by \code{\link{model}}. If the \code{generate} argument is not specified, then the object in the \code{model} argument will be used for both data generation and analysis. If \code{generate} is specified, then the \code{model} argument will be used for data analysis only.
+	\code{\link{SimSem}} object created by \code{\link{model}}. If the \code{generate} argument is not specified, then the object in the \code{model} argument will be used for both data generation and analysis. If \code{generate} is specified, then the \code{model} argument will be used for data analysis only.
 }
   \item{n}{
 	Sample size. Either a single value, or a list of values to vary sample size across replications. The \code{n} argument can also be specified as a random distribution object; if any resulting values are non-integers, the decimal will be rounded. 
 }
   \item{generate}{
-	\code{\linkS4class{SimSem}} object created using the \code{\link{model}} function. If included, this argument will be used to generate data instead of the code{\linkS4class{SimSem}} object specified in the \code{model} option.
+	\code{\link{SimSem}} object created using the \code{\link{model}} function. If included, this argument will be used to generate data instead of the code{\link{SimSem}} object specified in the \code{model} option.
 }
   \item{rawData}{
 	If specified, a list of data objects to be used in simulations instead of generating data from a \code{SimSem} template.
@@ -47,10 +47,10 @@ paramOnly = FALSE, dataOnly=FALSE, smartStart=FALSE, ...)
 
 }
   \item{facDist}{ 
-	Factor distributions. Either a list of \code{\linkS4class{SimDataDist}} objects or a single \code{\linkS4class{SimDataDist}} object to give all factors the same distribution. Use when \code{sequential} is \code{TRUE}.
+	Factor distributions. Either a list of \code{\link{SimDataDist}} objects or a single \code{\link{SimDataDist}} object to give all factors the same distribution. Use when \code{sequential} is \code{TRUE}.
 }
   \item{indDist}{ 
-	Indicator distributions. Either a list of \code{\linkS4class{SimDataDist}} objects or a single \code{\linkS4class{SimDataDist}} object to give all indicators the same distribution. Use when \code{sequential} is \code{FALSE}.
+	Indicator distributions. Either a list of \code{\link{SimDataDist}} objects or a single \code{\link{SimDataDist}} object to give all indicators the same distribution. Use when \code{sequential} is \code{FALSE}.
 }
   \item{errorDist}{ 
 	An object or list of objects of type \code{SimDataDist} indicating the distribution of errors. If a single \code{SimDataDist} is specified, each error will be genrated with that distribution.
@@ -117,7 +117,7 @@ paramOnly = FALSE, dataOnly=FALSE, smartStart=FALSE, ...)
 }
 }
 \value{
-	A result object (\code{\linkS4class{SimResult}})
+	A result object (\code{\link{SimResult}})
 }
 \author{
 	Patrick Miller (Univeristy of Notre Dame; \email{pmille13@nd.edu})
@@ -125,7 +125,7 @@ paramOnly = FALSE, dataOnly=FALSE, smartStart=FALSE, ...)
 }
 \seealso{
 	\itemize{
-		\item \code{\linkS4class{SimResult}} for the resulting output description
+		\item \code{\link{SimResult}} for the resulting output description
 	}
 }
 \examples{

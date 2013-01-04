@@ -36,7 +36,7 @@ findPower(powerTable, iv, power)
 \seealso{
 	\itemize{
 		\item \code{\link{getPower}} to find the power of parameter estimates		
-		\item \code{\link{continuousPower}} to find the power of parameter estimates for the result object (\code{linkS4class{SimResult}}) with varying parameters.
+		\item \code{\link{continuousPower}} to find the power of parameter estimates for the result object (\code{link{SimResult}}) with varying parameters.
 	}
 }
 \examples{

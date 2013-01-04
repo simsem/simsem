@@ -13,19 +13,19 @@ pmMCARval = NULL, pmMARval = NULL, condCutoff = TRUE, df = 0)
 }
 \arguments{
   \item{altNested}{
-	\code{\linkS4class{SimResult}} that saves the simulation result of the nested model when the nested model is \code{FALSE}.
+	\code{\link{SimResult}} that saves the simulation result of the nested model when the nested model is \code{FALSE}.
 }
   \item{altParent}{
-	\code{\linkS4class{SimResult}} that saves the simulation result of the parent model when the nested model is \code{FALSE}.
+	\code{\link{SimResult}} that saves the simulation result of the parent model when the nested model is \code{FALSE}.
 }
   \item{cutoff}{
 	A vector of priori cutoffs for fit indices. The \code{cutoff} cannot be specified if the \code{nullNested} and \code{nullParent} are specified.
 }
   \item{nullNested}{
-	The \code{\linkS4class{SimResult}} that saves the simulation result of the nested model when the nested model is \code{TRUE}. This argument must be specified with \code{nullParent}. The \code{nullNested} cannot be specified if the \code{cutoff} is specified.
+	The \code{\link{SimResult}} that saves the simulation result of the nested model when the nested model is \code{TRUE}. This argument must be specified with \code{nullParent}. The \code{nullNested} cannot be specified if the \code{cutoff} is specified.
 }
   \item{nullParent}{
-	The \code{\linkS4class{SimResult}} that saves the simulation result of the parent model when the nested model is \code{TRUE}. This argument must be specified with \code{nullNested}. The \code{nullNested} cannot be specified if the \code{cutoff} is specified.
+	The \code{\link{SimResult}} that saves the simulation result of the parent model when the nested model is \code{TRUE}. This argument must be specified with \code{nullNested}. The \code{nullNested} cannot be specified if the \code{cutoff} is specified.
 }
   \item{revDirec}{
 	Reverse the direction of deciding a power by fit indices (e.g., less than --> greater than). The default is to count the proportion of fit indices that indicates lower fit to the model, such as how many RMSEA in the alternative model that is worse than cutoffs. The direction can be reversed by setting as \code{TRUE}.
@@ -61,7 +61,7 @@ pmMCARval = NULL, pmMARval = NULL, condCutoff = TRUE, df = 0)
 \seealso{
 	\itemize{
 		\item \code{\link{getCutoff}} to find the cutoffs from null model.
-		\item \code{\linkS4class{SimResult}} to see how to create simResult
+		\item \code{\link{SimResult}} to see how to create simResult
 	}
 }
 \examples{

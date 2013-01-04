@@ -4,7 +4,7 @@
 	Generate data using SimSem template
 }
 \description{
-	This function can be used to generate random data based on the \code{\linkS4class{SimSem}} template. Some notable features include fine control of misspecification and misspecification optimization, as well as the ability to generate non-normal data. When using \emph{simsem} for simulations, this function is used internally to generate data in the function \code{sim}, and can be helpful for debugging, or in creating data for use with other analysis programs. 
+	This function can be used to generate random data based on the \code{\link{SimSem}} template. Some notable features include fine control of misspecification and misspecification optimization, as well as the ability to generate non-normal data. When using \emph{simsem} for simulations, this function is used internally to generate data in the function \code{sim}, and can be helpful for debugging, or in creating data for use with other analysis programs. 
 }
 \usage{
 generate(model, n, maxDraw=50, misfitBounds=NULL, misfitType="f0",
@@ -15,7 +15,7 @@ generate(model, n, maxDraw=50, misfitBounds=NULL, misfitType="f0",
 }
 \arguments{
   \item{model}{
-	A \code{\linkS4class{SimSem}} object. 
+	A \code{\link{SimSem}} object. 
 }
   \item{n}{
 	Integer of sample size.
@@ -42,13 +42,13 @@ generate(model, n, maxDraw=50, misfitBounds=NULL, misfitType="f0",
     The order of 1) applying equality/inequality constraints, 2) applying misspecification, and 3) fill unspecified parameters (e.g., residual variances when total variances are specified). The specification of this argument is a vector of different orders of 1 (constraint), 2 (misspecification), and 3 (filling parameters). For example, \code{c(1, 2, 3)} is to apply constraints first, then add the misspecification, and finally fill all parameters. See the example of how to use it in the \code{\link{draw}} function. 
 }
   \item{indDist}{ 
-	A \code{\linkS4class{SimDataDist}} object or list of objects for a distribution of indicators. If one object is passed, each indicator will have the same distribution. Use when \code{sequential} is \code{FALSE}.
+	A \code{\link{SimDataDist}} object or list of objects for a distribution of indicators. If one object is passed, each indicator will have the same distribution. Use when \code{sequential} is \code{FALSE}.
 }
  \item{sequential}{ 
 	If \code{TRUE}, use a sequential method to create data such that the data from factor are generated first and apply to a set of equations to obtain the data of indicators. If \code{FALSE}, create data directly from model-implied mean and covariance of indicators.
 }
   \item{facDist}{ 
-  A \code{\linkS4class{SimDataDist}} object or list of objects for the distribution of factors. If one object is passed, all factors will have the same distribution. Use when \code{sequential} is \code{TRUE}.
+  A \code{\link{SimDataDist}} object or list of objects for the distribution of factors. If one object is passed, all factors will have the same distribution. Use when \code{sequential} is \code{TRUE}.
 }
   \item{errorDist}{ 
 	An object or list of objects of type \code{SimDataDist} indicating the distribution of errors. If a single \code{SimDataDist} is specified, each error will be genrated with that distribution.
@@ -70,7 +70,7 @@ generate(model, n, maxDraw=50, misfitBounds=NULL, misfitType="f0",
 	A data.frame containing simulated data from the data generation template. A variable "group" is appended indicating group membership.
 }
 \details{
-This function will use \code{\link[MASS]{mvrnorm}} function ito create data from model implied covariance matrix if the data distribution object (\code{\linkS4class{SimDataDist}}) is not specified. It the data distribution object is specified, the Gaussian copula model is used. See \code{\linkS4class{SimDataDist}} for further details. For the model-based bootstrap, the transformation proposed by Yung & Bentler (1996) is used. This procedure is the expansion from the Bollen and Stine (1992) bootstrap including a mean structure. The model-implied mean vector and covariance matrix with trivial misspecification will be used in the model-based bootstrap if \code{misspec} is specified. See page 133 of Bollen and Stine (1992) for a reference. 
+This function will use \code{\link[MASS]{mvrnorm}} function ito create data from model implied covariance matrix if the data distribution object (\code{\link{SimDataDist}}) is not specified. It the data distribution object is specified, the Gaussian copula model is used. See \code{\link{SimDataDist}} for further details. For the model-based bootstrap, the transformation proposed by Yung & Bentler (1996) is used. This procedure is the expansion from the Bollen and Stine (1992) bootstrap including a mean structure. The model-implied mean vector and covariance matrix with trivial misspecification will be used in the model-based bootstrap if \code{misspec} is specified. See page 133 of Bollen and Stine (1992) for a reference. 
 
 Internally, parameters are first drawn, and data is then created from these parameters. Both of these steps are available via the \code{\link{draw}} and \code{\link{createData}} functions respectively.
 }
@@ -85,7 +85,7 @@ Yung, Y.-F., & Bentler, P. M. (1996). Bootstrapping techniques in analysis of me
 
 \seealso{
 	\itemize{
-		\item \code{\link{draw}} To draw parameters using the \code{\linkS4class{SimSem}} template.
+		\item \code{\link{draw}} To draw parameters using the \code{\link{SimSem}} template.
 		\item \code{\link{createData}} To generate random data using a set of parameters from \code{\link{draw}}
 	}
 }

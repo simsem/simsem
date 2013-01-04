@@ -11,10 +11,10 @@ getCutoffNested(nested, parent, alpha = 0.05, usedFit = NULL, nVal = NULL, pmMCA
 }
 \arguments{
   \item{nested}{
-	\code{\linkS4class{SimResult}} that saves the analysis results of nested model from multiple replications
+	\code{\link{SimResult}} that saves the analysis results of nested model from multiple replications
 }
   \item{parent}{
-	\code{\linkS4class{SimResult}} that saves the analysis results of parent model from multiple replications
+	\code{\link{SimResult}} that saves the analysis results of parent model from multiple replications
 }
   \item{alpha}{
 	A priori alpha level
@@ -42,7 +42,7 @@ getCutoffNested(nested, parent, alpha = 0.05, usedFit = NULL, nVal = NULL, pmMCA
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \seealso{
-	\code{\linkS4class{SimResult}} for a detail of simResult
+	\code{\link{SimResult}} for a detail of simResult
 	\code{\link{getCutoff}} for a detail of finding cutoffs for absolute fit
 }
 \examples{

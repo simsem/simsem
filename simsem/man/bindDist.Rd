@@ -30,7 +30,7 @@ bindDist(margins, ..., p = NULL, keepScale = TRUE, reverse = FALSE, copula = NUL
 }
 }
 \value{
-	\code{\linkS4class{SimDataDist}} that saves analysis result from simulate data.
+	\code{\link{SimDataDist}} that saves analysis result from simulate data.
 }
 \references{
 Mair, P., Satorra, A., & Bentler, P. M. (2012). Generating nonnormal multivariate data using copulas: Applications to SEM. \emph{Multivariate Behavioral Research, 47}, 547-565.
@@ -40,7 +40,7 @@ Mair, P., Satorra, A., & Bentler, P. M. (2012). Generating nonnormal multivariat
 }
 \seealso{
 	\itemize{
-		\item \code{\linkS4class{SimResult}} for the type of resulting object
+		\item \code{\link{SimResult}} for the type of resulting object
 	}
 }
 \examples{

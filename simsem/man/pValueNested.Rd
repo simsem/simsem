@@ -18,10 +18,10 @@ nVal = NULL, pmMCARval = NULL, pmMARval = NULL, df = 0)
 	\code{\linkS4class{lavaan}} that saves the analysis result of the parent model from the target dataset
 }
   \item{simNested}{
-	\code{\linkS4class{SimResult}} that saves the analysis results of nested model from multiple replications
+	\code{\link{SimResult}} that saves the analysis results of nested model from multiple replications
 }
   \item{simParent}{
-	\code{\linkS4class{SimResult}} that saves the analysis results of parent model from multiple replications
+	\code{\link{SimResult}} that saves the analysis results of parent model from multiple replications
 }
   \item{usedFit}{
 	Vector of names of fit indices that researchers wish to getCutoffs from. The default is to getCutoffs of all fit indices.
@@ -50,9 +50,7 @@ nVal = NULL, pmMCARval = NULL, pmMARval = NULL, df = 0)
 }
 \seealso{
 	\itemize{
-		%\item \code{\linkS4class{SimModelOut}} to see how to get the analysis result of observed data
-		\item \code{\linkS4class{SimResult}} to run a simulation study
-		%\item \code{\link{runFit}} to run a simulation study based on the parameter estimates from the analysis result of observed data
+		\item \code{\link{SimResult}} to run a simulation study
 	}
 }
 \examples{

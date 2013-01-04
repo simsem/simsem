@@ -19,16 +19,16 @@ onetailed=FALSE)
 	\code{\linkS4class{lavaan}} that saves the analysis result of the second model from the target dataset
 }
   \item{dat1Mod1}{
-	\code{\linkS4class{SimResult}} that saves the simulation of analyzing Model 1 by datasets created from Model 1
+	\code{\link{SimResult}} that saves the simulation of analyzing Model 1 by datasets created from Model 1
 }
   \item{dat1Mod2}{
-	\code{\linkS4class{SimResult}} that saves the simulation of analyzing Model 2 by datasets created from Model 1
+	\code{\link{SimResult}} that saves the simulation of analyzing Model 2 by datasets created from Model 1
 }
   \item{dat2Mod1}{
-	\code{\linkS4class{SimResult}} that saves the simulation of analyzing Model 1 by datasets created from Model 2
+	\code{\link{SimResult}} that saves the simulation of analyzing Model 1 by datasets created from Model 2
 }
   \item{dat2Mod2}{
-	\code{\linkS4class{SimResult}} that saves the simulation of analyzing Model 2 by datasets created from Model 2
+	\code{\link{SimResult}} that saves the simulation of analyzing Model 2 by datasets created from Model 2
 }
   \item{usedFit}{
 	Vector of names of fit indices that researchers wish to getCutoffs from. The default is to getCutoffs of all fit indices.
@@ -60,9 +60,7 @@ onetailed=FALSE)
 }
 \seealso{
 	\itemize{
-		%\item \code{\linkS4class{SimModelOut}} to see how to get the analysis result of observed data
-		\item \code{\linkS4class{SimResult}} to run a simulation study
-		%\item \code{\link{runFit}} to run a simulation study based on the parameter estimates from the analysis result of observed data
+		\item \code{\link{SimResult}} to run a simulation study
 	}
 }
 \examples{

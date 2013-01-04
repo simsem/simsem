@@ -13,16 +13,16 @@ contMAR = TRUE, useContour = TRUE, logistic = TRUE, onetailed = FALSE)
 }
 \arguments{
   \item{dat2Mod1}{
-	\code{\linkS4class{SimResult}} that saves the simulation of analyzing Model 1 by datasets created from Model 2
+	\code{\link{SimResult}} that saves the simulation of analyzing Model 1 by datasets created from Model 2
 }
   \item{dat2Mod2}{
-	\code{\linkS4class{SimResult}} that saves the simulation of analyzing Model 2 by datasets created from Model 2
+	\code{\link{SimResult}} that saves the simulation of analyzing Model 2 by datasets created from Model 2
 }
   \item{dat1Mod1}{
-	\code{\linkS4class{SimResult}} that saves the simulation of analyzing Model 1 by datasets created from Model 1
+	\code{\link{SimResult}} that saves the simulation of analyzing Model 1 by datasets created from Model 1
 }
   \item{dat1Mod2}{
-	\code{\linkS4class{SimResult}} that saves the simulation of analyzing Model 2 by datasets created from Model 1
+	\code{\link{SimResult}} that saves the simulation of analyzing Model 2 by datasets created from Model 1
 }
   \item{cutoff}{
 	A vector of priori cutoffs for the differences in fit indices.
@@ -60,7 +60,7 @@ contMAR = TRUE, useContour = TRUE, logistic = TRUE, onetailed = FALSE)
 }
 \seealso{
 	\itemize{
-		\item \code{\linkS4class{SimResult}} for simResult that used in this function.
+		\item \code{\link{SimResult}} for simResult that used in this function.
 		\item \code{\link{getCutoffNonNested}} to find the cutoffs of the differences in fit indices for non-nested model comparison
 		\item \code{\link{plotCutoffNonNested}} to visualize the cutoffs of the differences in fit indices for non-nested model comparison
 		\item \code{\link{getPowerFitNonNested}} to find the power in rejecting the non-nested model by the difference in fit indices cutoffs

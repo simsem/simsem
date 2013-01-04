@@ -2,8 +2,7 @@
 \Rdversion{1.1}
 \docType{class}
 \alias{SimResult-class}
-\alias{summary,SimResult-method}
-\alias{summaryShort,SimResult-method}
+\alias{SimResult}
 \title{Class \code{"SimResult"}: Simulation Result Object}
 \description{
 This class will save data analysis results from multiple replications, such as fit indices cutoffs or power, parameter values, model misspecification, etc.
@@ -11,7 +10,7 @@ This class will save data analysis results from multiple replications, such as f
 \section{Objects from the Class}{
 Objects can be created by \code{\link{sim}}. 
 }
-\section{Slots}{
+\section{Fields}{
   \describe{
     \item{\code{modelType}:}{Analysis model type (CFA, Path, or SEM) }
     \item{\code{nRep}:}{Number of replications have been created and run simulated data. }

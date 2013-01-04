@@ -9,7 +9,7 @@
 	Find p-values (1 - percentile)
 }
 \description{
-	This function will provide \emph{p} value from comparing number and vector or the analytic result to the observed data (in \code{\linkS4class{lavaan}}) and the simulation result (in \code{\linkS4class{SimResult}}).
+	This function will provide \emph{p} value from comparing number and vector or the analytic result to the observed data (in \code{\linkS4class{lavaan}}) and the simulation result (in \code{\link{SimResult}}).
 }
 \usage{
 pValue(target, dist, ...)
@@ -48,7 +48,7 @@ pValue(target, dist, ...)
 }
 \seealso{
 	\itemize{
-		\item \code{\linkS4class{SimResult}} to run a simulation study
+		\item \code{\link{SimResult}} to run a simulation study
 	}
 }
 \examples{

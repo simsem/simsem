@@ -11,7 +11,7 @@ summaryMisspec(object, improper = FALSE)
 }
 \arguments{
   \item{object}{
-		\code{\linkS4class{SimResult}} object being described
+		\code{\link{SimResult}} object being described
 }
   \item{improper}{
 	If TRUE, include the replications that provided improper solutions
@@ -46,7 +46,7 @@ summaryMisspec(object, improper = FALSE)
 Browne, M. W., & Cudeck, R. (1992). Alternative ways of assessing model fit. \emph{Sociological Methods & Research, 21}, 230-258.
 }
 \seealso{
-	\code{\linkS4class{SimResult}} for the object input
+	\code{\link{SimResult}} for the object input
 }
 \examples{
 \dontrun{

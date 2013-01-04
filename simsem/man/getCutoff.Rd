@@ -8,14 +8,14 @@
 	Find fit indices cutoff given a priori alpha level
 }
 \description{
-	Extract fit indices information from the \code{\linkS4class{SimResult}} and getCutoff of fit indices given a priori alpha level
+	Extract fit indices information from the \code{\link{SimResult}} and getCutoff of fit indices given a priori alpha level
 }
 \usage{
 getCutoff(object, alpha, revDirec = FALSE, usedFit = NULL, ...)
 }
 \arguments{
   \item{object}{
-	\code{\linkS4class{SimResult}} that saves the analysis results from multiple replications
+	\code{\link{SimResult}} that saves the analysis results from multiple replications
 }
   \item{alpha}{
 	A priori alpha level
@@ -39,7 +39,7 @@ getCutoff(object, alpha, revDirec = FALSE, usedFit = NULL, ...)
 		The details are similar to the method for \code{data.frame}		
 	}
 	\item{signature(object="SimResult")}{
-		This method will find the fit indices cutoff given a specified alpha level. The additional arguments are \code{nVal}, \code{pmMCARval}, \code{pmMARval}, and \code{df}, which are needed when using varying sample sizes or percent missing across replications in \code{\linkS4class{SimResult}}. The \code{nVal} is the sample size value that researchers wish to find the fit indices cutoffs from. The \code{pmMCARval} is the percent missing completely at random value that researchers wish to find the fit indices cutoffs from. The \code{pmMARval} is the percent missing at random value that researchers wish to find the fit indices cutoffs from. The \code{df} is the degree of freedom used in spline method in predicting the fit indices by the predictors. If \code{df} is 0, the spline method will not be applied.
+		This method will find the fit indices cutoff given a specified alpha level. The additional arguments are \code{nVal}, \code{pmMCARval}, \code{pmMARval}, and \code{df}, which are needed when using varying sample sizes or percent missing across replications in \code{\link{SimResult}}. The \code{nVal} is the sample size value that researchers wish to find the fit indices cutoffs from. The \code{pmMCARval} is the percent missing completely at random value that researchers wish to find the fit indices cutoffs from. The \code{pmMARval} is the percent missing at random value that researchers wish to find the fit indices cutoffs from. The \code{df} is the degree of freedom used in spline method in predicting the fit indices by the predictors. If \code{df} is 0, the spline method will not be applied.
 	}
 }}
 \value{
@@ -49,7 +49,7 @@ getCutoff(object, alpha, revDirec = FALSE, usedFit = NULL, ...)
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
 }
 \seealso{
-	\code{\linkS4class{SimResult}} for a detail of simResult
+	\code{\link{SimResult}} for a detail of simResult
 }
 \examples{
 \dontrun{
