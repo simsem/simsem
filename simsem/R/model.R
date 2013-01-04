@@ -287,9 +287,9 @@ buildPT <- function(paramSet, pt = NULL, group = 1, facLab = NULL, indLab = NULL
         } else {
             rhs <- rep(indLab, times = nf)
         }
-        pt <- parseFree(paramSet$LY, group = group, pt = pt, op = "=~", lhs, rhs)
+        pt <- parseFree(freeDat = paramSet$LY$free, popParamDat = paramSet$LY$popParam, isVector = FALSE, isSymmetric = FALSE, group = group, pt = pt, op = "=~", lhs, rhs)
     }
-    
+	
     ## PS - factor covariance: Symmetric
     if (!is.null(paramSet$PS)) {
         nf <- ncol(paramSet$PS$free)
@@ -302,30 +302,32 @@ buildPT <- function(paramSet, pt = NULL, group = 1, facLab = NULL, indLab = NULL
         }
         if (!is.null(pt)) {
             if (!is.null(paramSet$LY)) {
-                pt <- mapply(pt, parseFree(paramSet$PS, group = group, pt = pt, op = "~~", 
+                pt <- mapply(pt, parseFree(freeDat = paramSet$PS$free, popParamDat = paramSet$PS$popParam, isVector = FALSE, isSymmetric = TRUE, group = group, pt = pt, op = "~~", 
                   lhs, rhs), FUN = c, SIMPLIFY = FALSE)
             } else {
-                pt <- parseFree(paramSet$PS, group = group, pt = pt, op = "~~", lhs, 
+                pt <- parseFree(freeDat = paramSet$PS$free, popParamDat = paramSet$PS$popParam, isVector = FALSE, isSymmetric = TRUE, group = group, pt = pt, op = "~~", lhs, 
                   rhs)
             }
         } else {
-            pt <- parseFree(paramSet$PS, group = group, pt = pt, op = "~~", lhs, 
+            pt <- parseFree(freeDat = paramSet$PS$free, popParamDat = paramSet$PS$popParam, isVector = FALSE, isSymmetric = TRUE, group = group, pt = pt, op = "~~", lhs, 
                 rhs)
         }
     }
 
     ## RPS - factor correlation (same as PS): Symmetric
     if (!is.null(paramSet$RPS)) {
+		# Make it awkward because the reference class will change the global object too.
+		RPSfree <- paramSet$RPS$free
         # Step 1: parse variance information to the RPS
         if (!is.null(paramSet$VPS)) {
-            diag(paramSet$RPS$free) <- paramSet$VPS$free
+            diag(RPSfree) <- paramSet$VPS$free
         } else if (!is.null(paramSet$VE)) {
             # Intentionally use else if to select either VPS or VE
-            diag(paramSet$RPS$free) <- paramSet$VE$free
+            diag(RPSfree) <- paramSet$VE$free
         }
         
         # Step 2: create pt
-        nf <- ncol(paramSet$RPS$free)
+        nf <- ncol(RPSfree)
         if (is.null(psLab)) {
             lhs <- paste0(psLetter, rep(1:nf, nf:1))
             rhs <- paste0(psLetter, unlist(lapply(1:nf, function(k) (1:nf)[k:nf])))
@@ -335,14 +337,14 @@ buildPT <- function(paramSet, pt = NULL, group = 1, facLab = NULL, indLab = NULL
         }
         if (!is.null(pt)) {
             if (!is.null(paramSet$LY)) {
-                pt <- mapply(pt, parseFree(paramSet$RPS, group = group, pt = pt, 
+                pt <- mapply(pt, parseFree(freeDat = RPSfree, popParamDat = paramSet$RPS$popParam, isVector = FALSE, isSymmetric = TRUE, group = group, pt = pt, 
                   op = "~~", lhs, rhs), FUN = c, SIMPLIFY = FALSE)
             } else {
-                pt <- parseFree(paramSet$RPS, group = group, pt = pt, op = "~~", 
+                pt <- parseFree(freeDat = RPSfree, popParamDat = paramSet$RPS$popParam, isVector = FALSE, isSymmetric = TRUE, group = group, pt = pt, op = "~~", 
                   lhs, rhs)
             }
         } else {
-            pt <- parseFree(paramSet$RPS, group = group, pt = pt, op = "~~", lhs, 
+            pt <- parseFree(freeDat = RPSfree, popParamDat = paramSet$RPS$popParam, isVector = FALSE, isSymmetric = TRUE, group = group, pt = pt, op = "~~", lhs, 
                 rhs)
         }
     }
@@ -359,26 +361,28 @@ buildPT <- function(paramSet, pt = NULL, group = 1, facLab = NULL, indLab = NULL
             rhs <- unlist(lapply(1:ni, function(k) indLab[k:ni]))
         }
         if (!is.null(pt)) {
-            pt <- mapply(pt, parseFree(paramSet$TE, group = group, pt = pt, op = "~~", 
+            pt <- mapply(pt, parseFree(freeDat = paramSet$TE$free, popParamDat = paramSet$TE$popParam, isVector = FALSE, isSymmetric = TRUE, group = group, pt = pt, op = "~~", 
                 lhs, rhs), FUN = c, SIMPLIFY = FALSE)
         } else {
-            pt <- parseFree(paramSet$TE, group = group, pt = pt, op = "~~", lhs, 
+            pt <- parseFree(freeDat = paramSet$TE$free, popParamDat = paramSet$TE$popParam, isVector = FALSE, isSymmetric = TRUE, group = group, pt = pt, op = "~~", lhs, 
                 rhs)
         }
     }
     
     ## RTE - Correlation of measurment error: Symmetric
     if (!is.null(paramSet$RTE)) {
+		# Make it awkward because the reference class will change the global object too.
+		RTEfree <- paramSet$RTE$free
         # Step 1: parse variance information to the RTE
         if (!is.null(paramSet$VTE)) {
-            diag(paramSet$RTE$free) <- paramSet$VTE$free
+            diag(RTEfree) <- paramSet$VTE$free
         } else if (!is.null(paramSet$VY)) {
             # Intentionally use else if to select either VPS or VE
-            diag(paramSet$RTE$free) <- paramSet$VY$free
+            diag(RTEfree) <- paramSet$VY$free
         }
         
         # Step 2: create pt
-        ni <- ncol(paramSet$RTE$free)
+        ni <- ncol(RTEfree)
         if (is.null(indLab)) {
             lhs <- paste0("y", rep(1:ni, ni:1))
             rhs <- paste0("y", unlist(lapply(1:ni, function(k) (1:ni)[k:ni])))
@@ -386,7 +390,7 @@ buildPT <- function(paramSet, pt = NULL, group = 1, facLab = NULL, indLab = NULL
             lhs <- rep(indLab, ni:1)
             rhs <- unlist(lapply(1:ni, function(k) indLab[k:ni]))
         }
-        pt <- mapply(pt, parseFree(paramSet$RTE, group = group, pt = pt, op = "~~", 
+        pt <- mapply(pt, parseFree(freeDat = RTEfree, popParamDat = paramSet$RTE$popParam, isVector = FALSE, isSymmetric = TRUE, group = group, pt = pt, op = "~~", 
             lhs, rhs), FUN = c, SIMPLIFY = FALSE)
     }
     
@@ -400,21 +404,24 @@ buildPT <- function(paramSet, pt = NULL, group = 1, facLab = NULL, indLab = NULL
             lhs <- rep(psLab, each = nf)
             rhs <- rep(psLab, times = nf)
         }
-        pt <- mapply(pt, parseFree(paramSet$BE, group = group, pt = pt, op = "~", 
+        pt <- mapply(pt, parseFree(freeDat = paramSet$BE$free, popParamDat = paramSet$BE$popParam, isVector = FALSE, isSymmetric = FALSE, group = group, pt = pt, op = "~", 
             rhs, lhs), FUN = c, SIMPLIFY = FALSE)
     }
     
     
     ## AL - factor intercept
     
+	facIntcept <- NULL
     # if ME is not null but AL is null
     if (!is.null(paramSet$ME) && is.null(paramSet$AL)) {
-        paramSet$AL <- paramSet$ME
-    }
+        facIntcept <- paramSet$ME
+    } else if (!is.null(paramSet$AL)) {
+		facIntcept <- paramSet$AL
+	}
     
     # Create pt
-    if (!is.null(paramSet$AL)) {
-        nf <- length(paramSet$AL$free)
+    if (!is.null(facIntcept)) {
+        nf <- length(facIntcept$free)
         if (is.null(psLab)) {
             lhs <- paste(psLetter, 1:nf, sep = "")
             rhs <- rep("", times = nf)
@@ -422,20 +429,23 @@ buildPT <- function(paramSet, pt = NULL, group = 1, facLab = NULL, indLab = NULL
             lhs <- psLab
             rhs <- rep("", times = nf)
         }
-        pt <- mapply(pt, parseFree(paramSet$AL, group = group, pt = pt, op = "~1", 
+        pt <- mapply(pt, parseFree(freeDat = facIntcept$free, popParamDat = facIntcept$popParam, isVector = TRUE, isSymmetric = FALSE, group = group, pt = pt, op = "~1", 
             lhs, rhs), FUN = c, SIMPLIFY = FALSE)
     }
     
     ## TY - indicator intercept
     
     # if MY is not null but TY is null
+	errorIntcept <- NULL
     if (!is.null(paramSet$MY) && is.null(paramSet$TY)) {
-        paramSet$TY <- paramSet$MY
-    }
+        errorIntcept <- paramSet$MY
+    } else if (!is.null(paramSet$TY)) {
+		errorIntcept <- paramSet$TY
+	}
     
     # Create pt
-    if (!is.null(paramSet$TY)) {
-        ni <- length(paramSet$TY$free)
+    if (!is.null(errorIntcept)) {
+        ni <- length(errorIntcept$free)
         if (is.null(indLab)) {
             lhs <- paste("y", 1:ni, sep = "")
             rhs <- rep("", times = ni)
@@ -443,7 +453,7 @@ buildPT <- function(paramSet, pt = NULL, group = 1, facLab = NULL, indLab = NULL
             lhs <- indLab
             rhs <- rep("", times = ni)
         }
-        pt <- mapply(pt, parseFree(paramSet$TY, group = group, pt = pt, op = "~1", 
+        pt <- mapply(pt, parseFree(freeDat = errorIntcept$free, popParamDat = errorIntcept$popParam, isVector = TRUE, isSymmetric = FALSE, group = group, pt = pt, op = "~1", 
             lhs, rhs), FUN = c, SIMPLIFY = FALSE)
     }
     
@@ -451,7 +461,7 @@ buildPT <- function(paramSet, pt = NULL, group = 1, facLab = NULL, indLab = NULL
 }
 
 ## Returns a pt (list) of parsed SimMatrix/SimVector
-parseFree <- function(simDat, group, pt, op, lhs = NULL, rhs = NULL,
+parseFree <- function(freeDat, popParamDat, isVector, isSymmetric = FALSE, group, pt, op, lhs = NULL, rhs = NULL,
     swap = FALSE) {
     ## Calculate starting indices from previous pt
     if (!is.null(pt)) {
@@ -464,17 +474,15 @@ parseFree <- function(simDat, group, pt, op, lhs = NULL, rhs = NULL,
         startUnco <- 1
     }
     
-    freeDat <- simDat$free
-    popParamDat <- simDat$popParam
     if (swap) {
         freeDat <- t(freeDat)
         popParamDat <- t(popParamDat)
     }
     numElem <- NULL
     
-    if (class(simDat) == "SimVector") {
+    if (isVector) {
         numElem <- length(freeDat)
-    } else if (simDat$symmetric && op == "~~") {
+    } else if (isSymmetric && op == "~~") {
         # Just get lower tri
         numElem <- nrow(freeDat) * (nrow(freeDat) + 1)/2
     } else {

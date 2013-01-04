@@ -347,7 +347,6 @@ summary(Output)
 
 # No misspecification
 
-
 loading <- matrix(0, 8, 3)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
@@ -409,7 +408,7 @@ path.start[3, 2] <- 0.4
 BE <- bind(path, path.start)
 
 SEM.model <- model(BE=BE, LY=LY, PS=PS, TE=TE, modelType="SEM")
-Output <- sim(100, n=300, SEM.model, smartStart=FALSE) 
+Output <- sim(100, n=300, SEM.model, smartStart=TRUE) 
 Output2 <- sim(100, n=300, SEM.model)#, smartStart=FALSE) 
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
