@@ -25,7 +25,7 @@ bindDist <- function(margins, ..., p = NULL, keepScale = TRUE, reverse = FALSE, 
 	} else {
 		copula <- new("NullCopula")
 	}
-    return(new("SimDataDist", margins = margins, paramMargins = List, p = p, keepScale = keepScale, 
+    return(SimDataDist$new(margins = margins, paramMargins = List, p = p, keepScale = keepScale, 
         reverse = reverse, copula = copula))
 }
  

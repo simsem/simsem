@@ -10,9 +10,9 @@
 draw <- function(model, maxDraw = 50, misfitBounds = NULL, averageNumMisspec = FALSE, 
     optMisfit = NULL, optDraws = 50, misfitType = "f0", createOrder = c(1, 2, 3)) {
     stopifnot(class(model) == "SimSem")
-    drawParam(model@dgen, maxDraw = maxDraw, numFree = max(model@pt$free), misfitBounds = misfitBounds, 
+    drawParam(model$dgen, maxDraw = maxDraw, numFree = max(model$pt$free), misfitBounds = misfitBounds, 
         averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, 
-        misfitType = misfitType, con = model@con, ord = createOrder)
+        misfitType = misfitType, con = model$con, ord = createOrder)
 }
 
 # Order 1 = constraint, 2 = misspec, 3 = filling parameters
@@ -23,7 +23,7 @@ drawParam <- function(paramSet, maxDraw = 50, numFree = 1, misfitBounds = NULL, 
     }
     misspec <- any(sapply(paramSet, FUN = function(group) {
         sapply(group, FUN = function(mat) {
-            if (!is.null(mat) && length(mat@misspec) != 0 && !any(is.nan(mat@misspec))) {
+            if (!is.null(mat) && length(mat$misspec) != 0 && !any(is.nan(mat$misspec))) {
                 TRUE
             } else {
                 FALSE
@@ -294,9 +294,9 @@ drawParam <- function(paramSet, maxDraw = 50, numFree = 1, misfitBounds = NULL, 
 rawDraw <- function(simDat, constraint = TRUE, misSpec = TRUE, parMisOnly = FALSE, 
     misOnly = FALSE) {
     if (class(simDat) == "SimMatrix" || class(simDat) == "SimVector") {
-        free <- as.vector(simDat@free)
-        popParam <- as.vector(simDat@popParam)
-        misspec <- as.vector(simDat@misspec)
+        free <- as.vector(simDat$free)
+        popParam <- as.vector(simDat$popParam)
+        misspec <- as.vector(simDat$misspec)
         
         ## param will contain population parameters, fixed and freed only.  paramMis
         ## will contain param + any misspecification missRaw will contain ONLY the
@@ -357,10 +357,10 @@ rawDraw <- function(simDat, constraint = TRUE, misSpec = TRUE, parMisOnly = FALS
             }
         }
         if (class(simDat) == "SimMatrix") {
-            param <- matrix(param, nrow = nrow(simDat@free), ncol = ncol(simDat@free))
-            paramMis <- matrix(paramMis, nrow = nrow(simDat@free), ncol = ncol(simDat@free))
-            missRaw <- matrix(missRaw, nrow = nrow(simDat@free), ncol = ncol(simDat@free))
-            if (simDat@symmetric) {
+            param <- matrix(param, nrow = nrow(simDat$free), ncol = ncol(simDat$free))
+            paramMis <- matrix(paramMis, nrow = nrow(simDat$free), ncol = ncol(simDat$free))
+            missRaw <- matrix(missRaw, nrow = nrow(simDat$free), ncol = ncol(simDat$free))
+            if (simDat$symmetric) {
                 param[upper.tri(param)] <- t(param)[upper.tri(param)]
                 paramMis[upper.tri(paramMis)] <- t(paramMis)[upper.tri(paramMis)]
                 missRaw[upper.tri(missRaw)] <- t(missRaw)[upper.tri(missRaw)]
@@ -639,7 +639,7 @@ equalCon <- function(pls, dgen, fill=FALSE, con=NULL) {
 					if(!is.null(pls[[g]][[i]])) {
 						temp <- getElement(dgen[[g]], names(pls[[g]])[i])
 						if(!is.null(temp)) {
-							index <- which(temp@free == target[j])
+							index <- which(temp$free == target[j])
 							for(k in seq_len(length(index))) {
 								# if(numFound == 1) {
 									# equalVal <- pls[[g]][[i]][index[k]]
@@ -662,7 +662,7 @@ equalCon <- function(pls, dgen, fill=FALSE, con=NULL) {
 
 extractLab <- function(pls, dgen, fill=FALSE, con=NULL) {
 
-	free <- lapply(dgen, function(x) lapply(x, function(y) if(is.null(y)) { return(NULL) } else { return(slot(y, "free")) }))
+	free <- lapply(dgen, function(x) lapply(x, function(y) if(is.null(y)) { return(NULL) } else { return(y$free) }))
 	if(fill) {
 		
 		for(i in 1:length(free)) {
@@ -676,7 +676,7 @@ extractLab <- function(pls, dgen, fill=FALSE, con=NULL) {
 					} else if(!is.null(temp$VE)) {
 						diag(temp$PS) <- temp$VE
 					}
-					dgen[[i]]$PS@free <- temp$PS
+					dgen[[i]]$PS$free <- temp$PS
 				}
 			}
 			if(is.null(temp$TE)) {
@@ -688,7 +688,7 @@ extractLab <- function(pls, dgen, fill=FALSE, con=NULL) {
 					} else if(!is.null(temp$VY)) {
 						diag(temp$TE) <- temp$VY
 					}
-					dgen[[i]]$TE@free <- temp$TE
+					dgen[[i]]$TE$free <- temp$TE
 				}
 			}
 			if(is.null(temp$AL)) {

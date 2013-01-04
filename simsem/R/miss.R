@@ -30,7 +30,7 @@ miss <- function(cov = 0, pmMCAR = 0, pmMAR = 0, logit = "", nforms = 0, itemGro
 	if (package == "default") {
 		if(m > 0) package <- "Amelia"
 	}
-    return(new("SimMissing", cov = cov, pmMCAR = pmMCAR, pmMAR = pmMAR, logit=logit, nforms = nforms, 
+    return(SimMissing$new(cov = cov, pmMCAR = pmMCAR, pmMAR = pmMAR, logit=logit, nforms = nforms, 
         itemGroups = itemGroups, twoMethod = twoMethod, prAttr = prAttr, timePoints = timePoints, 
         threshold = threshold, ignoreCols = ignoreCols, covAsAux = covAsAux, logical = logical, 
         m = m, chi = chi, package = package, convergentCutoff = convergentCutoff, args = args))

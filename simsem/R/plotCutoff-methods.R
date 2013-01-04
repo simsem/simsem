@@ -54,13 +54,13 @@ setMethod("plotCutoff", signature(object = "data.frame"), definition = function(
 
 setMethod("plotCutoff", signature(object = "SimResult"), definition = function(object, 
     alpha = NULL, revDirec = FALSE, usedFit = NULL, useContour = T) {
-    object <- clean(object)
+    object <- object$clean()
     cutoff <- NULL
-    Data <- as.data.frame(object@fit)
+    Data <- as.data.frame(object$fit)
     
-    condition <- c(length(unique(object@pmMCAR)) > 1, length(unique(object@pmMAR)) > 
-        1, length(unique(object@n)) > 1)
-    condValue <- cbind(object@pmMCAR, object@pmMAR, object@n)
+    condition <- c(length(unique(object$pmMCAR)) > 1, length(unique(object$pmMAR)) > 
+        1, length(unique(object$n)) > 1)
+    condValue <- cbind(object$pmMCAR, object$pmMAR, object$n)
     colnames(condValue) <- c("Percent MCAR", "Percent MAR", "N")
     if (!is.null(alpha)) {
         if (revDirec) 

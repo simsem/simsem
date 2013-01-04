@@ -63,7 +63,10 @@ SimNorm <- setRefClass("SimNorm",
         cat("Normal Distribution Object\n")
 		cat(paste("Mean =", mean, "\n"))
 		cat(paste("Standard Deviation =", sd, "\n"))
-     }
+     },
+	 runagain = function() {
+		run()
+	 }
      ))
 
 ######################### Constructor #############################

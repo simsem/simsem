@@ -50,11 +50,11 @@ getPowerFitCutoff <- function(altObject, cutoff, revDirec = FALSE, usedFit = NUL
         pmMCARval <- NULL
     if (is.null(pmMARval) || is.na(pmMARval)) 
         pmMARval <- NULL
-    altObject <- clean(altObject)
-    Data <- as.data.frame(altObject@fit)
-    condition <- c(length(unique(altObject@pmMCAR)) > 1, length(unique(altObject@pmMAR)) > 
-        1, length(unique(altObject@n)) > 1)
-    condValue <- cbind(altObject@pmMCAR, altObject@pmMAR, altObject@n)
+    altObject <- altObject$clean()
+    Data <- as.data.frame(altObject$fit)
+    condition <- c(length(unique(altObject$pmMCAR)) > 1, length(unique(altObject$pmMAR)) > 
+        1, length(unique(altObject$n)) > 1)
+    condValue <- cbind(altObject$pmMCAR, altObject$pmMAR, altObject$n)
     colnames(condValue) <- c("Percent MCAR", "Percent MAR", "N")
     condValue <- condValue[, condition]
     if (is.null(condValue) || length(condValue) == 0) 
@@ -84,14 +84,14 @@ getPowerFitNullObj <- function(altObject, nullObject, revDirec = FALSE, usedFit 
 	if (is.null(usedFit)) 
 		usedFit <- getKeywords()$usedFit
 	if(is.null(nullObject)) nullObject <- altObject
-	mod <- clean(altObject, nullObject)
+	mod <- cleanMultiple(altObject, nullObject)
 	altObject <- mod[[1]]
 	nullObject <- mod[[2]]
-	if (!isTRUE(all.equal(unique(altObject@n), unique(nullObject@n)))) 
+	if (!isTRUE(all.equal(unique(altObject$n), unique(nullObject$n)))) 
 		stop("Models are based on different values of sample sizes")
-	if (!isTRUE(all.equal(unique(altObject@pmMCAR), unique(nullObject@pmMCAR)))) 
+	if (!isTRUE(all.equal(unique(altObject$pmMCAR), unique(nullObject$pmMCAR)))) 
 		stop("Models are based on different values of the percent completely missing at random")
-	if (!isTRUE(all.equal(unique(altObject@pmMAR), unique(nullObject@pmMAR)))) 
+	if (!isTRUE(all.equal(unique(altObject$pmMAR), unique(nullObject$pmMAR)))) 
 		stop("Models are based on different values of the percent missing at random")
 	if (is.null(nVal) || is.na(nVal)) 
 		nVal <- NULL
@@ -99,9 +99,9 @@ getPowerFitNullObj <- function(altObject, nullObject, revDirec = FALSE, usedFit 
 		pmMCARval <- NULL
 	if (is.null(pmMARval) || is.na(pmMARval)) 
 		pmMARval <- NULL
-	condition <- c(length(unique(altObject@pmMCAR)) > 1, length(unique(altObject@pmMAR)) > 
-		1, length(unique(altObject@n)) > 1)
-	condValue <- cbind(altObject@pmMCAR, altObject@pmMAR, altObject@n)
+	condition <- c(length(unique(altObject$pmMCAR)) > 1, length(unique(altObject$pmMAR)) > 
+		1, length(unique(altObject$n)) > 1)
+	condValue <- cbind(altObject$pmMCAR, altObject$pmMAR, altObject$n)
 	colnames(condValue) <- c("Percent MCAR", "Percent MAR", "N")
 	condValue <- condValue[, condition]
 	if (is.null(condValue) || length(condValue) == 0) 
@@ -124,8 +124,8 @@ getPowerFitNullObj <- function(altObject, nullObject, revDirec = FALSE, usedFit 
 	usedDirec <- (usedFit %in% c("CFI", "TLI"))  # CFA --> TRUE, RMSEA --> FALSE
 	if (revDirec) 
 		usedDirec <- !usedDirec
-	usedDist <- as.data.frame(altObject@fit[, usedFit])
-	nullFit <- as.data.frame(nullObject@fit[, usedFit])
+	usedDist <- as.data.frame(altObject$fit[, usedFit])
+	nullFit <- as.data.frame(nullObject$fit[, usedFit])
 	temp <- rep(NA, length(usedFit))
 	if (is.null(condValue)) {
 		usedCutoff <- as.vector(t(getCutoff(nullObject, alpha = alpha, usedFit = usedFit)))
@@ -133,8 +133,8 @@ getPowerFitNullObj <- function(altObject, nullObject, revDirec = FALSE, usedFit 
 		temp <- pValue(usedCutoff, as.data.frame(usedDist), revDirec = usedDirec)
 		names(temp) <- usedFit
 		# Find cutoff based on chi-square test
-		cutoffChisq <- qchisq(1 - alpha, df=nullObject@fit[,"df"])
-		powerChi <- mean(altObject@fit[,"Chi"] > cutoffChisq)
+		cutoffChisq <- qchisq(1 - alpha, df=nullObject$fit[,"df"])
+		powerChi <- mean(altObject$fit[,"Chi"] > cutoffChisq)
 		temp <- c("TraditionalChi" = powerChi, temp)
 	} else {
 		varyingCutoff <- getCutoff(object = nullFit, alpha = alpha, revDirec = FALSE, 

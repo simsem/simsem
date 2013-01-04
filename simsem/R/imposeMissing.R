@@ -2,23 +2,23 @@
 
 impose <- function(miss, data.mat, pmMCAR = NULL, pmMAR = NULL) {
     if (!is.null(pmMCAR)) 
-        miss@pmMCAR <- pmMCAR
+        miss$pmMCAR <- pmMCAR
     if (!is.null(pmMAR)) 
-        miss@pmMAR <- pmMAR
+        miss$pmMAR <- pmMAR
     if (is(data.mat, "list")) {
         if (!("data" %in% names(data.mat))) 
             stop("The list does not contain any dataset.")
-        data.mat$data <- as.data.frame(imposeMissing(data.mat$data, cov = miss@cov, 
-            pmMCAR = miss@pmMCAR, pmMAR = miss@pmMAR, logit = miss@logit, nforms = miss@nforms, itemGroups = miss@itemGroups, 
-            twoMethod = miss@twoMethod, prAttr = miss@prAttr, timePoints = miss@timePoints, 
-            logical = miss@logical, ignoreCols = miss@ignoreCols, threshold = miss@threshold))
+        data.mat$data <- as.data.frame(imposeMissing(data.mat$data, cov = miss$cov, 
+            pmMCAR = miss$pmMCAR, pmMAR = miss$pmMAR, logit = miss$logit, nforms = miss$nforms, itemGroups = miss$itemGroups, 
+            twoMethod = miss$twoMethod, prAttr = miss$prAttr, timePoints = miss$timePoints, 
+            logical = miss$logical, ignoreCols = miss$ignoreCols, threshold = miss$threshold))
     } else {
         if (is.matrix(data.mat)) 
             data.mat <- as.data.frame(data.mat)
-        data.mat <- as.data.frame(imposeMissing(data.mat, cov = miss@cov, pmMCAR = miss@pmMCAR, 
-            pmMAR = miss@pmMAR, logit = miss@logit, nforms = miss@nforms, itemGroups = miss@itemGroups, 
-            twoMethod = miss@twoMethod, prAttr = miss@prAttr, timePoints = miss@timePoints, 
-            logical = miss@logical, ignoreCols = miss@ignoreCols, threshold = miss@threshold))
+        data.mat <- as.data.frame(imposeMissing(data.mat, cov = miss$cov, pmMCAR = miss$pmMCAR, 
+            pmMAR = miss$pmMAR, logit = miss$logit, nforms = miss$nforms, itemGroups = miss$itemGroups, 
+            twoMethod = miss$twoMethod, prAttr = miss$prAttr, timePoints = miss$timePoints, 
+            logical = miss$logical, ignoreCols = miss$ignoreCols, threshold = miss$threshold))
     }
     return(data.mat)
 }

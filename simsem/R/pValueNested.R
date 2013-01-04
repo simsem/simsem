@@ -2,20 +2,20 @@
 
 pValueNested <- function(outNested, outParent, simNested, simParent, usedFit = NULL, 
     nVal = NULL, pmMCARval = NULL, pmMARval = NULL, df = 0) {
-    mod <- clean(simNested, simParent)
+    mod <- cleanMultiple(simNested, simParent)
     simNested <- mod[[1]]
     simParent <- mod[[2]]
     if (is.null(usedFit)) 
         usedFit <- getKeywords()$usedFit
     revDirec <- (usedFit %in% c("CFI", "TLI"))  # CFA --> FALSE, RMSEA --> TRUE
     
-    if (!isTRUE(all.equal(unique(simNested@paramValue), unique(simParent@paramValue)))) 
+    if (!isTRUE(all.equal(unique(simNested$paramValue), unique(simParent$paramValue)))) 
         stop("Models are based on different data and cannot be compared, check your random seed")
-    if (!isTRUE(all.equal(unique(simNested@n), unique(simParent@n)))) 
+    if (!isTRUE(all.equal(unique(simNested$n), unique(simParent$n)))) 
         stop("Models are based on different values of sample sizes")
-    if (!isTRUE(all.equal(unique(simNested@pmMCAR), unique(simParent@pmMCAR)))) 
+    if (!isTRUE(all.equal(unique(simNested$pmMCAR), unique(simParent$pmMCAR)))) 
         stop("Models are based on different values of the percent completely missing at random")
-    if (!isTRUE(all.equal(unique(simNested@pmMAR), unique(simParent@pmMAR)))) 
+    if (!isTRUE(all.equal(unique(simNested$pmMAR), unique(simParent$pmMAR)))) 
         stop("Models are based on different values of the percent missing at random")
     
     if (is.null(nVal) || is.na(nVal)) 
@@ -24,10 +24,10 @@ pValueNested <- function(outNested, outParent, simNested, simParent, usedFit = N
         pmMCARval <- NULL
     if (is.null(pmMARval) || is.na(pmMARval)) 
         pmMARval <- NULL
-    Data <- as.data.frame((simNested@fit - simParent@fit)[, usedFit])
-    condition <- c(length(unique(simNested@pmMCAR)) > 1, length(unique(simNested@pmMAR)) > 
-        1, length(unique(simNested@n)) > 1)
-    condValue <- cbind(simNested@pmMCAR, simNested@pmMAR, simNested@n)
+    Data <- as.data.frame((simNested$fit - simParent$fit)[, usedFit])
+    condition <- c(length(unique(simNested$pmMCAR)) > 1, length(unique(simNested$pmMAR)) > 
+        1, length(unique(simNested$n)) > 1)
+    condValue <- cbind(simNested$pmMCAR, simNested$pmMAR, simNested$n)
     colnames(condValue) <- c("Percent MCAR", "Percent MAR", "N")
     condValue <- condValue[, condition]
     if (is.null(condValue) || length(condValue) == 0) 

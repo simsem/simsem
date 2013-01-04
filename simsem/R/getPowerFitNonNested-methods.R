@@ -29,24 +29,24 @@ getPowerFitNonNestedNullObj <- function(dat2Mod1, dat2Mod2, dat1Mod1, dat1Mod2, 
     
     if (is.null(usedFit)) 
         usedFit <- getKeywords()$usedFit
-    mod1 <- clean(dat2Mod1, dat2Mod2)
+    mod1 <- cleanMultiple(dat2Mod1, dat2Mod2)
     dat2Mod1 <- mod1[[1]]
     dat2Mod2 <- mod1[[2]]
-    mod2 <- clean(dat1Mod1, dat1Mod2)
+    mod2 <- cleanMultiple(dat1Mod1, dat1Mod2)
     dat1Mod1 <- mod2[[1]]
     dat1Mod2 <- mod2[[2]]
-    if (!isTRUE(all.equal(unique(dat2Mod1@paramValue), unique(dat2Mod2@paramValue)))) 
+    if (!isTRUE(all.equal(unique(dat2Mod1$paramValue), unique(dat2Mod2$paramValue)))) 
         stop("'dat2Mod1' and 'dat2Mod2' are based on different data and cannot be compared, check your random seed")
-    if (!isTRUE(all.equal(unique(dat1Mod1@paramValue), unique(dat1Mod2@paramValue)))) 
+    if (!isTRUE(all.equal(unique(dat1Mod1$paramValue), unique(dat1Mod2$paramValue)))) 
         stop("'dat1Mod1' and 'dat1Mod2' are based on different data and cannot be compared, check your random seed")
-    if (!multipleAllEqual(unique(dat2Mod1@n), unique(dat2Mod2@n), unique(dat1Mod1@n), 
-        unique(dat1Mod2@n))) 
+    if (!multipleAllEqual(unique(dat2Mod1$n), unique(dat2Mod2$n), unique(dat1Mod1$n), 
+        unique(dat1Mod2$n))) 
         stop("Models are based on different values of sample sizes")
-    if (!multipleAllEqual(unique(dat2Mod1@pmMCAR), unique(dat2Mod2@pmMCAR), unique(dat1Mod1@pmMCAR), 
-        unique(dat1Mod2@pmMCAR))) 
+    if (!multipleAllEqual(unique(dat2Mod1$pmMCAR), unique(dat2Mod2$pmMCAR), unique(dat1Mod1$pmMCAR), 
+        unique(dat1Mod2$pmMCAR))) 
         stop("Models are based on different values of the percent completely missing at random")
-    if (!multipleAllEqual(unique(dat2Mod1@pmMAR), unique(dat2Mod2@pmMAR), unique(dat1Mod1@pmMAR), 
-        unique(dat1Mod2@pmMAR))) 
+    if (!multipleAllEqual(unique(dat2Mod1$pmMAR), unique(dat2Mod2$pmMAR), unique(dat1Mod1$pmMAR), 
+        unique(dat1Mod2$pmMAR))) 
         stop("Models are based on different values of the percent missing at random")
     if (is.null(nVal) || is.na(nVal)) 
         nVal <- NULL
@@ -54,9 +54,9 @@ getPowerFitNonNestedNullObj <- function(dat2Mod1, dat2Mod2, dat1Mod1, dat1Mod2, 
         pmMCARval <- NULL
     if (is.null(pmMARval) || is.na(pmMARval)) 
         pmMARval <- NULL
-    condition <- c(length(unique(dat2Mod1@pmMCAR)) > 1, length(unique(dat2Mod1@pmMAR)) > 
-        1, length(unique(dat2Mod1@n)) > 1)
-    condValue <- cbind(dat2Mod1@pmMCAR, dat2Mod1@pmMAR, dat2Mod1@n)
+    condition <- c(length(unique(dat2Mod1$pmMCAR)) > 1, length(unique(dat2Mod1$pmMAR)) > 
+        1, length(unique(dat2Mod1$n)) > 1)
+    condValue <- cbind(dat2Mod1$pmMCAR, dat2Mod1$pmMAR, dat2Mod1$n)
     colnames(condValue) <- c("Percent MCAR", "Percent MAR", "N")
     condValue <- condValue[, condition]
     if (is.null(condValue) || length(condValue) == 0) 
@@ -81,8 +81,8 @@ getPowerFitNonNestedNullObj <- function(dat2Mod1, dat2Mod2, dat1Mod1, dat1Mod2, 
         usedDirec <- !usedDirec
     usedDirecInverse <- !usedDirec
     
-    Data1 <- as.data.frame((dat1Mod1@fit - dat1Mod2@fit)[, usedFit])
-    Data2 <- as.data.frame((dat2Mod1@fit - dat2Mod2@fit)[, usedFit])
+    Data1 <- as.data.frame((dat1Mod1$fit - dat1Mod2$fit)[, usedFit])
+    Data2 <- as.data.frame((dat2Mod1$fit - dat2Mod2$fit)[, usedFit])
     
     cut1Data1 <- alpha
     cut2Data1 <- NULL

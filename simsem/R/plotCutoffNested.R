@@ -3,23 +3,23 @@
 
 plotCutoffNested <- function(nested, parent, alpha = 0.05, cutoff = NULL, usedFit = NULL, 
     useContour = T) {
-    mod <- clean(nested, parent)
+    mod <- cleanMultiple(nested, parent)
     nested <- mod[[1]]
     parent <- mod[[2]]
-    if (!all.equal(unique(nested@paramValue), unique(parent@paramValue))) 
+    if (!all.equal(unique(nested$paramValue), unique(parent$paramValue))) 
         stop("Models are based on different data and cannot be compared, check your random seed")
-    if (!all.equal(unique(nested@n), unique(parent@n))) 
+    if (!all.equal(unique(nested$n), unique(parent$n))) 
         stop("Models are based on different values of sample sizes")
-    if (!all.equal(unique(nested@pmMCAR), unique(parent@pmMCAR))) 
+    if (!all.equal(unique(nested$pmMCAR), unique(parent$pmMCAR))) 
         stop("Models are based on different values of the percent completely missing at random")
-    if (!all.equal(unique(nested@pmMAR), unique(parent@pmMAR))) 
+    if (!all.equal(unique(nested$pmMAR), unique(parent$pmMAR))) 
         stop("Models are based on different values of the percent missing at random")
     
-    Data <- as.data.frame(nested@fit - parent@fit)
+    Data <- as.data.frame(nested$fit - parent$fit)
     
-    condition <- c(length(unique(nested@pmMCAR)) > 1, length(unique(nested@pmMAR)) > 
-        1, length(unique(nested@n)) > 1)
-    condValue <- cbind(nested@pmMCAR, nested@pmMAR, nested@n)
+    condition <- c(length(unique(nested$pmMCAR)) > 1, length(unique(nested$pmMAR)) > 
+        1, length(unique(nested$n)) > 1)
+    condValue <- cbind(nested$pmMCAR, nested$pmMAR, nested$n)
     colnames(condValue) <- c("Percent MCAR", "Percent MAR", "N")
     if (!is.null(alpha)) {
         if (all(!condition)) 

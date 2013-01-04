@@ -4,16 +4,16 @@
 # model1: nested model --> more df model2: parent model --> less df
 getCutoffNested <- function(nested, parent, alpha = 0.05, usedFit = NULL, nVal = NULL, 
     pmMCARval = NULL, pmMARval = NULL, df = 0) {
-    mod <- clean(nested, parent)
+    mod <- cleanMultiple(nested, parent)
     nested <- mod[[1]]
     parent <- mod[[2]]
-    if (!isTRUE(all.equal(unique(nested@paramValue), unique(parent@paramValue)))) 
+    if (!isTRUE(all.equal(unique(nested$paramValue), unique(parent$paramValue)))) 
         stop("Models are based on different data and cannot be compared, check your random seed")
-    if (!isTRUE(all.equal(unique(nested@n), unique(parent@n)))) 
+    if (!isTRUE(all.equal(unique(nested$n), unique(parent$n)))) 
         stop("Models are based on different values of sample sizes")
-    if (!isTRUE(all.equal(unique(nested@pmMCAR), unique(parent@pmMCAR)))) 
+    if (!isTRUE(all.equal(unique(nested$pmMCAR), unique(parent$pmMCAR)))) 
         stop("Models are based on different values of the percent completely missing at random")
-    if (!isTRUE(all.equal(unique(nested@pmMAR), unique(parent@pmMAR)))) 
+    if (!isTRUE(all.equal(unique(nested$pmMAR), unique(parent$pmMAR)))) 
         stop("Models are based on different values of the percent missing at random")
     if (is.null(nVal) || is.na(nVal)) 
         nVal <- NULL
@@ -21,10 +21,10 @@ getCutoffNested <- function(nested, parent, alpha = 0.05, usedFit = NULL, nVal =
         pmMCARval <- NULL
     if (is.null(pmMARval) || is.na(pmMARval)) 
         pmMARval <- NULL
-    Data <- as.data.frame((nested@fit - parent@fit))
-    condition <- c(length(unique(nested@pmMCAR)) > 1, length(unique(nested@pmMAR)) > 
-        1, length(unique(nested@n)) > 1)
-    condValue <- cbind(nested@pmMCAR, nested@pmMAR, nested@n)
+    Data <- as.data.frame((nested$fit - parent$fit))
+    condition <- c(length(unique(nested$pmMCAR)) > 1, length(unique(nested$pmMAR)) > 
+        1, length(unique(nested$n)) > 1)
+    condValue <- cbind(nested$pmMCAR, nested$pmMAR, nested$n)
     colnames(condValue) <- c("Percent MCAR", "Percent MAR", "N")
     condValue <- condValue[, condition]
     if (is.null(condValue) || length(condValue) == 0) 

@@ -5,19 +5,19 @@ plotPowerFit <- function(altObject, nullObject = NULL, cutoff = NULL, usedFit = 
     alpha = 0.05, contN = TRUE, contMCAR = TRUE, contMAR = TRUE, useContour = TRUE, 
     logistic = TRUE) {
     if (is.null(nullObject)) {
-        altObject <- clean(altObject)
+        altObject <- altObject$clean()
     } else {
-        mod <- clean(altObject, nullObject)
+        mod <- cleanMultiple(altObject, nullObject)
         altObject <- mod[[1]]
         nullObject <- mod[[2]]
-        if (!isTRUE(all.equal(unique(altObject@n), unique(nullObject@n)))) 
+        if (!isTRUE(all.equal(unique(altObject$n), unique(nullObject$n)))) 
             stop("Models are based on different values of sample sizes")
-        if (!isTRUE(all.equal(unique(altObject@pmMCAR), unique(nullObject@pmMCAR)))) 
+        if (!isTRUE(all.equal(unique(altObject$pmMCAR), unique(nullObject$pmMCAR)))) 
             stop("Models are based on different values of the percent completely missing at random")
-        if (!isTRUE(all.equal(unique(altObject@pmMAR), unique(nullObject@pmMAR)))) 
+        if (!isTRUE(all.equal(unique(altObject$pmMAR), unique(nullObject$pmMAR)))) 
             stop("Models are based on different values of the percent missing at random")
     }
-    nrep <- dim(altObject@fit)[[1]]
+    nrep <- dim(altObject$fit)[[1]]
     if (is.null(usedFit)) 
         usedFit <- getKeywords()$usedFit
     if (!is.null(cutoff)) {
@@ -28,32 +28,32 @@ plotPowerFit <- function(altObject, nullObject = NULL, cutoff = NULL, usedFit = 
     x <- NULL
     pred <- NULL
     
-    if ((length(unique(altObject@n)) > 1) && contN) {
-        if (!length(altObject@n) == nrep) {
+    if ((length(unique(altObject$n)) > 1) && contN) {
+        if (!length(altObject$n) == nrep) {
             stop("Number of random sample sizes is not the same as the number of replications, check to see if N varied across replications")
         }
-        x <- cbind(x, N = altObject@n)
-        pred$N <- min(altObject@n):max(altObject@n)
+        x <- cbind(x, N = altObject$n)
+        pred$N <- min(altObject$n):max(altObject$n)
     }
-    if ((length(unique(altObject@pmMCAR)) > 1) && contMCAR) {
-        if (!length(altObject@pmMCAR) == nrep) {
+    if ((length(unique(altObject$pmMCAR)) > 1) && contMCAR) {
+        if (!length(altObject$pmMCAR) == nrep) {
             stop("Number of random pmMCARs is not the same as the number of replications, check to see if pmMCAR varied across replications")
         }
-        x <- cbind(x, pmMCAR = altObject@pmMCAR)
-        pred$MCAR <- seq(min(altObject@pmMCAR), max(altObject@pmMCAR), by = 0.01)
+        x <- cbind(x, pmMCAR = altObject$pmMCAR)
+        pred$MCAR <- seq(min(altObject$pmMCAR), max(altObject$pmMCAR), by = 0.01)
         
     }
-    if ((length(unique(altObject@pmMAR)) > 1) && contMAR) {
-        if (!length(altObject@pmMAR) == nrep) {
+    if ((length(unique(altObject$pmMAR)) > 1) && contMAR) {
+        if (!length(altObject$pmMAR) == nrep) {
             stop("Number of random pmMARs is not the same as the number of replications, check to see if pmMAR varied across replications")
         }
-        x <- cbind(x, pmMAR = altObject@pmMAR)
-        pred$MAR <- seq(min(altObject@pmMAR), max(altObject@pmMAR), by = 0.01)
+        x <- cbind(x, pmMAR = altObject$pmMAR)
+        pred$MAR <- seq(min(altObject$pmMAR), max(altObject$pmMAR), by = 0.01)
         
     }
     if (!is.null(nullObject)) 
-        nullObject <- nullObject@fit
-    plotPowerFitDf(altObject@fit, nullObject = nullObject, cutoff = cutoff, usedFit = usedFit, 
+        nullObject <- nullObject$fit
+    plotPowerFitDf(altObject$fit, nullObject = nullObject, cutoff = cutoff, usedFit = usedFit, 
         alpha = alpha, x = x, xval = pred, useContour = useContour, logistic = logistic)
 }
 

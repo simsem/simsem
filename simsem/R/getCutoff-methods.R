@@ -33,11 +33,11 @@ setMethod("getCutoff", signature(object = "SimResult"), definition = function(ob
         pmMCARval <- NULL
     if (is.null(pmMARval) || is.na(pmMARval)) 
         pmMARval <- NULL
-    object <- clean(object)
-    Data <- as.data.frame(object@fit)
-    condition <- c(length(unique(object@pmMCAR)) > 1, length(unique(object@pmMAR)) > 
-        1, length(unique(object@n)) > 1)
-    condValue <- cbind(object@pmMCAR, object@pmMAR, object@n)
+    object <- object$clean()
+    Data <- as.data.frame(object$fit)
+    condition <- c(length(unique(object$pmMCAR)) > 1, length(unique(object$pmMAR)) > 
+        1, length(unique(object$n)) > 1)
+    condValue <- cbind(object$pmMCAR, object$pmMAR, object$n)
     colnames(condValue) <- c("Percent MCAR", "Percent MAR", "N")
     condValue <- condValue[, condition]
     if (is.null(condValue) || length(condValue) == 0) 

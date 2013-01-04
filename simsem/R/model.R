@@ -39,12 +39,12 @@ model <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = 
                   temp <- NULL
                   if (class(paramSet[sgidx][[i]]) == "SimMatrix") {
                     temp <- paramSet[sgidx][[i]]
-                    paramSet[sgidx][[i]] <- replicate(n, new("SimMatrix", free = temp@free, 
-                      popParam = temp@popParam, misspec = temp@misspec, symmetric = temp@symmetric))
+                    paramSet[sgidx][[i]] <- replicate(n, new("SimMatrix", free = temp$free, 
+                      popParam = temp$popParam, misspec = temp$misspec, symmetric = temp$symmetric))
                   } else {
                     temp <- paramSet[sgidx][[i]]
-                    paramSet[sgidx][[i]] <- replicate(n, new("SimVector", free = temp@free, 
-                      popParam = temp@popParam, misspec = temp@misspec))
+                    paramSet[sgidx][[i]] <- replicate(n, new("SimVector", free = temp$free, 
+                      popParam = temp$popParam, misspec = temp$misspec))
                   }
                 }
                 
@@ -101,11 +101,11 @@ buildModel <- function(paramSet, modelType) {
         if (is.null(paramSet$LY)) 
             stop("A loading (LY) matrix must be specified in CFA models.")
         
-        ni <- nrow(paramSet$LY@free)
-        nk <- ncol(paramSet$LY@free)
+        ni <- nrow(paramSet$LY$free)
+        nk <- ncol(paramSet$LY$free)
         
         if (!is.null(paramSet$TE)) {
-            if (!paramSet$TE@symmetric)
+            if (!paramSet$TE$symmetric)
 				stop("The error covariance (TE) matrix must be symmetric.")
             if (!is.null(paramSet$RTE)) 
                 stop("Conflict: You cannot specify both error covariance (TE) and error correlation (RTE)!")
@@ -116,7 +116,7 @@ buildModel <- function(paramSet, modelType) {
         } else {
             if (is.null(paramSet$RTE)) 
                 stop("Either error correlation (RTE) or error covariance (TE) must be specified in CFA models.")
-            if (!paramSet$RTE@symmetric)
+            if (!paramSet$RTE$symmetric)
 				stop("The error correlation (RTE) matrix must be symmetric.")
             if (is.null(paramSet$VTE) && is.null(paramSet$VY)) 
                 {
@@ -125,7 +125,7 @@ buildModel <- function(paramSet, modelType) {
         }
         
         if (!is.null(paramSet$PS)) {
-			if (!paramSet$PS@symmetric)
+			if (!paramSet$PS$symmetric)
 				stop("The factor covariance (PS) matrix must be symmetric.")
             if (!is.null(paramSet$RPS)) 
                 stop("Conflict: You cannot specify both factor covariance (PS) and factor correlation (RPS)!")
@@ -134,7 +134,7 @@ buildModel <- function(paramSet, modelType) {
         } else {
             if (is.null(paramSet$RPS)) 
                 stop("Either factor covariance (PS) or factor correlation (RPS) must be specified in CFA models!")
-            if (!paramSet$RPS@symmetric)
+            if (!paramSet$RPS$symmetric)
 				stop("The factor correlation (RPS) matrix must be symmetric!")
             if (!is.null(paramSet$VPS)) {
                 paramSet$VE <- paramSet$VPS
@@ -168,9 +168,9 @@ buildModel <- function(paramSet, modelType) {
         
         if (is.null(paramSet$BE)) 
             stop("The path coefficient (BE) matrix has not been specified.")
-        ne <- ncol(paramSet$BE@free)
+        ne <- ncol(paramSet$BE$free)
         if (!is.null(paramSet$PS)) {
-			if (!paramSet$PS@symmetric)
+			if (!paramSet$PS$symmetric)
 				stop("The covariance (PS) matrix must be symmetric.")
             if (!is.null(paramSet$RPS)) 
                 stop("Conflict: You cannot specify both covariance (PS) and correlation (RPS)!")
@@ -181,7 +181,7 @@ buildModel <- function(paramSet, modelType) {
         } else {
             if (is.null(paramSet$RPS)) 
                 stop("The residual correlation (RPS) matrix has not been specified.")
-            if (!paramSet$RPS@symmetric)
+            if (!paramSet$RPS$symmetric)
 				stop("The correlation (RPS) matrix must be symmetric!")
             if (is.null(paramSet$VPS) && is.null(paramSet$VE)) 
                 {
@@ -197,11 +197,11 @@ buildModel <- function(paramSet, modelType) {
         
         if (is.null(paramSet$LY)) 
             stop("A loading (LY) matrix must be specified in SEM models.")
-        ny <- nrow(paramSet$LY@free)
-        ne <- ncol(paramSet$LY@free)
+        ny <- nrow(paramSet$LY$free)
+        ne <- ncol(paramSet$LY$free)
         
         if (!is.null(paramSet$TE)) {
-            if (!paramSet$TE@symmetric)
+            if (!paramSet$TE$symmetric)
 				stop("The error covariance (TE) matrix must be symmetric!")
             if (!is.null(paramSet$RTE)) 
                 stop("Conflict: You cannot specify both error covariance (TE) and error correlation (RTE)!")
@@ -212,7 +212,7 @@ buildModel <- function(paramSet, modelType) {
         } else {
             if (is.null(paramSet$RTE)) 
                 stop("Either measurement error correlation (RTE) or measurement error covariance (TE) must be specified in SEM models.")
-            if(!paramSet$RTE@symmetric)
+            if(!paramSet$RTE$symmetric)
 				stop("The error correlation (RTE) matrix must be symmetric!")
             if (is.null(paramSet$VTE) && is.null(paramSet$VY)) 
                 {
@@ -229,7 +229,7 @@ buildModel <- function(paramSet, modelType) {
             stop("A path coefficient (BE) matrix must be specified in SEM models.")
         
         if (!is.null(paramSet$PS)) {
-            if(!paramSet$PS@symmetric)
+            if(!paramSet$PS$symmetric)
 				stop("The residual covariance (PS) matrix must be symmetric.")
             if (!is.null(paramSet$RPS)) 
                 stop("Conflict: You cannot specify both residual covariance (PS) and residual correlation (RPS)!")
@@ -240,7 +240,7 @@ buildModel <- function(paramSet, modelType) {
         } else {
             if (is.null(paramSet$RPS)) 
                 stop("Either error covariance (PS) or error correlation (RPS) must be specified in SEM models.")
-            if(!paramSet$RPS@symmetric)
+            if(!paramSet$RPS$symmetric)
 				stop("The error correlation (RPS) matrix must be symmetric.")
             if (is.null(paramSet$VPS) && is.null(paramSet$VE)) 
                 {
@@ -275,8 +275,8 @@ buildPT <- function(paramSet, pt = NULL, group = 1, facLab = NULL, indLab = NULL
     if (!is.null(paramSet$LY)) {
 		psLab <- facLab
 		psLetter <- "f"
-        nf <- ncol(paramSet$LY@free)
-        ni <- nrow(paramSet$LY@free)
+        nf <- ncol(paramSet$LY$free)
+        ni <- nrow(paramSet$LY$free)
         if (is.null(facLab)) {
             lhs <- rep(paste("f", 1:nf, sep = ""), each = ni)
         } else {
@@ -292,7 +292,7 @@ buildPT <- function(paramSet, pt = NULL, group = 1, facLab = NULL, indLab = NULL
     
     ## PS - factor covariance: Symmetric
     if (!is.null(paramSet$PS)) {
-        nf <- ncol(paramSet$PS@free)
+        nf <- ncol(paramSet$PS$free)
         if (is.null(psLab)) {
             lhs <- paste0(psLetter, rep(1:nf, nf:1))
             rhs <- paste0(psLetter, unlist(lapply(1:nf, function(k) (1:nf)[k:nf])))
@@ -318,14 +318,14 @@ buildPT <- function(paramSet, pt = NULL, group = 1, facLab = NULL, indLab = NULL
     if (!is.null(paramSet$RPS)) {
         # Step 1: parse variance information to the RPS
         if (!is.null(paramSet$VPS)) {
-            diag(paramSet$RPS@free) <- paramSet$VPS@free
+            diag(paramSet$RPS$free) <- paramSet$VPS$free
         } else if (!is.null(paramSet$VE)) {
             # Intentionally use else if to select either VPS or VE
-            diag(paramSet$RPS@free) <- paramSet$VE@free
+            diag(paramSet$RPS$free) <- paramSet$VE$free
         }
         
         # Step 2: create pt
-        nf <- ncol(paramSet$RPS@free)
+        nf <- ncol(paramSet$RPS$free)
         if (is.null(psLab)) {
             lhs <- paste0(psLetter, rep(1:nf, nf:1))
             rhs <- paste0(psLetter, unlist(lapply(1:nf, function(k) (1:nf)[k:nf])))
@@ -350,7 +350,7 @@ buildPT <- function(paramSet, pt = NULL, group = 1, facLab = NULL, indLab = NULL
     
     ## TE - Covariance of measurement error: Symmetric
     if (!is.null(paramSet$TE)) {
-        ni <- ncol(paramSet$TE@free)
+        ni <- ncol(paramSet$TE$free)
         if (is.null(indLab)) {
             lhs <- paste0("y", rep(1:ni, ni:1))
             rhs <- paste0("y", unlist(lapply(1:ni, function(k) (1:ni)[k:ni])))
@@ -371,14 +371,14 @@ buildPT <- function(paramSet, pt = NULL, group = 1, facLab = NULL, indLab = NULL
     if (!is.null(paramSet$RTE)) {
         # Step 1: parse variance information to the RTE
         if (!is.null(paramSet$VTE)) {
-            diag(paramSet$RTE@free) <- paramSet$VTE@free
+            diag(paramSet$RTE$free) <- paramSet$VTE$free
         } else if (!is.null(paramSet$VY)) {
             # Intentionally use else if to select either VPS or VE
-            diag(paramSet$RTE@free) <- paramSet$VY@free
+            diag(paramSet$RTE$free) <- paramSet$VY$free
         }
         
         # Step 2: create pt
-        ni <- ncol(paramSet$RTE@free)
+        ni <- ncol(paramSet$RTE$free)
         if (is.null(indLab)) {
             lhs <- paste0("y", rep(1:ni, ni:1))
             rhs <- paste0("y", unlist(lapply(1:ni, function(k) (1:ni)[k:ni])))
@@ -392,7 +392,7 @@ buildPT <- function(paramSet, pt = NULL, group = 1, facLab = NULL, indLab = NULL
     
     ## BE - Regressions among factors
     if (!is.null(paramSet$BE)) {
-        nf <- ncol(paramSet$BE@free)
+        nf <- ncol(paramSet$BE$free)
         if (is.null(psLab)) {
             lhs <- rep(paste(psLetter, 1:nf, sep = ""), each = nf)
             rhs <- rep(paste(psLetter, 1:nf, sep = ""), times = nf)
@@ -414,7 +414,7 @@ buildPT <- function(paramSet, pt = NULL, group = 1, facLab = NULL, indLab = NULL
     
     # Create pt
     if (!is.null(paramSet$AL)) {
-        nf <- length(paramSet$AL@free)
+        nf <- length(paramSet$AL$free)
         if (is.null(psLab)) {
             lhs <- paste(psLetter, 1:nf, sep = "")
             rhs <- rep("", times = nf)
@@ -435,7 +435,7 @@ buildPT <- function(paramSet, pt = NULL, group = 1, facLab = NULL, indLab = NULL
     
     # Create pt
     if (!is.null(paramSet$TY)) {
-        ni <- length(paramSet$TY@free)
+        ni <- length(paramSet$TY$free)
         if (is.null(indLab)) {
             lhs <- paste("y", 1:ni, sep = "")
             rhs <- rep("", times = ni)
@@ -464,8 +464,8 @@ parseFree <- function(simDat, group, pt, op, lhs = NULL, rhs = NULL,
         startUnco <- 1
     }
     
-    freeDat <- simDat@free
-    popParamDat <- simDat@popParam
+    freeDat <- simDat$free
+    popParamDat <- simDat$popParam
     if (swap) {
         freeDat <- t(freeDat)
         popParamDat <- t(popParamDat)
@@ -474,7 +474,7 @@ parseFree <- function(simDat, group, pt, op, lhs = NULL, rhs = NULL,
     
     if (class(simDat) == "SimVector") {
         numElem <- length(freeDat)
-    } else if (simDat@symmetric && op == "~~") {
+    } else if (simDat$symmetric && op == "~~") {
         # Just get lower tri
         numElem <- nrow(freeDat) * (nrow(freeDat) + 1)/2
     } else {
@@ -695,7 +695,7 @@ estmodel <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE
         if (is.null(PS)) {
             if (is.null(RPS)) {
                 temp <- rep(list(matrix(NA, ne, ne)), length(LY))
-                temp2 <- lapply(LY, function(y) !apply(y@free, 2, function(x) any(!is.free(x) & 
+                temp2 <- lapply(LY, function(y) !apply(y$free, 2, function(x) any(!is.free(x) & 
                   (!is.na(x) & x != 0))))
                 temp <- mapply(function(ps, x) {
                   diag(ps)[x] <- 1
@@ -800,7 +800,7 @@ estmodel <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE
                   diag(x) <- NA
                   return(x)
                 })
-                set1 <- lapply(BE, function(x) findRecursiveSet(x@free)[[1]])
+                set1 <- lapply(BE, function(x) findRecursiveSet(x$free)[[1]])
                 temp <- mapply(function(x, y) {
                   x[y, y] <- NA
                   return(x)
@@ -865,12 +865,12 @@ estmodel <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE
                   diag(x) <- NA
                   return(x)
                 })
-                set1 <- lapply(BE, function(x) findRecursiveSet(x@free)[[1]])
+                set1 <- lapply(BE, function(x) findRecursiveSet(x$free)[[1]])
                 temp <- mapply(function(x, y) {
                   x[y, y] <- NA
                   return(x)
                 }, x = temp, y = set1, SIMPLIFY = FALSE)
-                temp2 <- lapply(LY, function(y) !apply(y@free, 2, function(x) any(!is.free(x) & 
+                temp2 <- lapply(LY, function(y) !apply(y$free, 2, function(x) any(!is.free(x) & 
                   (!is.na(x) & x != 0))))
                 temp <- mapply(function(ps, x) {
                   diag(ps)[x] <- 1

@@ -33,7 +33,7 @@ library(copula)
 #assign
 dir <- "C:/Users/Sunthud/Dropbox/simsem/simsem/R/"
 #dir <- "C:/Users/Sunthud/simsem_backup/simsem/R/"
-dir <- "C:/Users/student/Dropbox/simsem/simsem/R/"
+#dir <- "C:/Users/student/Dropbox/simsem/simsem/R/"
  source(paste(dir, "AllClass.R", sep=""))
  source(paste(dir, "AllGenerics.R", sep=""))
  sourceDir(dir)
@@ -68,7 +68,7 @@ summaryParam(Output)
 # Try auxiliary
 m <- miss(pmMCAR=0.1, cov="group")
 Output <- sim(20, CFA.Model,n=200, miss=m)
-Output2 <- sim(20, CFA.Model,n=200, miss=m, smartStart=FALSE)
+Output2 <- sim(20, CFA.Model,n=200, miss=m, smartStart=TRUE)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)

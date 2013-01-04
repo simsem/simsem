@@ -7,14 +7,14 @@ generate <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "
     facDist = NULL, errorDist = NULL, indLab = NULL, modelBoot = FALSE, realData = NULL, 
     params = FALSE) {
     if (is.null(indLab)) {
-        if (model@modelType == "Path") {
-            indLab <- unique(model@pt$lhs)
+        if (model$modelType == "Path") {
+            indLab <- unique(model$pt$lhs)
         } else {
-            indLab <- unique(model@pt$rhs[model@pt$op == "=~"])
+            indLab <- unique(model$pt$rhs[model$pt$op == "=~"])
         }
     }
-    free <- max(model@pt$free)
-    ngroups <- max(model@pt$group)
+    free <- max(model$pt$free)
+    ngroups <- max(model$pt$group)
     
     # Wrap distributions in lists for mg
     if (!class(indDist) == "list") {
@@ -32,7 +32,7 @@ generate <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "
     draws <- draw(model, maxDraw = maxDraw, misfitBounds = misfitBounds, misfitType = misfitType, 
         averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, createOrder = createOrder)
 	
-	if (model@modelType == "SEM") {
+	if (model$modelType == "SEM") {
 		draws <- changeScaleSEM(draws, model)
 	}	
 	
@@ -41,7 +41,7 @@ generate <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "
         SIMPLIFY = FALSE)
     data <- do.call("rbind", datal)
     data <- cbind(data, group = rep(1:ngroups, n))
-    colnames(data)[ncol(data)] <- model@groupLab
+    colnames(data)[ncol(data)] <- model$groupLab
     
     if (params) {
         return(list(data = data, psl = draws))
@@ -66,8 +66,8 @@ popMisfitParams <- function(psl, df = NULL) {
 		
 changeScaleSEM <- function(drawResult, gen) {
 	# Find the scales that are based on fixed factor 
-	dgen <- gen@dgen
-	pt <- gen@pt
+	dgen <- gen$dgen
+	pt <- gen$pt
 	addcon <- pt$op %in% c("==", "<", ">", ":=")
 	pt <- lapply(pt, function(x) x[!addcon])
 	ptgroup <- split(as.data.frame(pt), pt$group)

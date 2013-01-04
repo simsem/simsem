@@ -24,9 +24,9 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 	#Then get rid of the if/else.
 	ngroups <- 1
 	if(!is.null(generate)) {
-		ngroups <- max(generate@pt$group)
+		ngroups <- max(generate$pt$group)
 	} else {
-		ngroups <- max(model@pt$group)
+		ngroups <- max(model$pt$group)
 	}
 
     timing$SimulationParams <- (proc.time()[3] - start.time0)
@@ -319,9 +319,9 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 		}
 		
 		if (is.null(pmMCAR)) 
-			ifelse(is.null(miss), pmMCAR <- 0, pmMCAR <- miss@pmMCAR)
+			ifelse(is.null(miss), pmMCAR <- 0, pmMCAR <- miss$pmMCAR)
 		if (is.null(pmMAR)) 
-			ifelse(is.null(miss), pmMAR <- 0, pmMAR <- miss@pmMAR)
+			ifelse(is.null(miss), pmMAR <- 0, pmMAR <- miss$pmMAR)
 		
 		timing$CombineResults <- (proc.time()[3] - start.time)
 		start.time <- proc.time()[3]
@@ -330,7 +330,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 		n <- Reduce("+", n)
 		colnames(nobs) <- 1:ngroups
 		
-		Result <- new("SimResult", modelType = model@modelType, nRep = nRep, coef = coef, 
+		Result <- new("SimResult", modelType = model$modelType, nRep = nRep, coef = coef, 
 			se = se, fit = fit, converged = converged, seed = seed, paramValue = param, 
 			misspecValue = popMis, popFit = misfitOut, FMI1 = FMI1, FMI2 = FMI2, 
 			stdCoef = std, n = n, nobs=nobs, pmMCAR = pmMCAR, pmMAR = pmMAR, extraOut = extra,
@@ -364,7 +364,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
     n <- simConds[[2]]
     pmMCAR <- simConds[[3]]
     pmMAR <- simConds[[4]]
-    dgen <- model@dgen
+    dgen <- model$dgen
     RNGkind("L'Ecuyer-CMRG")
     assign(".Random.seed", simConds[[5]], envir = .GlobalEnv)
     
@@ -376,14 +376,14 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 	#2. Why do we do this for each rep? Move up to sim/model and pass values to runRep. Add 2 slots to SimSem class, put it there.
 	#3. Also don't do this with rawData
     indLabGen <- NULL
-	if (generate@modelType == "Path") {
-		indLabGen <- unique(generate@pt$lhs)
+	if (generate$modelType == "Path") {
+		indLabGen <- unique(generate$pt$lhs)
 	} else {
-		indLabGen <- unique(generate@pt$rhs[generate@pt$op == "=~"])
+		indLabGen <- unique(generate$pt$rhs[generate$pt$op == "=~"])
 	}
 	facLabGen <- NULL
-	if (generate@modelType != "Path") {
-		facLabGen <- unique(generate@pt$lhs[generate@pt$op == "=~"])
+	if (generate$modelType != "Path") {
+		facLabGen <- unique(generate$pt$lhs[generate$pt$op == "=~"])
 	}
 			
     ## 1. Create a missing data template from simulation parameters.
@@ -399,9 +399,9 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
         }
     } else {
         if (is.null(pmMCAR)) 
-            pmMCAR <- miss@pmMCAR
+            pmMCAR <- miss$pmMCAR
         if (is.null(pmMAR)) 
-            pmMAR <- miss@pmMAR
+            pmMAR <- miss$pmMAR
     }
     
     ## 2. Generate data (data) & store parameter values (paramSet)
@@ -421,7 +421,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 		paramSet <- lapply(psl, "[[", 1) 
 		if(smartStart) {
 		#Once indLab and facLab are in the model object, sub them in for indLabGen and facLabGen
-			model <- imposeSmartStart(model, paramSet, indLabGen, facLabGen, latent=(generate@modelType != "Path"))
+			model <- imposeSmartStart(model, paramSet, indLabGen, facLabGen, latent=(generate$modelType != "Path"))
 		}
     }  # else: do nothing. Raw data.
     timing$GenerateData <- (proc.time()[3] - start.time)
@@ -481,22 +481,22 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 				}
 				#Below is only for multiple imputation. If the number of converged imputations is below the threshold then converged = 2
 				if(is(out, "lavaanStar") && length(out@imputed) > 0) {
-					if(out@imputed[[1]][1] < miss@convergentCutoff) converged <- 2
+					if(out@imputed[[1]][1] < miss$convergentCutoff) converged <- 2
 				}
 			}
 		}
 		#Lines 490-5-1 can be replaced when labels are in SimSem object. Just call that slot.
 		if (is.null(indLab)) {
-			if (model@modelType == "Path") {
-				indLab <- unique(model@pt$lhs)
+			if (model$modelType == "Path") {
+				indLab <- unique(model$pt$lhs)
 			} else {
-				indLab <- unique(model@pt$rhs[model@pt$op == "=~"])
+				indLab <- unique(model$pt$rhs[model$pt$op == "=~"])
 			}
 		}
 		indLab <- setdiff(indLab, aux)
 		facLab <- NULL
-		if (model@modelType != "Path") {
-			facLab <- unique(model@pt$lhs[model@pt$op == "=~"])
+		if (model$modelType != "Path") {
+			facLab <- unique(model$pt$lhs[model$pt$op == "=~"])
 		}
 		#reminder: out=lavaan object
 		if (converged %in% c(0, 3:5)) {
@@ -533,25 +533,25 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 		## non-convergent sets
 		if (!is.null(paramSet)) {
 			
-			popParam <- reduceParamSet(paramSet, generate@dgen, indLabGen, facLabGen, 
+			popParam <- reduceParamSet(paramSet, generate$dgen, indLabGen, facLabGen, 
 				aux)
 			
 			if (!is.null(psl[[1]]$misspec)) {
 				misParamSet <- lapply(psl, "[[", 3)
-				popMis <- reduceMisspecSet(misParamSet, generate@modelType != "Path", 
+				popMis <- reduceMisspecSet(misParamSet, generate$modelType != "Path", 
 					indLabGen, facLabGen)
 				p <- length(indLabGen)
 				nElements <- (p + (p * (p + 1)/2)) * length(psl)
-				dfParam <- nElements - max(generate@pt$free)
+				dfParam <- nElements - max(generate$pt$free)
 				misfitOut <- popMisfitParams(psl, df = dfParam)
 			} else {
 				popMis <- NA
 				misfitOut <- NA
 			}
 			
-			if(!is.null(generate@con[[1]])) {
-				extraparam <- collapseExtraParam(paramSet, generate@dgen, fill=TRUE, con=generate@con)
-				names(extraparam) <- renameExtraParam(generate@con$lhs, generate@con$op, generate@con$rhs)
+			if(!is.null(generate$con[[1]])) {
+				extraparam <- collapseExtraParam(paramSet, generate$dgen, fill=TRUE, con=generate$con)
+				names(extraparam) <- renameExtraParam(generate$con$lhs, generate$con$op, generate$con$rhs)
 				popParam <- c(popParam, extraparam)
 			}
 		} else {
@@ -561,7 +561,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 		}
 		
 
-		if(!is.null(miss) && miss@m > 0) {
+		if(!is.null(miss) && miss$m > 0) {
 			if (converged %in% c(0, 3:5)) {
 				fmiOut <- out@imputed[[2]]
 				FMI1 <- fmiOut[,5]
@@ -571,7 +571,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 			} 	
 		}
 		#Finish FIML FMI below! from parameterEstimates
-		if(!is.null(miss) && miss@m == 0){
+		if(!is.null(miss) && miss$m == 0){
 		}
 		timing$ParseOutput <- (proc.time()[3] - start.time)
 		start.time <- proc.time()[3]
@@ -644,10 +644,10 @@ reduceParamSet <- function(paramSet, dgen, indLab = NULL, facLab = NULL, aux = N
 		facLab <- savedFacLab
 
         if (!is.null(tpset$LY)) {
-			facLab <- facLab[1:ncol(tpgen$LY@free)]
+			facLab <- facLab[1:ncol(tpgen$LY$free)]
 			selectFac <- seq_along(facLab)
 		
-            free <- is.free(tpgen$LY@free)[selectInd, selectFac]
+            free <- is.free(tpgen$LY$free)[selectInd, selectFac]
             lab <- outer(indLab, facLab, function(x, y, op, g) paste0(g, ".", y, 
                 op, x), op = "=~", g = g)
             param <- tpset$LY[selectInd, selectFac][free]
@@ -657,13 +657,13 @@ reduceParamSet <- function(paramSet, dgen, indLab = NULL, facLab = NULL, aux = N
         if (!is.null(tpset$TE)) {
             
             if (!is.null(tpgen$TE)) {
-                free <- is.free(tpgen$TE@free) & lower.tri(tpgen$TE@free, diag = TRUE)
+                free <- is.free(tpgen$TE$free) & lower.tri(tpgen$TE$free, diag = TRUE)
             } else {
-                free <- is.free(tpgen$RTE@free) & lower.tri(tpgen$RTE@free, diag = FALSE)
+                free <- is.free(tpgen$RTE$free) & lower.tri(tpgen$RTE$free, diag = FALSE)
                 if (!is.null(tpgen$VTE)) {
-                  diag(free) <- is.free(tpgen$VTE@free)
+                  diag(free) <- is.free(tpgen$VTE$free)
                 } else if (!is.null(tpgen$VY)) {
-                  diag(free) <- is.free(tpgen$VY@free)
+                  diag(free) <- is.free(tpgen$VY$free)
                 }
             }
             free <- free[selectInd, selectInd]
@@ -675,13 +675,13 @@ reduceParamSet <- function(paramSet, dgen, indLab = NULL, facLab = NULL, aux = N
         }
         if (!is.null(tpset$PS)) {
             if (!is.null(tpgen$PS)) {
-                free <- is.free(tpgen$PS@free) & lower.tri(tpgen$PS@free, diag = TRUE)
+                free <- is.free(tpgen$PS$free) & lower.tri(tpgen$PS$free, diag = TRUE)
             } else {
-                free <- is.free(tpgen$RPS@free) & lower.tri(tpgen$RPS@free, diag = FALSE)
+                free <- is.free(tpgen$RPS$free) & lower.tri(tpgen$RPS$free, diag = FALSE)
                 if (!is.null(tpgen$VPS)) {
-                  diag(free) <- is.free(tpgen$VPS@free)
+                  diag(free) <- is.free(tpgen$VPS$free)
                 } else if (!is.null(tpgen$VE)) {
-                  diag(free) <- is.free(tpgen$VE@free)
+                  diag(free) <- is.free(tpgen$VE$free)
                 }
             }
             if (!is.null(tpset$LY)) {
@@ -700,12 +700,12 @@ reduceParamSet <- function(paramSet, dgen, indLab = NULL, facLab = NULL, aux = N
         }
         if (!is.null(tpset$BE)) {
             if (!is.null(tpset$LY)) {
-                free <- is.free(tpgen$BE@free)[selectFac, selectFac]
+                free <- is.free(tpgen$BE$free)[selectFac, selectFac]
                 lab <- outer(facLab, facLab, function(x, y, op, g) paste0(g, ".", 
                   x, op, y), op = "~", g = g)
                 param <- tpset$BE[selectFac, selectFac][free]
             } else {
-                free <- is.free(tpgen$BE@free)[selectInd, selectInd]
+                free <- is.free(tpgen$BE$free)[selectInd, selectInd]
                 lab <- outer(indLab, indLab, function(x, y, op, g) paste0(g, ".", 
                   x, op, y), op = "~", g = g)
                 param <- tpset$BE[selectInd, selectInd][free]
@@ -715,9 +715,9 @@ reduceParamSet <- function(paramSet, dgen, indLab = NULL, facLab = NULL, aux = N
         }
         if (!is.null(tpset$AL)) {
             if (!is.null(tpgen$AL)) {
-                free <- is.free(tpgen$AL@free)
+                free <- is.free(tpgen$AL$free)
             } else if (!is.null(tpgen$ME)) {
-                free <- is.free(tpgen$ME@free)
+                free <- is.free(tpgen$ME$free)
             } else {
                 free <- rep(FALSE, length(tpset$AL))
             }
@@ -735,9 +735,9 @@ reduceParamSet <- function(paramSet, dgen, indLab = NULL, facLab = NULL, aux = N
         }
         if (!is.null(tpset$TY)) {
             if (!is.null(tpgen$TY)) {
-                free <- is.free(tpgen$TY@free)
+                free <- is.free(tpgen$TY$free)
             } else if (!is.null(tpgen$MY)) {
-                free <- is.free(tpgen$MY@free)
+                free <- is.free(tpgen$MY$free)
             } else {
                 free <- rep(FALSE, length(tpset$TY))
             }
@@ -894,7 +894,7 @@ reduceLavaanParam <- function(glist, dgen, indLab, facLab) {
     }
 	ngroups <- length(dgen)
 	if("lambda" %in% names && !is.null(dgen[[1]]$LY)) {
-		nfac <- lapply(lapply(dgen, "[[", "LY"), function(x) ncol(x@free))
+		nfac <- lapply(lapply(dgen, "[[", "LY"), function(x) ncol(x$free))
 		facLab <- lapply(nfac, function(num, lab) lab[1:num], lab=facLab)
 	} else {
 		facLab <- list(facLab)
@@ -903,7 +903,7 @@ reduceLavaanParam <- function(glist, dgen, indLab, facLab) {
     if ("lambda" %in% names && !is.null(dgen[[1]]$LY)) {
         idx <- which(names == "lambda")
         for (i in seq_along(idx)) {
-            free <- is.free(dgen[[i]]$LY@free)
+            free <- is.free(dgen[[i]]$LY$free)
             param <- glist[idx[i]]$lambda[indLab, facLab[[i]]][free]
             lab <- outer(indLab, facLab[[i]], function(x, y, op, g) paste0(g, ".", y, 
                 op, x), op = "=~", g = i)
@@ -916,15 +916,15 @@ reduceLavaanParam <- function(glist, dgen, indLab, facLab) {
         idx <- which(names == "theta")
         for (i in seq_along(idx)) {
             if (!is.null(dgen[[i]]$TE)) {
-                free <- is.free(dgen[[i]]$TE@free) & lower.tri(dgen[[i]]$TE@free, 
+                free <- is.free(dgen[[i]]$TE$free) & lower.tri(dgen[[i]]$TE$free, 
                   diag = TRUE)
             } else {
-                free <- is.free(dgen[[i]]$RTE@free) & lower.tri(dgen[[i]]$RTE@free, 
+                free <- is.free(dgen[[i]]$RTE$free) & lower.tri(dgen[[i]]$RTE$free, 
                   diag = FALSE)
                 if (!is.null(dgen[[i]]$VTE)) {
-                  diag(free) <- is.free(dgen[[i]]$VTE@free)
+                  diag(free) <- is.free(dgen[[i]]$VTE$free)
                 } else if (!is.null(dgen[[i]]$VY)) {
-                  diag(free) <- is.free(dgen[[i]]$VY@free)
+                  diag(free) <- is.free(dgen[[i]]$VY$free)
                 }
             }
             param <- glist[idx[i]]$theta[indLab, indLab][free]
@@ -938,15 +938,15 @@ reduceLavaanParam <- function(glist, dgen, indLab, facLab) {
         idx <- which(names == "psi")
         for (i in seq_along(idx)) {
             if (!is.null(dgen[[i]]$PS)) {
-                free <- is.free(dgen[[i]]$PS@free) & lower.tri(dgen[[i]]$PS@free, 
+                free <- is.free(dgen[[i]]$PS$free) & lower.tri(dgen[[i]]$PS$free, 
                   diag = TRUE)
             } else {
-                free <- is.free(dgen[[i]]$RPS@free) & lower.tri(dgen[[i]]$RPS@free, 
+                free <- is.free(dgen[[i]]$RPS$free) & lower.tri(dgen[[i]]$RPS$free, 
                   diag = FALSE)
                 if (!is.null(dgen[[i]]$VPS)) {
-                  diag(free) <- is.free(dgen[[i]]$VPS@free)
+                  diag(free) <- is.free(dgen[[i]]$VPS$free)
                 } else if (!is.null(dgen[[i]]$VE)) {
-                  diag(free) <- is.free(dgen[[i]]$VE@free)
+                  diag(free) <- is.free(dgen[[i]]$VE$free)
                 }
             }
             if (!is.null(dgen[[i]]$LY)) {
@@ -966,7 +966,7 @@ reduceLavaanParam <- function(glist, dgen, indLab, facLab) {
     if ("beta" %in% names) {
         idx <- which(names == "beta")
         for (i in seq_along(idx)) {
-            free <- is.free(dgen[[i]]$BE@free)
+            free <- is.free(dgen[[i]]$BE$free)
             if (!is.null(dgen[[i]]$LY)) {
                 param <- glist[idx[i]]$beta[facLab[[i]], facLab[[i]]][free]
                 lab <- outer(facLab[[i]], facLab[[i]], function(x, y, op, g) paste0(g, ".", 
@@ -985,9 +985,9 @@ reduceLavaanParam <- function(glist, dgen, indLab, facLab) {
         idx <- which(names == "alpha")
         for (i in seq_along(idx)) {
             if (!is.null(dgen[[i]]$AL)) {
-                free <- is.free(dgen[[i]]$AL@free)
+                free <- is.free(dgen[[i]]$AL$free)
             } else {
-                free <- is.free(dgen[[i]]$ME@free)
+                free <- is.free(dgen[[i]]$ME$free)
             }
             if (!is.null(dgen[[i]]$LY)) {
                 param <- glist[idx[i]]$alpha[facLab[[i]], ][free]
@@ -1005,9 +1005,9 @@ reduceLavaanParam <- function(glist, dgen, indLab, facLab) {
         idx <- which(names == "nu")
         for (i in seq_along(idx)) {
             if (!is.null(dgen[[i]]$TY)) {
-                free <- is.free(dgen[[i]]$TY@free)
+                free <- is.free(dgen[[i]]$TY$free)
             } else {
-                free <- is.free(dgen[[i]]$MY@free)
+                free <- is.free(dgen[[i]]$MY$free)
             }
             param <- glist[idx[i]]$nu[indLab, ][free]
             lab <- paste0(i, ".", indLab, "~1")
@@ -1030,8 +1030,8 @@ getLavaanLabels <- function(glist, dgen, indLab, facLab) {
     if ("lambda" %in% names && !is.null(dgen[[1]]$LY)) {
         idx <- which(names == "lambda")
         for (i in seq_along(idx)) {
-            free <- is.free(dgen[[i]]$LY@free)
-			label <- c(label, dgen[[i]]$LY@free[free])
+            free <- is.free(dgen[[i]]$LY$free)
+			label <- c(label, dgen[[i]]$LY$free[free])
         }
     }
     
@@ -1040,19 +1040,19 @@ getLavaanLabels <- function(glist, dgen, indLab, facLab) {
         for (i in seq_along(idx)) {
 			targetLab <- NULL
             if (!is.null(dgen[[i]]$TE)) {
-                free <- is.free(dgen[[i]]$TE@free) & lower.tri(dgen[[i]]$TE@free, 
+                free <- is.free(dgen[[i]]$TE$free) & lower.tri(dgen[[i]]$TE$free, 
                   diag = TRUE)
-				targetLab <- dgen[[i]]$TE@free
+				targetLab <- dgen[[i]]$TE$free
             } else {
-                free <- is.free(dgen[[i]]$RTE@free) & lower.tri(dgen[[i]]$RTE@free, 
+                free <- is.free(dgen[[i]]$RTE$free) & lower.tri(dgen[[i]]$RTE$free, 
                   diag = FALSE)
-				targetLab <- dgen[[i]]$RTE@free
+				targetLab <- dgen[[i]]$RTE$free
                 if (!is.null(dgen[[i]]$VTE)) {
-                  diag(free) <- is.free(dgen[[i]]$VTE@free)
-				  diag(targetLab) <- dgen[[i]]$VTE@free
+                  diag(free) <- is.free(dgen[[i]]$VTE$free)
+				  diag(targetLab) <- dgen[[i]]$VTE$free
                 } else if (!is.null(dgen[[i]]$VY)) {
-                  diag(free) <- is.free(dgen[[i]]$VY@free)
-				  diag(targetLab) <- dgen[[i]]$VY@free
+                  diag(free) <- is.free(dgen[[i]]$VY$free)
+				  diag(targetLab) <- dgen[[i]]$VY$free
                 }
             }
 			label <- c(label, targetLab[free])
@@ -1063,19 +1063,19 @@ getLavaanLabels <- function(glist, dgen, indLab, facLab) {
         for (i in seq_along(idx)) {
 			targetLab <- NULL
             if (!is.null(dgen[[i]]$PS)) {
-                free <- is.free(dgen[[i]]$PS@free) & lower.tri(dgen[[i]]$PS@free, 
+                free <- is.free(dgen[[i]]$PS$free) & lower.tri(dgen[[i]]$PS$free, 
                   diag = TRUE)
-				targetLab <- dgen[[i]]$PS@free
+				targetLab <- dgen[[i]]$PS$free
             } else {
-                free <- is.free(dgen[[i]]$RPS@free) & lower.tri(dgen[[i]]$RPS@free, 
+                free <- is.free(dgen[[i]]$RPS$free) & lower.tri(dgen[[i]]$RPS$free, 
                   diag = FALSE)
-				targetLab <- dgen[[i]]$RPS@free
+				targetLab <- dgen[[i]]$RPS$free
                 if (!is.null(dgen[[i]]$VPS)) {
-                  diag(free) <- is.free(dgen[[i]]$VPS@free)
-				  diag(targetLab) <- dgen[[i]]$VPS@free
+                  diag(free) <- is.free(dgen[[i]]$VPS$free)
+				  diag(targetLab) <- dgen[[i]]$VPS$free
                 } else if (!is.null(dgen[[i]]$VE)) {
-                  diag(free) <- is.free(dgen[[i]]$VE@free)
-				  diag(targetLab) <- dgen[[i]]$VE@free
+                  diag(free) <- is.free(dgen[[i]]$VE$free)
+				  diag(targetLab) <- dgen[[i]]$VE$free
                 }
             }
             label <- c(label, targetLab[free])
@@ -1085,8 +1085,8 @@ getLavaanLabels <- function(glist, dgen, indLab, facLab) {
     if ("beta" %in% names) {
         idx <- which(names == "beta")
         for (i in seq_along(idx)) {
-            free <- is.free(dgen[[i]]$BE@free)
-            label <- c(label, dgen[[i]]$BE@free[free])
+            free <- is.free(dgen[[i]]$BE$free)
+            label <- c(label, dgen[[i]]$BE$free[free])
         }
     }
     
@@ -1094,11 +1094,11 @@ getLavaanLabels <- function(glist, dgen, indLab, facLab) {
         idx <- which(names == "alpha")
         for (i in seq_along(idx)) {
             if (!is.null(dgen[[i]]$AL)) {
-                free <- is.free(dgen[[i]]$AL@free)
-				label <- c(label, dgen[[i]]$AL@free[free])
+                free <- is.free(dgen[[i]]$AL$free)
+				label <- c(label, dgen[[i]]$AL$free[free])
             } else {
-                free <- is.free(dgen[[i]]$ME@free)
-				label <- c(label, dgen[[i]]$ME@free[free])
+                free <- is.free(dgen[[i]]$ME$free)
+				label <- c(label, dgen[[i]]$ME$free[free])
             }
         }
     }
@@ -1107,11 +1107,11 @@ getLavaanLabels <- function(glist, dgen, indLab, facLab) {
         idx <- which(names == "nu")
         for (i in seq_along(idx)) {
             if (!is.null(dgen[[i]]$TY)) {
-                free <- is.free(dgen[[i]]$TY@free)
-				label <- c(label, dgen[[i]]$TY@free[free])
+                free <- is.free(dgen[[i]]$TY$free)
+				label <- c(label, dgen[[i]]$TY$free[free])
             } else {
-                free <- is.free(dgen[[i]]$MY@free)
-				label <- c(label, dgen[[i]]$MY@free[free])
+                free <- is.free(dgen[[i]]$MY$free)
+				label <- c(label, dgen[[i]]$MY$free[free])
             }
         }
     }
@@ -1173,14 +1173,14 @@ checkCov <- function(object) {
 } 
 
 imposeSmartStart <- function(model, paramSet, indLab, facLab, latent) {
-	pt <- as.data.frame(model@pt)
+	pt <- as.data.frame(model$pt)
 	#Change to return on single vector for param, then add onto pt
 	param <- mapply(collapseParamSet, paramSet, unique(pt$group), MoreArgs=list(indLab=indLab, facLab=facLab, latent=latent), SIMPLIFY=FALSE)
 	param <- do.call(rbind, param)
 	temp <- merge(pt, param, by=c("group", "op", "lhs", "rhs"))
 	temp2 <- c(temp$ustart2, pt$ustart[setdiff(pt$id, temp$id)])
 	ordertemp <- order(c(temp$id, setdiff(pt$id, temp$id)))
-	model@pt$ustart <- temp2[ordertemp]
+	model$pt$ustart <- temp2[ordertemp]
 	model
 }
 

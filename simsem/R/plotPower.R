@@ -2,11 +2,11 @@
 
 plotPower <- function(object, powerParam, alpha = 0.05, contParam = NULL, contN = TRUE, 
     contMCAR = TRUE, contMAR = TRUE, useContour = TRUE) {
-    object <- clean(object)
+    object <- object$clean()
     
     crit.value <- qnorm(1 - alpha/2)
-    sig <- 0 + (abs(object@coef/object@se) > crit.value)
-    colnames(sig) <- colnames(object@coef)
+    sig <- 0 + (abs(object$coef/object$se) > crit.value)
+    colnames(sig) <- colnames(object$coef)
     nrep <- dim(sig)[[1]]
     if (is.null(powerParam)) 
         stop("Please specify the parameter used to plot")
@@ -17,38 +17,38 @@ plotPower <- function(object, powerParam, alpha = 0.05, contParam = NULL, contN 
     x <- NULL
     pred <- NULL
     
-    if ((length(unique(object@n)) > 1) && contN) {
-        if (!length(object@n) == nrep) {
+    if ((length(unique(object$n)) > 1) && contN) {
+        if (!length(object$n) == nrep) {
             stop("Number of random sample sizes is not the same as the number of replications, check to see if N varied across replications")
         }
-        x <- cbind(x, object@n)
-        pred$N <- min(object@n):max(object@n)
+        x <- cbind(x, object$n)
+        pred$N <- min(object$n):max(object$n)
     }
-    if ((length(unique(object@pmMCAR)) > 1) && contMCAR) {
-        if (!length(object@pmMCAR) == nrep) {
+    if ((length(unique(object$pmMCAR)) > 1) && contMCAR) {
+        if (!length(object$pmMCAR) == nrep) {
             stop("Number of random pmMCARs is not the same as the number of replications, check to see if pmMCAR varied across replications")
         }
-        x <- cbind(x, object@pmMCAR)
-        pred$MCAR <- seq(min(object@pmMCAR), max(object@pmMCAR), by = 0.01)
+        x <- cbind(x, object$pmMCAR)
+        pred$MCAR <- seq(min(object$pmMCAR), max(object$pmMCAR), by = 0.01)
         
     }
-    if ((length(unique(object@pmMAR)) > 1) && contMAR) {
-        if (!length(object@pmMAR) == nrep) {
+    if ((length(unique(object$pmMAR)) > 1) && contMAR) {
+        if (!length(object$pmMAR) == nrep) {
             stop("Number of random pmMARs is not the same as the number of replications, check to see if pmMAR varied across replications")
         }
-        x <- cbind(x, object@pmMAR)
-        pred$MAR <- seq(min(object@pmMAR), max(object@pmMAR), by = 0.01)
+        x <- cbind(x, object$pmMAR)
+        pred$MAR <- seq(min(object$pmMAR), max(object$pmMAR), by = 0.01)
         
     }
     if (!is.null(contParam)) {
-        if (!(dim(object@paramValue)[[1]] == nrep)) {
+        if (!(dim(object$paramValue)[[1]] == nrep)) {
             stop("Number of random parameters is not the same as the number of replications, check to see if parameters varied across replications")
         }
-        j <- match(contParam, names(object@paramValue))  # Return column indices that start with 'contParam'
-        x <- cbind(x, object@paramValue[, j])
+        j <- match(contParam, names(object$paramValue))  # Return column indices that start with 'contParam'
+        x <- cbind(x, object$paramValue[, j])
         paramVal <- list()
         for (i in 1:length(contParam)) {
-            temp <- seq(min(object@paramValue[, contParam[i]]), max(object@paramValue[, 
+            temp <- seq(min(object$paramValue[, contParam[i]]), max(object$paramValue[, 
                 contParam[i]]), length.out = 50)
             paramVal[[i]] <- unique(temp)
         }

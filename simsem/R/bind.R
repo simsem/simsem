@@ -92,9 +92,10 @@ bind <- function(free = NULL, popParam = NULL, misspec = NULL, symmetric = FALSE
             misspecMat <- matrix(NaN)
         }
         
-        return(new("SimMatrix", free = free, popParam = paramMat, misspec = misspecMat, 
+        return(SimMatrix$new(free = free, popParam = paramMat, misspec = misspecMat, 
             symmetric = symmetric))
-        
+		
+		
         ## SimVector
     } else if (is.vector(free)) {
         
@@ -134,7 +135,7 @@ bind <- function(free = NULL, popParam = NULL, misspec = NULL, symmetric = FALSE
             misspecVec <- vector()
         }
         
-        return(new("SimVector", free = free, popParam = paramVec, misspec = misspecVec))
+		return(SimVector$new(free = free, popParam = paramVec, misspec = misspecVec))
     } else {
         stop("Please specify a free/fixed parameter matrix or vector.")
     }

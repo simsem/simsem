@@ -3,9 +3,9 @@
 
 getPower <- function(simResult, alpha = 0.05, contParam = NULL, powerParam = NULL, 
     nVal = NULL, pmMCARval = NULL, pmMARval = NULL, paramVal = NULL) {
-    object <- clean(simResult)
-    condition <- c(length(unique(object@pmMCAR)) > 1, length(unique(object@pmMAR)) > 
-        1, length(unique(object@n)) > 1)
+    object <- simResult$clean()
+    condition <- c(length(unique(object$pmMCAR)) > 1, length(unique(object$pmMAR)) > 
+        1, length(unique(object$n)) > 1)
     if (any(condition)) {
         pred <- NULL
         pred$N <- nVal
@@ -28,16 +28,16 @@ getPower <- function(simResult, alpha = 0.05, contParam = NULL, powerParam = NUL
                 }
             }
         }
-        pow <- continuousPower(object, length(unique(object@n)) > 1, length(unique(object@pmMCAR)) > 
-            1, length(unique(object@pmMAR)) > 1, contParam = contParam, alpha = alpha, 
+        pow <- continuousPower(object, length(unique(object$n)) > 1, length(unique(object$pmMCAR)) > 
+            1, length(unique(object$pmMAR)) > 1, contParam = contParam, alpha = alpha, 
             powerParam = powerParam, pred = pred)
         return(pow)
     } else {
-        coef <- colMeans(object@coef, na.rm = TRUE)
-        real.se <- sapply(object@coef, sd, na.rm = TRUE)
-        estimated.se <- colMeans(object@se, na.rm = TRUE)
+        coef <- colMeans(object$coef, na.rm = TRUE)
+        real.se <- sapply(object$coef, sd, na.rm = TRUE)
+        estimated.se <- colMeans(object$se, na.rm = TRUE)
         estimated.se[estimated.se == 0] <- NA
-        z <- object@coef/object@se
+        z <- object$coef/object$se
         crit.value <- qnorm(1 - alpha/2)
         sig <- abs(z) > crit.value
         pow <- apply(sig, 2, mean, na.rm = TRUE)
@@ -59,9 +59,9 @@ continuousPower <- function(simResult, contN = TRUE, contMCAR = FALSE, contMAR =
     
     # Clean simResult object and get a replications by parameters matrix of 0s and
     # 1s for logistic regression
-    object <- clean(simResult)
+    object <- simResult$clean()
     crit.value <- qnorm(1 - alpha/2)
-    sig <- 0 + (abs(object@coef/object@se) > crit.value)
+    sig <- 0 + (abs(object$coef/object$se) > crit.value)
     nrep <- dim(sig)[[1]]
     
     # Find paramaterss to get power for
@@ -77,41 +77,41 @@ continuousPower <- function(simResult, contN = TRUE, contMCAR = FALSE, contMAR =
     predDefault <- is.null(pred)
     
     if (contN) {
-        if (!length(object@n) == nrep) {
+        if (!length(object$n) == nrep) {
             stop("Number of random sample sizes is not the same as the number of replications, check to see if N varied across replications")
         }
-        x <- cbind(x, object@n)
+        x <- cbind(x, object$n)
         if (predDefault) 
-            pred$N <- min(object@n):max(object@n)
+            pred$N <- min(object$n):max(object$n)
     }
     if (contMCAR) {
-        if (!length(object@pmMCAR) == nrep) {
+        if (!length(object$pmMCAR) == nrep) {
             stop("Number of random pmMCARs is not the same as the number of replications, check to see if pmMCAR varied across replications")
         }
-        x <- cbind(x, object@pmMCAR)
+        x <- cbind(x, object$pmMCAR)
         if (predDefault) 
-            pred$MCAR <- seq(min(object@pmMCAR), max(object@pmMCAR), by = 0.01)
+            pred$MCAR <- seq(min(object$pmMCAR), max(object$pmMCAR), by = 0.01)
         
     }
     if (contMAR) {
-        if (!length(object@pmMAR) == nrep) {
+        if (!length(object$pmMAR) == nrep) {
             stop("Number of random pmMARs is not the same as the number of replications, check to see if pmMAR varied across replications")
         }
-        x <- cbind(x, object@pmMAR)
+        x <- cbind(x, object$pmMAR)
         if (predDefault) 
-            pred$MAR <- seq(min(object@pmMAR), max(object@pmMAR), by = 0.01)
+            pred$MAR <- seq(min(object$pmMAR), max(object$pmMAR), by = 0.01)
         
     }
     if (!is.null(contParam)) {
-        if (!(dim(object@paramValue)[[1]] == nrep)) {
+        if (!(dim(object$paramValue)[[1]] == nrep)) {
             stop("Number of random parameters is not the same as the number of replications, check to see if parameters varied across replications")
         }
-        j <- match(contParam, names(object@paramValue))  # Return column indices that start with 'contParam'
-        x <- cbind(x, object@paramValue[, j])
+        j <- match(contParam, names(object$paramValue))  # Return column indices that start with 'contParam'
+        x <- cbind(x, object$paramValue[, j])
         if (predDefault) {
             paramVal <- list()
             for (i in 1:length(contParam)) {
-                temp <- seq(min(object@paramValue[, contParam[i]]), max(object@paramValue[, 
+                temp <- seq(min(object$paramValue[, contParam[i]]), max(object$paramValue[, 
                   contParam[i]]), length.out = 5)
                 paramVal[[i]] <- unique(temp)
             }

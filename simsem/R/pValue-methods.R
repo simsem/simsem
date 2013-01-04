@@ -60,7 +60,7 @@ setMethod("pValue", signature(target = "numeric", dist = "data.frame"), definiti
 
 setMethod("pValue", signature(target = "lavaan", dist = "SimResult"), definition = function(target, 
     dist, usedFit = NULL, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, df = 0) {
-    dist <- clean(dist)
+    dist <- dist$clean()
     if (is.null(usedFit)) 
         usedFit <- getKeywords()$usedFit
     revDirec <- (usedFit %in% c("CFI", "TLI"))  # CFA --> FALSE, RMSEA --> TRUE
@@ -73,10 +73,10 @@ setMethod("pValue", signature(target = "lavaan", dist = "SimResult"), definition
         pmMCARval <- NULL
     if (is.null(pmMARval) || is.na(pmMARval)) 
         pmMARval <- NULL
-    Data <- as.data.frame(dist@fit[, usedFit])
-    condition <- c(length(unique(dist@pmMCAR)) > 1, length(unique(dist@pmMAR)) > 
-        1, length(unique(dist@n)) > 1)
-    condValue <- cbind(dist@pmMCAR, dist@pmMAR, dist@n)
+    Data <- as.data.frame(dist$fit[, usedFit])
+    condition <- c(length(unique(dist$pmMCAR)) > 1, length(unique(dist$pmMAR)) > 
+        1, length(unique(dist$n)) > 1)
+    condValue <- cbind(dist$pmMCAR, dist$pmMAR, dist$n)
     colnames(condValue) <- c("Percent MCAR", "Percent MAR", "N")
     condValue <- condValue[, condition]
     if (is.null(condValue) || length(condValue) == 0) 

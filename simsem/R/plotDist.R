@@ -8,12 +8,12 @@ plotDist <- function(object, xlim = NULL, ylim = NULL, r = 0, var = NULL, contou
             stop("The length of the variables you wish to plot is larger than two")
         object <- extractSimDataDist(object, var)
     }
-    if (object@p == 1) {
-        plotDist1D(object@margins[1], object@paramMargins[[1]], reverse = object@reverse[1], 
+    if (object$p == 1) {
+        plotDist1D(object$margins[1], object$paramMargins[[1]], reverse = object$reverse[1], 
             xlim = xlim)
-    } else if (object@p == 2) {
-        plotDist2D(object@margins[1:2], object@paramMargins[1:2], reverse = object@reverse[1:2], 
-            xlim = xlim, ylim = ylim, r = r, contour = contour, cop = object@copula)
+    } else if (object$p == 2) {
+        plotDist2D(object$margins[1:2], object$paramMargins[1:2], reverse = object$reverse[1:2], 
+            xlim = xlim, ylim = ylim, r = r, contour = contour, cop = object$copula)
     } else {
         stop("The dimension cannot be greater than 2.")
     }

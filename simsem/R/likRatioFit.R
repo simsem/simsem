@@ -8,16 +8,16 @@ likRatioFit <- function(outMod1, outMod2, dat1Mod1, dat1Mod2, dat2Mod1, dat2Mod2
     observedFit <- as.data.frame(rbind(extractLavaanFit(outMod1), extractLavaanFit(outMod2))[, 
         usedFit])
     
-    mod1 <- clean(dat1Mod1, dat1Mod2, dat2Mod1, dat2Mod2)
+    mod1 <- cleanMultiple(dat1Mod1, dat1Mod2, dat2Mod1, dat2Mod2)
     dat1Mod1 <- mod1[[1]]
     dat1Mod2 <- mod1[[2]]
-    mod2 <- clean(dat2Mod1, dat2Mod2)
+    mod2 <- cleanMultiple(dat2Mod1, dat2Mod2)
     dat2Mod1 <- mod2[[1]]
     dat2Mod2 <- mod2[[2]]
-    dat1Mod1Fit <- as.data.frame(dat1Mod1@fit[, usedFit])
-    dat1Mod2Fit <- as.data.frame(dat1Mod2@fit[, usedFit])
-    dat2Mod1Fit <- as.data.frame(dat2Mod1@fit[, usedFit])
-    dat2Mod2Fit <- as.data.frame(dat2Mod2@fit[, usedFit])
+    dat1Mod1Fit <- as.data.frame(dat1Mod1$fit[, usedFit])
+    dat1Mod2Fit <- as.data.frame(dat1Mod2$fit[, usedFit])
+    dat2Mod1Fit <- as.data.frame(dat2Mod1$fit[, usedFit])
+    dat2Mod2Fit <- as.data.frame(dat2Mod2$fit[, usedFit])
     
     histDat1 <- mapply(find2Dhist, vec1 = dat1Mod1Fit, vec2 = dat1Mod2Fit, SIMPLIFY = FALSE)
     histDat2 <- mapply(find2Dhist, vec1 = dat2Mod1Fit, vec2 = dat2Mod2Fit, SIMPLIFY = FALSE)
