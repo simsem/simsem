@@ -64,9 +64,9 @@ createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist 
         if (sequential) {
             if (is.null(usedParam$BE) && !is.null(usedParam$LY)) {
                 # CFA
-                fac <- dataGen(facDist, n, usedParam@AL, usedParam@PS)
-                trueScore <- fac %*% t(usedParam@LY)
-                errorScore <- dataGen(errorDist, n, usedParam@TY, usedParam@TE)
+                fac <- dataGen(facDist, n, usedParam$AL, usedParam$PS)
+                trueScore <- fac %*% t(usedParam$LY)
+                errorScore <- dataGen(errorDist, n, usedParam$TY, usedParam$TE)
                 Data <- trueScore + errorScore
             } else {
                 usedParam2 <- NULL
