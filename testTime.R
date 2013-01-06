@@ -1,3 +1,6 @@
+install.packages("simsem_0.5-0.tar.gz", repos=NULL, type="source")
+install.packages("simsem_0.4-6.tar.gz", repos=NULL, type="source")
+library(simsem)
 
 test1 <- function() {
 
@@ -17,7 +20,7 @@ VTE <- bind(rep(NA, 6), 0.51)
 CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, VTE=VTE, modelType = "CFA", indLab=c("pos1", "pos2", "pos3", "neg1", "neg2", "neg3"), facLab=c("posaffect", "negaffect"))
 
 #SimMissing <- simMissing(pmMCAR=0.1, numImps=5)
-Output <- sim(20, CFA.Model,n=200)
+Output <- sim(1000, CFA.Model,n=200)
 
 }
 
@@ -52,7 +55,7 @@ out <- analyze(Path.Model, dat)
 
 
 # Output is wrong. It contains some bugs.
-Output <- sim(100, n=500, Path.Model)
+Output <- sim(1000, n=500, Path.Model)
 }
 
 test3 <- function() {
@@ -88,41 +91,7 @@ SEM.model <- model(BE=BE, LY=LY, RPS=RPS, RTE=RTE, modelType="SEM")
 dat <- generate(SEM.model, n=300)
 out <- analyze(SEM.model, dat)
 
-Output <- sim(200, n=300, SEM.model, silent=TRUE) 
-getCutoff(Output, 0.05)
-plotCutoff(Output, 0.05)
-summary(Output)
-
-# No misspecification
-
-loading <- matrix(0, 8, 3)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-loading[7:8, 3] <- "con1"
-loading.start <- matrix("", 8, 3)
-loading.start[1:3, 1] <- 0.7
-loading.start[4:6, 2] <- 0.7
-loading.start[7:8, 3] <- 0.6
-LY <- bind(loading, loading.start)
-
-RTE <- binds(diag(8))
-
-factor.cor <- diag(3)
-factor.cor[1, 2] <- factor.cor[2, 1] <- NA
-RPS <- binds(factor.cor, 0.5)
-
-path <- matrix(0, 3, 3)
-path[3, 1:2] <- NA
-path.start <- matrix(0, 3, 3)
-path.start[3, 1] <- 0.4
-path.start[3, 2] <- 0.2
-BE <- bind(path, path.start)
-
-SEM.model <- model(BE=BE, LY=LY, RPS=RPS, RTE=RTE, modelType="SEM")
-
-draw(SEM.model)
-
-Output <- sim(100, n=300, SEM.model, silent=TRUE)
+Output <- sim(1000, n=300, SEM.model, silent=TRUE) 
 }
 
 test4 <- function() {
@@ -144,13 +113,7 @@ VTE <- bind(rep(NA, 6), 0.51)
 
 noninvariance <- model(LY = list(LY1, LY2), RPS = list(RPS1, RPS2), RTE = list(RTE, RTE), VTE=list(VTE, VTE), ngroups=2, modelType = "CFA")
 
-dat <- generate(noninvariance, 200)
-out <- analyze(noninvariance, dat)
-
-Output <- sim(20, noninvariance, n=200) # Need to be fixed
-getCutoff(Output, 0.05)
-plotCutoff(Output, 0.05)
-summaryParam(Output)
+Output <- sim(1000, noninvariance, n=200) # Need to be fixed
 
 # Configural Invariance
 loading <- matrix(0, 6, 2)
@@ -171,10 +134,7 @@ configural <- model(LY = list(LY, LY), RPS = list(RPS, RPS), RTE = list(RTE, RTE
 dat <- generate(configural, 200)
 out <- analyze(configural, dat)
 
-Output <- sim(20, configural, n=200) # 
-getCutoff(Output, 0.05)
-plotCutoff(Output, 0.05)
-summaryParam(Output)
+Output <- sim(1000, configural, n=200) # 
 
 # Weak Invariance
 loading.in <- matrix(0, 6, 2)
@@ -197,15 +157,7 @@ VPS2 <- bind(rep(NA, 2), c(1.1, 1.2))
 
 weak <- model(LY = LY.in, RPS = RPS, VPS=list(VPS1, VPS2), RTE = RTE, VTE=VTE, ngroups=2, modelType = "CFA")
 
-
-
-dat <- generate(weak, 200)
-out <- analyze(weak, dat)
-
-Output <- sim(20, weak, n=200) 
-getCutoff(Output, 0.05)
-plotCutoff(Output, 0.05)
-summaryParam(Output)
+Output <- sim(1000, weak, n=200) 
 
 # Strong Invariance
 loading.in <- matrix(0, 6, 2)
@@ -231,11 +183,8 @@ AL2 <- bind(rep(NA, 2), c(-0.5, 0.2))
 
 strong <- model(LY = LY.in, RPS = RPS, VPS=list(VPS1, VPS2), RTE = RTE, VTE=VTE, TY=TY.in, AL=list(AL1, AL2), ngroups=2, modelType = "CFA")
 
-dat <- generate(strong,200)
-out <- analyze(strong,dat)
-
 #SimMissing <- simMissing(pmMCAR=0.1, numImps=5)
-Output <- sim(20, strong, n=200)
+Output <- sim(1000, strong, n=200)
 }
 
 test5 <- function() {
@@ -270,5 +219,11 @@ RTE <- binds(diag(9), misspec=error.cor.mis)
 
 mtmm.model <- model(LY=LY, RPS=RPS, RTE=RTE, modelType="CFA")
 miss.model <- miss(pmMCAR=0.2, ignoreCols="group") #, package="mice")
-Output <- sim(10, n=500, mtmm.model, miss=miss.model)
+Output <- sim(30, n=500, mtmm.model, miss=miss.model)
 }
+
+system.time(test1())
+system.time(test2())
+system.time(test3())
+system.time(test4())
+system.time(test5())
