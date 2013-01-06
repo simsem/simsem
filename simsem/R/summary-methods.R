@@ -44,7 +44,9 @@ setMethod("summary", signature = "SimSem", definition = function(object) {
 		printIfNotNull(dgen$RPS, "\nRPS: Correlation of Regression.Residual.PSI")
 		printIfNotNull(dgen$VE, "\nVE: Variance of Factor.ETA")
 		printIfNotNull(dgen$AL, "\nAL: Regression Intercept of Factor.ETA")
-		printIfNotNull(dgen$ME, "\nME: mean of Factor.ETA")
+		printIfNotNull(dgen$ME, "\nME: Mean of Factor.ETA")
+		printIfNotNull(dgen$GA, "\nGA: Regression Coefficient of Factor.ETA on Covariates")
+		printIfNotNull(dgen$KA, "\nKA: Regression Coefficient of Indicator.Y on Covariates")
 		cat("--------------------------", "\n")
 	}
 	if(any(!(dim(object@con) == 0))) {

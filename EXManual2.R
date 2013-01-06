@@ -38,9 +38,40 @@ dir <- "C:/Users/student/Dropbox/simsem/simsem/R/"
  source(paste(dir, "AllGenerics.R", sep=""))
  sourceDir(dir)
 
- 
+
 # library(formatR)
 # tidy.dir(dir)
+
+########################### Scratch paper
+
+##library(simsem)
+
+loading <- matrix(0, 6, 2)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+LY <- bind(loading, 0.7)
+
+latent.cor <- matrix(NA, 2, 2)
+diag(latent.cor) <- 1
+RPS <- binds(latent.cor, 0.5)
+
+RTE <- binds(diag(6))
+
+VTE <- bind(rep(NA, 6), 0.51)
+
+gamma <- matrix(NA, 2, 1)
+GA <- bind(gamma, 0.2)
+
+
+CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, VTE=VTE, GA=GA, modelType = "CFA", indLab=c("pos1", "pos2", "pos3", "neg1", "neg2", "neg3"), facLab=c("posaffect", "negaffect"))
+
+
+
+
+
+
+
+############################ Example 1
 
 ##library(simsem)
 

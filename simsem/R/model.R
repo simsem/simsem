@@ -3,12 +3,12 @@
 ## templates for data generation and analyis.
 model <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = NULL, 
     VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, MY = NULL, 
-    ME = NULL, modelType = NULL, indLab = NULL, facLab = NULL, groupLab = "group", ngroups = 1,
-	con = NULL) {
+    ME = NULL, KA = NULL, GA = NULL, modelType = NULL, indLab = NULL, facLab = NULL, covLab = NULL, 
+	groupLab = "group", ngroups = 1, con = NULL) {
     
 	con <- parseSyntaxCon(con)
     paramSet <- list(LY = LY, PS = PS, RPS = RPS, TE = TE, RTE = RTE, BE = BE, VTE = VTE, 
-        VY = VY, VPS = VPS, VE = VE, TY = TY, AL = AL, MY = MY, ME = ME)
+        VY = VY, VPS = VPS, VE = VE, TY = TY, AL = AL, MY = MY, ME = ME, KA = KA, GA = GA)
     if (!is.null(modelType)) {
         
         mg <- NULL
@@ -61,10 +61,10 @@ model <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = 
             pt <- NULL
             for (i in seq_along(psl)) {
                 if (i == 1) {
-                  pt <- buildPT(psl[[i]], pt = pt, group = i, facLab = facLab, indLab = indLab)
+                  pt <- buildPT(psl[[i]], pt = pt, group = i, facLab = facLab, indLab = indLab, covLab = covLab)
                 } else {
                   pt <- mapply(pt, buildPT(psl[[i]], pt = pt, group = i, facLab = facLab, 
-                    indLab = indLab), FUN = c, SIMPLIFY = FALSE)
+                    indLab = indLab, covLab = covLab), FUN = c, SIMPLIFY = FALSE)
                 }
             }
             
@@ -78,7 +78,7 @@ model <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = 
         } else {
             # ngroups = 1, and no matrices are lists
             paramSet <- buildModel(paramSet, modelType)
-            pt <- buildPT(paramSet, facLab = facLab, indLab = indLab)
+            pt <- buildPT(paramSet, facLab = facLab, indLab = indLab, covLab = covLab)
             # nullpt <- nullpt(paramSet)
 			pt <- attachConPt(pt, con)
 
@@ -192,7 +192,15 @@ buildModel <- function(paramSet, modelType) {
             {
                 paramSet$ME <- bind(rep(NA, ne), popParam = 0)
             }  ## Set factor intercepts to be free, pop value = 0
-        
+        if (is.null(paramSet$KA)) {
+			if (is.null(paramSet$GA)) {
+				paramSet$GA <- paramSet$KA
+				paramSet$KA <- NULL
+			} else {
+				stop("Conflict: You cannot specify both the covaraite effects on indicators (KA) and factors (GA simultaneously)")
+			}
+		}
+		
     } else if (modelType == "SEM") {
         
         if (is.null(paramSet$LY)) 
@@ -265,7 +273,7 @@ buildModel <- function(paramSet, modelType) {
 ## analysis with lavaan.  This time, PT will only take a sg paramSet. And while
 ## I'm at it, I'm taking out the df stuff.
 
-buildPT <- function(paramSet, pt = NULL, group = 1, facLab = NULL, indLab = NULL) {
+buildPT <- function(paramSet, pt = NULL, group = 1, facLab = NULL, indLab = NULL, covLab = NULL) {
     
     ## Convert a chunk at a time - starting with LY - factor loading. At least
     ## LY,PS/RPS must be specified.
@@ -446,13 +454,62 @@ buildPT <- function(paramSet, pt = NULL, group = 1, facLab = NULL, indLab = NULL
         pt <- mapply(pt, parseFree(paramSet$TY, group = group, pt = pt, op = "~1", 
             lhs, rhs), FUN = c, SIMPLIFY = FALSE)
     }
-    
+
+	
+	nz <- NULL # Save for create covariances and means among covariates
+	
+    ## GA - Regressions of factors on covariates
+    if (!is.null(paramSet$GA)) {
+        nf <- nrow(paramSet$GA@free)
+        nz <- ncol(paramSet$GA@free)
+        if (is.null(psLab)) {
+            lhs <- rep(paste(psLetter, 1:nf, sep = ""), each = nz)
+        } else {
+            lhs <- rep(psLab, each = nz)
+        }
+		if (is.null(covLab)) {
+			covLab <- paste("z", 1:nz, sep = "") # Save for create covariances and means among covariates
+		} 
+		rhs <- rep(covLab, times = nf)
+        pt <- mapply(pt, parseFree(paramSet$GA, group = group, pt = pt, op = "~", 
+            rhs, lhs), FUN = c, SIMPLIFY = FALSE)
+    }
+ 
+    ## KA - Regressions of factors on indicators
+    if (!is.null(paramSet$KA)) {
+        ni <- nrow(paramSet$KA@free)
+        nz <- ncol(paramSet$KA@free)
+		
+		if (is.null(indLab)) {
+            lhs <- rep(paste0("y", 1:ni) , each = nz)
+        } else {
+            lhs <- rep(indLab, each = nz)
+        }
+		if (is.null(covLab)) {
+			covLab <- paste("z", 1:nz, sep = "") # Save for create covariances and means among covariates
+		} 
+		rhs <- rep(covLab, times = ni)
+        pt <- mapply(pt, parseFree(paramSet$KA, group = group, pt = pt, op = "~", 
+            rhs, lhs), FUN = c, SIMPLIFY = FALSE)
+    }
+
+	# Create parameter table for covariates
+	if(!is.null(covLab)) {
+		lhs <- rep(covLab, nz:1)
+		rhs <- unlist(lapply(1:nz, function(k) covLab[k:nz]))
+		pt <- mapply(pt, parseFree(bind(matrix(0, nz, nz)), group = group, pt = pt, op = "~~", 
+                lhs, rhs, exo = 1, forceUstart = NA), FUN = c, SIMPLIFY = FALSE)	
+		lhs2 <- covLab		
+		rhs2 <- rep("", times = nz)
+		pt <- mapply(pt, parseFree(bind(rep(0, nz)), group = group, pt = pt, op = "~1", 
+            lhs2, rhs2, exo = 1, forceUstart = NA), FUN = c, SIMPLIFY = FALSE)
+	}
     return(pt)
 }
 
 ## Returns a pt (list) of parsed SimMatrix/SimVector
 parseFree <- function(simDat, group, pt, op, lhs = NULL, rhs = NULL,
-    swap = FALSE) {
+    swap = FALSE, exo = 0, forceUstart = NULL) {
     ## Calculate starting indices from previous pt
     if (!is.null(pt)) {
         startId <- max(pt$id) + 1
@@ -486,8 +543,12 @@ parseFree <- function(simDat, group, pt, op, lhs = NULL, rhs = NULL,
     user <- rep(0, numElem)
     group <- rep(group, numElem)
     free <- freeIdx(freeDat, start = startFree, symm = (op == "~~"))
-    ustart <- startingVal(freeDat, popParamDat, symm = (op == "~~"))
-    exo <- rep(0, length(id))
+	if(is.null(forceUstart)) {
+		ustart <- startingVal(freeDat, popParamDat, symm = (op == "~~"))
+	} else {
+		ustart <- rep(forceUstart, numElem)
+	}
+    exo <- rep(exo, length(id))
     eq.id <- eqIdx(freeDat, id, symm = (op == "~~"))
     label <- names(eq.id)
     eq.id <- as.vector(eq.id)
