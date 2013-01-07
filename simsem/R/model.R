@@ -163,7 +163,16 @@ buildModel <- function(paramSet, modelType) {
         if (is.null(paramSet$ME)) {
             paramSet$ME <- paramSet$AL
         }
-        
+		
+		# There is a covariate
+        if (!is.null(paramSet$KA) | !is.null(paramSet$GA)) {
+			if (is.null(paramSet$GA)) {
+				paramSet$GA <- bind(matrix(0, ni, ncol(paramSet$KA@free)))
+			} 
+			if (is.null(paramSet$KA)) {
+				paramSet$KA <- bind(matrix(0, ni, ncol(paramSet$GA@free)))
+			} 
+		}       
     } else if (modelType == "Path") {
         
         if (is.null(paramSet$BE)) 
@@ -261,6 +270,16 @@ buildModel <- function(paramSet, modelType) {
             }  ## Set factor means to be fixed at 0
         # if(is.null(paramSet$AL)) { AL <- bind(rep(0,ne)) } ## Set factor intercepts
         # to be fixed at 0
+		
+		# There is a covariate
+        if (!is.null(paramSet$KA) | !is.null(paramSet$GA)) {
+			if (is.null(paramSet$GA)) {
+				paramSet$GA <- bind(matrix(0, ni, ncol(paramSet$KA@free)))
+			} 
+			if (is.null(paramSet$KA)) {
+				paramSet$KA <- bind(matrix(0, ni, ncol(paramSet$GA@free)))
+			} 
+		}
     } else {
         stop("modelType not recognized. Options are: \"CFA\", \"SEM\", or \"Path\"")
     }
@@ -720,33 +739,41 @@ btwGroupCons <- function(pt) {
 ######################## Create some shortcuts ########################
 
 model.cfa <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, VTE = NULL, 
-    VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, 
-    indLab = NULL, facLab = NULL, groupLab = "group", ngroups = 1, con = NULL) {
+    VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, KA = NULL, GA = NULL, 
+    indLab = NULL, facLab = NULL, covLab = NULL, groupLab = "group", ngroups = 1, con = NULL) {
     model(LY = LY, PS = PS, RPS = RPS, TE = TE, RTE = RTE, BE = NULL, VTE = VTE, 
-        VY = VY, VPS = VPS, VE = VE, TY = TY, AL = AL, MY = MY, ME = ME, modelType = "CFA", 
-        indLab = indLab, facLab = facLab, groupLab = groupLab, ngroups = ngroups, con = con)
+        VY = VY, VPS = VPS, VE = VE, TY = TY, AL = AL, MY = MY, ME = ME, KA = KA, GA = GA, modelType = "CFA", 
+        indLab = indLab, facLab = facLab, covLab = covLab, groupLab = groupLab, ngroups = ngroups, con = con)
 }
 
 model.path <- function(PS = NULL, RPS = NULL, BE = NULL, VPS = NULL, VE = NULL, AL = NULL, 
-    ME = NULL, indLab = NULL, facLab = NULL, groupLab = "group", ngroups = 1, con = NULL) {
+    ME = NULL, KA = NULL, GA = NULL, indLab = NULL, facLab = NULL, covLab = NULL, groupLab = "group", ngroups = 1, con = NULL) {
     model(LY = NULL, PS = PS, RPS = RPS, TE = NULL, RTE = NULL, BE = BE, VTE = NULL, 
-        VY = NULL, VPS = VPS, VE = VE, TY = NULL, AL = AL, MY = NULL, ME = ME, modelType = "Path", 
-        indLab = indLab, facLab = facLab, groupLab = groupLab, ngroups = ngroups, con = con)
+        VY = NULL, VPS = VPS, VE = VE, TY = NULL, AL = AL, MY = NULL, ME = ME, KA = KA, GA = GA, modelType = "Path", 
+        indLab = indLab, facLab = facLab, groupLab = groupLab, covLab = covLab, ngroups = ngroups, con = con)
 }
 
 model.sem <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = NULL, 
     VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, MY = NULL, 
-    ME = NULL, indLab = NULL, facLab = NULL, groupLab = "group", ngroups = 1, con = NULL) {
+    ME = NULL, KA = NULL, GA = NULL, indLab = NULL, facLab = NULL, covLab = NULL, groupLab = "group", ngroups = 1, con = NULL) {
     model(LY = LY, PS = PS, RPS = RPS, TE = TE, RTE = RTE, BE = BE, VTE = VTE, VY = VY, 
-        VPS = VPS, VE = VE, TY = TY, AL = AL, MY = MY, ME = ME, modelType = "SEM", 
-        indLab = indLab, facLab = facLab, groupLab = groupLab, ngroups = ngroups, con = con)
+        VPS = VPS, VE = VE, TY = TY, AL = AL, MY = MY, ME = ME, KA = KA, GA = GA, modelType = "SEM", 
+        indLab = indLab, facLab = facLab, groupLab = groupLab, covLab = covLab, ngroups = ngroups, con = con)
 }
 
 estmodel <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = NULL, 
     VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, MY = NULL, 
-    ME = NULL, modelType, indLab = NULL, facLab = NULL, groupLab = "group", ngroups = 1, con = NULL) {
+    ME = NULL, KA = NULL, GA = NULL, modelType, indLab = NULL, facLab = NULL, covLab = NULL, groupLab = "group", ngroups = 1, con = NULL) {
     if (is.null(modelType)) 
         stop("modelType has not been specified. Options are: \"CFA\", \"SEM\", or \"Path\"")
+	if (!is.null(GA)) {
+		if (!is.list(GA)) GA <- list(GA)
+		GA <- lapply(GA, bind)
+	}
+	if (!is.null(KA)) {
+		if (!is.list(KA)) KA <- list(KA)
+		KA <- lapply(KA, bind)		
+	}
     if (modelType == "CFA") {
         if (!is.list(LY)) 
             LY <- list(LY)
@@ -1055,38 +1082,42 @@ estmodel <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE
         MY <- rep(MY, ngroups)
     if (!is.null(ME) && (ngroups != length(ME))) 
         ME <- rep(ME, ngroups)
-    
+    if (!is.null(GA) && (ngroups != length(GA))) 
+        GA <- rep(GA, ngroups)
+    if (!is.null(KA) && (ngroups != length(KA))) 
+        KA <- rep(KA, ngroups)
+   
     model(LY = LY, PS = PS, RPS = RPS, TE = TE, RTE = RTE, BE = BE, VTE = VTE, VY = VY, 
-        VPS = VPS, VE = VE, TY = TY, AL = AL, MY = MY, ME = ME, modelType = modelType, 
-        indLab = indLab, facLab = facLab, groupLab = groupLab, ngroups = ngroups, con = con)
+        VPS = VPS, VE = VE, TY = TY, AL = AL, MY = MY, ME = ME, KA = KA, GA = GA, modelType = modelType, 
+        indLab = indLab, facLab = facLab, groupLab = groupLab, covLab = covLab, ngroups = ngroups, con = con)
 }
 
 estmodel.cfa <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, 
     VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, MY = NULL, 
-    ME = NULL, indLab = NULL, facLab = NULL, groupLab = "group", ngroups = 1, con = NULL) {
+    ME = NULL, KA = NULL, GA = NULL, indLab = NULL, facLab = NULL, groupLab = "group", covLab = NULL, ngroups = 1, con = NULL) {
     estmodel(LY = LY, PS = PS, RPS = RPS, TE = TE, RTE = RTE, BE = NULL, VTE = VTE, 
-        VY = VY, VPS = VPS, VE = VE, TY = TY, AL = AL, MY = MY, ME = ME, modelType = "CFA", 
-        indLab = indLab, facLab = facLab, groupLab = groupLab, ngroups = ngroups, con = con)
+        VY = VY, VPS = VPS, VE = VE, TY = TY, AL = AL, MY = MY, ME = ME, KA = KA, GA = GA, modelType = "CFA", 
+        indLab = indLab, facLab = facLab, groupLab = groupLab, covLab = covLab, ngroups = ngroups, con = con)
 }
 
 estmodel.path <- function(PS = NULL, RPS = NULL, BE = NULL, VPS = NULL, VE = NULL, 
-    AL = NULL, ME = NULL, indLab = NULL, facLab = NULL, groupLab = "group", ngroups = 1, con = NULL) {
+    AL = NULL, ME = NULL, KA = NULL, GA = NULL, indLab = NULL, facLab = NULL, groupLab = "group", covLab = NULL, ngroups = 1, con = NULL) {
     estmodel(LY = NULL, PS = PS, RPS = RPS, TE = NULL, RTE = NULL, BE = BE, VTE = NULL, 
-        VY = NULL, VPS = VPS, VE = VE, TY = NULL, AL = AL, MY = NULL, ME = ME, modelType = "Path", 
-        indLab = indLab, facLab = facLab, groupLab = groupLab, ngroups = ngroups, con = con)
+        VY = NULL, VPS = VPS, VE = VE, TY = NULL, AL = AL, MY = NULL, ME = ME, KA = KA, GA = GA, modelType = "Path", 
+        indLab = indLab, facLab = facLab, groupLab = groupLab, covLab = covLab, ngroups = ngroups, con = con)
 }
 
 estmodel.sem <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, 
     BE = NULL, VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, 
-    MY = NULL, ME = NULL, indLab = NULL, facLab = NULL, groupLab = "group", ngroups = 1, con = NULL) {
+    MY = NULL, ME = NULL, KA = NULL, GA = NULL, indLab = NULL, facLab = NULL, groupLab = "group", covLab = NULL, ngroups = 1, con = NULL) {
     estmodel(LY = LY, PS = PS, RPS = RPS, TE = TE, RTE = RTE, BE = BE, VTE = VTE, 
-        VY = VY, VPS = VPS, VE = VE, TY = TY, AL = AL, MY = MY, ME = ME, modelType = "SEM", 
-        indLab = indLab, facLab = facLab, groupLab = groupLab, ngroups = ngroups, con = con)
+        VY = VY, VPS = VPS, VE = VE, TY = TY, AL = AL, MY = MY, ME = ME, KA = KA, GA = GA, modelType = "SEM", 
+        indLab = indLab, facLab = facLab, groupLab = groupLab, covLab = covLab, ngroups = ngroups, con = con)
 }
 
 model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, TE = NULL, 
     RTE = NULL, BE = NULL, VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL, 
-    AL = NULL, MY = NULL, ME = NULL) {
+    AL = NULL, MY = NULL, ME = NULL, KA = NULL, GA = NULL) {
     ngroups <- object@Model@ngroups
     name <- names(object@Model@GLIST)
     modelType <- NULL

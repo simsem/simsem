@@ -8,19 +8,49 @@
 
 
 draw <- function(model, maxDraw = 50, misfitBounds = NULL, averageNumMisspec = FALSE, 
-    optMisfit = NULL, optDraws = 50, misfitType = "f0", createOrder = c(1, 2, 3)) {
+    optMisfit = NULL, optDraws = 50, misfitType = "f0", createOrder = c(1, 2, 3), covData = NULL) {
     stopifnot(class(model) == "SimSem")
+	covLab <- model@pt$lhs[model@pt$op == "~1" & model@pt$exo == 1]
+	
+	if(length(covLab) > 0) {
+		if(is.null(covData)) stop("The covariate data must be specified.")
+		groupseq <- unique(model@pt$group)
+		if(length(groupseq) > 1) covLab <- c(covLab, model@groupLab)
+		covData <- covData[,covLab, drop=FALSE]		
+		if(ncol(covData) != length(covLab)) stop(paste0("The covariate data must contain the following variable names: ", paste(covLab, collapse = ", ")))
+		if(any(is.na(covData))) stop("The covariate data must not have missing variables.")
+	} else {
+		if(!is.null(covData)) {
+			warnings("CONFLICT: The model template does not have any covariates but the covaraite data are specified. The covaraite data are ignored.")
+			covData <- NULL
+		}
+	}
+	
     drawParam(model@dgen, maxDraw = maxDraw, numFree = max(model@pt$free), misfitBounds = misfitBounds, 
         averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, 
-        misfitType = misfitType, con = model@con, ord = createOrder)
+        misfitType = misfitType, con = model@con, ord = createOrder, covData = covData)
 }
 
 # Order 1 = constraint, 2 = misspec, 3 = filling parameters
 drawParam <- function(paramSet, maxDraw = 50, numFree = 1, misfitBounds = NULL, averageNumMisspec = FALSE, 
-    optMisfit = NULL, optDraws = 50, misfitType = "f0", con = NULL, ord = c(1, 2, 3)) {
+    optMisfit = NULL, optDraws = 50, misfitType = "f0", con = NULL, ord = c(1, 2, 3), covData = NULL) {
     if (!is.list(paramSet[[1]])) {
         paramSet <- list(paramSet)
     }
+	ngroups <- length(paramSet)
+    groupLoop <- seq_len(ngroups)
+	covStat <- rep(list(NULL), ngroups)
+	if (!is.null(covData)) {
+		if(ngroups == 1) {
+			covStat[[1]] <- list(MZ = as.matrix(colMeans(covData)), CZ = cov(covData))
+		} else {
+			groupCov <- covData[,ncol(covData)]
+			targetDat <- covData[,-ncol(covData)]
+			for(i in groupLoop) {
+				covStat[[i]] <- list(MZ = as.matrix(colMeans(targetDat[groupCov == i,])), CZ = cov(targetDat[groupCov == i,]))
+			}
+		}
+	}
     misspec <- any(sapply(paramSet, FUN = function(group) {
         sapply(group, FUN = function(mat) {
             if (!is.null(mat) && length(mat@misspec) != 0 && !any(is.nan(mat@misspec))) {
@@ -37,10 +67,6 @@ drawParam <- function(paramSet, maxDraw = 50, numFree = 1, misfitBounds = NULL, 
     draw <- 1
     valid <- FALSE
     while (draw <= maxDraw) {
-        
-        ngroups <- length(paramSet)
-        groupLoop <- seq_len(ngroups)
-        
         if (misspec) {
             
             rpls <- list()  # list of drawn parameter sets (raw)
@@ -50,16 +76,9 @@ drawParam <- function(paramSet, maxDraw = 50, numFree = 1, misfitBounds = NULL, 
             for (i in groupLoop) {
                 rpls[[i]] <- lapply(paramSet[[i]], rawDraw, constraint = FALSE)
 				fullpls[[i]] <- lapply(rpls[[i]], "[[", 1)
-                #fullmpls[[i]] <- lapply(rpls[[i]], "[[", 2)
                 fullmls[[i]] <- lapply(rpls[[i]], "[[", 3)
             }
-			temp <- misspecOrder(real=fullpls, misDraw=fullmls, paramSet=paramSet, con=con, ord=ord)
-            # fullpls <- equalCon(fullpls, paramSet, con=con)
-			# fullmpls <- equalCon(fullmpls, paramSet, con=con)
-            # for (i in groupLoop) {
-                # fullpls[[i]] <- fillParam(fullpls[[i]])
-                # fullmpls[[i]] <- fillParam(fullmpls[[i]])
-            # }
+			temp <- misspecOrder(real=fullpls, misDraw=fullmls, paramSet=paramSet, con=con, ord=ord, covStat=covStat)
 			fullpls <- temp[[1]]
 			fullmpls <- temp[[2]]
 			
@@ -76,14 +95,14 @@ drawParam <- function(paramSet, maxDraw = 50, numFree = 1, misfitBounds = NULL, 
 				  fullplsdraw <- fullpls
 				  
 				  if(fillFirst) {
-					fullpls <- lapply(fullpls, fillParam)
+					fullpls <- mapply(fillParam, fullpls, covStat, SIMPLIFY = FALSE)
 					fullpls <- equalCon(fullpls, paramSet, fill=TRUE, con=con)
 				  } else {
 				    fullpls <- equalCon(fullpls, paramSet, fill=FALSE, con=con)
-					fullpls <- lapply(fullpls, fillParam)
+					fullpls <- mapply(fillParam, fullpls, covStat, SIMPLIFY = FALSE)
 				  }
-                  fullpls <- lapply(fullpls, fillParam)  # fill after drawing misspec
-                  macsPopls <- lapply(fullpls, createImpliedMACS)
+                  #fullpls <- mapply(fillParam, fullpls, covStat, SIMPLIFY = FALSE)  # fill after drawing misspec
+                  macsPopls <- mapply(createImpliedMACS, fullpls, covStat, SIMPLIFY = FALSE)
                   
                   if (!(all(is.finite(unlist(lapply(macsPopls, "[[", 2)))) && (sum(unlist(lapply(lapply(lapply(macsPopls, 
                     "[[", 2), eigen), "[[", 1)) <= 0) == 0) && all(sapply(fullpls, 
@@ -106,16 +125,10 @@ drawParam <- function(paramSet, maxDraw = 50, numFree = 1, misfitBounds = NULL, 
                     for (j in groupLoop) {
                       temp[[i]][[j]] <- lapply(paramSet[[j]], rawDraw, misOnly = TRUE)
 					}  
-					misspecDraws <- misspecOrder(real=fullplsdraw, misDraw=temp[[i]], paramSet=paramSet, con=con, ord=ord)[[2]]
+					misspecDraws <- misspecOrder(real=fullplsdraw, misDraw=temp[[i]], paramSet=paramSet, con=con, ord=ord, covStat=covStat)[[2]]
 					  
 					for (j in groupLoop) {  
-                      # addMis <- mapply("+", fullplsdraw[[j]], temp[[i]][[j]])
-                      # misspecDraws[[j]] <- fillParam(lapply(addMis, FUN = function(x) {
-                        # if (length(x) == 0) {
-                          # x <- NULL
-                        # } else x
-                      # }))
-                      tempMacs <- createImpliedMACS(misspecDraws[[j]])
+                      tempMacs <- createImpliedMACS(misspecDraws[[j]], covStat[[j]])
                       if (all(is.finite(tempMacs$CM)) && (sum(eigen(tempMacs$CM)$values <= 
                         0) == 0)) {
                         macsMis[[j]] <- tempMacs
@@ -168,9 +181,8 @@ drawParam <- function(paramSet, maxDraw = 50, numFree = 1, misfitBounds = NULL, 
                 redmls <- fullmls #lapply(fullmls, reduceMatrices)
                 
                 # if (!is.null(param) && !is.null(misspec)) {
-                macsPopls <- lapply(redpls, createImpliedMACS)
-                macsMisls <- lapply(redmpls, createImpliedMACS)
-                
+                macsPopls <- mapply(createImpliedMACS, redpls, covStat, SIMPLIFY = FALSE)
+                macsMisls <- mapply(createImpliedMACS, redmpls, covStat, SIMPLIFY = FALSE)
                 ## Checks: 1. all covariances are finite 2. Eigenvalues are less than zero 3.
                 ## Paths and variances are valid
                 if (!(all(is.finite(unlist(lapply(macsPopls, "[[", 2)))) && (sum(unlist(lapply(lapply(lapply(macsPopls, 
@@ -222,33 +234,24 @@ drawParam <- function(paramSet, maxDraw = 50, numFree = 1, misfitBounds = NULL, 
 			
 			# Exclude the misspecification from the order
 			ord <- ord[ord != 2]
-            
 			unfillpls <- list()
             fullpls <- list()  # list of drawn parameter sets (filled)
             for (i in groupLoop) {
 				unfillpls[[i]] <- lapply(paramSet[[i]], rawDraw, misSpec = FALSE, constraint = FALSE)
             }
 			fillFirst <- ord[1] == 3
-			# if(fillFirst) {
-				# unfillpls <- lapply(unfillpls, fillParam)
-			# } 
-			# unfillpls <- equalCon(unfillpls, paramSet, fill=fillFirst, con=con)
 			
 			if(fillFirst) {
-				fullpls <- lapply(unfillpls, fillParam)
+				fullpls <- mapply(fillParam, unfillpls, covStat, SIMPLIFY = FALSE)
 				fullpls <- equalCon(fullpls, paramSet, fill=TRUE, con=con)
 			} else {
 				fullpls <- equalCon(unfillpls, paramSet, fill=FALSE, con=con)
-				fullpls <- lapply(fullpls, fillParam)
+				fullpls <- mapply(fillParam, fullpls, covStat, SIMPLIFY = FALSE)
 			}
 			
-			
-			# for (i in groupLoop) {
-                # fullpls[[i]] <- fillParam(unfillpls[[i]])
-            # }
             if (all(sapply(fullpls, validateObject))) {
                 redpls <- lapply(fullpls, reduceMatrices)
-                macsPopls <- lapply(redpls, createImpliedMACS)
+                macsPopls <- mapply(createImpliedMACS, redpls, covStat, SIMPLIFY = FALSE)
                 if (all(is.finite(unlist(lapply(macsPopls, "[[", 2)))) && all(unlist(lapply(lapply(lapply(macsPopls, 
                   "[[", 2), eigen), "[[", 1)) > 0)) {
                   break
@@ -259,11 +262,6 @@ drawParam <- function(paramSet, maxDraw = 50, numFree = 1, misfitBounds = NULL, 
 			  stop("Cannot obtain valid parameter set within maximum number of draws.")
 			}
 			next
-            # final <- list()
-            # for (i in groupLoop) {
-                # final[[i]] <- list(param = redpls[[i]], misspec = NULL, misOnly = NULL)
-            # }
-            # return(final)
         }
         
     }
@@ -382,7 +380,7 @@ rawDraw <- function(simDat, constraint = TRUE, misSpec = TRUE, parMisOnly = FALS
 }
 
 # Auto-completition of parameters
-fillParam <- function(rawParamSet) {
+fillParam <- function(rawParamSet, covStat = NULL) {
     require(lavaan)
     LY <- rawParamSet$LY
     VTE <- rawParamSet$VTE
@@ -400,86 +398,105 @@ fillParam <- function(rawParamSet) {
     VE <- rawParamSet$VE
     AL <- rawParamSet$AL
     ME <- rawParamSet$ME
-    
+    KA <- rawParamSet$KA
+	GA <- rawParamSet$GA
+	
+	MZ <- NULL
+	CZ <- NULL
+	isCov <- !is.null(covStat)
+	if(isCov) {
+		MZ <- covStat$MZ
+		CZ <- covStat$CZ
+	}
+	
     if (is.null(BE) && !is.null(LY)) {
         # CFA
         if (is.null(PS)) {
-            PS <- suppressWarnings(cor2cov(RPS, sqrt(VE)))
+			#if(isCov) VE <- 
+			VPS <- findFactorResidualVar(matrix(0, nrow(RPS), ncol(RPS)), RPS, totalVarPsi = VE, gamma = GA, covcov = CZ)
+            PS <- suppressWarnings(cor2cov(RPS, sqrt(VPS)))
         } else {
-            VE <- diag(PS)
             VPS <- diag(PS)
             RPS <- cov2corMod(PS)
+            VE <- findFactorTotalVar(matrix(0, nrow(RPS), ncol(RPS)), RPS, VPS, gamma = GA, covcov = CZ)
         }
+		if (is.null(ME)) 
+            ME <- findFactorMean(matrix(0, length(AL), length(AL)), AL, gamma = GA, covmean = MZ)
+        if (is.null(AL)) 
+            AL <- findFactorIntercept(matrix(0, length(ME), length(ME)), ME, gamma = GA, covmean = MZ)
+
+		# CE is model-implied covariance
+		CE <- findFactorTotalCov(matrix(0, nrow(RPS), ncol(RPS)), psi = PS, gamma = GA, covcov = CZ)
         if (is.null(TE)) {
             if (is.null(VTE)) 
-                VTE <- findIndResidualVar(LY, PS, VY)  # PS is model-implied covariance
+                VTE <- findIndResidualVar(LY, CE, VY, kappa = KA, covcov = CZ)  
             if (is.null(VY)) 
-                VY <- findIndTotalVar(LY, PS, VTE)
+                VY <- findIndTotalVar(LY, CE, VTE, kappa = KA, covcov = CZ)
             TE <- suppressWarnings(cor2cov(RTE, suppressWarnings(sqrt(VTE))))
         } else {
             VTE <- diag(TE)
             RTE <- cov2corMod(TE)
-            VY <- findIndTotalVar(LY, PS, VTE)
+            VY <- findIndTotalVar(LY, CE, VTE, kappa = KA, covcov = CZ)
         }
         if (is.null(MY)) 
-            MY <- findIndMean(LY, ME, TY)
+            MY <- findIndMean(LY, ME, TY, kappa = KA, covmean = MZ)
         if (is.null(TY)) 
-            TY <- findIndIntercept(LY, ME, MY)
+            TY <- findIndIntercept(LY, ME, MY, kappa = KA, covmean = MZ)
         
     } else if (!is.null(BE) && is.null(LY)) {
         # Path
         if (is.null(PS)) {
             if (is.null(VPS)) 
-                VPS <- findFactorResidualVar(BE, RPS, VE)
+                VPS <- findFactorResidualVar(BE, RPS, VE, gamma = GA, covcov = CZ)
             if (is.null(VE)) 
-                VE <- findFactorTotalVar(BE, RPS, VPS)
+                VE <- findFactorTotalVar(BE, RPS, VPS, gamma = GA, covcov = CZ)
             PS <- suppressWarnings(cor2cov(RPS, suppressWarnings(sqrt(VPS))))
         } else {
             VPS <- diag(PS)
             RPS <- cov2corMod(PS)
-            VE <- findFactorTotalVar(BE, RPS, VPS)
+            VE <- findFactorTotalVar(BE, RPS, VPS, gamma = GA, covcov = CZ)
         }
         if (is.null(ME)) 
-            ME <- findFactorMean(BE, AL)
+            ME <- findFactorMean(BE, AL, gamma = GA, covmean = MZ)
         if (is.null(AL)) 
-            AL <- findFactorIntercept(BE, ME)
+            AL <- findFactorIntercept(BE, ME, gamma = GA, covmean = MZ)
         
     } else if (!is.null(BE) && !is.null(LY)) {
         # SEM
         if (is.null(PS)) {
             if (is.null(VPS)) 
-                VPS <- findFactorResidualVar(BE, RPS, VE)
+                VPS <- findFactorResidualVar(BE, RPS, VE, gamma = GA, covcov = CZ)
             if (is.null(VE)) 
-                VE <- findFactorTotalVar(BE, RPS, VPS)
+                VE <- findFactorTotalVar(BE, RPS, VPS, gamma = GA, covcov = CZ)
             PS <- suppressWarnings(cor2cov(RPS, suppressWarnings(sqrt(VPS))))
         } else {
             VPS <- diag(PS)
             RPS <- cov2corMod(PS)
-            VE <- findFactorTotalVar(BE, RPS, VPS)
+            VE <- findFactorTotalVar(BE, RPS, VPS, gamma = GA, covcov = CZ)
         }
         if (is.null(ME)) 
-            ME <- findFactorMean(BE, AL)
+            ME <- findFactorMean(BE, AL, gamma = GA, covmean = MZ)
         if (is.null(AL)) 
-            AL <- findFactorIntercept(BE, ME)
-        facCov <- findFactorTotalCov(BE, PS)
+            AL <- findFactorIntercept(BE, ME, gamma = GA, covmean = M)
+        facCov <- findFactorTotalCov(BE, PS, gamma = GA, covcov = CZ)
         if (is.null(TE)) {
             if (is.null(VTE)) 
-                VTE <- findIndResidualVar(LY, facCov, VY)
+                VTE <- findIndResidualVar(LY, facCov, VY, kappa = KA, covcov = CZ)
             if (is.null(VY)) 
-                VY <- findIndTotalVar(LY, facCov, VTE)
+                VY <- findIndTotalVar(LY, facCov, VTE, kappa = KA, covcov = CZ)
             TE <- suppressWarnings(cor2cov(RTE, suppressWarnings(sqrt(VTE))))
         } else {
             RTE <- cov2corMod(TE)
             VTE <- diag(TE)
-            VY <- findIndTotalVar(LY, facCov, VTE)
+            VY <- findIndTotalVar(LY, facCov, VTE, kappa = KA, covcov = CZ)
         }
         if (is.null(MY)) 
-            MY <- findIndMean(LY, ME, TY)
+            MY <- findIndMean(LY, ME, TY, kappa = KA, covmean = MZ)
         if (is.null(TY)) 
-            TY <- findIndIntercept(LY, ME, MY)
+            TY <- findIndIntercept(LY, ME, MY, kappa = KA, covmean = MZ)
     }
     fullParamSet <- list(LY = LY, VTE = VTE, TE = TE, RTE = RTE, VY = VY, TY = TY, 
-        MY = MY, BE = BE, VPS = VPS, PS = PS, RPS = RPS, VE = VE, AL = AL, ME = ME)
+        MY = MY, BE = BE, VPS = VPS, PS = PS, RPS = RPS, VE = VE, AL = AL, ME = ME, GA = GA, KA = KA)
     return(fullParamSet)
 }
 
@@ -496,34 +513,87 @@ reduceMatrices <- function(paramSet) {
     }
     
     reducedParamSet <- list(PS = paramSet$PS, BE = paramSet$BE, AL = paramSet$AL, 
-        TE = paramSet$TE, LY = paramSet$LY, TY = paramSet$TY)
+        TE = paramSet$TE, LY = paramSet$LY, TY = paramSet$TY, GA = paramSet$GA, KA = paramSet$KA)
     return(reducedParamSet)
 }
 
-createImpliedMACS <- function(reducedParamSet) {
+createImpliedMACS <- function(reducedParamSet, covStat = NULL) {
     implied.mean <- NULL
     implied.covariance <- NULL
-    ID <- matrix(0, nrow(reducedParamSet$PS), nrow(reducedParamSet$PS))
-    diag(ID) <- 1
+	if(!is.null(covStat)) {
+		reducedParamSet <- combineParamSetCov(reducedParamSet, covStat = covStat)
+	}
+    ID <- diag(nrow(reducedParamSet$PS))
     if (!is.null(reducedParamSet$BE)) {
         # Path or SEM
-        implied.mean <- solve(ID - reducedParamSet$BE) %*% reducedParamSet$AL
-        implied.covariance <- solve(ID - reducedParamSet$BE) %*% reducedParamSet$PS %*% 
-            t(solve(ID - reducedParamSet$BE))
+		temp <- solve(ID - reducedParamSet$BE)
+        implied.mean <- temp %*% reducedParamSet$AL
+        implied.covariance <- temp %*% reducedParamSet$PS %*% t(temp)
         if (!is.null(reducedParamSet$LY)) {
             # SEM
             implied.mean <- reducedParamSet$TY + (reducedParamSet$LY %*% implied.mean)
             implied.covariance <- (reducedParamSet$LY %*% implied.covariance %*% 
                 t(reducedParamSet$LY)) + reducedParamSet$TE
         }
-        
     } else {
         # CFA
-        implied.mean <- reducedParamSet$LY %*% reducedParamSet$AL + reducedParamSet$TY
-        implied.covariance <- (reducedParamSet$LY %*% reducedParamSet$PS %*% t(reducedParamSet$LY)) + 
+		facMean <- reducedParamSet$AL
+		facCov <- reducedParamSet$PS
+        implied.mean <- reducedParamSet$LY %*% facMean + reducedParamSet$TY
+        implied.covariance <- (reducedParamSet$LY %*% facCov %*% t(reducedParamSet$LY)) + 
             reducedParamSet$TE
     }
     return(list(M = as.vector(implied.mean), CM = implied.covariance))
+}
+
+combineParamSetCov <- function(reducedParamSet, covStat = NULL) {
+	nz <- length(covStat$MZ)
+	if(!is.null(reducedParamSet$BE)) reducedParamSet$BE <- parseGammaToBeta(reducedParamSet$BE, reducedParamSet$GA)
+	if(!is.null(reducedParamSet$AL)) reducedParamSet$AL <- as.matrix(c(covStat$MZ, reducedParamSet$AL))
+	if(!is.null(reducedParamSet$PS)) reducedParamSet$PS <- parseCovCovToPsi(reducedParamSet$PS, covStat$CZ)
+	if(!is.null(reducedParamSet$LY)) reducedParamSet$LY <- parseKappaToLambda(reducedParamSet$LY, reducedParamSet$KA)
+	if(!is.null(reducedParamSet$TE)) reducedParamSet$TE <- parseCovToTheta(reducedParamSet$TE, covStat$CZ)
+	if(!is.null(reducedParamSet$TY)) reducedParamSet$TY <- as.matrix(c(rep(0, nz), reducedParamSet$TY))
+	reducedParamSet$KA <- NULL
+	reducedParamSet$GA <- NULL
+	reducedParamSet
+}
+
+parseGammaToBeta <- function(beta, gamma) {
+	nf <- nrow(beta)
+	nz <- ncol(gamma)
+	result <- matrix(0, nf + nz, nf + nz)
+	result[nz + 1:nf, nz + 1:nf] <- beta
+	result[nz + 1:nf, 1:nz] <- gamma
+	result
+}
+
+parseCovCovToPsi <- function(psi, sigmaxx) {
+	nf <- nrow(psi)
+	nz <- ncol(sigmaxx)
+	result <- matrix(0, nf + nz, nf + nz)
+	result[nz + 1:nf, nz + 1:nf] <- psi
+	result[1:nz, 1:nz] <- sigmaxx	
+	result
+}
+
+parseKappaToLambda <- function(lambda, kappa) {
+	ni <- nrow(lambda)
+	nf <- ncol(lambda)
+	nz <- ncol(kappa)
+	result <- matrix(0, nz + ni, nz + nf)
+	result[1:nz, 1:nz] <- diag(nz)
+	result[(nz+1):(nz+ni), 1:nz] <- kappa
+	result[(nz+1):(nz+ni), (nz+1):(nz+nf)] <- lambda
+	result
+}
+
+parseCovToTheta <- function(theta, sigmaxx) {
+	nz <- ncol(sigmaxx)
+	ni <- nrow(theta)
+	result <- matrix(0, ni + nz, ni + nz)
+	result[(nz + 1):(nz + ni), (nz + 1):(nz + ni)] <- theta
+	result
 }
 
 ## Now takes lists for the matrices for mg
@@ -755,43 +825,44 @@ applyConScript <- function(xxxtargetxxx, xxxvalxxx, xxxconxxx, xxxthresholdxxx =
 	list(xxxalltargetxxx, xxxresultxxx)
 }
 
-misspecOrder <- function(real, misDraw, paramSet, con, ord=c(1, 2, 3)) {
+misspecOrder <- function(real, misDraw, paramSet, con, ord=c(1, 2, 3), covStat=NULL) {
 	pls <- list()
 	mpls <- list()
+	if(is.null(covStat)) covStat <- rep(list(NULL), length(paramSet))
 	# Order 1 = constraint, 2 = misspec, 3 = filling parameters
 	if(isTRUE(all.equal(ord, c(1, 2, 3)))) {
 		# con, misspec, fill
 		real <- equalCon(real, paramSet, con=con)
-		pls <- lapply(real, fillParam)
+		pls <- mapply(fillParam, real, covStat, SIMPLIFY = FALSE)
 		mis <- imposeMis(real, misDraw)
-		mpls <- lapply(mis, fillParam)
+		mpls <- mapply(fillParam, mis, covStat, SIMPLIFY = FALSE)
 	} else if (isTRUE(all.equal(ord, c(1, 3, 2)))) {
 		# con, fill, misspec
 		real <- equalCon(real, paramSet, con=con)
-		pls <- lapply(real, fillParam)
+		pls <- mapply(fillParam, real, covStat, SIMPLIFY = FALSE)
 		mpls <- imposeMis(pls, misDraw)		
 	} else if (isTRUE(all.equal(ord, c(2, 1, 3)))) {
 		# mis, con, fill
 		mis <- imposeMis(real, misDraw)
 		mis <- equalCon(mis, paramSet, con=con)
-		mpls <- lapply(mis, fillParam)
+		mpls <- mapply(fillParam, mis, covStat, SIMPLIFY = FALSE)
 		real <- equalCon(real, paramSet, con=con)
-		pls <- lapply(real, fillParam)	
+		pls <- mapply(fillParam, real, covStat, SIMPLIFY = FALSE)	
 	} else if (isTRUE(all.equal(ord, c(2, 3, 1)))) {
 		# mis, fill, con
 		mis <- imposeMis(real, misDraw)
-		mis <- lapply(mis, fillParam)
+		mis <- mapply(fillParam, mis, covStat, SIMPLIFY = FALSE)
 		mpls <- equalCon(mis, paramSet, con=con, fill=TRUE)
-		real <- lapply(real, fillParam)	
+		real <- mapply(fillParam, real, covStat, SIMPLIFY = FALSE)
 		pls <- equalCon(real, paramSet, con=con, fill=TRUE)
 	} else if (isTRUE(all.equal(ord, c(3, 1, 2)))) {
 		# fill, con, mis
-		real <- lapply(real, fillParam)
+		real <- mapply(fillParam, real, covStat, SIMPLIFY = FALSE)
 		pls <- equalCon(real, paramSet, con=con, fill=TRUE)
 		mpls <- imposeMis(pls, misDraw)
 	} else if (isTRUE(all.equal(ord, c(3, 2, 1)))) {
 		# fill, mis, con
-		real <- lapply(real, fillParam)
+		real <- mapply(fillParam, real, covStat, SIMPLIFY = FALSE)
 		pls <- equalCon(real, paramSet, con=con, fill=TRUE)
 		mis <- imposeMis(real, misDraw)
 		mpls <- equalCon(mis, paramSet, con=con, fill=TRUE)

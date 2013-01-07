@@ -17,7 +17,7 @@ analyze <- function(model, data, package = "lavaan", miss = NULL,
         colnames(data) <- paste0("x", 1:ncol(data))
     if (is.null(aux)) {
         if (!is.null(miss) && !(length(miss@cov) == 1 && miss@cov == 0) && miss@covAsAux) 
-            auxiliy <- miss@cov
+            aux <- miss@cov
     }
 	if(length(unique(model@pt$group)) == 1) {
 		args$group <- NULL
