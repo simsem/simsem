@@ -134,7 +134,7 @@ createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist 
         varnames <- paste0("x", 1:ny)
     }  
 	if (!is.null(covData)) {
-		if (!is.null(colnames(covData))) colnames(covData) <- paste0("z", 1:ncol(covData))
+		if (is.null(colnames(covData))) colnames(covData) <- paste0("z", 1:ncol(covData))
 		varnames <- c(colnames(covData), varnames)
 	}
     colnames(Data) <- varnames

@@ -22,7 +22,7 @@
 
 getKeywords <- function() {
     
-    usedFit <- c("Chi", "AIC", "BIC", "RMSEA", "CFI", "TLI", "SRMR")
+    usedFit <- c("chisq", "aic", "bic", "rmsea", "cfi", "tli", "srmr")
     usedFitPop <- c("f0", "rmsea", "srmr")
     optMin <- c("min", "minimum", "lower")
     optMax <- c("max", "maximum", "upper")

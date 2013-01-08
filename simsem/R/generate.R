@@ -5,7 +5,7 @@
 generate <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "f0", 
     averageNumMisspec = FALSE, optMisfit = NULL, optDraws = 50, createOrder = c(1, 2, 3), indDist = NULL, sequential = FALSE, 
     facDist = NULL, errorDist = NULL, indLab = NULL, modelBoot = FALSE, realData = NULL, 
-    params = FALSE) {
+    params = FALSE, covData = NULL) {
     if (is.null(indLab)) {
         if (model@modelType == "Path") {
             indLab <- unique(model@pt$lhs)
@@ -28,19 +28,61 @@ generate <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "
     }
     
 	if(ngroups > 1 && length(n) == 1) n <- rep(n, ngroups)
-    
-    draws <- draw(model, maxDraw = maxDraw, misfitBounds = misfitBounds, misfitType = misfitType, 
-        averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, createOrder = createOrder)
+
+	covLab <- model@pt$lhs[model@pt$op == "~1" & model@pt$exo == 1]    
+	if(!is.null(realData)) {
+		if((ngroups > 1) && !(model@groupLab %in% colnames(realData))) stop(paste0("The ", model@groupLab, " varaible does not in the realData argument"))	
+		if(!is.null(covData) && (length(covLab) > 0)) {
+			usedCol <- covLab
+			if(ngroups > 1) usedCol <- c(usedCol, model@groupLab)
+			covData <- realData[,usedCol]
+		}
+		realData <- realData[,setdiff(colnames(realData), covLab)]
+	}
 	
-	if (model@modelType == "SEM") {
-		draws <- changeScaleSEM(draws, model)
+	
+	if(length(covLab) > 0) {
+		if(is.null(covData)) stop("The covariate data must be specified.")
+		if(ngroups > 1) covLab <- c(covLab, model@groupLab)
+		covData <- covData[,covLab, drop=FALSE]		
+		if(ncol(covData) != length(covLab)) stop(paste0("The covariate data must contain the following variable names: ", paste(covLab, collapse = ", ")))
+		if(any(is.na(covData))) stop("The covariate data must not have missing variables.")
+	} else {
+		if(!is.null(covData)) {
+			warnings("CONFLICT: The model template does not have any covariates but the covaraite data are specified. The covaraite data are ignored.")
+			covData <- NULL
+		}
+	}
+    draws <- draw(model, maxDraw = maxDraw, misfitBounds = misfitBounds, misfitType = misfitType, 
+        averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, createOrder = createOrder, covData = covData)
+	
+	# The data-generation model and analysis model may have different parameterization (residual factor varaince != 1) so the change of scale is needed
+	if (model@modelType %in% c("CFA", "SEM")) {
+		draws <- changeScaleFactor(draws, model)
 	}	
 	
+	realDataGroup <- rep(list(NULL), ngroups)
+	covDataGroup <- rep(list(NULL), ngroups)
+	if (ngroups > 1) {
+		if(!is.null(realData)) {
+			realDataGroup <- split(realData, realData[,model@groupLab])
+			nrealData <- sapply(realDataGroup, nrow)
+			if(any(nrealData != n)) stop("CONFLICT: The group sizes specified in realData and the 'n' argument are not equal.")
+		}
+		if(!is.null(covData)) {
+			covDataGroup <- split(covData, covData[,model@groupLab])
+			ncovData <- sapply(covDataGroup, nrow)
+			if(any(ncovData != n)) stop("CONFLICT: The group sizes specified in covData and the 'n' argument are not equal.")
+		}
+	} else {
+		if(!is.null(realData)) realDataGroup <- list(realData)
+		if(!is.null(covData)) covDataGroup <- list(covData)
+	}
 	# realData must be separated into different groups
 	# covariates must be separated into different groups
 	# realData must not contain covariates
-    datal <- mapply(FUN = createData, draws, indDist, facDist, errorDist, n = n, MoreArgs = list(
-        sequential = sequential, modelBoot = modelBoot, realData = realData, indLab = indLab), 
+    datal <- mapply(FUN = createData, draws, indDist, facDist, errorDist, n = n, realData = realDataGroup, 
+		covData = covDataGroup, MoreArgs = list(sequential = sequential, modelBoot = modelBoot, indLab = indLab), 
         SIMPLIFY = FALSE)
     data <- do.call("rbind", datal)
     data <- cbind(data, group = rep(1:ngroups, n))
@@ -54,12 +96,24 @@ generate <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "
     
 }
 
-popMisfitParams <- function(psl, df = NULL) {
+popMisfitParams <- function(psl, df = NULL, covData = NULL) {
     ngroups <- length(psl)
     real <- lapply(psl, "[[", 1)
     realmis <- lapply(psl, "[[", 2)
-    macsreal <- lapply(real, createImpliedMACS)
-    macsmis <- lapply(realmis, createImpliedMACS)
+	covStat <- rep(list(NULL), ngroups)
+	if (!is.null(covData)) {
+		if(ngroups == 1) {
+			covStat[[1]] <- list(MZ = as.matrix(colMeans(covData)), CZ = cov(covData))
+		} else {
+			groupCov <- covData[,ncol(covData)]
+			targetDat <- covData[,-ncol(covData)]
+			for(i in groupLoop) {
+				covStat[[i]] <- list(MZ = as.matrix(colMeans(targetDat[groupCov == i,])), CZ = cov(targetDat[groupCov == i,]))
+			}
+		}
+	}
+    macsreal <- mapply(createImpliedMACS, real, covStat, SIMPLIFY = FALSE)
+    macsmis <- mapply(createImpliedMACS, realmis, covStat, SIMPLIFY = FALSE)
     misfit <- popMisfitMACS(paramM = lapply(macsreal, "[[", 1), paramCM = lapply(macsreal, 
         "[[", 2), misspecM = lapply(macsmis, "[[", 1), misspecCM = lapply(macsmis, 
         "[[", 2), fit.measures = "all", dfParam = df)
@@ -67,7 +121,7 @@ popMisfitParams <- function(psl, df = NULL) {
 } 
 
 		
-changeScaleSEM <- function(drawResult, gen) {
+changeScaleFactor <- function(drawResult, gen) {
 	# Find the scales that are based on fixed factor 
 	dgen <- gen@dgen
 	pt <- gen@pt
@@ -160,13 +214,15 @@ changeScaleSEM <- function(drawResult, gen) {
 	for(g in 1:ngroup) {
 		param[[g]]$LY <- param[[g]]$LY %*% solve(scale[[g]])
 		param[[g]]$PS <- scale[[g]] %*% param[[g]]$PS %*% scale[[g]]
-		param[[g]]$BE <- scale[[g]] %*% param[[g]]$BE %*% solve(scale[[g]])
+		if(!is.null(param[[g]]$BE)) param[[g]]$BE <- scale[[g]] %*% param[[g]]$BE %*% solve(scale[[g]])
 		param[[g]]$AL <- scale[[g]] %*% param[[g]]$AL
+		if(!is.null(param[[g]]$GA)) param[[g]]$GA <- scale[[g]] %*% param[[g]]$GA
 		if(!is.null(misspec[[g]])) {
 			misspec[[g]]$LY <- misspec[[g]]$LY %*% solve(scale[[g]])
 			misspec[[g]]$PS <- scale[[g]] %*% misspec[[g]]$PS %*% scale[[g]]
-			misspec[[g]]$BE <- scale[[g]] %*% misspec[[g]]$BE %*% solve(scale[[g]])
+			if(!is.null(misspec[[g]]$BE)) misspec[[g]]$BE <- scale[[g]] %*% misspec[[g]]$BE %*% solve(scale[[g]])
 			misspec[[g]]$AL <- scale[[g]] %*% misspec[[g]]$AL		
+			if(!is.null(misspec[[g]]$GA)) misspec[[g]]$GA <- scale[[g]] %*% misspec[[g]]$GA
 		}
 	}
 	for(g in 1:ngroup) {

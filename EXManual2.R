@@ -69,7 +69,13 @@ CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, VTE=VTE, GA=GA, KA = KA, model
 sex <- data.frame(sex = rep(c(0, 1), each=100))
 param <- draw(CFA.Model, covData=sex)
 createData(param[[1]], n=200, covData=sex, sequential=TRUE)
+generate(CFA.Model, n=200, covData=sex, params=TRUE)
+out <- sim(10, n=200, CFA.Model, covData=sex)
 
+
+
+#model.lavaan
+#sim
 lavaan(CFA.Model@pt, data=HolzingerSwineford1939)
 
 
