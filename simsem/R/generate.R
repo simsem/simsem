@@ -36,6 +36,9 @@ generate <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "
 		draws <- changeScaleSEM(draws, model)
 	}	
 	
+	# realData must be separated into different groups
+	# covariates must be separated into different groups
+	# realData must not contain covariates
     datal <- mapply(FUN = createData, draws, indDist, facDist, errorDist, n = n, MoreArgs = list(
         sequential = sequential, modelBoot = modelBoot, realData = realData, indLab = indLab), 
         SIMPLIFY = FALSE)

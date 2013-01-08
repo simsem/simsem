@@ -546,6 +546,31 @@ createImpliedMACS <- function(reducedParamSet, covStat = NULL) {
     return(list(M = as.vector(implied.mean), CM = implied.covariance))
 }
 
+createImpliedConditionalMACS <- function(reducedParamSet, covData) {
+    implied.mean <- list()
+    implied.covariance <- NULL
+	covData <- as.list(data.frame(t(covData)))
+	covData <- lapply(covData, as.matrix)
+	nf <- nrow(reducedParamSet$PS)
+    ID <- diag(nf)
+	if (is.null(reducedParamSet$BE)) reducedParamSet$BE <- matrix(0, nf, nf) #CFA
+	temp <- solve(ID - reducedParamSet$BE)
+	implied.mean <- temp %*% reducedParamSet$AL
+	covBeta <- temp %*% reducedParamSet$GA
+	factorMeanShift <- lapply(covData, function(x) covBeta %*% x)
+	implied.mean <- lapply(factorMeanShift, function(x) as.matrix(implied.mean + x))
+	implied.covariance <- temp %*% reducedParamSet$PS %*% t(temp)
+	if (!is.null(reducedParamSet$LY)) {
+		# SEM or CFA
+		indicatorMeanShift <- lapply(covData, function(x) reducedParamSet$KA %*% x)
+		implied.mean <- lapply(implied.mean, function(x) reducedParamSet$TY + (reducedParamSet$LY %*% x))
+		implied.mean <- mapply("+", implied.mean, indicatorMeanShift, SIMPLIFY=FALSE) 
+		implied.covariance <- (reducedParamSet$LY %*% implied.covariance %*% 
+			t(reducedParamSet$LY)) + reducedParamSet$TE
+	}
+    return(list(M = implied.mean, CM = implied.covariance))
+}
+
 combineParamSetCov <- function(reducedParamSet, covStat = NULL) {
 	nz <- length(covStat$MZ)
 	if(!is.null(reducedParamSet$BE)) reducedParamSet$BE <- parseGammaToBeta(reducedParamSet$BE, reducedParamSet$GA)

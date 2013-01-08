@@ -67,7 +67,8 @@ KA <- bind(matrix(0, 9, 1), misspec = matrix("runif(1, -0.2, 0.2)", 9, 1))
 
 CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, VTE=VTE, GA=GA, KA = KA, modelType = "CFA", indLab=paste0("x", 1:9), facLab=c("visual", "textual", "speed"), covLab = "sex")
 sex <- data.frame(sex = rep(c(0, 1), each=100))
-draw(CFA.Model, covData=sex)
+param <- draw(CFA.Model, covData=sex)
+createData(param[[1]], n=200, covData=sex, sequential=TRUE)
 
 lavaan(CFA.Model@pt, data=HolzingerSwineford1939)
 
