@@ -111,11 +111,6 @@ summaryParam <- function(object, alpha = 0.05, detail = FALSE, improper = FALSE,
 	if(!is.null(digits)) {
 		result <- round(result, digits)
 	}
-	lab <- abbreviate(object@labelParam[match(names(object@labelParam), names(coef))], 4)
-	if(!all(lab == "")) {
-		lab[lab != ""] <- paste0("(", lab[lab != ""], ")")
-		result <- data.frame("Labels" = lab, result)
-	}
     return(as.data.frame(result))
 } 
 
@@ -179,10 +174,9 @@ summaryPopulation <- function(object, improper = FALSE) {
 # summaryFit: This function will summarize the obtained fit indices and
 # generate a data frame.
 
-summaryFit <- function(object, alpha = NULL, improper = FALSE) {
+summaryFit <- function(object, alpha = NULL, improper = FALSE, usedFit = NULL) {
     cleanObj <- clean(object, improper = improper)
-    usedFit <- getKeywords()$usedFit
-    
+	usedFit <- cleanUsedFit(usedFit)
     condition <- c(length(unique(object@pmMCAR)) > 1, length(unique(object@pmMAR)) > 
         1, length(unique(object@n)) > 1)
     if (any(condition)) {
@@ -366,13 +360,13 @@ setPopulation <- function(target, population) {
     psl <- generate(population, n = 20, params = TRUE)$psl
     paramSet <- lapply(psl, "[[", 1)
     indLabGen <- NULL
-    if (population@modelType == "Path") {
+    if (population@modelType == "path") {
         indLabGen <- unique(population@pt$lhs)
     } else {
         indLabGen <- unique(population@pt$rhs[population@pt$op == "=~"])
     }
     facLabGen <- NULL
-    if (population@modelType != "Path") {
+    if (population@modelType != "path") {
         facLabGen <- unique(population@pt$lhs[population@pt$op == "=~"])
     }
     popParam <- reduceParamSet(paramSet, population@dgen, indLabGen, facLabGen)

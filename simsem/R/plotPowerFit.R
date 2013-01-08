@@ -18,8 +18,7 @@ plotPowerFit <- function(altObject, nullObject = NULL, cutoff = NULL, usedFit = 
             stop("Models are based on different values of the percent missing at random")
     }
     nrep <- dim(altObject@fit)[[1]]
-    if (is.null(usedFit)) 
-        usedFit <- getKeywords()$usedFit
+	usedFit <- cleanUsedFit(usedFit)
     if (!is.null(cutoff)) {
         usedFit <- intersect(usedFit, names(cutoff))
         cutoff <- cutoff[usedFit]
@@ -181,8 +180,7 @@ plotPowerFitDf <- function(altObject, nullObject = NULL, cutoff = NULL, usedFit 
 plotOverHist <- function(altObject, nullObject, cutoff = NULL, usedFit = NULL, alpha = 0.05, 
     cutoff2 = NULL, cutoff3 = NULL, cutoff4 = NULL) {
     percentile <- 1 - alpha
-    if (is.null(usedFit)) 
-        usedFit <- getKeywords()$usedFit
+	usedFit <- cleanUsedFit(usedFit)
     if (is.null(cutoff)) {
         cutoff <- getCutoff(nullObject, alpha, usedFit = usedFit)
         names(cutoff) <- usedFit
@@ -224,7 +222,7 @@ plotOverHist <- function(altObject, nullObject, cutoff = NULL, usedFit = NULL, a
         stop("Some errors occur")
     }
     for (i in 1:length(common.name)) {
-        swap <- sum(common.name[i] == c("CFI", "TLI")) > 0
+        swap <- sum(common.name[i] == getKeywords()$reversedFit) > 0
         overlapHist(nullObject[, i], altObject[, i], main = common.name[i], xlab = "Value", 
             colors = c("yellow", "skyblue", "lightgreen"), swap = swap)
         abline(v = cutoff[i], lty = 1, lwd = 3, col = "red")
@@ -318,7 +316,7 @@ plotLogisticFit <- function(altObject, nullObject = NULL, cutoff = NULL, usedFit
     } else {
         sig <- mapply(function(dat, x) dat > x, dat = altObject[, usedFit], x = as.list(cutoff))
     }
-    reverse <- colnames(sig) %in% c("TLI", "CFI")
+    reverse <- colnames(sig) %in% getKeywords()$reversedFit
     if (any(reverse)) {
         sig[, reverse] <- !sig[, reverse]
     }
@@ -367,8 +365,7 @@ plotLogisticFit <- function(altObject, nullObject = NULL, cutoff = NULL, usedFit
 
 plotScatter <- function(altObject, nullObject = NULL, cutoff = NULL, usedFit = NULL, 
     x, alpha = 0.05, df = 5) {
-    if (is.null(usedFit)) 
-        usedFit <- getKeywords()$usedFit
+	usedFit <- cleanUsedFit(usedFit)
     if (!is.null(cutoff)) {
         usedFit <- intersect(usedFit, names(cutoff))
         cutoff <- cutoff[usedFit]

@@ -2,8 +2,7 @@
 
 likRatioFit <- function(outMod1, outMod2, dat1Mod1, dat1Mod2, dat2Mod1, dat2Mod2, 
     usedFit = NULL, prior = 1) {
-    if (is.null(usedFit)) 
-        usedFit <- getKeywords()$usedFit
+	usedFit <- cleanUsedFit(usedFit)
     
     observedFit <- as.data.frame(rbind(extractLavaanFit(outMod1), extractLavaanFit(outMod2))[, 
         usedFit])

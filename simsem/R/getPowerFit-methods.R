@@ -21,8 +21,7 @@ getPowerFit <- function(altObject, cutoff = NULL, nullObject = NULL, revDirec = 
 
 getPowerFitDataFrame <- function(altObject, cutoff, revDirec = FALSE, usedFit = NULL, predictor = NULL, 
 	predictorVal = NULL, condCutoff = TRUE, df = 0) {
-	if (is.null(usedFit)) 
-		usedFit <- getKeywords()$usedFit
+	usedFit <- cleanUsedFit(usedFit)
 	if (is.null(names(cutoff)) && length(cutoff) == 7) 
 		names(cutoff) <- usedFit
 	common.name <- Reduce(intersect, list(colnames(altObject), names(cutoff), 
@@ -36,10 +35,10 @@ getPowerFitDataFrame <- function(altObject, cutoff, revDirec = FALSE, usedFit = 
 			i]), revDirec = revDirec, x = predictor, xval = predictorVal, df = df, 
 			condCutoff = condCutoff)
 	}
-	if ("TLI" %in% common.name) 
-		temp["TLI"] <- revText(temp["TLI"])
-	if ("CFI" %in% common.name) 
-		temp["CFI"] <- revText(temp["CFI"])
+	revIndex <- which(common.name %in% getKeywords()$reversedFit)
+	for(i in seq_along(revIndex)) {
+		temp[revIndex[i]] <- revText(temp[revIndex[i]])
+	}
 	return(temp)
 }
 
@@ -81,8 +80,7 @@ getPowerFitCutoff <- function(altObject, cutoff, revDirec = FALSE, usedFit = NUL
 }
 
 getPowerFitNullObj <- function(altObject, nullObject, revDirec = FALSE, usedFit = NULL, alpha = 0.05, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, df = 0) {
-	if (is.null(usedFit)) 
-		usedFit <- getKeywords()$usedFit
+	usedFit <- cleanUsedFit(usedFit)
 	if(is.null(nullObject)) nullObject <- altObject
 	mod <- clean(altObject, nullObject)
 	altObject <- mod[[1]]
@@ -121,7 +119,7 @@ getPowerFitNullObj <- function(altObject, nullObject, revDirec = FALSE, usedFit 
 	}
 	predictorVal <- predictorVal[condition]
 	
-	usedDirec <- (usedFit %in% c("CFI", "TLI"))  # CFA --> TRUE, RMSEA --> FALSE
+	usedDirec <- (usedFit %in% getKeywords()$reversedFit)  # CFA --> TRUE, RMSEA --> FALSE
 	if (revDirec) 
 		usedDirec <- !usedDirec
 	usedDist <- as.data.frame(altObject@fit[, usedFit])

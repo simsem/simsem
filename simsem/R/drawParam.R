@@ -14,7 +14,7 @@ draw <- function(model, maxDraw = 50, misfitBounds = NULL, averageNumMisspec = F
 	
 	if(length(covLab) > 0) {
 		if(is.null(covData)) stop("The covariate data must be specified.")
-		groupseq <- unique(model@pt$group)
+		groupseq <- unique(model@pt$group[model@pt$group > 0])
 		if(length(groupseq) > 1) covLab <- c(covLab, model@groupLab)
 		covData <- covData[,covLab, drop=FALSE]		
 		if(ncol(covData) != length(covLab)) stop(paste0("The covariate data must contain the following variable names: ", paste(covLab, collapse = ", ")))
@@ -935,7 +935,7 @@ RPS <- binds(residual.error, "rnorm(1,0.3,0.1)")
 
 ME <- bind(rep(NA, 4), 0)
 
-Path.Model <- model(RPS = RPS, BE = BE, ME = ME, modelType="Path")
+Path.Model <- model(RPS = RPS, BE = BE, ME = ME, modelType="path")
 
 param1 <- draw(Path.Model, misfitBounds = c(0.10, 0.12), misfitType="rmsea")
 param2 <- draw(Path.Model, misfitBounds = c(0.03, 0.05), misfitType="f0")

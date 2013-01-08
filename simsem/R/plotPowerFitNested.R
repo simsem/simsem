@@ -39,8 +39,7 @@ plotPowerFitNested <- function(altNested, altParent, nullNested = NULL, nullPare
         stop("The nullNested and nullParent arguments should be both specified.")
     }
     nrep <- dim(altNested@fit)[[1]]
-    if (is.null(usedFit)) 
-        usedFit <- getKeywords()$usedFit
+	usedFit <- cleanUsedFit(usedFit)
     if (!is.null(cutoff)) {
         usedFit <- intersect(usedFit, names(cutoff))
         cutoff <- cutoff[usedFit]

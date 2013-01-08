@@ -260,22 +260,6 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 		std <- as.data.frame(do.call(rbind, std.l))
 		converged <- as.vector(unlist(converged.l))
 		
-		
-		name <- colnames(coef)
-		#This determines which reps have names for parameters. Which indicates if the generating model has  
-		#parameters with names (e.g. model constraints, or lavaan names). TRUE=has names
-		haveName <- which(!sapply(Result.l, function(x) { if(is.null(x)) {return(TRUE)} else {return(is.null(x$labelParam))} }))
-		lab <- NULL
-		if(length(haveName) > 0) {
-			lab <- Result.l[[haveName[1]]]$labelParam
-			lab[is.na(lab)] <- ""
-			names(lab) <- name
-		} else {
-			lab <- rep("", length(name))
-			names(lab) <- name
-		}		
-		
-		
 		if(paramOnly) converged <- rep(TRUE, length(converged))
 		param <- NULL
 		FMI1 <- NULL
@@ -337,7 +321,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 			se = se, fit = fit, converged = converged, seed = seed, paramValue = param, 
 			misspecValue = popMis, popFit = misfitOut, FMI1 = FMI1, FMI2 = FMI2, 
 			stdCoef = std, n = n, nobs=nobs, pmMCAR = pmMCAR, pmMAR = pmMAR, extraOut = extra,
-			paramOnly=paramOnly, labelParam = lab, timing = timing)
+			paramOnly=paramOnly, timing = timing)
 		if (silent) 
 			options(warn = warnT)
 		return <- Result
@@ -381,13 +365,13 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 	#2. Why do we do this for each rep? Move up to sim/model and pass values to runRep. Add 2 slots to SimSem class, put it there.
 	#3. Also don't do this with rawData
     indLabGen <- NULL
-	if (generate@modelType == "Path") {
+	if (generate@modelType == "path") {
 		indLabGen <- unique(generate@pt$lhs)
 	} else {
 		indLabGen <- unique(generate@pt$rhs[generate@pt$op == "=~"])
 	}
 	facLabGen <- NULL
-	if (generate@modelType != "Path") {
+	if (generate@modelType != "path") {
 		facLabGen <- unique(generate@pt$lhs[generate@pt$op == "=~"])
 	}
 	covLabGen <- generate@pt$lhs[generate@pt$op == "~1" & generate@pt$exo == 1]
@@ -504,7 +488,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 		}
 		#Lines 490-5-1 can be replaced when labels are in SimSem object. Just call that slot.
 		if (is.null(indLab)) {
-			if (model@modelType == "Path") {
+			if (model@modelType == "path") {
 				indLab <- unique(model@pt$lhs)
 			} else {
 				indLab <- unique(model@pt$rhs[model@pt$op == "=~"])
@@ -512,7 +496,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 		}
 		indLab <- setdiff(indLab, aux)
 		facLab <- NULL
-		if (model@modelType != "Path") {
+		if (model@modelType != "path") {
 			facLab <- unique(model@pt$lhs[model@pt$op == "=~"])
 		}
 		#reminder: out=lavaan object
@@ -522,15 +506,16 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 			
 			#redo with parameterEstimate function in lavaan (for coef se, std) all the way to 526
 			result <- parameterEstimates(out, standardize=TRUE)
-			index <- model@pt$free != 0
+			extraParamIndex <- model@pt$op %in% c(">", "<", "==", ":=")
+			index <- ((model@pt$free != 0) & !(duplicated(model@pt$free))) | extraParamIndex
 			coef <- result$est[index]
 			se <- result$se[index]
 			std <- result$std.all[index]
 			lab <- lavaan:::getParameterLabels(model@pt, type="free")
+			if(any(extraParamIndex)) lab <- c(lab, renameExtraParam(model@con$lhs, model@con$op, model@con$rhs))
 			names(coef) <- lab
 			names(se) <- lab
 			names(std) <- lab
-			labelParam <- model@pt$label[index]
 			
 			## 6.1. Call output function (if exists)
 			if (!is.null(outfun)) {
@@ -543,7 +528,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 		if (!is.null(paramSet)) {
 			if (!is.null(psl[[1]]$misspec)) {
 				misParamSet <- lapply(psl, "[[", 3)
-				popMis <- reduceMisspecSet(misParamSet, generate@modelType != "Path", 
+				popMis <- reduceMisspecSet(misParamSet, generate@modelType != "path", 
 					indLabGen, facLabGen, covLab = covLabGen)
 				p <- length(indLabGen)
 				nElements <- (p + (p * (p + 1)/2)) * length(psl)
@@ -554,14 +539,16 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 				misfitOut <- NA
 			}
 			
-			if(!is.null(generate@con[[1]])) {
+			extraParamIndex <- generate@pt$op %in% c(">", "<", "==", ":=")
+			extraParamName <- NULL
+			if(any(extraParamIndex)) {
 				extraparam <- collapseExtraParam(paramSet, generate@dgen, fill=TRUE, con=generate@con)
-				names(extraparam) <- renameExtraParam(generate@con$lhs, generate@con$op, generate@con$rhs)
-				popParam <- c(popParam, extraparam)
+				extraParamName <- renameExtraParam(generate@con$lhs, generate@con$op, generate@con$rhs)
+				popParam[extraParamIndex] <- extraparam
 			}
-			index <- generate@pt$free != 0
+			index <- ((generate@pt$free != 0)& !(duplicated(generate@pt$free))) | extraParamIndex
 			popParam <- popParam[index]
-			names(popParam) <- lavaan:::getParameterLabels(generate@pt, type="free")
+			names(popParam) <- c(lavaan:::getParameterLabels(generate@pt, type="free"), extraParamName)
 		} else {
 			popParam <- NA  # Real Data
 			popMis <- NA  # Misspecfication
@@ -586,7 +573,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
     	
 		Result <- list(coef = coef, se = se, fit = fit, converged = converged, param = popParam, 
         FMI1 = FMI1, FMI2 = FMI2, std = std, timing = timing, extra = extra, popMis = popMis, 
-        misfitOut = misfitOut, labelParam = labelParam)
+        misfitOut = misfitOut)
 		return(Result)
 	} else {
 		return(data)

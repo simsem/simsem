@@ -23,12 +23,13 @@
 getKeywords <- function() {
     
     usedFit <- c("chisq", "aic", "bic", "rmsea", "cfi", "tli", "srmr")
+	reversedFit <- c("cfi", "tli", "nnfi", "nfi", "rfi", "ifi", "gfi", "agfi", "pnfi", "mfi")
     usedFitPop <- c("f0", "rmsea", "srmr")
     optMin <- c("min", "minimum", "lower")
     optMax <- c("max", "maximum", "upper")
     optNone <- c("none", "null")
     
-    result <- list(usedFit = usedFit, usedFitPop = usedFitPop, optMin = optMin, optMax = optMax, 
+    result <- list(usedFit = usedFit, reversedFit = reversedFit, usedFitPop = usedFitPop, optMin = optMin, optMax = optMax, 
         optNone = optNone)
     return(result)
 } 

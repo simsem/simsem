@@ -71,8 +71,7 @@ getPowerFitNestedCutoff <- function(altNested, altParent, cutoff, revDirec = FAL
 getPowerFitNestedNullObj <- function(altNested, altParent, 
     nullNested, nullParent, revDirec = FALSE, usedFit = NULL, alpha = 0.05, nVal = NULL, 
     pmMCARval = NULL, pmMARval = NULL, df = 0) {
-    if (is.null(usedFit)) 
-        usedFit <- getKeywords()$usedFit
+	usedFit <- cleanUsedFit(usedFit)
 	if(is.null(nullNested)) nullNested <- altNested
 	if(is.null(nullParent)) nullParent <- altParent
     mod1 <- clean(altNested, altParent)
@@ -122,7 +121,7 @@ getPowerFitNestedNullObj <- function(altNested, altParent,
     }
     predictorVal <- predictorVal[condition]
     
-    usedDirec <- (usedFit %in% c("CFI", "TLI"))  # CFA --> TRUE, RMSEA --> FALSE
+    usedDirec <- (usedFit %in% getKeywords()$reversedFit)  # CFA --> TRUE, RMSEA --> FALSE
     if (revDirec) 
         usedDirec <- !usedDirec
     usedDist <- as.data.frame((altNested@fit - altParent@fit)[, usedFit])

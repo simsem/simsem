@@ -10,7 +10,8 @@ model <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = 
     paramSet <- list(LY = LY, PS = PS, RPS = RPS, TE = TE, RTE = RTE, BE = BE, VTE = VTE, 
         VY = VY, VPS = VPS, VE = VE, TY = TY, AL = AL, MY = MY, ME = ME, KA = KA, GA = GA)
     if (!is.null(modelType)) {
-        
+        modelType <- tolower(modelType)
+		
         mg <- NULL
         mgidx <- which(sapply(paramSet, is.list))
         mg <- names(mgidx)
@@ -86,7 +87,7 @@ model <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = 
                 groupLab = groupLab, con=con))
         }
     } else {
-        stop("modelType has not been specified. Options are: \"CFA\", \"SEM\", or \"Path\"")
+        stop("modelType has not been specified. Options are: \"cfa\", \"sem\", or \"path\"")
     }
 }
 
@@ -96,7 +97,7 @@ model <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = 
 ## necessary matrices and checks the validity of the model specification.
 buildModel <- function(paramSet, modelType) {
     
-    if (modelType == "CFA") {
+    if (modelType == "cfa") {
         
         if (is.null(paramSet$LY)) 
             stop("A loading (LY) matrix must be specified in CFA models.")
@@ -173,7 +174,7 @@ buildModel <- function(paramSet, modelType) {
 				paramSet$KA <- bind(matrix(0, ni, ncol(paramSet$GA@free)))
 			} 
 		}       
-    } else if (modelType == "Path") {
+    } else if (modelType == "path") {
         
         if (is.null(paramSet$BE)) 
             stop("The path coefficient (BE) matrix has not been specified.")
@@ -210,7 +211,7 @@ buildModel <- function(paramSet, modelType) {
 			}
 		}
 		
-    } else if (modelType == "SEM") {
+    } else if (modelType == "sem") {
         
         if (is.null(paramSet$LY)) 
             stop("A loading (LY) matrix must be specified in SEM models.")
@@ -742,14 +743,14 @@ model.cfa <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, V
     VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, KA = NULL, GA = NULL, 
     indLab = NULL, facLab = NULL, covLab = NULL, groupLab = "group", ngroups = 1, con = NULL) {
     model(LY = LY, PS = PS, RPS = RPS, TE = TE, RTE = RTE, BE = NULL, VTE = VTE, 
-        VY = VY, VPS = VPS, VE = VE, TY = TY, AL = AL, MY = MY, ME = ME, KA = KA, GA = GA, modelType = "CFA", 
+        VY = VY, VPS = VPS, VE = VE, TY = TY, AL = AL, MY = MY, ME = ME, KA = KA, GA = GA, modelType = "cfa", 
         indLab = indLab, facLab = facLab, covLab = covLab, groupLab = groupLab, ngroups = ngroups, con = con)
 }
 
 model.path <- function(PS = NULL, RPS = NULL, BE = NULL, VPS = NULL, VE = NULL, AL = NULL, 
     ME = NULL, KA = NULL, GA = NULL, indLab = NULL, facLab = NULL, covLab = NULL, groupLab = "group", ngroups = 1, con = NULL) {
     model(LY = NULL, PS = PS, RPS = RPS, TE = NULL, RTE = NULL, BE = BE, VTE = NULL, 
-        VY = NULL, VPS = VPS, VE = VE, TY = NULL, AL = AL, MY = NULL, ME = ME, KA = KA, GA = GA, modelType = "Path", 
+        VY = NULL, VPS = VPS, VE = VE, TY = NULL, AL = AL, MY = NULL, ME = ME, KA = KA, GA = GA, modelType = "path", 
         indLab = indLab, facLab = facLab, groupLab = groupLab, covLab = covLab, ngroups = ngroups, con = con)
 }
 
@@ -757,7 +758,7 @@ model.sem <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, B
     VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, MY = NULL, 
     ME = NULL, KA = NULL, GA = NULL, indLab = NULL, facLab = NULL, covLab = NULL, groupLab = "group", ngroups = 1, con = NULL) {
     model(LY = LY, PS = PS, RPS = RPS, TE = TE, RTE = RTE, BE = BE, VTE = VTE, VY = VY, 
-        VPS = VPS, VE = VE, TY = TY, AL = AL, MY = MY, ME = ME, KA = KA, GA = GA, modelType = "SEM", 
+        VPS = VPS, VE = VE, TY = TY, AL = AL, MY = MY, ME = ME, KA = KA, GA = GA, modelType = "sem", 
         indLab = indLab, facLab = facLab, groupLab = groupLab, covLab = covLab, ngroups = ngroups, con = con)
 }
 
@@ -765,7 +766,7 @@ estmodel <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE
     VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, MY = NULL, 
     ME = NULL, KA = NULL, GA = NULL, modelType, indLab = NULL, facLab = NULL, covLab = NULL, groupLab = "group", ngroups = 1, con = NULL) {
     if (is.null(modelType)) 
-        stop("modelType has not been specified. Options are: \"CFA\", \"SEM\", or \"Path\"")
+        stop("modelType has not been specified. Options are: \"cfa\", \"sem\", or \"path\"")
 	if (!is.null(GA)) {
 		if (!is.list(GA)) GA <- list(GA)
 		GA <- lapply(GA, bind)
@@ -774,7 +775,7 @@ estmodel <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE
 		if (!is.list(KA)) KA <- list(KA)
 		KA <- lapply(KA, bind)		
 	}
-    if (modelType == "CFA") {
+    if (modelType == "cfa") {
         if (!is.list(LY)) 
             LY <- list(LY)
         ne <- ncol(LY[[1]])
@@ -876,7 +877,7 @@ estmodel <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE
                 AL <- list(bind(AL))
             }
         }
-    } else if (modelType == "Path") {
+    } else if (modelType == "path") {
         if (!is.list(BE)) 
             BE <- list(BE)
         ne <- ncol(BE[[1]])
@@ -935,7 +936,7 @@ estmodel <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE
                 AL <- list(bind(AL))
             }
         }
-    } else if (modelType == "SEM") {
+    } else if (modelType == "sem") {
         if (!is.list(LY)) 
             LY <- list(LY)
         ne <- ncol(LY[[1]])
@@ -1125,14 +1126,14 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
     facLab <- NULL
     if (isTRUE(all.equal(object@Model@dimNames[[1]][[1]], object@Model@dimNames[[1]][[2]]))) {
         indLab <- object@Model@dimNames[[1]][[1]]
-        modelType <- "Path"
+        modelType <- "path"
     } else {
         indLab <- object@Model@dimNames[[1]][[1]]
         facLab <- object@Model@dimNames[[1]][[2]]
         if ("beta" %in% name) {
-            modelType <- "SEM"
+            modelType <- "sem"
         } else {
-            modelType <- "CFA"
+            modelType <- "cfa"
         }
     }
     
@@ -1176,7 +1177,7 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
         RPS <- mapply(FUNS, x = free[names(free) == "psi"], y = est[names(est) == 
             "psi"], z = RPS, h = freeUnstd[names(freeUnstd) == "psi"], SIMPLIFY = FALSE)
         
-        if (modelType %in% c("CFA", "SEM")) {
+        if (modelType %in% c("cfa", "sem")) {
             ne <- ncol(est[["lambda"]])
             ny <- nrow(est[["lambda"]])
             if (!is.list(LY)) 
@@ -1233,7 +1234,7 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
                 return(x)
             })
         })
-        if (modelType == "Path") {
+        if (modelType == "path") {
             set1 <- lapply(free[names(free) == "beta"], function(x) findRecursiveSet(x)[[1]])
             pospsi <- match("psi", names(free))
             for (i in seq_along(pospsi)) {
@@ -1277,7 +1278,7 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
         PS <- mapply(FUNS2, x = free[names(free) == "psi"], y = est[names(est) == 
             "psi"], z = PS, SIMPLIFY = FALSE)
         
-        if (modelType %in% c("CFA", "SEM")) {
+        if (modelType %in% c("cfa", "sem")) {
             if (!is.list(LY)) 
                 LY <- rep(list(LY), ngroups)
             LY <- mapply(FUN2, x = free[names(free) == "lambda"], y = est[names(est) == 
@@ -1306,7 +1307,7 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
                 y = lapply(est[names(est) == "alpha"], as.vector), z = AL, SIMPLIFY = FALSE)
         } else {
             p <- ncol(est[["psi"]])
-            if (modelType == "Path") {
+            if (modelType == "path") {
                 AL <- mapply(FUN2, x = rep(list(rep(NA, p)), ngroups), y = rep(list(rep(0, 
                   p)), ngroups), z = AL, SIMPLIFY = FALSE)
             } else {
@@ -1455,14 +1456,14 @@ test.estmodel <- function() {
     facmean <- rep(0, 2)
     error <- diag(NA, 6)
     cfa3 <- estmodel(LY = loading, PS = list(latent, latent), TE = error, AL = facmean, 
-        TY = intcept, ngroups = 2, modelType = "CFA")
+        TY = intcept, ngroups = 2, modelType = "cfa")
     
     
     path <- matrix(0, 4, 4)
     path[3, 1:2] <- NA
     path[4, 3] <- NA
-    path1 <- estmodel(BE = path, ngroups = 1, modelType = "Path")
-    path2 <- estmodel(BE = path, ngroups = 2, modelType = "Path")
+    path1 <- estmodel(BE = path, ngroups = 1, modelType = "path")
+    path2 <- estmodel(BE = path, ngroups = 2, modelType = "path")
     
     path <- matrix(0, 4, 4)
     path[3, 1:2] <- c("con1", "con2")
@@ -1471,7 +1472,7 @@ test.estmodel <- function() {
     faccov[2, 1] <- faccov[1, 2] <- NA
     facmean <- rep(NA, 4)
     path3 <- estmodel(BE = path, PS = list(faccov, faccov), AL = facmean, ngroups = 2, 
-        modelType = "Path")
+        modelType = "path")
     
     path <- matrix(0, 4, 4)
     path[3, 1:2] <- NA
@@ -1481,8 +1482,8 @@ test.estmodel <- function() {
     loading[4:6, 2] <- NA
     loading[7:9, 3] <- NA
     loading[10:12, 4] <- NA
-    sem1 <- estmodel(LY = loading, BE = path, ngroups = 1, modelType = "SEM")
-    sem2 <- estmodel(LY = loading, BE = path, ngroups = 2, modelType = "SEM")
+    sem1 <- estmodel(LY = loading, BE = path, ngroups = 1, modelType = "sem")
+    sem2 <- estmodel(LY = loading, BE = path, ngroups = 2, modelType = "sem")
     
     path <- matrix(0, 4, 4)
     path[3, 1:2] <- NA
@@ -1498,7 +1499,7 @@ test.estmodel <- function() {
     facmean <- rep(0, 4)
     error <- diag(NA, 12)
     sem3 <- estmodel(LY = loading, BE = path, PS = faccov, TY = intcept, AL = facmean, 
-        TE = error, ngroups = 2, modelType = "SEM")
+        TE = error, ngroups = 2, modelType = "sem")
     
 }
 

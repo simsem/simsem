@@ -7,7 +7,7 @@ generate <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "
     facDist = NULL, errorDist = NULL, indLab = NULL, modelBoot = FALSE, realData = NULL, 
     params = FALSE, covData = NULL) {
     if (is.null(indLab)) {
-        if (model@modelType == "Path") {
+        if (model@modelType == "path") {
             indLab <- unique(model@pt$lhs)
         } else {
             indLab <- unique(model@pt$rhs[model@pt$op == "=~"])
@@ -57,7 +57,7 @@ generate <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "
         averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, createOrder = createOrder, covData = covData)
 	
 	# The data-generation model and analysis model may have different parameterization (residual factor varaince != 1) so the change of scale is needed
-	if (model@modelType %in% c("CFA", "SEM")) {
+	if (model@modelType %in% c("cfa", "sem")) {
 		draws <- changeScaleFactor(draws, model)
 	}	
 	

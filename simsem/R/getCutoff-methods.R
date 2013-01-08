@@ -4,8 +4,7 @@
 setMethod("getCutoff", signature(object = "data.frame"), definition = function(object, 
     alpha, revDirec = FALSE, usedFit = NULL, predictor = NULL, predictorVal = NULL, 
     df = 0) {
-    if (is.null(usedFit)) 
-        usedFit <- getKeywords()$usedFit
+	usedFit <- cleanUsedFit(usedFit)
     percentile <- 1 - alpha
     if (revDirec) 
         percentile <- 1 - percentile
@@ -14,12 +13,11 @@ setMethod("getCutoff", signature(object = "data.frame"), definition = function(o
     temp <- list()
     temp <- lapply(object, getCondQtile, qtile = percentile, df = df, x = predictor, 
         xval = predictorVal)
-    if ("TLI" %in% colnames(object)) 
-        temp$TLI <- getCondQtile(object[, "TLI"], x = predictor, xval = predictorVal, 
+	reversedCol <- which(colnames(object) %in% getKeywords()$reversedFit)
+	for (i in seq_along(reversedCol)) {
+        temp[[reversedCol[i]]] <- getCondQtile(object[, reversedCol[i]], x = predictor, xval = predictorVal, 
             qtile = 1 - percentile, df = df)
-    if ("CFI" %in% colnames(object)) 
-        temp$CFI <- getCondQtile(object[, "CFI"], x = predictor, xval = predictorVal, 
-            qtile = 1 - percentile, df = df)
+	}
     temp <- data.frame(temp)
     return(temp)
 })

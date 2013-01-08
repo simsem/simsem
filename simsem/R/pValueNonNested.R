@@ -8,9 +8,8 @@ pValueNonNested <- function(outMod1, outMod2, dat1Mod1, dat1Mod2, dat2Mod1, dat2
     mod2 <- clean(dat2Mod1, dat2Mod2)
     dat2Mod1 <- mod2[[1]]
     dat2Mod2 <- mod2[[2]]
-    if (is.null(usedFit)) 
-        usedFit <- getKeywords()$usedFit
-    revDirec <- (usedFit %in% c("CFI", "TLI"))  # CFA --> FALSE, RMSEA --> TRUE
+	usedFit <- cleanUsedFit(usedFit)
+    revDirec <- (usedFit %in% getKeywords()$reversedFit)  # CFA --> FALSE, RMSEA --> TRUE
     
     if (!isTRUE(all.equal(unique(dat2Mod1@paramValue), unique(dat2Mod2@paramValue)))) 
         stop("'dat2Mod1' and 'dat2Mod2' are based on different data and cannot be compared, check your random seed")

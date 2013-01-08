@@ -118,9 +118,9 @@ setMethod("anova", signature(object = "SimResult"), function(object, ...) {
     
     diff <- c(mean(Chi.delta), mean(Df.delta), mean(Power.delta), mean(CFI.delta), 
         mean(TLI.delta), mean(RMSEA.delta), mean(AIC.delta), mean(BIC.delta))
-    colnames(val) <- c("df", "chisq", "CFI", "TLI", "RMSEA", "AIC", "BIC")
-    names(diff) <- c("Chisq diff", "Df diff", "Power", "CFI diff", "TLI diff", "RMSEA diff", 
-        "AIC diff", "BIC diff")
+    colnames(val) <- c("df", "chisq", "cfi", "tli", "rmsea", "aic", "bic")
+    names(diff) <- c("chisq diff", "df diff", "power", "cfi diff", "tli diff", "rmsea diff", 
+        "aic diff", "bic diff")
     
     varyResult <- NULL
     

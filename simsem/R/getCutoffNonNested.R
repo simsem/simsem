@@ -5,8 +5,7 @@
 getCutoffNonNested <- function(dat1Mod1, dat1Mod2, dat2Mod1 = NULL, dat2Mod2 = NULL, 
     alpha = 0.05, usedFit = NULL, onetailed = FALSE, nVal = NULL, pmMCARval = NULL, 
     pmMARval = NULL, df = 0) {
-    if (is.null(usedFit)) 
-        usedFit <- getKeywords()$usedFit
+	usedFit <- cleanUsedFit(usedFit)
     mod1 <- clean(dat1Mod1, dat1Mod2)
     dat1Mod1 <- mod1[[1]]
     dat1Mod2 <- mod1[[2]]
@@ -72,7 +71,7 @@ getCutoffNonNested <- function(dat1Mod1, dat1Mod2, dat2Mod1 = NULL, dat2Mod2 = N
         cutoffDat1 <- getCutoff(Data1, alpha, FALSE, usedFit, predictor = condValue, 
             predictorVal = predictorVal, df = df)
         bound <- rep(-Inf, length(cutoffDat1))
-        bound[names(cutoffDat1) %in% c("TLI", "CFI")] <- Inf
+        bound[names(cutoffDat1) %in% getKeywords()$reversedFit] <- Inf
         resultModel1 <- rbind(bound, cutoffDat1)
         resultModel1 <- apply(resultModel1, 2, sort)
         rownames(resultModel1) <- c("lower", "upper")
@@ -81,7 +80,7 @@ getCutoffNonNested <- function(dat1Mod1, dat1Mod2, dat2Mod1 = NULL, dat2Mod2 = N
             cutoffDat2 <- getCutoff(Data2, 1 - alpha, FALSE, usedFit, predictor = condValue, 
                 predictorVal = predictorVal, df = df)
             bound <- rep(Inf, length(cutoffDat2))
-            bound[names(cutoffDat2) %in% c("TLI", "CFI")] <- -Inf
+            bound[names(cutoffDat2) %in% getKeywords()$reversedFit] <- -Inf
             resultModel2 <- rbind(bound, cutoffDat2)
             resultModel2 <- apply(resultModel2, 2, sort)
             rownames(resultModel2) <- c("lower", "upper")

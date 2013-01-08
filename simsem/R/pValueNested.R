@@ -5,9 +5,8 @@ pValueNested <- function(outNested, outParent, simNested, simParent, usedFit = N
     mod <- clean(simNested, simParent)
     simNested <- mod[[1]]
     simParent <- mod[[2]]
-    if (is.null(usedFit)) 
-        usedFit <- getKeywords()$usedFit
-    revDirec <- (usedFit %in% c("CFI", "TLI"))  # CFA --> FALSE, RMSEA --> TRUE
+	usedFit <- cleanUsedFit(usedFit)
+    revDirec <- (usedFit %in% getKeywords()$reversedFit)  # CFA --> FALSE, RMSEA --> TRUE
     
     if (!isTRUE(all.equal(unique(simNested@paramValue), unique(simParent@paramValue)))) 
         stop("Models are based on different data and cannot be compared, check your random seed")

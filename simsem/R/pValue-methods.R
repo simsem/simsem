@@ -61,11 +61,8 @@ setMethod("pValue", signature(target = "numeric", dist = "data.frame"), definiti
 setMethod("pValue", signature(target = "lavaan", dist = "SimResult"), definition = function(target, 
     dist, usedFit = NULL, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, df = 0) {
     dist <- clean(dist)
-    if (is.null(usedFit)) 
-        usedFit <- getKeywords()$usedFit
-    revDirec <- (usedFit %in% c("CFI", "TLI"))  # CFA --> FALSE, RMSEA --> TRUE
-    
-    
+	usedFit <- cleanUsedFit(usedFit)
+    revDirec <- (usedFit %in% getKeywords()$reversedFit)  # CFA --> FALSE, RMSEA --> TRUE
     
     if (is.null(nVal) || is.na(nVal)) 
         nVal <- NULL

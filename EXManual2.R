@@ -47,10 +47,14 @@ dir <- "C:/Users/student/Dropbox/simsem/simsem/R/"
 ##library(simsem)
 
 loading <- matrix(0, 9, 3)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-loading[7:9, 3] <- NA
-LY <- bind(loading, 0.7)
+loading[1:3, 1] <- "con1"
+loading[4:6, 2] <- "con2"
+loading[7:9, 3] <- "con3"
+loadingVal <- matrix(0, 9, 3)
+loadingVal[1:3, 1] <- 0.9
+loadingVal[4:6, 2] <- 0.8
+loadingVal[7:9, 3] <- 0.7
+LY <- bind(loading, loadingVal)
 
 latent.cor <- matrix(NA, 3, 3)
 diag(latent.cor) <- 1
@@ -65,17 +69,21 @@ GA <- bind(gamma, 0.3)
 
 KA <- bind(matrix(0, 9, 1), misspec = matrix("runif(1, -0.2, 0.2)", 9, 1))
 
-CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, VTE=VTE, GA=GA, KA = KA, modelType = "CFA", indLab=paste0("x", 1:9), facLab=c("visual", "textual", "speed"), covLab = "sex")
+con <- "abc := con1 * con2
+con1 == con2"
+CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, VTE=VTE, GA=GA, KA = KA, modelType = "CFA", indLab=paste0("x", 1:9), facLab=c("visual", "textual", "speed"), covLab = "sex", con=con)
 sex <- data.frame(sex = rep(c(0, 1), each=100))
 param <- draw(CFA.Model, covData=sex)
-createData(param[[1]], n=200, covData=sex, sequential=TRUE)
-generate(CFA.Model, n=200, covData=sex, params=TRUE)
-out <- sim(10, n=200, CFA.Model, covData=sex)
+out <- analyze(CFA.Model, generate(CFA.Model, n=200, covData=sex, params=TRUE))
+Output <- sim(10, n=200, CFA.Model, covData=sex)
+getCutoff(Output, 0.05)
+plotCutoff(Output, 0.05)
+summaryParam(Output)
 
 
 
 #model.lavaan
-#sim
+
 lavaan(CFA.Model@pt, data=HolzingerSwineford1939)
 
 

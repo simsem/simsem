@@ -57,8 +57,7 @@ setMethod("summary", signature = "SimSem", definition = function(object) {
 
 setMethod("summary", signature = "SimResult", definition = function(object, digits = 3, 
     usedFit = NULL, alpha = NULL) {
-    if (is.null(usedFit)) 
-        usedFit <- getKeywords()$usedFit
+	usedFit <- cleanUsedFit(usedFit)
     cat("RESULT OBJECT\n")
     cat("Model Type\n")
     print(object@modelType)
@@ -210,3 +209,14 @@ printIfNotNull <- function(object, name = NULL) {
         summaryShort(object)
     }
 } 
+
+cleanUsedFit <- function(txt) {
+    if (is.null(txt)) {
+        txt <- getKeywords()$usedFit
+	} else {
+		txt <- tolower(txt)
+		txt[txt == "chi"] <- "chisq"
+		txt
+	}
+	txt
+}
