@@ -131,7 +131,7 @@ createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist 
     } else {
 		ny <- ncol(Data)
 		if(!is.null(covData)) ny <- ny - ncol(covData)
-        varnames <- paste0("x", 1:ny)
+        varnames <- paste0("y", 1:ny)
     }  
 	if (!is.null(covData)) {
 		if (is.null(colnames(covData))) colnames(covData) <- paste0("z", 1:ncol(covData))

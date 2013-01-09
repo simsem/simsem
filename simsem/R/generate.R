@@ -29,7 +29,7 @@ generate <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "
     
 	if(ngroups > 1 && length(n) == 1) n <- rep(n, ngroups)
 
-	covLab <- model@pt$lhs[model@pt$op == "~1" & model@pt$exo == 1]    
+	covLab <- unique(model@pt$lhs[model@pt$op == "~1" & model@pt$exo == 1])
 	if(!is.null(realData)) {
 		if((ngroups > 1) && !(model@groupLab %in% colnames(realData))) stop(paste0("The ", model@groupLab, " varaible does not in the realData argument"))	
 		if(!is.null(covData) && (length(covLab) > 0)) {
@@ -40,13 +40,13 @@ generate <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "
 		realData <- realData[,setdiff(colnames(realData), covLab)]
 	}
 	
-	
 	if(length(covLab) > 0) {
 		if(is.null(covData)) stop("The covariate data must be specified.")
 		if(ngroups > 1) covLab <- c(covLab, model@groupLab)
 		covData <- covData[,covLab, drop=FALSE]		
 		if(ncol(covData) != length(covLab)) stop(paste0("The covariate data must contain the following variable names: ", paste(covLab, collapse = ", ")))
 		if(any(is.na(covData))) stop("The covariate data must not have missing variables.")
+		indLab <- setdiff(indLab, covLab)
 	} else {
 		if(!is.null(covData)) {
 			warnings("CONFLICT: The model template does not have any covariates but the covaraite data are specified. The covaraite data are ignored.")
@@ -70,7 +70,7 @@ generate <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "
 			if(any(nrealData != n)) stop("CONFLICT: The group sizes specified in realData and the 'n' argument are not equal.")
 		}
 		if(!is.null(covData)) {
-			covDataGroup <- split(covData, covData[,model@groupLab])
+			covDataGroup <- split(covData[,setdiff(covLab, model@groupLab), drop=FALSE], covData[,model@groupLab])
 			ncovData <- sapply(covDataGroup, nrow)
 			if(any(ncovData != n)) stop("CONFLICT: The group sizes specified in covData and the 'n' argument are not equal.")
 		}

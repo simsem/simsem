@@ -10,7 +10,7 @@
 draw <- function(model, maxDraw = 50, misfitBounds = NULL, averageNumMisspec = FALSE, 
     optMisfit = NULL, optDraws = 50, misfitType = "f0", createOrder = c(1, 2, 3), covData = NULL) {
     stopifnot(class(model) == "SimSem")
-	covLab <- model@pt$lhs[model@pt$op == "~1" & model@pt$exo == 1]
+	covLab <- unique(model@pt$lhs[model@pt$op == "~1" & model@pt$exo == 1])
 	
 	if(length(covLab) > 0) {
 		if(is.null(covData)) stop("The covariate data must be specified.")
@@ -44,10 +44,10 @@ drawParam <- function(paramSet, maxDraw = 50, numFree = 1, misfitBounds = NULL, 
 		if(ngroups == 1) {
 			covStat[[1]] <- list(MZ = as.matrix(colMeans(covData)), CZ = cov(covData))
 		} else {
-			groupCov <- covData[,ncol(covData)]
-			targetDat <- covData[,-ncol(covData)]
+			groupCov <- covData[,ncol(covData),drop=FALSE]
+			targetDat <- covData[,-ncol(covData),drop=FALSE]
 			for(i in groupLoop) {
-				covStat[[i]] <- list(MZ = as.matrix(colMeans(targetDat[groupCov == i,])), CZ = cov(targetDat[groupCov == i,]))
+				covStat[[i]] <- list(MZ = as.matrix(colMeans(targetDat[groupCov == i,,drop=FALSE])), CZ = cov(targetDat[groupCov == i,,drop=FALSE]))
 			}
 		}
 	}
@@ -240,7 +240,6 @@ drawParam <- function(paramSet, maxDraw = 50, numFree = 1, misfitBounds = NULL, 
 				unfillpls[[i]] <- lapply(paramSet[[i]], rawDraw, misSpec = FALSE, constraint = FALSE)
             }
 			fillFirst <- ord[1] == 3
-			
 			if(fillFirst) {
 				fullpls <- mapply(fillParam, unfillpls, covStat, SIMPLIFY = FALSE)
 				fullpls <- equalCon(fullpls, paramSet, fill=TRUE, con=con)
@@ -477,7 +476,7 @@ fillParam <- function(rawParamSet, covStat = NULL) {
         if (is.null(ME)) 
             ME <- findFactorMean(BE, AL, gamma = GA, covmean = MZ)
         if (is.null(AL)) 
-            AL <- findFactorIntercept(BE, ME, gamma = GA, covmean = M)
+            AL <- findFactorIntercept(BE, ME, gamma = GA, covmean = MZ)
         facCov <- findFactorTotalCov(BE, PS, gamma = GA, covcov = CZ)
         if (is.null(TE)) {
             if (is.null(VTE)) 

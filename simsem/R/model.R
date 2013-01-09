@@ -202,8 +202,8 @@ buildModel <- function(paramSet, modelType) {
             {
                 paramSet$ME <- bind(rep(NA, ne), popParam = 0)
             }  ## Set factor intercepts to be free, pop value = 0
-        if (is.null(paramSet$KA)) {
-			if (is.null(paramSet$GA)) {
+        if (is.null(paramSet$GA)) {
+			if (!is.null(paramSet$KA)) {
 				paramSet$GA <- paramSet$KA
 				paramSet$KA <- NULL
 			} else {
@@ -275,10 +275,10 @@ buildModel <- function(paramSet, modelType) {
 		# There is a covariate
         if (!is.null(paramSet$KA) | !is.null(paramSet$GA)) {
 			if (is.null(paramSet$GA)) {
-				paramSet$GA <- bind(matrix(0, ni, ncol(paramSet$KA@free)))
+				paramSet$GA <- bind(matrix(0, ny, ncol(paramSet$KA@free)))
 			} 
 			if (is.null(paramSet$KA)) {
-				paramSet$KA <- bind(matrix(0, ni, ncol(paramSet$GA@free)))
+				paramSet$KA <- bind(matrix(0, ny, ncol(paramSet$GA@free)))
 			} 
 		}
     } else {
@@ -475,7 +475,6 @@ buildPT <- function(paramSet, pt = NULL, group = 1, facLab = NULL, indLab = NULL
             lhs, rhs), FUN = c, SIMPLIFY = FALSE)
     }
 
-	
 	nz <- NULL # Save for create covariances and means among covariates
 	
     ## GA - Regressions of factors on covariates
@@ -492,7 +491,7 @@ buildPT <- function(paramSet, pt = NULL, group = 1, facLab = NULL, indLab = NULL
 		} 
 		rhs <- rep(covLab, times = nf)
         pt <- mapply(pt, parseFree(paramSet$GA, group = group, pt = pt, op = "~", 
-            rhs, lhs), FUN = c, SIMPLIFY = FALSE)
+            lhs, rhs), FUN = c, SIMPLIFY = FALSE)
     }
  
     ## KA - Regressions of factors on indicators
@@ -510,14 +509,14 @@ buildPT <- function(paramSet, pt = NULL, group = 1, facLab = NULL, indLab = NULL
 		} 
 		rhs <- rep(covLab, times = ni)
         pt <- mapply(pt, parseFree(paramSet$KA, group = group, pt = pt, op = "~", 
-            rhs, lhs), FUN = c, SIMPLIFY = FALSE)
+            lhs, rhs), FUN = c, SIMPLIFY = FALSE)
     }
 
 	# Create parameter table for covariates
 	if(!is.null(covLab)) {
 		lhs <- rep(covLab, nz:1)
 		rhs <- unlist(lapply(1:nz, function(k) covLab[k:nz]))
-		pt <- mapply(pt, parseFree(bind(matrix(0, nz, nz)), group = group, pt = pt, op = "~~", 
+		pt <- mapply(pt, parseFree(bind(matrix(0, nz, nz), symmetric=TRUE), group = group, pt = pt, op = "~~", 
                 lhs, rhs, exo = 1, forceUstart = NA), FUN = c, SIMPLIFY = FALSE)	
 		lhs2 <- covLab		
 		rhs2 <- rep("", times = nz)
@@ -1124,12 +1123,16 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
     modelType <- NULL
     indLab <- NULL
     facLab <- NULL
+	covLab <- unique(object@ParTable$lhs[object@ParTable$op == "~~" & object@ParTable$exo == 1])
+	if(length(covLab) == 0) covLab <- NULL
+	
     if (isTRUE(all.equal(object@Model@dimNames[[1]][[1]], object@Model@dimNames[[1]][[2]]))) {
-        indLab <- object@Model@dimNames[[1]][[1]]
+        indLab <- setdiff(object@Model@dimNames[[1]][[1]], covLab)
+		facLab <- indLab
         modelType <- "path"
     } else {
-        indLab <- object@Model@dimNames[[1]][[1]]
-        facLab <- object@Model@dimNames[[1]][[2]]
+        indLab <- setdiff(object@Model@dimNames[[1]][[1]], covLab)
+        facLab <- setdiff(object@Model@dimNames[[1]][[2]], c(covLab, indLab))
         if ("beta" %in% name) {
             modelType <- "sem"
         } else {
@@ -1139,11 +1142,15 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
     
     if (std) {
         est <- standardize(object)
+		if(!is.null(covLab)) est <- reshuffleParamGroup(est, covLab, indLab, facLab, ngroups)
         free <- lapply(est, function(x) {
-            x[!(round(x, 4) == 1 | round(x, 4) == 0)] <- NA
+			if(!is.null(x)) {
+				x[!(round(x, 4) == 1 | round(x, 4) == 0)] <- NA
+			}
             x
         })
-        freeUnstd <- inspect(object, "free")
+        freeUnstd <- labelFree(inspect(object, "free"), object@Model@isSymmetric)
+		if(!is.null(covLab)) freeUnstd <- reshuffleParamGroup(freeUnstd, covLab, indLab, facLab, ngroups)
         if (!is.null(PS)) 
             stop("Misspecification is not allowed in PS if 'std' is TRUE.")
         if (!is.null(TE)) 
@@ -1154,20 +1161,29 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
             stop("Misspecification is not allowed in VY if 'std' is TRUE.")
         
         FUN <- function(x, y = NULL, z = NULL, h) {
-            x[is.na(x) & (h != 0)] <- paste0("simcon", h[is.na(x) & (h != 0)])
+			if(!is.null(h)) {
+				x[(is.na(x) & (h != 0)) & is.na(h)] <- NA
+				x[(is.na(x) & (h != 0)) & !is.na(h)] <- h[(is.na(x) & (h != 0)) & !is.na(h)]
+			}
             y[!is.free(x)] <- ""
             bind(x, y, z)
         }
         FUNS <- function(x, y, z = NULL, h) {
-            x[is.na(x) & (h != 0)] <- paste0("simcon", h[is.na(x) & (h != 0)])
+			if(!is.null(h)) {
+				x[(is.na(x) & (h != 0)) & is.na(h)] <- NA
+				x[(is.na(x) & (h != 0)) & !is.na(h)] <- h[(is.na(x) & (h != 0)) & !is.na(h)]
+			}
             diag(x) <- 1
             if (is.matrix(y)) 
                 y[!is.free(x)] <- ""
             binds(x, y, z)
         }
         FUNV <- function(x, y = NULL, z = NULL, h) {
-            h <- diag(h)
-            x[is.na(x) & (h != 0)] <- paste0("simcon", h[is.na(x) & (h != 0)])
+			if(!is.null(h)) {
+				h <- diag(h)
+				x[(is.na(x) & (h != 0)) & is.na(h)] <- NA
+				x[(is.na(x) & (h != 0)) & !is.na(h)] <- h[(is.na(x) & (h != 0)) & !is.na(h)]
+			}
             y[!is.free(x)] <- ""
             bind(x, y, z)
         }
@@ -1206,6 +1222,11 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
             TY <- mapply(FUN, x = rep(list(rep(NA, ny)), ngroups), y = rep(list(rep(0, 
                 ny)), ngroups), z = TY, h = freeUnstd[names(freeUnstd) == "nu"], 
                 SIMPLIFY = FALSE)
+            if (!is.null(covLab)) {
+				if (!is.list(KA)) KA <- rep(list(KA), ngroups)
+				KA <- mapply(FUN, x = free[names(free) == "kappa"], y = est[names(est) == 
+                "kappa"], z = KA, h = freeUnstd[names(freeUnstd) == "kappa"], SIMPLIFY = FALSE)
+			}
         } else {
             ne <- ncol(est[["psi"]])
             if (!is.list(AL)) 
@@ -1225,15 +1246,17 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
             BE <- mapply(FUN, x = free[names(free) == "beta"], y = est[names(est) == 
                 "beta"], z = BE, h = freeUnstd[names(freeUnstd) == "beta"], SIMPLIFY = FALSE)
         }
+		if (!is.null(covLab)) {
+			if (!is.list(GA)) GA <- rep(list(GA), ngroups)
+			GA <- mapply(FUN, x = free[names(free) == "gamma"], y = est[names(est) == 
+			"gamma"], z = GA, h = freeUnstd[names(freeUnstd) == "gamma"], SIMPLIFY = FALSE)
+		}
         
     } else {
         est <- inspect(object, "coef")
-        free <- lapply(inspect(object, "free"), function(h) {
-            apply(h, 2, function(x) {
-                x[x != 0] <- paste0("sim", x[x != 0])
-                return(x)
-            })
-        })
+		if(!is.null(covLab)) est <- reshuffleParamGroup(est, covLab, indLab, facLab, ngroups)
+        free <- labelFree(inspect(object, "free"), object@Model@isSymmetric)
+		if(!is.null(covLab)) free <- reshuffleParamGroup(free, covLab, indLab, facLab, ngroups)
         if (modelType == "path") {
             set1 <- lapply(free[names(free) == "beta"], function(x) findRecursiveSet(x)[[1]])
             pospsi <- match("psi", names(free))
@@ -1273,10 +1296,10 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
 			}
             binds(x, y, z)
         }
-        if (!is.list(PS)) 
+		if (!is.list(PS)) 
             PS <- rep(list(PS), ngroups)
-        PS <- mapply(FUNS2, x = free[names(free) == "psi"], y = est[names(est) == 
-            "psi"], z = PS, SIMPLIFY = FALSE)
+		PS <- mapply(FUNS2, x = free[names(free) == "psi"], y = est[names(est) == 
+			"psi"], z = PS, SIMPLIFY = FALSE)
         
         if (modelType %in% c("cfa", "sem")) {
             if (!is.list(LY)) 
@@ -1291,7 +1314,7 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
             
             if (!is.list(TY)) 
                 TY <- rep(list(TY), ngroups)
-            if ("nu" %in% names(est)) {
+            if ("nu" %in% names(est) && !is.null(est$nu)) {
                 TY <- mapply(FUN2, x = lapply(free[names(free) == "nu"], as.vector), 
                   y = lapply(est[names(est) == "nu"], as.vector), z = TY, SIMPLIFY = FALSE)
             } else {
@@ -1299,10 +1322,16 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
                 TY <- mapply(FUN2, x = rep(list(rep(NA, ny)), ngroups), y = rep(list(rep(0, 
                   ny)), ngroups), z = TY, SIMPLIFY = FALSE)
             }
+			if ("kappa" %in% names(est) && !is.null(est$kappa)) {
+				if (!is.list(KA)) 
+					KA <- rep(list(KA), ngroups)
+				KA <- mapply(FUN2, x = free[names(free) == "kappa"], y = est[names(est) == 
+					"kappa"], z = KA, SIMPLIFY = FALSE)
+			}
         }
         if (!is.list(AL)) 
             AL <- rep(list(AL), ngroups)
-        if ("alpha" %in% names(est)) {
+        if ("alpha" %in% names(est) && !is.null(est$alpha)) {
             AL <- mapply(FUN2, x = lapply(free[names(free) == "alpha"], as.vector), 
                 y = lapply(est[names(est) == "alpha"], as.vector), z = AL, SIMPLIFY = FALSE)
         } else {
@@ -1315,13 +1344,18 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
             }
         }
         
-        if ("beta" %in% names(est)) {
+        if ("beta" %in% names(est) && !is.null(est$beta)) {
             if (!is.list(BE)) 
                 BE <- rep(list(BE), ngroups)
             BE <- mapply(FUN2, x = free[names(free) == "beta"], y = est[names(est) == 
                 "beta"], z = BE, SIMPLIFY = FALSE)
         }
-        
+        if ("gamma" %in% names(est) && !is.null(est$gamma)) {
+			if (!is.list(GA)) 
+				GA <- rep(list(GA), ngroups)
+			GA <- mapply(FUN2, x = free[names(free) == "gamma"], y = est[names(est) == 
+				"gamma"], z = GA, SIMPLIFY = FALSE)
+		}
     }
     groupLab <- object@Options$group
     if (is.null(groupLab)) 
@@ -1334,13 +1368,103 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
 	if(any(pos)) {
 		conList <- list(lhs = pt$lhs[pos], op = pt$op[pos], con = pt$rhs[pos])
 	}
-	
 	# Make the con right here
     result <- model(LY = LY, PS = PS, RPS = RPS, TE = TE, RTE = RTE, BE = BE, VTE = VTE, 
-        VY = VY, VPS = VPS, VE = VE, TY = TY, AL = AL, MY = MY, ME = ME, modelType = modelType, 
-        indLab = indLab, facLab = facLab, groupLab = groupLab, ngroups = ngroups, con = conList)
+        VY = VY, VPS = VPS, VE = VE, TY = TY, AL = AL, MY = MY, ME = ME, GA = GA, KA = KA, modelType = modelType, 
+        indLab = indLab, facLab = facLab, groupLab = groupLab, covLab = covLab, ngroups = ngroups, con = conList)
     return(result)
 }
+
+labelFree <- function(free, symmetric) {
+	free2 <- mapply(function(x, y) { if(y) { return(x[lower.tri(x, diag=TRUE)]) } else { return(x) } }, x = free, y = symmetric)
+	ord <- do.call(c, free2)
+	ord <- ord[ord != 0]
+	target <- paste0("con", 1:length(unique(ord)))
+	nocommon <- !(duplicated(ord) | duplicated(ord, fromLast = TRUE))
+	target[ord[nocommon]] <- NA
+	
+	free <- lapply(free, function(h) {
+            apply(h, 2, function(x) {
+                x[x != 0] <- target[x[x != 0]]
+                return(x)
+            })
+        })
+	free
+}
+		
+## taken shamelessly from param.value in lavaan.
+standardize <- function(object) {
+    
+    GLIST <- object@Model@GLIST
+    est.std <- standardizedSolution(object)$est.std
+    
+    for (mm in 1:length(GLIST)) {
+        ## labels
+        dimnames(GLIST[[mm]]) <- object@Model@dimNames[[mm]]
+        
+        ## fill in starting values
+        m.user.idx <- object@Model@m.user.idx[[mm]]
+        x.user.idx <- object@Model@x.user.idx[[mm]]
+        GLIST[[mm]][m.user.idx] <- est.std[x.user.idx]
+        
+        ## class
+        class(GLIST[[mm]]) <- c("matrix")
+        
+        
+    }
+    GLIST
+}
+
+reshuffleParamGroup <- function(set, covLab, indLab, facLab, ngroups) {
+	if(ngroups > 1) {
+		groupvec <- rep(1:ngroups, each = length(set)/ngroups)
+		setGroup <- split(set, groupvec)
+		result <- lapply(setGroup, reshuffleParam, covLab=covLab, indLab=indLab, facLab=facLab)
+		names(result) <- NULL
+		result <- do.call(c, result)
+	} else {
+		result <- reshuffleParam(set, covLab, indLab, facLab)
+	}
+	return(result)
+}
+
+reshuffleParam <- function(set, covLab, indLab, facLab) {
+	lambda <- NULL
+	theta <- NULL
+	psi <- NULL
+	beta <- NULL
+	nu <- NULL
+	alpha <- NULL
+	gamma <- NULL
+	kappa <- NULL
+
+	if(!is.null(set$lambda)) lambda <- set$lambda[indLab, facLab, drop=FALSE]
+	if(!is.null(set$theta)) theta <- set$theta[indLab, indLab, drop=FALSE]
+	if(!is.null(set$psi)) psi <- set$psi[facLab, facLab, drop=FALSE]
+	if(!is.null(set$beta)) beta <- set$beta[facLab, facLab, drop=FALSE]
+	if(!is.null(set$nu)) nu <- set$nu[indLab, , drop=FALSE]
+	if(!is.null(set$alpha)) alpha <- set$alpha[facLab, , drop=FALSE]
+	
+	covariateFac <- covLab[covLab %in% colnames(set$beta)]
+	if(nrow(lambda) > ncol(lambda)) {
+		singleIndicator <- indLab[indLab %in% colnames(set$beta)]
+		if(length(singleIndicator) > 0) {
+			if(!is.null(set$lambda)) lambda[singleIndicator, ] <- set$beta[singleIndicator, facLab, drop=FALSE]
+			if(!is.null(set$theta)) theta[singleIndicator, singleIndicator] <- set$psi[singleIndicator, singleIndicator, drop=FALSE]
+			if(!is.null(set$nu)) nu[singleIndicator, ] <- set$alpha[singleIndicator, , drop=FALSE]
+		}
+		if(length(covariateFac) > 0) {
+			kappa <- matrix(0, length(indLab), length(covLab), dimnames=list(indLab, covLab))
+			kappa[singleIndicator, covLab] <- set$beta[singleIndicator, covLab, drop=FALSE]
+		}
+	}
+	if(length(covariateFac) > 0) {
+		gamma <- set$beta[facLab, covLab, drop=FALSE]
+	}
+	return(list(lambda=lambda, theta=theta, psi=psi, beta=beta, nu=nu, alpha=alpha, gamma=gamma, kappa=kappa))	
+}
+
+
 
 parseSyntaxCon <- function(script) {
 	if(is.null(script)) return(list(NULL))

@@ -87,9 +87,133 @@ summaryParam(Output)
 lavaan(CFA.Model@pt, data=HolzingerSwineford1939)
 
 
+# Check multiple covariates
+# Check multiple groups
+# model.lavaan with multiple groups
+library(lavaan)
+## The famous Holzinger and Swineford (1939) example
+HS.model <- ' visual  =~ x1 + x2 + x3
+              textual =~ x4 + x5 + x6
+              speed   =~ x7 + x8 + x9 
+			  textual ~ sex
+			  visual ~~ textual
+			  visual ~~ speed
+			  textual ~~ speed
+			  x1 ~ sex
+			  '
+
+object <- cfa(HS.model, data=HolzingerSwineford1939, meanstructure=TRUE)
+model.lavaan(object)
+model.lavaan(object, std=TRUE)
+
+HS.model2 <- ' x3 ~ x2 + x1
+				x2 ~ x1
+				x2 ~ sex
+				x1 ~ sex
+			  '
+
+object2 <- sem(HS.model2, data=HolzingerSwineford1939)
+model.lavaan(object2)
+model.lavaan(object2, std=TRUE)
+
+HS.model3 <- ' visual  =~ x1 + x2 + x3
+              textual =~ x4 + x5 + x6
+              speed   =~ x7 + x8 + x9 
+			  textual ~ sex
+			  visual ~~ textual
+			  visual ~~ speed
+			  textual ~~ speed
+			  x1 ~ sex
+			  '
+
+object3 <- cfa(HS.model, data=HolzingerSwineford1939, meanstructure=TRUE, group="school", group.equal="loadings")
+mod <- model.lavaan(object3) # Still have a problem
+sexgroup <- data.frame(sex, school=rep(c(1,2,1,2), each=50))
+generate(mod, list(100, 100), covData=sexgroup)
+Output <- sim(10, n=list(100, 100), model=mod, covData=sexgroup)
+
+path.BE <- matrix(0, 4, 4)
+path.BE[3, 1:2] <- NA
+path.BE[4, 3] <- NA
+starting.BE <- matrix("", 4, 4)
+starting.BE[3, 1:2] <- "runif(1, 0.3, 0.5)"
+starting.BE[4, 3] <- "runif(1,0.5,0.7)"
+mis.path.BE <- matrix(0, 4, 4)
+mis.path.BE[4, 1:2] <- "runif(1,-0.1,0.1)"
+BE <- bind(path.BE, starting.BE, misspec=mis.path.BE)
+
+residual.error <- diag(4)
+residual.error[1,2] <- residual.error[2,1] <- NA
+RPS <- binds(residual.error, "rnorm(1,0.3,0.1)")
+
+ME <- bind(rep(NA, 4), 0)
+
+gamma <- matrix(NA, 4, 2)
+gammaVal <- matrix(rep(c(0.1, -0.05), each=4), 4, 2)
+GA <- bind(gamma, gammaVal)
+
+Path.Model <- model(RPS = RPS, BE = BE, ME = ME, GA = GA, modelType="Path")
+
+covData <- data.frame(z1 = c(rep(1, 100), rep(0, 100), rep(0, 100)), z2 = c(rep(0, 100), rep(1, 100), rep(0, 100)))
+param <- draw(Path.Model, misfitBound = c(0.03, 0.05), misfitType="rmsea", covData=covData)
+dat <- createData(param[[1]], n = 300, covData=covData)
+
+
+out <- analyze(Path.Model, dat)
+# The VTE is still wrong. Check after the LCA comes in.
+generate(Path.Model, n = 300, covData=covData)
+
+# Output is wrong. It contains some bugs.
+Output <- sim(100, n=300, Path.Model, covData=covData)
+getCutoff(Output, 0.05)
+plotCutoff(Output, 0.05)
+summaryParam(Output)
 
 
 
+
+loading <- matrix(0, 8, 3)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+loading[7:8, 3] <- "con1"
+loading.start <- matrix("", 8, 3)
+loading.start[1:3, 1] <- 0.7
+loading.start[4:6, 2] <- 0.7
+loading.start[7:8, 3] <- "rnorm(1,0.6,0.05)"
+loading.trivial <- matrix("runif(1, -0.2, 0.2)", 8, 3)
+loading.trivial[is.na(loading)] <- 0
+LY <- bind(loading, loading.start, misspec=loading.trivial)
+
+error.cor.trivial <- matrix("rnorm(1, 0, 0.1)", 8, 8)
+diag(error.cor.trivial) <- 1
+RTE <- binds(diag(8), misspec=error.cor.trivial)
+
+factor.cor <- diag(3)
+factor.cor[1, 2] <- factor.cor[2, 1] <- NA
+RPS <- binds(factor.cor, 0.5)
+
+path <- matrix(0, 3, 3)
+path[3, 1:2] <- NA
+path.start <- matrix(0, 3, 3)
+path.start[3, 1] <- "rnorm(1,0.6,0.05)"
+path.start[3, 2] <- "runif(1,0.3,0.5)"
+BE <- bind(path, path.start)
+
+gamma <- matrix(NA, 3, 2)
+gammaVal <- matrix(rep(c(0.1, -0.05), each=3), 3, 2)
+GA <- bind(gamma, gammaVal)
+
+SEM.model <- model(BE=BE, LY=LY, RPS=RPS, RTE=RTE, GA=GA, modelType="SEM")
+
+covData <- data.frame(z1 = c(rep(1, 100), rep(0, 100), rep(0, 100)), z2 = c(rep(0, 100), rep(1, 100), rep(0, 100)))
+
+dat <- generate(SEM.model, n=300, covData=covData)
+out <- analyze(SEM.model, dat)
+
+Output <- sim(200, n=300, SEM.model, covData=covData, silent=TRUE) 
+getCutoff(Output, 0.05)
+plotCutoff(Output, 0.05)
+summary(Output)
 
 ############################ Example 1
 

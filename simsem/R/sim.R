@@ -486,19 +486,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 				}
 			}
 		}
-		#Lines 490-5-1 can be replaced when labels are in SimSem object. Just call that slot.
-		if (is.null(indLab)) {
-			if (model@modelType == "path") {
-				indLab <- unique(model@pt$lhs)
-			} else {
-				indLab <- unique(model@pt$rhs[model@pt$op == "=~"])
-			}
-		}
-		indLab <- setdiff(indLab, aux)
-		facLab <- NULL
-		if (model@modelType != "path") {
-			facLab <- unique(model@pt$lhs[model@pt$op == "=~"])
-		}
+		
 		#reminder: out=lavaan object
 		if (converged %in% c(0, 3:5)) {
 		
@@ -887,7 +875,7 @@ parsePopulation <- function(paramSet, draws, group = 1) {
 
 	# Create parameter table for covariates
 	if(!is.null(nz)) {
-		ustart <- c(ustart, startingVal(matrix(0, nz, nz), matrix(0, nz, nz), smart = TRUE, symm = FALSE))
+		ustart <- c(ustart, startingVal(matrix(0, nz, nz), matrix(0, nz, nz), smart = TRUE, symm = TRUE))
 		ustart <- c(ustart, startingVal(rep(0, nz), rep(0, nz), smart = TRUE, symm = FALSE))
 	}
     return(ustart)
