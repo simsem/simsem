@@ -359,19 +359,25 @@ summaryConverge <- function(object, improper = FALSE) {
 setPopulation <- function(target, population) {
     psl <- generate(population, n = 20, params = TRUE)$psl
     paramSet <- lapply(psl, "[[", 1)
-    indLabGen <- NULL
-    if (population@modelType == "path") {
-        indLabGen <- unique(population@pt$lhs)
-    } else {
-        indLabGen <- unique(population@pt$rhs[population@pt$op == "=~"])
-    }
-    facLabGen <- NULL
-    if (population@modelType != "path") {
-        facLabGen <- unique(population@pt$lhs[population@pt$op == "=~"])
-    }
-    popParam <- reduceParamSet(paramSet, population@dgen, indLabGen, facLabGen)
-    target@paramValue <- as.data.frame(t(data.frame(param = popParam)))
-    return(target)
+	generatedgen <- population@dgen
+	popParam <- NULL
+	if (!is.list(generatedgen[[1]])) {
+		generatedgen <- list(generatedgen)
+	}
+	for (i in seq_along(paramSet)) {
+		popParam <- c(popParam, parsePopulation(generatedgen[[i]], paramSet[[i]], group = i))
+	}
+	extraParamIndex <- population@pt$op %in% c(">", "<", "==", ":=")
+	extraParamName <- NULL
+	if(any(extraParamIndex)) {
+		extraparam <- collapseExtraParam(paramSet, population@dgen, fill=TRUE, con=population@con)
+		extraParamName <- renameExtraParam(population@con$lhs, population@con$op, population@con$rhs)
+		popParam[extraParamIndex] <- extraparam
+	}
+	index <- ((population@pt$free != 0)& !(duplicated(population@pt$free))) | extraParamIndex
+	popParam <- popParam[index]
+	names(popParam) <- c(lavaan:::getParameterLabels(population@pt, type="free"), extraParamName)
+    return(popParam)
 } 
 
 # getPopulation: Description: Extract the population value from an object

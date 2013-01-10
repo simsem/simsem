@@ -12,18 +12,19 @@
 \usage{
 model(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = NULL, 
 	VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, MY = NULL, 
-	ME = NULL, modelType, indLab = NULL, facLab = NULL, groupLab = "group", 
-	ngroups = 1, con = NULL)
+	ME = NULL, KA = NULL, GA = NULL, modelType, indLab = NULL, facLab = NULL, 
+	covLab = NULL, groupLab = "group", ngroups = 1, con = NULL)
 model.cfa(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, VTE = NULL, 
 	VY = NULL, VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, 
-	indLab = NULL, facLab = NULL, groupLab = "group", ngroups = 1, con = NULL)
+	KA = NULL, GA = NULL, indLab = NULL, facLab = NULL, covLab = NULL, 
+	groupLab = "group", ngroups = 1, con = NULL)
 model.path(PS = NULL, RPS = NULL, BE = NULL, VPS = NULL, VE=NULL, AL = NULL, 
-	ME = NULL, indLab = NULL, facLab = NULL, groupLab = "group", ngroups = 1, 
-	con = NULL)
+	ME = NULL, KA = NULL, GA = NULL, indLab = NULL, facLab = NULL, covLab = NULL, 
+	groupLab = "group", ngroups = 1, con = NULL)
 model.sem(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL, 
 	VTE = NULL, VY = NULL, VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NULL, 
-	ME = NULL, indLab = NULL, facLab = NULL, groupLab = "group", ngroups = 1,
-	con = NULL)
+	ME = NULL, KA = NULL, GA = NULL, indLab = NULL, facLab = NULL, covLab = NULL, 
+	groupLab = "group", ngroups = 1, con = NULL)
 }
 \arguments{
   \item{LY}{
@@ -66,7 +67,13 @@ model.sem(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL,
 	Y indicator means (must be \code{\linkS4class{SimVector}} object). Either TY or MY (but not both) can be specified. 
 }
   \item{ME}{
-	Total mean of endogenous factors (must be \code{\linkS4class{SimVector}} object). Either AL or ME (but not both) can be specified. 
+	Total mean of endogenous factors (must be \code{\linkS4class{SimVector}} object). NOTE: Either endogenous factor intercept or total mean of endogenous factor is specified. Both cannot be simultaneously specified.
+}
+  \item{KA}{
+	Regression coefficient matrix from covariates to indicators (must be \code{\linkS4class{SimMatrix}} object). KA is needed when (fixed) exogenous covariates are needed only.
+}
+  \item{GA}{
+	Regression coefficient matrix from covariates to factors (must be \code{\linkS4class{SimMatrix}} object). GA is needed when (fixed) exogenous covariates are needed only.
 }
   \item{modelType}{
 	"CFA", "Sem", or "Path". Model type must be specified to ensure that the matrices specified in model templates for data generation and analysis correspond to what the user intends.
@@ -76,6 +83,9 @@ model.sem(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL,
 }
   \item{facLab}{ 
 	Character vector of factor labels. If left blank, automatic labels will be generated as \code{f1}, \code{f2}, ... \code{ff}
+}
+  \item{covLab}{ 
+	Character vector of covariate labels. If left blank, automatic labels will be generated as \code{z1}, \code{z2}, ... \code{zz}
 }
   \item{groupLab}{
 	Character of group-variable label (not the names of each group). If left blank, automatic labels will be generated as \code{group}

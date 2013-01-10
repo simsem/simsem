@@ -11,7 +11,7 @@ generate(model, n, maxDraw=50, misfitBounds=NULL, misfitType="f0",
 	averageNumMisspec=FALSE, optMisfit=NULL, optDraws=50, 
 	createOrder = c(1, 2, 3), indDist=NULL, sequential=FALSE,	
 	facDist=NULL, errorDist=NULL, indLab=NULL, modelBoot=FALSE, 
-	realData=NULL, params=FALSE)
+	realData=NULL, covData=NULL, params=FALSE)
 }
 \arguments{
   \item{model}{
@@ -61,6 +61,9 @@ generate(model, n, maxDraw=50, misfitBounds=NULL, misfitType="f0",
 }
   \item{realData}{ 
 	A data.frame containing real data. The data generated will follow the distribution of this data set.
+}
+  \item{covData}{ 
+	A data.frame containing covariate data, which can have any distributions. This argument is required when users specify \code{GA} or \code{KA} matrices in the model template (\code{\linkS4class{SimSem}}).
 }
   \item{params}{ 
 	If \code{TRUE}, return the parameters drawn along with the generated data set. Default is \code{FALSE}.

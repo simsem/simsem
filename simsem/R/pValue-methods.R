@@ -92,7 +92,7 @@ setMethod("pValue", signature(target = "lavaan", dist = "SimResult"), definition
             predictorVal[2] <- pmMARval)
     }
     predictorVal <- predictorVal[condition]
-    cutoff <- extractLavaanFit(target)[usedFit]
+    cutoff <- inspect(target, "fit")[usedFit]
     if (any(condition)) {
         result <- pValue(cutoff, Data, revDirec, x = condValue, xval = predictorVal, 
             df = df, asLogical = FALSE)

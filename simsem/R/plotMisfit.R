@@ -7,7 +7,9 @@ plotMisfit <- function(object, usedFit = "default", misParam = NULL) {
     if (usedFit == "default") {
         ifelse(is.null(misParam), usedFit <- c("pop.f0", "pop.rmsea", "pop.srmr"), 
             usedFit <- "pop.rmsea")
-    }
+    } else {
+		usedFit <- cleanUsedFit(usedFit)
+	}
     dimOut <- length(usedFit)
     if (!is.null(misParam)) {
         if (length(usedFit) > 1) 

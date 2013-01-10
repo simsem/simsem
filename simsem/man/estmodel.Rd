@@ -11,18 +11,18 @@
 }
 \usage{
 estmodel(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = NULL, 
-	VTE = NULL, VY = NULL, VPS = NULL, VE=NULL, TY = NULL, AL = NULL, 
-	MY = NULL, ME = NULL, modelType, indLab = NULL, facLab = NULL, 
+	VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, 
+	MY = NULL, ME = NULL, KA = NULL, GA = NULL, modelType, indLab = NULL, facLab = NULL, covLab = NULL, 
 	groupLab = "group", ngroups = 1, con = NULL)
 estmodel.cfa(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, VTE = NULL, 
-	VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, 
-	indLab = NULL, facLab = NULL, groupLab = "group", ngroups = 1, con = NULL)
+	VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, KA = NULL, GA = NULL, 
+	indLab = NULL, facLab = NULL, covLab = NULL, groupLab = "group", ngroups = 1, con = NULL)
 estmodel.path(PS = NULL, RPS = NULL, BE = NULL, VPS = NULL, VE = NULL, AL = NULL, 
-	ME = NULL, indLab = NULL, facLab = NULL, groupLab = "group", ngroups = 1,
+	ME = NULL, KA = NULL, GA = NULL, indLab = NULL, facLab = NULL, covLab = NULL, groupLab = "group", ngroups = 1,
 	con = NULL)
 estmodel.sem(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL, 
 	VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, MY = NULL, 
-	ME = NULL, indLab = NULL, facLab = NULL, groupLab = "group", ngroups = 1,
+	ME = NULL, KA = NULL, GA = NULL, indLab = NULL, facLab = NULL, covLab = NULL, groupLab = "group", ngroups = 1,
 	con = NULL)
 }
 \arguments{
@@ -68,6 +68,12 @@ estmodel.sem(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL,
   \item{ME}{
 	Total mean of endogenous factors (need to be a vector or a list of vectors). NOTE: Either endogenous factor intercept or total mean of endogenous factor is specified. Both cannot be simultaneously specified.
 }
+  \item{KA}{
+	Regression coefficient matrix from covariates to indicators (need to be a matrix or a list of matrices). KA is needed when (fixed) exogenous covariates are needed only.
+}
+  \item{GA}{
+	Regression coefficient matrix from covariates to factors (need to be a matrix or a list of matrices). GA is needed when (fixed) exogenous covariates are needed only.
+}
   \item{modelType}{
 	"CFA", "Sem", or "Path". This is specified to ensure that the analysis and data generation template created based on specified matrices in model correspond to what the user intends.
 }
@@ -75,7 +81,11 @@ estmodel.sem(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL,
 	Character vector of indicator labels. If left blank, automatic labels will be generated as  \code{y1}, \code{y2}, ... \code{yy}.
 }
   \item{facLab}{ 
-	Character vector of factor labels. If left blank, automatic labels will be generated as \code{f1}, \code{f2}, ... \code{ff}}
+	Character vector of factor labels. If left blank, automatic labels will be generated as \code{f1}, \code{f2}, ... \code{ff}
+}
+  \item{covLab}{ 
+	Character vector of covariate labels. If left blank, automatic labels will be generated as \code{z1}, \code{z2}, ... \code{zz}
+}
   \item{groupLab}{
 	Character of group-variable label (not the names of each group). If left blank, automatic labels will be generated as \code{group}
 }

@@ -45,7 +45,7 @@ pValueNested <- function(outNested, outParent, simNested, simParent, usedFit = N
             predictorVal[2] <- pmMARval)
     }
     predictorVal <- predictorVal[condition]
-    cutoff <- extractLavaanFit(outNested)[usedFit] - extractLavaanFit(outParent)[usedFit]
+    cutoff <- inspect(outNested, "fit")[usedFit] - inspect(outParent, "fit")[usedFit]
     if (any(condition)) {
         result <- pValue(cutoff, Data, revDirec, x = condValue, xval = predictorVal, 
             df = df, asLogical = FALSE)

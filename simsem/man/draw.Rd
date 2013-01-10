@@ -8,7 +8,8 @@
 }
 \usage{
 draw(model, maxDraw=50, misfitBounds=NULL, averageNumMisspec=FALSE, 
-optMisfit = NULL, optDraws=50, misfitType="f0", createOrder = c(1, 2, 3))
+optMisfit = NULL, optDraws = 50, misfitType = "f0", createOrder = c(1, 2, 3),
+covData = NULL)
 }
 \arguments{
   \item{model}{
@@ -34,6 +35,9 @@ optMisfit = NULL, optDraws=50, misfitType="f0", createOrder = c(1, 2, 3))
 }
   \item{createOrder}{
     The order of 1) applying equality/inequality constraints, 2) applying misspecification, and 3) fill unspecified parameters (e.g., residual variances when total variances are specified). The specification of this argument is a vector of different orders of 1 (constraint), 2 (misspecification), and 3 (filling parameters). For example, \code{c(1, 2, 3)} is to apply constraints first, then add the misspecification, and finally fill all parameters. 
+}
+  \item{covData}{ 
+	A data.frame containing covariate data, which can have any distributions. This argument is required when users specify \code{GA} or \code{KA} matrices in the model template (\code{\linkS4class{SimSem}}).
 }
 }
 \value{

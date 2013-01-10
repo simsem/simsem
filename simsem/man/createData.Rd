@@ -8,7 +8,7 @@
 }
 \usage{
 createData(paramSet, n, indDist=NULL, sequential=FALSE, facDist=NULL, 
-errorDist=NULL, indLab=NULL, modelBoot=FALSE, realData=NULL)
+errorDist=NULL, indLab=NULL, modelBoot=FALSE, realData=NULL, covData=NULL)
 }
 \arguments{
   \item{paramSet}{
@@ -37,6 +37,9 @@ errorDist=NULL, indLab=NULL, modelBoot=FALSE, realData=NULL)
 }
   \item{realData}{
 	A data.frame containing real data. The data generated will follow the distribution of this data set.
+}
+  \item{covData}{ 
+	A data.frame containing covariate data, which can have any distributions. This argument is required when users specify \code{GA} or \code{KA} matrices in the model template (\code{\linkS4class{SimSem}}).
 }
 }
 \value{

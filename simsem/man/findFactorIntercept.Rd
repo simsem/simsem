@@ -7,14 +7,20 @@
 Find factor intercept from regression coefficient matrix and factor total means for latent variable models. In the path analysis model, this function will find indicator intercept from regression coefficient and indicator total means.
 }
 \usage{
-findFactorIntercept(beta, factorMean = NULL)
+findFactorIntercept(beta, factorMean = NULL, gamma = NULL, covmean = NULL)
 }
 \arguments{
   \item{beta}{
-	Regression coefficient matrix
+	Regression coefficient matrix among factors
 }
   \item{factorMean}{
-	Total (model-implied) factor (indicator) means. The default is that all total factor means are 0.
+	A vector of total (model-implied) factor (indicator) means. The default is that all total factor means are 0.
+}
+  \item{gamma}{
+	Regression coefficient matrix from covariates (column) to factors (rows)
+}
+  \item{covmean}{
+	A vector of covariate means.
 }
 }
 \value{

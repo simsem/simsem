@@ -7,17 +7,23 @@
 Find factor total variances from regression coefficient matrix, factor (residual) correlation matrix, and factor residual variances  for latent variable models. In the path analysis model, this function will find indicator total variances from regression coefficient, indicator (residual) correlation matrix, and indicator residual variances. 
 }
 \usage{
-findFactorTotalVar(beta, corPsi, residualVarPsi)
+findFactorTotalVar(beta, corPsi, residualVarPsi, gamma = NULL, covcov = NULL)
 }
 \arguments{
   \item{beta}{
-	Regression coefficient matrix
+	Regression coefficient matrix among factors
 }
   \item{corPsi}{
 	Factor or indicator residual correlations.
 }
   \item{residualVarPsi}{
 	Factor or indicator residual variances. 
+}
+  \item{gamma}{
+	Regression coefficient matrix from covariates (column) to factors (rows)
+}
+  \item{covcov}{
+	A covariance matrix among covariates
 }
 }
 \value{

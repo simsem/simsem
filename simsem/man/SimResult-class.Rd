@@ -22,7 +22,6 @@ Objects can be created by \code{\link{sim}}.
     \item{\code{seed}:}{Seed number. }
 	\item{\code{paramValue}:}{Population model underlying each simulated dataset.}
 	\item{\code{paramOnly}:}{If \code{TRUE}, the result object saves only population characteristics and do not save sample characteristics (e.g., parameter estimates and standard errors.}
-	\item{\code{labelParam}:}{The labels of parameters specified in the analysis model.}
 	\item{\code{misspecValue}:}{Misspecified-parameter values that are imposed on the population model in each replication.}
 	\item{\code{popFit}:}{The amount of population misfit. See details at \code{\link{summaryMisspec}}}
 	\item{\code{FMI1}:}{Fraction Missing Method 1.}

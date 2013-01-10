@@ -1,14 +1,13 @@
 Package: simsem
 Type: Package
 Title: SIMulated Structural Equation Modeling.
-Version: 0.4-6
-Date: 2012-12-30
+Version: 0.5-0
+Date: 2013-01-09
 Authors@R: c(person("Sunthud", "Pornprasertmanit", role = c("aut", "cre"), email = "psunthud@ku.edu"), 
 		person("Patrick", "Miller", role = "aut", email="patr1ckm@ku.edu"), 
 		person("Alexander", "Schoemann", role = "aut", email="schoemann@ku.edu"),
 		person("Corbin", "Quick", role = "ctb", email="corbinq@gmail.com"))
-Author: Sunthud Pornprasertmanit <psunthud@ku.edu>, Patrick Miller
-        <patr1ckm@ku.edu>, Alexander Schoemann <schoemann@ku.edu>
+Author: Sunthud Pornprasertmanit [aut], Patrick Miller [aut], Alexander Schoemann [aut], Corbin Quick [ctb]
 Maintainer: Sunthud Pornprasertmanit <psunthud@ku.edu>
 Depends: R(>= 2.15), methods, lavaan, copula
 Suggests: parallel, Amelia, quantreg, splines, foreign, KernSmooth, semTools

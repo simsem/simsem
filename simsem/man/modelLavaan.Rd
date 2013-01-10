@@ -9,7 +9,8 @@
 \usage{
 model.lavaan(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
 	TE = NULL, RTE = NULL, BE = NULL, VTE = NULL, VY = NULL, VPS = NULL, 
-	VE=NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL)
+	VE=NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, KA = NULL, 
+	GA = NULL)
 }
 \arguments{
   \item{object}{
@@ -59,6 +60,12 @@ model.lavaan(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL,
 }
   \item{ME}{
 	Model misspecification in total mean of endogenous factors (need to be a vector or a list of vectors). NOTE: Either endogenous factor intercept or total mean of endogenous factor is specified. Both cannot be simultaneously specified.
+}
+  \item{KA}{
+	Model misspecification in regression coefficient matrix from covariates to indicators (need to be a matrix or a list of matrices). KA is applicable when exogenous covariates are specified only.
+}
+  \item{GA}{
+	Model misspecification in regression coefficient matrix from covariates to factors (need to be a matrix or a list of matrices). KA is applicable when exogenous covariates are specified only.
 }
 }
 \value{

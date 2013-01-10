@@ -493,7 +493,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 			fit <- inspect(out, "fit") # Avoid fitMeasures function becuase the runMI function does not support the fitMeasures function.
 			
 			#redo with parameterEstimate function in lavaan (for coef se, std) all the way to 526
-			result <- parameterEstimates(out, standardize=TRUE)
+			result <- parameterEstimates(out, standardized=TRUE)
 			extraParamIndex <- model@pt$op %in% c(">", "<", "==", ":=")
 			index <- ((model@pt$free != 0) & !(duplicated(model@pt$free))) | extraParamIndex
 			coef <- result$est[index]

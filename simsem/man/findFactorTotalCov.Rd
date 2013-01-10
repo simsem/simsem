@@ -7,11 +7,12 @@
 Find factor total covariances from regression coefficient matrix, factor residual covariance matrix. The residual covaraince matrix might be derived from factor residual correlation, total variance, and error variance. This function can be applied for path analysis model as well. 
 }
 \usage{
-findFactorTotalCov(beta, psi=NULL, corPsi=NULL, totalVarPsi = NULL, errorVarPsi=NULL)
+findFactorTotalCov(beta, psi = NULL, corPsi = NULL, totalVarPsi = NULL, 
+    errorVarPsi = NULL, gamma = NULL, covcov = NULL)
 }
 \arguments{
   \item{beta}{
-	Regression coefficient matrix
+	Regression coefficient matrix among factors
 }
   \item{psi}{
 	Factor or indicator residual covariances. This argument can be skipped if factor residual correlation and either total variances or error variances are specified.
@@ -24,6 +25,12 @@ findFactorTotalCov(beta, psi=NULL, corPsi=NULL, totalVarPsi = NULL, errorVarPsi=
 }
   \item{errorVarPsi}{
 	Factor or indicator residual variances. 
+}
+  \item{gamma}{
+	Regression coefficient matrix from covariates (column) to factors (rows)
+}
+  \item{covcov}{
+	A covariance matrix among covariates
 }
 }
 \value{

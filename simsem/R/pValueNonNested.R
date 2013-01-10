@@ -57,7 +57,7 @@ pValueNonNested <- function(outMod1, outMod2, dat1Mod1, dat1Mod2, dat2Mod1, dat2
     Data1 <- as.data.frame((dat1Mod1@fit - dat1Mod2@fit)[, usedFit])
     Data2 <- as.data.frame((dat2Mod1@fit - dat2Mod2@fit)[, usedFit])
     
-    cutoff <- extractLavaanFit(outMod1)[usedFit] - extractLavaanFit(outMod2)[usedFit]
+    cutoff <- inspect(outMod1, "fit")[usedFit] - inspect(outMod2, "fit")[usedFit]
     
     result1 <- NULL
     result2 <- NULL

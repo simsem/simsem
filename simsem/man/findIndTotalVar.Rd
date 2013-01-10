@@ -7,7 +7,8 @@
 Find indicator total variances from a factor loading matrix, total factor covariance matrix, and indicator (measurement) residual variances.
 }
 \usage{
-findIndTotalVar(lambda, totalFactorCov, residualVarTheta)
+findIndTotalVar(lambda, totalFactorCov, residualVarTheta, kappa = NULL, 
+	covcov = NULL)
 }
 \arguments{
   \item{lambda}{
@@ -18,6 +19,12 @@ findIndTotalVar(lambda, totalFactorCov, residualVarTheta)
 }
   \item{residualVarTheta}{
 	Indicator (measurement) residual variances. 
+}
+  \item{kappa}{
+	Regression coefficient matrix from covariates (column) to indicators (rows)
+}
+  \item{covcov}{
+	A covariance matrix among covariates
 }
 }
 \value{

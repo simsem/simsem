@@ -4,8 +4,8 @@
 
 generate <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "f0", 
     averageNumMisspec = FALSE, optMisfit = NULL, optDraws = 50, createOrder = c(1, 2, 3), indDist = NULL, sequential = FALSE, 
-    facDist = NULL, errorDist = NULL, indLab = NULL, modelBoot = FALSE, realData = NULL, 
-    params = FALSE, covData = NULL) {
+    facDist = NULL, errorDist = NULL, indLab = NULL, modelBoot = FALSE, realData = NULL, covData = NULL, 
+    params = FALSE) {
     if (is.null(indLab)) {
         if (model@modelType == "path") {
             indLab <- unique(model@pt$lhs)
@@ -107,7 +107,7 @@ popMisfitParams <- function(psl, df = NULL, covData = NULL) {
 		} else {
 			groupCov <- covData[,ncol(covData)]
 			targetDat <- covData[,-ncol(covData)]
-			for(i in groupLoop) {
+			for(i in 1:ngroups) {
 				covStat[[i]] <- list(MZ = as.matrix(colMeans(targetDat[groupCov == i,])), CZ = cov(targetDat[groupCov == i,]))
 			}
 		}

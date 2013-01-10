@@ -7,7 +7,8 @@
 Find indicator total means from a factor loading matrix, total factor means, and indicator (measurement) intercepts.
 }
 \usage{
-findIndMean(lambda, factorMean = NULL, tau = NULL)
+findIndMean(lambda, factorMean = NULL, tau = NULL, kappa = NULL, 
+	covmean = NULL)
 }
 \arguments{
   \item{lambda}{
@@ -18,6 +19,12 @@ findIndMean(lambda, factorMean = NULL, tau = NULL)
 }
   \item{tau}{
 	Indicator (measurement) intercepts. As a default, all intercepts are 0.
+}
+  \item{kappa}{
+	Regression coefficient matrix from covariates (column) to indicators (rows)
+}
+  \item{covmean}{
+	A vector of covariate means.
 }
 }
 \value{

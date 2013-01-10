@@ -7,12 +7,14 @@
 	This function can be used to generate and analyze simulated data from \code{\linkS4class{SimSem}} objects created with the \code{\link{model}} function. In this function, parameters are drawn from the specified data-generation model and used to create data, specified missingness (if any) is imposed, and data are analyzed using the specified \code{\linkS4class{SimSem}} analysis model object. Provides a \code{\linkS4class{SimResult}}) object as ouput, which summarizes analyses across replications. Data can be transformed using the \code{datafun} argument. Additional output can be extracted using the \code{outfun} argument. Paralleled processing can be enabled using the \code{multicore} argument. The \code{sim} function can also be used to obtain raw data using the \code{dataOnly} argument, to analyze pre-existing data using the \code{rawData} argument, and to simulate data that follows the distribution of a real data set using the \code{rawData} argument.
 }
 \usage{
-sim(nRep, model, n, generate = NULL, rawData = NULL, miss = NULL, datafun=NULL, outfun=NULL,
-pmMCAR = NULL, pmMAR = NULL, facDist = NULL, indDist = NULL, errorDist = NULL, sequential = FALSE, 
-modelBoot = FALSE, realData = NULL, maxDraw = 50, misfitType = "f0", 
-misfitBounds = NULL, averageNumMisspec = FALSE, optMisfit=NULL, optDraws = 50, createOrder = c(1, 2, 3), 
-aux = NULL, seed = 123321, silent = FALSE, multicore = FALSE, cluster = FALSE, numProc = NULL,  
-paramOnly = FALSE, dataOnly=FALSE, smartStart=FALSE, ...)
+sim(nRep, model, n, generate = NULL, rawData = NULL, miss = NULL, datafun=NULL, 
+outfun=NULL, pmMCAR = NULL, pmMAR = NULL, facDist = NULL, indDist = NULL, 
+errorDist = NULL, sequential = FALSE, modelBoot = FALSE, realData = NULL, 
+covData = NULL, maxDraw = 50, misfitType = "f0", misfitBounds = NULL, 
+averageNumMisspec = FALSE, optMisfit=NULL, optDraws = 50, 
+createOrder = c(1, 2, 3), aux = NULL, seed = 123321, silent = FALSE, 
+multicore = FALSE, cluster = FALSE, numProc = NULL, paramOnly = FALSE, 
+dataOnly=FALSE, smartStart=FALSE, ...)
 }
 \arguments{
   \item{nRep}{
@@ -63,6 +65,9 @@ paramOnly = FALSE, dataOnly=FALSE, smartStart=FALSE, ...)
 }
   \item{realData}{ 
 	A data.frame containing real data. Generated data will follow the distribution of this data set.
+}
+  \item{covData}{ 
+	A data.frame containing covariate data, which can have any distributions. This argument is required when users specify \code{GA} or \code{KA} matrices in the model template (\code{\linkS4class{SimSem}}).
 }
   \item{maxDraw}{ 
 	The maximum number of attempts to draw a valid set of parameters (no negative error variance, standardized coefficients over 1).
