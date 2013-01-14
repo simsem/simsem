@@ -22,8 +22,13 @@ getPowerFit <- function(altObject, cutoff = NULL, nullObject = NULL, revDirec = 
 getPowerFitDataFrame <- function(altObject, cutoff, revDirec = FALSE, usedFit = NULL, predictor = NULL, 
 	predictorVal = NULL, condCutoff = TRUE, df = 0) {
 	usedFit <- cleanUsedFit(usedFit)
-	if (is.null(names(cutoff)) && length(cutoff) == 7) 
+	if (!is.null(names(cutoff))) {
+		names(cutoff) <- cleanUsedFit(names(cutoff))
+	} else if (is.null(names(cutoff)) && length(cutoff) == 7) { 
 		names(cutoff) <- usedFit
+	} else {
+		stop("Please specify the name of fit indices in the cutoff argument")
+	}
 	common.name <- Reduce(intersect, list(colnames(altObject), names(cutoff), 
 		usedFit))
 	temp <- rep(NA, length(common.name))
@@ -132,7 +137,7 @@ getPowerFitNullObj <- function(altObject, nullObject, revDirec = FALSE, usedFit 
 		names(temp) <- usedFit
 		# Find cutoff based on chi-square test
 		cutoffChisq <- qchisq(1 - alpha, df=nullObject@fit[,"df"])
-		powerChi <- mean(altObject@fit[,"Chi"] > cutoffChisq)
+		powerChi <- mean(altObject@fit[,"chisq"] > cutoffChisq)
 		temp <- c("TraditionalChi" = powerChi, temp)
 	} else {
 		varyingCutoff <- getCutoff(object = nullFit, alpha = alpha, revDirec = FALSE, 

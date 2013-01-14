@@ -41,6 +41,7 @@ plotPowerFitNested <- function(altNested, altParent, nullNested = NULL, nullPare
     nrep <- dim(altNested@fit)[[1]]
 	usedFit <- cleanUsedFit(usedFit)
     if (!is.null(cutoff)) {
+		names(cutoff) <- cleanUsedFit(names(cutoff))
         usedFit <- intersect(usedFit, names(cutoff))
         cutoff <- cutoff[usedFit]
     }

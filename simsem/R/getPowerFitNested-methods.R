@@ -71,19 +71,6 @@ getPowerFitNestedCutoff <- function(altNested, altParent, cutoff, revDirec = FAL
 getPowerFitNestedNullObj <- function(altNested, altParent, 
     nullNested, nullParent, revDirec = FALSE, usedFit = NULL, alpha = 0.05, nVal = NULL, 
     pmMCARval = NULL, pmMARval = NULL, df = 0) {
-	usedFit <- cleanUsedFit(usedFit)
-	if(is.null(nullNested)) nullNested <- altNested
-	if(is.null(nullParent)) nullParent <- altParent
-    mod1 <- clean(altNested, altParent)
-    altNested <- mod1[[1]]
-    altParent <- mod1[[2]]
-    mod2 <- clean(nullNested, nullParent)
-    nullNested <- mod2[[1]]
-    nullParent <- mod2[[2]]
-    if (!isTRUE(all.equal(unique(altNested@paramValue), unique(altParent@paramValue)))) 
-        stop("'altNested' and 'altParent' are based on different data and cannot be compared, check your random seed")
-    if (!isTRUE(all.equal(unique(nullNested@paramValue), unique(nullParent@paramValue)))) 
-        stop("'nullNested' and 'nullParent' are based on different data and cannot be compared, check your random seed")
     if (!multipleAllEqual(unique(altNested@n), unique(altParent@n), unique(nullNested@n), 
         unique(nullParent@n))) 
         stop("Models are based on different values of sample sizes")
@@ -93,6 +80,18 @@ getPowerFitNestedNullObj <- function(altNested, altParent,
     if (!multipleAllEqual(unique(altNested@pmMAR), unique(altParent@pmMAR), unique(nullNested@pmMAR), 
         unique(nullParent@pmMAR))) 
         stop("Models are based on different values of the percent missing at random")
+    if (!isTRUE(all.equal(unique(altNested@paramValue), unique(altParent@paramValue)))) 
+        stop("'altNested' and 'altParent' are based on different data and cannot be compared, check your random seed")
+    if (!isTRUE(all.equal(unique(nullNested@paramValue), unique(nullParent@paramValue)))) 
+        stop("'nullNested' and 'nullParent' are based on different data and cannot be compared, check your random seed")
+	usedFit <- cleanUsedFit(usedFit)
+	if(is.null(nullNested)) nullNested <- altNested
+	if(is.null(nullParent)) nullParent <- altParent
+    mod <- clean(altNested, altParent, nullNested, nullParent)
+    altNested <- mod[[1]]
+    altParent <- mod[[2]]
+    nullNested <- mod[[3]]
+    nullParent <- mod[[4]]
     if (is.null(nVal) || is.na(nVal)) 
         nVal <- NULL
     if (is.null(pmMCARval) || is.na(pmMCARval)) 
@@ -133,7 +132,7 @@ getPowerFitNestedNullObj <- function(altNested, altParent,
         temp <- pValue(usedCutoff, usedDist, revDirec = usedDirec)
 		names(temp) <- usedFit
 		cutoffChisq <- qchisq(1 - alpha, df=(nullNested@fit - nullParent@fit)[,"df"])
-		powerChi <- mean((altNested@fit - altParent@fit)[,"Chi"] > cutoffChisq)
+		powerChi <- mean((altNested@fit - altParent@fit)[,"chisq"] > cutoffChisq)
 		temp <- c("TraditionalChi" = powerChi, temp)		
     } else {
         varyingCutoff <- getCutoff(object = nullFit, alpha = alpha, revDirec = FALSE, 

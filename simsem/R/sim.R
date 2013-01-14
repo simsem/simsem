@@ -494,12 +494,13 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 			
 			#redo with parameterEstimate function in lavaan (for coef se, std) all the way to 526
 			result <- parameterEstimates(out, standardized=TRUE)
-			extraParamIndex <- model@pt$op %in% c(">", "<", "==", ":=")
-			index <- ((model@pt$free != 0) & !(duplicated(model@pt$free))) | extraParamIndex
+			outpt <- out@ParTable
+			extraParamIndex <- outpt$op %in% c(">", "<", "==", ":=")
+			index <- ((outpt$free != 0) & !(duplicated(outpt$free))) | extraParamIndex
 			coef <- result$est[index]
-			se <- result$se[index]
+			se <- out@Fit@se[index]
 			std <- result$std.all[index]
-			lab <- lavaan:::getParameterLabels(model@pt, type="free")
+			lab <- lavaan:::getParameterLabels(outpt, type="free")
 			if(any(extraParamIndex)) lab <- c(lab, renameExtraParam(model@con$lhs, model@con$op, model@con$rhs))
 			names(coef) <- lab
 			names(se) <- lab
@@ -508,6 +509,19 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 			## 6.1. Call output function (if exists)
 			if (!is.null(outfun)) {
 				extra <- outfun(out)
+			}
+			
+			if(!is.null(miss) && miss@m > 0) {
+				if (converged %in% c(0, 3:5)) {
+					fmiOut <- out@imputed[[2]]
+					FMI1 <- fmiOut[,5][index]
+					FMI2 <- fmiOut[,6][index]
+					names(FMI1) <- lab
+					names(FMI2) <- lab
+				} 	
+			}
+			#Finish FIML FMI below! from parameterEstimates
+			if(!is.null(miss) && miss@m == 0){
 			}
 		} 
 		
@@ -544,18 +558,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 		}
 		
 
-		if(!is.null(miss) && miss@m > 0) {
-			if (converged %in% c(0, 3:5)) {
-				fmiOut <- out@imputed[[2]]
-				FMI1 <- fmiOut[,5]
-				FMI2 <- fmiOut[,6]
-				names(FMI1) <- paste0(fmiOut[,4], ".", fmiOut[,1], fmiOut[,2], fmiOut[,3]) 
-				names(FMI2) <- names(FMI1) 
-			} 	
-		}
-		#Finish FIML FMI below! from parameterEstimates
-		if(!is.null(miss) && miss@m == 0){
-		}
+
 		timing$ParseOutput <- (proc.time()[3] - start.time)
 		start.time <- proc.time()[3]
     	
@@ -578,8 +581,11 @@ reduceMisspecSet <- function(misspecSet, latent, indLab = NULL, facLab = NULL, c
     } else {
         psLab <- indLab
     }
+	ngroups <- length(misspecSet)
 	
     for (g in seq_along(misspecSet)) {
+		temp <- NULL
+		
         tpset <- misspecSet[[g]]
         tpset <- lapply(tpset, function(x) {
             if (is.null(x) || (is.vector(x) && length(x) == 0)) {
@@ -591,124 +597,127 @@ reduceMisspecSet <- function(misspecSet, latent, indLab = NULL, facLab = NULL, c
 		
         if (!is.null(tpset$LY)) {
             free <- tpset$LY != 0
-            lab <- outer(indLab, facLab[1:ncol(free)], function(x, y, op, g) paste0(g, ".", y, 
-                op, x), op = "=~", g = g)
+            lab <- outer(indLab, facLab[1:ncol(free)], function(x, y, op) paste0(y, 
+                op, x), op = "=~")
             param <- tpset$LY[free]
             names(param) <- lab[free]
-            final <- c(final, param)
+            temp <- c(temp, param)
         }
         if (!is.null(tpset$PS)) {
             free <- tpset$PS != 0 & lower.tri(tpset$PS, diag = TRUE)
-            lab <- outer(psLab[1:ncol(free)], psLab[1:ncol(free)], function(x, y, op, g) paste0(g, ".", x, op, 
-                y), op = "~~", g = g)
+            lab <- outer(psLab[1:ncol(free)], psLab[1:ncol(free)], function(x, y, op) paste0(x, op, 
+                y), op = "~~")
             param <- tpset$PS[free]
             names(param) <- lab[free]
-            final <- c(final, param)
+            temp <- c(temp, param)
         }
         if (!is.null(tpset$RPS)) {
             free <- tpset$RPS != 0 & lower.tri(tpset$RPS, diag = FALSE)
-            lab <- outer(psLab[1:ncol(free)], psLab[1:ncol(free)], function(x, y, op, g) paste0(g, ".", x, op, 
-                y), op = "~~*", g = g)
+            lab <- outer(psLab[1:ncol(free)], psLab[1:ncol(free)], function(x, y, op) paste0(x, op, 
+                y), op = "~~*")
             param <- tpset$RPS[free]
             names(param) <- lab[free]
-            final <- c(final, param)
+            temp <- c(temp, param)
         }
         if (!is.null(tpset$VPS)) {
             free <- tpset$VPS != 0
-            lab <- paste0(g, ".", psLab[1:length(free)], "~~", psLab)
+            lab <- paste0(psLab[1:length(free)], "~~", psLab)
             param <- tpset$VPS[free]
             names(param) <- lab[free]
-            final <- c(final, param)
+            temp <- c(temp, param)
         }
         if (!is.null(tpset$VE)) {
             free <- tpset$VE != 0
-            lab <- paste0(g, ".", psLab[1:length(free)], "~~*", psLab)
+            lab <- paste0(psLab[1:length(free)], "~~*", psLab)
             param <- tpset$VE[free]
             names(param) <- lab[free]
-            final <- c(final, param)
+            temp <- c(temp, param)
         }
         if (!is.null(tpset$TE)) {
             free <- tpset$TE != 0 & lower.tri(tpset$TE, diag = TRUE)
-            lab <- outer(indLab, indLab, function(x, y, op, g) paste0(g, ".", x, 
-                op, y), op = "~~", g = g)
+            lab <- outer(indLab, indLab, function(x, y, op) paste0(x, 
+                op, y), op = "~~")
             param <- tpset$TE[free]
             names(param) <- lab[free]
-            final <- c(final, param)
+            temp <- c(temp, param)
         }
         if (!is.null(tpset$RTE)) {
             free <- tpset$RTE != 0 & lower.tri(tpset$RTE, diag = FALSE)
-            lab <- outer(indLab, indLab, function(x, y, op, g) paste0(g, ".", x, 
-                op, y), op = "~~*", g = g)
+            lab <- outer(indLab, indLab, function(x, y, op) paste0(x, 
+                op, y), op = "~~*")
             param <- tpset$RTE[free]
             names(param) <- lab[free]
-            final <- c(final, param)
+            temp <- c(temp, param)
         }
         if (!is.null(tpset$VTE)) {
             free <- tpset$VTE != 0
-            lab <- paste0(g, ".", indLab, "~~", indLab)
+            lab <- paste0(indLab, "~~", indLab)
             param <- tpset$VTE[free]
             names(param) <- lab[free]
-            final <- c(final, param)
+            temp <- c(temp, param)
         }
         if (!is.null(tpset$VY)) {
             free <- tpset$VY != 0
-            lab <- paste0(g, ".", indLab, "~~*", indLab)
+            lab <- paste0(indLab, "~~*", indLab)
             param <- tpset$VY[free]
             names(param) <- lab[free]
-            final <- c(final, param)
+            temp <- c(temp, param)
         }
         if (!is.null(tpset$BE)) {
             free <- tpset$BE != 0
-            lab <- outer(psLab[1:ncol(free)], psLab[1:ncol(free)], function(x, y, op, g) paste0(g, ".", x, op, 
-                y), op = "~", g = g)
+            lab <- outer(psLab[1:ncol(free)], psLab[1:ncol(free)], function(x, y, op) paste0(x, op, 
+                y), op = "~")
             param <- tpset$BE[free]
             names(param) <- lab[free]
-            final <- c(final, param)
+            temp <- c(temp, param)
         }
         if (!is.null(tpset$AL)) {
             free <- tpset$AL != 0
-            lab <- paste0(g, ".", psLab[1:length(free)], "~1")
+            lab <- paste0(psLab[1:length(free)], "~1")
             param <- tpset$AL[free]
             names(param) <- lab[free]
-            final <- c(final, param)
+            temp <- c(temp, param)
         }
         if (!is.null(tpset$ME)) {
             free <- tpset$ME != 0
-            lab <- paste0(g, ".", psLab[1:length(free)], "~1*")
+            lab <- paste0(psLab[1:length(free)], "~1*")
             param <- tpset$ME[free]
             names(param) <- lab[free]
-            final <- c(final, param)
+            temp <- c(temp, param)
         }
         if (!is.null(tpset$TY)) {
             free <- tpset$TY != 0
-            lab <- paste0(g, ".", indLab, "~1")
+            lab <- paste0(indLab, "~1")
             param <- tpset$TY[free]
             names(param) <- lab[free]
-            final <- c(final, param)
+            temp <- c(temp, param)
         }
         if (!is.null(tpset$MY)) {
             free <- tpset$MY != 0
-            lab <- paste0(g, ".", indLab, "~1*")
+            lab <- paste0(indLab, "~1*")
             param <- tpset$MY[free]
             names(param) <- lab[free]
-            final <- c(final, param)
+            temp <- c(temp, param)
         }
         if (!is.null(tpset$GA)) {
             free <- tpset$GA != 0
-            lab <- outer(psLab[1:nrow(free)], covLab[1:ncol(free)], function(x, y, op, g) paste0(g, ".", x, op, 
-                y), op = "~", g = g)
+            lab <- outer(psLab[1:nrow(free)], covLab[1:ncol(free)], function(x, y, op) paste0(x, op, 
+                y), op = "~")
             param <- tpset$GA[free]
             names(param) <- lab[free]
-            final <- c(final, param)
+            temp <- c(temp, param)
         }
         if (!is.null(tpset$KA)) {
             free <- tpset$KA != 0
-            lab <- outer(indLab[1:nrow(free)], covLab[1:ncol(free)], function(x, y, op, g) paste0(g, ".", x, op, 
-                y), op = "~", g = g)
+            lab <- outer(indLab[1:nrow(free)], covLab[1:ncol(free)], function(x, y, op) paste0(x, op, 
+                y), op = "~")
             param <- tpset$KA[free]
             names(param) <- lab[free]
-            final <- c(final, param)
+            temp <- c(temp, param)
         }
+		
+		if(ngroups > 1) names(temp) <- paste0(g, ".", names(temp))
+		final <- c(final, temp)
 	}
     final
 }

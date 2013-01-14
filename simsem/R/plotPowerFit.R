@@ -20,6 +20,7 @@ plotPowerFit <- function(altObject, nullObject = NULL, cutoff = NULL, usedFit = 
     nrep <- dim(altObject@fit)[[1]]
 	usedFit <- cleanUsedFit(usedFit)
     if (!is.null(cutoff)) {
+		names(cutoff) <- cleanUsedFit(names(cutoff))
         usedFit <- intersect(usedFit, names(cutoff))
         cutoff <- cutoff[usedFit]
     }

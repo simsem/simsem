@@ -20,13 +20,13 @@ summary(Output)
 plotCutoff(Output, 0.05)
 getCutoff(Output, 0.05, n = 200)	
 
-Cpow <- getPower(Output, contParam = "1.f2~f1")
-Cpow2 <- getPower(Output, contParam = "1.f2~f1", nVal = 200, paramVal = seq(0.1, 0.9, 0.1))
+Cpow <- getPower(Output, contParam = "f2~f1")
+Cpow2 <- getPower(Output, contParam = "f2~f1", nVal = 200, paramVal = seq(0.1, 0.9, 0.1))
 
-targetVal <- list("1.f2~f1" = seq(0.1, 0.9, 0.1), "1.f1=~y1" = c(0.5, 0.7))
-Cpow3 <- getPower(Output, contParam = c("1.f2~f1", "1.f1=~y1"), nVal = 200, paramVal = targetVal)
+targetVal <- list("f2~f1" = seq(0.1, 0.9, 0.1), "f1=~y1" = c(0.5, 0.7))
+Cpow3 <- getPower(Output, contParam = c("f2~f1", "f1=~y1"), nVal = 200, paramVal = targetVal)
 
 findPower(Cpow, 1, 0.80)
 findPower(Cpow, 2, 0.80)
 
-plotPower(Output, powerParam = c("1.f2~f1", "1.f2=~y10"), contParam = "1.f2~f1")
+plotPower(Output, powerParam = c("f2~f1", "f2=~y10"), contParam = "f2~f1")

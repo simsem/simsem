@@ -11,6 +11,7 @@ plotPower <- function(object, powerParam, alpha = 0.05, contParam = NULL, contN 
     if (is.null(powerParam)) 
         stop("Please specify the parameter used to plot")
     j <- match(powerParam, dimnames(sig)[[2]])  # Return column indices that start with 'param'
+	if(length(j) == 0) stop("The specified parameter does not match with any parameter names in the object.")
     sig <- as.matrix(sig[, j])
     
     # Create matrix of predictors (randomly varying params)

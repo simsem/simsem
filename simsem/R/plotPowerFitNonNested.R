@@ -42,6 +42,7 @@ plotPowerFitNonNested <- function(dat2Mod1, dat2Mod2, dat1Mod1 = NULL, dat1Mod2 
     if (is.null(usedFit)) 
         usedFit <- getKeywords()$usedFit
     if (!is.null(cutoff)) {
+		names(cutoff) <- cleanUsedFit(names(cutoff))
         usedFit <- intersect(usedFit, names(cutoff))
         cutoff <- cutoff[usedFit]
     }

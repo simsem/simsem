@@ -3,7 +3,7 @@
 
 # ROC curve?
 # Fix the first rows the same when sample size is increasing
-
+# Provide option when users have population data
 
 # Find non ASCII
 
@@ -1659,30 +1659,28 @@ AL <- rep(NA, 2)
 
 TE <- diag(NA, 4)
 
-linearModel <- simParamCFA(LY=LY, PS=PS, TY=TY, AL=AL, TE=TE)
+linearModel <- estmodel(LY=LY, PS=PS, TY=TY, AL=AL, TE=TE, modelType="CFA", indLab=paste("t", 1:4, sep=""))
 
 LY2 <- matrix(1, 4, 2)
 LY2[,2] <- c(0, NA, NA, 3)
 
-unconstrainModel <- simParamCFA(LY=LY2, PS=PS, TY=TY, AL=AL, TE=TE)
+unconstrainModel <- estmodel(LY=LY2, PS=PS, TY=TY, AL=AL, TE=TE, modelType="CFA", indLab=paste("t", 1:4, sep=""))
 
-nested <- simModel(linearModel, indLab=paste("t", 1:4, sep=""))
-parent <- simModel(unconstrainModel, indLab=paste("t", 1:4, sep=""))
-
-outNested <- run(nested, Demo.growth)
-outParent <- run(parent, Demo.growth)
+outNested <- analyze(linearModel, Demo.growth)
+outParent <- analyze(unconstrainModel, Demo.growth)
 
 loadingMis <- matrix(0, 4, 2)
-loadingMis[2:3, 2] <- NA
-LYmis <- bind(loadingMis, "runif(1, -0.1, 0.1)")
+loadingMis[2:3, 2] <- "runif(1, -0.1, 0.1)"
 
+nested <- model.lavaan(outNested, LY = loadingMis)
+parent <- model.lavaan(outParent)
 
-linearMis <- simMisspecCFA(LY=LYmis)
+samplesize <- nrow(Demo.growth)
 
-simNestedNested <- runFit(model=nested, data=Demo.growth, nRep=1000, misspec=linearMis)
-simNestedParent <- runFit(model=nested, data=Demo.growth, nRep=1000, misspec=linearMis, analyzeModel=parent)
-simParentNested <- runFit(model=parent, data=Demo.growth, nRep=1000, analyzeModel=nested)
-simParentParent <- runFit(model=parent, data=Demo.growth, nRep=1000)
+simNestedNested <- sim(1000, n = samplesize, model=nested, generate=nested)
+simNestedParent <- sim(1000, n = samplesize, model=parent, generate=nested)
+simParentNested <- sim(1000, n = samplesize, model=nested, generate=parent)
+simParentParent <- sim(1000, n = samplesize, model=parent, generate=parent)
 
 pValueNested(outNested, outParent, simNestedNested, simNestedParent)
 getPowerFitNested(simParentNested, simParentParent, nullNested=simNestedNested, nullParent=simNestedParent)
@@ -1716,20 +1714,13 @@ facCorB <- diag(4)
 facCorB[2, 4] <- facCorB[4, 2] <- NA
 RPSB <- binds(facCorB, 0.3)
 
-modelA <- simSetCFA(LY=LY, TY=TY, RTE=RTE, VTE=VTE, AL=AL, VPS=VPS, RPS=RPSA)
-modelB <- simSetCFA(LY=LY, TY=TY, RTE=RTE, VTE=VTE, AL=AL, VPS=VPS, RPS=RPSB)
+modelA <- model(LY=LY, TY=TY, RTE=RTE, VTE=VTE, AL=AL, VPS=VPS, RPS=RPSA, modelType="CFA")
+modelB <- model(LY=LY, TY=TY, RTE=RTE, VTE=VTE, AL=AL, VPS=VPS, RPS=RPSB, modelType="CFA")
 
-dataA <- simData(modelA, 200)
-dataB <- simData(modelB, 200)
-
-analyzeA <- simModel(modelA)
-analyzeB <- simModel(modelB)
-
-
-outAA <- sim(1000, dataA, analyzeA)
-outBA <- sim(1000, dataB, analyzeA)
-outAB <- sim(1000, dataA, analyzeB)
-outBB <- sim(1000, dataB, analyzeB)
+outAA <- sim(1000, n = 200, model = modelA, generate = modelA)
+outAB <- sim(1000, n = 200, model = modelB, generate = modelA)
+outBA <- sim(1000, n = 200, model = modelA, generate = modelB)
+outBB <- sim(1000, n = 200, model = modelB, generate = modelB)
 
 # anova for nonnested model comparison
 anova(outAA, outAB)

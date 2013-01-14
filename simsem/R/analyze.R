@@ -53,7 +53,7 @@ analyze <- function(model, data, package = "lavaan", miss = NULL,
 		}
         if (!is.null(aux)) {
             library(semTools)	
-			
+			if(is.numeric(aux)) aux <- colnames(data)[aux]
 			attribute <- list(object=model@pt, aux = aux, data = data, group = groupLab, 
                 model.type = model@modelType, missing = missing)
 			attribute <- c(attribute, args)

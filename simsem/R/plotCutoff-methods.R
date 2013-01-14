@@ -6,9 +6,14 @@ setMethod("plotCutoff", signature(object = "data.frame"), definition = function(
     nameVector1 = NULL, nameVector2 = NULL, alpha = NULL, useContour = T, cutoff2 = NULL) {
 	usedFit <- cleanUsedFit(usedFit)
     object <- as.data.frame(object[, usedFit])
-    cutoff <- cutoff[usedFit]
-    if (!is.null(cutoff2)) 
+	if(!is.null(cutoff)) {
+		names(cutoff) <- cleanUsedFit(names(cutoff))
+		cutoff <- cutoff[usedFit]
+	}
+    if (!is.null(cutoff2)) {
+		names(cutoff2) <- cleanUsedFit(names(cutoff2))
         cutoff2 <- cutoff2[usedFit]
+	}
     object <- as.data.frame(object[, !apply(object, 2, function(vec) all(is.na(vec)))])
     colnames(object) <- usedFit
     if (ncol(object) == 2) {

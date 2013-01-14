@@ -91,12 +91,12 @@ setMethod("anova", signature(object = "SimResult"), function(object, ...) {
     
     # collect statistics for each model
     Df <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")$df)), ncol = length(mods))
-    Chi <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")$Chi)), ncol = length(mods))
-    CFI <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")$CFI)), ncol = length(mods))
-    TLI <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")$TLI)), ncol = length(mods))
-    RMSEA <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")$RMSEA)), ncol = length(mods))
-    AIC <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")$AIC)), ncol = length(mods))
-    BIC <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")$BIC)), ncol = length(mods))
+    Chi <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")$chisq)), ncol = length(mods))
+    CFI <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")$cfi)), ncol = length(mods))
+    TLI <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")$tli)), ncol = length(mods))
+    RMSEA <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")$rmsea)), ncol = length(mods))
+    AIC <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")$aic)), ncol = length(mods))
+    BIC <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")$bic)), ncol = length(mods))
     
     # difference statistics. Taking the absolute value so order models entered
     # doesn't matter
