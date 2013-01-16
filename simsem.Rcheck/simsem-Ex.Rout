@@ -5338,6 +5338,10 @@ $missRaw
 > 
 > ### ** Examples
 > 
+> # Please go to www.simsem.org for more examples.
+> 
+> # Example of using simsem model template
+> 
 > loading <- matrix(0, 6, 2)
 > loading[1:3, 1] <- NA
 > loading[4:6, 2] <- NA
@@ -5354,7 +5358,7 @@ $missRaw
 > CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
 > 
 > # In reality, more than 5 replications are needed.
-> Output <- sim(5, CFA.Model,n=200)
+> Output <- sim(5, CFA.Model, n=200)
 Loading required package: parallel
 > summary(Output)
 RESULT OBJECT
@@ -5420,6 +5424,142 @@ rmsea  0.995  0.070  0.070  1.000 -0.980 -0.985  0.944
 cfi   -0.956  0.074  0.074 -0.980  1.000  0.935 -0.906
 tli   -0.995 -0.120 -0.120 -0.985  0.935  1.000 -0.918
 srmr   0.947  0.353  0.353  0.944 -0.906 -0.918  1.000
+================== Replications =====================
+Number of replications = 5 
+Number of converged replications = 5 
+Number of nonconverged replications: 
+   1. Nonconvergent Results = 0 
+   2. Nonconvergent results from multiple imputation = 0 
+   3. At least one SE were negative or NA = 0 
+   4. At least one variance estimates were negative = 0 
+   5. At least one correlation estimates were greater than 1 or less than -1 = 0 
+> 
+> # Example of using simsem model template
+> 
+> popModel <- "
++ f1 =~ 0.7*y1 + 0.7*y2 + 0.7*y3
++ f2 =~ 0.7*y4 + 0.7*y5 + 0.7*y6
++ f1 ~~ 1*f1
++ f2 ~~ 1*f2
++ f1 ~~ 0.5*f2
++ y1 ~~ 0.49*y1
++ y2 ~~ 0.49*y2
++ y3 ~~ 0.49*y3
++ y4 ~~ 0.49*y4
++ y5 ~~ 0.49*y5
++ y6 ~~ 0.49*y6
++ "
+> 
+> analysisModel <- "
++ f1 =~ y1 + y2 + y3
++ f2 =~ y4 + y5 + y6
++ "
+> 
+> Output <- sim(5, model=analysisModel, n=200, generate=popModel, std.lv=TRUE)
+> summary(Output)
+RESULT OBJECT
+Model Type
+[1] "lavaan"
+========= Fit Indices Cutoffs ============
+           Alpha
+Fit Indices      0.1     0.05     0.01    0.001     Mean     SD
+      chisq   22.988   25.092   26.775   27.153   14.438  8.218
+      aic   3103.496 3114.409 3123.140 3125.104 3065.072 41.744
+      bic   3146.374 3157.288 3166.018 3167.982 3107.950 41.744
+      rmsea    0.095    0.102    0.108    0.109    0.050  0.046
+      cfi      0.955    0.948    0.942    0.941    0.979  0.024
+      tli      0.915    0.902    0.891    0.889    0.963  0.048
+      srmr     0.056    0.061    0.065    0.066    0.040  0.017
+========= Parameter Estimates and Standard Errors ============
+       Estimate.Average Estimate.SD Average.SE Power..Not.equal.0. Std.Est
+f1=~y1            0.663       0.048      0.067                   1   0.716
+f1=~y2            0.698       0.045      0.069                   1   0.734
+f1=~y3            0.669       0.043      0.072                   1   0.678
+f2=~y4            0.653       0.063      0.073                   1   0.666
+f2=~y5            0.721       0.135      0.073                   1   0.719
+f2=~y6            0.721       0.077      0.076                   1   0.706
+y1~~y1            0.417       0.051      0.064                   1   0.486
+y2~~y2            0.416       0.080      0.068                   1   0.459
+y3~~y3            0.527       0.049      0.073                   1   0.540
+y4~~y4            0.533       0.067      0.074                   1   0.555
+y5~~y5            0.462       0.078      0.077                   1   0.476
+y6~~y6            0.520       0.126      0.082                   1   0.497
+f1~~f2            0.477       0.126      0.078                   1   0.477
+       Std.Est.SD Average.Param Average.Bias Coverage
+f1=~y1      0.034          0.70       -0.037      1.0
+f1=~y2      0.050          0.70       -0.002      1.0
+f1=~y3      0.017          0.70       -0.031      1.0
+f2=~y4      0.036          0.70       -0.047      0.8
+f2=~y5      0.095          0.70        0.021      0.6
+f2=~y6      0.079          0.70        0.021      1.0
+y1~~y1      0.047          0.49       -0.073      0.6
+y2~~y2      0.072          0.49       -0.074      0.8
+y3~~y3      0.023          0.49        0.037      1.0
+y4~~y4      0.047          0.49        0.043      1.0
+y5~~y5      0.131          0.49       -0.028      1.0
+y6~~y6      0.116          0.49        0.030      0.8
+f1~~f2      0.126          0.50       -0.023      0.6
+========= Correlation between Fit Indices ============
+       chisq    aic    bic  rmsea    cfi    tli   srmr
+chisq  1.000  0.261  0.261  0.968 -0.995 -0.997  0.989
+aic    0.261  1.000  1.000  0.434 -0.248 -0.304  0.289
+bic    0.261  1.000  1.000  0.434 -0.248 -0.304  0.289
+rmsea  0.968  0.434  0.434  1.000 -0.956 -0.967  0.940
+cfi   -0.995 -0.248 -0.248 -0.956  1.000  0.997 -0.985
+tli   -0.997 -0.304 -0.304 -0.967  0.997  1.000 -0.992
+srmr   0.989  0.289  0.289  0.940 -0.985 -0.992  1.000
+================== Replications =====================
+Number of replications = 5 
+Number of converged replications = 5 
+Number of nonconverged replications: 
+   1. Nonconvergent Results = 0 
+   2. Nonconvergent results from multiple imputation = 0 
+   3. At least one SE were negative or NA = 0 
+   4. At least one variance estimates were negative = 0 
+   5. At least one correlation estimates were greater than 1 or less than -1 = 0 
+> 
+> # Example of using population data
+> 
+> pop <- data.frame(y1 = rnorm(100000, 0, 1), y2 = rnorm(100000, 0, 1))
+> 
+> covModel <- "
++ y1 ~~ y2
++ "
+> 
+> Output <- sim(5, model=covModel, n=200, rawData=pop)
+> summary(Output)
+RESULT OBJECT
+Model Type
+[1] "lavaan"
+========= Fit Indices Cutoffs ============
+           Alpha
+Fit Indices      0.1     0.05     0.01    0.001     Mean     SD
+      chisq    0.000    0.000    0.000    0.000    0.000  0.000
+      aic   1150.784 1152.533 1153.933 1154.247 1131.608 26.310
+      bic   1160.679 1162.428 1163.827 1164.142 1141.503 26.310
+      rmsea    0.000    0.000    0.000    0.000    0.000  0.000
+      cfi      0.100    0.050    0.010    0.001    0.500  0.707
+      tli      1.000    1.000    1.000    1.000    1.000  0.000
+      srmr     0.000    0.000    0.000    0.000    0.000  0.000
+========= Parameter Estimates and Standard Errors ============
+       Estimate.Average Estimate.SD Average.SE Power..Not.equal.0. Std.Est
+y1~~y2           -0.032       0.054      0.069                   0  -0.033
+y1~~y1            0.967       0.123      0.097                   1   1.000
+y2~~y2            0.997       0.060      0.100                   1   1.000
+       Std.Est.SD Average.Param Average.Bias Coverage
+y1~~y2      0.054        -0.043        0.012      1.0
+y1~~y1      0.000         0.995       -0.028      0.8
+y2~~y2      0.000         1.017       -0.019      1.0
+========= Correlation between Fit Indices ============
+Warning in cor(fit) : the standard deviation is zero
+      chisq    aic    bic rmsea cfi tli   srmr
+chisq 1.000  0.088  0.088    NA  NA  NA  0.901
+aic   0.088  1.000  1.000    NA  NA  NA -0.302
+bic   0.088  1.000  1.000    NA  NA  NA -0.302
+rmsea    NA     NA     NA     1  NA  NA     NA
+cfi      NA     NA     NA    NA   1  NA     NA
+tli      NA     NA     NA    NA  NA   1     NA
+srmr  0.901 -0.302 -0.302    NA  NA  NA  1.000
 ================== Replications =====================
 Number of replications = 5 
 Number of converged replications = 5 
@@ -6117,7 +6257,7 @@ detaching 'package:parallel'
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  6 0.1 6.59 NA NA 
+Time elapsed:  7.33 0.16 7.63 NA NA 
 > grDevices::dev.off()
 null device 
           1 

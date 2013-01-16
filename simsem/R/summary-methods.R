@@ -92,8 +92,10 @@ setMethod("summary", signature = "SimResult", definition = function(object, digi
 		if (length(unique(object@pmMAR)) > 1) 
 			cat("NOTE: The percent of MAR is varying.\n")
 		if (!is.null(object@paramValue)) {
-			if ((ncol(object@coef) != ncol(object@paramValue)) | ((ncol(object@coef) == 
-				ncol(object@paramValue)) && any(sort(colnames(object@coef)) != sort(colnames(object@paramValue))))) 
+			targetVar <- match(colnames(object@coef), colnames(object@paramValue))
+			targetVar <- targetVar[!is.na(targetVar)]
+			targetVar <- colnames(object@paramValue)[targetVar]
+			if ((ncol(object@coef) != length(targetVar)) || !all(colnames(object@coef) == targetVar)) 
 				cat("NOTE: The data generation model is not the same as the analysis model. See the summary of the population underlying data generation by the summaryPopulation function.\n")
 		}
 	} else {

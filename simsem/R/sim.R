@@ -1,32 +1,101 @@
 
-sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = NULL, miss = NULL, datafun = NULL, 
-    outfun = NULL, pmMCAR = NULL, pmMAR = NULL, facDist = NULL, indDist = NULL, errorDist = NULL, 
+sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = NULL, miss = NULL, datafun = NULL, lavaanfun = "sem", outfun = NULL, pmMCAR = NULL, pmMAR = NULL, facDist = NULL, indDist = NULL, errorDist = NULL, 
     sequential = FALSE, modelBoot = FALSE, realData = NULL, covData = NULL, maxDraw = 50, misfitType = "f0", 
     misfitBounds = NULL, averageNumMisspec = FALSE, optMisfit = NULL, optDraws = 50, createOrder = c(1, 2, 3), 
     aux = NULL, seed = 123321, silent = FALSE, multicore = FALSE, cluster = FALSE, 
     numProc = NULL, paramOnly = FALSE, dataOnly = FALSE, smartStart = FALSE, ...) {
+
 	#Future plans. Add summaryTime option. Or include as an option in summary. Guess time forfull sim
+	#Add inspect function for anything
 	#Update function. Takes results object. Or takes model object.
-	#Speed things: Reference class, functions in c or c++ (maybe drawparam), look at sugar functions
-	#Reference class for model object?
+	#Speed things: functions in c or c++ (maybe drawparam), look at sugar functions
 	#Difference percent missing in different groups
     start.time0 <- start.time <- proc.time()[3]
     timing <- list()
     require(parallel)
     RNGkind("L'Ecuyer-CMRG")
-    
+ 
+    set.seed(seed)
+ 
+	isPopulation <- FALSE
+	popData <- NULL
+	if(!is.null(rawData)) {
+		if(!is.null(nRep) & !is.null(n)) {
+			isPopulation <- TRUE
+			popData <- rawData
+			rawData <- NULL
+		}
+	}
+	
+	lavaanGenerate <- FALSE
+	if(!is.null(generate)) {
+		if(is.character(generate)) {
+			generate <- list(model = generate)
+			lavaanGenerate <- TRUE
+		} else if (is.partable(generate)) {
+			generate <- list(model = generate)
+			lavaanGenerate <- TRUE
+		} else if (is.lavaancall(generate)) {
+			lavaanGenerate <- TRUE
+		} else if (is(generate, "lavaan")) {
+			generate <- list(model = generate@ParTable)
+			lavaanGenerate <- TRUE
+		} else if (is(generate, "SimSem")) {
+			# Do nothing
+		} else {
+			stop("Please specify an appropriate object for the 'generate' argument: simsem model template, lavaan script, lavaan parameter table, or list of options for the 'simulateData' function.")
+		}
+	}
+	
+	lavaanAnalysis <- FALSE
+	if(is.character(model)) {
+		model <- list(model = model)
+		lavaanAnalysis <- TRUE
+	} else if (is.partable(model)) {
+		model <- list(model = model)
+		lavaanAnalysis <- TRUE
+	} else if (is.lavaancall(model)) {
+		lavaanAnalysis <- TRUE
+	} else if (is(model, "lavaan")) {
+		model <- list(model = model@ParTable)
+		lavaanAnalysis <- TRUE
+	} else if (is(model, "SimSem")) {
+		# Do nothing
+	} else {
+		stop("Please specify an appropriate object for the 'model' argument: simsem model template, lavaan script, lavaan parameter table, or list of options for the 'lavaan' function.")
+	}
+		
     ## 1. Set up correct data generation template (move inside the runRep).
 
-    set.seed(seed)
 	
 	# Find the number of groups
 	#Change in draw param so we always have a nested list (even with 1 group).
 	#Then get rid of the if/else.
 	ngroups <- 1
 	if(!is.null(generate)) {
-		ngroups <- max(generate@pt$group)
+		if(lavaanGenerate) {
+			if(is.partable(generate$model)) {
+				ngroups <- max(generate$model$group)
+			} else {
+				if(is.list(n)) ngroups <- length(n)
+			}
+		} else {
+			ngroups <- max(generate@pt$group)
+		}
 	} else {
-		ngroups <- max(model@pt$group)
+		if(lavaanAnalysis) {
+			if(is.partable(model$model)) {
+				ngroups <- max(model$model$group)
+			} else {
+				if(!is.null(rawData) && !is.null(model$group)) {
+					ngroups <- length(unique(rawData[,model$group]))
+				} else {
+					if(is.list(n)) ngroups <- length(n)
+				}
+			}		
+		} else {
+			ngroups <- max(model@pt$group)
+		}
 	}
 
     timing$SimulationParams <- (proc.time()[3] - start.time0)
@@ -140,26 +209,36 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
             simConds[[i]][[4]] <- pmMAR[i]
             simConds[[i]][[5]] <- numseed[[i]]
         }
-        
+		if (isPopulation) {
+			if (is.matrix(popData)) {
+				popData <- data.frame(popData)
+			}
+			
+			simConds[[nRep + 1]] <- list()
+			simConds[[nRep + 1]][[1]] <- NULL
+			simConds[[nRep + 1]][[2]] <- NULL
+			simConds[[nRep + 1]][[3]] <- 0
+			simConds[[nRep + 1]][[4]] <- 0
+			simConds[[nRep + 1]][[5]] <- s
+		}
     } else if (is.list(rawData)) {
-        
-        if (is.data.frame(rawData[[1]])) {
-            # Do nothing
-        } else if (is.matrix(rawData[[1]])) {
-            rawData <- lapply(rawData, data.frame)
-        } else {
-            stop("Check the list object specified in the 'rawData' argument; list must either contain matrices or data frames")
-        }
+		if (is.data.frame(rawData[[1]])) {
+			# Do nothing
+		} else if (is.matrix(rawData[[1]])) {
+			rawData <- lapply(rawData, data.frame)
+		} else {
+			stop("Check the list object specified in the 'rawData' argument; list must either contain matrices or data frames")
+		}
 		
-        for (i in seq_along(rawData)) {
-            simConds[[i]] <- list()
-            simConds[[i]][[1]] <- rawData[[i]]
-            simConds[[i]][[2]] <- NA
-            simConds[[i]][[3]] <- pmMCAR[i]
-            simConds[[i]][[4]] <- pmMAR[i]
-            simConds[[i]][[5]] <- numseed[[i]]
-        }
-    } else {
+		for (i in seq_along(rawData)) {
+			simConds[[i]] <- list()
+			simConds[[i]][[1]] <- rawData[[i]]
+			simConds[[i]][[2]] <- NA
+			simConds[[i]][[3]] <- pmMCAR[i]
+			simConds[[i]][[4]] <- pmMAR[i]
+			simConds[[i]][[5]] <- numseed[[i]]
+		}	
+	} else {
         stop("Check the object specified in 'rawData' argument; object must either be a SimData class or a list of data frames.")
     }
     
@@ -179,29 +258,38 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
         if (sys == "windows") {
             cl <- makeCluster(rep("localhost", numProc), type = "SOCK")
             Result.l <- clusterApplyLB(cl, simConds, runRep, model = model, generate = generate, 
-                miss = miss, datafun = datafun, outfun = outfun, silent = silent, 
+                miss = miss, datafun = datafun, lavaanfun = lavaanfun, outfun = outfun, silent = silent, 
                 facDist = facDist, indDist = indDist, errorDist = errorDist, sequential = sequential, 
                 realData = realData, covData = covData, maxDraw = maxDraw, misfitBounds = misfitBounds, 
-                averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, createOrder = createOrder,
-                misfitType = misfitType, aux = aux, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart, ...)
+                averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, createOrder = createOrder, misfitType = misfitType, aux = aux, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart, popData = popData, ...)
             stopCluster(cl)
         } else {
             Result.l <- mclapply(simConds, runRep, model = model, generate = generate, 
-                miss = miss, datafun = datafun, outfun = outfun, silent = silent, 
+                miss = miss, datafun = datafun, lavaanfun = lavaanfun, outfun = outfun, silent = silent, 
                 facDist = facDist, indDist = indDist, errorDist = errorDist, sequential = sequential, 
                 realData = realData, covData = covData, maxDraw = maxDraw, misfitBounds = misfitBounds, 
                 averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, createOrder = createOrder, 
-                misfitType = misfitType, aux = aux, mc.cores = numProc, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart, ...)
+                misfitType = misfitType, aux = aux, mc.cores = numProc, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart, popData = popData, ...)
         }
     } else {
         Result.l <- lapply(simConds, runRep, model = model, generate = generate, 
-            miss = miss, datafun = datafun, outfun = outfun, silent = silent, facDist = facDist, 
+            miss = miss, datafun = datafun, lavaanfun = lavaanfun, outfun = outfun, silent = silent, facDist = facDist, 
             indDist = indDist, errorDist = errorDist, sequential = sequential, realData = realData, covData = covData, 
             maxDraw = maxDraw, misfitBounds = misfitBounds, averageNumMisspec = averageNumMisspec, 
             optMisfit = optMisfit, optDraws = optDraws,  createOrder = createOrder, misfitType = misfitType, 
-            aux = aux, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart, ...)
+            aux = aux, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart, popData = popData, ...)
     }
 
+	################## Extract out popData ##################################
+	
+	popResult <- NULL
+	if(isPopulation) {
+		popResult <- Result.l[[nRep + 1]]
+		Result.l[[nRep + 1]] <- NULL
+	}
+	
+	
+	
 	if(dataOnly) {
 		## Return data when dataOnly is requested
 		return(Result.l)
@@ -271,6 +359,26 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 			if (nrow(unique(param)) == 1) 
 				param <- unique(param)
 		}
+		
+		if(isPopulation) {
+			param <- as.data.frame(t(popResult$coef))
+		}
+		
+		if(lavaanGenerate) {
+			if(!is.partable(generate$model)) {
+				lavaanifyargs <- formals(lavaanify)
+				commonname <- intersect(names(lavaanifyargs), names(generate))
+				temp <- generate[commonname]
+				temp$ngroups <- ngroups
+				pt <- do.call("lavaanify", temp)
+			} else {
+				pt <- generate$model
+			}
+			param <- pt$ustart
+			names(param) <- lavaan:::getParameterLabels(pt)
+			param <- as.data.frame(t(param))
+		}
+		
 		if (!is.null(FMI1.l[[1]])) {
 			FMI1 <- as.data.frame(do.call(rbind, FMI1.l))
 			if (sum(dim(FMI1)) == 0) 
@@ -313,11 +421,29 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 		timing$CombineResults <- (proc.time()[3] - start.time)
 		start.time <- proc.time()[3]
 		
-		nobs <- as.data.frame(n)
-		n <- Reduce("+", n)
-		colnames(nobs) <- 1:ngroups
+		if(!is.null(rawData) & !isPopulation) {
+			if(ngroups > 1) {
+				if(lavaanAnalysis) {
+					groupLab <- model$group
+				} else {
+					groupLab <- model@groupLab
+				}
+				nobs <- as.data.frame(t(sapply(rawData, function(x, col) table(x[,col]), col = groupLab)))
+			} else {
+				nobs <- as.data.frame(sapply(rawData, nrow))
+			}
+			n <- apply(nobs, 2, "+")
+			colnames(nobs) <- 1:ngroups		
+		} else {
+			nobs <- as.data.frame(n)
+			n <- Reduce("+", n)
+			colnames(nobs) <- 1:ngroups
+		}
 		
-		Result <- new("SimResult", modelType = model@modelType, nRep = nRep, coef = coef, 
+		modelType <- "lavaan"
+		if(!lavaanAnalysis) modelType <- model@modelType
+		
+		Result <- new("SimResult", modelType = modelType, nRep = nRep, coef = coef, 
 			se = se, fit = fit, converged = converged, seed = seed, paramValue = param, 
 			misspecValue = popMis, popFit = misfitOut, FMI1 = FMI1, FMI2 = FMI2, 
 			stdCoef = std, n = n, nobs=nobs, pmMCAR = pmMCAR, pmMAR = pmMAR, extraOut = extra,
@@ -330,11 +456,11 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 
 # runRep: Run one replication
 
-runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL, 
+runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL, lavaanfun = NULL, 
     outfun = NULL, facDist = NULL, indDist = NULL, indLab = NULL, errorDist = NULL, 
     sequential = FALSE, realData = NULL, covData = NULL, silent = FALSE, modelBoot = FALSE, maxDraw = 50, 
     misfitType = "f0", misfitBounds = NULL, averageNumMisspec = NULL, optMisfit = NULL, 
-    optDraws = 50, createOrder = c(1, 2, 3), aux = NULL, paramOnly = FALSE, dataOnly = FALSE, smartStart = TRUE, ...) {
+    optDraws = 50, createOrder = c(1, 2, 3), aux = NULL, paramOnly = FALSE, dataOnly = FALSE, smartStart = TRUE, popData = NULL, ...) {
     start.time0 <- start.time <- proc.time()[3]
     timing <- list()
     #Check why some are NULL and some are NA
@@ -347,11 +473,11 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
     FMI1 <- NULL
     FMI2 <- NULL
 	labelParam <- NULL
+	paramSet <- NULL
     converged <- 1
     n <- simConds[[2]]
     pmMCAR <- simConds[[3]]
     pmMAR <- simConds[[4]]
-    dgen <- model@dgen
     RNGkind("L'Ecuyer-CMRG")
     assign(".Random.seed", simConds[[5]], envir = .GlobalEnv)
     specifiedGenerate <- TRUE
@@ -364,18 +490,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 	#Two things to think about: 1. Only do this when the generating and analysis models are different
 	#2. Why do we do this for each rep? Move up to sim/model and pass values to runRep. Add 2 slots to SimSem class, put it there.
 	#3. Also don't do this with rawData
-    indLabGen <- NULL
-	if (generate@modelType == "path") {
-		indLabGen <- unique(generate@pt$lhs)
-	} else {
-		indLabGen <- unique(generate@pt$rhs[generate@pt$op == "=~"])
-	}
-	facLabGen <- NULL
-	if (generate@modelType != "path") {
-		facLabGen <- unique(generate@pt$lhs[generate@pt$op == "=~"])
-	}
-	covLabGen <- generate@pt$lhs[generate@pt$op == "~1" & generate@pt$exo == 1]
-	if (length(covLabGen) == 0) covLabGen <- NULL
+
     ## 1. Create a missing data template from simulation parameters.
 	##Creates SimMissing object if none exists (but pmMCAR or pmMAR are specified)
 	##If a SimMissing object does exist it sets pmMCAR and pmMAR based on the SimMissing object
@@ -396,7 +511,46 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
     
     ## 2. Generate data (data) & store parameter values (paramSet)
     data <- simConds[[1]]  # either a paramSet or raw data
+	if (!is.null(popData)) {
+		if(is.null(n)) {
+			data <- popData
+		} else {
+			groupLab <- NULL
+			if(is(model, "SimSem")) {
+				groupLab <- model@groupLab
+			} else {
+				groupLab <- model$group
+			}
+			if(!is.null(groupLab)) {
+				data <- split(popData, popData[,groupLab])
+				data <- mapply(function(dat, ss) dat[sample(nrow(dat), ss),], dat=data, ss=n, SIMPLIFY=FALSE)
+				data <- data.frame(do.call(rbind, data))
+			} else {
+				data <- popData[sample(nrow(popData), n),]
+			}
+		}
+	}
+	
+	if (is.lavaancall(generate)) {
+		generate$sample.nobs <- n
+		data <- do.call("simulateData", generate)
+	}
+	
     if (is.null(data)) {
+		# Label variables for creating labels later
+		indLabGen <- NULL
+		if (generate@modelType == "path") {
+			indLabGen <- unique(generate@pt$lhs)
+		} else {
+			indLabGen <- unique(generate@pt$rhs[generate@pt$op == "=~"])
+		}
+		facLabGen <- NULL
+		if (generate@modelType != "path") {
+			facLabGen <- unique(generate@pt$lhs[generate@pt$op == "=~"])
+		}
+		covLabGen <- generate@pt$lhs[generate@pt$op == "~1" & generate@pt$exo == 1]
+		if (length(covLabGen) == 0) covLabGen <- NULL
+	
 		# Need to draw parameters
 		genout <- generate(model = generate, n = n, maxDraw = maxDraw, misfitBounds = misfitBounds, 
 			misfitType = misfitType, averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, 
@@ -446,19 +600,29 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 		# Impute missing and run results
 		# Will use analyze either when there is a missing object or auxiliary variables specified. 
 		# If users provide their own data there maybe a case with auxiliary variables and no missing object
-		if (!is.null(miss) | !is.null(aux)) {
+		if (is.lavaancall(model)) {
+			model$data <- data
+			model <- c(model, list(...))
 			if (silent) {
-				invisible(capture.output(suppressMessages(try(out <- analyze(model, data, 
-					aux = aux, miss = miss, ...), silent = TRUE))))
+				invisible(capture.output(suppressMessages(try(out <- analyzeLavaan(model, lavaanfun, miss, aux), silent = TRUE))))
 			} else {
-				try(out <- analyze(model, data, aux = aux, miss = miss, ...))
+				try(out <- analyzeLavaan(model, lavaanfun, miss, aux))
 			}
 		} else {
-			if (silent) {
-				invisible(capture.output(suppressMessages(try(out <- anal(model, data, ...), 
-					silent = TRUE))))
+			if (!is.null(miss) | !is.null(aux)) {
+				if (silent) {
+					invisible(capture.output(suppressMessages(try(out <- analyze(model, data, 
+						aux = aux, miss = miss, ...), silent = TRUE))))
+				} else {
+					try(out <- analyze(model, data, aux = aux, miss = miss, ...))
+				}
 			} else {
-				try(out <- anal(model, data, ...))
+				if (silent) {
+					invisible(capture.output(suppressMessages(try(out <- anal(model, data, ...), 
+						silent = TRUE))))
+				} else {
+					try(out <- anal(model, data, ...))
+				}
 			}
 		}
     }
@@ -501,7 +665,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 			se <- out@Fit@se[index]
 			std <- result$std.all[index]
 			lab <- lavaan:::getParameterLabels(outpt, type="free")
-			if(any(extraParamIndex)) lab <- c(lab, renameExtraParam(model@con$lhs, model@con$op, model@con$rhs))
+			if(!is.lavaancall(model) && any(extraParamIndex)) lab <- c(lab, renameExtraParam(model@con$lhs, model@con$op, model@con$rhs))
 			names(coef) <- lab
 			names(se) <- lab
 			names(std) <- lab
@@ -888,4 +1052,12 @@ parsePopulation <- function(paramSet, draws, group = 1) {
 		ustart <- c(ustart, startingVal(rep(0, nz), rep(0, nz), smart = TRUE, symm = FALSE))
 	}
     return(ustart)
+}
+
+is.partable <- function(object) {
+	is.list(object) && all(names(object) %in% c("id", "lhs", "op", "rhs", "user", "group", "free", "ustart", "exo", "label", "eq.id", "unco"))
+}
+
+is.lavaancall <- function(object) {
+	is.list(object) && ("model" %in% names(object))
 }

@@ -1,7 +1,7 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2012.12.18)  14 JAN 2013 14:16
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2012.12.18)  16 JAN 2013 00:08
 entering extended mode
-**C:/Users/sunthud/AppData/Local/Temp/RtmpUFLXKr/Rd2pdf11dc106a3297/Rd2.tex
-(C:/Users/sunthud/AppData/Local/Temp/RtmpUFLXKr/Rd2pdf11dc106a3297/Rd2.tex
+**C:/Users/sunthud/AppData/Local/Temp/RtmpmGztbp/Rd2pdf1c08eea7b90/Rd2.tex
+(C:/Users/sunthud/AppData/Local/Temp/RtmpmGztbp/Rd2pdf1c08eea7b90/Rd2.tex
 LaTeX2e <2011/06/27>
 Babel <v3.8m> and hyphenation patterns for english, afrikaans, ancientgreek, ar
 abic, armenian, assamese, basque, bengali, bokmal, bulgarian, catalan, coptic, 
@@ -618,7 +618,7 @@ File: latin1.def 2008/03/30 v1.1d Input encoding file
 \@indexfile=\write3
 
 Writing index file Rd2.idx
-(C:\Users\sunthud\AppData\Local\Temp\RtmpUFLXKr\Rd2pdf11dc106a3297\Rd2.aux)
+(C:\Users\sunthud\AppData\Local\Temp\RtmpmGztbp\Rd2pdf1c08eea7b90\Rd2.aux)
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 8.
 LaTeX Font Info:    ... okay on input line 8.
 LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 8.
@@ -673,8 +673,8 @@ LaTeX Info: Redefining \ref on input line 8.
 LaTeX Info: Redefining \pageref on input line 8.
 LaTeX Info: Redefining \nameref on input line 8.
 
-(C:\Users\sunthud\AppData\Local\Temp\RtmpUFLXKr\Rd2pdf11dc106a3297\Rd2.out)
-(C:\Users\sunthud\AppData\Local\Temp\RtmpUFLXKr\Rd2pdf11dc106a3297\Rd2.out)
+(C:\Users\sunthud\AppData\Local\Temp\RtmpmGztbp\Rd2pdf1c08eea7b90\Rd2.out)
+(C:\Users\sunthud\AppData\Local\Temp\RtmpmGztbp\Rd2pdf1c08eea7b90\Rd2.out)
 \@outlinefile=\write4
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <24.88> not available
 (Font)              Font shape `T1/ptm/b/n' tried instead on input line 9.
@@ -698,7 +698,7 @@ LaTeX Font Info:    Try loading font information for T1+phv on input line 30.
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\t1phv.fd"
 File: t1phv.fd 2001/06/04 scalable font definitions for T1/phv.
 )
-(C:\Users\sunthud\AppData\Local\Temp\RtmpUFLXKr\Rd2pdf11dc106a3297\Rd2.toc
+(C:\Users\sunthud\AppData\Local\Temp\RtmpmGztbp\Rd2pdf1c08eea7b90\Rd2.toc
 [1
 
 
@@ -1477,81 +1477,98 @@ ov, modelType="SEM", indLab=paste("y", 1:7, sep=""))[]
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [92] [93]
-Overfull \hbox (6.08833pt too wide) in paragraph at lines 5255--5256
+) [92]
+Overfull \hbox (64.78088pt too wide) in paragraph at lines 5211--5211
+ []\T1/fi4/m/n/10 lavaanfun = "sem", outfun=NULL, pmMCAR = NULL, pmMAR = NULL, 
+facDist = NULL, indDist = NULL,[] 
+ []
+
+
+Overfull \hbox (6.4586pt too wide) in paragraph at lines 5233--5234
+\T1/fi4/m/n/10 lavaan \T1/ptm/m/n/10 script or \T1/fi4/m/n/10 lavaan \T1/ptm/m/
+n/10 pa-ram-e-ter ta-ble (for data gen-er-a-tion; see [][]\T1/fi4/m/n/10 simula
+teData[][][]\T1/ptm/m/n/10 ),
+ []
+
+[93]
+Overfull \hbox (6.08833pt too wide) in paragraph at lines 5258--5259
 []\T1/ptm/m/n/10 Factor dis-tri-bu-tions. Ei-ther a list of [][]\T1/fi4/m/n/10 
 SimDataDist[][][] \T1/ptm/m/n/10 ob-jects or a sin-gle [][]\T1/fi4/m/n/10 SimDa
 taDist[][][]
  []
 
 
-Overfull \hbox (16.78815pt too wide) in paragraph at lines 5258--5259
+Overfull \hbox (16.78815pt too wide) in paragraph at lines 5261--5262
 []\T1/ptm/m/n/10 Indicator dis-tri-bu-tions. Ei-ther a list of [][]\T1/fi4/m/n/
 10 SimDataDist[][][] \T1/ptm/m/n/10 ob-jects or a sin-gle [][]\T1/fi4/m/n/10 Si
 mDataDist[][][]
  []
 
-[94] [95] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+[94] [95]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [96]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
-Overfull \hbox (40.86832pt too wide) in paragraph at lines 5399--5400
+Overfull \hbox (40.86832pt too wide) in paragraph at lines 5441--5442
 []\T1/ptm/m/n/10 Objects can be cre-ated by [][]\T1/fi4/m/n/10 bindDist[][][] \
 T1/ptm/m/n/10 func-tion. It can also be called from the form \T1/fi4/m/n/10 new
 ("SimDataDist", ...)\T1/ptm/m/n/10 . 
  []
 
-[96]
-Overfull \hbox (41.28088pt too wide) in paragraph at lines 5452--5452
+[97]
+Overfull \hbox (41.28088pt too wide) in paragraph at lines 5494--5494
  []\T1/fi4/m/n/9 dist <- bindDist(c(rep("t", 4), rep("chisq", 8)), d1, d2, d3, 
 d4, d5, d6, d7, d8, d5, d6, d7, d8)[] 
  []
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [97]
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
-File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [98]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [99] [100]
-[101] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
-File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [102]
+) [99]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+) [100] [101]
+[102] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [103]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+) [104]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
-Overfull \hbox (5.39653pt too wide) in paragraph at lines 5865--5866
+Overfull \hbox (5.39653pt too wide) in paragraph at lines 5907--5908
 \T1/ptm/m/n/10 pletely at ran-dom (if vary-ing), per-cent miss-ing at ran-dom (
 if vary-ing), pa-ram-e-ter val-ues, misspecified-
  []
 
-[104] [105] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+[105] [106] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 )
-[106] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
-File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [107]
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+[107] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 ) [108]
-Overfull \hbox (19.78088pt too wide) in paragraph at lines 6123--6123
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+) [109]
+Overfull \hbox (19.78088pt too wide) in paragraph at lines 6165--6165
  []\T1/fi4/m/n/10 summaryParam(object, alpha = 0.05, detail = FALSE, improper =
  FALSE, digits = NULL)[] 
  []
 
 
-Overfull \hbox (2.46945pt too wide) in paragraph at lines 6165--6170
+Overfull \hbox (2.46945pt too wide) in paragraph at lines 6207--6212
 []\T1/fi4/m/n/10 Std.Bias: \T1/ptm/m/n/10 Stan-dard-ized Bias, which is (\T1/fi
 4/m/n/10 Estimate.Average \T1/ptm/m/n/10 - \T1/fi4/m/n/10 Average.Param\T1/ptm/
 m/n/10 )/\T1/fi4/m/n/10 Estimate.SD
  []
 
-[109]
-Overfull \hbox (24.57841pt too wide) in paragraph at lines 6170--6174
+[110]
+Overfull \hbox (24.57841pt too wide) in paragraph at lines 6212--6216
 []\T1/fi4/m/n/10 Rel.SE.Bias: \T1/ptm/m/n/10 Rel-a-tive Bias in stan-dard er-ro
 r, which is (\T1/fi4/m/n/10 Average.SE \T1/ptm/m/n/10 - \T1/fi4/m/n/10 Estimate
 .SD\T1/ptm/m/n/10 )/\T1/fi4/m/n/10 Estimate.SD
@@ -1559,12 +1576,12 @@ r, which is (\T1/fi4/m/n/10 Average.SE \T1/ptm/m/n/10 - \T1/fi4/m/n/10 Estimate
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [110]
+) [111]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
-) [111]
-(C:\Users\sunthud\AppData\Local\Temp\RtmpUFLXKr\Rd2pdf11dc106a3297\Rd2.ind
-[112]
+) [112]
+(C:\Users\sunthud\AppData\Local\Temp\RtmpmGztbp\Rd2pdf1c08eea7b90\Rd2.ind
+[113]
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <12> not available
 (Font)              Font shape `T1/ptm/b/n' tried instead on input line 3.
 
@@ -1582,15 +1599,15 @@ Overfull \hbox (80.8567pt too wide) in paragraph at lines 151--153
 []\T1/fi4/m/it/10 getPowerFitNonNested,SimResult,SimResult,vector-method 
  []
 
-[113
+[114
 
-] [114])
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 6333.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 6333.
+] [115])
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 6375.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 6375.
 
-(C:\Users\sunthud\AppData\Local\Temp\RtmpUFLXKr\Rd2pdf11dc106a3297\Rd2.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 6333.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 6333.
+(C:\Users\sunthud\AppData\Local\Temp\RtmpmGztbp\Rd2pdf1c08eea7b90\Rd2.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 6375.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 6375.
 
 Package rerunfilecheck Info: File `Rd2.out' has not changed.
 (rerunfilecheck)             Checksum: C61B8C340A60C443E021B76AD53EF117;4045.
@@ -1598,19 +1615,22 @@ Package rerunfilecheck Info: File `Rd2.out' has not changed.
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 6333.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 6375.
  ) 
 Here is how much of TeX's memory you used:
- 7178 strings out of 494045
- 108556 string characters out of 3145962
- 175112 words of memory out of 3000000
+ 7180 strings out of 494045
+ 108565 string characters out of 3145962
+ 174943 words of memory out of 3000000
  9455 multiletter control sequences out of 15000+200000
  43888 words of font info for 52 fonts, out of 3000000 for 9000
  715 hyphenation exceptions out of 8191
- 38i,6n,27p,1426b,588s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 38i,6n,27p,1425b,588s stack positions out of 5000i,500n,10000p,200000b,50000s
 pdfTeX warning (dest): name{Rfn.anova\\unhbox\040\\voidb@x\040\\kern\040\\z@\
 040\\char\040`\\protect\040\\relax\040\\kern\040.16667em\040SimResult.Rdash.met
 hod} has been referenced but does not exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{Rfn.simulateData} has been referenced but does not 
+exist, replaced by a fixed one
 
 pdfTeX warning (dest): name{Rfn.summary} has been referenced but does not exist
 , replaced by a fixed one
@@ -1657,9 +1677,9 @@ onts/type1/urw/helvetic/uhvr8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/typ
 e1/urw/times/utmb8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/time
 s/utmr8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.pf
 b><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Rd2.pdf (114 pages, 674050 bytes).
+Output written on Rd2.pdf (115 pages, 676540 bytes).
 PDF statistics:
- 2407 PDF objects out of 2487 (max. 8388607)
- 787 named destinations out of 1000 (max. 500000)
+ 2417 PDF objects out of 2487 (max. 8388607)
+ 789 named destinations out of 1000 (max. 500000)
  545 words of extra memory for PDF output out of 10000 (max. 10000000)
 

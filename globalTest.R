@@ -108,7 +108,7 @@ test.overall <- function() {
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version03/ex6/ex6.R"), "Example 6", subFrom = "sim\\(1000", subTo = "sim\\(20", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version03/ex7/ex7.R"), "Example 7", subFrom = "sim\\(1000", subTo = "sim\\(20", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version03/ex8/ex8.R"), "Example 8", subFrom = "sim\\(1000", subTo = "sim\\(20", result = result)
-	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version03/ex9/ex9.R"), "Example 9", subFrom = "sim\\(1000", subTo = "sim\\(20", result = result)
+	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version03/ex9/ex9.R"), "Example 9", subFrom = "sim\\(1000", subTo = "sim\\(10", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version03/ex10/ex10.R"), "Example 10", subFrom = "sim\\(1000", subTo = "sim\\(20", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version03/ex11/ex11.R"), "Example 11", subFrom = "sim\\(1000", subTo = "sim\\(20", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version03/ex12/ex12.R"), "Example 12", subFrom = "sim\\(1000", subTo = "sim\\(20", result = result)

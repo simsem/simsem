@@ -4,11 +4,11 @@
 	Run a monte carlo simulation with a structural equation model.
 }
 \description{
-	This function can be used to generate and analyze simulated data from \code{\linkS4class{SimSem}} objects created with the \code{\link{model}} function. In this function, parameters are drawn from the specified data-generation model and used to create data, specified missingness (if any) is imposed, and data are analyzed using the specified \code{\linkS4class{SimSem}} analysis model object. Provides a \code{\linkS4class{SimResult}}) object as ouput, which summarizes analyses across replications. Data can be transformed using the \code{datafun} argument. Additional output can be extracted using the \code{outfun} argument. Paralleled processing can be enabled using the \code{multicore} argument. The \code{sim} function can also be used to obtain raw data using the \code{dataOnly} argument, to analyze pre-existing data using the \code{rawData} argument, and to simulate data that follows the distribution of a real data set using the \code{rawData} argument.
+	This function can be used to generate and analyze simulated data from 1. \code{\linkS4class{SimSem}} objects created with the \code{\link{model}} function or 2. \code{lavaan} script or parameter tables. In this function, parameters are drawn from the specified data-generation model and used to create data, specified missingness (if any) is imposed, and data are analyzed using the specified \code{\linkS4class{SimSem}} analysis model object. Provides a \code{\linkS4class{SimResult}}) object as ouput, which summarizes analyses across replications. Data can be transformed using the \code{datafun} argument. Additional output can be extracted using the \code{outfun} argument. Paralleled processing can be enabled using the \code{multicore} argument. The \code{sim} function can also be used to obtain raw data using the \code{dataOnly} argument, to analyze pre-existing data using the \code{rawData} argument, and to simulate data that follows the distribution of a real data set using the \code{rawData} argument.
 }
 \usage{
 sim(nRep, model, n, generate = NULL, rawData = NULL, miss = NULL, datafun=NULL, 
-outfun=NULL, pmMCAR = NULL, pmMAR = NULL, facDist = NULL, indDist = NULL, 
+lavaanfun = "sem", outfun=NULL, pmMCAR = NULL, pmMAR = NULL, facDist = NULL, indDist = NULL, 
 errorDist = NULL, sequential = FALSE, modelBoot = FALSE, realData = NULL, 
 covData = NULL, maxDraw = 50, misfitType = "f0", misfitBounds = NULL, 
 averageNumMisspec = FALSE, optMisfit=NULL, optDraws = 50, 
@@ -21,22 +21,25 @@ dataOnly=FALSE, smartStart=FALSE, ...)
 	Number of replications. If any of the \code{n}, \code{pmMCAR}, or \code{pmMAR} arguments are specified as lists, the number of replications will default to the length of the list(s), and \code{nRep} need not be specified.
 }
   \item{model}{
-	\code{\linkS4class{SimSem}} object created by \code{\link{model}}. If the \code{generate} argument is not specified, then the object in the \code{model} argument will be used for both data generation and analysis. If \code{generate} is specified, then the \code{model} argument will be used for data analysis only.
+	There are three options for this argument: 1. \code{\linkS4class{SimSem}} object created by \code{\link{model}}, 2. \code{lavaan} script or \code{lavaan} parameter table, or 3. a list that contains all argument that users use to run \code{lavaan} (including \code{cfa}, \code{sem}, \code{lavaan}). For the \code{\linkS4class{SimSem}} object, if the \code{generate} argument is not specified, then the object in the \code{model} argument will be used for both data generation and analysis. If \code{generate} is specified, then the \code{model} argument will be used for data analysis only. 
 }
   \item{n}{
 	Sample size. Either a single value, or a list of values to vary sample size across replications. The \code{n} argument can also be specified as a random distribution object; if any resulting values are non-integers, the decimal will be rounded. 
 }
   \item{generate}{
-	\code{\linkS4class{SimSem}} object created using the \code{\link{model}} function. If included, this argument will be used to generate data instead of the code{\linkS4class{SimSem}} object specified in the \code{model} option.
+	There are three options for this argument: 1. \code{\linkS4class{SimSem}} object created by \code{\link{model}}, 2. \code{lavaan} script or \code{lavaan} parameter table (for data generation; see \code{\link[lavaan]{simulateData}}), or 3. a list that contains all argument that users use to run \code{\link[lavaan]{simulateData}}. This argument cannot be specified the same time as the \code{rawData} argument
 }
   \item{rawData}{
-	If specified, a list of data objects to be used in simulations instead of generating data from a \code{SimSem} template.
+	There are two options for this argument: 1. a list of data frames to be used in simulations or 2. a population data. If a list of data frames is specified, the \code{nRep} and \code{n} arguments must not be specified. If a population data frame is specified, the \code{nRep} and \code{n} arguments are required.
 }
   \item{miss}{
 	A missing data template created using the \code{\link{miss}} function.
 }
   \item{datafun}{
 	A function to be applied to each generated data set across replications.
+}
+  \item{lavaanfun}{
+	The character of the function name used in running lavaan model (\code{"cfa"}, \code{"sem"}, \code{"growth"}, \code{"lavaan"}). This argument is required only when lavaan script or a list of arguments is specified in the \code{model} argument.
 }
   \item{outfun}{
 	A function to be applied to the \code{\linkS4class{lavaan}} output at each replication. Output from this function in each replication will be saved in the simulation output (\code{\linkS4class{SimResult}}), and can be obtained using the \code{\link{getExtraOutput}} function.
@@ -134,6 +137,10 @@ dataOnly=FALSE, smartStart=FALSE, ...)
 	}
 }
 \examples{
+# Please go to www.simsem.org for more examples.
+
+# Example of using simsem model template
+
 loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
@@ -150,7 +157,42 @@ VY <- bind(rep(NA,6),2)
 CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
 
 # In reality, more than 5 replications are needed.
-Output <- sim(5, CFA.Model,n=200)
+Output <- sim(5, CFA.Model, n=200)
+summary(Output)
+
+# Example of using simsem model template
+
+popModel <- "
+f1 =~ 0.7*y1 + 0.7*y2 + 0.7*y3
+f2 =~ 0.7*y4 + 0.7*y5 + 0.7*y6
+f1 ~~ 1*f1
+f2 ~~ 1*f2
+f1 ~~ 0.5*f2
+y1 ~~ 0.49*y1
+y2 ~~ 0.49*y2
+y3 ~~ 0.49*y3
+y4 ~~ 0.49*y4
+y5 ~~ 0.49*y5
+y6 ~~ 0.49*y6
+"
+
+analysisModel <- "
+f1 =~ y1 + y2 + y3
+f2 =~ y4 + y5 + y6
+"
+
+Output <- sim(5, model=analysisModel, n=200, generate=popModel, std.lv=TRUE)
+summary(Output)
+
+# Example of using population data
+
+pop <- data.frame(y1 = rnorm(100000, 0, 1), y2 = rnorm(100000, 0, 1))
+
+covModel <- "
+y1 ~~ y2
+"
+
+Output <- sim(5, model=covModel, n=200, rawData=pop)
 summary(Output)
 
 # Example of data transformation: Transforming to standard score

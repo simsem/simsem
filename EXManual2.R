@@ -4,6 +4,7 @@
 # ROC curve?
 # Fix the first rows the same when sample size is increasing
 # Provide option when users have population data
+# Complex simulation with many conditions
 
 # Find non ASCII
 
@@ -40,6 +41,156 @@ dir <- "C:/Users/student/Dropbox/simsem/simsem/R/"
 
 # library(formatR)
 # tidy.dir(dir)
+
+
+loading <- matrix(0, 6, 2)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+LY <- bind(loading, 0.7)
+
+latent.cor <- matrix(NA, 2, 2)
+diag(latent.cor) <- 1
+RPS <- binds(latent.cor, 0.5)
+
+RTE <- binds(diag(6))
+
+VTE <- bind(rep(NA, 6), 0.51)
+
+CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, VTE=VTE, modelType = "CFA", indLab=c("pos1", "pos2", "pos3", "neg1", "neg2", "neg3"), facLab=c("posaffect", "negaffect"))
+
+dat <- generate(CFA.Model, 20000)
+
+#SimMissing <- simMissing(pmMCAR=0.1, numImps=5)
+Output <- sim(1000, CFA.Model, rawData=dat, n = 200)
+
+
+
+
+# Noninvariance
+loading1 <- matrix(NA, 6, 1)
+LY1 <- bind(loading1, 0.7)
+loading2 <- matrix(0, 6, 2)
+loading2[1:3, 1] <- NA
+loading2[4:6, 2] <- NA
+LY2 <- bind(loading2, 0.7)
+
+latent.cor2 <- matrix(NA, 2, 2)
+diag(latent.cor2) <- 1
+RPS1 <- binds(as.matrix(1))
+RPS2 <- binds(latent.cor2, 0.5)
+
+RTE <- binds(diag(6))
+
+VTE <- bind(rep(NA, 6), 0.51)
+
+noninvariance <- model(LY = list(LY1, LY2), RPS = list(RPS1, RPS2), RTE = list(RTE, RTE), VTE=list(VTE, VTE), ngroups=2, modelType = "CFA")
+
+dat <- generate(noninvariance, 20000)
+
+#SimMissing <- simMissing(pmMCAR=0.1, numImps=5)
+Output <- sim(20, noninvariance, rawData=dat, n = 200)
+
+
+population.model <- ' f1 =~ 0.7*y1 + 0.8*y2 + 0.7*y3
+					  f2 =~ 0.7*y4 + 0.9*y5 + 0.4*y6
+					  f1 ~~ 1*f1
+					  f2 ~~ 1*f2
+					  f1 ~~ 0.3*f2
+					  y1 ~~ 0.5*y1
+					  y2 ~~ 0.5*y2
+					  y3 ~~ 0.5*y3
+					  y4 ~~ 0.5*y4
+					  y5 ~~ 0.5*y5
+					  y6 ~~ 0.5*y6
+					  
+                    '
+
+# generate data
+myData <- simulateData(population.model, sample.nobs=100)
+
+loading <- matrix(0, 6, 2)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+myModel <- estmodel.cfa(LY=loading)
+
+Output <- sim(20, myModel, generate=population.model, n = 200)
+
+Output <- sim(20, myModel, generate=list(model=population.model, meanstructure=TRUE), n = 200)
+
+
+population.model <- ' f1 =~ 0.7*y1 + 0.8*y2 + 0.7*y3
+					  f2 =~ 0.7*y4 + 0.9*y5 + 0.4*y6
+					  f1 ~~ 1*f1
+					  f2 ~~ 1*f2
+					  f1 ~~ 0.3*f2
+					  y1 ~~ 0.5*y1
+					  y2 ~~ 0.5*y2
+					  y3 ~~ 0.5*y3
+					  y4 ~~ 0.5*y4
+					  y5 ~~ 0.5*y5
+					  y6 ~~ 0.5*y6
+					  
+                    '
+analysis.model <- 'f1 =~ y1 + y2 + y3
+f2 =~ y4 + y5 + y6
+'
+m <- miss(pmMCAR=0.1)
+
+Output <- sim(20, analysis.model, generate=list(model=population.model, meanstructure=TRUE), n = 200, miss=m, std.lv=TRUE, missing="ml")
+
+
+###############################################################################
+
+loading <- matrix(0, 6, 2)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+LY <- bind(loading, 0.7)
+
+latent.cor <- matrix(NA, 2, 2)
+diag(latent.cor) <- 1
+RPS <- binds(latent.cor, 0.5)
+
+RTE <- binds(diag(6))
+
+VTE <- bind(rep(NA, 6), 0.51)
+
+CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, VTE=VTE, modelType = "CFA", indLab=c("pos1", "pos2", "pos3", "neg1", "neg2", "neg3"), facLab=c("posaffect", "negaffect"))
+
+dat.l <- list()
+for (i in 1:20) {
+	dat.l[[i]] <- generate(CFA.Model, 200)
+}
+
+#SimMissing <- simMissing(pmMCAR=0.1, numImps=5)
+Output <- sim(20, CFA.Model, rawData=dat.l)
+
+
+# Noninvariance
+loading1 <- matrix(NA, 6, 1)
+LY1 <- bind(loading1, 0.7)
+loading2 <- matrix(0, 6, 2)
+loading2[1:3, 1] <- NA
+loading2[4:6, 2] <- NA
+LY2 <- bind(loading2, 0.7)
+
+latent.cor2 <- matrix(NA, 2, 2)
+diag(latent.cor2) <- 1
+RPS1 <- binds(as.matrix(1))
+RPS2 <- binds(latent.cor2, 0.5)
+
+RTE <- binds(diag(6))
+
+VTE <- bind(rep(NA, 6), 0.51)
+
+noninvariance <- model(LY = list(LY1, LY2), RPS = list(RPS1, RPS2), RTE = list(RTE, RTE), VTE=list(VTE, VTE), ngroups=2, modelType = "CFA")
+
+dat.l <- list()
+for (i in 1:20) {
+	dat.l[[i]] <- generate(noninvariance, 200)
+}
+
+Output <- sim(model=noninvariance, rawData=dat.l) 
+
 
 ############################ Example 1
 

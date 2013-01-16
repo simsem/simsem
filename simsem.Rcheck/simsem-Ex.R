@@ -2479,6 +2479,10 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
+# Please go to www.simsem.org for more examples.
+
+# Example of using simsem model template
+
 loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
@@ -2495,7 +2499,42 @@ VY <- bind(rep(NA,6),2)
 CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
 
 # In reality, more than 5 replications are needed.
-Output <- sim(5, CFA.Model,n=200)
+Output <- sim(5, CFA.Model, n=200)
+summary(Output)
+
+# Example of using simsem model template
+
+popModel <- "
+f1 =~ 0.7*y1 + 0.7*y2 + 0.7*y3
+f2 =~ 0.7*y4 + 0.7*y5 + 0.7*y6
+f1 ~~ 1*f1
+f2 ~~ 1*f2
+f1 ~~ 0.5*f2
+y1 ~~ 0.49*y1
+y2 ~~ 0.49*y2
+y3 ~~ 0.49*y3
+y4 ~~ 0.49*y4
+y5 ~~ 0.49*y5
+y6 ~~ 0.49*y6
+"
+
+analysisModel <- "
+f1 =~ y1 + y2 + y3
+f2 =~ y4 + y5 + y6
+"
+
+Output <- sim(5, model=analysisModel, n=200, generate=popModel, std.lv=TRUE)
+summary(Output)
+
+# Example of using population data
+
+pop <- data.frame(y1 = rnorm(100000, 0, 1), y2 = rnorm(100000, 0, 1))
+
+covModel <- "
+y1 ~~ y2
+"
+
+Output <- sim(5, model=covModel, n=200, rawData=pop)
 summary(Output)
 
 # Example of data transformation: Transforming to standard score

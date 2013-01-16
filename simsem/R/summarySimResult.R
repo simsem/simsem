@@ -24,7 +24,6 @@ summaryParam <- function(object, alpha = 0.05, detail = FALSE, improper = FALSE,
         targetVar <- match(colnames(object@coef), colnames(object@paramValue))
         targetVar <- targetVar[!is.na(targetVar)]
         paramValue <- object@paramValue[, targetVar]
-        
         if ((ncol(object@coef) == ncol(paramValue)) && all(colnames(object@coef) == 
             colnames(paramValue))) {
             nRep <- object@nRep
