@@ -64,7 +64,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 	} else {
 		stop("Please specify an appropriate object for the 'model' argument: simsem model template, lavaan script, lavaan parameter table, or list of options for the 'lavaan' function.")
 	}
-		
+	
     ## 1. Set up correct data generation template (move inside the runRep).
 
 	
@@ -88,7 +88,11 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 				ngroups <- max(model$model$group)
 			} else {
 				if(!is.null(rawData) && !is.null(model$group)) {
-					ngroups <- length(unique(rawData[,model$group]))
+					if(is.data.frame(rawData) || is.matrix(rawData)) {
+						ngroups <- length(unique(rawData[,model$group]))
+					} else {
+						ngroups <- length(unique(rawData[[1]][,model$group]))
+					}
 				} else {
 					if(is.list(n)) ngroups <- length(n)
 				}
@@ -432,7 +436,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 			} else {
 				nobs <- as.data.frame(sapply(rawData, nrow))
 			}
-			n <- apply(nobs, 2, "+")
+			n <- apply(nobs, 1, sum)
 			colnames(nobs) <- 1:ngroups		
 		} else {
 			nobs <- as.data.frame(n)
@@ -521,7 +525,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 			} else {
 				groupLab <- model$group
 			}
-			if(!is.null(groupLab)) {
+			if(!is.null(groupLab) && (groupLab %in% colnames(popData))) {
 				data <- split(popData, popData[,groupLab])
 				data <- mapply(function(dat, ss) dat[sample(nrow(dat), ss),], dat=data, ss=n, SIMPLIFY=FALSE)
 				data <- data.frame(do.call(rbind, data))
@@ -531,7 +535,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 		}
 	}
 	
-	if (is.lavaancall(generate)) {
+	if (is.null(data) && is.lavaancall(generate)) {
 		generate$sample.nobs <- n
 		data <- do.call("simulateData", generate)
 	}

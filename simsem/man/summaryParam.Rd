@@ -7,7 +7,8 @@
 	This function will provide averages of parameter estimates, standard deviations of parameter estimates, averages of standard errors, and power of rejection with a priori alpha level for the null hypothesis of parameters equal 0.
 }
 \usage{
-summaryParam(object, alpha = 0.05, detail = FALSE, improper = FALSE, digits = NULL)
+summaryParam(object, alpha = 0.05, detail = FALSE, improper = FALSE, 
+	digits = NULL, matchParam = FALSE)
 }
 \arguments{
   \item{object}{
@@ -24,6 +25,9 @@ summaryParam(object, alpha = 0.05, detail = FALSE, improper = FALSE, digits = NU
 }
   \item{digits}{
 	The number of digits rounded in the result. If \code{NULL}, the results will not be rounded.
+}
+  \item{matchParam}{
+	If \code{TRUE}, only parameter estimates that have the same names as the parameter values will be reported. This argument is recommended when users know that the data-generation model and analysis model are the same. Then the comparison between the parameter estimates and parameter value will be valid.
 }
 }
 \value{

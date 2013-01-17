@@ -4,7 +4,7 @@
 # summaryParam: This function will summarize the obtained parameter estimates
 # and standard error.
 
-summaryParam <- function(object, alpha = 0.05, detail = FALSE, improper = FALSE, digits = NULL) {
+summaryParam <- function(object, alpha = 0.05, detail = FALSE, improper = FALSE, digits = NULL, matchParam = FALSE) {
     object <- clean(object, improper = improper)
     coef <- colMeans(object@coef, na.rm = TRUE)
     real.se <- sapply(object@coef, sd, na.rm = TRUE)
@@ -24,17 +24,20 @@ summaryParam <- function(object, alpha = 0.05, detail = FALSE, improper = FALSE,
         targetVar <- match(colnames(object@coef), colnames(object@paramValue))
         targetVar <- targetVar[!is.na(targetVar)]
         paramValue <- object@paramValue[, targetVar]
-        if ((ncol(object@coef) == ncol(paramValue)) && all(colnames(object@coef) == 
+		if(matchParam) result <- result[colnames(paramValue),]
+        if ((nrow(result) == ncol(paramValue)) && all(rownames(result) == 
             colnames(paramValue))) {
             nRep <- object@nRep
-            nParam <- ncol(object@coef)
-            if (nrow(object@paramValue) == 1) 
+            nParam <- nrow(result)
+            if (nrow(paramValue) == 1) 
                 paramValue <- matrix(unlist(rep(paramValue, nRep)), nRep, nParam, 
                   byrow = T)
-            biasParam <- object@coef - paramValue
+			selectCoef <- object@coef[,rownames(result)]
+			selectSE <- object@se[,rownames(result)]
+            biasParam <- selectCoef - paramValue
             crit <- qnorm(1 - alpha/2)
-            lowerBound <- object@coef - crit * object@se
-            upperBound <- object@coef + crit * object@se
+            lowerBound <- selectCoef - crit * selectSE
+            upperBound <- selectCoef + crit * selectSE
             cover <- (paramValue > lowerBound) & (paramValue < upperBound)
             
             average.param <- apply(paramValue, 2, mean, na.rm = TRUE)
@@ -42,7 +45,7 @@ summaryParam <- function(object, alpha = 0.05, detail = FALSE, improper = FALSE,
             average.bias <- apply(biasParam, 2, mean, na.rm = TRUE)
             perc.cover <- apply(cover, 2, mean, na.rm = TRUE)
             sd.bias <- apply(biasParam, 2, sd, na.rm = TRUE)
-            perc.cover[estimated.se == 0] <- NA
+            perc.cover[estimated.se[rownames(result)] == 0] <- NA
             result2 <- cbind(average.param, sd.param, average.bias, sd.bias, perc.cover)
             colnames(result2) <- c("Average Param", "SD Param", "Average Bias", "SD Bias", 
                 "Coverage")
@@ -69,7 +72,7 @@ summaryParam <- function(object, alpha = 0.05, detail = FALSE, improper = FALSE,
         }
     }
     if (length(object@FMI1) != 0 & length(object@FMI2) != 0) {
-        nRep <- nrow(object@coef)
+        nRep <- object@nRep
         nFMI1 <- ncol(object@FMI1)
         FMI1 <- object@FMI1
         FMI2 <- object@FMI2

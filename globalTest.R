@@ -98,7 +98,6 @@ test.overall <- function() {
 	result <- NULL
 	currentDir <- getwd()
 	currentDir <- gsub("/simsem/R", "", currentDir)
-	usedFun <- c("usedFun", "result", "currentDir", "checkFigure", "useTemp")
 	
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version03/ex1/ex1.R"), "Example 1", subFrom = "sim\\(1000", subTo = "sim\\(20", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version03/ex2/ex2.R"), "Example 2", subFrom = "sim\\(1000", subTo = "sim\\(20", result = result)
@@ -128,6 +127,9 @@ test.overall <- function() {
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version03/ex26/ex26.R"), "Example 26", subFrom = "50:500", subTo = "seq\\(50, 1000, 10\\)", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version03/ex27/ex27.R"), "Example 27", subFrom = "sim\\(1000", subTo = "sim\\(20", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version03/ex28/ex28.R"), "Example 28", subFrom = "sim\\(1000", subTo = "sim\\(20", result = result)
+	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/exMultipleFormat/singleGroup.R"), "Multiple format sim (Single Group)", subFrom = "totalRep <- 1000", subTo = "totalRep <- 50", result = result)
+	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/exMultipleFormat/multipleGroup.R"), "Multiple format sim (Multiple Group)", subFrom = "totalRep <- 1000", subTo = "totalRep <- 50", result = result)
+	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/exMultipleFormat/covData.R"), "Covariate effect", subFrom = "sim\\(1000", subTo = "sim\\(20", result = result)
 
 	
 	colnames(result) <- c("condition", "success", "expecterror", "time")

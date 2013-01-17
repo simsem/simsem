@@ -5535,31 +5535,31 @@ Model Type
            Alpha
 Fit Indices      0.1     0.05     0.01    0.001     Mean     SD
       chisq    0.000    0.000    0.000    0.000    0.000  0.000
-      aic   1150.784 1152.533 1153.933 1154.247 1131.608 26.310
-      bic   1160.679 1162.428 1163.827 1164.142 1141.503 26.310
+      aic   1142.931 1153.299 1161.594 1163.460 1113.425 29.748
+      bic   1152.826 1163.194 1171.489 1173.355 1123.320 29.748
       rmsea    0.000    0.000    0.000    0.000    0.000  0.000
-      cfi      0.100    0.050    0.010    0.001    0.500  0.707
+      cfi      0.200    0.100    0.020    0.002    0.667  0.577
       tli      1.000    1.000    1.000    1.000    1.000  0.000
       srmr     0.000    0.000    0.000    0.000    0.000  0.000
 ========= Parameter Estimates and Standard Errors ============
        Estimate.Average Estimate.SD Average.SE Power..Not.equal.0. Std.Est
-y1~~y2           -0.032       0.054      0.069                   0  -0.033
-y1~~y1            0.967       0.123      0.097                   1   1.000
-y2~~y2            0.997       0.060      0.100                   1   1.000
+y1~~y2            0.011       0.101      0.067                 0.2   0.017
+y1~~y1            0.924       0.056      0.092                 1.0   1.000
+y2~~y2            0.960       0.134      0.096                 1.0   1.000
        Std.Est.SD Average.Param Average.Bias Coverage
-y1~~y2      0.054        -0.043        0.012      1.0
-y1~~y1      0.000         0.995       -0.028      0.8
-y2~~y2      0.000         1.017       -0.019      1.0
+y1~~y2      0.105        -0.002        0.013      0.8
+y1~~y1      0.000         1.004       -0.080      1.0
+y2~~y2      0.000         0.999       -0.039      1.0
 ========= Correlation between Fit Indices ============
 Warning in cor(fit) : the standard deviation is zero
-      chisq    aic    bic rmsea cfi tli   srmr
-chisq 1.000  0.088  0.088    NA  NA  NA  0.901
-aic   0.088  1.000  1.000    NA  NA  NA -0.302
-bic   0.088  1.000  1.000    NA  NA  NA -0.302
-rmsea    NA     NA     NA     1  NA  NA     NA
-cfi      NA     NA     NA    NA   1  NA     NA
-tli      NA     NA     NA    NA  NA   1     NA
-srmr  0.901 -0.302 -0.302    NA  NA  NA  1.000
+       chisq    aic    bic rmsea cfi tli   srmr
+chisq  1.000 -0.030 -0.030    NA  NA  NA  0.827
+aic   -0.030  1.000  1.000    NA  NA  NA -0.372
+bic   -0.030  1.000  1.000    NA  NA  NA -0.372
+rmsea     NA     NA     NA     1  NA  NA     NA
+cfi       NA     NA     NA    NA   1  NA     NA
+tli       NA     NA     NA    NA  NA   1     NA
+srmr   0.827 -0.372 -0.372    NA  NA  NA  1.000
 ================== Replications =====================
 Number of replications = 5 
 Number of converged replications = 5 
@@ -6257,7 +6257,7 @@ detaching 'package:parallel'
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  7.33 0.16 7.63 NA NA 
+Time elapsed:  7.81 0.14 8.13 NA NA 
 > grDevices::dev.off()
 null device 
           1 
