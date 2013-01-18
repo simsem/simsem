@@ -1,5 +1,6 @@
 
-sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = NULL, miss = NULL, datafun = NULL, lavaanfun = "sem", outfun = NULL, pmMCAR = NULL, pmMAR = NULL, facDist = NULL, indDist = NULL, errorDist = NULL, 
+sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = NULL, miss = NULL, datafun = NULL, 
+	lavaanfun = "lavaan", outfun = NULL, pmMCAR = NULL, pmMAR = NULL, facDist = NULL, indDist = NULL, errorDist = NULL, 
     sequential = FALSE, modelBoot = FALSE, realData = NULL, covData = NULL, maxDraw = 50, misfitType = "f0", 
     misfitBounds = NULL, averageNumMisspec = FALSE, optMisfit = NULL, optDraws = 50, createOrder = c(1, 2, 3), 
     aux = NULL, seed = 123321, silent = FALSE, multicore = FALSE, cluster = FALSE, 
@@ -38,7 +39,9 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 		} else if (is.lavaancall(generate)) {
 			lavaanGenerate <- TRUE
 		} else if (is(generate, "lavaan")) {
-			generate <- list(model = generate@ParTable)
+			temp <- generate@ParTable
+			temp$ustart <- generate@Fit@est
+			generate <- list(model = temp)
 			lavaanGenerate <- TRUE
 		} else if (is(generate, "SimSem")) {
 			# Do nothing
@@ -63,6 +66,10 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 		# Do nothing
 	} else {
 		stop("Please specify an appropriate object for the 'model' argument: simsem model template, lavaan script, lavaan parameter table, or list of options for the 'lavaan' function.")
+	}
+	
+	if(lavaanAnalysis) {
+		model <- c(model, list(...))
 	}
 	
     ## 1. Set up correct data generation template (move inside the runRep).
@@ -537,7 +544,8 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 	
 	if (is.null(data) && is.lavaancall(generate)) {
 		generate$sample.nobs <- n
-		data <- do.call("simulateData", generate)
+		generate$indDist <- indDist
+		data <- do.call("lavaanSimulateData", generate) # Change to simulateData when the bug is fixed
 	}
 	
     if (is.null(data)) {
@@ -606,7 +614,6 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 		# If users provide their own data there maybe a case with auxiliary variables and no missing object
 		if (is.lavaancall(model)) {
 			model$data <- data
-			model <- c(model, list(...))
 			if (silent) {
 				invisible(capture.output(suppressMessages(try(out <- analyzeLavaan(model, lavaanfun, miss, aux), silent = TRUE))))
 			} else {

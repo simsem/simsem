@@ -166,17 +166,24 @@ setMethod("summary", signature = "SimDataDist", definition = function(object) {
     cat(paste("The number of variables is", object@p, "\n"))
     cat(paste("Keep means and variances of the original scales:", paste(object@keepScale, 
         collapse = " / "), "\n"))
-    cat("The list of distributions:\n")
-    attr <- sapply(object@paramMargins, function(x) paste0(names(x), " = ", x, collapse = ", "))
-    out <- paste0(object@margins, ": ", attr)
-    for (i in 1:object@p) {
-        cat(i, ". ", out[i], "\n", sep = "")
-    }
     cat(paste("Reverse (mirror) distribution:", paste(object@reverse, collapse = " / "), 
         "\n"))
-	if(!is(object@copula, "NullCopula")) {
-		cat(paste("Multivariate Copula:\n"))
-		show(object@copula)
+	if(any(is.na(object@skewness))) {
+		cat("The list of distributions:\n")
+		attr <- sapply(object@paramMargins, function(x) paste0(names(x), " = ", x, collapse = ", "))
+		out <- paste0(object@margins, ": ", attr)
+		for (i in 1:object@p) {
+			cat(i, ". ", out[i], "\n", sep = "")
+		}
+		if(!is(object@copula, "NullCopula")) {
+			cat(paste("Multivariate Copula:\n"))
+			show(object@copula)
+		}
+	} else {
+		cat(paste("Skewness:", paste(object@skewness, 
+			collapse = " / "), "\n"))
+		cat(paste("(Excessive) Kurtosis:", paste(object@kurtosis, 
+			collapse = " / "), "\n"))	
 	}
 }) 
 

@@ -33,6 +33,9 @@ d8 <- list(df=6)
 dist <- bindDist(c(rep("t", 4), rep("chisq", 8)), d1, d2, d3, d4, d5, d6, d7, d8, d5, d6, d7, d8)
 summary(dist)
 
+dist2 <- bindDist(skewness = seq(-3, 3, length.out=12), kurtosis = seq(2, 5, length.out=12))
+summary(dist2)
+
 
 
 cleanEx()
@@ -337,6 +340,9 @@ dist <- bindDist(c("t", "chisq", "norm"), d1, d2, d3, copula = gumbelCopula(2, d
 # Reverse the direction of chi-square distribution from positively skew to negatively skew
 dist <- bindDist(c("t", "chisq", "norm"), d1, d2, d3, copula = gumbelCopula(2, dim = 3),
 	reverse = c(FALSE, TRUE, FALSE))
+	
+# Create data based on Vale and Maurelli's method by specifying skewness and kurtosis
+dist <- bindDist(skewness = c(0, -2, 2), kurtosis = c(0, 8, 4))
 
 
 
@@ -2027,6 +2033,14 @@ plotDist(datadist, r=0.5, var=1:2)
 # Plot the marginal distribution of the variable 3
 plotDist(datadist, var=3)
 
+datadist2 <- bindDist(skewness = c(0, -2, 2), kurtosis = c(2, 4, 4))
+
+# Plot the joint distribution of Variables 1 and 2 with correlation of 0.5
+plotDist(datadist2, r=0.5, var=1:2)
+
+# Plot the marginal distribution of the variable 3
+plotDist(datadist2, var=3)
+
 
 
 cleanEx()
@@ -2523,7 +2537,7 @@ f1 =~ y1 + y2 + y3
 f2 =~ y4 + y5 + y6
 "
 
-Output <- sim(5, model=analysisModel, n=200, generate=popModel, std.lv=TRUE)
+Output <- sim(5, model=analysisModel, n=200, generate=popModel, std.lv=TRUE, lavaanfun = "cfa")
 summary(Output)
 
 # Example of using population data
@@ -2534,7 +2548,7 @@ covModel <- "
 y1 ~~ y2
 "
 
-Output <- sim(5, model=covModel, n=200, rawData=pop)
+Output <- sim(5, model=covModel, n=200, rawData=pop, lavaanfun = "cfa")
 summary(Output)
 
 # Example of data transformation: Transforming to standard score

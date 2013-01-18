@@ -96,15 +96,17 @@ analyzeLavaan <- function(args, fun = "lavaan", miss = NULL, aux = NULL) {
 		library(semTools)
 		miArgs <- miss@args
 		if(miss@package == "Amelia") {
-			if(model@groupLab %in% colnames(data)) {
-				if(!is.null(miArgs$idvars)) {
-					miArgs$idvars <- c(miArgs$idvars, model@groupLab)
-				} else {
-					miArgs <- c(miArgs, list(idvars=model@groupLab))
+			if(!is.null(args$group)) {
+				if(args$group %in% colnames(data)) {
+					if(!is.null(miArgs$idvars)) {
+						miArgs$idvars <- c(miArgs$idvars, args$group)
+					} else {
+						miArgs <- c(miArgs, list(idvars=args$group))
+					}
 				}
 			}
 		}
-		args$m <- miss$m
+		args$m <- miss@m
 		args$miArgs <- miArgs
 		args$chi <- miss@chi
 		args$miPackage <- miss@package
@@ -131,4 +133,5 @@ analyzeLavaan <- function(args, fun = "lavaan", miss = NULL, aux = NULL) {
 			Output <- do.call(fun, args)
         }
     }
+	return(Output)
 }

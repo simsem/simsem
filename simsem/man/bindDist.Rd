@@ -4,10 +4,11 @@
 	Create a data distribution object.
 }
 \description{
-	Create a data distribution object
+	Create a data distribution object. There are two ways to specify nonnormal data-generation model. To create nonnormal data by the copula method, \code{margins} and \code{...} arguments are required. To create data by Vale and Maurelli's method, \code{skewness} and/or \code{kurtosis} arguments are required.
 }
 \usage{
-bindDist(margins, ..., p = NULL, keepScale = TRUE, reverse = FALSE, copula = NULL)
+bindDist(margins = NULL, ..., p = NULL, keepScale = TRUE, reverse = FALSE, 
+	copula = NULL, skewness = NULL, kurtosis = NULL)
 }
 \arguments{
   \item{margins}{
@@ -28,12 +29,20 @@ bindDist(margins, ..., p = NULL, keepScale = TRUE, reverse = FALSE, copula = NUL
   \item{copula}{
 	A copula class that represents the multivariate distribution, such as \code{\link[copula]{ellipCopula}}, \code{\link[copula]{normalCopula}}, or \code{\link[copula]{archmCopula}}. When this copula argument is specified, the data-transformation method from Mair, Satorra, and Bentler (2012) is used. If this copula argument is not specified, the naive Gaussian copula is used such that the correlation matrix is direct applied to the multivariate Gaussian copula. The correlation matrix will be equivalent to the Spearman's correlation (rank correlation) of the resulting data. 
 }
+  \item{skewness}{
+	A vector of skewness of each variable. The Vale & Maurelli (1983) method is used in data generation.
+}
+  \item{kurtosis}{
+	A vector of (excessive) skewness of each variable. The Vale & Maurelli (1983) method is used in data generation.
+}
 }
 \value{
 	\code{\linkS4class{SimDataDist}} that saves analysis result from simulate data.
 }
 \references{
 Mair, P., Satorra, A., & Bentler, P. M. (2012). Generating nonnormal multivariate data using copulas: Applications to SEM. \emph{Multivariate Behavioral Research, 47}, 547-565.
+
+Vale, C. D. & Maurelli, V. A. (1983) Simulating multivariate nonormal distributions. \emph{Psychometrika, 48}, 465-471.
 }
 \author{
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
@@ -67,4 +76,7 @@ dist <- bindDist(c("t", "chisq", "norm"), d1, d2, d3, copula = gumbelCopula(2, d
 # Reverse the direction of chi-square distribution from positively skew to negatively skew
 dist <- bindDist(c("t", "chisq", "norm"), d1, d2, d3, copula = gumbelCopula(2, dim = 3),
 	reverse = c(FALSE, TRUE, FALSE))
+	
+# Create data based on Vale and Maurelli's method by specifying skewness and kurtosis
+dist <- bindDist(skewness = c(0, -2, 2), kurtosis = c(0, 8, 4))
 }

@@ -391,3 +391,257 @@ semMACS <- function(param) {
         }
 		return(list(implied.mean, implied.covariance))
 }
+
+# The script below is modified from lavaan. 
+
+lavaanSimulateData <- function(
+                         # user-specified model
+                         model           = NULL,
+                         model.type      = "sem",
+
+                         # model modifiers
+                         meanstructure   = FALSE,
+                         int.ov.free     = TRUE,
+                         int.lv.free     = FALSE,
+                         fixed.x         = FALSE,
+                         orthogonal      = FALSE,
+                         std.lv          = TRUE,
+
+                         auto.fix.first  = FALSE,
+                         auto.fix.single = FALSE,
+                         auto.var        = TRUE,
+                         auto.cov.lv.x   = TRUE,
+                         auto.cov.y      = TRUE,
+                         ...,
+
+                         # data properties
+                         sample.nobs     = 500L,
+                         ov.var          = NULL,
+                         group.label     = paste("G", 1:ngroups, sep=""),
+                         skewness        = NULL,
+                         kurtosis        = NULL,
+
+                         # control
+                         seed = NULL,
+                         empirical = FALSE,
+
+                         return.type = "data.frame",
+                         return.fit = FALSE,
+						 indDist = NULL
+                        )
+{
+    if(!is.null(seed)) set.seed(seed)
+    if(!exists(".Random.seed", envir = .GlobalEnv))
+        runif(1)               # initialize the RNG if necessary
+    RNGstate <- .Random.seed
+	
+	if(!is.list(model)) {
+    # lavaanify
+		lav <- lavaanify(model = model, 
+						 meanstructure=meanstructure,
+						 int.ov.free=int.ov.free, 
+						 int.lv.free=int.lv.free,
+						 fixed.x=fixed.x,
+						 orthogonal=orthogonal,
+						 std.lv=std.lv,
+						 auto.fix.first=auto.fix.first,
+						 auto.fix.single=auto.fix.single,
+						 auto.var=auto.var,
+						 auto.cov.lv.x=auto.cov.lv.x,
+						 auto.cov.y=auto.cov.y,
+						 ngroups=length(sample.nobs))
+	} else {
+		lav <- model
+	}
+	
+    # fill in any remaining NA values (needed for unstandardize)
+    # 1 for variances and factor loadings, 0 otherwise
+    idx <- which(lav$op == "=~" & is.na(lav$ustart))
+    if(length(idx) > 0L) lav$ustart[idx] <- 1.0
+    idx <- which(lav$op == "~~" & is.na(lav$ustart) & lav$lhs == lav$rhs)
+    if(length(idx) > 0L) lav$ustart[idx] <- 1.0
+    idx <- which(is.na(lav$ustart))
+    if(length(idx) > 0L) lav$ustart[idx] <- 0.0
+
+
+    # unstandardize 
+    if(!is.null(ov.var)) {
+        # FIXME: if ov.var is named, check the order of the elements
+
+        # 1. unstandardize observed variables
+        lav$ustart <- lavaan:::unstandardize.est.ov(partable=lav, ov.var=ov.var)
+
+        # 2. unstandardized latent variables
+    }
+
+
+    # basic fit (ignoring thresholds
+    ord.idx <- which(lav$op == "|")
+    if(length(ord.idx) > 0L) {
+        lav.no_ord <- lav[-ord.idx,]
+    } else {
+        lav.no_ord <- lav
+    }
+    fit <- lavaan(model=lav.no_ord, sample.nobs=sample.nobs,  ...)
+
+    # the model-implied moments for the population
+    Sigma.hat <- lavaan:::computeSigmaHat(fit@Model)
+       Mu.hat <- lavaan:::computeMuHat(fit@Model)
+
+    # ngroups
+    ngroups <- length(sample.nobs)
+
+    # prepare 
+    X <- vector("list", length=ngroups)
+    out <- vector("list", length=ngroups)
+
+	if(!is.null(indDist) && !is.list(indDist)) {
+		indDist <- rep(list(indDist), ngroups)
+	}
+	
+    for(g in 1:ngroups) {
+        X[[g]] <- dataGen(dataDist = indDist[[g]], n = sample.nobs[g], m = Mu.hat[[g]], cm = Sigma.hat[[g]])
+
+        # any categorical variables?
+        ov.ord <- lavaan:::vnames(lav, type="ov.ord", group=g)
+        if(length(ov.ord) > 0L) {
+            ov.names <- lavaan:::vnames(lav, type="ov", group=g)
+            # use thresholds to cut -- after standardization?
+            for(o in ov.ord) {
+                o.idx <- which(o == ov.names)
+                th.idx <- which(lav$op == "|" & lav$lhs == o)
+                th.val <- c(-Inf,sort(lav$ustar[th.idx]),+Inf)
+                # scale!!
+                xz <- scale(X[[g]][,o.idx])
+                X[[g]][,o.idx] <- as.integer(cut(xz, th.val))
+            }
+        }
+
+        if(return.type == "data.frame") X[[g]] <- as.data.frame(X[[g]])
+    }
+
+    if(return.type == "matrix") {
+        if(ngroups == 1L) {
+            return(X[[1L]])
+        } else {
+            return(X)
+        }
+
+    } else if (return.type == "data.frame") {
+        Data <- X[[1L]]
+
+        # if multiple groups, add group column
+        if(ngroups > 1L) {
+            for(g in 2:ngroups) {
+                Data <- rbind(Data, X[[g]])
+            }
+            Data$group <- rep(1:ngroups, times=sample.nobs)
+        }
+        var.names <- lavaan:::vnames(fit@ParTable, type="ov", group=1L)
+        if(ngroups > 1L) var.names <- c(var.names, "group")
+        names(Data) <- var.names
+        if(return.fit) {
+            attr(Data, "fit") <- fit
+        }
+        return(Data)
+
+    } else if (return.type == "cov") {
+        if(ngroups == 1L) {
+            return(cov(X[[1L]]))
+        } else {
+            cov.list <- lapply(X, cov)
+            return(cov.list)
+        }
+    }
+}
+
+lavaanValeMaurelli1983 <- function(n=100L, COR, skewness, kurtosis) {
+    fleishman1978_abcd <- function(skewness, kurtosis) {
+        system.function <- function(x, skewness, kurtosis) {
+            b.=x[1L]; c.=x[2L]; d.=x[3L]
+            eq1 <- b.^2 + 6*b.*d. + 2*c.^2 + 15*d.^2 - 1
+            eq2 <- 2*c.*(b.^2 + 24*b.*d. + 105*d.^2 + 2) - skewness
+            eq3 <- 24*(b.*d. + c.^2*(1 + b.^2 + 28*b.*d.) +
+                       d.^2*(12 + 48*b.*d. + 141*c.^2 + 225*d.^2)) - kurtosis
+            eq <- c(eq1,eq2,eq3)
+            sum(eq^2) ## SS
+        }
+
+        out <- nlminb(start=c(1,0,0), objective=system.function,
+                      scale=10,
+                      control=list(trace=0),
+                      skewness=skewness, kurtosis=kurtosis)
+        if(out$convergence != 0) warning("no convergence")
+        b. <- out$par[1L]; c. <- out$par[2L]; d. <- out$par[3L]; a. <- -c.
+        c(a.,b.,c.,d.)
+    }
+
+    getICOV <- function(b1, c1, d1, b2, c2, d2, R) {
+        objectiveFunction <- function(x, b1, c1, d1, b2, c2, d2, R) {
+            rho=x[1L]
+            eq <- rho*(b1*b2 + 3*b1*d2 + 3*d1*b2 + 9*d1*d2) +
+                  rho^2*(2*c1*c2) + rho^3*(6*d1*d2) - R
+            eq^2
+        }
+
+        #gradientFunction <- function(x, bcd1, bcd2, R) {
+        #
+        #}
+
+        out <- nlminb(start=R, objective=objectiveFunction,
+                      scale=10, control=list(trace=0),
+                      b1=b1, c1=c1, d1=d1, b2=b2, c2=c2, d2=d2, R=R)
+        if(out$convergence != 0) warning("no convergence")
+        rho <- out$par[1L]
+        rho
+    }
+
+    # number of variables
+    nvar <- ncol(COR)
+    # check skewness
+    if(length(skewness) == nvar) {
+        SK <- skewness
+    } else if(length(skewness == 1L)) {
+        SK <- rep(skewness, nvar)
+    } else {
+        stop("skewness has wrong length")
+    }
+
+    if(length(kurtosis) == nvar) {
+        KU <- kurtosis
+    } else if(length(skewness == 1L)) {
+        KU <- rep(kurtosis, nvar)
+    } else {
+        stop("kurtosis has wrong length")
+    }
+
+    # create Fleishman table
+    FTable <- matrix(0, nvar, 4L)
+    for(i in 1:nvar) {
+        FTable[i,] <- fleishman1978_abcd(skewness=SK[i], kurtosis=KU[i])
+    }
+
+    # compute intermediate correlations between all pairs
+    ICOR <- diag(nvar)
+	if(nvar > 1) {
+		for(j in 1:(nvar-1L)) {
+			for(i in (j+1):nvar) {
+				if(COR[i,j] == 0) next
+				ICOR[i,j] <- ICOR[j,i] <-
+					getICOV(FTable[i,2], FTable[i,3], FTable[i,4],
+							FTable[j,2], FTable[j,3], FTable[j,4], R=COR[i,j])
+			}
+		}
+	}
+    # generate Z ## FIXME: replace by rmvnorm once we use that package
+    X <- Z <- mvrnorm(n=n, mu=rep(0,nvar), Sigma=ICOR)
+
+    # transform Z using Fleishman constants
+    for(i in 1:nvar) {
+        X[,i] <- FTable[i,1L] + FTable[i,2L]*Z[,i] + FTable[i,3L]*Z[,i]^2 +
+                 FTable[i,4L]*Z[,i]^3
+    }
+
+    X
+}
+

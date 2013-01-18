@@ -5,6 +5,7 @@
 # Fix the first rows the same when sample size is increasing
 # Provide option when users have population data
 # Complex simulation with many conditions
+# Naive auxiliary variable
 
 # Find non ASCII
 

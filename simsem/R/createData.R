@@ -146,52 +146,56 @@ dataGen <- function(dataDist, n, m, cm) {
     Data <- NULL
     # Check dim(M) dim(CM) dim(copula) are equal
     if (!is.null(dataDist)) {
-        require(copula)
-        if (dataDist@p > 1) {
-            varNotZeros <- diag(cm) != 0
-            dataDist2 <- dataDist
-            cm2 <- cm
-            if (sum(varNotZeros) < dataDist@p) {
-                dataDist2 <- extractSimDataDist(dataDist, which(varNotZeros))
-                cm2 <- cm[which(varNotZeros), which(varNotZeros), drop=FALSE]
-            }
-			for (i in 1:dataDist2@p) {
-				if (dataDist2@reverse[i] == TRUE) {
-				  cm2[i, ] <- -1 * cm2[i, ]
-				  cm2[, i] <- -1 * cm2[, i]
+		if(any(is.na(dataDist@skewness))) {
+			require(copula)
+			if (dataDist@p > 1) {
+				varNotZeros <- diag(cm) != 0
+				dataDist2 <- dataDist
+				cm2 <- cm
+				if (sum(varNotZeros) < dataDist@p) {
+					dataDist2 <- extractSimDataDist(dataDist, which(varNotZeros))
+					cm2 <- cm[which(varNotZeros), which(varNotZeros), drop=FALSE]
 				}
-			}
-			
-			if(!is(dataDist@copula, "NullCopula")) {
-				Mvdc <- mvdc(dataDist@copula, dataDist2@margins, dataDist2@paramMargins)
-				Data <- CopSEM(Mvdc, cm2, nw = n * 100, np = n)
-			} else {
-				r <- cov2cor(as.matrix(cm2))
-				listR <- r[lower.tri(diag(dataDist2@p))]
-				CopNorm <- ellipCopula(family = "normal", dim = dataDist2@p, dispstr = "un", 
-					param = listR)
+				for (i in 1:dataDist2@p) {
+					if (dataDist2@reverse[i] == TRUE) {
+					  cm2[i, ] <- -1 * cm2[i, ]
+					  cm2[, i] <- -1 * cm2[, i]
+					}
+				}
 				
-				Mvdc <- mvdc(CopNorm, dataDist2@margins, dataDist2@paramMargins)
-				Data <- rMvdc(n, Mvdc)
+				if(!is(dataDist@copula, "NullCopula")) {
+					Mvdc <- mvdc(dataDist@copula, dataDist2@margins, dataDist2@paramMargins)
+					Data <- CopSEM(Mvdc, cm2, nw = n * 100, np = n)
+				} else {
+					r <- cov2cor(as.matrix(cm2))
+					listR <- r[lower.tri(diag(dataDist2@p))]
+					CopNorm <- ellipCopula(family = "normal", dim = dataDist2@p, dispstr = "un", 
+						param = listR)
+					
+					Mvdc <- mvdc(CopNorm, dataDist2@margins, dataDist2@paramMargins)
+					Data <- rMvdc(n, Mvdc)
+				}
+				if (sum(varNotZeros) < dataDist@p) {
+					varZeros <- diag(cm) == 0
+					constant <- matrix(0, n, sum(varZeros))
+					Data <- data.frame(Data, constant)
+					Data[, c(which(varNotZeros), which(varZeros))] <- Data
+				}
+			} else if (dataDist@p == 1) {
+				if (as.matrix(cm)[1, 1] == 0) {
+					Data <- rep(m[1], n)
+				} else {
+					# Data <- as.matrix(run(dataDist@dist[[1]], n = n))
+					temp <- c(list(get(paste0("r", dataDist@margins[[1]]))), dataDist@paramMargins[[1]], 
+					  list(n = n))
+					Data <- as.matrix(eval(as.call(temp)))
+				}
+			} else {
+				stop("when creating a data distribution object, p cannot equal 0.")
 			}
-            if (sum(varNotZeros) < dataDist@p) {
-                varZeros <- diag(cm) == 0
-                constant <- matrix(0, n, sum(varZeros))
-                Data <- data.frame(Data, constant)
-                Data[, c(which(varNotZeros), which(varZeros))] <- Data
-            }
-        } else if (dataDist@p == 1) {
-            if (as.matrix(cm)[1, 1] == 0) {
-                Data <- rep(m[1], n)
-            } else {
-                # Data <- as.matrix(run(dataDist@dist[[1]], n = n))
-                temp <- c(list(get(paste0("r", dataDist@margins[[1]]))), dataDist@paramMargins[[1]], 
-                  list(n = n))
-                Data <- as.matrix(eval(as.call(temp)))
-            }
-        } else {
-            stop("when creating a data distribution object, p cannot equal 0.")
-        }
+		} else {
+			Data <- lavaanValeMaurelli1983(n = n, COR = cov2cor(cm), skewness = dataDist@skewness, kurtosis = dataDist@kurtosis)
+		}
         for (i in 1:dataDist@p) {
             if (dataDist@reverse[i] == TRUE) {
                 meanOld <- mean(Data[, i])
@@ -226,7 +230,8 @@ extractSimDataDist <- function(object, pos) {
 		copula@dimension <- 2L
 	} 
     return(new("SimDataDist", margins = object@margins[pos], paramMargins = object@paramMargins[pos], 
-        p = length(pos), keepScale = object@keepScale[pos], reverse = object@reverse[pos], copula = copula))
+        p = length(pos), keepScale = object@keepScale[pos], reverse = object@reverse[pos], copula = copula, 
+		skewness = object@skewness[pos], kurtosis = object@kurtosis[pos]))
 } 
 
 # The function from Mair et al. (2012)

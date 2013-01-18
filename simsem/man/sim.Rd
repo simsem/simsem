@@ -8,7 +8,7 @@
 }
 \usage{
 sim(nRep, model, n, generate = NULL, rawData = NULL, miss = NULL, datafun=NULL, 
-lavaanfun = "sem", outfun=NULL, pmMCAR = NULL, pmMAR = NULL, facDist = NULL, indDist = NULL, 
+lavaanfun = "lavaan", outfun=NULL, pmMCAR = NULL, pmMAR = NULL, facDist = NULL, indDist = NULL, 
 errorDist = NULL, sequential = FALSE, modelBoot = FALSE, realData = NULL, 
 covData = NULL, maxDraw = 50, misfitType = "f0", misfitBounds = NULL, 
 averageNumMisspec = FALSE, optMisfit=NULL, optDraws = 50, 
@@ -181,7 +181,7 @@ f1 =~ y1 + y2 + y3
 f2 =~ y4 + y5 + y6
 "
 
-Output <- sim(5, model=analysisModel, n=200, generate=popModel, std.lv=TRUE)
+Output <- sim(5, model=analysisModel, n=200, generate=popModel, std.lv=TRUE, lavaanfun = "cfa")
 summary(Output)
 
 # Example of using population data
@@ -192,7 +192,7 @@ covModel <- "
 y1 ~~ y2
 "
 
-Output <- sim(5, model=covModel, n=200, rawData=pop)
+Output <- sim(5, model=covModel, n=200, rawData=pop, lavaanfun = "cfa")
 summary(Output)
 
 # Example of data transformation: Transforming to standard score

@@ -1,0 +1,52 @@
+library(simsem)
+
+popNull <- "
+f1 =~ 0.7*y1 + 0.7*y2 + 0.7*y3 + 0.7*y4 + 0.7*y5 + 0.7*y6
+f1 ~~ 1*f1
+y1 ~~ 0.51*y1
+y2 ~~ 0.51*y2
+y3 ~~ 0.51*y3
+y4 ~~ 0.51*y4
+y5 ~~ 0.51*y5
+y6 ~~ 0.51*y6
+"
+
+popAlt <- "
+f1 =~ 0.7*y1 + 0.7*y2 + 0.7*y3
+f2 =~ 0.7*y4 + 0.7*y5 + 0.7*y6
+f1 ~~ 1*f1
+f2 ~~ 1*f2
+f1 ~~ 0.5*f2
+y1 ~~ 0.51*y1
+y2 ~~ 0.51*y2
+y3 ~~ 0.51*y3
+y4 ~~ 0.51*y4
+y5 ~~ 0.51*y5
+y6 ~~ 0.51*y6
+"
+
+analyzeNull <- "
+f1 =~ y1 + y2 + y3 + y4 + y5 + y6
+"
+
+Output.NULL <- sim(1000, analyzeNull, n=200, generate=popNull, std.lv=TRUE, lavaanfun = "cfa")
+getCutoff(Output.NULL, 0.05)
+plotCutoff(Output.NULL, 0.05)
+summary(Output.NULL)
+
+Output.ALT <- sim(1000, analyzeNull, n=200, generate=popAlt, std.lv=TRUE, lavaanfun = "cfa")
+getCutoff(Output.ALT, 0.05)
+plotCutoff(Output.ALT, 0.05)
+summary(Output.ALT)
+
+cutoff <- getCutoff(Output.NULL, 0.05)
+getPowerFit(Output.ALT, cutoff)
+plotPowerFit(Output.ALT, Output.NULL, alpha=0.05)
+plotPowerFit(Output.ALT, Output.NULL, alpha=0.05, usedFit=c("RMSEA", "SRMR", "CFI"))
+
+cutoff2 <- c(RMSEA = 0.05, CFI = 0.95, TLI = 0.95, SRMR = 0.06)
+getPowerFit(Output.ALT, cutoff2)
+plotPowerFit(Output.ALT, cutoff=cutoff2)
+plotPowerFit(Output.ALT, cutoff=cutoff2, usedFit=c("RMSEA", "SRMR", "CFI"))
+
+plotPowerFit(Output.ALT, Output.NULL, cutoff=cutoff2, usedFit=c("RMSEA", "SRMR", "CFI"))

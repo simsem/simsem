@@ -60,9 +60,9 @@ Slots:
                                                                        
 Name:             p      margins paramMargins    keepScale      reverse
 Class:      numeric    character         list      logical       vector
-                   
-Name:        copula
-Class:       copula
+                                             
+Name:        copula     skewness     kurtosis
+Class:       copula       vector       vector
 > 
 > d1 <- list(df=2)
 > d2 <- list(df=3)
@@ -78,6 +78,7 @@ Class:       copula
 DATA DISTRIBUTION OBJECT
 The number of variables is 12 
 Keep means and variances of the original scales: TRUE / TRUE / TRUE / TRUE / TRUE / TRUE / TRUE / TRUE / TRUE / TRUE / TRUE / TRUE 
+Reverse (mirror) distribution: FALSE / FALSE / FALSE / FALSE / FALSE / FALSE / FALSE / FALSE / FALSE / FALSE / FALSE / FALSE 
 The list of distributions:
 1. t: df = 2
 2. t: df = 3
@@ -91,7 +92,15 @@ The list of distributions:
 10. chisq: df = 4
 11. chisq: df = 5
 12. chisq: df = 6
+> 
+> dist2 <- bindDist(skewness = seq(-3, 3, length.out=12), kurtosis = seq(2, 5, length.out=12))
+> summary(dist2)
+DATA DISTRIBUTION OBJECT
+The number of variables is 12 
+Keep means and variances of the original scales: TRUE / TRUE / TRUE / TRUE / TRUE / TRUE / TRUE / TRUE / TRUE / TRUE / TRUE / TRUE 
 Reverse (mirror) distribution: FALSE / FALSE / FALSE / FALSE / FALSE / FALSE / FALSE / FALSE / FALSE / FALSE / FALSE / FALSE 
+Skewness: -3 / -2.45454545454545 / -1.90909090909091 / -1.36363636363636 / -0.818181818181818 / -0.272727272727273 / 0.272727272727272 / 0.818181818181818 / 1.36363636363636 / 1.90909090909091 / 2.45454545454545 / 3 
+(Excessive) Kurtosis: 2 / 2.27272727272727 / 2.54545454545455 / 2.81818181818182 / 3.09090909090909 / 3.36363636363636 / 3.63636363636364 / 3.90909090909091 / 4.18181818181818 / 4.45454545454545 / 4.72727272727273 / 5 
 > 
 > 
 > 
@@ -865,6 +874,9 @@ logical(0)
 > # Reverse the direction of chi-square distribution from positively skew to negatively skew
 > dist <- bindDist(c("t", "chisq", "norm"), d1, d2, d3, copula = gumbelCopula(2, dim = 3),
 + 	reverse = c(FALSE, TRUE, FALSE))
+> 	
+> # Create data based on Vale and Maurelli's method by specifying skewness and kurtosis
+> dist <- bindDist(skewness = c(0, -2, 2), kurtosis = c(0, 8, 4))
 > 
 > 
 > 
@@ -4832,9 +4844,22 @@ y1 ~ 0.05 + 0.5*y3
 > # Plot the marginal distribution of the variable 3
 > plotDist(datadist, var=3)
 > 
+> datadist2 <- bindDist(skewness = c(0, -2, 2), kurtosis = c(2, 4, 4))
+> 
+> # Plot the joint distribution of Variables 1 and 2 with correlation of 0.5
+> plotDist(datadist2, r=0.5, var=1:2)
+KernSmooth 2.23 loaded
+Copyright M. P. Wand 1997-2009
+> 
+> # Plot the marginal distribution of the variable 3
+> plotDist(datadist2, var=3)
+> 
 > 
 > 
 > cleanEx()
+
+detaching 'package:KernSmooth'
+
 > nameEx("plotLogitMiss")
 > ### * plotLogitMiss
 > 
@@ -5455,7 +5480,7 @@ Number of nonconverged replications:
 + f2 =~ y4 + y5 + y6
 + "
 > 
-> Output <- sim(5, model=analysisModel, n=200, generate=popModel, std.lv=TRUE)
+> Output <- sim(5, model=analysisModel, n=200, generate=popModel, std.lv=TRUE, lavaanfun = "cfa")
 > summary(Output)
 RESULT OBJECT
 Model Type
@@ -5463,51 +5488,51 @@ Model Type
 ========= Fit Indices Cutoffs ============
            Alpha
 Fit Indices      0.1     0.05     0.01    0.001     Mean     SD
-      chisq   22.988   25.092   26.775   27.153   14.438  8.218
-      aic   3103.496 3114.409 3123.140 3125.104 3065.072 41.744
-      bic   3146.374 3157.288 3166.018 3167.982 3107.950 41.744
-      rmsea    0.095    0.102    0.108    0.109    0.050  0.046
-      cfi      0.955    0.948    0.942    0.941    0.979  0.024
-      tli      0.915    0.902    0.891    0.889    0.963  0.048
-      srmr     0.056    0.061    0.065    0.066    0.040  0.017
+      chisq   11.652   12.189   12.620   12.716    8.213  3.755
+      aic   3097.402 3105.353 3111.713 3113.144 3064.306 36.673
+      bic   3140.280 3148.231 3154.591 3156.022 3107.184 36.673
+      rmsea    0.047    0.051    0.054    0.054    0.020  0.024
+      cfi      0.988    0.987    0.985    0.985    0.996  0.007
+      tli      0.978    0.975    0.973    0.972    1.001  0.028
+      srmr     0.033    0.035    0.037    0.037    0.027  0.006
 ========= Parameter Estimates and Standard Errors ============
        Estimate.Average Estimate.SD Average.SE Power..Not.equal.0. Std.Est
-f1=~y1            0.663       0.048      0.067                   1   0.716
-f1=~y2            0.698       0.045      0.069                   1   0.734
-f1=~y3            0.669       0.043      0.072                   1   0.678
-f2=~y4            0.653       0.063      0.073                   1   0.666
-f2=~y5            0.721       0.135      0.073                   1   0.719
-f2=~y6            0.721       0.077      0.076                   1   0.706
-y1~~y1            0.417       0.051      0.064                   1   0.486
-y2~~y2            0.416       0.080      0.068                   1   0.459
-y3~~y3            0.527       0.049      0.073                   1   0.540
-y4~~y4            0.533       0.067      0.074                   1   0.555
-y5~~y5            0.462       0.078      0.077                   1   0.476
-y6~~y6            0.520       0.126      0.082                   1   0.497
-f1~~f2            0.477       0.126      0.078                   1   0.477
+f1=~y1            0.684       0.066      0.071                   1   0.712
+f1=~y2            0.684       0.087      0.073                   1   0.698
+f1=~y3            0.692       0.084      0.073                   1   0.694
+f2=~y4            0.699       0.115      0.072                   1   0.706
+f2=~y5            0.722       0.102      0.073                   1   0.725
+f2=~y6            0.649       0.071      0.070                   1   0.687
+y1~~y1            0.451       0.041      0.071                   1   0.492
+y2~~y2            0.483       0.055      0.075                   1   0.510
+y3~~y3            0.506       0.053      0.076                   1   0.515
+y4~~y4            0.477       0.078      0.073                   1   0.496
+y5~~y5            0.460       0.041      0.075                   1   0.473
+y6~~y6            0.468       0.085      0.069                   1   0.525
+f1~~f2            0.444       0.143      0.080                   1   0.444
        Std.Est.SD Average.Param Average.Bias Coverage
-f1=~y1      0.034          0.70       -0.037      1.0
-f1=~y2      0.050          0.70       -0.002      1.0
-f1=~y3      0.017          0.70       -0.031      1.0
-f2=~y4      0.036          0.70       -0.047      0.8
-f2=~y5      0.095          0.70        0.021      0.6
-f2=~y6      0.079          0.70        0.021      1.0
-y1~~y1      0.047          0.49       -0.073      0.6
-y2~~y2      0.072          0.49       -0.074      0.8
-y3~~y3      0.023          0.49        0.037      1.0
-y4~~y4      0.047          0.49        0.043      1.0
-y5~~y5      0.131          0.49       -0.028      1.0
-y6~~y6      0.116          0.49        0.030      0.8
-f1~~f2      0.126          0.50       -0.023      0.6
+f1=~y1      0.035          0.70       -0.016      1.0
+f1=~y2      0.055          0.70       -0.016      1.0
+f1=~y3      0.064          0.70       -0.008      0.8
+f2=~y4      0.086          0.70       -0.001      0.8
+f2=~y5      0.048          0.70        0.022      0.8
+f2=~y6      0.068          0.70       -0.051      1.0
+y1~~y1      0.049          0.49       -0.039      1.0
+y2~~y2      0.079          0.49       -0.007      1.0
+y3~~y3      0.085          0.49        0.016      1.0
+y4~~y4      0.113          0.49       -0.013      1.0
+y5~~y5      0.071          0.49       -0.030      1.0
+y6~~y6      0.099          0.49       -0.022      0.8
+f1~~f2      0.143          0.50       -0.056      0.6
 ========= Correlation between Fit Indices ============
        chisq    aic    bic  rmsea    cfi    tli   srmr
-chisq  1.000  0.261  0.261  0.968 -0.995 -0.997  0.989
-aic    0.261  1.000  1.000  0.434 -0.248 -0.304  0.289
-bic    0.261  1.000  1.000  0.434 -0.248 -0.304  0.289
-rmsea  0.968  0.434  0.434  1.000 -0.956 -0.967  0.940
-cfi   -0.995 -0.248 -0.248 -0.956  1.000  0.997 -0.985
-tli   -0.997 -0.304 -0.304 -0.967  0.997  1.000 -0.992
-srmr   0.989  0.289  0.289  0.940 -0.985 -0.992  1.000
+chisq  1.000 -0.238 -0.238  0.850 -0.810 -0.993  0.957
+aic   -0.238  1.000  1.000 -0.282  0.209  0.221 -0.351
+bic   -0.238  1.000  1.000 -0.282  0.209  0.221 -0.351
+rmsea  0.850 -0.282 -0.282  1.000 -0.975 -0.788  0.843
+cfi   -0.810  0.209  0.209 -0.975  1.000  0.737 -0.851
+tli   -0.993  0.221  0.221 -0.788  0.737  1.000 -0.934
+srmr   0.957 -0.351 -0.351  0.843 -0.851 -0.934  1.000
 ================== Replications =====================
 Number of replications = 5 
 Number of converged replications = 5 
@@ -5526,7 +5551,7 @@ Number of nonconverged replications:
 + y1 ~~ y2
 + "
 > 
-> Output <- sim(5, model=covModel, n=200, rawData=pop)
+> Output <- sim(5, model=covModel, n=200, rawData=pop, lavaanfun = "cfa")
 > summary(Output)
 RESULT OBJECT
 Model Type
@@ -6257,7 +6282,7 @@ detaching 'package:parallel'
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  7.81 0.14 8.13 NA NA 
+Time elapsed:  9.67 0.14 9.81 NA NA 
 > grDevices::dev.off()
 null device 
           1 

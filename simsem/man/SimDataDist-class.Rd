@@ -19,6 +19,8 @@ Objects can be created by \code{\link{bindDist}} function. It can also be called
     \item{\code{keepScale}:}{Transform back to retain the mean and standard deviation of a variable equal to the model implied mean and standard deviation (with sampling error)}
     \item{\code{reverse}:}{To mirror each variable or not. If \code{TRUE}, reverse the distribution of a variable (e.g., from positive skewed to negative skewed).}
     \item{\code{copula}:}{The multivariate copula template for data generation. See \code{\link{bindDist}}}
+    \item{\code{skewness}:}{The target skewness values of each variable}
+    \item{\code{kurtosis}:}{The target (excessive) kurtosis values of each variable}
   }
 }
 \section{Methods}{
@@ -49,5 +51,8 @@ d8 <- list(df=6)
 
 dist <- bindDist(c(rep("t", 4), rep("chisq", 8)), d1, d2, d3, d4, d5, d6, d7, d8, d5, d6, d7, d8)
 summary(dist)
+
+dist2 <- bindDist(skewness = seq(-3, 3, length.out=12), kurtosis = seq(2, 5, length.out=12))
+summary(dist2)
 }
 \keyword{classes}
