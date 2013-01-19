@@ -64,7 +64,7 @@ datafun <- function(data) {
 
 analyzeModel3 <- analyzeModel1
 
-Output3 <- sim(10, n=200, analyzeModel3, generate=popModel, std.lv=TRUE, lavaanfun="sem", datafun=datafun)
+Output3 <- sim(1000, n=200, analyzeModel3, generate=popModel, std.lv=TRUE, lavaanfun="sem", datafun=datafun)
 summary(Output3)
 
 # Fourth analysis model: Model accounting for covariate in factor level
@@ -78,6 +78,6 @@ f1 ~~ 1*f1
 f2 ~~ 1*f2
 "
 
-Output4 <- sim(10, n=200, analyzeModel4, generate=popModel, std.lv=TRUE, fixed.x=FALSE, lavaanfun="sem")
+Output4 <- sim(1000, n=200, analyzeModel4, generate=popModel, std.lv=TRUE, fixed.x=FALSE, lavaanfun="sem")
 summary(Output4)
 summaryParam(Output4, matchParam=TRUE) # Ignore y7 ~~ y7 which means error variance in data-generation model but total variance in analysis model

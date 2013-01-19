@@ -69,7 +69,7 @@ summary(Output)
 
 dist2 <- bindDist(skewness = seq(-5, 5, length.out=12), kurtosis = seq(2, 10, length.out=12))
 
-Output2 <- sim(10, n=200, analyzeModel, indDist=dist2, generate=popModel, estimator="mlm", std.lv=TRUE, lavaanfun="cfa")
+Output2 <- sim(1000, n=200, analyzeModel, indDist=dist2, generate=popModel, estimator="mlm", std.lv=TRUE, lavaanfun="cfa")
 getCutoff(Output2, 0.05)
 plotCutoff(Output2, 0.05)
 summary(Output2)

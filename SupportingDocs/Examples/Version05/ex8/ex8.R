@@ -45,7 +45,7 @@ f2 ~~ f3
 
 miss.model <- miss(pmMCAR=0.2, m=5) 
 
-Output <- sim(10, n=500, model=analyzeModel, generate=popModel, lavaanfun = "cfa", miss=miss.model)
+Output <- sim(1000, n=500, model=analyzeModel, generate=popModel, lavaanfun = "cfa", miss=miss.model)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summary(Output)
