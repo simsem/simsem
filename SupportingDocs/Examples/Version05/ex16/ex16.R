@@ -27,7 +27,7 @@ f2 =~ y4 + y5 + y6
 f2 ~ f1
 "
 
-Output1 <- sim(10, n=200, analyzeModel1, generate=popModel, std.lv=TRUE, lavaanfun="sem")
+Output1 <- sim(1000, n=200, analyzeModel1, generate=popModel, std.lv=TRUE, lavaanfun="sem")
 summary(Output1)
 
 # Second analysis model: Model accounting for covariate in the indicator level
@@ -51,7 +51,7 @@ y6 ~~ y6
 y7 ~~ 0*y7
 "
 
-Output2 <- sim(10, n=200, analyzeModel2, generate=popModel, lavaanfun="lavaan")
+Output2 <- sim(1000, n=200, analyzeModel2, generate=popModel, lavaanfun="lavaan")
 summary(Output2)
 
 # Third analysis model: Model accounting for covariate with orthogonalization

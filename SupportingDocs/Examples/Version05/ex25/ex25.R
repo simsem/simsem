@@ -1,67 +1,183 @@
 library(simsem)
 
-loading <- matrix(0, 9, 3)
-loading[1, 1] <- 1
-loading[2:3, 1] <- c("con1", "con2")
-loading[4, 2] <- 1
-loading[5:6, 2] <- c("con1", "con2")
-loading[7, 3] <- 1
-loading[8:9, 3] <- c("con1", "con2")
-loadingMis <- matrix(0, 9, 3)
-loadingMis[2:3, 1] <- "runif(1, -0.1, 0.1)"
-loadingMis[5:6, 2] <- "runif(1, -0.1, 0.1)"
-loadingMis[8:9, 3] <- "runif(1, -0.1, 0.1)"
-LY <- bind(loading, "runif(1, 0.5, 1.5)", misspec = loadingMis)
+popNested <- "
+f1 =~ 1*y1 + 0.8*y2 + 1.2*y3 + con1*y2 + con2*y3
+f2 =~ 1*y4 + 0.8*y5 + 1.2*y6 + con1*y5 + con2*y6
+f3 =~ 1*y7 + 0.8*y8 + 1.2*y9 + con1*y8 + con2*y9
+f1 ~~ 1*f1
+f2 ~~ 1.2*f2
+f3 ~~ 1.4*f3
+f1 ~~ 0.77*f2
+f2 ~~ 0.91*f3
+f1 ~~ 0.58*f3
+y1 ~~ 0.4*y1
+y2 ~~ 0.4*y2
+y3 ~~ 0.4*y3
+y4 ~~ 0.4*y4
+y5 ~~ 0.4*y5
+y6 ~~ 0.4*y6
+y7 ~~ 0.4*y7
+y8 ~~ 0.4*y8
+y9 ~~ 0.4*y9
+y1 ~~ 0.08*y4
+y2 ~~ 0.08*y5
+y3 ~~ 0.08*y6
+y4 ~~ 0.08*y7
+y5 ~~ 0.08*y8
+y6 ~~ 0.08*y9
+y1 ~~ 0.016*y7
+y2 ~~ 0.016*y8
+y3 ~~ 0.016*y9
+f1 ~ 0*1
+f2 ~ 0.5*1
+f3 ~ 1*1
+y1 ~ 0*1
+y2 ~ -0.5*1 + label('con3')*1
+y3 ~ 0.5*1 + label('con4')*1
+y4 ~ 0*1
+y5 ~ -0.5*1 + label('con3')*1
+y6 ~ 0.5*1 + label('con4')*1
+y7 ~ 0*1
+y8 ~ -0.5*1 + label('con3')*1
+y9 ~ 0.5*1 + label('con4')*1
+"
 
-facCor <- matrix(NA, 3, 3)
-diag(facCor) <- 1
-facCorVal <- diag(3)
-facCorVal[1, 2] <- facCorVal[2, 1] <- 0.7
-facCorVal[2, 3] <- facCorVal[3, 2] <- 0.7
-facCorVal[1, 3] <- facCorVal[3, 1] <- 0.49
-RPS <- binds(facCor, facCorVal)
+popParent <- "
+f1 =~ 1*y1 + 0.8*y2 + 1.2*y3 + con1*y2 + con2*y3
+f2 =~ 1*y4 + 0.8*y5 + 1.2*y6 + con1*y5 + con2*y6
+f3 =~ 1*y7 + 0.8*y8 + 1.2*y9 + con1*y8 + con2*y9
+f1 ~~ 1*f1
+f2 ~~ 1.2*f2
+f3 ~~ 1.4*f3
+f1 ~~ 0.77*f2
+f2 ~~ 0.91*f3
+f1 ~~ 0.58*f3
+y1 ~~ 0.4*y1
+y2 ~~ 0.4*y2
+y3 ~~ 0.4*y3
+y4 ~~ 0.4*y4
+y5 ~~ 0.4*y5
+y6 ~~ 0.4*y6
+y7 ~~ 0.4*y7
+y8 ~~ 0.4*y8
+y9 ~~ 0.4*y9
+y1 ~~ 0.08*y4
+y2 ~~ 0.08*y5
+y3 ~~ 0.08*y6
+y4 ~~ 0.08*y7
+y5 ~~ 0.08*y8
+y6 ~~ 0.08*y9
+y1 ~~ 0.016*y7
+y2 ~~ 0.016*y8
+y3 ~~ 0.016*y9
+f1 ~ 0*1
+f2 ~ 0.5*1
+f3 ~ 1*1
+y1 ~ 0*1
+y2 ~ -0.5*1
+y3 ~ 0.5*1
+y4 ~ 0*1
+y5 ~ 0*1
+y6 ~ 0*1
+y7 ~ 0*1
+y8 ~ 0.5*1
+y9 ~ -0.5*1
+"
 
-VE <- bind(rep(NA, 3), c(1, 1.2, 1.4))
+analyzeNested <- "
+f1 =~ 1*y1 + con1*y2 + con2*y3
+f2 =~ 1*y4 + con1*y5 + con2*y6
+f3 =~ 1*y7 + con1*y8 + con2*y9
+f1 ~~ f1
+f2 ~~ f2
+f3 ~~ f3
+f1 ~~ f2
+f2 ~~ f3
+f1 ~~ f3
+y1 ~~ y1
+y2 ~~ y2
+y3 ~~ y3
+y4 ~~ y4
+y5 ~~ y5
+y6 ~~ y6
+y7 ~~ y7
+y8 ~~ y8
+y9 ~~ y9
+y1 ~~ y4
+y2 ~~ y5
+y3 ~~ y6
+y4 ~~ y7
+y5 ~~ y8
+y6 ~~ y9
+y1 ~~ y7
+y2 ~~ y8
+y3 ~~ y9
+f1 ~ 1
+f2 ~ 1
+f3 ~ 1
+y1 ~ 0*1
+y2 ~ con3*1
+y3 ~ con4*1
+y4 ~ 0*1
+y5 ~ con3*1
+y6 ~ con4*1
+y7 ~ 0*1
+y8 ~ con3*1
+y9 ~ con4*1
+"
 
-error <- diag(9)
-error[1, 4] <- error[4, 7] <- error[4, 1] <- error[7, 4] <- NA
-error[2, 5] <- error[5, 8] <- error[5, 2] <- error[8, 5] <- NA
-error[3, 6] <- error[6, 9] <- error[6, 3] <- error[9, 6] <- NA
-error[1, 7] <- error[7, 1] <- NA
-error[2, 8] <- error[8, 2] <- NA
-error[3, 9] <- error[9, 3] <- NA
-errorVal <- diag(9)
-errorVal[1, 4] <- errorVal[4, 7] <- errorVal[4, 1] <- errorVal[7, 4] <- 0.2
-errorVal[2, 5] <- errorVal[5, 8] <- errorVal[5, 2] <- errorVal[8, 5] <- 0.2
-errorVal[3, 6] <- errorVal[6, 9] <- errorVal[6, 3] <- errorVal[9, 6] <- 0.2
-errorVal[1, 7] <- errorVal[7, 1] <- 0.04
-errorVal[2, 8] <- errorVal[8, 2] <- 0.04
-errorVal[3, 9] <- errorVal[9, 3] <- 0.04
-RTE <- binds(error, errorVal)
+analyzeParent <- "
+f1 =~ 1*y1 + con1*y2 + con2*y3
+f2 =~ 1*y4 + con1*y5 + con2*y6
+f3 =~ 1*y7 + con1*y8 + con2*y9
+f1 ~~ f1
+f2 ~~ f2
+f3 ~~ f3
+f1 ~~ f2
+f2 ~~ f3
+f1 ~~ f3
+y1 ~~ y1
+y2 ~~ y2
+y3 ~~ y3
+y4 ~~ y4
+y5 ~~ y5
+y6 ~~ y6
+y7 ~~ y7
+y8 ~~ y8
+y9 ~~ y9
+y1 ~~ y4
+y2 ~~ y5
+y3 ~~ y6
+y4 ~~ y7
+y5 ~~ y8
+y6 ~~ y9
+y1 ~~ y7
+y2 ~~ y8
+y3 ~~ y9
+f1 ~ 1
+f2 ~ 1
+f3 ~ 1
+y1 ~ 0*1
+y2 ~ 1
+y3 ~ 1
+y4 ~ 0*1
+y5 ~ 1
+y6 ~ 1
+y7 ~ 0*1
+y8 ~ 1
+y9 ~ 1
+"
 
-VTE <- bind(rep(NA, 9), 0.4)
-
-intceptMis <- rep(c(0, "runif(1, -0.1, 0.1)", "runif(1, -0.1, 0.1)"), 3)
-TYnested <- bind(rep(c(0, "con3", "con4"), 3), "runif(1, -0.5, 0.5)", misspec = intceptMis)
-
-AL <- bind(rep(NA, 3), c(0, 0.5, 1))
-
-longNested <- model(LY=LY, RPS=RPS, VE=VE, RTE=RTE, VTE=VTE, TY=TYnested, AL=AL, modelType = "CFA")
-
-TYparent <- bind(rep(c(0, NA, NA), 3), "runif(1, -0.5, 0.5)", misspec = intceptMis)
-
-longParent <- model(LY=LY, RPS=RPS, VE=VE, RTE=RTE, VTE=VTE, TY=TYparent, AL=AL, modelType = "CFA")
-
-outDatNestedModNested <- sim(NULL, n=50:500, longNested, generate = longNested)
-outDatNestedModParent <- sim(NULL, n=50:500, longParent, generate = longNested)
+outDatNestedModNested <- sim(NULL, n = 50:500, analyzeNested, generate = popNested, lavaanfun = "lavaan")
+outDatNestedModParent <- sim(NULL, n = 50:500, analyzeParent, generate = popNested, lavaanfun = "lavaan")
 
 anova(outDatNestedModNested, outDatNestedModParent)
 
 cutoff <- getCutoffNested(outDatNestedModNested, outDatNestedModParent, nVal = 250)
 plotCutoffNested(outDatNestedModNested, outDatNestedModParent, alpha = 0.05)
 
-outDatParentModNested <- sim(NULL, n=50:500, longNested, generate = longParent)
-outDatParentModParent <- sim(NULL, n=50:500, longParent, generate = longParent)
+outDatParentModNested <- sim(NULL, n = 50:500, analyzeNested, generate = popParent, lavaanfun = "lavaan")
+outDatParentModParent <- sim(NULL, n = 50:500, analyzeParent, generate = popParent, lavaanfun = "lavaan")
 
 anova(outDatParentModNested, outDatParentModParent)
 

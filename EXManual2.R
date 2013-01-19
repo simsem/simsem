@@ -1095,7 +1095,7 @@ errorCorVal <- errorCorVal + t(errorCorVal)
 diag(errorCorVal) <- 1
 RTE <- binds(errorCor, errorCorVal)
 
-VE <- bind(c(NA, NA, NA, "con15", "con16", "con17", "con15", "con16", "con17"), 1)
+VE <- bind(c(1, 1, 1, "con15", "con16", "con17", "con15", "con16", "con17"), 1)
 
 longMed <- model(BE=BE, RPS=RPS, LY=LY, RTE=RTE, VE=VE, modelType="SEM")
 

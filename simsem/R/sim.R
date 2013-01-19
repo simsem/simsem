@@ -385,6 +385,16 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 			} else {
 				pt <- generate$model
 			}
+			extraParamIndex <- pt$op %in% c(">", "<", "==", ":=")
+			if(any(extraParamIndex)) {
+				con <- list(lhs = pt$lhs[extraParamIndex], op = pt$op[extraParamIndex], rhs = pt$rhs[extraParamIndex])
+				hasLab <- pt$label != ""
+				extraVal <- applyConScript(pt$label[hasLab][!duplicated(pt$label[hasLab])],  pt$ustart[hasLab][!duplicated(pt$label[hasLab])], con)
+				toBeFill <- which(is.na(pt$ustart) & hasLab)
+				for(i in seq_along(toBeFill)) {
+					pt$ustart[toBeFill[i]] <- extraVal[[2]][extraVal[[1]] == pt$label[toBeFill[i]]]
+				}
+			}
 			param <- pt$ustart
 			names(param) <- lavaan:::getParameterLabels(pt)
 			param <- as.data.frame(t(param))
@@ -646,7 +656,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 			try(converged <- as.numeric(!inspect(out, "converged")))
 			if(converged == 0) {
 				se <- inspect(out, "se")
-				improperSE <- any(unlist(se) < 0) | any(is.na(unlist(se)))
+				improperSE <- any(unlist(se) < 0) | any(is.na(unlist(se))) | all(unlist(se) == 0)
 				if (improperSE) {
 					converged <- 3
 				}
@@ -676,7 +686,13 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 			se <- out@Fit@se[index]
 			std <- result$std.all[index]
 			lab <- lavaan:::getParameterLabels(outpt, type="free")
-			if(!is.lavaancall(model) && any(extraParamIndex)) lab <- c(lab, renameExtraParam(model@con$lhs, model@con$op, model@con$rhs))
+			if(any(extraParamIndex)) {
+				if(!is.lavaancall(model)) {
+					lab <- c(lab, renameExtraParam(model@con$lhs, model@con$op, model@con$rhs))
+				} else {
+					lab <- c(lab, renameExtraParam(outpt$lhs[extraParamIndex], outpt$op[extraParamIndex], outpt$rhs[extraParamIndex]))
+				}
+			}
 			names(coef) <- lab
 			names(se) <- lab
 			names(std) <- lab

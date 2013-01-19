@@ -1,25 +1,44 @@
 library(simsem)
 
-loading.null <- matrix(0, 8, 2)
-loading.null[1:5, 1] <- NA
-loading.null[6:8, 2] <- NA
-LY.NULL <- bind(loading.null, 0.7)
-latent.cor.null <- matrix(NA, 2, 2)
-diag(latent.cor.null) <- 1
-RPS <- binds(latent.cor.null, 0.5)
-error.cor.mis <- matrix("rnorm(1, 0, 0.1)", 8, 8)
-diag(error.cor.mis) <- 1
-RTE <- binds(diag(8), misspec = error.cor.mis)
-CFA.Model.NULL <- model(LY = LY.NULL, RPS = RPS, RTE = RTE, modelType = "CFA")
+popNull <- "
+f1 =~ 0.7*y1 + 0.7*y2 + 0.7*y3 + 0.7*y4 + 0.7*y5
+f2 =~ 0.7*y6 + 0.7*y7 + 0.7*y8
+f1 ~~ 1*f1
+f2 ~~ 1*f2
+f1 ~~ 0.5*f2
+y1 ~~ 0.51*y1
+y2 ~~ 0.51*y2
+y3 ~~ 0.51*y3
+y4 ~~ 0.51*y4
+y5 ~~ 0.51*y5
+y6 ~~ 0.51*y6
+y7 ~~ 0.51*y7
+y8 ~~ 0.51*y8
+"
 
-loading.alt <- matrix(0, 8, 2)
-loading.alt[1:4, 1] <- NA
-loading.alt[5:8, 2] <- NA
-LY.ALT <- bind(loading.alt, 0.7)
-CFA.Model.ALT <- model(LY = LY.ALT, RPS = RPS, RTE = RTE, modelType="CFA")
+popAlt <- "
+f1 =~ 0.7*y1 + 0.7*y2 + 0.7*y3 + 0.7*y4
+f2 =~ 0.7*y5 + 0.7*y6 + 0.7*y7 + 0.7*y8
+f1 ~~ 1*f1
+f2 ~~ 1*f2
+f1 ~~ 0.5*f2
+y1 ~~ 0.51*y1
+y2 ~~ 0.51*y2
+y3 ~~ 0.51*y3
+y4 ~~ 0.51*y4
+y5 ~~ 0.51*y5
+y6 ~~ 0.51*y6
+y7 ~~ 0.51*y7
+y8 ~~ 0.51*y8
+"
 
-Output.NULL <- sim(NULL, n = 25:500, CFA.Model.NULL)
-Output.ALT <- sim(NULL, n = 25:500, CFA.Model.NULL, generate = CFA.Model.ALT)
+analyzeNull <- "
+f1 =~ y1 + y2 + y3 + y4 + y5
+f2 =~ y6 + y7 + y8
+"
+
+Output.NULL <- sim(NULL, n = 25:500, analyzeNull, generate = popNull, std.lv = TRUE, lavaanfun = "cfa")
+Output.ALT <- sim(NULL, n = 25:500, analyzeNull, generate = popAlt, std.lv = TRUE, lavaanfun = "cfa")
 
 cutoff <- getCutoff(Output.NULL, alpha = 0.05, nVal = 250)
 plotCutoff(Output.NULL, alpha = 0.05)

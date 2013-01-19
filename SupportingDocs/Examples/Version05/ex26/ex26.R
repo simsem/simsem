@@ -1,46 +1,53 @@
 library(simsem)
 
-pathNested <- matrix(0, 5, 5)
-pathNested[2, 1] <- "con"
-pathNested[3, 2] <- "con"
-pathNested[4, 3] <- "con"
-pathNested[5, 4] <- "con"
-pathMis <- matrix(0, 5, 5)
-pathMis[2:5, 1] <- "rnorm(1, 0, 0.05)"
-pathMis[3:5, 2] <- "rnorm(1, 0, 0.05)"
-pathMis[4:5, 3] <- "rnorm(1, 0, 0.05)"
-pathMis[5, 4] <- "rnorm(1, 0, 0.05)"
-BEnested <- bind(pathNested, "runif(1, 0.3, 0.7)", misspec = pathMis)
+popNested <- "
+y2 ~ 0.4*y1 + con*y1
+y3 ~ 0.4*y2 + con*y2
+y4 ~ 0.4*y3 + con*y3
+y5 ~ 0.4*y4 + con*y4
+y1 ~~ 1*y1
+y2 ~~ 0.8*y2
+y3 ~~ 0.8*y3
+y4 ~~ 0.8*y4
+y5 ~~ 0.8*y5
+"
 
-residual <- diag(5)
-RPS <- binds(residual)
+popParent <- "
+y2 ~ 0.4*y1
+y3 ~ 0.5*y2
+y4 ~ 0.3*y3
+y5 ~ 0.7*y4
+y1 ~~ 1*y1
+y2 ~~ 0.8*y2
+y3 ~~ 0.8*y3
+y4 ~~ 0.8*y4
+y5 ~~ 0.8*y5
+"
 
-modelNested <- model(RPS = RPS, BE = BEnested, modelType="Path")
+analyzeNested <- "
+y2 ~ con*y1
+y3 ~ con*y2
+y4 ~ con*y3
+y5 ~ con*y4
+"
 
-pathParent <- matrix(0, 5, 5)
-pathParent[2, 1] <- NA
-pathParent[3, 2] <- NA
-pathParent[4, 3] <- NA
-pathParent[5, 4] <- NA
-pathMis <- matrix(0, 5, 5)
-pathMis[2:5, 1] <- "rnorm(1, 0, 0.05)"
-pathMis[3:5, 2] <- "rnorm(1, 0, 0.05)"
-pathMis[4:5, 3] <- "rnorm(1, 0, 0.05)"
-pathMis[5, 4] <- "rnorm(1, 0, 0.05)"
-BEparent <- bind(pathParent, "runif(1, 0.3, 0.7)", misspec = pathMis)
+analyzeParent <- "
+y2 ~ y1
+y3 ~ y2
+y4 ~ y3
+y5 ~ y4
+"
 
-modelParent <- model(RPS = RPS, BE = BEparent, modelType="Path")
-
-outDatNestedModNested <- sim(NULL, n=50:500, modelNested, generate = modelNested, pmMCAR=seq(0, 0.3, 0.1))
-outDatNestedModParent <- sim(NULL, n=50:500, modelParent, generate = modelNested, pmMCAR=seq(0, 0.3, 0.1))
+outDatNestedModNested <- sim(NULL, n = 50:500, analyzeNested, generate = list(model = popNested, fixed.x = FALSE), lavaanfun = "sem", pmMCAR=seq(0, 0.3, 0.1))
+outDatNestedModParent <- sim(NULL, n = 50:500, analyzeParent, generate = list(model = popNested, fixed.x = FALSE), lavaanfun = "sem", pmMCAR=seq(0, 0.3, 0.1))
 
 anova(outDatNestedModNested, outDatNestedModParent)
 
 cutoff <- getCutoffNested(outDatNestedModNested, outDatNestedModParent, nVal=250, pmMCARval=0.2)
 plotCutoffNested(outDatNestedModNested, outDatNestedModParent, alpha=0.05)
 
-outDatParentModNested <- sim(NULL, n=50:500, modelNested, generate = modelParent, pmMCAR=seq(0, 0.3, 0.1))
-outDatParentModParent <- sim(NULL, n=50:500, modelParent, generate = modelParent, pmMCAR=seq(0, 0.3, 0.1))
+outDatParentModNested <- sim(NULL, n = 50:500, analyzeNested, generate = list(model = popParent, fixed.x = FALSE), lavaanfun = "sem", pmMCAR=seq(0, 0.3, 0.1))
+outDatParentModParent <- sim(NULL, n = 50:500, analyzeParent, generate = list(model = popParent, fixed.x = FALSE), lavaanfun = "sem", pmMCAR=seq(0, 0.3, 0.1))
 
 anova(outDatParentModNested, outDatParentModParent)
 

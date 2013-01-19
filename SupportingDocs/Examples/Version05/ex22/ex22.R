@@ -1,34 +1,38 @@
 library(simsem)
 
-path.null <- matrix(0, 5, 5)
-path.null[2, 1] <- NA
-path.null[3, 2] <- NA
-path.null[4, 3] <- NA
-path.null[5, 4] <- NA
-path.null.mis <- matrix(0, 5, 5)
-path.null.mis[3:5, 1] <- "rnorm(1, 0, 0.05)"
-path.null.mis[4:5, 2] <- "rnorm(1, 0, 0.05)"
-path.null.mis[5, 3] <- "rnorm(1, 0, 0.05)"
-BE.null <- bind(path.null, 0.4, misspec = path.null.mis)
+popNull <- "
+y2 ~ 0.4*y1
+y3 ~ 0.4*y2
+y4 ~ 0.4*y3
+y5 ~ 0.4*y4
+y1 ~~ 1*y1
+y2 ~~ 0.64*y2
+y3 ~~ 0.64*y3
+y4 ~~ 0.64*y4
+y5 ~~ 0.64*y5
+"
 
-residual <- diag(5)
-RPS <- binds(residual)
+popAlt <- "
+y2 ~ 0.4*y1
+y3 ~ 0.4*y1
+y4 ~ 0.4*y2 + 0.4*y3
+y5 ~ 0.4*y5
+y1 ~~ 1*y1
+y2 ~~ 0.64*y2
+y3 ~~ 0.64*y3
+y4 ~~ 0.40*y4
+y5 ~~ 0.64*y5
+"
 
-path.model.null <- model(RPS = RPS, BE = BE.null, modelType = "Path")
+analyzeNull <- "
+y2 ~ y1
+y3 ~ y2
+y4 ~ y3
+y5 ~ y4
+"
 
-path.alt <- matrix(0, 5, 5)
-path.alt[2:3, 1] <- NA
-path.alt[4, 2:3] <- NA
-path.alt[5, 4] <- NA
-path.alt.mis <- matrix(0, 5, 5)
-path.alt.mis[4:5, 1] <- "rnorm(1, 0, 0.05)"
-path.alt.mis[5, 2:3] <- "rnorm(1, 0, 0.05)"
-BE.alt <- bind(path.alt, 0.4, misspec = path.alt.mis)
-
-path.model.alt <- model(RPS = RPS, BE = BE.alt, modelType="Path")
-
-Output.NULL <- sim(NULL, n = 25:500, path.model.null, pmMCAR = seq(0, 0.3, 0.1))
-Output.ALT <- sim(NULL, n = 25:500, path.model.null, generate = path.model.alt, pmMCAR = seq(0, 0.3, 0.1))
+Output.NULL <- sim(NULL, n = 25:500, analyzeNull, generate = popNull, lavaanfun = "sem", pmMCAR = seq(0, 0.3, 0.1))
+Output.ALT <- sim(NULL, n = 25:500, analyzeNull, generate = popAlt, lavaanfun = "sem", pmMCAR = seq(0, 0.3, 0.1))
 
 cutoff <- getCutoff(Output.NULL, alpha = 0.05, nVal = 250, pmMCARval = 0.2)
 plotCutoff(Output.NULL, alpha = 0.05)

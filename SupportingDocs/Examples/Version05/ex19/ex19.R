@@ -1,48 +1,39 @@
 library(simsem)
 
-loading <- matrix(0, 5, 3)
-loading[1,1] <- 1
-loading[2:5,2] <- 1
-loading[2:5,3] <- 0:3
-loading.trivial <- matrix(0, 5, 3)
-loading.trivial[3:4, 3] <- "runif(1, -0.1, 0.1)"
-LY <- bind(loading, misspec=loading.trivial)
+popModel <- "
+i =~ 1*t1 + 1*t2 + 1*t3 + 1*t4
+s =~ 0*t1 + 1*t2 + 2*t3 + 3*t4
+i ~ 0.5*x
+s ~ 0.1*x
+i ~~ 1*i
+s ~~ 0.25*s
+i ~~ 0.05*s
+x ~~ 0.25*x
+x ~ 0.5*1
+i ~ 5*1
+s ~ 2*1
+t1 ~ 0*1
+t2 ~ 0*1
+t3 ~ 0*1
+t4 ~ 0*1
+t1 ~~ 1.2*t1
+t2 ~~ 1.2*t2
+t3 ~~ 1.2*t3
+t4 ~~ 1.2*t4
+"
 
-facMean <- rep(NA, 3)
-facMeanVal <- c(0.5, 5, 2)
-AL <- bind(facMean, facMeanVal)
+analyzeModel <- "
+i =~ 1*t1 + 1*t2 + 1*t3 + 1*t4
+s =~ 0*t1 + 1*t2 + 2*t3 + 3*t4
+i ~ x
+s ~ x
+"
 
-facVar <- rep(NA, 3)
-facVarVal <- c(0.25, 1, 0.25)
-VPS <- bind(facVar, facVarVal)
-
-facCor <- diag(3)
-facCor[2,3] <- NA
-facCor[3,2] <- NA
-RPS <- binds(facCor, 0.5)
-
-VTE <- bind(c(0, rep(NA, 4)), 1.2)
-
-RTE <- binds(diag(5))
-
-TY <- bind(rep(0, 5))
-
-path <- matrix(0, 3, 3)
-path[2,1] <- NA
-path[3,1] <- NA
-pathVal <- matrix(0, 3, 3)
-pathVal[2,1] <- 0.5
-pathVal[3,1] <- 0.1
-BE <- bind(path, pathVal)
-
-LCA.Model <- model(LY=LY, RPS=RPS, VPS=VPS, AL=AL, VTE=VTE, RTE=RTE, TY=TY, BE=BE, modelType="SEM")
-
-group <- list(size=1, prob=0.5)
+pois <- list(lambda = 3)
 n01 <- list(mean=0, sd=1)
-facDist <- bindDist(c("binom", "norm", "norm"), group, n01, n01, keepScale=c(FALSE, TRUE, TRUE))
+indDist <- bindDist(c("norm", "norm", "norm", "norm", "pois"), n01, n01, n01, n01, pois, keepScale=c(TRUE, TRUE, TRUE, TRUE, FALSE))
 
-Output <- sim(NULL, n=50:500, LCA.Model, pmMCAR=seq(0, 0.4, 0.1), sequential=TRUE, facDist=facDist)
-
+Output <- sim(NULL, n=50:1000, pmMCAR=seq(0, 0.4, 0.1), indDist=indDist, model = analyzeModel, generate = list(model = popModel, fixed.x = FALSE), fixed.x = FALSE, lavaanfun = "growth")
 plotCutoff(Output, 0.05)
 getCutoff(Output, 0.05, nVal = 200, pmMCARval = 0)
 getCutoff(Output, 0.05, nVal = 300, pmMCARval = 0.33)	
@@ -51,4 +42,4 @@ Cpow <- getPower(Output)
 Cpow2 <- getPower(Output, nVal = 200, pmMCARval = 0.35)
 findPower(Cpow, "N", 0.80)
 findPower(Cpow, "MCAR", 0.80)
-plotPower(Output, powerParam=c("f2~f1", "f3~f1"))
+plotPower(Output, powerParam=c("i~x", "s~x"))

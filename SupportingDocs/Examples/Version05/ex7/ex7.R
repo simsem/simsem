@@ -9,4 +9,4 @@ fit <- cfa(HS.model, data=HolzingerSwineford1939)
 
 output.nomis <- sim(1000, n=nrow(HolzingerSwineford1939), model = fit, generate = fit)
 plotCutoff(output.nomis, 0.05)
-pValue(out, output.nomis)
+pValue(fit, output.nomis)

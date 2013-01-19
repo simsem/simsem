@@ -1,33 +1,109 @@
 library(simsem)
 
-loading <- matrix(0, 8, 4)
-loading[1:4, 1] <- 1
-loading[1:4, 2] <- 0:3
-loading[5:8, 3] <- 1
-loading[5:8, 4] <- 0:3
-LY <- bind(loading)
+popA <- "
+ix =~ 1*x1 + 1*x2 + 1*x3 + 1*x4
+sx =~ 0*x1 + 1*x2 + 2*x3 + 3*x4
+iy =~ 1*y1 + 1*y2 + 1*y3 + 1*y4
+sy =~ 0*y1 + 1*y2 + 2*y3 + 3*y4
+x1 ~~ 0.5*x1
+x2 ~~ 0.5*x2
+x3 ~~ 0.5*x3
+x4 ~~ 0.5*x4
+y1 ~~ 0.5*y1
+y2 ~~ 0.5*y2
+y3 ~~ 0.5*y3
+y4 ~~ 0.5*y4
+ix ~~ 1*ix
+sx ~~ 0.25*sx
+iy ~~ 1*iy
+sy ~~ 0.25*sy
+ix ~~ 0.2*sx
+iy ~~ 0.2*sy
+ix ~~ 0.5*iy
+sx ~~ 0*sy
+ix ~~ 0*sy
+iy ~~ 0*sx
+x1 ~ 0*1
+x2 ~ 0*1
+x3 ~ 0*1
+x4 ~ 0*1
+y1 ~ 0*1
+y2 ~ 0*1
+y3 ~ 0*1
+y4 ~ 0*1
+ix ~ 5*1
+sx ~ 2*1
+iy ~ 5*1
+sy ~ 2*1
+"
 
-RTE <- binds(diag(8))
-VTE <- bind(rep(NA, 8), 0.5)
-TY <- bind(rep(0, 8))
+popB <- "
+ix =~ 1*x1 + 1*x2 + 1*x3 + 1*x4
+sx =~ 0*x1 + 1*x2 + 2*x3 + 3*x4
+iy =~ 1*y1 + 1*y2 + 1*y3 + 1*y4
+sy =~ 0*y1 + 1*y2 + 2*y3 + 3*y4
+x1 ~~ 0.5*x1
+x2 ~~ 0.5*x2
+x3 ~~ 0.5*x3
+x4 ~~ 0.5*x4
+y1 ~~ 0.5*y1
+y2 ~~ 0.5*y2
+y3 ~~ 0.5*y3
+y4 ~~ 0.5*y4
+ix ~~ 1*ix
+sx ~~ 0.25*sx
+iy ~~ 1*iy
+sy ~~ 0.25*sy
+ix ~~ 0.2*sx
+iy ~~ 0.2*sy
+ix ~~ 0*iy
+sx ~~ 0.125*sy
+ix ~~ 0*sy
+iy ~~ 0*sx
+x1 ~ 0*1
+x2 ~ 0*1
+x3 ~ 0*1
+x4 ~ 0*1
+y1 ~ 0*1
+y2 ~ 0*1
+y3 ~ 0*1
+y4 ~ 0*1
+ix ~ 5*1
+sx ~ 2*1
+iy ~ 5*1
+sy ~ 2*1
+"
 
-AL <- bind(rep(NA, 4), c(5, 2, 5, 2))
-VPS <- bind(rep(NA, 4), c(1, 0.25, 1, 0.25))
-facCorA <- diag(4)
-facCorA[1, 3] <- facCorA[3, 1] <- NA
-RPSA <- binds(facCorA, 0.3)
+analyzeA <- "
+ix =~ 1*x1 + 1*x2 + 1*x3 + 1*x4
+sx =~ 0*x1 + 1*x2 + 2*x3 + 3*x4
+iy =~ 1*y1 + 1*y2 + 1*y3 + 1*y4
+sy =~ 0*y1 + 1*y2 + 2*y3 + 3*y4
+ix ~~ sx
+iy ~~ sy
+ix ~~ iy
+sx ~~ 0*sy
+ix ~~ 0*sy
+iy ~~ 0*sx
+"
 
-facCorB <- diag(4)
-facCorB[2, 4] <- facCorB[4, 2] <- NA
-RPSB <- binds(facCorB, 0.3)
+analyzeB <- "
+ix =~ 1*x1 + 1*x2 + 1*x3 + 1*x4
+sx =~ 0*x1 + 1*x2 + 2*x3 + 3*x4
+iy =~ 1*y1 + 1*y2 + 1*y3 + 1*y4
+sy =~ 0*y1 + 1*y2 + 2*y3 + 3*y4
+ix ~~ sx
+iy ~~ sy
+ix ~~ 0*iy
+sx ~~ sy
+ix ~~ 0*sy
+iy ~~ 0*sx
+"
 
-modelA <- model(LY=LY, TY=TY, RTE=RTE, VTE=VTE, AL=AL, VPS=VPS, RPS=RPSA, modelType="CFA")
-modelB <- model(LY=LY, TY=TY, RTE=RTE, VTE=VTE, AL=AL, VPS=VPS, RPS=RPSB, modelType="CFA")
-
-outAA <- sim(1000, n = 200, model = modelA, generate = modelA)
-outAB <- sim(1000, n = 200, model = modelB, generate = modelA)
-outBA <- sim(1000, n = 200, model = modelA, generate = modelB)
-outBB <- sim(1000, n = 200, model = modelB, generate = modelB)
+outAA <- sim(1000, n = 200, model = analyzeA, generate = popA, lavaanfun="growth")
+outAB <- sim(1000, n = 200, model = analyzeB, generate = popA, lavaanfun="growth")
+outBA <- sim(1000, n = 200, model = analyzeA, generate = popB, lavaanfun="growth")
+outBB <- sim(1000, n = 200, model = analyzeB, generate = popB, lavaanfun="growth")
 
 getCutoffNonNested(outAA, outAB, outBA, outBB)
 getCutoffNonNested(outAA, outAB)
