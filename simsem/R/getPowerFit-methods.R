@@ -21,7 +21,7 @@ getPowerFit <- function(altObject, cutoff = NULL, nullObject = NULL, revDirec = 
 
 getPowerFitDataFrame <- function(altObject, cutoff, revDirec = FALSE, usedFit = NULL, predictor = NULL, 
 	predictorVal = NULL, condCutoff = TRUE, df = 0) {
-	usedFit <- cleanUsedFit(usedFit)
+	usedFit <- cleanUsedFit(usedFit, colnames(altObject))
 	if (!is.null(names(cutoff))) {
 		names(cutoff) <- cleanUsedFit(names(cutoff))
 	} else if (is.null(names(cutoff)) && length(cutoff) == 7) { 
@@ -85,7 +85,7 @@ getPowerFitCutoff <- function(altObject, cutoff, revDirec = FALSE, usedFit = NUL
 }
 
 getPowerFitNullObj <- function(altObject, nullObject, revDirec = FALSE, usedFit = NULL, alpha = 0.05, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, df = 0) {
-	usedFit <- cleanUsedFit(usedFit)
+	usedFit <- cleanUsedFit(usedFit, colnames(altObject@fit), colnames(nullObject@fit))
 	if(is.null(nullObject)) nullObject <- altObject
 	mod <- clean(altObject, nullObject)
 	altObject <- mod[[1]]

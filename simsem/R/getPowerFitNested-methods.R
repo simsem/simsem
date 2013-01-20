@@ -84,7 +84,7 @@ getPowerFitNestedNullObj <- function(altNested, altParent,
         stop("'altNested' and 'altParent' are based on different data and cannot be compared, check your random seed")
     if (!isTRUE(all.equal(unique(nullNested@paramValue), unique(nullParent@paramValue)))) 
         stop("'nullNested' and 'nullParent' are based on different data and cannot be compared, check your random seed")
-	usedFit <- cleanUsedFit(usedFit)
+	usedFit <- cleanUsedFit(usedFit, colnames(altNested@fit), colnames(altParent@fit), colnames(nullNested@fit), colnames(nullParent@fit))
 	if(is.null(nullNested)) nullNested <- altNested
 	if(is.null(nullParent)) nullParent <- altParent
     mod <- clean(altNested, altParent, nullNested, nullParent)

@@ -178,7 +178,7 @@ summaryPopulation <- function(object, improper = FALSE) {
 
 summaryFit <- function(object, alpha = NULL, improper = FALSE, usedFit = NULL) {
     cleanObj <- clean(object, improper = improper)
-	usedFit <- cleanUsedFit(usedFit)
+	usedFit <- cleanUsedFit(usedFit, colnames(object@fit))
     condition <- c(length(unique(object@pmMCAR)) > 1, length(unique(object@pmMAR)) > 
         1, length(unique(object@n)) > 1)
     if (any(condition)) {

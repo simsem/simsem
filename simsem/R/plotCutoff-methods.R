@@ -4,7 +4,7 @@
 setMethod("plotCutoff", signature(object = "data.frame"), definition = function(object, 
     cutoff = NULL, revDirec = FALSE, usedFit = NULL, vector1 = NULL, vector2 = NULL, 
     nameVector1 = NULL, nameVector2 = NULL, alpha = NULL, useContour = T, cutoff2 = NULL) {
-	usedFit <- cleanUsedFit(usedFit)
+	usedFit <- cleanUsedFit(usedFit, colnames(object))
     object <- as.data.frame(object[, usedFit])
 	if(!is.null(cutoff)) {
 		names(cutoff) <- cleanUsedFit(names(cutoff))

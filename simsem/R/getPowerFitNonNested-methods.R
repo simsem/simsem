@@ -27,7 +27,7 @@ getPowerFitNonNestedCutoff <- function(dat2Mod1, dat2Mod2, cutoff, usedFit = NUL
 
 getPowerFitNonNestedNullObj <- function(dat2Mod1, dat2Mod2, dat1Mod1, dat1Mod2, usedFit = NULL, alpha = 0.05, revDirec = FALSE, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, df = 0, onetailed = FALSE) {
     
-	usedFit <- cleanUsedFit(usedFit)
+	usedFit <- cleanUsedFit(usedFit, colnames(dat2Mod1@fit), colnames(dat2Mod2@fit), colnames(dat1Mod1@fit), colnames(dat1Mod2@fit))
     mod1 <- clean(dat2Mod1, dat2Mod2)
     dat2Mod1 <- mod1[[1]]
     dat2Mod2 <- mod1[[2]]

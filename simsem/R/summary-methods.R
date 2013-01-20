@@ -57,7 +57,7 @@ setMethod("summary", signature = "SimSem", definition = function(object) {
 
 setMethod("summary", signature = "SimResult", definition = function(object, digits = 3, 
     usedFit = NULL, alpha = NULL) {
-	usedFit <- cleanUsedFit(usedFit)
+	usedFit <- cleanUsedFit(usedFit, colnames(object@fit))
     cat("RESULT OBJECT\n")
     cat("Model Type\n")
     print(object@modelType)
@@ -219,7 +219,7 @@ printIfNotNull <- function(object, name = NULL) {
     }
 } 
 
-cleanUsedFit <- function(txt) {
+cleanUsedFit <- function(txt, ...) {
     if (is.null(txt)) {
         txt <- getKeywords()$usedFit
 	} else {
@@ -227,5 +227,16 @@ cleanUsedFit <- function(txt) {
 		txt[txt == "chi"] <- "chisq"
 		txt
 	}
+	arg <- list(...)
+	if(length(arg) > 0) {
+		txt <- intersection(txt, ...)
+		if(length(txt) == 0) stop("The name of fit indices does not match with the saved fit indices.")
+	}
 	txt
+}
+
+# From R-help mailing list posted by John Fox
+intersection <- function(x, y, ...){
+    if (missing(...)) intersect(x, y)
+	else intersect(x, intersection(y, ...))
 }

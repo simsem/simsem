@@ -18,7 +18,7 @@ plotPowerFit <- function(altObject, nullObject = NULL, cutoff = NULL, usedFit = 
             stop("Models are based on different values of the percent missing at random")
     }
     nrep <- dim(altObject@fit)[[1]]
-	usedFit <- cleanUsedFit(usedFit)
+	usedFit <- cleanUsedFit(usedFit, colnames(altObject@fit))
     if (!is.null(cutoff)) {
 		names(cutoff) <- cleanUsedFit(names(cutoff))
         usedFit <- intersect(usedFit, names(cutoff))

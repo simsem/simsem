@@ -4,7 +4,7 @@
 setMethod("getCutoff", signature(object = "data.frame"), definition = function(object, 
     alpha, revDirec = FALSE, usedFit = NULL, predictor = NULL, predictorVal = NULL, 
     df = 0) {
-	usedFit <- cleanUsedFit(usedFit)
+	usedFit <- cleanUsedFit(usedFit, colnames(object))
     percentile <- 1 - alpha
     if (revDirec) 
         percentile <- 1 - percentile

@@ -8,7 +8,7 @@ pValueNonNested <- function(outMod1, outMod2, dat1Mod1, dat1Mod2, dat2Mod1, dat2
     mod2 <- clean(dat2Mod1, dat2Mod2)
     dat2Mod1 <- mod2[[1]]
     dat2Mod2 <- mod2[[2]]
-	usedFit <- cleanUsedFit(usedFit)
+	usedFit <- cleanUsedFit(usedFit, colnames(dat1Mod1@fit), colnames(dat1Mod2@fit), colnames(dat2Mod1@fit), colnames(dat2Mod2@fit))
     revDirec <- (usedFit %in% getKeywords()$reversedFit)  # CFA --> FALSE, RMSEA --> TRUE
     
     if (!isTRUE(all.equal(unique(dat2Mod1@paramValue), unique(dat2Mod2@paramValue)))) 

@@ -5,7 +5,7 @@
 getCutoffNonNested <- function(dat1Mod1, dat1Mod2, dat2Mod1 = NULL, dat2Mod2 = NULL, 
     alpha = 0.05, usedFit = NULL, onetailed = FALSE, nVal = NULL, pmMCARval = NULL, 
     pmMARval = NULL, df = 0) {
-	usedFit <- cleanUsedFit(usedFit)
+	usedFit <- cleanUsedFit(usedFit, colnames(dat1Mod1@fit), colnames(dat1Mod2@fit))
     mod1 <- clean(dat1Mod1, dat1Mod2)
     dat1Mod1 <- mod1[[1]]
     dat1Mod2 <- mod1[[2]]

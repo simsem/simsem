@@ -6,7 +6,7 @@ plotPowerFitNonNested <- function(dat2Mod1, dat2Mod2, dat1Mod1 = NULL, dat1Mod2 
     useContour = TRUE, logistic = TRUE, onetailed = FALSE) {
     if (is.null(cutoff) & is.null(dat1Mod1) & is.null(dat1Mod2)) 
         stop("Please specify result objects representing the simulation results for datasets from Model 1 ('dat1Mod1' and 'dat1Mod2') or cutoff")
-	usedFit <- cleanUsedFit(usedFit)
+	usedFit <- cleanUsedFit(usedFit, colnames(dat2Mod1@fit), colnames(dat2Mod2@fit))
     mod2 <- clean(dat2Mod1, dat2Mod2)
     dat2Mod1 <- mod2[[1]]
     dat2Mod2 <- mod2[[2]]

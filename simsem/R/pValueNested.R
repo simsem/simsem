@@ -5,7 +5,7 @@ pValueNested <- function(outNested, outParent, simNested, simParent, usedFit = N
     mod <- clean(simNested, simParent)
     simNested <- mod[[1]]
     simParent <- mod[[2]]
-	usedFit <- cleanUsedFit(usedFit)
+	usedFit <- cleanUsedFit(usedFit, colnames(simNested@fit), colnames(simParent@fit))
     revDirec <- (usedFit %in% getKeywords()$reversedFit)  # CFA --> FALSE, RMSEA --> TRUE
     
     if (!isTRUE(all.equal(unique(simNested@paramValue), unique(simParent@paramValue)))) 
