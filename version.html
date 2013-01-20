@@ -33,6 +33,17 @@
       <section id="main_content" class="inner">
         <h1>Version History (Official)</h1>
 
+<h2>Version 0.5-0 01/20/13</h2>
+
+<p>This version is available on KRAN. Here is a list of major updates:</p>
+
+<ol>
+<li>The generate and model arguments for the sim function can take two formats: simsem template (as previous versions) and lavaan script (or lavaan parameter table or a list of arguments for the simulateData, lavaan, cfa, sem, or growth functions). See more details and the example scripts in the vignette.
+<li>In the simsem template format, users can add exogenous covariates for data generation, which can take any distributions (or even dummy variables). The KA and GA arguments are added to the model function to account for the effects of exogenous covariates on indicators or factors respectively. Users need to create their own covariate data and add to the covData argument in the generate or sim functions.
+<li>Nonnormal data can be created from Vale and Maurelli's (1983) method. Users can simply specify the skewness and kurtosis arguments in the bindDist function.
+<li>All arguments that take characters will be case-insensitive.
+</ol>
+
 <h2>Version 0.4-6 12/30/12</h2>
 
 <p>This version is available on CRAN and KRAN. The Mair and colleagues (2012) method for nonnormally-distributed data generation is implemented. Users can specify any multivariate copula for data generation. Please check Example 12 in the vignette. The normally-distributed data are generated so that the common cases between two datasets with different sample size are replicated if the same random seed number is used (Thanks to Paul Johnson). We also make some internal codes to be more efficient and less time-consuming. Some error messages and documentations are updated. All examples in <em>simsemClassic</em> have been transcribed to the current <em>simsem</em>. Several minor bugs are fixed.</p>
