@@ -164,3 +164,19 @@ multipleAllEqualList <- function(obj) {
     }
     return(TRUE)
 } 
+
+multipleAnyEqual <- function(...) {
+    obj <- list(...)
+    multipleAnyEqualList(obj)
+}
+
+multipleAnyEqualList <- function(obj) {
+    for (i in 2:length(obj)) {
+        for (j in 1:(i - 1)) {
+            temp <- isTRUE(all.equal(obj[[i]], obj[[j]]))
+            if (temp) 
+                return(TRUE)
+        }
+    }
+    return(FALSE)
+} 

@@ -4,7 +4,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
     sequential = FALSE, modelBoot = FALSE, realData = NULL, covData = NULL, maxDraw = 50, misfitType = "f0", 
     misfitBounds = NULL, averageNumMisspec = FALSE, optMisfit = NULL, optDraws = 50, createOrder = c(1, 2, 3), 
     aux = NULL, seed = 123321, silent = FALSE, multicore = FALSE, cluster = FALSE, 
-    numProc = NULL, paramOnly = FALSE, dataOnly = FALSE, smartStart = FALSE, ...) {
+    numProc = NULL, paramOnly = FALSE, dataOnly = FALSE, smartStart = FALSE, previousSim = NULL, completeRep = FALSE, ...) {
 
 	#Future plans. Add summaryTime option. Or include as an option in summary. Guess time forfull sim
 	#Add inspect function for anything
@@ -15,8 +15,11 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
     timing <- list()
     require(parallel)
     RNGkind("L'Ecuyer-CMRG")
- 
-    set.seed(seed)
+	if(is.null(previousSim)) {
+		set.seed(seed)
+	} else {
+		assign(".Random.seed", as.integer(previousSim@seed[-1]), envir = .GlobalEnv)
+	}
  
 	isPopulation <- FALSE
 	popData <- NULL
@@ -71,6 +74,12 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 	if(lavaanAnalysis) {
 		model <- c(model, list(...))
 	}
+	
+	## Save arguments for completeRep = TRUE
+	nInitial <- n
+	pmMCARInitial <- pmMCAR
+	pmMARInitial <- pmMAR
+	nRepInitial <- nRep
 	
     ## 1. Set up correct data generation template (move inside the runRep).
 
@@ -465,10 +474,25 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 		if(!lavaanAnalysis) modelType <- model@modelType
 		
 		Result <- new("SimResult", modelType = modelType, nRep = nRep, coef = coef, 
-			se = se, fit = fit, converged = converged, seed = seed, paramValue = param, 
+			se = se, fit = fit, converged = converged, seed = c(seed, s), paramValue = param, 
 			misspecValue = popMis, popFit = misfitOut, FMI1 = FMI1, FMI2 = FMI2, 
 			stdCoef = std, n = n, nobs=nobs, pmMCAR = pmMCAR, pmMAR = pmMAR, extraOut = extra,
 			paramOnly=paramOnly, timing = timing)
+		
+		if(!is.null(previousSim)) {
+			Result <- combineSim(previousSim, Result)
+		} 
+		
+		# If completeRep = TRUE, check whether the number of converged results
+		if(completeRep & !is.null(nRepInitial)) {
+			success <- sum(Result@converged == 0)
+			pSuccess <- success / nRep
+			if(pSuccess < 1) {
+				nRepNew <- ceiling((nRep - success) / pSuccess) 
+				Result <- sim(nRep = nRepNew, model = model, n = nInitial, generate = generate, rawData = rawData, miss = miss, datafun = datafun, lavaanfun = lavaanfun, outfun = outfun, pmMCAR = pmMCARInitial, pmMAR = pmMARInitial, facDist = facDist, indDist = indDist, errorDist = errorDist, sequential = sequential, modelBoot = modelBoot, realData = realData, covData = covData, maxDraw = maxDraw, misfitType = misfitType, misfitBounds = misfitBounds, averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, createOrder = createOrder, aux = aux, seed = seed, silent = silent, multicore = multicore, cluster = cluster, numProc = numProc, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart, previousSim = Result, completeRep = completeRep, ...)
+			}
+		}
+		
 		if (silent) 
 			options(warn = warnT)
 		return <- Result
