@@ -1,30 +1,30 @@
 library(simsem)
 
 popModel <- "
-f1 =~ 1*y1 + 1*y2 + 1*y3 + con1*y2 + con1*y3
-f2 =~ 1*y4 + 1*y5 + 1*y6 + con2*y5 + con2*y6
-f3 =~ 1*y7 + 1*y8 + 1*y9 + con3*y8 + con3*y9
-f4 =~ 1*y10 + 1*y11 + 1*y12 + con4*y11 + con4*y12
-f5 =~ 1*y13 + 1*y14 + 1*y15 + con5*y14 + con5*y15
-f6 =~ 1*y16 + 1*y17 + 1*y18 + con6*y17 + con6*y18
-f7 =~ 1*y19 + 1*y20 + 1*y21 + con7*y20 + con7*y21
-f8 =~ 1*y22 + 1*y23 + 1*y24 + con8*y23 + con8*y24
-f9 =~ 1*y25 + 1*y26 + 1*y27 + con9*y26 + con9*y27
-f4 ~ 0.6*f1 + con10*f1
-f5 ~ start(0.3)*f1 + 0.6*f2 + con11*f1 + con12*f2
-f6 ~ start(0.3)*f2 + 0.6*f3 + con13*f2 + con14*f3
-f7 ~ 0.6*f4 + con10*f4
-f8 ~ start(0.3)*f4 + 0.6*f5 + con11*f4 + con12*f5
-f9 ~ start(0.3)*f5 + 0.6*f6 + con13*f5 + con14*f6
+f1 =~ 1*y1 + 1*y2 + 1*y3 + con1*y2 + con2*y3
+f2 =~ 1*y4 + 1*y5 + 1*y6 + con3*y5 + con4*y6
+f3 =~ 1*y7 + 1*y8 + 1*y9 + con5*y8 + con6*y9
+f4 =~ 1*y10 + 1*y11 + 1*y12 + con1*y11 + con2*y12
+f5 =~ 1*y13 + 1*y14 + 1*y15 + con3*y14 + con4*y15
+f6 =~ 1*y16 + 1*y17 + 1*y18 + con5*y17 + con6*y18
+f7 =~ 1*y19 + 1*y20 + 1*y21 + con1*y20 + con2*y21
+f8 =~ 1*y22 + 1*y23 + 1*y24 + con3*y23 + con4*y24
+f9 =~ 1*y25 + 1*y26 + 1*y27 + con5*y26 + con6*y27
+f4 ~ 0.6*f1 + con7*f1
+f5 ~ start(0.3)*f1 + 0.6*f2 + con8*f1 + con9*f2
+f6 ~ start(0.3)*f2 + 0.6*f3 + con10*f2 + con11*f3
+f7 ~ 0.6*f4 + con7*f4
+f8 ~ start(0.3)*f4 + 0.6*f5 + con8*f4 + con9*f5
+f9 ~ start(0.3)*f5 + 0.6*f6 + con10*f5 + con11*f6
 f1 ~~ 1*f1
 f2 ~~ 1*f2
 f3 ~~ 1*f3
-f4 ~~ 0.6*f4 + con15*f4
-f5 ~~ 0.6*f5 + con16*f5
-f6 ~~ 0.6*f6 + con17*f6
-f7 ~~ 0.6*f7 + con15*f7
-f8 ~~ 0.6*f8 + con16*f8
-f9 ~~ 0.6*f9 + con17*f9
+f4 ~~ 0.6*f4 + con12*f4
+f5 ~~ 0.6*f5 + con13*f5
+f6 ~~ 0.6*f6 + con14*f6
+f7 ~~ 0.6*f7 + con12*f7
+f8 ~~ 0.6*f8 + con13*f8
+f9 ~~ 0.6*f9 + con14*f9
 f1 ~~ 0.4*f2
 f1 ~~ 0.4*f3
 f2 ~~ 0.4*f3
@@ -82,34 +82,34 @@ y6 ~~ 0.04*y24
 y7 ~~ 0.04*y25
 y8 ~~ 0.04*y26
 y9 ~~ 0.04*y27
-med := con11 * con13
+med := con8 * con10
 "
 
 analyzeModel1 <- "
-f1 =~ 1*y1 + con1*y2 + con1*y3
-f2 =~ 1*y4 + con2*y5 + con2*y6
-f3 =~ 1*y7 + con3*y8 + con3*y9
-f4 =~ 1*y10 + con4*y11 + con4*y12
-f5 =~ 1*y13 + con5*y14 + con5*y15
-f6 =~ 1*y16 + con6*y17 + con6*y18
-f7 =~ 1*y19 + con7*y20 + con7*y21
-f8 =~ 1*y22 + con8*y23 + con8*y24
-f9 =~ 1*y25 + con9*y26 + con9*y27
-f4 ~ con10*f1
-f5 ~ con11*f1 + con12*f2
-f6 ~ con13*f2 + con14*f3
-f7 ~ con10*f4
-f8 ~ con11*f4 + con12*f5
-f9 ~ con13*f5 + con14*f6
+f1 =~ 1*y1 + con1*y2 + con2*y3
+f2 =~ 1*y4 + con3*y5 + con4*y6
+f3 =~ 1*y7 + con5*y8 + con6*y9
+f4 =~ 1*y10 + con1*y11 + con2*y12
+f5 =~ 1*y13 + con3*y14 + con4*y15
+f6 =~ 1*y16 + con5*y17 + con6*y18
+f7 =~ 1*y19 + con1*y20 + con2*y21
+f8 =~ 1*y22 + con3*y23 + con4*y24
+f9 =~ 1*y25 + con5*y26 + con6*y27
+f4 ~ con7*f1
+f5 ~ con8*f1 + con9*f2
+f6 ~ con10*f2 + con11*f3
+f7 ~ con7*f4
+f8 ~ con8*f4 + con9*f5
+f9 ~ con10*f5 + con11*f6
 f1 ~~ f1
 f2 ~~ f2
 f3 ~~ f3
-f4 ~~ con15*f4
-f5 ~~ con16*f5
-f6 ~~ con17*f6
-f7 ~~ con15*f7
-f8 ~~ con16*f8
-f9 ~~ con17*f9
+f4 ~~ con12*f4
+f5 ~~ con13*f5
+f6 ~~ con14*f6
+f7 ~~ con12*f7
+f8 ~~ con13*f8
+f9 ~~ con14*f9
 f1 ~~ f2
 f1 ~~ f3
 f2 ~~ f3
@@ -167,16 +167,16 @@ y6 ~~ y24
 y7 ~~ y25
 y8 ~~ y26
 y9 ~~ y27
-med := con11 * con13
+med := con8 * con10
 "
 
 Output1 <- sim(1000, n=200, analyzeModel1, generate=popModel, lavaanfun="lavaan")
 summary(Output1)
 
 analyzeModel2 <- "
-f7 =~ 1*y19 + con7*y20 + con7*y21
-f8 =~ 1*y22 + con8*y23 + con8*y24
-f9 =~ 1*y25 + con9*y26 + con9*y27
+f7 =~ 1*y19 + con1*y20 + con2*y21
+f8 =~ 1*y22 + con3*y23 + con4*y24
+f9 =~ 1*y25 + con5*y26 + con6*y27
 f8 ~ a*f7 
 f9 ~ b*f8 
 f7 ~~ f7

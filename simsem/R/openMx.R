@@ -176,7 +176,7 @@ getImpliedStatML <- function(xxxobjectxxx, xxxcovdatatxxx = NULL) {
 	list(xxximpliedMeanxxx, xxximpliedCovxxx, xxximpliedThresholdxxx)
 }
 
-analyzeMx <- function(object, data, groupLab = NULL) {
+analyzeMx <- function(object, data, groupLab = NULL, ...) {
 	if(length(object@submodels) > 1) {
 		temp <- object@submodels
 		if(is.null(groupLab)) groupLab <- "group"
@@ -187,7 +187,7 @@ analyzeMx <- function(object, data, groupLab = NULL) {
 	} else {
 		object@data <- mxData(observed=data,type="raw")
 	}
-	capture.output(fit <- mxRun(object))
+	capture.output(fit <- mxRun(object, ...))
 	return(fit)
 }
 

@@ -711,9 +711,9 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 				group <- NULL
 			}
 			if (silent) {
-				invisible(capture.output(suppressMessages(try(out <- analyzeMx(model, data, groupLab = group), silent = TRUE))))
+				invisible(capture.output(suppressMessages(try(out <- analyzeMx(model, data, groupLab = group, ...), silent = TRUE))))
 			} else {
-				try(out <- analyzeMx(model, data, groupLab = group))
+				try(out <- analyzeMx(model, data, groupLab = group, ...))
 			}
 		} else {
 			if (!is.null(miss) | !is.null(aux)) {
