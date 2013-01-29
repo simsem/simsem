@@ -1,4 +1,5 @@
 library(simsem)
+library(OpenMx)
 
 AvaluesNull <- matrix(0, 7, 7)
 AvaluesNull[1:6, 7] <- 0.7

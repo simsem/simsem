@@ -45,7 +45,13 @@ pValueNested <- function(outNested, outParent, simNested, simParent, usedFit = N
             predictorVal[2] <- pmMARval)
     }
     predictorVal <- predictorVal[condition]
-    cutoff <- inspect(outNested, "fit")[usedFit] - inspect(outParent, "fit")[usedFit]
+	if(is(outNested, "MxModel") & is(outParent, "MxModel")) {
+		cutoff <- semTools:::fitMeasuresMx(outNested)[usedFit] - semTools:::fitMeasuresMx(outParent)[usedFit]
+	} else if (is(outNested, "lavaan") & is(outParent, "lavaan")) {
+		cutoff <- inspect(outNested, "fit")[usedFit] - inspect(outParent, "fit")[usedFit]
+	} else {
+		stop("The 'outNested' and 'outParent' arguments must be both lavaan objects or MxModel objects.")
+	}
     if (any(condition)) {
         result <- pValue(cutoff, Data, revDirec, x = condValue, xval = predictorVal, 
             df = df, asLogical = FALSE)

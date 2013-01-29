@@ -1,4 +1,5 @@
 library(simsem)
+library(OpenMx)
 
 Avalues <- matrix(0, 13, 13)
 Avalues[1:3, 10] <- 0.65
@@ -33,7 +34,7 @@ popModel <- mxModel("Three Factor Model with method factor",
 
 miss.model <- miss(pmMCAR=0.2) # Multiple-imputation is not available in OpenMx currently 
 
-Output <- sim(10, n=500, model=popModel, miss=miss.model)
+Output <- sim(1000, n=500, model=popModel, miss=miss.model)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summary(Output)

@@ -114,7 +114,7 @@ plotCutoffNonNested(outAA, outAB, outBA, outBB, alpha=0.05, onetailed=TRUE)
 
 getPowerFitNonNested(outBA, outBB, dat1Mod1=outAA, dat1Mod2=outAB)
 plotPowerFitNonNested(outBA, outBB, dat1Mod1=outAA, dat1Mod2=outAB)
-plotPowerFitNonNested(outBA, outBB, dat1Mod1=outAA, dat1Mod2=outAB, usedFit="RMSEA")
+plotPowerFitNonNested(outBA, outBB, dat1Mod1=outAA, dat1Mod2=outAB, usedFit="AIC")
 
 cutoff <- c(AIC=0, BIC=0)
 cutoff2 <- c(AIC=2, BIC=2)

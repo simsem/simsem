@@ -1,4 +1,5 @@
 library(simsem)
+library(OpenMx)
 
 # First analysis model: Model without covariate
 

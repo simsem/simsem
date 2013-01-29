@@ -1,109 +1,60 @@
 library(simsem)
+library(OpenMx)
 
-popA <- "
-ix =~ 1*x1 + 1*x2 + 1*x3 + 1*x4
-sx =~ 0*x1 + 1*x2 + 2*x3 + 3*x4
-iy =~ 1*y1 + 1*y2 + 1*y3 + 1*y4
-sy =~ 0*y1 + 1*y2 + 2*y3 + 3*y4
-x1 ~~ 0.5*x1
-x2 ~~ 0.5*x2
-x3 ~~ 0.5*x3
-x4 ~~ 0.5*x4
-y1 ~~ 0.5*y1
-y2 ~~ 0.5*y2
-y3 ~~ 0.5*y3
-y4 ~~ 0.5*y4
-ix ~~ 1*ix
-sx ~~ 0.25*sx
-iy ~~ 1*iy
-sy ~~ 0.25*sy
-ix ~~ 0.2*sx
-iy ~~ 0.2*sy
-ix ~~ 0.5*iy
-sx ~~ 0*sy
-ix ~~ 0*sy
-iy ~~ 0*sx
-x1 ~ 0*1
-x2 ~ 0*1
-x3 ~ 0*1
-x4 ~ 0*1
-y1 ~ 0*1
-y2 ~ 0*1
-y3 ~ 0*1
-y4 ~ 0*1
-ix ~ 5*1
-sx ~ 2*1
-iy ~ 5*1
-sy ~ 2*1
-"
+Avalues <- matrix(0, 12, 12)
+Avalues[1:4, 9] <- 1
+Avalues[1:4, 10] <- 0:3
+Avalues[5:8, 11] <- 1
+Avalues[5:8, 12] <- 0:3
+Afree <- matrix(FALSE, 12, 12)
 
-popB <- "
-ix =~ 1*x1 + 1*x2 + 1*x3 + 1*x4
-sx =~ 0*x1 + 1*x2 + 2*x3 + 3*x4
-iy =~ 1*y1 + 1*y2 + 1*y3 + 1*y4
-sy =~ 0*y1 + 1*y2 + 2*y3 + 3*y4
-x1 ~~ 0.5*x1
-x2 ~~ 0.5*x2
-x3 ~~ 0.5*x3
-x4 ~~ 0.5*x4
-y1 ~~ 0.5*y1
-y2 ~~ 0.5*y2
-y3 ~~ 0.5*y3
-y4 ~~ 0.5*y4
-ix ~~ 1*ix
-sx ~~ 0.25*sx
-iy ~~ 1*iy
-sy ~~ 0.25*sy
-ix ~~ 0.2*sx
-iy ~~ 0.2*sy
-ix ~~ 0*iy
-sx ~~ 0.125*sy
-ix ~~ 0*sy
-iy ~~ 0*sx
-x1 ~ 0*1
-x2 ~ 0*1
-x3 ~ 0*1
-x4 ~ 0*1
-y1 ~ 0*1
-y2 ~ 0*1
-y3 ~ 0*1
-y4 ~ 0*1
-ix ~ 5*1
-sx ~ 2*1
-iy ~ 5*1
-sy ~ 2*1
-"
+SvaluesA <- diag(c(rep(0.5, 8), 1, 0.25, 1, 0.25))
+SvaluesA[9, 10] <- SvaluesA[10, 9] <- 0.2
+SvaluesA[11, 12] <- SvaluesA[12, 11] <- 0.2
+SvaluesA[9, 11] <- SvaluesA[11, 9] <- 0.5
+SfreeA <- matrix(FALSE, 12, 12)
+diag(SfreeA) <- TRUE
+SfreeA[9, 10] <- SfreeA[10, 9] <- TRUE
+SfreeA[11, 12] <- SfreeA[12, 11] <- TRUE
+SfreeA[9, 11] <- SfreeA[11, 9] <- TRUE
 
-analyzeA <- "
-ix =~ 1*x1 + 1*x2 + 1*x3 + 1*x4
-sx =~ 0*x1 + 1*x2 + 2*x3 + 3*x4
-iy =~ 1*y1 + 1*y2 + 1*y3 + 1*y4
-sy =~ 0*y1 + 1*y2 + 2*y3 + 3*y4
-ix ~~ sx
-iy ~~ sy
-ix ~~ iy
-sx ~~ 0*sy
-ix ~~ 0*sy
-iy ~~ 0*sx
-"
+Fvalues <- cbind(diag(8), matrix(0, 8, 4))
 
-analyzeB <- "
-ix =~ 1*x1 + 1*x2 + 1*x3 + 1*x4
-sx =~ 0*x1 + 1*x2 + 2*x3 + 3*x4
-iy =~ 1*y1 + 1*y2 + 1*y3 + 1*y4
-sy =~ 0*y1 + 1*y2 + 2*y3 + 3*y4
-ix ~~ sx
-iy ~~ sy
-ix ~~ 0*iy
-sx ~~ sy
-ix ~~ 0*sy
-iy ~~ 0*sx
-"
+Mvalues <- c(rep(0, 8), 5, 2, 5, 2)
+Mfree <- c(rep(FALSE, 8), TRUE, TRUE, TRUE, TRUE)
 
-outAA <- sim(1000, n = 200, model = analyzeA, generate = popA, lavaanfun="growth")
-outAB <- sim(1000, n = 200, model = analyzeB, generate = popA, lavaanfun="growth")
-outBA <- sim(1000, n = 200, model = analyzeA, generate = popB, lavaanfun="growth")
-outBB <- sim(1000, n = 200, model = analyzeB, generate = popB, lavaanfun="growth")
+popA <- mxModel("Model A",
+    type="RAM",
+    mxMatrix(type="Full", nrow=12, ncol=12, values=Avalues, free=Afree, byrow=TRUE, name="A"),
+    mxMatrix(type="Symm", nrow=12, ncol=12, values=SvaluesA, free=SfreeA, byrow=TRUE, name="S"),
+    mxMatrix(type="Full", nrow=8, ncol=12, free=FALSE, values=Fvalues, byrow=TRUE, name="F"),
+    mxMatrix(type="Full", nrow=1, ncol=12, values=Mvalues, free=Mfree, name="M"),
+    mxRAMObjective("A","S","F","M", dimnames=c(paste0("x", 1:4), paste0("y", 1:4), "ix", "sx", "iy", "sy"))
+)
+
+SvaluesB <- diag(c(rep(0.5, 8), 1, 0.25, 1, 0.25))
+SvaluesB[9, 10] <- SvaluesB[10, 9] <- 0.2
+SvaluesB[11, 12] <- SvaluesB[12, 11] <- 0.2
+SvaluesB[10, 12] <- SvaluesB[12, 10] <- 0.125
+SfreeB <- matrix(FALSE, 12, 12)
+diag(SfreeB) <- TRUE
+SfreeB[9, 10] <- SfreeB[10, 9] <- TRUE
+SfreeB[11, 12] <- SfreeB[12, 11] <- TRUE
+SfreeB[10, 12] <- SfreeB[12, 10] <- TRUE
+
+popB <- mxModel("Model B",
+    type="RAM",
+    mxMatrix(type="Full", nrow=12, ncol=12, values=Avalues, free=Afree, byrow=TRUE, name="A"),
+    mxMatrix(type="Symm", nrow=12, ncol=12, values=SvaluesB, free=SfreeB, byrow=TRUE, name="S"),
+    mxMatrix(type="Full", nrow=8, ncol=12, free=FALSE, values=Fvalues, byrow=TRUE, name="F"),
+    mxMatrix(type="Full", nrow=1, ncol=12, values=Mvalues, free=Mfree, name="M"),
+    mxRAMObjective("A","S","F","M", dimnames=c(paste0("x", 1:4), paste0("y", 1:4), "ix", "sx", "iy", "sy"))
+)
+
+outAA <- sim(1000, n = 200, model = popA, generate = popA)
+outAB <- sim(1000, n = 200, model = popB, generate = popA)
+outBA <- sim(1000, n = 200, model = popA, generate = popB)
+outBB <- sim(1000, n = 200, model = popB, generate = popB)
 
 getCutoffNonNested(outAA, outAB, outBA, outBB)
 getCutoffNonNested(outAA, outAB)
@@ -114,7 +65,7 @@ plotCutoffNonNested(outAA, outAB, outBA, outBB, alpha=0.05, onetailed=TRUE)
 
 getPowerFitNonNested(outBA, outBB, dat1Mod1=outAA, dat1Mod2=outAB)
 plotPowerFitNonNested(outBA, outBB, dat1Mod1=outAA, dat1Mod2=outAB)
-plotPowerFitNonNested(outBA, outBB, dat1Mod1=outAA, dat1Mod2=outAB, usedFit="RMSEA")
+plotPowerFitNonNested(outBA, outBB, dat1Mod1=outAA, dat1Mod2=outAB, usedFit="AIC")
 
 cutoff <- c(AIC=0, BIC=0)
 cutoff2 <- c(AIC=2, BIC=2)

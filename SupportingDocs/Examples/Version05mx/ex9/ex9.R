@@ -1,4 +1,5 @@
 library(simsem)
+library(OpenMx)
 
 Avalues <- matrix(0, 52, 52)
 Avalues[1:12, 49] <- 0.7

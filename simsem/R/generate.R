@@ -28,10 +28,10 @@ generate <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "
 		} else {
 			stop("Please specify an appropriate object for the 'model' argument: simsem model template, lavaan script, lavaan parameter table, OpenMx object, or list of options for the 'simulateData' function.")
 		}
-		generate$sample.nobs <- n
-		generate$indDist <- indDist
-		generate <- c(generate, list(...))
-		data <- do.call("lavaanSimulateData", generate) 
+		model$sample.nobs <- n
+		model$indDist <- indDist
+		model <- c(model, list(...))
+		data <- do.call("lavaanSimulateData", model) 
 	}
 	return(data)
 }
@@ -538,6 +538,8 @@ lavaanSimulateData <- function(
         X[[g]] <- dataGen(dataDist = indDist[[g]], n = sample.nobs[g], m = Mu.hat[[g]], cm = Sigma.hat[[g]])
 
         # any categorical variables?
+        if(return.type == "data.frame") X[[g]] <- as.data.frame(X[[g]])
+
         ov.ord <- lavaan:::vnames(lav, type="ov.ord", group=g)
         if(length(ov.ord) > 0L) {
             ov.names <- lavaan:::vnames(lav, type="ov", group=g)
@@ -548,11 +550,11 @@ lavaanSimulateData <- function(
                 th.val <- c(-Inf,sort(lav$ustar[th.idx]),+Inf)
                 # scale!!
                 xz <- scale(X[[g]][,o.idx])
-                X[[g]][,o.idx] <- as.integer(cut(xz, th.val))
+				lev <- 1:(length(setdiff(th.val, NA))-1)
+                X[[g]][,o.idx] <- factor(as.numeric(cut(xz, th.val)), levels= lev, labels=lev, exclude=NA, ordered=TRUE)
             }
         }
 
-        if(return.type == "data.frame") X[[g]] <- as.data.frame(X[[g]])
     }
 
     if(return.type == "matrix") {

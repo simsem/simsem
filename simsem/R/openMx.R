@@ -99,7 +99,7 @@ generateMxSingleGroup <- function(object, n, indDist = NULL, covData = NULL) {
 
 		colnames(Data) <- varnames[1:ncol(Data)]
 		if(length(varnames) == 0) varnames <- paste0("y", 1:ncol(Data))
-		if(!all(is.na(object@objective@thresholds))) {
+		if(!(length(object@objective@thresholds) == 1 && is.na(object@objective@thresholds))) {
 			for(i in colnames(impliedThreshold[[1]])) {
 				lev <- 1:length(unique(Data[,i]))
 				Data[,i] <- factor(as.numeric(Data[,i]), levels= lev, labels=lev, exclude=NA, ordered=TRUE)
@@ -118,8 +118,13 @@ generateMxSingleGroup <- function(object, n, indDist = NULL, covData = NULL) {
 		if(length(varnames) == 0) varnames <- paste0("y", 1:ncol(Data))
 		colnames(Data) <- varnames[1:ncol(Data)]
 		Data <- data.frame(Data)
-		if(!all(is.na(impliedThreshold))) {
-			for(i in colnames(impliedThreshold)) {
+		if(!(length(impliedThreshold) == 1 && is.na(impliedThreshold))) {
+			name <- colnames(impliedThreshold)
+			if(is.null(name)) {
+				name <- intersect(object@objective@threshnames, colnames(Data))
+				colnames(impliedThreshold) <- name
+			}
+			for(i in name) {
 				thresholdVal <- c(-Inf, setdiff(impliedThreshold[,i], NA), Inf)
 				temp <- cut(as.vector(Data[,i]),thresholdVal)
 				lev <- 1:(length(setdiff(impliedThreshold[,i], NA))+1)

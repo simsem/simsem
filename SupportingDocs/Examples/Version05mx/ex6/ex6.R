@@ -1,4 +1,5 @@
 library(simsem)
+library(OpenMx)
 
 # a) Noninvariance
 

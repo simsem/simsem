@@ -1,5 +1,6 @@
 library(simsem)
 library(lavaan)
+library(OpenMx)
 
 Avalues <- matrix(0, 14, 14)
 Avalues[1:3, 12] <- 1

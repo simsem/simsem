@@ -1,53 +1,66 @@
 library(simsem)
+library(OpenMx)
 
-popNested <- "
-y2 ~ 0.4*y1 + con*y1
-y3 ~ 0.4*y2 + con*y2
-y4 ~ 0.4*y3 + con*y3
-y5 ~ 0.4*y4 + con*y4
-y1 ~~ 1*y1
-y2 ~~ 0.8*y2
-y3 ~~ 0.8*y3
-y4 ~~ 0.8*y4
-y5 ~~ 0.8*y5
-"
+AvaluesNull <- matrix(0, 5, 5)
+AvaluesNull[2, 1] <- 0.4
+AvaluesNull[3, 2] <- 0.4
+AvaluesNull[4, 3] <- 0.4
+AvaluesNull[5, 4] <- 0.4
+AfreeNull <- matrix(FALSE, 5, 5)
+AfreeNull[2, 1] <- TRUE
+AfreeNull[3, 2] <- TRUE
+AfreeNull[4, 3] <- TRUE
+AfreeNull[5, 4] <- TRUE
+AlabelsNull <- matrix(NA, 5, 5)
+AlabelsNull[2, 1] <- "con"
+AlabelsNull[3, 2] <- "con"
+AlabelsNull[4, 3] <- "con"
+AlabelsNull[5, 4] <- "con"
 
-popParent <- "
-y2 ~ 0.4*y1
-y3 ~ 0.5*y2
-y4 ~ 0.3*y3
-y5 ~ 0.7*y4
-y1 ~~ 1*y1
-y2 ~~ 0.8*y2
-y3 ~~ 0.8*y3
-y4 ~~ 0.8*y4
-y5 ~~ 0.8*y5
-"
+Svalues <- diag(c(1, rep(0.8, 4)))
+Sfree <- matrix(FALSE, 5, 5)
+diag(Sfree) <- TRUE
+Fvalues <- diag(5)
 
-analyzeNested <- "
-y2 ~ con*y1
-y3 ~ con*y2
-y4 ~ con*y3
-y5 ~ con*y4
-"
+popNull <- mxModel("Null Hypothesis Model",
+    type="RAM",
+    mxMatrix(type="Full", nrow=5, ncol=5, values=AvaluesNull, free=AfreeNull, labels=AlabelsNull, byrow=TRUE, name="A"),
+    mxMatrix(type="Symm", nrow=5, ncol=5, values=Svalues, free=Sfree, byrow=TRUE, name="S"),
+    mxMatrix(type="Full", nrow=5, ncol=5, free=FALSE, values=Fvalues, byrow=TRUE, name="F"),
+    mxMatrix(type="Full", nrow=1, ncol=5, values=rep(0, 5), free=rep(TRUE, 5), name="M"),
+    mxRAMObjective("A","S","F","M", dimnames=paste0("y", 1:5))
+)
 
-analyzeParent <- "
-y2 ~ y1
-y3 ~ y2
-y4 ~ y3
-y5 ~ y4
-"
+AvaluesAlt <- matrix(0, 5, 5)
+AvaluesAlt[2, 1] <- 0.4
+AvaluesAlt[3, 2] <- 0.5
+AvaluesAlt[4, 3] <- 0.3
+AvaluesAlt[5, 4] <- 0.7
+AfreeAlt <- matrix(FALSE, 5, 5)
+AfreeAlt[2, 1] <- TRUE
+AfreeAlt[3, 2] <- TRUE
+AfreeAlt[4, 3] <- TRUE
+AfreeAlt[5, 4] <- TRUE
 
-outDatNestedModNested <- sim(NULL, n = 50:500, analyzeNested, generate = list(model = popNested, fixed.x = FALSE), lavaanfun = "sem", pmMCAR=seq(0, 0.3, 0.1))
-outDatNestedModParent <- sim(NULL, n = 50:500, analyzeParent, generate = list(model = popNested, fixed.x = FALSE), lavaanfun = "sem", pmMCAR=seq(0, 0.3, 0.1))
+popAlt <- mxModel("Alternative Hypothesis Model",
+    type="RAM",
+    mxMatrix(type="Full", nrow=5, ncol=5, values=AvaluesAlt, free=AfreeAlt, byrow=TRUE, name="A"),
+    mxMatrix(type="Symm", nrow=5, ncol=5, values=Svalues, free=Sfree, byrow=TRUE, name="S"),
+    mxMatrix(type="Full", nrow=5, ncol=5, free=FALSE, values=Fvalues, byrow=TRUE, name="F"),
+    mxMatrix(type="Full", nrow=1, ncol=5, values=rep(0, 5), free=rep(TRUE, 5), name="M"),
+    mxRAMObjective("A","S","F","M", dimnames=paste0("y", 1:5))
+)
+
+outDatNestedModNested <- sim(NULL, n = 50:500, popNested, generate = popNested, pmMCAR=seq(0, 0.3, 0.1), mxFit = TRUE)
+outDatNestedModParent <- sim(NULL, n = 50:500, popParent, generate = popNested, pmMCAR=seq(0, 0.3, 0.1), mxFit = TRUE)
 
 anova(outDatNestedModNested, outDatNestedModParent)
 
 cutoff <- getCutoffNested(outDatNestedModNested, outDatNestedModParent, nVal=250, pmMCARval=0.2)
 plotCutoffNested(outDatNestedModNested, outDatNestedModParent, alpha=0.05)
 
-outDatParentModNested <- sim(NULL, n = 50:500, analyzeNested, generate = list(model = popParent, fixed.x = FALSE), lavaanfun = "sem", pmMCAR=seq(0, 0.3, 0.1))
-outDatParentModParent <- sim(NULL, n = 50:500, analyzeParent, generate = list(model = popParent, fixed.x = FALSE), lavaanfun = "sem", pmMCAR=seq(0, 0.3, 0.1))
+outDatParentModNested <- sim(NULL, n = 50:500, popNested, generate = popParent, pmMCAR=seq(0, 0.3, 0.1), mxFit = TRUE)
+outDatParentModParent <- sim(NULL, n = 50:500, popParent, generate = popParent, pmMCAR=seq(0, 0.3, 0.1), mxFit = TRUE)
 
 anova(outDatParentModNested, outDatParentModParent)
 

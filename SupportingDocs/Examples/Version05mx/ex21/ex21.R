@@ -1,44 +1,47 @@
 library(simsem)
+library(OpenMx)
 
-popNull <- "
-f1 =~ 0.7*y1 + 0.7*y2 + 0.7*y3 + 0.7*y4 + 0.7*y5
-f2 =~ 0.7*y6 + 0.7*y7 + 0.7*y8
-f1 ~~ 1*f1
-f2 ~~ 1*f2
-f1 ~~ 0.5*f2
-y1 ~~ 0.51*y1
-y2 ~~ 0.51*y2
-y3 ~~ 0.51*y3
-y4 ~~ 0.51*y4
-y5 ~~ 0.51*y5
-y6 ~~ 0.51*y6
-y7 ~~ 0.51*y7
-y8 ~~ 0.51*y8
-"
+AvaluesNull <- matrix(0, 10, 10)
+AvaluesNull[1:5, 9] <- 0.7
+AvaluesNull[6:8, 10] <- 0.7
+AfreeNull <- matrix(FALSE, 10, 10)
+AfreeNull[1:5, 9] <- TRUE
+AfreeNull[6:8, 10] <- TRUE
 
-popAlt <- "
-f1 =~ 0.7*y1 + 0.7*y2 + 0.7*y3 + 0.7*y4
-f2 =~ 0.7*y5 + 0.7*y6 + 0.7*y7 + 0.7*y8
-f1 ~~ 1*f1
-f2 ~~ 1*f2
-f1 ~~ 0.5*f2
-y1 ~~ 0.51*y1
-y2 ~~ 0.51*y2
-y3 ~~ 0.51*y3
-y4 ~~ 0.51*y4
-y5 ~~ 0.51*y5
-y6 ~~ 0.51*y6
-y7 ~~ 0.51*y7
-y8 ~~ 0.51*y8
-"
+Svalues <- diag(c(rep(0.51, 8), 1, 1))
+Svalues[9, 10] <- Svalues[10, 9] <- 0.5
+Sfree <- matrix(FALSE, 10, 10)
+diag(Sfree)[1:8] <- TRUE
+Sfree[9, 10] <- Sfree[10, 9] <- TRUE
+Fvalues <- cbind(diag(8), matrix(0, 8, 2))
 
-analyzeNull <- "
-f1 =~ y1 + y2 + y3 + y4 + y5
-f2 =~ y6 + y7 + y8
-"
+popNull <- mxModel("Null Hypothesis Model",
+    type="RAM",
+    mxMatrix(type="Full", nrow=10, ncol=10, values=AvaluesNull, free=AfreeNull, byrow=TRUE, name="A"),
+    mxMatrix(type="Symm", nrow=10, ncol=10, values=Svalues, free=Sfree, byrow=TRUE, name="S"),
+    mxMatrix(type="Full", nrow=8, ncol=10, free=FALSE, values=Fvalues, byrow=TRUE, name="F"),
+    mxMatrix(type="Full", nrow=1, ncol=10, values=rep(0, 10), free=c(rep(TRUE, 8), rep(FALSE, 4)), name="M"),
+    mxRAMObjective("A","S","F","M", dimnames=c(paste0("y", 1:8), "f1", "f2"))
+)
 
-Output.NULL <- sim(NULL, n = 25:500, analyzeNull, generate = popNull, std.lv = TRUE, lavaanfun = "cfa")
-Output.ALT <- sim(NULL, n = 25:500, analyzeNull, generate = popAlt, std.lv = TRUE, lavaanfun = "cfa")
+AvaluesAlt <- matrix(0, 10, 10)
+AvaluesAlt[1:4, 9] <- 0.7
+AvaluesAlt[5:8, 10] <- 0.7
+AfreeAlt <- matrix(FALSE, 10, 10)
+AfreeAlt[1:4, 9] <- TRUE
+AfreeAlt[5:8, 10] <- TRUE
+
+popAlt <- mxModel("Alternative Hypothesis Model",
+    type="RAM",
+    mxMatrix(type="Full", nrow=10, ncol=10, values=AvaluesAlt, free=AfreeAlt, byrow=TRUE, name="A"),
+    mxMatrix(type="Symm", nrow=10, ncol=10, values=Svalues, free=Sfree, byrow=TRUE, name="S"),
+    mxMatrix(type="Full", nrow=8, ncol=10, free=FALSE, values=Fvalues, byrow=TRUE, name="F"),
+    mxMatrix(type="Full", nrow=1, ncol=10, values=rep(0, 10), free=c(rep(TRUE, 8), rep(FALSE, 4)), name="M"),
+    mxRAMObjective("A","S","F","M", dimnames=c(paste0("y", 1:8), "f1", "f2"))
+)
+
+Output.NULL <- sim(NULL, n = 25:500, popNull, generate = popNull, mxFit=TRUE)
+Output.ALT <- sim(NULL, n = 25:500, popNull, generate = popAlt, mxFit=TRUE)
 
 cutoff <- getCutoff(Output.NULL, alpha = 0.05, nVal = 250)
 plotCutoff(Output.NULL, alpha = 0.05)

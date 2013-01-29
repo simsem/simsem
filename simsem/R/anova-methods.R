@@ -1,7 +1,10 @@
 # this is based on the anova function in the lmer/lavaan package
 
-setMethod("anova", signature(object = "SimResult"), function(object, ...) {
-    
+setMethod("anova", signature(object = "SimResult"), function(object, ..., usedFit = NULL) {
+    usedFit <- cleanUsedFit(usedFit, colnames(object@fit))
+	if("df" %in% colnames(object@fit) & "chisq" %in% colnames(object@fit)) {
+		usedFit <- c("chisq", "df", setdiff(usedFit, c("chisq", "df")))
+	}
     mcall <- match.call(expand.dots = TRUE)
     mod <- clean(object, ...)
     object <- mod[[1]]
@@ -28,25 +31,26 @@ setMethod("anova", signature(object = "SimResult"), function(object, ...) {
     # put them in order (using number of free parameters) nfreepar <-
     # sapply(lapply(mods, logLik), attr, 'df')
     nfreepar <- mods[[1]]@fit$df[1]
-    for (i in 2:length(mods)) {
-        nfreepar <- c(nfreepar, mods[[i]]@fit$df[1])
+	if(!is.null(nfreepar)) {
+		for (i in 2:length(mods)) {
+			nfreepar <- c(nfreepar, mods[[i]]@fit$df[1])
+		}
+		
+		
+		if (any(duplicated(nfreepar))) 
+			stop("simSEM ERROR: Two models have the same degrees of freedom and cannot be nested")
+		## FIXME: what to do here?
+		
+		# what, same number of free parameters?
+		
+		# right now we stop things and give a warning.
+		
+		# stop('simSEM ERROR: Two models have the same degrees of freedom and cannot be
+		# nested')
+		
+		# ORDERING DOES NOT WORK RIGHT NOW. Why??
+		mods <- mods[order(nfreepar, decreasing = FALSE)]
     }
-    
-    
-    if (any(duplicated(nfreepar))) 
-        stop("simSEM ERROR: Two models have the same degrees of freedom and cannot be nested")
-    ## FIXME: what to do here?
-    
-    # what, same number of free parameters?
-    
-    # right now we stop things and give a warning.
-    
-    # stop('simSEM ERROR: Two models have the same degrees of freedom and cannot be
-    # nested')
-    
-    # ORDERING DOES NOT WORK RIGHT NOW. Why??
-    mods <- mods[order(nfreepar, decreasing = FALSE)]
-    
     
     if (!multipleAllEqualList(lapply(mods, function(x, name) unique(slot(x, name)), 
         name = "n"))) 
@@ -90,43 +94,34 @@ setMethod("anova", signature(object = "SimResult"), function(object, ...) {
     # Use apply and diff function to get differneces for each rows
     
     # collect statistics for each model
-    Df <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")$df)), ncol = length(mods))
-    Chi <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")$chisq)), ncol = length(mods))
-    CFI <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")$cfi)), ncol = length(mods))
-    TLI <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")$tli)), ncol = length(mods))
-    RMSEA <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")$rmsea)), ncol = length(mods))
-    AIC <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")$aic)), ncol = length(mods))
-    BIC <- matrix(unlist(lapply(mods, function(x) slot(x, "fit")$bic)), ncol = length(mods))
-    
-    # difference statistics. Taking the absolute value so order models entered
-    # doesn't matter
-    Chi.delta <- (apply(Chi, 1, diff))
-    Df.delta <- (apply(Df, 1, diff))
-    CFI.delta <- (apply(CFI, 1, diff))
-    TLI.delta <- (apply(TLI, 1, diff))
-    RMSEA.delta <- (apply(RMSEA, 1, diff))
-    AIC.delta <- (apply(AIC, 1, diff))
-    BIC.delta <- (apply(BIC, 1, diff))
-    
+	modsout <- lapply(mods, function(x) slot(x, "fit")[,usedFit])
+	mat <- list()
+	for(i in seq_along(usedFit)) {
+		mat[[i]] <- sapply(modsout, function(x) x[,usedFit[i]])
+	}
+	names(mat) <- usedFit
+	matDelta <- lapply(mat, function(x) apply(x, 1, diff))
+
+	val <- sapply(mat, colMeans)
+	rownames(val) <- paste("Object", 1:nrow(val))
+	diff <- sapply(matDelta, mean)
+	names(diff) <- paste(names(diff), "diff")
+	
     # Power of test. 0 = not siginficant, 1 = sig.
-    Power.delta <- pchisq(Chi.delta, Df.delta, lower.tail = FALSE) < 0.05
-    
-    # Need to think about what we want out of this. Maybe just mean differences
-    # across models? Lets do that for now
-    val <- data.frame(Df = colMeans(Df), Chisq = colMeans(Chi), CFI = colMeans(CFI), 
-        TLI = colMeans(TLI), RMSEA = colMeans(RMSEA), AIC = colMeans(AIC), BIC = colMeans(BIC))
-    
-    diff <- c(mean(Chi.delta), mean(Df.delta), mean(Power.delta), mean(CFI.delta), 
-        mean(TLI.delta), mean(RMSEA.delta), mean(AIC.delta), mean(BIC.delta))
-    colnames(val) <- c("df", "chisq", "cfi", "tli", "rmsea", "aic", "bic")
-    names(diff) <- c("chisq diff", "df diff", "power", "cfi diff", "tli diff", "rmsea diff", 
-        "aic diff", "bic diff")
-    
+	if("chisq" %in% names(mat) & "df" %in% names(mat)) {
+		Chi.delta <- matDelta$chisq
+		Df.delta <- matDelta$df
+		diff <- diff[!(names(mat) %in% c("chisq", "df"))]
+		Power.delta <- pchisq(Chi.delta, Df.delta, lower.tail = FALSE) < 0.05
+		diff <- c("chisq diff" = mean(Chi.delta), "df diff" = mean(Df.delta), "power diff" = mean(Power.delta), diff)
+    }
+
     varyResult <- NULL
     
-    if (!is.null(x)) {
-        Chi.delta <- as.matrix(Chi.delta)
-        Df.delta <- as.matrix(Df.delta)
+	
+    if (!is.null(x) && ("chisq" %in% names(mat) & "df" %in% names(mat))) {
+        Chi.delta <- as.matrix(matDelta$chisq)
+        Df.delta <- as.matrix(matDelta$df)
         temp <- list()
         # Varying parameters
         ivVal <- expand.grid(pred)

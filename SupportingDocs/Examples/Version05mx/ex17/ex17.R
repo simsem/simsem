@@ -1,4 +1,5 @@
 library(simsem)
+library(OpenMx)
 
 Avalues <- matrix(0, 36, 36)
 Avalues[1:3, 28] <- 1

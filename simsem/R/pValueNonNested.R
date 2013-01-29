@@ -56,8 +56,14 @@ pValueNonNested <- function(outMod1, outMod2, dat1Mod1, dat1Mod2, dat2Mod1, dat2
     
     Data1 <- as.data.frame((dat1Mod1@fit - dat1Mod2@fit)[, usedFit])
     Data2 <- as.data.frame((dat2Mod1@fit - dat2Mod2@fit)[, usedFit])
-    
-    cutoff <- inspect(outMod1, "fit")[usedFit] - inspect(outMod2, "fit")[usedFit]
+	
+    if(is(outMod1, "MxModel") & is(outMod2, "MxModel")) {
+		cutoff <- semTools:::fitMeasuresMx(outMod1)[usedFit] - semTools:::fitMeasuresMx(outMod2)[usedFit]
+	} else if (is(outMod1, "lavaan") & is(outMod2, "lavaan")) {
+		cutoff <- inspect(outMod1, "fit")[usedFit] - inspect(outMod2, "fit")[usedFit]
+	} else {
+		stop("The 'outMod1' and 'outMod2' arguments must be both lavaan objects or MxModel objects.")
+	}
     
     result1 <- NULL
     result2 <- NULL

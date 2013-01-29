@@ -1,4 +1,5 @@
 library(simsem)
+library(OpenMx)
 
 Avalues <- matrix(0, 9, 9)
 Avalues[1:3, 8] <- 0.7
@@ -51,7 +52,7 @@ analyzeModel <- mxModel("Analysis ignore missing",
 
 missmodel <- miss(pmMAR=0.1, cov="y7", threshold = 0.5) # Auxiliary variable cannot be taken to account automatically when OpenMx is used.
 
-Output <- sim(10, analyzeModel, n=200, generate=popModel, miss = missmodel)
+Output <- sim(1000, analyzeModel, n=200, generate=popModel, miss = missmodel)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summary(Output)
