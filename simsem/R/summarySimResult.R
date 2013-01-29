@@ -14,11 +14,16 @@ summaryParam <- function(object, alpha = 0.05, detail = FALSE, improper = FALSE,
     crit.value <- qnorm(1 - alpha/2)
     sig <- abs(z) > crit.value
     pow <- apply(sig, 2, mean, na.rm = TRUE)
-    stdCoef <- colMeans(object@stdCoef, na.rm = TRUE)
-    stdRealSE <- sapply(object@stdCoef, sd, na.rm = TRUE)
-	result <- cbind(coef, real.se, estimated.se, pow, stdCoef, stdRealSE)
-	colnames(result) <- c("Estimate Average", "Estimate SD", "Average SE", "Power (Not equal 0)", 
-		"Std Est", "Std Est SD")
+	result <- cbind(coef, real.se, estimated.se, pow)
+	colnames(result) <- c("Estimate Average", "Estimate SD", "Average SE", "Power (Not equal 0)")
+	
+	if (length(object@stdCoef) != 0) {
+		stdCoef <- colMeans(object@stdCoef, na.rm = TRUE)
+		stdRealSE <- sapply(object@stdCoef, sd, na.rm = TRUE)
+		resultStd <- cbind(stdCoef, stdRealSE)
+        colnames(resultStd) <- c("Std Est", "Std Est SD")
+        result <- data.frame(result, resultStd[rownames(result),])
+	}
 
     if (!is.null(object@paramValue)) {
         targetVar <- match(colnames(object@coef), colnames(object@paramValue))

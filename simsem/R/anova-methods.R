@@ -18,9 +18,9 @@ setMethod("anova", signature(object = "SimResult"), function(object, ...) {
     names(mods) <- sapply(as.list(mcall)[c(FALSE, TRUE, modp)], as.character)
     
     # Make sure models come from the same seed else stop and give warning
-    nseed <- mods[[1]]@seed
+    nseed <- mods[[1]]@seed[1]
     for (i in 2:length(mods)) {
-        nseed <- c(nseed, mods[[1]]@seed)
+        nseed <- rbind(nseed, mods[[1]]@seed[1])
     }
     if (any(!duplicated(nseed)[2:length(mods)])) 
         stop("simSEM ERROR: Models are based on different data and cannont be compared, check you random seed")

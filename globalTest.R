@@ -133,6 +133,9 @@ test.overall <- function() {
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/exMultipleFormat/multipleGroup.R"), "Multiple format sim (Multiple Group)", subFrom = "totalRep <- 1000", subTo = "totalRep <- 50", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/exMultipleFormat/covData.R"), "Covariate effect", subFrom = "sim\\(1000", subTo = "sim\\(20", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/exMultipleFormat/ordered.R"), "Ordered Data", subFrom = c("sim\\(1000", "50:500"), subTo = c("sim\\(20", "seq\\(50, 500, 10\\)"), result = result)
+	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/exMultipleFormat/completeRep.R"), "Ordered Data", subFrom = NULL, subTo = NULL, result = result)
+
+	# 0.5 lavaan script
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/ex2/ex2.R"), "Example 2 (lavaan)", subFrom = "sim\\(1000", subTo = "sim\\(20", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/ex5/ex5.R"), "Example 5 (lavaan)", subFrom = "sim\\(1000", subTo = "sim\\(20", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/ex6/ex6.R"), "Example 6 (lavaan)", subFrom = "sim\\(1000", subTo = "sim\\(20", result = result)
@@ -155,6 +158,17 @@ test.overall <- function() {
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/ex26/ex26.R"), "Example 26 (lavaan)", subFrom = "50:500", subTo = "seq\\(50, 1000, 10\\)", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/ex27/ex27.R"), "Example 27 (lavaan)", subFrom = "sim\\(1000", subTo = "sim\\(20", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/ex28/ex28.R"), "Example 28 (lavaan)", subFrom = "sim\\(1000", subTo = "sim\\(20", result = result)
+
+	# 0.5 openmx script
+	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/ex2/ex2.R"), "Example 2 (OpenMx)", subFrom = "sim\\(1000", subTo = "sim\\(20", result = result)
+	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/ex5/ex5.R"), "Example 5 (OpenMx)", subFrom = "sim\\(1000", subTo = "sim\\(20", result = result)
+	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/ex6/ex6.R"), "Example 6 (OpenMx)", subFrom = "sim\\(1000", subTo = "sim\\(20", result = result)
+	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/ex7/ex7.R"), "Example 7 (OpenMx)", subFrom = "sim\\(1000", subTo = "sim\\(20", result = result)
+	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/ex8/ex8.R"), "Example 8 (OpenMx)", subFrom = "sim\\(1000", subTo = "sim\\(20", result = result)
+	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/ex9/ex9.R"), "Example 9 (OpenMx)", subFrom = "sim\\(1000", subTo = "sim\\(2", result = result)
+	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/ex10/ex10.R"), "Example 10 (OpenMx)", subFrom = "sim\\(1000", subTo = "sim\\(20", result = result)
+	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/ex11/ex11.R"), "Example 11 (OpenMx)", subFrom = "sim\\(1000", subTo = "sim\\(20", result = result)
+	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/ex12/ex12.R"), "Example 12 (OpenMx)", subFrom = "sim\\(1000", subTo = "sim\\(20", result = result)
 
 	
 	colnames(result) <- c("condition", "success", "expecterror", "time")

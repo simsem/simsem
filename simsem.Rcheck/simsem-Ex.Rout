@@ -881,6 +881,116 @@ logical(0)
 > 
 > 
 > cleanEx()
+> nameEx("combineSim")
+> ### * combineSim
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: combineSim
+> ### Title: Combine result objects
+> ### Aliases: combineSim
+> 
+> ### ** Examples
+> 
+> loading <- matrix(0, 6, 2)
+> loading[1:3, 1] <- NA
+> loading[4:6, 2] <- NA
+> LY <- bind(loading, 0.7)
+> 
+> latent.cor <- matrix(NA, 2, 2)
+> diag(latent.cor) <- 1
+> RPS <- binds(latent.cor, 0.5)
+> 
+> RTE <- binds(diag(6))
+> 
+> VY <- bind(rep(NA,6),2)
+> 
+> CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
+> Output1 <- sim(5, CFA.Model, n=200, seed=123321)
+Loading required package: parallel
+> Output2 <- sim(4, CFA.Model, n=200, seed=324567)
+> Output3 <- sim(3, CFA.Model, n=200, seed=789987)
+> Output <- combineSim(Output1, Output2, Output3)
+> summary(Output)
+RESULT OBJECT
+Model Type
+[1] "cfa"
+========= Fit Indices Cutoffs ============
+           Alpha
+Fit Indices      0.1     0.05     0.01    0.001     Mean     SD
+      chisq   14.564   18.043   21.214   21.928    8.595  5.561
+      aic   3161.890 3168.700 3174.227 3175.470 3123.343 32.305
+      bic   3224.558 3231.368 3236.895 3238.138 3186.011 32.305
+      rmsea    0.064    0.078    0.090    0.093    0.023  0.032
+      cfi      0.981    0.969    0.958    0.955    0.992  0.014
+      tli      0.964    0.942    0.921    0.916    0.999  0.036
+      srmr     0.034    0.041    0.048    0.049    0.027  0.009
+========= Parameter Estimates and Standard Errors ============
+       Estimate.Average Estimate.SD Average.SE Power..Not.equal.0. Std.Est
+f1=~y1            0.643       0.099      0.073               1.000   0.656
+f1=~y2            0.731       0.052      0.076               1.000   0.726
+f1=~y3            0.686       0.067      0.074               1.000   0.690
+f2=~y4            0.664       0.066      0.074               1.000   0.674
+f2=~y5            0.661       0.063      0.073               1.000   0.679
+f2=~y6            0.706       0.073      0.074               1.000   0.717
+f1~~f2            0.480       0.105      0.080               1.000   0.480
+y1~~y1            0.533       0.077      0.074               1.000   0.563
+y2~~y2            0.483       0.114      0.083               1.000   0.470
+y3~~y3            0.512       0.064      0.077               1.000   0.521
+y4~~y4            0.526       0.081      0.076               1.000   0.542
+y5~~y5            0.507       0.072      0.074               1.000   0.536
+y6~~y6            0.467       0.056      0.076               1.000   0.485
+y1~1              0.003       0.078      0.069               0.083   0.003
+y2~1              0.008       0.059      0.071               0.000   0.008
+y3~1              0.013       0.077      0.070               0.083   0.013
+y4~1             -0.021       0.069      0.070               0.083  -0.021
+y5~1              0.007       0.069      0.069               0.000   0.006
+y6~1             -0.005       0.068      0.070               0.000  -0.005
+       Std.Est.SD Average.Param Average.Bias Coverage
+f1=~y1      0.080          0.70       -0.057    0.750
+f1=~y2      0.059          0.70        0.031    1.000
+f1=~y3      0.056          0.70       -0.014    1.000
+f2=~y4      0.056          0.70       -0.036    1.000
+f2=~y5      0.052          0.70       -0.039    1.000
+f2=~y6      0.043          0.70        0.006    1.000
+f1~~f2      0.105          0.50       -0.020    0.750
+y1~~y1      0.100          0.51        0.023    0.917
+y2~~y2      0.087          0.51       -0.027    0.833
+y3~~y3      0.075          0.51        0.002    1.000
+y4~~y4      0.077          0.51        0.016    0.917
+y5~~y5      0.072          0.51       -0.003    0.917
+y6~~y6      0.061          0.51       -0.043    1.000
+y1~1        0.080          0.00        0.003    0.917
+y2~1        0.058          0.00        0.008    1.000
+y3~1        0.077          0.00        0.013    0.917
+y4~1        0.070          0.00       -0.021    0.917
+y5~1        0.070          0.00        0.007    1.000
+y6~1        0.068          0.00       -0.005    1.000
+========= Correlation between Fit Indices ============
+       chisq    aic    bic  rmsea    cfi    tli   srmr
+chisq  1.000  0.058  0.058  0.982 -0.954 -0.994  0.940
+aic    0.058  1.000  1.000  0.003  0.067 -0.063  0.147
+bic    0.058  1.000  1.000  0.003  0.067 -0.063  0.147
+rmsea  0.982  0.003  0.003  1.000 -0.952 -0.974  0.911
+cfi   -0.954  0.067  0.067 -0.952  1.000  0.935 -0.894
+tli   -0.994 -0.063 -0.063 -0.974  0.935  1.000 -0.925
+srmr   0.940  0.147  0.147  0.911 -0.894 -0.925  1.000
+================== Replications =====================
+Number of replications = 12 
+Number of converged replications = 12 
+Number of nonconverged replications: 
+   1. Nonconvergent Results = 0 
+   2. Nonconvergent results from multiple imputation = 0 
+   3. At least one SE were negative or NA = 0 
+   4. At least one variance estimates were negative = 0 
+   5. At least one correlation estimates were greater than 1 or less than -1 = 0 
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:parallel'
+
 > nameEx("continuousPower")
 > ### * continuousPower
 > 
@@ -4530,7 +4640,7 @@ y1 ~ 0.05 + 0.5*y3
 > ### Title: Find p-values (1 - percentile)
 > ### Aliases: pValue pValue-methods pValue,ANY-method
 > ###   pValue,numeric,vector-method pValue,numeric,data.frame-method
-> ###   pValue,lavaan,SimResult-method
+> ###   pValue,lavaan,SimResult-method pValue,MxModel,SimResult-method
 > 
 > ### ** Examples
 > 
@@ -5598,7 +5708,6 @@ Number of nonconverged replications:
 > # Example of data transformation: Transforming to standard score
 > fun1 <- function(data) {
 + 	temp <- scale(data)
-+ 	temp[,"group"] <- data[,"group"]
 + 	as.data.frame(temp)
 + }
 > 
@@ -6282,7 +6391,7 @@ detaching 'package:parallel'
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  9.1 0.17 9.69 NA NA 
+Time elapsed:  9.97 0.19 10.18 NA NA 
 > grDevices::dev.off()
 null device 
           1 

@@ -1,66 +1,165 @@
 # Only work for single-group for now.
 
-generateOpenMx <- function(object, n, indDist = NULL, groupLab = NULL) {
+generateMx <- function(object, n, indDist = NULL, groupLab = NULL, covData = NULL) {
 	library(OpenMx)
 	if(length(object@submodels) > 1) {
 		ngroups <- length(object@submodels)
-		if(!is.list(n)) n <- list(n)
+		if(!is.list(n)) n <- as.list(n)
 		if(!is.list(indDist)) indDist <- list(indDist)
 		if(length(n) == 1) n <- rep(n, ngroups)
 		if(length(indDist) == 1) indDist <- rep(indDist, ngroups)
-		data.l <- mapply(generateOpenMxSingleGroup, object=object@submodels, n=n, indDist=indDist, SIMPLIFY=FALSE)
+
+		# Separate covData
+		if(is.null(covData)) {
+			covData.l <- rep(list(NULL), ngroups)
+		} else {
+			if(is.null(groupLab)) groupLab <- "group"
+			covData.l <- split(covData, covData[,groupLab])
+			covData.l <- lapply(covData.l, function(x) x[-ncol(x)])
+		}
+		
+		data.l <- mapply(generateMxSingleGroup, object=object@submodels, n=n, indDist=indDist, covData=covData.l, SIMPLIFY=FALSE)
+		if(!is.null(covData)) {
+			data.l <- mapply(data.frame, data.l, covData.l, SIMPLIFY = FALSE)
+		}
 		data.l <- mapply(data.frame, data.l, group = 1:ngroups, SIMPLIFY = FALSE)
+		
 		data <- do.call(rbind, data.l)
 		rownames(data) <- NULL
 		if(!is.null(groupLab)) colnames(data)[ncol(data)] <- groupLab
 	} else {
-		data <- generateOpenMxSingleGroup(object, n, indDist)
+		data <- generateMxSingleGroup(object, n, indDist, covData)
 	}
 	data
 }
 
-generateOpenMxSingleGroup <- function(object, n, indDist = NULL) {
+generateMxSingleGroup <- function(object, n, indDist = NULL, covData = NULL) {
+
 	if(is(object@objective, "MxRAMObjective")) {
-		A <- object@matrices$A@values
-		I <- diag(nrow(A))
-		S <- object@matrices$S@values
-		F <- object@matrices$F@values
-		Z <- solve(I - A)
-		impliedCov <- F %*% Z %*% S %*% t(Z) %*% t(F)
+		# Create F, S, and M to suppress warnings when compiling the package.
+		F <- NULL
+		S <- NULL
+		M <- NULL
+		nfac <- nrow(object@matrices$A@values)
+		I <- mxMatrix(type = "Iden", nrow=nfac, ncol=nfac, free=FALSE, name="I")
+		Z <- mxAlgebra(expression=solve(I-A), name="Z")
+		impliedCov <- mxAlgebra(expression=F %*% Z %*% S %*% t(Z) %*% t(F), name="impliedCov")
+		allMatrices <- c(object@matrices, I = I)
+		allAlgebras <- c(object@algebras, Z = Z, impliedCov = impliedCov)
 		if(!is.null(object@matrices$M)) {
-			M <- object@matrices$M@values
-			impliedMean <- t(F %*% Z %*% t(M))
+			impliedMean <- mxAlgebra(expression=t(F %*% Z %*% t(M)), name="impliedMean")
+			allAlgebras <- c(allAlgebras, impliedMean = impliedMean)
+			newObjective <- mxFIMLObjective(
+				covariance="impliedCov", 
+				means="impliedMean", 
+				dimnames=object@objective@dims, 
+				thresholds=object@objective@thresholds
+			)
 		} else {
-			impliedMean <- rep(0, nrow(impliedCov))
+			newObjective <- mxMLObjective(
+				covariance="impliedCov", 
+				dimnames=object@objective@dims, 
+				thresholds=object@objective@thresholds
+			)
 		}
-	} else if (is(object@objective, "MxMLObjective") | is(object@objective, "MxFIMLObjective")) {
+		
+		object@matrices <- allMatrices
+		object@algebras <- allAlgebras
+		object@objective <- newObjective
+	}
+	if (!is(object@objective, "MxMLObjective") & !is(object@objective, "MxFIMLObjective")) {
+		stop("This function supports only MxRAMObjective, MxMLObjective, or MxFIMLObjective.")
+	}
+	defVars <- findDefVars(object)	
+	if(length(defVars) > 0) {
+		if(is.null(covData)) stop("Please specify the covData argument because the specified model has a definition variable.")
+		covData.l <- as.list(data.frame(t(covData)))
+		covData.l <- lapply(covData.l, function(x, name) {names(x) <- name; x}, name=colnames(covData))
+		macs <- lapply(covData.l, getImpliedStatML, xxxobjectxxx = object)
+		impliedMean <- lapply(macs, "[[", 1)
+		impliedCov <- lapply(macs, "[[", 2)
+		impliedThreshold <- lapply(macs, "[[", 3)
+		Data.l <- mapply(dataGen, m=impliedMean, cm=impliedCov, MoreArgs=list(n=1, dataDist=indDist), SIMPLIFY=FALSE)
+		if(!all(is.na(object@objective@thresholds))) {
+			FUN <- function(x, thres) {
+				for(i in colnames(thres)) {
+						thresholdVal <- c(-Inf, setdiff(thres[,i], NA), Inf)
+						temp <- cut(as.vector(x[,i]),thresholdVal)
+						lev <- 1:(length(setdiff(thres[,i], NA))+1)
+						x[,i] <- factor(as.numeric(temp), levels= lev, labels=lev, exclude=NA, ordered=TRUE)
+					}
+				x
+			}
+			Data.l <- mapply(FUN, x=Data.l, thres=impliedThreshold, SIMPLIFY=FALSE)
+		}
+		Data <- data.frame(do.call(rbind, Data.l))
+		rownames(Data) <- NULL
+		varnames <- object@objective@dims
+		if(any(is.na(varnames))) varnames <- object@manifestVars
+
+		colnames(Data) <- varnames[1:ncol(Data)]
+		if(length(varnames) == 0) varnames <- paste0("y", 1:ncol(Data))
+		if(!all(is.na(object@objective@thresholds))) {
+			for(i in colnames(impliedThreshold[[1]])) {
+				lev <- 1:length(unique(Data[,i]))
+				Data[,i] <- factor(as.numeric(Data[,i]), levels= lev, labels=lev, exclude=NA, ordered=TRUE)
+			}
+		}
+		Data <- cbind(Data, covData)
+	} else {
 		implied <- getImpliedStatML(object)
 		impliedCov <- implied[[2]]
 		impliedMean <- implied[[1]]
-	} else {
-		stop("This function supports only MxRAMObjective, MxMLObjective, or MxFIMLObjective.")
-	}
-	varnames <- object@objective@dims
-	if(any(is.na(varnames))) varnames <- object@manifestVars
+		impliedThreshold <- implied[[3]]
+		varnames <- object@objective@dims
+		if(any(is.na(varnames))) varnames <- object@manifestVars
 
-	Data <- dataGen(indDist, n, impliedMean, impliedCov)
-	colnames(Data) <- varnames[1:ncol(Data)]
-	return(data.frame(Data))
+		Data <- dataGen(indDist, n, impliedMean, impliedCov)
+		if(length(varnames) == 0) varnames <- paste0("y", 1:ncol(Data))
+		colnames(Data) <- varnames[1:ncol(Data)]
+		Data <- data.frame(Data)
+		if(!all(is.na(impliedThreshold))) {
+			for(i in colnames(impliedThreshold)) {
+				thresholdVal <- c(-Inf, setdiff(impliedThreshold[,i], NA), Inf)
+				temp <- cut(as.vector(Data[,i]),thresholdVal)
+				lev <- 1:(length(setdiff(impliedThreshold[,i], NA))+1)
+				Data[,i] <- factor(as.numeric(temp), levels= lev, labels=lev, exclude=NA, ordered=TRUE)
+			}
+		}
+	}
+	return(Data)
 }
 
-getImpliedStatML <- function(xxxobjectxxx) {
+getImpliedStatML <- function(xxxobjectxxx, xxxcovdatatxxx = NULL) {
 	xxxmatxxx <- xxxobjectxxx@matrices
 	xxxmatnamexxx <- names(xxxmatxxx)
 	xxxmatvalxxx <- lapply(xxxmatxxx, slot, "values")
-	for(i in 1:length(xxxmatnamexxx)) {
+	for(i in seq_along(xxxmatnamexxx)) {
 		assign(xxxmatnamexxx[i], xxxmatvalxxx[[i]])
+	}
+	if(!is.null(xxxcovdatatxxx)) {
+		xxxmatlabxxx <- lapply(xxxmatxxx, slot, "labels")
+		xxxdefvarsxxx <- lapply(xxxmatlabxxx, function(x) apply(x, c(1,2), OpenMx::imxIsDefinitionVariable))
+		for(i in seq_along(xxxmatnamexxx)) {
+			if(any(xxxdefvarsxxx[[i]])) {
+				xxxtempxxx <- get(xxxmatnamexxx[i])
+				for(j in seq_len(length(xxxdefvarsxxx[[i]]))) {
+					if(xxxdefvarsxxx[[i]][j]) {
+						xxxtempnamexxx <- gsub("data.", "", xxxmatlabxxx[[i]][j])
+						xxxtempxxx[j] <- xxxcovdatatxxx[xxxtempnamexxx]
+					}
+				}
+				assign(xxxmatnamexxx[i], xxxtempxxx)
+			}
+		}
 	}
 	xxxalgebraxxx <- xxxobjectxxx@algebras
 	xxxalgebranamexxx <- names(xxxalgebraxxx)
 	xxxalgebraformulaxxx <- lapply(xxxalgebraxxx, slot, "formula")
-	for(i in 1:length(xxxalgebranamexxx)) {
+	for(i in seq_along(xxxalgebranamexxx)) {
 		assign(xxxalgebranamexxx[i], eval(xxxalgebraformulaxxx[[i]]))
 	}
+	
 	xxximpliedCovxxx <- get(xxxobjectxxx@objective@covariance)
 	
 	if(is.na(xxxobjectxxx@objective@means)) {
@@ -68,11 +167,16 @@ getImpliedStatML <- function(xxxobjectxxx) {
 	} else {
 		xxximpliedMeanxxx <- get(xxxobjectxxx@objective@means)
 	}
-	list(xxximpliedMeanxxx, xxximpliedCovxxx)
+	
+	if(is.na(xxxobjectxxx@objective@thresholds)) {
+		xxximpliedThresholdxxx <- NA
+	} else {
+		xxximpliedThresholdxxx <- get(xxxobjectxxx@objective@thresholds)
+	}
+	list(xxximpliedMeanxxx, xxximpliedCovxxx, xxximpliedThresholdxxx)
 }
 
-
-analyzeOpenMx <- function(object, data, groupLab = NULL) {
+analyzeMx <- function(object, data, groupLab = NULL) {
 	if(length(object@submodels) > 1) {
 		temp <- object@submodels
 		if(is.null(groupLab)) groupLab <- "group"
@@ -87,240 +191,78 @@ analyzeOpenMx <- function(object, data, groupLab = NULL) {
 	return(fit)
 }
 
-analyzeSaturateOpenMx <- function(data, groupLab = NULL) {
-	if(!is.null(groupLab) && groupLab %in% colnames(data)) {
-		data.l <- split(data, data[,groupLab])
-		data.l <- lapply(data.l, function(x) x[-ncol(x)])
-		ngroups <- length(data.l)
-		temp <- mapply(analyzeSaturateOpenMxSingleGroup, data = data.l, title = paste0("group", 1:ngroups), groupnum = 1:ngroups, SIMPLIFY=FALSE)
-		title <- "Multiple group Saturate Model"
-		algebra <- mxAlgebra("", name="allobjective")
-		groupnames <- paste0("group", 1:ngroups)
-		groupnames <- paste0(groupnames, ".objective")
-		groupnames <- lapply(groupnames, as.name)
-		algebra@formula <- as.call(c(list(as.name("sum")), groupnames))
-		objective <- mxAlgebraObjective("allobjective")
-		Saturate <- mxModel(title, unlist(temp), algebra, objective)
+findDefVars <- function(object) {
+	mat <- lapply(object@matrices, slot, "labels")
+	defvars <- sapply(mat, function(x) x[apply(x, c(1,2), OpenMx::imxIsDefinitionVariable)])
+	Reduce("c", defvars)
+}
+
+vectorizeMx <- function(object) {
+	multigroup <- length(object@submodels) > 0
+	if(multigroup) {
+		object <- object@submodels
 	} else {
-		Saturate <- analyzeSaturateOpenMxSingleGroup(data, title = "Saturate Model")
+		object <- list(object)	
 	}
-	capture.output(fit <- mxRun(Saturate))
-	fit
+	result <- NULL
+	for(i in seq_along(object)) {
+		name <- ""
+		if(multigroup) name <- paste0(object[[i]]@name, ".")
+		mat <- object[[i]]@matrices
+		for(j in seq_along(mat)) {
+			tempname <- paste0(name, mat[[j]]@name)
+			lab <- mat[[j]]@labels
+			free <- as.vector(mat[[j]]@free)
+			madeLab <- paste0(tempname, "[", row(lab), ",", col(lab), "]")
+			lab <- as.vector(lab)
+			madeLab[!is.na(lab)] <- lab[!is.na(lab)]
+			temp <- mat[[j]]@values[free]
+			names(temp) <- madeLab[free]
+			result <- c(result, temp)
+		}
+	}
+	
+	result[!duplicated(names(result))]
 }
 
-analyzeSaturateOpenMxSingleGroup <- function(data, title = "Saturate Model", groupnum = NULL) {
-	p <- ncol(data)
-	startMeans <- colMeans(data, na.rm=TRUE)
-	startCov <- cov(data, use="pairwise.complete.obs")
-	lab <- outer(1:p, 1:p, function(x, y) paste0("cov", x, y, "_", groupnum))
-	lab2 <- outer(1:p, 1:p, function(x, y) paste0("cov", y, x, "_", groupnum))
-	lab[upper.tri(lab)] <- lab2[upper.tri(lab2)]
-	Saturate <- mxModel(title,
-		mxData(
-			observed=data,
-			type="raw"
-		),
-		# means
-		mxMatrix(
-			type="Full",
-			nrow=1,
-			ncol=p,
-			values=startMeans,
-			free=rep(TRUE, p),
-			labels=paste0("mean", 1:p, "_", groupnum),
-			name="M"
-		),
-		# symmetric paths
-		mxMatrix(
-			type="Symm",
-			nrow=p,
-			ncol=p,
-			values=startCov,
-			free=matrix(TRUE, p, p),
-			labels=lab,
-			byrow=TRUE,
-			name="S"
-		),
-		mxFIMLObjective(
-			covariance="S",
-			means="M",
-			dimnames=colnames(data)
-		)
-	)
-	Saturate
-}
-
-analyzeNullOpenMx <- function(data, groupLab = NULL) {
-	if(!is.null(groupLab) && groupLab %in% colnames(data)) {
-		data.l <- split(data, data[,groupLab])
-		data.l <- lapply(data.l, function(x) x[-ncol(x)])
-		ngroups <- length(data.l)
-		temp <- mapply(analyzeNullOpenMxSingleGroup, data = data.l, title = paste0("group", 1:ngroups), groupnum = 1:ngroups, SIMPLIFY=FALSE)
-		title <- "Multiple group Null Model"
-		algebra <- mxAlgebra("", name="allobjective")
-		groupnames <- paste0("group", 1:ngroups)
-		groupnames <- paste0(groupnames, ".objective")
-		groupnames <- lapply(groupnames, as.name)
-		algebra@formula <- as.call(c(list(as.name("sum")), groupnames))
-		objective <- mxAlgebraObjective("allobjective")
-		Null <- mxModel(title, unlist(temp), algebra, objective)
+easyFitMx <- function(object) {
+	library(OpenMx)
+	
+	if(length(object@submodels) > 1) {
+		dat <- lapply(object@submodels, slot, "data")
 	} else {
-		Null <- analyzeNullOpenMxSingleGroup(data, title = "Null Model")
+		dat <- object@data
 	}
-	capture.output(fit <- mxRun(Null))
-	fit
-}
+	
+	if(length(object@submodels) > 1) {
+		N <- sum(sapply(dat, slot, "numObs"))
+	} else {
+		N <- dat@numObs
+	}
 
-analyzeNullOpenMxSingleGroup <- function(data, title = "Null Model", groupnum = NULL) {
-	p <- ncol(data)
-	startMeans <- colMeans(data, na.rm=TRUE)
-	startVar <- apply(data, 2, var, na.rm=TRUE)
-	lab <- paste0("var", 1:p, "_", groupnum)
-	NullModel <- mxModel(title,
-		mxData(
-			observed=data,
-			type="raw"
-		),
-		# means
-		mxMatrix(
-			type="Full",
-			nrow=1,
-			ncol=p,
-			values=startMeans,
-			free=rep(TRUE, p),
-			labels=paste0("mean", 1:p, "_", groupnum),
-			name="M"
-		),
-		# symmetric paths
-		mxMatrix(
-			type="Diag",
-			nrow=p,
-			ncol=p,
-			values=startVar,
-			free=rep(TRUE, p),
-			labels=lab,
-			byrow=TRUE,
-			name="S"
-		),
-		mxFIMLObjective(
-			covariance="S",
-			means="M",
-			dimnames=colnames(data)
-		)
-	)
-	capture.output(fit <- mxRun(NullModel))
-	fit
-}
+    npar <- length(object@output$estimate)
 
+    multigroup <- length(object@submodels) > 1
+    G <- length(object@submodels) # number of groups
+	if(G == 0) G <- 1 # Correct when there is no submodel
 
-
-
-
-# Need to update for categorical variables and multiple groups
-fitMeasuresCalc <- function(X2, df, p = NULL, X2.null, df.null, p.null = NULL, N, fit.measures = "all") {
-	if(is.null(p)) p <- pchisq(X2, df=df, lower.tail=FALSE)
-	if(is.null(p.null)) p.null <- pchisq(X2.null, df=df.null, lower.tail=FALSE)
-    
-    fit.measures <- tolower(fit.measures)
-    if ("all" %in% fit.measures) {
-        chisq <- c("chisq", "df", "pvalue")
-        baseline <- c("baseline.chisq", "baseline.df", "baseline.pvalue")
-        cfi.tli <- c("cfi", "tli")
-        logl <- c("logl", "unrestricted.logl", "npar", "aic", "bic", "ntotal")
-        logl <- c(logl, "bic2")
-        rmsea.ci <- c("rmsea", "rmsea.ci.lower", "rmsea.ci.upper")
-        srmr <- c("srmr")
-        fit.measures <- c(chisq, baseline, cfi.tli, logl, rmsea.ci, srmr)
-    }
+    # main container
     indices <- list()
-    
-    # Chi-square value estimated model (H0)
-    if (any(c("chisq") %in% fit.measures)) {
-        indices["Chi"] <- X2
-    }
-    if (any(c("df", "df.scaled") %in% fit.measures)) {
-        indices["df"] <- df
-    }
-    if (any(c("pvalue", "pvalue.scaled") %in% fit.measures)) {
-        indices["pvalue"] <- p
-    }
-    
-    
-    if (any(c("cfi", "tli", "baseline.chisq", "baseline.pvalue") %in% fit.measures)) {
-        if ("baseline.chisq" %in% fit.measures) {
-            indices["baseline.Chi"] <- X2.null
-        }
-        if ("baseline.df" %in% fit.measures) {
-            indices["baseline.df"] <- df.null
-        }
-        if ("baseline.pvalue" %in% fit.measures) {
-            indices["baseline.pvalue"] <- p.null
-        }
-        # CFI
-        if ("cfi" %in% fit.measures) {
-            indices["CFI"] <- (1 - max(c(X2 - df, 0))/max(c(X2 - df, X2.null - df.null, 0)))
-        }
-        # TLI
-        if ("tli" %in% fit.measures) {
-            if (df > 0) {
-                TLI <- (X2.null/df.null - X2/df)/(X2.null/df.null - 1)
-                # if(TLI < 0) TLI <- NaN
-            } else {
-                TLI <- 1
-            }
-            indices["TLI"] <- TLI
-        }
-    }
-    
-    if (any(c("rmsea") %in% fit.measures)) {
-        # RMSEA
-        if (df > 0) {
-            RMSEA <- sqrt(max(c((X2/N)/df - 1/N, 0)))
-        } else {
-            RMSEA <- 0
-        }
-        indices["RMSEA"] <- RMSEA
-    }
-    
-    if ("rmsea.ci.lower" %in% fit.measures) {
-        lower.lambda <- function(lambda) {
-            (pchisq(X2, df = df, ncp = lambda) - 0.95)
-        }
-        
-        if (df < 1 || lower.lambda(0) < 0) {
-            indices["RMSEA.ci.lower"] <- 0
-        } else {
-            lambda.l <- try(uniroot(f = lower.lambda, lower = 0, upper = X2)$root)
-            if (inherits(lambda.l, "try-error")) {
-                lambda.l <- NA
-            }
-            indices["RMSEA.ci.lower"] <- sqrt(lambda.l/(N * df))
-        }
-    }
-    
-    N.RMSEA <- max(N, X2 * 2)
-    if ("rmsea.ci.upper" %in% fit.measures) {
-        upper.lambda <- function(lambda) {
-            (pchisq(X2, df = df, ncp = lambda) - 0.05)
-        }
-        if (df < 1 || upper.lambda(N.RMSEA) > 0 || upper.lambda(0) < 0) {
-            indices["RMSEA.ci.upper"] <- 0
-        } else {
-            lambda.u <- try(uniroot(f = upper.lambda, lower = 0, upper = N.RMSEA)$root)
-            if (inherits(lambda.u, "try-error")) {
-                lambda.u <- NA
-            }
-            indices["RMSEA.ci.upper"] <- sqrt(lambda.u/(N * df))
-        }
-    }
-    
-    out <- unlist(indices)
-    
-    if (length(out) > 0L) {
-        class(out) <- c("lavaan.vector", "numeric")
-    } else {
-        return(invisible(numeric(0)))
-    }
-    
-    out
+		
+	logl.H0 <- object@output$Minus2LogLikelihood * (-1/2)
+	indices["logl"] <- logl.H0
+	indices["npar"] <- npar
+
+	AIC <-  -2*logl.H0 + 2*npar
+	indices["aic"] <- AIC
+
+	BIC <- -2*logl.H0 + npar*log(N)
+	indices["bic"] <- BIC
+
+	# add sample-size adjusted bic
+	N.star <- (N + 2) / 24
+	BIC2 <- -2*logl.H0 + npar*log(N.star)
+	indices["bic2"] <- BIC2
+	out <- unlist(indices)
+    return(out)
 }

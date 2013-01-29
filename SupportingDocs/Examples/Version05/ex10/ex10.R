@@ -28,7 +28,7 @@ f2 =~ y4 + y5 + y6
 
 missmodel <- miss(pmMAR=0.1, cov="y7", threshold = 0.5)
 
-Output <- sim(1000, analyzeModel, n=200, generate=popModel, std.lv=TRUE, lavaanfun = "cfa")
+Output <- sim(1000, analyzeModel, n=200, generate=popModel, std.lv=TRUE, lavaanfun = "cfa", miss = missmodel)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summary(Output)

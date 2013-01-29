@@ -4,14 +4,14 @@
 	Generate data using SimSem template
 }
 \description{
-	This function can be used to generate random data based on the \code{\linkS4class{SimSem}} template. Some notable features include fine control of misspecification and misspecification optimization, as well as the ability to generate non-normal data. When using \emph{simsem} for simulations, this function is used internally to generate data in the function \code{sim}, and can be helpful for debugging, or in creating data for use with other analysis programs. 
+	This function can be used to generate random data based on the 1. \code{\linkS4class{SimSem}} objects created with the \code{\link{model}} function, 2. \code{lavaan} script or parameter tables, or 3. an \code{MxModel} object from the \code{OpenMx} package. Some notable features include fine control of misspecification and misspecification optimization (for \code{\linkS4class{SimSem}} only), as well as the ability to generate non-normal data. When using \emph{simsem} for simulations, this function is used internally to generate data in the function \code{sim}, and can be helpful for debugging, or in creating data for use with other analysis programs. 
 }
 \usage{
 generate(model, n, maxDraw=50, misfitBounds=NULL, misfitType="f0",
 	averageNumMisspec=FALSE, optMisfit=NULL, optDraws=50, 
 	createOrder = c(1, 2, 3), indDist=NULL, sequential=FALSE,	
 	facDist=NULL, errorDist=NULL, indLab=NULL, modelBoot=FALSE, 
-	realData=NULL, covData=NULL, params=FALSE)
+	realData=NULL, covData=NULL, params=FALSE, group = NULL, ...)
 }
 \arguments{
   \item{model}{
@@ -67,6 +67,12 @@ generate(model, n, maxDraw=50, misfitBounds=NULL, misfitType="f0",
 }
   \item{params}{ 
 	If \code{TRUE}, return the parameters drawn along with the generated data set. Default is \code{FALSE}.
+}
+  \item{group}{ 
+	The label of the grouping variable
+}
+  \item{\dots}{ 
+	Additional arguments for the \code{\link[lavaan]{simulateData}} function. 
 }
 }
 \value{

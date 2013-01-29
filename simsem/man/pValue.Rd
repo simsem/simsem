@@ -5,6 +5,7 @@
 \alias{pValue,numeric,vector-method}
 \alias{pValue,numeric,data.frame-method}
 \alias{pValue,lavaan,SimResult-method}
+\alias{pValue,MxModel,SimResult-method}
 \title{
 	Find p-values (1 - percentile)
 }
@@ -16,7 +17,7 @@ pValue(target, dist, ...)
 }
 \arguments{
   \item{target}{
-	A value, multiple values, or a lavaan object used to find p values. This argument could be a cutoff of a fit index.
+	A value, multiple values, a lavaan object, or an OpenMx object used to find p values. This argument could be a cutoff of a fit index.
 }
   \item{dist}{
 	The comparison distribution, which can be a vector of numbers, a data frame, or a result object.
@@ -35,6 +36,9 @@ pValue(target, dist, ...)
 	}
 	\item{signature(target="lavaan", dist="SimResult")}{
 		This method will find the \emph{p} value of the analysis result compared to the simulated sampling distribution in a result object (\code{SimResult}). The additional arguments are \code{usedFit}, \code{nVal}, \code{pmMCARval}, \code{pmMARval}, and \code{df}. The \code{usedFit} is the vector of names of fit indices that researchers wish to find the \emph{p} value from. The \code{nVal} is the sample size value that researchers wish to find the fit indices cutoffs from. The \code{pmMCARval} is the percent missing completely at random value that researchers wish to find the fit indices cutoffs from. The \code{pmMARval} is the percent missing at random value that researchers wish to find the fit indices cutoffs from. The \code{df} is the degree of freedom used in spline method in predicting the fit indices by the predictors. If \code{df} is 0, the spline method will not be applied.
+	}
+	\item{signature(target="OpenMx", dist="SimResult")}{
+		See signature(target="lavaan", dist="SimResult")
 	}
 }}
 \value{

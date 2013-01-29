@@ -5,6 +5,40 @@
 generate <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "f0", 
     averageNumMisspec = FALSE, optMisfit = NULL, optDraws = 50, createOrder = c(1, 2, 3), indDist = NULL, sequential = FALSE, 
     facDist = NULL, errorDist = NULL, indLab = NULL, modelBoot = FALSE, realData = NULL, covData = NULL, 
+    params = FALSE, group = NULL, ...) {
+	if(is(model, "SimSem")) {
+		if(!is.null(group)) model@groupLab <- group
+		data <- generateSimSem(model = model, n = n, maxDraw = maxDraw, misfitBounds = misfitBounds, misfitType = misfitType, 
+			averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, createOrder = createOrder, indDist = indDist, sequential = sequential, 
+			facDist = facDist, errorDist = errorDist, indLab = indLab, modelBoot = modelBoot, realData = realData, covData = covData, 
+			params = params)
+	} else if (is(model, "MxModel")) {
+		data <- generateMx(object = model, n = n, indDist = indDist, groupLab = group, covData = covData)
+	} else {
+		if(is.character(model)) {
+			model <- list(model = model)
+		} else if (is.partable(model)) {
+			model <- list(model = model)
+		} else if (is.lavaancall(model)) {
+			# Intentionally leave it blank
+		} else if (is(model, "lavaan")) {
+			temp <- model@ParTable
+			temp$ustart <- model@Fit@est
+			model <- list(model = temp)
+		} else {
+			stop("Please specify an appropriate object for the 'model' argument: simsem model template, lavaan script, lavaan parameter table, OpenMx object, or list of options for the 'simulateData' function.")
+		}
+		generate$sample.nobs <- n
+		generate$indDist <- indDist
+		generate <- c(generate, list(...))
+		data <- do.call("lavaanSimulateData", generate) 
+	}
+	return(data)
+}
+
+generateSimSem <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "f0", 
+    averageNumMisspec = FALSE, optMisfit = NULL, optDraws = 50, createOrder = c(1, 2, 3), indDist = NULL, sequential = FALSE, 
+    facDist = NULL, errorDist = NULL, indLab = NULL, modelBoot = FALSE, realData = NULL, covData = NULL, 
     params = FALSE) {
     if (is.null(indLab)) {
         if (model@modelType == "path") {
@@ -85,9 +119,10 @@ generate <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "
 		covData = covDataGroup, MoreArgs = list(sequential = sequential, modelBoot = modelBoot, indLab = indLab), 
         SIMPLIFY = FALSE)
     data <- do.call("rbind", datal)
-    data <- cbind(data, group = rep(1:ngroups, n))
-    colnames(data)[ncol(data)] <- model@groupLab
-    
+	if(ngroups > 1) {
+		data <- cbind(data, group = rep(1:ngroups, n))
+		colnames(data)[ncol(data)] <- model@groupLab
+    }
     if (params) {
         return(list(data = data, psl = draws))
     } else {

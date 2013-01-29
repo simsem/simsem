@@ -85,6 +85,9 @@ setMethod("summary", signature = "SimResult", definition = function(object, digi
 		cat(paste("   3.", "At least one SE were negative or NA", "=", sum(object@converged == 3), "\n"))
 		cat(paste("   4.", "At least one variance estimates were negative", "=", sum(object@converged == 4), "\n"))
 		cat(paste("   5.", "At least one correlation estimates were greater than 1 or less than -1", "=", sum(object@converged == 5), "\n"))
+		if(any(object@converged == 6)) {
+			cat(paste("   6.", "(OpenMx only) Optimal estimates could not be obtained (Status 6)", "=", sum(object@converged == 6), "\n"))
+		}
 		if (length(unique(object@n)) > 1) 
 			cat("NOTE: The sample size is varying.\n")
 		if (length(unique(object@pmMCAR)) > 1) 

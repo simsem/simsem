@@ -11,6 +11,7 @@ anova,SimResult-method
 bind                    Specify matrices for Monte Carlo simulation of
                         structural equation models
 bindDist                Create a data distribution object.
+combineSim              Combine result objects
 continuousPower         Find power of model parameters when simulations
                         have randomly varying parameters
 createData              Create data from a set of drawn parameters.

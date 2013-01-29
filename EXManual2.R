@@ -31,6 +31,7 @@ sourceDir <- function(path, trace = TRUE, ...) {
  # sourceDir(dir2)
 library(lavaan)
 library(copula)
+library(OpenMx)
 #get
 #assign
 dir <- "C:/Users/Sunthud/Dropbox/simsem/simsem/R/"
@@ -114,13 +115,13 @@ param <- draw(CFA.Model)
 dat <- createData(param[[1]], n = 200)
 
 script <- "
-x1 ~ p(0.5) + 0.3*x2 + 0.4*x4
+y1 ~ p(0.5) + 0.3*y2 + 0.4*y4
 #y3 ~ 0.7 + 0.4*y2 + 0.1*y4
 #y2 ~ 1
 #y4 ~ -0.5 + 0.2*y2
-x4 ~ -3
-x2 ~ p(0.1) + 0.3*x2
-x3 ~ p(0.05)
+y4 ~ -3
+y2 ~ p(0.1) + 0.3*y2
+y3 ~ p(0.05)
 "
 
 missthing <- miss(logit=script, ignoreCols="group")

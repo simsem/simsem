@@ -3,9 +3,12 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 	lavaanfun = "lavaan", outfun = NULL, pmMCAR = NULL, pmMAR = NULL, facDist = NULL, indDist = NULL, errorDist = NULL, 
     sequential = FALSE, modelBoot = FALSE, realData = NULL, covData = NULL, maxDraw = 50, misfitType = "f0", 
     misfitBounds = NULL, averageNumMisspec = FALSE, optMisfit = NULL, optDraws = 50, createOrder = c(1, 2, 3), 
-    aux = NULL, seed = 123321, silent = FALSE, multicore = FALSE, cluster = FALSE, 
+    aux = NULL, 
+	group = NULL, mxFit = FALSE,
+	seed = 123321, silent = FALSE, multicore = FALSE, cluster = FALSE, 
     numProc = NULL, paramOnly = FALSE, dataOnly = FALSE, smartStart = FALSE, previousSim = NULL, completeRep = FALSE, ...) {
 
+	mc <- match.call()
 	#Future plans. Add summaryTime option. Or include as an option in summary. Guess time forfull sim
 	#Add inspect function for anything
 	#Update function. Takes results object. Or takes model object.
@@ -32,6 +35,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 	}
 	
 	lavaanGenerate <- FALSE
+	mxGenerate <- FALSE
 	if(!is.null(generate)) {
 		if(is.character(generate)) {
 			generate <- list(model = generate)
@@ -46,14 +50,17 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 			temp$ustart <- generate@Fit@est
 			generate <- list(model = temp)
 			lavaanGenerate <- TRUE
+		} else if (is(generate, "MxModel")) {
+			mxGenerate <- TRUE
 		} else if (is(generate, "SimSem")) {
 			# Do nothing
 		} else {
-			stop("Please specify an appropriate object for the 'generate' argument: simsem model template, lavaan script, lavaan parameter table, or list of options for the 'simulateData' function.")
+			stop("Please specify an appropriate object for the 'generate' argument: simsem model template, lavaan script, lavaan parameter table, OpenMx object, or list of options for the 'simulateData' function.")
 		}
 	}
 	
 	lavaanAnalysis <- FALSE
+	mxAnalysis <- FALSE
 	if(is.character(model)) {
 		model <- list(model = model)
 		lavaanAnalysis <- TRUE
@@ -65,6 +72,8 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 	} else if (is(model, "lavaan")) {
 		model <- list(model = model@ParTable)
 		lavaanAnalysis <- TRUE
+	} else if (is(model, "MxModel")) {
+		mxAnalysis <- TRUE
 	} else if (is(model, "SimSem")) {
 		# Do nothing
 	} else {
@@ -73,9 +82,17 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 	
 	if(lavaanAnalysis) {
 		model <- c(model, list(...))
+		if(!("group" %in% names(model)) & "group" %in% names(mc)) model$group <- group
 	}
 	
 	## Save arguments for completeRep = TRUE
+	if(is.logical(completeRep)) {
+		if(completeRep) {
+			completeRep <- nRep
+		} else {
+			completeRep <- 0
+		}
+	}
 	nInitial <- n
 	pmMCARInitial <- pmMCAR
 	pmMARInitial <- pmMAR
@@ -95,6 +112,9 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 			} else {
 				if(is.list(n)) ngroups <- length(n)
 			}
+		} else if (mxGenerate) {
+			ngroups <- length(generate@submodels)
+			if(ngroups == 0) ngroups <- 1
 		} else {
 			ngroups <- max(generate@pt$group)
 		}
@@ -112,7 +132,10 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 				} else {
 					if(is.list(n)) ngroups <- length(n)
 				}
-			}		
+			}
+		} else if (mxAnalysis) {
+			ngroups <- length(model@submodels)
+			if(ngroups == 0) ngroups <- 1
 		} else {
 			ngroups <- max(model@pt$group)
 		}
@@ -281,7 +304,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
                 miss = miss, datafun = datafun, lavaanfun = lavaanfun, outfun = outfun, silent = silent, 
                 facDist = facDist, indDist = indDist, errorDist = errorDist, sequential = sequential, 
                 realData = realData, covData = covData, maxDraw = maxDraw, misfitBounds = misfitBounds, 
-                averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, createOrder = createOrder, misfitType = misfitType, aux = aux, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart, popData = popData, ...)
+                averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, createOrder = createOrder, misfitType = misfitType, aux = aux, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart, popData = popData, group = group, mxFit = mxFit, ...)
             stopCluster(cl)
         } else {
             Result.l <- mclapply(simConds, runRep, model = model, generate = generate, 
@@ -289,7 +312,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
                 facDist = facDist, indDist = indDist, errorDist = errorDist, sequential = sequential, 
                 realData = realData, covData = covData, maxDraw = maxDraw, misfitBounds = misfitBounds, 
                 averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, createOrder = createOrder, 
-                misfitType = misfitType, aux = aux, mc.cores = numProc, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart, popData = popData, ...)
+                misfitType = misfitType, aux = aux, mc.cores = numProc, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart, popData = popData, group = group, mxFit = mxFit, ...)
         }
     } else {
         Result.l <- lapply(simConds, runRep, model = model, generate = generate, 
@@ -297,7 +320,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
             indDist = indDist, errorDist = errorDist, sequential = sequential, realData = realData, covData = covData, 
             maxDraw = maxDraw, misfitBounds = misfitBounds, averageNumMisspec = averageNumMisspec, 
             optMisfit = optMisfit, optDraws = optDraws,  createOrder = createOrder, misfitType = misfitType, 
-            aux = aux, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart, popData = popData, ...)
+            aux = aux, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart, popData = popData, group = group, mxFit = mxFit, ...)
     }
 
 	################## Extract out popData ##################################
@@ -365,7 +388,6 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 		coef <- as.data.frame(do.call(rbind, coef.l))
 		se <- as.data.frame(do.call(rbind, se.l))
 		fit <- as.data.frame(do.call(rbind, fit.l))
-		std <- as.data.frame(do.call(rbind, std.l))
 		converged <- as.vector(unlist(converged.l))
 		
 		if(paramOnly) converged <- rep(TRUE, length(converged))
@@ -407,8 +429,20 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 			param <- pt$ustart
 			names(param) <- lavaan:::getParameterLabels(pt)
 			param <- as.data.frame(t(param))
+		} else if (mxGenerate | (is.null(generate) & is(model, "MxModel"))) {
+			if(is.null(generate)) generate <- model
+			param <- vectorizeMx(generate)
+			param <- as.data.frame(t(param))
 		}
 		
+		if (!is.null(std.l[[1]])) {
+			std <- as.data.frame(do.call(rbind, std.l))
+			if (sum(dim(std)) == 0) 
+				std <- data.frame()
+		} else {
+			std <- data.frame()
+		}
+
 		if (!is.null(FMI1.l[[1]])) {
 			FMI1 <- as.data.frame(do.call(rbind, FMI1.l))
 			if (sum(dim(FMI1)) == 0) 
@@ -455,6 +489,8 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 			if(ngroups > 1) {
 				if(lavaanAnalysis) {
 					groupLab <- model$group
+				} else if (mxAnalysis) {
+					groupLab <- group
 				} else {
 					groupLab <- model@groupLab
 				}
@@ -471,7 +507,13 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 		}
 		
 		modelType <- "lavaan"
-		if(!lavaanAnalysis) modelType <- model@modelType
+		if(!lavaanAnalysis) {
+			if(mxAnalysis) {
+				modelType <- "OpenMx"
+			} else {
+				modelType <- model@modelType
+			}
+		}
 		
 		Result <- new("SimResult", modelType = modelType, nRep = nRep, coef = coef, 
 			se = se, fit = fit, converged = converged, seed = c(seed, s), paramValue = param, 
@@ -484,12 +526,12 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 		} 
 		
 		# If completeRep = TRUE, check whether the number of converged results
-		if(completeRep & !is.null(nRepInitial)) {
+		if(completeRep > 0 & !is.null(nRepInitial)) {
 			success <- sum(Result@converged == 0)
-			pSuccess <- success / nRep
-			if(pSuccess < 1) {
-				nRepNew <- ceiling((nRep - success) / pSuccess) 
-				Result <- sim(nRep = nRepNew, model = model, n = nInitial, generate = generate, rawData = rawData, miss = miss, datafun = datafun, lavaanfun = lavaanfun, outfun = outfun, pmMCAR = pmMCARInitial, pmMAR = pmMARInitial, facDist = facDist, indDist = indDist, errorDist = errorDist, sequential = sequential, modelBoot = modelBoot, realData = realData, covData = covData, maxDraw = maxDraw, misfitType = misfitType, misfitBounds = misfitBounds, averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, createOrder = createOrder, aux = aux, seed = seed, silent = silent, multicore = multicore, cluster = cluster, numProc = numProc, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart, previousSim = Result, completeRep = completeRep, ...)
+			pSuccess <- success / Result@nRep
+			if(success < completeRep) {
+				nRepNew <- ceiling((completeRep - success) / pSuccess) 
+				Result <- sim(nRep = nRepNew, model = model, n = nInitial, generate = generate, rawData = rawData, miss = miss, datafun = datafun, lavaanfun = lavaanfun, outfun = outfun, pmMCAR = pmMCARInitial, pmMAR = pmMARInitial, facDist = facDist, indDist = indDist, errorDist = errorDist, sequential = sequential, modelBoot = modelBoot, realData = realData, covData = covData, maxDraw = maxDraw, misfitType = misfitType, misfitBounds = misfitBounds, averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, createOrder = createOrder, aux = aux, group = group, mxFit = mxFit, seed = seed, silent = silent, multicore = multicore, cluster = cluster, numProc = numProc, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart, previousSim = Result, completeRep = completeRep, ...)
 			}
 		}
 		
@@ -505,7 +547,8 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
     outfun = NULL, facDist = NULL, indDist = NULL, indLab = NULL, errorDist = NULL, 
     sequential = FALSE, realData = NULL, covData = NULL, silent = FALSE, modelBoot = FALSE, maxDraw = 50, 
     misfitType = "f0", misfitBounds = NULL, averageNumMisspec = NULL, optMisfit = NULL, 
-    optDraws = 50, createOrder = c(1, 2, 3), aux = NULL, paramOnly = FALSE, dataOnly = FALSE, smartStart = TRUE, popData = NULL, ...) {
+    optDraws = 50, createOrder = c(1, 2, 3), aux = NULL, paramOnly = FALSE, dataOnly = FALSE, smartStart = TRUE, 
+	popData = NULL, group = NULL, mxFit = FALSE, ...) {
     start.time0 <- start.time <- proc.time()[3]
     timing <- list()
     #Check why some are NULL and some are NA
@@ -513,7 +556,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
     coef <- NA
     se <- NA
     fit <- NA
-    std <- NA
+    std <- NULL
     extra <- NA
     FMI1 <- NULL
     FMI2 <- NULL
@@ -581,6 +624,10 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 		generate$indDist <- indDist
 		data <- do.call("lavaanSimulateData", generate) # Change to simulateData when the bug is fixed
 	}
+
+	if (is.null(data) && is(generate, "MxModel")) {
+		data <- generateMx(generate, n=n, indDist=indDist, covData=covData)
+	}
 	
     if (is.null(data)) {
 		# Label variables for creating labels later
@@ -598,7 +645,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 		if (length(covLabGen) == 0) covLabGen <- NULL
 	
 		# Need to draw parameters
-		genout <- generate(model = generate, n = n, maxDraw = maxDraw, misfitBounds = misfitBounds, 
+		genout <- generateSimSem(model = generate, n = n, maxDraw = maxDraw, misfitBounds = misfitBounds, 
 			misfitType = misfitType, averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, 
 			optDraws = optDraws, createOrder = createOrder, indDist = indDist, sequential = sequential, 
 			facDist = facDist, errorDist = errorDist, indLab = indLab, modelBoot = modelBoot, 
@@ -626,6 +673,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 			model@pt$ustart <- c(popParam, rep(NA, length(model@pt$ustart) - length(popParam)))
 		}
     }  # else: do nothing. Raw data.
+	
     timing$GenerateData <- (proc.time()[3] - start.time)
     start.time <- proc.time()[3]
     ## 3. Impose Missing (if any)
@@ -642,6 +690,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
     start.time <- proc.time()[3]
     ## 5. Call lavaan using simsem template and generated data from 2.
     out <- NULL
+	mxAnalysis <- FALSE
 	if(!paramOnly & !dataOnly) {
 		# Impute missing and run results
 		# Will use analyze either when there is a missing object or auxiliary variables specified. 
@@ -653,13 +702,26 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 			} else {
 				try(out <- analyzeLavaan(model, lavaanfun, miss, aux))
 			}
+		} else if (is(model, "MxModel")) {
+			mxAnalysis <- TRUE
+			multigroup <- length(model@submodels) > 0
+			if(multigroup) {
+				if(is.null(group)) group <- "group"
+			} else {
+				group <- NULL
+			}
+			if (silent) {
+				invisible(capture.output(suppressMessages(try(out <- analyzeMx(model, data, groupLab = group), silent = TRUE))))
+			} else {
+				try(out <- analyzeMx(model, data, groupLab = group))
+			}
 		} else {
 			if (!is.null(miss) | !is.null(aux)) {
 				if (silent) {
-					invisible(capture.output(suppressMessages(try(out <- analyze(model, data, 
+					invisible(capture.output(suppressMessages(try(out <- analyzeSimSem(model, data, 
 						aux = aux, miss = miss, ...), silent = TRUE))))
 				} else {
-					try(out <- analyze(model, data, aux = aux, miss = miss, ...))
+					try(out <- analyzeSimSem(model, data, aux = aux, miss = miss, ...))
 				}
 			} else {
 				if (silent) {
@@ -677,66 +739,121 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
     ## 6. Parse Lavaan Output
 	if (!dataOnly) {
 		if (!is.null(out)) {
-			try(converged <- as.numeric(!inspect(out, "converged")))
-			if(converged == 0) {
-				se <- inspect(out, "se")
-				improperSE <- any(unlist(se) < 0) | any(is.na(unlist(se))) | all(unlist(se) == 0)
-				if (improperSE) {
-					converged <- 3
+			if(mxAnalysis) {
+				try(converged.l <- out@output$status)
+				converged <- 0
+				if(converged.l[[2]] != 0) {
+					converged <- 1
 				}
-				if (checkVar(out)) {
-					converged <- 4
-				} else if(checkCov(out)) {
-					converged <- 5
+				if(converged.l[[1]] == 1) {
+					converged <- 0
+				} else if (converged.l[[1]] == 6) {
+					converged <- 6
+				} else if (converged.l[[1]] == 0) {
+					converged <- 0
+				} else {
+					converged <- 1
 				}
+				if(converged == 0) {
+					seTemp <- out@output$standardErrors
+					improperSE <- any(unlist(seTemp) < 0) | any(is.na(unlist(seTemp))) | all(unlist(seTemp) == 0)
+					if (improperSE) {
+						converged <- 3
+					}
+				}
+			} else {
+				try(converged <- as.numeric(!inspect(out, "converged")))
 				#Below is only for multiple imputation. If the number of converged imputations is below the threshold then converged = 2
 				if(is(out, "lavaanStar") && length(out@imputed) > 0) {
 					if(out@imputed[[1]][1] < miss@convergentCutoff) converged <- 2
 				}
+				if(converged == 0) {
+					seTemp <- inspect(out, "se")
+					improperSE <- any(unlist(seTemp) < 0) | any(is.na(unlist(seTemp))) | all(unlist(seTemp) == 0)
+					if (improperSE) {
+						converged <- 3
+					}
+					if (checkVar(out)) {
+						converged <- 4
+					} else if(checkCov(out)) {
+						converged <- 5
+					}
+				}			
 			}
 		}
 		
 		#reminder: out=lavaan object
-		if (converged %in% c(0, 3:5)) {
-		
-			fit <- inspect(out, "fit") # Avoid fitMeasures function becuase the runMI function does not support the fitMeasures function.
-			
-			#redo with parameterEstimate function in lavaan (for coef se, std) all the way to 526
-			result <- parameterEstimates(out, standardized=TRUE)
-			outpt <- out@ParTable
-			extraParamIndex <- outpt$op %in% c(">", "<", "==", ":=")
-			index <- ((outpt$free != 0) & !(duplicated(outpt$free))) | extraParamIndex
-			coef <- result$est[index]
-			se <- out@Fit@se[index]
-			std <- result$std.all[index]
-			lab <- lavaan:::getParameterLabels(outpt, type="free")
-			if(any(extraParamIndex)) {
-				if(!is.lavaancall(model)) {
-					lab <- c(lab, renameExtraParam(model@con$lhs, model@con$op, model@con$rhs))
+		if (converged %in% c(0, 3:6)) {
+			if(mxAnalysis) {
+				if(mxFit) {
+					fit <- NA
+					try(fit <- semTools:::fitMeasuresMx(out), silent = silent)
+					if(!all(is.na(fit))) {
+						availfit <- names(fit)
+						if("saturate.status" %in% availfit) {
+							set1 <- intersect(c("logl", "npar", "aic", "bic"), availfit)
+							set2 <- intersect(c("cfi", "tli", "nnfi", "pnfi", "rfi", "nfi", "ifi", "rni", "baseline.chisq", "baseline.pvalue"), availfit)
+							set3 <- setdiff(availfit, c(set1, set2))
+							if(!(fit["saturate.status"] %in% c(0, 1))) fit[c(set2, set3)] <- NA
+							if(!(fit["null.status"] %in% c(0, 1))) fit[set2] <- NA
+						}
+					}
 				} else {
-					lab <- c(lab, renameExtraParam(outpt$lhs[extraParamIndex], outpt$op[extraParamIndex], outpt$rhs[extraParamIndex]))
+					fit <- easyFitMx(out)
 				}
-			}
-			names(coef) <- lab
-			names(se) <- lab
-			names(std) <- lab
-			
-			## 6.1. Call output function (if exists)
-			if (!is.null(outfun)) {
-				extra <- outfun(out)
-			}
-			
-			if(!is.null(miss) && miss@m > 0) {
-				if (converged %in% c(0, 3:5)) {
-					fmiOut <- out@imputed[[2]]
-					FMI1 <- fmiOut[,5][index]
-					FMI2 <- fmiOut[,6][index]
-					names(FMI1) <- lab
-					names(FMI2) <- lab
-				} 	
-			}
-			#Finish FIML FMI below! from parameterEstimates
-			if(!is.null(miss) && miss@m == 0){
+				coef <- out@output$estimate
+				se <- as.vector(out@output$standardErrors)
+				name <- names(coef)
+				name <- gsub(paste0(out@name, "."), "", name)
+				names(coef) <- name
+				names(se) <- name
+				if(is(out@objective, "MxRAMObjective") | (length(out@submodels) > 0 && is(out@submodels[[1]]@objective, "MxRAMObjective"))) {
+					std <- NA
+					try(std <- semTools:::standardizeMx(out, free = TRUE), silent = silent)
+				}
+				if (!is.null(outfun)) {
+					extra <- outfun(out)
+				}
+			} else {
+				fit <- inspect(out, "fit") # Avoid fitMeasures function becuase the runMI function does not support the fitMeasures function.
+				
+				#redo with parameterEstimate function in lavaan (for coef se, std) all the way to 526
+				result <- parameterEstimates(out, standardized=TRUE)
+				outpt <- out@ParTable
+				extraParamIndex <- outpt$op %in% c(">", "<", "==", ":=")
+				index <- ((outpt$free != 0) & !(duplicated(outpt$free))) | extraParamIndex
+				coef <- result$est[index]
+				se <- out@Fit@se[index]
+				std <- result$std.all[index]
+				lab <- lavaan:::getParameterLabels(outpt, type="free")
+				if(any(extraParamIndex)) {
+					if(!is.lavaancall(model)) {
+						lab <- c(lab, renameExtraParam(model@con$lhs, model@con$op, model@con$rhs))
+					} else {
+						lab <- c(lab, renameExtraParam(outpt$lhs[extraParamIndex], outpt$op[extraParamIndex], outpt$rhs[extraParamIndex]))
+					}
+				}
+				names(coef) <- lab
+				names(se) <- lab
+				names(std) <- lab
+				
+				## 6.1. Call output function (if exists)
+				if (!is.null(outfun)) {
+					extra <- outfun(out)
+				}
+				
+				if(!is.null(miss) && miss@m > 0) {
+					if (converged %in% c(0, 3:5)) {
+						fmiOut <- out@imputed[[2]]
+						FMI1 <- fmiOut[,5][index]
+						FMI2 <- fmiOut[,6][index]
+						names(FMI1) <- lab
+						names(FMI2) <- lab
+					} 	
+				}
+				#Finish FIML FMI below! from parameterEstimates
+				if(!is.null(miss) && miss@m == 0){
+				}
 			}
 		} 
 		
@@ -776,7 +893,6 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 
 		timing$ParseOutput <- (proc.time()[3] - start.time)
 		start.time <- proc.time()[3]
-    	
 		Result <- list(coef = coef, se = se, fit = fit, converged = converged, param = popParam, 
         FMI1 = FMI1, FMI2 = FMI2, std = std, timing = timing, extra = extra, popMis = popMis, 
         misfitOut = misfitOut)

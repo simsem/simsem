@@ -4,7 +4,7 @@
 	Run a monte carlo simulation with a structural equation model.
 }
 \description{
-	This function can be used to generate and analyze simulated data from 1. \code{\linkS4class{SimSem}} objects created with the \code{\link{model}} function or 2. \code{lavaan} script or parameter tables. In this function, parameters are drawn from the specified data-generation model and used to create data, specified missingness (if any) is imposed, and data are analyzed using the specified \code{\linkS4class{SimSem}} analysis model object. Provides a \code{\linkS4class{SimResult}}) object as ouput, which summarizes analyses across replications. Data can be transformed using the \code{datafun} argument. Additional output can be extracted using the \code{outfun} argument. Paralleled processing can be enabled using the \code{multicore} argument. The \code{sim} function can also be used to obtain raw data using the \code{dataOnly} argument, to analyze pre-existing data using the \code{rawData} argument, and to simulate data that follows the distribution of a real data set using the \code{rawData} argument.
+	This function can be used to generate data, analyze the generated data, and summarized into a result object where parameter estimates, standard errors, fit indices, and other characteristics of each replications are saved. The data-generation and data analysis can be done by 1. \code{\linkS4class{SimSem}} objects created with the \code{\link{model}} function, 2. \code{lavaan} script or parameter tables, or 3. an \code{MxModel} object from the \code{OpenMx} package. 
 }
 \usage{
 sim(nRep, model, n, generate = NULL, rawData = NULL, miss = NULL, datafun=NULL, 
@@ -12,9 +12,10 @@ lavaanfun = "lavaan", outfun=NULL, pmMCAR = NULL, pmMAR = NULL, facDist = NULL, 
 errorDist = NULL, sequential = FALSE, modelBoot = FALSE, realData = NULL, 
 covData = NULL, maxDraw = 50, misfitType = "f0", misfitBounds = NULL, 
 averageNumMisspec = FALSE, optMisfit=NULL, optDraws = 50, 
-createOrder = c(1, 2, 3), aux = NULL, seed = 123321, silent = FALSE, 
+createOrder = c(1, 2, 3), aux = NULL, group = NULL, mxFit = FALSE,
+seed = 123321, silent = FALSE, 
 multicore = FALSE, cluster = FALSE, numProc = NULL, paramOnly = FALSE, 
-dataOnly=FALSE, smartStart=FALSE, ...)
+dataOnly=FALSE, smartStart=FALSE, previousSim = NULL, completeRep = FALSE,  ...)
 }
 \arguments{
   \item{nRep}{
@@ -96,6 +97,12 @@ dataOnly=FALSE, smartStart=FALSE, ...)
   \item{aux}{
     The names of auxiliary variables saved in a vector.
 }
+  \item{group}{
+    The name of the group variable. This argument is used when \code{lavaan} script or \code{MxModel} is used in the \code{model} only.
+}
+  \item{mxFit}{
+    A logical whether to find an extensive list of fit measures (which will be slower). This argument is applicable when \code{MxModel} is used in the \code{model} argument only.
+}
   \item{seed}{ 
 	Random number seed. Reproducibility across multiple cores or clusters is ensured using R'Lecuyer package.
 }
@@ -120,9 +127,20 @@ dataOnly=FALSE, smartStart=FALSE, ...)
   \item{smartStart}{
 	Defaults to FALSE. If TRUE, population parameter values that are real numbers will be used as starting values. When tested in small models, the time elapsed when using population values as starting values was greater than the time reduced during analysis, and convergence rates were not affected. 
 }
+  \item{previousSim}{
+	A result object that users wish to add the results of the current simulation in
+}
+  \item{completeRep}{
+	If \code{TRUE}, the function will run until the number of convergent replication equal to the specified \code{nRep}.
+}
   \item{\dots}{ 
 	Additional arguments to be passed to lavaan.
 }
+}
+\details{
+This function is executed as follows: 1. parameters are drawn from the specified data-generation model (applicable only simsem model template, \code{\linkS4class{SimSem}}, only), 2. the drawn (or the specified) parameters are used to create data, 3. data can be transformed using the \code{datafun} argument, 4. specified missingness (if any) is imposed, 5. data are analyzed using the specified analysis model, 6. parameter estimates, standard errors, fit indices, and other characteristics of a replication are extracted, 7. additional outputs (if any) are extracted using the \code{outfun} argument, and 8. results across replications are summarized in a result object, \code{\linkS4class{SimResult}}).
+
+The \code{sim} function can also be used to obtain raw data using the \code{dataOnly} argument, to analyze pre-existing data or a drawn of a specified population data using the \code{rawData} argument, and to simulate data that follows the distribution of a real data set using the \code{realData} argument. Paralleled processing can be enabled using the \code{multicore} argument. 
 }
 \value{
 	A result object (\code{\linkS4class{SimResult}})
@@ -198,7 +216,6 @@ summary(Output)
 # Example of data transformation: Transforming to standard score
 fun1 <- function(data) {
 	temp <- scale(data)
-	temp[,"group"] <- data[,"group"]
 	as.data.frame(temp)
 }
 

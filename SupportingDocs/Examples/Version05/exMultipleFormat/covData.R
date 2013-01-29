@@ -167,7 +167,7 @@ SEM.model <- model(BE=BE, LY=LY, RPS=RPS, RTE=RTE, GA=GA, modelType="SEM")
 covData <- data.frame(z1 = c(rep(1, 100), rep(0, 100), rep(0, 100)), z2 = c(rep(0, 100), rep(1, 100), rep(0, 100)))
 
 dat <- generate(SEM.model, n=300, covData=covData)
-out <- analyze(SEM.model, dat)
+try(out <- analyze(SEM.model, dat))
 
 Output6 <- sim(1000, n=300, SEM.model, covData=covData, silent=TRUE)
 getCutoff(Output6, 0.05)

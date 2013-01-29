@@ -2,6 +2,7 @@
 ** R
 ** inst
 ** preparing package for lazy loading
+in method for 'pValue' with signature 'target="MxModel",dist="SimResult"': no definition for class "MxModel"
 ** help
 *** installing help indices
 ** building package indices

@@ -1,6 +1,21 @@
 
-
 analyze <- function(model, data, package = "lavaan", miss = NULL, 
+    aux = NULL, group = NULL, ...) {
+	mc <- match.call()
+	args <- list(...)
+	if(is(model, "SimSem")) {
+		if(!("group" %in% names(args)) & "group" %in% names(mc)) args$group <- group
+		args <- c(list(model = model, data = data, package = package, miss = miss, aux = aux), args)
+		out <- do.call("analyzeSimSem", args)
+	} else if (is(model, "MxModel")) {
+		out <- analyzeMx(object = model, data = data, groupLab = group)
+	} else {
+		stop("Please specify an appropriate object for the 'model' argument: simsem model template or OpenMx object. If users wish to analyze the lavaan script, please use the functions in the lavaan package directly (e.g., sem, cfa, growth, or lavaan).")
+	}
+	return(out)
+}
+
+analyzeSimSem <- function(model, data, package = "lavaan", miss = NULL, 
     aux = NULL, ...) {
     Output <- NULL
     DataOut <- NULL
@@ -23,10 +38,6 @@ analyze <- function(model, data, package = "lavaan", miss = NULL,
 		args$group <- NULL
 		groupLab <- NULL
 	}
-    # if (!(model@groupLab %in% colnames(data))) {
-        # data <- data.frame(data, group = 1)
-        # colnames(data)[ncol(data)] <- model@groupLab
-    # }
     if (!is.null(miss) && length(miss@package) != 0 && miss@package %in% c("Amelia", "mice")) {
 		library(semTools)
 		miArgs <- miss@args
@@ -58,20 +69,13 @@ analyze <- function(model, data, package = "lavaan", miss = NULL,
                 model.type = model@modelType, missing = missing, fun = "lavaan")
 			attribute <- c(attribute, args)
 			Output <- do.call(auxiliary, attribute)
-			
-            #Output <- auxiliary(model@pt, aux = aux, data = data, group = model@groupLab, 
-            #    model.type = model@modelType, missing = missing, ...)
         } else {
 			attribute <- list(model=model@pt, data = data, group = groupLab, model.type = model@modelType, 
                 missing = missing)
 			attribute <- c(attribute, args)
 			Output <- do.call(lavaan, attribute)
-			
-            #Output <- lavaan(model@pt, data = data, group = model@groupLab, model.type = model@modelType, 
-             #   missing = missing, ...)
         }
     }
-    
     return(Output)
 }
 

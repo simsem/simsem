@@ -347,6 +347,40 @@ dist <- bindDist(skewness = c(0, -2, 2), kurtosis = c(0, 8, 4))
 
 
 cleanEx()
+nameEx("combineSim")
+### * combineSim
+
+flush(stderr()); flush(stdout())
+
+### Name: combineSim
+### Title: Combine result objects
+### Aliases: combineSim
+
+### ** Examples
+
+loading <- matrix(0, 6, 2)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+LY <- bind(loading, 0.7)
+
+latent.cor <- matrix(NA, 2, 2)
+diag(latent.cor) <- 1
+RPS <- binds(latent.cor, 0.5)
+
+RTE <- binds(diag(6))
+
+VY <- bind(rep(NA,6),2)
+
+CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
+Output1 <- sim(5, CFA.Model, n=200, seed=123321)
+Output2 <- sim(4, CFA.Model, n=200, seed=324567)
+Output3 <- sim(3, CFA.Model, n=200, seed=789987)
+Output <- combineSim(Output1, Output2, Output3)
+summary(Output)
+
+
+
+cleanEx()
 nameEx("continuousPower")
 ### * continuousPower
 
@@ -1719,7 +1753,7 @@ flush(stderr()); flush(stdout())
 ### Title: Find p-values (1 - percentile)
 ### Aliases: pValue pValue-methods pValue,ANY-method
 ###   pValue,numeric,vector-method pValue,numeric,data.frame-method
-###   pValue,lavaan,SimResult-method
+###   pValue,lavaan,SimResult-method pValue,MxModel,SimResult-method
 
 ### ** Examples
 
@@ -2554,7 +2588,6 @@ summary(Output)
 # Example of data transformation: Transforming to standard score
 fun1 <- function(data) {
 	temp <- scale(data)
-	temp[,"group"] <- data[,"group"]
 	as.data.frame(temp)
 }
 

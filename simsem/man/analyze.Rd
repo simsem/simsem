@@ -7,11 +7,11 @@
 	Data analysis using the model specification (\code{linkS4class{SimSem}}). Data will be multiply imputed if the \code{miss} argument is specified.
 }
 \usage{
-analyze(model, data, package="lavaan", miss=NULL, aux=NULL, ...)
+analyze(model, data, package="lavaan", miss=NULL, aux=NULL, group = NULL, ...)
 }
 \arguments{
   \item{model}{
-	The model specification (\code{linkS4class{SimSem}})
+	The simsem model template (\code{linkS4class{SimSem}}) or the mx model object (\code{MxModel})
 }
   \item{data}{
 	The target dataset 
@@ -24,6 +24,9 @@ analyze(model, data, package="lavaan", miss=NULL, aux=NULL, ...)
 }
   \item{aux}{ 
 	List of auxiliary variables
+}
+  \item{group}{ 
+	A group variable. This argument is applicable only when the \code{model} argument is a \code{MxModel} object.
 }
   \item{\dots}{ 
 	Additional arguments in the \code{\link[lavaan]{lavaan}} function

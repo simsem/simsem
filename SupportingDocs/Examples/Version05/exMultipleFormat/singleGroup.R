@@ -1,4 +1,5 @@
 library(simsem)
+library(OpenMx)
 
 totalRep <- 1000
 # 1. Generate Data by simsem model template
@@ -36,6 +37,107 @@ summary(Output12)
 Output13 <- sim(nRep = totalRep, model = list(model = script, std.lv = TRUE), n = 200, generate = CFA.Model, lavaanfun = "cfa")
 summary(Output13)
 
+# 1.4 Analyze by OpenMx object
+
+mxTwoFactorModel <- mxModel("Two Factor Model",
+    type="RAM",
+    # asymmetric paths
+    mxMatrix(
+        type="Full",
+        nrow=8,
+        ncol=8,
+        values=c(0,0,0,0,0,0,0.7,0,
+                 0,0,0,0,0,0,0.7,0,
+                 0,0,0,0,0,0,0.7,0,
+                 0,0,0,0,0,0,0,0.7,
+                 0,0,0,0,0,0,0,0.7,
+                 0,0,0,0,0,0,0,0.7,
+                 0,0,0,0,0,0,0,0,
+                 0,0,0,0,0,0,0,0),
+        free=c(F, F, F, F, F, F, T, F,
+               F, F, F, F, F, F, T, F,
+               F, F, F, F, F, F, T, F,
+               F, F, F, F, F, F, F, T,
+               F, F, F, F, F, F, F, T,
+               F, F, F, F, F, F, F, T,
+               F, F, F, F, F, F, F, F,
+               F, F, F, F, F, F, F, F),
+        labels=c(NA,NA,NA,NA,NA,NA,"l1", NA,
+                 NA,NA,NA,NA,NA,NA,"l2", NA,
+                 NA,NA,NA,NA,NA,NA,"l3", NA,
+                 NA,NA,NA,NA,NA,NA, NA,"l4",
+                 NA,NA,NA,NA,NA,NA, NA,"l5",
+                 NA,NA,NA,NA,NA,NA, NA,"l6",
+                 NA,NA,NA,NA,NA,NA, NA, NA,
+                 NA,NA,NA,NA,NA,NA, NA, NA),
+        byrow=TRUE,
+        name="A"
+    ),
+    # symmetric paths
+    mxMatrix(
+        type="Symm",
+        nrow=8,
+        ncol=8,
+        values=c(0.51,0,0,0,0,0, 0, 0,
+                 0,0.51,0,0,0,0, 0, 0,
+                 0,0,0.51,0,0,0, 0, 0,
+                 0,0,0,0.51,0,0, 0, 0,
+                 0,0,0,0,0.51,0, 0, 0,
+                 0,0,0,0,0,0.51, 0, 0,
+                 0,0,0,0,0,0, 1,.5,
+                 0,0,0,0,0,0,.5, 1),
+        free=c(T, F, F, F, F, F, F, F,
+               F, T, F, F, F, F, F, F,
+               F, F, T, F, F, F, F, F,
+               F, F, F, T, F, F, F, F,
+               F, F, F, F, T, F, F, F,
+               F, F, F, F, F, T, F, F,
+               F, F, F, F, F, F, F, T,
+               F, F, F, F, F, F, T, F),
+        labels=c("e1", NA,   NA,   NA,   NA,   NA,    NA,    NA,
+                 NA, "e2",   NA,   NA,   NA,   NA,    NA,    NA,
+                 NA,   NA, "e3",   NA,   NA,   NA,    NA,    NA,
+                 NA,   NA,   NA, "e4",   NA,   NA,    NA,    NA,
+                 NA,   NA,   NA,   NA, "e5",   NA,    NA,    NA,
+                 NA,   NA,   NA,   NA,   NA, "e6",    NA,    NA,
+                 NA,   NA,   NA,   NA,   NA,   NA, "varF1", "cov",
+                 NA,   NA,   NA,   NA,   NA,   NA, "cov", "varF2"),
+        byrow=TRUE,
+        name="S"
+    ),
+    # filter matrix
+    mxMatrix(
+        type="Full",
+        nrow=6,
+        ncol=8,
+        free=F,
+        values=c(1,0,0,0,0,0,0,0,
+                 0,1,0,0,0,0,0,0,
+                 0,0,1,0,0,0,0,0,
+                 0,0,0,1,0,0,0,0,
+                 0,0,0,0,1,0,0,0,
+                 0,0,0,0,0,1,0,0),
+        byrow=T,
+        name="F"
+    ),
+    # means
+    mxMatrix(
+        type="Full",
+        nrow=1,
+        ncol=8,
+        values=c(0,0,0,0,0,0,0,0),
+        free=c(T,T,T,T,T,T,F,F),
+        labels=c("meanx1","meanx2","meanx3",
+                 "meanx4","meanx5","meanx6",
+                  NA,NA),
+        name="M"
+    ),
+    mxRAMObjective("A","S","F","M", dimnames=c(paste0("y", 1:6), "f1", "f2"))
+)
+
+Output14 <- sim(nRep = totalRep, model = mxTwoFactorModel, n = 200, generate = CFA.Model)
+summary(Output14)
+
 # 2. Provide a list of data
 
 library(MASS)
@@ -70,6 +172,11 @@ summary(Output22)
 Output23 <- sim(model = list(model = script, std.lv = TRUE), rawData = data.l, lavaanfun = "cfa")
 summary(Output23)
 
+# 2.4 Analyze by OpenMx object
+
+Output24 <- sim(model = mxTwoFactorModel, rawData = data.l)
+summary(Output24)
+
 # 3. Provide a population data
 
 scores <- mvrnorm(10000, rep(0, 6), modelImplied)
@@ -93,6 +200,11 @@ summary(Output32)
 
 Output33 <- sim(nRep = totalRep, model = list(model = script, std.lv = TRUE), n = 200, rawData = popData, lavaanfun = "cfa")
 summary(Output33)
+
+# 3.4 Analyze by OpenMx object
+
+Output34 <- sim(nRep = totalRep, model = mxTwoFactorModel, n = 200, rawData = popData)
+summary(Output34)
 
 # 4. lavaan script for simulate data
 
@@ -125,5 +237,32 @@ summary(Output42)
 Output43 <- sim(nRep = totalRep, model = list(model = script, std.lv = TRUE), n = 200, generate = genscript, lavaanfun = "cfa")
 summary(Output43)
 
+# 4.4 Analyze by OpenMx object
 
+Output44 <- sim(nRep = totalRep, model = mxTwoFactorModel, n = 200, generate = genscript)
+summary(Output44)
+
+# 5. OpenMx Model
+
+# The data generation and data analysis are the same models (since the parameter values are fixed as starting values)
+
+# 5.1 Analyze by simsem model template
+
+Output51 <- sim(nRep = totalRep, model = CFA.Model, n = 200, generate = mxTwoFactorModel)
+summary(Output51)
+
+# 5.2 Analyze by lavaan
+
+Output52 <- sim(nRep = totalRep, model = script, n = 200, generate = mxTwoFactorModel, std.lv = TRUE, lavaanfun = "cfa")
+summary(Output52)
+
+# 5.3 Analyze by list of lavaan arguments
+
+Output53 <- sim(nRep = totalRep, model = list(model = script, std.lv = TRUE), n = 200, generate = mxTwoFactorModel, lavaanfun = "cfa")
+summary(Output53)
+
+# 5.4 Analyze by OpenMx object
+
+Output54 <- sim(nRep = totalRep, model = mxTwoFactorModel, n = 200, generate = mxTwoFactorModel)
+summary(Output54)
 
