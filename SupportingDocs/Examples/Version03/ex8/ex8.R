@@ -31,7 +31,7 @@ RTE <- binds(diag(9), misspec=error.cor.mis)
 
 mtmm.model <- model(LY=LY, RPS=RPS, RTE=RTE, modelType="CFA")
 
-miss.model <- miss(pmMCAR=0.2, ignoreCols="group", m=5) 
+miss.model <- miss(pmMCAR=0.2, m=5) 
 
 dat <- generate(mtmm.model, 500)
 dat <- impose(miss.model, dat)

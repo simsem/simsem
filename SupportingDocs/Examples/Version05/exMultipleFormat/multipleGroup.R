@@ -1,6 +1,7 @@
 library(simsem)
+library(OpenMx)
 
-totalRep <- 1000
+totalRep <- 5
 # 1. Generate Data by simsem model template
 
 loading <- matrix(0, 6, 2)

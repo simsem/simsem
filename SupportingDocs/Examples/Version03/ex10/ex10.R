@@ -21,7 +21,7 @@ VX <- bind(rep(NA, 7), 1)
 
 CFA.Model.Aux <- model(LY = LY, RPS = RPS, RTE = RTE, VY = VX, modelType="CFA") 
 
-missmodel <- miss(pmMAR=0.1, cov="y7", ignoreCols=8, threshold = 0.5)
+missmodel <- miss(pmMAR=0.1, cov="y7", threshold = 0.5)
 
 loading2 <- matrix(0, 6, 2)
 loading2[1:3, 1] <- NA

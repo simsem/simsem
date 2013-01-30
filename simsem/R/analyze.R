@@ -34,7 +34,7 @@ analyzeSimSem <- function(model, data, package = "lavaan", miss = NULL,
         if (!is.null(miss) && !(length(miss@cov) == 1 && miss@cov == 0) && miss@covAsAux) 
             aux <- miss@cov
     }
-	if(length(unique(model@pt$group)) == 1) {
+	if(length(unique(model@pt$group[model@pt$op %in% c("=~", "~~", "~", "~1", "|")])) == 1) {
 		args$group <- NULL
 		groupLab <- NULL
 	}
@@ -82,7 +82,7 @@ analyzeSimSem <- function(model, data, package = "lavaan", miss = NULL,
 # To be used internally
 anal <- function(model, data, package = "lavaan", ...) {
 	groupLab <- model@groupLab
-	if(length(unique(model@pt$group)) == 1) {
+	if(length(unique(model@pt$group[model@pt$op %in% c("=~", "~~", "~", "~1", "|")])) == 1) {
 		groupLab <- NULL
 	}
     Output <- lavaan(model@pt, data = data, group = groupLab, model.type = model@modelType, 

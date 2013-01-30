@@ -1,50 +1,50 @@
 library(simsem)
 library(OpenMx)
 
-AvaluesNull <- matrix(0, 5, 5)
-AvaluesNull[2, 1] <- 0.4
-AvaluesNull[3, 2] <- 0.4
-AvaluesNull[4, 3] <- 0.4
-AvaluesNull[5, 4] <- 0.4
-AfreeNull <- matrix(FALSE, 5, 5)
-AfreeNull[2, 1] <- TRUE
-AfreeNull[3, 2] <- TRUE
-AfreeNull[4, 3] <- TRUE
-AfreeNull[5, 4] <- TRUE
-AlabelsNull <- matrix(NA, 5, 5)
-AlabelsNull[2, 1] <- "con"
-AlabelsNull[3, 2] <- "con"
-AlabelsNull[4, 3] <- "con"
-AlabelsNull[5, 4] <- "con"
+AvaluesNested <- matrix(0, 5, 5)
+AvaluesNested[2, 1] <- 0.4
+AvaluesNested[3, 2] <- 0.4
+AvaluesNested[4, 3] <- 0.4
+AvaluesNested[5, 4] <- 0.4
+AfreeNested <- matrix(FALSE, 5, 5)
+AfreeNested[2, 1] <- TRUE
+AfreeNested[3, 2] <- TRUE
+AfreeNested[4, 3] <- TRUE
+AfreeNested[5, 4] <- TRUE
+AlabelsNested <- matrix(NA, 5, 5)
+AlabelsNested[2, 1] <- "con"
+AlabelsNested[3, 2] <- "con"
+AlabelsNested[4, 3] <- "con"
+AlabelsNested[5, 4] <- "con"
 
 Svalues <- diag(c(1, rep(0.8, 4)))
 Sfree <- matrix(FALSE, 5, 5)
 diag(Sfree) <- TRUE
 Fvalues <- diag(5)
 
-popNull <- mxModel("Null Hypothesis Model",
+popNested <- mxModel("Constrained simplex structure",
     type="RAM",
-    mxMatrix(type="Full", nrow=5, ncol=5, values=AvaluesNull, free=AfreeNull, labels=AlabelsNull, byrow=TRUE, name="A"),
+    mxMatrix(type="Full", nrow=5, ncol=5, values=AvaluesNested, free=AfreeNested, labels=AlabelsNested, byrow=TRUE, name="A"),
     mxMatrix(type="Symm", nrow=5, ncol=5, values=Svalues, free=Sfree, byrow=TRUE, name="S"),
     mxMatrix(type="Full", nrow=5, ncol=5, free=FALSE, values=Fvalues, byrow=TRUE, name="F"),
     mxMatrix(type="Full", nrow=1, ncol=5, values=rep(0, 5), free=rep(TRUE, 5), name="M"),
     mxRAMObjective("A","S","F","M", dimnames=paste0("y", 1:5))
 )
 
-AvaluesAlt <- matrix(0, 5, 5)
-AvaluesAlt[2, 1] <- 0.4
-AvaluesAlt[3, 2] <- 0.5
-AvaluesAlt[4, 3] <- 0.3
-AvaluesAlt[5, 4] <- 0.7
-AfreeAlt <- matrix(FALSE, 5, 5)
-AfreeAlt[2, 1] <- TRUE
-AfreeAlt[3, 2] <- TRUE
-AfreeAlt[4, 3] <- TRUE
-AfreeAlt[5, 4] <- TRUE
+AvaluesParent <- matrix(0, 5, 5)
+AvaluesParent[2, 1] <- 0.4
+AvaluesParent[3, 2] <- 0.5
+AvaluesParent[4, 3] <- 0.3
+AvaluesParent[5, 4] <- 0.7
+AfreeParent <- matrix(FALSE, 5, 5)
+AfreeParent[2, 1] <- TRUE
+AfreeParent[3, 2] <- TRUE
+AfreeParent[4, 3] <- TRUE
+AfreeParent[5, 4] <- TRUE
 
-popAlt <- mxModel("Alternative Hypothesis Model",
+popParent <- mxModel("Unconstrained simplex structure",
     type="RAM",
-    mxMatrix(type="Full", nrow=5, ncol=5, values=AvaluesAlt, free=AfreeAlt, byrow=TRUE, name="A"),
+    mxMatrix(type="Full", nrow=5, ncol=5, values=AvaluesParent, free=AfreeParent, byrow=TRUE, name="A"),
     mxMatrix(type="Symm", nrow=5, ncol=5, values=Svalues, free=Sfree, byrow=TRUE, name="S"),
     mxMatrix(type="Full", nrow=5, ncol=5, free=FALSE, values=Fvalues, byrow=TRUE, name="F"),
     mxMatrix(type="Full", nrow=1, ncol=5, values=rep(0, 5), free=rep(TRUE, 5), name="M"),

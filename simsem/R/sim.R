@@ -494,6 +494,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 				} else {
 					groupLab <- model@groupLab
 				}
+				if(is.null(groupLab)) groupLab <- "group"
 				nobs <- as.data.frame(t(sapply(rawData, function(x, col) table(x[,col]), col = groupLab)))
 			} else {
 				nobs <- as.data.frame(sapply(rawData, nrow))
