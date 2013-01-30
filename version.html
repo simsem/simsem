@@ -33,16 +33,23 @@
       <section id="main_content" class="inner">
         <h1>Version History (Official)</h1>
 
-<h2>Version 0.5-0 01/20/13</h2>
+<h2>Version 0.5-0 01/29/13</h2>
 
 <p>This version is available on KRAN. Here is a list of major updates:</p>
 
 <ol>
-<li>The generate and model arguments for the sim function can take two formats: simsem template (as previous versions) and lavaan script (or lavaan parameter table or a list of arguments for the simulateData, lavaan, cfa, sem, or growth functions). See more details and the example scripts in the vignette.
-<li>In the simsem template format, users can add exogenous covariates for data generation, which can take any distributions (or even dummy variables). The KA and GA arguments are added to the model function to account for the effects of exogenous covariates on indicators or factors respectively. Users need to create their own covariate data and add to the covData argument in the generate or sim functions.
-<li>Nonnormal data can be created from Vale and Maurelli's (1983) method. Users can simply specify the skewness and kurtosis arguments in the bindDist function.
+<li>The <em>generate</em> and <em>model</em> arguments for the <strong>sim</strong> function can take three formats: simsem template (as previous versions), lavaan script (or lavaan parameter table or a list of arguments for the simulateData, lavaan, cfa, sem, or growth functions), or an OpenMx object. See more details and the example scripts in the vignette.
+<li>The <strong>generate</strong> function can take simsem template, lavaan script, and an OpenMx object. If OpenMx object has definition variables, users need to provide the data of definition variables (in the <em>covData</em> argument) and the model parameters are specified based on the definition variables.
+<li>The <strong>analyze</strong> function can take simsem template and OpenMx object
+<li>In the simsem template format, users can add exogenous covariates for data generation, which can take any distributions (or even dummy variables). The KA and GA arguments are added to the model function to account for the effects of exogenous covariates on indicators or factors respectively. Users need to create their own covariate data and add to the <em>covData</em> argument in the <strong>generate</strong> or <strong>sim</strong> functions.
+<li>Nonnormal data can be created from Vale and Maurelli's (1983) method. Users can simply specify the <em>skewness</em> and <em>kurtosis</em> arguments in the <strong>bindDist</strong> function.
 <li>All arguments that take characters will be case-insensitive.
+<li>The <strong>combineSim</strong> function is added to combine multiple (similar) simulation results into a single simulation result
+<li>The <strong>sim</strong> function has an <em>completeRep</em> argument. If the argument is specified as TRUE, the simulation will be run until the number of convergent replications is equal to or greater than the specified number of replications.
+<li>Some minor bugs were fixed.
 </ol>
+
+We are still testing this version. We will announce this update at the beginning of February.
 
 <h2>Version 0.4-6 12/30/12</h2>
 

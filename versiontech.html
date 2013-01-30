@@ -33,7 +33,7 @@
       <section id="main_content" class="inner">
         <h1>Version History (Technical)</h1>
 
-<h2>Version 0.5-0 01/18/13</h2>
+<h2>Version 0.5-0 01/29/13</h2>
 
 <ul>
 <li>Fix small bugs in the createData function that mistakenly uses '@' instead of '$'
@@ -55,6 +55,14 @@
 <li>The SimDataDist class has two more slots: skewness and kurtosis. The plotDist function is adjusted for the new change.
 <li>The summary and summaryShort methods are modified based on the changed definition of classes.
 <li>The summaryParam function has the matchParam argument to report the common labels between the coef slot and paramValue slot.
+<li>Add combineSim function to combine two result objects into a single result object
+<li>Add generateOpenMx, analyzeOpenMx, and other functions in the simsem and semTools package to create data and run OpenMx in the simsem package
+<li>Add previousSim and completeRep arguments in the sim function to run the simulation until the number of convergent replications is equal to the specified number of replications.
+<li>A single-group data set will not have the group variable anymore.
+<li>The analyze function can take simsem model template or OpenMx object
+<li>The generate function can take simsem model template, OpenMx object, or lavaan script
+<li>The anova function is rewritten to be more efficient
+<li>Fix the bug in the validatePath function that the floating numbers are treated as unequal when they are actually equal.
 </ul>
 
 <h2>Version 0.4-999 1/6/13</h2>
