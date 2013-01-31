@@ -592,26 +592,27 @@ lavaanSimulateData <- function(
     }
 }
 
-lavaanValeMaurelli1983 <- function(n=100L, COR, skewness, kurtosis) {
-    fleishman1978_abcd <- function(skewness, kurtosis) {
-        system.function <- function(x, skewness, kurtosis) {
-            b.=x[1L]; c.=x[2L]; d.=x[3L]
-            eq1 <- b.^2 + 6*b.*d. + 2*c.^2 + 15*d.^2 - 1
-            eq2 <- 2*c.*(b.^2 + 24*b.*d. + 105*d.^2 + 2) - skewness
-            eq3 <- 24*(b.*d. + c.^2*(1 + b.^2 + 28*b.*d.) +
-                       d.^2*(12 + 48*b.*d. + 141*c.^2 + 225*d.^2)) - kurtosis
-            eq <- c(eq1,eq2,eq3)
-            sum(eq^2) ## SS
-        }
+fleishman1978_abcd <- function(skewness, kurtosis) {
+	system.function <- function(x, skewness, kurtosis) {
+		b.=x[1L]; c.=x[2L]; d.=x[3L]
+		eq1 <- b.^2 + 6*b.*d. + 2*c.^2 + 15*d.^2 - 1
+		eq2 <- 2*c.*(b.^2 + 24*b.*d. + 105*d.^2 + 2) - skewness
+		eq3 <- 24*(b.*d. + c.^2*(1 + b.^2 + 28*b.*d.) +
+				   d.^2*(12 + 48*b.*d. + 141*c.^2 + 225*d.^2)) - kurtosis
+		eq <- c(eq1,eq2,eq3)
+		sum(eq^2) ## SS
+	}
 
-        out <- nlminb(start=c(1,0,0), objective=system.function,
-                      scale=10,
-                      control=list(trace=0),
-                      skewness=skewness, kurtosis=kurtosis)
-        if(out$convergence != 0) warning("no convergence")
-        b. <- out$par[1L]; c. <- out$par[2L]; d. <- out$par[3L]; a. <- -c.
-        c(a.,b.,c.,d.)
-    }
+	out <- nlminb(start=c(1,0,0), objective=system.function,
+				  scale=10,
+				  control=list(trace=0),
+				  skewness=skewness, kurtosis=kurtosis)
+	if(out$convergence != 0) warning("no convergence")
+	b. <- out$par[1L]; c. <- out$par[2L]; d. <- out$par[3L]; a. <- -c.
+	c(a.,b.,c.,d.)
+}
+	
+lavaanValeMaurelli1983 <- function(n=100L, COR, skewness, kurtosis) {
 
     getICOV <- function(b1, c1, d1, b2, c2, d2, R) {
         objectiveFunction <- function(x, b1, c1, d1, b2, c2, d2, R) {
@@ -620,10 +621,6 @@ lavaanValeMaurelli1983 <- function(n=100L, COR, skewness, kurtosis) {
                   rho^2*(2*c1*c2) + rho^3*(6*d1*d2) - R
             eq^2
         }
-
-        #gradientFunction <- function(x, bcd1, bcd2, R) {
-        #
-        #}
 
         out <- nlminb(start=R, objective=objectiveFunction,
                       scale=10, control=list(trace=0),
@@ -675,6 +672,150 @@ lavaanValeMaurelli1983 <- function(n=100L, COR, skewness, kurtosis) {
 
     # transform Z using Fleishman constants
     for(i in 1:nvar) {
+        X[,i] <- FTable[i,1L] + FTable[i,2L]*Z[,i] + FTable[i,3L]*Z[,i]^2 +
+                 FTable[i,4L]*Z[,i]^3
+    }
+
+    X
+}
+		
+HeadrickSawilowsky1999 <- function(n=100L, COR, skewness, kurtosis) {
+    # number of variables
+    p <- ncol(COR)
+    # check skewness
+    if(length(skewness) == p) {
+        SK <- skewness
+    } else if(length(skewness == 1L)) {
+        SK <- rep(skewness, p)
+    } else {
+        stop("skewness has wrong length")
+    }
+
+    if(length(kurtosis) == p) {
+        KU <- kurtosis
+    } else if(length(skewness == 1L)) {
+        KU <- rep(kurtosis, p)
+    } else {
+        stop("kurtosis has wrong length")
+    }
+
+    FTable <- matrix(0, p, 4L)
+    for(i in 1:p) {
+        FTable[i,] <- fleishman1978_abcd(skewness=SK[i], kurtosis=KU[i])
+    }
+	if (p == 2) {
+		targetR <- COR[lower.tri(COR)]
+		objFUN2 <- function(x, va, vb, vd, COR) {
+			r <- x^2
+			eq <- r*(vb[1]*vb[2] + 3*vb[2]*vd[1] + 3*vb[1]*vd[2] + 9*vd[1]*vd[2] + 2*va[1]*va[2]*r + 6*vd[1]*vd[2]*(r^2)) - COR
+			eq^2	
+		}
+		out <- nlminb(start=targetR, objective=objFUN2,
+                      scale=10, control=list(trace=0),
+                      va=FTable[,1], vb=FTable[,2], vd=FTable[,4], COR=targetR)		  
+        if(out$convergence != 0) warning("no convergence")
+        vr <- out$par[1L]
+		z1 <- rnorm(n, 0, 1)
+		edata <- sapply(1:2, function(x) rnorm(n, 0, 1))
+		tarvar <- z1 %*% matrix(vr, nrow=1, ncol=2)
+		transformvr <- edata %*% diag(sqrt(1 - vr^2), 2)
+		Z <- tarvar + transformvr
+	} else if (p == 3) {
+		rowindex <- row(diag(p))[lower.tri(diag(p))]
+		colindex <- col(diag(p))[lower.tri(diag(p))]
+		targetR <- COR[lower.tri(COR)]
+		findStart <- function(x, targetR, rowindex, colindex) {
+			eq <- x[rowindex] * x[colindex] - targetR
+			sum(eq^2)
+		}
+		start <- nlminb(start=runif(3, -1, 1), objective=findStart,
+                      scale=10, control=list(trace=0),
+                      targetR=targetR, rowindex = rowindex, colindex = colindex)
+		if(start$convergence != 0) warning("no convergence")
+		objFUN3 <- function(x, va, vb, vd, targetR, rowindex, colindex) {
+			vr <- x
+			tempr1 <- vr[rowindex]
+			tempr2 <- vr[colindex]
+			tempb1 <- vb[rowindex]
+			tempb2 <- vb[colindex]
+			tempa1 <- va[rowindex]
+			tempa2 <- va[colindex]
+			tempd1 <- vd[rowindex]
+			tempd2 <- vd[colindex]
+			rprod <- tempr1 * tempr2
+			eq <- rprod*(tempb1 * tempb2 + 3*tempb2*tempd1 + 3*tempb1*tempd2 + 9*tempd2*tempd2 + 2*tempa1*tempa2*(rprod^2) + 6*tempd1*tempd2*(rprod^4)) - targetR
+			sum(eq^2)
+		}
+		out <- nlminb(start=start$par, objective=objFUN3,
+                      scale=10, control=list(trace=0),
+                      va=FTable[,1], vb=FTable[,2], vd=FTable[,4], targetR=targetR, rowindex = rowindex, colindex = colindex)
+					  
+        if(out$convergence != 0) warning("no convergence")
+		z1 <- rnorm(n, 0, 1)
+		vr <- out$par
+		edata <- sapply(1:p, function(x) rnorm(n, 0, 1))
+		tarvar <- z1 %*% matrix(vr, nrow=1)
+		transformvr <- edata %*% diag(sqrt(1 - vr^2))
+		Z <- tarvar + transformvr
+	} else if (p > 3) {
+		rowindex <- row(diag(p))[lower.tri(diag(p))]
+		colindex <- col(diag(p))[lower.tri(diag(p))]
+		targetR <- COR[lower.tri(COR)]
+		halfp <- ceiling(p/2)
+		mat <- matrix(FALSE, p, p)
+		mat[1:halfp, 1:halfp] <- TRUE
+		mat[(halfp + 1):p, (halfp + 1):p] <- TRUE
+		ctrlvec <- mat[lower.tri(mat)]
+		
+		findStart <- function(x, targetR, rowindex, colindex, p, ctrlvec) {
+			r0 <- rep(x[1], length(targetR))
+			r0[ctrlvec] <- 1
+			vr <- x[2:(p+1)]
+			eq <- r0 * vr[rowindex] * vr[colindex] - targetR
+			sum(eq^2)
+		}
+		start <- nlminb(start=runif(p+1, -1, 1), objective=findStart,
+                      scale=10, control=list(trace=0),
+                      targetR=targetR, rowindex = rowindex, colindex = colindex, p = p, ctrlvec = ctrlvec, lower=-1, upper=1)
+		if(start$convergence != 0) warning("no convergence")
+		
+		objFUN4 <- function(x, va, vb, vd, targetR, rowindex, colindex, p, ctrlvec) {
+			r0 <- rep(x[1], length(targetR))
+			r0[ctrlvec] <- 1
+			vr <- x[2:(p+1)]
+			tempr1 <- vr[rowindex]
+			tempr2 <- vr[colindex]
+			tempb1 <- vb[rowindex]
+			tempb2 <- vb[colindex]
+			tempa1 <- va[rowindex]
+			tempa2 <- va[colindex]
+			tempd1 <- vd[rowindex]
+			tempd2 <- vd[colindex]
+			rprod <- tempr1 * tempr2 * r0
+			eq <- rprod*(tempb1 * tempb2 + 3*tempb2*tempd1 + 3*tempb1*tempd2 + 9*tempd2*tempd2 + 2*tempa1*tempa2*(rprod^2) + 6*tempd1*tempd2*(rprod^4)) - targetR
+			sum(eq^2)
+		}
+		# optimize COR (y) directly
+		out <- nlminb(start=start$par, objective=objFUN4,
+                      scale=10, control=list(trace=0),
+                      va=FTable[,1], vb=FTable[,2], vd=FTable[,4], targetR=targetR, rowindex = rowindex, colindex = colindex, p = p, ctrlvec = ctrlvec, lower=-1, upper=1)
+					  
+        if(out$convergence != 0) warning("no convergence")
+		z1 <- rnorm(n, 0, 1)
+		v <- rnorm(n, 0, 1)
+		r0 <- out$par[1]
+		vr <- out$par[2:(p+1)]
+		edata <- sapply(1:p, function(x) rnorm(n, 0, 1))
+		z2 <- r0 * z1 + sqrt(1 - r0^2) * v
+		classify <- c(rep(TRUE, halfp), rep(FALSE, p - halfp))
+		classify <- rbind(classify, !classify) * rbind(vr, vr)
+		tarvar <- cbind(z1, z2) %*% classify
+		transformvr <- edata %*% diag(sqrt(1 - vr^2))
+		Z <- tarvar + transformvr
+	}
+	X <- Z
+    # transform Z using Fleishman constants
+    for(i in 1:p) {
         X[,i] <- FTable[i,1L] + FTable[i,2L]*Z[,i] + FTable[i,3L]*Z[,i]^2 +
                  FTable[i,4L]*Z[,i]^3
     }
