@@ -33,6 +33,44 @@
       <section id="main_content" class="inner">
         <h1>Version History (Technical)</h1>
 
+<h2>Version 0.5-0 01/29/13</h2>
+
+<ul>
+<li>Fix small bugs in the createData function that mistakenly uses '@' instead of '$'
+<li>Add GA and KA for the exogenous covariate effect in the model, model.lavaan, and estmodel function. The SimSem object will have GA and KA in the dgen object.
+<li>Fix small bugs in naming auxiliy instead of aux
+<li>The draw, drawParam, createData, generate, and sim functions have the covData argument to account for the effect of exogenous covariates. The draw-family function will use GA and KA to find residual variances and model-implied sufficient statistics. The createData function will use exogenous variables to create data given that the exogenous covariates are known.
+<li>The find-family function can take care of the effect of covariates.
+<li>Change all arguments to be case-insensitive, such as usedFit in the methods for result object or modelType in model function
+<li>Change the structure to remember that CFI and TLI needed to be reversed. Instead of listing them in each function, the getKeywords function is used to save those fit indices. Other incremental fit indices are also added such as NFI, GFI, and so on.
+<li>Change the structure of the sim function to depend on functions from the lavaan package as many as possible. For example, the reducedParamSet, reduceLavaanParam function is removed and the parameterEstimates function from lavaan is used instead.
+<li>Data-generation parameters are vectorized in all replications right after the data are generated (by the parsePopulation function). The parameters do not need to be parsed after the analysis result from each replication is obtained.
+<li>The labelParam slot is removed from result object. The getParameterLabels from the lavaan package is used instead.
+<li>Add more stringent error-checking routines.
+<li>Modify the sim function such that the rawData argument can take population data. The population data will be drawn into different datasets and analyzed by the target model. The population data itself are also analyzed to get the parameter values.
+<li>The generate and model arguments in the sim function can take lavaan script, parameter table, or a list of arguments. The generate argument will be passed to the lavaanSimulateData function which is a modified simulateData function from lavaan (described below). The model argument will be passed to analyzeLavaan function (described below). The lavaanfun argument is also added to specify which functions users would like to use to analyze data (the default is the lavaan function).
+<li>The lavaanSimulateData function is modified from the simulateData function to 1) fix bugs that the function cannot take parameter table, and 2) use createData function in the simsem package to generate data.
+<li>The analyzeLavaan function is simply a hub to analyze data by the lavaan (including cfa, sem, or growth), runMI, or auxiliary functions.
+<li>The bindDist function has two more arguments: skewness and kurtosis. These arguments will be passed to the createData function and then lavaanValeMaurelli83 function, which is modified from lavaan to generate data based on Vale and Maurelli (1983) method. The lavaanValeMaurelli83 function is a bug-fix version for a single variable. 
+<li>The SimDataDist class has two more slots: skewness and kurtosis. The plotDist function is adjusted for the new change.
+<li>The summary and summaryShort methods are modified based on the changed definition of classes.
+<li>The summaryParam function has the matchParam argument to report the common labels between the coef slot and paramValue slot.
+<li>Add combineSim function to combine two result objects into a single result object
+<li>Add generateOpenMx, analyzeOpenMx, and other functions in the simsem and semTools package to create data and run OpenMx in the simsem package
+<li>Add previousSim and completeRep arguments in the sim function to run the simulation until the number of convergent replications is equal to the specified number of replications.
+<li>A single-group data set will not have the group variable anymore.
+<li>The analyze function can take simsem model template or OpenMx object
+<li>The generate function can take simsem model template, OpenMx object, or lavaan script
+<li>The anova function is rewritten to be more efficient
+<li>Fix the bug in the validatePath function that the floating numbers are treated as unequal when they are actually equal.
+</ul>
+
+<h2>Version 0.4-999 1/6/13</h2>
+
+<ul>
+<li>Change all S4 objects to reference classes. All codes work well. However, the time used is not lower than the S4 objects. Therefore, the S4 classes are retained. The reference class package is available in the <em>referenceclass</em> branch.
+</ul>
+
 <h2>Version 0.4-6 12/30/12</h2>
 
 <ul>
