@@ -33,6 +33,29 @@
       <section id="main_content" class="inner">
         <h1>Version History (Official)</h1>
 
+<h2>Version 0.4-6 12/30/12</h2>
+
+<p>This version is available on CRAN and KRAN. The Mair and colleagues (2012) method for nonnormally-distributed data generation is implemented. Users can specify any multivariate copula for data generation. Please check Example 12 in the vignette. The normally-distributed data are generated so that the common cases between two datasets with different sample size are replicated if the same random seed number is used (Thanks to Paul Johnson). We also make some internal codes to be more efficient and less time-consuming. Some error messages and documentations are updated. All examples in <em>simsemClassic</em> have been transcribed to the current <em>simsem</em>. Several minor bugs are fixed.</p>
+
+<h2>Version 0.4-1 10/26/12</h2>
+
+<p>This version is available in both CRAN and KRAN. We have recovered all functionalities from the simsemClassic (simsem 0.2-*). Here is a list of updates: </p>
+
+<ol>
+<li>If users have random parameters, equality constraints in data generation can be applied across groups and across matrices. In the previous version, equality constraints are applied within a matrix only.
+<li>The <strong>model</strong> and related functions have the <em>con</em> argument that takes the <em>lavaan</em> script for additional parameters (the ":=" operator), complex equality constraints (the "==" operator), and inequality constraints (the "&lt;" and "&gt;" operators). In data generation, the right-handed-side term will be computed and and the value will be assigned to the left-handed-side term for the ":=" and "==" opertaors. In the "&lt;" and "&gt;" operators, the left-handed-side term will be compare with the right-handed-side term. If the statement is not true, the left-handed-side term will be adjusted to make the statement true with a small difference (i.e., 0.000001). For example, in "load1 > load2", if load1 is 0.5 and load2 is 0.7, load1 will be assigned as 0.7 + 0.000001, which is 0.700001. The additional parameters and the differences between left-handed-side and right-handed-side terms will be also summarized in the simulation result. See the help page of the <strong>model</strong> function for further details.
+<li>The <em>optMisfit</em> and <em>misfitBounds</em> arguments in the <strong>draw</strong>, <strong>generate</strong>, and <strong>sim</strong> functions are working. The <em>optMisfit</em> argument is used to get the misspecification that attains the maximum amount of population misfit. The <em>misfitBounds</em> argument is used to get the misspecification that are within the specified range of population misfit.
+<li>The <em>createOrder</em> arguments in the <strong>draw</strong>, <strong>generate</strong>, and <strong>sim</strong> functions are added. This argument is used to specify the order of each of three tasks in data generation process: 1) imposing equality/inequality constraints, 2) imposing model misspecifications, and 3) filling the unspecified parameters (e.g., filling the residual variances when the total variances are specified). For example, createOrder = c(1, 2, 3), which is the default, means that data-generation parameters will be 1) imposed by constraints, 2) imposed by model misspecification, and 3) filled on the unspecified parameters. See the help page of the <strong>draw</strong> function for further details.
+<li>The labels of free parameters are provided in the <strong>summary</strong> and <strong>summaryParam</strong> function of a result object.
+<li>Minor bugs have been fixed.
+<li>The package is updated to be compatible with the lavaan package version 0.5-10.
+</ol>
+<p>From this update, all functionalities in the <strong>simsemClassic</strong> are avaiable in the current version of simsem. Please let us know if you have any questions, find any bugs, or provide any feedbacks. Thank you!</p>
+
+<h2>Version 0.3-14 10/22/12</h2>
+
+<p>This version is available on KRAN only. In this version, <a style="color: #FF0000"><strong>A serious bug was fixed</strong></a>. The previous versions of 0.3-*, including one currently on CRAN, have the problem on any models with the beta matrix (regression coefficients). The independent varaible is swapped with the dependent variable during the matrix translation into a parameter table for lavaan. Therefore, in the previous versions, BE[2,1] are interpreted as BE[1,2] and vice versus. Therefore, any results with a beta matrix from the previous versions cannot be trusted. We are really sorry for this bug. In addition, the problems with indicator and factor labels have been fixed, as well as other minor bugs.</p>
+
 <h2>Version 0.3-13 10/17/12</h2>
 
 <p>This version is available on KRAN only. This version allows users to impose missing values by logistic regression approach even easier. Users can use a p() function in the intercept of each logistic equation to set the intercept so that the average missing proportion equals the specified value. For example, 'y1 ~ p(0.2) + 0.5*y2' means that the missing proportion increases when y2 increases and the average missing proportion is 0.2. Users may write the target variable without any independent variable, which would be the missing completely at random, such as 'y2 ~ p(0.3)'. The logistic script can be visualized by the <strong>plotLogitMiss</strong> function.</p>

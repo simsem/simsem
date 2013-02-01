@@ -33,10 +33,67 @@
       <section id="main_content" class="inner">
         <h1>Version History (Technical)</h1>
 
-<h2>Version 0.3-13 10/21/12</h2>
+<h2>Version 0.4-6 12/30/12</h2>
+
+<ul>
+<li>Edit the documentation of the <strong>model</strong> and <strong>sim</strong> functions
+<li>Add the <strong>mvrnorm</strong> function to create data row-wise such that the first <em>p</em> rows are the same when data with <em>p</em> and <em>p + n</em> rows are generated with the same random number seed.
+<li>The <em>copula</em> argument is added to the <strong>bindDist</strong> function in order to save the multivariate copula template, which will implement the Mair and colleagues' method for data gneeration. The <strong>SimDataDist</strong> class and <strong>createData</strong> function are modified to implement the method. 
+<li>The <strong>summary</strong> method for the <strong>SimDataDist</strong> class and the <strong>plotDist</strong> function support the Mair and colleagues' method.
+</ul>
+
+<h2>Version 0.4-5 12/18/12</h2>
+
+<ul>
+<li>Change the error messages in <strong>model</strong> and <strong>sim</strong> to be more useful.
+<li>Go over the <strong>sim</strong> and <strong>runRep</strong> functions to make them more efficient
+</ul>
+
+<h2>Version 0.4-4 11/28/12</h2>
+
+<ul>
+<li>Fix the bug in <strong>changeScaleSEM</strong> that did not extract the group appropriately when nonlinear constraints exist (group in a parameter table is listed as 0)
+<li>Fix the mess in the while loop of <strong>drawParam</strong>.
+</ul>
+
+<h2>Version 0.4-3 11/19/12</h2>
+
+<ul>
+<li>A bug is in <strong>extractExtraParam</strong> that cannot extract a label because the list of parameters in a single group is unlisted
+<li>Fix the wrong nonlinear constraint parameter values in <strong>extractExtraParam</strong> because of not using parentheses.
+</ul>
+
+<h2>Version 0.4-2 10/29/12</h2>
+
+<ul>
+<li>Fix the multiple imputation problem that cannot be run because of the group label problem
+</ul>
+
+<h2>Version 0.4-1 10/24/12</h2>
+
+<ul>
+<li>Fix the group name default in the <strong>anal</strong> function to the name specified in the model template.
+<li>Do not try to extract standard errors when the lavaan object is not convergent in the <strong>runRep</strong> function, which will be crashed in the lavaan 0.5-10 or later.
+<li><strong>getPowerFit</strong>, <strong>getPowerFitNested</strong>, and <strong>getPowerFitNonNested</strong> are changed from methods to functions because the request from CRAN that does not allow the method that cutoff is missing. 
+</ul>
+
+<h2>Version 0.4-0 10/24/12</h2>
+
+<ul>
+<li>Fix the <em>optMisfit</em> and <em>misfitBound</em> in the <strong>draw</strong> function to work. Thus, these arguments in the <strong>createData</strong> and <strong>sim</strong> will work as well. 
+<li>Write the <strong>equalCon</strong> and <strong>applyConScript</strong> functions to fix the equality/inequality constraints in data generation. Thus, the problem that equality constraint cannot be applied across groups or matrices is fixed.
+<li>Add the <em>con</em> argument in the <strong>model</strong> function to take phantom variables/equality constraint/inequality constraint. The simsem object has the <em>con</em> attribute that saves the phantom variables/constraints definition.
+<li>Make the result object to contain additional parameters. The <strong>summaryParam</strong> function can compare the parameter estimates on additional parameters.
+<li>The result object contains the labels of each parameter. Then, the <strong>summaryParam</strong> also provides the labels of each parameter.
+<li>The order of data generation is implemented. The order of 1) imposing equality constraints, 2) imposing trivial misspecification, and 3) filling unspecified parameters can be specified by the <em>createOrder</em> argument in the <strong>draw</strong>, <strong>generate</strong> and <strong>sim</strong> functions. The <strong>misspecOrder</strong> is built to implement the order of data generation.
+</ul>
+
+<h2>Version 0.3-14 10/22/12</h2>
 
 <ul>
 <li>Fix the <strong>analyze</strong> and <strong>anal</strong> functions to ignore grouping variable when there is only one group
+<li><a style="color: #FF0000">SERIOUS BUG:</a> Fix the bug in translation in the beta matrix such that the independent variable was set as dependent variable as vice versa in the <strong>buildPT</strong> function.
+<li>Fix the labels problems in the model function.
 </ul>
 
 <h2>Version 0.3-13 10/17/12</h2>
