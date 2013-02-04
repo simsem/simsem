@@ -114,11 +114,11 @@ getPowerFitNonNestedNullObj <- function(dat2Mod1, dat2Mod2, dat1Mod1, dat1Mod2, 
     power1 <- rep(NA, length(usedFit))
     power2 <- rep(NA, length(usedFit))
     if (is.null(condValue)) {
-        power2 <- pValue(as.numeric(cutoff1[[1]]), Data2, revDirec = usedDirec)
-        power1 <- pValue(as.numeric(cutoff2[[1]]), Data1, revDirec = !usedDirec)
+        power2 <- pValueDataFrame(as.numeric(cutoff1[[1]]), Data2, revDirec = usedDirec)
+        power1 <- pValueDataFrame(as.numeric(cutoff2[[1]]), Data1, revDirec = !usedDirec)
         if (onetailed == FALSE) {
-            power2 <- power2 + pValue(as.numeric(cutoff1[[2]]), Data2, revDirec = !usedDirec)
-            power1 <- power1 + pValue(as.numeric(cutoff2[[2]]), Data1, revDirec = usedDirec)
+            power2 <- power2 + pValueDataFrame(as.numeric(cutoff1[[2]]), Data2, revDirec = !usedDirec)
+            power1 <- power1 + pValueDataFrame(as.numeric(cutoff2[[2]]), Data1, revDirec = usedDirec)
         }
     } else {
         for (i in 1:length(power2)) {

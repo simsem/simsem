@@ -1,6 +1,6 @@
 
 analyze <- function(model, data, package = "lavaan", miss = NULL, 
-    aux = NULL, group = NULL, ...) {
+    aux = NULL, group = NULL, mxMixture = FALSE, ...) {
 	mc <- match.call()
 	args <- list(...)
 	if(is(model, "SimSem")) {
@@ -8,7 +8,7 @@ analyze <- function(model, data, package = "lavaan", miss = NULL,
 		args <- c(list(model = model, data = data, package = package, miss = miss, aux = aux), args)
 		out <- do.call("analyzeSimSem", args)
 	} else if (is(model, "MxModel")) {
-		out <- analyzeMx(object = model, data = data, groupLab = group, ...)
+		out <- analyzeMx(object = model, data = data, groupLab = group, mxMixture = mxMixture, ...)
 	} else {
 		stop("Please specify an appropriate object for the 'model' argument: simsem model template or OpenMx object. If users wish to analyze the lavaan script, please use the functions in the lavaan package directly (e.g., sem, cfa, growth, or lavaan).")
 	}

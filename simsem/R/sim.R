@@ -4,7 +4,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
     sequential = FALSE, modelBoot = FALSE, realData = NULL, covData = NULL, maxDraw = 50, misfitType = "f0", 
     misfitBounds = NULL, averageNumMisspec = FALSE, optMisfit = NULL, optDraws = 50, createOrder = c(1, 2, 3), 
     aux = NULL, 
-	group = NULL, mxFit = FALSE,
+	group = NULL, mxFit = FALSE, mxMixture = FALSE, 
 	seed = 123321, silent = FALSE, multicore = FALSE, cluster = FALSE, 
     numProc = NULL, paramOnly = FALSE, dataOnly = FALSE, smartStart = FALSE, previousSim = NULL, completeRep = FALSE, ...) {
 
@@ -83,6 +83,14 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 	if(lavaanAnalysis) {
 		model <- c(model, list(...))
 		if(!("group" %in% names(model)) & "group" %in% names(mc)) model$group <- group
+	}
+	
+	if(mxAnalysis) {
+		if(length(model@submodels) > 0) {
+			if(!is(model@submodels[[1]]@objective, "MxRAMObjective") && all(is.na(model@submodels[[1]]@objective@means))) stop("The expected means must be specified in the objective of the 'model' argument.")
+		} else {
+			if(!is(model@objective, "MxRAMObjective") && all(is.na(model@objective@means))) stop("The expected means must be specified in the objective of the 'model' argument.")
+		}
 	}
 	
 	## Save arguments for completeRep = TRUE
@@ -304,7 +312,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
                 miss = miss, datafun = datafun, lavaanfun = lavaanfun, outfun = outfun, silent = silent, 
                 facDist = facDist, indDist = indDist, errorDist = errorDist, sequential = sequential, 
                 realData = realData, covData = covData, maxDraw = maxDraw, misfitBounds = misfitBounds, 
-                averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, createOrder = createOrder, misfitType = misfitType, aux = aux, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart, popData = popData, group = group, mxFit = mxFit, ...)
+                averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, createOrder = createOrder, misfitType = misfitType, aux = aux, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart, popData = popData, group = group, mxFit = mxFit, mxMixture = mxMixture, ...)
             stopCluster(cl)
         } else {
             Result.l <- mclapply(simConds, runRep, model = model, generate = generate, 
@@ -312,7 +320,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
                 facDist = facDist, indDist = indDist, errorDist = errorDist, sequential = sequential, 
                 realData = realData, covData = covData, maxDraw = maxDraw, misfitBounds = misfitBounds, 
                 averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, createOrder = createOrder, 
-                misfitType = misfitType, aux = aux, mc.cores = numProc, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart, popData = popData, group = group, mxFit = mxFit, ...)
+                misfitType = misfitType, aux = aux, mc.cores = numProc, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart, popData = popData, group = group, mxFit = mxFit, mxMixture = mxMixture, ...)
         }
     } else {
         Result.l <- lapply(simConds, runRep, model = model, generate = generate, 
@@ -320,7 +328,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
             indDist = indDist, errorDist = errorDist, sequential = sequential, realData = realData, covData = covData, 
             maxDraw = maxDraw, misfitBounds = misfitBounds, averageNumMisspec = averageNumMisspec, 
             optMisfit = optMisfit, optDraws = optDraws,  createOrder = createOrder, misfitType = misfitType, 
-            aux = aux, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart, popData = popData, group = group, mxFit = mxFit, ...)
+            aux = aux, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart, popData = popData, group = group, mxFit = mxFit, mxMixture = mxMixture, ...)
     }
 
 	################## Extract out popData ##################################
@@ -532,7 +540,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 			pSuccess <- success / Result@nRep
 			if(success < completeRep) {
 				nRepNew <- ceiling((completeRep - success) / pSuccess) 
-				Result <- sim(nRep = nRepNew, model = model, n = nInitial, generate = generate, rawData = rawData, miss = miss, datafun = datafun, lavaanfun = lavaanfun, outfun = outfun, pmMCAR = pmMCARInitial, pmMAR = pmMARInitial, facDist = facDist, indDist = indDist, errorDist = errorDist, sequential = sequential, modelBoot = modelBoot, realData = realData, covData = covData, maxDraw = maxDraw, misfitType = misfitType, misfitBounds = misfitBounds, averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, createOrder = createOrder, aux = aux, group = group, mxFit = mxFit, seed = seed, silent = silent, multicore = multicore, cluster = cluster, numProc = numProc, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart, previousSim = Result, completeRep = completeRep, ...)
+				Result <- sim(nRep = nRepNew, model = model, n = nInitial, generate = generate, rawData = rawData, miss = miss, datafun = datafun, lavaanfun = lavaanfun, outfun = outfun, pmMCAR = pmMCARInitial, pmMAR = pmMARInitial, facDist = facDist, indDist = indDist, errorDist = errorDist, sequential = sequential, modelBoot = modelBoot, realData = realData, covData = covData, maxDraw = maxDraw, misfitType = misfitType, misfitBounds = misfitBounds, averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, createOrder = createOrder, aux = aux, group = group, mxFit = mxFit, mxMixture = mxMixture, seed = seed, silent = silent, multicore = multicore, cluster = cluster, numProc = numProc, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart, previousSim = Result, completeRep = completeRep, ...)
 			}
 		}
 		
@@ -549,7 +557,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
     sequential = FALSE, realData = NULL, covData = NULL, silent = FALSE, modelBoot = FALSE, maxDraw = 50, 
     misfitType = "f0", misfitBounds = NULL, averageNumMisspec = NULL, optMisfit = NULL, 
     optDraws = 50, createOrder = c(1, 2, 3), aux = NULL, paramOnly = FALSE, dataOnly = FALSE, smartStart = TRUE, 
-	popData = NULL, group = NULL, mxFit = FALSE, ...) {
+	popData = NULL, group = NULL, mxFit = FALSE, mxMixture = FALSE, ...) {
     start.time0 <- start.time <- proc.time()[3]
     timing <- list()
     #Check why some are NULL and some are NA
@@ -714,7 +722,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 			if (silent) {
 				invisible(capture.output(suppressMessages(try(out <- analyzeMx(model, data, groupLab = group, ...), silent = TRUE))))
 			} else {
-				try(out <- analyzeMx(model, data, groupLab = group, ...))
+				try(out <- analyzeMx(model, data, groupLab = group, mxMixture = mxMixture, ...))
 			}
 		} else {
 			if (!is.null(miss) | !is.null(aux)) {
@@ -800,7 +808,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 						}
 					}
 				} else {
-					fit <- easyFitMx(out)
+					fit <- easyFitMx(out, mxMixture = mxMixture)
 				}
 				coef <- out@output$estimate
 				se <- as.vector(out@output$standardErrors)
@@ -808,7 +816,16 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 				name <- gsub(paste0(out@name, "."), "", name)
 				names(coef) <- name
 				names(se) <- name
-				if(is(out@objective, "MxRAMObjective") | (length(out@submodels) > 0 && is(out@submodels[[1]]@objective, "MxRAMObjective"))) {
+				findStd <- FALSE
+				if(length(out@submodels) > 0) {
+					defVars <- lapply(out@submodels, findDefVars)
+					defVars <- do.call(c, defVars)
+					if(is(out@submodels[[1]]@objective, "MxRAMObjective") && !(length(defVars) > 0)) findStd <- TRUE
+				} else {
+					defVars <- findDefVars(out)	
+					if(is(out@objective, "MxRAMObjective") && !(length(defVars) > 0)) findStd <- TRUE
+				}
+				if(findStd) {
 					std <- NA
 					try(std <- semTools:::standardizeMx(out, free = TRUE), silent = silent)
 				}

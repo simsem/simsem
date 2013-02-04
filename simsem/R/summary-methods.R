@@ -8,6 +8,7 @@ setMethod("summary", signature = "SimMatrix", definition = function(object) {
     print(object@popParam)
     print("Model misspecification")
     print(object@misspec)
+	print(paste("Symmetric:", object@symmetric))
 })
 
 setMethod("summary", signature = "SimVector", definition = function(object) {
@@ -23,11 +24,16 @@ setMethod("summary", signature = "SimVector", definition = function(object) {
 setMethod("summary", signature = "SimSem", definition = function(object) {
     cat("Model Type\n")
     print(object@modelType)
+    temp <- object@dgen
+	if("PS" %in% names(temp)) temp <- list(temp)
+	if(length(temp) > 1) {
+		cat(paste("Number of groups:", length(temp), "\n"))
+		cat("Grouping Variable Label\n")
+		print(object@groupLab)		
+	}
     cat("========================Lavaan Analysis Model========================\n")
     print(as.data.frame(object@pt))
     cat("========================Data Generation Template========================\n")
-    temp <- object@dgen
-	if("PS" %in% names(temp)) temp <- list(temp)
 	for(i in 1:length(temp)) {
 		cat(paste0("-------- Group ", i, " --------\n"))
 		dgen <- temp[[i]]
@@ -67,7 +73,7 @@ setMethod("summary", signature = "SimResult", definition = function(object, digi
 		print(round(summaryFit(object, alpha = alpha), digits))
 		cat("========= Parameter Estimates and Standard Errors ============\n")
 		print(summaryParam(object, digits=digits))
-		cat("========= Correlation between Fit Indices ============\n")
+		# Correlation between Fit Indices
 		fit <- cleanObj@fit[, usedFit]
 		if (length(unique(object@n)) > 1) 
 			fit <- data.frame(fit, n = cleanObj@n)
@@ -75,7 +81,13 @@ setMethod("summary", signature = "SimResult", definition = function(object, digi
 			fit <- data.frame(fit, pmMCAR = cleanObj@pmMCAR)
 		if (length(unique(object@pmMAR)) > 1) 
 			fit <- data.frame(fit, pmMAR = cleanObj@pmMAR)
-		print(round(cor(fit), digits))
+		if(nrow(fit) > 1) {
+			variableCol <- apply(fit, 2, sd, na.rm=TRUE) > 0
+			if(sum(variableCol) >= 2) {
+				cat("========= Correlation between Fit Indices ============\n")
+				print(round(cor(fit[,variableCol]), digits))
+			}
+		}
 		cat("================== Replications =====================\n")
 		cat(paste("Number of replications", "=", object@nRep, "\n"))
 		cat(paste("Number of converged replications", "=", sum(object@converged == 0), "\n"))

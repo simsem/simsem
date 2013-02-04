@@ -2,7 +2,7 @@ Package: simsem
 Type: Package
 Title: SIMulated Structural Equation Modeling.
 Version: 0.5-0
-Date: 2013-01-29
+Date: 2013-02-03
 Authors@R: c(person("Sunthud", "Pornprasertmanit", role = c("aut",
         "cre"), email = "psunthud@ku.edu"), person("Patrick", "Miller",
         role = "aut", email="patr1ckm@ku.edu"), person("Alexander",
@@ -19,4 +19,4 @@ Description: This package can be used to generate data using the structural equa
 License: GPL (>= 2)
 LazyLoad: yes
 URL: http://www.simsem.org
-Built: R 2.15.2; ; 2013-01-30 01:02:28 UTC; windows
+Built: R 2.15.2; ; 2013-02-04 06:42:50 UTC; windows

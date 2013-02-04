@@ -53,12 +53,12 @@ pValueNested <- function(outNested, outParent, simNested, simParent, usedFit = N
 		stop("The 'outNested' and 'outParent' arguments must be both lavaan objects or MxModel objects.")
 	}
     if (any(condition)) {
-        result <- pValue(cutoff, Data, revDirec, x = condValue, xval = predictorVal, 
+        result <- pValueDataFrame(cutoff, Data, revDirec, x = condValue, xval = predictorVal, 
             df = df, asLogical = FALSE)
         names(result) <- usedFit
         return(result)
     } else {
-        logicalMat <- pValue(cutoff, Data, revDirec, asLogical = TRUE)
+        logicalMat <- pValueDataFrame(cutoff, Data, revDirec, asLogical = TRUE)
         result <- apply(logicalMat, 2, mean, na.rm = TRUE)
         names(result) <- usedFit
         andRule <- mean(apply(logicalMat, 1, all), na.rm = TRUE)

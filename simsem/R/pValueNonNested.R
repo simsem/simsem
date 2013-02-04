@@ -68,20 +68,20 @@ pValueNonNested <- function(outMod1, outMod2, dat1Mod1, dat1Mod2, dat2Mod1, dat2
     result1 <- NULL
     result2 <- NULL
     if (any(condition)) {
-        result1 <- pValue(cutoff, Data1, revDirec, x = condValue, xval = predictorVal, 
+        result1 <- pValueDataFrame(cutoff, Data1, revDirec, x = condValue, xval = predictorVal, 
             df = df, asLogical = FALSE)
         names(result1) <- usedFit
-        result2 <- pValue(cutoff, Data2, !revDirec, x = condValue, xval = predictorVal, 
+        result2 <- pValueDataFrame(cutoff, Data2, !revDirec, x = condValue, xval = predictorVal, 
             df = df, asLogical = FALSE)
         names(result2) <- usedFit
     } else {
-        logicalMat1 <- pValue(cutoff, Data1, revDirec, asLogical = TRUE)
+        logicalMat1 <- pValueDataFrame(cutoff, Data1, revDirec, asLogical = TRUE)
         result1 <- apply(logicalMat1, 2, mean, na.rm = TRUE)
         names(result1) <- usedFit
         andRule1 <- mean(apply(logicalMat1, 1, all), na.rm = TRUE)
         orRule1 <- mean(apply(logicalMat1, 1, any), na.rm = TRUE)
         result1 <- c(result1, andRule = andRule1, orRule = orRule1)
-        logicalMat2 <- pValue(cutoff, Data2, !revDirec, asLogical = TRUE)
+        logicalMat2 <- pValueDataFrame(cutoff, Data2, !revDirec, asLogical = TRUE)
         result2 <- apply(logicalMat2, 2, mean, na.rm = TRUE)
         names(result2) <- usedFit
         andRule2 <- mean(apply(logicalMat2, 1, all), na.rm = TRUE)

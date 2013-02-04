@@ -8,7 +8,6 @@ exportClasses(SimMatrix,
 	SimMissing)
 exportMethods(summary, 	summaryShort, 
 	getCutoff, plotCutoff, 
-	pValue, 
 	anova)
 export(bindDist, rawDraw,
 	model, model.cfa, model.path, model.sem,
@@ -26,6 +25,6 @@ export(bindDist, rawDraw,
 	plotPowerFit, plotPowerFitNested, plotCutoffNested, getCutoffNested, multipleAllEqual,
 	plotDist, 
 	summaryPopulation, getPopulation, setPopulation, 
-	getCutoffNonNested, plotCutoffNonNested, plotPowerFitNonNested, likRatioFit, pValueNested, pValueNonNested,
+	getCutoffNonNested, plotCutoffNonNested, plotPowerFitNonNested, likRatioFit, pValue, pValueNested, pValueNonNested,
 	bind, binds, generate, analyze, sim, draw, createData, miss, exportData,
 	plotLogitMiss)

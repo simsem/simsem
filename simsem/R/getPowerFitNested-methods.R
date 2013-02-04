@@ -129,7 +129,7 @@ getPowerFitNestedNullObj <- function(altNested, altParent,
     if (is.null(condValue)) {
         usedCutoff <- as.vector(t(getCutoff(nullFit, alpha = alpha, usedFit = usedFit)))
         names(usedCutoff) <- usedFit
-        temp <- pValue(usedCutoff, usedDist, revDirec = usedDirec)
+        temp <- pValueDataFrame(usedCutoff, usedDist, revDirec = usedDirec)
 		names(temp) <- usedFit
 		if(all(c("chisq", "df") %in% colnames(nullNested@fit))) {
 			cutoffChisq <- qchisq(1 - alpha, df=(nullNested@fit - nullParent@fit)[,"df"])

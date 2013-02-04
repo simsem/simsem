@@ -68,12 +68,6 @@ plotPowerFitNonNested	plotPowerFitNonNested
 popDiscrepancy	popDiscrepancy
 popMisfitMACS	popMisfitMACS
 pValue	pValue
-pValue,ANY-method	pValue
-pValue,lavaan,SimResult-method	pValue
-pValue,MxModel,SimResult-method	pValue
-pValue,numeric,data.frame-method	pValue
-pValue,numeric,vector-method	pValue
-pValue-methods	pValue
 pValueNested	pValueNested
 pValueNonNested	pValueNonNested
 rawDraw	rawDraw

@@ -724,11 +724,11 @@ HeadrickSawilowsky1999 <- function(n=100L, COR, skewness, kurtosis) {
 		rowindex <- row(diag(p))[lower.tri(diag(p))]
 		colindex <- col(diag(p))[lower.tri(diag(p))]
 		targetR <- COR[lower.tri(COR)]
-		findStart <- function(x, targetR, rowindex, colindex) {
+		findStartA <- function(x, targetR, rowindex, colindex) {
 			eq <- x[rowindex] * x[colindex] - targetR
 			sum(eq^2)
 		}
-		start <- nlminb(start=runif(3, -1, 1), objective=findStart,
+		start <- nlminb(start=runif(3, -1, 1), objective=findStartA,
                       scale=10, control=list(trace=0),
                       targetR=targetR, rowindex = rowindex, colindex = colindex)
 		if(start$convergence != 0) warning("no convergence")
@@ -763,18 +763,21 @@ HeadrickSawilowsky1999 <- function(n=100L, COR, skewness, kurtosis) {
 		targetR <- COR[lower.tri(COR)]
 		halfp <- ceiling(p/2)
 		mat <- matrix(FALSE, p, p)
+		# Arbitrarily pick first half from Z1 and second half from Z2
 		mat[1:halfp, 1:halfp] <- TRUE
 		mat[(halfp + 1):p, (halfp + 1):p] <- TRUE
+		# This method does not make sense in this logic. In two or three variables, only one Z is needed. In four variables, two Zs are needed. However, in more than four variables, only two Zs are needed. If the number of Zs is doubled from two to four variables, isn't it doubled when from four to eight variables.
 		ctrlvec <- mat[lower.tri(mat)]
 		
-		findStart <- function(x, targetR, rowindex, colindex, p, ctrlvec) {
+		findStartB <- function(x, targetR, rowindex, colindex, p, ctrlvec) {
 			r0 <- rep(x[1], length(targetR))
 			r0[ctrlvec] <- 1
 			vr <- x[2:(p+1)]
 			eq <- r0 * vr[rowindex] * vr[colindex] - targetR
 			sum(eq^2)
 		}
-		start <- nlminb(start=runif(p+1, -1, 1), objective=findStart,
+		#r0 is modeled instead of the product of different t which does not make sense to use it.
+		start <- nlminb(start=runif(p+1, -1, 1), objective=findStartB,
                       scale=10, control=list(trace=0),
                       targetR=targetR, rowindex = rowindex, colindex = colindex, p = p, ctrlvec = ctrlvec, lower=-1, upper=1)
 		if(start$convergence != 0) warning("no convergence")

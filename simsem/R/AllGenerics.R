@@ -10,7 +10,3 @@ setGeneric("getCutoff", function(object, alpha, revDirec = FALSE, usedFit = NULL
 setGeneric("plotCutoff", function(object, ...) {
     return(standardGeneric("plotCutoff"))
 })
-
-setGeneric("pValue", function(target, dist, ...) {
-    return(standardGeneric("pValue"))
-})

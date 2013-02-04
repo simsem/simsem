@@ -27,8 +27,9 @@ Loading required package: lavaan
 Loading required package: MASS
 Loading required package: boot
 Loading required package: mnormt
+Loading required package: pbivnorm
 Loading required package: quadprog
-This is lavaan 0.5-10
+This is lavaan 0.5-11
 lavaan is BETA software! Please report any bugs.
 Loading required package: copula
  
@@ -154,6 +155,7 @@ Class:    matrix    matrix    matrix   logical
 [1] "Model misspecification"
      [,1]
 [1,]  NaN
+[1] "Symmetric: FALSE"
 > rawDraw(LY)
 $param
      [,1] [,2]
@@ -205,6 +207,7 @@ $missRaw
 [1] "Model misspecification"
      [,1]
 [1,]  NaN
+[1] "Symmetric: FALSE"
 > rawDraw(LY)
 $param
           [,1]      [,2]
@@ -263,6 +266,7 @@ $missRaw
 [4,] "runif(1, -0.1, 0.1)" "0"                  
 [5,] "runif(1, -0.1, 0.1)" "0"                  
 [6,] "runif(1, -0.1, 0.1)" "0"                  
+[1] "Symmetric: FALSE"
 > rawDraw(LY)
 $param
           [,1]      [,2]
@@ -558,6 +562,7 @@ Class:      list      list character character      list
 [1] "Model misspecification"
      [,1]
 [1,]  NaN
+[1] "Symmetric: FALSE"
 > 
 > latent.cor <- matrix(NA, 2, 2)
 > diag(latent.cor) <- 1
@@ -826,6 +831,7 @@ logical(0)
 [1] "Model misspecification"
      [,1]
 [1,]  NaN
+[1] "Symmetric: FALSE"
 > 
 > # Set both factor correlations to .05
 > latent.cor <- matrix(NA, 2, 2)
@@ -4292,16 +4298,16 @@ Proportion of MCAR: 0.1
 > #Analyze data
 > out <- analyze(CFA.Model, datmiss)
 > summary(out)
-lavaan (0.5-10) converged normally after  24 iterations
+lavaan (0.5-11) converged normally after  24 iterations
 
   Number of observations                            20
 
   Number of missing patterns                         7
 
   Estimator                                         ML
-  Minimum Function Chi-square                    8.196
+  Minimum Function Test Statistic                8.196
   Degrees of freedom                                 9
-  P-value                                        0.515
+  P-value (Chi-square)                           0.515
 
 Parameter estimates:
 
@@ -4637,10 +4643,9 @@ y1 ~ 0.05 + 0.5*y3
 > flush(stderr()); flush(stdout())
 > 
 > ### Name: pValue
-> ### Title: Find p-values (1 - percentile)
-> ### Aliases: pValue pValue-methods pValue,ANY-method
-> ###   pValue,numeric,vector-method pValue,numeric,data.frame-method
-> ###   pValue,lavaan,SimResult-method pValue,MxModel,SimResult-method
+> ### Title: Find p-values (1 - percentile) by comparing a single analysis
+> ###   output from the result object
+> ### Aliases: pValue
 > 
 > ### ** Examples
 > 
@@ -5673,7 +5678,7 @@ Fit Indices      0.1     0.05     0.01    0.001     Mean     SD
       aic   1142.931 1153.299 1161.594 1163.460 1113.425 29.748
       bic   1152.826 1163.194 1171.489 1173.355 1123.320 29.748
       rmsea    0.000    0.000    0.000    0.000    0.000  0.000
-      cfi      0.200    0.100    0.020    0.002    0.667  0.577
+      cfi      0.400    0.200    0.040    0.004    0.800  0.447
       tli      1.000    1.000    1.000    1.000    1.000  0.000
       srmr     0.000    0.000    0.000    0.000    0.000  0.000
 ========= Parameter Estimates and Standard Errors ============
@@ -5686,15 +5691,12 @@ y1~~y2      0.105        -0.002        0.013      0.8
 y1~~y1      0.000         1.004       -0.080      1.0
 y2~~y2      0.000         0.999       -0.039      1.0
 ========= Correlation between Fit Indices ============
-Warning in cor(fit) : the standard deviation is zero
-       chisq    aic    bic rmsea cfi tli   srmr
-chisq  1.000 -0.030 -0.030    NA  NA  NA  0.827
-aic   -0.030  1.000  1.000    NA  NA  NA -0.372
-bic   -0.030  1.000  1.000    NA  NA  NA -0.372
-rmsea     NA     NA     NA     1  NA  NA     NA
-cfi       NA     NA     NA    NA   1  NA     NA
-tli       NA     NA     NA    NA  NA   1     NA
-srmr   0.827 -0.372 -0.372    NA  NA  NA  1.000
+       chisq    aic    bic    cfi   srmr
+chisq  1.000 -0.030 -0.030 -1.000  0.827
+aic   -0.030  1.000  1.000  0.030 -0.372
+bic   -0.030  1.000  1.000  0.030 -0.372
+cfi   -1.000  0.030  0.030  1.000 -0.827
+srmr   0.827 -0.372 -0.372 -0.827  1.000
 ================== Replications =====================
 Number of replications = 5 
 Number of converged replications = 5 
@@ -6391,7 +6393,7 @@ detaching 'package:parallel'
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  10.67 0.19 11.03 NA NA 
+Time elapsed:  9.73 0.06 9.95 NA NA 
 > grDevices::dev.off()
 null device 
           1 

@@ -35,7 +35,7 @@ miss.model <- miss(pmMCAR=0.2, m=5)
 
 dat <- generate(mtmm.model, 500)
 dat <- impose(miss.model, dat)
-out <- analyze(mtmm.model, dat, miss=miss.model)
+try(out <- analyze(mtmm.model, dat, miss=miss.model))
 
 Output <- sim(1000, n=500, mtmm.model, miss=miss.model)
 getCutoff(Output, 0.05)

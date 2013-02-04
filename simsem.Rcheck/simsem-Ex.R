@@ -1750,10 +1750,9 @@ nameEx("pValue")
 flush(stderr()); flush(stdout())
 
 ### Name: pValue
-### Title: Find p-values (1 - percentile)
-### Aliases: pValue pValue-methods pValue,ANY-method
-###   pValue,numeric,vector-method pValue,numeric,data.frame-method
-###   pValue,lavaan,SimResult-method pValue,MxModel,SimResult-method
+### Title: Find p-values (1 - percentile) by comparing a single analysis
+###   output from the result object
+### Aliases: pValue
 
 ### ** Examples
 

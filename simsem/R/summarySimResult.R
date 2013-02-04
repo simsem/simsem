@@ -20,6 +20,13 @@ summaryParam <- function(object, alpha = 0.05, detail = FALSE, improper = FALSE,
 	if (length(object@stdCoef) != 0) {
 		stdCoef <- colMeans(object@stdCoef, na.rm = TRUE)
 		stdRealSE <- sapply(object@stdCoef, sd, na.rm = TRUE)
+		leftover <- setdiff(rownames(result), names(stdCoef))
+		if(length(leftover) > 0) {
+			temp <- rep(NA, length(leftover))
+			names(temp) <- leftover
+			stdCoef <- c(stdCoef, temp)
+			stdRealSE <- c(stdRealSE, temp)
+		}
 		resultStd <- cbind(stdCoef, stdRealSE)
         colnames(resultStd) <- c("Std Est", "Std Est SD")
         result <- data.frame(result, resultStd[rownames(result),])
@@ -241,8 +248,10 @@ summaryConverge <- function(object, improper = FALSE) {
     if (numnonconverged == 0) 
         stop("You are good! All replications were converged!")
     result <- c(result, list(Converged = c(num.converged = sum(converged), num.nonconverged = numnonconverged)))
-	reasons <- list("Nonconvergent Reasons" = c("Nonconvergent" = sum(object@converged %in% 1:2), "Improper SE" = sum(object@converged == 3), "Improper Variance" = sum(object@converged == 4), "Improper Correlation" = sum(object@converged == 5)))
-	result <- c(result, reasons)
+	reasons <- c("Nonconvergent" = sum(object@converged %in% 1:2), "Improper SE" = sum(object@converged == 3), "Improper Variance" = sum(object@converged == 4), "Improper Correlation" = sum(object@converged == 5), "Optimal estimates were not guaranteed" = sum(object@converged == 6))
+	reasons <- as.matrix(reasons)
+	colnames(reasons) <- "count"
+	result <- c(result, list("Nonconvergent Reasons" = reasons))
     n <- object@n
     pmMCAR <- object@pmMCAR
     pmMAR <- object@pmMAR
@@ -253,7 +262,7 @@ summaryConverge <- function(object, improper = FALSE) {
 	improprep <- rep(FALSE, length(converged))
 	if(improper) {
 		nonconverged <- object@converged %in% 1:2
-		improprep <- object@converged %in% 3:5
+		improprep <- object@converged %in% 3:6
 	}
     if (length(unique(n)) > 1) {
         temp1 <- n[converged]
@@ -303,24 +312,26 @@ summaryConverge <- function(object, improper = FALSE) {
 		}
         result <- c(result, list(pmMAR = c(resultTemp, resultDiff)))
     }
-    temp1 <- paramValue[converged, ]
-    temp2 <- paramValue[nonconverged, ]
-	temp3 <- paramValue[improprep, ]
-	resultTemp <- cbind(mean.convergence = apply(temp1, 2, mean), sd.convergence = apply(temp1, 
-        2, sd))
-	resultDiff <- NULL
-	if(nrow(temp2) > 0) {
-		resultTemp <- cbind(resultTemp, mean.nonconvergence = apply(temp2, 2, mean), sd.nonconvergence = apply(temp2, 2, sd))
-		resultDiff <- cbind(resultDiff, diff.non.mean = apply(temp2, 2, mean) - apply(temp1, 2, mean), 
-        diff.non.sd = apply(temp2, 2, sd) - apply(temp1, 2, sd))
+	if(nrow(paramValue) > 1) {
+		temp1 <- paramValue[converged, , drop = FALSE]
+		temp2 <- paramValue[nonconverged, , drop = FALSE]
+		temp3 <- paramValue[improprep, , drop = FALSE]
+		resultTemp <- cbind(mean.convergence = apply(temp1, 2, mean), sd.convergence = apply(temp1, 
+			2, sd))
+		resultDiff <- NULL
+		if(nrow(temp2) > 0) {
+			resultTemp <- cbind(resultTemp, mean.nonconvergence = apply(temp2, 2, mean), sd.nonconvergence = apply(temp2, 2, sd))
+			resultDiff <- cbind(resultDiff, diff.non.mean = apply(temp2, 2, mean) - apply(temp1, 2, mean), 
+			diff.non.sd = apply(temp2, 2, sd) - apply(temp1, 2, sd))
+		}
+		if(nrow(temp3) > 0) {
+			resultTemp <- cbind(resultTemp, mean.improper = apply(temp3, 2, mean), sd.improper = apply(temp3, 2, sd))
+			resultDiff <- cbind(resultDiff, diff.improper.mean = apply(temp3, 2, mean) - apply(temp1, 2, mean), 
+			diff.improper.sd = apply(temp3, 2, sd) - apply(temp1, 2, sd))
+		}
+		result <- c(result, list(paramValue = cbind(resultTemp, resultDiff)))
 	}
-	if(nrow(temp3) > 0) {
-		resultTemp <- cbind(resultTemp, mean.improper = apply(temp3, 2, mean), sd.improper = apply(temp3, 2, sd))
-		resultDiff <- cbind(resultDiff, diff.improper.mean = apply(temp3, 2, mean) - apply(temp1, 2, mean), 
-        diff.improper.sd = apply(temp3, 2, sd) - apply(temp1, 2, sd))
-	}
-    result <- c(result, list(paramValue = cbind(resultTemp, resultDiff)))
-    if (!all(dim(misspecValue) == 0)) {
+    if (!all(dim(misspecValue) == 0) && nrow(misspecValue) > 1) {
 		temp1 <- misspecValue[converged, ]
 		temp2 <- misspecValue[nonconverged, ]
 		temp3 <- misspecValue[improprep, ]
@@ -339,7 +350,7 @@ summaryConverge <- function(object, improper = FALSE) {
 		}
 		result <- c(result, list(misspecValue = cbind(resultTemp, resultDiff)))
     }
-    if (!all(dim(popFit) == 0)) {
+    if (!all(dim(popFit) == 0) && nrow(popFit) > 1) {
 		temp1 <- popFit[converged, ]
 		temp2 <- popFit[nonconverged, ]
 		temp3 <- popFit[improprep, ]
@@ -397,7 +408,7 @@ getPopulation <- function(object) {
 
 getExtraOutput <- function(object, improper = FALSE) {
 	targetRep <- 0
-	if(improper) targetRep <- c(0, 3:5)
+	if(improper) targetRep <- c(0, 3:6)
     if (length(object@extraOut) == 0) {
         stop("This simulation result does not contain any extra results")
     } else {

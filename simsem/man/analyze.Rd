@@ -7,7 +7,8 @@
 	Data analysis using the model specification (\code{linkS4class{SimSem}}). Data will be multiply imputed if the \code{miss} argument is specified.
 }
 \usage{
-analyze(model, data, package="lavaan", miss=NULL, aux=NULL, group = NULL, ...)
+analyze(model, data, package="lavaan", miss=NULL, aux=NULL, group = NULL, 
+	mxMixture = FALSE, ...)
 }
 \arguments{
   \item{model}{
@@ -27,6 +28,9 @@ analyze(model, data, package="lavaan", miss=NULL, aux=NULL, group = NULL, ...)
 }
   \item{group}{ 
 	A group variable. This argument is applicable only when the \code{model} argument is a \code{MxModel} object.
+}
+  \item{mxMixture}{
+    A logical whether to the analysis model is a mixture model. This argument is applicable when \code{MxModel} is used in the \code{model} argument only.
 }
   \item{\dots}{ 
 	Additional arguments in the \code{\link[lavaan]{lavaan}} function

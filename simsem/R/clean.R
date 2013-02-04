@@ -23,8 +23,9 @@ clean <- function(..., improper = FALSE) {
 	paramOnly <- sapply(object.l, slot, name = "paramOnly")
 	if(all(!paramOnly)) {
 		converged <- sapply(object.l, slot, name = "converged")
+		if(!is.matrix(converged)) converged <- as.matrix(converged)
 		targetRep <- 0
-		if(improper) targetRep <- c(0, 3:5)
+		if(improper) targetRep <- c(0, 3:5, 6)
 		allConverged <- matrix(converged %in% targetRep, nrow(converged), ncol(converged))
 		allConverged <- apply(allConverged, 1, all)
 

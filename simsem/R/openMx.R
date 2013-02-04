@@ -17,8 +17,11 @@ generateMx <- function(object, n, indDist = NULL, groupLab = NULL, covData = NUL
 			covData.l <- split(covData, covData[,groupLab])
 			covData.l <- lapply(covData.l, function(x) x[-ncol(x)])
 		}
-		
-		data.l <- mapply(generateMxSingleGroup, object=object@submodels, n=n, indDist=indDist, covData=covData.l, SIMPLIFY=FALSE)
+		upperLevelMatrices <- getInnerObjects(object)
+		if(length(upperLevelMatrices) > 0) {
+			names(upperLevelMatrices) <- paste0(object@name, ".", names(upperLevelMatrices))
+		}
+		data.l <- mapply(generateMxSingleGroup, object=object@submodels, n=n, indDist=indDist, covData=covData.l, MoreArgs=list(extraMatrices = upperLevelMatrices), SIMPLIFY=FALSE)
 		if(!is.null(covData)) {
 			data.l <- mapply(data.frame, data.l, covData.l, SIMPLIFY = FALSE)
 		}
@@ -33,7 +36,35 @@ generateMx <- function(object, n, indDist = NULL, groupLab = NULL, covData = NUL
 	data
 }
 
-generateMxSingleGroup <- function(object, n, indDist = NULL, covData = NULL) {
+getInnerObjects <- function(xxxobjectxxx) {
+	xxxmatxxx <- xxxobjectxxx@matrices
+	xxxmatnamexxx <- names(xxxmatxxx)
+	xxxmatvalxxx <- lapply(xxxmatxxx, slot, "values")
+	for(i in seq_along(xxxmatnamexxx)) {
+		assign(xxxmatnamexxx[i], xxxmatvalxxx[[i]])
+	}
+	xxxalgebraxxx <- xxxobjectxxx@algebras
+	xxxalgebranamexxx <- names(xxxalgebraxxx)
+	xxxalgebraformulaxxx <- lapply(xxxalgebraxxx, slot, "formula")
+	xxxalgebraassignedxxx <- NULL
+	for(i in seq_along(xxxalgebranamexxx)) {
+		temp <- NULL
+		try(temp <- eval(xxxalgebraformulaxxx[[i]]), silent = TRUE)
+		if(!is.null(temp)) {
+			assign(xxxalgebranamexxx[i], temp)
+			xxxalgebraassignedxxx <- c(xxxalgebraassignedxxx, xxxalgebranamexxx[i])
+		}
+	}
+	xxxusednamexxx <- c(xxxmatnamexxx, xxxalgebraassignedxxx)
+	xxxresultxxx <- list()
+	for(i in seq_along(xxxusednamexxx)) {
+		xxxresultxxx[[i]] <- get(xxxusednamexxx[i])
+	}
+	names(xxxresultxxx) <- xxxusednamexxx
+	xxxresultxxx	
+}
+
+generateMxSingleGroup <- function(object, n, indDist = NULL, covData = NULL, extraMatrices = NULL) {
 
 	if(is(object@objective, "MxRAMObjective")) {
 		# Create F, S, and M to suppress warnings when compiling the package.
@@ -75,7 +106,7 @@ generateMxSingleGroup <- function(object, n, indDist = NULL, covData = NULL) {
 		if(is.null(covData)) stop("Please specify the covData argument because the specified model has a definition variable.")
 		covData.l <- as.list(data.frame(t(covData)))
 		covData.l <- lapply(covData.l, function(x, name) {names(x) <- name; x}, name=colnames(covData))
-		macs <- lapply(covData.l, getImpliedStatML, xxxobjectxxx = object)
+		macs <- lapply(covData.l, getImpliedStatML, xxxobjectxxx = object, xxxextraxxx = extraMatrices)
 		impliedMean <- lapply(macs, "[[", 1)
 		impliedCov <- lapply(macs, "[[", 2)
 		impliedThreshold <- lapply(macs, "[[", 3)
@@ -107,7 +138,7 @@ generateMxSingleGroup <- function(object, n, indDist = NULL, covData = NULL) {
 		}
 		Data <- cbind(Data, covData)
 	} else {
-		implied <- getImpliedStatML(object)
+		implied <- getImpliedStatML(object, xxxextraxxx = extraMatrices)
 		impliedCov <- implied[[2]]
 		impliedMean <- implied[[1]]
 		impliedThreshold <- implied[[3]]
@@ -135,7 +166,13 @@ generateMxSingleGroup <- function(object, n, indDist = NULL, covData = NULL) {
 	return(Data)
 }
 
-getImpliedStatML <- function(xxxobjectxxx, xxxcovdatatxxx = NULL) {
+getImpliedStatML <- function(xxxobjectxxx, xxxcovdatatxxx = NULL, xxxextraxxx = NULL) {
+	if(!is.null(xxxextraxxx)) {
+		xxxmatnamexxx2 <- names(xxxextraxxx)
+		for(i in seq_along(xxxmatnamexxx2)) {
+			assign(xxxmatnamexxx2[i], xxxextraxxx[[i]])
+		}
+	}
 	xxxmatxxx <- xxxobjectxxx@matrices
 	xxxmatnamexxx <- names(xxxmatxxx)
 	xxxmatvalxxx <- lapply(xxxmatxxx, slot, "values")
@@ -181,8 +218,8 @@ getImpliedStatML <- function(xxxobjectxxx, xxxcovdatatxxx = NULL) {
 	list(xxximpliedMeanxxx, xxximpliedCovxxx, xxximpliedThresholdxxx)
 }
 
-analyzeMx <- function(object, data, groupLab = NULL, ...) {
-	if(length(object@submodels) > 1) {
+analyzeMx <- function(object, data, groupLab = NULL, mxMixture = FALSE, ...) {
+	if(length(object@submodels) > 1 & !mxMixture) {
 		temp <- object@submodels
 		if(is.null(groupLab)) groupLab <- "group"
 		data.l <- split(data, data[,groupLab])
@@ -205,7 +242,7 @@ findDefVars <- function(object) {
 vectorizeMx <- function(object) {
 	multigroup <- length(object@submodels) > 0
 	if(multigroup) {
-		object <- object@submodels
+		object <- c(list(object), object@submodels)
 	} else {
 		object <- list(object)	
 	}
@@ -226,20 +263,19 @@ vectorizeMx <- function(object) {
 			result <- c(result, temp)
 		}
 	}
-	
 	result[!duplicated(names(result))]
 }
 
-easyFitMx <- function(object) {
+easyFitMx <- function(object, mxMixture = FALSE) {
 	library(OpenMx)
 	
-	if(length(object@submodels) > 1) {
+	if(length(object@submodels) > 1 & !mxMixture) {
 		dat <- lapply(object@submodels, slot, "data")
 	} else {
 		dat <- object@data
 	}
 	
-	if(length(object@submodels) > 1) {
+	if(length(object@submodels) > 1 & !mxMixture) {
 		N <- sum(sapply(dat, slot, "numObs"))
 	} else {
 		N <- dat@numObs

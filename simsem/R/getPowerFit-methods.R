@@ -36,7 +36,7 @@ getPowerFitDataFrame <- function(altObject, cutoff, revDirec = FALSE, usedFit = 
 	altObject <- as.data.frame(altObject[, common.name])
 	cutoff <- cutoff[common.name]
 	for (i in 1:length(common.name)) {
-		temp[i] <- pValue(target = as.numeric(cutoff[i]), dist = as.vector(altObject[, 
+		temp[i] <- pValueVector(target = as.numeric(cutoff[i]), dist = as.vector(altObject[, 
 			i]), revDirec = revDirec, x = predictor, xval = predictorVal, df = df, 
 			condCutoff = condCutoff)
 	}
@@ -133,7 +133,7 @@ getPowerFitNullObj <- function(altObject, nullObject, revDirec = FALSE, usedFit 
 	if (is.null(condValue)) {
 		usedCutoff <- as.vector(t(getCutoff(nullObject, alpha = alpha, usedFit = usedFit)))
 		names(usedCutoff) <- usedFit
-		temp <- pValue(usedCutoff, as.data.frame(usedDist), revDirec = usedDirec)
+		temp <- pValueDataFrame(usedCutoff, as.data.frame(usedDist), revDirec = usedDirec)
 		names(temp) <- usedFit
 		# Find cutoff based on chi-square test
 		cutoffChisq <- qchisq(1 - alpha, df=nullObject@fit[,"df"])

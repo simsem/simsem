@@ -12,7 +12,7 @@ lavaanfun = "lavaan", outfun=NULL, pmMCAR = NULL, pmMAR = NULL, facDist = NULL, 
 errorDist = NULL, sequential = FALSE, modelBoot = FALSE, realData = NULL, 
 covData = NULL, maxDraw = 50, misfitType = "f0", misfitBounds = NULL, 
 averageNumMisspec = FALSE, optMisfit=NULL, optDraws = 50, 
-createOrder = c(1, 2, 3), aux = NULL, group = NULL, mxFit = FALSE,
+createOrder = c(1, 2, 3), aux = NULL, group = NULL, mxFit = FALSE, mxMixture = FALSE,
 seed = 123321, silent = FALSE, 
 multicore = FALSE, cluster = FALSE, numProc = NULL, paramOnly = FALSE, 
 dataOnly=FALSE, smartStart=FALSE, previousSim = NULL, completeRep = FALSE,  ...)
@@ -102,6 +102,9 @@ dataOnly=FALSE, smartStart=FALSE, previousSim = NULL, completeRep = FALSE,  ...)
 }
   \item{mxFit}{
     A logical whether to find an extensive list of fit measures (which will be slower). This argument is applicable when \code{MxModel} is used in the \code{model} argument only.
+}
+  \item{mxMixture}{
+    A logical whether to the analysis model is a mixture model. This argument is applicable when \code{MxModel} is used in the \code{model} argument only.
 }
   \item{seed}{ 
 	Random number seed. Reproducibility across multiple cores or clusters is ensured using R'Lecuyer package.

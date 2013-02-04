@@ -79,7 +79,8 @@ model                   Data generation template and analysis template
 model.lavaan            Build the data generation template and analysis
                         template from the lavaan result
 multipleAllEqual        Test whether all objects are equal
-pValue                  Find p-values (1 - percentile)
+pValue                  Find p-values (1 - percentile) by comparing a
+                        single analysis output from the result object
 pValueNested            Find p-values (1 - percentile) for a nested
                         model comparison
 pValueNonNested         Find p-values (1 - percentile) for a non-nested
