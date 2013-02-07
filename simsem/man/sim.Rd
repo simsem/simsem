@@ -4,7 +4,7 @@
 	Run a monte carlo simulation with a structural equation model.
 }
 \description{
-	This function can be used to generate data, analyze the generated data, and summarized into a result object where parameter estimates, standard errors, fit indices, and other characteristics of each replications are saved. The data-generation and data analysis can be done by 1. \code{\linkS4class{SimSem}} objects created with the \code{\link{model}} function, 2. \code{lavaan} script or parameter tables, or 3. an \code{MxModel} object from the \code{OpenMx} package. 
+	This function can be used to generate data, analyze the generated data, and summarized into a result object where parameter estimates, standard errors, fit indices, and other characteristics of each replications are saved. 
 }
 \usage{
 sim(nRep, model, n, generate = NULL, rawData = NULL, miss = NULL, datafun=NULL, 
@@ -22,13 +22,13 @@ dataOnly=FALSE, smartStart=FALSE, previousSim = NULL, completeRep = FALSE,  ...)
 	Number of replications. If any of the \code{n}, \code{pmMCAR}, or \code{pmMAR} arguments are specified as lists, the number of replications will default to the length of the list(s), and \code{nRep} need not be specified.
 }
   \item{model}{
-	There are three options for this argument: 1. \code{\linkS4class{SimSem}} object created by \code{\link{model}}, 2. \code{lavaan} script or \code{lavaan} parameter table, or 3. a list that contains all argument that users use to run \code{lavaan} (including \code{cfa}, \code{sem}, \code{lavaan}). For the \code{\linkS4class{SimSem}} object, if the \code{generate} argument is not specified, then the object in the \code{model} argument will be used for both data generation and analysis. If \code{generate} is specified, then the \code{model} argument will be used for data analysis only. 
+	There are three options for this argument: 1. \code{\linkS4class{SimSem}} object created by \code{\link{model}}, 2. \code{lavaan} script, \code{lavaan} parameter table, or a list that contains all argument that users use to run \code{lavaan} (including \code{cfa}, \code{sem}, \code{lavaan}), or 3. \code{MxModel} object from the \code{OpenMx} package. For the \code{\linkS4class{SimSem}} object, if the \code{generate} argument is not specified, then the object in the \code{model} argument will be used for both data generation and analysis. If \code{generate} is specified, then the \code{model} argument will be used for data analysis only. 
 }
   \item{n}{
 	Sample size. Either a single value, or a list of values to vary sample size across replications. The \code{n} argument can also be specified as a random distribution object; if any resulting values are non-integers, the decimal will be rounded. 
 }
   \item{generate}{
-	There are three options for this argument: 1. \code{\linkS4class{SimSem}} object created by \code{\link{model}}, 2. \code{lavaan} script or \code{lavaan} parameter table (for data generation; see \code{\link[lavaan]{simulateData}}), or 3. a list that contains all argument that users use to run \code{\link[lavaan]{simulateData}}. This argument cannot be specified the same time as the \code{rawData} argument
+	There are three options for this argument: 1. \code{\linkS4class{SimSem}} object created by \code{\link{model}}, 2. \code{lavaan} script, \code{lavaan} parameter table (for data generation; see \code{\link[lavaan]{simulateData}}), or a list that contains all argument that users use to run \code{\link[lavaan]{simulateData}}, 3. \code{MxModel} object with population parameters specified in the starting values of all matrices in the model. This argument cannot be specified the same time as the \code{rawData} argument
 }
   \item{rawData}{
 	There are two options for this argument: 1. a list of data frames to be used in simulations or 2. a population data. If a list of data frames is specified, the \code{nRep} and \code{n} arguments must not be specified. If a population data frame is specified, the \code{nRep} and \code{n} arguments are required.
@@ -141,9 +141,29 @@ dataOnly=FALSE, smartStart=FALSE, previousSim = NULL, completeRep = FALSE,  ...)
 }
 }
 \details{
+
+
 This function is executed as follows: 1. parameters are drawn from the specified data-generation model (applicable only simsem model template, \code{\linkS4class{SimSem}}, only), 2. the drawn (or the specified) parameters are used to create data, 3. data can be transformed using the \code{datafun} argument, 4. specified missingness (if any) is imposed, 5. data are analyzed using the specified analysis model, 6. parameter estimates, standard errors, fit indices, and other characteristics of a replication are extracted, 7. additional outputs (if any) are extracted using the \code{outfun} argument, and 8. results across replications are summarized in a result object, \code{\linkS4class{SimResult}}).
 
-The \code{sim} function can also be used to obtain raw data using the \code{dataOnly} argument, to analyze pre-existing data or a drawn of a specified population data using the \code{rawData} argument, and to simulate data that follows the distribution of a real data set using the \code{realData} argument. Paralleled processing can be enabled using the \code{multicore} argument. 
+There are five ways to provide or generate data in this function: 
+	\enumerate{
+		\item \code{\linkS4class{SimSem}} can be used as a template to generate data, which can be created by the \code{\link{model}} function. The \code{\linkS4class{SimSem}} can be specified in the \code{generate} argument.
+		\item \code{lavaan} script, parameter table for the \code{lavaan} package, or a list of arguments for the \code{\link[lavaan]{simulateData}} function. The \code{lavaan} script can be specified in the \code{generate} argument.
+		\item \code{MxModel} object from the \code{OpenMx} package. The \code{MxModel} object can be specified in the \code{generate} argument.
+		\item A list of raw data for each replication can be provided for the \code{rawData} argument. The \code{sim} function will analyze each data and summarize the result. Note that the \code{generate}, \code{n} and \code{nRep} could not be specified if the list of raw data is provided.
+		\item Population data can be provided for the \code{rawData} argument. The \code{sim} function will randomly draw sample data sets and analyze data. Note that the \code{n} and \code{nRep} must be specified if the population data are provided. The \code{generate} argument must not be specified.
+	}
+
+Note that all generated or provided data can be transformed based on Bollen-Stine approach by providing a real data in the \code{realData} argument if any of the first three methods are used.
+	
+There are three ways to analyze the data sets for each replication by setting the \code{model} argument as
+\enumerate{
+		\item \code{\linkS4class{SimSem}} can be used as a template for data analysis. 
+		\item \code{lavaan} script, parameter table for the \code{lavaan} package, or a list of arguments for the \code{\link[lavaan]{lavaan}}, \code{\link[lavaan]{sem}}, \code{\link[lavaan]{cfa}}, or \code{\link[lavaan]{growth}} function. Note that if the desired function to analyze data can be specified in the \code{lavaanfun} argument, which the default is the \code{\link[lavaan]{lavaan}} function
+		\item \code{MxModel} object from the \code{OpenMx} package. The object does not need to have data inside. Note that if users need an extensive fit indices, the \code{mxFit} argument should be specified as \code{TRUE}. If users wish to analyze by mixture model, the \code{mxMixture} argument should be \code{TRUE} such that the \code{sim} function knows how to handle the data.
+	}
+	
+Any combination of data-generation methods and data-analysis methods are valid. For example, data can be simulated using lavaan script and analyzed by \code{MxModel}.  Paralleled processing can be enabled using the \code{multicore} argument. 
 }
 \value{
 	A result object (\code{\linkS4class{SimResult}})

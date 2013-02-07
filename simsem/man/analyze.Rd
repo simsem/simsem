@@ -4,7 +4,7 @@
 	Data analysis using the model specification
 }
 \description{
-	Data analysis using the model specification (\code{linkS4class{SimSem}}). Data will be multiply imputed if the \code{miss} argument is specified.
+	Data analysis using the model specification (\code{linkS4class{SimSem}}) or the mx model object (\code{MxModel}). Data will be multiply imputed if the \code{miss} argument is specified. 
 }
 \usage{
 analyze(model, data, package="lavaan", miss=NULL, aux=NULL, group = NULL, 
@@ -42,6 +42,11 @@ analyze(model, data, package="lavaan", miss=NULL, aux=NULL, group = NULL,
 \author{
 	Patrick Miller (Univeristy of Notre Dame; \email{pmille13@nd.edu})
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
+}
+\seealso{
+	Note that users can use functions provided by \code{lavaan} package (\code{\link[lavaan]{lavaan}}, \code{\link[lavaan]{cfa}}, \code{\link[lavaan]{sem}}, or \code{\link[lavaan]{growth}}) if they wish to analyze data by lavaan directly. 
+	
+	For the \code{OpenMx} result, users may request standardized measures and additional fit indices by the \code{\link[semTools]{standardizeMx}} and \code{\link[semTools]{fitMeasuresMx}} functions in the \code{semTools} package.
 }
 \examples{
 loading <- matrix(0, 6, 2)

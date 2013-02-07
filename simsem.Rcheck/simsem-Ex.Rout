@@ -3336,7 +3336,7 @@ NULL
 > 
 > CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
 > 
-> dat <- generate(CFA.Model,200)
+> dat <- generate(CFA.Model, 200)
 > 
 > 
 > 
@@ -6393,7 +6393,7 @@ detaching 'package:parallel'
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  9.73 0.06 9.95 NA NA 
+Time elapsed:  11.44 0.14 11.87 NA NA 
 > grDevices::dev.off()
 null device 
           1 

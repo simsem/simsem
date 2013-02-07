@@ -931,7 +931,7 @@ VY <- bind(rep(NA,6),2)
 
 CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
 
-dat <- generate(CFA.Model,200)
+dat <- generate(CFA.Model, 200)
 
 
 
