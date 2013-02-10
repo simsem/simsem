@@ -20,6 +20,6 @@ loading.mis <- matrix("runif(1, -0.2, 0.2)", 11, 3)
 loading.mis[is.na(loading)] <- 0
 datamodel <- model.lavaan(out, std=TRUE, LY=loading.mis)
 
-misstemplate <- miss(logical=is.na(usedData), m=5, ignoreCols="group")
+misstemplate <- miss(logical=is.na(usedData), m=5)
 output <- sim(1000, n=nrow(PoliticalDemocracy), datamodel, miss=misstemplate)
 pValue(out, output)

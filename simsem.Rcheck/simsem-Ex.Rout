@@ -6393,7 +6393,7 @@ detaching 'package:parallel'
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  11.44 0.14 11.87 NA NA 
+Time elapsed:  10.54 0.22 13.03 NA NA 
 > grDevices::dev.off()
 null device 
           1 

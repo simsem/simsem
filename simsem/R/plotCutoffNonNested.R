@@ -6,6 +6,8 @@ plotCutoffNonNested <- function(dat1Mod1, dat1Mod2, dat2Mod1 = NULL, dat2Mod2 = 
     mod1 <- clean(dat1Mod1, dat1Mod2)
     dat1Mod1 <- mod1[[1]]
     dat1Mod2 <- mod1[[2]]
+	usedFit <- cleanUsedFit(usedFit, colnames(dat1Mod1@fit), colnames(dat1Mod2@fit))
+	
     if (!isTRUE(all.equal(unique(dat1Mod1@paramValue), unique(dat1Mod2@paramValue)))) 
         stop("'dat1Mod1' and 'dat1Mod2' are based on different data and cannot be compared, check your random seed")
     if (!is.null(dat2Mod1) & !is.null(dat2Mod2)) {

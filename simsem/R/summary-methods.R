@@ -235,14 +235,18 @@ printIfNotNull <- function(object, name = NULL) {
 } 
 
 cleanUsedFit <- function(txt, ...) {
+	arg <- list(...)
     if (is.null(txt)) {
-        txt <- getKeywords()$usedFit
+		if("chisq.scaled" %in% arg[[1]]) {
+			txt <- getKeywords()$usedFitScaled
+		} else {
+			txt <- getKeywords()$usedFit
+		}
 	} else {
 		txt <- tolower(txt)
 		txt[txt == "chi"] <- "chisq"
 		txt
 	}
-	arg <- list(...)
 	if(length(arg) > 0) {
 		txt <- intersection(txt, ...)
 		if(length(txt) == 0) stop("The name of fit indices does not match with the saved fit indices.")

@@ -132,8 +132,8 @@ test.overall <- function() {
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/exMultipleFormat/singleGroup.R"), "Multiple format sim (Single Group)", subFrom = "totalRep <- 1000", subTo = "totalRep <- 10", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/exMultipleFormat/multipleGroup.R"), "Multiple format sim (Multiple Group)", subFrom = "totalRep <- 1000", subTo = "totalRep <- 5", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/exMultipleFormat/covData.R"), "Covariate effect", subFrom = "sim\\(1000", subTo = "sim\\(20", result = result)
-	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/exMultipleFormat/ordered.R"), "Ordered Data", subFrom = c("sim\\(1000", "50:500"), subTo = c("sim\\(20", "seq\\(50, 500, 50\\)"), result = result)
-	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/exMultipleFormat/completeRep.R"), "Ordered Data", subFrom = NULL, subTo = NULL, result = result)
+	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/exMultipleFormat/ordered.R"), "Ordered Data", subFrom = c("sim\\(1000", "50:1000"), subTo = c("sim\\(20", "seq\\(50, 1000, 50\\)"), result = result)
+	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/exMultipleFormat/completeRep.R"), "Complete Reps", subFrom = NULL, subTo = NULL, result = result)
 
 	# 0.5 lavaan script
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/ex2/ex2.R"), "Example 2 (lavaan)", subFrom = "sim\\(1000", subTo = "sim\\(10", result = result)
@@ -184,7 +184,7 @@ test.overall <- function() {
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/ex28/ex28.R"), "Example 28 (OpenMx)", subFrom = "sim\\(1000", subTo = "sim\\(10", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/exMisc/orderedMx.R"), "Ordered Data (OpenMx)", subFrom = "sim\\(1000", subTo = "sim\\(10", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/exMisc/definitionVarMx.R"), "Definition Variables (OpenMx)", subFrom = "sim\\(1000", subTo = "sim\\(10", result = result)
-	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/exMisc/mixtureMx.R"), "Definition Variables (OpenMx)", subFrom = "sim\\(1000", subTo = "sim\\(10", result = result)
+	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/exMisc/mixtureMx.R"), "Mixture Models (OpenMx)", subFrom = "sim\\(1000", subTo = "sim\\(10", result = result)
 
 	# 0.5 openmx demo files
 	allfiles <- list.files(path = paste0(currentDir, "/SupportingDocs/Examples/Version05mx/exDemo/"))

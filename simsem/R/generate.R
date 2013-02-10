@@ -522,7 +522,27 @@ lavaanSimulateData <- function(
     # the model-implied moments for the population
     Sigma.hat <- lavaan:::computeSigmaHat(fit@Model)
        Mu.hat <- lavaan:::computeMuHat(fit@Model)
-
+	   
+	# To be deleted if the Mu.hat is not wrong anymore and the lavaan version changed to 0.5-12
+	for(g in seq_along(Sigma.hat)) {
+		ov.ord <- lavaan:::vnames(lav, type="ov.ord", group=g)
+		ov.names <- lavaan:::vnames(lav, type="ov", group=g)
+		for(o in ov.ord) {
+			o.idx <- which(o == ov.names)
+			tv.idx <- which(lav$op == "~*~" & lav$lhs == o)
+			if(length(tv.idx) == 0) {
+				th.idx <- which(lav$op == "~~" & lav$lhs == o & lav$user == 1)
+				if(length(th.idx) == 0) {
+					tv <- 1
+				} else {
+					tv <- NULL
+				}
+			} else {
+				tv <- lav$ustart[tv.idx]
+			}
+			if(!is.null(tv)) Sigma.hat[[g]][o.idx, o.idx] <- tv
+		}
+	}
     # ngroups
     ngroups <- length(sample.nobs)
 
@@ -547,7 +567,7 @@ lavaanSimulateData <- function(
             for(o in ov.ord) {
                 o.idx <- which(o == ov.names)
                 th.idx <- which(lav$op == "|" & lav$lhs == o)
-                th.val <- c(-Inf,sort(lav$ustar[th.idx]),+Inf)
+                th.val <- c(-Inf,sort(lav$ustart[th.idx]),+Inf)
                 # scale!!
                 xz <- scale(X[[g]][,o.idx])
 				lev <- 1:(length(setdiff(th.val, NA))-1)
