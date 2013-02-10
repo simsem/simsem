@@ -33,7 +33,7 @@
       <section id="main_content" class="inner">
         <h1>Version History (Technical)</h1>
 
-<h2>Version 0.5-0 01/29/13</h2>
+<h2>Version 0.5-0 02/10/13</h2>
 
 <ul>
 <li>Fix small bugs in the createData function that mistakenly uses '@' instead of '$'
@@ -49,7 +49,7 @@
 <li>Add more stringent error-checking routines.
 <li>Modify the sim function such that the rawData argument can take population data. The population data will be drawn into different datasets and analyzed by the target model. The population data itself are also analyzed to get the parameter values.
 <li>The generate and model arguments in the sim function can take lavaan script, parameter table, or a list of arguments. The generate argument will be passed to the lavaanSimulateData function which is a modified simulateData function from lavaan (described below). The model argument will be passed to analyzeLavaan function (described below). The lavaanfun argument is also added to specify which functions users would like to use to analyze data (the default is the lavaan function).
-<li>The lavaanSimulateData function is modified from the simulateData function to 1) fix bugs that the function cannot take parameter table, and 2) use createData function in the simsem package to generate data.
+<li>The lavaanSimulateData function is modified from the simulateData function to 1) fix bugs that the function cannot take parameter table, 2) use createData function in the simsem package to generate data, and 3) appropriately put the right variance for latent indicator variables when categorical variables are specified.
 <li>The analyzeLavaan function is simply a hub to analyze data by the lavaan (including cfa, sem, or growth), runMI, or auxiliary functions.
 <li>The bindDist function has two more arguments: skewness and kurtosis. These arguments will be passed to the createData function and then lavaanValeMaurelli83 function, which is modified from lavaan to generate data based on Vale and Maurelli (1983) method. The lavaanValeMaurelli83 function is a bug-fix version for a single variable. 
 <li>The SimDataDist class has two more slots: skewness and kurtosis. The plotDist function is adjusted for the new change.
@@ -63,6 +63,10 @@
 <li>The generate function can take simsem model template, OpenMx object, or lavaan script
 <li>The anova function is rewritten to be more efficient
 <li>Fix the bug in the validatePath function that the floating numbers are treated as unequal when they are actually equal.
+<li>Add the HeadrickSawilowsky1999 function to create nonnormal data based on Headrick and Sawilowsky (1999) method. However, this function has not been publicized yet.
+<li>Change the pValue methods to function in order to not depend on calling MxModel object. The pValueDataFrame and pValueVector are added for those pValue methods for data frame and vector.
+<li>Fix the summary method to not show correlation of fit indices when only one replication is convergent and not calculate correlation for constant fit index value across replications
+<li>Report the scaled fit indices as a default if they are available in a result object.
 </ul>
 
 <h2>Version 0.4-999 1/6/13</h2>
