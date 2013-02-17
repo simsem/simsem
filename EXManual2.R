@@ -45,6 +45,198 @@ dir <- "C:/Users/student/Dropbox/simsem/simsem/R/"
 # tidy.dir(dir)
 
 
+
+
+
+
+
+
+
+
+
+
+loading <- matrix(0, 6, 2)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+LY <- bind(loading, 0.7)
+
+latent.cor <- matrix(NA, 2, 2)
+diag(latent.cor) <- 1
+RPS <- binds(latent.cor, 0.5)
+
+RTE <- binds(diag(6))
+
+VTE <- bind(rep(NA, 6), 0.51)
+
+CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, VTE=VTE, modelType = "CFA", indLab=c("pos1", "pos2", "pos3", "neg1", "neg2", "neg3"), facLab=c("posaffect", "negaffect"))
+
+#SimMissing <- simMissing(pmMCAR=0.1, numImps=5)
+Output <- sim(20, CFA.Model,n=200)
+getCutoff(Output, 0.05)
+plotCutoff(Output, 0.05)
+summaryParam(Output)
+
+FUN <- function(data) {
+	script <- "posaffect =~ pos1 + pos2 + pos3
+	negaffect =~ neg1 + neg2 + neg3
+	"
+	out <- cfa(script, data=data)
+	coef <- coef(out)
+	se <- sqrt(diag(vcov(out)))
+	fit <- fitMeasures(out)
+	converged <- inspect(out, "converged")
+	return(list(coef=coef, se=se, fit=fit, converged=converged))
+}
+
+FUN2 <- function(data) {
+	out <- lm(pos1 ~ pos2 + pos3, data=data)
+	coef <- coef(out)
+	se <- sqrt(diag(vcov(out)))
+	fit <- c(logLik = as.numeric(logLik(out)))
+	converged <- TRUE
+	return(list(coef=coef, se=se, fit=fit, converged=converged))
+}
+
+Output3 <- sim(20, model=FUN2, generate=CFA.Model,n=200)
+
+FUN4 <- function(data) {
+	out <- lm(pos1 ~ pos2 + pos3, data=data)
+	coef <- coef(out)
+	se <- sqrt(diag(vcov(out)))
+	fit <- c(logLik = as.numeric(logLik(out)))
+	converged <- TRUE
+	return(list(coef=coef, se=se, converged=converged))
+}
+
+Output4 <- sim(20, model=FUN4, generate=CFA.Model,n=200)
+
+
+
+
+
+
+
+
+
+###
+
+library(lavaan)
+
+script <- "
+f1 =~ 1*x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9
+f2 =~ 1*x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9
+f3 =~ 1*x3 + x4 + x5 + x6 + x7 + x8 + x9
+f1 ~~ 0*f2
+f1 ~~ 0*f3
+f2 ~~ 0*f3
+
+"
+
+fit <- cfa(script, data=HolzingerSwineford1939, std.lv=TRUE)
+
+
+
+
+
+
+
+
+
+
+
+library(simsem)
+set.seed(123321)
+loading <- matrix(0, 7, 2)
+loading[1:3, 1] <- NA
+loading[4:6, 2] <- NA
+LY <- bind(loading, 0.7)
+
+latent.cor <- matrix(NA, 2, 2)
+diag(latent.cor) <- 1
+RPS <- binds(latent.cor, 0.5)
+
+error.cor <- diag(7)
+error.cor[1:6, 7] <- NA
+error.cor[7, 1:6] <- NA
+RTE <- binds(error.cor, 0.4)
+
+VX <- bind(rep(NA, 7), 1)
+
+CFA.Model.Aux <- model(LY = LY, RPS = RPS, RTE = RTE, VY = VX, modelType="CFA")
+
+script <- 'y1 ~ p(0.3) + 0.5*y7' 
+Missing2 <- miss(logit=script)
+summary(Missing2)
+
+dat <- generate(CFA.Model.Aux, n = 1000)
+dat <- impose(Missing2, dat)
+
+write.table(dat, file = "dat.dat", na = "-999", row.names = FALSE,
+            col.names = FALSE, sep=",")
+
+loading2 <- matrix(0, 6, 2)
+loading2[1:3, 1] <- NA
+loading2[4:6, 2] <- NA
+
+latent.cor2 <- matrix(NA, 2, 2)
+diag(latent.cor2) <- 1
+
+error.cor2 <- diag(NA, 6)
+
+CFA.Model <- estmodel(LY = loading2, PS = latent.cor2, TE = error.cor2, modelType="CFA", indLab=paste0("y", 1:6))
+
+
+
+
+
+out <- analyze(CFA.Model, dat, aux="y7")
+
+Output <- sim(1000, n=200, model=CFA.Model, generate=CFA.Model.Aux, miss=missmodel)
+getCutoff(Output, 0.05)
+plotCutoff(Output, 0.05)
+summary(Output)
+
+
+
+###############
+
+library(lavaan)
+popModel <- "
+f1 =~ 0.6*y1 + 0.6*y2 + 0.6*y3 + 0.6*y4
+f2 =~ 1*x1 + 1*x2 + 1*x3
+y1 | 0.5*t1
+y2 | 0.25*t1
+y3 | 0*t1
+y4 | -0.5*t1
+x1 ~~ 0.5*x1
+x2 ~~ 0.5*x2
+x3 ~~ 0.5*x3
+y1 ~*~ 1*y1
+y2 ~*~ 1*y2
+y3 ~*~ 1*y3
+y4 ~*~ 1*y4
+"
+fit.pop <- cfa(popModel)
+fitted(fit.pop)
+
+dat <- simulateData(popModel, sample.nobs=1000L, empirical=TRUE,
+return.fit=TRUE)
+fitted(attr(dat, "fit"))
+
+
+model <- '
+f1 =~ y1 + y2 + y3 + y4
+f2 =~ x1 + x2 + x3
+'
+fit <- cfa(model, data=dat, ordered=c("y1","y2","y3","y4"),std.lv=TRUE)
+summary(fit)
+
+
+##############
+
+
+
+
 library(simsem)
 
 loading <- matrix(0, 9, 3)

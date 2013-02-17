@@ -61,6 +61,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 	
 	lavaanAnalysis <- FALSE
 	mxAnalysis <- FALSE
+	functionAnalysis <- FALSE
 	if(is.character(model)) {
 		model <- list(model = model)
 		lavaanAnalysis <- TRUE
@@ -76,6 +77,8 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 		mxAnalysis <- TRUE
 	} else if (is(model, "SimSem")) {
 		# Do nothing
+	} else if (is(model, "function")) {
+		functionAnalysis <- TRUE
 	} else {
 		stop("Please specify an appropriate object for the 'model' argument: simsem model template, lavaan script, lavaan parameter table, or list of options for the 'lavaan' function.")
 	}
@@ -144,6 +147,8 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 		} else if (mxAnalysis) {
 			ngroups <- length(model@submodels)
 			if(ngroups == 0) ngroups <- 1
+		} else if (functionAnalysis) {
+			ngroups <- 1 # Intentionally use 1 because, to get at this point, only raw data are provided. The number of group will does not matter.
 		} else {
 			ngroups <- max(model@pt$group)
 		}
@@ -399,7 +404,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 		converged <- as.vector(unlist(converged.l))
 		
 		if(paramOnly) converged <- rep(TRUE, length(converged))
-		param <- NULL
+		param <- data.frame()
 		FMI1 <- NULL
 		FMI2 <- NULL
 		popMis <- NULL
@@ -519,10 +524,14 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 		if(!lavaanAnalysis) {
 			if(mxAnalysis) {
 				modelType <- "OpenMx"
+			} else if (functionAnalysis) {
+				modelType <- "function"
 			} else {
 				modelType <- model@modelType
 			}
 		}
+		
+		colnames(fit) <- tolower(colnames(fit))
 		
 		Result <- new("SimResult", modelType = modelType, nRep = nRep, coef = coef, 
 			se = se, fit = fit, converged = converged, seed = c(seed, s), paramValue = param, 
@@ -615,6 +624,8 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 			groupLab <- NULL
 			if(is(model, "SimSem")) {
 				groupLab <- model@groupLab
+			} else if (is(model, "function")) {
+				# Intentionally leave as blank
 			} else {
 				groupLab <- model$group
 			}
@@ -704,7 +715,13 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 		# Impute missing and run results
 		# Will use analyze either when there is a missing object or auxiliary variables specified. 
 		# If users provide their own data there maybe a case with auxiliary variables and no missing object
-		if (is.lavaancall(model)) {
+		if(is(model, "function")) {
+			if (silent) {
+				invisible(capture.output(suppressMessages(try(out <- model(data), silent = TRUE))))
+			} else {
+				try(out <- model(data))
+			}
+		} else if (is.lavaancall(model)) {
 			model$data <- data
 			if (silent) {
 				invisible(capture.output(suppressMessages(try(out <- analyzeLavaan(model, lavaanfun, miss, aux), silent = TRUE))))
@@ -748,7 +765,17 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
     ## 6. Parse Lavaan Output
 	if (!dataOnly) {
 		if (!is.null(out)) {
-			if(mxAnalysis) {
+			if(is(model, "function")) {
+				converged <- out$converged
+				if(is.null(converged)) stop("In the function for data analysis, please specify the 'converged' in the resulting list")
+				if(is.logical(converged)) {
+					if(converged) {
+						converged <- 0
+					} else {
+						converged <- 1
+					}
+				} 
+			} else if (mxAnalysis) {
 				try(converged.l <- out@output$status)
 				converged <- 0
 				if(converged.l[[2]] != 0) {
@@ -793,7 +820,15 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 		
 		#reminder: out=lavaan object
 		if (converged %in% c(0, 3:6)) {
-			if(mxAnalysis) {
+			if(is(model, "function")) {
+				fit <- out$fit
+				coef <- out$coef
+				se <- out$se
+				std <- out$std
+				extra <- out$extra
+				FMI1 <- out$FMI1
+				FMI2 <- out$FMI2
+			} else if(mxAnalysis) {
 				if(mxFit) {
 					fit <- NA
 					try(fit <- semTools:::fitMeasuresMx(out), silent = silent)

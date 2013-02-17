@@ -31,10 +31,9 @@ Loading required package: pbivnorm
 Loading required package: quadprog
 This is lavaan 0.5-11
 lavaan is BETA software! Please report any bugs.
-Loading required package: copula
  
 ###############################################################################################
-This is simsem 0.5-0
+This is simsem 0.5-1
 simsem is BETA software! Please report any bugs.
 simsem was developed at the University of Kansas Center for Research Methods and Data Analysis.
 ###############################################################################################
@@ -63,7 +62,7 @@ Name:             p      margins paramMargins    keepScale      reverse
 Class:      numeric    character         list      logical       vector
                                              
 Name:        copula     skewness     kurtosis
-Class:       copula       vector       vector
+Class:          ANY       vector       vector
 > 
 > d1 <- list(df=2)
 > d2 <- list(df=3)
@@ -106,6 +105,9 @@ Skewness: -3 / -2.45454545454545 / -1.90909090909091 / -1.36363636363636 / -0.81
 > 
 > 
 > cleanEx()
+
+detaching 'package:copula'
+
 > nameEx("SimMatrix-class")
 > ### * SimMatrix-class
 > 
@@ -887,6 +889,9 @@ logical(0)
 > 
 > 
 > cleanEx()
+
+detaching 'package:copula'
+
 > nameEx("combineSim")
 > ### * combineSim
 > 
@@ -4973,7 +4978,7 @@ Copyright M. P. Wand 1997-2009
 > 
 > cleanEx()
 
-detaching 'package:KernSmooth'
+detaching 'package:KernSmooth', 'package:copula'
 
 > nameEx("plotLogitMiss")
 > ### * plotLogitMiss
@@ -6032,6 +6037,43 @@ Number of nonconverged replications:
 44  f2 ~1        NA     NA      NA       NA       NA
 
 > 
+> # Example of analyze using a function
+> 
+> analyzeFUN <- function(data) {
++ 	out <- lm(y2 ~ y1, data=data)
++ 	coef <- coef(out)
++ 	se <- sqrt(diag(vcov(out)))
++ 	fit <- c(loglik = as.numeric(logLik(out)))
++ 	converged <- TRUE # Assume to be convergent all the time
++ 	return(list(coef = coef, se = se, fit = fit, converged = converged))
++ }
+> 
+> Output <- sim(5, model=analyzeFUN, n=200, rawData=pop, lavaanfun = "cfa")
+> summary(Output)
+RESULT OBJECT
+Model Type
+[1] "function"
+========= Fit Indices Cutoffs ============
+           Alpha
+Fit Indices      0.1     0.05     0.01    0.001     Mean     SD
+     loglik -268.388 -267.833 -267.389 -267.289 -278.003 13.231
+========= Parameter Estimates and Standard Errors ============
+            Estimate.Average Estimate.SD Average.SE Power..Not.equal.0.
+(Intercept)           -0.013       0.074      0.069                 0.0
+y1                     0.015       0.108      0.072                 0.2
+            Average.Param Average.Bias Coverage
+(Intercept)         0.001       -0.013      1.0
+y1                 -0.002        0.017      0.8
+================== Replications =====================
+Number of replications = 5 
+Number of converged replications = 5 
+Number of nonconverged replications: 
+   1. Nonconvergent Results = 0 
+   2. Nonconvergent results from multiple imputation = 0 
+   3. At least one SE were negative or NA = 0 
+   4. At least one variance estimates were negative = 0 
+   5. At least one correlation estimates were greater than 1 or less than -1 = 0 
+> 
 > 
 > 
 > cleanEx()
@@ -6393,7 +6435,7 @@ detaching 'package:parallel'
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  10.54 0.22 13.03 NA NA 
+Time elapsed:  11.32 0.17 11.61 NA NA 
 > grDevices::dev.off()
 null device 
           1 

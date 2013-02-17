@@ -1,6 +1,7 @@
 library(simsem)
 library(OpenMx)
 
+
 totalRep <- 1000
 # 1. Generate Data by simsem model template
 
@@ -138,6 +139,29 @@ mxTwoFactorModel <- mxModel("Two Factor Model",
 Output14 <- sim(nRep = totalRep, model = mxTwoFactorModel, n = 200, generate = CFA.Model)
 summary(Output14)
 
+# 1.5 Analyze by functions using lava
+
+FUN <- function(data) {
+	library(lava)
+	m1 <- lvm()
+	latent(m1) <- ~f1 + f2
+	regression(m1) <- c(y1, y2, y3) ~ f1
+	regression(m1) <- c(y4, y5, y6) ~ f2
+	covariance(m1) <- f1 ~ f2
+	covariance(m1, ~f1 + f2) <- 1
+	intercept(m1, ~f1 + f2) <- 0
+	e <- estimate(m1, data)
+	coef <- coef(e)
+	se <- sqrt(diag(vcov(e)))
+	f <- gof(e)
+	fit <- c(f$fit$statistic, f$fit$parameter, f$fit$p.value, loglik = as.numeric(f$logLik), bic = f$BIC, aic = f$AIC, rmsea = as.numeric(f$RMSEA[1]))
+	converged <- !any(is.na(se))
+	list(coef = coef, se = se, fit = fit, converged = converged)
+}
+
+Output15 <- sim(nRep = totalRep, model = FUN, n = 200, generate = CFA.Model)
+summary(Output15)
+
 # 2. Provide a list of data
 
 library(MASS)
@@ -177,6 +201,11 @@ summary(Output23)
 Output24 <- sim(model = mxTwoFactorModel, rawData = data.l)
 summary(Output24)
 
+# 2.5 Analyze by functions using lava
+
+Output25 <- sim(model = FUN, rawData = data.l)
+summary(Output25)
+
 # 3. Provide a population data
 
 scores <- mvrnorm(10000, rep(0, 6), modelImplied)
@@ -205,6 +234,11 @@ summary(Output33)
 
 Output34 <- sim(nRep = totalRep, model = mxTwoFactorModel, n = 200, rawData = popData)
 summary(Output34)
+
+# 3.5 Analyze by functions using lava
+
+Output35 <- sim(nRep = totalRep, model = FUN, n = 200, rawData = popData)
+summary(Output35)
 
 # 4. lavaan script for simulate data
 
@@ -242,6 +276,11 @@ summary(Output43)
 Output44 <- sim(nRep = totalRep, model = mxTwoFactorModel, n = 200, generate = genscript)
 summary(Output44)
 
+# 4.5 Analyze by functions using lava
+
+Output45 <- sim(nRep = totalRep, model = FUN, n = 200, generate = genscript)
+summary(Output45)
+
 # 5. OpenMx Model
 
 # The data generation and data analysis are the same models (since the parameter values are fixed as starting values)
@@ -266,3 +305,7 @@ summary(Output53)
 Output54 <- sim(nRep = totalRep, model = mxTwoFactorModel, n = 200, generate = mxTwoFactorModel)
 summary(Output54)
 
+# 5.5 Analyze by functions using lava
+
+Output55 <- sim(nRep = totalRep, model = FUN, n = 200, generate = mxTwoFactorModel)
+summary(Output55)

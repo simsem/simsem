@@ -1,5 +1,4 @@
 importFrom("lavaan", summary, anova, cor2cov, sqrtSymmetricMatrix)
-importClassesFrom("copula", copula)
 exportClasses(SimMatrix, 
 	SimVector, 
 	SimSem,

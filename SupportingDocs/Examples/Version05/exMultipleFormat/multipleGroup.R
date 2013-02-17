@@ -1,7 +1,7 @@
 library(simsem)
 library(OpenMx)
 
-totalRep <- 5
+totalRep <- 1000
 # 1. Generate Data by simsem model template
 
 loading <- matrix(0, 6, 2)
@@ -240,6 +240,37 @@ mxTwoGroupModel <- mxModel("Two Group",
 Output14 <- sim(nRep = totalRep, model = mxTwoGroupModel, n = list(150, 100), generate = CFA.Model, group = "group")
 summary(Output14)
 
+# 1.5 Analyze by function using lava
+
+FUN <- function(data) {
+	library(lava)
+	m1 <- lvm()
+	latent(m1) <- ~f1 + f2
+	regression(m1) <- c(y1, y2, y3) ~ f1
+	regression(m1) <- c(y4, y5, y6) ~ f2
+	covariance(m1) <- f1 ~ f2
+	covariance(m1, ~f1 + f2) <- 1
+	intercept(m1, ~f1 + f2) <- 0
+	m2 <- m1
+	dataGroup <- split(data, data$group)
+	e <- estimate(list(`Group 1` = m1, `Group 2` = m2), dataGroup) # No constraints across groups
+	coef <- lapply(coef(e), function(x) x[,1])
+	se <- lapply(coef(e), function(x) x[,2])
+	lenGroup <- sapply(coef, length)
+	groupLab <- paste0(".g", rep(1:2, each=lenGroup[1]))
+	coef <- Reduce("c", coef)
+	se <- Reduce("c", se)
+	names(coef) <- paste0(names(coef), groupLab)
+	names(se) <- paste0(names(se), groupLab)
+	f <- gof(e)
+	fit <- c(f$fit$statistic, f$fit$parameter, f$fit$p.value, loglik = as.numeric(f$logLik), bic = f$BIC, aic = f$AIC, rmsea = as.numeric(f$RMSEA[1]))
+	converged <- !any(is.na(se))
+	list(coef = coef, se = se, fit = fit, converged = converged)
+}
+
+Output15 <- sim(nRep = totalRep, model = FUN, n = list(150, 100), generate = CFA.Model, group = "group")
+summary(Output15)
+
 # 2. Provide a list of data
 
 library(MASS)
@@ -281,6 +312,11 @@ summary(Output23)
 Output24 <- sim(model = mxTwoGroupModel, rawData = data.l)
 summary(Output24)
 
+# 2.5 Analyze by function using lava
+
+Output25 <- sim(model = FUN, rawData = data.l)
+summary(Output25)
+
 # 3. Provide a population data
 
 scores1 <- cbind(mvrnorm(15000, rep(0, 6), modelImplied), 1)
@@ -311,6 +347,11 @@ summary(Output33)
 
 Output34 <- sim(nRep = totalRep, model = mxTwoGroupModel, n = list(150, 100), rawData = popData)
 summary(Output34)
+
+# 3.5 Analyze by function using lava
+
+Output35 <- im(nRep = totalRep, model = FUN, n = list(150, 100), rawData = popData)
+summary(Output35)
 
 # 4. lavaan script for simulate data
 
@@ -349,6 +390,11 @@ summaryParam(Output43, matchParam = TRUE)
 Output44 <- sim(nRep = totalRep, model = mxTwoGroupModel, n = list(150, 100), generate = genscript)
 summary(Output44)
 
+# 4.5 Analyze by function using lava
+
+Output45 <- sim(nRep = totalRep, model = FUN, n = list(150, 100), generate = genscript)
+summary(Output45)
+
 # 5. OpenMx Model
 
 # The data generation and data analysis are the same models (since the parameter values are fixed as starting values)
@@ -372,3 +418,8 @@ summary(Output53)
 
 Output54 <- sim(nRep = totalRep, model = mxTwoGroupModel, n = list(150, 100), generate = mxTwoGroupModel)
 summary(Output54)
+
+# 5.5 Analyze by function using lava
+
+Output55 <- sim(nRep = totalRep, model = FUN, n = list(150, 100), generate = mxTwoGroupModel)
+summary(Output55)

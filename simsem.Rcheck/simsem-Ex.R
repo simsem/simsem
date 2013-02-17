@@ -2602,6 +2602,20 @@ summary(Output)
 # Get modification indices
 getExtraOutput(Output)
 
+# Example of analyze using a function
+
+analyzeFUN <- function(data) {
+	out <- lm(y2 ~ y1, data=data)
+	coef <- coef(out)
+	se <- sqrt(diag(vcov(out)))
+	fit <- c(loglik = as.numeric(logLik(out)))
+	converged <- TRUE # Assume to be convergent all the time
+	return(list(coef = coef, se = se, fit = fit, converged = converged))
+}
+
+Output <- sim(5, model=analyzeFUN, n=200, rawData=pop, lavaanfun = "cfa")
+summary(Output)
+
 
 
 cleanEx()

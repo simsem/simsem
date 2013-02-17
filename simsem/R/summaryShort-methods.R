@@ -60,8 +60,11 @@ setMethod("summaryShort", signature = "SimResult", definition = function(object,
 		} else {
 			cat(paste("Percent Missing at Random:", unique(object@pmMAR),"\n"))
 		}
-		cat("========= Fit Indices Cutoffs ============\n")
-		print(round(summaryFit(cleanObj, alpha = alpha), digits))
+		haveFit <- length(colnames(object@fit)) > 0
+		if(haveFit) {
+			cat("========= Fit Indices Cutoffs ============\n")
+			print(round(summaryFit(object, alpha = alpha), digits))
+		}
 		if (!is.null(object@paramValue)) {
 			targetVar <- match(colnames(object@coef), colnames(object@paramValue))
 			targetVar <- targetVar[!is.na(targetVar)]

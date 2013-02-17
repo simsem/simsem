@@ -22,7 +22,7 @@ dataOnly=FALSE, smartStart=FALSE, previousSim = NULL, completeRep = FALSE,  ...)
 	Number of replications. If any of the \code{n}, \code{pmMCAR}, or \code{pmMAR} arguments are specified as lists, the number of replications will default to the length of the list(s), and \code{nRep} need not be specified.
 }
   \item{model}{
-	There are three options for this argument: 1. \code{\linkS4class{SimSem}} object created by \code{\link{model}}, 2. \code{lavaan} script, \code{lavaan} parameter table, or a list that contains all argument that users use to run \code{lavaan} (including \code{cfa}, \code{sem}, \code{lavaan}), or 3. \code{MxModel} object from the \code{OpenMx} package. For the \code{\linkS4class{SimSem}} object, if the \code{generate} argument is not specified, then the object in the \code{model} argument will be used for both data generation and analysis. If \code{generate} is specified, then the \code{model} argument will be used for data analysis only. 
+	There are three options for this argument: 1. \code{\linkS4class{SimSem}} object created by \code{\link{model}}, 2. \code{lavaan} script, \code{lavaan} parameter table, or a list that contains all argument that users use to run \code{lavaan} (including \code{cfa}, \code{sem}, \code{lavaan}), 3. \code{MxModel} object from the \code{OpenMx} package, or 4. a function that takes a data set and return a list of \code{coef}, \code{se}, and \code{converged} (see details below). For the \code{\linkS4class{SimSem}} object, if the \code{generate} argument is not specified, then the object in the \code{model} argument will be used for both data generation and analysis. If \code{generate} is specified, then the \code{model} argument will be used for data analysis only. 
 }
   \item{n}{
 	Sample size. Either a single value, or a list of values to vary sample size across replications. The \code{n} argument can also be specified as a random distribution object; if any resulting values are non-integers, the decimal will be rounded. 
@@ -156,11 +156,12 @@ There are five ways to provide or generate data in this function:
 
 Note that all generated or provided data can be transformed based on Bollen-Stine approach by providing a real data in the \code{realData} argument if any of the first three methods are used.
 	
-There are three ways to analyze the data sets for each replication by setting the \code{model} argument as
+There are four ways to analyze the data sets for each replication by setting the \code{model} argument as
 \enumerate{
 		\item \code{\linkS4class{SimSem}} can be used as a template for data analysis. 
 		\item \code{lavaan} script, parameter table for the \code{lavaan} package, or a list of arguments for the \code{\link[lavaan]{lavaan}}, \code{\link[lavaan]{sem}}, \code{\link[lavaan]{cfa}}, or \code{\link[lavaan]{growth}} function. Note that if the desired function to analyze data can be specified in the \code{lavaanfun} argument, which the default is the \code{\link[lavaan]{lavaan}} function
 		\item \code{MxModel} object from the \code{OpenMx} package. The object does not need to have data inside. Note that if users need an extensive fit indices, the \code{mxFit} argument should be specified as \code{TRUE}. If users wish to analyze by mixture model, the \code{mxMixture} argument should be \code{TRUE} such that the \code{sim} function knows how to handle the data.
+		\item A function that takes a data set and returns a list. The list must contain at least three objects: a vector of parameter estimates (\code{coef}), a vector of standard error (\code{se}), and the convergence status as \code{TRUE} or \code{FALSE} (\code{converged}). There are five optional objects in the list: a vector of fit indices (\code{fit}), a vector of standardized estimates (\code{std}), any extra output (\code{extra}), fraction missing type I (\code{FMI1}), and fraction missing type II (\code{FMI2}). Note that the \code{coef}, \code{se}, \code{std}, \code{FMI1}, and \code{FMI2} must be a vector with names. The name of those vectors across different objects must be the same.
 	}
 	
 Any combination of data-generation methods and data-analysis methods are valid. For example, data can be simulated using lavaan script and analyzed by \code{MxModel}.  Paralleled processing can be enabled using the \code{multicore} argument. 
@@ -253,5 +254,19 @@ summary(Output)
 
 # Get modification indices
 getExtraOutput(Output)
+
+# Example of analyze using a function
+
+analyzeFUN <- function(data) {
+	out <- lm(y2 ~ y1, data=data)
+	coef <- coef(out)
+	se <- sqrt(diag(vcov(out)))
+	fit <- c(loglik = as.numeric(logLik(out)))
+	converged <- TRUE # Assume to be convergent all the time
+	return(list(coef = coef, se = se, fit = fit, converged = converged))
+}
+
+Output <- sim(5, model=analyzeFUN, n=200, rawData=pop, lavaanfun = "cfa")
+summary(Output)
 }
 

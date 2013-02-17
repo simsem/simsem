@@ -69,23 +69,28 @@ setMethod("summary", signature = "SimResult", definition = function(object, digi
     print(object@modelType)
     cleanObj <- clean(object)
     if(!object@paramOnly) {
-		cat("========= Fit Indices Cutoffs ============\n")
-		print(round(summaryFit(object, alpha = alpha), digits))
+		haveFit <- length(colnames(object@fit)) > 0
+		if(haveFit) {
+			cat("========= Fit Indices Cutoffs ============\n")
+			print(round(summaryFit(object, alpha = alpha), digits))
+		}
 		cat("========= Parameter Estimates and Standard Errors ============\n")
 		print(summaryParam(object, digits=digits))
 		# Correlation between Fit Indices
-		fit <- cleanObj@fit[, usedFit]
-		if (length(unique(object@n)) > 1) 
-			fit <- data.frame(fit, n = cleanObj@n)
-		if (length(unique(object@pmMCAR)) > 1) 
-			fit <- data.frame(fit, pmMCAR = cleanObj@pmMCAR)
-		if (length(unique(object@pmMAR)) > 1) 
-			fit <- data.frame(fit, pmMAR = cleanObj@pmMAR)
-		if(nrow(fit) > 1) {
-			variableCol <- apply(fit, 2, sd, na.rm=TRUE) > 0
-			if(sum(variableCol) >= 2) {
-				cat("========= Correlation between Fit Indices ============\n")
-				print(round(cor(fit[,variableCol]), digits))
+		if(haveFit) {
+			fit <- cleanObj@fit[, usedFit, drop = FALSE]
+			if (length(unique(object@n)) > 1) 
+				fit <- data.frame(fit, n = cleanObj@n)
+			if (length(unique(object@pmMCAR)) > 1) 
+				fit <- data.frame(fit, pmMCAR = cleanObj@pmMCAR)
+			if (length(unique(object@pmMAR)) > 1) 
+				fit <- data.frame(fit, pmMAR = cleanObj@pmMAR)
+			if(nrow(fit) > 1) {
+				variableCol <- apply(fit, 2, sd, na.rm=TRUE) > 0
+				if(sum(variableCol) >= 2) {
+					cat("========= Correlation between Fit Indices ============\n")
+					print(round(cor(fit[,variableCol]), digits))
+				}
 			}
 		}
 		cat("================== Replications =====================\n")
@@ -236,6 +241,7 @@ printIfNotNull <- function(object, name = NULL) {
 
 cleanUsedFit <- function(txt, ...) {
 	arg <- list(...)
+	txtOrig <- txt
     if (is.null(txt)) {
 		if("chisq.scaled" %in% arg[[1]]) {
 			txt <- getKeywords()$usedFitScaled
@@ -249,7 +255,13 @@ cleanUsedFit <- function(txt, ...) {
 	}
 	if(length(arg) > 0) {
 		txt <- intersection(txt, ...)
-		if(length(txt) == 0) stop("The name of fit indices does not match with the saved fit indices.")
+		if(length(txt) == 0) {
+			if(is.null(txtOrig)) {
+				txt <- intersection(arg[[1]], ...)
+			} else {
+				stop("The name of fit indices does not match with the saved fit indices.")
+			}
+		}
 	}
 	txt
 }
