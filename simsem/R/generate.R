@@ -431,50 +431,48 @@ semMACS <- function(param) {
 
 lavaanSimulateData <- function(
                          # user-specified model
-                         model           = NULL,
-                         model.type      = "sem",
+                         model = NULL,
+                         model.type = "sem",
+						 indDist = NULL,
 
                          # model modifiers
-                         meanstructure   = FALSE,
-                         int.ov.free     = TRUE,
-                         int.lv.free     = FALSE,
-                         fixed.x         = FALSE,
-                         orthogonal      = FALSE,
-                         std.lv          = TRUE,
+                         meanstructure = FALSE,
+                         int.ov.free = TRUE,
+                         int.lv.free = FALSE,
+                         fixed.x = FALSE,
+                         orthogonal = FALSE,
+                         std.lv = TRUE,
 
-                         auto.fix.first  = FALSE,
+                         auto.fix.first = FALSE,
                          auto.fix.single = FALSE,
-                         auto.var        = TRUE,
-                         auto.cov.lv.x   = TRUE,
-                         auto.cov.y      = TRUE,
+                         auto.var = TRUE,
+                         auto.cov.lv.x = TRUE,
+                         auto.cov.y = TRUE,
                          ...,
 
                          # data properties
-                         sample.nobs     = 500L,
-                         ov.var          = NULL,
-                         group.label     = paste("G", 1:ngroups, sep=""),
-                         skewness        = NULL,
-                         kurtosis        = NULL,
+                         sample.nobs = 500L,
+                         ov.var = NULL,
+                         group.label = paste("G", 1:ngroups, sep=""),
 
                          # control
                          seed = NULL,
-                         empirical = FALSE,
 
-                         return.type = "data.frame",
                          return.fit = FALSE,
-						 indDist = NULL
+                         debug = FALSE,
+                         standardized = FALSE
                         )
 {
     if(!is.null(seed)) set.seed(seed)
     if(!exists(".Random.seed", envir = .GlobalEnv))
-        runif(1)               # initialize the RNG if necessary
+        runif(1) # initialize the RNG if necessary
     RNGstate <- .Random.seed
 	
 	if(!is.list(model)) {
-    # lavaanify
-		lav <- lavaanify(model = model, 
+		# lavaanify
+		lav <- lavaanify(model = model,
 						 meanstructure=meanstructure,
-						 int.ov.free=int.ov.free, 
+						 int.ov.free=int.ov.free,
 						 int.lv.free=int.lv.free,
 						 fixed.x=fixed.x,
 						 orthogonal=orthogonal,
@@ -485,6 +483,11 @@ lavaanSimulateData <- function(
 						 auto.cov.lv.x=auto.cov.lv.x,
 						 auto.cov.y=auto.cov.y,
 						 ngroups=length(sample.nobs))
+
+		if(debug) {
+			cat("initial lav\n")
+			print(as.data.frame(lav))
+		}
 	} else {
 		lav <- model
 	}
@@ -498,8 +501,46 @@ lavaanSimulateData <- function(
     idx <- which(is.na(lav$ustart))
     if(length(idx) > 0L) lav$ustart[idx] <- 0.0
 
+	if(standardized) {
+        # check if factor loadings are smaller than 1.0
+        lambda.idx <- which(lav$op == "=~")
+        if(any(lav$ustart[lambda.idx] >= 1.0)) {
+            warning("lavaan WARNING: standardized=TRUE but factor loadings are >= 1.0")
+        }
 
-    # unstandardize 
+        # check if regression coefficients are smaller than 1.0
+        reg.idx <- which(lav$op == "~")
+        if(any(lav$ustart[reg.idx] >= 1.0)) {
+            warning("lavaan WARNING: standardized=TRUE but regression coefficients are >= 1.0")
+        }
+
+        # for ordered observed variables, we will get '0.0', but that is ok
+        # so there is no need to make a distinction between numeric/ordered
+        # here??
+        lav2 <- lav
+        ngroups <- max(lav$group)
+        ov.names <- lavaan:::vnames(lav, "ov")
+        ov.var.idx <- which(lav$op == "~~" & lav$lhs %in% ov.names &
+                            lav$rhs == lav$lhs)
+        if(any(lav2$user[ov.var.idx] > 0L)) {
+            warning("lavaan WARNING: if residual variances are specified, please use standardized=FALSE")
+        }
+        lav2$ustart[ov.var.idx] <- 0.0
+        fit <- lavaan(model=lav2, sample.nobs=sample.nobs, ...)
+        Sigma.hat <- lavaan:::computeSigmaHat(fit@Model)
+        for(g in 1:ngroups) {
+            var.group <- which(lav$op == "~~" & lav$lhs %in% ov.names &
+                               lav$rhs == lav$lhs & lav$group == g)
+            lav$ustart[var.group] <- 1 - diag(Sigma.hat[[g]])
+        }
+
+        if(debug) {
+            cat("after standardisation lav\n")
+            print(as.data.frame(lav))
+        }
+    }
+
+    # unstandardize
     if(!is.null(ov.var)) {
         # FIXME: if ov.var is named, check the order of the elements
 
@@ -507,46 +548,34 @@ lavaanSimulateData <- function(
         lav$ustart <- lavaan:::unstandardize.est.ov(partable=lav, ov.var=ov.var)
 
         # 2. unstandardized latent variables
+
+        if(debug) {
+            cat("after unstandardisation lav\n")
+            print(as.data.frame(lav))
+        }
     }
 
 
-    # basic fit (ignoring thresholds
-    ord.idx <- which(lav$op == "|")
-    if(length(ord.idx) > 0L) {
-        lav.no_ord <- lav[-ord.idx,]
-    } else {
-        lav.no_ord <- lav
-    }
-    fit <- lavaan(model=lav.no_ord, sample.nobs=sample.nobs,  ...)
+    # fit the model without data
+    fit <- lavaan(model=lav, sample.nobs=sample.nobs, ...)
 
     # the model-implied moments for the population
     Sigma.hat <- lavaan:::computeSigmaHat(fit@Model)
        Mu.hat <- lavaan:::computeMuHat(fit@Model)
+    if(fit@Model@categorical) {
+       TH <- lavaan:::computeTH(fit@Model)
+    }
+
+    if(debug) {
+        print(Sigma.hat)
+        print(Mu.hat)
+        if(exists("TH")) print(TH)
+    }
 	   
-	# To be deleted if the Mu.hat is not wrong anymore and the lavaan version changed to 0.5-12
-	for(g in seq_along(Sigma.hat)) {
-		ov.ord <- lavaan:::vnames(lav, type="ov.ord", group=g)
-		ov.names <- lavaan:::vnames(lav, type="ov", group=g)
-		for(o in ov.ord) {
-			o.idx <- which(o == ov.names)
-			tv.idx <- which(lav$op == "~*~" & lav$lhs == o)
-			if(length(tv.idx) == 0) {
-				th.idx <- which(lav$op == "~~" & lav$lhs == o & lav$user == 1)
-				if(length(th.idx) == 0) {
-					tv <- 1
-				} else {
-					tv <- NULL
-				}
-			} else {
-				tv <- lav$ustart[tv.idx]
-			}
-			if(!is.null(tv)) Sigma.hat[[g]][o.idx, o.idx] <- tv
-		}
-	}
-    # ngroups
+   # ngroups
     ngroups <- length(sample.nobs)
 
-    # prepare 
+    # prepare
     X <- vector("list", length=ngroups)
     out <- vector("list", length=ngroups)
 
@@ -556,60 +585,40 @@ lavaanSimulateData <- function(
 	
     for(g in 1:ngroups) {
         X[[g]] <- dataGen(dataDist = indDist[[g]], n = sample.nobs[g], m = Mu.hat[[g]], cm = Sigma.hat[[g]])
+		X[[g]] <- as.data.frame(X[[g]])
 
-        # any categorical variables?
-        if(return.type == "data.frame") X[[g]] <- as.data.frame(X[[g]])
-
+		# any categorical variables?
         ov.ord <- lavaan:::vnames(lav, type="ov.ord", group=g)
         if(length(ov.ord) > 0L) {
             ov.names <- lavaan:::vnames(lav, type="ov", group=g)
-            # use thresholds to cut -- after standardization?
+            # use thresholds to cut
             for(o in ov.ord) {
                 o.idx <- which(o == ov.names)
-                th.idx <- which(lav$op == "|" & lav$lhs == o)
+                th.idx <- which(lav$op == "|" & lav$lhs == o & lav$group == g)
                 th.val <- c(-Inf,sort(lav$ustart[th.idx]),+Inf)
-                # scale!!
-                xz <- scale(X[[g]][,o.idx])
-				lev <- 1:(length(setdiff(th.val, NA))-1)
-                X[[g]][,o.idx] <- factor(as.numeric(cut(xz, th.val)), levels= lev, labels=lev, exclude=NA, ordered=TRUE)
+                X[[g]][,o.idx] <- as.integer(cut(X[[g]][,o.idx], th.val))
             }
         }
 
+        X[[g]] <- as.data.frame(X[[g]])
+
     }
 
-    if(return.type == "matrix") {
-        if(ngroups == 1L) {
-            return(X[[1L]])
-        } else {
-            return(X)
-        }
-
-    } else if (return.type == "data.frame") {
-        Data <- X[[1L]]
-
-        # if multiple groups, add group column
-        if(ngroups > 1L) {
-            for(g in 2:ngroups) {
-                Data <- rbind(Data, X[[g]])
-            }
-            Data$group <- rep(1:ngroups, times=sample.nobs)
-        }
-        var.names <- lavaan:::vnames(fit@ParTable, type="ov", group=1L)
-        if(ngroups > 1L) var.names <- c(var.names, "group")
-        names(Data) <- var.names
-        if(return.fit) {
-            attr(Data, "fit") <- fit
-        }
-        return(Data)
-
-    } else if (return.type == "cov") {
-        if(ngroups == 1L) {
-            return(cov(X[[1L]]))
-        } else {
-            cov.list <- lapply(X, cov)
-            return(cov.list)
-        }
-    }
+	Data <- X[[1L]]
+	# if multiple groups, add group column
+	if(ngroups > 1L) {
+		for(g in 2:ngroups) {
+			Data <- rbind(Data, X[[g]])
+		}
+		Data$group <- rep(1:ngroups, times=sample.nobs)
+	}
+	var.names <- lavaan:::vnames(fit@ParTable, type="ov", group=1L)
+	if(ngroups > 1L) var.names <- c(var.names, "group")
+	names(Data) <- var.names
+	if(return.fit) {
+		attr(Data, "fit") <- fit
+	}
+	return(Data)
 }
 
 fleishman1978_abcd <- function(skewness, kurtosis) {

@@ -421,11 +421,10 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, rawData = 
 		
 		if(lavaanGenerate) {
 			if(!is.partable(generate$model)) {
-				lavaanifyargs <- formals(lavaanify)
-				commonname <- intersect(names(lavaanifyargs), names(generate))
-				temp <- generate[commonname]
-				temp$ngroups <- ngroups
-				pt <- do.call("lavaanify", temp)
+				generate2 <- generate
+				generate2$sample.nobs <- simConds[[1]][[2]]
+				generate2$return.fit <- TRUE
+				pt <- parTable(attr(do.call(lavaan:::simulateData, generate2), "fit"))
 			} else {
 				pt <- generate$model
 			}

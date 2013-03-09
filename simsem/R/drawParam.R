@@ -706,7 +706,7 @@ popDiscrepancy <- function(paramM, paramCM, misspecM, misspecCM) {
 cov2corMod <- function(V) {
     targetCol <- which(diag(V) != 0)
     if (!length(targetCol) == 0) {
-        V[targetCol, targetCol] <- cov2cor(V[targetCol, targetCol])
+        V[targetCol, targetCol] <- cov2cor(V[targetCol, targetCol, drop=FALSE])
     }
     return(V)
 }
@@ -755,7 +755,6 @@ equalCon <- function(pls, dgen, fill=FALSE, con=NULL) {
 
 
 extractLab <- function(pls, dgen, fill=FALSE, con=NULL) {
-
 	free <- lapply(dgen, function(x) lapply(x, function(y) if(is.null(y)) { return(NULL) } else { return(slot(y, "free")) }))
 	if(fill) {
 		
@@ -808,11 +807,15 @@ extractLab <- function(pls, dgen, fill=FALSE, con=NULL) {
 			free[[i]][names(temp)] <- temp
 		}
 	}
-	free2 <- do.call(c, lapply(free, function(x) do.call(c, x)))
+	freetemp1 <- lapply(free, function(x) do.call(c, x))
+	freetemp2 <- mapply(function(x, k) {names(x) <- paste0(names(x), "_", k); x}, x = freetemp1, k = seq_along(free), SIMPLIFY = FALSE)
+	free2 <- do.call(c, freetemp2)
 	lab <- free2[is.na(suppressWarnings(as.numeric(as.vector(free2)))) & !is.na(free2)]
 	target <- unique(lab) #[duplicated(lab)])
 	val <- lapply(pls, function(x) lapply(x, function(y) if(is.null(y)) { return(NULL) } else { return(y) }))
-	val2 <- do.call(c, lapply(val, function(x) do.call(c, x)))
+	valtemp1 <- lapply(val, function(x) do.call(c, x))
+	valtemp2 <- mapply(function(x, k) {names(x) <- paste0(names(x), "_", k); x}, x = valtemp1, k = seq_along(val), SIMPLIFY = FALSE)
+	val2 <- do.call(c, valtemp2)
 	val2 <- val2[match(names(free2), names(val2))]
 	realval <- val2[is.na(suppressWarnings(as.numeric(as.vector(free2)))) & !is.na(free2)]
 	realval <- realval[match(target, lab)]

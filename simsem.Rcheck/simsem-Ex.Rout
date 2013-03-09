@@ -1,6 +1,6 @@
 
-R version 2.15.2 (2012-10-26) -- "Trick or Treat"
-Copyright (C) 2012 The R Foundation for Statistical Computing
+R version 2.15.3 (2013-03-01) -- "Security Blanket"
+Copyright (C) 2013 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 Platform: i386-w64-mingw32/i386 (32-bit)
 
@@ -29,11 +29,11 @@ Loading required package: boot
 Loading required package: mnormt
 Loading required package: pbivnorm
 Loading required package: quadprog
-This is lavaan 0.5-11
+This is lavaan 0.5-12
 lavaan is BETA software! Please report any bugs.
  
 ###############################################################################################
-This is simsem 0.5-1
+This is simsem 0.5-2
 simsem is BETA software! Please report any bugs.
 simsem was developed at the University of Kansas Center for Research Methods and Data Analysis.
 ###############################################################################################
@@ -4303,7 +4303,7 @@ Proportion of MCAR: 0.1
 > #Analyze data
 > out <- analyze(CFA.Model, datmiss)
 > summary(out)
-lavaan (0.5-11) converged normally after  24 iterations
+lavaan (0.5-12) converged normally after  24 iterations
 
   Number of observations                            20
 
@@ -5680,28 +5680,28 @@ Model Type
            Alpha
 Fit Indices      0.1     0.05     0.01    0.001     Mean     SD
       chisq    0.000    0.000    0.000    0.000    0.000  0.000
-      aic   1142.931 1153.299 1161.594 1163.460 1113.425 29.748
-      bic   1152.826 1163.194 1171.489 1173.355 1123.320 29.748
+      aic   1164.316 1172.151 1178.420 1179.830 1135.994 26.617
+      bic   1174.211 1182.046 1188.315 1189.725 1145.889 26.617
       rmsea    0.000    0.000    0.000    0.000    0.000  0.000
-      cfi      0.400    0.200    0.040    0.004    0.800  0.447
+      cfi      0.000    0.000    0.000    0.000    0.600  0.548
       tli      1.000    1.000    1.000    1.000    1.000  0.000
       srmr     0.000    0.000    0.000    0.000    0.000  0.000
 ========= Parameter Estimates and Standard Errors ============
        Estimate.Average Estimate.SD Average.SE Power..Not.equal.0. Std.Est
-y1~~y2            0.011       0.101      0.067                 0.2   0.017
-y1~~y1            0.924       0.056      0.092                 1.0   1.000
-y2~~y2            0.960       0.134      0.096                 1.0   1.000
+y1~~y2           -0.007       0.097      0.070                   0  -0.004
+y1~~y1            0.995       0.059      0.099                   1   1.000
+y2~~y2            0.993       0.107      0.099                   1   1.000
        Std.Est.SD Average.Param Average.Bias Coverage
-y1~~y2      0.105        -0.002        0.013      0.8
-y1~~y1      0.000         1.004       -0.080      1.0
-y2~~y2      0.000         0.999       -0.039      1.0
+y1~~y2      0.095        -0.002       -0.004        1
+y1~~y1      0.000         1.004       -0.009        1
+y2~~y2      0.000         0.999       -0.006        1
 ========= Correlation between Fit Indices ============
        chisq    aic    bic    cfi   srmr
-chisq  1.000 -0.030 -0.030 -1.000  0.827
-aic   -0.030  1.000  1.000  0.030 -0.372
-bic   -0.030  1.000  1.000  0.030 -0.372
-cfi   -1.000  0.030  0.030  1.000 -0.827
-srmr   0.827 -0.372 -0.372 -0.827  1.000
+chisq  1.000 -0.539 -0.539 -0.537  0.967
+aic   -0.539  1.000  1.000  0.659 -0.716
+bic   -0.539  1.000  1.000  0.659 -0.716
+cfi   -0.537  0.659  0.659  1.000 -0.678
+srmr   0.967 -0.716 -0.716 -0.678  1.000
 ================== Replications =====================
 Number of replications = 5 
 Number of converged replications = 5 
@@ -6056,14 +6056,14 @@ Model Type
 ========= Fit Indices Cutoffs ============
            Alpha
 Fit Indices      0.1     0.05     0.01    0.001     Mean     SD
-     loglik -268.388 -267.833 -267.389 -267.289 -278.003 13.231
+     loglik -271.718 -269.524 -267.769 -267.374 -281.864 10.486
 ========= Parameter Estimates and Standard Errors ============
             Estimate.Average Estimate.SD Average.SE Power..Not.equal.0.
-(Intercept)           -0.013       0.074      0.069                 0.0
-y1                     0.015       0.108      0.072                 0.2
+(Intercept)            0.007       0.087      0.071                   0
+y1                    -0.003       0.097      0.071                   0
             Average.Param Average.Bias Coverage
-(Intercept)         0.001       -0.013      1.0
-y1                 -0.002        0.017      0.8
+(Intercept)         0.002        0.005      1.0
+y1                 -0.002       -0.001      0.8
 ================== Replications =====================
 Number of replications = 5 
 Number of converged replications = 5 
@@ -6435,7 +6435,7 @@ detaching 'package:parallel'
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  11.32 0.17 11.61 NA NA 
+Time elapsed:  10.7 0.23 11.01 NA NA 
 > grDevices::dev.off()
 null device 
           1 

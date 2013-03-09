@@ -15,7 +15,7 @@ Slabels <- matrix(NA, 6, 6)
 diag(Slabels)[1:4] <- paste("resid", 1:4)
 
 Svalues2 <- diag(c(rep(0.5, 4), 1, 0.25))
-Svalues2[6, 7] <- Svalues2[7, 6] <- 0.05
+Svalues2[5, 6] <- Svalues2[6, 5] <- 0.05
 
 Fvalues <- cbind(diag(4), matrix(0, 4, 2))
 

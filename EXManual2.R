@@ -45,16 +45,6 @@ dir <- "C:/Users/student/Dropbox/simsem/simsem/R/"
 # tidy.dir(dir)
 
 
-
-
-
-
-
-
-
-
-
-
 loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
