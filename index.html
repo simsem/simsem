@@ -42,25 +42,13 @@
 
 </ol><h2>Announcements</h2>
 
+<h3>[March 17, 2013] Latest Update: simsem, Version 0.5-3</h3>
+
+<p>This version is available on CRAN and KRAN. This simulation result of this version can save confidence interval computed by any methods (e.g., bootstrap or profile-likelihood). The coverage rate can be investigated by <strong>getCoverage</strong>, <strong>findCoverage</strong>, and <strong>plotCoverage</strong> functions. The confidence interval widths can be investigated by <strong>getCIwidth</strong> and <strong>plotCIwidth</strong>, which allows users to estimate sample size and percent missing for accuracy in parameter estimation. The <strong>inspect</strong> function is written to extract the information from the simulation result, such as <strong>inspect(Output, "fit")</strong> for fit indices of convergent replications. The <strong>summaryTime</strong>, <strong>summarySeed</strong>, and <strong>coef</strong> are also written to extract information from the simulation result. The <strong>empirical</strong> argument is added into the <strong>generate</strong> and <strong>createData</strong> functions to create multivariate normal data with the sample statistics equal to the model-implied means and covariance matrix from the provided parameters.</p>
+
 <h3>[March 9, 2013] Latest Update: simsem, Version 0.5-2</h3>
 
 <p>This version is available on KRAN. The major update in this function is that users can write a function that returns vectors of parameter estimates, standard errors, fit indices, and convergence status and specify it in the <em>model</em> argument in the <strong>sim</strong> function. See the help page of the <strong>sim</strong> function for an example. A minor bug in multiple group analysis was fixed.</p>
-
-<h3>[February 10, 2013] Latest Update: simsem, Version 0.5-0</h3>
-
-<p>This version is available on CRAN and KRAN. Here is a list of major updates:</p>
-
-<ol>
-<li>The <em>generate</em> and <em>model</em> arguments for the <strong>sim</strong> function can take three formats: simsem template (as previous versions), lavaan script (or lavaan parameter table or a list of arguments for the simulateData, lavaan, cfa, sem, or growth functions), or an OpenMx object. See more details and the example scripts in the vignette.
-<li>The <strong>generate</strong> function can take simsem template, lavaan script, and an OpenMx object. If OpenMx object has definition variables, users need to provide the data of definition variables (in the <em>covData</em> argument) and the model parameters are specified based on the definition variables.
-<li>The <strong>analyze</strong> function can take simsem template and OpenMx object
-<li>In the simsem template format, users can add exogenous covariates for data generation, which can take any distributions (or even dummy variables). The KA and GA arguments are added to the model function to account for the effects of exogenous covariates on indicators or factors respectively. Users need to create their own covariate data and add to the <em>covData</em> argument in the <strong>generate</strong> or <strong>sim</strong> functions.
-<li>Nonnormal data can be created from Vale and Maurelli's (1983) method. Users can simply specify the <em>skewness</em> and <em>kurtosis</em> arguments in the <strong>bindDist</strong> function.
-<li>All arguments that take characters will be case-insensitive.
-<li>The <strong>combineSim</strong> function is added to combine multiple (similar) simulation results into a single simulation result
-<li>The <strong>sim</strong> function has an <em>completeRep</em> argument. If the argument is specified as TRUE, the simulation will be run until the number of convergent replications is equal to or greater than the specified number of replications.
-<li>Some minor bugs were fixed.
-</ol>
 
 <h2>Main Developers</h2>
 

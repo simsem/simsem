@@ -33,6 +33,22 @@
       <section id="main_content" class="inner">
         <h1>Version History (Technical)</h1>
 
+<h2>Version 0.5-3 03/17/13</h2>
+
+<ul>
+<li>Add empirical argument to generate and createData functions
+<li>Add cilower and ciupper slots in the SimResult class. Change the combineSim and clean functions according to the adjustment
+<li>Add cilevel and citype arguments in the sim function to pass through the parameterEstimates function in lavaan
+<li>Change plotCutoff and getCutoff methods into functions and change other functions using these functions accordingly
+<li>Add getCIwidth and plotCIwidth function
+<li>Add continuousConverage, getCoverage, findCovarege, and plotCoverage functions
+<li>Change the sim function to specify lavaan script in the model argument only (do not need to specify the generate function)
+<li>Add summaryTime, summarySeed, coef, and inspect functions to investigate results
+<li>Add the improper and nonconverged argument on the getPopulation and getExtraOutput functions
+<li>The timing slot of SimResult has starting time and end time
+<li>Edit some example wrong codes and typos in the documentation
+</ul> 
+
 <h2>Version 0.5-2 03/09/13</h2>
 
 <ul>
