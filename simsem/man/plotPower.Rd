@@ -15,7 +15,7 @@ plotPower(object, powerParam, alpha = 0.05, contParam = NULL, contN = TRUE,
 	\code{\linkS4class{SimResult}} that includes at least one randomly varying parameter (e.g. sample size, percent missing, model parameters)
 }
   \item{powerParam}{
-	Vector of parameters names that the user wishes to find power for. This can be a vector of names (e.g., "LY1_1", "LY2_2").
+	Vector of parameters names that the user wishes to find power for. This can be a vector of names (e.g., "f1=~y2", "f1~~f2").
 }
   \item{alpha}{
 	Alpha level to use for power analysis.
@@ -66,9 +66,9 @@ CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA")
 Output <- sim(NULL, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2), model=CFA.Model)
 
 # Plot the power of the first factor loading along the sample size value
-plotPower(Output, "1.f1=~y1", contMCAR=FALSE)
+plotPower(Output, "f1=~y1", contMCAR=FALSE)
 
 # Plot the power of the correlation along the sample size and percent missing completely at random
-plotPower(Output, "1.f1=~y1")
+plotPower(Output, "f1=~y1")
 }
 }

@@ -127,7 +127,7 @@ getPowerFitNestedNullObj <- function(altNested, altParent,
     nullFit <- as.data.frame((nullNested@fit - nullParent@fit)[, usedFit])
     temp <- rep(NA, length(usedFit))
     if (is.null(condValue)) {
-        usedCutoff <- as.vector(t(getCutoff(nullFit, alpha = alpha, usedFit = usedFit)))
+        usedCutoff <- as.vector(t(getCutoffDataFrame(nullFit, alpha = alpha, usedFit = usedFit)))
         names(usedCutoff) <- usedFit
         temp <- pValueDataFrame(usedCutoff, usedDist, revDirec = usedDirec)
 		names(temp) <- usedFit
@@ -137,7 +137,7 @@ getPowerFitNestedNullObj <- function(altNested, altParent,
 			temp <- c("TraditionalChi" = powerChi, temp)
 		}
     } else {
-        varyingCutoff <- getCutoff(object = nullFit, alpha = alpha, revDirec = FALSE, 
+        varyingCutoff <- getCutoffDataFrame(object = nullFit, alpha = alpha, revDirec = FALSE, 
             usedFit = usedFit, predictor = condValue, df = df, predictorVal = "all")
         for (i in 1:length(temp)) {
             temp[i] <- pValueVariedCutoff(varyingCutoff[, i], usedDist[, i], revDirec = usedDirec[i], 

@@ -26,6 +26,8 @@ Objects can be created by \code{\link{sim}}.
 	\item{\code{popFit}:}{The amount of population misfit. See details at \code{\link{summaryMisspec}}}
 	\item{\code{FMI1}:}{Fraction Missing Method 1.}
 	\item{\code{FMI2}:}{Fraction Missing Method 2.}
+	\item{\code{cilower}:}{Lower bounds of confidence interval.}
+	\item{\code{ciupper}:}{Upper bounds of confidence interval.}
 	\item{\code{stdCoef}:}{Standardized coefficients from each replication}
 	\item{\code{n}:}{The total sample size of the analyzed data.}
 	\item{\code{nobs}:}{The sample size within each group.}
@@ -39,7 +41,11 @@ Objects can be created by \code{\link{sim}}.
 	The following methods are listed alphabetically. More details can be found by following the link of each method.
 	\itemize{
 		\item \code{\link[=anova,SimResult-method]{anova}} to find the averages of model fit statistics and indices for nested models, as well as the differences of model fit indices among models. This function requires at least two \code{SimResult} objects. 
+		\item \code{\link[=coef,SimResult-method]{coef}} to extract parameter estimates of each replication
+		\item \code{\link{findCoverage}} to find a value of independent variables (e.g., sample size) that provides a given value of coverage rate.
 		\item \code{\link{findPower}} to find a value of independent variables (e.g., sample size) that provides a given value of power of a parameter estimate. 
+		\item \code{\link{getCoverage}} to get the coverage rate of the confidence interval of each parameter estimate
+		\item \code{\link{getCIwidth}} to get a median or percentile rank (assurance) of confidence interval widths of parameters estimates
 		\item \code{\link{getCutoff}} to get the cutoff of fit indices based on a priori alpha level.
 		\item \code{\link{getCutoffNested}} to get the cutoff of the difference in fit indices of nested models based on a priori alpha level. 
 		\item \code{\link{getCutoffNonNested}} to get the cutoff of the difference in fit indices of nonnested models based on a priori alpha level. 
@@ -49,7 +55,10 @@ Objects can be created by \code{\link{sim}}.
 		\item \code{\link{getPowerFit}} to get the power in rejecting alternative models based on absolute model fit cutoff. 
 		\item \code{\link{getPowerFitNested}} to get the power in rejecting alternative models based on the difference between model fit cutoffs of nested models. 
 		\item \code{\link{getPowerFitNonNested}} to get the power in rejecting alternative models based on the difference between model fit cutoffs of nonnested models.  
+		\item \code{\link[=inspect,SimResult-method]{inspect}} Extract target information from the simulation result. The available information is listed in this \code{\link[=inspect,SimResult-method]{link}}
 		\item \code{\link{likRatioFit}} to find the likelihood ratio (or Bayes factor) based on the bivariate distribution of fit indices
+		\item \code{\link{plotCoverage}} to plot the coverage rate of confidence interval of parameter estimates
+		\item \code{\link{plotCIwidth}} to plot confidence interval widths with a line of a median or percentile rank (assurance) 
 		\item \code{\link{plotCutoff}} to plot sampling distributions of fit indices with an option to draw fit indices cutoffs by specifying a priori alpha level.
 		\item \code{\link{plotCutoffNested}} to plot sampling distributions of the difference in fit indices between nested models with an option to draw fit indices cutoffs by specifying a priori alpha level.
 		\item \code{\link{plotCutoffNonNested}} to plot sampling distributions of the difference in fit indices between nonnested models with an option to draw fit indices cutoffs by specifying a priori alpha level.
@@ -67,7 +76,9 @@ Objects can be created by \code{\link{sim}}.
 		\item \code{\link{summaryMisspec}} to provide a summary of model misfit
 		\item \code{\link{summaryParam}} to summarize all parameter estimates
 		\item \code{\link{summaryPopulation}} to summarize the data generation population underlying the simulation study.
+		\item \code{\link{summarySeed}} to provide a summary of the seed number in the simulation
 		\item \code{\link{summaryShort}} to provide a short summary of the result output
+		\item \code{\link{summaryTime}} to provide a summary of time elapsed in the simulation
 	}
 }
 \author{

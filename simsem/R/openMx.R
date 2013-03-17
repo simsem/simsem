@@ -1,6 +1,6 @@
 # Only work for single-group for now.
 
-generateMx <- function(object, n, indDist = NULL, groupLab = NULL, covData = NULL) {
+generateMx <- function(object, n, indDist = NULL, groupLab = NULL, covData = NULL, empirical = FALSE) {
 	library(OpenMx)
 	if(length(object@submodels) > 1) {
 		ngroups <- length(object@submodels)
@@ -21,7 +21,7 @@ generateMx <- function(object, n, indDist = NULL, groupLab = NULL, covData = NUL
 		if(length(upperLevelMatrices) > 0) {
 			names(upperLevelMatrices) <- paste0(object@name, ".", names(upperLevelMatrices))
 		}
-		data.l <- mapply(generateMxSingleGroup, object=object@submodels, n=n, indDist=indDist, covData=covData.l, MoreArgs=list(extraMatrices = upperLevelMatrices), SIMPLIFY=FALSE)
+		data.l <- mapply(generateMxSingleGroup, object=object@submodels, n=n, indDist=indDist, covData=covData.l, MoreArgs=list(extraMatrices = upperLevelMatrices, empirical = empirical), SIMPLIFY=FALSE)
 		if(!is.null(covData)) {
 			data.l <- mapply(data.frame, data.l, covData.l, SIMPLIFY = FALSE)
 		}
@@ -31,7 +31,7 @@ generateMx <- function(object, n, indDist = NULL, groupLab = NULL, covData = NUL
 		rownames(data) <- NULL
 		if(!is.null(groupLab)) colnames(data)[ncol(data)] <- groupLab
 	} else {
-		data <- generateMxSingleGroup(object, n, indDist, covData)
+		data <- generateMxSingleGroup(object, n, indDist, covData, empirical = empirical)
 	}
 	data
 }
@@ -64,7 +64,7 @@ getInnerObjects <- function(xxxobjectxxx) {
 	xxxresultxxx	
 }
 
-generateMxSingleGroup <- function(object, n, indDist = NULL, covData = NULL, extraMatrices = NULL) {
+generateMxSingleGroup <- function(object, n, indDist = NULL, covData = NULL, extraMatrices = NULL, empirical = FALSE) {
 
 	if(is(object@objective, "MxRAMObjective")) {
 		# Create F, S, and M to suppress warnings when compiling the package.
@@ -110,7 +110,7 @@ generateMxSingleGroup <- function(object, n, indDist = NULL, covData = NULL, ext
 		impliedMean <- lapply(macs, "[[", 1)
 		impliedCov <- lapply(macs, "[[", 2)
 		impliedThreshold <- lapply(macs, "[[", 3)
-		Data.l <- mapply(dataGen, m=impliedMean, cm=impliedCov, MoreArgs=list(n=1, dataDist=indDist), SIMPLIFY=FALSE)
+		Data.l <- mapply(dataGen, m=impliedMean, cm=impliedCov, MoreArgs=list(n=1, dataDist=indDist, empirical = empirical), SIMPLIFY=FALSE)
 		if(!all(is.na(object@objective@thresholds))) {
 			FUN <- function(x, thres) {
 				for(i in colnames(thres)) {
@@ -145,7 +145,7 @@ generateMxSingleGroup <- function(object, n, indDist = NULL, covData = NULL, ext
 		varnames <- object@objective@dims
 		if(any(is.na(varnames))) varnames <- object@manifestVars
 
-		Data <- dataGen(indDist, n, impliedMean, impliedCov)
+		Data <- dataGen(indDist, n, impliedMean, impliedCov, empirical = empirical)
 		if(length(varnames) == 0) varnames <- paste0("y", 1:ncol(Data))
 		colnames(Data) <- varnames[1:ncol(Data)]
 		Data <- data.frame(Data)

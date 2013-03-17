@@ -30,7 +30,7 @@ continuousPower(simResult, contN = TRUE, contMCAR = FALSE, contMAR = FALSE,
 	Alpha level to use for power analysis.
 }
 \item{powerParam}{
-	Vector of parameters names that the user wishes to find power for. This can be a vector of names (e.g., "LY1_1", "LY2_2"), or the name of a matrix (e.g. "PS"), if the name of a matrix is used power for all parameters in that matrix will be returned. If parameters are not specified, power for all parameters in the model will be returned.
+	Vector of parameters names that the user wishes to find power for. This can be a vector of names (e.g., "f1=~y2", "f1~~f2"). If parameters are not specified, power for all parameters in the model will be returned.
 }
 \item{pred}{
 	A list of varying parameter values that users wish to find statistical power from.

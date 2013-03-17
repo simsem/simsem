@@ -10,7 +10,7 @@
 <div align="center">
 <a href="../../../doc/html/packages.html"><img src="../../../doc/html/left.jpg" alt="[Up]" width="30" height="30" border="0"></a>
 <a href="../../../doc/html/index.html"><img src="../../../doc/html/up.jpg" alt="[Top]" width="30" height="30" border="0"></a>
-</div><h2>Documentation for package &lsquo;simsem&rsquo; version 0.5-2</h2>
+</div><h2>Documentation for package &lsquo;simsem&rsquo; version 0.5-3</h2>
 
 <ul><li><a href="../DESCRIPTION">DESCRIPTION file</a>.</li>
 </ul>
@@ -29,8 +29,12 @@
 <td>Create a data distribution object.</td></tr>
 <tr><td width="25%"><a href="bind.html">binds</a></td>
 <td>Specify matrices for Monte Carlo simulation of structural equation models</td></tr>
+<tr><td width="25%"><a href="coef.html">coef-method</a></td>
+<td>Extract parameter estimates from a simulation result</td></tr>
 <tr><td width="25%"><a href="combineSim.html">combineSim</a></td>
 <td>Combine result objects</td></tr>
+<tr><td width="25%"><a href="continuousCoverage.html">continuousCoverage</a></td>
+<td>Find coverage rate of model parameters when simulations have randomly varying parameters</td></tr>
 <tr><td width="25%"><a href="continuousPower.html">continuousPower</a></td>
 <td>Find power of model parameters when simulations have randomly varying parameters</td></tr>
 <tr><td width="25%"><a href="createData.html">createData</a></td>
@@ -47,6 +51,8 @@
 <td>Shortcut for data analysis template for simulation.</td></tr>
 <tr><td width="25%"><a href="exportData.html">exportData</a></td>
 <td>Export data sets for analysis with outside SEM program.</td></tr>
+<tr><td width="25%"><a href="findCoverage.html">findCoverage</a></td>
+<td>Find a value of independent variables that provides a given value of coverage rate</td></tr>
 <tr><td width="25%"><a href="findFactorIntercept.html">findFactorIntercept</a></td>
 <td>Find factor intercept from regression coefficient matrix and factor total means</td></tr>
 <tr><td width="25%"><a href="findFactorMean.html">findFactorMean</a></td>
@@ -73,11 +79,11 @@
 <td>Group variables regarding the position in mediation chain</td></tr>
 <tr><td width="25%"><a href="generate.html">generate</a></td>
 <td>Generate data using SimSem template</td></tr>
+<tr><td width="25%"><a href="getCIwidth.html">getCIwidth</a></td>
+<td>Find confidence interval width</td></tr>
+<tr><td width="25%"><a href="getCoverage.html">getCoverage</a></td>
+<td>Find coverage rate of model parameters</td></tr>
 <tr><td width="25%"><a href="getCutoff.html">getCutoff</a></td>
-<td>Find fit indices cutoff given a priori alpha level</td></tr>
-<tr><td width="25%"><a href="getCutoff.html">getCutoff-method</a></td>
-<td>Find fit indices cutoff given a priori alpha level</td></tr>
-<tr><td width="25%"><a href="getCutoff.html">getCutoff-methods</a></td>
 <td>Find fit indices cutoff given a priori alpha level</td></tr>
 <tr><td width="25%"><a href="getCutoffNested.html">getCutoffNested</a></td>
 <td>Find fit indices cutoff for nested model comparison given a priori alpha level</td></tr>
@@ -103,6 +109,8 @@
 <td>Impose MAR, MCAR, planned missingness, or attrition on a data set</td></tr>
 <tr><td width="25%"><a href="imposeMissing.html">imposeMissing</a></td>
 <td>Impose MAR, MCAR, planned missingness, or attrition on a data set</td></tr>
+<tr><td width="25%"><a href="inspect.html">inspect-method</a></td>
+<td>Extract information from a simulation result</td></tr>
 <tr><td width="25%"><a href="likRatioFit.html">likRatioFit</a></td>
 <td>Find the likelihood ratio (or Bayes factor) based on the bivariate distribution of fit indices</td></tr>
 <tr><td width="25%"><a href="miss.html">miss</a></td>
@@ -119,11 +127,11 @@
 <td>Data generation template and analysis template for simulation.</td></tr>
 <tr><td width="25%"><a href="multipleAllEqual.html">multipleAllEqual</a></td>
 <td>Test whether all objects are equal</td></tr>
+<tr><td width="25%"><a href="plotCIwidth.html">plotCIwidth</a></td>
+<td>Plot a confidence interval width of a target parameter</td></tr>
+<tr><td width="25%"><a href="plotCoverage.html">plotCoverage</a></td>
+<td>Make a plot of confidence interval coverage rates</td></tr>
 <tr><td width="25%"><a href="plotCutoff.html">plotCutoff</a></td>
-<td>Plot sampling distributions of fit indices with fit indices cutoffs</td></tr>
-<tr><td width="25%"><a href="plotCutoff.html">plotCutoff-method</a></td>
-<td>Plot sampling distributions of fit indices with fit indices cutoffs</td></tr>
-<tr><td width="25%"><a href="plotCutoff.html">plotCutoff-methods</a></td>
 <td>Plot sampling distributions of fit indices with fit indices cutoffs</td></tr>
 <tr><td width="25%"><a href="plotCutoffNested.html">plotCutoffNested</a></td>
 <td>Plot sampling distributions of the differences in fit indices between nested models with fit indices cutoffs</td></tr>
@@ -195,6 +203,8 @@
 <td>Provide summary of parameter estimates and standard error across replications</td></tr>
 <tr><td width="25%"><a href="summaryPopulation.html">summaryPopulation</a></td>
 <td>Summarize the population model used for data generation underlying a result object</td></tr>
+<tr><td width="25%"><a href="summarySeed.html">summarySeed</a></td>
+<td>Summary of a seed number</td></tr>
 <tr><td width="25%"><a href="summaryShort.html">summaryShort</a></td>
 <td>Provide short summary of an object.</td></tr>
 <tr><td width="25%"><a href="SimMatrix-class.html">summaryShort-method</a></td>
@@ -207,5 +217,7 @@
 <td>Provide short summary of an object.</td></tr>
 <tr><td width="25%"><a href="summaryShort.html">summaryShort-methods</a></td>
 <td>Provide short summary of an object.</td></tr>
+<tr><td width="25%"><a href="summaryTime.html">summaryTime</a></td>
+<td>Time summary</td></tr>
 </table>
 </body></html>

@@ -69,14 +69,14 @@ plotCutoffNonNested <- function(dat1Mod1, dat1Mod2, dat2Mod1 = NULL, dat2Mod2 = 
             plotOverHist(Data2, Data1, cutoff = cutoff1, usedFit = usedFit, cutoff2 = cutoff2, 
                 cutoff3 = cutoff3, cutoff4 = cutoff4)
         } else {
-            plotCutoff(Data1, cutoff1, usedFit = usedFit, cutoff2 = cutoff2)
+            plotCutoffDataFrame(Data1, cutoff1, usedFit = usedFit, cutoff2 = cutoff2)
         }
     } else if (sum(condition) == 1) {
-        plotCutoff(Data2, cutoff, FALSE, usedFit, vector1 = condValue[, condition], 
+        plotCutoffDataFrame(Data2, cutoff, FALSE, usedFit, vector1 = condValue[, condition], 
             nameVector1 = colnames(condValue)[condition], alpha = alpha)
     } else if (sum(condition) == 2) {
         condValue <- condValue[, condition]
-        plotCutoff(Data2, cutoff, FALSE, usedFit, vector1 = condValue[, 1], vector2 = condValue[, 
+        plotCutoffDataFrame(Data2, cutoff, FALSE, usedFit, vector1 = condValue[, 1], vector2 = condValue[, 
             2], nameVector1 = colnames(condValue)[1], nameVector2 = colnames(condValue)[2], 
             alpha = alpha, useContour = useContour)
     } else {

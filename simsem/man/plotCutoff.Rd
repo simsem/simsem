@@ -1,40 +1,37 @@
 \name{plotCutoff}
 \alias{plotCutoff}
-\alias{plotCutoff-methods}
-\alias{plotCutoff,data.frame-method}
-\alias{plotCutoff,SimResult-method}
 \title{
 Plot sampling distributions of fit indices with fit indices cutoffs
 }
 \description{
-This function will plot sampling distributions of null hypothesis fit indices. The users may add cutoffs by specifying the \code{alpha} level.
+This function will plot sampling distributions of fit indices. The users may add cutoffs by specifying the \code{alpha} level.
 }
 \usage{
-plotCutoff(object, ...)
+plotCutoff(object, alpha = NULL, revDirec = FALSE, usedFit = NULL, 
+	useContour = TRUE)
 }
 \arguments{
   \item{object}{
-	The object (\code{\linkS4class{SimResult}} or \code{data.frame}) that contains values of fit indices in each distribution.
+	The target (\code{\linkS4class{SimResult}} 
 }
-  \item{\dots}{
-	Other arguments specific to different types of object you pass in the function.
+  \item{alpha}{
+	A priori alpha level to get the cutoffs of fit indices
+}
+  \item{revDirec}{
+	The default is to find critical point on the side that indicates worse fit (the right side of RMSEA or the left side of CFI). If specifying as \code{TRUE}, the directions are reversed.
+}
+  \item{usedFit}{
+	The name of fit indices that researchers wish to plot
+}
+  \item{useContour}{
+	If there are two things from varying sample size, varying percent completely at random, or varying percent missing at random, the \code{plotCutoff} function will provide 3D graph. A contour graph is a default. However, if this is specified as \code{FALSE}, perspective plot is used.
 }
 }
 \value{
-NONE. Only plot the fit indices distributions.
+NONE. The plot the fit indices distributions is provided.
 }
 \author{
     Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
-}
-\section{Details in \dots}{
-	\itemize{
-		\item \code{cutoff}: A priori cutoffs for fit indices, saved in a vector
-		\item \code{cutoff2}: Another set of priori cutoffs for fit indices, saved in a vector
-		\item \code{alpha}:	A priori alpha level to getCutoffs of fit indices (do not specify when you have \code{cutoff})
-		\item \code{revDirec}:	The default is to find critical point on the side that indicates worse fit (the right side of RMSEA or the left side of CFI). If specifying as TRUE, the directions are reversed.
-		\item \code{usedFit}:	The name of fit indices that researchers wish to plot
-		\item \code{useContour}:	If there are two of sample size, percent completely at random, and percent missing at random are varying, the \code{plotCutoff} function will provide 3D graph. Contour graph is a default. However, if this is specified as \code{FALSE}, perspective plot is used.
-	}
 }
 \seealso{
 	\itemize{

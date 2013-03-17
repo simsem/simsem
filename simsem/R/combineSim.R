@@ -36,6 +36,8 @@ combineSim <- function(...) {
   popFit <- do.call("rbind", lapply(s4list, stackEm, "popFit"))
   FMI1 <- do.call("rbind", lapply(s4list, stackEm, "FMI1"))
   FMI2 <- do.call("rbind", lapply(s4list, stackEm, "FMI2"))
+  cilower <- do.call("rbind", lapply(s4list, stackEm, "cilower"))
+  ciupper <- do.call("rbind", lapply(s4list, stackEm, "ciupper"))
   stdCoef <- do.call("rbind", lapply(s4list, stackEm, "stdCoef"))
   nobs <- do.call("rbind", lapply(s4list, stackEm, "nobs"))
   
@@ -68,14 +70,21 @@ combineSim <- function(...) {
   
   ### add list elements (always same order)
   FUN <- function(timing1, timing2) mapply("+", timing1, timing2, SIMPLIFY = FALSE)
-  
-  timing <- Reduce(FUN, lapply(s4list, function(dat) dat@timing))
+  timing <- Reduce(FUN, lapply(s4list, function(dat) dat@timing[-which(names(dat@timing) %in% c("StartTime", "EndTime"))]))
 
+	inreps <- lapply(s4list, function(dat) dat@timing$InReps)
+	nreps <- lapply(s4list, function(dat) dat@nRep)
+	totaltime <- mapply("*", inreps, nreps, SIMPLIFY = TRUE)
+	totaltime <- apply(totaltime, 1, sum)
+	timing$InReps <- totaltime/nRep
+	timing$StartTime <- Reduce(min, lapply(s4list, function(dat) dat@timing$StartTime))
+	timing$EndTime <- Reduce(max, lapply(s4list, function(dat) dat@timing$EndTime))
+    
   ## store in single S4 SimResult object, which is the return value of this function
   output <- new("SimResult", modelType = mT, nRep = nRep, coef = coef, se = se,
                 fit = fit, converged = converged, paramValue = pV,
                 misspecValue = misspecValue, popFit = popFit, FMI1 = FMI1, 
-                FMI2 = FMI2, stdCoef = stdCoef, seed = seed, n = n, nobs = nobs,
+                FMI2 = FMI2, cilower = cilower, ciupper = ciupper, stdCoef = stdCoef, seed = seed, n = n, nobs = nobs,
                 pmMCAR = pmMCAR, pmMAR = pmMAR, extraOut = extraOut, timing = timing, paramOnly = paramOnly)
 				# nobs, paramOnly
   output

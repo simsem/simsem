@@ -111,7 +111,7 @@ plotPowerFitNonNested <- function(dat2Mod1, dat2Mod2, dat1Mod1 = NULL, dat1Mod2 
             plotOverHist(Data2, Data1, cutoff = cutoff1, usedFit = usedFit, cutoff2 = cutoff2, 
                 cutoff3 = cutoff3, cutoff4 = cutoff4)
         } else {
-            plotCutoff(Data2, cutoff1, usedFit = usedFit, cutoff2 = cutoff2)
+            plotCutoffDataFrame(Data2, cutoff1, usedFit = usedFit, cutoff2 = cutoff2)
         }
     } else if (ncol(x) == 1) {
         if (logistic & (!is.null(Data1) | !is.null(cutoff))) {

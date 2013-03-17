@@ -68,7 +68,7 @@ getCutoffNonNested <- function(dat1Mod1, dat1Mod2, dat2Mod1 = NULL, dat2Mod2 = N
     predictorVal <- predictorVal[condition]
     result <- list()
     if (onetailed) {
-        cutoffDat1 <- getCutoff(Data1, alpha, FALSE, usedFit, predictor = condValue, 
+        cutoffDat1 <- getCutoffDataFrame(Data1, alpha, FALSE, usedFit, predictor = condValue, 
             predictorVal = predictorVal, df = df)
         bound <- rep(-Inf, length(cutoffDat1))
         bound[names(cutoffDat1) %in% getKeywords()$reversedFit] <- Inf
@@ -77,7 +77,7 @@ getCutoffNonNested <- function(dat1Mod1, dat1Mod2, dat2Mod1 = NULL, dat2Mod2 = N
         rownames(resultModel1) <- c("lower", "upper")
         result$model1 <- resultModel1
         if (!is.null(dat2Mod1) & !is.null(dat2Mod2)) {
-            cutoffDat2 <- getCutoff(Data2, 1 - alpha, FALSE, usedFit, predictor = condValue, 
+            cutoffDat2 <- getCutoffDataFrame(Data2, 1 - alpha, FALSE, usedFit, predictor = condValue, 
                 predictorVal = predictorVal, df = df)
             bound <- rep(Inf, length(cutoffDat2))
             bound[names(cutoffDat2) %in% getKeywords()$reversedFit] <- -Inf
@@ -89,18 +89,18 @@ getCutoffNonNested <- function(dat1Mod1, dat1Mod2, dat2Mod1 = NULL, dat2Mod2 = N
     } else {
         lower <- alpha/2
         upper <- 1 - (alpha/2)
-        cutoffDat1Low <- getCutoff(Data1, lower, FALSE, usedFit, predictor = condValue, 
+        cutoffDat1Low <- getCutoffDataFrame(Data1, lower, FALSE, usedFit, predictor = condValue, 
             predictorVal = predictorVal, df = df)
-        cutoffDat1High <- getCutoff(Data1, upper, FALSE, usedFit, predictor = condValue, 
+        cutoffDat1High <- getCutoffDataFrame(Data1, upper, FALSE, usedFit, predictor = condValue, 
             predictorVal = predictorVal, df = df)
         resultModel1 <- rbind(cutoffDat1Low, cutoffDat1High)
         resultModel1 <- apply(resultModel1, 2, sort)
         rownames(resultModel1) <- c("lower", "upper")
         result$model1 <- resultModel1
         if (!is.null(dat2Mod1) & !is.null(dat2Mod2)) {
-            cutoffDat2Low <- getCutoff(Data2, lower, FALSE, usedFit, predictor = condValue, 
+            cutoffDat2Low <- getCutoffDataFrame(Data2, lower, FALSE, usedFit, predictor = condValue, 
                 predictorVal = predictorVal, df = df)
-            cutoffDat2High <- getCutoff(Data2, upper, FALSE, usedFit, predictor = condValue, 
+            cutoffDat2High <- getCutoffDataFrame(Data2, upper, FALSE, usedFit, predictor = condValue, 
                 predictorVal = predictorVal, df = df)
             resultModel2 <- rbind(cutoffDat2Low, cutoffDat2High)
             resultModel2 <- apply(resultModel2, 2, sort)

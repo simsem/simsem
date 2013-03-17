@@ -43,8 +43,6 @@ getCutoffNested <- function(nested, parent, alpha = 0.05, usedFit = NULL, nVal =
             predictorVal[2] <- pmMARval)
     }
     predictorVal <- predictorVal[condition]
-    output <- getCutoff(Data, alpha, FALSE, usedFit, predictor = condValue, predictorVal = predictorVal, 
-        df = df)
-    
+    output <- getCutoffDataFrame(Data, alpha, FALSE, usedFit, predictor = condValue, predictorVal = predictorVal, df = df)
     return(output)
 } 

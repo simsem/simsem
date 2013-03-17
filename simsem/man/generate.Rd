@@ -11,7 +11,8 @@ generate(model, n, maxDraw=50, misfitBounds=NULL, misfitType="f0",
 	averageNumMisspec=FALSE, optMisfit=NULL, optDraws=50, 
 	createOrder = c(1, 2, 3), indDist=NULL, sequential=FALSE,	
 	facDist=NULL, errorDist=NULL, indLab=NULL, modelBoot=FALSE, 
-	realData=NULL, covData=NULL, params=FALSE, group = NULL, ...)
+	realData=NULL, covData=NULL, params=FALSE, group = NULL, 
+	empirical = FALSE, ...)
 }
 \arguments{
   \item{model}{
@@ -70,6 +71,9 @@ generate(model, n, maxDraw=50, misfitBounds=NULL, misfitType="f0",
 }
   \item{group}{ 
 	The label of the grouping variable
+}
+  \item{empirical}{ 
+	Logical. If \code{TRUE}, the specified parameters are treated as sample statistics and data are created to get the specified sample statistics. This argument is applicable when multivariate normal distribution is specified only.
 }
   \item{\dots}{ 
 	Additional arguments for the \code{\link[lavaan]{simulateData}} function. 

@@ -7,7 +7,6 @@ plotPower <- function(object, powerParam, alpha = 0.05, contParam = NULL, contN 
     crit.value <- qnorm(1 - alpha/2)
     sig <- 0 + (abs(object@coef/object@se) > crit.value)
     colnames(sig) <- colnames(object@coef)
-    nrep <- dim(sig)[[1]]
     if (is.null(powerParam)) 
         stop("Please specify the parameter used to plot")
     j <- match(powerParam, dimnames(sig)[[2]])  # Return column indices that start with 'param'
@@ -15,9 +14,32 @@ plotPower <- function(object, powerParam, alpha = 0.05, contParam = NULL, contN 
     sig <- as.matrix(sig[, j])
     
     # Create matrix of predictors (randomly varying params)
-    x <- NULL
-    pred <- NULL
+    xpred <- getXandPred(object, contParam, contN, contMCAR, contMAR)
+    plotPowerSig(sig, xpred[[1]], xval = xpred[[2]], mainName = powerParam, useContour = useContour)
     
+}
+
+plotCoverage <- function(object, coverParam, coverValue = NULL, contParam = NULL, contN = TRUE, 
+    contMCAR = TRUE, contMAR = TRUE, useContour = TRUE) {
+    object <- clean(object)
+    cover <- calcCoverMatrix(object, coverValue = coverValue)
+	
+    if (is.null(coverParam)) 
+        stop("Please specify the parameter used to plot")
+    j <- match(coverParam, dimnames(cover)[[2]])  # Return column indices that start with 'param'
+	if(length(j) == 0) stop("The specified parameter does not match with any parameter names in the object.")
+    cover <- as.matrix(cover[, j])
+    
+    # Create matrix of predictors (randomly varying params)
+    xpred <- getXandPred(object, contParam, contN, contMCAR, contMAR)
+    plotPowerSig(cover, xpred[[1]], xval = xpred[[2]], mainName = coverParam, useContour = useContour)
+    
+}
+
+getXandPred <- function(object, contParam = NULL, contN = TRUE, contMCAR = TRUE, contMAR = TRUE) {
+	x <- NULL
+    pred <- NULL
+    nrep <- dim(object@coef)[[1]]
     if ((length(unique(object@n)) > 1) && contN) {
         if (!length(object@n) == nrep) {
             stop("Number of random sample sizes is not the same as the number of replications, check to see if N varied across replications")
@@ -56,9 +78,9 @@ plotPower <- function(object, powerParam, alpha = 0.05, contParam = NULL, contN 
         names(paramVal) <- contParam
         pred <- c(pred, paramVal)
     }
-    plotPowerSig(sig, x, xval = pred, mainName = powerParam, useContour = useContour)
-    
+	list(x, pred)
 }
+
 
 # plotPowerSig: plot the power curve given one or two varying parameters when a
 # data frame of significance or not is specified

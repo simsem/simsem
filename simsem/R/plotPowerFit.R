@@ -107,7 +107,7 @@ plotPowerFitDf <- function(altObject, nullObject = NULL, cutoff = NULL, usedFit 
     alpha = 0.05, x = NULL, xval = NULL, useContour = TRUE, logistic = TRUE) {
     if (is.null(x)) {
         if (is.null(nullObject)) {
-            plotCutoff(altObject, cutoff, usedFit = usedFit)
+            plotCutoffDataFrame(altObject, cutoff, usedFit = usedFit)
         } else {
             plotOverHist(altObject, nullObject, cutoff = cutoff, usedFit = usedFit, 
                 alpha = alpha)
@@ -183,7 +183,7 @@ plotOverHist <- function(altObject, nullObject, cutoff = NULL, usedFit = NULL, a
     percentile <- 1 - alpha
 	usedFit <- cleanUsedFit(usedFit)
     if (is.null(cutoff)) {
-        cutoff <- getCutoff(nullObject, alpha, usedFit = usedFit)
+        cutoff <- getCutoffDataFrame(nullObject, alpha, usedFit = usedFit)
         names(cutoff) <- usedFit
     }
     usedFit <- intersect(usedFit, names(cutoff))
@@ -305,7 +305,7 @@ plotLogisticFit <- function(altObject, nullObject = NULL, cutoff = NULL, usedFit
         nullFit <- as.data.frame(nullObject[, usedFit])
         colnames(nullFit) <- usedFit
         temp <- rep(NA, length(usedFit))
-        cutoff <- getCutoff(object = nullFit, alpha = alpha, revDirec = FALSE, usedFit = usedFit, 
+        cutoff <- getCutoffDataFrame(object = nullFit, alpha = alpha, revDirec = FALSE, usedFit = usedFit, 
             predictor = x, df = df, predictorVal = "all")
         if (!is.matrix(cutoff)) {
             cutoff <- as.matrix(cutoff)
@@ -375,7 +375,7 @@ plotScatter <- function(altObject, nullObject = NULL, cutoff = NULL, usedFit = N
         nullFit <- as.data.frame(nullObject[, usedFit])
         colnames(nullFit) <- usedFit
         temp <- rep(NA, length(usedFit))
-        cutoff <- getCutoff(object = nullFit, alpha = alpha, revDirec = FALSE, usedFit = usedFit, 
+        cutoff <- getCutoffDataFrame(object = nullFit, alpha = alpha, revDirec = FALSE, usedFit = usedFit, 
             predictor = x, df = df, predictorVal = "all")
         if (!is.matrix(cutoff)) {
             cutoff <- as.matrix(cutoff)

@@ -44,14 +44,24 @@ summaryParam <- function(object, alpha = 0.05, detail = FALSE, improper = FALSE,
             if (nrow(paramValue) == 1) 
                 paramValue <- matrix(unlist(rep(paramValue, nRep)), nRep, nParam, 
                   byrow = T)
-			selectCoef <- object@coef[,rownames(result)]
-			selectSE <- object@se[,rownames(result)]
-            biasParam <- selectCoef - paramValue
-            crit <- qnorm(1 - alpha/2)
-            lowerBound <- selectCoef - crit * selectSE
-            upperBound <- selectCoef + crit * selectSE
-            cover <- (paramValue > lowerBound) & (paramValue < upperBound)
-            
+			biasParam <- object@coef[,rownames(result)] - paramValue
+			lowerBound <- object@cilower
+			upperBound <- object@ciupper
+			selectci <- colnames(lowerBound) %in% rownames(result)
+			lowerBound <- lowerBound[,selectci]
+			upperBound <- upperBound[,selectci]
+			noci <- setdiff(rownames(result), colnames(lowerBound))
+			if(length(noci) > 0) {
+				if(length(selectci) > 0) warning("Some CIs are Wald CI and others are calculated inside the simulation.")
+				selectCoef <- object@coef[,noci]
+				selectSE <- object@se[,noci]
+				
+				crit <- qnorm(1 - alpha/2)
+				
+				lowerBound <- cbind(lowerBound, selectCoef - crit * selectSE)
+				upperBound <- cbind(upperBound, selectCoef + crit * selectSE)
+            }
+			cover <- (paramValue > lowerBound) & (paramValue < upperBound)
             average.param <- apply(paramValue, 2, mean, na.rm = TRUE)
             sd.param <- apply(paramValue, 2, sd, na.rm = TRUE)
             average.bias <- apply(biasParam, 2, mean, na.rm = TRUE)
@@ -77,30 +87,39 @@ summaryParam <- function(object, alpha = 0.05, detail = FALSE, improper = FALSE,
                   std.bias <- average.bias/sd.bias
                   relative.bias.se <- (estimated.se - sd.bias)/sd.bias
                 }
-                result3 <- cbind(relBias, std.bias, relative.bias.se)
-                colnames(result3) <- c("Rel Bias", "Std Bias", "Rel SE Bias")
+				width <- upperBound - lowerBound
+				average.width <- apply(width, 2, mean, na.rm = TRUE)
+				sd.width <- apply(width, 2, sd, na.rm = TRUE)				
+                result3 <- cbind(relBias, std.bias, relative.bias.se, average.width, sd.width)
+                colnames(result3) <- c("Rel Bias", "Std Bias", "Rel SE Bias", "Average CI Width", "SD CI Width")
                 result <- data.frame(result, result3)
             }
         }
     }
-    if (length(object@FMI1) != 0 & length(object@FMI2) != 0) {
-        nRep <- object@nRep
-        nFMI1 <- ncol(object@FMI1)
+
+    if (nrow(object@FMI1) > 1 & ncol(object@FMI1) >= 1) {
         FMI1 <- object@FMI1
-        FMI2 <- object@FMI2
         average.FMI1 <- apply(FMI1, 2, mean, na.rm = TRUE)
         sd.FMI1 <- apply(FMI1, 2, sd, na.rm = TRUE)
+        resultFMI <- cbind(average.FMI1, sd.FMI1)
+        colnames(resultFMI) <- c("Average FMI1", "SD FMI1")
+		targetParam <- matchLavaanName(rownames(result), rownames(resultFMI))
+		targetParam <- targetParam[!is.na(targetParam)]
+        result <- data.frame(result, resultFMI[targetParam,])
+    }
+	
+    if (nrow(object@FMI2) > 1 & ncol(object@FMI2) >= 1) {
+        FMI2 <- object@FMI2
         average.FMI2 <- apply(FMI2, 2, mean, na.rm = TRUE)
         sd.FMI2 <- apply(FMI2, 2, sd, na.rm = TRUE)
         
-        resultFMI <- cbind(average.FMI1, sd.FMI1, average.FMI2, sd.FMI2)
-        colnames(resultFMI) <- c("Average FMI1", "SD FMI1", "Average FMI2", "SD FMI2")
-
+        resultFMI <- cbind(average.FMI2, sd.FMI2)
+        colnames(resultFMI) <- c("Average FMI2", "SD FMI2")
 		targetParam <- matchLavaanName(rownames(result), rownames(resultFMI))
 		targetParam <- targetParam[!is.na(targetParam)]
-
         result <- data.frame(result, resultFMI[targetParam,])
-    }
+    }	
+	
     if (length(unique(object@n)) > 1) {
         corCoefN <- cor(cbind(object@coef, object@n), use = "pairwise.complete.obs")[colnames(object@coef), 
             "object@n"]
@@ -400,18 +419,242 @@ setPopulation <- function(target, population) {
 
 # getPopulation: Description: Extract the population value from an object
 
-getPopulation <- function(object) {
-    return(object@paramValue)
+getPopulation <- function(object, improper = FALSE, nonconverged = FALSE) {
+    inspect(object, improper = improper, nonconverged = nonconverged)
 } 
 
 # getExtraOutput: Extract the extra output that users set in the 'outfun' argument
 
-getExtraOutput <- function(object, improper = FALSE) {
+getExtraOutput <- function(object, improper = FALSE, nonconverged = FALSE) {
 	targetRep <- 0
-	if(improper) targetRep <- c(0, 3:6)
+	if(improper) targetRep <- c(targetRep, 3:6)
+	if(nonconverged) targetRep <- c(targetRep, 1:2)
     if (length(object@extraOut) == 0) {
         stop("This simulation result does not contain any extra results")
     } else {
         return(object@extraOut[object@converged %in% targetRep])
     }
 } 
+
+setMethod("coef", "SimResult",
+function(object, improper = FALSE, nonconverged = FALSE) {
+	inspect(object, "coef", improper = improper, nonconverged = nonconverged)
+})
+
+setMethod("inspect", "SimResult",
+function(object, what="coef", improper = FALSE, nonconverged = FALSE) {
+
+	targetRep <- 0
+	if(improper) targetRep <- c(targetRep, 3:6)
+	if(nonconverged) targetRep <- c(targetRep, 1:2)
+	targetRep <- object@converged %in% targetRep
+	
+    if(length(what) > 1) {
+        stop("`what' arguments contains multiple arguments; only one is allowed")
+    }
+
+    # be case insensitive
+    what <- tolower(what)
+
+    if(what == "type" ||
+              what == "model.type" ||
+              what == "modeltype") {
+        return(object@modelType)
+    } else if(what == "nrep" ||
+              what == "numrep") {
+        return(object@nRep)
+    } else if(what == "param" ||
+              what == "paramvalue" ||
+              what == "parameter" ||
+              what == "parameter.value" ||
+              what == "paramvalues" ||
+              what == "parameter.values" ||
+              what == "parameters") {
+		target <- object@paramValue
+		if(nrow(target) > 1) target <- target[targetRep, , drop=FALSE]
+        return(target)
+    } else if(what == "se" ||
+              what == "std.err" ||
+              what == "standard.errors") {
+        return(object@se[targetRep, , drop=FALSE])
+    } else if(what == "misspec" ||
+              what == "misspecification" ||
+              what == "misspecified" ||
+              what == "misspecified.param") {
+		target <- object@misspecValue
+		if(nrow(target) > 1) target <- target[targetRep, , drop=FALSE]
+        return(target)
+    } else if(what == "coef" ||
+              what == "coefficients" ||
+              what == "parameter.estimates" ||
+              what == "estimates" ||
+              what == "x" ||
+              what == "est") {
+        return(object@coef[targetRep, , drop=FALSE])
+    } else if(what == "popfit" ||
+              what == "popmisfit" ||
+              what == "popmis" ||
+              what == "misfit") {
+		target <- object@popFit
+		if(nrow(target) > 1) target <- target[targetRep, , drop=FALSE]
+        return(target)
+    } else if(what == "fmi" ||
+              what == "fmi1") {
+		target <- object@FMI1
+		if(nrow(target) > 1) target <- target[targetRep, , drop=FALSE]
+        return(target)
+    } else if(what == "fmi2") {
+        target <- object@FMI2
+		if(nrow(target) > 1) target <- target[targetRep, , drop=FALSE]
+        return(target)
+    } else if(what == "fit" ||
+              what == "fitmeasures" ||
+              what == "fit.measures" ||
+              what == "fit.indices") {
+        return(object@fit[targetRep, , drop=FALSE])
+    } else if(what == "std" ||
+              what == "std.coef" ||
+              what == "standardized" ||
+              what == "standardizedsolution" ||
+              what == "standardized.solution") {
+        return(object@stdCoef[targetRep, , drop=FALSE])
+    } else if(what == "cilower" ||
+              what == "ci.lower" ||
+              what == "lowerci" ||
+              what == "lower.ci") {
+         return(object@cilower[targetRep, , drop=FALSE])
+    } else if(what == "ciupper" ||
+              what == "ci.upper" ||
+              what == "upperci" ||
+              what == "upper.ci") {
+         return(object@ciupper[targetRep, , drop=FALSE])
+    } else if(what == "ciwidth" ||
+              what == "ci.width" ||
+              what == "widthci" ||
+              what == "width.ci" ||
+			  what == "width") {
+		 lower <- as.matrix(object@cilower)
+		 upper <- as.matrix(object@ciupper)
+		 if(nrow(lower) <= 1) stop("There are no lower and upper bounds of confidence intervals saved in this simulation.")
+         return(upper[targetRep, , drop=FALSE] - lower[targetRep, , drop=FALSE])
+    } else if(what == "seed") {
+        return(summarySeed(object))
+    } else if(what == "n" || 
+              what == "samplesize" ||
+              what == "groupsize" ||
+              what == "groupn" ||
+              what == "ngroup" ||
+			  what == "sample.size") {
+        return(object@nobs[targetRep, , drop=FALSE])
+    } else if(what == "ntotal" || 
+              what == "totaln" ||
+              what == "totalsamplesize" ||
+			  what == "total.sample.size") {
+        return(object@n[targetRep])
+    } else if(what == "mcar" || 
+              what == "pmmcar" ||
+			  what == "pmcar") {
+		target <- object@pmMCAR
+		if(length(target) > 1) target <- target[targetRep]
+        return(target)
+    } else if(what == "mar" || 
+              what == "pmmar" ||
+			  what == "pmar") {
+		target <- object@pmMAR
+		if(length(target) > 1) target <- target[targetRep]
+        return(target)
+    } else if(what == "extra" || 
+              what == "extraout" ||
+			  what == "misc") {
+        return(getExtraOutput(object, improper = improper, nonconverged = nonconverged))
+    } else if(what == "time"  ||
+              what == "timing") {
+        return(summaryTime(object))
+    } else if(what == "converged") {
+		lab <- c("converged", "nonconverged", "nonconvergedMI", "improperSE", "improperVariance", "improperCorrelation", "nonOptimal")
+		lab <- lab[sort(unique(object@converged)) + 1]
+		out <- factor(object@converged, labels = lab)
+        return(out)
+    } else {
+        stop("unknown `what' argument in inspect function: `", what, "'")
+    }
+
+})
+
+# summaryPopulation: Summarize population values behind data generation model
+
+summaryTime <- function(object, units = "seconds") {
+	timing <- object@timing
+	timing1 <- timing[-which(names(timing) %in% c("StartTime", "EndTime"))]
+	units <- tolower(units)
+	if(units %in% c("secs", "seconds", "second", "sec", "s")) {
+		# Do nothing
+	} else if (units %in% c("min", "mins", "minute", "minutes", "m")) {
+		timing1 <- lapply(timing1, "/", 60)
+	} else if (units %in% c("hours", "hour", "h")) {
+		timing1 <- lapply(timing1, "/", 3600)	
+	} else if (units %in% c("days", "day", "d")) {
+		timing1 <- lapply(timing1, "/", 86400)
+	} else {
+		stop("unknown `units' argument in summaryTime function: `", units, "'")
+	}
+	
+	#format(.POSIXct(dt,tz="GMT"), "%H:%M:%S")
+	cat("============ Wall Time ============\n")
+	t0.txt <- sprintf("  %-72s", "1. Error Checking and setting up data-generation and analysis template:")
+    t1.txt <- sprintf("  %10.3f", timing1$SimulationParams)
+	cat(t0.txt, t1.txt, "\n", sep="")
+	t0.txt <- sprintf("  %-72s", "2. Set combinations of n, pmMCAR, and pmMAR:")
+    t1.txt <- sprintf("  %10.3f", timing1$RandomSimParams)
+	cat(t0.txt, t1.txt, "\n", sep="")
+	t0.txt <- sprintf("  %-72s", "3. Setting up simulation conditions for each replication:")
+    t1.txt <- sprintf("  %10.3f", timing1$SimConditions)
+	cat(t0.txt, t1.txt, "\n", sep="")
+	t0.txt <- sprintf("  %-72s", "4. Total time elapsed running all replications:")
+    t1.txt <- sprintf("  %10.3f", timing1$RunReplications)
+	cat(t0.txt, t1.txt, "\n", sep="")
+	t0.txt <- sprintf("  %-72s", "5. Combining outputs from different replications:")
+    t1.txt <- sprintf("  %10.3f", timing1$CombineResults)
+	cat(t0.txt, t1.txt, "\n", "\n", sep="")
+	
+	cat("============ Average Time in Each Replication ============\n")
+	t0.txt <- sprintf("  %-46s", "1. Data Generation:")
+    t1.txt <- sprintf("  %10.3f", timing1$InReps[1])
+	cat(t0.txt, t1.txt, "\n", sep="")
+	t0.txt <- sprintf("  %-46s", "2. Impose Missing Values:")
+    t1.txt <- sprintf("  %10.3f", timing1$InReps[2])
+	cat(t0.txt, t1.txt, "\n", sep="")
+	t0.txt <- sprintf("  %-46s", "3. User-defined Data-Transformation Function:")
+    t1.txt <- sprintf("  %10.3f", timing1$InReps[3])
+	cat(t0.txt, t1.txt, "\n", sep="")
+	t0.txt <- sprintf("  %-46s", "4. Main Data Analysis:")
+    t1.txt <- sprintf("  %10.3f", timing1$InReps[4])
+	cat(t0.txt, t1.txt, "\n", sep="")
+	t0.txt <- sprintf("  %-46s", "5. Extracting Outputs:")
+    t1.txt <- sprintf("  %10.3f", timing1$InReps[5])
+	cat(t0.txt, t1.txt, "\n", "\n", sep="")
+	
+	cat("============ Summary ============\n")
+	t0.txt <- sprintf("  %-28s", "Start Time:")
+    t1.txt <- format(timing$StartTime, "  %Y-%m-%d %H:%M:%S")
+	cat(t0.txt, t1.txt, "\n", sep="")
+	t0.txt <- sprintf("  %-28s", "End Time:")
+    t1.txt <- format(timing$EndTime, "  %Y-%m-%d %H:%M:%S")
+	cat(t0.txt, t1.txt, "\n", sep="")
+	totaltime <- Reduce("+", timing1[-which("InReps" == names(timing1))])
+	t0.txt <- sprintf("  %-28s", "Wall (Actual) Time:")
+    t1.txt <- sprintf("  %10.3f", totaltime)
+	cat(t0.txt, t1.txt, "\n", sep="")
+	inreptime <- max(sum(timing1$InReps * object@nRep), timing1$RunReplications)
+	systemtime <- totaltime - timing1$RunReplications + inreptime
+	t0.txt <- sprintf("  %-28s", "System (Processors) Time:")
+    t1.txt <- sprintf("  %10.3f", systemtime)
+	cat(t0.txt, t1.txt, "\n", sep="")
+	t0.txt <- sprintf("  %-28s", "Units:")
+	cat(t0.txt, "  ", units, "\n", sep="")
+} 
+
+summarySeed <- function(object) {
+	seed <- object@seed
+	list("Seed number" = object@seed[1], "L'Ecuyer seed of the last replication" = object@seed[-1])
+}

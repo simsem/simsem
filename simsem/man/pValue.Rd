@@ -49,12 +49,6 @@ pValue(target, dist, usedFit = NULL, nVal = NULL, pmMCARval = NULL,
 }
 \examples{
 \dontrun{
-# Compare number with a vector
-pValue(0.5, rnorm(1000, 0, 1))
-
-# Compare numbers with a data frame
-pValue(c(0.5, 0.2), data.frame(rnorm(1000, 0, 1), runif(1000, 0, 1)))
-
 # Compare an analysis result with a result of simulation study
 library(lavaan)
 loading <- matrix(0, 9, 3)

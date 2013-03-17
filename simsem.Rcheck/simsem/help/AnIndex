@@ -3,7 +3,9 @@ anova,SimResult-method	anova
 bind	bind
 bindDist	bindDist
 binds	bind
+coef,SimResult-method	coef
 combineSim	combineSim
+continuousCoverage	continuousCoverage
 continuousPower	continuousPower
 createData	createData
 draw	draw
@@ -12,6 +14,7 @@ estmodel.cfa	estmodel
 estmodel.path	estmodel
 estmodel.sem	estmodel
 exportData	exportData
+findCoverage	findCoverage
 findFactorIntercept	findFactorIntercept
 findFactorMean	findFactorMean
 findFactorResidualVar	findFactorResidualVar
@@ -25,11 +28,9 @@ findPossibleFactorCor	findPossibleFactorCor
 findPower	findPower
 findRecursiveSet	findRecursiveSet
 generate	generate
+getCIwidth	getCIwidth
+getCoverage	getCoverage
 getCutoff	getCutoff
-getCutoff,data.frame-method	getCutoff
-getCutoff,matrix-method	getCutoff
-getCutoff,SimResult-method	getCutoff
-getCutoff-methods	getCutoff
 getCutoffNested	getCutoffNested
 getCutoffNonNested	getCutoffNonNested
 getExtraOutput	getExtraOutput
@@ -43,6 +44,7 @@ getPowerFitNonNested,SimResult,SimResult,vector-method	getPowerFitNonNested
 getPowerFitNonNested-methods	getPowerFitNonNested
 impose	imposeMissing
 imposeMissing	imposeMissing
+inspect,SimResult-method	inspect
 likRatioFit	likRatioFit
 miss	miss
 model	model
@@ -51,10 +53,9 @@ model.lavaan	modelLavaan
 model.path	model
 model.sem	model
 multipleAllEqual	multipleAllEqual
+plotCIwidth	plotCIwidth
+plotCoverage	plotCoverage
 plotCutoff	plotCutoff
-plotCutoff,data.frame-method	plotCutoff
-plotCutoff,SimResult-method	plotCutoff
-plotCutoff-methods	plotCutoff
 plotCutoffNested	plotCutoffNested
 plotCutoffNonNested	plotCutoffNonNested
 plotDist	plotDist
@@ -90,6 +91,7 @@ summaryFit	summaryFit
 summaryMisspec	summaryMisspec
 summaryParam	summaryParam
 summaryPopulation	summaryPopulation
+summarySeed	summarySeed
 summaryShort	summaryShort
 summaryShort,ANY-method	summaryShort
 summaryShort,matrix-method	summaryShort
@@ -98,3 +100,4 @@ summaryShort,SimResult-method	SimResult-class
 summaryShort,SimVector-method	SimVector-class
 summaryShort,vector-method	summaryShort
 summaryShort-methods	summaryShort
+summaryTime	summaryTime

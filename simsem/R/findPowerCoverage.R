@@ -1,6 +1,12 @@
 # findPower: Find a value of a given independent variable that provides a given
 # value of power. This function can handle multiple ivs by split data.
 
+findCoverage <- function(coverTable, iv, target) {
+	ivCol <- grep("iv", colnames(coverTable))
+	coverTable[, -ivCol] <- 1 - coverTable[, -ivCol]
+	findPower(coverTable, iv, 1 - target)
+}
+
 findPower <- function(powerTable, iv, power) {
     ivCol <- grep("iv", colnames(powerTable))
     ivTable <- as.matrix(powerTable[, ivCol])
@@ -72,7 +78,7 @@ findTargetPower <- function(iv, dv, power) {
             } else if (dv[minIndex] < dv[maxIndex]) {
                 return(iv[minIndex, ])
             } else {
-                return(NaN)
+                return(Inf)
             }
         } else {
             return(NA)

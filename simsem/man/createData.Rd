@@ -8,7 +8,8 @@
 }
 \usage{
 createData(paramSet, n, indDist=NULL, sequential=FALSE, facDist=NULL, 
-errorDist=NULL, indLab=NULL, modelBoot=FALSE, realData=NULL, covData=NULL)
+errorDist=NULL, indLab=NULL, modelBoot=FALSE, realData=NULL, covData=NULL, 
+empirical = FALSE)
 }
 \arguments{
   \item{paramSet}{
@@ -40,6 +41,9 @@ errorDist=NULL, indLab=NULL, modelBoot=FALSE, realData=NULL, covData=NULL)
 }
   \item{covData}{ 
 	A data.frame containing covariate data, which can have any distributions. This argument is required when users specify \code{GA} or \code{KA} matrices in the model template (\code{\linkS4class{SimSem}}).
+}
+  \item{empirical}{ 
+	Logical. If \code{TRUE}, the specified parameters are treated as sample statistics and data are created to get the specified sample statistics. This argument is applicable when multivariate normal distribution is specified only.
 }
 }
 \value{

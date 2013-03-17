@@ -24,10 +24,10 @@ findPower(powerTable, iv, power)
 	There are five possible types of values provided:
 	\itemize{
 		\item \emph{Value} The varying parameter value that provides the power just over the specified power value (the adjacent value of varying parameter provides lower power than the specified power value).
-		\item \emph{Minimum value} The minimum value has already provided enough power (way over the specified power value). The value of varying parameters that provides exact desired power may be lower than the minimum value. The example of varying parmaeter that can provides the minimum value is sample size.
-		\item \emph{Maximum value} The maximum value has already provided enough power (way over the specified power value). The value of varying parameters that provides exact desired power may be higher than the maximum value. The example of varying parmaeter that can provides the maximum value is percent missing.
+		\item \emph{Minimum value} The minimum value has already provided enough power (way over the specified power value). The value of varying parameters that provides exact desired power may be lower than the minimum value. The example of varying parameter that can provides the minimum value is sample size.
+		\item \emph{Maximum value} The maximum value has already provided enough power (way over the specified power value). The value of varying parameters that provides exact desired power may be higher than the maximum value. The example of varying parameter that can provides the maximum value is percent missing.
 		\item \code{NA} There is no value in the domain of varying parameters that provides the power greater than the desired power.
-		\item \code{NaN} The power of all values in the varying parameters is 1 (specifically more than 0.9999) and any values of the varying parameters can be picked and still provide enough power.
+		\item \code{Inf} The power of all values in the varying parameters is 1 (specifically more than 0.9999) and any values of the varying parameters can be picked and still provide enough power.
 	}
 }
 \author{

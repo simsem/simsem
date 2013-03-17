@@ -96,18 +96,18 @@ getPowerFitNonNestedNullObj <- function(dat2Mod1, dat2Mod2, dat1Mod1, dat1Mod2, 
         cut2Data2 <- lower
     }
     cutoff1 <- list()
-    cutoff1[[1]] <- getCutoff(Data1, cut1Data1, FALSE, usedFit, predictor = condValue, 
+    cutoff1[[1]] <- getCutoffDataFrame(Data1, cut1Data1, FALSE, usedFit, predictor = condValue, 
         predictorVal = "all", df = df)
     if (!is.null(cut2Data1)) {
-        cutoff1[[2]] <- getCutoff(Data1, cut2Data1, FALSE, usedFit, predictor = condValue, 
+        cutoff1[[2]] <- getCutoffDataFrame(Data1, cut2Data1, FALSE, usedFit, predictor = condValue, 
             predictorVal = "all", df = df)
     }
     
     cutoff2 <- list()
-    cutoff2[[1]] <- getCutoff(Data2, cut1Data2, FALSE, usedFit, predictor = condValue, 
+    cutoff2[[1]] <- getCutoffDataFrame(Data2, cut1Data2, FALSE, usedFit, predictor = condValue, 
         predictorVal = "all", df = df)
     if (!is.null(cut2Data2)) {
-        cutoff2[[2]] <- getCutoff(Data2, cut2Data2, FALSE, usedFit, predictor = condValue, 
+        cutoff2[[2]] <- getCutoffDataFrame(Data2, cut2Data2, FALSE, usedFit, predictor = condValue, 
             predictorVal = "all", df = df)
     }
     

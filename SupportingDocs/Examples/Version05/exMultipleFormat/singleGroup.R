@@ -55,14 +55,14 @@ mxTwoFactorModel <- mxModel("Two Factor Model",
                  0,0,0,0,0,0,0,0.7,
                  0,0,0,0,0,0,0,0,
                  0,0,0,0,0,0,0,0),
-        free=c(F, F, F, F, F, F, T, F,
-               F, F, F, F, F, F, T, F,
-               F, F, F, F, F, F, T, F,
-               F, F, F, F, F, F, F, T,
-               F, F, F, F, F, F, F, T,
-               F, F, F, F, F, F, F, T,
-               F, F, F, F, F, F, F, F,
-               F, F, F, F, F, F, F, F),
+        free=c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE,
+               FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE,
+               FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE,
+               FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE,
+               FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE,
+               FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE,
+               FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
+               FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE),
         labels=c(NA,NA,NA,NA,NA,NA,"l1", NA,
                  NA,NA,NA,NA,NA,NA,"l2", NA,
                  NA,NA,NA,NA,NA,NA,"l3", NA,
@@ -87,14 +87,14 @@ mxTwoFactorModel <- mxModel("Two Factor Model",
                  0,0,0,0,0,0.51, 0, 0,
                  0,0,0,0,0,0, 1,.5,
                  0,0,0,0,0,0,.5, 1),
-        free=c(T, F, F, F, F, F, F, F,
-               F, T, F, F, F, F, F, F,
-               F, F, T, F, F, F, F, F,
-               F, F, F, T, F, F, F, F,
-               F, F, F, F, T, F, F, F,
-               F, F, F, F, F, T, F, F,
-               F, F, F, F, F, F, F, T,
-               F, F, F, F, F, F, T, F),
+        free=c(TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
+               FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
+               FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE,
+               FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE,
+               FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE,
+               FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE,
+               FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE,
+               FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE),
         labels=c("e1", NA,   NA,   NA,   NA,   NA,    NA,    NA,
                  NA, "e2",   NA,   NA,   NA,   NA,    NA,    NA,
                  NA,   NA, "e3",   NA,   NA,   NA,    NA,    NA,
@@ -111,14 +111,14 @@ mxTwoFactorModel <- mxModel("Two Factor Model",
         type="Full",
         nrow=6,
         ncol=8,
-        free=F,
+        free=FALSE,
         values=c(1,0,0,0,0,0,0,0,
                  0,1,0,0,0,0,0,0,
                  0,0,1,0,0,0,0,0,
                  0,0,0,1,0,0,0,0,
                  0,0,0,0,1,0,0,0,
                  0,0,0,0,0,1,0,0),
-        byrow=T,
+        byrow=TRUE,
         name="F"
     ),
     # means
@@ -127,7 +127,7 @@ mxTwoFactorModel <- mxModel("Two Factor Model",
         nrow=1,
         ncol=8,
         values=c(0,0,0,0,0,0,0,0),
-        free=c(T,T,T,T,T,T,F,F),
+        free=c(TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,FALSE,FALSE),
         labels=c("meanx1","meanx2","meanx3",
                  "meanx4","meanx5","meanx6",
                   NA,NA),
@@ -143,20 +143,25 @@ summary(Output14)
 
 FUN <- function(data) {
 	library(lava)
-	m1 <- lvm()
+	m1 <- lava::lvm()
 	latent(m1) <- ~f1 + f2
 	regression(m1) <- c(y1, y2, y3) ~ f1
 	regression(m1) <- c(y4, y5, y6) ~ f2
 	covariance(m1) <- f1 ~ f2
 	covariance(m1, ~f1 + f2) <- 1
 	intercept(m1, ~f1 + f2) <- 0
-	e <- estimate(m1, data)
+	e <- lava::estimate(m1, data)
 	coef <- coef(e)
 	se <- sqrt(diag(vcov(e)))
 	f <- gof(e)
 	fit <- c(f$fit$statistic, f$fit$parameter, f$fit$p.value, loglik = as.numeric(f$logLik), bic = f$BIC, aic = f$AIC, rmsea = as.numeric(f$RMSEA[1]))
 	converged <- !any(is.na(se))
-	list(coef = coef, se = se, fit = fit, converged = converged)
+	ci <- confint(e)
+	cilower <- ci[,1]
+	ciupper <- ci[,2]
+	extra <- logLik(e)
+	detach(package:lava) # Detach is used because the sim method from the lava package interrupting the sim function in the simsem
+	list(coef = coef, se = se, fit = fit, converged = converged, cilower = cilower, ciupper = ciupper, extra = extra)
 }
 
 Output15 <- sim(nRep = totalRep, model = FUN, n = 200, generate = CFA.Model)

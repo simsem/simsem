@@ -24,16 +24,16 @@ plotCutoffNested <- function(nested, parent, alpha = 0.05, cutoff = NULL, usedFi
     if (!is.null(alpha)) {
         if (all(!condition)) 
             if (is.null(cutoff)) 
-                cutoff <- getCutoff(Data, alpha)
+                cutoff <- getCutoffDataFrame(Data, alpha)
     }
     if (sum(condition) == 0) {
-        plotCutoff(Data, cutoff, FALSE, usedFit)
+        plotCutoffDataFrame(Data, cutoff, FALSE, usedFit)
     } else if (sum(condition) == 1) {
-        plotCutoff(Data, cutoff, FALSE, usedFit, vector1 = condValue[, condition], 
+        plotCutoffDataFrame(Data, cutoff, FALSE, usedFit, vector1 = condValue[, condition], 
             nameVector1 = colnames(condValue)[condition], alpha = alpha)
     } else if (sum(condition) == 2) {
         condValue <- condValue[, condition]
-        plotCutoff(Data, cutoff, FALSE, usedFit, vector1 = condValue[, 1], vector2 = condValue[, 
+        plotCutoffDataFrame(Data, cutoff, FALSE, usedFit, vector1 = condValue[, 1], vector2 = condValue[, 
             2], nameVector1 = colnames(condValue)[1], nameVector2 = colnames(condValue)[2], 
             alpha = alpha, useContour = useContour)
     } else {

@@ -8,7 +8,8 @@
 ## is generated.
 
 createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist = NULL, 
-    errorDist = NULL, indLab = NULL, modelBoot = FALSE, realData = NULL, covData = NULL) {
+    errorDist = NULL, indLab = NULL, modelBoot = FALSE, realData = NULL, covData = NULL,
+	empirical = FALSE) {
 	# Assume covData is good
     if (modelBoot) {
         if (sequential) 
@@ -66,10 +67,10 @@ createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist 
         if (sequential) {
             if (is.null(usedParam$BE) && !is.null(usedParam$LY)) {
                 # CFA
-                fac <- dataGen(facDist, n, usedParam$AL, usedParam$PS)
+                fac <- dataGen(facDist, n, usedParam$AL, usedParam$PS, empirical = empirical)
 				if(!is.null(covData)) fac <- fac + (as.matrix(covData) %*% t(usedParam$GA))
                 trueScore <- fac %*% t(usedParam$LY)
-                errorScore <- dataGen(errorDist, n, usedParam$TY, usedParam$TE)
+                errorScore <- dataGen(errorDist, n, usedParam$TY, usedParam$TE, empirical = empirical)
                 Data <- trueScore + errorScore
 				if(!is.null(covData)) Data <- Data + (as.matrix(covData) %*% t(usedParam$KA))
             } else {
@@ -83,13 +84,13 @@ createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist 
                 set <- findRecursiveSet(usedParam2$BE)
                 iv <- set[[1]]
                 fac <- dataGen(extractSimDataDist(facDist, iv), n, usedParam2$AL[iv], 
-                  usedParam2$PS[iv, iv])
+                  usedParam2$PS[iv, iv], empirical = empirical)
 				if(!is.null(covData)) fac <- fac + (as.matrix(covData) %*% t(usedParam2$GA[iv, ,drop=FALSE]))
                 for (i in 2:length(set)) {
                   dv <- set[[i]]
                   pred <- fac %*% t(usedParam2$BE[dv, iv, drop = FALSE])
                   res <- dataGen(extractSimDataDist(facDist, dv), n, usedParam2$AL[dv], 
-                    usedParam2$PS[dv, dv])
+                    usedParam2$PS[dv, dv], empirical = empirical)
                   new <- pred + res
 				  if(!is.null(covData)) new <- new + (as.matrix(covData) %*% t(usedParam2$GA[dv, ,drop=FALSE]))
                   fac <- cbind(fac, new)
@@ -101,7 +102,7 @@ createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist 
                 } else {
                   # SEM
                   trueScore <- fac %*% t(usedParam2$LY)
-                  errorScore <- dataGen(errorDist, n, usedParam2$TY, usedParam2$TE)
+                  errorScore <- dataGen(errorDist, n, usedParam2$TY, usedParam2$TE, empirical = empirical)
                   Data <- trueScore + errorScore
 				  if(!is.null(covData)) Data <- Data + (as.matrix(covData) %*% t(usedParam2$KA))
                 }
@@ -111,16 +112,16 @@ createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist 
 			if(is.null(covData)) {
 				macs <- createImpliedMACS(usedParam)
 				if (!is.null(indDist)) {
-					Data <- dataGen(indDist, n, macs$M, macs$CM)
+					Data <- dataGen(indDist, n, macs$M, macs$CM, empirical = empirical)
 				} else {
-					Data <- mvrnorm(n, macs$M, macs$CM)
+					Data <- mvrnorm(n, macs$M, macs$CM, empirical = empirical)
 				}
 			} else {
 				macs <- createImpliedConditionalMACS(usedParam, covData)
 				meanMacs <- macs$M
 				names(meanMacs) <- NULL
 				covMacs <- macs$CM
-				Data <- t(sapply(meanMacs, dataGen, dataDist=indDist, n=1, cm=covMacs))
+				Data <- t(sapply(meanMacs, dataGen, dataDist=indDist, n=1, cm=covMacs, empirical = empirical))
 				Data <- data.frame(covData, Data)
 			}
         }
@@ -142,7 +143,7 @@ createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist 
     return(Data)
 }
 
-dataGen <- function(dataDist, n, m, cm) {
+dataGen <- function(dataDist, n, m, cm, empirical = FALSE) {
     Data <- NULL
     # Check dim(M) dim(CM) dim(copula) are equal
     if (!is.null(dataDist)) {
@@ -209,7 +210,7 @@ dataGen <- function(dataDist, n, m, cm) {
         if (any(dataDist@keepScale)) {
             Data <- scale(Data)
             Data[is.na(Data)] <- 0
-            fakeDat <- mvrnorm(n, m, cm)
+            fakeDat <- mvrnorm(n, m, cm, empirical = empirical)
             fakeMean <- apply(fakeDat, 2, mean)
             fakeSD <- apply(fakeDat, 2, sd)
             Data <- t(apply(Data, 1, function(y, m, s) {
@@ -219,7 +220,7 @@ dataGen <- function(dataDist, n, m, cm) {
         if (nrow(Data) == 1) 
             Data <- t(Data)
     } else {
-        Data <- mvrnorm(n, m, cm)
+        Data <- mvrnorm(n, m, cm, empirical = empirical)
     }
     return(Data)
 }

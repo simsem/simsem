@@ -140,7 +140,7 @@ getPowerFitNullObj <- function(altObject, nullObject, revDirec = FALSE, usedFit 
 		powerChi <- mean(altObject@fit[,"chisq"] > cutoffChisq)
 		temp <- c("TraditionalChi" = powerChi, temp)
 	} else {
-		varyingCutoff <- getCutoff(object = nullFit, alpha = alpha, revDirec = FALSE, 
+		varyingCutoff <- getCutoffDataFrame(object = nullFit, alpha = alpha, revDirec = FALSE, 
 			usedFit = usedFit, predictor = condValue, df = df, predictorVal = "all")
 		for (i in 1:length(temp)) {
 			temp[i] <- pValueVariedCutoff(varyingCutoff[, i], usedDist[, i], 

@@ -32,6 +32,27 @@ checkExample <- function(path, label, subFrom = NULL, subTo = NULL, result = NUL
 	return(result)
 }
 
+checkManuals <- function(path, label, result = NULL) {
+	#path <- paste0(currentDir, "/simsem/man/", "pValue.Rd")
+	png(useTemp("figure.png"))
+	txt <- readLines(path)
+	txt <- txt[(grep("examples\\{", txt) + 1):length(txt)]
+	test <- TRUE
+	while(test) {
+		if((txt[length(txt)] %in% c("}", "")) || length(grep("keyword", txt[length(txt)])) > 0) txt <- txt[-length(txt)] else test <- FALSE
+	}
+	txt[grep("dontrun\\{", txt)] <- ""
+	error <- try(time <- system.time(capture.output(eval(parse(text = txt)))), silent=TRUE)
+	dev.off()
+	figure <- checkFigure(useTemp("figure.png"))
+	if(is(error, "try-error")) {
+		result <- rbind(result, c(label, FALSE, FALSE, NA))
+	} else {
+		result <- rbind(result, c(label, figure, NA, time[3]))
+	}
+	return(result)
+}
+
 globalTest <- function() {
 	# Test
 	# 1. Successful run
@@ -94,7 +115,7 @@ test.overall <- function() {
 	# 2. Successful run?
 	# 3. Have expected errors?
 	# 4. Time elapsed
-	install.packages("simsem_0.5-0.tar.gz", repos=NULL, type="source")
+	install.packages("simsem_0.5-3.tar.gz", repos=NULL, type="source")
 	result <- NULL
 	currentDir <- getwd()
 	currentDir <- gsub("/simsem/R", "", currentDir)
@@ -134,6 +155,8 @@ test.overall <- function() {
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/exMultipleFormat/covData.R"), "Covariate effect", subFrom = "sim\\(1000", subTo = "sim\\(20", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/exMultipleFormat/ordered.R"), "Ordered Data", subFrom = c("sim\\(1000", "50:1000"), subTo = c("sim\\(20", "seq\\(50, 1000, 50\\)"), result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/exMultipleFormat/completeRep.R"), "Complete Reps", subFrom = NULL, subTo = NULL, result = result)
+	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/exMultipleFormat/bootci.R"), "Bootstrap", subFrom = c("sim\\(1000", "50:500"), subTo = c("sim\\(10", "seq\\(50, 1000, 50\\)"), result = result)
+	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/exMultipleFormat/simResultMethods.R"), "Inspect and Additional Methods", subFrom = c("sim\\(1000", "50:500"), subTo = c("sim\\(20", "seq\\(50, 1000, 50\\)"), result = result)
 
 	# 0.5 lavaan script
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/ex2/ex2.R"), "Example 2 (lavaan)", subFrom = "sim\\(1000", subTo = "sim\\(10", result = result)
@@ -182,9 +205,10 @@ test.overall <- function() {
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/ex26/ex26.R"), "Example 26 (OpenMx)", subFrom = "50:500", subTo = "seq\\(50, 1000, 100\\)", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/ex27/ex27.R"), "Example 27 (OpenMx)", subFrom = "sim\\(1000", subTo = "sim\\(10", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/ex28/ex28.R"), "Example 28 (OpenMx)", subFrom = "sim\\(1000", subTo = "sim\\(10", result = result)
-	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/exMisc/orderedMx.R"), "Ordered Data (OpenMx)", subFrom = "sim\\(1000", subTo = "sim\\(10", result = result)
+	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/exMisc/orderedMx.R"), "Ordered Data (OpenMx)", subFrom = "sim\\(1000", subTo = "sim\\(5", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/exMisc/definitionVarMx.R"), "Definition Variables (OpenMx)", subFrom = "sim\\(1000", subTo = "sim\\(10", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/exMisc/mixtureMx.R"), "Mixture Models (OpenMx)", subFrom = "sim\\(1000", subTo = "sim\\(10", result = result)
+	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/exMisc/mxci.R"), "Mixture Models (OpenMx)", subFrom = "sim\\(1000", subTo = "sim\\(10", result = result)
 
 	# 0.5 openmx demo files
 	allfiles <- list.files(path = paste0(currentDir, "/SupportingDocs/Examples/Version05mx/exDemo/"))
@@ -192,6 +216,15 @@ test.overall <- function() {
 		print(allfiles[i])
 		result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/exDemo/", allfiles[i]), allfiles[i], result = result)	
 	}
+	
+	# Check example manual
+	allfiles <- list.files(path = paste0(currentDir, "/simsem/man/"))
+	for(i in seq_along(allfiles)) {
+		print(allfiles[i])
+		result <- checkManuals(paste0(currentDir, "/simsem/man/", allfiles[i]), allfiles[i], result = result)	
+	}
+	
+	
 	
 	colnames(result) <- c("condition", "success", "expecterror", "time")
 	return(result)

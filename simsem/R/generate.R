@@ -5,15 +5,15 @@
 generate <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "f0", 
     averageNumMisspec = FALSE, optMisfit = NULL, optDraws = 50, createOrder = c(1, 2, 3), indDist = NULL, sequential = FALSE, 
     facDist = NULL, errorDist = NULL, indLab = NULL, modelBoot = FALSE, realData = NULL, covData = NULL, 
-    params = FALSE, group = NULL, ...) {
+    params = FALSE, group = NULL, empirical = FALSE, ...) {
 	if(is(model, "SimSem")) {
 		if(!is.null(group)) model@groupLab <- group
 		data <- generateSimSem(model = model, n = n, maxDraw = maxDraw, misfitBounds = misfitBounds, misfitType = misfitType, 
 			averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, createOrder = createOrder, indDist = indDist, sequential = sequential, 
 			facDist = facDist, errorDist = errorDist, indLab = indLab, modelBoot = modelBoot, realData = realData, covData = covData, 
-			params = params)
+			params = params, empirical = empirical)
 	} else if (is(model, "MxModel")) {
-		data <- generateMx(object = model, n = n, indDist = indDist, groupLab = group, covData = covData)
+		data <- generateMx(object = model, n = n, indDist = indDist, groupLab = group, covData = covData, empirical = empirical)
 	} else {
 		if(is.character(model)) {
 			model <- list(model = model)
@@ -30,6 +30,7 @@ generate <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "
 		}
 		model$sample.nobs <- n
 		model$indDist <- indDist
+		model$empirical <- empirical
 		model <- c(model, list(...))
 		data <- do.call("lavaanSimulateData", model) 
 	}
@@ -39,7 +40,7 @@ generate <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "
 generateSimSem <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "f0", 
     averageNumMisspec = FALSE, optMisfit = NULL, optDraws = 50, createOrder = c(1, 2, 3), indDist = NULL, sequential = FALSE, 
     facDist = NULL, errorDist = NULL, indLab = NULL, modelBoot = FALSE, realData = NULL, covData = NULL, 
-    params = FALSE) {
+    params = FALSE, empirical = FALSE) {
     if (is.null(indLab)) {
         if (model@modelType == "path") {
             indLab <- unique(model@pt$lhs)
@@ -116,7 +117,7 @@ generateSimSem <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitTy
 	# covariates must be separated into different groups
 	# realData must not contain covariates
     datal <- mapply(FUN = createData, draws, indDist, facDist, errorDist, n = n, realData = realDataGroup, 
-		covData = covDataGroup, MoreArgs = list(sequential = sequential, modelBoot = modelBoot, indLab = indLab), 
+		covData = covDataGroup, MoreArgs = list(sequential = sequential, modelBoot = modelBoot, indLab = indLab, empirical = empirical), 
         SIMPLIFY = FALSE)
     data <- do.call("rbind", datal)
 	if(ngroups > 1) {
@@ -460,7 +461,8 @@ lavaanSimulateData <- function(
 
                          return.fit = FALSE,
                          debug = FALSE,
-                         standardized = FALSE
+                         standardized = FALSE, 
+						 empirical = FALSE
                         )
 {
     if(!is.null(seed)) set.seed(seed)
@@ -584,7 +586,7 @@ lavaanSimulateData <- function(
 	}
 	
     for(g in 1:ngroups) {
-        X[[g]] <- dataGen(dataDist = indDist[[g]], n = sample.nobs[g], m = Mu.hat[[g]], cm = Sigma.hat[[g]])
+        X[[g]] <- dataGen(dataDist = indDist[[g]], n = sample.nobs[g], m = Mu.hat[[g]], cm = Sigma.hat[[g]], empirical = empirical)
 		X[[g]] <- as.data.frame(X[[g]])
 
 		# any categorical variables?

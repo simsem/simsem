@@ -11,7 +11,11 @@ anova,SimResult-method
 bind                    Specify matrices for Monte Carlo simulation of
                         structural equation models
 bindDist                Create a data distribution object.
+coef,SimResult-method   Extract parameter estimates from a simulation
+                        result
 combineSim              Combine result objects
+continuousCoverage      Find coverage rate of model parameters when
+                        simulations have randomly varying parameters
 continuousPower         Find power of model parameters when simulations
                         have randomly varying parameters
 createData              Create data from a set of drawn parameters.
@@ -20,6 +24,8 @@ estmodel                Shortcut for data analysis template for
                         simulation.
 exportData              Export data sets for analysis with outside SEM
                         program.
+findCoverage            Find a value of independent variables that
+                        provides a given value of coverage rate
 findFactorIntercept     Find factor intercept from regression
                         coefficient matrix and factor total means
 findFactorMean          Find factor total means from regression
@@ -51,6 +57,8 @@ findPower               Find a value of independent variables that
 findRecursiveSet        Group variables regarding the position in
                         mediation chain
 generate                Generate data using SimSem template
+getCIwidth              Find confidence interval width
+getCoverage             Find coverage rate of model parameters
 getCutoff               Find fit indices cutoff given a priori alpha
                         level
 getCutoffNested         Find fit indices cutoff for nested model
@@ -69,6 +77,8 @@ getPowerFitNonNested    Find power in rejecting non-nested models based
                         on the differences in fit indices
 imposeMissing           Impose MAR, MCAR, planned missingness, or
                         attrition on a data set
+inspect,SimResult-method
+                        Extract information from a simulation result
 likRatioFit             Find the likelihood ratio (or Bayes factor)
                         based on the bivariate distribution of fit
                         indices
@@ -85,6 +95,10 @@ pValueNested            Find p-values (1 - percentile) for a nested
                         model comparison
 pValueNonNested         Find p-values (1 - percentile) for a non-nested
                         model comparison
+plotCIwidth             Plot a confidence interval width of a target
+                        parameter
+plotCoverage            Make a plot of confidence interval coverage
+                        rates
 plotCutoff              Plot sampling distributions of fit indices with
                         fit indices cutoffs
 plotCutoffNested        Plot sampling distributions of the differences
@@ -127,4 +141,6 @@ summaryParam            Provide summary of parameter estimates and
                         standard error across replications
 summaryPopulation       Summarize the population model used for data
                         generation underlying a result object
+summarySeed             Summary of a seed number
 summaryShort            Provide short summary of an object.
+summaryTime             Time summary

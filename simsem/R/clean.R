@@ -83,6 +83,10 @@ cleanSimResult <- function(object, converged = NULL, improper = FALSE) {
         object@FMI1 <- object@FMI1[converged, , drop=FALSE]
     if (!is.null(object@FMI2)) 
         object@FMI2 <- object@FMI2[converged, , drop=FALSE]
+    if (!is.null(object@cilower)) 
+        object@cilower <- object@cilower[converged, , drop=FALSE]
+    if (!is.null(object@ciupper)) 
+        object@ciupper <- object@ciupper[converged, , drop=FALSE]
     object@stdCoef <- object@stdCoef[converged, , drop=FALSE]
     object@seed <- object@seed
     if (length(object@n) > 1) 

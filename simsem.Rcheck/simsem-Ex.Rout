@@ -33,7 +33,7 @@ This is lavaan 0.5-12
 lavaan is BETA software! Please report any bugs.
  
 ###############################################################################################
-This is simsem 0.5-2
+This is simsem 0.5-3
 simsem is BETA software! Please report any bugs.
 simsem was developed at the University of Kansas Center for Research Methods and Data Analysis.
 ###############################################################################################
@@ -348,11 +348,14 @@ Class:    character      numeric   data.frame   data.frame   data.frame
 Name:     converged   paramValue misspecValue       popFit         FMI1
 Class:       vector   data.frame   data.frame   data.frame   data.frame
                                                                        
-Name:          FMI2      stdCoef         seed            n         nobs
-Class:   data.frame   data.frame      numeric       vector   data.frame
+Name:          FMI2      cilower      ciupper      stdCoef         seed
+Class:   data.frame   data.frame   data.frame   data.frame      numeric
                                                                        
-Name:        pmMCAR        pmMAR     extraOut    paramOnly       timing
-Class:       vector       vector         list      logical         list
+Name:             n         nobs       pmMCAR        pmMAR     extraOut
+Class:       vector   data.frame       vector       vector         list
+                                
+Name:     paramOnly       timing
+Class:      logical         list
 > loading <- matrix(0, 6, 1)
 > loading[1:6, 1] <- NA
 > LY <- bind(loading, 0.7)
@@ -892,6 +895,42 @@ logical(0)
 
 detaching 'package:copula'
 
+> nameEx("coef")
+> ### * coef
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: coef
+> ### Title: Extract parameter estimates from a simulation result
+> ### Aliases: coef,SimResult-method
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D loading <- matrix(0, 6, 2)
+> ##D loading[1:3, 1] <- NA
+> ##D loading[4:6, 2] <- NA
+> ##D LY <- bind(loading, 0.7)
+> ##D 
+> ##D latent.cor <- matrix(NA, 2, 2)
+> ##D diag(latent.cor) <- 1
+> ##D RPS <- binds(latent.cor, 0.5)
+> ##D 
+> ##D RTE <- binds(diag(6))
+> ##D 
+> ##D VY <- bind(rep(NA,6),2)
+> ##D 
+> ##D CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
+> ##D 
+> ##D # In reality, more than 5 replications are needed.
+> ##D Output <- sim(5, CFA.Model, n=200)
+> ##D coef(Output)
+> ##D coef(Output, improper = TRUE)
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
 > nameEx("combineSim")
 > ### * combineSim
 > 
@@ -1002,6 +1041,44 @@ Number of nonconverged replications:
 
 detaching 'package:parallel'
 
+> nameEx("continuousCoverage")
+> ### * continuousCoverage
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: continuousCoverage
+> ### Title: Find coverage rate of model parameters when simulations have
+> ###   randomly varying parameters
+> ### Aliases: continuousCoverage
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D # Specify Sample Size by n
+> ##D loading <- matrix(0, 6, 1)
+> ##D loading[1:6, 1] <- NA
+> ##D LY <- bind(loading, 0.7)
+> ##D RPS <- binds(diag(1))
+> ##D RTE <- binds(diag(6))
+> ##D CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA")
+> ##D 
+> ##D # Specify both continuous sample size and percent missing completely at random. Note that more fine-grained 
+> ##D # values of n and pmMCAR is needed, e.g., n=seq(50, 500, 1) and pmMCAR=seq(0, 0.2, 0.01)
+> ##D Output <- sim(NULL, CFA.Model, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2))
+> ##D summary(Output)
+> ##D 
+> ##D # Find the coverage rates of all combinations of different sample size and percent MCAR missing
+> ##D Ccover <- continuousCoverage(Output, contN = TRUE, contMCAR = TRUE)
+> ##D Ccover
+> ##D 
+> ##D # Find the coverage rates of parameter estimates when sample size is 200 and percent MCAR missing is 0.3
+> ##D Ccover2 <- continuousCoverage(Output, coverValue=0, contN = TRUE, contMCAR = TRUE, pred=list(N = 200, pmMCAR = 0.3))
+> ##D Ccover2
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
 > nameEx("continuousPower")
 > ### * continuousPower
 > 
@@ -2978,6 +3055,41 @@ NULL
 > 
 > 
 > cleanEx()
+> nameEx("findCoverage")
+> ### * findCoverage
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: findCoverage
+> ### Title: Find a value of independent variables that provides a given
+> ###   value of coverage rate
+> ### Aliases: findCoverage
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D # Specify Sample Size by n
+> ##D loading <- matrix(0, 6, 1)
+> ##D loading[1:6, 1] <- NA
+> ##D LY <- bind(loading, 0.4)
+> ##D RPS <- binds(diag(1))
+> ##D RTE <- binds(diag(6))
+> ##D CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA")
+> ##D 
+> ##D # Specify both sample size and percent missing completely at random. Note that more fine-grained 
+> ##D # values of n and pmMCAR is needed, e.g., n=seq(50, 500, 1) and pmMCAR=seq(0, 0.2, 0.01)
+> ##D Output <- sim(NULL, model=CFA.Model, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2))
+> ##D 
+> ##D # Find the power of all possible combination of N and pmMCAR
+> ##D cover <- getCoverage(Output, coverValue = 0)
+> ##D 
+> ##D # Find the sample size that provides the power of 0.8
+> ##D findCoverage(cover, "N", 0.20)
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
 > nameEx("findFactorIntercept")
 > ### * findFactorIntercept
 > 
@@ -3346,6 +3458,85 @@ NULL
 > 
 > 
 > cleanEx()
+> nameEx("getCIwidth")
+> ### * getCIwidth
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: getCIwidth
+> ### Title: Find confidence interval width
+> ### Aliases: getCIwidth
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D loading <- matrix(0, 6, 2)
+> ##D loading[1:3, 1] <- NA
+> ##D loading[4:6, 2] <- NA
+> ##D loadingValues <- matrix(0, 6, 2)
+> ##D loadingValues[1:3, 1] <- 0.7
+> ##D loadingValues[4:6, 2] <- 0.7
+> ##D LY <- bind(loading, loadingValues)
+> ##D latent.cor <- matrix(NA, 2, 2)
+> ##D diag(latent.cor) <- 1
+> ##D RPS <- binds(latent.cor, 0.5)
+> ##D error.cor <- matrix(0, 6, 6)
+> ##D diag(error.cor) <- 1
+> ##D RTE <- binds(error.cor)
+> ##D CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA")
+> ##D 
+> ##D # We make the examples running only 5 replications to save time.
+> ##D # In reality, more replications are needed.
+> ##D Output <- sim(5, n = 200, model=CFA.Model)
+> ##D 
+> ##D # Get the cutoff (critical value) when alpha is 0.05
+> ##D getCIwidth(Output, assurance=0.80)
+> ##D 
+> ##D # Finding the cutoff when the sample size is varied. Note that more fine-grained 
+> ##D # values of n is needed, e.g., n=seq(50, 500, 1)
+> ##D Output2 <- sim(NULL, model=CFA.Model, n=seq(50, 100, 10))
+> ##D 
+> ##D # Get the fit index cutoff when sample size is 75.
+> ##D getCIwidth(Output2, assurance=0.80, nVal = 75)
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("getCoverage")
+> ### * getCoverage
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: getCoverage
+> ### Title: Find coverage rate of model parameters
+> ### Aliases: getCoverage
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D loading <- matrix(0, 6, 1)
+> ##D loading[1:6, 1] <- NA
+> ##D LY <- bind(loading, 0.7)
+> ##D RPS <- binds(diag(1))
+> ##D RTE <- binds(diag(6))
+> ##D CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA")
+> ##D 
+> ##D # Specify both sample size and percent missing completely at random. Note that more fine-grained 
+> ##D # values of n and pmMCAR is needed, e.g., n=seq(50, 500, 1) and pmMCAR=seq(0, 0.2, 0.01)
+> ##D Output <- sim(NULL, model=CFA.Model, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2))
+> ##D summary(Output)
+> ##D 
+> ##D # Get the coverage rates of all possible combinations of n and pmMCAR
+> ##D getCoverage(Output)
+> ##D 
+> ##D # Get the coverage rates of the combinations of n of 100 and 200 and pmMCAR of 0, 0.1, and 0.2
+> ##D getCoverage(Output, coverValue = 0, nVal=c(100, 200), pmMCARval=c(0, 0.1, 0.2))
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
 > nameEx("getCutoff")
 > ### * getCutoff
 > 
@@ -3353,8 +3544,7 @@ NULL
 > 
 > ### Name: getCutoff
 > ### Title: Find fit indices cutoff given a priori alpha level
-> ### Aliases: getCutoff getCutoff-methods getCutoff,data.frame-method
-> ###   getCutoff,matrix-method getCutoff,SimResult-method
+> ### Aliases: getCutoff
 > 
 > ### ** Examples
 > 
@@ -4209,6 +4399,43 @@ NULL
 > 
 > 
 > cleanEx()
+> nameEx("inspect")
+> ### * inspect
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: inspect
+> ### Title: Extract information from a simulation result
+> ### Aliases: inspect,SimResult-method
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D loading <- matrix(0, 6, 2)
+> ##D loading[1:3, 1] <- NA
+> ##D loading[4:6, 2] <- NA
+> ##D LY <- bind(loading, 0.7)
+> ##D 
+> ##D latent.cor <- matrix(NA, 2, 2)
+> ##D diag(latent.cor) <- 1
+> ##D RPS <- binds(latent.cor, 0.5)
+> ##D 
+> ##D RTE <- binds(diag(6))
+> ##D 
+> ##D VY <- bind(rep(NA,6),2)
+> ##D 
+> ##D CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
+> ##D 
+> ##D # In reality, more than 5 replications are needed.
+> ##D Output <- sim(5, CFA.Model, n=200)
+> ##D inspect(Output, "coef")
+> ##D inspect(Output, "param")
+> ##D inspect(Output, "se", improper = TRUE, nonconverged = TRUE)
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
 > nameEx("likRatioFit")
 > ### * likRatioFit
 > 
@@ -4655,12 +4882,6 @@ y1 ~ 0.05 + 0.5*y3
 > ### ** Examples
 > 
 > ## Not run: 
-> ##D # Compare number with a vector
-> ##D pValue(0.5, rnorm(1000, 0, 1))
-> ##D 
-> ##D # Compare numbers with a data frame
-> ##D pValue(c(0.5, 0.2), data.frame(rnorm(1000, 0, 1), runif(1000, 0, 1)))
-> ##D 
 > ##D # Compare an analysis result with a result of simulation study
 > ##D library(lavaan)
 > ##D loading <- matrix(0, 9, 3)
@@ -4798,6 +5019,94 @@ y1 ~ 0.05 + 0.5*y3
 > 
 > 
 > cleanEx()
+> nameEx("plotCIwidth")
+> ### * plotCIwidth
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: plotCIwidth
+> ### Title: Plot a confidence interval width of a target parameter
+> ### Aliases: plotCIwidth
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D loading <- matrix(0, 6, 2)
+> ##D loading[1:3, 1] <- NA
+> ##D loading[4:6, 2] <- NA
+> ##D loadingValues <- matrix(0, 6, 2)
+> ##D loadingValues[1:3, 1] <- 0.7
+> ##D loadingValues[4:6, 2] <- 0.7
+> ##D LY <- bind(loading, loadingValues)
+> ##D latent.cor <- matrix(NA, 2, 2)
+> ##D diag(latent.cor) <- 1
+> ##D RPS <- binds(latent.cor, 0.5)
+> ##D error.cor <- matrix(0, 6, 6)
+> ##D diag(error.cor) <- 1
+> ##D RTE <- binds(error.cor)
+> ##D CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA")
+> ##D 
+> ##D # We make the examples running only 5 replications to save time.
+> ##D # In reality, more replications are needed.
+> ##D Output <- sim(5, n=200, model=CFA.Model) 
+> ##D 
+> ##D # Plot the widths of factor correlation
+> ##D plotCIwidth(Output, "f1~~f2", assurance = 0.80)
+> ##D 
+> ##D # The example of continous varying sample size. Note that more fine-grained 
+> ##D # values of n is needed, e.g., n=seq(50, 500, 1)
+> ##D Output2 <- sim(NULL, n=seq(450, 500, 10), model=CFA.Model)
+> ##D 
+> ##D # Plot the widths along sample size value
+> ##D plotCIwidth(Output2, "f1~~f2", assurance = 0.80)
+> ##D 
+> ##D # Specify both continuous sample size and percent missing completely at random. Note that more fine-grained 
+> ##D # values of n and pmMCAR is needed, e.g., n=seq(50, 500, 1) and pmMCAR=seq(0, 0.2, 0.01)
+> ##D Output3 <- sim(NULL, n=seq(450, 500, 10), pmMCAR=c(0, 0.05, 0.1, 0.15), model=CFA.Model)
+> ##D 
+> ##D # Plot the contours that each contour represents the value of widths at each level
+> ##D # of sample size and percent missing completely at random
+> ##D plotCIwidth(Output3, "f1~~f2", assurance = 0.80)
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("plotCoverage")
+> ### * plotCoverage
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: plotCoverage
+> ### Title: Make a plot of confidence interval coverage rates
+> ### Aliases: plotCoverage
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D loading <- matrix(0, 6, 1)
+> ##D loading[1:6, 1] <- NA
+> ##D LY <- bind(loading, 0.4)
+> ##D RPS <- binds(diag(1))
+> ##D RTE <- binds(diag(6))
+> ##D CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA")
+> ##D 
+> ##D # Specify both continuous sample size and percent missing completely at random. Note that more fine-grained 
+> ##D # values of n and pmMCAR is needed, e.g., n=seq(50, 500, 1) and pmMCAR=seq(0, 0.2, 0.01)
+> ##D 
+> ##D Output <- sim(NULL, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2), model=CFA.Model)
+> ##D 
+> ##D # Plot the power of the first factor loading along the sample size value
+> ##D plotCoverage(Output, "f1=~y1", contMCAR=FALSE)
+> ##D plotCoverage(Output, "f1=~y1", coverValue = 0, contMCAR=FALSE)
+> ##D 
+> ##D # Plot the power of the correlation along the sample size and percent missing completely at random
+> ##D plotCoverage(Output, "f1=~y1")
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
 > nameEx("plotCutoff")
 > ### * plotCutoff
 > 
@@ -4806,8 +5115,7 @@ y1 ~ 0.05 + 0.5*y3
 > ### Name: plotCutoff
 > ### Title: Plot sampling distributions of fit indices with fit indices
 > ###   cutoffs
-> ### Aliases: plotCutoff plotCutoff-methods plotCutoff,data.frame-method
-> ###   plotCutoff,SimResult-method
+> ### Aliases: plotCutoff
 > 
 > ### ** Examples
 > 
@@ -5080,10 +5388,10 @@ detaching 'package:parallel'
 > ##D Output <- sim(NULL, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2), model=CFA.Model)
 > ##D 
 > ##D # Plot the power of the first factor loading along the sample size value
-> ##D plotPower(Output, "1.f1=~y1", contMCAR=FALSE)
+> ##D plotPower(Output, "f1=~y1", contMCAR=FALSE)
 > ##D 
 > ##D # Plot the power of the correlation along the sample size and percent missing completely at random
-> ##D plotPower(Output, "1.f1=~y1")
+> ##D plotPower(Output, "f1=~y1")
 > ## End(Not run)
 > 
 > 
@@ -5692,9 +6000,9 @@ y1~~y2           -0.007       0.097      0.070                   0  -0.004
 y1~~y1            0.995       0.059      0.099                   1   1.000
 y2~~y2            0.993       0.107      0.099                   1   1.000
        Std.Est.SD Average.Param Average.Bias Coverage
-y1~~y2      0.095        -0.002       -0.004        1
-y1~~y1      0.000         1.004       -0.009        1
-y2~~y2      0.000         0.999       -0.006        1
+y1~~y2      0.095             0       -0.007        1
+y1~~y1      0.000             1       -0.005        1
+y2~~y2      0.000             1       -0.007        1
 ========= Correlation between Fit Indices ============
        chisq    aic    bic    cfi   srmr
 chisq  1.000 -0.539 -0.539 -0.537  0.967
@@ -6249,11 +6557,14 @@ Class:    character      numeric   data.frame   data.frame   data.frame
 Name:     converged   paramValue misspecValue       popFit         FMI1
 Class:       vector   data.frame   data.frame   data.frame   data.frame
                                                                        
-Name:          FMI2      stdCoef         seed            n         nobs
-Class:   data.frame   data.frame      numeric       vector   data.frame
+Name:          FMI2      cilower      ciupper      stdCoef         seed
+Class:   data.frame   data.frame   data.frame   data.frame      numeric
                                                                        
-Name:        pmMCAR        pmMAR     extraOut    paramOnly       timing
-Class:       vector       vector         list      logical         list
+Name:             n         nobs       pmMCAR        pmMAR     extraOut
+Class:       vector   data.frame       vector       vector         list
+                                
+Name:     paramOnly       timing
+Class:      logical         list
 > loading <- matrix(0, 6, 1)
 > loading[1:6, 1] <- NA
 > LY <- bind(loading, 0.7)
@@ -6347,25 +6658,25 @@ y3~1   0.01881353          0.00 -0.048035069      1.0         -Inf -2.55973024
 y4~1   0.05627538          0.00 -0.030141352      1.0           NA -0.55356983
 y5~1   0.03319385          0.00 -0.025018328      1.0           NA -0.68951235
 y6~1   0.04189960          0.00  0.004855082      1.0           NA  0.11441035
-       Rel.SE.Bias
-f1=~y1  1.33715032
-f1=~y2 -0.16599662
-f1=~y3 -0.10180250
-f1=~y4 -0.26936358
-f1=~y5 -0.47122576
-f1=~y6 -0.21919826
-y1~~y1  0.17322317
-y2~~y2  2.15317400
-y3~~y3 -0.35798249
-y4~~y4 -0.16117506
-y5~~y5  1.11271312
-y6~~y6 -0.19046320
-y1~1   -0.22929975
-y2~1    0.15165895
-y3~1    1.31704036
-y4~1   -0.19427105
-y5~1    0.21779743
-y6~1    0.04732499
+       Rel.SE.Bias Average.CI.Width SD.CI.Width
+f1=~y1  1.33715032        0.1632157 0.002311521
+f1=~y2 -0.16599662        0.1636247 0.003617770
+f1=~y3 -0.10180250        0.1620544 0.005697447
+f1=~y4 -0.26936358        0.1622902 0.004130255
+f1=~y5 -0.47122576        0.1624265 0.006783409
+f1=~y6 -0.21919826        0.1633799 0.007649485
+y1~~y1  0.17322317        0.1511192 0.005507253
+y2~~y2  2.15317400        0.1539716 0.004420729
+y3~~y3 -0.35798249        0.1513664 0.013697766
+y4~~y4 -0.16117506        0.1501380 0.009877484
+y5~~y5  1.11271312        0.1493696 0.008826089
+y6~~y6 -0.19046320        0.1510911 0.013686738
+y1~1   -0.22929975        0.1737545 0.003316927
+y2~1    0.15165895        0.1723417 0.006797848
+y3~1    1.31704036        0.1704417 0.004714392
+y4~1   -0.19427105        0.1719719 0.005045193
+y5~1    0.21779743        0.1732086 0.010807950
+y6~1    0.04732499        0.1742171 0.009647712
 > 
 > 
 > 
@@ -6404,6 +6715,41 @@ detaching 'package:parallel'
 > 
 > 
 > cleanEx()
+> nameEx("summarySeed")
+> ### * summarySeed
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: summarySeed
+> ### Title: Summary of a seed number
+> ### Aliases: summarySeed
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D loading <- matrix(0, 6, 2)
+> ##D loading[1:3, 1] <- NA
+> ##D loading[4:6, 2] <- NA
+> ##D LY <- bind(loading, 0.7)
+> ##D 
+> ##D latent.cor <- matrix(NA, 2, 2)
+> ##D diag(latent.cor) <- 1
+> ##D RPS <- binds(latent.cor, 0.5)
+> ##D 
+> ##D RTE <- binds(diag(6))
+> ##D 
+> ##D VY <- bind(rep(NA,6),2)
+> ##D 
+> ##D CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
+> ##D 
+> ##D # In reality, more than 5 replications are needed.
+> ##D Output <- sim(5, CFA.Model, n=200)
+> ##D summarySeed(Output)
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
 > nameEx("summaryShort")
 > ### * summaryShort
 > 
@@ -6432,10 +6778,45 @@ detaching 'package:parallel'
 > 
 > 
 > 
+> cleanEx()
+> nameEx("summaryTime")
+> ### * summaryTime
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: summaryTime
+> ### Title: Time summary
+> ### Aliases: summaryTime
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D loading <- matrix(0, 6, 2)
+> ##D loading[1:3, 1] <- NA
+> ##D loading[4:6, 2] <- NA
+> ##D LY <- bind(loading, 0.7)
+> ##D 
+> ##D latent.cor <- matrix(NA, 2, 2)
+> ##D diag(latent.cor) <- 1
+> ##D RPS <- binds(latent.cor, 0.5)
+> ##D 
+> ##D RTE <- binds(diag(6))
+> ##D 
+> ##D VY <- bind(rep(NA,6),2)
+> ##D 
+> ##D CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
+> ##D 
+> ##D # In reality, more than 5 replications are needed.
+> ##D Output <- sim(5, CFA.Model, n=200)
+> ##D summaryTime(Output)
+> ## End(Not run)
+> 
+> 
+> 
 > ### * <FOOTER>
 > ###
 > cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  10.7 0.23 11.01 NA NA 
+Time elapsed:  11.67 0.27 12.12 NA NA 
 > grDevices::dev.off()
 null device 
           1 
