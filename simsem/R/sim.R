@@ -770,7 +770,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 				group <- NULL
 			}
 			if (silent) {
-				invisible(capture.output(suppressMessages(tryCatch(out <- analyzeMx(model, data, groupLab = group, ...), error = function(e) if(stopOnError) stop(e) else e))))
+				invisible(capture.output(suppressMessages(tryCatch(out <- analyzeMx(model, data, groupLab = group, ...), error = function(e) if(stopOnError) stop(e)))))
 			} else {
 			  tryCatch(out <- analyzeMx(model, data, groupLab = group, mxMixture = mxMixture, ...), error = function(e) if(stopOnError) stop(e) else e)
 			}
