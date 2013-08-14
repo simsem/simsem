@@ -9,7 +9,6 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ..., rawDa
                 stopOnError = FALSE) {
 	
   mc <- match.call()
-	#Future plans. Add summaryTime option. Or include as an option in summary. Guess time forfull sim
 	#Add inspect function for anything
 	#Update function. Takes results object. Or takes model object.
 	#Speed things: functions in c or c++ (maybe drawparam), look at sugar functions
@@ -749,17 +748,23 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 		# Will use analyze either when there is a missing object or auxiliary variables specified. 
 		# If users provide their own data there maybe a case with auxiliary variables and no missing object
 		if(is(model, "function")) {
-			if (silent) {
-				invisible(capture.output(suppressMessages(tryCatch(out <- model(data), error = function(e) if(stopOnError) stop(e)))))
+      if(stopOnError){
+        out <- model(data)
+      }
+			else if (silent) {
+				invisible(capture.output(suppressMessages(try(out <- model(data), silent = TRUE))))
 			} else {
-			  tryCatch(out <- model(data), error = function(e) if(stopOnError) stop(e) else e)
+				try(out <- model(data))
 			}
 		} else if (is.lavaancall(model)) {
 			model$data <- data
-			if (silent) {
-				invisible(capture.output(suppressMessages(tryCatch(out <- analyzeLavaan(model, lavaanfun, miss, aux), error = function(e) if(stopOnError) stop(e)))))
+			if(stopOnError){
+			  out <- analyzeLavaan(model, lavaanfun, miss, aux)
+			}
+			else if (silent) {
+				invisible(capture.output(suppressMessages(try(out <- analyzeLavaan(model, lavaanfun, miss, aux), silent = TRUE))))
 			} else {
-			  tryCatch(out <- analyzeLavaan(model, lavaanfun, miss, aux), error = function(e) if(stopOnError) stop(e) else e)
+				try(out <- analyzeLavaan(model, lavaanfun, miss, aux))
 			}
 		} else if (is(model, "MxModel")) {
 			mxAnalysis <- TRUE
@@ -769,25 +774,34 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 			} else {
 				group <- NULL
 			}
-			if (silent) {
-				invisible(capture.output(suppressMessages(tryCatch(out <- analyzeMx(model, data, groupLab = group, ...), error = function(e) if(stopOnError) stop(e)))))
+			if(stopOnError){
+			  out <- analyzeMx(model, data, groupLab = group, ...)
+			}
+			else if (silent) {
+				invisible(capture.output(suppressMessages(try(out <- analyzeMx(model, data, groupLab = group, ...), silent = TRUE))))
 			} else {
-			  tryCatch(out <- analyzeMx(model, data, groupLab = group, mxMixture = mxMixture, ...), error = function(e) if(stopOnError) stop(e) else e)
+				try(out <- analyzeMx(model, data, groupLab = group, mxMixture = mxMixture, ...))
 			}
 		} else {
 			if (!is.null(miss) | !is.null(aux)) {
-				if (silent) {
-					invisible(capture.output(suppressMessages(tryCatch(out <- analyzeSimSem(model, data, 
-						aux = aux, miss = miss, ...), error = function(e) if(stopOnError) stop(e)))))
+			  if(stopOnError){
+			    out <- analyzeSimSem(model, data, aux = aux, miss = miss, ...)
+			  }
+			  else if (silent) {
+					invisible(capture.output(suppressMessages(try(out <- analyzeSimSem(model, data, 
+						aux = aux, miss = miss, ...), silent = TRUE))))
 				} else {
-				  tryCatch(out <- analyzeSimSem(model, data, aux = aux, miss = miss, ...), error = function(e) if(stopOnError) stop(e) else e)
+					try(out <- analyzeSimSem(model, data, aux = aux, miss = miss, ...))
 				}
 			} else {
-				if (silent) {
-					invisible(capture.output(suppressMessages(tryCatch(out <- anal(model, data, ...), 
-					                                                   , error = function(e) if(stopOnError) stop(e)))))
+			  if(stopOnError){
+			    out <- anal(model, data, ...)
+			  }
+			  else if (silent) {
+					invisible(capture.output(suppressMessages(try(out <- anal(model, data, ...), 
+						silent = TRUE))))
 				} else {
-				  tryCatch(out <- anal(model, data, ...), error = function(e) if(stopOnError) stop(e) else e)
+					try(out <- anal(model, data, ...))
 				}
 			}
 		}
