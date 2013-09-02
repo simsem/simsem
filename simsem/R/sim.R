@@ -320,12 +320,45 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ..., rawDa
                 averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, createOrder = createOrder, misfitType = misfitType, aux = aux, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart, popData = popData, group = group, mxFit = mxFit, mxMixture = mxMixture, citype = citype, cilevel = cilevel, stopOnError = stopOnError, ...)
             stopCluster(cl)
         } else {
-            Result.l <- mclapply(simConds, runRep, model = model, generate = generate, 
+          if(! silent){
+            
+            # Progress tracking
+            # http://stackoverflow.com/questions/10984556/is-there-way-to-track-progress-on-a-mclapply
+            
+            library(multicore)
+            
+            f <- fifo(tempfile(), open="w+b", blocking=T)
+            if (inherits(fork(), "masterProcess")) {
+              cat("Started progress monitoring.\n")
+              # Child
+              progress <- 0.0
+              progressPrintValue = 0
+              while (progress < 1 && !isIncomplete(f)) {
+                msg <- readBin(f, "double")
+                progress <- progress + as.numeric(msg)
+                if(round(progress, digits=2) > progressPrintValue){
+                  progressPrintValue <- round(progress, digits=2)
+                  cat("Progress:", progressPrintValue * 100,"%\n")
+                }
+              } 
+              exit()
+            }
+            numJobs <- length(simConds)
+          }
+            Result.l <- mclapply(simConds, function(...){
+                  runRep(...)
+                  # Write progress
+                  if(!silent) writeBin(1/numJobs, f)
+                }, model = model, generate = generate, 
                 miss = miss, datafun = datafun, lavaanfun = lavaanfun, outfun = outfun, silent = silent, 
                 facDist = facDist, indDist = indDist, errorDist = errorDist, sequential = sequential, 
                 realData = realData, covData = covData, maxDraw = maxDraw, misfitBounds = misfitBounds, 
                 averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, createOrder = createOrder, 
                 misfitType = misfitType, aux = aux, mc.cores = numProc, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart, popData = popData, group = group, mxFit = mxFit, mxMixture = mxMixture, citype = citype, cilevel = cilevel, stopOnError = stopOnError, ...)
+          
+          # End progress monitoring
+          if(!silent) close(f)
+          
         }
     } else {
         Result.l <- lapply(simConds, runRep, model = model, generate = generate, 
