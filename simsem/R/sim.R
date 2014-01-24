@@ -346,9 +346,9 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ..., rawDa
             numJobs <- length(simConds)
           }
             Result.l <- mclapply(simConds, function(...){
-                  runRep(...)
                   # Write progress
                   if(!silent) writeBin(1/numJobs, f)
+                  runRep(...)
                 }, model = model, generate = generate, 
                 miss = miss, datafun = datafun, lavaanfun = lavaanfun, outfun = outfun, silent = silent, 
                 facDist = facDist, indDist = indDist, errorDist = errorDist, sequential = sequential, 
@@ -361,7 +361,13 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ..., rawDa
           
         }
     } else {
-        Result.l <- lapply(simConds, runRep, model = model, generate = generate, 
+        numJobs <- length(simConds)
+
+        Result.l <- lapply(1:length(simConds), function(i, ...){
+          # Write progress
+          if(!silent) cat("Progress:", round(i/numJobs, digits=2) * 100,"%\n")
+          runRep(simConds[[i]], ...)
+        },  model = model, generate = generate, 
             miss = miss, datafun = datafun, lavaanfun = lavaanfun, outfun = outfun, silent = silent, facDist = facDist, 
             indDist = indDist, errorDist = errorDist, sequential = sequential, realData = realData, covData = covData, 
             maxDraw = maxDraw, misfitBounds = misfitBounds, averageNumMisspec = averageNumMisspec, 
