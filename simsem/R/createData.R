@@ -10,6 +10,7 @@
 createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist = NULL, 
                        errorDist = NULL, indLab = NULL, modelBoot = FALSE, realData = NULL, covData = NULL,
                        empirical = FALSE) {
+  
   # Assume covData is good
   if (modelBoot) {
     if (sequential) 
@@ -108,7 +109,11 @@ createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist 
         }
       }
       if(!is.null(covData)) Data <- data.frame(covData, Data)
-    } else {
+    } 
+    
+    # Covariance matrix based data generation
+    
+    else {
       if(is.null(covData)) {
         macs <- createImpliedMACS(usedParam)
         if (!is.null(indDist)) {
@@ -226,13 +231,18 @@ dataGen <- function(dataDist, n, m, cm, empirical = FALSE) {
 }
 
 extractSimDataDist <- function(object, pos) {
-  copula <- object@copula
-  if (!is(copula, "NullCopula")) {
-    copula@dimension <- 2L
-  } 
-  return(new("SimDataDist", margins = object@margins[pos], paramMargins = object@paramMargins[pos], 
-             p = length(pos), keepScale = object@keepScale[pos], reverse = object@reverse[pos], copula = copula, 
-             skewness = object@skewness[pos], kurtosis = object@kurtosis[pos]))
+  if(is.null(object)){
+    return(NULL)
+  }
+  else{
+    copula <- object@copula
+    if (!is(copula, "NullCopula")) {
+      copula@dimension <- 2L
+    } 
+    return(new("SimDataDist", margins = object@margins[pos], paramMargins = object@paramMargins[pos], 
+               p = length(pos), keepScale = object@keepScale[pos], reverse = object@reverse[pos], copula = copula, 
+               skewness = object@skewness[pos], kurtosis = object@kurtosis[pos]))
+  }
 } 
 
 # The function from Mair et al. (2012)
