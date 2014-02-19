@@ -1,4 +1,3 @@
-
 analyze <- function(model, data, package = "lavaan", miss = NULL, 
     aux = NULL, group = NULL, mxMixture = FALSE, ...) {
 	mc <- match.call()
@@ -127,6 +126,12 @@ analyzeLavaan <- function(args, fun = "lavaan", miss = NULL, aux = NULL) {
 			missing <- args$missing
 			args$missing <- NULL
 		}
+		
+		    # If there is a miss argument and m = 0, use FIML
+    if (!is.null(miss)) {
+      if (miss@m == 0) args$missing <- "fiml"
+    }
+
         if (!is.null(aux)) {
             library(semTools)	
 			if(is.numeric(aux)) aux <- colnames(model$data)[aux]
