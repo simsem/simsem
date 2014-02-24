@@ -5,9 +5,10 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ..., rawDa
     misfitBounds = NULL, averageNumMisspec = FALSE, optMisfit = NULL, optDraws = 50, createOrder = c(1, 2, 3), 
     aux = NULL, group = NULL, mxFit = FALSE, mxMixture = FALSE, citype = NULL, cilevel = 0.95,
 	seed = 123321, silent = FALSE, multicore = FALSE, cluster = FALSE, 
-    numProc = NULL, paramOnly = FALSE, dataOnly = FALSE, smartStart = FALSE, previousSim = NULL, completeRep = FALSE) {
-	mc <- match.call()
-	#Future plans. Add summaryTime option. Or include as an option in summary. Guess time forfull sim
+    numProc = NULL, paramOnly = FALSE, dataOnly = FALSE, smartStart = FALSE, previousSim = NULL, completeRep = FALSE,
+                stopOnError = FALSE) {
+	
+  mc <- match.call()
 	#Add inspect function for anything
 	#Update function. Takes results object. Or takes model object.
 	#Speed things: functions in c or c++ (maybe drawparam), look at sugar functions
@@ -316,23 +317,62 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ..., rawDa
                 miss = miss, datafun = datafun, lavaanfun = lavaanfun, outfun = outfun, silent = silent, 
                 facDist = facDist, indDist = indDist, errorDist = errorDist, sequential = sequential, 
                 realData = realData, covData = covData, maxDraw = maxDraw, misfitBounds = misfitBounds, 
-                averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, createOrder = createOrder, misfitType = misfitType, aux = aux, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart, popData = popData, group = group, mxFit = mxFit, mxMixture = mxMixture, citype = citype, cilevel = cilevel, ...)
+                averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, createOrder = createOrder, misfitType = misfitType, aux = aux, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart, popData = popData, group = group, mxFit = mxFit, mxMixture = mxMixture, citype = citype, cilevel = cilevel, stopOnError = stopOnError, ...)
             stopCluster(cl)
         } else {
-            Result.l <- mclapply(simConds, runRep, model = model, generate = generate, 
+          if(! silent){
+            
+            # Progress tracking
+            # http://stackoverflow.com/questions/10984556/is-there-way-to-track-progress-on-a-mclapply
+            
+            library(multicore)
+            
+            f <- fifo(tempfile(), open="w+b", blocking=T)
+            if (inherits(fork(), "masterProcess")) {
+              cat("Started progress monitoring.\n")
+              # Child
+              progress <- 0.0
+              progressPrintValue = 0
+              while (progress < 1 && !isIncomplete(f)) {
+                msg <- readBin(f, "double")
+                progress <- progress + as.numeric(msg)
+                if(round(progress, digits=2) > progressPrintValue){
+                  progressPrintValue <- round(progress, digits=2)
+                  cat("Progress:", progressPrintValue * 100,"%\n")
+                }
+              } 
+              exit()
+            }
+            numJobs <- length(simConds)
+          }
+            Result.l <- mclapply(simConds, function(...){
+                  # Write progress
+                  if(!silent) writeBin(1/numJobs, f)
+                  runRep(...)
+                }, model = model, generate = generate, 
                 miss = miss, datafun = datafun, lavaanfun = lavaanfun, outfun = outfun, silent = silent, 
                 facDist = facDist, indDist = indDist, errorDist = errorDist, sequential = sequential, 
                 realData = realData, covData = covData, maxDraw = maxDraw, misfitBounds = misfitBounds, 
                 averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, createOrder = createOrder, 
-                misfitType = misfitType, aux = aux, mc.cores = numProc, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart, popData = popData, group = group, mxFit = mxFit, mxMixture = mxMixture, citype = citype, cilevel = cilevel, ...)
+                misfitType = misfitType, aux = aux, mc.cores = numProc, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart, popData = popData, group = group, mxFit = mxFit, mxMixture = mxMixture, citype = citype, cilevel = cilevel, stopOnError = stopOnError, ...)
+          
+          # End progress monitoring
+          if(!silent) close(f)
+          
         }
     } else {
-        Result.l <- lapply(simConds, runRep, model = model, generate = generate, 
+        numJobs <- length(simConds)
+
+        Result.l <- lapply(1:length(simConds), function(i, ...){
+          # Write progress
+          if(!silent) cat("Progress:", round(i/numJobs, digits=2) * 100,"%\n")
+          runRep(simConds[[i]], ...)
+        },  model = model, generate = generate, 
             miss = miss, datafun = datafun, lavaanfun = lavaanfun, outfun = outfun, silent = silent, facDist = facDist, 
             indDist = indDist, errorDist = errorDist, sequential = sequential, realData = realData, covData = covData, 
             maxDraw = maxDraw, misfitBounds = misfitBounds, averageNumMisspec = averageNumMisspec, 
             optMisfit = optMisfit, optDraws = optDraws,  createOrder = createOrder, misfitType = misfitType, 
-            aux = aux, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart, popData = popData, group = group, mxFit = mxFit, mxMixture = mxMixture, citype = citype, cilevel = cilevel, ...)
+            aux = aux, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart, popData = popData, group = group, mxFit = mxFit, mxMixture = mxMixture, citype = citype, cilevel = cilevel, stopOnError = stopOnError, ...)
     }
 
 	################## Extract out popData ##################################
@@ -594,7 +634,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
     sequential = FALSE, realData = NULL, covData = NULL, silent = FALSE, modelBoot = FALSE, maxDraw = 50, 
     misfitType = "f0", misfitBounds = NULL, averageNumMisspec = NULL, optMisfit = NULL, 
     optDraws = 50, createOrder = c(1, 2, 3), aux = NULL, paramOnly = FALSE, dataOnly = FALSE, smartStart = TRUE, 
-	popData = NULL, group = NULL, mxFit = FALSE, mxMixture = FALSE, citype = NULL, cilevel = 0.95, ...) {
+	popData = NULL, group = NULL, mxFit = FALSE, mxMixture = FALSE, citype = NULL, cilevel = 0.95, stopOnError = FALSE, ...) {
     start.time0 <- start.time <- proc.time()[3]
     timing <- list()
     
@@ -747,14 +787,20 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 		# Will use analyze either when there is a missing object or auxiliary variables specified. 
 		# If users provide their own data there maybe a case with auxiliary variables and no missing object
 		if(is(model, "function")) {
-			if (silent) {
+      if(stopOnError){
+        out <- model(data)
+      }
+			else if (silent) {
 				invisible(capture.output(suppressMessages(try(out <- model(data), silent = TRUE))))
 			} else {
 				try(out <- model(data))
 			}
 		} else if (is.lavaancall(model)) {
 			model$data <- data
-			if (silent) {
+			if(stopOnError){
+			  out <- analyzeLavaan(model, lavaanfun, miss, aux)
+			}
+			else if (silent) {
 				invisible(capture.output(suppressMessages(try(out <- analyzeLavaan(model, lavaanfun, miss, aux), silent = TRUE))))
 			} else {
 				try(out <- analyzeLavaan(model, lavaanfun, miss, aux))
@@ -767,21 +813,30 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 			} else {
 				group <- NULL
 			}
-			if (silent) {
+			if(stopOnError){
+			  out <- analyzeMx(model, data, groupLab = group, ...)
+			}
+			else if (silent) {
 				invisible(capture.output(suppressMessages(try(out <- analyzeMx(model, data, groupLab = group, ...), silent = TRUE))))
 			} else {
 				try(out <- analyzeMx(model, data, groupLab = group, mxMixture = mxMixture, ...))
 			}
 		} else {
 			if (!is.null(miss) | !is.null(aux)) {
-				if (silent) {
+			  if(stopOnError){
+			    out <- analyzeSimSem(model, data, aux = aux, miss = miss, ...)
+			  }
+			  else if (silent) {
 					invisible(capture.output(suppressMessages(try(out <- analyzeSimSem(model, data, 
 						aux = aux, miss = miss, ...), silent = TRUE))))
 				} else {
 					try(out <- analyzeSimSem(model, data, aux = aux, miss = miss, ...))
 				}
 			} else {
-				if (silent) {
+			  if(stopOnError){
+			    out <- anal(model, data, ...)
+			  }
+			  else if (silent) {
 					invisible(capture.output(suppressMessages(try(out <- anal(model, data, ...), 
 						silent = TRUE))))
 				} else {
