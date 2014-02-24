@@ -258,11 +258,12 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ..., rawDa
         
         for (i in seq_len(nRep)) {
             simConds[[i]] <- list()
-            simConds[[i]][[1]] <- NULL
-            simConds[[i]][[2]] <- sapply(n, "[", i)
-            simConds[[i]][[3]] <- pmMCAR[i]
-            simConds[[i]][[4]] <- pmMAR[i]
-            simConds[[i]][[5]] <- numseed[[i]]
+            simConds[[i]][[1]] <- NULL 				# Rawdata
+            simConds[[i]][[2]] <- sapply(n, "[", i) # Sample Size
+            simConds[[i]][[3]] <- pmMCAR[i] 		# Percent Missing Completely at Random
+            simConds[[i]][[4]] <- pmMAR[i] 			# Percent Missing at random
+            simConds[[i]][[5]] <- numseed[[i]] 		# L'Ecuyer random seed
+			simConds[[i]][[6]] <- FALSE				# Skip impose missing values
         }
 		if (isPopulation) {
 			if (is.matrix(popData)) {
@@ -275,6 +276,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ..., rawDa
 			simConds[[nRep + 1]][[3]] <- 0
 			simConds[[nRep + 1]][[4]] <- 0
 			simConds[[nRep + 1]][[5]] <- s
+			simConds[[nRep + 1]][[6]] <- TRUE
 		}
     } else if (is.list(rawData)) {
 		if (is.data.frame(rawData[[1]])) {
@@ -292,6 +294,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ..., rawDa
 			simConds[[i]][[3]] <- pmMCAR[i]
 			simConds[[i]][[4]] <- pmMAR[i]
 			simConds[[i]][[5]] <- numseed[[i]]
+			simConds[[i]][[6]] <- FALSE
 		}	
 	} else {
         stop("Check the object specified in 'rawData' argument; object must either be a SimData class or a list of data frames.")
@@ -432,7 +435,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ..., rawDa
 				generate2 <- generate
 				generate2$sample.nobs <- simConds[[1]][[2]]
 				generate2$return.fit <- TRUE
-				pt <- parTable(attr(do.call(lavaan:::simulateData, generate2), "fit"))
+				pt <- parTable(attr(do.call(lavaan::simulateData, generate2), "fit"))
 			} else {
 				pt <- generate$model
 			}
@@ -617,6 +620,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
     pmMAR <- simConds[[4]]
     RNGkind("L'Ecuyer-CMRG")
     assign(".Random.seed", simConds[[5]], envir = .GlobalEnv)
+	skipMiss <- simConds[[6]]
     specifiedGenerate <- TRUE
 	
     if (is.null(generate)) {
@@ -728,9 +732,10 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
     timing$GenerateData <- (proc.time()[3] - start.time)
     start.time <- proc.time()[3]
     ## 3. Impose Missing (if any)
-    if (!is.null(miss)) {
+    if (!is.null(miss) & !skipMiss) {
         data <- impose(miss, data)
     }
+	
     timing$ImposeMissing <- (proc.time()[3] - start.time)
     start.time <- proc.time()[3]
     ## 4. Call user function (if exists)
@@ -864,7 +869,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 			} else if(mxAnalysis) {
 				if(mxFit) {
 					fit <- NA
-					try(fit <- semTools:::fitMeasuresMx(out), silent = silent)
+					try(fit <- semTools::fitMeasuresMx(out), silent = silent)
 					if(!all(is.na(fit))) {
 						availfit <- names(fit)
 						if("saturate.status" %in% availfit) {
@@ -904,7 +909,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 				}
 				if(findStd) {
 					std <- NA
-					try(std <- semTools:::standardizeMx(out, free = TRUE), silent = silent)
+					try(std <- semTools::standardizeMx(out, free = TRUE), silent = silent)
 				}
 				if (!is.null(outfun)) {
 					extra <- outfun(out)

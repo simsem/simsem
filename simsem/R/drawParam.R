@@ -380,7 +380,6 @@ rawDraw <- function(simDat, constraint = TRUE, misSpec = TRUE, parMisOnly = FALS
 
 # Auto-completition of parameters
 fillParam <- function(rawParamSet, covStat = NULL) {
-    require(lavaan)
     LY <- rawParamSet$LY
     VTE <- rawParamSet$VTE
     TE <- rawParamSet$TE
@@ -501,8 +500,6 @@ fillParam <- function(rawParamSet, covStat = NULL) {
 
 # Reduce RPS/RTE to PS/TE if present.
 reduceMatrices <- function(paramSet) {
-    require(lavaan)
-    
     if (is.null(paramSet$PS)) 
         paramSet$PS <- suppressWarnings(cor2cov(paramSet$RPS, sqrt(paramSet$VPS)))
     

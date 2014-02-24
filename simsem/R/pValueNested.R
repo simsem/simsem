@@ -46,7 +46,7 @@ pValueNested <- function(outNested, outParent, simNested, simParent, usedFit = N
     }
     predictorVal <- predictorVal[condition]
 	if(is(outNested, "MxModel") & is(outParent, "MxModel")) {
-		cutoff <- semTools:::fitMeasuresMx(outNested)[usedFit] - semTools:::fitMeasuresMx(outParent)[usedFit]
+		cutoff <- semTools::fitMeasuresMx(outNested)[usedFit] - semTools::fitMeasuresMx(outParent)[usedFit]
 	} else if (is(outNested, "lavaan") & is(outParent, "lavaan")) {
 		cutoff <- inspect(outNested, "fit")[usedFit] - inspect(outParent, "fit")[usedFit]
 	} else {

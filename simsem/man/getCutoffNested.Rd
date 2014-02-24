@@ -7,7 +7,8 @@
 	Extract fit indices information from the simulation of parent and nested models and getCutoff of fit indices given a priori alpha level
 }
 \usage{
-getCutoffNested(nested, parent, alpha = 0.05, usedFit = NULL, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, df = 0)
+getCutoffNested(nested, parent, alpha = 0.05, usedFit = NULL, nVal = NULL, 
+	pmMCARval = NULL, pmMARval = NULL, df = 0)
 }
 \arguments{
   \item{nested}{

@@ -60,8 +60,9 @@ RPS <- binds(diag(1))
 RTE <- binds(diag(6))
 CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA")
 
-# Specify both continuous sample size and percent missing completely at random. Note that more fine-grained 
-# values of n and pmMCAR is needed, e.g., n=seq(50, 500, 1) and pmMCAR=seq(0, 0.2, 0.01)
+# Specify both continuous sample size and percent missing completely at random. 
+# Note that more fine-grained values of n and pmMCAR is needed, e.g., n=seq(50, 500, 1) 
+# and pmMCAR=seq(0, 0.2, 0.01)
 
 Output <- sim(NULL, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2), model=CFA.Model)
 

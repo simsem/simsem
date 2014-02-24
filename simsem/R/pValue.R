@@ -97,7 +97,7 @@ pValue <- function(target,
 	if(is(target, "lavaan")) {
 		cutoff <- inspect(target, "fit")[usedFit]
 	} else if (is(target, "MxModel")) {
-		cutoff <- semTools:::fitMeasuresMx(target)[usedFit]
+		cutoff <- semTools::fitMeasuresMx(target)[usedFit]
 	} else {
 		stop("The target argument must be a lavaan object or MxModel object.")
 	}
@@ -383,7 +383,7 @@ pValueVariedCutoff <- function(cutoff, obtainedValue, revDirec = FALSE, x = NULL
     } else {
         x <- as.matrix(x)
         mod <- invisible(try(glm(sig ~ x, family = binomial(link = "logit")), silent = TRUE))
-        result <- predProb(c(1, xval), mod)
+        result <- predProb(c(1, xval), mod)[2]
     }
     ## Return warnings setting to user's settings
     options(warn = warnT)

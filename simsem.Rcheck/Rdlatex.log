@@ -1,4 +1,2506 @@
 Hmm ... looks like a package
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9)
+entering extended mode
+(C:\Users\sunthud\AppData\Local\Temp\RtmpCWEVeP\Rd2pdf191c675c2540\Rd2.tex
+LaTeX2e <2011/06/27>
+Babel <v3.8m> and hyphenation patterns for english, afrikaans, ancientgreek, ar
+abic, armenian, assamese, basque, bengali, bokmal, bulgarian, catalan, coptic, 
+croatian, czech, danish, dutch, esperanto, estonian, farsi, finnish, french, ga
+lician, german, german-x-2012-05-30, greek, gujarati, hindi, hungarian, iceland
+ic, indonesian, interlingua, irish, italian, kannada, kurmanji, latin, latvian,
+ lithuanian, malayalam, marathi, mongolian, mongolianlmc, monogreek, ngerman, n
+german-x-2012-05-30, nynorsk, oriya, panjabi, pinyin, polish, portuguese, roman
+ian, russian, sanskrit, serbian, slovak, slovenian, spanish, swedish, swissgerm
+an, tamil, telugu, turkish, turkmen, ukenglish, ukrainian, uppersorbian, usengl
+ishmax, welsh, loaded.
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\book.cls"
+Document Class: book 2007/10/19 v1.4h Standard LaTeX document class
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\bk10.clo"))
+(C:/PROGRA~1/R/R-30~1.2/share/texmf/tex/latex\Rd.sty
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\ifthen.sty")
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\tools\longtable.sty")
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\tools\bm.sty")
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\alltt.sty")
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\tools\verbatim.sty")
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\ltxmisc\url.sty")
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\textcomp.sty"
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\ts1enc.def"))
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\fontenc.sty"
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\t1enc.def"))
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\times.sty"))
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\inputenc.sty"
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\t1enc.dfu")
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\ot1enc.dfu")
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\omsenc.dfu")
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\ts1enc.dfu"))
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\latin1.def"))
+No file Rd2.aux.
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\ts1cmr.fd")
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\t1ptm.fd")
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\t1pcr.fd")
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\t1phv.fd")
+No file Rd2.toc.
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (42.78088pt too wide) in paragraph at lines 38--38
+ []\T1/pcr/m/n/10 analyze(model, data, package="lavaan", miss=NULL, aux=NULL, g
+roup = NULL,[] 
+[1{C:/Users/sunthud/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [2]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\ts1ptm.fd")
+Overfull \hbox (1.58855pt too wide) in paragraph at lines 141--143
+[]\T1/ptm/m/n/10 Alexander M. Schoe-mann (Uni-ver-sity of Kansas; \T1/pcr/m/n/1
+0 <schoemann@ku.edu>\T1/ptm/m/n/10 ), Sun-thud Porn-prasert-
+
+Overfull \hbox (15.18042pt too wide) in paragraph at lines 166--166
+ []\T1/pcr/m/n/9 Output1 <- sim(5, n=500, model=CFA.Model1, generate=CFA.Model1
+, seed=123567)[] 
+
+Overfull \hbox (15.18042pt too wide) in paragraph at lines 167--167
+ []\T1/pcr/m/n/9 Output2 <- sim(5, n=500, model=CFA.Model2, generate=CFA.Model1
+, seed=123567)[] 
+[3]
+Overfull \hbox (106.98032pt too wide) in paragraph at lines 171--171
+ []\T1/pcr/m/n/9 Output1b <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model1, ge
+nerate=CFA.Model1, seed=123567)[] 
+
+Overfull \hbox (106.98032pt too wide) in paragraph at lines 172--172
+ []\T1/pcr/m/n/9 Output2b <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model2, ge
+nerate=CFA.Model1, seed=123567)[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (18.78088pt too wide) in paragraph at lines 196--196
+ []\T1/pcr/m/n/10 bind(free = NULL, popParam = NULL, misspec = NULL, symmetric 
+= FALSE)[] 
+
+Overfull \hbox (18.78088pt too wide) in paragraph at lines 197--197
+ []\T1/pcr/m/n/10 binds(free = NULL, popParam = NULL, misspec = NULL, symmetric
+ = TRUE)[] 
+
+Overfull \hbox (2.59966pt too wide) in paragraph at lines 205--207
+\T1/ptm/m/n/10 gen-er-a-tion func-tion in quotes: e.g \T1/pcr/m/n/10 "runif(1,0
+,1)","rnorm(1,0,.01)"
+[4] [5] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (48.78088pt too wide) in paragraph at lines 274--274
+ []\T1/pcr/m/n/10 bindDist(margins = NULL, ..., p = NULL, keepScale = TRUE, rev
+erse = FALSE,[] 
+[6]
+Overfull \hbox (13.65695pt too wide) in paragraph at lines 297--298
+[]\T1/ptm/m/n/10 A cop-ula class that rep-re-sents the mul-ti-vari-ate dis-tri-
+bu-tion, such as \T1/pcr/m/n/10 ellipCopula\T1/ptm/m/n/10 ,
+
+Overfull \hbox (20.58041pt too wide) in paragraph at lines 346--346
+ []\T1/pcr/m/n/9 # Create a data distribution object by setting the names of ea
+ch distribution[] 
+[7]
+Overfull \hbox (79.98035pt too wide) in paragraph at lines 351--351
+ []\T1/pcr/m/n/9 dist <- bindDist(c("t", "chisq", "norm"), d1, d2, d3, copula =
+ gumbelCopula(2, dim = 3))[] 
+
+Overfull \hbox (90.78033pt too wide) in paragraph at lines 353--353
+ []\T1/pcr/m/n/9 # Reverse the direction of chi-square distribution from positi
+vely skew to negatively skew[] 
+
+Overfull \hbox (79.98035pt too wide) in paragraph at lines 354--354
+ []\T1/pcr/m/n/9 dist <- bindDist(c("t", "chisq", "norm"), d1, d2, d3, copula =
+ gumbelCopula(2, dim = 3),[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\ts1pcr.fd")
+Overfull \hbox (63.78036pt too wide) in paragraph at lines 357--357
+ []\T1/pcr/m/n/9 # Create data based on Vale and Maurelli\TS1/pcr/m/n/9 '\T1/pc
+r/m/n/9 s method by specifying skewness and kurtosis[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [8]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [9]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (84.78088pt too wide) in paragraph at lines 485--485
+ []\T1/pcr/m/n/10 continuousCoverage(simResult, coverValue = NULL, contN = TRUE
+, contMCAR = FALSE,[] 
+
+Overfull \hbox (24.78088pt too wide) in paragraph at lines 486--486
+ []    \T1/pcr/m/n/10 contMAR = FALSE, contParam = NULL, coverParam = NULL, pre
+d = NULL)[] 
+[10]
+Overfull \hbox (31.3804pt too wide) in paragraph at lines 551--551
+ []\T1/pcr/m/n/9 # Specify both continuous sample size and percent missing comp
+letely at random.[] 
+
+Overfull \hbox (74.58035pt too wide) in paragraph at lines 552--552
+ []\T1/pcr/m/n/9 # Note that more fine-grained values of n and pmMCAR is needed
+, e.g., n=seq(50, 500, 1)[] 
+
+Overfull \hbox (4.38043pt too wide) in paragraph at lines 554--554
+ []\T1/pcr/m/n/9 Output <- sim(NULL, CFA.Model, n=seq(100, 200, 20), pmMCAR=c(0
+, 0.1, 0.2))[] 
+
+Overfull \hbox (117.7803pt too wide) in paragraph at lines 557--557
+ []\T1/pcr/m/n/9 # Find the coverage rates of all combinations of different sam
+ple size and percent MCAR missing[] 
+
+Overfull \hbox (47.58038pt too wide) in paragraph at lines 563--563
+ []\T1/pcr/m/n/9 Ccover2 <- continuousCoverage(Output, coverValue=0, contN = TR
+UE, contMCAR = TRUE,[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (54.78088pt too wide) in paragraph at lines 579--579
+ []\T1/pcr/m/n/10 continuousPower(simResult, contN = TRUE, contMCAR = FALSE, co
+ntMAR = FALSE,[] 
+[11]
+Overfull \hbox (1.58855pt too wide) in paragraph at lines 622--623
+[]\T1/ptm/m/n/10 Alexander M. Schoe-mann (Uni-ver-sity of Kansas; \T1/pcr/m/n/1
+0 <schoemann@ku.edu>\T1/ptm/m/n/10 ), Sun-thud Porn-prasert-
+[12]
+Overfull \hbox (31.3804pt too wide) in paragraph at lines 651--651
+ []\T1/pcr/m/n/9 # Specify both continuous sample size and percent missing comp
+letely at random.[] 
+
+Overfull \hbox (74.58035pt too wide) in paragraph at lines 652--652
+ []\T1/pcr/m/n/9 # Note that more fine-grained values of n and pmMCAR is needed
+, e.g., n=seq(50, 500, 1)[] 
+
+Overfull \hbox (4.38043pt too wide) in paragraph at lines 654--654
+ []\T1/pcr/m/n/9 Output <- sim(NULL, CFA.Model, n=seq(100, 200, 20), pmMCAR=c(0
+, 0.1, 0.2))[] 
+
+Overfull \hbox (69.18036pt too wide) in paragraph at lines 657--657
+ []\T1/pcr/m/n/9 # Find the power of all combinations of different sample size 
+and percent MCAR missing[] 
+
+Overfull \hbox (117.7803pt too wide) in paragraph at lines 661--661
+ []\T1/pcr/m/n/9 # Find the power of parameter estimates when sample size is 20
+0 and percent MCAR missing is 0.3[] 
+
+Overfull \hbox (128.58029pt too wide) in paragraph at lines 662--662
+ []\T1/pcr/m/n/9 Cpow2 <- continuousPower(Output, contN = TRUE, contMCAR = TRUE
+, pred=list(N = 200, pmMCAR = 0.3))[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (18.78088pt too wide) in paragraph at lines 677--677
+ []\T1/pcr/m/n/10 createData(paramSet, n, indDist=NULL, sequential=FALSE, facDi
+st=NULL,[] 
+
+Overfull \hbox (48.78088pt too wide) in paragraph at lines 678--678
+ []\T1/pcr/m/n/10 errorDist=NULL, indLab=NULL, modelBoot=FALSE, realData=NULL, 
+covData=NULL,[] 
+[13]
+Overfull \hbox (50.88759pt too wide) in paragraph at lines 704--705
+[]\T1/ptm/m/n/10 A vec-tor of in-di-ca-tor la-bels. When not spec-i-fied, the v
+ari-able names are \T1/pcr/m/n/10 x1, x2, ... xN\T1/ptm/m/n/10 . 
+
+Overfull \hbox (15.60706pt too wide) in paragraph at lines 722--723
+\T1/ptm/m/n/10 son to cre-ate data from model im-plied co-vari-ance ma-trix if 
+the data dis-tri-bu-tion ob-ject (\T1/pcr/m/n/10 SimDataDist\T1/ptm/m/n/10 )
+[14] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [15]
+Overfull \hbox (6.78088pt too wide) in paragraph at lines 787--787
+ []\T1/pcr/m/n/10 draw(model, maxDraw=50, misfitBounds=NULL, averageNumMisspec=
+FALSE,[] 
+
+Overfull \hbox (66.78088pt too wide) in paragraph at lines 788--788
+ []\T1/pcr/m/n/10 optMisfit = NULL, optDraws = 50, misfitType = "f0", createOrd
+er = c(1, 2, 3),[] 
+
+Overfull \hbox (60.95909pt too wide) in paragraph at lines 826--828
+[]\T1/ptm/m/n/10 Nested list of drawn pa-ram-e-ters in the form \T1/pcr/m/n/10 
+[[Group]][[param,misspec,misOnly]][[SimMatrix]]\T1/ptm/m/n/10 .
+[16] [17]
+Overfull \hbox (85.38034pt too wide) in paragraph at lines 892--892
+ []\T1/pcr/m/n/9 weak <- model(LY = LY.in, RPS = RPS, VPS=list(VPS1, VPS2), RTE
+ = RTE, VTE=VTE, ngroups=2,[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (60.78088pt too wide) in paragraph at lines 926--926
+ []\T1/pcr/m/n/10 estmodel(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = N
+ULL, BE = NULL,[] 
+
+Overfull \hbox (6.78088pt too wide) in paragraph at lines 927--927
+ []\T1/pcr/m/n/10 VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL =
+ NULL,[] 
+
+Overfull \hbox (18.78088pt too wide) in paragraph at lines 928--928
+ []\T1/pcr/m/n/10 MY = NULL, ME = NULL, KA = NULL, GA = NULL, modelType, indLab
+ = NULL,[] 
+
+Overfull \hbox (48.78088pt too wide) in paragraph at lines 929--929
+ []\T1/pcr/m/n/10 facLab = NULL, covLab = NULL, groupLab = "group", ngroups = 1
+, con = NULL)[] 
+
+Overfull \hbox (72.78088pt too wide) in paragraph at lines 930--930
+ []\T1/pcr/m/n/10 estmodel.cfa(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = 
+NULL, VTE = NULL,[] 
+
+Overfull \hbox (66.78088pt too wide) in paragraph at lines 931--931
+ []\T1/pcr/m/n/10 VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, MY = 
+NULL, ME = NULL,[] 
+
+Overfull \hbox (0.78088pt too wide) in paragraph at lines 932--932
+ []\T1/pcr/m/n/10 KA = NULL, GA = NULL, indLab = NULL, facLab = NULL, covLab = 
+NULL,[] 
+
+Overfull \hbox (90.78088pt too wide) in paragraph at lines 934--934
+ []\T1/pcr/m/n/10 estmodel.path(PS = NULL, RPS = NULL, BE = NULL, VPS = NULL, V
+E = NULL, AL = NULL,[] 
+
+Overfull \hbox (66.78088pt too wide) in paragraph at lines 935--935
+ []\T1/pcr/m/n/10 ME = NULL, KA = NULL, GA = NULL, indLab = NULL, facLab = NULL
+, covLab = NULL,[] 
+
+Overfull \hbox (66.78088pt too wide) in paragraph at lines 937--937
+ []\T1/pcr/m/n/10 estmodel.sem(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = 
+NULL, BE = NULL,[] 
+
+Overfull \hbox (72.78088pt too wide) in paragraph at lines 938--938
+ []\T1/pcr/m/n/10 VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL =
+ NULL, MY = NULL,[] 
+
+Overfull \hbox (66.78088pt too wide) in paragraph at lines 939--939
+ []\T1/pcr/m/n/10 ME = NULL, KA = NULL, GA = NULL, indLab = NULL, facLab = NULL
+, covLab = NULL,[] 
+[18] [19]
+Overfull \hbox (13.42987pt too wide) in paragraph at lines 1027--1028
+[]\T1/ptm/m/n/10 The \T1/pcr/m/n/10 estmodel.cfa\T1/ptm/m/n/10 , \T1/pcr/m/n/10
+ estmodel.path\T1/ptm/m/n/10 , and \T1/pcr/m/n/10 estmodel.sem \T1/ptm/m/n/10 a
+re the short-cuts for the \T1/pcr/m/n/10 estmodel
+[20] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (60.78088pt too wide) in paragraph at lines 1083--1083
+ []\T1/pcr/m/n/10 exportData(nRep, model, n, program = "Mplus", fileStem = "sim
+", miss = NULL,[] 
+
+Overfull \hbox (54.78088pt too wide) in paragraph at lines 1084--1084
+ []\T1/pcr/m/n/10 missCode = -999, datafun=NULL, pmMCAR = NULL, pmMAR = NULL, f
+acDist = NULL,[] 
+
+Overfull \hbox (36.78088pt too wide) in paragraph at lines 1085--1085
+ []\T1/pcr/m/n/10 indDist = NULL, errorDist = NULL, sequential = FALSE, modelBo
+ot = FALSE,[] 
+
+Overfull \hbox (24.78088pt too wide) in paragraph at lines 1086--1086
+ []\T1/pcr/m/n/10 realData = NULL, maxDraw = 50, misfitType = "f0", misfitBound
+s = NULL,[] 
+
+Overfull \hbox (30.78088pt too wide) in paragraph at lines 1087--1087
+ []\T1/pcr/m/n/10 averageNumMisspec = NULL, optMisfit=NULL, optDraws = 50, seed
+ = 123321,[] 
+
+Overfull \hbox (6.78088pt too wide) in paragraph at lines 1088--1088
+ []\T1/pcr/m/n/10 silent = FALSE, multicore = FALSE, numProc = NULL,  params = 
+FALSE)[] 
+[21]
+Overfull \hbox (15.82811pt too wide) in paragraph at lines 1138--1139
+\T1/ptm/m/n/10 for fur-ther in-for-ma-tion. This ar-gu-ment re-quires real data
+ to be passed to \T1/pcr/m/n/10 realData\T1/ptm/m/n/10 . 
+[22] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [23]
+[24]
+Overfull \hbox (123.1803pt too wide) in paragraph at lines 1275--1275
+ []\T1/pcr/m/n/9 # Specify both sample size and percent missing completely at r
+andom. Note that more fine-grained[] 
+
+Overfull \hbox (79.98035pt too wide) in paragraph at lines 1276--1276
+ []\T1/pcr/m/n/9 # values of n and pmMCAR is needed, e.g., n=seq(50, 500, 1) an
+d pmMCAR=seq(0, 0.2, 0.01)[] 
+
+Overfull \hbox (36.7804pt too wide) in paragraph at lines 1277--1277
+ []\T1/pcr/m/n/9 Output <- sim(NULL, model=CFA.Model, n=seq(100, 200, 20), pmMC
+AR=c(0, 0.1, 0.2))[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (48.78088pt too wide) in paragraph at lines 1297--1297
+ []\T1/pcr/m/n/10 findFactorIntercept(beta, factorMean = NULL, gamma = NULL, co
+vmean = NULL)[] 
+[25] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [26]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (108.78088pt too wide) in paragraph at lines 1429--1429
+ []\T1/pcr/m/n/10 findFactorResidualVar(beta, corPsi, totalVarPsi = NULL, gamma
+ = NULL, covcov = NULL)[] 
+[27] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (30.78088pt too wide) in paragraph at lines 1502--1502
+ []\T1/pcr/m/n/10 findFactorTotalCov(beta, psi = NULL, corPsi = NULL, totalVarP
+si = NULL,[] 
+[28] [29] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (66.78088pt too wide) in paragraph at lines 1582--1582
+ []\T1/pcr/m/n/10 findFactorTotalVar(beta, corPsi, residualVarPsi, gamma = NULL
+, covcov = NULL)[] 
+[30] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [31]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [32]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [33]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (30.78088pt too wide) in paragraph at lines 1859--1859
+ []\T1/pcr/m/n/10 findIndTotalVar(lambda, totalFactorCov, residualVarTheta, kap
+pa = NULL,[] 
+[34] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [35]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [36]
+Overfull \hbox (94.6082pt too wide) in paragraph at lines 2016--2017
+[]\T1/pcr/m/n/10 continuousPower \T1/ptm/m/n/10 to find the power of pa-ram-e-t
+er es-ti-mates for the re-sult ob-ject (\T1/pcr/m/n/10 linkS4class{SimResult}\T
+1/ptm/m/n/10 )
+
+Overfull \hbox (123.1803pt too wide) in paragraph at lines 2033--2033
+ []\T1/pcr/m/n/9 # Specify both sample size and percent missing completely at r
+andom. Note that more fine-grained[] 
+
+Overfull \hbox (79.98035pt too wide) in paragraph at lines 2034--2034
+ []\T1/pcr/m/n/9 # values of n and pmMCAR is needed, e.g., n=seq(50, 500, 1) an
+d pmMCAR=seq(0, 0.2, 0.01)[] 
+
+Overfull \hbox (36.7804pt too wide) in paragraph at lines 2035--2035
+ []\T1/pcr/m/n/9 Output <- sim(NULL, model=CFA.Model, n=seq(100, 200, 20), pmMC
+AR=c(0, 0.1, 0.2))[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [37]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (0.78088pt too wide) in paragraph at lines 2104--2104
+ []\T1/pcr/m/n/10 generate(model, n, maxDraw=50, misfitBounds=NULL, misfitType=
+"f0",[] 
+[38]
+Overfull \hbox (50.88759pt too wide) in paragraph at lines 2155--2156
+[]\T1/ptm/m/n/10 A vec-tor of in-di-ca-tor la-bels. When not spec-i-fied, the v
+ari-able names are \T1/pcr/m/n/10 x1, x2, ... xN\T1/ptm/m/n/10 . 
+[39] [40] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (6.78088pt too wide) in paragraph at lines 2243--2243
+ []\T1/pcr/m/n/10 getCIwidth(object, assurance = 0.50, nVal = NULL, pmMCARval =
+ NULL,[] 
+[41]
+Overfull \hbox (36.7804pt too wide) in paragraph at lines 2312--2312
+ []\T1/pcr/m/n/9 # Finding the cutoff when the sample size is varied. Note that
+ more fine-grained[] 
+[42] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (72.78088pt too wide) in paragraph at lines 2331--2331
+ []\T1/pcr/m/n/10 getCoverage(simResult, coverValue = NULL, contParam = NULL, c
+overParam = NULL,[] 
+
+Overfull \hbox (12.78088pt too wide) in paragraph at lines 2332--2332
+ []    \T1/pcr/m/n/10 nVal = NULL, pmMCARval = NULL, pmMARval = NULL, paramVal 
+= NULL)[] 
+[43]
+Overfull \hbox (123.1803pt too wide) in paragraph at lines 2396--2396
+ []\T1/pcr/m/n/9 # Specify both sample size and percent missing completely at r
+andom. Note that more fine-grained[] 
+
+Overfull \hbox (79.98035pt too wide) in paragraph at lines 2397--2397
+ []\T1/pcr/m/n/9 # values of n and pmMCAR is needed, e.g., n=seq(50, 500, 1) an
+d pmMCAR=seq(0, 0.2, 0.01)[] 
+
+Overfull \hbox (36.7804pt too wide) in paragraph at lines 2398--2398
+ []\T1/pcr/m/n/9 Output <- sim(NULL, model=CFA.Model, n=seq(100, 200, 20), pmMC
+AR=c(0, 0.1, 0.2))[] 
+
+Overfull \hbox (112.38031pt too wide) in paragraph at lines 2404--2404
+ []\T1/pcr/m/n/9 # Get the coverage rates of the combinations of n of 100 and 2
+00 and pmMCAR of 0, 0.1, and 0.2[] 
+
+Overfull \hbox (31.3804pt too wide) in paragraph at lines 2405--2405
+ []\T1/pcr/m/n/9 getCoverage(Output, coverValue = 0, nVal=c(100, 200), pmMCARva
+l=c(0, 0.1, 0.2))[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (30.78088pt too wide) in paragraph at lines 2419--2419
+ []\T1/pcr/m/n/10 getCutoff(object, alpha, revDirec = FALSE, usedFit = NULL, nV
+al = NULL,[] 
+[44]
+Overfull \hbox (36.7804pt too wide) in paragraph at lines 2490--2490
+ []\T1/pcr/m/n/9 # Finding the cutoff when the sample size is varied. Note that
+ more fine-grained[] 
+[45] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (48.78088pt too wide) in paragraph at lines 2509--2509
+ []\T1/pcr/m/n/10 getCutoffNested(nested, parent, alpha = 0.05, usedFit = NULL,
+ nVal = NULL,[] 
+[46]
+Overfull \hbox (42.18039pt too wide) in paragraph at lines 2568--2568
+ []\T1/pcr/m/n/9 CFA.Model.NULL <- model(LY = LY.NULL, RPS = RPS.NULL, RTE = RT
+E, modelType="CFA")[] 
+
+Overfull \hbox (25.98041pt too wide) in paragraph at lines 2578--2578
+ []\T1/pcr/m/n/9 CFA.Model.ALT <- model(LY = LY.ALT, RPS = RPS.ALT, RTE = RTE, 
+modelType="CFA")[] 
+
+Overfull \hbox (42.18039pt too wide) in paragraph at lines 2581--2581
+ []\T1/pcr/m/n/9 Output.NULL.NULL <- sim(10, n=500, model=CFA.Model.NULL, gener
+ate=CFA.Model.NULL)[] 
+
+Overfull \hbox (31.3804pt too wide) in paragraph at lines 2582--2582
+ []\T1/pcr/m/n/9 Output.NULL.ALT <- sim(10, n=500, model=CFA.Model.ALT, generat
+e=CFA.Model.NULL)[] 
+
+Overfull \hbox (15.18042pt too wide) in paragraph at lines 2584--2584
+ []\T1/pcr/m/n/9 # Find the fix index cutoff from the sampling distribution of 
+the difference[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (12.78088pt too wide) in paragraph at lines 2600--2600
+ []\T1/pcr/m/n/10 getCutoffNonNested(dat1Mod1, dat1Mod2, dat2Mod1=NULL, dat2Mod
+2=NULL,[] 
+
+Overfull \hbox (36.78088pt too wide) in paragraph at lines 2601--2601
+ []\T1/pcr/m/n/10 alpha=.05, usedFit=NULL, onetailed=FALSE, nVal = NULL, pmMCAR
+val = NULL,[] 
+[47]
+Overfull \hbox (41.0588pt too wide) in paragraph at lines 2653--2657
+\T1/pcr/m/n/10 getCutoffNested \T1/ptm/m/n/10 for a de-tail of find-ing cut-off
+s for nested model com-par-i-son \T1/pcr/m/n/10 plotCutoffNonNested
+[48]
+Overfull \hbox (20.58041pt too wide) in paragraph at lines 2686--2686
+ []\T1/pcr/m/n/9 # Find the cutoffs from the sampling distribution to reject mo
+del A (model 1)[] 
+
+Overfull \hbox (20.58041pt too wide) in paragraph at lines 2690--2690
+ []\T1/pcr/m/n/9 # Find the cutoffs from the sampling distribution to reject mo
+del A (model 1)[] 
+
+Overfull \hbox (20.58041pt too wide) in paragraph at lines 2693--2693
+ []\T1/pcr/m/n/9 # Find the cutoffs from the sampling distribution to reject mo
+del B (model 1)[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [49]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (97.66725pt too wide) in paragraph at lines 2772--2773
+[]\T1/ptm/m/n/10 This func-tion will ex-tract the data gen-er-a-tion pop-u-la-t
+ion model un-der-ly-ing a re-sult ob-ject (\T1/pcr/m/n/10 linkS4class{SimResult
+}\T1/ptm/m/n/10 ). 
+[50] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (24.78088pt too wide) in paragraph at lines 2841--2841
+ []\T1/pcr/m/n/10 getPower(simResult, alpha = 0.05, contParam = NULL, powerPara
+m = NULL,[] 
+[51]
+Overfull \hbox (1.58855pt too wide) in paragraph at lines 2884--2885
+[]\T1/ptm/m/n/10 Alexander M. Schoe-mann (Uni-ver-sity of Kansas; \T1/pcr/m/n/1
+0 <schoemann@ku.edu>\T1/ptm/m/n/10 ), Sun-thud Porn-prasert-
+
+Overfull \hbox (123.1803pt too wide) in paragraph at lines 2910--2910
+ []\T1/pcr/m/n/9 # Specify both sample size and percent missing completely at r
+andom. Note that more fine-grained[] 
+
+Overfull \hbox (79.98035pt too wide) in paragraph at lines 2911--2911
+ []\T1/pcr/m/n/9 # values of n and pmMCAR is needed, e.g., n=seq(50, 500, 1) an
+d pmMCAR=seq(0, 0.2, 0.01)[] 
+
+Overfull \hbox (36.7804pt too wide) in paragraph at lines 2912--2912
+ []\T1/pcr/m/n/9 Output <- sim(NULL, model=CFA.Model, n=seq(100, 200, 20), pmMC
+AR=c(0, 0.1, 0.2))[] 
+
+Overfull \hbox (63.78036pt too wide) in paragraph at lines 2918--2918
+ []\T1/pcr/m/n/9 # Get the power of the combinations of n of 100 and 200 and pm
+MCAR of 0, 0.1, and 0.2[] 
+[52] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (48.78088pt too wide) in paragraph at lines 2933--2933
+ []\T1/pcr/m/n/10 getPowerFit(altObject, cutoff = NULL, nullObject = NULL, revD
+irec = FALSE,[] 
+
+Overfull \hbox (66.78088pt too wide) in paragraph at lines 2934--2934
+ []\T1/pcr/m/n/10 usedFit = NULL, alpha = 0.05, nVal = NULL, pmMCARval = NULL, 
+pmMARval = NULL,[] 
+[53]
+Overfull \hbox (58.75859pt too wide) in paragraph at lines 2972--2973
+[]\T1/ptm/m/n/10 The de-gree of free-dom used in spline method in quan-tile re-
+gres-sion (\T1/pcr/m/n/10 condCutoff = TRUE\T1/ptm/m/n/10 ).
+
+Overfull \hbox (42.18039pt too wide) in paragraph at lines 3004--3004
+ []\T1/pcr/m/n/9 CFA.Model.NULL <- model(LY = LY.NULL, RPS = RPS.NULL, RTE = RT
+E, modelType="CFA")[] 
+
+Overfull \hbox (25.98041pt too wide) in paragraph at lines 3021--3021
+ []\T1/pcr/m/n/9 CFA.Model.ALT <- model(LY = LY.ALT, RPS = RPS.ALT, RTE = RTE, 
+modelType="CFA")[] 
+
+Overfull \hbox (4.38043pt too wide) in paragraph at lines 3030--3030
+ []\T1/pcr/m/n/9 # Get the power based on the rule of thumb proposed by Hu & Be
+ntler (1999)[] 
+[54]
+Overfull \hbox (74.58035pt too wide) in paragraph at lines 3032--3032
+ []\T1/pcr/m/n/9 getPowerFit(Output.ALT, cutoff=Rule.of.thumb, usedFit=c("RMSEA
+", "CFI", "TLI", "SRMR"))[] 
+
+Overfull \hbox (9.78043pt too wide) in paragraph at lines 3034--3034
+ []\T1/pcr/m/n/9 # The example of continous varying sample size. Note that more
+ fine-grained[] 
+
+Overfull \hbox (101.58032pt too wide) in paragraph at lines 3036--3036
+ []\T1/pcr/m/n/9 Output.NULL2 <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model.
+NULL, generate=CFA.Model.NULL)[] 
+
+Overfull \hbox (90.78033pt too wide) in paragraph at lines 3037--3037
+ []\T1/pcr/m/n/9 Output.ALT2 <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model.N
+ULL, generate=CFA.Model.ALT)[] 
+
+Overfull \hbox (85.38034pt too wide) in paragraph at lines 3039--3039
+ []\T1/pcr/m/n/9 # Get the power based on the derived cutoff from the null mode
+l at the sample size of 250[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (42.78088pt too wide) in paragraph at lines 3054--3054
+ []\T1/pcr/m/n/10 getPowerFitNested(altNested, altParent, cutoff = NULL, nullNe
+sted = NULL,[] 
+
+Overfull \hbox (78.78088pt too wide) in paragraph at lines 3055--3055
+ []\T1/pcr/m/n/10 nullParent = NULL, revDirec = FALSE, usedFit = NULL, alpha = 
+0.05, nVal = NULL,[] 
+[55]
+Overfull \hbox (58.75859pt too wide) in paragraph at lines 3099--3100
+[]\T1/ptm/m/n/10 The de-gree of free-dom used in spline method in quan-tile re-
+gres-sion (\T1/pcr/m/n/10 condCutoff = TRUE\T1/ptm/m/n/10 ).
+
+Overfull \hbox (42.18039pt too wide) in paragraph at lines 3131--3131
+ []\T1/pcr/m/n/9 CFA.Model.NULL <- model(LY = LY.NULL, RPS = RPS.NULL, RTE = RT
+E, modelType="CFA")[] 
+[56]
+Overfull \hbox (25.98041pt too wide) in paragraph at lines 3141--3141
+ []\T1/pcr/m/n/9 CFA.Model.ALT <- model(LY = LY.ALT, RPS = RPS.ALT, RTE = RTE, 
+modelType="CFA")[] 
+
+Overfull \hbox (42.18039pt too wide) in paragraph at lines 3145--3145
+ []\T1/pcr/m/n/9 Output.NULL.NULL <- sim(10, n=500, model=CFA.Model.NULL, gener
+ate=CFA.Model.NULL)[] 
+
+Overfull \hbox (31.3804pt too wide) in paragraph at lines 3146--3146
+ []\T1/pcr/m/n/9 Output.ALT.NULL <- sim(10, n=500, model=CFA.Model.NULL, genera
+te=CFA.Model.ALT)[] 
+
+Overfull \hbox (31.3804pt too wide) in paragraph at lines 3147--3147
+ []\T1/pcr/m/n/9 Output.NULL.ALT <- sim(10, n=500, model=CFA.Model.ALT, generat
+e=CFA.Model.NULL)[] 
+
+Overfull \hbox (20.58041pt too wide) in paragraph at lines 3148--3148
+ []\T1/pcr/m/n/9 Output.ALT.ALT <- sim(10, n=500, model=CFA.Model.ALT, generate
+=CFA.Model.ALT)[] 
+
+Overfull \hbox (90.78033pt too wide) in paragraph at lines 3150--3150
+ []\T1/pcr/m/n/9 # Find the power based on the derived cutoff from the models a
+nalyzed on the null datasets[] 
+
+Overfull \hbox (31.3804pt too wide) in paragraph at lines 3151--3151
+ []\T1/pcr/m/n/9 getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=
+Output.NULL.NULL,[] 
+
+Overfull \hbox (79.98035pt too wide) in paragraph at lines 3154--3154
+ []\T1/pcr/m/n/9 # Find the power based on the chi-square value at df=1 and the
+ CFI change (intentionally[] 
+
+Overfull \hbox (15.18042pt too wide) in paragraph at lines 3155--3155
+ []\T1/pcr/m/n/9 # use a cutoff from Cheung and Rensvold (2002) in an appropria
+te situation).[] 
+
+Overfull \hbox (42.18039pt too wide) in paragraph at lines 3156--3156
+ []\T1/pcr/m/n/9 getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, cutoff=c(Ch
+i=3.84, CFI=-0.10))[] 
+
+Overfull \hbox (9.78043pt too wide) in paragraph at lines 3158--3158
+ []\T1/pcr/m/n/9 # The example of continous varying sample size. Note that more
+ fine-grained[] 
+
+Overfull \hbox (128.58029pt too wide) in paragraph at lines 3160--3160
+ []\T1/pcr/m/n/9 Output.NULL.NULL2 <- sim(NULL, n=seq(50, 500, 50), model=CFA.M
+odel.NULL, generate=CFA.Model.NULL)[] 
+
+Overfull \hbox (117.7803pt too wide) in paragraph at lines 3161--3161
+ []\T1/pcr/m/n/9 Output.ALT.NULL2 <- sim(NULL, n=seq(50, 500, 50), model=CFA.Mo
+del.NULL, generate=CFA.Model.ALT)[] 
+
+Overfull \hbox (117.7803pt too wide) in paragraph at lines 3162--3162
+ []\T1/pcr/m/n/9 Output.NULL.ALT2 <- sim(NULL, n=seq(50, 500, 50), model=CFA.Mo
+del.ALT, generate=CFA.Model.NULL)[] 
+
+Overfull \hbox (106.98032pt too wide) in paragraph at lines 3163--3163
+ []\T1/pcr/m/n/9 Output.ALT.ALT2 <- sim(NULL, n=seq(50, 500, 50), model=CFA.Mod
+el.ALT, generate=CFA.Model.ALT)[] 
+
+Overfull \hbox (85.38034pt too wide) in paragraph at lines 3165--3165
+ []\T1/pcr/m/n/9 # Get the power based on the derived cutoff from the null mode
+l at the sample size of 250[] 
+
+Overfull \hbox (47.58038pt too wide) in paragraph at lines 3166--3166
+ []\T1/pcr/m/n/9 getPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNeste
+d=Output.NULL.NULL2,[] 
+
+Overfull \hbox (79.98035pt too wide) in paragraph at lines 3169--3169
+ []\T1/pcr/m/n/9 # Get the power based on the rule of thumb from the null model
+ at the sample size of 250[] 
+
+Overfull \hbox (117.7803pt too wide) in paragraph at lines 3170--3170
+ []\T1/pcr/m/n/9 getPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, cutoff=c(
+Chi=3.84, CFI=-0.10), nVal = 250)[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (36.78088pt too wide) in paragraph at lines 3187--3187
+ []\T1/pcr/m/n/10 getPowerFitNonNested(dat2Mod1, dat2Mod2, cutoff = NULL, dat1M
+od1 = NULL,[] 
+
+Overfull \hbox (66.78088pt too wide) in paragraph at lines 3188--3188
+ []\T1/pcr/m/n/10 dat1Mod2 = NULL, revDirec = FALSE, usedFit = NULL, alpha = 0.
+05, nVal = NULL,[] 
+
+Overfull \hbox (84.78088pt too wide) in paragraph at lines 3189--3189
+ []\T1/pcr/m/n/10 pmMCARval = NULL, pmMARval = NULL, condCutoff = TRUE, df = 0,
+ onetailed = FALSE)[] 
+[57]
+Overfull \hbox (58.75859pt too wide) in paragraph at lines 3232--3233
+[]\T1/ptm/m/n/10 The de-gree of free-dom used in spline method in quan-tile re-
+gres-sion (\T1/pcr/m/n/10 condCutoff = TRUE\T1/ptm/m/n/10 ).
+[58]
+Overfull \hbox (69.18036pt too wide) in paragraph at lines 3286--3286
+ []\T1/pcr/m/n/9 getPowerFitNonNested(Output.B.A, Output.B.B, dat1Mod1=Output.A
+.A, dat1Mod2=Output.A.B)[] 
+
+Overfull \hbox (133.98029pt too wide) in paragraph at lines 3288--3288
+ []\T1/pcr/m/n/9 # Find the power based on the AIC and BIC of 0 (select model B
+ if Output.B.B has lower AIC or BIC)[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (6.78088pt too wide) in paragraph at lines 3306--3306
+ []\T1/pcr/m/n/10 imposeMissing(data.mat, cov = 0, pmMCAR = 0, pmMAR = 0, nform
+s = 0,[] 
+[59] [60]
+Overfull \hbox (4.38043pt too wide) in paragraph at lines 3439--3439
+ []\T1/pcr/m/n/9 # Imposing Missing with the following arguments produces no mi
+ssing values[] 
+[61] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [62]
+[63] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (18.78088pt too wide) in paragraph at lines 3578--3578
+ []\T1/pcr/m/n/10 likRatioFit(outMod1, outMod2, dat1Mod1, dat1Mod2, dat2Mod1, d
+at2Mod2,[] 
+[64]
+Overfull \hbox (106.98032pt too wide) in paragraph at lines 3638--3638
+ []\T1/pcr/m/n/9 model.A <- estmodel(LY=loading, BE=path.A, modelType="SEM", in
+dLab=c(paste("x", 1:3, sep=""),[] 
+
+Overfull \hbox (106.98032pt too wide) in paragraph at lines 3647--3647
+ []\T1/pcr/m/n/9 model.B <- estmodel(LY=loading, BE=path.B, modelType="SEM", in
+dLab=c(paste("x", 1:3, sep=""),[] 
+
+Overfull \hbox (79.98035pt too wide) in paragraph at lines 3669--3669
+ []\T1/pcr/m/n/9 # When the number of replications increases (e.g., 1000), the 
+warnings should disappear.[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [65]
+Overfull \hbox (90.78088pt too wide) in paragraph at lines 3684--3684
+ []\T1/pcr/m/n/10 miss(cov = 0, pmMCAR = 0, pmMAR = 0, logit = "", nforms = 0, 
+itemGroups = list(),[] 
+
+Overfull \hbox (0.78088pt too wide) in paragraph at lines 3685--3685
+ []    \T1/pcr/m/n/10 timePoints = 1, twoMethod = 0, prAttr = 0, m = 0, chi = "
+all",[] 
+[66]
+Overfull \hbox (2.21797pt too wide) in paragraph at lines 3719--3722
+\T1/ptm/m/n/10 veristy of Notre Dame; \T1/pcr/m/n/10 <pmille13@nd.edu>\T1/ptm/m
+/n/10 ), Sun-thud Porn-prasert-manit (Uni-ver-sity of Kansas;
+
+Overfull \hbox (79.98035pt too wide) in paragraph at lines 3735--3735
+ []\T1/pcr/m/n/9 #Example of imposing 10% MCAR missing in all variables with no
+ imputations (FIML method)[] 
+[67]
+Overfull \hbox (96.18033pt too wide) in paragraph at lines 3774--3774
+ []\T1/pcr/m/n/9 #Example to create simMissing object for 3 forms design at 3 t
+imepoints with 10 imputations[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (42.78088pt too wide) in paragraph at lines 3793--3793
+ []\T1/pcr/m/n/10 model(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL
+, BE = NULL,[] 
+
+Overfull \hbox (72.78088pt too wide) in paragraph at lines 3794--3794
+ []\T1/pcr/m/n/10 VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL =
+ NULL, MY = NULL,[] 
+
+Overfull \hbox (42.78088pt too wide) in paragraph at lines 3795--3795
+ []\T1/pcr/m/n/10 ME = NULL, KA = NULL, GA = NULL, modelType, indLab = NULL, fa
+cLab = NULL,[] 
+
+Overfull \hbox (54.78088pt too wide) in paragraph at lines 3797--3797
+ []\T1/pcr/m/n/10 model.cfa(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NUL
+L, VTE = NULL,[] 
+
+Overfull \hbox (54.78088pt too wide) in paragraph at lines 3798--3798
+ []\T1/pcr/m/n/10 VY = NULL, VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NU
+LL, ME = NULL,[] 
+
+Overfull \hbox (0.78088pt too wide) in paragraph at lines 3799--3799
+ []\T1/pcr/m/n/10 KA = NULL, GA = NULL, indLab = NULL, facLab = NULL, covLab = 
+NULL,[] 
+
+Overfull \hbox (60.78088pt too wide) in paragraph at lines 3801--3801
+ []\T1/pcr/m/n/10 model.path(PS = NULL, RPS = NULL, BE = NULL, VPS = NULL, VE=N
+ULL, AL = NULL,[] 
+
+Overfull \hbox (66.78088pt too wide) in paragraph at lines 3802--3802
+ []\T1/pcr/m/n/10 ME = NULL, KA = NULL, GA = NULL, indLab = NULL, facLab = NULL
+, covLab = NULL,[] 
+[68]
+Overfull \hbox (48.78088pt too wide) in paragraph at lines 3804--3804
+ []\T1/pcr/m/n/10 model.sem(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NUL
+L, BE = NULL,[] 
+
+Overfull \hbox (60.78088pt too wide) in paragraph at lines 3805--3805
+ []\T1/pcr/m/n/10 VTE = NULL, VY = NULL, VPS = NULL, VE=NULL, TY = NULL, AL = N
+ULL, MY = NULL,[] 
+
+Overfull \hbox (66.78088pt too wide) in paragraph at lines 3806--3806
+ []\T1/pcr/m/n/10 ME = NULL, KA = NULL, GA = NULL, indLab = NULL, facLab = NULL
+, covLab = NULL,[] 
+
+Overfull \hbox (19.43762pt too wide) in paragraph at lines 3814--3815
+[]\T1/ptm/m/n/10 Factor load-ing ma-trix from en-doge-nous fac-tors to Y in-di-
+ca-tors (must be \T1/pcr/m/n/10 SimMatrix
+
+Overfull \hbox (26.53812pt too wide) in paragraph at lines 3817--3818
+[]\T1/ptm/m/n/10 Residual variance-covariance ma-trix among en-doge-nous fac-to
+rs (must be \T1/pcr/m/n/10 SimMatrix
+
+Overfull \hbox (2.53737pt too wide) in paragraph at lines 3826--3827
+[]\T1/ptm/m/n/10 Measurement er-ror cor-re-la-tion ma-trix among Y in-di-ca-tor
+s (must be \T1/pcr/m/n/10 SimMatrix
+
+Overfull \hbox (4.52782pt too wide) in paragraph at lines 3856--3857
+[]\T1/ptm/m/n/10 Regression co-ef-fi-cient ma-trix from co-vari-ates to in-di-c
+a-tors (must be \T1/pcr/m/n/10 SimMatrix
+[69]
+Overfull \hbox (52.29958pt too wide) in paragraph at lines 3880--3881
+\T1/ptm/m/n/10 i-cal ex-pres-sions are al-lowed, e.g., \T1/pcr/m/n/10 "newparam
+ := (load1 + load2 + load3)/3"\T1/ptm/m/n/10 .
+[70]
+Overfull \hbox (96.18033pt too wide) in paragraph at lines 3947--3947
+ []\T1/pcr/m/n/9 CFA.Model <- model(LY = LY, RPS = list(RPS, RPS), RTE = list(R
+TE, RTE), VTE=list(VTE, VTE),[] 
+[71]
+Overfull \hbox (101.58032pt too wide) in paragraph at lines 3974--3974
+ []\T1/pcr/m/n/9 LCA.Model <- model(LY=LY, RPS=RPS, VPS=VPS, AL=AL, VTE=VTE, RT
+E=RTE, TY=TY, modelType="CFA")[] 
+
+Underfull \vbox (badness 10000) has occurred while \output is active [72]
+Overfull \hbox (85.38034pt too wide) in paragraph at lines 4041--4041
+ []\T1/pcr/m/n/9 noninvariance <- model(LY = list(LY1, LY2), RPS = list(RPS1, R
+PS2), RTE = list(RTE, RTE),[] 
+
+Underfull \vbox (badness 10000) has occurred while \output is active [73]
+Overfull \hbox (85.38034pt too wide) in paragraph at lines 4075--4075
+ []\T1/pcr/m/n/9 weak <- model(LY = LY.in, RPS = RPS, VPS=list(VPS1, VPS2), RTE
+ = RTE, VTE=VTE, ngroups=2,[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (6.78088pt too wide) in paragraph at lines 4088--4088
+ []\T1/pcr/m/n/10 model.lavaan(object, std = FALSE, LY = NULL, PS = NULL, RPS =
+ NULL,[] 
+
+Overfull \hbox (12.78088pt too wide) in paragraph at lines 4089--4089
+ []\T1/pcr/m/n/10 TE = NULL, RTE = NULL, BE = NULL, VTE = NULL, VY = NULL, VPS 
+= NULL,[] 
+
+Overfull \hbox (5.78783pt too wide) in paragraph at lines 4101--4102
+[]\T1/ptm/m/n/10 If TRUE, use the re-sult-ing stan-dard-ized pa-ram-e-ters for 
+data gen-er-a-tion. If FALSE,
+[74] [75] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (18.78088pt too wide) in paragraph at lines 4242--4242
+ []\T1/pcr/m/n/10 plotCIwidth(object, targetParam, assurance = 0.50, useContour
+ = TRUE)[] 
+[76]
+Overfull \hbox (9.78043pt too wide) in paragraph at lines 4310--4310
+ []\T1/pcr/m/n/9 # The example of continous varying sample size. Note that more
+ fine-grained[] 
+[77]
+Overfull \hbox (31.3804pt too wide) in paragraph at lines 4317--4317
+ []\T1/pcr/m/n/9 # Specify both continuous sample size and percent missing comp
+letely at random.[] 
+
+Overfull \hbox (74.58035pt too wide) in paragraph at lines 4318--4318
+ []\T1/pcr/m/n/9 # Note that more fine-grained values of n and pmMCAR is needed
+, e.g., n=seq(50, 500, 1)[] 
+
+Overfull \hbox (79.98035pt too wide) in paragraph at lines 4320--4320
+ []\T1/pcr/m/n/9 Output3 <- sim(NULL, n=seq(450, 500, 10), pmMCAR=c(0, 0.05, 0.
+1, 0.15), model=CFA.Model)[] 
+
+Overfull \hbox (47.58038pt too wide) in paragraph at lines 4322--4322
+ []\T1/pcr/m/n/9 # Plot the contours that each contour represents the value of 
+widths at each level[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (102.78088pt too wide) in paragraph at lines 4338--4338
+ []\T1/pcr/m/n/10 plotCoverage(object, coverParam, coverValue = NULL, contParam
+ = NULL, contN = TRUE,[] 
+[78]
+Overfull \hbox (31.3804pt too wide) in paragraph at lines 4404--4404
+ []\T1/pcr/m/n/9 # Specify both continuous sample size and percent missing comp
+letely at random.[] 
+
+Overfull \hbox (74.58035pt too wide) in paragraph at lines 4405--4405
+ []\T1/pcr/m/n/9 # Note that more fine-grained values of n and pmMCAR is needed
+, e.g., n=seq(50, 500, 1)[] 
+
+Overfull \hbox (36.7804pt too wide) in paragraph at lines 4408--4408
+ []\T1/pcr/m/n/9 Output <- sim(NULL, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2)
+, model=CFA.Model)[] 
+
+Overfull \hbox (133.98029pt too wide) in paragraph at lines 4414--4414
+ []\T1/pcr/m/n/9 # Plot the power of the correlation along the sample size and 
+percent missing completely at random[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (0.78088pt too wide) in paragraph at lines 4429--4429
+ []\T1/pcr/m/n/10 plotCutoff(object, alpha = NULL, revDirec = FALSE, usedFit = 
+NULL,[] 
+[79] [80]
+Overfull \hbox (9.78043pt too wide) in paragraph at lines 4497--4497
+ []\T1/pcr/m/n/9 # The example of continous varying sample size. Note that more
+ fine-grained[] 
+
+Overfull \hbox (31.3804pt too wide) in paragraph at lines 4504--4504
+ []\T1/pcr/m/n/9 # Specify both continuous sample size and percent missing comp
+letely at random.[] 
+
+Overfull \hbox (74.58035pt too wide) in paragraph at lines 4505--4505
+ []\T1/pcr/m/n/9 # Note that more fine-grained values of n and pmMCAR is needed
+, e.g., n=seq(50, 500, 1)[] 
+
+Overfull \hbox (79.98035pt too wide) in paragraph at lines 4507--4507
+ []\T1/pcr/m/n/9 Output3 <- sim(NULL, n=seq(450, 500, 10), pmMCAR=c(0, 0.05, 0.
+1, 0.15), model=CFA.Model)[] 
+
+Overfull \hbox (47.58038pt too wide) in paragraph at lines 4509--4509
+ []\T1/pcr/m/n/9 # Plot the contours that each contour represents the value of 
+cutoff at each level[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [81]
+Overfull \hbox (42.18039pt too wide) in paragraph at lines 4580--4580
+ []\T1/pcr/m/n/9 CFA.Model.NULL <- model(LY = LY.NULL, RPS = RPS.NULL, RTE = RT
+E, modelType="CFA")[] 
+
+Overfull \hbox (25.98041pt too wide) in paragraph at lines 4590--4590
+ []\T1/pcr/m/n/9 CFA.Model.ALT <- model(LY = LY.ALT, RPS = RPS.ALT, RTE = RTE, 
+modelType="CFA")[] 
+
+Overfull \hbox (31.3804pt too wide) in paragraph at lines 4594--4594
+ []\T1/pcr/m/n/9 Output.NULL.ALT <- sim(10, n=500, model=CFA.Model.ALT, generat
+e=CFA.Model.NULL)[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (18.78088pt too wide) in paragraph at lines 4611--4611
+ []\T1/pcr/m/n/10 plotCutoffNonNested(dat1Mod1, dat1Mod2, dat2Mod1=NULL, dat2Mo
+d2=NULL,[] 
+
+Overfull \hbox (54.78088pt too wide) in paragraph at lines 4612--4612
+ []\T1/pcr/m/n/10 alpha=0.05, cutoff = NULL, usedFit = NULL, useContour = T, on
+etailed=FALSE)[] 
+[82] [83] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (66.78088pt too wide) in paragraph at lines 4714--4714
+ []\T1/pcr/m/n/10 plotDist(object, xlim = NULL, ylim = NULL, r = 0, var = NULL,
+ contour = TRUE)[] 
+[84]
+Overfull \hbox (69.18036pt too wide) in paragraph at lines 4760--4760
+ []\T1/pcr/m/n/9 datadist <- bindDist(c("chisq", "t", "f"), list(df=5), list(df
+=3), list(df1=3, df2=5))[] 
+
+Overfull \hbox (4.38043pt too wide) in paragraph at lines 4762--4762
+ []\T1/pcr/m/n/9 # Plot the joint distribution of Variables 1 and 2 with correl
+ation of 0.5[] 
+
+Overfull \hbox (4.38043pt too wide) in paragraph at lines 4770--4770
+ []\T1/pcr/m/n/9 # Plot the joint distribution of Variables 1 and 2 with correl
+ation of 0.5[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (48.78088pt too wide) in paragraph at lines 4786--4786
+ []\T1/pcr/m/n/10 plotLogitMiss(script, ylim=c(0,1), x1lim=c(-3,3), x2lim=c(-3,
+3), otherx=0,[] 
+[85] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [86]
+Overfull \hbox (9.78043pt too wide) in paragraph at lines 4902--4902
+ []\T1/pcr/m/n/9 # The number of replications in actual analysis should be much
+ more than 20[] 
+
+Overfull \hbox (58.38037pt too wide) in paragraph at lines 4908--4908
+ []\T1/pcr/m/n/9 # Plot the relationship between population RMSEA and all missp
+ecified direct effects[] 
+
+Overfull \hbox (25.98041pt too wide) in paragraph at lines 4911--4911
+ []\T1/pcr/m/n/9 # Plot the relationship between sample CFI and all misspecifie
+d direct effects[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (54.78088pt too wide) in paragraph at lines 4924--4924
+ []\T1/pcr/m/n/10 plotPower(object, powerParam, alpha = 0.05, contParam = NULL,
+ contN = TRUE,[] 
+[87]
+Overfull \hbox (31.3804pt too wide) in paragraph at lines 4990--4990
+ []\T1/pcr/m/n/9 # Specify both continuous sample size and percent missing comp
+letely at random.[] 
+
+Overfull \hbox (74.58035pt too wide) in paragraph at lines 4991--4991
+ []\T1/pcr/m/n/9 # Note that more fine-grained values of n and pmMCAR is needed
+, e.g., n=seq(50, 500, 1)[] 
+
+Overfull \hbox (36.7804pt too wide) in paragraph at lines 4994--4994
+ []\T1/pcr/m/n/9 Output <- sim(NULL, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2)
+, model=CFA.Model)[] 
+[88]
+Overfull \hbox (133.98029pt too wide) in paragraph at lines 4999--4999
+ []\T1/pcr/m/n/9 # Plot the power of the correlation along the sample size and 
+percent missing completely at random[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (42.78088pt too wide) in paragraph at lines 5014--5014
+ []\T1/pcr/m/n/10 plotPowerFit(altObject, nullObject = NULL, cutoff = NULL, use
+dFit = NULL,[] 
+[89]
+Overfull \hbox (42.18039pt too wide) in paragraph at lines 5083--5083
+ []\T1/pcr/m/n/9 CFA.Model.NULL <- model(LY = LY.NULL, RPS = RPS.NULL, RTE = RT
+E, modelType="CFA")[] 
+
+Overfull \hbox (9.78043pt too wide) in paragraph at lines 5087--5087
+ []\T1/pcr/m/n/9 Output.NULL <- sim(50, n=50, model=CFA.Model.NULL, generate=CF
+A.Model.NULL)[] 
+
+Overfull \hbox (25.98041pt too wide) in paragraph at lines 5097--5097
+ []\T1/pcr/m/n/9 CFA.Model.ALT <- model(LY = LY.ALT, RPS = RPS.ALT, RTE = RTE, 
+modelType="CFA")[] 
+
+Overfull \hbox (52.98038pt too wide) in paragraph at lines 5100--5100
+ []\T1/pcr/m/n/9 # Plot the power based on derived cutoff from the null model u
+sing four fit indices[] 
+
+Overfull \hbox (123.1803pt too wide) in paragraph at lines 5104--5104
+ []\T1/pcr/m/n/9 # Plot the power of rejecting null model when the rule of thum
+b from Hu & Bentler (1999) is used[] 
+
+Overfull \hbox (9.78043pt too wide) in paragraph at lines 5109--5109
+ []\T1/pcr/m/n/9 # The example of continous varying sample size. Note that more
+ fine-grained[] 
+
+Overfull \hbox (101.58032pt too wide) in paragraph at lines 5111--5111
+ []\T1/pcr/m/n/9 Output.NULL2 <- sim(NULL, n=seq(50, 250, 25), model=CFA.Model.
+NULL, generate=CFA.Model.NULL)[] 
+
+Overfull \hbox (90.78033pt too wide) in paragraph at lines 5112--5112
+ []\T1/pcr/m/n/9 Output.ALT2 <- sim(NULL, n=seq(50, 250, 25), model=CFA.Model.N
+ULL, generate=CFA.Model.ALT)[] 
+
+Overfull \hbox (52.98038pt too wide) in paragraph at lines 5114--5114
+ []\T1/pcr/m/n/9 # Plot the power based on derived cutoff from the null model u
+sing four fit indices[] 
+[90] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [91]
+Overfull \hbox (42.18039pt too wide) in paragraph at lines 5212--5212
+ []\T1/pcr/m/n/9 CFA.Model.NULL <- model(LY = LY.NULL, RPS = RPS.NULL, RTE = RT
+E, modelType="CFA")[] 
+
+Overfull \hbox (25.98041pt too wide) in paragraph at lines 5222--5222
+ []\T1/pcr/m/n/9 CFA.Model.ALT <- model(LY = LY.ALT, RPS = RPS.ALT, RTE = RTE, 
+modelType="CFA")[] 
+
+Overfull \hbox (42.18039pt too wide) in paragraph at lines 5225--5225
+ []\T1/pcr/m/n/9 Output.NULL.NULL <- sim(10, n=500, model=CFA.Model.NULL, gener
+ate=CFA.Model.NULL)[] 
+
+Overfull \hbox (31.3804pt too wide) in paragraph at lines 5226--5226
+ []\T1/pcr/m/n/9 Output.ALT.NULL <- sim(10, n=500, model=CFA.Model.NULL, genera
+te=CFA.Model.ALT)[] 
+
+Overfull \hbox (31.3804pt too wide) in paragraph at lines 5227--5227
+ []\T1/pcr/m/n/9 Output.NULL.ALT <- sim(10, n=500, model=CFA.Model.ALT, generat
+e=CFA.Model.NULL)[] 
+
+Overfull \hbox (20.58041pt too wide) in paragraph at lines 5228--5228
+ []\T1/pcr/m/n/9 Output.ALT.ALT <- sim(10, n=500, model=CFA.Model.ALT, generate
+=CFA.Model.ALT)[] 
+
+Overfull \hbox (90.78033pt too wide) in paragraph at lines 5230--5230
+ []\T1/pcr/m/n/9 # Plot the power based on the derived cutoff from the models a
+nalyzed on the null datasets[] 
+
+Overfull \hbox (36.7804pt too wide) in paragraph at lines 5231--5231
+ []\T1/pcr/m/n/9 plotPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested
+=Output.NULL.NULL,[] 
+
+Overfull \hbox (36.7804pt too wide) in paragraph at lines 5235--5235
+ []\T1/pcr/m/n/9 plotPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested
+=Output.NULL.NULL,[] 
+
+Overfull \hbox (9.78043pt too wide) in paragraph at lines 5238--5238
+ []\T1/pcr/m/n/9 # The example of continous varying sample size. Note that more
+ fine-grained[] 
+
+Overfull \hbox (128.58029pt too wide) in paragraph at lines 5240--5240
+ []\T1/pcr/m/n/9 Output.NULL.NULL2 <- sim(NULL, n=seq(50, 500, 25), model=CFA.M
+odel.NULL, generate=CFA.Model.NULL)[] 
+
+Overfull \hbox (117.7803pt too wide) in paragraph at lines 5241--5241
+ []\T1/pcr/m/n/9 Output.ALT.NULL2 <- sim(NULL, n=seq(50, 500, 25), model=CFA.Mo
+del.NULL, generate=CFA.Model.ALT)[] 
+
+Overfull \hbox (117.7803pt too wide) in paragraph at lines 5242--5242
+ []\T1/pcr/m/n/9 Output.NULL.ALT2 <- sim(NULL, n=seq(50, 500, 25), model=CFA.Mo
+del.ALT, generate=CFA.Model.NULL)[] 
+
+Overfull \hbox (106.98032pt too wide) in paragraph at lines 5243--5243
+ []\T1/pcr/m/n/9 Output.ALT.ALT2 <- sim(NULL, n=seq(50, 500, 25), model=CFA.Mod
+el.ALT, generate=CFA.Model.ALT)[] 
+[92]
+Overfull \hbox (47.58038pt too wide) in paragraph at lines 5245--5245
+ []\T1/pcr/m/n/9 # Plot logistic line for the power based on the derived cutoff
+ from the null model[] 
+
+Overfull \hbox (52.98038pt too wide) in paragraph at lines 5247--5247
+ []\T1/pcr/m/n/9 plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNest
+ed=Output.NULL.NULL2,[] 
+
+Overfull \hbox (36.7804pt too wide) in paragraph at lines 5250--5250
+ []\T1/pcr/m/n/9 # Plot scatterplot for the power based on the derived cutoff f
+rom the null model[] 
+
+Overfull \hbox (52.98038pt too wide) in paragraph at lines 5252--5252
+ []\T1/pcr/m/n/9 plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNest
+ed=Output.NULL.NULL2,[] 
+
+Overfull \hbox (85.38034pt too wide) in paragraph at lines 5256--5256
+ []\T1/pcr/m/n/9 plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, cutoff=c
+(CFI=-0.1), logistic=FALSE)[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (30.78088pt too wide) in paragraph at lines 5270--5270
+ []\T1/pcr/m/n/10 plotPowerFitNonNested(dat2Mod1, dat2Mod2, dat1Mod1=NULL, dat1
+Mod2=NULL,[] 
+
+Overfull \hbox (54.78088pt too wide) in paragraph at lines 5271--5271
+ []\T1/pcr/m/n/10 cutoff = NULL, usedFit = NULL, alpha = 0.05, contN = TRUE, co
+ntMCAR = TRUE,[] 
+
+Overfull \hbox (24.78088pt too wide) in paragraph at lines 5272--5272
+ []\T1/pcr/m/n/10 contMAR = TRUE, useContour = TRUE, logistic = TRUE, onetailed
+ = FALSE)[] 
+[93] [94]
+Overfull \hbox (74.58035pt too wide) in paragraph at lines 5368--5368
+ []\T1/pcr/m/n/9 plotPowerFitNonNested(Output.B.A, Output.B.B, dat1Mod1=Output.
+A.A, dat1Mod2=Output.A.B)[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [95]
+Overfull \hbox (114.78088pt too wide) in paragraph at lines 5436--5436
+ []\T1/pcr/m/n/10 popMisfitMACS(paramM, paramCM, misspecM, misspecCM, dfParam=N
+ULL, fit.measures="all")[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [96]
+Overfull \hbox (6.78088pt too wide) in paragraph at lines 5493--5493
+ []\T1/pcr/m/n/10 pValue(target, dist, usedFit = NULL, nVal = NULL, pmMCARval =
+ NULL,[] 
+[97]
+Overfull \hbox (58.38037pt too wide) in paragraph at lines 5554--5554
+ []\T1/pcr/m/n/9 targetmodel <- estmodel(LY=loading, modelType="CFA", indLab=pa
+ste("x", 1:9, sep=""))[] 
+
+Overfull \hbox (9.78043pt too wide) in paragraph at lines 5564--5564
+ []\T1/pcr/m/n/9 # Find the p-value comparing the observed fit indices against 
+the simulated[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (36.78088pt too wide) in paragraph at lines 5580--5580
+ []\T1/pcr/m/n/10 pValueNested(outNested, outParent, simNested, simParent, used
+Fit = NULL,[] 
+[98] [99]
+Overfull \hbox (47.58038pt too wide) in paragraph at lines 5665--5665
+ []\T1/pcr/m/n/9 # Create data template from the nested model with small misfit
+ on the linear curve[] 
+
+Overfull \hbox (9.78043pt too wide) in paragraph at lines 5677--5677
+ []\T1/pcr/m/n/9 # Find the p-value comparing the observed fit indices against 
+the simulated[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (42.78088pt too wide) in paragraph at lines 5693--5693
+ []\T1/pcr/m/n/10 pValueNonNested(outMod1, outMod2, dat1Mod1, dat1Mod2, dat2Mod
+1, dat2Mod2,[] 
+
+Overfull \hbox (30.78088pt too wide) in paragraph at lines 5694--5694
+ []\T1/pcr/m/n/10 usedFit = NULL, nVal = NULL, pmMCARval = NULL, pmMARval = NUL
+L, df = 0,[] 
+[100] [101]
+Overfull \hbox (106.98032pt too wide) in paragraph at lines 5775--5775
+ []\T1/pcr/m/n/9 model.A <- estmodel(LY=loading, BE=path.A, modelType="SEM", in
+dLab=c(paste("x", 1:3, sep=""),[] 
+
+Overfull \hbox (106.98032pt too wide) in paragraph at lines 5784--5784
+ []\T1/pcr/m/n/9 model.B <- estmodel(LY=loading, BE=path.B, modelType="SEM", in
+dLab=c(paste("x", 1:3, sep=""),[] 
+
+Overfull \hbox (9.78043pt too wide) in paragraph at lines 5805--5805
+ []\T1/pcr/m/n/9 # Find the p-value comparing the observed fit indices against 
+the simulated[] 
+
+Overfull \hbox (20.58041pt too wide) in paragraph at lines 5808--5808
+ []\T1/pcr/m/n/9 pValueNonNested(out.A, out.B, output.A.A, output.A.B, output.B
+.A, output.B.B)[] 
+
+Overfull \hbox (25.98041pt too wide) in paragraph at lines 5810--5810
+ []\T1/pcr/m/n/9 # If the p-value for model A is significant but the p-value fo
+r model B is not[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (24.78088pt too wide) in paragraph at lines 5825--5825
+ []\T1/pcr/m/n/10 rawDraw(simDat, constraint = TRUE, misSpec = TRUE, parMisOnly
+ = FALSE,[] 
+[102] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [103]
+[104]
+Overfull \hbox (4.38043pt too wide) in paragraph at lines 5957--5957
+ []\T1/pcr/m/n/9 datamodel <- model(LY=LY, RPS=RPS, BE=BE, RTE=RTE, VY=VY, mode
+lType="SEM")[] 
+
+Overfull \hbox (47.58038pt too wide) in paragraph at lines 5971--5971
+ []\T1/pcr/m/n/9 analysis <- estmodel(LY=loading, BE=path, TE=errorCov, PS=facC
+ov, modelType="SEM",[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [105]
+Overfull \hbox (108.78088pt too wide) in paragraph at lines 6012--6012
+ []\T1/pcr/m/n/10 sim(nRep, model, n, generate = NULL, ..., rawData = NULL, mis
+s = NULL, datafun=NULL,[] 
+
+Overfull \hbox (78.78088pt too wide) in paragraph at lines 6013--6013
+ []\T1/pcr/m/n/10 lavaanfun = "lavaan", outfun=NULL, pmMCAR = NULL, pmMAR = NUL
+L, facDist = NULL,[] 
+
+Overfull \hbox (36.78088pt too wide) in paragraph at lines 6014--6014
+ []\T1/pcr/m/n/10 indDist = NULL, errorDist = NULL, sequential = FALSE, modelBo
+ot = FALSE,[] 
+
+Overfull \hbox (72.78088pt too wide) in paragraph at lines 6016--6016
+ []\T1/pcr/m/n/10 misfitBounds = NULL, averageNumMisspec = FALSE, optMisfit=NUL
+L, optDraws = 50,[] 
+
+Overfull \hbox (0.78088pt too wide) in paragraph at lines 6017--6017
+ []\T1/pcr/m/n/10 createOrder = c(1, 2, 3), aux = NULL, group = NULL, mxFit = F
+ALSE,[] 
+
+Overfull \hbox (84.78088pt too wide) in paragraph at lines 6018--6018
+ []\T1/pcr/m/n/10 mxMixture = FALSE, citype = NULL, cilevel = 0.95, seed = 1233
+21, silent = FALSE,[] 
+
+Overfull \hbox (24.78088pt too wide) in paragraph at lines 6019--6019
+ []\T1/pcr/m/n/10 multicore = FALSE, cluster = FALSE, numProc = NULL, paramOnly
+ = FALSE,[] 
+
+Overfull \hbox (48.78088pt too wide) in paragraph at lines 6020--6020
+ []\T1/pcr/m/n/10 dataOnly=FALSE, smartStart=FALSE, previousSim = NULL, complet
+eRep = FALSE)[] 
+
+Overfull \hbox (33.24861pt too wide) in paragraph at lines 6036--6037
+\T1/ptm/m/n/10 2. \T1/pcr/m/n/10 lavaan \T1/ptm/m/n/10 script, \T1/pcr/m/n/10 l
+avaan \T1/ptm/m/n/10 pa-ram-e-ter ta-ble (for data gen-er-a-tion; see \T1/pcr/m
+/n/10 simulateData\T1/ptm/m/n/10 ),
+[106]
+Overfull \hbox (28.08833pt too wide) in paragraph at lines 6061--6062
+[]\T1/ptm/m/n/10 Factor dis-tri-bu-tions. Ei-ther a list of \T1/pcr/m/n/10 SimD
+ataDist \T1/ptm/m/n/10 ob-jects or a sin-gle \T1/pcr/m/n/10 SimDataDist
+
+Overfull \hbox (38.78815pt too wide) in paragraph at lines 6064--6065
+[]\T1/ptm/m/n/10 Indicator dis-tri-bu-tions. Ei-ther a list of \T1/pcr/m/n/10 S
+imDataDist \T1/ptm/m/n/10 ob-jects or a sin-gle \T1/pcr/m/n/10 SimDataDist
+[107] [108] [109]
+Overfull \hbox (117.7803pt too wide) in paragraph at lines 6251--6251
+ []\T1/pcr/m/n/9 Output <- sim(5, model=analysisModel, n=200, generate=popModel
+, std.lv=TRUE, lavaanfun = "cfa")[] 
+
+Underfull \vbox (badness 10000) has occurred while \output is active [110]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (71.86832pt too wide) in paragraph at lines 6309--6310
+[]\T1/ptm/m/n/10 Objects can be cre-ated by \T1/pcr/m/n/10 bindDist \T1/ptm/m/n
+/10 func-tion. It can also be called from the form \T1/pcr/m/n/10 new("SimDataD
+ist", ...)\T1/ptm/m/n/10 . 
+[111]
+Overfull \hbox (128.58029pt too wide) in paragraph at lines 6364--6364
+ []\T1/pcr/m/n/9 dist <- bindDist(c(rep("t", 4), rep("chisq", 8)), d1, d2, d3, 
+d4, d5, d6, d7, d8, d5, d6, d7, d8)[] 
+
+Overfull \hbox (101.58032pt too wide) in paragraph at lines 6367--6367
+ []\T1/pcr/m/n/9 dist2 <- bindDist(skewness = seq(-3, 3, length.out=12), kurtos
+is = seq(2, 5, length.out=12))[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [112]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [113] [114]
+Overfull \hbox (48.9587pt too wide) in paragraph at lines 6499--6503
+\T1/ptm/m/n/10 (Uni-ver-sity of Kansas; \T1/pcr/m/n/10 <schoemann@ku.edu>\T1/pt
+m/m/n/10 ) Kyle Lang (Uni-ver-sity of Kansas; \T1/pcr/m/n/10 <kylelang@ku.edu>\
+T1/ptm/m/n/10 )
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [115] [116]
+[117] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [118]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [119]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (5.39653pt too wide) in paragraph at lines 6791--6792
+\T1/ptm/m/n/10 pletely at ran-dom (if vary-ing), per-cent miss-ing at ran-dom (
+if vary-ing), pa-ram-e-ter val-ues, misspecified-
+[120]
+Overfull \hbox (15.18042pt too wide) in paragraph at lines 6867--6867
+ []\T1/pcr/m/n/9 facDist <- bindDist(c("chisq", "chisq", "norm", "norm"), chi5,
+ chi5, n1, n1)[] 
+[121]
+Overfull \hbox (69.18036pt too wide) in paragraph at lines 6870--6870
+ []\T1/pcr/m/n/9 simOut <- sim(50, n=500, SEM.Model, sequential=TRUE, facDist=f
+acDist, estimator="mlr")[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (0.78088pt too wide) in paragraph at lines 6887--6887
+ []\T1/pcr/m/n/10 summaryFit(object, alpha = NULL, improper = FALSE, usedFit = 
+NULL)[] 
+[122] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [123]
+Overfull \hbox (4.38043pt too wide) in paragraph at lines 7031--7031
+ []\T1/pcr/m/n/9 # The number of replications in actual analysis should be much
+ more than 5[] 
+
+Overfull \hbox (36.7804pt too wide) in paragraph at lines 7034--7034
+ []\T1/pcr/m/n/9 # Summarize the model misspecification that is specified in th
+e \TS1/pcr/m/n/9 '\T1/pcr/m/n/9 pathMis\TS1/pcr/m/n/9 ' \T1/pcr/m/n/9 object[] 
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [124]
+Overfull \hbox (12.78088pt too wide) in paragraph at lines 7049--7049
+ []\T1/pcr/m/n/10 summaryParam(object, alpha = 0.05, detail = FALSE, improper =
+ FALSE,[] 
+[125]
+Overfull \hbox (46.68953pt too wide) in paragraph at lines 7092--7095
+[]\T1/pcr/m/n/10 Rel.Bias: \T1/ptm/m/n/10 Rel-a-tive Bias, which is (\T1/pcr/m/
+n/10 Estimate.Average \T1/ptm/m/n/10 - \T1/pcr/m/n/10 Average.Param\T1/ptm/m/n/
+10 )/\T1/pcr/m/n/10 Average.Param\T1/ptm/m/n/10 .
+
+Overfull \hbox (51.46945pt too wide) in paragraph at lines 7095--7100
+[]\T1/pcr/m/n/10 Std.Bias: \T1/ptm/m/n/10 Stan-dard-ized Bias, which is (\T1/pc
+r/m/n/10 Estimate.Average \T1/ptm/m/n/10 - \T1/pcr/m/n/10 Average.Param\T1/ptm/
+m/n/10 )/\T1/pcr/m/n/10 Estimate.SD
+
+Overfull \hbox (68.57841pt too wide) in paragraph at lines 7100--7104
+[]\T1/pcr/m/n/10 Rel.SE.Bias: \T1/ptm/m/n/10 Rel-a-tive Bias in stan-dard er-ro
+r, which is (\T1/pcr/m/n/10 Average.SE \T1/ptm/m/n/10 - \T1/pcr/m/n/10 Estimate
+.SD\T1/ptm/m/n/10 )/\T1/pcr/m/n/10 Estimate.SD
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [126]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [127]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [128]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [129] [130]
+(C:\Users\sunthud\AppData\Local\Temp\RtmpCWEVeP\Rd2pdf191c675c2540\Rd2.aux) )
+(see the transcript file for additional information){C:/Program Files (x86)/MiK
+TeX 2.9/fonts/enc/dvips/fontname/8r.enc}<C:/Program Files (x86)/MiKTeX 2.9/font
+s/type1/public/amsfonts/cm/cmex10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/
+type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/ty
+pe1/public/amsfonts/cm/cmmi5.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1
+/public/amsfonts/cm/cmmi7.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/pu
+blic/amsfonts/cm/cmr10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/publi
+c/amsfonts/cm/cmr7.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/am
+sfonts/cm/cmsy10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsf
+onts/cm/cmsy7.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/courier/uc
+rr8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/helvetic/uhvr8a.pfb
+><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><C:/Progra
+m Files (x86)/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.pfb><C:/Program Files (x8
+6)/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.pfb><C:/Program Files (x86)/MiKTeX 2
+.9/fonts/type1/urw/times/utmri8a.pfb>
+Output written on Rd2.pdf (130 pages, 428864 bytes).
+Transcript written on Rd2.log.
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9)
+entering extended mode
+(C:\Users\sunthud\AppData\Local\Temp\RtmpCWEVeP\Rd2pdf191c675c2540\Rd2.tex
+LaTeX2e <2011/06/27>
+Babel <v3.8m> and hyphenation patterns for english, afrikaans, ancientgreek, ar
+abic, armenian, assamese, basque, bengali, bokmal, bulgarian, catalan, coptic, 
+croatian, czech, danish, dutch, esperanto, estonian, farsi, finnish, french, ga
+lician, german, german-x-2012-05-30, greek, gujarati, hindi, hungarian, iceland
+ic, indonesian, interlingua, irish, italian, kannada, kurmanji, latin, latvian,
+ lithuanian, malayalam, marathi, mongolian, mongolianlmc, monogreek, ngerman, n
+german-x-2012-05-30, nynorsk, oriya, panjabi, pinyin, polish, portuguese, roman
+ian, russian, sanskrit, serbian, slovak, slovenian, spanish, swedish, swissgerm
+an, tamil, telugu, turkish, turkmen, ukenglish, ukrainian, uppersorbian, usengl
+ishmax, welsh, loaded.
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\book.cls"
+Document Class: book 2007/10/19 v1.4h Standard LaTeX document class
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\bk10.clo"))
+(C:/PROGRA~1/R/R-30~1.2/share/texmf/tex/latex\Rd.sty
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\ifthen.sty")
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\tools\longtable.sty")
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\tools\bm.sty")
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\alltt.sty")
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\tools\verbatim.sty")
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\ltxmisc\url.sty")
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\textcomp.sty"
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\ts1enc.def"))
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\fontenc.sty"
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\t1enc.def"))
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\times.sty"))
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\inputenc.sty"
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def"
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\t1enc.dfu")
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\ot1enc.dfu")
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\omsenc.dfu")
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\ts1enc.dfu"))
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\latin1.def"))
+(C:\Users\sunthud\AppData\Local\Temp\RtmpCWEVeP\Rd2pdf191c675c2540\Rd2.aux)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\ts1cmr.fd")
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\t1ptm.fd")
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\t1pcr.fd")
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\t1phv.fd")
+(C:\Users\sunthud\AppData\Local\Temp\RtmpCWEVeP\Rd2pdf191c675c2540\Rd2.toc
+[1{C:/Users/sunthud/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
+[2]) ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (42.78088pt too wide) in paragraph at lines 38--38
+ []\T1/pcr/m/n/10 analyze(model, data, package="lavaan", miss=NULL, aux=NULL, g
+roup = NULL,[] 
+[3] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\ts1ptm.fd")
+Overfull \hbox (1.58855pt too wide) in paragraph at lines 141--143
+[]\T1/ptm/m/n/10 Alexander M. Schoe-mann (Uni-ver-sity of Kansas; \T1/pcr/m/n/1
+0 <schoemann@ku.edu>\T1/ptm/m/n/10 ), Sun-thud Porn-prasert-
+[4]
+Overfull \hbox (15.18042pt too wide) in paragraph at lines 166--166
+ []\T1/pcr/m/n/9 Output1 <- sim(5, n=500, model=CFA.Model1, generate=CFA.Model1
+, seed=123567)[] 
+
+Overfull \hbox (15.18042pt too wide) in paragraph at lines 167--167
+ []\T1/pcr/m/n/9 Output2 <- sim(5, n=500, model=CFA.Model2, generate=CFA.Model1
+, seed=123567)[] 
+
+Overfull \hbox (106.98032pt too wide) in paragraph at lines 171--171
+ []\T1/pcr/m/n/9 Output1b <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model1, ge
+nerate=CFA.Model1, seed=123567)[] 
+
+Overfull \hbox (106.98032pt too wide) in paragraph at lines 172--172
+ []\T1/pcr/m/n/9 Output2b <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model2, ge
+nerate=CFA.Model1, seed=123567)[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (18.78088pt too wide) in paragraph at lines 196--196
+ []\T1/pcr/m/n/10 bind(free = NULL, popParam = NULL, misspec = NULL, symmetric 
+= FALSE)[] 
+[5]
+Overfull \hbox (18.78088pt too wide) in paragraph at lines 197--197
+ []\T1/pcr/m/n/10 binds(free = NULL, popParam = NULL, misspec = NULL, symmetric
+ = TRUE)[] 
+
+Overfull \hbox (2.59966pt too wide) in paragraph at lines 205--207
+\T1/ptm/m/n/10 gen-er-a-tion func-tion in quotes: e.g \T1/pcr/m/n/10 "runif(1,0
+,1)","rnorm(1,0,.01)"
+[6] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (48.78088pt too wide) in paragraph at lines 274--274
+ []\T1/pcr/m/n/10 bindDist(margins = NULL, ..., p = NULL, keepScale = TRUE, rev
+erse = FALSE,[] 
+[7]
+Overfull \hbox (13.65695pt too wide) in paragraph at lines 297--298
+[]\T1/ptm/m/n/10 A cop-ula class that rep-re-sents the mul-ti-vari-ate dis-tri-
+bu-tion, such as \T1/pcr/m/n/10 ellipCopula\T1/ptm/m/n/10 ,
+[8]
+Overfull \hbox (20.58041pt too wide) in paragraph at lines 346--346
+ []\T1/pcr/m/n/9 # Create a data distribution object by setting the names of ea
+ch distribution[] 
+
+Overfull \hbox (79.98035pt too wide) in paragraph at lines 351--351
+ []\T1/pcr/m/n/9 dist <- bindDist(c("t", "chisq", "norm"), d1, d2, d3, copula =
+ gumbelCopula(2, dim = 3))[] 
+
+Overfull \hbox (90.78033pt too wide) in paragraph at lines 353--353
+ []\T1/pcr/m/n/9 # Reverse the direction of chi-square distribution from positi
+vely skew to negatively skew[] 
+
+Overfull \hbox (79.98035pt too wide) in paragraph at lines 354--354
+ []\T1/pcr/m/n/9 dist <- bindDist(c("t", "chisq", "norm"), d1, d2, d3, copula =
+ gumbelCopula(2, dim = 3),[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\ts1pcr.fd")
+Overfull \hbox (63.78036pt too wide) in paragraph at lines 357--357
+ []\T1/pcr/m/n/9 # Create data based on Vale and Maurelli\TS1/pcr/m/n/9 '\T1/pc
+r/m/n/9 s method by specifying skewness and kurtosis[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [9]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [10]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (84.78088pt too wide) in paragraph at lines 485--485
+ []\T1/pcr/m/n/10 continuousCoverage(simResult, coverValue = NULL, contN = TRUE
+, contMCAR = FALSE,[] 
+
+Overfull \hbox (24.78088pt too wide) in paragraph at lines 486--486
+ []    \T1/pcr/m/n/10 contMAR = FALSE, contParam = NULL, coverParam = NULL, pre
+d = NULL)[] 
+[11]
+Overfull \hbox (31.3804pt too wide) in paragraph at lines 551--551
+ []\T1/pcr/m/n/9 # Specify both continuous sample size and percent missing comp
+letely at random.[] 
+
+Overfull \hbox (74.58035pt too wide) in paragraph at lines 552--552
+ []\T1/pcr/m/n/9 # Note that more fine-grained values of n and pmMCAR is needed
+, e.g., n=seq(50, 500, 1)[] 
+
+Overfull \hbox (4.38043pt too wide) in paragraph at lines 554--554
+ []\T1/pcr/m/n/9 Output <- sim(NULL, CFA.Model, n=seq(100, 200, 20), pmMCAR=c(0
+, 0.1, 0.2))[] 
+
+Overfull \hbox (117.7803pt too wide) in paragraph at lines 557--557
+ []\T1/pcr/m/n/9 # Find the coverage rates of all combinations of different sam
+ple size and percent MCAR missing[] 
+
+Overfull \hbox (47.58038pt too wide) in paragraph at lines 563--563
+ []\T1/pcr/m/n/9 Ccover2 <- continuousCoverage(Output, coverValue=0, contN = TR
+UE, contMCAR = TRUE,[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [12]
+Overfull \hbox (54.78088pt too wide) in paragraph at lines 579--579
+ []\T1/pcr/m/n/10 continuousPower(simResult, contN = TRUE, contMCAR = FALSE, co
+ntMAR = FALSE,[] 
+
+Overfull \hbox (1.58855pt too wide) in paragraph at lines 622--623
+[]\T1/ptm/m/n/10 Alexander M. Schoe-mann (Uni-ver-sity of Kansas; \T1/pcr/m/n/1
+0 <schoemann@ku.edu>\T1/ptm/m/n/10 ), Sun-thud Porn-prasert-
+[13]
+Overfull \hbox (31.3804pt too wide) in paragraph at lines 651--651
+ []\T1/pcr/m/n/9 # Specify both continuous sample size and percent missing comp
+letely at random.[] 
+
+Overfull \hbox (74.58035pt too wide) in paragraph at lines 652--652
+ []\T1/pcr/m/n/9 # Note that more fine-grained values of n and pmMCAR is needed
+, e.g., n=seq(50, 500, 1)[] 
+
+Overfull \hbox (4.38043pt too wide) in paragraph at lines 654--654
+ []\T1/pcr/m/n/9 Output <- sim(NULL, CFA.Model, n=seq(100, 200, 20), pmMCAR=c(0
+, 0.1, 0.2))[] 
+
+Overfull \hbox (69.18036pt too wide) in paragraph at lines 657--657
+ []\T1/pcr/m/n/9 # Find the power of all combinations of different sample size 
+and percent MCAR missing[] 
+
+Overfull \hbox (117.7803pt too wide) in paragraph at lines 661--661
+ []\T1/pcr/m/n/9 # Find the power of parameter estimates when sample size is 20
+0 and percent MCAR missing is 0.3[] 
+
+Overfull \hbox (128.58029pt too wide) in paragraph at lines 662--662
+ []\T1/pcr/m/n/9 Cpow2 <- continuousPower(Output, contN = TRUE, contMCAR = TRUE
+, pred=list(N = 200, pmMCAR = 0.3))[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (18.78088pt too wide) in paragraph at lines 677--677
+ []\T1/pcr/m/n/10 createData(paramSet, n, indDist=NULL, sequential=FALSE, facDi
+st=NULL,[] 
+
+Overfull \hbox (48.78088pt too wide) in paragraph at lines 678--678
+ []\T1/pcr/m/n/10 errorDist=NULL, indLab=NULL, modelBoot=FALSE, realData=NULL, 
+covData=NULL,[] 
+[14]
+Overfull \hbox (50.88759pt too wide) in paragraph at lines 704--705
+[]\T1/ptm/m/n/10 A vec-tor of in-di-ca-tor la-bels. When not spec-i-fied, the v
+ari-able names are \T1/pcr/m/n/10 x1, x2, ... xN\T1/ptm/m/n/10 . 
+
+Overfull \hbox (15.60706pt too wide) in paragraph at lines 722--723
+\T1/ptm/m/n/10 son to cre-ate data from model im-plied co-vari-ance ma-trix if 
+the data dis-tri-bu-tion ob-ject (\T1/pcr/m/n/10 SimDataDist\T1/ptm/m/n/10 )
+[15] [16] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (6.78088pt too wide) in paragraph at lines 787--787
+ []\T1/pcr/m/n/10 draw(model, maxDraw=50, misfitBounds=NULL, averageNumMisspec=
+FALSE,[] 
+
+Overfull \hbox (66.78088pt too wide) in paragraph at lines 788--788
+ []\T1/pcr/m/n/10 optMisfit = NULL, optDraws = 50, misfitType = "f0", createOrd
+er = c(1, 2, 3),[] 
+[17]
+Overfull \hbox (60.95909pt too wide) in paragraph at lines 826--828
+[]\T1/ptm/m/n/10 Nested list of drawn pa-ram-e-ters in the form \T1/pcr/m/n/10 
+[[Group]][[param,misspec,misOnly]][[SimMatrix]]\T1/ptm/m/n/10 .
+[18]
+Overfull \hbox (85.38034pt too wide) in paragraph at lines 892--892
+ []\T1/pcr/m/n/9 weak <- model(LY = LY.in, RPS = RPS, VPS=list(VPS1, VPS2), RTE
+ = RTE, VTE=VTE, ngroups=2,[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (60.78088pt too wide) in paragraph at lines 926--926
+ []\T1/pcr/m/n/10 estmodel(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = N
+ULL, BE = NULL,[] 
+
+Overfull \hbox (6.78088pt too wide) in paragraph at lines 927--927
+ []\T1/pcr/m/n/10 VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL =
+ NULL,[] 
+
+Overfull \hbox (18.78088pt too wide) in paragraph at lines 928--928
+ []\T1/pcr/m/n/10 MY = NULL, ME = NULL, KA = NULL, GA = NULL, modelType, indLab
+ = NULL,[] 
+
+Overfull \hbox (48.78088pt too wide) in paragraph at lines 929--929
+ []\T1/pcr/m/n/10 facLab = NULL, covLab = NULL, groupLab = "group", ngroups = 1
+, con = NULL)[] 
+
+Overfull \hbox (72.78088pt too wide) in paragraph at lines 930--930
+ []\T1/pcr/m/n/10 estmodel.cfa(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = 
+NULL, VTE = NULL,[] 
+[19]
+Overfull \hbox (66.78088pt too wide) in paragraph at lines 931--931
+ []\T1/pcr/m/n/10 VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, MY = 
+NULL, ME = NULL,[] 
+
+Overfull \hbox (0.78088pt too wide) in paragraph at lines 932--932
+ []\T1/pcr/m/n/10 KA = NULL, GA = NULL, indLab = NULL, facLab = NULL, covLab = 
+NULL,[] 
+
+Overfull \hbox (90.78088pt too wide) in paragraph at lines 934--934
+ []\T1/pcr/m/n/10 estmodel.path(PS = NULL, RPS = NULL, BE = NULL, VPS = NULL, V
+E = NULL, AL = NULL,[] 
+
+Overfull \hbox (66.78088pt too wide) in paragraph at lines 935--935
+ []\T1/pcr/m/n/10 ME = NULL, KA = NULL, GA = NULL, indLab = NULL, facLab = NULL
+, covLab = NULL,[] 
+
+Overfull \hbox (66.78088pt too wide) in paragraph at lines 937--937
+ []\T1/pcr/m/n/10 estmodel.sem(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = 
+NULL, BE = NULL,[] 
+
+Overfull \hbox (72.78088pt too wide) in paragraph at lines 938--938
+ []\T1/pcr/m/n/10 VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL =
+ NULL, MY = NULL,[] 
+
+Overfull \hbox (66.78088pt too wide) in paragraph at lines 939--939
+ []\T1/pcr/m/n/10 ME = NULL, KA = NULL, GA = NULL, indLab = NULL, facLab = NULL
+, covLab = NULL,[] 
+[20]
+Overfull \hbox (13.42987pt too wide) in paragraph at lines 1027--1028
+[]\T1/ptm/m/n/10 The \T1/pcr/m/n/10 estmodel.cfa\T1/ptm/m/n/10 , \T1/pcr/m/n/10
+ estmodel.path\T1/ptm/m/n/10 , and \T1/pcr/m/n/10 estmodel.sem \T1/ptm/m/n/10 a
+re the short-cuts for the \T1/pcr/m/n/10 estmodel
+[21] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (60.78088pt too wide) in paragraph at lines 1083--1083
+ []\T1/pcr/m/n/10 exportData(nRep, model, n, program = "Mplus", fileStem = "sim
+", miss = NULL,[] 
+
+Overfull \hbox (54.78088pt too wide) in paragraph at lines 1084--1084
+ []\T1/pcr/m/n/10 missCode = -999, datafun=NULL, pmMCAR = NULL, pmMAR = NULL, f
+acDist = NULL,[] 
+
+Overfull \hbox (36.78088pt too wide) in paragraph at lines 1085--1085
+ []\T1/pcr/m/n/10 indDist = NULL, errorDist = NULL, sequential = FALSE, modelBo
+ot = FALSE,[] 
+
+Overfull \hbox (24.78088pt too wide) in paragraph at lines 1086--1086
+ []\T1/pcr/m/n/10 realData = NULL, maxDraw = 50, misfitType = "f0", misfitBound
+s = NULL,[] 
+
+Overfull \hbox (30.78088pt too wide) in paragraph at lines 1087--1087
+ []\T1/pcr/m/n/10 averageNumMisspec = NULL, optMisfit=NULL, optDraws = 50, seed
+ = 123321,[] 
+
+Overfull \hbox (6.78088pt too wide) in paragraph at lines 1088--1088
+ []\T1/pcr/m/n/10 silent = FALSE, multicore = FALSE, numProc = NULL,  params = 
+FALSE)[] 
+[22]
+Overfull \hbox (15.82811pt too wide) in paragraph at lines 1138--1139
+\T1/ptm/m/n/10 for fur-ther in-for-ma-tion. This ar-gu-ment re-quires real data
+ to be passed to \T1/pcr/m/n/10 realData\T1/ptm/m/n/10 . 
+[23] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [24]
+[25]
+Overfull \hbox (123.1803pt too wide) in paragraph at lines 1275--1275
+ []\T1/pcr/m/n/9 # Specify both sample size and percent missing completely at r
+andom. Note that more fine-grained[] 
+
+Overfull \hbox (79.98035pt too wide) in paragraph at lines 1276--1276
+ []\T1/pcr/m/n/9 # values of n and pmMCAR is needed, e.g., n=seq(50, 500, 1) an
+d pmMCAR=seq(0, 0.2, 0.01)[] 
+
+Overfull \hbox (36.7804pt too wide) in paragraph at lines 1277--1277
+ []\T1/pcr/m/n/9 Output <- sim(NULL, model=CFA.Model, n=seq(100, 200, 20), pmMC
+AR=c(0, 0.1, 0.2))[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (48.78088pt too wide) in paragraph at lines 1297--1297
+ []\T1/pcr/m/n/10 findFactorIntercept(beta, factorMean = NULL, gamma = NULL, co
+vmean = NULL)[] 
+[26] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [27]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (108.78088pt too wide) in paragraph at lines 1429--1429
+ []\T1/pcr/m/n/10 findFactorResidualVar(beta, corPsi, totalVarPsi = NULL, gamma
+ = NULL, covcov = NULL)[] 
+[28] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (30.78088pt too wide) in paragraph at lines 1502--1502
+ []\T1/pcr/m/n/10 findFactorTotalCov(beta, psi = NULL, corPsi = NULL, totalVarP
+si = NULL,[] 
+[29] [30] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (66.78088pt too wide) in paragraph at lines 1582--1582
+ []\T1/pcr/m/n/10 findFactorTotalVar(beta, corPsi, residualVarPsi, gamma = NULL
+, covcov = NULL)[] 
+[31] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [32]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [33]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [34]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (30.78088pt too wide) in paragraph at lines 1859--1859
+ []\T1/pcr/m/n/10 findIndTotalVar(lambda, totalFactorCov, residualVarTheta, kap
+pa = NULL,[] 
+[35] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [36]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [37]
+Overfull \hbox (94.6082pt too wide) in paragraph at lines 2016--2017
+[]\T1/pcr/m/n/10 continuousPower \T1/ptm/m/n/10 to find the power of pa-ram-e-t
+er es-ti-mates for the re-sult ob-ject (\T1/pcr/m/n/10 linkS4class{SimResult}\T
+1/ptm/m/n/10 )
+
+Overfull \hbox (123.1803pt too wide) in paragraph at lines 2033--2033
+ []\T1/pcr/m/n/9 # Specify both sample size and percent missing completely at r
+andom. Note that more fine-grained[] 
+
+Overfull \hbox (79.98035pt too wide) in paragraph at lines 2034--2034
+ []\T1/pcr/m/n/9 # values of n and pmMCAR is needed, e.g., n=seq(50, 500, 1) an
+d pmMCAR=seq(0, 0.2, 0.01)[] 
+
+Overfull \hbox (36.7804pt too wide) in paragraph at lines 2035--2035
+ []\T1/pcr/m/n/9 Output <- sim(NULL, model=CFA.Model, n=seq(100, 200, 20), pmMC
+AR=c(0, 0.1, 0.2))[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [38]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (0.78088pt too wide) in paragraph at lines 2104--2104
+ []\T1/pcr/m/n/10 generate(model, n, maxDraw=50, misfitBounds=NULL, misfitType=
+"f0",[] 
+[39]
+Overfull \hbox (50.88759pt too wide) in paragraph at lines 2155--2156
+[]\T1/ptm/m/n/10 A vec-tor of in-di-ca-tor la-bels. When not spec-i-fied, the v
+ari-able names are \T1/pcr/m/n/10 x1, x2, ... xN\T1/ptm/m/n/10 . 
+[40] [41] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (6.78088pt too wide) in paragraph at lines 2243--2243
+ []\T1/pcr/m/n/10 getCIwidth(object, assurance = 0.50, nVal = NULL, pmMCARval =
+ NULL,[] 
+[42]
+Overfull \hbox (36.7804pt too wide) in paragraph at lines 2312--2312
+ []\T1/pcr/m/n/9 # Finding the cutoff when the sample size is varied. Note that
+ more fine-grained[] 
+[43] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (72.78088pt too wide) in paragraph at lines 2331--2331
+ []\T1/pcr/m/n/10 getCoverage(simResult, coverValue = NULL, contParam = NULL, c
+overParam = NULL,[] 
+
+Overfull \hbox (12.78088pt too wide) in paragraph at lines 2332--2332
+ []    \T1/pcr/m/n/10 nVal = NULL, pmMCARval = NULL, pmMARval = NULL, paramVal 
+= NULL)[] 
+[44]
+Overfull \hbox (123.1803pt too wide) in paragraph at lines 2396--2396
+ []\T1/pcr/m/n/9 # Specify both sample size and percent missing completely at r
+andom. Note that more fine-grained[] 
+
+Overfull \hbox (79.98035pt too wide) in paragraph at lines 2397--2397
+ []\T1/pcr/m/n/9 # values of n and pmMCAR is needed, e.g., n=seq(50, 500, 1) an
+d pmMCAR=seq(0, 0.2, 0.01)[] 
+
+Overfull \hbox (36.7804pt too wide) in paragraph at lines 2398--2398
+ []\T1/pcr/m/n/9 Output <- sim(NULL, model=CFA.Model, n=seq(100, 200, 20), pmMC
+AR=c(0, 0.1, 0.2))[] 
+
+Overfull \hbox (112.38031pt too wide) in paragraph at lines 2404--2404
+ []\T1/pcr/m/n/9 # Get the coverage rates of the combinations of n of 100 and 2
+00 and pmMCAR of 0, 0.1, and 0.2[] 
+
+Overfull \hbox (31.3804pt too wide) in paragraph at lines 2405--2405
+ []\T1/pcr/m/n/9 getCoverage(Output, coverValue = 0, nVal=c(100, 200), pmMCARva
+l=c(0, 0.1, 0.2))[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (30.78088pt too wide) in paragraph at lines 2419--2419
+ []\T1/pcr/m/n/10 getCutoff(object, alpha, revDirec = FALSE, usedFit = NULL, nV
+al = NULL,[] 
+[45]
+Overfull \hbox (36.7804pt too wide) in paragraph at lines 2490--2490
+ []\T1/pcr/m/n/9 # Finding the cutoff when the sample size is varied. Note that
+ more fine-grained[] 
+[46] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (48.78088pt too wide) in paragraph at lines 2509--2509
+ []\T1/pcr/m/n/10 getCutoffNested(nested, parent, alpha = 0.05, usedFit = NULL,
+ nVal = NULL,[] 
+[47]
+Overfull \hbox (42.18039pt too wide) in paragraph at lines 2568--2568
+ []\T1/pcr/m/n/9 CFA.Model.NULL <- model(LY = LY.NULL, RPS = RPS.NULL, RTE = RT
+E, modelType="CFA")[] 
+
+Overfull \hbox (25.98041pt too wide) in paragraph at lines 2578--2578
+ []\T1/pcr/m/n/9 CFA.Model.ALT <- model(LY = LY.ALT, RPS = RPS.ALT, RTE = RTE, 
+modelType="CFA")[] 
+
+Overfull \hbox (42.18039pt too wide) in paragraph at lines 2581--2581
+ []\T1/pcr/m/n/9 Output.NULL.NULL <- sim(10, n=500, model=CFA.Model.NULL, gener
+ate=CFA.Model.NULL)[] 
+
+Overfull \hbox (31.3804pt too wide) in paragraph at lines 2582--2582
+ []\T1/pcr/m/n/9 Output.NULL.ALT <- sim(10, n=500, model=CFA.Model.ALT, generat
+e=CFA.Model.NULL)[] 
+
+Overfull \hbox (15.18042pt too wide) in paragraph at lines 2584--2584
+ []\T1/pcr/m/n/9 # Find the fix index cutoff from the sampling distribution of 
+the difference[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (12.78088pt too wide) in paragraph at lines 2600--2600
+ []\T1/pcr/m/n/10 getCutoffNonNested(dat1Mod1, dat1Mod2, dat2Mod1=NULL, dat2Mod
+2=NULL,[] 
+
+Overfull \hbox (36.78088pt too wide) in paragraph at lines 2601--2601
+ []\T1/pcr/m/n/10 alpha=.05, usedFit=NULL, onetailed=FALSE, nVal = NULL, pmMCAR
+val = NULL,[] 
+[48]
+Overfull \hbox (41.0588pt too wide) in paragraph at lines 2653--2657
+\T1/pcr/m/n/10 getCutoffNested \T1/ptm/m/n/10 for a de-tail of find-ing cut-off
+s for nested model com-par-i-son \T1/pcr/m/n/10 plotCutoffNonNested
+[49]
+Overfull \hbox (20.58041pt too wide) in paragraph at lines 2686--2686
+ []\T1/pcr/m/n/9 # Find the cutoffs from the sampling distribution to reject mo
+del A (model 1)[] 
+
+Overfull \hbox (20.58041pt too wide) in paragraph at lines 2690--2690
+ []\T1/pcr/m/n/9 # Find the cutoffs from the sampling distribution to reject mo
+del A (model 1)[] 
+
+Overfull \hbox (20.58041pt too wide) in paragraph at lines 2693--2693
+ []\T1/pcr/m/n/9 # Find the cutoffs from the sampling distribution to reject mo
+del B (model 1)[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [50]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (97.66725pt too wide) in paragraph at lines 2772--2773
+[]\T1/ptm/m/n/10 This func-tion will ex-tract the data gen-er-a-tion pop-u-la-t
+ion model un-der-ly-ing a re-sult ob-ject (\T1/pcr/m/n/10 linkS4class{SimResult
+}\T1/ptm/m/n/10 ). 
+[51] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (24.78088pt too wide) in paragraph at lines 2841--2841
+ []\T1/pcr/m/n/10 getPower(simResult, alpha = 0.05, contParam = NULL, powerPara
+m = NULL,[] 
+[52]
+Overfull \hbox (1.58855pt too wide) in paragraph at lines 2884--2885
+[]\T1/ptm/m/n/10 Alexander M. Schoe-mann (Uni-ver-sity of Kansas; \T1/pcr/m/n/1
+0 <schoemann@ku.edu>\T1/ptm/m/n/10 ), Sun-thud Porn-prasert-
+
+Overfull \hbox (123.1803pt too wide) in paragraph at lines 2910--2910
+ []\T1/pcr/m/n/9 # Specify both sample size and percent missing completely at r
+andom. Note that more fine-grained[] 
+
+Overfull \hbox (79.98035pt too wide) in paragraph at lines 2911--2911
+ []\T1/pcr/m/n/9 # values of n and pmMCAR is needed, e.g., n=seq(50, 500, 1) an
+d pmMCAR=seq(0, 0.2, 0.01)[] 
+
+Overfull \hbox (36.7804pt too wide) in paragraph at lines 2912--2912
+ []\T1/pcr/m/n/9 Output <- sim(NULL, model=CFA.Model, n=seq(100, 200, 20), pmMC
+AR=c(0, 0.1, 0.2))[] 
+
+Overfull \hbox (63.78036pt too wide) in paragraph at lines 2918--2918
+ []\T1/pcr/m/n/9 # Get the power of the combinations of n of 100 and 200 and pm
+MCAR of 0, 0.1, and 0.2[] 
+[53] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (48.78088pt too wide) in paragraph at lines 2933--2933
+ []\T1/pcr/m/n/10 getPowerFit(altObject, cutoff = NULL, nullObject = NULL, revD
+irec = FALSE,[] 
+
+Overfull \hbox (66.78088pt too wide) in paragraph at lines 2934--2934
+ []\T1/pcr/m/n/10 usedFit = NULL, alpha = 0.05, nVal = NULL, pmMCARval = NULL, 
+pmMARval = NULL,[] 
+[54]
+Overfull \hbox (58.75859pt too wide) in paragraph at lines 2972--2973
+[]\T1/ptm/m/n/10 The de-gree of free-dom used in spline method in quan-tile re-
+gres-sion (\T1/pcr/m/n/10 condCutoff = TRUE\T1/ptm/m/n/10 ).
+
+Overfull \hbox (42.18039pt too wide) in paragraph at lines 3004--3004
+ []\T1/pcr/m/n/9 CFA.Model.NULL <- model(LY = LY.NULL, RPS = RPS.NULL, RTE = RT
+E, modelType="CFA")[] 
+
+Overfull \hbox (25.98041pt too wide) in paragraph at lines 3021--3021
+ []\T1/pcr/m/n/9 CFA.Model.ALT <- model(LY = LY.ALT, RPS = RPS.ALT, RTE = RTE, 
+modelType="CFA")[] 
+
+Overfull \hbox (4.38043pt too wide) in paragraph at lines 3030--3030
+ []\T1/pcr/m/n/9 # Get the power based on the rule of thumb proposed by Hu & Be
+ntler (1999)[] 
+[55]
+Overfull \hbox (74.58035pt too wide) in paragraph at lines 3032--3032
+ []\T1/pcr/m/n/9 getPowerFit(Output.ALT, cutoff=Rule.of.thumb, usedFit=c("RMSEA
+", "CFI", "TLI", "SRMR"))[] 
+
+Overfull \hbox (9.78043pt too wide) in paragraph at lines 3034--3034
+ []\T1/pcr/m/n/9 # The example of continous varying sample size. Note that more
+ fine-grained[] 
+
+Overfull \hbox (101.58032pt too wide) in paragraph at lines 3036--3036
+ []\T1/pcr/m/n/9 Output.NULL2 <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model.
+NULL, generate=CFA.Model.NULL)[] 
+
+Overfull \hbox (90.78033pt too wide) in paragraph at lines 3037--3037
+ []\T1/pcr/m/n/9 Output.ALT2 <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model.N
+ULL, generate=CFA.Model.ALT)[] 
+
+Overfull \hbox (85.38034pt too wide) in paragraph at lines 3039--3039
+ []\T1/pcr/m/n/9 # Get the power based on the derived cutoff from the null mode
+l at the sample size of 250[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (42.78088pt too wide) in paragraph at lines 3054--3054
+ []\T1/pcr/m/n/10 getPowerFitNested(altNested, altParent, cutoff = NULL, nullNe
+sted = NULL,[] 
+
+Overfull \hbox (78.78088pt too wide) in paragraph at lines 3055--3055
+ []\T1/pcr/m/n/10 nullParent = NULL, revDirec = FALSE, usedFit = NULL, alpha = 
+0.05, nVal = NULL,[] 
+[56]
+Overfull \hbox (58.75859pt too wide) in paragraph at lines 3099--3100
+[]\T1/ptm/m/n/10 The de-gree of free-dom used in spline method in quan-tile re-
+gres-sion (\T1/pcr/m/n/10 condCutoff = TRUE\T1/ptm/m/n/10 ).
+
+Overfull \hbox (42.18039pt too wide) in paragraph at lines 3131--3131
+ []\T1/pcr/m/n/9 CFA.Model.NULL <- model(LY = LY.NULL, RPS = RPS.NULL, RTE = RT
+E, modelType="CFA")[] 
+[57]
+Overfull \hbox (25.98041pt too wide) in paragraph at lines 3141--3141
+ []\T1/pcr/m/n/9 CFA.Model.ALT <- model(LY = LY.ALT, RPS = RPS.ALT, RTE = RTE, 
+modelType="CFA")[] 
+
+Overfull \hbox (42.18039pt too wide) in paragraph at lines 3145--3145
+ []\T1/pcr/m/n/9 Output.NULL.NULL <- sim(10, n=500, model=CFA.Model.NULL, gener
+ate=CFA.Model.NULL)[] 
+
+Overfull \hbox (31.3804pt too wide) in paragraph at lines 3146--3146
+ []\T1/pcr/m/n/9 Output.ALT.NULL <- sim(10, n=500, model=CFA.Model.NULL, genera
+te=CFA.Model.ALT)[] 
+
+Overfull \hbox (31.3804pt too wide) in paragraph at lines 3147--3147
+ []\T1/pcr/m/n/9 Output.NULL.ALT <- sim(10, n=500, model=CFA.Model.ALT, generat
+e=CFA.Model.NULL)[] 
+
+Overfull \hbox (20.58041pt too wide) in paragraph at lines 3148--3148
+ []\T1/pcr/m/n/9 Output.ALT.ALT <- sim(10, n=500, model=CFA.Model.ALT, generate
+=CFA.Model.ALT)[] 
+
+Overfull \hbox (90.78033pt too wide) in paragraph at lines 3150--3150
+ []\T1/pcr/m/n/9 # Find the power based on the derived cutoff from the models a
+nalyzed on the null datasets[] 
+
+Overfull \hbox (31.3804pt too wide) in paragraph at lines 3151--3151
+ []\T1/pcr/m/n/9 getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=
+Output.NULL.NULL,[] 
+
+Overfull \hbox (79.98035pt too wide) in paragraph at lines 3154--3154
+ []\T1/pcr/m/n/9 # Find the power based on the chi-square value at df=1 and the
+ CFI change (intentionally[] 
+
+Overfull \hbox (15.18042pt too wide) in paragraph at lines 3155--3155
+ []\T1/pcr/m/n/9 # use a cutoff from Cheung and Rensvold (2002) in an appropria
+te situation).[] 
+
+Overfull \hbox (42.18039pt too wide) in paragraph at lines 3156--3156
+ []\T1/pcr/m/n/9 getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, cutoff=c(Ch
+i=3.84, CFI=-0.10))[] 
+
+Overfull \hbox (9.78043pt too wide) in paragraph at lines 3158--3158
+ []\T1/pcr/m/n/9 # The example of continous varying sample size. Note that more
+ fine-grained[] 
+
+Overfull \hbox (128.58029pt too wide) in paragraph at lines 3160--3160
+ []\T1/pcr/m/n/9 Output.NULL.NULL2 <- sim(NULL, n=seq(50, 500, 50), model=CFA.M
+odel.NULL, generate=CFA.Model.NULL)[] 
+
+Overfull \hbox (117.7803pt too wide) in paragraph at lines 3161--3161
+ []\T1/pcr/m/n/9 Output.ALT.NULL2 <- sim(NULL, n=seq(50, 500, 50), model=CFA.Mo
+del.NULL, generate=CFA.Model.ALT)[] 
+
+Overfull \hbox (117.7803pt too wide) in paragraph at lines 3162--3162
+ []\T1/pcr/m/n/9 Output.NULL.ALT2 <- sim(NULL, n=seq(50, 500, 50), model=CFA.Mo
+del.ALT, generate=CFA.Model.NULL)[] 
+
+Overfull \hbox (106.98032pt too wide) in paragraph at lines 3163--3163
+ []\T1/pcr/m/n/9 Output.ALT.ALT2 <- sim(NULL, n=seq(50, 500, 50), model=CFA.Mod
+el.ALT, generate=CFA.Model.ALT)[] 
+
+Overfull \hbox (85.38034pt too wide) in paragraph at lines 3165--3165
+ []\T1/pcr/m/n/9 # Get the power based on the derived cutoff from the null mode
+l at the sample size of 250[] 
+
+Overfull \hbox (47.58038pt too wide) in paragraph at lines 3166--3166
+ []\T1/pcr/m/n/9 getPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNeste
+d=Output.NULL.NULL2,[] 
+
+Overfull \hbox (79.98035pt too wide) in paragraph at lines 3169--3169
+ []\T1/pcr/m/n/9 # Get the power based on the rule of thumb from the null model
+ at the sample size of 250[] 
+
+Overfull \hbox (117.7803pt too wide) in paragraph at lines 3170--3170
+ []\T1/pcr/m/n/9 getPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, cutoff=c(
+Chi=3.84, CFI=-0.10), nVal = 250)[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (36.78088pt too wide) in paragraph at lines 3187--3187
+ []\T1/pcr/m/n/10 getPowerFitNonNested(dat2Mod1, dat2Mod2, cutoff = NULL, dat1M
+od1 = NULL,[] 
+
+Overfull \hbox (66.78088pt too wide) in paragraph at lines 3188--3188
+ []\T1/pcr/m/n/10 dat1Mod2 = NULL, revDirec = FALSE, usedFit = NULL, alpha = 0.
+05, nVal = NULL,[] 
+
+Overfull \hbox (84.78088pt too wide) in paragraph at lines 3189--3189
+ []\T1/pcr/m/n/10 pmMCARval = NULL, pmMARval = NULL, condCutoff = TRUE, df = 0,
+ onetailed = FALSE)[] 
+[58]
+Overfull \hbox (58.75859pt too wide) in paragraph at lines 3232--3233
+[]\T1/ptm/m/n/10 The de-gree of free-dom used in spline method in quan-tile re-
+gres-sion (\T1/pcr/m/n/10 condCutoff = TRUE\T1/ptm/m/n/10 ).
+[59]
+Overfull \hbox (69.18036pt too wide) in paragraph at lines 3286--3286
+ []\T1/pcr/m/n/9 getPowerFitNonNested(Output.B.A, Output.B.B, dat1Mod1=Output.A
+.A, dat1Mod2=Output.A.B)[] 
+
+Overfull \hbox (133.98029pt too wide) in paragraph at lines 3288--3288
+ []\T1/pcr/m/n/9 # Find the power based on the AIC and BIC of 0 (select model B
+ if Output.B.B has lower AIC or BIC)[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (6.78088pt too wide) in paragraph at lines 3306--3306
+ []\T1/pcr/m/n/10 imposeMissing(data.mat, cov = 0, pmMCAR = 0, pmMAR = 0, nform
+s = 0,[] 
+[60] [61]
+Overfull \hbox (4.38043pt too wide) in paragraph at lines 3439--3439
+ []\T1/pcr/m/n/9 # Imposing Missing with the following arguments produces no mi
+ssing values[] 
+[62] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [63]
+[64] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (18.78088pt too wide) in paragraph at lines 3578--3578
+ []\T1/pcr/m/n/10 likRatioFit(outMod1, outMod2, dat1Mod1, dat1Mod2, dat2Mod1, d
+at2Mod2,[] 
+[65]
+Overfull \hbox (106.98032pt too wide) in paragraph at lines 3638--3638
+ []\T1/pcr/m/n/9 model.A <- estmodel(LY=loading, BE=path.A, modelType="SEM", in
+dLab=c(paste("x", 1:3, sep=""),[] 
+
+Overfull \hbox (106.98032pt too wide) in paragraph at lines 3647--3647
+ []\T1/pcr/m/n/9 model.B <- estmodel(LY=loading, BE=path.B, modelType="SEM", in
+dLab=c(paste("x", 1:3, sep=""),[] 
+
+Overfull \hbox (79.98035pt too wide) in paragraph at lines 3669--3669
+ []\T1/pcr/m/n/9 # When the number of replications increases (e.g., 1000), the 
+warnings should disappear.[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [66]
+Overfull \hbox (90.78088pt too wide) in paragraph at lines 3684--3684
+ []\T1/pcr/m/n/10 miss(cov = 0, pmMCAR = 0, pmMAR = 0, logit = "", nforms = 0, 
+itemGroups = list(),[] 
+
+Overfull \hbox (0.78088pt too wide) in paragraph at lines 3685--3685
+ []    \T1/pcr/m/n/10 timePoints = 1, twoMethod = 0, prAttr = 0, m = 0, chi = "
+all",[] 
+[67]
+Overfull \hbox (2.21797pt too wide) in paragraph at lines 3719--3722
+\T1/ptm/m/n/10 veristy of Notre Dame; \T1/pcr/m/n/10 <pmille13@nd.edu>\T1/ptm/m
+/n/10 ), Sun-thud Porn-prasert-manit (Uni-ver-sity of Kansas;
+
+Overfull \hbox (79.98035pt too wide) in paragraph at lines 3735--3735
+ []\T1/pcr/m/n/9 #Example of imposing 10% MCAR missing in all variables with no
+ imputations (FIML method)[] 
+[68]
+Overfull \hbox (96.18033pt too wide) in paragraph at lines 3774--3774
+ []\T1/pcr/m/n/9 #Example to create simMissing object for 3 forms design at 3 t
+imepoints with 10 imputations[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (42.78088pt too wide) in paragraph at lines 3793--3793
+ []\T1/pcr/m/n/10 model(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL
+, BE = NULL,[] 
+
+Overfull \hbox (72.78088pt too wide) in paragraph at lines 3794--3794
+ []\T1/pcr/m/n/10 VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL =
+ NULL, MY = NULL,[] 
+
+Overfull \hbox (42.78088pt too wide) in paragraph at lines 3795--3795
+ []\T1/pcr/m/n/10 ME = NULL, KA = NULL, GA = NULL, modelType, indLab = NULL, fa
+cLab = NULL,[] 
+
+Overfull \hbox (54.78088pt too wide) in paragraph at lines 3797--3797
+ []\T1/pcr/m/n/10 model.cfa(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NUL
+L, VTE = NULL,[] 
+
+Overfull \hbox (54.78088pt too wide) in paragraph at lines 3798--3798
+ []\T1/pcr/m/n/10 VY = NULL, VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NU
+LL, ME = NULL,[] 
+
+Overfull \hbox (0.78088pt too wide) in paragraph at lines 3799--3799
+ []\T1/pcr/m/n/10 KA = NULL, GA = NULL, indLab = NULL, facLab = NULL, covLab = 
+NULL,[] 
+
+Overfull \hbox (60.78088pt too wide) in paragraph at lines 3801--3801
+ []\T1/pcr/m/n/10 model.path(PS = NULL, RPS = NULL, BE = NULL, VPS = NULL, VE=N
+ULL, AL = NULL,[] 
+
+Overfull \hbox (66.78088pt too wide) in paragraph at lines 3802--3802
+ []\T1/pcr/m/n/10 ME = NULL, KA = NULL, GA = NULL, indLab = NULL, facLab = NULL
+, covLab = NULL,[] 
+[69]
+Overfull \hbox (48.78088pt too wide) in paragraph at lines 3804--3804
+ []\T1/pcr/m/n/10 model.sem(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NUL
+L, BE = NULL,[] 
+
+Overfull \hbox (60.78088pt too wide) in paragraph at lines 3805--3805
+ []\T1/pcr/m/n/10 VTE = NULL, VY = NULL, VPS = NULL, VE=NULL, TY = NULL, AL = N
+ULL, MY = NULL,[] 
+
+Overfull \hbox (66.78088pt too wide) in paragraph at lines 3806--3806
+ []\T1/pcr/m/n/10 ME = NULL, KA = NULL, GA = NULL, indLab = NULL, facLab = NULL
+, covLab = NULL,[] 
+
+Overfull \hbox (19.43762pt too wide) in paragraph at lines 3814--3815
+[]\T1/ptm/m/n/10 Factor load-ing ma-trix from en-doge-nous fac-tors to Y in-di-
+ca-tors (must be \T1/pcr/m/n/10 SimMatrix
+
+Overfull \hbox (26.53812pt too wide) in paragraph at lines 3817--3818
+[]\T1/ptm/m/n/10 Residual variance-covariance ma-trix among en-doge-nous fac-to
+rs (must be \T1/pcr/m/n/10 SimMatrix
+
+Overfull \hbox (2.53737pt too wide) in paragraph at lines 3826--3827
+[]\T1/ptm/m/n/10 Measurement er-ror cor-re-la-tion ma-trix among Y in-di-ca-tor
+s (must be \T1/pcr/m/n/10 SimMatrix
+
+Overfull \hbox (4.52782pt too wide) in paragraph at lines 3856--3857
+[]\T1/ptm/m/n/10 Regression co-ef-fi-cient ma-trix from co-vari-ates to in-di-c
+a-tors (must be \T1/pcr/m/n/10 SimMatrix
+[70]
+Overfull \hbox (52.29958pt too wide) in paragraph at lines 3880--3881
+\T1/ptm/m/n/10 i-cal ex-pres-sions are al-lowed, e.g., \T1/pcr/m/n/10 "newparam
+ := (load1 + load2 + load3)/3"\T1/ptm/m/n/10 .
+[71]
+Overfull \hbox (96.18033pt too wide) in paragraph at lines 3947--3947
+ []\T1/pcr/m/n/9 CFA.Model <- model(LY = LY, RPS = list(RPS, RPS), RTE = list(R
+TE, RTE), VTE=list(VTE, VTE),[] 
+[72]
+Overfull \hbox (101.58032pt too wide) in paragraph at lines 3974--3974
+ []\T1/pcr/m/n/9 LCA.Model <- model(LY=LY, RPS=RPS, VPS=VPS, AL=AL, VTE=VTE, RT
+E=RTE, TY=TY, modelType="CFA")[] 
+
+Underfull \vbox (badness 10000) has occurred while \output is active [73]
+Overfull \hbox (85.38034pt too wide) in paragraph at lines 4041--4041
+ []\T1/pcr/m/n/9 noninvariance <- model(LY = list(LY1, LY2), RPS = list(RPS1, R
+PS2), RTE = list(RTE, RTE),[] 
+
+Underfull \vbox (badness 10000) has occurred while \output is active [74]
+Overfull \hbox (85.38034pt too wide) in paragraph at lines 4075--4075
+ []\T1/pcr/m/n/9 weak <- model(LY = LY.in, RPS = RPS, VPS=list(VPS1, VPS2), RTE
+ = RTE, VTE=VTE, ngroups=2,[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (6.78088pt too wide) in paragraph at lines 4088--4088
+ []\T1/pcr/m/n/10 model.lavaan(object, std = FALSE, LY = NULL, PS = NULL, RPS =
+ NULL,[] 
+
+Overfull \hbox (12.78088pt too wide) in paragraph at lines 4089--4089
+ []\T1/pcr/m/n/10 TE = NULL, RTE = NULL, BE = NULL, VTE = NULL, VY = NULL, VPS 
+= NULL,[] 
+
+Overfull \hbox (5.78783pt too wide) in paragraph at lines 4101--4102
+[]\T1/ptm/m/n/10 If TRUE, use the re-sult-ing stan-dard-ized pa-ram-e-ters for 
+data gen-er-a-tion. If FALSE,
+[75] [76] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (18.78088pt too wide) in paragraph at lines 4242--4242
+ []\T1/pcr/m/n/10 plotCIwidth(object, targetParam, assurance = 0.50, useContour
+ = TRUE)[] 
+[77]
+Overfull \hbox (9.78043pt too wide) in paragraph at lines 4310--4310
+ []\T1/pcr/m/n/9 # The example of continous varying sample size. Note that more
+ fine-grained[] 
+[78]
+Overfull \hbox (31.3804pt too wide) in paragraph at lines 4317--4317
+ []\T1/pcr/m/n/9 # Specify both continuous sample size and percent missing comp
+letely at random.[] 
+
+Overfull \hbox (74.58035pt too wide) in paragraph at lines 4318--4318
+ []\T1/pcr/m/n/9 # Note that more fine-grained values of n and pmMCAR is needed
+, e.g., n=seq(50, 500, 1)[] 
+
+Overfull \hbox (79.98035pt too wide) in paragraph at lines 4320--4320
+ []\T1/pcr/m/n/9 Output3 <- sim(NULL, n=seq(450, 500, 10), pmMCAR=c(0, 0.05, 0.
+1, 0.15), model=CFA.Model)[] 
+
+Overfull \hbox (47.58038pt too wide) in paragraph at lines 4322--4322
+ []\T1/pcr/m/n/9 # Plot the contours that each contour represents the value of 
+widths at each level[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (102.78088pt too wide) in paragraph at lines 4338--4338
+ []\T1/pcr/m/n/10 plotCoverage(object, coverParam, coverValue = NULL, contParam
+ = NULL, contN = TRUE,[] 
+[79]
+Overfull \hbox (31.3804pt too wide) in paragraph at lines 4404--4404
+ []\T1/pcr/m/n/9 # Specify both continuous sample size and percent missing comp
+letely at random.[] 
+
+Overfull \hbox (74.58035pt too wide) in paragraph at lines 4405--4405
+ []\T1/pcr/m/n/9 # Note that more fine-grained values of n and pmMCAR is needed
+, e.g., n=seq(50, 500, 1)[] 
+
+Overfull \hbox (36.7804pt too wide) in paragraph at lines 4408--4408
+ []\T1/pcr/m/n/9 Output <- sim(NULL, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2)
+, model=CFA.Model)[] 
+
+Overfull \hbox (133.98029pt too wide) in paragraph at lines 4414--4414
+ []\T1/pcr/m/n/9 # Plot the power of the correlation along the sample size and 
+percent missing completely at random[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (0.78088pt too wide) in paragraph at lines 4429--4429
+ []\T1/pcr/m/n/10 plotCutoff(object, alpha = NULL, revDirec = FALSE, usedFit = 
+NULL,[] 
+[80] [81]
+Overfull \hbox (9.78043pt too wide) in paragraph at lines 4497--4497
+ []\T1/pcr/m/n/9 # The example of continous varying sample size. Note that more
+ fine-grained[] 
+
+Overfull \hbox (31.3804pt too wide) in paragraph at lines 4504--4504
+ []\T1/pcr/m/n/9 # Specify both continuous sample size and percent missing comp
+letely at random.[] 
+
+Overfull \hbox (74.58035pt too wide) in paragraph at lines 4505--4505
+ []\T1/pcr/m/n/9 # Note that more fine-grained values of n and pmMCAR is needed
+, e.g., n=seq(50, 500, 1)[] 
+
+Overfull \hbox (79.98035pt too wide) in paragraph at lines 4507--4507
+ []\T1/pcr/m/n/9 Output3 <- sim(NULL, n=seq(450, 500, 10), pmMCAR=c(0, 0.05, 0.
+1, 0.15), model=CFA.Model)[] 
+
+Overfull \hbox (47.58038pt too wide) in paragraph at lines 4509--4509
+ []\T1/pcr/m/n/9 # Plot the contours that each contour represents the value of 
+cutoff at each level[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [82]
+Overfull \hbox (42.18039pt too wide) in paragraph at lines 4580--4580
+ []\T1/pcr/m/n/9 CFA.Model.NULL <- model(LY = LY.NULL, RPS = RPS.NULL, RTE = RT
+E, modelType="CFA")[] 
+
+Overfull \hbox (25.98041pt too wide) in paragraph at lines 4590--4590
+ []\T1/pcr/m/n/9 CFA.Model.ALT <- model(LY = LY.ALT, RPS = RPS.ALT, RTE = RTE, 
+modelType="CFA")[] 
+
+Overfull \hbox (31.3804pt too wide) in paragraph at lines 4594--4594
+ []\T1/pcr/m/n/9 Output.NULL.ALT <- sim(10, n=500, model=CFA.Model.ALT, generat
+e=CFA.Model.NULL)[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (18.78088pt too wide) in paragraph at lines 4611--4611
+ []\T1/pcr/m/n/10 plotCutoffNonNested(dat1Mod1, dat1Mod2, dat2Mod1=NULL, dat2Mo
+d2=NULL,[] 
+
+Overfull \hbox (54.78088pt too wide) in paragraph at lines 4612--4612
+ []\T1/pcr/m/n/10 alpha=0.05, cutoff = NULL, usedFit = NULL, useContour = T, on
+etailed=FALSE)[] 
+[83] [84] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (66.78088pt too wide) in paragraph at lines 4714--4714
+ []\T1/pcr/m/n/10 plotDist(object, xlim = NULL, ylim = NULL, r = 0, var = NULL,
+ contour = TRUE)[] 
+[85]
+Overfull \hbox (69.18036pt too wide) in paragraph at lines 4760--4760
+ []\T1/pcr/m/n/9 datadist <- bindDist(c("chisq", "t", "f"), list(df=5), list(df
+=3), list(df1=3, df2=5))[] 
+
+Overfull \hbox (4.38043pt too wide) in paragraph at lines 4762--4762
+ []\T1/pcr/m/n/9 # Plot the joint distribution of Variables 1 and 2 with correl
+ation of 0.5[] 
+
+Overfull \hbox (4.38043pt too wide) in paragraph at lines 4770--4770
+ []\T1/pcr/m/n/9 # Plot the joint distribution of Variables 1 and 2 with correl
+ation of 0.5[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (48.78088pt too wide) in paragraph at lines 4786--4786
+ []\T1/pcr/m/n/10 plotLogitMiss(script, ylim=c(0,1), x1lim=c(-3,3), x2lim=c(-3,
+3), otherx=0,[] 
+[86] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [87]
+Overfull \hbox (9.78043pt too wide) in paragraph at lines 4902--4902
+ []\T1/pcr/m/n/9 # The number of replications in actual analysis should be much
+ more than 20[] 
+
+Overfull \hbox (58.38037pt too wide) in paragraph at lines 4908--4908
+ []\T1/pcr/m/n/9 # Plot the relationship between population RMSEA and all missp
+ecified direct effects[] 
+
+Overfull \hbox (25.98041pt too wide) in paragraph at lines 4911--4911
+ []\T1/pcr/m/n/9 # Plot the relationship between sample CFI and all misspecifie
+d direct effects[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (54.78088pt too wide) in paragraph at lines 4924--4924
+ []\T1/pcr/m/n/10 plotPower(object, powerParam, alpha = 0.05, contParam = NULL,
+ contN = TRUE,[] 
+[88]
+Overfull \hbox (31.3804pt too wide) in paragraph at lines 4990--4990
+ []\T1/pcr/m/n/9 # Specify both continuous sample size and percent missing comp
+letely at random.[] 
+
+Overfull \hbox (74.58035pt too wide) in paragraph at lines 4991--4991
+ []\T1/pcr/m/n/9 # Note that more fine-grained values of n and pmMCAR is needed
+, e.g., n=seq(50, 500, 1)[] 
+
+Overfull \hbox (36.7804pt too wide) in paragraph at lines 4994--4994
+ []\T1/pcr/m/n/9 Output <- sim(NULL, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2)
+, model=CFA.Model)[] 
+[89]
+Overfull \hbox (133.98029pt too wide) in paragraph at lines 4999--4999
+ []\T1/pcr/m/n/9 # Plot the power of the correlation along the sample size and 
+percent missing completely at random[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (42.78088pt too wide) in paragraph at lines 5014--5014
+ []\T1/pcr/m/n/10 plotPowerFit(altObject, nullObject = NULL, cutoff = NULL, use
+dFit = NULL,[] 
+[90]
+Overfull \hbox (42.18039pt too wide) in paragraph at lines 5083--5083
+ []\T1/pcr/m/n/9 CFA.Model.NULL <- model(LY = LY.NULL, RPS = RPS.NULL, RTE = RT
+E, modelType="CFA")[] 
+
+Overfull \hbox (9.78043pt too wide) in paragraph at lines 5087--5087
+ []\T1/pcr/m/n/9 Output.NULL <- sim(50, n=50, model=CFA.Model.NULL, generate=CF
+A.Model.NULL)[] 
+
+Overfull \hbox (25.98041pt too wide) in paragraph at lines 5097--5097
+ []\T1/pcr/m/n/9 CFA.Model.ALT <- model(LY = LY.ALT, RPS = RPS.ALT, RTE = RTE, 
+modelType="CFA")[] 
+
+Overfull \hbox (52.98038pt too wide) in paragraph at lines 5100--5100
+ []\T1/pcr/m/n/9 # Plot the power based on derived cutoff from the null model u
+sing four fit indices[] 
+
+Overfull \hbox (123.1803pt too wide) in paragraph at lines 5104--5104
+ []\T1/pcr/m/n/9 # Plot the power of rejecting null model when the rule of thum
+b from Hu & Bentler (1999) is used[] 
+
+Overfull \hbox (9.78043pt too wide) in paragraph at lines 5109--5109
+ []\T1/pcr/m/n/9 # The example of continous varying sample size. Note that more
+ fine-grained[] 
+
+Overfull \hbox (101.58032pt too wide) in paragraph at lines 5111--5111
+ []\T1/pcr/m/n/9 Output.NULL2 <- sim(NULL, n=seq(50, 250, 25), model=CFA.Model.
+NULL, generate=CFA.Model.NULL)[] 
+
+Overfull \hbox (90.78033pt too wide) in paragraph at lines 5112--5112
+ []\T1/pcr/m/n/9 Output.ALT2 <- sim(NULL, n=seq(50, 250, 25), model=CFA.Model.N
+ULL, generate=CFA.Model.ALT)[] 
+
+Overfull \hbox (52.98038pt too wide) in paragraph at lines 5114--5114
+ []\T1/pcr/m/n/9 # Plot the power based on derived cutoff from the null model u
+sing four fit indices[] 
+[91] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [92]
+Overfull \hbox (42.18039pt too wide) in paragraph at lines 5212--5212
+ []\T1/pcr/m/n/9 CFA.Model.NULL <- model(LY = LY.NULL, RPS = RPS.NULL, RTE = RT
+E, modelType="CFA")[] 
+
+Overfull \hbox (25.98041pt too wide) in paragraph at lines 5222--5222
+ []\T1/pcr/m/n/9 CFA.Model.ALT <- model(LY = LY.ALT, RPS = RPS.ALT, RTE = RTE, 
+modelType="CFA")[] 
+
+Overfull \hbox (42.18039pt too wide) in paragraph at lines 5225--5225
+ []\T1/pcr/m/n/9 Output.NULL.NULL <- sim(10, n=500, model=CFA.Model.NULL, gener
+ate=CFA.Model.NULL)[] 
+
+Overfull \hbox (31.3804pt too wide) in paragraph at lines 5226--5226
+ []\T1/pcr/m/n/9 Output.ALT.NULL <- sim(10, n=500, model=CFA.Model.NULL, genera
+te=CFA.Model.ALT)[] 
+
+Overfull \hbox (31.3804pt too wide) in paragraph at lines 5227--5227
+ []\T1/pcr/m/n/9 Output.NULL.ALT <- sim(10, n=500, model=CFA.Model.ALT, generat
+e=CFA.Model.NULL)[] 
+
+Overfull \hbox (20.58041pt too wide) in paragraph at lines 5228--5228
+ []\T1/pcr/m/n/9 Output.ALT.ALT <- sim(10, n=500, model=CFA.Model.ALT, generate
+=CFA.Model.ALT)[] 
+
+Overfull \hbox (90.78033pt too wide) in paragraph at lines 5230--5230
+ []\T1/pcr/m/n/9 # Plot the power based on the derived cutoff from the models a
+nalyzed on the null datasets[] 
+
+Overfull \hbox (36.7804pt too wide) in paragraph at lines 5231--5231
+ []\T1/pcr/m/n/9 plotPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested
+=Output.NULL.NULL,[] 
+
+Overfull \hbox (36.7804pt too wide) in paragraph at lines 5235--5235
+ []\T1/pcr/m/n/9 plotPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested
+=Output.NULL.NULL,[] 
+
+Overfull \hbox (9.78043pt too wide) in paragraph at lines 5238--5238
+ []\T1/pcr/m/n/9 # The example of continous varying sample size. Note that more
+ fine-grained[] 
+
+Overfull \hbox (128.58029pt too wide) in paragraph at lines 5240--5240
+ []\T1/pcr/m/n/9 Output.NULL.NULL2 <- sim(NULL, n=seq(50, 500, 25), model=CFA.M
+odel.NULL, generate=CFA.Model.NULL)[] 
+
+Overfull \hbox (117.7803pt too wide) in paragraph at lines 5241--5241
+ []\T1/pcr/m/n/9 Output.ALT.NULL2 <- sim(NULL, n=seq(50, 500, 25), model=CFA.Mo
+del.NULL, generate=CFA.Model.ALT)[] 
+
+Overfull \hbox (117.7803pt too wide) in paragraph at lines 5242--5242
+ []\T1/pcr/m/n/9 Output.NULL.ALT2 <- sim(NULL, n=seq(50, 500, 25), model=CFA.Mo
+del.ALT, generate=CFA.Model.NULL)[] 
+
+Overfull \hbox (106.98032pt too wide) in paragraph at lines 5243--5243
+ []\T1/pcr/m/n/9 Output.ALT.ALT2 <- sim(NULL, n=seq(50, 500, 25), model=CFA.Mod
+el.ALT, generate=CFA.Model.ALT)[] 
+[93]
+Overfull \hbox (47.58038pt too wide) in paragraph at lines 5245--5245
+ []\T1/pcr/m/n/9 # Plot logistic line for the power based on the derived cutoff
+ from the null model[] 
+
+Overfull \hbox (52.98038pt too wide) in paragraph at lines 5247--5247
+ []\T1/pcr/m/n/9 plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNest
+ed=Output.NULL.NULL2,[] 
+
+Overfull \hbox (36.7804pt too wide) in paragraph at lines 5250--5250
+ []\T1/pcr/m/n/9 # Plot scatterplot for the power based on the derived cutoff f
+rom the null model[] 
+
+Overfull \hbox (52.98038pt too wide) in paragraph at lines 5252--5252
+ []\T1/pcr/m/n/9 plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNest
+ed=Output.NULL.NULL2,[] 
+
+Overfull \hbox (85.38034pt too wide) in paragraph at lines 5256--5256
+ []\T1/pcr/m/n/9 plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, cutoff=c
+(CFI=-0.1), logistic=FALSE)[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (30.78088pt too wide) in paragraph at lines 5270--5270
+ []\T1/pcr/m/n/10 plotPowerFitNonNested(dat2Mod1, dat2Mod2, dat1Mod1=NULL, dat1
+Mod2=NULL,[] 
+
+Overfull \hbox (54.78088pt too wide) in paragraph at lines 5271--5271
+ []\T1/pcr/m/n/10 cutoff = NULL, usedFit = NULL, alpha = 0.05, contN = TRUE, co
+ntMCAR = TRUE,[] 
+
+Overfull \hbox (24.78088pt too wide) in paragraph at lines 5272--5272
+ []\T1/pcr/m/n/10 contMAR = TRUE, useContour = TRUE, logistic = TRUE, onetailed
+ = FALSE)[] 
+[94] [95]
+Overfull \hbox (74.58035pt too wide) in paragraph at lines 5368--5368
+ []\T1/pcr/m/n/9 plotPowerFitNonNested(Output.B.A, Output.B.B, dat1Mod1=Output.
+A.A, dat1Mod2=Output.A.B)[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [96]
+Overfull \hbox (114.78088pt too wide) in paragraph at lines 5436--5436
+ []\T1/pcr/m/n/10 popMisfitMACS(paramM, paramCM, misspecM, misspecCM, dfParam=N
+ULL, fit.measures="all")[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [97]
+Overfull \hbox (6.78088pt too wide) in paragraph at lines 5493--5493
+ []\T1/pcr/m/n/10 pValue(target, dist, usedFit = NULL, nVal = NULL, pmMCARval =
+ NULL,[] 
+[98]
+Overfull \hbox (58.38037pt too wide) in paragraph at lines 5554--5554
+ []\T1/pcr/m/n/9 targetmodel <- estmodel(LY=loading, modelType="CFA", indLab=pa
+ste("x", 1:9, sep=""))[] 
+
+Overfull \hbox (9.78043pt too wide) in paragraph at lines 5564--5564
+ []\T1/pcr/m/n/9 # Find the p-value comparing the observed fit indices against 
+the simulated[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (36.78088pt too wide) in paragraph at lines 5580--5580
+ []\T1/pcr/m/n/10 pValueNested(outNested, outParent, simNested, simParent, used
+Fit = NULL,[] 
+[99] [100]
+Overfull \hbox (47.58038pt too wide) in paragraph at lines 5665--5665
+ []\T1/pcr/m/n/9 # Create data template from the nested model with small misfit
+ on the linear curve[] 
+
+Overfull \hbox (9.78043pt too wide) in paragraph at lines 5677--5677
+ []\T1/pcr/m/n/9 # Find the p-value comparing the observed fit indices against 
+the simulated[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (42.78088pt too wide) in paragraph at lines 5693--5693
+ []\T1/pcr/m/n/10 pValueNonNested(outMod1, outMod2, dat1Mod1, dat1Mod2, dat2Mod
+1, dat2Mod2,[] 
+
+Overfull \hbox (30.78088pt too wide) in paragraph at lines 5694--5694
+ []\T1/pcr/m/n/10 usedFit = NULL, nVal = NULL, pmMCARval = NULL, pmMARval = NUL
+L, df = 0,[] 
+[101] [102]
+Overfull \hbox (106.98032pt too wide) in paragraph at lines 5775--5775
+ []\T1/pcr/m/n/9 model.A <- estmodel(LY=loading, BE=path.A, modelType="SEM", in
+dLab=c(paste("x", 1:3, sep=""),[] 
+
+Overfull \hbox (106.98032pt too wide) in paragraph at lines 5784--5784
+ []\T1/pcr/m/n/9 model.B <- estmodel(LY=loading, BE=path.B, modelType="SEM", in
+dLab=c(paste("x", 1:3, sep=""),[] 
+
+Overfull \hbox (9.78043pt too wide) in paragraph at lines 5805--5805
+ []\T1/pcr/m/n/9 # Find the p-value comparing the observed fit indices against 
+the simulated[] 
+
+Overfull \hbox (20.58041pt too wide) in paragraph at lines 5808--5808
+ []\T1/pcr/m/n/9 pValueNonNested(out.A, out.B, output.A.A, output.A.B, output.B
+.A, output.B.B)[] 
+
+Overfull \hbox (25.98041pt too wide) in paragraph at lines 5810--5810
+ []\T1/pcr/m/n/9 # If the p-value for model A is significant but the p-value fo
+r model B is not[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (24.78088pt too wide) in paragraph at lines 5825--5825
+ []\T1/pcr/m/n/10 rawDraw(simDat, constraint = TRUE, misSpec = TRUE, parMisOnly
+ = FALSE,[] 
+[103] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [104]
+[105]
+Overfull \hbox (4.38043pt too wide) in paragraph at lines 5957--5957
+ []\T1/pcr/m/n/9 datamodel <- model(LY=LY, RPS=RPS, BE=BE, RTE=RTE, VY=VY, mode
+lType="SEM")[] 
+
+Overfull \hbox (47.58038pt too wide) in paragraph at lines 5971--5971
+ []\T1/pcr/m/n/9 analysis <- estmodel(LY=loading, BE=path, TE=errorCov, PS=facC
+ov, modelType="SEM",[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [106]
+Overfull \hbox (108.78088pt too wide) in paragraph at lines 6012--6012
+ []\T1/pcr/m/n/10 sim(nRep, model, n, generate = NULL, ..., rawData = NULL, mis
+s = NULL, datafun=NULL,[] 
+
+Overfull \hbox (78.78088pt too wide) in paragraph at lines 6013--6013
+ []\T1/pcr/m/n/10 lavaanfun = "lavaan", outfun=NULL, pmMCAR = NULL, pmMAR = NUL
+L, facDist = NULL,[] 
+
+Overfull \hbox (36.78088pt too wide) in paragraph at lines 6014--6014
+ []\T1/pcr/m/n/10 indDist = NULL, errorDist = NULL, sequential = FALSE, modelBo
+ot = FALSE,[] 
+
+Overfull \hbox (72.78088pt too wide) in paragraph at lines 6016--6016
+ []\T1/pcr/m/n/10 misfitBounds = NULL, averageNumMisspec = FALSE, optMisfit=NUL
+L, optDraws = 50,[] 
+
+Overfull \hbox (0.78088pt too wide) in paragraph at lines 6017--6017
+ []\T1/pcr/m/n/10 createOrder = c(1, 2, 3), aux = NULL, group = NULL, mxFit = F
+ALSE,[] 
+
+Overfull \hbox (84.78088pt too wide) in paragraph at lines 6018--6018
+ []\T1/pcr/m/n/10 mxMixture = FALSE, citype = NULL, cilevel = 0.95, seed = 1233
+21, silent = FALSE,[] 
+
+Overfull \hbox (24.78088pt too wide) in paragraph at lines 6019--6019
+ []\T1/pcr/m/n/10 multicore = FALSE, cluster = FALSE, numProc = NULL, paramOnly
+ = FALSE,[] 
+
+Overfull \hbox (48.78088pt too wide) in paragraph at lines 6020--6020
+ []\T1/pcr/m/n/10 dataOnly=FALSE, smartStart=FALSE, previousSim = NULL, complet
+eRep = FALSE)[] 
+
+Overfull \hbox (33.24861pt too wide) in paragraph at lines 6036--6037
+\T1/ptm/m/n/10 2. \T1/pcr/m/n/10 lavaan \T1/ptm/m/n/10 script, \T1/pcr/m/n/10 l
+avaan \T1/ptm/m/n/10 pa-ram-e-ter ta-ble (for data gen-er-a-tion; see \T1/pcr/m
+/n/10 simulateData\T1/ptm/m/n/10 ),
+[107]
+Overfull \hbox (28.08833pt too wide) in paragraph at lines 6061--6062
+[]\T1/ptm/m/n/10 Factor dis-tri-bu-tions. Ei-ther a list of \T1/pcr/m/n/10 SimD
+ataDist \T1/ptm/m/n/10 ob-jects or a sin-gle \T1/pcr/m/n/10 SimDataDist
+
+Overfull \hbox (38.78815pt too wide) in paragraph at lines 6064--6065
+[]\T1/ptm/m/n/10 Indicator dis-tri-bu-tions. Ei-ther a list of \T1/pcr/m/n/10 S
+imDataDist \T1/ptm/m/n/10 ob-jects or a sin-gle \T1/pcr/m/n/10 SimDataDist
+[108] [109] [110]
+Overfull \hbox (117.7803pt too wide) in paragraph at lines 6251--6251
+ []\T1/pcr/m/n/9 Output <- sim(5, model=analysisModel, n=200, generate=popModel
+, std.lv=TRUE, lavaanfun = "cfa")[] 
+
+Underfull \vbox (badness 10000) has occurred while \output is active [111]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (71.86832pt too wide) in paragraph at lines 6309--6310
+[]\T1/ptm/m/n/10 Objects can be cre-ated by \T1/pcr/m/n/10 bindDist \T1/ptm/m/n
+/10 func-tion. It can also be called from the form \T1/pcr/m/n/10 new("SimDataD
+ist", ...)\T1/ptm/m/n/10 . 
+[112]
+Overfull \hbox (128.58029pt too wide) in paragraph at lines 6364--6364
+ []\T1/pcr/m/n/9 dist <- bindDist(c(rep("t", 4), rep("chisq", 8)), d1, d2, d3, 
+d4, d5, d6, d7, d8, d5, d6, d7, d8)[] 
+
+Overfull \hbox (101.58032pt too wide) in paragraph at lines 6367--6367
+ []\T1/pcr/m/n/9 dist2 <- bindDist(skewness = seq(-3, 3, length.out=12), kurtos
+is = seq(2, 5, length.out=12))[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [113]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [114] [115]
+Overfull \hbox (48.9587pt too wide) in paragraph at lines 6499--6503
+\T1/ptm/m/n/10 (Uni-ver-sity of Kansas; \T1/pcr/m/n/10 <schoemann@ku.edu>\T1/pt
+m/m/n/10 ) Kyle Lang (Uni-ver-sity of Kansas; \T1/pcr/m/n/10 <kylelang@ku.edu>\
+T1/ptm/m/n/10 )
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [116] [117]
+[118] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [119]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [120]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (5.39653pt too wide) in paragraph at lines 6791--6792
+\T1/ptm/m/n/10 pletely at ran-dom (if vary-ing), per-cent miss-ing at ran-dom (
+if vary-ing), pa-ram-e-ter val-ues, misspecified-
+[121]
+Overfull \hbox (15.18042pt too wide) in paragraph at lines 6867--6867
+ []\T1/pcr/m/n/9 facDist <- bindDist(c("chisq", "chisq", "norm", "norm"), chi5,
+ chi5, n1, n1)[] 
+[122]
+Overfull \hbox (69.18036pt too wide) in paragraph at lines 6870--6870
+ []\T1/pcr/m/n/9 simOut <- sim(50, n=500, SEM.Model, sequential=TRUE, facDist=f
+acDist, estimator="mlr")[] 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def")
+Overfull \hbox (0.78088pt too wide) in paragraph at lines 6887--6887
+ []\T1/pcr/m/n/10 summaryFit(object, alpha = NULL, improper = FALSE, usedFit = 
+NULL)[] 
+[123] ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [124]
+Overfull \hbox (4.38043pt too wide) in paragraph at lines 7031--7031
+ []\T1/pcr/m/n/9 # The number of replications in actual analysis should be much
+ more than 5[] 
+
+Overfull \hbox (36.7804pt too wide) in paragraph at lines 7034--7034
+ []\T1/pcr/m/n/9 # Summarize the model misspecification that is specified in th
+e \TS1/pcr/m/n/9 '\T1/pcr/m/n/9 pathMis\TS1/pcr/m/n/9 ' \T1/pcr/m/n/9 object[] 
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [125]
+Overfull \hbox (12.78088pt too wide) in paragraph at lines 7049--7049
+ []\T1/pcr/m/n/10 summaryParam(object, alpha = 0.05, detail = FALSE, improper =
+ FALSE,[] 
+[126]
+Overfull \hbox (46.68953pt too wide) in paragraph at lines 7092--7095
+[]\T1/pcr/m/n/10 Rel.Bias: \T1/ptm/m/n/10 Rel-a-tive Bias, which is (\T1/pcr/m/
+n/10 Estimate.Average \T1/ptm/m/n/10 - \T1/pcr/m/n/10 Average.Param\T1/ptm/m/n/
+10 )/\T1/pcr/m/n/10 Average.Param\T1/ptm/m/n/10 .
+
+Overfull \hbox (51.46945pt too wide) in paragraph at lines 7095--7100
+[]\T1/pcr/m/n/10 Std.Bias: \T1/ptm/m/n/10 Stan-dard-ized Bias, which is (\T1/pc
+r/m/n/10 Estimate.Average \T1/ptm/m/n/10 - \T1/pcr/m/n/10 Average.Param\T1/ptm/
+m/n/10 )/\T1/pcr/m/n/10 Estimate.SD
+
+Overfull \hbox (68.57841pt too wide) in paragraph at lines 7100--7104
+[]\T1/pcr/m/n/10 Rel.SE.Bias: \T1/ptm/m/n/10 Rel-a-tive Bias in stan-dard er-ro
+r, which is (\T1/pcr/m/n/10 Average.SE \T1/ptm/m/n/10 - \T1/pcr/m/n/10 Estimate
+.SD\T1/ptm/m/n/10 )/\T1/pcr/m/n/10 Estimate.SD
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [127]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [128]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [129]
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\utf8.def") [130] [131]
+(C:\Users\sunthud\AppData\Local\Temp\RtmpCWEVeP\Rd2pdf191c675c2540\Rd2.aux) )
+(see the transcript file for additional information){C:/Program Files (x86)/MiK
+TeX 2.9/fonts/enc/dvips/fontname/8r.enc}<C:/Program Files (x86)/MiKTeX 2.9/font
+s/type1/public/amsfonts/cm/cmex10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/
+type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/ty
+pe1/public/amsfonts/cm/cmmi5.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1
+/public/amsfonts/cm/cmmi7.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/pu
+blic/amsfonts/cm/cmr10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/publi
+c/amsfonts/cm/cmr7.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/am
+sfonts/cm/cmsy10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsf
+onts/cm/cmsy7.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/courier/uc
+rr8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/helvetic/uhvr8a.pfb
+><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><C:/Progra
+m Files (x86)/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.pfb><C:/Program Files (x8
+6)/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.pfb><C:/Program Files (x86)/MiKTeX 2
+.9/fonts/type1/urw/times/utmri8a.pfb>
+Output written on Rd2.pdf (131 pages, 430847 bytes).
+Transcript written on Rd2.log.
 Saving output to 'simsem-manual.pdf' ...
 Done
-You may want to clean up by 'rm -rf C:/Users/sunthud/AppData/Local/Temp/RtmpOGXfLk/Rd2pdf2954487f2bb0'
+You may want to clean up by 'rm -rf C:/Users/sunthud/AppData/Local/Temp/RtmpCWEVeP/Rd2pdf191c675c2540'

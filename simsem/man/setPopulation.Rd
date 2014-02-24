@@ -71,7 +71,8 @@ path[2, 3] <- NA
 errorCov <- diag(NA, 7)
 errorCov[7, 7] <- 0
 facCov <- diag(3)
-analysis <- estmodel(LY=loading, BE=path, TE=errorCov, PS=facCov, modelType="SEM", indLab=paste("y", 1:7, sep=""))
+analysis <- estmodel(LY=loading, BE=path, TE=errorCov, PS=facCov, modelType="SEM", 
+	indLab=paste("y", 1:7, sep=""))
 
 # In reality, more than 10 replications are needed.
 Output <- sim(10, n=200, analysis, generate=datamodel)

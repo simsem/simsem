@@ -1,7 +1,6 @@
 
-R version 2.15.3 (2013-03-01) -- "Security Blanket"
+R version 3.0.2 (2013-09-25) -- "Frisbee Sailing"
 Copyright (C) 2013 The R Foundation for Statistical Computing
-ISBN 3-900051-07-0
 Platform: i386-w64-mingw32/i386 (32-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -22,29 +21,37 @@ Type 'q()' to quit R.
 > source(file.path(R.home("share"), "R", "examples-header.R"))
 > options(warn = 1)
 > options(pager = "console")
+> base::assign(".ExTimings", "simsem-Ex.timings", pos = 'CheckExEnv')
+> base::cat("name\tuser\tsystem\telapsed\n", file=base::get(".ExTimings", pos = 'CheckExEnv'))
+> base::assign(".format_ptime",
++ function(x) {
++   if(!is.na(x[4L])) x[1L] <- x[1L] + x[4L]
++   if(!is.na(x[5L])) x[2L] <- x[2L] + x[5L]
++   options(OutDec = '.')
++   format(x[1L:3L], digits = 7L)
++ },
++ pos = 'CheckExEnv')
+> 
+> ### * </HEADER>
 > library('simsem')
 Loading required package: lavaan
-Loading required package: MASS
-Loading required package: boot
-Loading required package: mnormt
-Loading required package: pbivnorm
-Loading required package: quadprog
-This is lavaan 0.5-12
+This is lavaan 0.5-16
 lavaan is BETA software! Please report any bugs.
  
 ###############################################################################################
-This is simsem 0.5-3
+This is simsem 0.5-5
 simsem is BETA software! Please report any bugs.
 simsem was developed at the University of Kansas Center for Research Methods and Data Analysis.
 ###############################################################################################
 > 
-> assign(".oldSearch", search(), pos = 'CheckExEnv')
+> base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
 > cleanEx()
 > nameEx("SimDataDist-class")
 > ### * SimDataDist-class
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: SimDataDist-class
 > ### Title: Class '"SimDataDist"': Data distribution object
 > ### Aliases: SimDataDist-class summary,SimDataDist-method
@@ -104,6 +111,8 @@ Skewness: -3 / -2.45454545454545 / -1.90909090909091 / -1.36363636363636 / -0.81
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("SimDataDist-class", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 
 detaching 'package:copula'
@@ -113,6 +122,7 @@ detaching 'package:copula'
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: SimMatrix-class
 > ### Title: Matrix object: Random parameters matrix
 > ### Aliases: SimMatrix-class summaryShort,SimMatrix-method
@@ -300,12 +310,15 @@ $missRaw
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("SimMatrix-class", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("SimMissing-class")
 > ### * SimMissing-class
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: SimMissing-class
 > ### Title: Class '"SimMissing"'
 > ### Aliases: SimMissing-class summary,SimMissing-method
@@ -323,12 +336,15 @@ Proportion of MCAR: 0.2
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("SimMissing-class", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("SimResult-class")
 > ### * SimResult-class
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: SimResult-class
 > ### Title: Class '"SimResult"': Simulation Result Object
 > ### Aliases: SimResult-class summary,SimResult-method
@@ -469,37 +485,37 @@ Fit Indices     0.05     Mean     SD
 > # Summary of parameter estimates
 > summaryParam(Output)
        Estimate.Average Estimate.SD Average.SE Power..Not.equal.0.      Std.Est
-f1=~y1      0.694043770  0.01781547 0.04163742                   1  0.700299596
-f1=~y2      0.664032498  0.05004988 0.04174177                   1  0.674733152
-f1=~y3      0.652742108  0.04602682 0.04134117                   1  0.671307416
-f1=~y4      0.675329584  0.05666475 0.04140133                   1  0.687819804
-f1=~y5      0.694838588  0.07836253 0.04143609                   1  0.701624723
-f1=~y6      0.698589134  0.05338015 0.04167931                   1  0.702433747
-y1~~y1      0.500730846  0.03285951 0.03855153                   1  0.509377930
-y2~~y2      0.524743514  0.01245703 0.03927918                   1  0.544291157
-y3~~y3      0.518102812  0.06014569 0.03861459                   1  0.547892722
-y4~~y4      0.504363909  0.04566056 0.03830122                   1  0.525493316
-y5~~y5      0.491558560  0.01803614 0.03810518                   1  0.506775777
-y6~~y6      0.499749541  0.04761284 0.03854435                   1  0.506183431
-y1~1       -0.008810148  0.05751387 0.04432595                   0 -0.009327775
-y2~1       -0.009631695  0.03817582 0.04396553                   0 -0.009606366
-y3~1       -0.048035069  0.01876568 0.04348083                   0 -0.049286225
-y4~1       -0.030141352  0.05444905 0.04387118                   0 -0.030503564
-y5~1       -0.025018328  0.03628409 0.04418667                   0 -0.023806731
+f1=~y1      0.694043765  0.01781547 0.04163742                   1  0.700299590
+f1=~y2      0.664032462  0.05004990 0.04174177                   1  0.674733131
+f1=~y3      0.652742070  0.04602687 0.04134117                   1  0.671307387
+f1=~y4      0.675329554  0.05666478 0.04140133                   1  0.687819784
+f1=~y5      0.694838578  0.07836254 0.04143609                   1  0.701624712
+f1=~y6      0.698589131  0.05338016 0.04167931                   1  0.702433739
+y1~~y1      0.500730857  0.03285950 0.03855153                   1  0.509377939
+y2~~y2      0.524743514  0.01245704 0.03927918                   1  0.544291185
+y3~~y3      0.518102828  0.06014571 0.03861459                   1  0.547892760
+y4~~y4      0.504363917  0.04566057 0.03830122                   1  0.525493343
+y5~~y5      0.491558573  0.01803612 0.03810518                   1  0.506775792
+y6~~y6      0.499749561  0.04761286 0.03854435                   1  0.506183443
+y1~1       -0.008810148  0.05751387 0.04432595                   0 -0.009327774
+y2~1       -0.009631695  0.03817582 0.04396552                   0 -0.009606367
+y3~1       -0.048035069  0.01876568 0.04348083                   0 -0.049286226
+y4~1       -0.030141352  0.05444905 0.04387118                   0 -0.030503566
+y5~1       -0.025018328  0.03628409 0.04418667                   0 -0.023806730
 y6~1        0.004855082  0.04243569 0.04444396                   0  0.004583798
        Std.Est.SD Average.Param Average.Bias Coverage
-f1=~y1 0.01591170          0.70 -0.005956230      1.0
-f1=~y2 0.02355888          0.70 -0.035967502      1.0
-f1=~y3 0.04262673          0.70 -0.047257892      0.8
-f1=~y4 0.04199108          0.70 -0.024670416      1.0
-f1=~y5 0.03440514          0.70 -0.005161412      0.8
-f1=~y6 0.02245549          0.70 -0.001410866      0.8
-y1~~y1 0.02215388          0.51 -0.009269154      1.0
-y2~~y2 0.03250012          0.51  0.014743514      1.0
-y3~~y3 0.05770237          0.51  0.008102812      0.6
-y4~~y4 0.05868259          0.51 -0.005636091      1.0
-y5~~y5 0.04916697          0.51 -0.018441440      1.0
-y6~~y6 0.03138416          0.51 -0.010250459      1.0
+f1=~y1 0.01591170          0.70 -0.005956235      1.0
+f1=~y2 0.02355889          0.70 -0.035967538      1.0
+f1=~y3 0.04262676          0.70 -0.047257930      0.8
+f1=~y4 0.04199111          0.70 -0.024670446      1.0
+f1=~y5 0.03440515          0.70 -0.005161422      0.8
+f1=~y6 0.02245550          0.70 -0.001410869      0.8
+y1~~y1 0.02215389          0.51 -0.009269143      1.0
+y2~~y2 0.03250013          0.51  0.014743514      1.0
+y3~~y3 0.05770241          0.51  0.008102828      0.6
+y4~~y4 0.05868262          0.51 -0.005636083      1.0
+y5~~y5 0.04916697          0.51 -0.018441427      1.0
+y6~~y6 0.03138418          0.51 -0.010250439      1.0
 y1~1   0.05825793          0.00 -0.008810148      1.0
 y2~1   0.03923871          0.00 -0.009631695      1.0
 y3~1   0.01881353          0.00 -0.048035069      1.0
@@ -516,6 +532,8 @@ Population Value 0.51   0.51   0.51   0    0    0    0    0    0
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("SimResult-class", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 
 detaching 'package:parallel'
@@ -525,6 +543,7 @@ detaching 'package:parallel'
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: SimSem-class
 > ### Title: Class '"SimSem"'
 > ### Aliases: SimSem-class summary,SimSem-method
@@ -675,12 +694,15 @@ ME: Mean of Factor.ETA
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("SimSem-class", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("SimVector-class")
 > ### * SimVector-class
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: SimVector-class
 > ### Title: Vector object: Random parameters vector
 > ### Aliases: SimVector-class summaryShort,SimVector-method
@@ -723,12 +745,15 @@ logical(0)
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("SimVector-class", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("analyze")
 > ### * analyze
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: analyze
 > ### Title: Data analysis using the model specification
 > ### Aliases: analyze
@@ -755,12 +780,15 @@ logical(0)
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("analyze", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("anova")
 > ### * anova
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: anova
 > ### Title: Provide a comparison of nested models and nonnested models
 > ###   across replications
@@ -795,12 +823,15 @@ logical(0)
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("anova", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("bind")
 > ### * bind
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: bind
 > ### Title: Specify matrices for Monte Carlo simulation of structural
 > ###   equation models
@@ -850,12 +881,15 @@ logical(0)
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("bind", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("bindDist")
 > ### * bindDist
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: bindDist
 > ### Title: Create a data distribution object.
 > ### Aliases: bindDist
@@ -891,6 +925,8 @@ logical(0)
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("bindDist", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 
 detaching 'package:copula'
@@ -900,6 +936,7 @@ detaching 'package:copula'
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: coef
 > ### Title: Extract parameter estimates from a simulation result
 > ### Aliases: coef,SimResult-method
@@ -930,12 +967,15 @@ detaching 'package:copula'
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("coef", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("combineSim")
 > ### * combineSim
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: combineSim
 > ### Title: Combine result objects
 > ### Aliases: combineSim
@@ -1037,6 +1077,8 @@ Number of nonconverged replications:
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("combineSim", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 
 detaching 'package:parallel'
@@ -1046,6 +1088,7 @@ detaching 'package:parallel'
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: continuousCoverage
 > ### Title: Find coverage rate of model parameters when simulations have
 > ###   randomly varying parameters
@@ -1062,8 +1105,9 @@ detaching 'package:parallel'
 > ##D RTE <- binds(diag(6))
 > ##D CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA")
 > ##D 
-> ##D # Specify both continuous sample size and percent missing completely at random. Note that more fine-grained 
-> ##D # values of n and pmMCAR is needed, e.g., n=seq(50, 500, 1) and pmMCAR=seq(0, 0.2, 0.01)
+> ##D # Specify both continuous sample size and percent missing completely at random. 
+> ##D # Note that more fine-grained values of n and pmMCAR is needed, e.g., n=seq(50, 500, 1) 
+> ##D # and pmMCAR=seq(0, 0.2, 0.01)
 > ##D Output <- sim(NULL, CFA.Model, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2))
 > ##D summary(Output)
 > ##D 
@@ -1071,19 +1115,24 @@ detaching 'package:parallel'
 > ##D Ccover <- continuousCoverage(Output, contN = TRUE, contMCAR = TRUE)
 > ##D Ccover
 > ##D 
-> ##D # Find the coverage rates of parameter estimates when sample size is 200 and percent MCAR missing is 0.3
-> ##D Ccover2 <- continuousCoverage(Output, coverValue=0, contN = TRUE, contMCAR = TRUE, pred=list(N = 200, pmMCAR = 0.3))
+> ##D # Find the coverage rates of parameter estimates when sample size is 200 
+> ##D # and percent MCAR missing is 0.3
+> ##D Ccover2 <- continuousCoverage(Output, coverValue=0, contN = TRUE, contMCAR = TRUE, 
+> ##D      pred=list(N = 200, pmMCAR = 0.3))
 > ##D Ccover2
 > ## End(Not run)
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("continuousCoverage", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("continuousPower")
 > ### * continuousPower
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: continuousPower
 > ### Title: Find power of model parameters when simulations have randomly
 > ###   varying parameters
@@ -1102,8 +1151,9 @@ detaching 'package:parallel'
 > ##D dat <- generate(CFA.Model, 50)
 > ##D out <- analyze(CFA.Model, dat)
 > ##D 
-> ##D # Specify both continuous sample size and percent missing completely at random. Note that more fine-grained 
-> ##D # values of n and pmMCAR is needed, e.g., n=seq(50, 500, 1) and pmMCAR=seq(0, 0.2, 0.01)
+> ##D # Specify both continuous sample size and percent missing completely at random. 
+> ##D # Note that more fine-grained values of n and pmMCAR is needed, e.g., n=seq(50, 500, 1) 
+> ##D # and pmMCAR=seq(0, 0.2, 0.01)
 > ##D Output <- sim(NULL, CFA.Model, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2))
 > ##D summary(Output)
 > ##D 
@@ -1118,12 +1168,15 @@ detaching 'package:parallel'
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("continuousPower", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("createData")
 > ### * createData
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: createData
 > ### Title: Create data from a set of drawn parameters.
 > ### Aliases: createData
@@ -1153,12 +1206,15 @@ detaching 'package:parallel'
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("createData", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("draw")
 > ### * draw
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: draw
 > ### Title: Draw parameters from a 'SimSem' object.
 > ### Aliases: draw
@@ -1214,7 +1270,8 @@ detaching 'package:parallel'
 + "
 > 
 > # Model Template
-> weak <- model(LY = LY.in, RPS = RPS, VPS=list(VPS1, VPS2), RTE = RTE, VTE=VTE, ngroups=2, modelType = "CFA", con=script)
+> weak <- model(LY = LY.in, RPS = RPS, VPS=list(VPS1, VPS2), RTE = RTE, VTE=VTE, ngroups=2, 
++      modelType = "CFA", con=script)
 > 
 > # Constraint --> Misspecification --> Fill Parameters
 > draw(weak, createOrder=c(1, 2, 3))
@@ -2988,12 +3045,15 @@ NULL
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("draw", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("estmodel")
 > ### * estmodel
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: estmodel
 > ### Title: Shortcut for data analysis template for simulation.
 > ### Aliases: estmodel estmodel.cfa estmodel.path estmodel.sem
@@ -3022,12 +3082,15 @@ NULL
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("estmodel", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("exportData")
 > ### * exportData
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: exportData
 > ### Title: Export data sets for analysis with outside SEM program.
 > ### Aliases: exportData
@@ -3054,12 +3117,15 @@ NULL
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("exportData", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("findCoverage")
 > ### * findCoverage
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: findCoverage
 > ### Title: Find a value of independent variables that provides a given
 > ###   value of coverage rate
@@ -3089,12 +3155,15 @@ NULL
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("findCoverage", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("findFactorIntercept")
 > ### * findFactorIntercept
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: findFactorIntercept
 > ### Title: Find factor intercept from regression coefficient matrix and
 > ###   factor total means
@@ -3114,12 +3183,15 @@ NULL
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("findFactorIntercept", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("findFactorMean")
 > ### * findFactorMean
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: findFactorMean
 > ### Title: Find factor total means from regression coefficient matrix and
 > ###   factor intercept
@@ -3139,12 +3211,15 @@ NULL
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("findFactorMean", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("findFactorResidualVar")
 > ### * findFactorResidualVar
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: findFactorResidualVar
 > ### Title: Find factor residual variances from regression coefficient
 > ###   matrix, factor (residual) correlations, and total factor variances
@@ -3168,12 +3243,15 @@ NULL
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("findFactorResidualVar", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("findFactorTotalCov")
 > ### * findFactorTotalCov
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: findFactorTotalCov
 > ### Title: Find factor total covariance from regression coefficient matrix,
 > ###   factor residual covariance
@@ -3206,12 +3284,15 @@ NULL
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("findFactorTotalCov", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("findFactorTotalVar")
 > ### * findFactorTotalVar
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: findFactorTotalVar
 > ### Title: Find factor total variances from regression coefficient matrix,
 > ###   factor (residual) correlations, and factor residual variances
@@ -3235,12 +3316,15 @@ NULL
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("findFactorTotalVar", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("findIndIntercept")
 > ### * findIndIntercept
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: findIndIntercept
 > ### Title: Find indicator intercepts from factor loading matrix, total
 > ###   factor mean, and indicator mean.
@@ -3258,12 +3342,15 @@ NULL
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("findIndIntercept", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("findIndMean")
 > ### * findIndMean
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: findIndMean
 > ### Title: Find indicator total means from factor loading matrix, total
 > ###   factor mean, and indicator intercept.
@@ -3281,12 +3368,15 @@ NULL
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("findIndMean", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("findIndResidualVar")
 > ### * findIndResidualVar
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: findIndResidualVar
 > ### Title: Find indicator residual variances from factor loading matrix,
 > ###   total factor covariance, and total indicator variances.
@@ -3304,12 +3394,15 @@ NULL
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("findIndResidualVar", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("findIndTotalVar")
 > ### * findIndTotalVar
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: findIndTotalVar
 > ### Title: Find indicator total variances from factor loading matrix, total
 > ###   factor covariance, and indicator residual variances.
@@ -3327,12 +3420,15 @@ NULL
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("findIndTotalVar", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("findPossibleFactorCor")
 > ### * findPossibleFactorCor
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: findPossibleFactorCor
 > ### Title: Find the appropriate position for freely estimated correlation
 > ###   (or covariance) given a regression coefficient matrix
@@ -3360,12 +3456,15 @@ NULL
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("findPossibleFactorCor", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("findPower")
 > ### * findPower
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: findPower
 > ### Title: Find a value of independent variables that provides a given
 > ###   value of power.
@@ -3395,12 +3494,15 @@ NULL
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("findPower", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("findRecursiveSet")
 > ### * findRecursiveSet
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: findRecursiveSet
 > ### Title: Group variables regarding the position in mediation chain
 > ### Aliases: findRecursiveSet
@@ -3426,12 +3528,15 @@ NULL
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("findRecursiveSet", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("generate")
 > ### * generate
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: generate
 > ### Title: Generate data using SimSem template
 > ### Aliases: generate
@@ -3457,12 +3562,15 @@ NULL
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("generate", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("getCIwidth")
 > ### * getCIwidth
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: getCIwidth
 > ### Title: Find confidence interval width
 > ### Aliases: getCIwidth
@@ -3502,12 +3610,15 @@ NULL
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("getCIwidth", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("getCoverage")
 > ### * getCoverage
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: getCoverage
 > ### Title: Find coverage rate of model parameters
 > ### Aliases: getCoverage
@@ -3536,12 +3647,15 @@ NULL
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("getCoverage", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("getCutoff")
 > ### * getCutoff
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: getCutoff
 > ### Title: Find fit indices cutoff given a priori alpha level
 > ### Aliases: getCutoff
@@ -3581,12 +3695,15 @@ NULL
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("getCutoff", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("getCutoffNested")
 > ### * getCutoffNested
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: getCutoffNested
 > ### Title: Find fit indices cutoff for nested model comparison given a
 > ###   priori alpha level
@@ -3627,12 +3744,15 @@ NULL
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("getCutoffNested", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("getCutoffNonNested")
 > ### * getCutoffNonNested
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: getCutoffNonNested
 > ### Title: Find fit indices cutoff for non-nested model comparison given a
 > ###   priori alpha level
@@ -3678,12 +3798,15 @@ NULL
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("getCutoffNonNested", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("getExtraOutput")
 > ### * getExtraOutput
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: getExtraOutput
 > ### Title: Get extra outputs from the result of simulation
 > ### Aliases: getExtraOutput
@@ -3713,12 +3836,15 @@ NULL
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("getExtraOutput", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("getPopulation")
 > ### * getPopulation
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: getPopulation
 > ### Title: Extract the data generation population model underlying a result
 > ###   object
@@ -3744,12 +3870,15 @@ NULL
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("getPopulation", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("getPower")
 > ### * getPower
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: getPower
 > ### Title: Find power of model parameters
 > ### Aliases: getPower
@@ -3778,12 +3907,15 @@ NULL
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("getPower", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("getPowerFit")
 > ### * getPowerFit
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: getPowerFit
 > ### Title: Find power in rejecting alternative models based on fit indices
 > ###   criteria
@@ -3839,12 +3971,15 @@ NULL
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("getPowerFit", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("getPowerFitNested")
 > ### * getPowerFitNested
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: getPowerFitNested
 > ### Title: Find power in rejecting nested models based on the differences
 > ###   in fit indices
@@ -3879,7 +4014,8 @@ NULL
 > ##D Output.ALT.ALT <- sim(10, n=500, model=CFA.Model.ALT, generate=CFA.Model.ALT) 
 > ##D 
 > ##D # Find the power based on the derived cutoff from the models analyzed on the null datasets
-> ##D getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT)
+> ##D getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, 
+> ##D 	nullParent=Output.NULL.ALT)
 > ##D 
 > ##D # Find the power based on the chi-square value at df=1 and the CFI change (intentionally
 > ##D # use a cutoff from Cheung and Rensvold (2002) in an appropriate situation).
@@ -3893,7 +4029,8 @@ NULL
 > ##D Output.ALT.ALT2 <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model.ALT, generate=CFA.Model.ALT) 
 > ##D 
 > ##D # Get the power based on the derived cutoff from the null model at the sample size of 250
-> ##D getPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNested=Output.NULL.NULL2, nullParent=Output.NULL.ALT2, nVal = 250)
+> ##D getPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNested=Output.NULL.NULL2, 
+> ##D 	nullParent=Output.NULL.ALT2, nVal = 250)
 > ##D 
 > ##D # Get the power based on the rule of thumb from the null model at the sample size of 250
 > ##D getPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, cutoff=c(Chi=3.84, CFI=-0.10), nVal = 250)
@@ -3901,12 +4038,15 @@ NULL
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("getPowerFitNested", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("getPowerFitNonNested")
 > ### * getPowerFitNonNested
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: getPowerFitNonNested
 > ### Title: Find power in rejecting non-nested models based on the
 > ###   differences in fit indices
@@ -3950,12 +4090,15 @@ NULL
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("getPowerFitNonNested", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("imposeMissing")
 > ### * imposeMissing
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: imposeMissing
 > ### Title: Impose MAR, MCAR, planned missingness, or attrition on a data
 > ###   set
@@ -3963,11 +4106,11 @@ NULL
 > 
 > ### ** Examples
 > 
->   data <- matrix(rep(rnorm(10,1,1),19),ncol=19)
->   datac <- cbind(data,rnorm(10,0,1),rnorm(10,5,5))
->  
->   # Imposing Missing with the following arguments produces no missing values
->   imposeMissing(data)
+> data <- matrix(rep(rnorm(10,1,1),19),ncol=19)
+> datac <- cbind(data,rnorm(10,0,1),rnorm(10,5,5))
+> 
+> # Imposing Missing with the following arguments produces no missing values
+> imposeMissing(data)
            [,1]      [,2]      [,3]      [,4]      [,5]      [,6]      [,7]
  [1,] 0.3735462 0.3735462 0.3735462 0.3735462 0.3735462 0.3735462 0.3735462
  [2,] 1.1836433 1.1836433 1.1836433 1.1836433 1.1836433 1.1836433 1.1836433
@@ -4001,7 +4144,7 @@ NULL
  [8,] 1.7383247 1.7383247 1.7383247 1.7383247 1.7383247
  [9,] 1.5757814 1.5757814 1.5757814 1.5757814 1.5757814
 [10,] 0.6946116 0.6946116 0.6946116 0.6946116 0.6946116
->   imposeMissing(data,cov=c(1,2))
+> imposeMissing(data,cov=c(1,2))
            [,1]      [,2]      [,3]      [,4]      [,5]      [,6]      [,7]
  [1,] 0.3735462 0.3735462 0.3735462 0.3735462 0.3735462 0.3735462 0.3735462
  [2,] 1.1836433 1.1836433 1.1836433 1.1836433 1.1836433 1.1836433 1.1836433
@@ -4035,7 +4178,7 @@ NULL
  [8,] 1.7383247 1.7383247 1.7383247 1.7383247 1.7383247
  [9,] 1.5757814 1.5757814 1.5757814 1.5757814 1.5757814
 [10,] 0.6946116 0.6946116 0.6946116 0.6946116 0.6946116
->   imposeMissing(data,pmMCAR=0)
+> imposeMissing(data,pmMCAR=0)
            [,1]      [,2]      [,3]      [,4]      [,5]      [,6]      [,7]
  [1,] 0.3735462 0.3735462 0.3735462 0.3735462 0.3735462 0.3735462 0.3735462
  [2,] 1.1836433 1.1836433 1.1836433 1.1836433 1.1836433 1.1836433 1.1836433
@@ -4069,7 +4212,7 @@ NULL
  [8,] 1.7383247 1.7383247 1.7383247 1.7383247 1.7383247
  [9,] 1.5757814 1.5757814 1.5757814 1.5757814 1.5757814
 [10,] 0.6946116 0.6946116 0.6946116 0.6946116 0.6946116
->   imposeMissing(data,pmMAR=0)
+> imposeMissing(data,pmMAR=0)
            [,1]      [,2]      [,3]      [,4]      [,5]      [,6]      [,7]
  [1,] 0.3735462 0.3735462 0.3735462 0.3735462 0.3735462 0.3735462 0.3735462
  [2,] 1.1836433 1.1836433 1.1836433 1.1836433 1.1836433 1.1836433 1.1836433
@@ -4103,7 +4246,7 @@ NULL
  [8,] 1.7383247 1.7383247 1.7383247 1.7383247 1.7383247
  [9,] 1.5757814 1.5757814 1.5757814 1.5757814 1.5757814
 [10,] 0.6946116 0.6946116 0.6946116 0.6946116 0.6946116
->   imposeMissing(data,nforms=0)
+> imposeMissing(data,nforms=0)
            [,1]      [,2]      [,3]      [,4]      [,5]      [,6]      [,7]
  [1,] 0.3735462 0.3735462 0.3735462 0.3735462 0.3735462 0.3735462 0.3735462
  [2,] 1.1836433 1.1836433 1.1836433 1.1836433 1.1836433 1.1836433 1.1836433
@@ -4138,10 +4281,10 @@ NULL
  [9,] 1.5757814 1.5757814 1.5757814 1.5757814 1.5757814
 [10,] 0.6946116 0.6946116 0.6946116 0.6946116 0.6946116
 > 
->   #Some more usage examples
->   
->   # No missing at variables 1 and 2
->   imposeMissing(data,cov=c(1,2),pmMCAR=.1)
+> #Some more usage examples
+> 
+> # No missing at variables 1 and 2
+> imposeMissing(data,cov=c(1,2),pmMCAR=.1)
            [,1]      [,2]      [,3]      [,4]      [,5]      [,6]      [,7]
  [1,] 0.3735462 0.3735462 0.3735462 0.3735462 0.3735462 0.3735462 0.3735462
  [2,] 1.1836433 1.1836433 1.1836433        NA 1.1836433 1.1836433 1.1836433
@@ -4175,9 +4318,9 @@ NULL
  [8,] 1.7383247 1.7383247        NA 1.7383247 1.7383247
  [9,] 1.5757814 1.5757814 1.5757814 1.5757814 1.5757814
 [10,] 0.6946116 0.6946116 0.6946116 0.6946116 0.6946116
->   
->   # 3-Form design
->   imposeMissing(data,nforms=3)
+> 
+> # 3-Form design
+> imposeMissing(data,nforms=3)
            [,1]      [,2]      [,3]      [,4]      [,5]      [,6]      [,7]
  [1,] 0.3735462 0.3735462 0.3735462 0.3735462        NA        NA        NA
  [2,] 1.1836433 1.1836433 1.1836433 1.1836433        NA        NA        NA
@@ -4211,9 +4354,10 @@ NULL
  [8,]        NA        NA        NA        NA        NA
  [9,]        NA        NA        NA        NA        NA
 [10,]        NA        NA        NA        NA        NA
->   
->   # 3-Form design with specified groups of items (XABC)
->   imposeMissing(data,nforms=3,itemGroups=list(c(1,2,3,4,5),c(6,7,8,9,10),c(11,12,13,14,15),c(16,17,18,19)))
+> 
+> # 3-Form design with specified groups of items (XABC)
+> imposeMissing(data, nforms = 3, itemGroups =
++ 	list(c(1,2,3,4,5), c(6,7,8,9,10), c(11,12,13,14,15), c(16,17,18,19)))
            [,1]      [,2]      [,3]      [,4]      [,5]      [,6]      [,7]
  [1,] 0.3735462 0.3735462 0.3735462 0.3735462 0.3735462        NA        NA
  [2,] 1.1836433 1.1836433 1.1836433 1.1836433 1.1836433        NA        NA
@@ -4247,9 +4391,9 @@ NULL
  [8,] 1.7383247        NA        NA        NA        NA
  [9,] 1.5757814        NA        NA        NA        NA
 [10,] 0.6946116        NA        NA        NA        NA
->   
->   # 3-Form design when variables 20 and 21 are not missing
->   imposeMissing(datac,cov=c(20,21),nforms=3)
+> 
+> # 3-Form design when variables 20 and 21 are not missing
+> imposeMissing(datac,cov=c(20,21),nforms=3)
            [,1]      [,2]      [,3]      [,4]      [,5]      [,6]      [,7]
  [1,] 0.3735462 0.3735462 0.3735462 0.3735462        NA        NA        NA
  [2,] 1.1836433 1.1836433 1.1836433 1.1836433        NA        NA        NA
@@ -4283,9 +4427,9 @@ NULL
  [8,]        NA        NA        NA        NA        NA  0.94383621 -2.353762
  [9,]        NA        NA        NA        NA        NA  0.82122120  2.609250
 [10,]        NA        NA        NA        NA        NA  0.59390132  7.089708
->   
->   # 2 method design where the expensive measure is on Variable 19
->   imposeMissing(data,twoMethod=c(19,.8))
+> 
+> # 2 method design where the expensive measure is on Variable 19
+> imposeMissing(data,twoMethod=c(19,.8))
            [,1]      [,2]      [,3]      [,4]      [,5]      [,6]      [,7]
  [1,] 0.3735462 0.3735462 0.3735462 0.3735462 0.3735462 0.3735462 0.3735462
  [2,] 1.1836433 1.1836433 1.1836433 1.1836433 1.1836433 1.1836433 1.1836433
@@ -4319,9 +4463,9 @@ NULL
  [8,] 1.7383247 1.7383247 1.7383247 1.7383247        NA
  [9,] 1.5757814 1.5757814 1.5757814 1.5757814 1.5757814
 [10,] 0.6946116 0.6946116 0.6946116 0.6946116 0.6946116
->   
->   # Impose missing data with percent attrition of 0.1 in 5 time points
->   imposeMissing(datac,cov=21,prAttr=.1,timePoints=5)
+> 
+> # Impose missing data with percent attrition of 0.1 in 5 time points
+> imposeMissing(datac,cov=21,prAttr=.1,timePoints=5)
            [,1]      [,2]      [,3]      [,4]      [,5]      [,6]      [,7]
  [1,] 0.3735462 0.3735462 0.3735462 0.3735462 0.3735462 0.3735462 0.3735462
  [2,] 1.1836433 1.1836433 1.1836433 1.1836433 1.1836433 1.1836433 1.1836433
@@ -4356,12 +4500,12 @@ NULL
  [9,] 1.5757814 1.5757814        NA        NA        NA          NA  2.609250
 [10,] 0.6946116 0.6946116 0.6946116 0.6946116 0.6946116  0.59390132  7.089708
 > 
->   # Logistic-regression MAR
->   colnames(data) <- paste("y", 1:ncol(data), sep="")
->   script <- 'y1 ~ 0.05 + 0.1*y2 + 0.3*y3
-+ 			y4 ~ -2 + 0.1*y4
-+ 			y5 ~ -0.5'
->   imposeMissing(data, logit=script)
+> # Logistic-regression MAR
+> colnames(data) <- paste("y", 1:ncol(data), sep="")
+> script <- 'y1 ~ 0.05 + 0.1*y2 + 0.3*y3
++ 		y4 ~ -2 + 0.1*y4
++ 		y5 ~ -0.5'
+> imposeMissing(data, logit=script)
              y1        y2        y3        y4        y5        y6        y7
  [1,] 0.3735462 0.3735462 0.3735462 0.3735462 0.3735462 0.3735462 0.3735462
  [2,]        NA 1.1836433 1.1836433 1.1836433        NA 1.1836433 1.1836433
@@ -4398,12 +4542,15 @@ NULL
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("imposeMissing", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("inspect")
 > ### * inspect
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: inspect
 > ### Title: Extract information from a simulation result
 > ### Aliases: inspect,SimResult-method
@@ -4435,12 +4582,15 @@ NULL
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("inspect", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("likRatioFit")
 > ### * likRatioFit
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: likRatioFit
 > ### Title: Find the likelihood ratio (or Bayes factor) based on the
 > ###   bivariate distribution of fit indices
@@ -4458,7 +4608,8 @@ NULL
 > ##D path.A <- matrix(0, 3, 3)
 > ##D path.A[2, 1] <- NA
 > ##D path.A[3, 2] <- NA
-> ##D model.A <- estmodel(LY=loading, BE=path.A, modelType="SEM", indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
+> ##D model.A <- estmodel(LY=loading, BE=path.A, modelType="SEM", indLab=c(paste("x", 1:3, sep=""), 
+> ##D 	paste("y", 1:8, sep="")))
 > ##D 
 > ##D out.A <- analyze(model.A, PoliticalDemocracy)
 > ##D 
@@ -4466,7 +4617,8 @@ NULL
 > ##D path.B <- matrix(0, 3, 3)
 > ##D path.B[3, 1] <- NA
 > ##D path.B[2, 3] <- NA
-> ##D model.B <- estmodel(LY=loading, BE=path.B, modelType="SEM", indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
+> ##D model.B <- estmodel(LY=loading, BE=path.B, modelType="SEM", indLab=c(paste("x", 1:3, sep=""), 
+> ##D 	paste("y", 1:8, sep="")))
 > ##D 
 > ##D out.B <- analyze(model.B, PoliticalDemocracy)
 > ##D 
@@ -4493,12 +4645,15 @@ NULL
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("likRatioFit", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("miss")
 > ### * miss
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: miss
 > ### Title: Specifying the missing template to impose on a dataset
 > ### Aliases: miss
@@ -4530,7 +4685,7 @@ Proportion of MCAR: 0.1
 > #Analyze data
 > out <- analyze(CFA.Model, datmiss)
 > summary(out)
-lavaan (0.5-12) converged normally after  24 iterations
+lavaan (0.5-16) converged normally after  25 iterations
 
   Number of observations                            20
 
@@ -4642,12 +4797,15 @@ y1 ~ 0.05 + 0.5*y3
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("miss", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("model")
 > ### * model
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: model
 > ### Title: Data generation template and analysis template for simulation.
 > ### Aliases: model model.cfa model.path model.sem
@@ -4684,7 +4842,8 @@ y1 ~ 0.05 + 0.5*y3
 > 
 > VTE <- bind(rep(NA, 6), 0.51)
 > 
-> CFA.Model <- model(LY = LY, RPS = list(RPS, RPS), RTE = list(RTE, RTE), VTE=list(VTE, VTE), ngroups=2, modelType = "CFA")
+> CFA.Model <- model(LY = LY, RPS = list(RPS, RPS), RTE = list(RTE, RTE), VTE=list(VTE, VTE), 
++ 	ngroups=2, modelType = "CFA")
 > 
 > # Example 3: Linear growth curve model with model misspecification
 > factor.loading <- matrix(NA, 4, 2)
@@ -4777,7 +4936,8 @@ y1 ~ 0.05 + 0.5*y3
 > 
 > VTE <- bind(rep(NA, 6), 0.51)
 > 
-> noninvariance <- model(LY = list(LY1, LY2), RPS = list(RPS1, RPS2), RTE = list(RTE, RTE), VTE=list(VTE, VTE), ngroups=2, modelType = "CFA")
+> noninvariance <- model(LY = list(LY1, LY2), RPS = list(RPS1, RPS2), RTE = list(RTE, RTE), 
++ 	VTE=list(VTE, VTE), ngroups=2, modelType = "CFA")
 > 
 > # Example 7: Inequality Constraints
 > 
@@ -4810,16 +4970,20 @@ y1 ~ 0.05 + 0.5*y3
 + "
 > 
 > # Model Template
-> weak <- model(LY = LY.in, RPS = RPS, VPS=list(VPS1, VPS2), RTE = RTE, VTE=VTE, ngroups=2, modelType = "CFA", con=script)
+> weak <- model(LY = LY.in, RPS = RPS, VPS=list(VPS1, VPS2), RTE = RTE, VTE=VTE, ngroups=2, 
++ 	modelType = "CFA", con=script)
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("model", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("modelLavaan")
 > ### * modelLavaan
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: model.lavaan
 > ### Title: Build the data generation template and analysis template from
 > ###   the lavaan result
@@ -4849,12 +5013,15 @@ y1 ~ 0.05 + 0.5*y3
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("modelLavaan", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("multipleAllEqual")
 > ### * multipleAllEqual
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: multipleAllEqual
 > ### Title: Test whether all objects are equal
 > ### Aliases: multipleAllEqual
@@ -4868,12 +5035,15 @@ y1 ~ 0.05 + 0.5*y3
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("multipleAllEqual", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("pValue")
 > ### * pValue
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: pValue
 > ### Title: Find p-values (1 - percentile) by comparing a single analysis
 > ###   output from the result object
@@ -4905,12 +5075,15 @@ y1 ~ 0.05 + 0.5*y3
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("pValue", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("pValueNested")
 > ### * pValueNested
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: pValueNested
 > ### Title: Find p-values (1 - percentile) for a nested model comparison
 > ### Aliases: pValueNested
@@ -4927,12 +5100,14 @@ y1 ~ 0.05 + 0.5*y3
 > ##D TY <- rep(0, 4)
 > ##D AL <- rep(NA, 2)
 > ##D TE <- diag(NA, 4)
-> ##D nested <- estmodel(LY=LY, PS=PS, TY=TY, AL=AL, TE=TE, modelType="CFA", indLab=paste("t", 1:4, sep=""))
+> ##D nested <- estmodel(LY=LY, PS=PS, TY=TY, AL=AL, TE=TE, modelType="CFA", 
+> ##D 	indLab=paste("t", 1:4, sep=""))
 > ##D 
 > ##D # Parent Model: Unconditional growth curve model
 > ##D LY2 <- matrix(1, 4, 2)
 > ##D LY2[,2] <- c(0, NA, NA, 3)
-> ##D parent <- estmodel(LY=LY2, PS=PS, TY=TY, AL=AL, TE=TE, modelType="CFA", indLab=paste("t", 1:4, sep=""))
+> ##D parent <- estmodel(LY=LY2, PS=PS, TY=TY, AL=AL, TE=TE, modelType="CFA", 
+> ##D 	indLab=paste("t", 1:4, sep=""))
 > ##D 
 > ##D # Analyze the output
 > ##D outNested <- analyze(nested, Demo.growth)
@@ -4957,12 +5132,15 @@ y1 ~ 0.05 + 0.5*y3
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("pValueNested", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("pValueNonNested")
 > ### * pValueNonNested
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: pValueNonNested
 > ### Title: Find p-values (1 - percentile) for a non-nested model comparison
 > ### Aliases: pValueNonNested
@@ -4979,7 +5157,8 @@ y1 ~ 0.05 + 0.5*y3
 > ##D path.A <- matrix(0, 3, 3)
 > ##D path.A[2, 1] <- NA
 > ##D path.A[3, 2] <- NA
-> ##D model.A <- estmodel(LY=loading, BE=path.A, modelType="SEM", indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
+> ##D model.A <- estmodel(LY=loading, BE=path.A, modelType="SEM", indLab=c(paste("x", 1:3, sep=""), 
+> ##D 	paste("y", 1:8, sep="")))
 > ##D 
 > ##D out.A <- analyze(model.A, PoliticalDemocracy)
 > ##D 
@@ -4987,7 +5166,8 @@ y1 ~ 0.05 + 0.5*y3
 > ##D path.B <- matrix(0, 3, 3)
 > ##D path.B[3, 1] <- NA
 > ##D path.B[2, 3] <- NA
-> ##D model.B <- estmodel(LY=loading, BE=path.B, modelType="SEM", indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
+> ##D model.B <- estmodel(LY=loading, BE=path.B, modelType="SEM", indLab=c(paste("x", 1:3, sep=""), 
+> ##D 	paste("y", 1:8, sep="")))
 > ##D 
 > ##D out.B <- analyze(model.B, PoliticalDemocracy)
 > ##D 
@@ -5018,12 +5198,15 @@ y1 ~ 0.05 + 0.5*y3
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("pValueNonNested", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("plotCIwidth")
 > ### * plotCIwidth
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: plotCIwidth
 > ### Title: Plot a confidence interval width of a target parameter
 > ### Aliases: plotCIwidth
@@ -5060,8 +5243,9 @@ y1 ~ 0.05 + 0.5*y3
 > ##D # Plot the widths along sample size value
 > ##D plotCIwidth(Output2, "f1~~f2", assurance = 0.80)
 > ##D 
-> ##D # Specify both continuous sample size and percent missing completely at random. Note that more fine-grained 
-> ##D # values of n and pmMCAR is needed, e.g., n=seq(50, 500, 1) and pmMCAR=seq(0, 0.2, 0.01)
+> ##D # Specify both continuous sample size and percent missing completely at random. 
+> ##D # Note that more fine-grained values of n and pmMCAR is needed, e.g., n=seq(50, 500, 1) 
+> ##D # and pmMCAR=seq(0, 0.2, 0.01)
 > ##D Output3 <- sim(NULL, n=seq(450, 500, 10), pmMCAR=c(0, 0.05, 0.1, 0.15), model=CFA.Model)
 > ##D 
 > ##D # Plot the contours that each contour represents the value of widths at each level
@@ -5071,12 +5255,15 @@ y1 ~ 0.05 + 0.5*y3
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("plotCIwidth", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("plotCoverage")
 > ### * plotCoverage
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: plotCoverage
 > ### Title: Make a plot of confidence interval coverage rates
 > ### Aliases: plotCoverage
@@ -5091,8 +5278,9 @@ y1 ~ 0.05 + 0.5*y3
 > ##D RTE <- binds(diag(6))
 > ##D CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA")
 > ##D 
-> ##D # Specify both continuous sample size and percent missing completely at random. Note that more fine-grained 
-> ##D # values of n and pmMCAR is needed, e.g., n=seq(50, 500, 1) and pmMCAR=seq(0, 0.2, 0.01)
+> ##D # Specify both continuous sample size and percent missing completely at random. 
+> ##D # Note that more fine-grained values of n and pmMCAR is needed, e.g., n=seq(50, 500, 1) 
+> ##D # and pmMCAR=seq(0, 0.2, 0.01)
 > ##D 
 > ##D Output <- sim(NULL, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2), model=CFA.Model)
 > ##D 
@@ -5106,12 +5294,15 @@ y1 ~ 0.05 + 0.5*y3
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("plotCoverage", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("plotCutoff")
 > ### * plotCutoff
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: plotCutoff
 > ### Title: Plot sampling distributions of fit indices with fit indices
 > ###   cutoffs
@@ -5149,8 +5340,9 @@ y1 ~ 0.05 + 0.5*y3
 > ##D # Plot the cutoffs along sample size value
 > ##D plotCutoff(Output2, 0.05)
 > ##D 
-> ##D # Specify both continuoussample size and percent missing completely at random. Note that more fine-grained 
-> ##D # values of n and pmMCAR is needed, e.g., n=seq(50, 500, 1) and pmMCAR=seq(0, 0.2, 0.01)
+> ##D # Specify both continuous sample size and percent missing completely at random. 
+> ##D # Note that more fine-grained values of n and pmMCAR is needed, e.g., n=seq(50, 500, 1) 
+> ##D # and pmMCAR=seq(0, 0.2, 0.01)
 > ##D Output3 <- sim(NULL, n=seq(450, 500, 10), pmMCAR=c(0, 0.05, 0.1, 0.15), model=CFA.Model)
 > ##D 
 > ##D # Plot the contours that each contour represents the value of cutoff at each level
@@ -5160,12 +5352,15 @@ y1 ~ 0.05 + 0.5*y3
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("plotCutoff", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("plotCutoffNested")
 > ### * plotCutoffNested
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: plotCutoffNested
 > ### Title: Plot sampling distributions of the differences in fit indices
 > ###   between nested models with fit indices cutoffs
@@ -5202,12 +5397,15 @@ y1 ~ 0.05 + 0.5*y3
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("plotCutoffNested", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("plotCutoffNonNested")
 > ### * plotCutoffNonNested
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: plotCutoffNonNested
 > ### Title: Plot sampling distributions of the differences in fit indices
 > ###   between non-nested models with fit indices cutoffs
@@ -5252,12 +5450,15 @@ y1 ~ 0.05 + 0.5*y3
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("plotCutoffNonNested", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("plotDist")
 > ### * plotDist
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: plotDist
 > ### Title: Plot a distribution of a data distribution object
 > ### Aliases: plotDist
@@ -5284,6 +5485,8 @@ Copyright M. P. Wand 1997-2009
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("plotDist", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 
 detaching 'package:KernSmooth', 'package:copula'
@@ -5293,6 +5496,7 @@ detaching 'package:KernSmooth', 'package:copula'
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: plotLogitMiss
 > ### Title: Visualize the missing proportion when the logistic regression
 > ###   method is used.
@@ -5314,12 +5518,15 @@ detaching 'package:KernSmooth', 'package:copula'
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("plotLogitMiss", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("plotMisfit")
 > ### * plotMisfit
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: plotMisfit
 > ### Title: Plot the population misfit in the result object
 > ### Aliases: plotMisfit
@@ -5359,6 +5566,8 @@ Loading required package: parallel
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("plotMisfit", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 
 detaching 'package:parallel'
@@ -5368,6 +5577,7 @@ detaching 'package:parallel'
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: plotPower
 > ### Title: Make a power plot of a parameter given varying parameters
 > ### Aliases: plotPower
@@ -5382,8 +5592,9 @@ detaching 'package:parallel'
 > ##D RTE <- binds(diag(6))
 > ##D CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA")
 > ##D 
-> ##D # Specify both continuous sample size and percent missing completely at random. Note that more fine-grained 
-> ##D # values of n and pmMCAR is needed, e.g., n=seq(50, 500, 1) and pmMCAR=seq(0, 0.2, 0.01)
+> ##D # Specify both continuous sample size and percent missing completely at random. 
+> ##D # Note that more fine-grained values of n and pmMCAR is needed, e.g., n=seq(50, 500, 1) 
+> ##D # and pmMCAR=seq(0, 0.2, 0.01)
 > ##D 
 > ##D Output <- sim(NULL, n=seq(100, 200, 20), pmMCAR=c(0, 0.1, 0.2), model=CFA.Model)
 > ##D 
@@ -5396,12 +5607,15 @@ detaching 'package:parallel'
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("plotPower", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("plotPowerFit")
 > ### * plotPowerFit
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: plotPowerFit
 > ### Title: Plot sampling distributions of fit indices that visualize power
 > ###   of rejecting datasets underlying misspecified models
@@ -5434,32 +5648,40 @@ detaching 'package:parallel'
 > ##D Output.ALT <- sim(50, n=50, model=CFA.Model.NULL, generate=CFA.Model.ALT)
 > ##D 
 > ##D # Plot the power based on derived cutoff from the null model using four fit indices
-> ##D plotPowerFit(Output.ALT, nullObject=Output.NULL, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+> ##D plotPowerFit(Output.ALT, nullObject=Output.NULL, alpha=0.05, 
+> ##D 	usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
 > ##D 
 > ##D # Plot the power of rejecting null model when the rule of thumb from Hu & Bentler (1999) is used
 > ##D Rule.of.thumb <- c(RMSEA=0.05, CFI=0.95, TLI=0.95, SRMR=0.06)
-> ##D plotPowerFit(Output.ALT, cutoff=Rule.of.thumb, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+> ##D plotPowerFit(Output.ALT, cutoff=Rule.of.thumb, alpha=0.05, 
+> ##D 	usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
 > ##D 
 > ##D # The example of continous varying sample size. Note that more fine-grained 
 > ##D # values of n is needed, e.g., n=seq(50, 500, 1)
 > ##D Output.NULL2 <- sim(NULL, n=seq(50, 250, 25), model=CFA.Model.NULL, generate=CFA.Model.NULL)
 > ##D Output.ALT2 <- sim(NULL, n=seq(50, 250, 25), model=CFA.Model.NULL, generate=CFA.Model.ALT)
 > ##D 
-> ##D # Plot the power based on derived cutoff from the null model using four fit indices along sample size
-> ##D plotPowerFit(Output.ALT2, nullObject=Output.NULL2, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+> ##D # Plot the power based on derived cutoff from the null model using four fit indices 
+> ##D # along sample size
+> ##D plotPowerFit(Output.ALT2, nullObject=Output.NULL2, alpha=0.05, 
+> ##D 	usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
 > ##D 
 > ##D # Plot the power based on rule of thumb along sample size
-> ##D plotPowerFit(Output.ALT2, cutoff=Rule.of.thumb, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+> ##D plotPowerFit(Output.ALT2, cutoff=Rule.of.thumb, alpha=0.05, 
+> ##D 	usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
 > ## End(Not run)
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("plotPowerFit", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("plotPowerFitNested")
 > ### * plotPowerFitNested
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: plotPowerFitNested
 > ### Title: Plot power of rejecting a nested model in a nested model
 > ###   comparison by each fit index
@@ -5493,10 +5715,12 @@ detaching 'package:parallel'
 > ##D Output.ALT.ALT <- sim(10, n=500, model=CFA.Model.ALT, generate=CFA.Model.ALT) 
 > ##D 
 > ##D # Plot the power based on the derived cutoff from the models analyzed on the null datasets
-> ##D plotPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT)
+> ##D plotPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, 
+> ##D 	nullParent=Output.NULL.ALT)
 > ##D 
 > ##D # Plot the power by only CFI
-> ##D plotPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT, usedFit="CFI")
+> ##D plotPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, 
+> ##D 	nullParent=Output.NULL.ALT, usedFit="CFI")
 > ##D 
 > ##D # The example of continous varying sample size. Note that more fine-grained 
 > ##D # values of n is needed, e.g., n=seq(50, 500, 1)
@@ -5505,11 +5729,15 @@ detaching 'package:parallel'
 > ##D Output.NULL.ALT2 <- sim(NULL, n=seq(50, 500, 25), model=CFA.Model.ALT, generate=CFA.Model.NULL) 
 > ##D Output.ALT.ALT2 <- sim(NULL, n=seq(50, 500, 25), model=CFA.Model.ALT, generate=CFA.Model.ALT) 
 > ##D 
-> ##D # Plot logistic line for the power based on the derived cutoff from the null model along sample size values
-> ##D plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNested=Output.NULL.NULL2, nullParent=Output.NULL.ALT2)
+> ##D # Plot logistic line for the power based on the derived cutoff from the null model 
+> ##D # along sample size values
+> ##D plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNested=Output.NULL.NULL2, 
+> ##D 	nullParent=Output.NULL.ALT2)
 > ##D 
-> ##D # Plot scatterplot for the power based on the derived cutoff from the null model along sample size values
-> ##D plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNested=Output.NULL.NULL2, nullParent=Output.NULL.ALT2, logistic=FALSE)
+> ##D # Plot scatterplot for the power based on the derived cutoff from the null model 
+> ##D # along sample size values
+> ##D plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNested=Output.NULL.NULL2, 
+> ##D 	nullParent=Output.NULL.ALT2, logistic=FALSE)
 > ##D 
 > ##D # Plot scatterplot for the power based on the advanced CFI value
 > ##D plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, cutoff=c(CFI=-0.1), logistic=FALSE)
@@ -5517,12 +5745,15 @@ detaching 'package:parallel'
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("plotPowerFitNested", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("plotPowerFitNonNested")
 > ### * plotPowerFitNonNested
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: plotPowerFitNonNested
 > ### Title: Plot power of rejecting a non-nested model based on a difference
 > ###   in fit index
@@ -5564,12 +5795,15 @@ detaching 'package:parallel'
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("plotPowerFitNonNested", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("popDiscrepancy")
 > ### * popDiscrepancy
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: popDiscrepancy
 > ### Title: Find the discrepancy value between two means and covariance
 > ###   matrices
@@ -5587,12 +5821,15 @@ detaching 'package:parallel'
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("popDiscrepancy", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("popMisfitMACS")
 > ### * popMisfitMACS
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: popMisfitMACS
 > ### Title: Find population misfit by sufficient statistics
 > ### Aliases: popMisfitMACS
@@ -5609,12 +5846,15 @@ detaching 'package:parallel'
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("popMisfitMACS", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("rawDraw")
 > ### * rawDraw
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: rawDraw
 > ### Title: Draw values from vector or matrix objects
 > ### Aliases: rawDraw
@@ -5694,12 +5934,15 @@ $missRaw
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("rawDraw", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("setPopulation")
 > ### * setPopulation
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: setPopulation
 > ### Title: Set the data generation population model underlying an object
 > ### Aliases: setPopulation
@@ -5748,7 +5991,8 @@ $missRaw
 > ##D errorCov <- diag(NA, 7)
 > ##D errorCov[7, 7] <- 0
 > ##D facCov <- diag(3)
-> ##D analysis <- estmodel(LY=loading, BE=path, TE=errorCov, PS=facCov, modelType="SEM", indLab=paste("y", 1:7, sep=""))
+> ##D analysis <- estmodel(LY=loading, BE=path, TE=errorCov, PS=facCov, modelType="SEM", 
+> ##D 	indLab=paste("y", 1:7, sep=""))
 > ##D 
 > ##D # In reality, more than 10 replications are needed.
 > ##D Output <- sim(10, n=200, analysis, generate=datamodel)
@@ -5779,12 +6023,15 @@ $missRaw
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("setPopulation", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("sim")
 > ### * sim
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: sim
 > ### Title: Run a monte carlo simulation with a structural equation model.
 > ### Aliases: sim
@@ -5991,7 +6238,7 @@ Fit Indices      0.1     0.05     0.01    0.001     Mean     SD
       aic   1164.316 1172.151 1178.420 1179.830 1135.994 26.617
       bic   1174.211 1182.046 1188.315 1189.725 1145.889 26.617
       rmsea    0.000    0.000    0.000    0.000    0.000  0.000
-      cfi      0.000    0.000    0.000    0.000    0.600  0.548
+      cfi      1.000    1.000    1.000    1.000    1.000  0.000
       tli      1.000    1.000    1.000    1.000    1.000  0.000
       srmr     0.000    0.000    0.000    0.000    0.000  0.000
 ========= Parameter Estimates and Standard Errors ============
@@ -6004,12 +6251,10 @@ y1~~y2      0.095             0       -0.007        1
 y1~~y1      0.000             1       -0.005        1
 y2~~y2      0.000             1       -0.007        1
 ========= Correlation between Fit Indices ============
-       chisq    aic    bic    cfi   srmr
-chisq  1.000 -0.539 -0.539 -0.537  0.967
-aic   -0.539  1.000  1.000  0.659 -0.716
-bic   -0.539  1.000  1.000  0.659 -0.716
-cfi   -0.537  0.659  0.659  1.000 -0.678
-srmr   0.967 -0.716 -0.716 -0.678  1.000
+      aic  bic srmr
+aic  1.00 1.00 0.07
+bic  1.00 1.00 0.07
+srmr 0.07 0.07 1.00
 ================== Replications =====================
 Number of replications = 5 
 Number of converged replications = 5 
@@ -6384,6 +6629,8 @@ Number of nonconverged replications:
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("sim", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 
 detaching 'package:parallel'
@@ -6393,6 +6640,7 @@ detaching 'package:parallel'
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: summaryConverge
 > ### Title: Provide a comparison between the characteristics of convergent
 > ###   replications and nonconvergent replications
@@ -6444,12 +6692,15 @@ detaching 'package:parallel'
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("summaryConverge", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("summaryFit")
 > ### * summaryFit
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: summaryFit
 > ### Title: Provide summary of model fit across replications
 > ### Aliases: summaryFit
@@ -6491,6 +6742,8 @@ Fit Indices           SD
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("summaryFit", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 
 detaching 'package:parallel'
@@ -6500,6 +6753,7 @@ detaching 'package:parallel'
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: summaryMisspec
 > ### Title: Provide summary of the population misfit and
 > ###   misspecified-parameter values across replications
@@ -6533,12 +6787,15 @@ detaching 'package:parallel'
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("summaryMisspec", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("summaryParam")
 > ### * summaryParam
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: summaryParam
 > ### Title: Provide summary of parameter estimates and standard error across
 > ###   replications
@@ -6580,37 +6837,37 @@ Loading required package: parallel
 > # Summary of the parameter estimates
 > summaryParam(Output)
        Estimate.Average Estimate.SD Average.SE Power..Not.equal.0.      Std.Est
-f1=~y1      0.694043770  0.01781547 0.04163742                   1  0.700299596
-f1=~y2      0.664032498  0.05004988 0.04174177                   1  0.674733152
-f1=~y3      0.652742108  0.04602682 0.04134117                   1  0.671307416
-f1=~y4      0.675329584  0.05666475 0.04140133                   1  0.687819804
-f1=~y5      0.694838588  0.07836253 0.04143609                   1  0.701624723
-f1=~y6      0.698589134  0.05338015 0.04167931                   1  0.702433747
-y1~~y1      0.500730846  0.03285951 0.03855153                   1  0.509377930
-y2~~y2      0.524743514  0.01245703 0.03927918                   1  0.544291157
-y3~~y3      0.518102812  0.06014569 0.03861459                   1  0.547892722
-y4~~y4      0.504363909  0.04566056 0.03830122                   1  0.525493316
-y5~~y5      0.491558560  0.01803614 0.03810518                   1  0.506775777
-y6~~y6      0.499749541  0.04761284 0.03854435                   1  0.506183431
-y1~1       -0.008810148  0.05751387 0.04432595                   0 -0.009327775
-y2~1       -0.009631695  0.03817582 0.04396553                   0 -0.009606366
-y3~1       -0.048035069  0.01876568 0.04348083                   0 -0.049286225
-y4~1       -0.030141352  0.05444905 0.04387118                   0 -0.030503564
-y5~1       -0.025018328  0.03628409 0.04418667                   0 -0.023806731
+f1=~y1      0.694043765  0.01781547 0.04163742                   1  0.700299590
+f1=~y2      0.664032462  0.05004990 0.04174177                   1  0.674733131
+f1=~y3      0.652742070  0.04602687 0.04134117                   1  0.671307387
+f1=~y4      0.675329554  0.05666478 0.04140133                   1  0.687819784
+f1=~y5      0.694838578  0.07836254 0.04143609                   1  0.701624712
+f1=~y6      0.698589131  0.05338016 0.04167931                   1  0.702433739
+y1~~y1      0.500730857  0.03285950 0.03855153                   1  0.509377939
+y2~~y2      0.524743514  0.01245704 0.03927918                   1  0.544291185
+y3~~y3      0.518102828  0.06014571 0.03861459                   1  0.547892760
+y4~~y4      0.504363917  0.04566057 0.03830122                   1  0.525493343
+y5~~y5      0.491558573  0.01803612 0.03810518                   1  0.506775792
+y6~~y6      0.499749561  0.04761286 0.03854435                   1  0.506183443
+y1~1       -0.008810148  0.05751387 0.04432595                   0 -0.009327774
+y2~1       -0.009631695  0.03817582 0.04396552                   0 -0.009606367
+y3~1       -0.048035069  0.01876568 0.04348083                   0 -0.049286226
+y4~1       -0.030141352  0.05444905 0.04387118                   0 -0.030503566
+y5~1       -0.025018328  0.03628409 0.04418667                   0 -0.023806730
 y6~1        0.004855082  0.04243569 0.04444396                   0  0.004583798
        Std.Est.SD Average.Param Average.Bias Coverage
-f1=~y1 0.01591170          0.70 -0.005956230      1.0
-f1=~y2 0.02355888          0.70 -0.035967502      1.0
-f1=~y3 0.04262673          0.70 -0.047257892      0.8
-f1=~y4 0.04199108          0.70 -0.024670416      1.0
-f1=~y5 0.03440514          0.70 -0.005161412      0.8
-f1=~y6 0.02245549          0.70 -0.001410866      0.8
-y1~~y1 0.02215388          0.51 -0.009269154      1.0
-y2~~y2 0.03250012          0.51  0.014743514      1.0
-y3~~y3 0.05770237          0.51  0.008102812      0.6
-y4~~y4 0.05868259          0.51 -0.005636091      1.0
-y5~~y5 0.04916697          0.51 -0.018441440      1.0
-y6~~y6 0.03138416          0.51 -0.010250459      1.0
+f1=~y1 0.01591170          0.70 -0.005956235      1.0
+f1=~y2 0.02355889          0.70 -0.035967538      1.0
+f1=~y3 0.04262676          0.70 -0.047257930      0.8
+f1=~y4 0.04199111          0.70 -0.024670446      1.0
+f1=~y5 0.03440515          0.70 -0.005161422      0.8
+f1=~y6 0.02245550          0.70 -0.001410869      0.8
+y1~~y1 0.02215389          0.51 -0.009269143      1.0
+y2~~y2 0.03250013          0.51  0.014743514      1.0
+y3~~y3 0.05770241          0.51  0.008102828      0.6
+y4~~y4 0.05868262          0.51 -0.005636083      1.0
+y5~~y5 0.04916697          0.51 -0.018441427      1.0
+y6~~y6 0.03138418          0.51 -0.010250439      1.0
 y1~1   0.05825793          0.00 -0.008810148      1.0
 y2~1   0.03923871          0.00 -0.009631695      1.0
 y3~1   0.01881353          0.00 -0.048035069      1.0
@@ -6621,37 +6878,37 @@ y6~1   0.04189960          0.00  0.004855082      1.0
 > # Summary of the parameter estimates with additional details
 > summaryParam(Output, detail=TRUE)
        Estimate.Average Estimate.SD Average.SE Power..Not.equal.0.      Std.Est
-f1=~y1      0.694043770  0.01781547 0.04163742                   1  0.700299596
-f1=~y2      0.664032498  0.05004988 0.04174177                   1  0.674733152
-f1=~y3      0.652742108  0.04602682 0.04134117                   1  0.671307416
-f1=~y4      0.675329584  0.05666475 0.04140133                   1  0.687819804
-f1=~y5      0.694838588  0.07836253 0.04143609                   1  0.701624723
-f1=~y6      0.698589134  0.05338015 0.04167931                   1  0.702433747
-y1~~y1      0.500730846  0.03285951 0.03855153                   1  0.509377930
-y2~~y2      0.524743514  0.01245703 0.03927918                   1  0.544291157
-y3~~y3      0.518102812  0.06014569 0.03861459                   1  0.547892722
-y4~~y4      0.504363909  0.04566056 0.03830122                   1  0.525493316
-y5~~y5      0.491558560  0.01803614 0.03810518                   1  0.506775777
-y6~~y6      0.499749541  0.04761284 0.03854435                   1  0.506183431
-y1~1       -0.008810148  0.05751387 0.04432595                   0 -0.009327775
-y2~1       -0.009631695  0.03817582 0.04396553                   0 -0.009606366
-y3~1       -0.048035069  0.01876568 0.04348083                   0 -0.049286225
-y4~1       -0.030141352  0.05444905 0.04387118                   0 -0.030503564
-y5~1       -0.025018328  0.03628409 0.04418667                   0 -0.023806731
+f1=~y1      0.694043765  0.01781547 0.04163742                   1  0.700299590
+f1=~y2      0.664032462  0.05004990 0.04174177                   1  0.674733131
+f1=~y3      0.652742070  0.04602687 0.04134117                   1  0.671307387
+f1=~y4      0.675329554  0.05666478 0.04140133                   1  0.687819784
+f1=~y5      0.694838578  0.07836254 0.04143609                   1  0.701624712
+f1=~y6      0.698589131  0.05338016 0.04167931                   1  0.702433739
+y1~~y1      0.500730857  0.03285950 0.03855153                   1  0.509377939
+y2~~y2      0.524743514  0.01245704 0.03927918                   1  0.544291185
+y3~~y3      0.518102828  0.06014571 0.03861459                   1  0.547892760
+y4~~y4      0.504363917  0.04566057 0.03830122                   1  0.525493343
+y5~~y5      0.491558573  0.01803612 0.03810518                   1  0.506775792
+y6~~y6      0.499749561  0.04761286 0.03854435                   1  0.506183443
+y1~1       -0.008810148  0.05751387 0.04432595                   0 -0.009327774
+y2~1       -0.009631695  0.03817582 0.04396552                   0 -0.009606367
+y3~1       -0.048035069  0.01876568 0.04348083                   0 -0.049286226
+y4~1       -0.030141352  0.05444905 0.04387118                   0 -0.030503566
+y5~1       -0.025018328  0.03628409 0.04418667                   0 -0.023806730
 y6~1        0.004855082  0.04243569 0.04444396                   0  0.004583798
        Std.Est.SD Average.Param Average.Bias Coverage     Rel.Bias    Std.Bias
-f1=~y1 0.01591170          0.70 -0.005956230      1.0 -0.008508900 -0.33432918
-f1=~y2 0.02355888          0.70 -0.035967502      1.0 -0.051382146 -0.71863313
-f1=~y3 0.04262673          0.70 -0.047257892      0.8 -0.067511274 -1.02674693
-f1=~y4 0.04199108          0.70 -0.024670416      1.0 -0.035243451 -0.43537500
-f1=~y5 0.03440514          0.70 -0.005161412      0.8 -0.007373446 -0.06586582
-f1=~y6 0.02245549          0.70 -0.001410866      0.8 -0.002015524 -0.02643055
-y1~~y1 0.02215388          0.51 -0.009269154      1.0 -0.018174812 -0.28208441
-y2~~y2 0.03250012          0.51  0.014743514      1.0  0.028908851  1.18354975
-y3~~y3 0.05770237          0.51  0.008102812      0.6  0.015887866  0.13471973
-y4~~y4 0.05868259          0.51 -0.005636091      1.0 -0.011051159 -0.12343455
-y5~~y5 0.04916697          0.51 -0.018441440      1.0 -0.036159687 -1.02247178
-y6~~y6 0.03138416          0.51 -0.010250459      1.0 -0.020098939 -0.21528768
+f1=~y1 0.01591170          0.70 -0.005956235      1.0 -0.008508907 -0.33432932
+f1=~y2 0.02355889          0.70 -0.035967538      1.0 -0.051382198 -0.71863353
+f1=~y3 0.04262676          0.70 -0.047257930      0.8 -0.067511328 -1.02674659
+f1=~y4 0.04199111          0.70 -0.024670446      1.0 -0.035243494 -0.43537532
+f1=~y5 0.03440515          0.70 -0.005161422      0.8 -0.007373460 -0.06586594
+f1=~y6 0.02245550          0.70 -0.001410869      0.8 -0.002015527 -0.02643058
+y1~~y1 0.02215389          0.51 -0.009269143      1.0 -0.018174790 -0.28208410
+y2~~y2 0.03250013          0.51  0.014743514      1.0  0.028908851  1.18354870
+y3~~y3 0.05770241          0.51  0.008102828      0.6  0.015887898  0.13471998
+y4~~y4 0.05868262          0.51 -0.005636083      1.0 -0.011051144 -0.12343435
+y5~~y5 0.04916697          0.51 -0.018441427      1.0 -0.036159661 -1.02247176
+y6~~y6 0.03138418          0.51 -0.010250439      1.0 -0.020098901 -0.21528721
 y1~1   0.05825793          0.00 -0.008810148      1.0           NA -0.15318302
 y2~1   0.03923871          0.00 -0.009631695      1.0           NA -0.25229831
 y3~1   0.01881353          0.00 -0.048035069      1.0         -Inf -2.55973024
@@ -6659,27 +6916,29 @@ y4~1   0.05627538          0.00 -0.030141352      1.0           NA -0.55356983
 y5~1   0.03319385          0.00 -0.025018328      1.0           NA -0.68951235
 y6~1   0.04189960          0.00  0.004855082      1.0           NA  0.11441035
        Rel.SE.Bias Average.CI.Width SD.CI.Width
-f1=~y1  1.33715032        0.1632157 0.002311521
-f1=~y2 -0.16599662        0.1636247 0.003617770
-f1=~y3 -0.10180250        0.1620544 0.005697447
-f1=~y4 -0.26936358        0.1622902 0.004130255
-f1=~y5 -0.47122576        0.1624265 0.006783409
-f1=~y6 -0.21919826        0.1633799 0.007649485
-y1~~y1  0.17322317        0.1511192 0.005507253
-y2~~y2  2.15317400        0.1539716 0.004420729
-y3~~y3 -0.35798249        0.1513664 0.013697766
-y4~~y4 -0.16117506        0.1501380 0.009877484
-y5~~y5  1.11271312        0.1493696 0.008826089
-y6~~y6 -0.19046320        0.1510911 0.013686738
-y1~1   -0.22929975        0.1737545 0.003316927
-y2~1    0.15165895        0.1723417 0.006797848
-y3~1    1.31704036        0.1704417 0.004714392
-y4~1   -0.19427105        0.1719719 0.005045193
-y5~1    0.21779743        0.1732086 0.010807950
-y6~1    0.04732499        0.1742171 0.009647712
+f1=~y1   1.3371495        0.1632157 0.002311520
+f1=~y2  -0.1659970        0.1636247 0.003617771
+f1=~y3  -0.1018035        0.1620544 0.005697448
+f1=~y4  -0.2693639        0.1622902 0.004130256
+f1=~y5  -0.4712258        0.1624265 0.006783409
+f1=~y6  -0.2191985        0.1633799 0.007649489
+y1~~y1   0.1732233        0.1511192 0.005507252
+y2~~y2   2.1531712        0.1539716 0.004420731
+y3~~y3  -0.3579826        0.1513664 0.013697769
+y4~~y4  -0.1611753        0.1501380 0.009877487
+y5~~y5   1.1127146        0.1493696 0.008826088
+y6~~y6  -0.1904634        0.1510911 0.013686746
+y1~1    -0.2292997        0.1737545 0.003316927
+y2~1     0.1516589        0.1723417 0.006797852
+y3~1     1.3170403        0.1704417 0.004714396
+y4~1    -0.1942711        0.1719718 0.005045194
+y5~1     0.2177974        0.1732086 0.010807951
+y6~1     0.0473250        0.1742171 0.009647714
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("summaryParam", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 
 detaching 'package:parallel'
@@ -6689,6 +6948,7 @@ detaching 'package:parallel'
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: summaryPopulation
 > ### Title: Summarize the population model used for data generation
 > ###   underlying a result object
@@ -6714,12 +6974,15 @@ detaching 'package:parallel'
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("summaryPopulation", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("summarySeed")
 > ### * summarySeed
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: summarySeed
 > ### Title: Summary of a seed number
 > ### Aliases: summarySeed
@@ -6749,12 +7012,15 @@ detaching 'package:parallel'
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("summarySeed", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("summaryShort")
 > ### * summaryShort
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: summaryShort
 > ### Title: Provide short summary of an object.
 > ### Aliases: summaryShort summaryShort-methods summaryShort,ANY-method
@@ -6778,12 +7044,15 @@ detaching 'package:parallel'
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("summaryShort", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("summaryTime")
 > ### * summaryTime
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: summaryTime
 > ### Title: Time summary
 > ### Aliases: summaryTime
@@ -6813,10 +7082,13 @@ detaching 'package:parallel'
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("summaryTime", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > ### * <FOOTER>
 > ###
-> cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  11.67 0.27 12.12 NA NA 
+> options(digits = 7L)
+> base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+Time elapsed:  17 0.21 17.44 NA NA 
 > grDevices::dev.off()
 null device 
           1 

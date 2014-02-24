@@ -154,7 +154,8 @@ RTE <- binds(diag(6))
 
 VTE <- bind(rep(NA, 6), 0.51)
 
-CFA.Model <- model(LY = LY, RPS = list(RPS, RPS), RTE = list(RTE, RTE), VTE=list(VTE, VTE), ngroups=2, modelType = "CFA")
+CFA.Model <- model(LY = LY, RPS = list(RPS, RPS), RTE = list(RTE, RTE), VTE=list(VTE, VTE), 
+	ngroups=2, modelType = "CFA")
 
 # Example 3: Linear growth curve model with model misspecification
 factor.loading <- matrix(NA, 4, 2)
@@ -247,7 +248,8 @@ RTE <- binds(diag(6))
 
 VTE <- bind(rep(NA, 6), 0.51)
 
-noninvariance <- model(LY = list(LY1, LY2), RPS = list(RPS1, RPS2), RTE = list(RTE, RTE), VTE=list(VTE, VTE), ngroups=2, modelType = "CFA")
+noninvariance <- model(LY = list(LY1, LY2), RPS = list(RPS1, RPS2), RTE = list(RTE, RTE), 
+	VTE=list(VTE, VTE), ngroups=2, modelType = "CFA")
 
 # Example 7: Inequality Constraints
 
@@ -280,5 +282,6 @@ sth2 := load1 - load2
 "
 
 # Model Template
-weak <- model(LY = LY.in, RPS = RPS, VPS=list(VPS1, VPS2), RTE = RTE, VTE=VTE, ngroups=2, modelType = "CFA", con=script)
+weak <- model(LY = LY.in, RPS = RPS, VPS=list(VPS1, VPS2), RTE = RTE, VTE=VTE, ngroups=2, 
+	modelType = "CFA", con=script)
 }

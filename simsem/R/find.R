@@ -39,7 +39,6 @@ findFactorIntercept <- function(beta, factorMean = NULL, gamma = NULL, covmean =
 # correlation, and regression coefficients are specified.
 
 findFactorResidualVar <- function(beta, corPsi, totalVarPsi = NULL, gamma = NULL, covcov = NULL) {
-    require(lavaan)
 	if(!is.null(gamma)) {
 		beta <- parseGammaToBeta(beta, gamma)
 		corPsi <- parseCovCovToPsi(corPsi, cov2cor(covcov))
@@ -98,7 +97,6 @@ findFactorResidualVar <- function(beta, corPsi, totalVarPsi = NULL, gamma = NULL
 # specified.
 
 findFactorTotalVar <- function(beta, corPsi, residualVarPsi, gamma = NULL, covcov = NULL) {
-    library(lavaan)
 	if(!is.null(gamma)) {
 		beta <- parseGammaToBeta(beta, gamma)
 		corPsi <- parseCovCovToPsi(corPsi, cov2cor(covcov))
@@ -158,7 +156,6 @@ findFactorMean <- function(beta, alpha = NULL, gamma = NULL, covmean = NULL) {
 findFactorTotalCov <- function(beta, psi = NULL, corPsi = NULL, totalVarPsi = NULL, 
     errorVarPsi = NULL, gamma = NULL, covcov = NULL) {
     if (is.null(psi)) {
-        library(lavaan)
         if (is.null(errorVarPsi)) 
             errorVarPsi <- findFactorResidualVar(beta, corPsi, totalVarPsi)
         psi <- suppressWarnings(cor2cov(as.matrix(corPsi), sqrt(errorVarPsi)))

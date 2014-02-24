@@ -1769,7 +1769,6 @@ Output <- sim(20, n=300, SEM.model, covData=covData, silent=TRUE)
 
 # model.lavaan with CFA model and one covariate
 
-library(lavaan)
 HS.model <- ' visual  =~ x1 + x2 + x3
               textual =~ x4 + x5 + x6
               speed   =~ x7 + x8 + x9 

@@ -12,18 +12,19 @@
 \usage{
 estmodel(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = NULL, 
 	VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, 
-	MY = NULL, ME = NULL, KA = NULL, GA = NULL, modelType, indLab = NULL, facLab = NULL, covLab = NULL, 
-	groupLab = "group", ngroups = 1, con = NULL)
+	MY = NULL, ME = NULL, KA = NULL, GA = NULL, modelType, indLab = NULL, 
+	facLab = NULL, covLab = NULL, groupLab = "group", ngroups = 1, con = NULL)
 estmodel.cfa(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, VTE = NULL, 
-	VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, KA = NULL, GA = NULL, 
-	indLab = NULL, facLab = NULL, covLab = NULL, groupLab = "group", ngroups = 1, con = NULL)
+	VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, 
+	KA = NULL, GA = NULL, indLab = NULL, facLab = NULL, covLab = NULL, 
+	groupLab = "group", ngroups = 1, con = NULL)
 estmodel.path(PS = NULL, RPS = NULL, BE = NULL, VPS = NULL, VE = NULL, AL = NULL, 
-	ME = NULL, KA = NULL, GA = NULL, indLab = NULL, facLab = NULL, covLab = NULL, groupLab = "group", ngroups = 1,
-	con = NULL)
+	ME = NULL, KA = NULL, GA = NULL, indLab = NULL, facLab = NULL, covLab = NULL, 
+	groupLab = "group", ngroups = 1,con = NULL)
 estmodel.sem(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL, 
 	VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, MY = NULL, 
-	ME = NULL, KA = NULL, GA = NULL, indLab = NULL, facLab = NULL, covLab = NULL, groupLab = "group", ngroups = 1,
-	con = NULL)
+	ME = NULL, KA = NULL, GA = NULL, indLab = NULL, facLab = NULL, covLab = NULL, 
+	groupLab = "group", ngroups = 1, con = NULL)
 }
 \arguments{
   \item{LY}{

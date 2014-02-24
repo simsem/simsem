@@ -49,7 +49,6 @@ createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist 
     }
   
     if (modelBoot) {
-        require(lavaan)
 		if(!is.null(covData)) realData <- data.frame(covData, realData)
 		covStat <- list(MZ = as.matrix(colMeans(covData)), CZ = cov(covData))
         implied <- createImpliedMACS(usedParam, covStat)

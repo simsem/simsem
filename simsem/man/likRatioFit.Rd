@@ -58,7 +58,8 @@ loading[8:11, 3] <- NA
 path.A <- matrix(0, 3, 3)
 path.A[2, 1] <- NA
 path.A[3, 2] <- NA
-model.A <- estmodel(LY=loading, BE=path.A, modelType="SEM", indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
+model.A <- estmodel(LY=loading, BE=path.A, modelType="SEM", indLab=c(paste("x", 1:3, sep=""), 
+	paste("y", 1:8, sep="")))
 
 out.A <- analyze(model.A, PoliticalDemocracy)
 
@@ -66,7 +67,8 @@ out.A <- analyze(model.A, PoliticalDemocracy)
 path.B <- matrix(0, 3, 3)
 path.B[3, 1] <- NA
 path.B[2, 3] <- NA
-model.B <- estmodel(LY=loading, BE=path.B, modelType="SEM", indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
+model.B <- estmodel(LY=loading, BE=path.B, modelType="SEM", indLab=c(paste("x", 1:3, sep=""), 
+	paste("y", 1:8, sep="")))
 
 out.B <- analyze(model.B, PoliticalDemocracy)
 

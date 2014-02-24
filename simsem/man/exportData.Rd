@@ -7,11 +7,12 @@
 	This function can be used to export data created from a set of parameters created from \code{\link{draw}}, called a code{paramSet}. This function can export data to be analyzed with either Mplus or LISREL.
 }
 \usage{
-exportData(nRep, model, n, program = "Mplus", fileStem = "sim", miss = NULL, missCode = -999, datafun=NULL, 
-pmMCAR = NULL, pmMAR = NULL, facDist = NULL, indDist = NULL, errorDist = NULL, sequential = FALSE, 
-modelBoot = FALSE, realData = NULL, maxDraw = 50, misfitType = "f0", 
-misfitBounds = NULL, averageNumMisspec = NULL, optMisfit=NULL, optDraws = 50, 
-seed = 123321, silent = FALSE, multicore = FALSE, numProc = NULL,  params = FALSE)
+exportData(nRep, model, n, program = "Mplus", fileStem = "sim", miss = NULL, 
+	missCode = -999, datafun=NULL, pmMCAR = NULL, pmMAR = NULL, facDist = NULL, 
+	indDist = NULL, errorDist = NULL, sequential = FALSE, modelBoot = FALSE, 
+	realData = NULL, maxDraw = 50, misfitType = "f0", misfitBounds = NULL, 
+	averageNumMisspec = NULL, optMisfit=NULL, optDraws = 50, seed = 123321, 
+	silent = FALSE, multicore = FALSE, numProc = NULL,  params = FALSE)
 }
 \arguments{
   \item{nRep}{
@@ -96,13 +97,10 @@ seed = 123321, silent = FALSE, multicore = FALSE, numProc = NULL,  params = FALS
   \item{params}{ 
 	If \code{TRUE}, the parameters from each replication will be returned.
 }
-
 }
-
 \value{
 	Text files saved to the current working directory. If \code{program} = "Mplus" one file is output for each replication, and an extra file is output with the names of all saved data sets (this file can be used with the MONTECARLO command in Mplus). If \code{program} = "LISREL" one file is output with each replication stacked on top of the next (this file can be used with the RP command in LISREL). If \code{program} = \code{TRUE}, a list of parameter values for each replication is returned.
 }
-
 \author{	
     Alexander M. Schoemann (University of Kansas; \email{schoemann@ku.edu}) 
 }

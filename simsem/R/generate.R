@@ -469,7 +469,6 @@ lavaanSimulateData <- function(
     if(!exists(".Random.seed", envir = .GlobalEnv))
         runif(1) # initialize the RNG if necessary
     RNGstate <- .Random.seed
-	
 	if(!is.list(model)) {
 		# lavaanify
 		lav <- lavaanify(model = model,
@@ -522,20 +521,48 @@ lavaanSimulateData <- function(
         lav2 <- lav
         ngroups <- max(lav$group)
         ov.names <- lavaan:::vnames(lav, "ov")
-        ov.var.idx <- which(lav$op == "~~" & lav$lhs %in% ov.names &
+        ov.nox <- lavaan:::vnames(lav, "ov.nox")
+        lv.names <- lavaan:::vnames(lav, "lv")
+        lv.y <- lavaan:::vnames(lav, "lv.y")
+        ov.var.idx <- which(lav$op == "~~" & lav$lhs %in% ov.nox &
                             lav$rhs == lav$lhs)
-        if(any(lav2$user[ov.var.idx] > 0L)) {
+        lv.var.idx <- which(lav$op == "~~" & lav$lhs %in% lv.y &
+                            lav$rhs == lav$lhs)
+        if(any(lav2$user[c(ov.var.idx, lv.var.idx)] > 0L)) {
             warning("lavaan WARNING: if residual variances are specified, please use standardized=FALSE")
         }
-        lav2$ustart[ov.var.idx] <- 0.0
+        lav2$ustart[c(ov.var.idx,lv.var.idx)] <- 0.0
         fit <- lavaan(model=lav2, sample.nobs=sample.nobs, ...)
         Sigma.hat <- lavaan:::computeSigmaHat(fit@Model)
-        for(g in 1:ngroups) {
-            var.group <- which(lav$op == "~~" & lav$lhs %in% ov.names &
-                               lav$rhs == lav$lhs & lav$group == g)
-            lav$ustart[var.group] <- 1 - diag(Sigma.hat[[g]])
+        ETA <- lavaan:::computeVETA(fit@Model, samplestats=NULL)
+
+        if(debug) {
+            cat("Sigma.hat:\n"); print(Sigma.hat)
+            cat("Eta:\n"); print(ETA)
+        }
+		
+        # standardize LV
+        if(length(lv.y) > 0L) {
+            for(g in 1:ngroups) {
+                var.group <- which(lav$op == "~~" & lav$lhs %in% lv.y &
+                                   lav$rhs == lav$lhs & lav$group == g)
+                eta.idx <- match(lv.y, lv.names)
+                lav$ustart[var.group] <- 1 - diag(ETA[[g]])[eta.idx]
+            }
         }
 
+		lav3 <- lav
+		lav3$ustart[c(ov.var.idx)] <- 0.0
+		fit3 <- lavaan(model=lav3, sample.nobs=sample.nobs, ...)
+        Sigma.hat3 <- lavaan:::computeSigmaHat(fit3@Model)
+
+		for(g in 1:ngroups) {
+            var.group <- which(lav$op == "~~" & lav$lhs %in% ov.nox &
+                               lav$rhs == lav$lhs & lav$group == g)
+            ov.idx <- match(ov.nox, ov.names)
+            lav$ustart[var.group] <- 1 - diag(Sigma.hat3[[g]])[ov.idx]
+        }
+		
         if(debug) {
             cat("after standardisation lav\n")
             print(as.data.frame(lav))

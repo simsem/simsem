@@ -2,8 +2,7 @@
 # To be developed soon
 
 # ROC curve?
-# Fix the first rows the same when sample size is increasing
-# Provide option when users have population data
+# Get cubic spline for the getPower or continuousPower or continuousWidth
 # Complex simulation with many conditions
 # Naive auxiliary variable
 
@@ -41,6 +40,39 @@ dir <- "C:/Users/student/Dropbox/simsem/simsem/R/"
  source(paste(dir, "AllGenerics.R", sep=""))
  sourceDir(dir)
 
+
+ 
+# Automatically put the name of covData
+ 
+library(lavaan)
+
+pop.model <- '
+     f1 =~ 0.7?y1 + 0.7?y2 + 0.7?y3
+     f2 =~ 0.7?y4 + 0.7?y5 + 0.7?y6
+     f3 =~ con1*y7 + con1*y8 + 0.6?y7 + 0.6?y8
+     f3 ~ 0.6?f1 + 0.3?f2
+     f1 ~~ 0.5?f2
+     f1 ~~ 1*f1
+     f2 ~~ 1*f2
+'
+
+Data <- generate(pop.model, n = 100, empirical=TRUE, standardized = TRUE)
+
+Data <- simulateData(pop.model, sample.nobs=100, empirical=TRUE,
+                      standardized=FALSE, debug=TRUE)
+
+fit <- sem(pop.model, data=Data)
+summary(fit, standardized=TRUE)
+
+Data <- simulateData(pop.model, sample.nobs=100, empirical=TRUE,
+                      standardized=TRUE, debug=TRUE)
+
+fit <- sem(pop.model, data=Data)
+summary(fit, standardized=TRUE)
+
+
+ 
+ 
 # library(formatR)
 # tidy.dir(dir)
 
@@ -2103,5 +2135,4 @@ pValueNonNested(out.A, out.B, output.A.A, output.A.B, output.B.A, output.B.B)
 ##################################### Time slot in SimResult and SimResultParam ################################
 ##################################### Add the nonconvergence paramValue ########################################
 ###################################### Double bootstrap, Bollen-Stine boot, double bollen-stine boot, residual bootstrap
-
 

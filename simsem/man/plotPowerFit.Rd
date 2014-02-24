@@ -82,21 +82,26 @@ CFA.Model.ALT <- model(LY = LY.ALT, RPS = RPS.ALT, RTE = RTE, modelType="CFA")
 Output.ALT <- sim(50, n=50, model=CFA.Model.NULL, generate=CFA.Model.ALT)
 
 # Plot the power based on derived cutoff from the null model using four fit indices
-plotPowerFit(Output.ALT, nullObject=Output.NULL, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+plotPowerFit(Output.ALT, nullObject=Output.NULL, alpha=0.05, 
+	usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
 
 # Plot the power of rejecting null model when the rule of thumb from Hu & Bentler (1999) is used
 Rule.of.thumb <- c(RMSEA=0.05, CFI=0.95, TLI=0.95, SRMR=0.06)
-plotPowerFit(Output.ALT, cutoff=Rule.of.thumb, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+plotPowerFit(Output.ALT, cutoff=Rule.of.thumb, alpha=0.05, 
+	usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
 
 # The example of continous varying sample size. Note that more fine-grained 
 # values of n is needed, e.g., n=seq(50, 500, 1)
 Output.NULL2 <- sim(NULL, n=seq(50, 250, 25), model=CFA.Model.NULL, generate=CFA.Model.NULL)
 Output.ALT2 <- sim(NULL, n=seq(50, 250, 25), model=CFA.Model.NULL, generate=CFA.Model.ALT)
 
-# Plot the power based on derived cutoff from the null model using four fit indices along sample size
-plotPowerFit(Output.ALT2, nullObject=Output.NULL2, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+# Plot the power based on derived cutoff from the null model using four fit indices 
+# along sample size
+plotPowerFit(Output.ALT2, nullObject=Output.NULL2, alpha=0.05, 
+	usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
 
 # Plot the power based on rule of thumb along sample size
-plotPowerFit(Output.ALT2, cutoff=Rule.of.thumb, alpha=0.05, usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
+plotPowerFit(Output.ALT2, cutoff=Rule.of.thumb, alpha=0.05, 
+	usedFit=c("RMSEA", "CFI", "TLI", "SRMR"))
 }
 }

@@ -91,10 +91,12 @@ Output.NULL.ALT <- sim(10, n=500, model=CFA.Model.ALT, generate=CFA.Model.NULL)
 Output.ALT.ALT <- sim(10, n=500, model=CFA.Model.ALT, generate=CFA.Model.ALT) 
 
 # Plot the power based on the derived cutoff from the models analyzed on the null datasets
-plotPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT)
+plotPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, 
+	nullParent=Output.NULL.ALT)
 
 # Plot the power by only CFI
-plotPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT, usedFit="CFI")
+plotPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, 
+	nullParent=Output.NULL.ALT, usedFit="CFI")
 
 # The example of continous varying sample size. Note that more fine-grained 
 # values of n is needed, e.g., n=seq(50, 500, 1)
@@ -103,11 +105,15 @@ Output.ALT.NULL2 <- sim(NULL, n=seq(50, 500, 25), model=CFA.Model.NULL, generate
 Output.NULL.ALT2 <- sim(NULL, n=seq(50, 500, 25), model=CFA.Model.ALT, generate=CFA.Model.NULL) 
 Output.ALT.ALT2 <- sim(NULL, n=seq(50, 500, 25), model=CFA.Model.ALT, generate=CFA.Model.ALT) 
 
-# Plot logistic line for the power based on the derived cutoff from the null model along sample size values
-plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNested=Output.NULL.NULL2, nullParent=Output.NULL.ALT2)
+# Plot logistic line for the power based on the derived cutoff from the null model 
+# along sample size values
+plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNested=Output.NULL.NULL2, 
+	nullParent=Output.NULL.ALT2)
 
-# Plot scatterplot for the power based on the derived cutoff from the null model along sample size values
-plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNested=Output.NULL.NULL2, nullParent=Output.NULL.ALT2, logistic=FALSE)
+# Plot scatterplot for the power based on the derived cutoff from the null model 
+# along sample size values
+plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNested=Output.NULL.NULL2, 
+	nullParent=Output.NULL.ALT2, logistic=FALSE)
 
 # Plot scatterplot for the power based on the advanced CFI value
 plotPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, cutoff=c(CFI=-0.1), logistic=FALSE)

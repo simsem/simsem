@@ -66,12 +66,14 @@ PS <- matrix(NA, 2, 2)
 TY <- rep(0, 4)
 AL <- rep(NA, 2)
 TE <- diag(NA, 4)
-nested <- estmodel(LY=LY, PS=PS, TY=TY, AL=AL, TE=TE, modelType="CFA", indLab=paste("t", 1:4, sep=""))
+nested <- estmodel(LY=LY, PS=PS, TY=TY, AL=AL, TE=TE, modelType="CFA", 
+	indLab=paste("t", 1:4, sep=""))
 
 # Parent Model: Unconditional growth curve model
 LY2 <- matrix(1, 4, 2)
 LY2[,2] <- c(0, NA, NA, 3)
-parent <- estmodel(LY=LY2, PS=PS, TY=TY, AL=AL, TE=TE, modelType="CFA", indLab=paste("t", 1:4, sep=""))
+parent <- estmodel(LY=LY2, PS=PS, TY=TY, AL=AL, TE=TE, modelType="CFA", 
+	indLab=paste("t", 1:4, sep=""))
 
 # Analyze the output
 outNested <- analyze(nested, Demo.growth)

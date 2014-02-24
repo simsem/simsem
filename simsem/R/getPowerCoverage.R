@@ -219,10 +219,16 @@ continuousLogical <- function(object, logical, contN = TRUE, contMCAR = FALSE, c
 	# Predictive probability of success given the values in the \code{newdat} argument.
 # }
 
-predProb <- function(newdat, glmObj) {
+predProb <- function(newdat, glmObj, alpha = 0.05) {
     slps <- as.numeric(coef(glmObj))
     logi <- sum(newdat * slps)
+	predVal <- as.matrix(newdat)
+	se <- sqrt(t(predVal) %*% vcov(glmObj) %*% predVal)
+	critVal <- qnorm(1 - alpha/2)
+	logi <- c(logi - critVal * se, logi, logi + critVal * se)
     pp <- exp(logi)/(1 + exp(logi))
+	if(round(pp[2], 6) == 1) pp[3] <- 1
+	if(round(pp[1], 6) == 0) pp[1] <- 0
     return(pp)
 }
  

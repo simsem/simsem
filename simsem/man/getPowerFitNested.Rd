@@ -92,7 +92,8 @@ Output.NULL.ALT <- sim(10, n=500, model=CFA.Model.ALT, generate=CFA.Model.NULL)
 Output.ALT.ALT <- sim(10, n=500, model=CFA.Model.ALT, generate=CFA.Model.ALT) 
 
 # Find the power based on the derived cutoff from the models analyzed on the null datasets
-getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, nullParent=Output.NULL.ALT)
+getPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL, 
+	nullParent=Output.NULL.ALT)
 
 # Find the power based on the chi-square value at df=1 and the CFI change (intentionally
 # use a cutoff from Cheung and Rensvold (2002) in an appropriate situation).
@@ -106,7 +107,8 @@ Output.NULL.ALT2 <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model.ALT, generate=
 Output.ALT.ALT2 <- sim(NULL, n=seq(50, 500, 50), model=CFA.Model.ALT, generate=CFA.Model.ALT) 
 
 # Get the power based on the derived cutoff from the null model at the sample size of 250
-getPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNested=Output.NULL.NULL2, nullParent=Output.NULL.ALT2, nVal = 250)
+getPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, nullNested=Output.NULL.NULL2, 
+	nullParent=Output.NULL.ALT2, nVal = 250)
 
 # Get the power based on the rule of thumb from the null model at the sample size of 250
 getPowerFitNested(Output.ALT.NULL2, Output.ALT.ALT2, cutoff=c(Chi=3.84, CFI=-0.10), nVal = 250)

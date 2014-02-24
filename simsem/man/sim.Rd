@@ -8,14 +8,14 @@
 }
 \usage{
 sim(nRep, model, n, generate = NULL, ..., rawData = NULL, miss = NULL, datafun=NULL, 
-lavaanfun = "lavaan", outfun=NULL, pmMCAR = NULL, pmMAR = NULL, facDist = NULL, indDist = NULL, 
-errorDist = NULL, sequential = FALSE, modelBoot = FALSE, realData = NULL, 
-covData = NULL, maxDraw = 50, misfitType = "f0", misfitBounds = NULL, 
-averageNumMisspec = FALSE, optMisfit=NULL, optDraws = 50, 
-createOrder = c(1, 2, 3), aux = NULL, group = NULL, mxFit = FALSE, mxMixture = FALSE, 
-citype = NULL, cilevel = 0.95, seed = 123321, silent = FALSE, 
-multicore = FALSE, cluster = FALSE, numProc = NULL, paramOnly = FALSE, 
-dataOnly=FALSE, smartStart=FALSE, previousSim = NULL, completeRep = FALSE)
+	lavaanfun = "lavaan", outfun=NULL, pmMCAR = NULL, pmMAR = NULL, facDist = NULL, 
+	indDist = NULL, errorDist = NULL, sequential = FALSE, modelBoot = FALSE, 
+	realData = NULL, covData = NULL, maxDraw = 50, misfitType = "f0", 
+	misfitBounds = NULL, averageNumMisspec = FALSE, optMisfit=NULL, optDraws = 50, 
+	createOrder = c(1, 2, 3), aux = NULL, group = NULL, mxFit = FALSE, 
+	mxMixture = FALSE, citype = NULL, cilevel = 0.95, seed = 123321, silent = FALSE, 
+	multicore = FALSE, cluster = FALSE, numProc = NULL, paramOnly = FALSE, 
+	dataOnly=FALSE, smartStart=FALSE, previousSim = NULL, completeRep = FALSE)
 }
 \arguments{
   \item{nRep}{
@@ -147,8 +147,6 @@ dataOnly=FALSE, smartStart=FALSE, previousSim = NULL, completeRep = FALSE)
 }
 }
 \details{
-
-
 This function is executed as follows: 1. parameters are drawn from the specified data-generation model (applicable only simsem model template, \code{\linkS4class{SimSem}}, only), 2. the drawn (or the specified) parameters are used to create data, 3. data can be transformed using the \code{datafun} argument, 4. specified missingness (if any) is imposed, 5. data are analyzed using the specified analysis model, 6. parameter estimates, standard errors, fit indices, and other characteristics of a replication are extracted, 7. additional outputs (if any) are extracted using the \code{outfun} argument, and 8. results across replications are summarized in a result object, \code{\linkS4class{SimResult}}).
 
 There are five ways to provide or generate data in this function: 

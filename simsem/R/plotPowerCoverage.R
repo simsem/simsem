@@ -138,9 +138,12 @@ plotPowerSig <- function(sig, x = NULL, xval = NULL, mainName = NULL, useContour
             silent = TRUE))
         if (ncol(x) == 1) {
             predVal <- apply(data.frame(1, xval), 1, predProb, mod)
-            plot(xval[[1]], predVal, type = "n", xlab = names(xval)[1], ylab = "Power", 
+			browser()
+            plot(xval[[1]], predVal[2,], type = "n", xlab = names(xval)[1], ylab = "Power", 
                 main = mainName[i], ylim = c(0, 1))
-            lines(xval[[1]], predVal)
+            lines(xval[[1]], predVal[1,], col = "red")
+            lines(xval[[1]], predVal[3,], col = "red")
+            lines(xval[[1]], predVal[2,])
         } else if (ncol(x) == 2) {
             FUN <- function(x, y) {
                 logi <- mod$coefficients[1] + mod$coefficients[2] * x + mod$coefficients[3] * 

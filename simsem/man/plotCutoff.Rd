@@ -70,8 +70,9 @@ Output2 <- sim(NULL, n=seq(450, 500, 10), model=CFA.Model)
 # Plot the cutoffs along sample size value
 plotCutoff(Output2, 0.05)
 
-# Specify both continuoussample size and percent missing completely at random. Note that more fine-grained 
-# values of n and pmMCAR is needed, e.g., n=seq(50, 500, 1) and pmMCAR=seq(0, 0.2, 0.01)
+# Specify both continuous sample size and percent missing completely at random. 
+# Note that more fine-grained values of n and pmMCAR is needed, e.g., n=seq(50, 500, 1) 
+# and pmMCAR=seq(0, 0.2, 0.01)
 Output3 <- sim(NULL, n=seq(450, 500, 10), pmMCAR=c(0, 0.05, 0.1, 0.15), model=CFA.Model)
 
 # Plot the contours that each contour represents the value of cutoff at each level
