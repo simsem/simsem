@@ -118,20 +118,11 @@ analyzeLavaan <- function(args, fun = "lavaan", miss = NULL, aux = NULL) {
     } else {
 		# If the missing argument is not specified and data have NAs, the default is fiml.
 		if(is.null(args$missing)) {
-			missing <- "default"
-			if (any(is.na(args$data))) {
-				missing <- "fiml"
+			args$missing <- "default"
+			if ((!is.null(miss) && (miss@m == 0)) || any(is.na(args$data))) {
+				args$missing <- "fiml"
 			}
-		} else {
-			missing <- args$missing
-			args$missing <- NULL
-		}
-		
-		    # If there is a miss argument and m = 0, use FIML
-    if (!is.null(miss)) {
-      if (miss@m == 0) args$missing <- "fiml"
-    }
-
+		} 
         if (!is.null(aux)) {
             library(semTools)	
 			if(is.numeric(aux)) aux <- colnames(model$data)[aux]

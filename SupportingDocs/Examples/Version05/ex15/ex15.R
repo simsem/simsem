@@ -17,8 +17,8 @@ model <- '
 '
 
 usedData <- imposeMissing(PoliticalDemocracy, pmMCAR=0.03)
-fit <- sem(model, data=usedData)
+fit <- sem(model, data=usedData, missing = "fiml", fixed.x = TRUE)
 
 misstemplate <- miss(logical=is.na(usedData))
-Output <- sim(1000, n=nrow(usedData), model=fit, generate=fit, miss=misstemplate)
+Output <- sim(50, n=nrow(usedData), model=fit, generate=fit, miss=misstemplate, fixed.x = TRUE)
 pValue(fit, Output)

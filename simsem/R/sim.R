@@ -649,7 +649,6 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
         if (is.null(pmMAR)) 
             pmMAR <- miss@pmMAR
     }
-    
     ## 2. Generate data (data) & store parameter values (paramSet)
     data <- simConds[[1]]  # either a paramSet or raw data
 	if (!is.null(popData)) {
@@ -919,6 +918,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 				
 				if(is.null(citype)) citype <- formals(parameterEstimates)$boot.ci.type
 				#redo with parameterEstimate function in lavaan (for coef se, std) all the way to 526
+
 				result <- parameterEstimates(out, standardized=TRUE, boot.ci.type=citype, level = cilevel)
 				outpt <- out@ParTable
 				extraParamIndex <- outpt$op %in% c(">", "<", "==", ":=")

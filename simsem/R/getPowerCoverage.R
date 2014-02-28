@@ -177,7 +177,7 @@ continuousLogical <- function(object, logical, contN = TRUE, contMCAR = FALSE, c
     for (i in 1:dim(logical)[[2]]) {
         mod <- invisible(try(glm(logical[, i] ~ x, family = binomial(link = "logit")), 
             silent = TRUE))
-        res[[dimnames(logical)[[2]][[i]]]] <- apply(powVal, 1, predProb, mod)
+        res[[dimnames(logical)[[2]][[i]]]] <- apply(powVal, 1, function(x) predProb(x, mod)[2])
     }
     if (is.list(res)) {
         res <- do.call(cbind, res)
@@ -226,9 +226,11 @@ predProb <- function(newdat, glmObj, alpha = 0.05) {
 	se <- sqrt(t(predVal) %*% vcov(glmObj) %*% predVal)
 	critVal <- qnorm(1 - alpha/2)
 	logi <- c(logi - critVal * se, logi, logi + critVal * se)
+	logi[logi > 500] <- 500
+	logi[logi < -500] <- -500
     pp <- exp(logi)/(1 + exp(logi))
 	if(round(pp[2], 6) == 1) pp[3] <- 1
-	if(round(pp[1], 6) == 0) pp[1] <- 0
+	if(round(pp[2], 6) == 0) pp[1] <- 0
     return(pp)
 }
  

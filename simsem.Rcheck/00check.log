@@ -45,11 +45,14 @@ Maintainer: 'Sunthud Pornprasertmanit <psunthud@ku.edu>'
 * checking Rd contents ... OK
 * checking for unstated dependencies in examples ... OK
 * checking examples ... OK
+Examples with CPU or elapsed time > 5s
+    user system elapsed
+sim 5.02   0.05    5.18
 * checking PDF version of manual ... WARNING
 LaTeX errors when creating PDF version.
 This typically indicates Rd problems.
 LaTeX errors found:
 !pdfTeX error: pdflatex.EXE (file ts1-zi4r): Font ts1-zi4r at 540 not found
  ==> Fatal error occurred, no output PDF file produced!
-* checking PDF version of manual without hyperrefs or index ... OK
-WARNING: There was 1 warning.
+* checking PDF version of manual without hyperrefs or index ... ERROR
+Re-running with no redirection of stdout/stderr.

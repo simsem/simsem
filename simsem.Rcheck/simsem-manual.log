@@ -1,7 +1,7 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9) (preloaded format=pdflatex 2013.11.18)  24 FEB 2014 13:05
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9) (preloaded format=pdflatex 2013.11.18)  27 FEB 2014 20:09
 entering extended mode
-**C:/Users/sunthud/AppData/Local/Temp/RtmpCWEVeP/Rd2pdf191c3c6521d1/Rd2.tex
-(C:/Users/sunthud/AppData/Local/Temp/RtmpCWEVeP/Rd2pdf191c3c6521d1/Rd2.tex
+**C:/Users/sunthud/AppData/Local/Temp/RtmpQnP2oo/Rd2pdfae45f5d6a69/Rd2.tex
+(C:/Users/sunthud/AppData/Local/Temp/RtmpQnP2oo/Rd2pdfae45f5d6a69/Rd2.tex
 LaTeX2e <2011/06/27>
 Babel <v3.8m> and hyphenation patterns for english, afrikaans, ancientgreek, ar
 abic, armenian, assamese, basque, bengali, bokmal, bulgarian, catalan, coptic, 
@@ -1357,8 +1357,7 @@ No file Rd2.ind.
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 7376.
 [130]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 7376.
-
-(C:\Users\sunthud\AppData\Local\Temp\RtmpCWEVeP\Rd2pdf191c3c6521d1\Rd2.aux)
+ (C:\Users\sunthud\AppData\Local\Temp\RtmpQnP2oo\Rd2pdfae45f5d6a69\Rd2.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 7376.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 7376.
 
@@ -1375,12 +1374,12 @@ Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 7376.
  ) 
 Here is how much of TeX's memory you used:
  7396 strings out of 493921
- 111822 string characters out of 3144869
+ 111817 string characters out of 3144869
  168131 words of memory out of 3000000
  9531 multiletter control sequences out of 15000+200000
  37367 words of font info for 48 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
- 38i,6n,27p,1582b,592s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 38i,6n,27p,1581b,592s stack positions out of 5000i,500n,10000p,200000b,50000s
 pdfTeX warning (dest): name{Rfn.anova\\unhbox\040\\voidb@x\040\\kern\040\\z@\
 040\\char\040`\\protect\040\\relax\040\\kern\040.16667em\040SimResult.Rdash.met
 hod} has been referenced but does not exist, replaced by a fixed one

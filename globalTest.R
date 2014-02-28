@@ -115,7 +115,7 @@ test.overall <- function() {
 	# 2. Successful run?
 	# 3. Have expected errors?
 	# 4. Time elapsed
-	install.packages("simsem_0.5-3.tar.gz", repos=NULL, type="source")
+	install.packages("simsem_0.5-5.tar.gz", repos=NULL, type="source")
 	result <- NULL
 	currentDir <- getwd()
 	currentDir <- gsub("/simsem/R", "", currentDir)
@@ -144,7 +144,7 @@ test.overall <- function() {
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version03/ex22/ex22.R"), "Example 22", subFrom = "25:500", subTo = "seq\\(25, 500, 50\\)", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version03/ex23/ex23.R"), "Example 23", subFrom = "sim\\(1000", subTo = "sim\\(10", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version03/ex24/ex24.R"), "Example 24", subFrom = "sim\\(1000", subTo = "sim\\(10", result = result)
-	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version03/ex25/ex25.R"), "Example 25", subFrom = "50:500", subTo = "seq\\(50, 1000, 50\\)", result = result)
+	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version03/ex25/ex25.R"), "Example 25", subFrom = "50:500", subTo = "seq\\(50, 1000, 10\\)", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version03/ex26/ex26.R"), "Example 26", subFrom = "50:500", subTo = "seq\\(50, 1000, 50\\)", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version03/ex27/ex27.R"), "Example 27", subFrom = "sim\\(1000", subTo = "sim\\(10", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version03/ex28/ex28.R"), "Example 28", subFrom = "sim\\(1000", subTo = "sim\\(10", result = result)
@@ -178,7 +178,7 @@ test.overall <- function() {
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/ex22/ex22.R"), "Example 22 (lavaan)", subFrom = "25:500", subTo = "seq\\(25, 500, 50\\)", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/ex24/ex24.R"), "Example 24 (lavaan)", subFrom = "sim\\(1000", subTo = "sim\\(10", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/ex25/ex25.R"), "Example 25 (lavaan)", subFrom = "50:500", subTo = "seq\\(50, 1000, 50\\)", result = result)
-	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/ex26/ex26.R"), "Example 26 (lavaan)", subFrom = "50:500", subTo = "seq\\(50, 1000, 50\\)", result = result)
+	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/ex26/ex26.R"), "Example 26 (lavaan)", subFrom = "50:500", subTo = "seq\\(50, 1000, 25\\)", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/ex27/ex27.R"), "Example 27 (lavaan)", subFrom = "sim\\(1000", subTo = "sim\\(10", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/ex28/ex28.R"), "Example 28 (lavaan)", subFrom = "sim\\(1000", subTo = "sim\\(10", result = result)
 

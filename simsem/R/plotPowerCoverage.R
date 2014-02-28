@@ -3,14 +3,13 @@
 plotPower <- function(object, powerParam, alpha = 0.05, contParam = NULL, contN = TRUE, 
     contMCAR = TRUE, contMAR = TRUE, useContour = TRUE) {
     object <- clean(object)
-    
     crit.value <- qnorm(1 - alpha/2)
     sig <- 0 + (abs(object@coef/object@se) > crit.value)
     colnames(sig) <- colnames(object@coef)
     if (is.null(powerParam)) 
         stop("Please specify the parameter used to plot")
     j <- match(powerParam, dimnames(sig)[[2]])  # Return column indices that start with 'param'
-	if(length(j) == 0) stop("The specified parameter does not match with any parameter names in the object.")
+	if((length(j)  == 0) || (any(is.na(j)))) stop("The specified parameter does not match with any parameter names in the object.")
     sig <- as.matrix(sig[, j])
     
     # Create matrix of predictors (randomly varying params)
@@ -27,7 +26,7 @@ plotCoverage <- function(object, coverParam, coverValue = NULL, contParam = NULL
     if (is.null(coverParam)) 
         stop("Please specify the parameter used to plot")
     j <- match(coverParam, dimnames(cover)[[2]])  # Return column indices that start with 'param'
-	if(length(j) == 0) stop("The specified parameter does not match with any parameter names in the object.")
+	if((length(j)  == 0) || (any(is.na(j)))) stop("The specified parameter does not match with any parameter names in the object.")
     cover <- as.matrix(cover[, j])
     
     # Create matrix of predictors (randomly varying params)
@@ -138,7 +137,6 @@ plotPowerSig <- function(sig, x = NULL, xval = NULL, mainName = NULL, useContour
             silent = TRUE))
         if (ncol(x) == 1) {
             predVal <- apply(data.frame(1, xval), 1, predProb, mod)
-			browser()
             plot(xval[[1]], predVal[2,], type = "n", xlab = names(xval)[1], ylab = "Power", 
                 main = mainName[i], ylim = c(0, 1))
             lines(xval[[1]], predVal[1,], col = "red")

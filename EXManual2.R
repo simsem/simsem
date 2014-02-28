@@ -913,7 +913,7 @@ VX <- bind(rep(NA, 7), 1)
 CFA.Model.Aux <- model(LY = LY, RPS = RPS, RTE = RTE, VY = VX, modelType="CFA") 
 
 dat <- generate(CFA.Model.Aux, n=200)
-missmodel <- miss(pmMAR=0.1, cov=7, ignoreCols=8, threshold = 0.5)
+missmodel <- miss(pmMAR=0.1, cov=7, threshold = 0.5)
 
 dat <- impose(missmodel, dat)
 
@@ -1382,7 +1382,7 @@ getCutoff(Output, 0.05, nVal = 200)
 Cpow <- getPower(Output)
 Cpow2 <- getPower(Output, nVal = 200)
 findPower(Cpow, "N", 0.80)
-plotPower(Output, powerParam=c("1.f1=~y1", "1.f2~~f1"))
+plotPower(Output, powerParam=c("f1=~y1", "f1~~f2"))
 
 ############################## Example 19 ###########################
 
@@ -1442,7 +1442,7 @@ Cpow <- getPower(Output)
 Cpow2 <- getPower(Output, nVal = 200, pmMCARval = 0.35)
 findPower(Cpow, "N", 0.80)
 findPower(Cpow, "MCAR", 0.80)
-plotPower(Output, powerParam=c("1.f2~f1", "1.f3~f1"))
+plotPower(Output, powerParam=c("f2~f1", "f3~f1"))
 
 ###################################### Example 20 #################################
 

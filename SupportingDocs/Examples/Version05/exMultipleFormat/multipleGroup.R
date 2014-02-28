@@ -254,14 +254,8 @@ FUN <- function(data) {
 	m2 <- m1
 	dataGroup <- split(data, data$group)
 	e <- estimate(list(`Group 1` = m1, `Group 2` = m2), dataGroup) # No constraints across groups
-	coef <- lapply(coef(e), function(x) x[,1])
-	se <- lapply(coef(e), function(x) x[,2])
-	lenGroup <- sapply(coef, length)
-	groupLab <- paste0(".g", rep(1:2, each=lenGroup[1]))
-	coef <- Reduce("c", coef)
-	se <- Reduce("c", se)
-	names(coef) <- paste0(names(coef), groupLab)
-	names(se) <- paste0(names(se), groupLab)
+	coef <- coef(e)
+	se <- sqrt(diag(vcov(e)))
 	f <- gof(e)
 	fit <- c(f$fit$statistic, f$fit$parameter, f$fit$p.value, loglik = as.numeric(f$logLik), bic = f$BIC, aic = f$AIC, rmsea = as.numeric(f$RMSEA[1]))
 	converged <- !any(is.na(se))
