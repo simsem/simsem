@@ -10,6 +10,7 @@
 createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist = NULL, 
     errorDist = NULL, indLab = NULL, modelBoot = FALSE, realData = NULL, covData = NULL,
 	empirical = FALSE) {
+	
 	# Assume covData is good
     if (modelBoot) {
         if (sequential) 
@@ -108,6 +109,7 @@ createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist 
             }
 			if(!is.null(covData)) Data <- data.frame(covData, Data)
         } else {
+			# Covariance matrix based data generation
 			if(is.null(covData)) {
 				macs <- createImpliedMACS(usedParam)
 				if (!is.null(indDist)) {
