@@ -90,8 +90,12 @@ summaryParam <- function(object, alpha = 0.05, detail = FALSE, improper = FALSE,
 				width <- upperBound - lowerBound
 				average.width <- apply(width, 2, mean, na.rm = TRUE)
 				sd.width <- apply(width, 2, sd, na.rm = TRUE)				
-                result3 <- cbind(relBias, std.bias, relative.bias.se, average.width, sd.width)
-                colnames(result3) <- c("Rel Bias", "Std Bias", "Rel SE Bias", "Average CI Width", "SD CI Width")
+				belowLowerBound <- paramValue < lowerBound
+				aboveUpperBound <- paramValue > upperBound
+				perc.lower <- apply(belowLowerBound, 2, mean, na.rm = TRUE)
+				perc.upper <- apply(aboveUpperBound, 2, mean, na.rm = TRUE)
+				result3 <- cbind(relBias, std.bias, relative.bias.se, perc.lower, perc.upper, average.width, sd.width)
+                colnames(result3) <- c("Rel Bias", "Std Bias", "Rel SE Bias", "Not Cover Below", "Not Cover Above", "Average CI Width", "SD CI Width")
                 result <- data.frame(result, result3)
             }
         }

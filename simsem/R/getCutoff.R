@@ -4,11 +4,11 @@
 getCutoffDataFrame <- function(object, 
     alpha, revDirec = FALSE, usedFit = NULL, predictor = NULL, predictorVal = NULL, 
     df = 0) {
-	usedFit <- cleanUsedFit(usedFit, colnames(object))
+	usedFit <- cleanUsedFit(usedFit, tolower(colnames(object)))
     percentile <- 1 - alpha
     if (revDirec) 
         percentile <- 1 - percentile
-    object <- as.data.frame(object[, usedFit])
+    object <- as.data.frame(object[, match(usedFit, tolower(colnames(object)))])
     colnames(object) <- usedFit
     temp <- list()
     temp <- lapply(object, getCondQtile, qtile = percentile, df = df, x = predictor, 

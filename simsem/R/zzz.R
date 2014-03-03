@@ -6,5 +6,6 @@
     packageStartupMessage(pkgname, " is BETA software! Please report any bugs.")
     packageStartupMessage(pkgname, " was developed at the University of Kansas Center for Research Methods and Data Analysis.")
     packageStartupMessage("###############################################################################################")
+	options('simsem.multicore' = FALSE)
 }
  

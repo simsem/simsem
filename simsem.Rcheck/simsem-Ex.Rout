@@ -383,6 +383,11 @@ Class:      logical         list
 > # In reality, more replications are needed.
 > Output <- sim(5, n=500, CFA.Model)
 Loading required package: parallel
+Progress: 1 / 5 
+Progress: 2 / 5 
+Progress: 3 / 5 
+Progress: 4 / 5 
+Progress: 5 / 5 
 > 
 > # Summary the simulation result
 > summary(Output)
@@ -998,8 +1003,20 @@ detaching 'package:copula'
 > CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
 > Output1 <- sim(5, CFA.Model, n=200, seed=123321)
 Loading required package: parallel
+Progress: 1 / 5 
+Progress: 2 / 5 
+Progress: 3 / 5 
+Progress: 4 / 5 
+Progress: 5 / 5 
 > Output2 <- sim(4, CFA.Model, n=200, seed=324567)
+Progress: 1 / 4 
+Progress: 2 / 4 
+Progress: 3 / 4 
+Progress: 4 / 4 
 > Output3 <- sim(3, CFA.Model, n=200, seed=789987)
+Progress: 1 / 3 
+Progress: 2 / 3 
+Progress: 3 / 3 
 > Output <- combineSim(Output1, Output2, Output3)
 > summary(Output)
 RESULT OBJECT
@@ -3560,6 +3577,75 @@ NULL
 > 
 > dat <- generate(CFA.Model, 200)
 > 
+> # Get the latent variable scores
+> 
+> dat2 <- generate(CFA.Model, 20, sequential = TRUE, saveLatentVar = TRUE)
+> dat2
+            y1          y2          y3          y4          y5           y6
+1  -1.87776616 -2.57114325 -2.32030240 -1.31470927  1.43641776 -0.221452065
+2   0.35086927 -0.34189214 -1.30876551 -2.04529925 -1.97227501 -0.876228929
+3   0.09815039  0.53913144 -0.25398531  0.11921154  1.67941342  2.354649417
+4  -0.55982208 -0.70954736 -0.70800932 -0.49580195 -1.12836749  0.005426461
+5   1.10415694 -0.66204414 -0.41364538  1.38145871  0.92503801  0.632865981
+6  -0.54493679  0.04235162 -2.11904421  0.70637305 -0.01000136  0.202113742
+7   0.76791123 -0.88805991  0.15845056  0.04386214  0.44591852  0.219313879
+8   1.25638849  0.56800215  0.36099193  1.21713107  2.58827007  2.625798587
+9   1.72333990  1.23206832  0.85728755  1.46856566  0.96414187  1.727813853
+10  0.82070848  0.07720837  0.68539613  0.09688089  0.53546795  3.173208970
+11 -0.76768088  0.19090395 -1.78952003 -0.38392152  1.24142735  0.545196093
+12  1.07545104 -0.25936876  0.53885499 -0.31556057 -0.68792474 -0.579830827
+13  1.01015581  0.06451805 -0.02824781  0.44599577  0.59696594  0.631218969
+14 -1.37034137 -0.45095500  0.11545863 -0.69690226  0.32964449 -1.402532384
+15  0.99559545  0.32875020  1.01436097  2.35764216  1.09875330  1.802405327
+16 -0.20238817 -0.72994951 -0.86176906 -0.09225865 -0.51242215 -0.331095605
+17  0.21666955 -1.02237424  0.40449006  0.05315416  0.59785483 -0.776030508
+18 -1.52159250 -1.74817829 -0.07381064  0.63360918  0.24545463 -0.756446018
+19  0.34202594 -0.04806707  0.46839685 -0.90487558 -0.51591389  0.176902510
+20 -0.18038904  0.56532246 -0.19068830 -1.59128370 -0.99797826 -1.614007097
+> attr(dat2, "latentVar")
+            f1            f2           y1          y2          y3           y4
+1  -2.31001434 -3.868507e-01 -0.260756127 -0.95413322 -0.70329237 -1.043913788
+2  -0.55500241 -2.661121e+00  0.739370954  0.04660954 -0.92026382 -0.182514653
+3   0.15045914  1.057904e+00 -0.007171006  0.43381004 -0.35930671 -0.621320945
+4  -0.06632052 -2.731410e-01 -0.513397720 -0.66312300 -0.66158496 -0.304603252
+5  -0.07145367  1.327265e+00  1.154174508 -0.61202657 -0.36362781  0.452373012
+6  -2.02970970 -7.252126e-01  0.875860007  1.46314841 -0.69824741  1.214021889
+7   0.33942286  7.941808e-05  0.530315224 -1.12565592 -0.07914545  0.043806552
+8   0.62576012  1.565534e+00  0.818356407  0.12997007 -0.07704015  0.121257403
+9   1.25231939  9.611592e-01  0.846716330  0.35544475 -0.01933602  0.795754184
+10  0.52432224  8.200479e-01  0.453682911 -0.28981720  0.31837056 -0.477152624
+11 -1.32652447  4.307086e-01  0.160886242  1.11947108 -0.86095291 -0.685417507
+12  0.16740172  1.127173e-01  0.958269834 -0.37654996  0.42167378 -0.394462716
+13  0.26323558  6.529701e-01  0.825890901 -0.11974686 -0.21251272 -0.011083303
+14 -0.58462674 -6.378052e-01 -0.961102653 -0.04171629  0.52469735 -0.250438609
+15  2.29354369  2.220951e+00 -0.609885131 -1.27673039 -0.59111962  0.802976753
+16 -0.62374415  1.105862e-01  0.234232738 -0.29332860 -0.42514816 -0.169668980
+17  0.61684306  7.854199e-02 -0.215120591 -1.45416438 -0.02730009 -0.001825232
+18 -1.36156616 -5.137648e-01 -0.568496190 -0.79508198  0.87928567  0.993244514
+19 -0.13820081  3.440464e-01  0.438766506  0.04867350  0.56513741 -1.145708071
+20  0.57376045 -1.078350e+00 -0.582021360  0.16369014 -0.59232062 -0.836438829
+             y5          y6
+1   1.707213241  0.04934341
+2  -0.109490421  0.98655566
+3   0.938880936  1.61411693
+4  -0.937168784  0.19662516
+5  -0.004047685 -0.29621972
+6   0.497647483  0.70976258
+7   0.445862932  0.21925829
+8   1.492396400  1.52992492
+9   0.291330397  1.05500238
+10 -0.038565567  2.59917546
+11  0.939931359  0.24370010
+12 -0.766826882 -0.65873297
+13  0.139886864  0.17413990
+14  0.776108143 -0.95606874
+15 -0.455912109  0.24773992
+16 -0.589832483 -0.40850593
+17  0.542875439 -0.83100990
+18  0.605089957 -0.39681069
+19 -0.756746382 -0.06392998
+20 -0.243133384 -0.85916223
+> 
 > 
 > 
 > base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
@@ -5554,6 +5640,26 @@ detaching 'package:KernSmooth', 'package:copula'
 > # The number of replications in actual analysis should be much more than 20
 > Output <- sim(20, n=500, Path.Model)
 Loading required package: parallel
+Progress: 1 / 20 
+Progress: 2 / 20 
+Progress: 3 / 20 
+Progress: 4 / 20 
+Progress: 5 / 20 
+Progress: 6 / 20 
+Progress: 7 / 20 
+Progress: 8 / 20 
+Progress: 9 / 20 
+Progress: 10 / 20 
+Progress: 11 / 20 
+Progress: 12 / 20 
+Progress: 13 / 20 
+Progress: 14 / 20 
+Progress: 15 / 20 
+Progress: 16 / 20 
+Progress: 17 / 20 
+Progress: 18 / 20 
+Progress: 19 / 20 
+Progress: 20 / 20 
 > 
 > # Plot the distribution of population misfit
 > plotMisfit(Output)
@@ -6060,6 +6166,11 @@ $missRaw
 > # In reality, more than 5 replications are needed.
 > Output <- sim(5, CFA.Model, n=200)
 Loading required package: parallel
+Progress: 1 / 5 
+Progress: 2 / 5 
+Progress: 3 / 5 
+Progress: 4 / 5 
+Progress: 5 / 5 
 > summary(Output)
 RESULT OBJECT
 Model Type
@@ -6156,6 +6267,11 @@ Number of nonconverged replications:
 + "
 > 
 > Output <- sim(5, model=analysisModel, n=200, generate=popModel, std.lv=TRUE, lavaanfun = "cfa")
+Progress: 1 / 5 
+Progress: 2 / 5 
+Progress: 3 / 5 
+Progress: 4 / 5 
+Progress: 5 / 5 
 > summary(Output)
 RESULT OBJECT
 Model Type
@@ -6227,6 +6343,12 @@ Number of nonconverged replications:
 + "
 > 
 > Output <- sim(5, model=covModel, n=200, rawData=pop, lavaanfun = "cfa")
+Progress: 1 / 6 
+Progress: 2 / 6 
+Progress: 3 / 6 
+Progress: 4 / 6 
+Progress: 5 / 6 
+Progress: 6 / 6 
 > summary(Output)
 RESULT OBJECT
 Model Type
@@ -6278,6 +6400,11 @@ Number of nonconverged replications:
 > 
 > # In reality, more than 5 replications are needed.
 > Output <- sim(5, CFA.Model,n=200,datafun=fun1, outfun=fun2)
+Progress: 1 / 5 
+Progress: 2 / 5 
+Progress: 3 / 5 
+Progress: 4 / 5 
+Progress: 5 / 5 
 > summary(Output)
 RESULT OBJECT
 Model Type
@@ -6590,6 +6717,40 @@ Number of nonconverged replications:
 44  f2 ~1        NA     NA      NA       NA       NA
 
 > 
+> # Example of additional output: Comparing latent variable correlation
+> 
+> outfundata <- function(out, data) {
++ 	predictcor <- inspect(out, "coef")$psi[2, 1]
++ 	latentvar <- attr(data, "latentVar")[,c("f1", "f2")]
++ 	latentcor <- cor(latentvar)[2,1]
++ 	latentcor - predictcor
++ }
+> 
+> Output <- sim(5, CFA.Model,n=200, sequential = TRUE, saveLatentVar = TRUE, 
++ 	outfundata = outfundata)
+Progress: 1 / 5 
+Progress: 2 / 5 
+Progress: 3 / 5 
+Progress: 4 / 5 
+Progress: 5 / 5 
+> 	
+> getExtraOutput(Output)
+[[1]]
+[1] -0.01218443
+
+[[2]]
+[1] -0.1084644
+
+[[3]]
+[1] 0.159233
+
+[[4]]
+[1] 0.0732529
+
+[[5]]
+[1] 0.01852433
+
+> 
 > # Example of analyze using a function
 > 
 > analyzeFUN <- function(data) {
@@ -6602,6 +6763,12 @@ Number of nonconverged replications:
 + }
 > 
 > Output <- sim(5, model=analyzeFUN, n=200, rawData=pop, lavaanfun = "cfa")
+Progress: 1 / 6 
+Progress: 2 / 6 
+Progress: 3 / 6 
+Progress: 4 / 6 
+Progress: 5 / 6 
+Progress: 6 / 6 
 > summary(Output)
 RESULT OBJECT
 Model Type
@@ -6718,6 +6885,11 @@ detaching 'package:parallel'
 > # In reality, more replications are needed.
 > Output <- sim(5, n=500, CFA.Model)
 Loading required package: parallel
+Progress: 1 / 5 
+Progress: 2 / 5 
+Progress: 3 / 5 
+Progress: 4 / 5 
+Progress: 5 / 5 
 > 
 > # Summarize the sample fit indices
 > summaryFit(Output)
@@ -6833,6 +7005,11 @@ Class:      logical         list
 > # In reality, more replications are needed.
 > Output <- sim(5, n=500, CFA.Model)
 Loading required package: parallel
+Progress: 1 / 5 
+Progress: 2 / 5 
+Progress: 3 / 5 
+Progress: 4 / 5 
+Progress: 5 / 5 
 > 
 > # Summary of the parameter estimates
 > summaryParam(Output)
@@ -6915,25 +7092,25 @@ y3~1   0.01881353          0.00 -0.048035069      1.0         -Inf -2.55973024
 y4~1   0.05627538          0.00 -0.030141352      1.0           NA -0.55356983
 y5~1   0.03319385          0.00 -0.025018328      1.0           NA -0.68951235
 y6~1   0.04189960          0.00  0.004855082      1.0           NA  0.11441035
-       Rel.SE.Bias Average.CI.Width SD.CI.Width
-f1=~y1   1.3371495        0.1632157 0.002311520
-f1=~y2  -0.1659970        0.1636247 0.003617771
-f1=~y3  -0.1018035        0.1620544 0.005697448
-f1=~y4  -0.2693639        0.1622902 0.004130256
-f1=~y5  -0.4712258        0.1624265 0.006783409
-f1=~y6  -0.2191985        0.1633799 0.007649489
-y1~~y1   0.1732233        0.1511192 0.005507252
-y2~~y2   2.1531712        0.1539716 0.004420731
-y3~~y3  -0.3579826        0.1513664 0.013697769
-y4~~y4  -0.1611753        0.1501380 0.009877487
-y5~~y5   1.1127146        0.1493696 0.008826088
-y6~~y6  -0.1904634        0.1510911 0.013686746
-y1~1    -0.2292997        0.1737545 0.003316927
-y2~1     0.1516589        0.1723417 0.006797852
-y3~1     1.3170403        0.1704417 0.004714396
-y4~1    -0.1942711        0.1719718 0.005045194
-y5~1     0.2177974        0.1732086 0.010807951
-y6~1     0.0473250        0.1742171 0.009647714
+       Rel.SE.Bias Not.Cover.Below Not.Cover.Above Average.CI.Width SD.CI.Width
+f1=~y1   1.3371495             0.0             0.0        0.1632157 0.002311520
+f1=~y2  -0.1659970             0.0             0.0        0.1636247 0.003617771
+f1=~y3  -0.1018035             0.0             0.2        0.1620544 0.005697448
+f1=~y4  -0.2693639             0.0             0.0        0.1622902 0.004130256
+f1=~y5  -0.4712258             0.2             0.0        0.1624265 0.006783409
+f1=~y6  -0.2191985             0.0             0.2        0.1633799 0.007649489
+y1~~y1   0.1732233             0.0             0.0        0.1511192 0.005507252
+y2~~y2   2.1531712             0.0             0.0        0.1539716 0.004420731
+y3~~y3  -0.3579826             0.2             0.2        0.1513664 0.013697769
+y4~~y4  -0.1611753             0.0             0.0        0.1501380 0.009877487
+y5~~y5   1.1127146             0.0             0.0        0.1493696 0.008826088
+y6~~y6  -0.1904634             0.0             0.0        0.1510911 0.013686746
+y1~1    -0.2292997             0.0             0.0        0.1737545 0.003316927
+y2~1     0.1516589             0.0             0.0        0.1723417 0.006797852
+y3~1     1.3170403             0.0             0.0        0.1704417 0.004714396
+y4~1    -0.1942711             0.0             0.0        0.1719718 0.005045194
+y5~1     0.2177974             0.0             0.0        0.1732086 0.010807951
+y6~1     0.0473250             0.0             0.0        0.1742171 0.009647714
 > 
 > 
 > 
@@ -7088,7 +7265,7 @@ detaching 'package:parallel'
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  18 0.37 19.54 NA NA 
+Time elapsed:  17.17 0.19 17.58 NA NA 
 > grDevices::dev.off()
 null device 
           1 

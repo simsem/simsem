@@ -4,13 +4,13 @@
 
 generate <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "f0", 
     averageNumMisspec = FALSE, optMisfit = NULL, optDraws = 50, createOrder = c(1, 2, 3), indDist = NULL, sequential = FALSE, 
-    facDist = NULL, errorDist = NULL, indLab = NULL, modelBoot = FALSE, realData = NULL, covData = NULL, 
+    facDist = NULL, errorDist = NULL, saveLatentVar = FALSE, indLab = NULL, modelBoot = FALSE, realData = NULL, covData = NULL, 
     params = FALSE, group = NULL, empirical = FALSE, ...) {
 	if(is(model, "SimSem")) {
 		if(!is.null(group)) model@groupLab <- group
 		data <- generateSimSem(model = model, n = n, maxDraw = maxDraw, misfitBounds = misfitBounds, misfitType = misfitType, 
 			averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, createOrder = createOrder, indDist = indDist, sequential = sequential, 
-			facDist = facDist, errorDist = errorDist, indLab = indLab, modelBoot = modelBoot, realData = realData, covData = covData, 
+			facDist = facDist, errorDist = errorDist, saveLatentVar = saveLatentVar, indLab = indLab, modelBoot = modelBoot, realData = realData, covData = covData, 
 			params = params, empirical = empirical)
 	} else if (is(model, "MxModel")) {
 		data <- generateMx(object = model, n = n, indDist = indDist, groupLab = group, covData = covData, empirical = empirical)
@@ -39,7 +39,7 @@ generate <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "
 
 generateSimSem <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "f0", 
     averageNumMisspec = FALSE, optMisfit = NULL, optDraws = 50, createOrder = c(1, 2, 3), indDist = NULL, sequential = FALSE, 
-    facDist = NULL, errorDist = NULL, indLab = NULL, modelBoot = FALSE, realData = NULL, covData = NULL, 
+    facDist = NULL, errorDist = NULL, saveLatentVar = FALSE, indLab = NULL, modelBoot = FALSE, realData = NULL, covData = NULL, 
     params = FALSE, empirical = FALSE) {
     if (is.null(indLab)) {
         if (model@modelType == "path") {
@@ -117,13 +117,27 @@ generateSimSem <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitTy
 	# covariates must be separated into different groups
 	# realData must not contain covariates
     datal <- mapply(FUN = createData, draws, indDist, facDist, errorDist, n = n, realData = realDataGroup, 
-		covData = covDataGroup, MoreArgs = list(sequential = sequential, modelBoot = modelBoot, indLab = indLab, empirical = empirical), 
+		covData = covDataGroup, MoreArgs = list(sequential = sequential, saveLatentVar = saveLatentVar, modelBoot = modelBoot, indLab = indLab, empirical = empirical), 
         SIMPLIFY = FALSE)
-    data <- do.call("rbind", datal)
+	data <- NULL
+	extra <- NULL
+	if(saveLatentVar) {
+		data <- lapply(datal, "[[", 1)
+		extra <- lapply(datal, "[[", 2)
+		data <- do.call("rbind", data)
+		extra <- do.call("rbind.fill", extra)
+	} else {
+		data <- do.call("rbind", datal)
+	}
 	if(ngroups > 1) {
 		data <- cbind(data, group = rep(1:ngroups, n))
 		colnames(data)[ncol(data)] <- model@groupLab
+		if(saveLatentVar) {
+			extra <- cbind(extra, group = rep(1:ngroups, n))
+			colnames(extra)[ncol(extra)] <- model@groupLab
+		}
     }
+	if(saveLatentVar) attr(data, "latentVar") <- extra
     if (params) {
         return(list(data = data, psl = draws))
     } else {
@@ -471,7 +485,7 @@ lavaanSimulateData <- function(
     RNGstate <- .Random.seed
 	if(!is.list(model)) {
 		# lavaanify
-		lav <- lavaanify(model = model,
+		lav <- lavaan::lavaanify(model = model,
 						 meanstructure=meanstructure,
 						 int.ov.free=int.ov.free,
 						 int.lv.free=int.lv.free,
@@ -884,3 +898,181 @@ HeadrickSawilowsky1999 <- function(n=100L, COR, skewness, kurtosis) {
     X
 }
 
+####### The following functions are copied from the plyr package.
+
+rbind.fill <- function (...) 
+{
+    dfs <- list(...)
+    if (length(dfs) == 0) 
+        return()
+    if (is.list(dfs[[1]]) && !is.data.frame(dfs[[1]])) {
+        dfs <- dfs[[1]]
+    }
+    dfs <- compact(dfs)
+    if (length(dfs) == 0) 
+        return()
+    if (length(dfs) == 1) 
+        return(dfs[[1]])
+    is_df <- vapply(dfs, is.data.frame, logical(1))
+    if (any(!is_df)) {
+        stop("All inputs to rbind.fill must be data.frames", 
+            call. = FALSE)
+    }
+    rows <- unlist(lapply(dfs, .row_names_info, 2L))
+    nrows <- sum(rows)
+    ot <- output_template(dfs, nrows)
+    setters <- ot$setters
+    getters <- ot$getters
+    if (length(setters) == 0) {
+        return(as.data.frame(matrix(nrow = nrows, ncol = 0)))
+    }
+    pos <- matrix(c(cumsum(rows) - rows + 1, rows), ncol = 2)
+    for (i in seq_along(rows)) {
+        rng <- seq(pos[i, 1], length = pos[i, 2])
+        df <- dfs[[i]]
+        for (var in names(df)) {
+            setters[[var]](rng, df[[var]])
+        }
+    }
+    quickdf(lapply(getters, function(x) x()))
+}
+
+quickdf <- function (list) 
+{
+    rows <- unique(unlist(lapply(list, NROW)))
+    stopifnot(length(rows) == 1)
+    names(list) <- make_names(list, "X")
+    class(list) <- "data.frame"
+    attr(list, "row.names") <- c(NA_integer_, -rows)
+    list
+}
+
+compact <- function (l) Filter(Negate(is.null), l)
+
+output_template <- function (dfs, nrows) 
+{
+    vars <- unique(unlist(lapply(dfs, base::names)))
+    output <- vector("list", length(vars))
+    names(output) <- vars
+    seen <- rep(FALSE, length(output))
+    names(seen) <- vars
+    for (df in dfs) {
+        matching <- intersect(names(df), vars[!seen])
+        for (var in matching) {
+            output[[var]] <- allocate_column(df[[var]], nrows, 
+                dfs, var)
+        }
+        seen[matching] <- TRUE
+        if (all(seen)) 
+            break
+    }
+    list(setters = lapply(output, `[[`, "set"), getters = lapply(output, 
+        `[[`, "get"))
+}
+
+allocate_column <- function (example, nrows, dfs, var) 
+{
+    a <- attributes(example)
+    type <- typeof(example)
+    class <- a$class
+    isList <- is.recursive(example)
+    a$names <- NULL
+    a$class <- NULL
+    if (is.data.frame(example)) {
+        stop("Data frame column '", var, "' not supported by rbind.fill")
+    }
+    if (is.array(example)) {
+        if (length(dim(example)) > 1) {
+            if ("dimnames" %in% names(a)) {
+                a$dimnames[1] <- list(NULL)
+                if (!is.null(names(a$dimnames))) 
+                  names(a$dimnames)[1] <- ""
+            }
+            df_has <- vapply(dfs, function(df) var %in% names(df), 
+                FALSE)
+            dims <- unique(lapply(dfs[df_has], function(df) dim(df[[var]])[-1]))
+            if (length(dims) > 1) 
+                stop("Array variable ", var, " has inconsistent dims")
+            a$dim <- c(nrows, dim(example)[-1])
+            length <- prod(a$dim)
+        }
+        else {
+            a$dim <- NULL
+            a$dimnames <- NULL
+            length <- nrows
+        }
+    }
+    else {
+        length <- nrows
+    }
+    if (is.factor(example)) {
+        df_has <- vapply(dfs, function(df) var %in% names(df), 
+            FALSE)
+        isfactor <- vapply(dfs[df_has], function(df) is.factor(df[[var]]), 
+            FALSE)
+        if (all(isfactor)) {
+            levels <- unique(unlist(lapply(dfs[df_has], function(df) levels(df[[var]]))))
+            a$levels <- levels
+            handler <- "factor"
+        }
+        else {
+            type <- "character"
+            handler <- "character"
+            class <- NULL
+            a$levels <- NULL
+        }
+    }
+    else if (inherits(example, "POSIXt")) {
+        tzone <- attr(example, "tzone")
+        class <- c("POSIXct", "POSIXt")
+        type <- "double"
+        handler <- "time"
+    }
+    else {
+        handler <- type
+    }
+    column <- vector(type, length)
+    if (!isList) {
+        column[] <- NA
+    }
+    attributes(column) <- a
+    assignment <- make_assignment_call(length(a$dim))
+    setter <- switch(handler, character = function(rows, what) {
+        what <- as.character(what)
+        eval(assignment)
+    }, factor = function(rows, what) {
+        what <- match(what, levels)
+        eval(assignment)
+    }, time = function(rows, what) {
+        what <- as.POSIXct(what, tz = tzone)
+        eval(assignment)
+    }, function(rows, what) {
+        eval(assignment)
+    })
+    getter <- function() {
+        class(column) <<- class
+        column
+    }
+    list(set = setter, get = getter)
+}
+
+make_assignment_call <- function (ndims) 
+{
+    assignment <- quote(column[rows] <<- what)
+    if (ndims >= 2) {
+        assignment[[2]] <- as.call(c(as.list(assignment[[2]]), 
+            rep(list(quote(expr = )), ndims - 1)))
+    }
+    assignment
+}
+
+make_names <- function (x, prefix = "X") 
+{
+    nm <- names(x)
+    if (is.null(nm)) {
+        nm <- rep.int("", length(x))
+    }
+    n <- sum(nm == "", na.rm = TRUE)
+    nm[nm == ""] <- paste(prefix, seq_len(n), sep = "")
+    nm
+}

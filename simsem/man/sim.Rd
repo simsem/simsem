@@ -8,14 +8,16 @@
 }
 \usage{
 sim(nRep, model, n, generate = NULL, ..., rawData = NULL, miss = NULL, datafun=NULL, 
-	lavaanfun = "lavaan", outfun=NULL, pmMCAR = NULL, pmMAR = NULL, facDist = NULL, 
-	indDist = NULL, errorDist = NULL, sequential = FALSE, modelBoot = FALSE, 
-	realData = NULL, covData = NULL, maxDraw = 50, misfitType = "f0", 
-	misfitBounds = NULL, averageNumMisspec = FALSE, optMisfit=NULL, optDraws = 50, 
+	lavaanfun = "lavaan", outfun=NULL, outfundata = NULL, pmMCAR = NULL, 
+	pmMAR = NULL, 	facDist = NULL, indDist = NULL, errorDist = NULL, 
+	sequential = FALSE, saveLatentVar = FALSE, modelBoot = FALSE, realData = NULL, 
+	covData = NULL, maxDraw = 50, misfitType = "f0", misfitBounds = NULL, 
+	averageNumMisspec = FALSE, optMisfit=NULL, optDraws = 50, 
 	createOrder = c(1, 2, 3), aux = NULL, group = NULL, mxFit = FALSE, 
 	mxMixture = FALSE, citype = NULL, cilevel = 0.95, seed = 123321, silent = FALSE, 
-	multicore = FALSE, cluster = FALSE, numProc = NULL, paramOnly = FALSE, 
-	dataOnly=FALSE, smartStart=FALSE, previousSim = NULL, completeRep = FALSE)
+	multicore = options('simsem.multicore')[[1]], cluster = FALSE, 
+	numProc = NULL, paramOnly = FALSE, dataOnly=FALSE, smartStart=FALSE, 
+	previousSim = NULL, completeRep = FALSE, stopOnError = FALSE)
 }
 \arguments{
   \item{nRep}{
@@ -45,6 +47,9 @@ sim(nRep, model, n, generate = NULL, ..., rawData = NULL, miss = NULL, datafun=N
   \item{outfun}{
 	A function to be applied to the \code{\linkS4class{lavaan}} output at each replication. Output from this function in each replication will be saved in the simulation output (\code{\linkS4class{SimResult}}), and can be obtained using the \code{\link{getExtraOutput}} function.
 }
+  \item{outfundata}{
+	A function to be applied to the \code{\linkS4class{lavaan}} output and the generated data at each replication. Users can get the characteristics of the generated data and also compare the characteristics with the generated output. The output from this function in each replication will be saved in the simulation output (\code{\linkS4class{SimResult}}), and can be obtained using the \code{\link{getExtraOutput}} function.
+}
   \item{pmMCAR}{
 	The percentage of data completely missing at random (0 <= pmMCAR < 1). Either a single value or a vector of values in order to vary pmMCAR across replications (with length equal to nRep or a divisor of nRep). The \code{objMissing} argument is only required when specifying complex missing value data generation, or when using multiple imputation. 
 }
@@ -63,6 +68,9 @@ sim(nRep, model, n, generate = NULL, ..., rawData = NULL, miss = NULL, datafun=N
 }
   \item{sequential}{ 
 	If \code{TRUE}, a sequential method is used to generate data in which factor data is generated first, and is subsequently applied to a set of equations to obtain the indicator data. If \code{FALSE}, data is generated directly from model-implied mean and covariance of the indicators.
+}
+  \item{saveLatentVar}{ 
+	If \code{TRUE}, the generated latent variable scores and measurement error scores are also provided as the attribute of the generated data. Users can use the \code{outfundata} to compare the latent variable scores with the estimated output. The \code{sequential} argument must be \code{TRUE} in order to use this option.
 }
   \item{modelBoot}{ 
 	 When specified, a model-based bootstrap is used for data generation (for use with the \code{realData} argument). See \code{\link{draw}} for further information.
@@ -119,7 +127,7 @@ sim(nRep, model, n, generate = NULL, ..., rawData = NULL, miss = NULL, datafun=N
 	If \code{TRUE}, suppress warnings.
 }
   \item{multicore}{ 
-	If \code{TRUE}, multiple processors within a computer will be utilized.
+	Users may put \code{TRUE} or \code{FALSE}. If \code{TRUE}, multiple processors within a computer will be utilized. The default value is \code{FALSE}. Users may permanently change the default value by assigning the following line: \code{options('simsem.multicore' = TRUE)}
 }
   \item{cluster}{ 
 	Not applicable now. Used to specify nodes in hpc in order to be parallelizable.
@@ -141,6 +149,9 @@ sim(nRep, model, n, generate = NULL, ..., rawData = NULL, miss = NULL, datafun=N
 }
   \item{completeRep}{
 	If \code{TRUE}, the function will run until the number of convergent replication equal to the specified \code{nRep}.
+}
+  \item{stopOnError}{ 
+	If \code{TRUE}, stop running the simulation when the error occurs during the data analysis on any replications.
 }
   \item{\dots}{ 
 	Additional arguments to be passed to lavaan.
@@ -257,6 +268,20 @@ Output <- sim(5, CFA.Model,n=200,datafun=fun1, outfun=fun2)
 summary(Output)
 
 # Get modification indices
+getExtraOutput(Output)
+
+# Example of additional output: Comparing latent variable correlation
+
+outfundata <- function(out, data) {
+	predictcor <- inspect(out, "coef")$psi[2, 1]
+	latentvar <- attr(data, "latentVar")[,c("f1", "f2")]
+	latentcor <- cor(latentvar)[2,1]
+	latentcor - predictcor
+}
+
+Output <- sim(5, CFA.Model,n=200, sequential = TRUE, saveLatentVar = TRUE, 
+	outfundata = outfundata)
+	
 getExtraOutput(Output)
 
 # Example of analyze using a function

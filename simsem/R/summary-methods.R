@@ -254,6 +254,7 @@ cleanUsedFit <- function(txt, ...) {
 		txt
 	}
 	if(length(arg) > 0) {
+		LIST <- list(...)
 		txt <- intersection(txt, ...)
 		if(length(txt) == 0) {
 			if(is.null(txtOrig)) {

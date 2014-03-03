@@ -8,7 +8,7 @@
 ## is generated.
 
 createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist = NULL, 
-    errorDist = NULL, indLab = NULL, modelBoot = FALSE, realData = NULL, covData = NULL,
+    errorDist = NULL, saveLatentVar = FALSE, indLab = NULL, modelBoot = FALSE, realData = NULL, covData = NULL,
 	empirical = FALSE) {
 	
 	# Assume covData is good
@@ -41,6 +41,7 @@ createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist 
     # soon
     
     Data <- NULL
+	ExtraData <- NULL
     param <- paramSet$param
     usedParam <- NULL
     if (!is.null(paramSet$misspec)) {
@@ -65,12 +66,16 @@ createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist 
         Data <- z[index, ]
     } else {
         if (sequential) {
+			latentVariableScore <- NULL
+			measurementErrorScore <- NULL
             if (is.null(usedParam$BE) && !is.null(usedParam$LY)) {
                 # CFA
                 fac <- dataGen(facDist, n, usedParam$AL, usedParam$PS, empirical = empirical)
+				latentVariableScore <- fac
 				if(!is.null(covData)) fac <- fac + (as.matrix(covData) %*% t(usedParam$GA))
                 trueScore <- fac %*% t(usedParam$LY)
                 errorScore <- dataGen(errorDist, n, usedParam$TY, usedParam$TE, empirical = empirical)
+				measurementErrorScore <- errorScore
                 Data <- trueScore + errorScore
 				if(!is.null(covData)) Data <- Data + (as.matrix(covData) %*% t(usedParam$KA))
             } else {
@@ -85,12 +90,16 @@ createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist 
                 iv <- set[[1]]
                 fac <- dataGen(extractSimDataDist(facDist, iv), n, usedParam2$AL[iv], 
                   usedParam2$PS[iv, iv], empirical = empirical)
-				if(!is.null(covData)) fac <- fac + (as.matrix(covData) %*% t(usedParam2$GA[iv, ,drop=FALSE]))
+				latentVariableScore <- fac
+				if(!is.null(covData)) {
+					fac <- fac + (as.matrix(covData) %*% t(usedParam2$GA[iv, ,drop=FALSE]))
+				}
                 for (i in 2:length(set)) {
                   dv <- set[[i]]
                   pred <- fac %*% t(usedParam2$BE[dv, iv, drop = FALSE])
                   res <- dataGen(extractSimDataDist(facDist, dv), n, usedParam2$AL[dv], 
                     usedParam2$PS[dv, dv], empirical = empirical)
+				  latentVariableScore <- cbind(latentVariableScore, res)
                   new <- pred + res
 				  if(!is.null(covData)) new <- new + (as.matrix(covData) %*% t(usedParam2$GA[dv, ,drop=FALSE]))
                   fac <- cbind(fac, new)
@@ -103,11 +112,25 @@ createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist 
                   # SEM
                   trueScore <- fac %*% t(usedParam2$LY)
                   errorScore <- dataGen(errorDist, n, usedParam2$TY, usedParam2$TE, empirical = empirical)
+				  measurementErrorScore <- errorScore
                   Data <- trueScore + errorScore
 				  if(!is.null(covData)) Data <- Data + (as.matrix(covData) %*% t(usedParam2$KA))
                 }
             }
 			if(!is.null(covData)) Data <- data.frame(covData, Data)
+			if(saveLatentVar) {
+				if(!is.null(usedParam$LY)) {
+					colnames(latentVariableScore) <- paste0("f", 1:ncol(latentVariableScore))
+					errorName <- indLab
+					if(is.null(errorName)) errorName <- paste0("y", 1:ncol(measurementErrorScore))
+					colnames(measurementErrorScore) <- errorName
+				} else {
+					errorName <- indLab
+					if(is.null(errorName)) errorName <- paste0("y", 1:ncol(latentVariableScore))
+					colnames(latentVariableScore) <- errorName
+				}
+				ExtraData <- data.frame(latentVariableScore, measurementErrorScore)
+			}
         } else {
 			# Covariance matrix based data generation
 			if(is.null(covData)) {
@@ -141,6 +164,7 @@ createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist 
 	}
     colnames(Data) <- varnames
     Data <- as.data.frame(Data)
+	if(saveLatentVar) Data <- list(Data, ExtraData)
     return(Data)
 }
 

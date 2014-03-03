@@ -5,8 +5,8 @@
 plotCutoffDataFrame <- function(object, 
     cutoff = NULL, revDirec = FALSE, usedFit = NULL, vector1 = NULL, vector2 = NULL, 
     nameVector1 = NULL, nameVector2 = NULL, alpha = NULL, useContour = TRUE, cutoff2 = NULL) {
-	usedFit <- cleanUsedFit(usedFit, colnames(object))
-    object <- as.data.frame(object[, usedFit])
+	usedFit <- cleanUsedFit(usedFit, tolower(colnames(object)))
+    object <- as.data.frame(object[, match(usedFit, tolower(colnames(object)))])
 	if(!is.null(cutoff)) {
 		names(cutoff) <- cleanUsedFit(names(cutoff))
 		cutoff <- cutoff[usedFit]

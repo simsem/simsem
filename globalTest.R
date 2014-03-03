@@ -153,6 +153,8 @@ test.overall <- function() {
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/exMultipleFormat/singleGroup.R"), "Multiple format sim (Single Group)", subFrom = "totalRep <- 1000", subTo = "totalRep <- 10", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/exMultipleFormat/multipleGroup.R"), "Multiple format sim (Multiple Group)", subFrom = "totalRep <- 1000", subTo = "totalRep <- 5", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/exMultipleFormat/covData.R"), "Covariate effect", subFrom = "sim\\(1000", subTo = "sim\\(20", result = result)
+	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/exMultipleFormat/latentScores.R"), "Latent Scores", subFrom = "sim\\(1000", subTo = "sim\\(20", result = result)
+	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/exMultipleFormat/ciWidth.R"), "CI Width", subFrom = "200:500", subTo = "seq\\(200, 500, 10\\)", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/exMultipleFormat/ordered.R"), "Ordered Data", subFrom = c("sim\\(1000", "50:1000"), subTo = c("sim\\(20", "seq\\(50, 1000, 50\\)"), result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/exMultipleFormat/completeRep.R"), "Complete Reps", subFrom = NULL, subTo = NULL, result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/exMultipleFormat/bootci.R"), "Bootstrap", subFrom = c("sim\\(1000", "50:500"), subTo = c("sim\\(10", "seq\\(50, 1000, 50\\)"), result = result)

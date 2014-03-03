@@ -1153,6 +1153,12 @@ CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
 
 dat <- generate(CFA.Model, 200)
 
+# Get the latent variable scores
+
+dat2 <- generate(CFA.Model, 20, sequential = TRUE, saveLatentVar = TRUE)
+dat2
+attr(dat2, "latentVar")
+
 
 
 base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
@@ -3158,6 +3164,20 @@ Output <- sim(5, CFA.Model,n=200,datafun=fun1, outfun=fun2)
 summary(Output)
 
 # Get modification indices
+getExtraOutput(Output)
+
+# Example of additional output: Comparing latent variable correlation
+
+outfundata <- function(out, data) {
+	predictcor <- inspect(out, "coef")$psi[2, 1]
+	latentvar <- attr(data, "latentVar")[,c("f1", "f2")]
+	latentcor <- cor(latentvar)[2,1]
+	latentcor - predictcor
+}
+
+Output <- sim(5, CFA.Model,n=200, sequential = TRUE, saveLatentVar = TRUE, 
+	outfundata = outfundata)
+	
 getExtraOutput(Output)
 
 # Example of analyze using a function
