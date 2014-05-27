@@ -458,7 +458,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ..., rawDa
 				}
 			}
 			param <- pt$ustart
-			names(param) <- lavaan:::getParameterLabels(pt)
+			names(param) <- names(coef(lavaan(pt, sample.nobs=rep(200, max(pt$group))), type="user"))
 			param <- as.data.frame(t(param))
 		} else if (mxGenerate | (is.null(generate) & is(model, "MxModel"))) {
 			if(is.null(generate)) generate <- model
@@ -949,7 +949,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 				cilower <- result$ci.lower[index]
 				ciupper <- result$ci.upper[index]
 				FMI1 <- result$fmi[index]
-				lab <- lavaan:::getParameterLabels(outpt, type="free")
+				lab <- names(coef(lavaan(outpt, sample.nobs=rep(200, max(outpt$group)))))
 				if(any(extraParamIndex)) {
 					if(!is.lavaancall(model)) {
 						lab <- c(lab, renameExtraParam(model@con$lhs, model@con$op, model@con$rhs))
@@ -1012,7 +1012,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 			}
 			index <- ((generate@pt$free != 0)& !(duplicated(generate@pt$free))) | extraParamIndex
 			popParam <- popParam[index]
-			names(popParam) <- c(lavaan:::getParameterLabels(generate@pt, type="free"), extraParamName)
+			names(popParam) <- c(names(coef(lavaan(generate@pt, sample.nobs=rep(200, max(generate@pt$group))))), extraParamName)
 		} else {
 			popParam <- NA  # Real Data
 			popMis <- NA  # Misspecfication

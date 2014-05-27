@@ -24,6 +24,8 @@ sourceDir <- function(path, trace = TRUE, ...) {
      }
 }
 
+options("simsem.multicore" = FALSE)
+
 # dir2 <- "C:/Users/student/Desktop/lavaan/R/"
  # source(paste(dir2, "00Class.R", sep=""))
  # source(paste(dir2, "00Generic.R", sep=""))

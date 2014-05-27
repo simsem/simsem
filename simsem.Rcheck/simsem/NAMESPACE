@@ -7,7 +7,7 @@ exportClasses(SimMatrix,
 	SimDataDist, 
 	SimMissing)
 exportMethods(summary, summaryShort, 
-	inspect, coef,
+	coef,
 	anova)
 export(bindDist, rawDraw,
 	model, model.cfa, model.path, model.sem,

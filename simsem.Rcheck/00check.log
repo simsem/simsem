@@ -4,7 +4,7 @@
 * using session charset: ISO8859-1
 * checking for file 'simsem/DESCRIPTION' ... OK
 * checking extension type ... Package
-* this is package 'simsem' version '0.5-5'
+* this is package 'simsem' version '0.5-6'
 * checking CRAN incoming feasibility ... OK
 Maintainer: 'Sunthud Pornprasertmanit <psunthud@ku.edu>'
 * checking package namespace information ... OK
@@ -47,7 +47,7 @@ Maintainer: 'Sunthud Pornprasertmanit <psunthud@ku.edu>'
 * checking examples ... OK
 Examples with CPU or elapsed time > 5s
     user system elapsed
-sim  5.4   0.08    6.04
+sim 5.71   0.06    6.14
 * checking PDF version of manual ... WARNING
 LaTeX errors when creating PDF version.
 This typically indicates Rd problems.

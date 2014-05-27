@@ -417,7 +417,7 @@ setPopulation <- function(target, population) {
 	}
 	index <- ((population@pt$free != 0)& !(duplicated(population@pt$free))) | extraParamIndex
 	popParam <- popParam[index]
-	names(popParam) <- c(lavaan:::getParameterLabels(population@pt, type="free"), extraParamName)
+	names(popParam) <- c(names(coef(lavaan(population@pt, sample.nobs=rep(200, max(population@pt$group))))), extraParamName)
     return(popParam)
 } 
 

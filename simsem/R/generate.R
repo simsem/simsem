@@ -534,10 +534,10 @@ lavaanSimulateData <- function(
         # here??
         lav2 <- lav
         ngroups <- max(lav$group)
-        ov.names <- lavaan:::vnames(lav, "ov")
-        ov.nox <- lavaan:::vnames(lav, "ov.nox")
-        lv.names <- lavaan:::vnames(lav, "lv")
-        lv.y <- lavaan:::vnames(lav, "lv.y")
+        ov.names <- lavNames(lav, "ov")
+        ov.nox <- lavNames(lav, "ov.nox")
+        lv.names <- lavNames(lav, "lv")
+        lv.y <- lavNames(lav, "lv.y")
         ov.var.idx <- which(lav$op == "~~" & lav$lhs %in% ov.nox &
                             lav$rhs == lav$lhs)
         lv.var.idx <- which(lav$op == "~~" & lav$lhs %in% lv.y &
@@ -547,8 +547,8 @@ lavaanSimulateData <- function(
         }
         lav2$ustart[c(ov.var.idx,lv.var.idx)] <- 0.0
         fit <- lavaan(model=lav2, sample.nobs=sample.nobs, ...)
-        Sigma.hat <- lavaan:::computeSigmaHat(fit@Model)
-        ETA <- lavaan:::computeVETA(fit@Model, samplestats=NULL)
+        Sigma.hat <- fitted(fit)$cov
+        ETA <- inspect(fit, "cov.lv")
 
         if(debug) {
             cat("Sigma.hat:\n"); print(Sigma.hat)
@@ -568,7 +568,7 @@ lavaanSimulateData <- function(
 		lav3 <- lav
 		lav3$ustart[c(ov.var.idx)] <- 0.0
 		fit3 <- lavaan(model=lav3, sample.nobs=sample.nobs, ...)
-        Sigma.hat3 <- lavaan:::computeSigmaHat(fit3@Model)
+        Sigma.hat3 <- fitted(fit3)$cov
 
 		for(g in 1:ngroups) {
             var.group <- which(lav$op == "~~" & lav$lhs %in% ov.nox &
@@ -588,7 +588,7 @@ lavaanSimulateData <- function(
         # FIXME: if ov.var is named, check the order of the elements
 
         # 1. unstandardize observed variables
-        lav$ustart <- lavaan:::unstandardize.est.ov(partable=lav, ov.var=ov.var)
+        lav$ustart <- temp.unstandardize.est.ov(partable=lav, ov.var=ov.var)
 
         # 2. unstandardized latent variables
 
@@ -603,12 +603,12 @@ lavaanSimulateData <- function(
     fit <- lavaan(model=lav, sample.nobs=sample.nobs, ...)
 
     # the model-implied moments for the population
-    Sigma.hat <- lavaan:::computeSigmaHat(fit@Model)
-       Mu.hat <- lavaan:::computeMuHat(fit@Model)
+    Sigma.hat <- fitted(fit)$cov
+       Mu.hat <- fitted(fit)$mean
     if(fit@Model@categorical) {
-       TH <- lavaan:::computeTH(fit@Model)
+       TH <- fitted(fit)$th
     }
-
+	
     if(debug) {
         print(Sigma.hat)
         print(Mu.hat)
@@ -617,6 +617,13 @@ lavaanSimulateData <- function(
 	   
    # ngroups
     ngroups <- length(sample.nobs)
+	if(ngroups == 1) {
+		Sigma.hat <- list(Sigma.hat)
+		Mu.hat <- list(Mu.hat)
+		if(fit@Model@categorical) {
+		   TH <- list(TH)
+		}		
+	}
 
     # prepare
     X <- vector("list", length=ngroups)
@@ -631,9 +638,9 @@ lavaanSimulateData <- function(
 		X[[g]] <- as.data.frame(X[[g]])
 
 		# any categorical variables?
-        ov.ord <- lavaan:::vnames(lav, type="ov.ord", group=g)
+        ov.ord <- lavNames(lav, type="ov.ord", group=g)
         if(length(ov.ord) > 0L) {
-            ov.names <- lavaan:::vnames(lav, type="ov", group=g)
+            ov.names <- lavNames(lav, type="ov", group=g)
             # use thresholds to cut
             for(o in ov.ord) {
                 o.idx <- which(o == ov.names)
@@ -655,7 +662,7 @@ lavaanSimulateData <- function(
 		}
 		Data$group <- rep(1:ngroups, times=sample.nobs)
 	}
-	var.names <- lavaan:::vnames(fit@ParTable, type="ov", group=1L)
+	var.names <- lavNames(fit@ParTable, type="ov", group=1L)
 	if(ngroups > 1L) var.names <- c(var.names, "group")
 	names(Data) <- var.names
 	if(return.fit) {
@@ -1075,4 +1082,112 @@ make_names <- function (x, prefix = "X")
     n <- sum(nm == "", na.rm = TRUE)
     nm[nm == ""] <- paste(prefix, seq_len(n), sep = "")
     nm
+}
+
+# Copy from lavaan to avoid using hidden function in lavaan
+
+temp.unstandardize.est.ov <- function(partable, ov.var=NULL, cov.std=TRUE) {
+
+    # check if ustart is missing; if so, look for est
+    if(is.null(partable$ustart)) 
+        partable$ustart <- partable$est
+  
+    # check if group is missing
+    if(is.null(partable$group)) 
+        partable$group <- rep(1L, length(partable$ustart))
+
+    stopifnot(!any(is.na(partable$ustart)))
+    est <- out <- partable$ustart
+    N <- length(est)
+    ngroups <- max(partable$group)
+
+    # if ov.var is NOT a list, make a list
+    if(!is.list(ov.var)) {
+        tmp <- ov.var
+        ov.var <- vector("list", length=ngroups)
+        ov.var[1:ngroups] <- list(tmp)
+    }
+
+    for(g in 1:ngroups) {
+
+        ov.names <- lavNames(partable, "ov", group=g) # not user
+        lv.names <- lavNames(partable, "lv", group=g)
+
+        OV  <- sqrt(ov.var[[g]])
+
+        # 1a. "=~" regular indicators
+        idx <- which(partable$op == "=~" & !(partable$rhs %in% lv.names) &
+                     partable$group == g)
+        out[idx] <- out[idx] * OV[ match(partable$rhs[idx], ov.names) ]
+
+        # 1b. "=~" regular higher-order lv indicators
+
+        # 1c. "=~" indicators that are both in ov and lv
+        #idx <- which(partable$op == "=~" & partable$rhs %in% ov.names
+        #                             & partable$rhs %in% lv.names &
+        #             partable$group == g)
+
+        # 2. "~" regressions (and "<~")
+        idx <- which((partable$op == "~" | partable$op == "<~") & 
+                     partable$lhs %in% ov.names &
+                     partable$group == g)
+        out[idx] <- out[idx] * OV[ match(partable$lhs[idx], ov.names) ]
+
+        idx <- which((partable$op == "~" | partable$op == "<~") & 
+                     partable$rhs %in% ov.names &
+                     partable$group == g)
+        out[idx] <- out[idx] / OV[ match(partable$rhs[idx], ov.names) ]
+
+        # 3a. "~~" ov
+        # ATTENTION: in Mplus 4.1, the off-diagonal residual covariances 
+        #            were computed by the formula cov(i,j) / sqrt(i.var*j.var)
+        #            were i.var and j.var where diagonal elements of OV
+        #
+        #            in Mplus 6.1 (but also AMOS and EQS), the i.var and j.var
+        #            elements are the 'THETA' diagonal elements!!
+
+        # variances
+        rv.idx <- which(partable$op == "~~" & !(partable$lhs %in% lv.names) & 
+                        partable$lhs == partable$rhs &
+                        partable$group == g)
+        out[rv.idx] <- ( out[rv.idx] * OV[ match(partable$lhs[rv.idx], ov.names) ]
+                                     * OV[ match(partable$rhs[rv.idx], ov.names) ] )
+
+        # covariances
+        idx <- which(partable$op == "~~" & !(partable$lhs %in% lv.names) &
+                     partable$lhs != partable$rhs &
+                     partable$group == g)
+        if(length(idx) > 0L) {
+            if(cov.std == FALSE) {
+                out[idx] <- ( out[idx] * OV[ match(partable$lhs[idx], ov.names) ]
+                                       * OV[ match(partable$rhs[idx], ov.names) ] )
+            } else {
+                # RV   <- sqrt(est[rv.idx])
+                RV   <- sqrt(out[rv.idx])
+                rv.names <- partable$lhs[rv.idx]
+                out[idx] <- ( out[idx] * RV[ match(partable$lhs[idx], rv.names) ]
+                                       * RV[ match(partable$rhs[idx], rv.names) ] )
+            }
+        }
+
+        # 3b. "~~" lv
+        #idx <- which(partable$op == "~~" & partable$rhs %in% lv.names &
+        #             partable$group == g)
+
+        # 4a. "~1" ov
+        idx <- which(partable$op == "~1" & !(partable$lhs %in% lv.names) &
+                     partable$group == g)
+        out[idx] <- out[idx] * OV[ match(partable$lhs[idx], ov.names) ]
+
+        # 4b. "~1" lv
+        #idx <- which(partable$op == "~1" & partable$lhs %in% lv.names &
+        #             partable$group == g)
+
+    }
+
+    # 5a ":="
+    # 5b "=="
+    # 5c. "<" or ">"
+
+    out
 }
