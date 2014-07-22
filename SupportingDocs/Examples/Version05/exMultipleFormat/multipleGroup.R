@@ -418,3 +418,53 @@ summary(Output54)
 
 Output55 <- sim(nRep = totalRep, model = FUN, n = list(150, 100), generate = mxTwoGroupModel)
 summary(Output55)
+
+# 6. Create data by a function
+
+datfun <- function(n) {
+	modelImplied1 <- matrix(
+		c(1, 0.49, 0.49, 0.245, 0.245, 0.245,
+		0.49, 1, 0.49, 0.245, 0.245, 0.245,
+		0.49, 0.49, 1, 0.245, 0.245, 0.245,
+		0.245, 0.245, 0.245, 1, 0.49, 0.49, 
+		0.245, 0.245, 0.245, 0.49, 1, 0.49, 
+		0.245, 0.245, 0.245, 0.49, 0.49, 1), 6, 6, byrow=TRUE)
+	modelImplied2 <- matrix(
+		c(1, 0.55, 0.55, 0.245, 0.245, 0.245,
+		0.55, 1, 0.55, 0.245, 0.245, 0.245,
+		0.55, 0.55, 1, 0.245, 0.245, 0.245,
+		0.245, 0.245, 0.245, 1, 0.55, 0.55, 
+		0.245, 0.245, 0.245, 0.55, 1, 0.55, 
+		0.245, 0.245, 0.245, 0.55, 0.55, 1), 6, 6, byrow=TRUE)
+
+	scores1 <- cbind(mvrnorm(n[1], rep(0, 6), modelImplied1), 1)
+	scores2 <- cbind(mvrnorm(n[2], rep(0, 6), modelImplied2), 2)
+	scores <- rbind(scores1, scores2)
+	colnames(scores) <- c(paste0("y", 1:6), "group")
+	scores
+}
+
+# 6.1 Analyze by simsem model template
+
+Output61 <- sim(nRep = totalRep, model = CFA.Model, n = list(150, 100), generate = datfun)
+summary(Output61)
+
+# 6.2 Analyze by lavaan
+
+Output62 <- sim(nRep = totalRep, model = script, n = list(150, 100), generate = datfun, std.lv = TRUE, lavaanfun = "cfa", group = "group")
+summary(Output62)
+
+# 6.3 Analyze by list of lavaan arguments
+
+Output63 <- sim(nRep = totalRep, model = list(model = script, std.lv = TRUE, group = "group"), n = list(150, 100), generate = datfun, lavaanfun = "cfa")
+summary(Output63)
+
+# 6.4 Analyze by OpenMx
+
+Output64 <- sim(nRep = totalRep, model = mxTwoGroupModel, n = list(150, 100), generate = datfun)
+summary(Output64)
+
+# 6.5 Analyze by function using lava
+
+Output65 <- sim(nRep = totalRep, model = FUN, n = list(150, 100), generate = datfun)
+summary(Output65)

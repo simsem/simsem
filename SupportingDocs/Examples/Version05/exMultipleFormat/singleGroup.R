@@ -314,3 +314,43 @@ summary(Output54)
 
 Output55 <- sim(nRep = totalRep, model = FUN, n = 200, generate = mxTwoFactorModel)
 summary(Output55)
+
+# 6. Data generation by functions
+
+datfun <- function(n) {
+	modelImplied <- matrix(
+		c(1, 0.49, 0.49, 0.245, 0.245, 0.245,
+		0.49, 1, 0.49, 0.245, 0.245, 0.245,
+		0.49, 0.49, 1, 0.245, 0.245, 0.245,
+		0.245, 0.245, 0.245, 1, 0.49, 0.49, 
+		0.245, 0.245, 0.245, 0.49, 1, 0.49, 
+		0.245, 0.245, 0.245, 0.49, 0.49, 1), 6, 6, byrow=TRUE)
+	scores <- mvrnorm(n, rep(0, 6), modelImplied)
+	colnames(scores) <- paste0("y", 1:6)
+	scores
+}
+
+# 6.1 Analyze by simsem model template
+
+Output61 <- sim(nRep = totalRep, model = CFA.Model, n = 200, generate = datfun)
+summary(Output61)
+
+# 6.2 Analyze by lavaan
+
+Output62 <- sim(nRep = totalRep, model = script, n = 200, generate = datfun, std.lv = TRUE, lavaanfun = "cfa")
+summary(Output62)
+
+# 6.3 Analyze by list of lavaan arguments
+
+Output63 <- sim(nRep = totalRep, model = list(model = script, std.lv = TRUE), n = 200, generate = datfun, lavaanfun = "cfa")
+summary(Output63)
+
+# 6.4 Analyze by OpenMx object
+
+Output64 <- sim(nRep = totalRep, model = mxTwoFactorModel, n = 200, generate = datfun)
+summary(Output64)
+
+# 6.5 Analyze by functions using lava
+
+Output65 <- sim(nRep = totalRep, model = FUN, n = 200, generate = datfun)
+summary(Output65)

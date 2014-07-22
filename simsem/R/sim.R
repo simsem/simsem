@@ -36,6 +36,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ..., rawDa
 	
 	lavaanGenerate <- FALSE
 	mxGenerate <- FALSE
+	functionGenerate <- FALSE
 	if(!is.null(generate)) {
 		if(is.character(generate)) {
 			generate <- list(model = generate)
@@ -52,6 +53,8 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ..., rawDa
 			lavaanGenerate <- TRUE
 		} else if (is(generate, "MxModel")) {
 			mxGenerate <- TRUE
+		} else if (is(generate, "function")) {
+			functionGenerate <- TRUE
 		} else if (is(generate, "SimSem")) {
 			# Do nothing
 		} else {
@@ -126,6 +129,8 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ..., rawDa
 		} else if (mxGenerate) {
 			ngroups <- length(generate@submodels)
 			if(ngroups == 0) ngroups <- 1
+		} else if (functionGenerate) {
+			if(is.list(n)) ngroups <- length(n)
 		} else {
 			ngroups <- max(generate@pt$group)
 		}
@@ -681,7 +686,17 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 			}
 		}
 	}
-	
+
+	if (is.null(data) && is(generate, "function")) {
+		if(stopOnError){
+			data <- generate(n)
+		} else if (silent) {
+			invisible(capture.output(suppressMessages(try(data <- generate(n), silent = TRUE))))
+		} else {
+			try(data <- generate(n))
+		}
+	}
+
 	if (is.null(data) && is.lavaancall(generate)) {
 		generate$sample.nobs <- n
 		generate$indDist <- indDist
