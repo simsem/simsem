@@ -70,11 +70,23 @@ createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist 
 			measurementErrorScore <- NULL
             if (is.null(usedParam$BE) && !is.null(usedParam$LY)) {
                 # CFA
+              if(!is.null(facDist)){
                 fac <- dataGen(facDist, n, usedParam$AL, usedParam$PS, empirical = empirical)
+              }
+              else{
+                fac <-mvrnorm(n, usedParam$AL, usedParam$PS, empirical = empirical)
+              }
 				latentVariableScore <- fac
 				if(!is.null(covData)) fac <- fac + (as.matrix(covData) %*% t(usedParam$GA))
                 trueScore <- fac %*% t(usedParam$LY)
-                errorScore <- dataGen(errorDist, n, usedParam$TY, usedParam$TE, empirical = empirical)
+                
+				if(!is.null(errorDist)){
+				  errorScore <- dataGen(errorDist, n, usedParam$TY, usedParam$TE, empirical = empirical)
+				}
+				else{
+				  errorScore <- nvrnorm(n, usedParam$TY, usedParam$TE, empirical = empirical)
+				}
+				
 				measurementErrorScore <- errorScore
                 Data <- trueScore + errorScore
 				if(!is.null(covData)) Data <- Data + (as.matrix(covData) %*% t(usedParam$KA))
@@ -88,8 +100,15 @@ createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist 
                 }
                 set <- findRecursiveSet(usedParam2$BE)
                 iv <- set[[1]]
-                fac <- dataGen(extractSimDataDist(facDist, iv), n, usedParam2$AL[iv], 
-                  usedParam2$PS[iv, iv], empirical = empirical)
+                if(!is.null(facDist)){
+                  fac <- dataGen(extractSimDataDist(facDist, iv), n, usedParam2$AL[iv], 
+                                 usedParam2$PS[iv, iv], empirical = empirical)                
+                }
+                else{
+                  fac <-mvrnorm(n, usedParam2$AL[iv], 
+                                usedParam2$PS[iv, iv], empirical = empirical)
+                }
+                
 				latentVariableScore <- fac
 				if(!is.null(covData)) {
 					fac <- fac + (as.matrix(covData) %*% t(usedParam2$GA[iv, ,drop=FALSE]))
@@ -97,8 +116,16 @@ createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist 
                 for (i in 2:length(set)) {
                   dv <- set[[i]]
                   pred <- fac %*% t(usedParam2$BE[dv, iv, drop = FALSE])
-                  res <- dataGen(extractSimDataDist(facDist, dv), n, usedParam2$AL[dv], 
-                    usedParam2$PS[dv, dv], empirical = empirical)
+                  
+                  if(!is.null(facDist)){
+                    res <- dataGen(extractSimDataDist(facDist, dv), n, usedParam2$AL[dv], 
+                                   usedParam2$PS[dv, dv], empirical = empirical)
+                  }
+                  else{
+                    res <- mvrnorm(n, usedParam2$AL[dv], 
+                                   usedParam2$PS[dv, dv], empirical = empirical)
+                  }
+                  
 				  latentVariableScore <- cbind(latentVariableScore, res)
                   new <- pred + res
 				  if(!is.null(covData)) new <- new + (as.matrix(covData) %*% t(usedParam2$GA[dv, ,drop=FALSE]))
@@ -111,7 +138,13 @@ createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist 
                 } else {
                   # SEM
                   trueScore <- fac %*% t(usedParam2$LY)
-                  errorScore <- dataGen(errorDist, n, usedParam2$TY, usedParam2$TE, empirical = empirical)
+                  
+                  if(!is.null(errorDist)){
+                    errorScore <- dataGen(errorDist, n, usedParam2$TY, usedParam2$TE, empirical = empirical)
+                  }
+                  else{
+                    errorScore <- mvrnorm(n, usedParam2$TY, usedParam2$TE, empirical = empirical)
+                  }
 				  measurementErrorScore <- errorScore
                   Data <- trueScore + errorScore
 				  if(!is.null(covData)) Data <- Data + (as.matrix(covData) %*% t(usedParam2$KA))
@@ -251,6 +284,7 @@ dataGen <- function(dataDist, n, m, cm, empirical = FALSE) {
 }
 
 extractSimDataDist <- function(object, pos) {
+  browser()
 	copula <- object@copula
 	if (!is(copula, "NullCopula")) {
 		copula@dimension <- 2L
