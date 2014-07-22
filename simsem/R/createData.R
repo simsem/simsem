@@ -84,7 +84,7 @@ createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist 
 				  errorScore <- dataGen(errorDist, n, usedParam$TY, usedParam$TE, empirical = empirical)
 				}
 				else{
-				  errorScore <- nvrnorm(n, usedParam$TY, usedParam$TE, empirical = empirical)
+				  errorScore <- mvrnorm(n, usedParam$TY, usedParam$TE, empirical = empirical)
 				}
 				
 				measurementErrorScore <- errorScore
@@ -284,7 +284,6 @@ dataGen <- function(dataDist, n, m, cm, empirical = FALSE) {
 }
 
 extractSimDataDist <- function(object, pos) {
-  browser()
 	copula <- object@copula
 	if (!is(copula, "NullCopula")) {
 		copula@dimension <- 2L
