@@ -8,7 +8,7 @@
 ## is generated.
 
 createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist = NULL, 
-    errorDist = NULL, saveLatentVar = FALSE, indLab = NULL, modelBoot = FALSE, realData = NULL, covData = NULL,
+    errorDist = NULL, saveLatentVar = FALSE, indLab = NULL, facLab = NULL, modelBoot = FALSE, realData = NULL, covData = NULL,
 	empirical = FALSE) {
 	
 	# Assume covData is good
@@ -67,6 +67,7 @@ createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist 
     } else {
         if (sequential) {
 			latentVariableScore <- NULL
+			latentResidualScore <- NULL
 			measurementErrorScore <- NULL
             if (is.null(usedParam$BE) && !is.null(usedParam$LY)) {
                 # CFA
@@ -76,8 +77,11 @@ createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist 
               else{
                 fac <-mvrnorm(n, usedParam$AL, usedParam$PS, empirical = empirical)
               }
+				if(!is.null(covData)) {
+					latentResidualScore <- fac
+					fac <- fac + (as.matrix(covData) %*% t(usedParam$GA))
+				}
 				latentVariableScore <- fac
-				if(!is.null(covData)) fac <- fac + (as.matrix(covData) %*% t(usedParam$GA))
                 trueScore <- fac %*% t(usedParam$LY)
                 
 				if(!is.null(errorDist)){
@@ -98,25 +102,25 @@ createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist 
                 } else {
                   stop("Incorrect model type")
                 }
-                set <- findRecursiveSet(usedParam2$BE)
+               set <- findRecursiveSet(usedParam2$BE)
                 iv <- set[[1]]
                 if(!is.null(facDist)){
                   fac <- dataGen(extractSimDataDist(facDist, iv), n, usedParam2$AL[iv], 
                                  usedParam2$PS[iv, iv], empirical = empirical)                
-                }
-                else{
+                } else{
                   fac <-mvrnorm(n, usedParam2$AL[iv], 
                                 usedParam2$PS[iv, iv], empirical = empirical)
                 }
-                
-				latentVariableScore <- fac
 				if(!is.null(covData)) {
+					latentResidualScore <- fac
 					fac <- fac + (as.matrix(covData) %*% t(usedParam2$GA[iv, ,drop=FALSE]))
+				} else if(length(set) > 1) {
+					latentResidualScore <- fac
 				}
+				if(length(set) > 1) {
                 for (i in 2:length(set)) {
                   dv <- set[[i]]
                   pred <- fac %*% t(usedParam2$BE[dv, iv, drop = FALSE])
-                  
                   if(!is.null(facDist)){
                     res <- dataGen(extractSimDataDist(facDist, dv), n, usedParam2$AL[dv], 
                                    usedParam2$PS[dv, dv], empirical = empirical)
@@ -125,13 +129,17 @@ createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist 
                     res <- mvrnorm(n, usedParam2$AL[dv], 
                                    usedParam2$PS[dv, dv], empirical = empirical)
                   }
-                  
-				  latentVariableScore <- cbind(latentVariableScore, res)
+				  latentResidualScore <- cbind(latentResidualScore, res)
                   new <- pred + res
 				  if(!is.null(covData)) new <- new + (as.matrix(covData) %*% t(usedParam2$GA[dv, ,drop=FALSE]))
                   fac <- cbind(fac, new)
                   iv <- c(iv, set[[i]])
                 }
+				}
+				neworder <- match(1:length(iv), iv)
+				fac <- fac[, neworder]
+				if(!is.null(latentResidualScore)) latentResidualScore <- latentResidualScore[, neworder]
+				latentVariableScore <- fac
                 if (is.null(usedParam$LY)) {
                   # Path
                   Data <- fac
@@ -153,16 +161,19 @@ createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist 
 			if(!is.null(covData)) Data <- data.frame(covData, Data)
 			if(saveLatentVar) {
 				if(!is.null(usedParam$LY)) {
-					colnames(latentVariableScore) <- paste0("f", 1:ncol(latentVariableScore))
+					if(is.null(facLab)) facLab <- paste0("f", 1:ncol(latentVariableScore))
+					colnames(latentVariableScore) <- facLab
 					errorName <- indLab
 					if(is.null(errorName)) errorName <- paste0("y", 1:ncol(measurementErrorScore))
-					colnames(measurementErrorScore) <- errorName
+					colnames(measurementErrorScore) <- paste0("res_", errorName)
+					if(!is.null(latentResidualScore)) colnames(latentResidualScore) <- paste0("res_", facLab)
 				} else {
 					errorName <- indLab
 					if(is.null(errorName)) errorName <- paste0("y", 1:ncol(latentVariableScore))
-					colnames(latentVariableScore) <- errorName
+					latentVariableScore <- NULL
+					if(!is.null(latentResidualScore)) colnames(latentResidualScore) <- paste0("res_", errorName)
 				}
-				ExtraData <- data.frame(latentVariableScore, measurementErrorScore)
+				ExtraData <- data.frame(cbind(latentVariableScore, latentResidualScore, measurementErrorScore))
 			}
         } else {
 			# Covariance matrix based data generation

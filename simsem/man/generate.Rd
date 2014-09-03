@@ -55,7 +55,7 @@ generate(model, n, maxDraw=50, misfitBounds=NULL, misfitType="f0",
 	An object or list of objects of type \code{SimDataDist} indicating the distribution of errors. If a single \code{SimDataDist} is specified, each error will be genrated with that distribution.
 }
   \item{saveLatentVar}{ 
-	If \code{TRUE}, the generated latent variable scores and measurement error scores are also provided as the \code{"latentVar"} attribute of the generated data by the following line: \code{attr(generatedData, "latentVar")}. The \code{sequential} argument must be \code{TRUE} in order to use this option.
+	If \code{TRUE}, the total latent variable scores, residual latent variable scores, and measurement error scores are also provided as the \code{"latentVar"} attribute of the generated data by the following line: \code{attr(generatedData, "latentVar")}. The \code{sequential} argument must be \code{TRUE} in order to use this option.
 }
   \item{indLab}{ 
 	A vector of indicator labels. When not specified, the variable names are \code{x1, x2, ... xN}.

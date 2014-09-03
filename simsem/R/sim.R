@@ -613,7 +613,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 	popData = NULL, group = NULL, mxFit = FALSE, mxMixture = FALSE, citype = NULL, cilevel = 0.95, stopOnError = FALSE, ...) {
     start.time0 <- start.time <- proc.time()[3]
     timing <- list()
-    
+    library(lavaan)
 	param <- NA
     coef <- NA
     se <- NA
@@ -897,6 +897,13 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 				FMI2 <- out$FMI2
 				cilower <- out$cilower
 				ciupper <- out$ciupper
+				if (!is.null(outfun)) {
+					extra <- outfun(out)
+				}
+				if (!is.null(outfundata)) {
+					extra2 <- outfundata(out, data)
+				}
+
 			} else if(mxAnalysis) {
 				if(mxFit) {
 					fit <- NA

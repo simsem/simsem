@@ -48,6 +48,8 @@ generateSimSem <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitTy
             indLab <- unique(model@pt$rhs[model@pt$op == "=~"])
         }
     }
+	facLab <- NULL
+	if(model@modelType != "path") facLab <- unique(model@pt$lhs[model@pt$op == "=~"])
     free <- max(model@pt$free)
     ngroups <- max(model@pt$group)
     
@@ -117,7 +119,7 @@ generateSimSem <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitTy
 	# covariates must be separated into different groups
 	# realData must not contain covariates
     datal <- mapply(FUN = createData, draws, indDist, facDist, errorDist, n = n, realData = realDataGroup, 
-		covData = covDataGroup, MoreArgs = list(sequential = sequential, saveLatentVar = saveLatentVar, modelBoot = modelBoot, indLab = indLab, empirical = empirical), 
+		covData = covDataGroup, MoreArgs = list(sequential = sequential, saveLatentVar = saveLatentVar, modelBoot = modelBoot, indLab = indLab, facLab = facLab, empirical = empirical), 
         SIMPLIFY = FALSE)
 	data <- NULL
 	extra <- NULL

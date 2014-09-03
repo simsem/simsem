@@ -26,7 +26,7 @@ sourceDir <- function(path, trace = TRUE, ...) {
 
 options("simsem.multicore" = FALSE)
 
-# dir2 <- "C:/Users/student/Desktop/lavaan/R/"
+# dir2 <- "C:/Users/jaehoonl/Desktop/lavaan/R/"
  # source(paste(dir2, "00Class.R", sep=""))
  # source(paste(dir2, "00Generic.R", sep=""))
  # sourceDir(dir2)
@@ -37,43 +37,12 @@ library(OpenMx)
 #assign
 dir <- "C:/Users/Sunthud/Dropbox/simsem/simsem/R/"
 #dir <- "C:/Users/Sunthud/simsem_backup/simsem/R/"
-dir <- "C:/Users/student/Dropbox/simsem/simsem/R/"
+dir <- "C:/Users/jaehoonl/Dropbox/simsem/simsem/R/"
  source(paste(dir, "AllClass.R", sep=""))
  source(paste(dir, "AllGenerics.R", sep=""))
  sourceDir(dir)
 
 
- 
-# Automatically put the name of covData
- 
-library(lavaan)
-
-pop.model <- '
-     f1 =~ 0.7?y1 + 0.7?y2 + 0.7?y3
-     f2 =~ 0.7?y4 + 0.7?y5 + 0.7?y6
-     f3 =~ con1*y7 + con1*y8 + 0.6?y7 + 0.6?y8
-     f3 ~ 0.6?f1 + 0.3?f2
-     f1 ~~ 0.5?f2
-     f1 ~~ 1*f1
-     f2 ~~ 1*f2
-'
-
-Data <- generate(pop.model, n = 100, empirical=TRUE, standardized = TRUE)
-
-Data <- simulateData(pop.model, sample.nobs=100, empirical=TRUE,
-                      standardized=FALSE, debug=TRUE)
-
-fit <- sem(pop.model, data=Data)
-summary(fit, standardized=TRUE)
-
-Data <- simulateData(pop.model, sample.nobs=100, empirical=TRUE,
-                      standardized=TRUE, debug=TRUE)
-
-fit <- sem(pop.model, data=Data)
-summary(fit, standardized=TRUE)
-
-
- 
  
 # library(formatR)
 # tidy.dir(dir)
@@ -132,12 +101,6 @@ FUN4 <- function(data) {
 }
 
 Output4 <- sim(20, model=FUN4, generate=CFA.Model,n=200)
-
-
-
-
-
-
 
 
 
