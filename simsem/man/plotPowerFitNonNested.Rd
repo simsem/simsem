@@ -56,7 +56,7 @@ contMAR = TRUE, useContour = TRUE, logistic = TRUE, onetailed = FALSE)
 	NONE. Only plot the fit indices distributions.
 }
 \author{
-    Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
+    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
 }
 \seealso{
 	\itemize{

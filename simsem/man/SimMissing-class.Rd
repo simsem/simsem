@@ -41,10 +41,10 @@ Objects can be created by \code{\link{miss}} function.
 	}
 }
 \author{
-	Patrick Miller (Univeristy of Notre Dame; \email{pmille13@nd.edu})
-	Alexander M. Schoemann (University of Kansas; \email{schoemann@ku.edu})  
+	Patrick Miller (University of Notre Dame; \email{pmille13@nd.edu})
+	Alexander M. Schoemann (East Carolina University; \email{schoemanna@ecu.edu})  
 	Kyle Lang (University of Kansas; \email{kylelang@ku.edu})
-    Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
+    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
 }
 \seealso{
 	\itemize{

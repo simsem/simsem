@@ -50,7 +50,7 @@
 	The target information depending on the \code{what} argument
 }
 \author{
-	Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
+	Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
 }
 \seealso{
 	\code{\linkS4class{SimResult}} for the object input

@@ -46,7 +46,7 @@ getPower(simResult, alpha = 0.05, contParam = NULL, powerParam = NULL,
 Muthen, L. K., & Muthen, B. O. (2002). How to use a Monte Carlo study to decide on sample size and determine power. \emph{Structural Equation Modeling, 4,} 599-620.
 }
 \author{
-    Alexander M. Schoemann (University of Kansas; \email{schoemann@ku.edu}), Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
+    Alexander M. Schoemann (East Carolina University; \email{schoemanna@ecu.edu}), Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
 }
 \seealso{
 	\itemize{

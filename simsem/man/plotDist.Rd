@@ -33,7 +33,7 @@ plotDist(object, xlim = NULL, ylim = NULL, r = 0, var = NULL, contour = TRUE)
 	No return value. This function will plot a graph only.
 }
 \author{
-    Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
+    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
 }
 \seealso{
 	\itemize{

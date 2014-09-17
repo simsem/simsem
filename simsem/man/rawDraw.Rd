@@ -31,7 +31,7 @@ rawDraw(simDat, constraint = TRUE, misSpec = TRUE, parMisOnly = FALSE,
 	A matrix (or vector) or a list of matrices (or vectors) which contains the draw result.
 }
 \author{
-	Patrick Miller (Univeristy of Notre Dame; \email{pmille13@nd.edu})
+	Patrick Miller (University of Notre Dame; \email{pmille13@nd.edu})
 }
 \examples{
 loading <- matrix(0, 7, 3)

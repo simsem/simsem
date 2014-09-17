@@ -37,7 +37,7 @@ findFactorTotalCov(beta, psi = NULL, corPsi = NULL, totalVarPsi = NULL,
 	A matrix of factor (model-implied) total covariance
 }
 \author{
-    Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
+    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
 }
 \seealso{
 	\itemize{

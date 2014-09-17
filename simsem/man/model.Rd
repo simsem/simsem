@@ -113,8 +113,8 @@ The \code{model.cfa}, \code{model.path}, and \code{model.sem} are the shortcuts 
 }
 
 \author{
-	Patrick Miller (Univeristy of Notre Dame; \email{pmille13@nd.edu}), 
-    Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
+	Patrick Miller (University of Notre Dame; \email{pmille13@nd.edu}), 
+    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
 }
 \seealso{
 	\itemize{\item {\code{\link{sim}} for simulations using the \code{\linkS4class{SimSem}} template.}

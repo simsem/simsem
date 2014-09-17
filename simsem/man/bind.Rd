@@ -36,8 +36,8 @@ In simulations supported by \emph{simsem}, a given parameter may be either fixed
 \value{ \code{\linkS4class{SimMatrix}} or \code{\linkS4class{SimVector}} object that used for model specification for analysis and data generation in simsem.}
 
 \author{
-    Patrick Miller (Univeristy of Notre Dame; \email{pmille13@nd.edu}),
-    Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
+    Patrick Miller (University of Notre Dame; \email{pmille13@nd.edu}),
+    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
 }
 \seealso{
 \itemize{\item {\code{\link{model}} To combine simMatrix objects into a complete data analysis and data generation template, which is a \code{\linkS4class{SimSem}} object}

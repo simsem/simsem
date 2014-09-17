@@ -31,7 +31,7 @@ A list with the following elements:
 Each element will provide the head-to-head comparison between convergent and nonconvergent replications properties.
 }
 \author{
-    Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
+    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
 }
 \examples{
 \dontrun{

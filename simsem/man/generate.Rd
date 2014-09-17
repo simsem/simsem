@@ -98,7 +98,7 @@ Bollen, K. A., & Stine, R. A. (1992). Bootstrapping goodness-of-fit measures in 
 Yung, Y.-F., & Bentler, P. M. (1996). Bootstrapping techniques in analysis of mean and covariance structures. In G. A. Marcoulides & R. E. Schumacker (Eds.), \emph{Advanced structural equation modeling: Issues and techniques} (pp. 195-226). Mahwah, NJ: Erlbaum.
 }
 \author{	
-    Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu}), Patrick Miller (Univeristy of Notre Dame; \email{pmille13@nd.edu}), the data generation code for lavaan script is modifed from the \code{simulateData} function in \code{lavaan} written by Yves Rosseel
+    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu}), Patrick Miller (University of Notre Dame; \email{pmille13@nd.edu}), the data generation code for lavaan script is modifed from the \code{simulateData} function in \code{lavaan} written by Yves Rosseel
 }
 
 \seealso{

@@ -31,7 +31,7 @@ findIndMean(lambda, factorMean = NULL, tau = NULL, kappa = NULL,
 	A vector of indicator total means.
 }
 \author{
-    Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
+    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
 }
 \seealso{
 	\itemize{

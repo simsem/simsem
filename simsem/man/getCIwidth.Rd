@@ -37,7 +37,7 @@ getCIwidth(object, assurance = 0.50, nVal = NULL, pmMCARval = NULL,
 Lai, K., & Kelley, K. (2011). Accuracy in parameter estimation for targeted effects in structural equation modeling: Sample size planning for narrow confidence intervals. \emph{Psychological Methods, 16}, 127-148.
 }
 \author{
-    Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
+    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
 }
 \seealso{
 	\code{\linkS4class{SimResult}} for a detail of simResult

@@ -27,7 +27,7 @@ This object is created by \code{\link{bind}} or \code{\link{binds}} function.
 	 }
 }
 \author{
-    Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
+    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
 }
 \seealso{
 	\itemize{

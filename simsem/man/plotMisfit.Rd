@@ -24,7 +24,7 @@ plotMisfit(object, usedFit="default", misParam=NULL)
 	None. This function will plot only.
 }
 \author{
-    Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
+    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
 }
 \examples{
 path.BE <- matrix(0, 4, 4)

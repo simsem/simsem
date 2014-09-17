@@ -40,8 +40,8 @@ analyze(model, data, package="lavaan", miss=NULL, aux=NULL, group = NULL,
 	The \code{\linkS4class{lavaan}} object containing the output
 }
 \author{
-	Patrick Miller (Univeristy of Notre Dame; \email{pmille13@nd.edu})
-    Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
+	Patrick Miller (University of Notre Dame; \email{pmille13@nd.edu}), 
+    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
 }
 \seealso{
 	Note that users can use functions provided by \code{lavaan} package (\code{\link[lavaan]{lavaan}}, \code{\link[lavaan]{cfa}}, \code{\link[lavaan]{sem}}, or \code{\link[lavaan]{growth}}) if they wish to analyze data by lavaan directly. 

@@ -30,7 +30,7 @@ findFactorTotalVar(beta, corPsi, residualVarPsi, gamma = NULL, covcov = NULL)
 	A vector of factor (indicator) total variances
 }
 \author{
-    Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
+    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
 }
 \seealso{
 	\itemize{

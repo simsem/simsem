@@ -116,14 +116,12 @@ does not equal 20 percent total missing).
 A data matrix with \code{NA}s introduced in the way specified by the arguments.
 }
 \author{
-Patrick Miller(University of Kansas; \email{patr1ckm@ku.edu})
-Alexander M. Schoemann (University of Kansas; \email{schoemann@ku.edu})  
-
+Patrick Miller (University of Kansas; \email{patr1ckm@ku.edu}), 
+Alexander M. Schoemann (East Carolina University; \email{schoemanna@ecu.edu})  
 }
 \seealso{
 	\itemize{
 		\item \code{\linkS4class{SimMissing}} for the alternative way to save missing data feature for using in the \code{\link{sim}} function.
-		%\item \code{\link{runMI}} for imputing missing data by multiple imputation and analyze the imputed data.
 	}
 }
 \examples{

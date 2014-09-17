@@ -27,7 +27,7 @@ findFactorMean(beta, alpha = NULL, gamma = NULL, covmean = NULL)
 	A vector of factor (indicator) total means
 }
 \author{
-    Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
+    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
 }
 \seealso{
 	\itemize{

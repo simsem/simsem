@@ -39,8 +39,8 @@ summaryFit(object, alpha = NULL, improper = FALSE, usedFit = NULL)
 	When \code{linkS4class{SimResult}} has random simulation parameters (sample size or percent missing), columns are the fit indices listed above and rows are values of the random parameter.
 }
 \author{
-    Alexander M. Schoemann (University of Kansas; \email{schoemann@ku.edu})
-    Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
+    Alexander M. Schoemann (East Carolina University; \email{schoemanna@ecu.edu})
+    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
 }
 \seealso{
 	\code{\linkS4class{SimResult}} for the result object input

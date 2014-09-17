@@ -21,7 +21,7 @@ summaryPopulation(object, improper = FALSE)
 	A \code{data.frame} contianing the summary of population model across replications.
 }
 \author{
-    Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
+    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
 }
 \seealso{
 	\itemize{

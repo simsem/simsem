@@ -18,7 +18,7 @@ summarySeed(object)
 The first section is the seed number used in running the whole simulation. The second section is the L'Ecuyer seed of the last replication.
 }
 \author{
-    Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
+    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
 }
 \examples{
 \dontrun{

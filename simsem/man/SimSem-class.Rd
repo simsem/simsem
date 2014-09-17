@@ -25,8 +25,8 @@
  }
 }
 \author{
-    Patrick Miller (Univeristy of Notre Dame; \email{pmille13@nd.edu}), 
-    Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
+    Patrick Miller (University of Notre Dame; \email{pmille13@nd.edu}), 
+    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
 }
 \seealso{
 	\itemize{

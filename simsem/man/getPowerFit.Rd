@@ -50,7 +50,7 @@ condCutoff = TRUE, df = 0)
 	List of power given different fit indices. The \code{TraditionalChi} means the proportion of replications that are rejected by the traditional chi-square test.
 }
 \author{
-    Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
+    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
 }
 \seealso{
 	\itemize{

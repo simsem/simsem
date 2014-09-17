@@ -45,7 +45,7 @@ Mair, P., Satorra, A., & Bentler, P. M. (2012). Generating nonnormal multivariat
 Vale, C. D. & Maurelli, V. A. (1983) Simulating multivariate nonormal distributions. \emph{Psychometrika, 48}, 465-471.
 }
 \author{
-    Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
+    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
 }
 \seealso{
 	\itemize{

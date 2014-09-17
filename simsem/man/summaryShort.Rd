@@ -25,7 +25,7 @@ summaryShort(object, ...)
 	NONE. This function will print on screen only.
 }
 \author{
-    Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
+    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
 }
 \seealso{
 	This is the list of classes that can use \code{summaryShort} method.

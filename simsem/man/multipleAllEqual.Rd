@@ -18,7 +18,7 @@ multipleAllEqual(...)
 	\code{TRUE} if all objects are equal.
 }
 \author{
-    Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
+    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
 }
 \examples{
 multipleAllEqual(1:5, 1:5, seq(2, 10, 2)/2) # Should be TRUE

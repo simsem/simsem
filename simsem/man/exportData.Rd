@@ -102,7 +102,7 @@ exportData(nRep, model, n, program = "Mplus", fileStem = "sim", miss = NULL,
 	Text files saved to the current working directory. If \code{program} = "Mplus" one file is output for each replication, and an extra file is output with the names of all saved data sets (this file can be used with the MONTECARLO command in Mplus). If \code{program} = "LISREL" one file is output with each replication stacked on top of the next (this file can be used with the RP command in LISREL). If \code{program} = \code{TRUE}, a list of parameter values for each replication is returned.
 }
 \author{	
-    Alexander M. Schoemann (University of Kansas; \email{schoemann@ku.edu}) 
+    Alexander M. Schoemann (East Carolina University; \email{schoemanna@ecu.edu}) 
 }
 \examples{
 loading <- matrix(0, 6, 2)

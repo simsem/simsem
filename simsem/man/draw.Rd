@@ -45,7 +45,7 @@ covData = NULL)
 The values in $param are the raw parameter values with no misspecification. The values in $misspec are raw parameter values + misspecification. The values in $misOnly are only the misspecification values. 
 }
 \author{	
-    Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu}), Patrick Miller (Univeristy of Notre Dame; \email{pmille13@nd.edu}) 
+    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu}), Patrick Miller (University of Notre Dame; \email{pmille13@nd.edu}) 
 }
 \seealso{		
 	 \code{\link{createData}} To generate random data using a set of parameters from \code{\link{draw}}

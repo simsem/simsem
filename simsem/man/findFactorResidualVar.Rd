@@ -30,7 +30,7 @@ findFactorResidualVar(beta, corPsi, totalVarPsi = NULL, gamma = NULL, covcov = N
 	A vector of factor (indicator) residual variances
 }
 \author{
-    Sunthud Pornprasertmanit (University of Kansas; \email{psunthud@ku.edu})
+    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
 }
 \seealso{
 	\itemize{
