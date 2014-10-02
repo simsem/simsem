@@ -219,9 +219,11 @@ getImpliedStatML <- function(xxxobjectxxx, xxxcovdatatxxx = NULL, xxxextraxxx = 
 }
 
 analyzeMx <- function(object, data, groupLab = NULL, mxMixture = FALSE, ...) {
+	library(OpenMx)
 	if(length(object@submodels) > 1 & !mxMixture) {
 		temp <- object@submodels
 		if(is.null(groupLab)) groupLab <- "group"
+		if(!is.data.frame(data)) stop("In multiple group model, the data must be in the data frame format.")
 		data.l <- split(data, data[,groupLab])
 		data.l <- lapply(data.l, function(x) x[-ncol(x)])
 		temp <- mapply(function(x, y) { x@data <- mxData(observed=y, type="raw");x}, x=temp, y=data.l, SIMPLIFY=FALSE)

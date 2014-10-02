@@ -696,7 +696,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 			try(data <- generate(n))
 		}
 	}
-
+	
 	if (is.null(data) && is.lavaancall(generate)) {
 		generate$sample.nobs <- n
 		generate$indDist <- indDist

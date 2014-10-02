@@ -603,12 +603,23 @@ lavaanSimulateData <- function(
 
     # fit the model without data
     fit <- lavaan(model=lav, sample.nobs=sample.nobs, ...)
-
+	
     # the model-implied moments for the population
-    Sigma.hat <- fitted(fit)$cov
-       Mu.hat <- fitted(fit)$mean
+   # ngroups
+    ngroups <- length(sample.nobs)
+	if(ngroups == 1) {
+		Sigma.hat <- list(fitted(fit)$cov)
+		   Mu.hat <- list(fitted(fit)$mean)
+	} else {
+		Sigma.hat <- lapply(fitted(fit), "[[", "cov")
+		   Mu.hat <- lapply(fitted(fit), "[[", "mean")
+	}
     if(fit@Model@categorical) {
-       TH <- fitted(fit)$th
+		if(ngroups == 1) {
+			TH <- list(fitted(fit)$th)
+		} else {
+			TH <- lapply(fitted(fit), "[[", "th")
+	   }
     }
 	
     if(debug) {
@@ -617,15 +628,13 @@ lavaanSimulateData <- function(
         if(exists("TH")) print(TH)
     }
 	   
-   # ngroups
-    ngroups <- length(sample.nobs)
-	if(ngroups == 1) {
-		Sigma.hat <- list(Sigma.hat)
-		Mu.hat <- list(Mu.hat)
-		if(fit@Model@categorical) {
-		   TH <- list(TH)
-		}		
-	}
+	# if(ngroups == 1) {
+		# Sigma.hat <- list(Sigma.hat)
+		# Mu.hat <- list(Mu.hat)
+		# if(fit@Model@categorical) {
+		   # TH <- list(TH)
+		# }		
+	# }
 
     # prepare
     X <- vector("list", length=ngroups)

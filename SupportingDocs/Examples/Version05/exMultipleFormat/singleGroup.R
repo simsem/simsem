@@ -327,7 +327,7 @@ datfun <- function(n) {
 		0.245, 0.245, 0.245, 0.49, 0.49, 1), 6, 6, byrow=TRUE)
 	scores <- mvrnorm(n, rep(0, 6), modelImplied)
 	colnames(scores) <- paste0("y", 1:6)
-	scores
+	data.frame(scores)
 }
 
 # 6.1 Analyze by simsem model template

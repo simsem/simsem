@@ -441,7 +441,7 @@ datfun <- function(n) {
 	scores2 <- cbind(mvrnorm(n[2], rep(0, 6), modelImplied2), 2)
 	scores <- rbind(scores1, scores2)
 	colnames(scores) <- c(paste0("y", 1:6), "group")
-	scores
+	data.frame(scores)
 }
 
 # 6.1 Analyze by simsem model template

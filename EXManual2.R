@@ -35,9 +35,9 @@ library(copula)
 library(OpenMx)
 #get
 #assign
-dir <- "C:/Users/Sunthud/Dropbox/simsem/simsem/R/"
+#dir <- "C:/Users/Sunthud/Dropbox/simsem/simsem/R/"
 #dir <- "C:/Users/Sunthud/simsem_backup/simsem/R/"
-dir <- "C:/Users/jaehoonl/Dropbox/simsem/simsem/R/"
+dir <- "C:/Users/spornpra/Dropbox/simsem/simsem/R/"
  source(paste(dir, "AllClass.R", sep=""))
  source(paste(dir, "AllGenerics.R", sep=""))
  sourceDir(dir)
