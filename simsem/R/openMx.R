@@ -67,27 +67,28 @@ getInnerObjects <- function(xxxobjectxxx) {
 generateMxSingleGroup <- function(object, n, indDist = NULL, covData = NULL, extraMatrices = NULL, empirical = FALSE) {
 
 	if(is(object@objective, "MxRAMObjective")) {
-		# Create F, S, and M to suppress warnings when compiling the package.
+		# Create A, F, S, and M to suppress warnings when compiling the package.
 		F <- NULL
 		S <- NULL
 		M <- NULL
+		A <- NULL
 		nfac <- nrow(object@matrices$A@values)
-		I <- mxMatrix(type = "Iden", nrow=nfac, ncol=nfac, free=FALSE, name="I")
-		Z <- mxAlgebra(expression=solve(I-A), name="Z")
-		impliedCov <- mxAlgebra(expression=F %*% Z %*% S %*% t(Z) %*% t(F), name="impliedCov")
+		I <- OpenMx::mxMatrix(type = "Iden", nrow=nfac, ncol=nfac, free=FALSE, name="I")
+		Z <- OpenMx::mxAlgebra(expression=solve(I-A), name="Z")
+		impliedCov <- OpenMx::mxAlgebra(expression=F %*% Z %*% S %*% t(Z) %*% t(F), name="impliedCov")
 		allMatrices <- c(object@matrices, I = I)
 		allAlgebras <- c(object@algebras, Z = Z, impliedCov = impliedCov)
 		if(!is.null(object@matrices$M)) {
-			impliedMean <- mxAlgebra(expression=t(F %*% Z %*% t(M)), name="impliedMean")
+			impliedMean <- OpenMx::mxAlgebra(expression=t(F %*% Z %*% t(M)), name="impliedMean")
 			allAlgebras <- c(allAlgebras, impliedMean = impliedMean)
-			newObjective <- mxFIMLObjective(
+			newObjective <- OpenMx::mxFIMLObjective(
 				covariance="impliedCov", 
 				means="impliedMean", 
 				dimnames=object@objective@dims, 
 				thresholds=object@objective@thresholds
 			)
 		} else {
-			newObjective <- mxMLObjective(
+			newObjective <- OpenMx::mxMLObjective(
 				covariance="impliedCov", 
 				dimnames=object@objective@dims, 
 				thresholds=object@objective@thresholds
@@ -226,12 +227,12 @@ analyzeMx <- function(object, data, groupLab = NULL, mxMixture = FALSE, ...) {
 		if(!is.data.frame(data)) stop("In multiple group model, the data must be in the data frame format.")
 		data.l <- split(data, data[,groupLab])
 		data.l <- lapply(data.l, function(x) x[-ncol(x)])
-		temp <- mapply(function(x, y) { x@data <- mxData(observed=y, type="raw");x}, x=temp, y=data.l, SIMPLIFY=FALSE)
+		temp <- mapply(function(x, y) { x@data <- OpenMx::mxData(observed=y, type="raw");x}, x=temp, y=data.l, SIMPLIFY=FALSE)
 		object@submodels <- temp
 	} else {
-		object@data <- mxData(observed=data,type="raw")
+		object@data <- OpenMx::mxData(observed=data,type="raw")
 	}
-	capture.output(fit <- mxRun(object, ...))
+	capture.output(fit <- OpenMx::mxRun(object, ...))
 	return(fit)
 }
 

@@ -255,7 +255,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ..., rawDa
     s <- .Random.seed
     for (i in 1:nRep) {
         numseed[[i]] <- s
-        s <- nextRNGStream(s)
+        s <- parallel::nextRNGStream(s)
     }
 	#Save last seed to the result object? numseed[[nRep]]
 	#Use for update method
@@ -319,17 +319,17 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ..., rawDa
 		if(!silent) cat("Progress tracker is not available when 'multicore' is TRUE.\n")
         sys <- .Platform$OS.type
         if (is.null(numProc)) 
-            numProc <- detectCores()
+            numProc <- parallel::detectCores()
         if (sys == "windows") {
-            cl <- makeCluster(rep("localhost", numProc), type = "SOCK")
-            Result.l <- clusterApplyLB(cl, simConds, runRep, model = model, generate = generate, 
+            cl <- parallel::makeCluster(rep("localhost", numProc), type = "SOCK")
+            Result.l <- parallel::clusterApplyLB(cl, simConds, runRep, model = model, generate = generate, 
                 miss = miss, datafun = datafun, lavaanfun = lavaanfun, outfun = outfun, outfundata = outfundata, silent = silent, 
                 facDist = facDist, indDist = indDist, errorDist = errorDist, sequential = sequential, saveLatentVar = saveLatentVar,
                 realData = realData, covData = covData, maxDraw = maxDraw, misfitBounds = misfitBounds, 
                 averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, createOrder = createOrder, misfitType = misfitType, aux = aux, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart, popData = popData, group = group, mxFit = mxFit, mxMixture = mxMixture, citype = citype, cilevel = cilevel, stopOnError = stopOnError, ...)
-            stopCluster(cl)
+            parallel::stopCluster(cl)
         } else {
-            Result.l <- mclapply(simConds, runRep, model = model, generate = generate, 
+            Result.l <- parallel::mclapply(simConds, runRep, model = model, generate = generate, 
                 miss = miss, datafun = datafun, lavaanfun = lavaanfun, outfun = outfun, outfundata = outfundata, silent = silent, 
                 facDist = facDist, indDist = indDist, errorDist = errorDist, sequential = sequential, saveLatentVar = saveLatentVar,
                 realData = realData, covData = covData, maxDraw = maxDraw, misfitBounds = misfitBounds, 
@@ -448,7 +448,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ..., rawDa
 				generate2 <- generate
 				generate2$sample.nobs <- simConds[[1]][[2]]
 				generate2$return.fit <- TRUE
-				pt <- parTable(attr(do.call(lavaan::simulateData, generate2), "fit"))
+				pt <- lavaan::parTable(attr(do.call(lavaan::simulateData, generate2), "fit"))
 			} else {
 				pt <- generate$model
 			}
@@ -463,7 +463,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ..., rawDa
 				}
 			}
 			param <- pt$ustart
-			names(param) <- names(coef(lavaan(pt, sample.nobs=rep(200, max(pt$group))), type="user"))
+			names(param) <- names(coef(lavaan::lavaan(pt, sample.nobs=rep(200, max(pt$group))), type="user"))
 			param <- as.data.frame(t(param))
 		} else if (mxGenerate | (is.null(generate) & is(model, "MxModel"))) {
 			if(is.null(generate)) generate <- model
@@ -613,7 +613,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 	popData = NULL, group = NULL, mxFit = FALSE, mxMixture = FALSE, citype = NULL, cilevel = 0.95, stopOnError = FALSE, ...) {
     start.time0 <- start.time <- proc.time()[3]
     timing <- list()
-    library(lavaan)
+    #library(lavaan)
 	param <- NA
     coef <- NA
     se <- NA
@@ -958,10 +958,10 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 			} else {
 				fit <- inspect(out, "fit") # Avoid fitMeasures function becuase the runMI function does not support the fitMeasures function.
 				
-				if(is.null(citype)) citype <- formals(parameterEstimates)$boot.ci.type
+				if(is.null(citype)) citype <- formals(lavaan::parameterEstimates)$boot.ci.type
 				#redo with parameterEstimate function in lavaan (for coef se, std) all the way to 526
 
-				result <- parameterEstimates(out, standardized=TRUE, boot.ci.type=citype, level = cilevel)
+				result <- lavaan::parameterEstimates(out, standardized=TRUE, boot.ci.type=citype, level = cilevel)
 				outpt <- out@ParTable
 				extraParamIndex <- outpt$op %in% c(">", "<", "==", ":=")
 				index <- ((outpt$free != 0) & !(duplicated(outpt$free))) | extraParamIndex
@@ -971,7 +971,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 				cilower <- result$ci.lower[index]
 				ciupper <- result$ci.upper[index]
 				FMI1 <- result$fmi[index]
-				lab <- names(coef(lavaan(outpt, sample.nobs=rep(200, max(outpt$group)))))
+				lab <- names(coef(lavaan::lavaan(outpt, sample.nobs=rep(200, max(outpt$group)))))
 				if(any(extraParamIndex)) {
 					if(!is.lavaancall(model)) {
 						lab <- c(lab, renameExtraParam(model@con$lhs, model@con$op, model@con$rhs))
@@ -1034,7 +1034,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 			}
 			index <- ((generate@pt$free != 0)& !(duplicated(generate@pt$free))) | extraParamIndex
 			popParam <- popParam[index]
-			names(popParam) <- c(names(coef(lavaan(generate@pt, sample.nobs=rep(200, max(generate@pt$group))))), extraParamName)
+			names(popParam) <- c(names(coef(lavaan::lavaan(generate@pt, sample.nobs=rep(200, max(generate@pt$group))))), extraParamName)
 		} else {
 			popParam <- NA  # Real Data
 			popMis <- NA  # Misspecfication

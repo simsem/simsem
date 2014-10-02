@@ -217,7 +217,7 @@ dataGen <- function(dataDist, n, m, cm, empirical = FALSE) {
     # Check dim(M) dim(CM) dim(copula) are equal
     if (!is.null(dataDist)) {
 		if(any(is.na(dataDist@skewness))) {
-			require(copula)
+			library(copula)
 			if (dataDist@p > 1) {
 				varNotZeros <- diag(cm) != 0
 				dataDist2 <- dataDist
@@ -234,16 +234,16 @@ dataGen <- function(dataDist, n, m, cm, empirical = FALSE) {
 				}
 				
 				if(!is(dataDist@copula, "NullCopula")) {
-					Mvdc <- mvdc(dataDist@copula, dataDist2@margins, dataDist2@paramMargins)
+					Mvdc <- copula::mvdc(dataDist@copula, dataDist2@margins, dataDist2@paramMargins)
 					Data <- CopSEM(Mvdc, cm2, nw = n * 100, np = n)
 				} else {
 					r <- cov2cor(as.matrix(cm2))
 					listR <- r[lower.tri(diag(dataDist2@p))]
-					CopNorm <- ellipCopula(family = "normal", dim = dataDist2@p, dispstr = "un", 
+					CopNorm <- copula::ellipCopula(family = "normal", dim = dataDist2@p, dispstr = "un", 
 						param = listR)
 					
-					Mvdc <- mvdc(CopNorm, dataDist2@margins, dataDist2@paramMargins)
-					Data <- rMvdc(n, Mvdc)
+					Mvdc <- copula::mvdc(CopNorm, dataDist2@margins, dataDist2@paramMargins)
+					Data <- copula::rMvdc(n, Mvdc)
 				}
 				if (sum(varNotZeros) < dataDist@p) {
 					varZeros <- diag(cm) == 0
@@ -310,13 +310,14 @@ CopSEM <- function(copmvdc, Sigma, nw = 100000, np = 1000) {
 	## Sigma ... model VC-matrix to be approximated
 	## nw ... sample size for warm-up sample
 	## np ... sample size for production sample
+	library(copula)
 	Xw <- rMvdc(nw, copmvdc) ## draw warm-up sample
 	Sw <- cov(Xw) ## warm-up VC matrix
 	Sigma.eigen <- eigen(Sigma) ## EV decomposition Sigma
 	Sigmaroot <- Sigma.eigen$vectors %*% sqrt(diag(Sigma.eigen$values)) %*% t(Sigma.eigen$vectors) ## root Sigma
 	Sx.eigen <- eigen(solve(Sw)) ## EV decomposition S
 	Sxroot <- Sx.eigen$vectors %*% sqrt(diag(Sx.eigen$values)) %*% t(Sx.eigen$vectors) ## root S
-	X <- rMvdc(np, copmvdc) ## draw production sample
+	X <- copula::rMvdc(np, copmvdc) ## draw production sample
 	Y <- (X %*% (Sxroot) %*% Sigmaroot) ## linear combination for Y
 	Y
 }

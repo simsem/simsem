@@ -98,7 +98,7 @@ findphist <- function(value, hist) {
 find2Dhist <- function(vec1, vec2, gridsize = c(51L, 51L)) {
     library(KernSmooth)
     result <- NA
-    try(result <- suppressWarnings(bkde2D(cbind(vec1, vec2), c(dpik(vec1), dpik(vec2)), gridsize = gridsize)), 
+    try(result <- suppressWarnings(KernSmooth::bkde2D(cbind(vec1, vec2), c(KernSmooth::dpik(vec1), KernSmooth::dpik(vec2)), gridsize = gridsize)), 
         silent = TRUE)
     return(result)
 } 

@@ -197,6 +197,7 @@ Any combination of data-generation methods and data-analysis methods are valid. 
 # Please go to www.simsem.org for more examples.
 
 # Example of using simsem model template
+library(lavaan)
 
 loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA

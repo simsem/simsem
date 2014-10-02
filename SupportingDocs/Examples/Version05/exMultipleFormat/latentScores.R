@@ -17,7 +17,7 @@ CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, VTE=VTE, modelType = "CFA", in
 
 outfundata <- function(out, data) {
 	predictcor <- inspect(out, "coef")$psi[2, 1]
-	latentvar <- attr(data, "latentVar")[,c("f1", "f2")]
+	latentvar <- attr(data, "latentVar")[,c("posaffect", "negaffect")]
 	latentcor <- cor(latentvar)[2,1]
 	latentcor - predictcor
 }

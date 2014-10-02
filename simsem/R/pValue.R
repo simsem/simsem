@@ -178,7 +178,7 @@ pValueCondCutoff <- function(target, dist, revDirec = FALSE, x = NULL, xval = NU
     dat <- data.frame(y = dist, x)
     library(quantreg)
     percVal <- 1:49/50
-    mod <- rq(express, data = dat, tau = percVal)
+    mod <- quantreg::rq(express, data = dat, tau = percVal)
     xval <- data.frame(t(as.matrix(xval)))
     colnames(xval) <- name2
     perc <- predict(mod, xval, interval = "none")

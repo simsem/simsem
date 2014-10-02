@@ -49,7 +49,7 @@ analyzeSimSem <- function(model, data, package = "lavaan", miss = NULL,
 				}
 			}
 		}
-        Output <- runMI(model@pt, data, m = miss@m, miArgs=miArgs, chi=miss@chi, miPackage=miss@package, fun="lavaan", ...)
+        Output <- semTools::runMI(model@pt, data, m = miss@m, miArgs=miArgs, chi=miss@chi, miPackage=miss@package, fun="lavaan", ...)
     } else {
 		# If the missing argument is not specified and data have NAs, the default is fiml.
 		if(is.null(args$missing)) {
@@ -67,12 +67,13 @@ analyzeSimSem <- function(model, data, package = "lavaan", miss = NULL,
 			attribute <- list(model=model@pt, aux = aux, data = data, group = groupLab, 
                 model.type = model@modelType, missing = missing, fun = "lavaan")
 			attribute <- c(attribute, args)
-			Output <- do.call(auxiliary, attribute)
+			Output <- do.call(semTools::auxiliary, attribute)
         } else {
+			#library(lavaan)
 			attribute <- list(model=model@pt, data = data, group = groupLab, model.type = model@modelType, 
                 missing = missing)
 			attribute <- c(attribute, args)
-			Output <- do.call(lavaan, attribute)
+			Output <- do.call(lavaan::lavaan, attribute)
         }
     }
     return(Output)
@@ -80,11 +81,12 @@ analyzeSimSem <- function(model, data, package = "lavaan", miss = NULL,
 
 # To be used internally
 anal <- function(model, data, package = "lavaan", ...) {
+	#library(lavaan)
 	groupLab <- model@groupLab
 	if(length(unique(model@pt$group[model@pt$op %in% c("=~", "~~", "~", "~1", "|")])) == 1) {
 		groupLab <- NULL
 	}
-    Output <- lavaan(model@pt, data = data, group = groupLab, model.type = model@modelType, 
+    Output <- lavaan::lavaan(model@pt, data = data, group = groupLab, model.type = model@modelType, 
         ...)
     return(Output)
 } 
