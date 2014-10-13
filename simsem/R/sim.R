@@ -977,14 +977,14 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 				#redo with parameterEstimate function in lavaan (for coef se, std) all the way to 526
 
 				result <- lavaan::parameterEstimates(out, standardized=TRUE, boot.ci.type=citype, level = cilevel)
-				resultstd <- lavaan::standardizedSolution(out)
 				outpt <- out@ParTable
 				extraParamIndex <- outpt$op %in% c(">", "<", "==", ":=")
 				index <- ((outpt$free != 0) & !(duplicated(outpt$free))) | extraParamIndex
 				coef <- result$est[index]
 				se <- out@Fit@se[index]
-				std <- resultstd$est.std[index]
-				stdse <- resultstd$se[index]
+				std <- result$std.all[index]
+				errstdse <- try(resultstd <- lavaan::standardizedSolution(out))
+				if(!is(errstdse, "try-error")) stdse <- resultstd$se[index]
 				cilower <- result$ci.lower[index]
 				ciupper <- result$ci.upper[index]
 				FMI1 <- result$fmi[index]

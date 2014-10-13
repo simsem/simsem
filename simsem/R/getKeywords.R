@@ -24,7 +24,7 @@ getKeywords <- function() {
     
     usedFit <- c("chisq", "aic", "bic", "rmsea", "cfi", "tli", "srmr")
     usedFitScaled <- c("chisq.scaled", "aic", "bic", "rmsea.scaled", "cfi.scaled", "tli.scaled", "srmr")
-	reversedFit <- c("cfi", "tli", "nnfi", "nfi", "rfi", "ifi", "gfi", "agfi", "pnfi", "mfi")
+	reversedFit <- c("cfi", "tli", "nnfi", "nfi", "rfi", "ifi", "gfi", "agfi", "pnfi", "pgfi", "mfi", "rni")
     usedFitPop <- c("f0", "rmsea", "srmr")
     optMin <- c("min", "minimum", "lower")
     optMax <- c("max", "maximum", "upper")
