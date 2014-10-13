@@ -1371,10 +1371,10 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
 	if(any(pos)) {
 		conList <- list(lhs = pt$lhs[pos], op = pt$op[pos], con = pt$rhs[pos])
 	}
-	# Make the con right here
     result <- model(LY = LY, PS = PS, RPS = RPS, TE = TE, RTE = RTE, BE = BE, VTE = VTE, 
         VY = VY, VPS = VPS, VE = VE, TY = TY, AL = AL, MY = MY, ME = ME, GA = GA, KA = KA, modelType = modelType, 
         indLab = indLab, facLab = facLab, groupLab = groupLab, covLab = covLab, ngroups = ngroups, con = conList)
+	tryCatch(draw(result), finally = print("The regression matrix is not recursive. Simsem template does not support non-recursive matrix."))
     return(result)
 }
 

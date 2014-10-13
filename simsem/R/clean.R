@@ -25,7 +25,7 @@ clean <- function(..., improper = FALSE) {
 		converged <- sapply(object.l, slot, name = "converged")
 		if(!is.matrix(converged)) converged <- as.matrix(converged)
 		targetRep <- 0
-		if(improper) targetRep <- c(0, 3:5, 6)
+		if(improper) targetRep <- c(0, 3:7)
 		allConverged <- matrix(converged %in% targetRep, nrow(converged), ncol(converged))
 		allConverged <- apply(allConverged, 1, all)
 
@@ -64,7 +64,7 @@ clean <- function(..., improper = FALSE) {
 cleanSimResult <- function(object, converged = NULL, improper = FALSE) {
     if (is.null(converged)) {
 		targetRep <- 0
-		if(improper) targetRep <- c(0, 3:5)
+		if(improper) targetRep <- c(0, 3:7)
         converged <- object@converged %in% targetRep
 	}
     object@nRep <- sum(converged)
@@ -88,6 +88,7 @@ cleanSimResult <- function(object, converged = NULL, improper = FALSE) {
     if (!is.null(object@ciupper)) 
         object@ciupper <- object@ciupper[converged, , drop=FALSE]
     object@stdCoef <- object@stdCoef[converged, , drop=FALSE]
+    object@stdSe <- object@stdSe[converged, , drop=FALSE]
     object@seed <- object@seed
     if (length(object@n) > 1) 
         object@n <- object@n[converged]

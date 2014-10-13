@@ -32,7 +32,7 @@ generate <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "
 		model$indDist <- indDist
 		model$empirical <- empirical
 		model <- c(model, list(...))
-		data <- do.call("lavaanSimulateData", model) 
+		data <- do.call("simulateData", model) 
 	}
 	return(data)
 }
@@ -298,7 +298,7 @@ semMACS <- function(param) {
 		return(list(implied.mean, implied.covariance))
 }
 
-# The script below is modified from lavaan. 
+# The script below is modified from lavaan. Not being used anymore.
 
 lavaanSimulateData <- function(
                          # user-specified model

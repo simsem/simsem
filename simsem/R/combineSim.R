@@ -39,6 +39,7 @@ combineSim <- function(...) {
   cilower <- do.call("rbind", lapply(s4list, stackEm, "cilower"))
   ciupper <- do.call("rbind", lapply(s4list, stackEm, "ciupper"))
   stdCoef <- do.call("rbind", lapply(s4list, stackEm, "stdCoef"))
+  stdSe <- do.call("rbind", lapply(s4list, stackEm, "stdSe"))
   nobs <- do.call("rbind", lapply(s4list, stackEm, "nobs"))
   
   if(all(is.na(misspecValue))) misspecValue <- data.frame(V1 = NA)
@@ -84,7 +85,7 @@ combineSim <- function(...) {
   output <- new("SimResult", modelType = mT, nRep = nRep, coef = coef, se = se,
                 fit = fit, converged = converged, paramValue = pV,
                 misspecValue = misspecValue, popFit = popFit, FMI1 = FMI1, 
-                FMI2 = FMI2, cilower = cilower, ciupper = ciupper, stdCoef = stdCoef, seed = seed, n = n, nobs = nobs,
+                FMI2 = FMI2, cilower = cilower, ciupper = ciupper, stdCoef = stdCoef, stdSe = stdSe, seed = seed, n = n, nobs = nobs,
                 pmMCAR = pmMCAR, pmMAR = pmMAR, extraOut = extraOut, timing = timing, paramOnly = paramOnly)
 				# nobs, paramOnly
   output

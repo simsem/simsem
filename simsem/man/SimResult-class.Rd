@@ -29,6 +29,7 @@ Objects can be created by \code{\link{sim}}.
 	\item{\code{cilower}:}{Lower bounds of confidence interval.}
 	\item{\code{ciupper}:}{Upper bounds of confidence interval.}
 	\item{\code{stdCoef}:}{Standardized coefficients from each replication}
+	\item{\code{stdSe}:}{Standard Errors of Standardized coefficients from each replication}
 	\item{\code{n}:}{The total sample size of the analyzed data.}
 	\item{\code{nobs}:}{The sample size within each group.}
 	\item{\code{pmMCAR}:}{Percent missing completely at random.}

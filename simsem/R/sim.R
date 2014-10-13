@@ -406,6 +406,9 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ..., rawDa
 		std.l <- lapply(Result.l, function(rep) {
 			rep$std
 		})
+		stdse.l <- lapply(Result.l, function(rep) {
+			rep$stdse
+		})
 		extra <- list()
 		if (!is.null(outfun) || !is.null(outfundata)) {
 			extra <- lapply(Result.l, function(rep) {
@@ -477,6 +480,14 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ..., rawDa
 				std <- data.frame()
 		} else {
 			std <- data.frame()
+		}
+
+		if (!is.null(stdse.l[[1]])) {
+			stdse <- as.data.frame(do.call(rbind, stdse.l))
+			if (sum(dim(stdse)) == 0) 
+				stdse <- data.frame()
+		} else {
+			stdse <- data.frame()
 		}
 
 		if (!is.null(FMI1.l[[1]])) {
@@ -580,7 +591,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ..., rawDa
 		Result <- new("SimResult", modelType = modelType, nRep = nRep, coef = coef, 
 			se = se, fit = fit, converged = converged, seed = c(seed, s), paramValue = param, 
 			misspecValue = popMis, popFit = misfitOut, FMI1 = FMI1, FMI2 = FMI2, cilower = cilower, ciupper = ciupper,
-			stdCoef = std, n = n, nobs=nobs, pmMCAR = pmMCAR, pmMAR = pmMAR, extraOut = extra,
+			stdCoef = std, stdSe = stdse, n = n, nobs=nobs, pmMCAR = pmMCAR, pmMAR = pmMAR, extraOut = extra,
 			paramOnly=paramOnly, timing = timing)
 		
 		if(!is.null(previousSim)) {
@@ -619,6 +630,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
     se <- NA
     fit <- NA
     std <- NA
+	stdse <- NA
     extra <- NULL
 	extra2 <- NULL
     FMI1 <- NA
@@ -700,7 +712,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 	if (is.null(data) && is.lavaancall(generate)) {
 		generate$sample.nobs <- n
 		generate$indDist <- indDist
-		data <- do.call("lavaanSimulateData", generate) # Change to simulateData when the bug is fixed
+		data <- do.call("simulateData", generate) # Change to simulateData when the bug is fixed
 	}
 
 	if (is.null(data) && is(generate, "MxModel")) {
@@ -851,7 +863,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 				if(converged.l[[1]] == 1) {
 					converged <- 0
 				} else if (converged.l[[1]] == 6) {
-					converged <- 6
+					converged <- 7
 				} else if (converged.l[[1]] == 0) {
 					converged <- 0
 				} else {
@@ -880,18 +892,21 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 						converged <- 4
 					} else if(checkCov(out)) {
 						converged <- 5
+					} else if(checkCovLv(out)) {
+						converged <- 6
 					}
 				}			
 			}
 		}
 		
 		#reminder: out=lavaan object
-		if (converged %in% c(0, 3:6)) {
+		if (converged %in% c(0, 3:7)) {
 			if(is(model, "function")) {
 				fit <- out$fit
 				coef <- out$coef
 				se <- out$se
 				std <- out$std
+				stdse <- out$stdse
 				extra <- out$extra
 				FMI1 <- out$FMI1
 				FMI2 <- out$FMI2
@@ -962,12 +977,14 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 				#redo with parameterEstimate function in lavaan (for coef se, std) all the way to 526
 
 				result <- lavaan::parameterEstimates(out, standardized=TRUE, boot.ci.type=citype, level = cilevel)
+				resultstd <- lavaan::standardizedSolution(out)
 				outpt <- out@ParTable
 				extraParamIndex <- outpt$op %in% c(">", "<", "==", ":=")
 				index <- ((outpt$free != 0) & !(duplicated(outpt$free))) | extraParamIndex
 				coef <- result$est[index]
 				se <- out@Fit@se[index]
-				std <- result$std.all[index]
+				std <- resultstd$est.std[index]
+				stdse <- resultstd$se[index]
 				cilower <- result$ci.lower[index]
 				ciupper <- result$ci.upper[index]
 				FMI1 <- result$fmi[index]
@@ -982,6 +999,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 				names(coef) <- lab
 				names(se) <- lab
 				names(std) <- lab
+				names(stdse) <- lab
 				if(!is.null(cilower)) names(cilower) <- lab
 				if(!is.null(ciupper)) names(ciupper) <- lab
 				if(!is.null(FMI1)) names(FMI1) <- lab
@@ -1052,7 +1070,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 		}
 		
 		Result <- list(coef = coef, se = se, fit = fit, converged = converged, param = popParam, 
-        FMI1 = FMI1, FMI2 = FMI2, std = std, timing = timing, extra = extra, popMis = popMis, cilower = cilower, ciupper = ciupper,
+        FMI1 = FMI1, FMI2 = FMI2, std = std, stdse = stdse, timing = timing, extra = extra, popMis = popMis, cilower = cilower, ciupper = ciupper,
         misfitOut = misfitOut)
 		return(Result)
 	} else {
@@ -1237,7 +1255,22 @@ checkCov <- function(object) {
 		return(FALSE)
 		}
 	})))
-} 
+}
+
+checkCovLv <- function(object) {
+	covlvs <- inspect(object, "cov.lv")
+	if(!is(covlvs, "list")) {
+		covlvs <- list(covlvs)
+	} 
+	result <- rep(FALSE, length(covlvs))
+	for(i in seq_along(covlvs)) {
+		if(nrow(covlvs[[i]]) >= 1) {
+			ev <- eigen(covlvs[[i]])$values
+			if(any(ev < 0)) result[i] <- TRUE
+		}
+	}
+	any(result)
+}
 
 collapseExtraParam <- function(pls, dgen, fill=TRUE, con=NULL) {
 	# Collapse all labels

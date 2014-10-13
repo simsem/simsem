@@ -4,36 +4,44 @@
 # summaryParam: This function will summarize the obtained parameter estimates
 # and standard error.
 
-summaryParam <- function(object, alpha = 0.05, detail = FALSE, improper = FALSE, digits = NULL, matchParam = FALSE) {
+summaryParam <- function(object, alpha = 0.05, compareStd = FALSE, detail = FALSE, improper = FALSE, digits = NULL, matchParam = FALSE) {
     object <- clean(object, improper = improper)
-    coef <- colMeans(object@coef, na.rm = TRUE)
-    real.se <- sapply(object@coef, sd, na.rm = TRUE)
-    estimated.se <- colMeans(object@se, na.rm = TRUE)
+	usedCoef <- object@coef
+	usedSe <- object@se
+	if(compareStd) {
+		usedCoef <- object@stdCoef
+		usedSe <- object@stdSe
+	}
+    coef <- colMeans(usedCoef, na.rm = TRUE)
+    real.se <- sapply(usedCoef, sd, na.rm = TRUE)
+    estimated.se <- colMeans(usedSe, na.rm = TRUE)
     estimated.se[estimated.se == 0] <- NA
-    z <- object@coef/object@se
-    crit.value <- qnorm(1 - alpha/2)
-    sig <- abs(z) > crit.value
+    z <- usedCoef/usedSe
+    crit <- qnorm(1 - alpha/2)
+    sig <- abs(z) > crit
     pow <- apply(sig, 2, mean, na.rm = TRUE)
 	result <- cbind(coef, real.se, estimated.se, pow)
 	colnames(result) <- c("Estimate Average", "Estimate SD", "Average SE", "Power (Not equal 0)")
 	
-	if (length(object@stdCoef) != 0) {
+	if (!compareStd && length(object@stdCoef) != 0) {
 		stdCoef <- colMeans(object@stdCoef, na.rm = TRUE)
 		stdRealSE <- sapply(object@stdCoef, sd, na.rm = TRUE)
+		stdEstSE <- colMeans(object@stdSe, na.rm = TRUE)
 		leftover <- setdiff(rownames(result), names(stdCoef))
 		if(length(leftover) > 0) {
 			temp <- rep(NA, length(leftover))
 			names(temp) <- leftover
 			stdCoef <- c(stdCoef, temp)
 			stdRealSE <- c(stdRealSE, temp)
+			stdEstSE <- c(stdEstSE, temp)
 		}
-		resultStd <- cbind(stdCoef, stdRealSE)
-        colnames(resultStd) <- c("Std Est", "Std Est SD")
+		resultStd <- cbind(stdCoef, stdRealSE, stdEstSE)
+        colnames(resultStd) <- c("Std Est", "Std Est SD", "Std Ave SE")
         result <- data.frame(result, resultStd[rownames(result),])
 	}
 
     if (!is.null(object@paramValue)) {
-        targetVar <- match(colnames(object@coef), colnames(object@paramValue))
+        targetVar <- match(colnames(usedCoef), colnames(object@paramValue))
         targetVar <- targetVar[!is.na(targetVar)]
         paramValue <- object@paramValue[, targetVar]
 		if(matchParam) result <- result[colnames(paramValue),]
@@ -44,20 +52,22 @@ summaryParam <- function(object, alpha = 0.05, detail = FALSE, improper = FALSE,
             if (nrow(paramValue) == 1) 
                 paramValue <- matrix(unlist(rep(paramValue, nRep)), nRep, nParam, 
                   byrow = T)
-			biasParam <- object@coef[,rownames(result)] - paramValue
+			biasParam <- usedCoef[,rownames(result)] - paramValue
 			lowerBound <- object@cilower
 			upperBound <- object@ciupper
+			if(compareStd) {
+				lowerBound <- usedCoef - crit * usedSe 
+				upperBound <- usedCoef + crit * usedSe 
+			}
 			selectci <- colnames(lowerBound) %in% rownames(result)
 			lowerBound <- lowerBound[,selectci]
 			upperBound <- upperBound[,selectci]
 			noci <- setdiff(rownames(result), colnames(lowerBound))
 			if(length(noci) > 0) {
 				if(length(selectci) > 0) warning("Some CIs are Wald CI and others are calculated inside the simulation.")
-				selectCoef <- object@coef[,noci]
-				selectSE <- object@se[,noci]
-				
-				crit <- qnorm(1 - alpha/2)
-				
+				selectCoef <- usedCoef[,noci]
+				selectSE <- usedSe[,noci]
+
 				lowerBound <- cbind(lowerBound, selectCoef - crit * selectSE)
 				upperBound <- cbind(upperBound, selectCoef + crit * selectSE)
             }
@@ -125,23 +135,23 @@ summaryParam <- function(object, alpha = 0.05, detail = FALSE, improper = FALSE,
     }	
 	
     if (length(unique(object@n)) > 1) {
-        corCoefN <- cor(cbind(object@coef, object@n), use = "pairwise.complete.obs")[colnames(object@coef), 
+        corCoefN <- cor(cbind(usedCoef, object@n), use = "pairwise.complete.obs")[colnames(usedCoef), 
             "object@n"]
-        corSeN <- cor(cbind(object@se, object@n), use = "pairwise.complete.obs")[colnames(object@se), 
+        corSeN <- cor(cbind(usedSe, object@n), use = "pairwise.complete.obs")[colnames(usedSe), 
             "object@n"]
         result <- data.frame(result, r_coef.n = corCoefN, r_se.n = corSeN)
     }
     if (length(unique(object@pmMCAR)) > 1) {
-        corCoefMCAR <- cor(cbind(object@coef, object@pmMCAR), use = "pairwise.complete.obs")[colnames(object@coef), 
+        corCoefMCAR <- cor(cbind(usedCoef, object@pmMCAR), use = "pairwise.complete.obs")[colnames(usedCoef), 
             "object@pmMCAR"]
-        corSeMCAR <- cor(cbind(object@se, object@pmMCAR), use = "pairwise.complete.obs")[colnames(object@se), 
+        corSeMCAR <- cor(cbind(usedSe, object@pmMCAR), use = "pairwise.complete.obs")[colnames(usedSe), 
             "object@pmMCAR"]
         result <- data.frame(result, r_coef.pmMCAR = corCoefMCAR, r_se.pmMCAR = corSeMCAR)
     }
     if (length(unique(object@pmMAR)) > 1) {
-        corCoefMAR <- cor(cbind(object@coef, object@pmMAR), use = "pairwise.complete.obs")[colnames(object@coef), 
+        corCoefMAR <- cor(cbind(usedCoef, object@pmMAR), use = "pairwise.complete.obs")[colnames(usedCoef), 
             "object@pmMAR"]
-        corSeMAR <- cor(cbind(object@se, object@pmMAR), use = "pairwise.complete.obs")[colnames(object@se), 
+        corSeMAR <- cor(cbind(usedSe, object@pmMAR), use = "pairwise.complete.obs")[colnames(usedSe), 
             "object@pmMAR"]
         result <- data.frame(result, r_coef.pmMAR = corCoefMAR, r_se.pmMAR = corSeMAR)
     }
@@ -271,7 +281,7 @@ summaryConverge <- function(object, improper = FALSE) {
     if (numnonconverged == 0) 
         stop("You are good! All replications were converged!")
     result <- c(result, list(Converged = c(num.converged = sum(converged), num.nonconverged = numnonconverged)))
-	reasons <- c("Nonconvergent" = sum(object@converged %in% 1:2), "Improper SE" = sum(object@converged == 3), "Improper Variance" = sum(object@converged == 4), "Improper Correlation" = sum(object@converged == 5), "Optimal estimates were not guaranteed" = sum(object@converged == 6))
+	reasons <- c("Nonconvergent" = sum(object@converged %in% 1:2), "Improper SE" = sum(object@converged == 3), "Improper Variance" = sum(object@converged == 4), "Improper Correlation" = sum(object@converged == 5), "Not-positive-definite model-implied covariance matrix of latent variables" = sum(object@converged == 6), "Optimal estimates were not guaranteed" = sum(object@converged == 7))
 	reasons <- as.matrix(reasons)
 	colnames(reasons) <- "count"
 	result <- c(result, list("Nonconvergent Reasons" = reasons))
@@ -285,7 +295,7 @@ summaryConverge <- function(object, improper = FALSE) {
 	improprep <- rep(FALSE, length(converged))
 	if(improper) {
 		nonconverged <- object@converged %in% 1:2
-		improprep <- object@converged %in% 3:6
+		improprep <- object@converged %in% 3:7
 	}
     if (length(unique(n)) > 1) {
         temp1 <- n[converged]
@@ -431,7 +441,7 @@ getPopulation <- function(object, improper = FALSE, nonconverged = FALSE) {
 
 getExtraOutput <- function(object, improper = FALSE, nonconverged = FALSE) {
 	targetRep <- 0
-	if(improper) targetRep <- c(targetRep, 3:6)
+	if(improper) targetRep <- c(targetRep, 3:7)
 	if(nonconverged) targetRep <- c(targetRep, 1:2)
     if (length(object@extraOut) == 0) {
         stop("This simulation result does not contain any extra results")
@@ -449,7 +459,7 @@ setMethod("inspect", "SimResult",
 function(object, what="coef", improper = FALSE, nonconverged = FALSE) {
 
 	targetRep <- 0
-	if(improper) targetRep <- c(targetRep, 3:6)
+	if(improper) targetRep <- c(targetRep, 3:7)
 	if(nonconverged) targetRep <- c(targetRep, 1:2)
 	targetRep <- object@converged %in% targetRep
 	
@@ -522,6 +532,11 @@ function(object, what="coef", improper = FALSE, nonconverged = FALSE) {
               what == "standardizedsolution" ||
               what == "standardized.solution") {
         return(object@stdCoef[targetRep, , drop=FALSE])
+    } else if(what == "stdse" ||
+              what == "std.se" ||
+              what == "standardizedse" ||
+              what == "standardized.se") {
+        return(object@stdSe[targetRep, , drop=FALSE])
     } else if(what == "cilower" ||
               what == "ci.lower" ||
               what == "lowerci" ||
@@ -575,7 +590,7 @@ function(object, what="coef", improper = FALSE, nonconverged = FALSE) {
               what == "timing") {
         return(summaryTime(object))
     } else if(what == "converged") {
-		lab <- c("converged", "nonconverged", "nonconvergedMI", "improperSE", "improperVariance", "improperCorrelation", "nonOptimal")
+		lab <- c("converged", "nonconverged", "nonconvergedMI", "improperSE", "improperVariance", "improperCorrelation", "improperCovLv", "nonOptimal")
 		lab <- lab[sort(unique(object@converged)) + 1]
 		out <- factor(object@converged, labels = lab)
         return(out)

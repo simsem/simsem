@@ -33,6 +33,8 @@
 		\item \code{"popfit"}: Population misfit
 		\item \code{"fmi1"}: Fraction missings type 1
 		\item \code{"fmi2"}: Fraction missings type 2
+		\item \code{"std"}: Standardized Parameter Estimates
+		\item \code{"stdse"}: Standard Errors of Standardized Values
 		\item \code{"cilower"}: Lower bounds of confidence intervals
 		\item \code{"ciupper"}: Upper bounds of confidence intervals
 		\item \code{"ciwidth"}: Widths of confidence intervals
