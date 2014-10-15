@@ -999,7 +999,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 				names(coef) <- lab
 				names(se) <- lab
 				names(std) <- lab
-				names(stdse) <- lab
+				if(!(length(stdse) == 1 && is.na(stdse))) names(stdse) <- lab
 				if(!is.null(cilower)) names(cilower) <- lab
 				if(!is.null(ciupper)) names(ciupper) <- lab
 				if(!is.null(FMI1)) names(FMI1) <- lab
