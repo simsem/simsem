@@ -30,7 +30,7 @@ sim(nRep, model, n, generate = NULL, ..., rawData = NULL, miss = NULL, datafun=N
 	Sample size. Either a single value, or a list of values to vary sample size across replications. The \code{n} argument can also be specified as a random distribution object; if any resulting values are non-integers, the decimal will be rounded. 
 }
   \item{generate}{
-	There are four options for this argument: 1. \code{\linkS4class{SimSem}} object created by \code{\link{model}}, 2. \code{lavaan} script, \code{lavaan} parameter table (for data generation; see \code{\link[lavaan]{simulateData}}), or a list that contains all argument that users use to run \code{\link[lavaan]{simulateData}}, 3. \code{MxModel} object with population parameters specified in the starting values of all matrices in the model, 4. a function that take only one sample size argument (by integer for single-group model or by a vector of integers for multiple-group model). This argument cannot be specified the same time as the \code{rawData} argument
+	There are four options for this argument: 1. \code{\linkS4class{SimSem}} object created by \code{\link{model}}, 2. \code{lavaan} script, \code{lavaan} parameter table (for data generation; see \code{\link[lavaan]{simulateData}}), or a list that contains all argument that users use to run \code{\link[lavaan]{simulateData}}, 3. \code{MxModel} object with population parameters specified in the starting values of all matrices in the model, 4. a function that take only one sample size argument (by integer for single-group model or by a vector of integers for multiple-group model). The \code{generate} argument cannot be specified the same time as the \code{rawData} argument.
 }
   \item{rawData}{
 	There are two options for this argument: 1. a list of data frames to be used in simulations or 2. a population data. If a list of data frames is specified, the \code{nRep} and \code{n} arguments must not be specified. If a population data frame is specified, the \code{nRep} and \code{n} arguments are required.
@@ -160,13 +160,14 @@ sim(nRep, model, n, generate = NULL, ..., rawData = NULL, miss = NULL, datafun=N
 \details{
 This function is executed as follows: 1. parameters are drawn from the specified data-generation model (applicable only simsem model template, \code{\linkS4class{SimSem}}, only), 2. the drawn (or the specified) parameters are used to create data, 3. data can be transformed using the \code{datafun} argument, 4. specified missingness (if any) is imposed, 5. data are analyzed using the specified analysis model, 6. parameter estimates, standard errors, fit indices, and other characteristics of a replication are extracted, 7. additional outputs (if any) are extracted using the \code{outfun} argument, and 8. results across replications are summarized in a result object, \code{\linkS4class{SimResult}}).
 
-There are five ways to provide or generate data in this function: 
+There are six ways to provide or generate data in this function: 
 	\enumerate{
 		\item \code{\linkS4class{SimSem}} can be used as a template to generate data, which can be created by the \code{\link{model}} function. The \code{\linkS4class{SimSem}} can be specified in the \code{generate} argument.
 		\item \code{lavaan} script, parameter table for the \code{lavaan} package, or a list of arguments for the \code{\link[lavaan]{simulateData}} function. The \code{lavaan} script can be specified in the \code{generate} argument.
 		\item \code{MxModel} object from the \code{OpenMx} package. The \code{MxModel} object can be specified in the \code{generate} argument.
 		\item A list of raw data for each replication can be provided for the \code{rawData} argument. The \code{sim} function will analyze each data and summarize the result. Note that the \code{generate}, \code{n} and \code{nRep} could not be specified if the list of raw data is provided.
 		\item Population data can be provided for the \code{rawData} argument. The \code{sim} function will randomly draw sample data sets and analyze data. Note that the \code{n} and \code{nRep} must be specified if the population data are provided. The \code{generate} argument must not be specified.
+		\item A function can be used to generate data. The function must take sample size in a numeric format (or a vector of numerics for multiple groups) and return a data frame of the generated data set. Note that parameter values and their standardized values can be provided by using the attributes of the resulting data set. That is, users can assign parameter values and standardized parameter values to \code{attr(data, "param")} and \code{attr(data, "stdparam")}. 
 	}
 
 Note that all generated or provided data can be transformed based on Bollen-Stine approach by providing a real data in the \code{realData} argument if any of the first three methods are used.

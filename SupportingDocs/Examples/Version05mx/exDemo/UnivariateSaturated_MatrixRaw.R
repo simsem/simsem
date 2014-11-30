@@ -34,7 +34,7 @@ univSatModel4 <- mxModel("univSat4",
         observed=testData, 
         type="raw", 
     ),
-    mxFIMLObjective(
+    mxExpectationNormal(
         covariance="expCov", 
         means="expMean",
         dimnames=selVars

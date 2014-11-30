@@ -39,7 +39,7 @@ bivCorModel <- mxModel("bivCor",
         observed=testData, 
         type="raw"
     ), 
-    mxFIMLObjective(
+    mxExpectationNormal(
         covariance="expCov", 
         means="expMean",
         dimnames=selVars)

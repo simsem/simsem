@@ -32,7 +32,7 @@ M <- mxMatrix(type="Full", nrow=1, ncol=12, values=Mvalues, free=Mfree, name="M"
 popModel <- mxModel("Three Factor Model",
     type="RAM", 
 	A, S, F, M,
-    mxRAMObjective("A","S","F","M", dimnames=c(paste0("x", 1:9), "f1", "f2", "f3"))
+    mxExpectationRAM("A","S","F","M", dimnames=c(paste0("x", 1:9), "f1", "f2", "f3"))
 )
 
 dat <- generate(popModel, n=200)

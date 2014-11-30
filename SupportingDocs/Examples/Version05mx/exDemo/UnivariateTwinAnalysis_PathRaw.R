@@ -97,7 +97,7 @@ twinACEModel <- mxModel("twinACE", mzModel, dzModel,
     	expression=MZ.objective + DZ.objective, 
     	name="twin"
     ), 
-    mxAlgebraObjective("twin")
+    mxFitFunctionAlgebra("twin")
 )
 
 twinACEFit <- mxRun(twinACEModel)
@@ -156,7 +156,7 @@ twinAEModel <- mxModel("twinAE", mzModel, dzModel,
     	expression=MZ.objective + DZ.objective, 
     	name="twin"
     ), 
-    mxAlgebraObjective("twin")
+    mxFitFunctionAlgebra("twin")
 )
 
 twinAEFit <- mxRun(twinAEModel)

@@ -62,6 +62,10 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ..., rawDa
 		}
 	}
 	
+	if((lavaanGenerate | mxGenerate | functionGenerate) & (sequential | saveLatentVar)) {
+		stop("The sequential or saveLatentVar features are supported by only the data generation using the simsem template.")
+	}
+	
 	lavaanAnalysis <- FALSE
 	mxAnalysis <- FALSE
 	functionAnalysis <- FALSE
@@ -93,9 +97,9 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ..., rawDa
 	
 	if(mxAnalysis) {
 		if(length(model@submodels) > 0) {
-			if(!is(model@submodels[[1]]@objective, "MxRAMObjective") && all(is.na(model@submodels[[1]]@objective@means))) stop("The expected means must be specified in the objective of the 'model' argument.")
+			if(!is(model@submodels[[1]]@expectation, "MxExpectationRAM") && all(is.na(model@submodels[[1]]@expectation@means))) stop("The expected means must be specified in the objective of the 'model' argument.")
 		} else {
-			if(!is(model@objective, "MxRAMObjective") && all(is.na(model@objective@means))) stop("The expected means must be specified in the objective of the 'model' argument.")
+			if(!is(model@expectation, "MxExpectationRAM") && all(is.na(model@expectation@means))) stop("The expected means must be specified in the objective of the 'model' argument.")
 		}
 	}
 	
@@ -391,6 +395,9 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ..., rawDa
 		param.l <- lapply(Result.l, function(rep) {
 			rep$param
 		})
+		stdparam.l <- lapply(Result.l, function(rep) {
+			rep$stdparam
+		})
 		FMI1.l <- lapply(Result.l, function(rep) {
 			rep$FMI1
 		})
@@ -429,6 +436,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ..., rawDa
 		
 		if(paramOnly) converged <- rep(TRUE, length(converged))
 		param <- data.frame()
+		stdparam <- data.frame()
 		FMI1 <- NULL
 		FMI2 <- NULL
 		cilower <- NULL
@@ -440,21 +448,27 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ..., rawDa
 			if (nrow(unique(param)) == 1) 
 				param <- unique(param)
 		}
+		if (!is.null(stdparam.l[[1]])) {
+			stdparam <- as.data.frame(do.call(rbind, stdparam.l))
+			if (nrow(unique(stdparam)) == 1) 
+				stdparam <- unique(stdparam)
+		}
 		
 		if(isPopulation) {
 			param <- as.data.frame(t(popResult$coef))
+			if(!is.null(popResult$std)) stdparam <- as.data.frame(t(popResult$std))
 		}
 		
 		if(lavaanGenerate || (is.null(generate) && lavaanAnalysis && is.null(rawData))) {
 			if(is.null(generate) && lavaanAnalysis) generate <- model
-			if(!is.partable(generate$model)) {
-				generate2 <- generate
-				generate2$sample.nobs <- simConds[[1]][[2]]
-				generate2$return.fit <- TRUE
-				pt <- lavaan::parTable(attr(do.call(lavaan::simulateData, generate2), "fit"))
-			} else {
-				pt <- generate$model
-			}
+			generate2 <- generate
+			generate2$sample.nobs <- simConds[[1]][[2]]
+			generate2$return.fit <- TRUE
+			lavaanfit <- attr(do.call(lavaan::simulateData, generate2), "fit")
+			pt <- lavaan::parTable(lavaanfit)
+			if(is.partable(generate$model)) pt <- generate$model
+			stdpt <- lavaan::standardizedSolution(lavaanfit)
+			if(!("group" %in% colnames(stdpt))) stdpt <- data.frame(stdpt, group = 1)
 			extraParamIndex <- pt$op %in% c(">", "<", "==", ":=")
 			if(any(extraParamIndex)) {
 				con <- list(lhs = pt$lhs[extraParamIndex], op = pt$op[extraParamIndex], rhs = pt$rhs[extraParamIndex])
@@ -468,10 +482,27 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ..., rawDa
 			param <- pt$ustart
 			names(param) <- names(coef(lavaan::lavaan(pt, sample.nobs=rep(200, max(pt$group))), type="user"))
 			param <- as.data.frame(t(param))
+			stdparam <- stdpt$est.std
+			########### Need to fix the hidden function
+			names(stdparam) <- lavaan:::lav_partable_labels(stdpt)
+			stdparam <- as.data.frame(t(stdparam))
 		} else if (mxGenerate | (is.null(generate) & is(model, "MxModel"))) {
 			if(is.null(generate)) generate <- model
 			param <- vectorizeMx(generate)
 			param <- as.data.frame(t(param))
+			
+			findStd <- FALSE
+			if(length(generate@submodels) > 0) {
+				defVars <- lapply(generate@submodels, findDefVars)
+				defVars <- do.call(c, defVars)
+				if(is(generate@submodels[[1]]@expectation, "MxExpectationRAM") && !(length(defVars) > 0)) findStd <- TRUE
+			} else {
+				defVars <- findDefVars(generate)	
+				if(is(generate@expectation, "MxExpectationRAM") && !(length(defVars) > 0)) findStd <- TRUE
+			}
+			if(findStd) {
+				try({stdparam <- semTools::standardizeMx(generate, free = TRUE);stdparam <- as.data.frame(t(stdparam))}, silent = silent)
+			}
 		}
 		
 		if (!is.null(std.l[[1]])) {
@@ -587,9 +618,8 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ..., rawDa
 		timing$CombineResults <- (proc.time()[3] - start.time)
 		start.time <- proc.time()[3]
 		timing$EndTime <- Sys.time()
-		
 		Result <- new("SimResult", modelType = modelType, nRep = nRep, coef = coef, 
-			se = se, fit = fit, converged = converged, seed = c(seed, s), paramValue = param, 
+			se = se, fit = fit, converged = converged, seed = c(seed, s), paramValue = param, stdParamValue = stdparam,
 			misspecValue = popMis, popFit = misfitOut, FMI1 = FMI1, FMI2 = FMI2, cilower = cilower, ciupper = ciupper,
 			stdCoef = std, stdSe = stdse, n = n, nobs=nobs, pmMCAR = pmMCAR, pmMAR = pmMAR, extraOut = extra,
 			paramOnly=paramOnly, timing = timing)
@@ -626,6 +656,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
     timing <- list()
     #library(lavaan)
 	param <- NA
+	stdparam <- NA
     coef <- NA
     se <- NA
     fit <- NA
@@ -637,6 +668,8 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
     FMI2 <- NA
 	cilower <- NA
 	ciupper <- NA
+	popParam <- NA  # Real Data
+	stdPopParam <- NA # Real Data Standardized
 	
 	labelParam <- NULL
 	paramSet <- NULL
@@ -707,6 +740,8 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 		} else {
 			try(data <- generate(n))
 		}
+		if(!is.null(attr(data, "param"))) popParam <- attr(data, "param")
+		if(!is.null(attr(data, "stdparam"))) stdPopParam <- attr(data, "stdparam")
 	}
 	
 	if (is.null(data) && is.lavaancall(generate)) {
@@ -718,7 +753,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 	if (is.null(data) && is(generate, "MxModel")) {
 		data <- generateMx(generate, n=n, indDist=indDist, covData=covData)
 	}
-	
+
     if (is.null(data)) {
 		# Label variables for creating labels later
 		indLabGen <- NULL
@@ -750,13 +785,30 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 		# Save parameter values in the parameter tables
 		generatedgen <- generate@dgen
 		popParam <- NULL
+		stdPopParam <- NULL
 		if (!is.list(generatedgen[[1]])) {
 			generatedgen <- list(generatedgen)
 		}
+		
+		covLab <- unique(generate@pt$lhs[generate@pt$op == "~1" & generate@pt$exo == 1])
+		ngroups <- length(paramSet)
+		covDataGroup <- rep(list(NULL), ngroups)
+	
+		if(length(covLab) > 0) {
+			if(ngroups > 1) covLab <- c(covLab, model@groupLab)
+			if(!is.null(realData) && is.null(covData)) covData <- realData[,covLab, drop=FALSE]
+			covData <- covData[,covLab, drop=FALSE]
+			if (ngroups > 1) {
+				covDataGroup <- split(covData[,setdiff(covLab, model@groupLab), drop=FALSE], covData[,model@groupLab])
+			} else {
+				covDataGroup <- list(covData)
+			}
+		}
+
 		for (i in seq_along(paramSet)) {
 			popParam <- c(popParam, parsePopulation(generatedgen[[i]], paramSet[[i]], group = i))
+			stdPopParam <- c(stdPopParam, parsePopulation(generatedgen[[i]], paramSet[[i]], group = i, std = TRUE, covData = covDataGroup[[i]]))
 		}
-		
 		if(smartStart) {
 		#Once indLab and facLab are in the model object, sub them in for indLabGen and facLabGen
 			if(specifiedGenerate) stop("The smartStart option is not available when the analysis model and data-generation model are different")
@@ -779,6 +831,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
     }
     timing$UserFun <- (proc.time()[3] - start.time)
     start.time <- proc.time()[3]
+	
     ## 5. Call lavaan using simsem template and generated data from 2.
     out <- NULL
 	mxAnalysis <- FALSE
@@ -840,7 +893,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
     }
     timing$Analyze <- (proc.time()[3] - start.time)
     start.time <- proc.time()[3]
-    
+
     ## 6. Parse Lavaan Output
 	if (!dataOnly) {
 		if (!is.null(out)) {
@@ -899,7 +952,6 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 			}
 		}
 		
-		#reminder: out=lavaan object
 		if (converged %in% c(0, 3:7)) {
 			if(is(model, "function")) {
 				fit <- out$fit
@@ -944,21 +996,20 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 				names(se) <- name
 				findStd <- FALSE
 				ci <- out@output$confidenceIntervals
-				if(nrow(ci) > 0) {
+				if(!is.null(ci) && nrow(ci) > 0) {
 					cilower <- ci[,1]
 					ciupper <- ci[,2]
 					nameci <- gsub(paste0(out@name, "."), "", rownames(ci))
 					names(cilower) <- nameci
 					names(ciupper) <- nameci
 				}
-				
 				if(length(out@submodels) > 0) {
 					defVars <- lapply(out@submodels, findDefVars)
 					defVars <- do.call(c, defVars)
-					if(is(out@submodels[[1]]@objective, "MxRAMObjective") && !(length(defVars) > 0)) findStd <- TRUE
+					if(is(out@submodels[[1]]@expectation, "MxExpectationRAM") && !(length(defVars) > 0)) findStd <- TRUE
 				} else {
 					defVars <- findDefVars(out)	
-					if(is(out@objective, "MxRAMObjective") && !(length(defVars) > 0)) findStd <- TRUE
+					if(is(out@expectation, "MxExpectationRAM") && !(length(defVars) > 0)) findStd <- TRUE
 				}
 				if(findStd) {
 					std <- NA
@@ -1025,7 +1076,26 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 				if(!is.null(miss) && miss@m == 0){
 				}
 			}
-		} 
+		} else {
+			if(is(model, "function")) {
+				try(fit <- out$fit, silent = TRUE)
+				try(coef <- out$coef, silent = TRUE)
+				try(se <- out$se, silent = TRUE)
+				try(std <- out$std, silent = TRUE)
+				try(stdse <- out$stdse, silent = TRUE)
+				try(extra <- out$extra, silent = TRUE)
+				try(FMI1 <- out$FMI1, silent = TRUE)
+				try(FMI2 <- out$FMI2, silent = TRUE)
+				try(cilower <- out$cilower, silent = TRUE)
+				try(ciupper <- out$ciupper, silent = TRUE)
+				if (!is.null(outfun)) {
+					try(extra <- outfun(out), silent = TRUE)
+				}
+				if (!is.null(outfundata)) {
+					try(extra2 <- outfundata(out, data), silent = TRUE)
+				}
+			}
+		}
 		
 		## Keep parameters regardless of convergence - may want to examine
 		## non-convergent sets
@@ -1050,11 +1120,14 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 				extraParamName <- renameExtraParam(generate@con$lhs, generate@con$op, generate@con$rhs)
 				popParam[extraParamIndex] <- extraparam
 			}
-			index <- ((generate@pt$free != 0)& !(duplicated(generate@pt$free))) | extraParamIndex
+			indexstd <- (generate@pt$free != 0)& !(duplicated(generate@pt$free))
+			index <- indexstd | extraParamIndex
 			popParam <- popParam[index]
-			names(popParam) <- c(names(coef(lavaan::lavaan(generate@pt, sample.nobs=rep(200, max(generate@pt$group))))), extraParamName)
+			stdPopParam <- stdPopParam[indexstd]
+			paramNames <- names(coef(lavaan::lavaan(generate@pt, sample.nobs=rep(200, max(generate@pt$group)))))
+			names(popParam) <- c(paramNames, extraParamName)
+			names(stdPopParam) <- paramNames
 		} else {
-			popParam <- NA  # Real Data
 			popMis <- NA  # Misspecfication
 			misfitOut <- NA  # Misfit indices for misspecification
 		}
@@ -1069,7 +1142,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 			extra <- list(extra, extra2)
 		}
 		
-		Result <- list(coef = coef, se = se, fit = fit, converged = converged, param = popParam, 
+		Result <- list(coef = coef, se = se, fit = fit, converged = converged, param = popParam, stdparam = stdPopParam,
         FMI1 = FMI1, FMI2 = FMI2, std = std, stdse = stdse, timing = timing, extra = extra, popMis = popMis, cilower = cilower, ciupper = ciupper,
         misfitOut = misfitOut)
 		return(Result)
@@ -1314,7 +1387,50 @@ renameExtraParam <- function(lhs, op, rhs) {
 
 
 # The steps follows the buildPT function.
-parsePopulation <- function(paramSet, draws, group = 1) {
+parsePopulation <- function(paramSet, draws, group = 1, std = FALSE, covData = NULL) {
+	if(std) {
+		temp <- draws
+	
+		vareta <- draws$PS
+		if (!is.null(draws$BE)) {
+			numrow <- nrow(draws$BE)
+			ID <- diag(rep(1, numrow))
+			vareta <- solve(ID - draws$BE) %*% vareta %*% solve(t(ID - draws$BE))
+		}
+		if(!is.null(covData)) {
+			sigmax <- cov(covData)
+			tempvareta <- draws$GA %*% sigmax %*% t(draws$GA)
+			if (!is.null(draws$BE)) {
+				numrow <- nrow(draws$BE)
+				ID <- diag(rep(1, numrow))
+				tempvareta <- solve(ID - draws$BE) %*% tempvareta %*% solve(t(ID - draws$BE))
+			}
+			vareta <- vareta + tempvareta
+		}
+		vary <- vareta
+		if (!is.null(draws$LY)) {
+			vary <- draws$LY %*% vareta %*% t(draws$LY) + draws$TE
+			if(!is.null(covData)) {
+				sigmax <- cov(covData)
+				vary <- vary + draws$KA %*% sigmax %*% t(draws$KA)
+			}
+		}
+		deta <- diag(sqrt(diag(vareta)))
+		dy <- diag(sqrt(diag(vary)))
+		
+		if (!is.null(draws$LY)) draws$LY <- solve(dy) %*% temp$LY %*% deta
+		if (!is.null(draws$PS)) draws$PS <- solve(deta) %*% temp$PS %*% solve(deta)
+		if (!is.null(draws$TE)) draws$TE <- solve(dy) %*% temp$TE %*% solve(dy)
+		if (!is.null(draws$BE)) draws$BE <- solve(deta) %*% temp$BE %*% deta
+		if (!is.null(draws$AL)) draws$AL <- solve(deta) %*% temp$AL
+		if (!is.null(draws$TY)) draws$TY <- solve(dy) %*% temp$TY
+		if(!is.null(covData)) {
+			sigmax <- cov(covData)
+			dx <- diag(sqrt(diag(sigmax)))
+			if (!is.null(draws$GA)) draws$GA <- solve(deta) %*% temp$GA %*% dx
+			if (!is.null(draws$KA)) draws$KA <- solve(dy) %*% temp$KA %*% dx
+		}
+	}
     ustart <- NULL
     if (!is.null(paramSet$LY)) {
         ustart <- c(ustart, startingVal(paramSet$LY@free, draws$LY, smart = TRUE, symm = FALSE))

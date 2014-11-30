@@ -1,7 +1,7 @@
 library(simsem)
 library(OpenMx)
 
-totalRep <- 1000
+totalRep <- 20
 # 1. Generate Data by simsem model template
 
 loading <- matrix(0, 6, 2)
@@ -133,7 +133,7 @@ mxTwoGroupModel <- mxModel("Two Group",
 					  NA,NA),
 			name="M"
 		),
-		mxRAMObjective("A","S","F","M", dimnames=c(paste0("y", 1:6), "f1", "f2"))
+		mxExpectationRAM("A","S","F","M", dimnames=c(paste0("y", 1:6), "f1", "f2"))
 	), 
 	mxModel("group2",
 		type="RAM",
@@ -228,13 +228,13 @@ mxTwoGroupModel <- mxModel("Two Group",
 					  NA,NA),
 			name="M"
 		),
-		mxRAMObjective("A","S","F","M", dimnames=c(paste0("y", 1:6), "f1", "f2"))
+		mxExpectationRAM("A","S","F","M", dimnames=c(paste0("y", 1:6), "f1", "f2"))
 	), 
 	mxAlgebra(
         group1.objective + group2.objective,
         name="minus2loglikelihood"
     ),
-    mxAlgebraObjective("minus2loglikelihood")
+    mxFitFunctionAlgebra("minus2loglikelihood")
 )
 
 Output14 <- sim(nRep = totalRep, model = mxTwoGroupModel, n = list(150, 100), generate = CFA.Model, group = "group")
@@ -441,7 +441,10 @@ datfun <- function(n) {
 	scores2 <- cbind(mvrnorm(n[2], rep(0, 6), modelImplied2), 2)
 	scores <- rbind(scores1, scores2)
 	colnames(scores) <- c(paste0("y", 1:6), "group")
-	data.frame(scores)
+	scores <- data.frame(scores)
+	attr(scores, "param") <- c("load1.g1" = 0.7, "load1.g2" = 0.75)
+	attr(scores, "stdparam") <- c("load1.g1" = 0.7, "load1.g2" = 0.72)
+	scores
 }
 
 # 6.1 Analyze by simsem model template

@@ -38,7 +38,7 @@ univSatModel3m <- mxModel("univSat3m",
         numObs=1000,
         means=colMeans(testData) 
     ),
-    mxMLObjective(
+    mxExpectationNormal(
         covariance="expCov", 
         means="expMean",
         dimnames=selVars

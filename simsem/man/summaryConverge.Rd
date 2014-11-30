@@ -7,11 +7,14 @@ Provide a comparison between the characteristics of convergent replications and 
 This function provides a comparison between the characteristics of convergent replications and nonconvergent replications. The comparison includes sample size (if varying), percent missing completely at random (if varying), percent missing at random (if varying), parameter values, misspecified-parameter values (if applicable), and population misfit (if applicable).
 }
 \usage{
-summaryConverge(object, improper = FALSE)
+summaryConverge(object, std = FALSE, improper = FALSE)
 }
 \arguments{
   \item{object}{
 		\code{\linkS4class{SimResult}} object being described
+}
+  \item{std}{
+		If \code{TRUE}, the standardized parameter values are used instead of unstandardized parameter values.
 }
   \item{improper}{
 	If TRUE, include the replications that provided improper solutions

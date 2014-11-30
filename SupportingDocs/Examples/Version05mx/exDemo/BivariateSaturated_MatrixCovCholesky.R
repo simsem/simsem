@@ -43,7 +43,7 @@ bivSatModel5m <- mxModel("bivSat5m",
         numObs=1000, 
         means=colMeans(testData) 
     ),
-    mxMLObjective(
+    mxExpectationNormal(
         covariance="expCov",
         means="expMean",
         dimnames=selVars

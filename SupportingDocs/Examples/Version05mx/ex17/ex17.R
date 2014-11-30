@@ -140,7 +140,7 @@ popModel <- mxModel("Longitudinal Mediation",
     mxMatrix(type="Full", nrow=1, ncol=36, values=rep(0, 36), free=c(rep(TRUE, 27), rep(FALSE, 9)), name="M"),
 	mxAlgebra(expression = A[32, 28] * A[36, 32], name = "med"),
 	mxCI("med"),
-    mxRAMObjective("A","S","F","M", dimnames=c(paste0("y", 1:27), paste0("f", 1:9)))
+    mxExpectationRAM("A","S","F","M", dimnames=c(paste0("y", 1:27), paste0("f", 1:9)))
 )
 
 outfun <- function(object) {
@@ -186,7 +186,7 @@ analyzeModel2 <- mxModel("Cross_sectional Mediation Model",
     mxMatrix(type="Full", nrow=1, ncol=12, values=rep(0, 12), free=c(rep(TRUE, 9), rep(FALSE, 3)), name="M"),
 	mxAlgebra(expression = A[12, 11] * A[11, 10], name = "med"),
 	mxCI("med"),
-    mxRAMObjective("A","S","F","M", dimnames=c(paste0("y", 1:9), "f1", "f2", "f3"))
+    mxExpectationRAM("A","S","F","M", dimnames=c(paste0("y", 1:9), "f1", "f2", "f3"))
 )
 
 Output2 <- sim(1000, n=200, analyzeModel2, generate=popModel, intervals=TRUE, outfun=outfun)

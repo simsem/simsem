@@ -14,7 +14,7 @@ factorModel <- mxModel("One Factor",
     mxMatrix(type="Diag", nrow=5, ncol=5, values=1, free=TRUE, name="U"),
     mxMatrix(type="Full", nrow=1, ncol=5, values=1, free=TRUE, name="M"),
     mxAlgebra(expression=A %*% L %*% t(A) + U, name="R"),
-    mxMLObjective(covariance="R", means="M", dimnames=manifestVars),
+    mxExpectationNormal(covariance="R", means="M", dimnames=manifestVars),
     mxData(observed=cov(demoOneFactor), means=colMeans(demoOneFactor), type="cov", numObs=500)
 )
 

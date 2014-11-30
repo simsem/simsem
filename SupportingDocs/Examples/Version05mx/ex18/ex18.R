@@ -21,7 +21,7 @@ popModel <- mxModel("Two_factor Model",
     mxMatrix(type="Symm", nrow=8, ncol=8, values=Svalues, free=Sfree, byrow=TRUE, name="S"),
     mxMatrix(type="Full", nrow=6, ncol=8, free=FALSE, values=Fvalues, byrow=TRUE, name="F"),
     mxMatrix(type="Full", nrow=1, ncol=8, values=rep(0, 8), free=c(rep(TRUE, 6), rep(FALSE, 2)), name="M"),
-    mxRAMObjective("A","S","F","M", dimnames=c(paste0("y", 1:6), "f1", "f2"))
+    mxExpectationRAM("A","S","F","M", dimnames=c(paste0("y", 1:6), "f1", "f2"))
 )
 
 Output <- sim(NULL, n=50:1000, model = popModel)

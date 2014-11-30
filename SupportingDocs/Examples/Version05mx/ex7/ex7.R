@@ -28,7 +28,7 @@ popModel <- mxModel("Three Factor Model",
     mxMatrix(type="Symm", nrow=12, ncol=12, values=Svalues, free=Sfree, byrow=TRUE, name="S"),
     mxMatrix(type="Full", nrow=9, ncol=12, free=FALSE, values=Fvalues, byrow=TRUE, name="F"),
     mxMatrix(type="Full", nrow=1, ncol=12, values=rep(0, 12), free=c(rep(TRUE, 9), rep(FALSE, 3)), name="M"),
-    mxRAMObjective("A","S","F","M", dimnames=c(paste0("x", 1:9), "f1", "f2", "f3"))
+    mxExpectationRAM("A","S","F","M", dimnames=c(paste0("x", 1:9), "f1", "f2", "f3"))
 )
 
 fit <- analyze(popModel, data=HolzingerSwineford1939)

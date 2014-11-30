@@ -73,6 +73,8 @@ cleanSimResult <- function(object, converged = NULL, improper = FALSE) {
     object@fit <- object@fit[converged, , drop=FALSE]
     if (!is.null(object@paramValue) && (nrow(object@paramValue) > 1)) 
         object@paramValue <- object@paramValue[converged, , drop=FALSE]
+    if (!is.null(object@stdParamValue) && (nrow(object@stdParamValue) > 1)) 
+        object@stdParamValue <- object@stdParamValue[converged, , drop=FALSE]
     if (!is.null(object@misspecValue) && (nrow(object@misspecValue) > 1)) 
         object@misspecValue <- object@misspecValue[converged, , drop=FALSE]
     if (!is.null(object@popFit) && (nrow(object@popFit) > 1)) 

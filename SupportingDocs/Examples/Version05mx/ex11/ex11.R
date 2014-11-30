@@ -17,7 +17,7 @@ popNull <- mxModel("Null Hypothesis Model",
     mxMatrix(type="Symm", nrow=7, ncol=7, values=SvaluesNull, free=SfreeNull, byrow=TRUE, name="S"),
     mxMatrix(type="Full", nrow=6, ncol=7, free=FALSE, values=FvaluesNull, byrow=TRUE, name="F"),
     mxMatrix(type="Full", nrow=1, ncol=7, values=rep(0, 7), free=c(rep(TRUE, 6), FALSE), name="M"),
-    mxRAMObjective("A","S","F","M", dimnames=c(paste0("y", 1:6), "f1"))
+    mxExpectationRAM("A","S","F","M", dimnames=c(paste0("y", 1:6), "f1"))
 )
 
 AvaluesAlt <- matrix(0, 8, 8)
@@ -40,7 +40,7 @@ popAlt <- mxModel("Alternative Hypothesis Model",
     mxMatrix(type="Symm", nrow=8, ncol=8, values=SvaluesAlt, free=SfreeAlt, byrow=TRUE, name="S"),
     mxMatrix(type="Full", nrow=6, ncol=8, free=FALSE, values=FvaluesAlt, byrow=TRUE, name="F"),
     mxMatrix(type="Full", nrow=1, ncol=8, values=rep(0, 8), free=c(rep(TRUE, 6), rep(FALSE, 2)), name="M"),
-    mxRAMObjective("A","S","F","M", dimnames=c(paste0("y", 1:6), "f1", "f2"))
+    mxExpectationRAM("A","S","F","M", dimnames=c(paste0("y", 1:6), "f1", "f2"))
 )
 
 Output.NULL <- sim(1000, popNull, n=200, generate=popNull, mxFit=TRUE)

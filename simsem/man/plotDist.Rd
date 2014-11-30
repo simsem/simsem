@@ -41,7 +41,8 @@ plotDist(object, xlim = NULL, ylim = NULL, r = 0, var = NULL, contour = TRUE)
 	}
 }
 \examples{
-datadist <- bindDist(c("chisq", "t", "f"), list(df=5), list(df=3), list(df1=3, df2=5))
+
+datadist <- bindDist(skewness = c(0, -2, 2), kurtosis = c(2, 4, 4))
 
 # Plot the joint distribution of Variables 1 and 2 with correlation of 0.5
 plotDist(datadist, r=0.5, var=1:2)
@@ -49,11 +50,13 @@ plotDist(datadist, r=0.5, var=1:2)
 # Plot the marginal distribution of the variable 3
 plotDist(datadist, var=3)
 
-datadist2 <- bindDist(skewness = c(0, -2, 2), kurtosis = c(2, 4, 4))
+\dontrun{
+datadist2 <- bindDist(c("chisq", "t", "f"), list(df=5), list(df=3), list(df1=3, df2=5))
 
 # Plot the joint distribution of Variables 1 and 2 with correlation of 0.5
 plotDist(datadist2, r=0.5, var=1:2)
 
 # Plot the marginal distribution of the variable 3
 plotDist(datadist2, var=3)
+}
 }

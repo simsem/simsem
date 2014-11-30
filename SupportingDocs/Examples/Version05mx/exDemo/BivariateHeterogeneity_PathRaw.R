@@ -96,7 +96,7 @@ bivHetModel <- mxModel("bivariate Heterogeneity Path Specification",
         group1.objective + group2.objective, 
         name="h12"
     ),
-    mxAlgebraObjective("h12")
+    mxFitFunctionAlgebra("h12")
 )
 
 bivHetFit <- mxRun(bivHetModel)

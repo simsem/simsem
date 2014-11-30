@@ -37,7 +37,7 @@ library(OpenMx)
 #assign
 #dir <- "C:/Users/Sunthud/Dropbox/simsem/simsem/R/"
 #dir <- "C:/Users/Sunthud/simsem_backup/simsem/R/"
-dir <- "C:/Users/spornpra/Dropbox/simsem/simsem/R/"
+dir <- "C:/Users/Sunthud/Dropbox/simsem/simsem/R/"
  source(paste(dir, "AllClass.R", sep=""))
  source(paste(dir, "AllGenerics.R", sep=""))
  sourceDir(dir)
@@ -103,151 +103,18 @@ FUN4 <- function(data) {
 Output4 <- sim(20, model=FUN4, generate=CFA.Model,n=200)
 
 
-
-###
-
-library(lavaan)
-
-script <- "
-f1 =~ 1*x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9
-f2 =~ 1*x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9
-f3 =~ 1*x3 + x4 + x5 + x6 + x7 + x8 + x9
-f1 ~~ 0*f2
-f1 ~~ 0*f3
-f2 ~~ 0*f3
-
-"
-
-fit <- cfa(script, data=HolzingerSwineford1939, std.lv=TRUE)
-
-
-
-
-
-
-
-
-
-
-
-library(simsem)
-set.seed(123321)
-loading <- matrix(0, 7, 2)
-loading[1:3, 1] <- NA
-loading[4:6, 2] <- NA
-LY <- bind(loading, 0.7)
-
-latent.cor <- matrix(NA, 2, 2)
-diag(latent.cor) <- 1
-RPS <- binds(latent.cor, 0.5)
-
-error.cor <- diag(7)
-error.cor[1:6, 7] <- NA
-error.cor[7, 1:6] <- NA
-RTE <- binds(error.cor, 0.4)
-
-VX <- bind(rep(NA, 7), 1)
-
-CFA.Model.Aux <- model(LY = LY, RPS = RPS, RTE = RTE, VY = VX, modelType="CFA")
-
-script <- 'y1 ~ p(0.3) + 0.5*y7' 
-Missing2 <- miss(logit=script)
-summary(Missing2)
-
-dat <- generate(CFA.Model.Aux, n = 1000)
-dat <- impose(Missing2, dat)
-
-write.table(dat, file = "dat.dat", na = "-999", row.names = FALSE,
-            col.names = FALSE, sep=",")
-
-loading2 <- matrix(0, 6, 2)
-loading2[1:3, 1] <- NA
-loading2[4:6, 2] <- NA
-
-latent.cor2 <- matrix(NA, 2, 2)
-diag(latent.cor2) <- 1
-
-error.cor2 <- diag(NA, 6)
-
-CFA.Model <- estmodel(LY = loading2, PS = latent.cor2, TE = error.cor2, modelType="CFA", indLab=paste0("y", 1:6))
-
-
-
-
-
-out <- analyze(CFA.Model, dat, aux="y7")
-
-Output <- sim(1000, n=200, model=CFA.Model, generate=CFA.Model.Aux, miss=missmodel)
-getCutoff(Output, 0.05)
-plotCutoff(Output, 0.05)
-summary(Output)
-
-
-
-###############
-
-library(lavaan)
 popModel <- "
-f1 =~ 0.6*y1 + 0.6*y2 + 0.6*y3 + 0.6*y4
-f2 =~ 1*x1 + 1*x2 + 1*x3
-y1 | 0.5*t1
-y2 | 0.25*t1
-y3 | 0*t1
-y4 | -0.5*t1
-x1 ~~ 0.5*x1
-x2 ~~ 0.5*x2
-x3 ~~ 0.5*x3
-y1 ~*~ 1*y1
-y2 ~*~ 1*y2
-y3 ~*~ 1*y3
-y4 ~*~ 1*y4
+f1 =~ 0.7*y1 + 0.7*y2 + 0.7*y3
+f2 =~ 0.7*y4 + 0.7*y5 + 0.7*y6
+f1 ~~ 0.5*f2
 "
-fit.pop <- cfa(popModel)
-fitted(fit.pop)
 
-dat <- simulateData(popModel, sample.nobs=1000L, empirical=TRUE,
-return.fit=TRUE)
-fitted(attr(dat, "fit"))
+analyzeModel <- "
+f1 =~ y1 + y2 + y3
+f2 =~ y4 + y5 + y6
+"
 
-
-model <- '
-f1 =~ y1 + y2 + y3 + y4
-f2 =~ x1 + x2 + x3
-'
-fit <- cfa(model, data=dat, ordered=c("y1","y2","y3","y4"),std.lv=TRUE)
-summary(fit)
-
-
-##############
-
-
-
-
-library(simsem)
-
-loading <- matrix(0, 9, 3)
-loading[1:3, 1] <- c(1, NA, NA)
-loading[4:6, 2] <- c(1, NA, NA)
-loading[7:9, 3] <- c(1, NA, NA)
-loadingVal <- matrix(0, 9, 3)
-loadingVal[2:3, 1] <- c(0.6, 0.7)
-loadingVal[5:6, 2] <- c(1.1, 0.9)
-loadingVal[8:9, 3] <- c(1.2, 1.1)
-LY <- bind(loading, loadingVal)
-
-facCov <- matrix(NA, 3, 3)
-facCovVal <- diag(c(0.8, 0.9, 0.4))
-facCovVal[lower.tri(facCovVal)] <- c(0.4, 0.2, 0.3)
-facCovVal[upper.tri(facCovVal)] <- c(0.4, 0.2, 0.3)
-PS <- binds(facCov, facCovVal)
-
-errorCov <- diag(NA, 9)
-errorCovVal <- diag(c(0.5, 1.1, 0.8, 0.4, 0.4, 0.8, 0.8, 0.5, 0.6))
-TE <- binds(errorCov, errorCovVal)
-
-HS.Model <- model(LY=LY, PS=PS, TE=TE, modelType="CFA")
-
-Output <- sim(10, HS.Model, n=200)
+Output <- sim(20, analyzeModel, n=200, generate=list(model = popModel), lavaanfun = "cfa", std.lv=TRUE)
 
 ############################ Example 1
 

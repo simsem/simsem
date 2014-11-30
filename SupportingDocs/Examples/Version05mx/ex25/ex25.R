@@ -53,7 +53,7 @@ popNested <- mxModel("Strong Invariance Model",
     mxMatrix(type="Symm", nrow=12, ncol=12, values=Svalues, free=Sfree, byrow=TRUE, name="S"),
     mxMatrix(type="Full", nrow=9, ncol=12, free=FALSE, values=Fvalues, byrow=TRUE, name="F"),
     mxMatrix(type="Full", nrow=1, ncol=12, values=MvaluesNested, free=MfreeNested, labels=MlabelsNested, name="M"),
-    mxRAMObjective("A","S","F","M", dimnames=c(paste0("y", 1:9), "f1", "f2", "f3"))
+    mxExpectationRAM("A","S","F","M", dimnames=c(paste0("y", 1:9), "f1", "f2", "f3"))
 )
 
 MvaluesParent <- c(0, -0.5, 0.5, 0, 0, 0, 0, 0.5, -0.5, 0, 0.5, 1)
@@ -65,7 +65,7 @@ popParent <- mxModel("Weak Invariance Model",
     mxMatrix(type="Symm", nrow=12, ncol=12, values=Svalues, free=Sfree, byrow=TRUE, name="S"),
     mxMatrix(type="Full", nrow=9, ncol=12, free=FALSE, values=Fvalues, byrow=TRUE, name="F"),
     mxMatrix(type="Full", nrow=1, ncol=12, values=MvaluesParent, free=MfreeParent, name="M"),
-    mxRAMObjective("A","S","F","M", dimnames=c(paste0("y", 1:9), "f1", "f2", "f3"))
+    mxExpectationRAM("A","S","F","M", dimnames=c(paste0("y", 1:9), "f1", "f2", "f3"))
 )
 
 outDatNestedModNested <- sim(NULL, n = 50:500, popNested, generate = popNested, mxFit=TRUE)

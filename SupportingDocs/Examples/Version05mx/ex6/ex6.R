@@ -39,7 +39,7 @@ groupNon1 <- mxModel("group1",
 		mxMatrix(type="Symm", nrow=7, ncol=7, values=SvaluesNon1, free=SfreeNon1, byrow=TRUE, name="S"),
 		mxMatrix(type="Full", nrow=6, ncol=7, free=FALSE, values=FvaluesNon1, byrow=TRUE, name="F"),
 		mxMatrix(type="Full", nrow=1, ncol=7, values=MvaluesNon1, free=MfreeNon1, name="M"),
-		mxRAMObjective("A","S","F","M", dimnames=c(paste0("y", 1:6), "f1"))
+		mxExpectationRAM("A","S","F","M", dimnames=c(paste0("y", 1:6), "f1"))
 	)
 
 groupNon2 <- mxModel("group2",
@@ -48,7 +48,7 @@ groupNon2 <- mxModel("group2",
 		mxMatrix(type="Symm", nrow=8, ncol=8, values=SvaluesNon2, free=SfreeNon2, byrow=TRUE, name="S"),
 		mxMatrix(type="Full", nrow=6, ncol=8, free=FALSE, values=FvaluesNon2, byrow=TRUE, name="F"),
 		mxMatrix(type="Full", nrow=1, ncol=8, values=MvaluesNon2, free=MfreeNon2, name="M"),
-		mxRAMObjective("A","S","F","M", dimnames=c(paste0("y", 1:6), "f1", "f2"))
+		mxExpectationRAM("A","S","F","M", dimnames=c(paste0("y", 1:6), "f1", "f2"))
 	)
 
 popModelNoninvariance <- mxModel("Noninvariance",
@@ -58,7 +58,7 @@ popModelNoninvariance <- mxModel("Noninvariance",
         group1.objective + group2.objective,
         name="minus2loglikelihood"
     ),
-    mxAlgebraObjective("minus2loglikelihood")
+    mxFitFunctionAlgebra("minus2loglikelihood")
 )
 
 Output.a <- sim(1000, popModelNoninvariance, n=list(200, 200), group = "group", mxFit=TRUE) 
@@ -108,7 +108,7 @@ groupCon1 <- mxModel("group1",
 		mxMatrix(type="Symm", nrow=8, ncol=8, values=SvaluesCon1, free=SfreeCon1, byrow=TRUE, name="S"),
 		mxMatrix(type="Full", nrow=6, ncol=8, free=FALSE, values=FvaluesCon1, byrow=TRUE, name="F"),
 		mxMatrix(type="Full", nrow=1, ncol=8, values=MvaluesCon1, free=MfreeCon1, name="M"),
-		mxRAMObjective("A","S","F","M", dimnames=c(paste0("y", 1:6), "f1", "f2"))
+		mxExpectationRAM("A","S","F","M", dimnames=c(paste0("y", 1:6), "f1", "f2"))
 	)
 
 groupCon2 <- mxModel("group2",
@@ -117,7 +117,7 @@ groupCon2 <- mxModel("group2",
 		mxMatrix(type="Symm", nrow=8, ncol=8, values=SvaluesCon2, free=SfreeCon2, byrow=TRUE, name="S"),
 		mxMatrix(type="Full", nrow=6, ncol=8, free=FALSE, values=FvaluesCon2, byrow=TRUE, name="F"),
 		mxMatrix(type="Full", nrow=1, ncol=8, values=MvaluesCon2, free=MfreeCon2, name="M"),
-		mxRAMObjective("A","S","F","M", dimnames=c(paste0("y", 1:6), "f1", "f2"))
+		mxExpectationRAM("A","S","F","M", dimnames=c(paste0("y", 1:6), "f1", "f2"))
 	)
 
 popModelConfigural <- mxModel("Configural Invariance",
@@ -127,7 +127,7 @@ popModelConfigural <- mxModel("Configural Invariance",
         group1.objective + group2.objective,
         name="minus2loglikelihood"
     ),
-    mxAlgebraObjective("minus2loglikelihood")
+    mxFitFunctionAlgebra("minus2loglikelihood")
 )
 
 Output.b <- sim(1000, popModelConfigural, n=list(200, 200)) 
@@ -173,7 +173,7 @@ groupWeak1 <- mxModel("group1",
 		mxMatrix(type="Symm", nrow=8, ncol=8, values=SvaluesWeak1, free=SfreeWeak1, byrow=TRUE, name="S"),
 		mxMatrix(type="Full", nrow=6, ncol=8, free=FALSE, values=FvaluesWeak1, byrow=TRUE, name="F"),
 		mxMatrix(type="Full", nrow=1, ncol=8, values=MvaluesWeak1, free=MfreeWeak1, name="M"),
-		mxRAMObjective("A","S","F","M", dimnames=c(paste0("y", 1:6), "f1", "f2"))
+		mxExpectationRAM("A","S","F","M", dimnames=c(paste0("y", 1:6), "f1", "f2"))
 	)
 
 groupWeak2 <- mxModel("group2",
@@ -182,7 +182,7 @@ groupWeak2 <- mxModel("group2",
 		mxMatrix(type="Symm", nrow=8, ncol=8, values=SvaluesWeak2, free=SfreeWeak2, byrow=TRUE, name="S"),
 		mxMatrix(type="Full", nrow=6, ncol=8, free=FALSE, values=FvaluesWeak2, byrow=TRUE, name="F"),
 		mxMatrix(type="Full", nrow=1, ncol=8, values=MvaluesWeak2, free=MfreeWeak2, name="M"),
-		mxRAMObjective("A","S","F","M", dimnames=c(paste0("y", 1:6), "f1", "f2"))
+		mxExpectationRAM("A","S","F","M", dimnames=c(paste0("y", 1:6), "f1", "f2"))
 	)
 
 popModelWeak <- mxModel("Weak Invariance",
@@ -192,7 +192,7 @@ popModelWeak <- mxModel("Weak Invariance",
         group1.objective + group2.objective,
         name="minus2loglikelihood"
     ),
-    mxAlgebraObjective("minus2loglikelihood")
+    mxFitFunctionAlgebra("minus2loglikelihood")
 )
 
 Output.c <- sim(1000, popModelWeak, n=list(200, 200)) 
@@ -240,7 +240,7 @@ groupStrong1 <- mxModel("group1",
 		mxMatrix(type="Symm", nrow=8, ncol=8, values=SvaluesStrong1, free=SfreeStrong1, byrow=TRUE, name="S"),
 		mxMatrix(type="Full", nrow=6, ncol=8, free=FALSE, values=FvaluesStrong1, byrow=TRUE, name="F"),
 		mxMatrix(type="Full", nrow=1, ncol=8, values=MvaluesStrong1, free=MfreeStrong1, labels=MlabelsStrong1, name="M"),
-		mxRAMObjective("A","S","F","M", dimnames=c(paste0("y", 1:6), "f1", "f2"))
+		mxExpectationRAM("A","S","F","M", dimnames=c(paste0("y", 1:6), "f1", "f2"))
 	)
 
 groupStrong2 <- mxModel("group2",
@@ -249,7 +249,7 @@ groupStrong2 <- mxModel("group2",
 		mxMatrix(type="Symm", nrow=8, ncol=8, values=SvaluesStrong2, free=SfreeStrong2, byrow=TRUE, name="S"),
 		mxMatrix(type="Full", nrow=6, ncol=8, free=FALSE, values=FvaluesStrong2, byrow=TRUE, name="F"),
 		mxMatrix(type="Full", nrow=1, ncol=8, values=MvaluesStrong2, free=MfreeStrong2, labels=MlabelsStrong2, name="M"),
-		mxRAMObjective("A","S","F","M", dimnames=c(paste0("y", 1:6), "f1", "f2"))
+		mxExpectationRAM("A","S","F","M", dimnames=c(paste0("y", 1:6), "f1", "f2"))
 	)
 
 popModelStrong <- mxModel("Strong Invariance",
@@ -259,7 +259,7 @@ popModelStrong <- mxModel("Strong Invariance",
         group1.objective + group2.objective,
         name="minus2loglikelihood"
     ),
-    mxAlgebraObjective("minus2loglikelihood")
+    mxFitFunctionAlgebra("minus2loglikelihood")
 )
 
 Output.d <- sim(1000, popModelStrong, n=list(200, 200)) 

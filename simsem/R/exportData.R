@@ -27,7 +27,7 @@ seed = seed, silent = silent, multicore = multicore, numProc = numProc, dataOnly
         dataF[is.na(dataF)] <- misscode
 		dataF
     }
-#browser()
+
     dat <- lapply(dat, replaceMissing, missCode)
 
 if(program == "Mplus" | program == "mplus") {

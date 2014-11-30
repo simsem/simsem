@@ -48,8 +48,8 @@ plotDist1D <- function(distName, param, xlim = NULL, reverse = FALSE) {
 plotDist2D <- function(object, xlim = NULL, ylim = NULL, r = 0, contour = TRUE) {
     library(copula)
 	if(any(is.na(object@skewness)) && !is.null(object@copula) && is(object@copula, "NullCopula")) {
-		CopNorm <- ellipCopula(family = "normal", dim = 2, dispstr = "un", param = r)
-		Mvdc <- mvdc(CopNorm, object@margins, object@paramMargins)
+		CopNorm <- copula::ellipCopula(family = "normal", dim = 2, dispstr = "un", param = r)
+		Mvdc <- copula::mvdc(CopNorm, object@margins, object@paramMargins)
 
 		######################### xlim
 		if (is.null(xlim)) {
@@ -70,10 +70,10 @@ plotDist2D <- function(object, xlim = NULL, ylim = NULL, r = 0, contour = TRUE) 
 		xis <- seq(xlim[1], xlim[2], length = 51)
 		yis <- seq(ylim[1], ylim[2], length = 51)
 		grids <- as.matrix(expand.grid(xis, yis))
-		zmat <- matrix(dMvdc(grids, Mvdc), 51, 51)
+		zmat <- matrix(copula::dMvdc(grids, Mvdc), 51, 51)
 	} else {
 		if(any(is.na(object@skewness))) {
-			Mvdc <- mvdc(object@copula, object@margins, object@paramMargins)
+			Mvdc <- copula::mvdc(object@copula, object@margins, object@paramMargins)
 			Data <- CopSEM(Mvdc, matrix(c(1, r, r, 1), 2, 2), nw = 100000, np = 100000)
 		} else {
 			Data <- dataGen(object, n = 100000, m = rep(0, 2), cm = matrix(c(1, r, r, 1), 2, 2))

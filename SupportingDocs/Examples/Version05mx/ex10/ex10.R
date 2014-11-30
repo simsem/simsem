@@ -23,7 +23,7 @@ popModel <- mxModel("Model with auxiliary variable",
     mxMatrix(type="Symm", nrow=9, ncol=9, values=Svalues, free=Sfree, byrow=TRUE, name="S"),
     mxMatrix(type="Full", nrow=7, ncol=9, free=FALSE, values=Fvalues, byrow=TRUE, name="F"),
     mxMatrix(type="Full", nrow=1, ncol=9, values=rep(0, 9), free=c(rep(TRUE, 7), rep(FALSE, 2)), name="M"),
-    mxRAMObjective("A","S","F","M", dimnames=c(paste0("y", 1:7), "f1", "f2"))
+    mxExpectationRAM("A","S","F","M", dimnames=c(paste0("y", 1:7), "f1", "f2"))
 )
 
 AvaluesA <- matrix(0, 8, 8)
@@ -46,7 +46,7 @@ analyzeModel <- mxModel("Analysis ignore missing",
     mxMatrix(type="Symm", nrow=8, ncol=8, values=SvaluesA, free=SfreeA, byrow=TRUE, name="S"),
     mxMatrix(type="Full", nrow=6, ncol=8, free=FALSE, values=FvaluesA, byrow=TRUE, name="F"),
     mxMatrix(type="Full", nrow=1, ncol=8, values=rep(0, 8), free=c(rep(TRUE, 6), rep(FALSE, 2)), name="M"),
-    mxRAMObjective("A","S","F","M", dimnames=c(paste0("y", 1:6), "f1", "f2"))
+    mxExpectationRAM("A","S","F","M", dimnames=c(paste0("y", 1:6), "f1", "f2"))
 )
 
 

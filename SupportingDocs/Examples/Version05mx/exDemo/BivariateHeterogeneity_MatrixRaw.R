@@ -48,7 +48,7 @@ bivHetModel <- mxModel("bivariate Heterogeneity Matrix Specification",
             xy1, 
             type="raw"
         ), 
-        mxFIMLObjective(
+        mxExpectationNormal(
             "EC1", 
             "EM1",
             selVars)
@@ -80,7 +80,7 @@ bivHetModel <- mxModel("bivariate Heterogeneity Matrix Specification",
             xy2, 
             type="raw"
         ), 
-        mxFIMLObjective(
+        mxExpectationNormal(
             "EC2", 
             "EM2",
             selVars)
@@ -89,7 +89,7 @@ bivHetModel <- mxModel("bivariate Heterogeneity Matrix Specification",
         group1.objective + group2.objective, 
         name="h12"
     ),
-    mxAlgebraObjective("h12")
+    mxFitFunctionAlgebra("h12")
 )
 
 bivHetFit <- mxRun(bivHetModel)

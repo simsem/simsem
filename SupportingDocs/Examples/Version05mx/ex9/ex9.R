@@ -28,7 +28,7 @@ popModel <- mxModel("Four Factor Model",
     mxMatrix(type="Symm", nrow=52, ncol=52, values=Svalues, free=Sfree, byrow=TRUE, name="S"),
     mxMatrix(type="Full", nrow=48, ncol=52, free=FALSE, values=Fvalues, byrow=TRUE, name="F"),
     mxMatrix(type="Full", nrow=1, ncol=52, values=rep(0, 52), free=c(rep(TRUE, 48), rep(FALSE, 4)), name="M"),
-    mxRAMObjective("A","S","F","M", dimnames=c(paste0("y", 1:48), "f1", "f2", "f3", "f4"))
+    mxExpectationRAM("A","S","F","M", dimnames=c(paste0("y", 1:48), "f1", "f2", "f3", "f4"))
 )
 
 setx <- c(1:3, 13:15, 25:27, 37:39)

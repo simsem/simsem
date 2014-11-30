@@ -7,11 +7,14 @@
 This function will extract the data generation population model underlying a result object (\code{linkS4class{SimResult}}).
 }
 \usage{
-getPopulation(object, improper = FALSE, nonconverged = FALSE)
+getPopulation(object, std = FALSE, improper = FALSE, nonconverged = FALSE)
 }
 \arguments{
   \item{object}{
 	The result object that you wish to extract the data generation population model from (\code{linkS4class{SimResult}}).
+}
+  \item{std}{
+	If \code{TRUE}, standardized parameters are returned.
 }
   \item{improper}{
     Specify whether to include the information from the replications with improper solutions

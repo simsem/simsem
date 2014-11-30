@@ -25,7 +25,7 @@ popModel <- mxModel("Model with Single Indicators",
     mxMatrix(type="Symm", nrow=8, ncol=8, values=Svalues, free=Sfree, byrow=TRUE, name="S"),
     mxMatrix(type="Full", nrow=5, ncol=8, free=FALSE, values=Fvalues, byrow=TRUE, name="F"),
     mxMatrix(type="Full", nrow=1, ncol=8, values=rep(0, 8), free=c(rep(TRUE, 5), rep(FALSE, 3)), name="M"),
-    mxRAMObjective("A","S","F","M", dimnames=c(paste0("y", 1:5), "f1", "f2", "f3"))
+    mxExpectationRAM("A","S","F","M", dimnames=c(paste0("y", 1:5), "f1", "f2", "f3"))
 )
 
 dist <- c("norm", "norm", "norm", "chisq", "norm")

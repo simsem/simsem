@@ -20,7 +20,7 @@ analyzeNested <- mxModel("Linear Growth",
     mxMatrix(type="Symm", nrow=6, ncol=6, values=Svalues, free=Sfree, byrow=TRUE, name="S"),
     mxMatrix(type="Full", nrow=4, ncol=6, free=FALSE, values=Fvalues, byrow=TRUE, name="F"),
     mxMatrix(type="Full", nrow=1, ncol=6, values=c(rep(0, 4), 5, 2), free=c(rep(FALSE, 4), rep(TRUE, 2)), name="M"),
-    mxRAMObjective("A","S","F","M", dimnames=c(paste0("t", 1:4), "i", "s"))
+    mxExpectationRAM("A","S","F","M", dimnames=c(paste0("t", 1:4), "i", "s"))
 )
 
 AvaluesParent <- matrix(0, 6, 6)
@@ -35,7 +35,7 @@ analyzeParent <- mxModel("Unconstrained Growth",
     mxMatrix(type="Symm", nrow=6, ncol=6, values=Svalues, free=Sfree, byrow=TRUE, name="S"),
     mxMatrix(type="Full", nrow=4, ncol=6, free=FALSE, values=Fvalues, byrow=TRUE, name="F"),
     mxMatrix(type="Full", nrow=1, ncol=6, values=c(rep(0, 4), 5, 2), free=c(rep(FALSE, 4), rep(TRUE, 2)), name="M"),
-    mxRAMObjective("A","S","F","M", dimnames=c(paste0("t", 1:4), "i", "s"))
+    mxExpectationRAM("A","S","F","M", dimnames=c(paste0("t", 1:4), "i", "s"))
 )
 
 outNested <- analyze(analyzeNested, data=Demo.growth)

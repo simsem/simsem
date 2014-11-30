@@ -57,7 +57,7 @@ defMeansModel <- mxModel("Definition  Means Matrix Specification",
     	observed=data.frame(y,def), 
     	type="raw"
     ), 
-    mxFIMLObjective(
+    mxExpectationNormal(
     	covariance="Sigma", 
     	means="Mu", 
     	dimnames=selVars

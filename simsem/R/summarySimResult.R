@@ -4,26 +4,30 @@
 # summaryParam: This function will summarize the obtained parameter estimates
 # and standard error.
 
-summaryParam <- function(object, alpha = 0.05, compareStd = FALSE, detail = FALSE, improper = FALSE, digits = NULL, matchParam = FALSE) {
+summaryParam <- function(object, alpha = 0.05, std = FALSE, detail = FALSE, improper = FALSE, digits = NULL, matchParam = FALSE) {
     object <- clean(object, improper = improper)
 	usedCoef <- object@coef
 	usedSe <- object@se
-	if(compareStd) {
+	if(std) {
+		if(all(dim(object@stdCoef) == 1) && is.na(object@stdCoef)) stop("The standardized coefficients cannot be summarized because there are no standardized coefficients in the object")
 		usedCoef <- object@stdCoef
 		usedSe <- object@stdSe
 	}
     coef <- colMeans(usedCoef, na.rm = TRUE)
     real.se <- sapply(usedCoef, sd, na.rm = TRUE)
-    estimated.se <- colMeans(usedSe, na.rm = TRUE)
-    estimated.se[estimated.se == 0] <- NA
-    z <- usedCoef/usedSe
-    crit <- qnorm(1 - alpha/2)
-    sig <- abs(z) > crit
-    pow <- apply(sig, 2, mean, na.rm = TRUE)
-	result <- cbind(coef, real.se, estimated.se, pow)
-	colnames(result) <- c("Estimate Average", "Estimate SD", "Average SE", "Power (Not equal 0)")
+	result <- cbind(coef, real.se)
+	colnames(result) <- c("Estimate Average", "Estimate SD")
+	if(!all(is.na(usedSe))) {
+		estimated.se <- colMeans(usedSe, na.rm = TRUE)
+		estimated.se[estimated.se == 0] <- NA
+		z <- usedCoef/usedSe
+		crit <- qnorm(1 - alpha/2)
+		sig <- abs(z) > crit
+		pow <- apply(sig, 2, mean, na.rm = TRUE)
+		result <- data.frame(result, "Average SE" = estimated.se, "Power (Not equal 0)" = pow)
+	}
 	
-	if (!compareStd && length(object@stdCoef) != 0) {
+	if (!std && length(object@stdCoef) != 0) {
 		stdCoef <- colMeans(object@stdCoef, na.rm = TRUE)
 		stdRealSE <- sapply(object@stdCoef, sd, na.rm = TRUE)
 		stdEstSE <- colMeans(object@stdSe, na.rm = TRUE)
@@ -39,11 +43,16 @@ summaryParam <- function(object, alpha = 0.05, compareStd = FALSE, detail = FALS
         colnames(resultStd) <- c("Std Est", "Std Est SD", "Std Ave SE")
         result <- data.frame(result, resultStd[rownames(result),])
 	}
-
-    if (!is.null(object@paramValue)) {
-        targetVar <- match(colnames(usedCoef), colnames(object@paramValue))
+	
+	paramExist <- !(all(dim(object@paramValue) == 1) && is.na(object@paramValue))
+	stdParamExist <- !(all(dim(object@stdParamValue) == 1) && is.na(object@stdParamValue))
+	
+    if ((!std & paramExist) | (std & stdParamExist)) {
+		paramValue <- object@paramValue
+		if(std) paramValue <- object@stdParamValue
+        targetVar <- match(colnames(usedCoef), colnames(paramValue))	
         targetVar <- targetVar[!is.na(targetVar)]
-        paramValue <- object@paramValue[, targetVar]
+        paramValue <- paramValue[, targetVar]
 		if(matchParam) result <- result[colnames(paramValue),]
         if ((nrow(result) == ncol(paramValue)) && all(rownames(result) == 
             colnames(paramValue))) {
@@ -55,7 +64,7 @@ summaryParam <- function(object, alpha = 0.05, compareStd = FALSE, detail = FALS
 			biasParam <- usedCoef[,rownames(result)] - paramValue
 			lowerBound <- object@cilower
 			upperBound <- object@ciupper
-			if(compareStd) {
+			if(std) {
 				lowerBound <- usedCoef - crit * usedSe 
 				upperBound <- usedCoef + crit * usedSe 
 			}
@@ -199,9 +208,13 @@ summaryMisspec <- function(object, improper = FALSE) {
 
 # summaryPopulation: Summarize population values behind data generation model
 
-summaryPopulation <- function(object, improper = FALSE) {
+summaryPopulation <- function(object, std = FALSE, improper = FALSE) {
     object <- clean(object, improper = improper)
     paramValue <- object@paramValue
+	if(std) {
+		if(all(dim(object@stdParamValue) == 1) && is.na(object@stdParamValue)) stop("The standardized parameters cannot be summarized because there are no standardized parameters in the object")
+		paramValue <- object@stdParamValue
+	}
     nRep <- nrow(paramValue)
     nParam <- ncol(paramValue)
     result <- NULL
@@ -274,7 +287,7 @@ summaryFit <- function(object, alpha = NULL, improper = FALSE, usedFit = NULL) {
 # summaryMisspec: This function will summarize the obtained fit indices and
 # generate a data frame.
 
-summaryConverge <- function(object, improper = FALSE) {
+summaryConverge <- function(object, std = FALSE, improper = FALSE) {
     result <- list()
     converged <- object@converged == 0
     numnonconverged <- sum(!converged)
@@ -289,6 +302,10 @@ summaryConverge <- function(object, improper = FALSE) {
     pmMCAR <- object@pmMCAR
     pmMAR <- object@pmMAR
     paramValue <- object@paramValue
+	if(std) {
+		if(all(dim(object@stdParamValue) == 1) && is.na(object@stdParamValue)) stop("The standardized parameters cannot be summarized because there are no standardized parameters in the object")
+		paramValue <- object@stdParamValue
+	}
     misspecValue <- object@misspecValue
     popFit <- object@popFit
 	nonconverged <- !converged
@@ -433,8 +450,10 @@ setPopulation <- function(target, population) {
 
 # getPopulation: Description: Extract the population value from an object
 
-getPopulation <- function(object, improper = FALSE, nonconverged = FALSE) {
-    inspect(object, improper = improper, nonconverged = nonconverged)
+getPopulation <- function(object, std = FALSE, improper = FALSE, nonconverged = FALSE) {
+	toextract <- "param"
+	if(std) toextract <- "stdparam"
+	inspect(object, toextract, improper = improper, nonconverged = nonconverged)
 } 
 
 # getExtraOutput: Extract the extra output that users set in the 'outfun' argument
@@ -485,6 +504,20 @@ function(object, what="coef", improper = FALSE, nonconverged = FALSE) {
               what == "parameter.values" ||
               what == "parameters") {
 		target <- object@paramValue
+		if(nrow(target) > 1) target <- target[targetRep, , drop=FALSE]
+        return(target)
+    } else if(what == "stdparam" ||
+              what == "stdparamvalue" ||
+              what == "stdparameter" ||
+              what == "stdparameter.value" ||
+              what == "std.param" ||
+              what == "std.param.value" ||
+              what == "std.param.values" ||
+              what == "std.parameters" ||
+              what == "stdparamvalues" ||
+              what == "std.parameter.values" ||
+              what == "standardized.parameters") {
+		target <- object@stdParamValue
 		if(nrow(target) > 1) target <- target[targetRep, , drop=FALSE]
         return(target)
     } else if(what == "se" ||

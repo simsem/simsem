@@ -138,7 +138,7 @@ bivSatModel3m <- mxModel("bivSat3m",
         numObs=1000, 
         means=colMeans(testData) 
     ),
-    mxMLObjective(
+    mxExpectationNormal(
         covariance="expCov",
         means="expMean",
         dimnames=selVars
@@ -172,7 +172,7 @@ mxData(
     observed=testData, 
     type="raw", 
 ),
-mxFIMLObjective(
+mxExpectationNormal(
     covariance="expCov",
     means="expMean",
     dimnames=selVars
@@ -216,7 +216,7 @@ bivSatModel5m <- mxModel("bivSat5m",
         numObs=1000, 
         means=colMeans(testData) 
     ),
-    mxMLObjective(
+    mxExpectationNormal(
         covariance="expCov",
         means="expMean",
     dimnames=selVars
@@ -256,7 +256,7 @@ bivSatModel6 <- mxModel("bivSat6",
         observed=testData, 
         type="raw", 
     ),
-    mxFIMLObjective(
+    mxExpectationNormal(
         covariance="expCov",
         means="expMean",
 		dimnames=selVars

@@ -133,7 +133,8 @@ mxTwoFactorModel <- mxModel("Two Factor Model",
                   NA,NA),
         name="M"
     ),
-    mxRAMObjective("A","S","F","M", dimnames=c(paste0("y", 1:6), "f1", "f2"))
+    mxExpectationRAM("A","S","F","M", dimnames=c(paste0("y", 1:6), "f1", "f2")),
+	mxFitFunctionML()
 )
 
 Output14 <- sim(nRep = totalRep, model = mxTwoFactorModel, n = 200, generate = CFA.Model)
@@ -327,7 +328,10 @@ datfun <- function(n) {
 		0.245, 0.245, 0.245, 0.49, 0.49, 1), 6, 6, byrow=TRUE)
 	scores <- mvrnorm(n, rep(0, 6), modelImplied)
 	colnames(scores) <- paste0("y", 1:6)
-	data.frame(scores)
+	scores <- data.frame(scores)
+	attr(scores, "param") <- c("load1" = 0.7, "load2" = 0.7, "load3" = 0.7)
+	attr(scores, "stdparam") <- c("load1" = 0.7, "load2" = 0.7, "load3" = 0.7)
+	scores
 }
 
 # 6.1 Analyze by simsem model template

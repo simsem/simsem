@@ -311,7 +311,7 @@ CopSEM <- function(copmvdc, Sigma, nw = 100000, np = 1000) {
 	## nw ... sample size for warm-up sample
 	## np ... sample size for production sample
 	library(copula)
-	Xw <- rMvdc(nw, copmvdc) ## draw warm-up sample
+	Xw <- copula::rMvdc(nw, copmvdc) ## draw warm-up sample
 	Sw <- cov(Xw) ## warm-up VC matrix
 	Sigma.eigen <- eigen(Sigma) ## EV decomposition Sigma
 	Sigmaroot <- Sigma.eigen$vectors %*% sqrt(diag(Sigma.eigen$values)) %*% t(Sigma.eigen$vectors) ## root Sigma

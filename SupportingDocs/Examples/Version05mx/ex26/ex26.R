@@ -28,7 +28,7 @@ popNested <- mxModel("Constrained simplex structure",
     mxMatrix(type="Symm", nrow=5, ncol=5, values=Svalues, free=Sfree, byrow=TRUE, name="S"),
     mxMatrix(type="Full", nrow=5, ncol=5, free=FALSE, values=Fvalues, byrow=TRUE, name="F"),
     mxMatrix(type="Full", nrow=1, ncol=5, values=rep(0, 5), free=rep(TRUE, 5), name="M"),
-    mxRAMObjective("A","S","F","M", dimnames=paste0("y", 1:5))
+    mxExpectationRAM("A","S","F","M", dimnames=paste0("y", 1:5))
 )
 
 AvaluesParent <- matrix(0, 5, 5)
@@ -48,7 +48,7 @@ popParent <- mxModel("Unconstrained simplex structure",
     mxMatrix(type="Symm", nrow=5, ncol=5, values=Svalues, free=Sfree, byrow=TRUE, name="S"),
     mxMatrix(type="Full", nrow=5, ncol=5, free=FALSE, values=Fvalues, byrow=TRUE, name="F"),
     mxMatrix(type="Full", nrow=1, ncol=5, values=rep(0, 5), free=rep(TRUE, 5), name="M"),
-    mxRAMObjective("A","S","F","M", dimnames=paste0("y", 1:5))
+    mxExpectationRAM("A","S","F","M", dimnames=paste0("y", 1:5))
 )
 
 outDatNestedModNested <- sim(NULL, n = 50:500, popNested, generate = popNested, pmMCAR=seq(0, 0.3, 0.1), mxFit = TRUE)

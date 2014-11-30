@@ -29,7 +29,7 @@ popModel <- mxModel("Three Factor Model with method factor",
     mxMatrix(type="Symm", nrow=13, ncol=13, values=Svalues, free=Sfree, byrow=TRUE, name="S"),
     mxMatrix(type="Full", nrow=9, ncol=13, free=FALSE, values=Fvalues, byrow=TRUE, name="F"),
     mxMatrix(type="Full", nrow=1, ncol=13, values=rep(0, 13), free=c(rep(TRUE, 9), rep(FALSE, 4)), name="M"),
-    mxRAMObjective("A","S","F","M", dimnames=c(paste0("y", 1:9), "f1", "f2", "f3", "f4"))
+    mxExpectationRAM("A","S","F","M", dimnames=c(paste0("y", 1:9), "f1", "f2", "f3", "f4"))
 )
 
 miss.model <- miss(pmMCAR=0.2) # Multiple-imputation is not available in OpenMx currently 

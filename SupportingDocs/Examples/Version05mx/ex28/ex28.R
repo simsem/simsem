@@ -29,7 +29,7 @@ popA <- mxModel("Model A",
     mxMatrix(type="Symm", nrow=12, ncol=12, values=SvaluesA, free=SfreeA, byrow=TRUE, name="S"),
     mxMatrix(type="Full", nrow=8, ncol=12, free=FALSE, values=Fvalues, byrow=TRUE, name="F"),
     mxMatrix(type="Full", nrow=1, ncol=12, values=Mvalues, free=Mfree, name="M"),
-    mxRAMObjective("A","S","F","M", dimnames=c(paste0("x", 1:4), paste0("y", 1:4), "ix", "sx", "iy", "sy"))
+    mxExpectationRAM("A","S","F","M", dimnames=c(paste0("x", 1:4), paste0("y", 1:4), "ix", "sx", "iy", "sy"))
 )
 
 SvaluesB <- diag(c(rep(0.5, 8), 1, 0.25, 1, 0.25))
@@ -48,7 +48,7 @@ popB <- mxModel("Model B",
     mxMatrix(type="Symm", nrow=12, ncol=12, values=SvaluesB, free=SfreeB, byrow=TRUE, name="S"),
     mxMatrix(type="Full", nrow=8, ncol=12, free=FALSE, values=Fvalues, byrow=TRUE, name="F"),
     mxMatrix(type="Full", nrow=1, ncol=12, values=Mvalues, free=Mfree, name="M"),
-    mxRAMObjective("A","S","F","M", dimnames=c(paste0("x", 1:4), paste0("y", 1:4), "ix", "sx", "iy", "sy"))
+    mxExpectationRAM("A","S","F","M", dimnames=c(paste0("x", 1:4), paste0("y", 1:4), "ix", "sx", "iy", "sy"))
 )
 
 outAA <- sim(1000, n = 200, model = popA, generate = popA)

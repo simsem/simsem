@@ -54,8 +54,10 @@ combineSim <- function(...) {
     } else return(dat@paramValue)
   }
   ## save stacked paramValues
-  pV <- do.call("rbind", lapply(s4list, stackParams))
-  if (nrow(unique(pV)) == 1) pV <- unique(pV)
+  pv <- do.call("rbind", lapply(s4list, stackParams))
+  if (nrow(unique(pv)) == 1) pv <- unique(pv)
+  stdpv <- do.call("rbind", lapply(s4list, stackParams))
+  if (nrow(unique(stdpv)) == 1) stdpv <- unique(stdpv)
   
   ## save vectors. If single values, save them as vectors to match nReps rows in data.frames
   converged <- do.call("c" , lapply(s4list, function(dat) dat@converged))
@@ -83,7 +85,7 @@ combineSim <- function(...) {
     
   ## store in single S4 SimResult object, which is the return value of this function
   output <- new("SimResult", modelType = mT, nRep = nRep, coef = coef, se = se,
-                fit = fit, converged = converged, paramValue = pV,
+                fit = fit, converged = converged, paramValue = pv, stdParamValue = stdpv,
                 misspecValue = misspecValue, popFit = popFit, FMI1 = FMI1, 
                 FMI2 = FMI2, cilower = cilower, ciupper = ciupper, stdCoef = stdCoef, stdSe = stdSe, seed = seed, n = n, nobs = nobs,
                 pmMCAR = pmMCAR, pmMAR = pmMAR, extraOut = extraOut, timing = timing, paramOnly = paramOnly)

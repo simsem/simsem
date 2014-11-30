@@ -41,7 +41,7 @@ analyzeModel <- mxModel("PoliticalDemocracy Data",
     mxMatrix(type="Symm", nrow=14, ncol=14, values=Svalues, free=Sfree, byrow=TRUE, name="S"),
     mxMatrix(type="Full", nrow=11, ncol=14, free=FALSE, values=Fvalues, byrow=TRUE, name="F"),
     mxMatrix(type="Full", nrow=1, ncol=14, values=rep(0, 14), free=c(rep(TRUE, 11), rep(FALSE, 3)), name="M"),
-    mxRAMObjective("A","S","F","M", dimnames=c(paste0("x", 1:3), paste0("y", 1:8), "ind60", "dem60", "dem65"))
+    mxExpectationRAM("A","S","F","M", dimnames=c(paste0("x", 1:3), paste0("y", 1:8), "ind60", "dem60", "dem65"))
 )
 
 usedData <- imposeMissing(PoliticalDemocracy, pmMCAR=0.03)

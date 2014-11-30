@@ -26,6 +26,7 @@
 		\item *\code{"modeltype"}: The type of the simulation result
 		\item *\code{"nrep"}: The number of overall replications, including converged and nonconverged replications
 		\item \code{"param"}: Parameter values (equivalent to the \code{\link{getPopulation}} function)
+		\item \code{"stdparam"}: Standardized parameter values (equivalent to the \code{\link{getPopulation}} function with \code{std = TRUE})
 		\item \code{"coef"}: Parameter estimates (equivalent to the \code{\link[=coef,SimResult-method]{coef}} method)
 		\item \code{"se"}: Standard errors
 		\item \code{"fit"}: Fit indices

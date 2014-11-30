@@ -53,6 +53,11 @@ Vale, C. D. & Maurelli, V. A. (1983) Simulating multivariate nonormal distributi
 	}
 }
 \examples{
+	
+# Create data based on Vale and Maurelli's method by specifying skewness and kurtosis
+dist <- bindDist(skewness = c(0, -2, 2), kurtosis = c(0, 8, 4))
+
+\dontrun{
 library(copula)
 
 # Create three-dimensional distribution by gaussian copula with 
@@ -76,7 +81,5 @@ dist <- bindDist(c("t", "chisq", "norm"), d1, d2, d3, copula = gumbelCopula(2, d
 # Reverse the direction of chi-square distribution from positively skew to negatively skew
 dist <- bindDist(c("t", "chisq", "norm"), d1, d2, d3, copula = gumbelCopula(2, dim = 3),
 	reverse = c(FALSE, TRUE, FALSE))
-	
-# Create data based on Vale and Maurelli's method by specifying skewness and kurtosis
-dist <- bindDist(skewness = c(0, -2, 2), kurtosis = c(0, 8, 4))
+}
 }

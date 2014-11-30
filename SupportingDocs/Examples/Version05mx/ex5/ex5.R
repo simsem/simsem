@@ -34,7 +34,7 @@ M <- mxMatrix(type="Full", nrow=1, ncol=11, values=Mvalues, free=Mfree, name="M"
 popModel <- mxModel("Latent Regression Model",
     type="RAM",
     A, S, F, M,
-    mxRAMObjective("A","S","F","M", dimnames=c(paste0("y", 1:8), "f1", "f2", "f3"))
+    mxExpectationRAM("A","S","F","M", dimnames=c(paste0("y", 1:8), "f1", "f2", "f3"))
 )
 
 Output <- sim(1000, popModel, n=200)

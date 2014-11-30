@@ -90,7 +90,7 @@ oneFactorThresholdModel <- mxModel("oneFactorThresholdModel",
         observed=ordinalData, 
         type='raw'
     ),
-    mxFIMLObjective(
+    mxExpectationNormal(
         covariance="expCovariances", 
         means="expMeans", 
         dimnames=fruitynames, 

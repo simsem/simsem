@@ -25,7 +25,7 @@ popModel <- mxModel("Covariate Population Data",
     mxMatrix(type="Symm", nrow=10, ncol=10, values=Svalues, free=Sfree, byrow=TRUE, name="S"),
     mxMatrix(type="Full", nrow=7, ncol=10, free=FALSE, values=Fvalues, byrow=TRUE, name="F"),
     mxMatrix(type="Full", nrow=1, ncol=10, values=rep(0, 10), free=c(rep(TRUE, 7), rep(FALSE, 3)), name="M"),
-    mxRAMObjective("A","S","F","M", dimnames=c(paste0("y", 1:7), "f1", "f2", "f3"))
+    mxExpectationRAM("A","S","F","M", dimnames=c(paste0("y", 1:7), "f1", "f2", "f3"))
 )
 
 Avalues1 <- matrix(0, 8, 8)
@@ -48,7 +48,7 @@ analyzeModel1 <- mxModel("Model without covariate",
     mxMatrix(type="Symm", nrow=8, ncol=8, values=Svalues1, free=Sfree1, byrow=TRUE, name="S"),
     mxMatrix(type="Full", nrow=6, ncol=8, free=FALSE, values=Fvalues1, byrow=TRUE, name="F"),
     mxMatrix(type="Full", nrow=1, ncol=8, values=rep(0, 8), free=c(rep(TRUE, 6), rep(FALSE, 2)), name="M"),
-    mxRAMObjective("A","S","F","M", dimnames=c(paste0("y", 1:6), "f1", "f2"))
+    mxExpectationRAM("A","S","F","M", dimnames=c(paste0("y", 1:6), "f1", "f2"))
 )
 
 Output1 <- sim(1000, n=200, analyzeModel1, generate=popModel)
@@ -108,7 +108,7 @@ analyzeModel4 <- mxModel("Model with covariate at factor level",
     mxMatrix(type="Symm", nrow=10, ncol=10, values=Svalues4, free=Sfree4, byrow=TRUE, name="S"),
     mxMatrix(type="Full", nrow=7, ncol=10, free=FALSE, values=Fvalues4, byrow=TRUE, name="F"),
     mxMatrix(type="Full", nrow=1, ncol=10, values=rep(0, 10), free=c(rep(TRUE, 7), rep(FALSE, 3)), name="M"),
-    mxRAMObjective("A","S","F","M", dimnames=c(paste0("y", 1:7), "f1", "f2", "f3"))
+    mxExpectationRAM("A","S","F","M", dimnames=c(paste0("y", 1:7), "f1", "f2", "f3"))
 )
 
 Output4 <- sim(1000, n=200, analyzeModel4, generate=popModel)

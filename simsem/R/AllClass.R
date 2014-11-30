@@ -18,7 +18,7 @@ setClass("SimDataDist", representation(p = "numeric", margins = "character", par
     keepScale = "logical", reverse = "vector", copula = "ANY", skewness = "vector", kurtosis = "vector"), prototype(keepScale = TRUE, reverse = FALSE, copula = new("NullCopula"), skewness = NA, kurtosis = NA))
 
 setClass("SimResult", representation(modelType = "character", nRep = "numeric", coef = "data.frame", 
-    se = "data.frame", fit = "data.frame", converged = "vector", paramValue = "data.frame", 
+    se = "data.frame", fit = "data.frame", converged = "vector", paramValue = "data.frame", stdParamValue = "data.frame",
     misspecValue = "data.frame", popFit = "data.frame", FMI1 = "data.frame", FMI2 = "data.frame", cilower = "data.frame", ciupper = "data.frame",
     stdCoef = "data.frame", stdSe = "data.frame", seed = "numeric", n = "vector", nobs="data.frame", pmMCAR = "vector", pmMAR = "vector", 
     extraOut = "list", paramOnly = "logical", timing = "list"))
