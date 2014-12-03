@@ -51,7 +51,8 @@ bivHetModel <- mxModel("bivariate Heterogeneity Matrix Specification",
         mxExpectationNormal(
             "EC1", 
             "EM1",
-            selVars)
+            selVars),
+		mxFitFunctionML()
         ),
     mxModel("group2",
         mxMatrix(
@@ -83,7 +84,8 @@ bivHetModel <- mxModel("bivariate Heterogeneity Matrix Specification",
         mxExpectationNormal(
             "EC2", 
             "EM2",
-            selVars)
+            selVars),
+		mxFitFunctionML()
         ),
     mxAlgebra(
         group1.objective + group2.objective, 

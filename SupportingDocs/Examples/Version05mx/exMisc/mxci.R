@@ -33,16 +33,8 @@ popModel <- mxModel("Three Factor Model",
     type="RAM", 
 	A, S, F, M,
 	mxCI("A"),
-    mxRAMObjective("A","S","F","M", dimnames=c(paste0("x", 1:9), "f1", "f2", "f3"))
+    mxExpectationRAM("A","S","F","M", dimnames=c(paste0("x", 1:9), "f1", "f2", "f3"))
 )
-
-dat <- generate(popModel, n=200)
-
-out <- analyze(popModel, dat, intervals = TRUE)
-
-library(semTools)
-fitMeasuresMx(out)
-standardizeMx(out, free=TRUE)
 
 Output <- sim(1000, popModel, n = 200, mxFit = TRUE, intervals = TRUE)
 getCutoff(Output, 0.05)

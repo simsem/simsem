@@ -28,7 +28,7 @@ subpop1 <- mxModel("subpop1",
     mxMatrix(type="Symm", nrow=6, ncol=6, values=Svalues1, free=Sfree, labels=Slabels, byrow=TRUE, name="S"),
     mxMatrix(type="Full", nrow=4, ncol=6, free=FALSE, values=Fvalues, byrow=TRUE, name="F"),
     mxMatrix(type="Full", nrow=1, ncol=6, values=Mvalues1, free=c(rep(FALSE, 4), rep(TRUE, 2)), name="M"),
-    mxRAMObjective("A","S","F","M", vector=TRUE, dimnames=c(paste0("t", 1:4), "i", "s"))
+    mxExpectationRAM("A","S","F","M", dimnames=c(paste0("t", 1:4), "i", "s"))
 )
 
 subpop2 <- mxModel(subpop1, name="subpop2",
@@ -36,7 +36,7 @@ subpop2 <- mxModel(subpop1, name="subpop2",
     mxMatrix(type="Symm", nrow=6, ncol=6, values=Svalues2, free=Sfree, labels=Slabels, byrow=TRUE, name="S"),
     mxMatrix(type="Full", nrow=4, ncol=6, free=FALSE, values=Fvalues, byrow=TRUE, name="F"),
     mxMatrix(type="Full", nrow=1, ncol=6, values=Mvalues2, free=c(rep(FALSE, 4), rep(TRUE, 2)), name="M"),
-    mxRAMObjective("A","S","F","M", vector=TRUE, dimnames=c(paste0("t", 1:4), "i", "s"))
+    mxExpectationRAM("A","S","F","M", dimnames=c(paste0("t", 1:4), "i", "s"))
 )
 
 # Class 1 = 20%; Class 2 = 80% --> Odds = .2/.8 and .8/.8
@@ -50,16 +50,13 @@ algObj <- mxAlgebra(-2*sum(
           log(classProbs[1,1]%x%subpop1.objective + classProbs[2,1]%x%subpop2.objective)), 
           name="mixtureObj")
 
-obj <- mxAlgebraObjective("mixtureObj")
+obj <- mxFitFunctionAlgebra("mixtureObj")
       
 popModel <- mxModel("Growth Mixture Model",
     subpop1, subpop2,
     odds, props,
     algObj, obj
 )  
-
-dat <- generate(popModel, n=list(50, 200))
-out <- analyze(popModel, dat, mxMixture=TRUE)
 
 Output <- sim(1000, popModel, n = list(200, 800), mxMixture = TRUE)
 getCutoff(Output, 0.05)

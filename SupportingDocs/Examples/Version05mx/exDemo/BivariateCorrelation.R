@@ -42,8 +42,9 @@ bivCorModel <- mxModel("bivCor",
     mxExpectationNormal(
         covariance="expCov", 
         means="expMean",
-        dimnames=selVars)
-    )
+        dimnames=selVars),
+	mxFitFunctionML()
+)
 
 
 bivCorFit <- mxRun(bivCorModel)

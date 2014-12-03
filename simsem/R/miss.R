@@ -28,7 +28,7 @@ miss <- function(cov = 0, pmMCAR = 0, pmMAR = 0, logit = "", nforms = 0, itemGro
 		if(!(m > 0)) stop("Because the Amelia or mice packages are specified, the m argument should be specified.")
 	}
 	if (package == "default") {
-		if(m > 0) package <- "Amelia"
+		if(m > 0) package <- "mice"
 	}
     return(new("SimMissing", cov = cov, pmMCAR = pmMCAR, pmMAR = pmMAR, logit=logit, nforms = nforms, 
         itemGroups = itemGroups, twoMethod = twoMethod, prAttr = prAttr, timePoints = timePoints, 

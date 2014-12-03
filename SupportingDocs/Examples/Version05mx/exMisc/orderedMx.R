@@ -17,7 +17,8 @@ popModel <- mxModel("Ordinal Factor Analysis",
     mxMatrix(type="Full", nrow=4, ncol=5, free=FALSE, values=Fvalues, byrow=TRUE, name="F"),
     mxMatrix(type="Full", nrow=1, ncol=5, values=rep(0, 5), free=rep(FALSE, 5), name="M"),
 	mxMatrix(type="Full", nrow=1, ncol=4, free=rep(TRUE, 4), values=c(0.5, 0.25, 0, -0.5), byrow=TRUE, name="thresh"),
-    mxRAMObjective("A","S","F","M", dimnames=c(paste0("y", 1:4), "f1"), thresholds = "thresh", threshnames=paste0("y", 1:4))
+    mxExpectationRAM("A","S","F","M", dimnames=c(paste0("y", 1:4), "f1"), thresholds = "thresh", threshnames=paste0("y", 1:4)),
+	mxFitFunctionML()
 )
 
 Output <- sim(1000, n = 1000, model = popModel, mxFit=TRUE)

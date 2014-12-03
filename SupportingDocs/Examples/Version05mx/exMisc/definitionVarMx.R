@@ -34,7 +34,7 @@ popModel <- mxModel("Growth Model with Varying Time Points",
     mxMatrix(type="Symm", nrow=6, ncol=6, values=Svalues, free=Sfree, byrow=TRUE, name="S"),
     mxMatrix(type="Full", nrow=4, ncol=6, free=FALSE, values=Fvalues, byrow=TRUE, name="F"),
     mxMatrix(type="Full", nrow=1, ncol=6, values=Mvalues, free=Mfree, name="M"),
-    mxRAMObjective("A","S","F","M", dimnames=c(paste0("y", 1:4), "i", "s"))
+    mxExpectationRAM("A","S","F","M", dimnames=c(paste0("y", 1:4), "i", "s"))
 )
 
 # Put dataset containing definition variables in the covData argument

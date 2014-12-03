@@ -42,7 +42,8 @@ univSatModel3m <- mxModel("univSat3m",
         covariance="expCov", 
         means="expMean",
         dimnames=selVars
-    )
+    ),
+	mxFitFunctionML()
 )
 
 univSatFit3m <- mxRun(univSatModel3m)

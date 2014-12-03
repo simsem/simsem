@@ -142,8 +142,9 @@ bivSatModel3m <- mxModel("bivSat3m",
         covariance="expCov",
         means="expMean",
         dimnames=selVars
-    )
-    )
+    ),
+	mxFitFunctionML()
+)
 bivSatFit3m <- mxRun(bivSatModel3m)
 fitMeasuresMx(bivSatFit3m)
 bivSatFit3mSim <- sim(10, bivSatFit3m, n = 200)
@@ -152,31 +153,32 @@ summary(bivSatFit3mSim)
 ################ Fitting bivSatFit4
 
 bivSatModel4 <- mxModel("bivSat4",
-mxMatrix(
-    type="Symm", 
-    nrow=2, 
-    ncol=2, 
-    free=T, 
-    values=c(1,.5,1), 
-    name="expCov"
-),
-mxMatrix(
-    type="Full", 
-    nrow=1, 
-    ncol=2, 
-    free=T, 
-    values=c(0,0), 
-    name="expMean"
-),
-mxData(
-    observed=testData, 
-    type="raw", 
-),
-mxExpectationNormal(
-    covariance="expCov",
-    means="expMean",
-    dimnames=selVars
-)
+	mxMatrix(
+		type="Symm", 
+		nrow=2, 
+		ncol=2, 
+		free=T, 
+		values=c(1,.5,1), 
+		name="expCov"
+	),
+	mxMatrix(
+		type="Full", 
+		nrow=1, 
+		ncol=2, 
+		free=T, 
+		values=c(0,0), 
+		name="expMean"
+	),
+	mxData(
+		observed=testData, 
+		type="raw", 
+	),
+	mxExpectationNormal(
+		covariance="expCov",
+		means="expMean",
+		dimnames=selVars
+	),
+	mxFitFunctionML()
 )
 bivSatFit4 <- mxRun(bivSatModel4)
 fitMeasuresMx(bivSatFit4)
@@ -220,8 +222,9 @@ bivSatModel5m <- mxModel("bivSat5m",
         covariance="expCov",
         means="expMean",
     dimnames=selVars
-    )
-    )
+    ), 
+	mxFitFunctionML()
+)
 bivSatFit5m <- mxRun(bivSatModel5m)
 fitMeasuresMx(bivSatFit5m)
 bivSatFit5mSim <- sim(10, bivSatFit5m, n = 200)
@@ -260,8 +263,9 @@ bivSatModel6 <- mxModel("bivSat6",
         covariance="expCov",
         means="expMean",
 		dimnames=selVars
-    )
-    )
+    ),
+	mxFitFunctionML()
+)
 bivSatFit6 <- mxRun(bivSatModel6)
 fitMeasuresMx(bivSatFit6)
 bivSatFit6Sim <- sim(10, bivSatFit6, n = 200)

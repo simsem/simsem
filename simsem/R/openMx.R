@@ -290,8 +290,10 @@ easyFitMx <- function(object, mxMixture = FALSE) {
 
     # main container
     indices <- list()
-
-	logl.H0 <- (-1/2) * (object@output$Minus2LogLikelihood - object@output$SaturatedLikelihood )
+	
+	satll <- 0
+	if(!is.null(object@output$SaturatedLikelihood)) satll <- object@output$SaturatedLikelihood
+	logl.H0 <- (-1/2) * (object@output$Minus2LogLikelihood - satll )
 	
 	indices["logl"] <- logl.H0
 

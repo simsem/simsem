@@ -61,7 +61,8 @@ defMeansModel <- mxModel("Definition  Means Matrix Specification",
     	covariance="Sigma", 
     	means="Mu", 
     	dimnames=selVars
-    )
+    ),
+	mxFitFunctionML()
 )
 
 defMeansFit <- mxRun(defMeansModel)

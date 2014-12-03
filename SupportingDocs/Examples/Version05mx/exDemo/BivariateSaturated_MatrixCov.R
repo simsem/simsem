@@ -43,7 +43,8 @@ bivSatModel3m <- mxModel("bivSat3m",
         covariance="expCov",
         means="expMean",
         dimnames=selVars
-    )
+    ),
+	mxFitFunctionML()
 )
 
 bivSatFit3m <- mxRun(bivSatModel3m)

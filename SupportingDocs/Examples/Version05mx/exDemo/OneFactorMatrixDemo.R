@@ -15,7 +15,8 @@ factorModel <- mxModel("One Factor",
     mxMatrix(type="Full", nrow=1, ncol=5, values=1, free=TRUE, name="M"),
     mxAlgebra(expression=A %*% L %*% t(A) + U, name="R"),
     mxExpectationNormal(covariance="R", means="M", dimnames=manifestVars),
-    mxData(observed=cov(demoOneFactor), means=colMeans(demoOneFactor), type="cov", numObs=500)
+    mxData(observed=cov(demoOneFactor), means=colMeans(demoOneFactor), type="cov", numObs=500),
+	mxFitFunctionML()
 )
 
 factorFit <- mxRun(factorModel)

@@ -1374,7 +1374,12 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
     result <- model(LY = LY, PS = PS, RPS = RPS, TE = TE, RTE = RTE, BE = BE, VTE = VTE, 
         VY = VY, VPS = VPS, VE = VE, TY = TY, AL = AL, MY = MY, ME = ME, GA = GA, KA = KA, modelType = modelType, 
         indLab = indLab, facLab = facLab, groupLab = groupLab, covLab = covLab, ngroups = ngroups, con = conList)
-	tryCatch(draw(result), error = function(e) print("The regression matrix is not recursive. Simsem template does not support non-recursive matrix."))
+	tempcov <- NULL
+	if(!is.null(KA)) {
+		tempcov <- matrix(rnorm(100), ncol = ncol(KA[[1]]@free))
+		colnames(tempcov) <- covLab
+	}
+	tryCatch(draw(result, covData = tempcov), error = function(e) print("The regression matrix is not recursive. Simsem template does not support non-recursive matrix."))
     return(result)
 }
 

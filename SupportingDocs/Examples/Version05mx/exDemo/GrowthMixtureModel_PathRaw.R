@@ -59,11 +59,12 @@ class1 <- mxModel("Class1",
         labels=c("meani1", "means1")
     ),
     # enable the likelihood vector
-    mxRAMObjective(A = "A",
+    mxExpectationRAM(A = "A",
         S = "S",
         F = "F",
         M = "M",
-        vector = TRUE)
+        vector = TRUE),
+	mxFitFunctionML()
 ) # close model
 
 class2 <- mxModel(class1,

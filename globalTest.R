@@ -200,7 +200,7 @@ test.overall <- function() {
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/ex17/ex17.R"), "Example 17 (OpenMx)", subFrom = "sim\\(1000", subTo = "sim\\(10", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/ex18/ex18.R"), "Example 18 (OpenMx)", subFrom = "50:1000", subTo = "seq\\(50, 1000, 50\\)", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/ex19/ex19.R"), "Example 19 (OpenMx)", subFrom = "50:500", subTo = "seq\\(50, 500, 100\\)", result = result)
-	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/ex21/ex21.R"), "Example 21 (OpenMx)", subFrom = "25:500", subTo = "seq\\(25, 500, 50\\)", result = result)
+	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/ex21/ex21.R"), "Example 21 (OpenMx)", subFrom = "25:500", subTo = "seq\\(25, 500, 50\\)", result = result)vx
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/ex22/ex22.R"), "Example 22 (OpenMx)", subFrom = "25:500", subTo = "seq\\(25, 500, 50\\)", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/ex24/ex24.R"), "Example 24 (OpenMx)", subFrom = "sim\\(1000", subTo = "sim\\(10", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/ex25/ex25.R"), "Example 25 (OpenMx)", subFrom = "50:500", subTo = "seq\\(50, 1000, 50\\)", result = result)
@@ -210,7 +210,7 @@ test.overall <- function() {
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/exMisc/orderedMx.R"), "Ordered Data (OpenMx)", subFrom = "sim\\(1000", subTo = "sim\\(5", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/exMisc/definitionVarMx.R"), "Definition Variables (OpenMx)", subFrom = "sim\\(1000", subTo = "sim\\(10", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/exMisc/mixtureMx.R"), "Mixture Models (OpenMx)", subFrom = "sim\\(1000", subTo = "sim\\(10", result = result)
-	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/exMisc/mxci.R"), "Mixture Models (OpenMx)", subFrom = "sim\\(1000", subTo = "sim\\(10", result = result)
+	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/exMisc/mxci.R"), "Confidence Intervals (OpenMx)", subFrom = "sim\\(1000", subTo = "sim\\(10", result = result)
 
 	# 0.5 openmx demo files
 	allfiles <- list.files(path = paste0(currentDir, "/SupportingDocs/Examples/Version05mx/exDemo/"))

@@ -58,7 +58,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ..., rawDa
 		} else if (is(generate, "SimSem")) {
 			# Do nothing
 		} else {
-			stop("Please specify an appropriate object for the 'generate' argument: simsem model template, lavaan script, lavaan parameter table, OpenMx object, or list of options for the 'simulateData' function.")
+			stop("Please specify an appropriate object for the 'generate' argument: simsem model template, lavaan script, lavaan parameter table, OpenMx object, a list of options for the 'simulateData' function, or a function that takes sample size and provides data as an output.")
 		}
 	}
 	
@@ -87,7 +87,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ..., rawDa
 	} else if (is(model, "function")) {
 		functionAnalysis <- TRUE
 	} else {
-		stop("Please specify an appropriate object for the 'model' argument: simsem model template, lavaan script, lavaan parameter table, or list of options for the 'lavaan' function.")
+		stop("Please specify an appropriate object for the 'model' argument: simsem model template, lavaan script, lavaan parameter table, list of options for the 'lavaan' function, or a function written to analyze data.")
 	}
 	
 	if(lavaanAnalysis) {
@@ -746,8 +746,19 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 	
 	if (is.null(data) && is.lavaancall(generate)) {
 		generate$sample.nobs <- n
-		generate$indDist <- indDist
-		data <- do.call("simulateData", generate) # Change to simulateData when the bug is fixed
+		
+		if(!is.null(indDist)) {
+			generate$return.fit <- TRUE
+			data <- do.call("simulateData", generate) # Change to simulateData when the bug is fixed
+			implied <- fitted(attr(data, "fit"))
+			if(length(n) == 1) implied <- list(implied)
+			datinddist <- NULL
+			for(i in seq_along(n)) datinddist <- rbind(datinddist, dataGen(indDist, n[i], implied[[i]]$mean, implied[[i]]$cov))
+			datinddist <- as.data.frame(datinddist)
+			datinddist$group <- rep(1:length(n), times=n)
+		} else {
+			data <- do.call("simulateData", generate) # Change to simulateData when the bug is fixed
+		}
 	}
 
 	if (is.null(data) && is(generate, "MxModel")) {
@@ -1415,9 +1426,10 @@ parsePopulation <- function(paramSet, draws, group = 1, std = FALSE, covData = N
 				vary <- vary + draws$KA %*% sigmax %*% t(draws$KA)
 			}
 		}
-		deta <- diag(sqrt(diag(vareta)))
-		dy <- diag(sqrt(diag(vary)))
-		
+		deta <- sqrt(diag(vareta))
+		ifelse(length(deta) == 1, deta <- as.matrix(deta), deta <- diag(deta))
+		dy <- sqrt(diag(vary))
+		ifelse(length(dy) == 1, dy <- as.matrix(dy), dy <- diag(dy))
 		if (!is.null(draws$LY)) draws$LY <- solve(dy) %*% temp$LY %*% deta
 		if (!is.null(draws$PS)) draws$PS <- solve(deta) %*% temp$PS %*% solve(deta)
 		if (!is.null(draws$TE)) draws$TE <- solve(dy) %*% temp$TE %*% solve(dy)
@@ -1426,7 +1438,8 @@ parsePopulation <- function(paramSet, draws, group = 1, std = FALSE, covData = N
 		if (!is.null(draws$TY)) draws$TY <- solve(dy) %*% temp$TY
 		if(!is.null(covData)) {
 			sigmax <- cov(covData)
-			dx <- diag(sqrt(diag(sigmax)))
+			dx <- sqrt(diag(sigmax))
+			ifelse(length(dx) == 1, dx <- as.matrix(dx), dx <- diag(dx))
 			if (!is.null(draws$GA)) draws$GA <- solve(deta) %*% temp$GA %*% dx
 			if (!is.null(draws$KA)) draws$KA <- solve(dy) %*% temp$KA %*% dx
 		}

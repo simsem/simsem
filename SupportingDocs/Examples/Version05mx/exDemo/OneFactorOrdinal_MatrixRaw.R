@@ -95,7 +95,8 @@ oneFactorThresholdModel <- mxModel("oneFactorThresholdModel",
         means="expMeans", 
         dimnames=fruitynames, 
         thresholds="expThresholds"
-    )
+    ),
+	mxFitFunctionML()
 )
 
 oneFactorThresholdFit <- mxRun(oneFactorThresholdModel, suppressWarnings=TRUE)

@@ -100,10 +100,10 @@ plotPowerFitNested(Output.ALT.NULL, Output.ALT.ALT, nullNested=Output.NULL.NULL,
 
 # The example of continous varying sample size. Note that more fine-grained 
 # values of n is needed, e.g., n=seq(50, 500, 1)
-Output.NULL.NULL2 <- sim(NULL, n=seq(50, 500, 25), model=CFA.Model.NULL, generate=CFA.Model.NULL) 
-Output.ALT.NULL2 <- sim(NULL, n=seq(50, 500, 25), model=CFA.Model.NULL, generate=CFA.Model.ALT) 
-Output.NULL.ALT2 <- sim(NULL, n=seq(50, 500, 25), model=CFA.Model.ALT, generate=CFA.Model.NULL) 
-Output.ALT.ALT2 <- sim(NULL, n=seq(50, 500, 25), model=CFA.Model.ALT, generate=CFA.Model.ALT) 
+Output.NULL.NULL2 <- sim(NULL, n=seq(50, 500, 5), model=CFA.Model.NULL, generate=CFA.Model.NULL) 
+Output.ALT.NULL2 <- sim(NULL, n=seq(50, 500, 5), model=CFA.Model.NULL, generate=CFA.Model.ALT) 
+Output.NULL.ALT2 <- sim(NULL, n=seq(50, 500, 5), model=CFA.Model.ALT, generate=CFA.Model.NULL) 
+Output.ALT.ALT2 <- sim(NULL, n=seq(50, 500, 5), model=CFA.Model.ALT, generate=CFA.Model.ALT) 
 
 # Plot logistic line for the power based on the derived cutoff from the null model 
 # along sample size values

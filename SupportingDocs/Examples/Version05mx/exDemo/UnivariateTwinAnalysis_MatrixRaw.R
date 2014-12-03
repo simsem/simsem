@@ -82,7 +82,8 @@ twinACEModel <- mxModel("twinACE",
 			covariance="twinACE.expCovMZ", 
 			means="twinACE.expMean", 
 			dimnames=selVars
-		)
+		),
+		mxFitFunctionML()
 	),
 	mxModel("DZ",
 	    mxData(
@@ -93,7 +94,8 @@ twinACEModel <- mxModel("twinACE",
 			covariance="twinACE.expCovDZ", 
 			means="twinACE.expMean", 
 			dimnames=selVars
-		)
+		),
+		mxFitFunctionML()
 	),
     mxAlgebra(
 		expression=MZ.objective + DZ.objective, 

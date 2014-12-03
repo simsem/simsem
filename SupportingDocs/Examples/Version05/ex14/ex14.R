@@ -35,9 +35,9 @@ y5 ~~ 0*y5
 dist <- c("norm", "norm", "norm", "chisq", "norm")
 n01 <- list(mean=0, sd=1)
 c5 <- list(df=5)
-facDist <- bindDist(dist, n01, n01, n01, c5, n01)
+indDist <- bindDist(dist, n01, n01, n01, c5, n01)
 
-Output <- sim(1000, n=200, analyzeModel, indDist=facDist, generate=popModel, estimator="mlm", lavaanfun="lavaan")
+Output <- sim(1000, n=200, analyzeModel, indDist=indDist, generate=popModel, estimator="mlm", lavaanfun="lavaan")
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summary(Output)
