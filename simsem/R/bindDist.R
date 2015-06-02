@@ -1,7 +1,6 @@
 # bindDist: A constructor of data distribution object
 
 bindDist <- function(margins = NULL, ..., p = NULL, keepScale = TRUE, reverse = FALSE, copula = NULL, skewness = NULL, kurtosis = NULL) {
-	library(copula)
     List <- list(...)
 	if(length(List) > 0) {
 		if(!is.null(skewness)) stop("CONFLICT: skewness and list of distributions cannot be both specified.")

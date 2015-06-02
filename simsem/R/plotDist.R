@@ -46,7 +46,6 @@ plotDist1D <- function(distName, param, xlim = NULL, reverse = FALSE) {
 }
 
 plotDist2D <- function(object, xlim = NULL, ylim = NULL, r = 0, contour = TRUE) {
-    library(copula)
 	if(any(is.na(object@skewness)) && !is.null(object@copula) && is(object@copula, "NullCopula")) {
 		CopNorm <- copula::ellipCopula(family = "normal", dim = 2, dispstr = "un", param = r)
 		Mvdc <- copula::mvdc(CopNorm, object@margins, object@paramMargins)

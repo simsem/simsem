@@ -752,6 +752,7 @@ equalCon <- function(pls, dgen, fill=FALSE, con=NULL) {
 
 
 extractLab <- function(pls, dgen, fill=FALSE, con=NULL) {
+	if(any(names(dgen) %in% c("LY", "PS", "RPS", "TE", "RTE", "BE", "VTE", "VY", "VPS", "VE", "TY", "AL", "MY",  "ME", "KA", "GA"))) dgen <- list(dgen)
 	free <- lapply(dgen, function(x) lapply(x, function(y) if(is.null(y)) { return(NULL) } else { return(slot(y, "free")) }))
 	if(fill) {
 		
@@ -820,9 +821,21 @@ extractLab <- function(pls, dgen, fill=FALSE, con=NULL) {
 }
 
 # Make the variable name very very weird so that the assign and get functions will work by setting the labels in the internal environment
-applyConScript <- function(xxxtargetxxx, xxxvalxxx, xxxconxxx, xxxthresholdxxx = 0.00001) {
+applyConScript <- function(xxxtargetxxx, xxxvalxxx, xxxconxxx, xxxthresholdxxx = 0.00001, refpt = NULL) {
 	for(i in 1:length(xxxtargetxxx)) {
 		assign(xxxtargetxxx[i], xxxvalxxx[i])
+	}
+	if(!is.null(refpt)) {
+		xxxnewlhsxxx <- xxxconxxx[[1]][!(xxxconxxx[[1]] %in% xxxtargetxxx)]
+		xxxnewlhsxxx <- xxxnewlhsxxx[(xxxnewlhsxxx %in% refpt$plabel)]
+		for(i in seq_along(xxxnewlhsxxx)) {
+			assign(xxxnewlhsxxx[i], get(refpt$label[which(xxxnewlhsxxx[i] == refpt$plabel)[1]]))
+		}
+		xxxnewrhsxxx <- xxxconxxx[[3]][!(xxxconxxx[[3]] %in% c(xxxtargetxxx, xxxconxxx[[1]]))]
+		xxxnewrhsxxx <- xxxnewrhsxxx[(xxxnewrhsxxx %in% refpt$plabel)]
+		for(i in seq_along(xxxnewrhsxxx)) {
+			assign(xxxnewrhsxxx[i], get(refpt$label[which(xxxnewrhsxxx[i] == refpt$plabel)[1]]))
+		}	
 	}
 	for(i in 1:length(xxxconxxx[[1]])) {
 		if(xxxconxxx[[2]][i] %in% c(":=", "==")) {

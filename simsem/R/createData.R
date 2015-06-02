@@ -217,7 +217,6 @@ dataGen <- function(dataDist, n, m, cm, empirical = FALSE) {
     # Check dim(M) dim(CM) dim(copula) are equal
     if (!is.null(dataDist)) {
 		if(any(is.na(dataDist@skewness))) {
-			library(copula)
 			if (dataDist@p > 1) {
 				varNotZeros <- diag(cm) != 0
 				dataDist2 <- dataDist
@@ -310,7 +309,6 @@ CopSEM <- function(copmvdc, Sigma, nw = 100000, np = 1000) {
 	## Sigma ... model VC-matrix to be approximated
 	## nw ... sample size for warm-up sample
 	## np ... sample size for production sample
-	library(copula)
 	Xw <- copula::rMvdc(nw, copmvdc) ## draw warm-up sample
 	Sw <- cov(Xw) ## warm-up VC matrix
 	Sigma.eigen <- eigen(Sigma) ## EV decomposition Sigma

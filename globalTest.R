@@ -109,13 +109,8 @@ globalTest <- function() {
 }
 
 
-test.overall <- function() {
-	# Test
-	# 1. Name of testing
-	# 2. Successful run?
-	# 3. Have expected errors?
-	# 4. Time elapsed
-	install.packages("simsem_0.5-9.tar.gz", repos=NULL, type="source")
+
+	install.packages("simsem_0.5-11.tar.gz", repos=NULL, type="source")
 	result <- NULL
 	currentDir <- getwd()
 	currentDir <- gsub("/simsem/R", "", currentDir)
@@ -230,5 +225,5 @@ test.overall <- function() {
 	
 	colnames(result) <- c("condition", "success", "expecterror", "time")
 	return(result)
-}
+
 

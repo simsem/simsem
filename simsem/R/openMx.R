@@ -1,7 +1,6 @@
 # Only work for single-group for now.
 
 generateMx <- function(object, n, indDist = NULL, groupLab = NULL, covData = NULL, empirical = FALSE) {
-	library(OpenMx)
 	if(length(object@submodels) > 1) {
 		ngroups <- length(object@submodels)
 		if(!is.list(n)) n <- as.list(n)
@@ -218,7 +217,6 @@ getImpliedStatML <- function(xxxobjectxxx, xxxcovdatatxxx = NULL, xxxextraxxx = 
 }
 
 analyzeMx <- function(object, data, groupLab = NULL, mxMixture = FALSE, ...) {
-	library(OpenMx)
 	if(length(object@submodels) > 1 & !mxMixture) {
 		temp <- object@submodels
 		if(is.null(groupLab)) groupLab <- "group"
@@ -268,8 +266,7 @@ vectorizeMx <- function(object) {
 }
 
 easyFitMx <- function(object, mxMixture = FALSE) {
-	library(OpenMx)
-	
+
 	if(length(object@submodels) > 1 & !mxMixture) {
 		dat <- lapply(object@submodels, slot, "data")
 	} else {

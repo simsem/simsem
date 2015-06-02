@@ -142,9 +142,11 @@ plotCutoff(Output, 0.05)
 summaryParam(Output)
 
 # Try auxiliary
+CFA.Model2 <- model(LY = list(LY, LY), RPS = RPS, RTE = RTE, VTE=VTE, modelType = "CFA", indLab=c("pos1", "pos2", "pos3", "neg1", "neg2", "neg3"), facLab=c("posaffect", "negaffect"))
+
 m <- miss(pmMCAR=0.1, cov="group")
-Output <- sim(20, CFA.Model,n=200, miss=m)
-Output2 <- sim(20, CFA.Model,n=200, miss=m, smartStart=FALSE)
+Output <- sim(20, CFA.Model, generate = CFA.Model2,n=200, miss=m)
+Output2 <- sim(20, CFA.Model, generate = CFA.Model2,n=200, miss=m, smartStart=FALSE)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summaryParam(Output)
@@ -612,15 +614,15 @@ summaryParam(Output)
 #library(simsem)
 library(lavaan)
 loading <- matrix(0, 9, 3)
-loading[1:3, 1] <- NA
+loading[1:3, 1] <- "load1"
 loading[4:6, 2] <- NA
 loading[7:9, 3] <- NA
 cfamodel <- estmodel(LY=loading, modelType="CFA", indLab=paste("x", 1:9, sep=""))
 out <- analyze(cfamodel, HolzingerSwineford1939)
 
 loading.mis <- matrix("runif(1, -0.2, 0.2)", 9, 3)
-loading.mis[is.na(loading)] <- 0
-datamodel.nomis <- model.lavaan(out, std=TRUE, LY=loading.mis)
+loading.mis[is.na(loading) | loading == "load1"] <- 0
+datamodel.nomis <- model.lavaan(out, std=FALSE, LY=loading.mis)
 output.nomis <- sim(200, n=nrow(HolzingerSwineford1939), datamodel.nomis)
 
 pValue(out, output.nomis)

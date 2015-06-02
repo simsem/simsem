@@ -16,7 +16,6 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ..., rawDa
     start.time0 <- start.time <- proc.time()[3]
     timing <- list()
 	timing$StartTime <- Sys.time()
-    require(parallel)
     RNGkind("L'Ecuyer-CMRG")
 	if(is.null(previousSim)) {
 		set.seed(seed)
@@ -467,24 +466,26 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ..., rawDa
 			lavaanfit <- attr(do.call(lavaan::simulateData, generate2), "fit")
 			pt <- lavaan::parTable(lavaanfit)
 			if(is.partable(generate$model)) pt <- generate$model
-			stdpt <- lavaan::standardizedSolution(lavaanfit)
+			stdpt <- lavaan::standardizedSolution(lavaanfit, remove.eq = FALSE, remove.ineq = FALSE, remove.def = FALSE)
 			if(!("group" %in% colnames(stdpt))) stdpt <- data.frame(stdpt, group = 1)
 			extraParamIndex <- pt$op %in% c(">", "<", "==", ":=")
 			if(any(extraParamIndex)) {
 				con <- list(lhs = pt$lhs[extraParamIndex], op = pt$op[extraParamIndex], rhs = pt$rhs[extraParamIndex])
 				hasLab <- pt$label != ""
-				extraVal <- applyConScript(pt$label[hasLab][!duplicated(pt$label[hasLab])],  pt$ustart[hasLab][!duplicated(pt$label[hasLab])], con)
+				extraVal <- applyConScript(pt$label[hasLab][!duplicated(pt$label[hasLab])],  pt$ustart[hasLab][!duplicated(pt$label[hasLab])], con, refpt = pt)
 				toBeFill <- which(is.na(pt$ustart) & hasLab)
 				for(i in seq_along(toBeFill)) {
 					pt$ustart[toBeFill[i]] <- extraVal[[2]][extraVal[[1]] == pt$label[toBeFill[i]]]
 				}
 			}
 			param <- pt$ustart
-			names(param) <- names(coef(lavaan::lavaan(pt, sample.nobs=rep(200, max(pt$group))), type="user"))
+			changparampt <- changeDupLab(pt)
+			paramNames <- lavaan::lav_partable_labels(lapply(changparampt, "[", !(changparampt$op %in% c("==", ">", "<", ":="))))
+			if(any(extraParamIndex)) paramNames <- c(paramNames, renameExtraParam(pt$lhs[extraParamIndex], pt$op[extraParamIndex], pt$rhs[extraParamIndex], refpt = pt))
+			names(param) <- paramNames
 			param <- as.data.frame(t(param))
 			stdparam <- stdpt$est.std
-			########### Need to fix the hidden function
-			names(stdparam) <- lavaan:::lav_partable_labels(stdpt)
+			names(stdparam) <- paramNames #lavaan::lav_partable_labels(stdpt)
 			stdparam <- as.data.frame(t(stdparam))
 		} else if (mxGenerate | (is.null(generate) & is(model, "MxModel"))) {
 			if(is.null(generate)) generate <- model
@@ -654,7 +655,6 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 	popData = NULL, group = NULL, mxFit = FALSE, mxMixture = FALSE, citype = NULL, cilevel = 0.95, stopOnError = FALSE, ...) {
     start.time0 <- start.time <- proc.time()[3]
     timing <- list()
-    #library(lavaan)
 	param <- NA
 	stdparam <- NA
     coef <- NA
@@ -1038,24 +1038,25 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 				if(is.null(citype)) citype <- formals(lavaan::parameterEstimates)$boot.ci.type
 				#redo with parameterEstimate function in lavaan (for coef se, std) all the way to 526
 
-				result <- lavaan::parameterEstimates(out, standardized=TRUE, boot.ci.type=citype, level = cilevel)
+				result <- lavaan::parameterEstimates(out, standardized=TRUE, boot.ci.type=citype, level = cilevel, remove.eq = FALSE, remove.ineq = FALSE, remove.def = FALSE)
 				outpt <- out@ParTable
 				extraParamIndex <- outpt$op %in% c(">", "<", "==", ":=")
 				index <- ((outpt$free != 0) & !(duplicated(outpt$free))) | extraParamIndex
 				coef <- result$est[index]
 				se <- out@Fit@se[index]
 				std <- result$std.all[index]
-				errstdse <- try(resultstd <- lavaan::standardizedSolution(out))
+				errstdse <- try(resultstd <- lavaan::standardizedSolution(out, remove.eq = FALSE, remove.ineq = FALSE, remove.def = FALSE))
 				if(!is(errstdse, "try-error")) stdse <- resultstd$se[index]
 				cilower <- result$ci.lower[index]
 				ciupper <- result$ci.upper[index]
 				FMI1 <- result$fmi[index]
-				lab <- names(coef(lavaan::lavaan(outpt, sample.nobs=rep(200, max(outpt$group)))))
+				changept <- changeDupLab(outpt)
+				lab <- lavaan::lav_partable_labels(lapply(changept, "[", changept$free > 0))
 				if(any(extraParamIndex)) {
 					if(!is.lavaancall(model)) {
-						lab <- c(lab, renameExtraParam(model@con$lhs, model@con$op, model@con$rhs))
+						lab <- c(lab, renameExtraParam(model@pt$lhs[extraParamIndex], model@pt$op[extraParamIndex], model@pt$rhs[extraParamIndex], refpt = outpt))
 					} else {
-						lab <- c(lab, renameExtraParam(outpt$lhs[extraParamIndex], outpt$op[extraParamIndex], outpt$rhs[extraParamIndex]))
+						lab <- c(lab, renameExtraParam(outpt$lhs[extraParamIndex], outpt$op[extraParamIndex], outpt$rhs[extraParamIndex], refpt = outpt))
 					}
 				}
 				names(coef) <- lab
@@ -1123,7 +1124,11 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 				popMis <- NA
 				misfitOut <- NA
 			}
+
+			changgenept <- changeDupLab(generate@pt)
+			paramNames <- lavaan::lav_partable_labels(lapply(changgenept, "[", changgenept$free > 0))
 			
+			# paramNames <- names(coef(lavaan::lavaan(changeDupLab(generate@pt), sample.nobs=rep(200, max(generate@pt$group)))))
 			extraParamIndex <- generate@pt$op %in% c(">", "<", "==", ":=")
 			extraParamName <- NULL
 			if(any(extraParamIndex)) {
@@ -1135,7 +1140,6 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 			index <- indexstd | extraParamIndex
 			popParam <- popParam[index]
 			stdPopParam <- stdPopParam[indexstd]
-			paramNames <- names(coef(lavaan::lavaan(generate@pt, sample.nobs=rep(200, max(generate@pt$group)))))
 			names(popParam) <- c(paramNames, extraParamName)
 			names(stdPopParam) <- paramNames
 		} else {
@@ -1358,7 +1362,7 @@ checkCovLv <- function(object) {
 
 collapseExtraParam <- function(pls, dgen, fill=TRUE, con=NULL) {
 	# Collapse all labels
-	if(length(pls) == 1) dgen <- list(dgen)
+	if(length(pls) == 1 & length(pls) != 1) dgen <- list(dgen)
 	temp <- extractLab(pls, dgen, fill=fill, con=con)
 	target <- temp[[1]]
 	realval <- temp[[2]]
@@ -1384,14 +1388,24 @@ collapseExtraParam <- function(pls, dgen, fill=TRUE, con=NULL) {
 	
 }
 
-renameExtraParam <- function(lhs, op, rhs) {
+renameExtraParam <- function(lhs, op, rhs, refpt = NULL) {
 	for(i in 1:length(lhs)) {
+		lablhs <- lhs[i]
+		labrhs <- rhs[i]
+		if(!is.null(refpt)) {
+			matchlhs <- match(lablhs, refpt$plabel)
+			matchrhs <- match(labrhs, refpt$plabel)
+			if(!is.na(matchlhs)) lablhs <- refpt$label[matchlhs]
+			if(!is.na(matchrhs)) labrhs <- refpt$label[matchrhs]
+		}
 		if(op[i] %in% c(">", "==")) {
-			lhs[i] <- paste("[", lhs[i], "]", "-", "[", rhs[i], "]")
+			lhs[i] <- paste("[", lablhs, "]", "-", "[", labrhs, "]")
 		} else if (op[i] == "<") {
-			lhs[i] <- paste("[", rhs[i], "]", "-", "[", lhs[i], "]")
+			lhs[i] <- paste("[", labrhs, "]", "-", "[", lablhs, "]")
 		}
 	}
+	dup <- duplicated(lhs) | duplicated(lhs, fromLast = TRUE)
+	lhs[dup] <- paste(lhs[dup], "#", 1:sum(dup))
 	lhs	
 }
 
@@ -1542,9 +1556,26 @@ parsePopulation <- function(paramSet, draws, group = 1, std = FALSE, covData = N
 }
 
 is.partable <- function(object) {
-	is.list(object) && all(names(object) %in% c("id", "lhs", "op", "rhs", "user", "group", "free", "ustart", "exo", "label", "eq.id", "unco"))
+	is.list(object) && all(names(object) %in% c("id", "lhs", "op", "rhs", "user", "group", "free", "ustart", "exo", "label", "plabel", "start", "eq.id", "unco")) # leave eq.id and unco for reverse comptability.
 }
 
 is.lavaancall <- function(object) {
 	is.list(object) && ("model" %in% names(object))
+}
+
+changeDupLab <- function(pt) {
+	temppt <- pt
+	temppt$label <- rep("", length(temppt$label))
+	templab <- lavaan::lav_partable_labels(temppt)
+	uniquelab <- setdiff(pt$label, "")
+	for(i in seq_along(uniquelab)) {
+		pos <- which(uniquelab[i] == pt$label)
+		if(length(pos) > 1) {
+			for(j in pos) {
+				nameparam <- paste0("<- (", templab[j], ")")
+				pt$label[j] <- paste(pt$label[j], nameparam)
+			}
+		}
+	}
+	pt
 }

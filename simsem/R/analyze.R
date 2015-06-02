@@ -38,7 +38,6 @@ analyzeSimSem <- function(model, data, package = "lavaan", miss = NULL,
 		groupLab <- NULL
 	}
     if (!is.null(miss) && length(miss@package) != 0 && miss@package %in% c("Amelia", "mice")) {
-		library(semTools)
 		miArgs <- miss@args
 		if(miss@package == "Amelia") {
 			if(model@groupLab %in% colnames(data)) {
@@ -48,7 +47,7 @@ analyzeSimSem <- function(model, data, package = "lavaan", miss = NULL,
 					miArgs <- c(miArgs, list(idvars=model@groupLab))
 				}
 			}
-		}
+		} 
         Output <- semTools::runMI(model@pt, data, m = miss@m, miArgs=miArgs, chi=miss@chi, miPackage=miss@package, fun="lavaan", ...)
     } else {
 		# If the missing argument is not specified and data have NAs, the default is fiml.
@@ -62,14 +61,12 @@ analyzeSimSem <- function(model, data, package = "lavaan", miss = NULL,
 			args$missing <- NULL
 		}
         if (!is.null(aux)) {
-            library(semTools)	
 			if(is.numeric(aux)) aux <- colnames(data)[aux]
 			attribute <- list(model=model@pt, aux = aux, data = data, group = groupLab, 
                 model.type = model@modelType, missing = missing, fun = "lavaan")
 			attribute <- c(attribute, args)
 			Output <- do.call(semTools::auxiliary, attribute)
         } else {
-			#library(lavaan)
 			attribute <- list(model=model@pt, data = data, group = groupLab, model.type = model@modelType, 
                 missing = missing)
 			attribute <- c(attribute, args)
@@ -81,7 +78,6 @@ analyzeSimSem <- function(model, data, package = "lavaan", miss = NULL,
 
 # To be used internally
 anal <- function(model, data, package = "lavaan", ...) {
-	#library(lavaan)
 	groupLab <- model@groupLab
 	if(length(unique(model@pt$group[model@pt$op %in% c("=~", "~~", "~", "~1", "|")])) == 1) {
 		groupLab <- NULL
@@ -98,7 +94,6 @@ analyzeLavaan <- function(args, fun = "lavaan", miss = NULL, aux = NULL) {
             aux <- miss@cov
     }
     if (!is.null(miss) && length(miss@package) != 0 && miss@package %in% c("Amelia", "mice")) {
-		library(semTools)
 		miArgs <- miss@args
 		if(miss@package == "Amelia") {
 			if(!is.null(args$group)) {
@@ -116,7 +111,7 @@ analyzeLavaan <- function(args, fun = "lavaan", miss = NULL, aux = NULL) {
 		args$chi <- miss@chi
 		args$miPackage <- miss@package
 		args$fun <- fun
-        Output <- do.call("runMI", args)
+        Output <- do.call(semTools::runMI, args)
     } else {
 		# If the missing argument is not specified and data have NAs, the default is fiml.
 		if(is.null(args$missing)) {
@@ -126,11 +121,10 @@ analyzeLavaan <- function(args, fun = "lavaan", miss = NULL, aux = NULL) {
 			}
 		} 
         if (!is.null(aux)) {
-            library(semTools)	
 			if(is.numeric(aux)) aux <- colnames(model$data)[aux]
 			args$aux <- aux
 			args$fun <- fun
-			Output <- do.call("auxiliary", args)
+			Output <- do.call(semTools::auxiliary, args)
         } else {
 			Output <- do.call(fun, args)
         }

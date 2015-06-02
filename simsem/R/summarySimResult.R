@@ -24,9 +24,8 @@ summaryParam <- function(object, alpha = 0.05, std = FALSE, detail = FALSE, impr
 		crit <- qnorm(1 - alpha/2)
 		sig <- abs(z) > crit
 		pow <- apply(sig, 2, mean, na.rm = TRUE)
-		result <- data.frame(result, "Average SE" = estimated.se, "Power (Not equal 0)" = pow)
+		result <- cbind(result, "Average SE" = estimated.se, "Power (Not equal 0)" = pow)
 	}
-	
 	if (!std && length(object@stdCoef) != 0) {
 		stdCoef <- colMeans(object@stdCoef, na.rm = TRUE)
 		stdRealSE <- sapply(object@stdCoef, sd, na.rm = TRUE)
@@ -41,9 +40,9 @@ summaryParam <- function(object, alpha = 0.05, std = FALSE, detail = FALSE, impr
 		}
 		resultStd <- cbind(stdCoef, stdRealSE, stdEstSE)
         colnames(resultStd) <- c("Std Est", "Std Est SD", "Std Ave SE")
-        result <- data.frame(result, resultStd[rownames(result),])
+        result <- cbind(result, resultStd[rownames(result),])
 	}
-	
+
 	paramExist <- !(all(dim(object@paramValue) == 1) && is.na(object@paramValue))
 	stdParamExist <- !(all(dim(object@stdParamValue) == 1) && is.na(object@stdParamValue))
 	
@@ -71,6 +70,7 @@ summaryParam <- function(object, alpha = 0.05, std = FALSE, detail = FALSE, impr
 			selectci <- colnames(lowerBound) %in% rownames(result)
 			lowerBound <- lowerBound[,selectci]
 			upperBound <- upperBound[,selectci]
+
 			noci <- setdiff(rownames(result), colnames(lowerBound))
 			if(length(noci) > 0) {
 				if(length(selectci) > 0) warning("Some CIs are Wald CI and others are calculated inside the simulation.")
@@ -92,7 +92,7 @@ summaryParam <- function(object, alpha = 0.05, std = FALSE, detail = FALSE, impr
                 "Coverage")
             if (nrow(object@paramValue) == 1) 
                 result2 <- result2[, c(1, 3, 5)]
-            result <- data.frame(result, result2)
+            result <- cbind(result, result2)
             if (detail) {
                 relative.bias <- biasParam/paramValue
                 relBias <- apply(relative.bias, 2, mean, na.rm = TRUE)
@@ -115,7 +115,7 @@ summaryParam <- function(object, alpha = 0.05, std = FALSE, detail = FALSE, impr
 				perc.upper <- apply(aboveUpperBound, 2, mean, na.rm = TRUE)
 				result3 <- cbind(relBias, std.bias, relative.bias.se, perc.lower, perc.upper, average.width, sd.width)
                 colnames(result3) <- c("Rel Bias", "Std Bias", "Rel SE Bias", "Not Cover Below", "Not Cover Above", "Average CI Width", "SD CI Width")
-                result <- data.frame(result, result3)
+                result <- cbind(result, result3)
             }
         }
     }
@@ -128,7 +128,7 @@ summaryParam <- function(object, alpha = 0.05, std = FALSE, detail = FALSE, impr
         colnames(resultFMI) <- c("Average FMI1", "SD FMI1")
 		targetParam <- matchLavaanName(rownames(result), rownames(resultFMI))
 		targetParam <- targetParam[!is.na(targetParam)]
-        result <- data.frame(result, resultFMI[targetParam,])
+        result <- cbind(result, resultFMI[targetParam,])
     }
 	
     if (nrow(object@FMI2) > 1 & ncol(object@FMI2) >= 1) {
@@ -140,7 +140,7 @@ summaryParam <- function(object, alpha = 0.05, std = FALSE, detail = FALSE, impr
         colnames(resultFMI) <- c("Average FMI2", "SD FMI2")
 		targetParam <- matchLavaanName(rownames(result), rownames(resultFMI))
 		targetParam <- targetParam[!is.na(targetParam)]
-        result <- data.frame(result, resultFMI[targetParam,])
+        result <- cbind(result, resultFMI[targetParam,])
     }	
 	
     if (length(unique(object@n)) > 1) {
@@ -148,21 +148,21 @@ summaryParam <- function(object, alpha = 0.05, std = FALSE, detail = FALSE, impr
             "object@n"]
         corSeN <- cor(cbind(usedSe, object@n), use = "pairwise.complete.obs")[colnames(usedSe), 
             "object@n"]
-        result <- data.frame(result, r_coef.n = corCoefN, r_se.n = corSeN)
+        result <- cbind(result, r_coef.n = corCoefN, r_se.n = corSeN)
     }
     if (length(unique(object@pmMCAR)) > 1) {
         corCoefMCAR <- cor(cbind(usedCoef, object@pmMCAR), use = "pairwise.complete.obs")[colnames(usedCoef), 
             "object@pmMCAR"]
         corSeMCAR <- cor(cbind(usedSe, object@pmMCAR), use = "pairwise.complete.obs")[colnames(usedSe), 
             "object@pmMCAR"]
-        result <- data.frame(result, r_coef.pmMCAR = corCoefMCAR, r_se.pmMCAR = corSeMCAR)
+        result <- cbind(result, r_coef.pmMCAR = corCoefMCAR, r_se.pmMCAR = corSeMCAR)
     }
     if (length(unique(object@pmMAR)) > 1) {
         corCoefMAR <- cor(cbind(usedCoef, object@pmMAR), use = "pairwise.complete.obs")[colnames(usedCoef), 
             "object@pmMAR"]
         corSeMAR <- cor(cbind(usedSe, object@pmMAR), use = "pairwise.complete.obs")[colnames(usedSe), 
             "object@pmMAR"]
-        result <- data.frame(result, r_coef.pmMAR = corCoefMAR, r_se.pmMAR = corSeMAR)
+        result <- cbind(result, r_coef.pmMAR = corCoefMAR, r_se.pmMAR = corSeMAR)
     }
 	if(!is.null(digits)) {
 		result <- round(result, digits)
@@ -252,7 +252,7 @@ summaryFit <- function(object, alpha = NULL, improper = FALSE, usedFit = NULL) {
         m <- do.call(expand.grid, values)
         FUN <- function(vec, obj, alpha, usedFit) as.numeric(getCutoff(obj, alpha, revDirec = FALSE, 
             usedFit = usedFit, nVal = vec[3], pmMCARval = vec[1], pmMARval = vec[2]))
-        cutoffs <- sapply(as.data.frame(t(m)), FUN, obj = object, alpha = alpha, 
+       cutoffs <- sapply(as.data.frame(t(m)), FUN, obj = object, alpha = alpha, 
             usedFit = usedFit)
         mSelect <- as.matrix(m[, condition])
         colnames(mSelect) <- c("%MCAR", "%MAR", "N")[condition]

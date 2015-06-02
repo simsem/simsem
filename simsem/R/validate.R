@@ -65,8 +65,9 @@ validatePath <- function(path, var.iv, var.dv) {
 validateCovariance <- function(resVar, correlation, totalVar = NULL) {
     if (!isSymmetric(correlation)) 
         return(FALSE)
-    if (sum(resVar < 0) > 0) 
+    if (any(is.na(resVar)) || sum(resVar < 0) > 0) {
         return(FALSE)
+	}
     zero.row <- resVar == 0
     if (sum(zero.row) > 0) {
         target.rows <- correlation[which(zero.row), , drop = FALSE]

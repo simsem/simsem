@@ -140,7 +140,6 @@ plotCutoff <-  function(object,
 
 plot3DQtile <- function(x, y, z, df = 0, qtile = 0.5, useContour = TRUE, xlab = NULL, 
     ylab = NULL, zlab = NULL, main = NULL) {
-    library(quantreg)
     if (length(qtile) > 1) 
         stop("Please use only one quantile value at a time")
     xyz <- data.frame(x = x, y = y, z = z)
@@ -149,7 +148,8 @@ plot3DQtile <- function(x, y, z, df = 0, qtile = 0.5, useContour = TRUE, xlab = 
     if (df == 0) {
         mod <- quantreg::rq(z ~ x + y + x * y, data = xyz, tau = qtile)
     } else {
-        library(splines)
+        requireNamespace("splines")
+		if(!("package:splines" %in% search())) attachNamespace("splines")
         mod <- quantreg::rq(z ~ ns(x, df) + ns(y, df) + ns(x, df) * ns(y, df), data = xyz, 
             tau = qtile)
     }
@@ -203,15 +203,17 @@ plot3DQtile <- function(x, y, z, df = 0, qtile = 0.5, useContour = TRUE, xlab = 
 # }
 
 plotQtile <- function(x, y, df = 0, qtile = NULL, ...) {
-    library(quantreg)
     xy <- data.frame(x = x, y = y)
     plot(x, y, ...)
     if (!is.null(qtile)) {
         mod <- NULL
+		requireNamespace("quantreg")
+		if(!("package:quantreg" %in% search())) attachNamespace("quantreg")
         if (df == 0) {
             mod <- quantreg::rq(y ~ x, tau = qtile)
         } else {
-            library(splines)
+            requireNamespace("splines")
+			if(!("package:splines" %in% search())) attachNamespace("splines")
             mod <- quantreg::rq(y ~ ns(x, df), tau = qtile)
         }
         xseq <- seq(min(x), max(x), length = nrow(xy))

@@ -161,10 +161,11 @@ pValueCondCutoff <- function(target, dist, revDirec = FALSE, x = NULL, xval = NU
     colnames(x) <- name
     names(xval) <- name
     if (df == 0) {
-        name2 <- name
+        name2 <- name	
     } else {
-        library(splines)
-        name2 <- paste("ns(", name, ",", df, ")", sep = "")
+        requireNamespace("splines")
+		if(!("package:splines" %in% search())) attachNamespace("splines")
+		name2 <- paste("ns(", name, ",", df, ")", sep = "")
     }
     firstord <- paste(name2, collapse = " + ")
     FUN <- function(x, y) paste(x, " * ", y, sep = "")
@@ -176,8 +177,9 @@ pValueCondCutoff <- function(target, dist, revDirec = FALSE, x = NULL, xval = NU
         express <- paste("y ~ ", firstord, " + ", secondord, sep = "")
     }
     dat <- data.frame(y = dist, x)
-    library(quantreg)
     percVal <- 1:49/50
+	requireNamespace("quantreg")
+	if(!("package:quantreg" %in% search())) attachNamespace("quantreg")
     mod <- quantreg::rq(express, data = dat, tau = percVal)
     xval <- data.frame(t(as.matrix(xval)))
     colnames(xval) <- name2

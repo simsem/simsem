@@ -71,8 +71,13 @@ model <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = 
             
             # Adjust indices for between group constraints
             pt <- btwGroupCons(pt)
+			
+			addptcon <- addeqcon(pt, con)
+			pt <- addptcon[[1]]
+			
             # nullpt <- nullpt(psl[[1]], ngroups=n)
 			pt <- attachConPt(pt, con)
+			con <- addptcon[[2]]
             
             return(new("SimSem", pt = pt, dgen = psl, modelType = modelType, groupLab = groupLab, con=con))
             
@@ -81,7 +86,11 @@ model <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = 
             paramSet <- buildModel(paramSet, modelType)
             pt <- buildPT(paramSet, facLab = facLab, indLab = indLab, covLab = covLab)
             # nullpt <- nullpt(paramSet)
+			addptcon <- addeqcon(pt, con)
+			pt <- addptcon[[1]]
+			
 			pt <- attachConPt(pt, con)
+			con <- addptcon[[2]]
 
             return(new("SimSem", pt = pt, dgen = paramSet, modelType = modelType, 
                 groupLab = groupLab, con=con))
@@ -1142,6 +1151,21 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
             modelType <- "cfa"
         }
     }
+	
+	# Handle the equality constraints
+	pt <- object@ParTable
+	eqpos <- which(pt$op %in% ":=")
+	iseqposfromlavaan <- pt$lhs[eqpos] %in% pt$plabel & pt$rhs[eqpos] %in% pt$plabel
+	eqposfromlavaan <- eqpos[iseqposfromlavaan]
+	for(i in seq_along(eqposfromlavaan)) {
+		temppos <- eqposfromlavaan[i]
+		templab <- paste0(".line", temppos, ".")
+		if(pt$label[temppos] == "") pt$label[temppos] <- templab
+	}
+	ptg <- lapply(pt, "[", pt$group != 0)
+	ptg <- split(data.frame(ptg), ptg$group)
+	
+	# Put labels in it
     
     if (std) {
         est <- standardize(object)
@@ -1163,38 +1187,82 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
         if (!is.null(VY)) 
             stop("Misspecification is not allowed in VY if 'std' is TRUE.")
         
-        FUN <- function(x, y = NULL, z = NULL, h) {
+        FUN <- function(x, y = NULL, z = NULL, h, pttemp = NULL, lhstemp = NULL, optemp = NULL, rhstemp = NULL) {
 			if(!is.null(h)) {
 				x[(is.na(x) & (h != 0)) & is.na(h)] <- NA
 				x[(is.na(x) & (h != 0)) & !is.na(h)] <- h[(is.na(x) & (h != 0)) & !is.na(h)]
 			}
-            y[!is.free(x)] <- ""
+			freex <- is.free(x)
+			if(!is.null(pttemp)) {
+				if(is.null(lhstemp)) lhstemp <- rownames(x)
+				if(is.null(rhstemp)) rhstemp <- colnames(x)
+				targetelem <- which(pttemp$op == optemp & pttemp$lhs %in% lhstemp & pttemp$rhs %in% rhstemp)
+				for(i in seq_along(targetelem)) {
+					varleft <- as.character(pttemp$lhs[targetelem[i]])
+					varright <- as.character(pttemp$rhs[targetelem[i]])
+					if(optemp == "=~") {
+						if(freex[varright, varleft] && pttemp$label[targetelem[i]] != "") x[varright, varleft] <- as.character(pttemp$label[targetelem[i]])
+					} else {
+						if(freex[varleft, varright] && pttemp$label[targetelem[i]] != "") x[varleft, varright] <- as.character(pttemp$label[targetelem[i]])
+					}
+				}
+			}
+            y[!freex] <- ""
             bind(x, y, z)
         }
-        FUNS <- function(x, y, z = NULL, h) {
+        FUNS <- function(x, y, z = NULL, h, pttemp = NULL, lhstemp = NULL, optemp = NULL, rhstemp = NULL) {
 			if(!is.null(h)) {
 				x[(is.na(x) & (h != 0)) & is.na(h)] <- NA
 				x[(is.na(x) & (h != 0)) & !is.na(h)] <- h[(is.na(x) & (h != 0)) & !is.na(h)]
 			}
             diag(x) <- 1
-            if (is.matrix(y)) 
-                y[!is.free(x)] <- ""
+			freex <- is.free(x)
+			if(!is.null(pttemp)) {
+				if(is.null(lhstemp)) lhstemp <- rownames(x)
+				if(is.null(rhstemp)) rhstemp <- colnames(x)
+				targetelem <- which(pttemp$op == optemp & pttemp$lhs %in% lhstemp & pttemp$rhs %in% rhstemp)
+				for(i in seq_along(targetelem)) {
+					varleft <- as.character(pttemp$lhs[targetelem[i]])
+					varright <- as.character(pttemp$rhs[targetelem[i]])
+					if(freex[varright, varleft] && pttemp$label[targetelem[i]] != "") x[varright, varleft] <- x[varleft, varright] <- as.character(pttemp$label[targetelem[i]])
+				}
+			}
+            if (is.matrix(y)) y[!freex] <- ""
             binds(x, y, z)
         }
-        FUNV <- function(x, y = NULL, z = NULL, h) {
+        FUNV <- function(x, y = NULL, z = NULL, h, pttemp = NULL, lhstemp = NULL, optemp = NULL) {
 			if(!is.null(h)) {
 				h <- diag(h)
 				x[(is.na(x) & (h != 0)) & is.na(h)] <- NA
 				x[(is.na(x) & (h != 0)) & !is.na(h)] <- h[(is.na(x) & (h != 0)) & !is.na(h)]
 			}
-            y[!is.free(x)] <- ""
+			freex <- is.free(x)
+			if(!is.null(pttemp)) {
+				if(optemp == "~~") {
+					if(is.null(lhstemp)) lhstemp <- rownames(x)
+					targetelem <- which(pttemp$op == optemp & pttemp$lhs %in% lhstemp & as.character(pttemp$lhs) == as.character(pttemp$rhs))
+					for(i in seq_along(targetelem)) {
+						var <- as.character(pttemp$lhs[targetelem[i]])
+						if(freex[var] && pttemp$label[targetelem[i]] != "") x[var] <- as.character(pttemp$label[targetelem[i]])
+					}
+				} else {
+					if(is.null(lhstemp)) lhstemp <- names(x)
+					targetelem <- which(pttemp$op == optemp & pttemp$lhs %in% lhstemp)
+					for(i in seq_along(targetelem)) {
+						var <- as.character(pttemp$lhs[targetelem[i]])
+						if(freex[var] && pttemp$label[targetelem[i]] != "") x[var] <- as.character(pttemp$label[targetelem[i]])
+					}
+				
+				}
+			}
+            y[!freex] <- ""
             bind(x, y, z)
         }
         
         if (!is.list(RPS)) 
             RPS <- rep(list(RPS), ngroups)
         RPS <- mapply(FUNS, x = free[names(free) == "psi"], y = est[names(est) == 
-            "psi"], z = RPS, h = freeUnstd[names(freeUnstd) == "psi"], SIMPLIFY = FALSE)
+            "psi"], z = RPS, h = freeUnstd[names(freeUnstd) == "psi"], pttemp = ptg, MoreArgs = list(lhstemp = rownames(free[names(free) == "psi"]), optemp = "~~", rhstemp = colnames(free[names(free) == "psi"])), SIMPLIFY = FALSE)
         
         if (modelType %in% c("cfa", "sem")) {
             ne <- ncol(est[["lambda"]])
@@ -1202,33 +1270,33 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
             if (!is.list(LY)) 
                 LY <- rep(list(LY), ngroups)
             LY <- mapply(FUN, x = free[names(free) == "lambda"], y = est[names(est) == 
-                "lambda"], z = LY, h = freeUnstd[names(freeUnstd) == "lambda"], SIMPLIFY = FALSE)
+                "lambda"], z = LY, h = freeUnstd[names(freeUnstd) == "lambda"], pttemp = ptg, MoreArgs = list(lhstemp = facLab, optemp = "=~", rhstemp = indLab), SIMPLIFY = FALSE)
             
             if (!is.list(AL)) 
                 AL <- rep(list(AL), ngroups)
             if (!("alpha" %in% names(freeUnstd))) 
                 freeUnstd <- c(freeUnstd, rep(list(alpha = rep(0, ne)), ngroups))
-            AL <- mapply(FUN, x = rep(list(rep(0, ne)), ngroups), z = AL, h = freeUnstd[names(freeUnstd) == 
-                "alpha"], SIMPLIFY = FALSE)
+            AL <- mapply(FUNV, x = rep(list(rep(0, ne)), ngroups), z = AL, h = freeUnstd[names(freeUnstd) == 
+                "alpha"], pttemp = ptg, MoreArgs = list(lhstemp = facLab, optemp = "~1"), SIMPLIFY = FALSE)
             VE <- mapply(FUNV, x = rep(list(rep(1, ne)), ngroups), h = freeUnstd[names(freeUnstd) == 
-                "psi"], SIMPLIFY = FALSE)
+                "psi"], pttemp = ptg, MoreArgs = list(lhstemp = indLab, optemp = "~~"), SIMPLIFY = FALSE)
             if (!is.list(RTE)) 
                 RTE <- rep(list(RTE), ngroups)
             RTE <- mapply(FUNS, x = free[names(free) == "theta"], y = est[names(est) == 
-                "theta"], z = RTE, h = freeUnstd[names(freeUnstd) == "theta"], SIMPLIFY = FALSE)
+                "theta"], z = RTE, h = freeUnstd[names(freeUnstd) == "theta"], pttemp = ptg, MoreArgs = list(lhstemp = indLab, optemp = "~~", rhstemp = indLab), SIMPLIFY = FALSE)
             VY <- mapply(FUNV, x = rep(list(rep(NA, ny)), ngroups), y = rep(list(rep(1, 
-                ny)), ngroups), h = freeUnstd[names(freeUnstd) == "theta"], SIMPLIFY = FALSE)
+                ny)), ngroups), h = freeUnstd[names(freeUnstd) == "theta"], pttemp = ptg, MoreArgs = list(lhstemp = indLab, optemp = "~~"), SIMPLIFY = FALSE)
             if (!is.list(TY)) 
                 TY <- rep(list(TY), ngroups)
             if (!("nu" %in% names(freeUnstd))) 
                 freeUnstd <- c(freeUnstd, rep(list(nu = rep(0, ny)), ngroups))
-            TY <- mapply(FUN, x = rep(list(rep(NA, ny)), ngroups), y = rep(list(rep(0, 
-                ny)), ngroups), z = TY, h = freeUnstd[names(freeUnstd) == "nu"], 
+            TY <- mapply(FUNV, x = rep(list(rep(NA, ny)), ngroups), y = rep(list(rep(0, 
+                ny)), ngroups), z = TY, h = freeUnstd[names(freeUnstd) == "nu"], pttemp = ptg, MoreArgs = list(lhstemp = indLab, optemp = "~1"), 
                 SIMPLIFY = FALSE)
             if (!is.null(covLab)) {
 				if (!is.list(KA)) KA <- rep(list(KA), ngroups)
 				KA <- mapply(FUN, x = free[names(free) == "kappa"], y = est[names(est) == 
-                "kappa"], z = KA, h = freeUnstd[names(freeUnstd) == "kappa"], SIMPLIFY = FALSE)
+                "kappa"], z = KA, h = freeUnstd[names(freeUnstd) == "kappa"], pttemp = ptg, MoreArgs = list(lhstemp = NULL, optemp = "~", rhstemp = covLab), SIMPLIFY = FALSE)
 			}
         } else {
             ne <- ncol(est[["psi"]])
@@ -1237,22 +1305,22 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
             if (!("alpha" %in% names(freeUnstd))) 
                 freeUnstd <- c(freeUnstd, rep(list(alpha = rep(0, ne)), ngroups))
             AL <- mapply(FUN, x = rep(list(rep(NA, ne)), ngroups), y = rep(list(rep(0, 
-                ne)), ngroups), z = AL, h = freeUnstd[names(freeUnstd) == "alpha"], 
+                ne)), ngroups), z = AL, h = freeUnstd[names(freeUnstd) == "alpha"], pttemp = ptg, MoreArgs = list(lhstemp = indLab, optemp = "~1"), 
                 SIMPLIFY = FALSE)
             VE <- mapply(FUNV, x = rep(list(rep(NA, ne)), ngroups), y = rep(list(rep(1, 
-                ne)), ngroups), h = freeUnstd[names(freeUnstd) == "psi"], SIMPLIFY = FALSE)
+                ne)), ngroups), h = freeUnstd[names(freeUnstd) == "psi"], pttemp = ptg, MoreArgs = list(lhstemp = indLab, optemp = "~~"), SIMPLIFY = FALSE)
         }
         
         if ("beta" %in% names(est)) {
             if (!is.list(BE)) 
                 BE <- rep(list(BE), ngroups)
             BE <- mapply(FUN, x = free[names(free) == "beta"], y = est[names(est) == 
-                "beta"], z = BE, h = freeUnstd[names(freeUnstd) == "beta"], SIMPLIFY = FALSE)
+                "beta"], z = BE, h = freeUnstd[names(freeUnstd) == "beta"], pttemp = ptg, MoreArgs = list(lhstemp = NULL, optemp = "~", rhstemp = NULL), SIMPLIFY = FALSE)
         }
 		if (!is.null(covLab)) {
 			if (!is.list(GA)) GA <- rep(list(GA), ngroups)
 			GA <- mapply(FUN, x = free[names(free) == "gamma"], y = est[names(est) == 
-			"gamma"], z = GA, h = freeUnstd[names(freeUnstd) == "gamma"], SIMPLIFY = FALSE)
+			"gamma"], z = GA, h = freeUnstd[names(freeUnstd) == "gamma"], pttemp = ptg, MoreArgs = list(lhstemp = NULL, optemp = "~", rhstemp = covLab), SIMPLIFY = FALSE)
 		}
         
     } else {
@@ -1285,65 +1353,117 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
             stop("Misspecification is not allowed in MY if 'std' is FALSE.")
         if (!is.list(RPS)) 
             RPS <- rep(list(RPS), ngroups)
-        FUN2 <- function(x, y = NULL, z = NULL) {
+        FUN2 <- function(x, y = NULL, z = NULL, pttemp = NULL, lhstemp = NULL, optemp = NULL, rhstemp = NULL) {
+			freex <- is.free(x)
+			if(!is.null(pttemp)) {
+				if(is.null(lhstemp)) lhstemp <- rownames(lhstemp)
+				if(is.null(rhstemp)) rhstemp <- colnames(rhstemp)
+				targetelem <- which(pttemp$op == optemp & pttemp$lhs %in% lhstemp & pttemp$rhs %in% rhstemp)
+				for(i in seq_along(targetelem)) {
+					varleft <- as.character(pttemp$lhs[targetelem[i]])
+					varright <- as.character(pttemp$rhs[targetelem[i]])
+					if(optemp == "=~") {
+						if(freex[varright, varleft] && pttemp$label[targetelem[i]] != "") x[varright, varleft] <- as.character(pttemp$label[targetelem[i]])
+					} else {
+						if(freex[varleft, varright] && pttemp$label[targetelem[i]] != "") x[varleft, varright] <- as.character(pttemp$label[targetelem[i]])
+					}
+				}
+			}
 			if(!is.null(y)) {
-				x[!is.free(x)] <- y[!is.free(x)]
-				y[!is.free(x)] <- ""
+				x[!freex] <- y[!freex]
+				y[!freex] <- ""
 			}
             bind(x, y, z)
         }
-        FUNS2 <- function(x, y, z = NULL) {
+        FUNS2 <- function(x, y, z = NULL, pttemp = NULL, lhstemp = NULL, optemp = NULL, rhstemp = NULL) {
+			freex <- is.free(x)
+			if(!is.null(pttemp)) {
+				if(is.null(lhstemp)) lhstemp <- rownames(lhstemp)
+				if(is.null(rhstemp)) rhstemp <- colnames(rhstemp)
+				targetelem <- which(pttemp$op == optemp & pttemp$lhs %in% lhstemp & pttemp$rhs %in% rhstemp)
+				for(i in seq_along(targetelem)) {
+					varleft <- as.character(pttemp$lhs[targetelem[i]])
+					varright <- as.character(pttemp$rhs[targetelem[i]])
+					if(freex[varright, varleft] && pttemp$label[targetelem[i]] != "") x[varright, varleft] <- x[varleft, varright] <- as.character(pttemp$label[targetelem[i]])
+				}
+			}
 			if(!is.null(y)) {
-				x[!is.free(x)] <- y[!is.free(x)]
-				y[!is.free(x)] <- ""
+				x[!freex] <- y[!freex]
+				y[!freex] <- ""
 			}
             binds(x, y, z)
         }
+		FUNV2 <- function(x, y = NULL, z = NULL, pttemp = NULL, lhstemp = NULL, optemp = NULL) {
+			freex <- is.free(x)
+			if(!is.null(pttemp)) {
+				if(optemp == "~~") {
+					if(is.null(lhstemp)) lhstemp <- rownames(x)
+					targetelem <- which(pttemp$op == optemp & pttemp$lhs %in% lhstemp & as.character(pttemp$lhs) == as.character(pttemp$rhs))
+					for(i in seq_along(targetelem)) {
+						var <- as.character(pttemp$lhs[targetelem[i]])
+						if(freex[var] && pttemp$label[targetelem[i]] != "") x[var] <- as.character(pttemp$label[targetelem[i]])
+					}
+				} else {
+					if(is.null(lhstemp)) lhstemp <- names(x)
+					targetelem <- which(pttemp$op == optemp & pttemp$lhs %in% lhstemp)
+					for(i in seq_along(targetelem)) {
+						var <- as.character(pttemp$lhs[targetelem[i]])
+						if(freex[var] && pttemp$label[targetelem[i]] != "") x[var] <- as.character(pttemp$label[targetelem[i]])
+					}
+				
+				}
+			}
+			if(!is.null(y)) {
+				x[!freex] <- y[!freex]
+				y[!freex] <- ""
+			}
+            bind(x, y, z)
+		}
 		if (!is.list(PS)) 
             PS <- rep(list(PS), ngroups)
 		PS <- mapply(FUNS2, x = free[names(free) == "psi"], y = est[names(est) == 
-			"psi"], z = PS, SIMPLIFY = FALSE)
+			"psi"], z = PS, pttemp = ptg, MoreArgs = list(lhstemp = NULL, optemp = "~~", rhstemp = NULL), SIMPLIFY = FALSE)
         
         if (modelType %in% c("cfa", "sem")) {
             if (!is.list(LY)) 
                 LY <- rep(list(LY), ngroups)
             LY <- mapply(FUN2, x = free[names(free) == "lambda"], y = est[names(est) == 
-                "lambda"], z = LY, SIMPLIFY = FALSE)
+                "lambda"], z = LY, pttemp = ptg, MoreArgs = list(lhstemp = facLab, optemp = "=~", rhstemp = indLab), SIMPLIFY = FALSE)
             
             if (!is.list(TE)) 
                 TE <- rep(list(TE), ngroups)
             TE <- mapply(FUNS2, x = free[names(free) == "theta"], y = est[names(est) == 
-                "theta"], z = TE, SIMPLIFY = FALSE)
+                "theta"], z = TE, pttemp = ptg, MoreArgs = list(lhstemp = indLab, optemp = "~~", rhstemp = indLab), SIMPLIFY = FALSE)
             
             if (!is.list(TY)) 
                 TY <- rep(list(TY), ngroups)
             if ("nu" %in% names(est) && !is.null(est$nu)) {
-                TY <- mapply(FUN2, x = lapply(free[names(free) == "nu"], as.vector), 
-                  y = lapply(est[names(est) == "nu"], as.vector), z = TY, SIMPLIFY = FALSE)
+                TY <- mapply(FUNV2, x = lapply(free[names(free) == "nu"], as.vector), 
+                  y = lapply(est[names(est) == "nu"], as.vector), z = TY, pttemp = ptg, MoreArgs = list(lhstemp = indLab, optemp = "~1"), SIMPLIFY = FALSE)
             } else {
                 ny <- nrow(est[["lambda"]])
-                TY <- mapply(FUN2, x = rep(list(rep(NA, ny)), ngroups), y = rep(list(rep(0, 
-                  ny)), ngroups), z = TY, SIMPLIFY = FALSE)
+                TY <- mapply(FUNV2, x = rep(list(rep(NA, ny)), ngroups), y = rep(list(rep(0, 
+                  ny)), ngroups), z = TY, pttemp = ptg, MoreArgs = list(lhstemp = indLab, optemp = "~1"), SIMPLIFY = FALSE)
             }
 			if ("kappa" %in% names(est) && !is.null(est$kappa)) {
 				if (!is.list(KA)) 
 					KA <- rep(list(KA), ngroups)
 				KA <- mapply(FUN2, x = free[names(free) == "kappa"], y = est[names(est) == 
-					"kappa"], z = KA, SIMPLIFY = FALSE)
+					"kappa"], z = KA, pttemp = ptg, MoreArgs = list(lhstemp = NULL, optemp = "~", rhstemp = covLab), SIMPLIFY = FALSE)
 			}
         }
         if (!is.list(AL)) 
             AL <- rep(list(AL), ngroups)
         if ("alpha" %in% names(est) && !is.null(est$alpha)) {
-            AL <- mapply(FUN2, x = lapply(free[names(free) == "alpha"], as.vector), 
-                y = lapply(est[names(est) == "alpha"], as.vector), z = AL, SIMPLIFY = FALSE)
+            AL <- mapply(FUNV2, x = lapply(free[names(free) == "alpha"], as.vector), 
+                y = lapply(est[names(est) == "alpha"], as.vector), z = AL, pttemp = ptg, MoreArgs = list(lhstemp = NULL, optemp = "~1"), SIMPLIFY = FALSE)
         } else {
             p <- ncol(est[["psi"]])
             if (modelType == "path") {
-                AL <- mapply(FUN2, x = rep(list(rep(NA, p)), ngroups), y = rep(list(rep(0, 
-                  p)), ngroups), z = AL, SIMPLIFY = FALSE)
+                AL <- mapply(FUNV2, x = rep(list(rep(NA, p)), ngroups), y = rep(list(rep(0, 
+                  p)), ngroups), z = AL, pttemp = ptg, MoreArgs = list(lhstemp = indLab, optemp = "~1"), SIMPLIFY = FALSE)
             } else {
-                AL <- mapply(FUN2, x = rep(list(rep(0, p)), ngroups), z = AL, SIMPLIFY = FALSE)
+                AL <- mapply(FUNV2, x = rep(list(rep(0, p)), ngroups), z = AL, pttemp = ptg, MoreArgs = list(lhstemp = facLab, optemp = "~1"), SIMPLIFY = FALSE)
             }
         }
         
@@ -1351,26 +1471,29 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
             if (!is.list(BE)) 
                 BE <- rep(list(BE), ngroups)
             BE <- mapply(FUN2, x = free[names(free) == "beta"], y = est[names(est) == 
-                "beta"], z = BE, SIMPLIFY = FALSE)
+                "beta"], z = BE, pttemp = ptg, MoreArgs = list(lhstemp = NULL, optemp = "~", rhstemp = NULL), SIMPLIFY = FALSE)
         }
         if ("gamma" %in% names(est) && !is.null(est$gamma)) {
 			if (!is.list(GA)) 
 				GA <- rep(list(GA), ngroups)
 			GA <- mapply(FUN2, x = free[names(free) == "gamma"], y = est[names(est) == 
-				"gamma"], z = GA, SIMPLIFY = FALSE)
+				"gamma"], z = GA, pttemp = ptg, MoreArgs = list(lhstemp = NULL, optemp = "~", rhstemp = covLab), SIMPLIFY = FALSE)
 		}
     }
     groupLab <- object@Options$group
     if (is.null(groupLab)) 
         groupLab <- "group"
-		
+	
+	
 	# Get the nonlinear constraints
-	pt <- object@ParTable
 	pos <- (pt$op %in% c(":=", "==", ">", "<"))
 	conList <- NULL
 	if(any(pos)) {
-		conList <- list(lhs = pt$lhs[pos], op = pt$op[pos], con = pt$rhs[pos])
+		posplabel <- pt$lhs[pos] %in% pt$plabel | pt$rhs[pos] %in% pt$plabel
+		pos <- pos[!posplabel]
+		if(any(pos)) conList <- list(lhs = pt$lhs[pos], op = pt$op[pos], con = pt$rhs[pos])
 	}
+	
     result <- model(LY = LY, PS = PS, RPS = RPS, TE = TE, RTE = RTE, BE = BE, VTE = VTE, 
         VY = VY, VPS = VPS, VE = VE, TY = TY, AL = AL, MY = MY, ME = ME, GA = GA, KA = KA, modelType = modelType, 
         indLab = indLab, facLab = facLab, groupLab = groupLab, covLab = covLab, ngroups = ngroups, con = conList)
@@ -1553,22 +1676,149 @@ parseSyntaxCon <- function(script) {
 }
 
 attachConPt <- function(pt, con) {
-	if(is.null(con) || is.null(con[[1]])) return(pt)
-	len <- length(con[[1]])
-	pt$id <- c(pt$id, length(pt$id) + (1:len))
-	pt$lhs <- c(pt$lhs, con$lhs)
-	pt$op <- c(pt$op, con$op)
-	pt$rhs <- c(pt$rhs, con$rhs)
-	pt$user <- c(pt$user, rep(as.integer(1), len))
-	pt$group <- c(pt$group, rep(as.integer(0), len))
-	pt$free <- c(pt$free, rep(as.integer(0), len))
-	pt$ustart <- c(pt$ustart, rep(NA, len))
-	pt$exo <- c(pt$exo, rep(as.integer(0), len))
-	lab <- rep("", len)
-	lab[con$op == ":="] <- con$lhs[con$op == ":="]
-	pt$label <- c(pt$label, lab)
-	pt$eq.id <- c(pt$eq.id, rep(as.integer(0), len))
-	pt$unco <- c(pt$unco, rep(as.integer(0), len))
-	pt
+	if(is.null(con) || is.null(con[[1]])) {
+		return(pt)
+	} else {
+		return(patMerge(pt, con))
+	}
+	# len <- length(con[[1]])
+	# pt$id <- c(pt$id, length(pt$id) + (1:len))
+	# pt$lhs <- c(pt$lhs, con$lhs)
+	# pt$op <- c(pt$op, con$op)
+	# pt$rhs <- c(pt$rhs, con$rhs)
+	# pt$user <- c(pt$user, rep(as.integer(1), len))
+	# pt$group <- c(pt$group, rep(as.integer(0), len))
+	# pt$free <- c(pt$free, rep(as.integer(0), len))
+	# pt$ustart <- c(pt$ustart, rep(NA, len))
+	# pt$exo <- c(pt$exo, rep(as.integer(0), len))
+	# lab <- rep("", len)
+	# lab[con$op == ":="] <- con$lhs[con$op == ":="]
+	# pt$label <- c(pt$label, lab)
+	# pt$eq.id <- c(pt$eq.id, rep(as.integer(0), len))
+	# pt$unco <- c(pt$unco, rep(as.integer(0), len))
+	# pt
 }
 
+patMerge <- function (pt1 = NULL, pt2 = NULL, remove.duplicated = FALSE, 
+    fromLast = FALSE, warn = TRUE) 
+{
+    pt1 <- as.data.frame(pt1, stringsAsFactors = FALSE)
+    pt2 <- as.data.frame(pt2, stringsAsFactors = FALSE)
+    stopifnot(!is.null(pt1$lhs), !is.null(pt1$op), !is.null(pt1$rhs), 
+        !is.null(pt2$lhs), !is.null(pt2$op), !is.null(pt2$rhs))
+    if (is.null(pt1$group) && is.null(pt2$group)) {
+        TMP <- rbind(pt1[, c("lhs", "op", "rhs", "group")], pt2[, 
+            c("lhs", "op", "rhs", "group")])
+    }
+    else {
+        if (is.null(pt1$group) && !is.null(pt2$group)) {
+            pt1$group <- rep(1L, length(pt1$lhs))
+        }
+        else if (is.null(pt2$group) && !is.null(pt1$group)) {
+            pt2$group <- rep(1L, length(pt2$lhs))
+        }
+        TMP <- rbind(pt1[, c("lhs", "op", "rhs", "group")], pt2[, 
+            c("lhs", "op", "rhs", "group")])
+    }
+    if (is.null(pt1$user) && !is.null(pt2$user)) {
+        pt1$user <- rep(0L, length(pt1$lhs))
+    }
+    else if (is.null(pt2$user) && !is.null(pt1$user)) {
+        pt2$user <- rep(0L, length(pt2$lhs))
+    }
+    if (is.null(pt1$free) && !is.null(pt2$free)) {
+        pt1$free <- rep(0L, length(pt1$lhs))
+    }
+    else if (is.null(pt2$free) && !is.null(pt1$free)) {
+        pt2$free <- rep(0L, length(pt2$lhs))
+    }
+    if (is.null(pt1$ustart) && !is.null(pt2$ustart)) {
+        pt1$ustart <- rep(0, length(pt1$lhs))
+    }
+    else if (is.null(pt2$ustart) && !is.null(pt1$ustart)) {
+        pt2$ustart <- rep(0, length(pt2$lhs))
+    }
+    if (is.null(pt1$exo) && !is.null(pt2$exo)) {
+        pt1$exo <- rep(0L, length(pt1$lhs))
+    }
+    else if (is.null(pt2$exo) && !is.null(pt1$exo)) {
+        pt2$exo <- rep(0L, length(pt2$lhs))
+    }
+    if (is.null(pt1$label) && !is.null(pt2$label)) {
+        pt1$label <- rep("", length(pt1$lhs))
+    }
+    else if (is.null(pt2$label) && !is.null(pt1$label)) {
+        pt2$label <- rep("", length(pt2$lhs))
+    }
+    if (is.null(pt1$plabel) && !is.null(pt2$plabel)) {
+        pt1$plabel <- rep("", length(pt1$lhs))
+    }
+    else if (is.null(pt2$plabel) && !is.null(pt1$plabel)) {
+        pt2$plabel <- rep("", length(pt2$lhs))
+    }
+    if (is.null(pt1$start) && !is.null(pt2$start)) {
+        pt1$start <- rep(as.numeric(NA), length(pt1$lhs))
+    }
+    else if (is.null(pt2$start) && !is.null(pt1$start)) {
+        pt2$start <- rep(as.numeric(NA), length(pt2$lhs))
+    }
+    if (is.null(pt1$est) && !is.null(pt2$est)) {
+        pt1$est <- rep(0, length(pt1$lhs))
+    }
+    else if (is.null(pt2$est) && !is.null(pt1$est)) {
+        pt2$est <- rep(0, length(pt2$lhs))
+    }
+    if (remove.duplicated) {
+        idx <- which(duplicated(TMP, fromLast = fromLast))
+        if (length(idx)) {
+            if (warn) {
+                warning("lavaan WARNING: duplicated parameters are ignored:\n", 
+                  paste(apply(pt1[idx, c("lhs", "op", "rhs")], 
+                    1, paste, collapse = " "), collapse = "\n"))
+            }
+            if (fromLast) {
+                pt1 <- pt1[-idx, ]
+            }
+            else {
+                idx <- idx - nrow(pt1)
+                pt2 <- pt2[-idx, ]
+            }
+        }
+    }
+    else if (!is.null(pt1$start) && !is.null(pt2$start)) {
+        for (i in 1:length(pt1$lhs)) {
+            idx <- which(pt2$lhs == pt1$lhs[i] & pt2$op == pt1$op[i] & 
+                pt2$rhs == pt1$rhs[i] & pt2$group == pt1$group[i])
+            pt2$start[idx] <- pt1$start[i]
+        }
+    }
+    if (is.null(pt1$id) && !is.null(pt2$id)) {
+        nid <- max(pt2$id)
+        pt1$id <- (nid + 1L):(nid + nrow(pt1))
+    }
+    else if (is.null(pt2$id) && !is.null(pt1$id)) {
+        nid <- max(pt1$id)
+        pt2$id <- (nid + 1L):(nid + nrow(pt2))
+    }
+    NEW <- base::merge(pt1, pt2, all = TRUE, sort = FALSE)
+    NEW
+}
+
+addeqcon <- function(pt, con) {
+	pt$plabel <- paste0(".p", pt$id, ".")
+	eqcon <- setdiff(pt$label[duplicated(pt$label)], "")
+	newcon <- list(lhs = character(0), op = character(0), rhs = character(0))
+	for(i in seq_along(eqcon)) {
+		target <- eqcon[i]
+		pos <- which(target == pt$label)
+		lhs <- rep(pt$plabel[pos[1]], length(pos) - 1)
+		op <- rep("==", length(pos) - 1)
+		rhs <- pt$plabel[pos[-1]]
+		pt <- patMerge(pt, list(lhs = lhs, op = op, rhs = rhs))
+		newcon <- mapply(c, newcon, list(lhs = rep(target, length(pos) - 1), op = op, rhs = rep(target, length(pos) - 1)), SIMPLIFY =FALSE)
+	}
+	if(length(eqcon) > 0) con <- mapply(c, newcon, con, SIMPLIFY =FALSE)
+	pt <- pt[-match(c("eq.id", "unco"), names(pt))]
+	pt$free[pt$free != 0] <- 1:sum(pt$free != 0)
+	list(pt, con)
+}

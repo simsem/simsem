@@ -118,7 +118,8 @@ getCondQtile <- function(y, x = NULL, xval = NULL, df = 0, qtile = 0.5) {
         if (df == 0) {
             name2 <- name
         } else {
-            library(splines)
+            requireNamespace("splines")
+			if(!("package:splines" %in% search())) attachNamespace("splines")
             name2 <- paste("ns(", name, ",", df, ")", sep = "")
         }
         firstord <- paste(name2, collapse = " + ")
@@ -131,7 +132,8 @@ getCondQtile <- function(y, x = NULL, xval = NULL, df = 0, qtile = 0.5) {
             express <- paste("y ~ ", firstord, " + ", secondord2, sep = "")
         }
         dat <- data.frame(y = y, x)
-        library(quantreg)
+		requireNamespace("quantreg")
+		if(!("package:quantreg" %in% search())) attachNamespace("quantreg")
         mod <- quantreg::rq(express, data = dat, tau = qtile)
         if (length(xval) == 1 && xval == "all") {
             result <- predict(mod, as.data.frame(x), interval = "none")

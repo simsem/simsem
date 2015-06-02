@@ -43,7 +43,7 @@ generateSimSem <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitTy
     params = FALSE, empirical = FALSE) {
     if (is.null(indLab)) {
         if (model@modelType == "path") {
-            indLab <- unique(model@pt$lhs)
+            indLab <- unique(model@pt$lhs[!(model@pt$op %in% c("==", ":=", ">", "<"))])
         } else {
             indLab <- unique(model@pt$rhs[model@pt$op == "=~"])
         }
