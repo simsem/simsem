@@ -975,12 +975,6 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 				FMI2 <- out$FMI2
 				cilower <- out$cilower
 				ciupper <- out$ciupper
-				if (!is.null(outfun)) {
-					extra <- outfun(out)
-				}
-				if (!is.null(outfundata)) {
-					extra2 <- outfundata(out, data)
-				}
 
 			} else if(mxAnalysis) {
 				if(mxFit) {
@@ -1026,12 +1020,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 					std <- NA
 					try(std <- semTools::standardizeMx(out, free = TRUE), silent = silent)
 				}
-				if (!is.null(outfun)) {
-					extra <- outfun(out)
-				}
-				if (!is.null(outfundata)) {
-					extra2 <- outfundata(out, data)
-				}
+
 			} else {
 				fit <- inspect(out, "fit") # Avoid fitMeasures function becuase the runMI function does not support the fitMeasures function.
 				
@@ -1066,15 +1055,7 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 				if(!is.null(cilower)) names(cilower) <- lab
 				if(!is.null(ciupper)) names(ciupper) <- lab
 				if(!is.null(FMI1)) names(FMI1) <- lab
-				
-				## 6.1. Call output function (if exists)
-				if (!is.null(outfun)) {
-					extra <- outfun(out)
-				}
-				if (!is.null(outfundata)) {
-					extra2 <- outfundata(out, data)
-				}
-				
+							
 				if(!is.null(miss) && miss@m > 0) {
 					if (converged %in% c(0, 3:5)) {
 						fmiOut <- out@imputed[[2]]
@@ -1100,13 +1081,17 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 				try(FMI2 <- out$FMI2, silent = TRUE)
 				try(cilower <- out$cilower, silent = TRUE)
 				try(ciupper <- out$ciupper, silent = TRUE)
-				if (!is.null(outfun)) {
-					try(extra <- outfun(out), silent = TRUE)
-				}
-				if (!is.null(outfundata)) {
-					try(extra2 <- outfundata(out, data), silent = TRUE)
-				}
 			}
+		}
+
+		## Run outfun regardless of convergence - may want to process
+		## non-convergent sets
+		
+		if (!is.null(outfun)) {
+		  try(extra <- outfun(out), silent = TRUE)
+		}
+		if (!is.null(outfundata)) {
+		  try(extra2 <- outfundata(out, data), silent = TRUE)
 		}
 		
 		## Keep parameters regardless of convergence - may want to examine
