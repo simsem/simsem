@@ -247,7 +247,6 @@ drawParam <- function(paramSet, maxDraw = 50, numFree = 1, misfitBounds = NULL, 
 				fullpls <- equalCon(unfillpls, paramSet, fill=FALSE, con=con)
 				fullpls <- mapply(fillParam, fullpls, covStat, SIMPLIFY = FALSE)
 			}
-			
             if (all(sapply(fullpls, validateObject))) {
                 redpls <- lapply(fullpls, reduceMatrices)
                 macsPopls <- mapply(createImpliedMACS, redpls, covStat, SIMPLIFY = FALSE)
