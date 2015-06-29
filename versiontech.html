@@ -33,6 +33,24 @@
       <section id="main_content" class="inner">
         <h1>Version History (Technical)</h1>
 
+<h2>Version 0.5-11 06/29/15</h2>
+
+<ul>
+<li>Update many functions to be compatible with lavaan 0.5-18 or higher because lavaan changed the way to handle equality constraints in parameter tables. The changed functions include drawParam, generate, model, model.lavaan, sim, summaryParam, and validateCovariance.
+<li>Delete the library functions from the codes according to CRAN policy.
+</ul> 
+
+<h2>Version 0.5-9 12/03/14</h2>
+
+<ul>
+<li>Add stdCoef, stdSE, and stdPopParam slots in the result object. Change all functions according to the addition of these slots, such as clean or combineSim functions.
+<li>Change the summaryParam, summaryPopulation, and summaryConverge function to provide the summary of standardized results
+<li>Change all functions relating to OpenMx to be compatible with OpenMx 2.0.
+<li>Change the error messages in the sim function to acknowledge the function format for generate and model arguments.
+<li>Fix the model.lavaan function that provides error message when KA or GA matrices exist
+<li>Remove copula example and hope that the package is compilable in Maverick OS.
+</ul> 
+
 <h2>Version 0.5-8 10/03/14</h2>
 
 <ul>
