@@ -25,7 +25,7 @@
 }
 \author{
     Alexander M. Schoemann (East Carolina University; \email{schoemanna@ecu.edu}), 
-	Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
+	Sunthud Pornprasertmanit (\email{psunthud@gmail.com})
 }
 
 \seealso{

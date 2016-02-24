@@ -21,7 +21,7 @@ setPopulation(target, population)
 	The target object that is changed the parameter.
 }
 \author{
-    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
+    Sunthud Pornprasertmanit (\email{psunthud@gmail.com})
 }
 \seealso{
 	\itemize{

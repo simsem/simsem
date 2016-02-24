@@ -187,7 +187,7 @@ Any combination of data-generation methods and data-analysis methods are valid. 
 }
 \author{
 	Patrick Miller (University of Notre Dame; \email{pmille13@nd.edu})
-    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
+    Sunthud Pornprasertmanit (\email{psunthud@gmail.com})
 }
 \seealso{
 	\itemize{

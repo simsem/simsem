@@ -29,7 +29,10 @@ generate <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "
 			stop("Please specify an appropriate object for the 'model' argument: simsem model template, lavaan script, lavaan parameter table, OpenMx object, or list of options for the 'simulateData' function.")
 		}
 		model$sample.nobs <- n
-		model$indDist <- indDist
+		if(!is.null(indDist)) {
+			model$indDist <- indDist@skewness
+			model$kurtosis <- indDist@kurtosis
+		}
 		model$empirical <- empirical
 		model <- c(model, list(...))
 		data <- do.call("simulateData", model) 

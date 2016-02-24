@@ -27,7 +27,7 @@ getPopulation(object, std = FALSE, improper = FALSE, nonconverged = FALSE)
 	A data frame contained the population of each replication
 }
 \author{
-    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
+    Sunthud Pornprasertmanit (\email{psunthud@gmail.com})
 }
 \seealso{
 	\itemize{

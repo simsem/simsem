@@ -43,7 +43,7 @@ alpha=0.05, cutoff = NULL, usedFit = NULL, useContour = T, onetailed=FALSE)
 	NONE. Only plot the fit indices distributions.
 }
 \author{
-    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
+    Sunthud Pornprasertmanit (\email{psunthud@gmail.com})
 }
 \seealso{
 	\itemize{

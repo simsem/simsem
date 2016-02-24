@@ -43,7 +43,7 @@ continuousCoverage(simResult, coverValue = NULL, contN = TRUE, contMCAR = FALSE,
 	Data frame containing columns representing values of the randomly varying simulation parameters, and coverage rates for model parameters of interest.
 }
 \author{
-    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu}), Alexander M. Schoemann (East Carolina University; \email{schoemanna@ecu.edu})
+    Sunthud Pornprasertmanit (\email{psunthud@gmail.com}), Alexander M. Schoemann (East Carolina University; \email{schoemanna@ecu.edu})
 }
 \seealso{
 	\itemize{

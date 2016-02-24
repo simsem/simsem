@@ -40,7 +40,7 @@ pValue(target, dist, usedFit = NULL, nVal = NULL, pmMCARval = NULL,
 	In comparing fit indices, the \emph{p} value is the proportion of the number of replications that provide poorer fit (e.g., less CFI value or greater RMSEA value) than the analysis result from the observed data. 
 }
 \author{
-    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
+    Sunthud Pornprasertmanit (\email{psunthud@gmail.com})
 }
 \seealso{
 	\itemize{

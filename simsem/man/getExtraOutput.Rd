@@ -24,7 +24,7 @@ getExtraOutput(object, improper = FALSE, nonconverged = FALSE)
 	A list of extra outputs
 }
 \author{
-    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
+    Sunthud Pornprasertmanit (\email{psunthud@gmail.com})
 }
 \seealso{
 	\itemize{

@@ -31,7 +31,7 @@ plotCutoff(object, alpha = NULL, revDirec = FALSE, usedFit = NULL,
 NONE. The plot the fit indices distributions is provided.
 }
 \author{
-    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
+    Sunthud Pornprasertmanit (\email{psunthud@gmail.com})
 }
 \seealso{
 	\itemize{

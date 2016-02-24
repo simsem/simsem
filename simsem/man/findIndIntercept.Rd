@@ -31,7 +31,7 @@ findIndIntercept(lambda, factorMean = NULL, indicatorMean = NULL,
 	A vector of indicator (measurement) intercepts.
 }
 \author{
-    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
+    Sunthud Pornprasertmanit (\email{psunthud@gmail.com})
 }
 \seealso{
 	\itemize{

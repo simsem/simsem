@@ -18,7 +18,7 @@ findPossibleFactorCor(beta)
 	The symmetric matrix containing the appropriate position for freely estimated correlation.
 }
 \author{
-    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
+    Sunthud Pornprasertmanit (\email{psunthud@gmail.com})
 }
 \seealso{
 	\itemize{

@@ -40,7 +40,7 @@ getCutoff(object, alpha, revDirec = FALSE, usedFit = NULL, nVal = NULL,
 	One-tailed cutoffs of several fit indices with a priori alpha level 
 }
 \author{
-    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
+    Sunthud Pornprasertmanit (\email{psunthud@gmail.com})
 }
 \seealso{
 	\code{\linkS4class{SimResult}} for a detail of simResult

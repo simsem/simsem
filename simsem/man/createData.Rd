@@ -78,7 +78,7 @@ Vale, C. D. & Maurelli, V. A. (1983) Simulating multivariate nonormal distributi
 Yung, Y.-F., & Bentler, P. M. (1996). Bootstrapping techniques in analysis of mean and covariance structures. In G. A. Marcoulides & R. E. Schumacker (Eds.), \emph{Advanced structural equation modeling: Issues and techniques} (pp. 195-226). Mahwah, NJ: Erlbaum.
 }
 \author{	
-    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu}), Patrick Miller (University of Notre Dame; \email{pmille13@nd.edu}). The original code of \code{mvrnorm} function is based on the \code{MASS} package slightly modified by Paul E. Johnson. The code for data-transformation in multivariate copula is based on Mair et al. (2012) article. The code for Vale and Maurelli (1983) is slightly modified from the function provided in the \code{lavaan} package.
+    Sunthud Pornprasertmanit (\email{psunthud@gmail.com}), Patrick Miller (University of Notre Dame; \email{pmille13@nd.edu}). The original code of \code{mvrnorm} function is based on the \code{MASS} package slightly modified by Paul E. Johnson. The code for data-transformation in multivariate copula is based on Mair et al. (2012) article. The code for Vale and Maurelli (1983) is slightly modified from the function provided in the \code{lavaan} package.
 }
 \examples{
 loading <- matrix(0, 6, 2)

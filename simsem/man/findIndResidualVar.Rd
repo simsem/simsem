@@ -31,7 +31,7 @@ findIndResidualVar(lambda, totalFactorCov, totalVarTheta = NULL,
 	A vector of indicator residual variances.
 }
 \author{
-    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
+    Sunthud Pornprasertmanit (\email{psunthud@gmail.com})
 }
 \seealso{
 	\itemize{

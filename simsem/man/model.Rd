@@ -114,7 +114,7 @@ The \code{model.cfa}, \code{model.path}, and \code{model.sem} are the shortcuts 
 
 \author{
 	Patrick Miller (University of Notre Dame; \email{pmille13@nd.edu}), 
-    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
+    Sunthud Pornprasertmanit (\email{psunthud@gmail.com})
 }
 \seealso{
 	\itemize{\item {\code{\link{sim}} for simulations using the \code{\linkS4class{SimSem}} template.}

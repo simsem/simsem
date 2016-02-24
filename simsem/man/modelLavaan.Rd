@@ -73,7 +73,7 @@ model.lavaan(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL,
 }
 
 \author{
-    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
+    Sunthud Pornprasertmanit (\email{psunthud@gmail.com})
 }
 \seealso{
 	\itemize{

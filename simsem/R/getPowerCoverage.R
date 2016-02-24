@@ -175,8 +175,7 @@ continuousLogical <- function(object, logical, contN = TRUE, contMCAR = FALSE, c
     powVal <- cbind(rep(1, dim(powVal)[1]), powVal)
     x <- as.matrix(x)
     for (i in 1:dim(logical)[[2]]) {
-        mod <- invisible(try(glm(logical[, i] ~ x, family = binomial(link = "logit")), 
-            silent = TRUE))
+        try(mod <- glm(logical[, i] ~ x, family = binomial(link = "logit")), silent = TRUE)
         res[[dimnames(logical)[[2]][[i]]]] <- apply(powVal, 1, function(x) predProb(x, mod)[2])
     }
     if (is.list(res)) {

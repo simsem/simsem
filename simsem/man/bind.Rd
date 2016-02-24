@@ -37,7 +37,7 @@ In simulations supported by \emph{simsem}, a given parameter may be either fixed
 
 \author{
     Patrick Miller (University of Notre Dame; \email{pmille13@nd.edu}),
-    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
+    Sunthud Pornprasertmanit (\email{psunthud@gmail.com})
 }
 \seealso{
 \itemize{\item {\code{\link{model}} To combine simMatrix objects into a complete data analysis and data generation template, which is a \code{\linkS4class{SimSem}} object}

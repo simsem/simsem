@@ -13,7 +13,7 @@ combineSim(...)
 \value{	A combined result object}
 \author{
 	Terry Jorgensen (University of Kansas; \email{TJorgensen314@gmail.com}), 
-    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
+    Sunthud Pornprasertmanit (\email{psunthud@gmail.com})
 }
 \seealso{
 	Result object (\code{\linkS4class{SimResult}})

@@ -30,7 +30,7 @@ popDiscrepancy(paramM, paramCM, misspecM, misspecCM)
 Browne, M. W., & Cudeck, R. (1992). Alternative ways of assessing model fit. \emph{Sociological Methods & Research, 21}, 230-258.
 }
 \author{
-    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
+    Sunthud Pornprasertmanit (\email{psunthud@gmail.com})
 }
 \examples{
 m1 <- rep(0, 3)

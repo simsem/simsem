@@ -44,7 +44,7 @@ Objects can be created by \code{\link{miss}} function.
 	Patrick Miller (University of Notre Dame; \email{pmille13@nd.edu})
 	Alexander M. Schoemann (East Carolina University; \email{schoemanna@ecu.edu})  
 	Kyle Lang (University of Kansas; \email{kylelang@ku.edu})
-    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
+    Sunthud Pornprasertmanit (\email{psunthud@gmail.com})
 }
 \seealso{
 	\itemize{

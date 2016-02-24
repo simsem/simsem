@@ -43,7 +43,7 @@ plotPower(object, powerParam, alpha = 0.05, contParam = NULL, contN = TRUE,
 	Not return any value. This function will plot a graph only.
 }
 \author{
-    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu}), Alexander M. Schoemann (East Carolina University; \email{schoemanna@ecu.edu})
+    Sunthud Pornprasertmanit (\email{psunthud@gmail.com}), Alexander M. Schoemann (East Carolina University; \email{schoemanna@ecu.edu})
 }
 \seealso{
 	\itemize{

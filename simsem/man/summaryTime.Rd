@@ -21,7 +21,7 @@ summaryTime(object, units = "seconds")
 The first section is the actual time used in each step of the simulation. The second section is the average system (processor) time used in each replication. The third section is the summary of starting time, end time, total actual time, and total system time.
 }
 \author{
-    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
+    Sunthud Pornprasertmanit (\email{psunthud@gmail.com})
 }
 \examples{
 \dontrun{

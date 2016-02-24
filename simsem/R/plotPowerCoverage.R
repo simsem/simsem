@@ -133,8 +133,7 @@ plotPowerSig <- function(sig, x = NULL, xval = NULL, mainName = NULL, useContour
         stop("Some errors occur")
     }
     for (i in 1:ncol(sig)) {
-        mod <- invisible(try(glm(sig[, i] ~ x, family = binomial(link = "logit")), 
-            silent = TRUE))
+        try(mod <- glm(sig[, i] ~ x, family = binomial(link = "logit")), silent = TRUE)
         if (ncol(x) == 1) {
             predVal <- apply(data.frame(1, xval), 1, predProb, mod)
             plot(xval[[1]], predVal[2,], type = "n", xlab = names(xval)[1], ylab = "Power", 

@@ -384,7 +384,7 @@ pValueVariedCutoff <- function(cutoff, obtainedValue, revDirec = FALSE, x = NULL
         result <- mean(sig, na.rm = TRUE)
     } else {
         x <- as.matrix(x)
-        mod <- invisible(try(glm(sig ~ x, family = binomial(link = "logit")), silent = TRUE))
+        try(mod <- glm(sig ~ x, family = binomial(link = "logit")), silent = TRUE)
         result <- predProb(c(1, xval), mod)[2]
     }
     ## Return warnings setting to user's settings

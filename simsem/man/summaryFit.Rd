@@ -40,7 +40,7 @@ summaryFit(object, alpha = NULL, improper = FALSE, usedFit = NULL)
 }
 \author{
     Alexander M. Schoemann (East Carolina University; \email{schoemanna@ecu.edu})
-    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
+    Sunthud Pornprasertmanit (\email{psunthud@gmail.com})
 }
 \seealso{
 	\code{\linkS4class{SimResult}} for the result object input

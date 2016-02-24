@@ -56,7 +56,7 @@ onetailed=FALSE)
 	In comparing fit indices, the \emph{p} value is the proportion of the number of replications that provide less preference for either model 1 or model 2 than the analysis result from the observed data. In two-tailed test, the function will report the proportion of values under the sampling distribution that are more extreme that one obtained from real data. If the resulting \code{p} value is high (> .05) on one model and low (< .05) in the other model, the model with high \code{p} value is preferred. If the \code{p} values are both high or both low, the decision is undetermined.
 }
 \author{
-    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
+    Sunthud Pornprasertmanit (\email{psunthud@gmail.com})
 }
 \seealso{
 	\itemize{

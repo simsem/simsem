@@ -41,7 +41,7 @@ analyze(model, data, package="lavaan", miss=NULL, aux=NULL, group = NULL,
 }
 \author{
 	Patrick Miller (University of Notre Dame; \email{pmille13@nd.edu}), 
-    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
+    Sunthud Pornprasertmanit (\email{psunthud@gmail.com})
 }
 \seealso{
 	Note that users can use functions provided by \code{lavaan} package (\code{\link[lavaan]{lavaan}}, \code{\link[lavaan]{cfa}}, \code{\link[lavaan]{sem}}, or \code{\link[lavaan]{growth}}) if they wish to analyze data by lavaan directly. 

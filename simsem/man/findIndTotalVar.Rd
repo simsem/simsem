@@ -31,7 +31,7 @@ findIndTotalVar(lambda, totalFactorCov, residualVarTheta, kappa = NULL,
 	A vector of indicator total variances.
 }
 \author{
-    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
+    Sunthud Pornprasertmanit (\email{psunthud@gmail.com})
 }
 \seealso{
 	\itemize{

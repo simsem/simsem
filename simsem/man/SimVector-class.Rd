@@ -28,7 +28,7 @@ This object is created by \code{\link{bind}} function.
 }
 \author{
 	Patrick Miller (University of Notre Dame; \email{pmille13@nd.edu})
-    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})
+    Sunthud Pornprasertmanit (\email{psunthud@gmail.com})
 }
 \seealso{
 \code{\linkS4class{SimMatrix}} for random parameter matrix 

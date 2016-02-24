@@ -38,7 +38,7 @@ miss(cov = 0, pmMCAR = 0, pmMAR = 0, logit = "", nforms = 0, itemGroups = list()
 \author{
 	Alexander M. Schoemann (East Carolina University; \email{schoemanna@ecu.edu}), 
     Patrick Miller (University of Notre Dame; \email{pmille13@nd.edu}), 
-	Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu})}
+	Sunthud Pornprasertmanit (\email{psunthud@gmail.com})}
 \seealso{
 	\itemize{
 		\item \code{\linkS4class{SimMissing}} The resulting missing object

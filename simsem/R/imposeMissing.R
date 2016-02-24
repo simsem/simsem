@@ -603,13 +603,6 @@ plotLogitMiss <- function(script, ylim=c(0,1), x1lim=c(-3,3), x2lim=c(-3,3), oth
 		}
 		
 		coef <- as.numeric(sapply(temp, function(x) x[1]))
-			
-			#pred <- apply(coef * ivj, 1, sum)
-			#predprob <- 1/(1 + exp(-pred))
-			#logmat[,which(dv[i]== colnames(data))] <- runif(length(predprob)) < predprob
-			#mod <- invisible(try(glm(sig[, i] ~ x, family = binomial(link = "logit")), 
-			#	silent = TRUE))
-		
 		ivname <- sapply(temp, "[", 2)[sapply(temp, length) != 1]
 		title <- paste("Missing Proportion of", dv[i])
         if (length(temp) == 1) {

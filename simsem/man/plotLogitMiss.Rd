@@ -34,7 +34,7 @@ plotLogitMiss(script, ylim=c(0,1), x1lim=c(-3,3), x2lim=c(-3,3), otherx=0,
 	Not return any value. This function will plot a graph only. If the number of independent variable is 0, the bar graph is provided. If the number of independent variables is 1, the logistic curve is provided. If the number of independent variables is 2, contour or perspective plot is provided.
 }
 \author{
-    Sunthud Pornprasertmanit (Texas Tech University; \email{sunthud.pornprasertmanit@ttu.edu}), Alexander M. Schoemann (East Carolina University; \email{schoemanna@ecu.edu})
+    Sunthud Pornprasertmanit (\email{psunthud@gmail.com}), Alexander M. Schoemann (East Carolina University; \email{schoemanna@ecu.edu})
 }
 \seealso{
 	\itemize{
