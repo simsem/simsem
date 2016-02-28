@@ -49,7 +49,7 @@ validatePath <- function(path, var.iv, var.dv) {
         inv.var.iv <- 1/var.iv
         max.path <- sqrt(var.dv) %o% sqrt(inv.var.iv)
         abs.path <- abs(path)
-        max.path[var.dv == 0, , drop = FALSE] <- abs.path[var.dv == 0, , drop = FALSE]
+		if(any(var.dv == 0)) max.path[var.dv == 0, ] <- abs.path[var.dv == 0, , drop = FALSE]
         ifelse(sum(round(abs.path, 6) > round(max.path, 6)) > 0, return(FALSE), return(TRUE))
     }
 }

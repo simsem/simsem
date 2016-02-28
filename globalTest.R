@@ -153,7 +153,7 @@ globalTest <- function() {
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/exMultipleFormat/ordered.R"), "Ordered Data", subFrom = c("sim\\(1000", "50:1000"), subTo = c("sim\\(20", "seq\\(50, 1000, 50\\)"), result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/exMultipleFormat/completeRep.R"), "Complete Reps", subFrom = NULL, subTo = NULL, result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/exMultipleFormat/bootci.R"), "Bootstrap", subFrom = c("sim\\(1000", "50:500"), subTo = c("sim\\(10", "seq\\(50, 1000, 50\\)"), result = result)
-	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/exMultipleFormat/simResultMethods.R"), "Inspect and Additional Methods", subFrom = c("sim\\(1000", "50:500"), subTo = c("sim\\(20", "seq\\(50, 1000, 50\\)"), result = result)
+	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/exMultipleFormat/simResultMethods.R"), "Inspect and Additional Methods", subFrom = c("sim\\(1000", "50:500"), subTo = c("sim\\(20", "seq\\(50, 1000, 25\\)"), result = result)
 
 	# 0.5 lavaan script
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/ex2/ex2.R"), "Example 2 (lavaan)", subFrom = "sim\\(1000", subTo = "sim\\(10", result = result)
@@ -164,8 +164,8 @@ globalTest <- function() {
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/ex9/ex9.R"), "Example 9 (lavaan)", subFrom = "sim\\(1000", subTo = "sim\\(3", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/ex10/ex10.R"), "Example 10 (lavaan)", subFrom = "sim\\(1000", subTo = "sim\\(10", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/ex11/ex11.R"), "Example 11 (lavaan)", subFrom = "sim\\(1000", subTo = "sim\\(10", result = result)
-	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/ex12/ex12.R"), "Example 12 (lavaan)", subFrom = "sim\\(1000", subTo = "sim\\(10", result = result)
-	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/ex14/ex14.R"), "Example 14 (lavaan)", subFrom = "sim\\(1000", subTo = "sim\\(10", result = result)
+	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/ex12/ex12.R"), "Example 12 (lavaan)", subFrom = "sim\\(1000", subTo = "sim\\(20", result = result)
+	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/ex14/ex14.R"), "Example 14 (lavaan)", subFrom = "sim\\(1000", subTo = "sim\\(20", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/ex15/ex15.R"), "Example 15 (lavaan)", subFrom = "sim\\(1000", subTo = "sim\\(10", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/ex16/ex16.R"), "Example 16 (lavaan)", subFrom = "sim\\(1000", subTo = "sim\\(10", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05/ex17/ex17.R"), "Example 17 (lavaan)", subFrom = "sim\\(1000", subTo = "sim\\(10", result = result)
