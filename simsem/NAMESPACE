@@ -1,7 +1,7 @@
 importFrom("methods", show, is, new, slot)
 importFrom("lavaan", summary, anova, inspect, coef, cor2cov, sqrtSymmetricMatrix)
 importFrom("stats", 
-           cov, nlminb, rnorm, runif, cov2cor, glm, qnorm, sd, quantile, predict, qchisq, fitted, density, loess.smooth, vcov, cor)
+           cov, nlminb, rnorm, runif, cov2cor, glm, qnorm, sd, quantile, predict, qchisq, fitted, density, loess.smooth, vcov, cor, binomial, pchisq)
 importFrom("utils", 
            data, capture.output, write.table, combn)
 importFrom("graphics", hist, plot, contour, persp, par, abline, lines, points, barplot, legend)
