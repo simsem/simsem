@@ -30,7 +30,7 @@ generate <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "
 		}
 		model$sample.nobs <- n
 		if(!is.null(indDist)) {
-			model$indDist <- indDist@skewness
+			model$skewness <- indDist@skewness
 			model$kurtosis <- indDist@kurtosis
 		}
 		model$empirical <- empirical
