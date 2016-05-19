@@ -1541,7 +1541,9 @@ parsePopulation <- function(paramSet, draws, group = 1, std = FALSE, covData = N
 }
 
 is.partable <- function(object) {
-	is.list(object) && all(names(object) %in% c("id", "lhs", "op", "rhs", "user", "group", "free", "ustart", "exo", "label", "plabel", "start", "eq.id", "unco")) # leave eq.id and unco for reverse comptability.
+	is.list(object) && all(names(object) %in% c("id", "lhs", "op", "rhs", "user", "group", "free", "ustart", "exo", "label", "plabel", "start", "est", "se", "eq.id", "unco"))
+  # leave eq.id and unco for reverse comptability.
+  ## 14 April 2016:  Terry added new names "est" and "se"
 }
 
 is.lavaancall <- function(object) {

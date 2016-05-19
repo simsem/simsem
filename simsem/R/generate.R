@@ -23,7 +23,7 @@ generate <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "
 			# Intentionally leave it blank
 		} else if (is(model, "lavaan")) {
 			temp <- model@ParTable
-			temp$ustart <- model@Fit@est
+			temp$ustart <- temp$est # model@Fit@est 
 			model <- list(model = temp)
 		} else {
 			stop("Please specify an appropriate object for the 'model' argument: simsem model template, lavaan script, lavaan parameter table, OpenMx object, or list of options for the 'simulateData' function.")
