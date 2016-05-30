@@ -35,7 +35,7 @@ generate <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "
 		}
 		model$empirical <- empirical
 		model <- c(model, list(...))
-		data <- do.call("simulateData", model) 
+		data <- do.call(lavaan::simulateData, model) 
 	}
 	return(data)
 }

@@ -95,9 +95,9 @@ TE <- binds(errorCov, errorCovVal)
 population <- model(LY=LY, PS=PS, BE=BE, TE=TE, modelType="SEM")
 
 # Set up the new population
-Output <- setPopulation(Output, population) 
+Output2 <- setPopulation(Output, population) 
 
 # This summary will contain the bias information
-summary(Output)
+summary(Output2)
 }
 }

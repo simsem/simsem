@@ -121,7 +121,7 @@ sim(nRep, model, n, generate = NULL, ..., rawData = NULL, miss = NULL, datafun=N
     Confidence level. For the current version, this argument will be forwarded to the \code{"level"} argument in the  \code{\link[lavaan]{parameterEstimates}} function from the \code{lavaan} package. This argument is not active when the \code{OpenMx} package is used.
 }
   \item{seed}{ 
-	Random number seed. Reproducibility across multiple cores or clusters is ensured using R'Lecuyer package.
+	Random number seed. Note that the seed number is always fixed in the \code{simsem} so that users can always replicate the same simulatin or can be confidence that the same data set are generated. Reproducibility across multiple cores or clusters is ensured using R'Lecuyer package.
 }
   \item{silent}{ 
 	If \code{TRUE}, suppress warnings.

@@ -46,10 +46,13 @@ validatePath <- function(path, var.iv, var.dv) {
     } else {
         path <- path[which(singleIV), , drop=FALSE]
         var.dv <- var.dv[singleIV]
-        inv.var.iv <- 1/var.iv
+        inv.var.iv <- 1/as.vector(var.iv)
         max.path <- sqrt(var.dv) %o% sqrt(inv.var.iv)
         abs.path <- abs(path)
-		if(any(var.dv == 0)) max.path[var.dv == 0, , drop = FALSE] <- abs.path[var.dv == 0, , drop = FALSE]
+		if(any(var.dv == 0)) {
+			tmp <- abs.path[var.dv == 0, , drop = FALSE]
+			if(length(tmp) > 0) max.path[var.dv == 0, ] <- tmp
+		}
         ifelse(sum(round(abs.path, 6) > round(max.path, 6)) > 0, return(FALSE), return(TRUE))
     }
 }

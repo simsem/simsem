@@ -425,27 +425,52 @@ summaryConverge <- function(object, std = FALSE, improper = FALSE) {
 # setPopulation: Set population parameter values
 
 setPopulation <- function(target, population) {
-    psl <- generate(population, n = 20, params = TRUE)$psl
-    paramSet <- lapply(psl, "[[", 1)
-	generatedgen <- population@dgen
 	popParam <- NULL
-	if (!is.list(generatedgen[[1]])) {
-		generatedgen <- list(generatedgen)
+	if(is(population, "SimSem")) {
+		psl <- generate(population, n = 20, params = TRUE)$psl
+		paramSet <- lapply(psl, "[[", 1)
+		generatedgen <- population@dgen
+		if (!is.list(generatedgen[[1]])) {
+			generatedgen <- list(generatedgen)
+		}
+		for (i in seq_along(paramSet)) {
+			popParam <- c(popParam, parsePopulation(generatedgen[[i]], paramSet[[i]], group = i))
+		}
+		extraParamIndex <- population@pt$op %in% c(">", "<", "==", ":=")
+		extraParamName <- NULL
+		if(any(extraParamIndex)) {
+			extraparam <- collapseExtraParam(paramSet, population@dgen, fill=TRUE, con=population@con)
+			extraParamName <- renameExtraParam(population@con$lhs, population@con$op, population@con$rhs)
+			popParam[extraParamIndex] <- extraparam
+		}
+		index <- ((population@pt$free != 0)& !(duplicated(population@pt$free))) | extraParamIndex
+		popParam <- popParam[index]
+		names(popParam) <- c(names(coef(lavaan::lavaan(population@pt, sample.nobs=rep(200, max(population@pt$group))))), extraParamName)
+	} else if (is(population, "lavaan")) {
+		pt <- lavaan::partable(population)
+		popParam <- pt$est
+		names(popParam) <- lavaan::lav_partable_labels(pt)
+	} else if (is(population, "character")) {
+		pt <- lavaan::partable(lavaan::lavaan(population))
+		popParam <- pt$est
+		names(popParam) <- lavaan::lav_partable_labels(pt)
+	} else if(is(population, "list")) {
+		pt <- population
+		popParam <- pt$est
+		names(popParam) <- lavaan::lav_partable_labels(pt)
+	} else {
+		stop("population must be a simsem object, lavaan object, lavaan script for data generation, or parameter table")
 	}
-	for (i in seq_along(paramSet)) {
-		popParam <- c(popParam, parsePopulation(generatedgen[[i]], paramSet[[i]], group = i))
+	if(is.vector(popParam)) {
+		popParam <- popParam[!is.na(popParam)]
+		tmp <- names(popParam)
+		popParam <- data.frame(t(matrix(popParam)))
+		colnames(popParam) <- tmp
+	} else if (is.matrix(popParam)) {
+		popParam <- data.frame(popParam)
 	}
-	extraParamIndex <- population@pt$op %in% c(">", "<", "==", ":=")
-	extraParamName <- NULL
-	if(any(extraParamIndex)) {
-		extraparam <- collapseExtraParam(paramSet, population@dgen, fill=TRUE, con=population@con)
-		extraParamName <- renameExtraParam(population@con$lhs, population@con$op, population@con$rhs)
-		popParam[extraParamIndex] <- extraparam
-	}
-	index <- ((population@pt$free != 0)& !(duplicated(population@pt$free))) | extraParamIndex
-	popParam <- popParam[index]
-	names(popParam) <- c(names(coef(lavaan::lavaan(population@pt, sample.nobs=rep(200, max(population@pt$group))))), extraParamName)
-    return(popParam)
+	target@paramValue <- popParam
+	return(target)
 } 
 
 # getPopulation: Description: Extract the population value from an object
