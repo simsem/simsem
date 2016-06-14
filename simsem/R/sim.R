@@ -325,14 +325,14 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ..., rawDa
             numProc <- parallel::detectCores()
         if (sys == "windows") {
             cl <- parallel::makeCluster(rep("localhost", numProc), type = "SOCK")
-            Result.l <- parallel::clusterApplyLB(cl, simConds, runRep, model = model, generate = generate, 
+            Result.l <- parallel::clusterApplyLB(cl, simConds, runRep, model = model, generateO = generate, 
                 miss = miss, datafun = datafun, lavaanfun = lavaanfun, outfun = outfun, outfundata = outfundata, silent = silent, 
                 facDist = facDist, indDist = indDist, errorDist = errorDist, sequential = sequential, saveLatentVar = saveLatentVar,
                 realData = realData, covData = covData, maxDraw = maxDraw, misfitBounds = misfitBounds, 
                 averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, createOrder = createOrder, misfitType = misfitType, aux = aux, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart, popData = popData, group = group, mxFit = mxFit, mxMixture = mxMixture, citype = citype, cilevel = cilevel, stopOnError = stopOnError, ...)
             parallel::stopCluster(cl)
         } else {
-            Result.l <- parallel::mclapply(simConds, runRep, model = model, generate = generate, 
+            Result.l <- parallel::mclapply(simConds, runRep, model = model, generateO = generate, 
                 miss = miss, datafun = datafun, lavaanfun = lavaanfun, outfun = outfun, outfundata = outfundata, silent = silent, 
                 facDist = facDist, indDist = indDist, errorDist = errorDist, sequential = sequential, saveLatentVar = saveLatentVar,
                 realData = realData, covData = covData, maxDraw = maxDraw, misfitBounds = misfitBounds, 
@@ -346,7 +346,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ..., rawDa
           # Write progress
           if(!silent) cat("Progress:", i, "/", numJobs, "\n")
           runRep(simConds[[i]], ...)
-        },  model = model, generate = generate, 
+        },  model = model, generateO = generate, 
             miss = miss, datafun = datafun, lavaanfun = lavaanfun, outfun = outfun, outfundata = outfundata, silent = silent, facDist = facDist, 
             indDist = indDist, errorDist = errorDist, sequential = sequential, saveLatentVar = saveLatentVar, realData = realData, covData = covData, 
             maxDraw = maxDraw, misfitBounds = misfitBounds, averageNumMisspec = averageNumMisspec, 
@@ -647,7 +647,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ..., rawDa
 
 # runRep: Run one replication
 
-runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL, lavaanfun = NULL, 
+runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NULL, lavaanfun = NULL, 
     outfun = NULL, outfundata = NULL, facDist = NULL, indDist = NULL, indLab = NULL, errorDist = NULL, 
     sequential = FALSE, saveLatentVar = FALSE, realData = NULL, covData = NULL, silent = FALSE, modelBoot = FALSE, maxDraw = 50, 
     misfitType = "f0", misfitBounds = NULL, averageNumMisspec = NULL, optMisfit = NULL, 
@@ -682,8 +682,8 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 	skipMiss <- simConds[[6]]
     specifiedGenerate <- TRUE
 	
-    if (is.null(generate)) {
-        generate <- model
+    if (is.null(generateO)) {
+        generateO <- model
 		specifiedGenerate <- FALSE
     }
 	
@@ -732,56 +732,58 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 		}
 	}
 
-	if (is.null(data) && is(generate, "function")) {
+	if (is.null(data) && is(generateO, "function")) {
 		if(stopOnError){
-			data <- generate(n)
+			data <- generateO(n)
 		} else if (silent) {
-			invisible(capture.output(suppressMessages(try(data <- generate(n), silent = TRUE))))
+			invisible(capture.output(suppressMessages(try(data <- generateO(n), silent = TRUE))))
 		} else {
-			try(data <- generate(n))
+			try(data <- generateO(n))
 		}
 		if(!is.null(attr(data, "param"))) popParam <- attr(data, "param")
 		if(!is.null(attr(data, "stdparam"))) stdPopParam <- attr(data, "stdparam")
 	}
 	
-	if (is.null(data) && is.lavaancall(generate)) {
-		generate$sample.nobs <- n
+	if (is.null(data) && is.lavaancall(generateO)) {
+		generateO$sample.nobs <- n
 		
 		if(!is.null(indDist)) {
-			generate$return.fit <- TRUE
-			data <- do.call(lavaan::simulateData, generate) # Change to simulateData when the bug is fixed
-			implied <- lavaan::fitted(attr(data, "fit"))
-			if(length(n) == 1) implied <- list(implied)
-			datinddist <- NULL
-			for(i in seq_along(n)) datinddist <- rbind(datinddist, dataGen(indDist, n[i], implied[[i]]$mean, implied[[i]]$cov))
-			datinddist <- as.data.frame(datinddist)
-			datinddist$group <- rep(1:length(n), times=n)
+			generateO$return.fit <- TRUE
+			generateO$skewness <- indDist@skewness
+			generateO$kurtosis <- indDist@kurtosis
+			data <- do.call(lavaan::simulateData, generateO) # Change to simulateData when the bug is fixed
+			# implied <- lavaan::fitted(attr(data, "fit"))
+			# if(length(n) == 1) implied <- list(implied)
+			# datinddist <- NULL
+			# for(i in seq_along(n)) datinddist <- rbind(datinddist, dataGen(indDist, n[i], implied[[i]]$mean, implied[[i]]$cov))
+			# datinddist <- as.data.frame(datinddist)
+			# datinddist$group <- rep(1:length(n), times=n)
 		} else {
-			data <- do.call(lavaan::simulateData, generate) # Change to simulateData when the bug is fixed
+			data <- do.call(lavaan::simulateData, generateO) # Change to simulateData when the bug is fixed
 		}
 	}
 
-	if (is.null(data) && is(generate, "MxModel")) {
-		data <- generateMx(generate, n=n, indDist=indDist, covData=covData)
+	if (is.null(data) && is(generateO, "MxModel")) {
+		data <- generateMx(generateO, n=n, indDist=indDist, covData=covData)
 	}
 
     if (is.null(data)) {
 		# Label variables for creating labels later
 		indLabGen <- NULL
-		if (generate@modelType == "path") {
-			indLabGen <- unique(generate@pt$lhs)
+		if (generateO@modelType == "path") {
+			indLabGen <- unique(generateO@pt$lhs)
 		} else {
-			indLabGen <- unique(generate@pt$rhs[generate@pt$op == "=~"])
+			indLabGen <- unique(generateO@pt$rhs[generateO@pt$op == "=~"])
 		}
 		facLabGen <- NULL
-		if (generate@modelType != "path") {
-			facLabGen <- unique(generate@pt$lhs[generate@pt$op == "=~"])
+		if (generateO@modelType != "path") {
+			facLabGen <- unique(generateO@pt$lhs[generateO@pt$op == "=~"])
 		}
-		covLabGen <- generate@pt$lhs[generate@pt$op == "~1" & generate@pt$exo == 1]
+		covLabGen <- generateO@pt$lhs[generateO@pt$op == "~1" & generateO@pt$exo == 1]
 		if (length(covLabGen) == 0) covLabGen <- NULL
 	
 		# Need to draw parameters
-		genout <- generateSimSem(model = generate, n = n, maxDraw = maxDraw, misfitBounds = misfitBounds, 
+		genout <- generateSimSem(model = generateO, n = n, maxDraw = maxDraw, misfitBounds = misfitBounds, 
 			misfitType = misfitType, averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, 
 			optDraws = optDraws, createOrder = createOrder, indDist = indDist, sequential = sequential, saveLatentVar = saveLatentVar, 
 			facDist = facDist, errorDist = errorDist, indLab = indLab, modelBoot = modelBoot, 
@@ -794,14 +796,14 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 		paramSet <- lapply(psl, "[[", 1) 
 		
 		# Save parameter values in the parameter tables
-		generatedgen <- generate@dgen
+		generatedgen <- generateO@dgen
 		popParam <- NULL
 		stdPopParam <- NULL
 		if (!is.list(generatedgen[[1]])) {
 			generatedgen <- list(generatedgen)
 		}
 		
-		covLab <- unique(generate@pt$lhs[generate@pt$op == "~1" & generate@pt$exo == 1])
+		covLab <- unique(generateO@pt$lhs[generateO@pt$op == "~1" & generateO@pt$exo == 1])
 		ngroups <- length(paramSet)
 		covDataGroup <- rep(list(NULL), ngroups)
 	
@@ -1098,29 +1100,29 @@ runRep <- function(simConds, model, generate = NULL, miss = NULL, datafun = NULL
 		if (!is.null(paramSet)) {
 			if (!is.null(psl[[1]]$misspec)) {
 				misParamSet <- lapply(psl, "[[", 3)
-				popMis <- reduceMisspecSet(misParamSet, generate@modelType != "path", 
+				popMis <- reduceMisspecSet(misParamSet, generateO@modelType != "path", 
 					indLabGen, facLabGen, covLab = covLabGen)
 				p <- length(indLabGen)
 				nElements <- (p + (p * (p + 1)/2)) * length(psl)
-				dfParam <- nElements - max(generate@pt$free)
+				dfParam <- nElements - max(generateO@pt$free)
 				misfitOut <- popMisfitParams(psl, df = dfParam, covData = covData)
 			} else {
 				popMis <- NA
 				misfitOut <- NA
 			}
 
-			changgenept <- changeDupLab(generate@pt)
+			changgenept <- changeDupLab(generateO@pt)
 			paramNames <- lavaan::lav_partable_labels(lapply(changgenept, "[", changgenept$free > 0))
 			
 			# paramNames <- names(coef(lavaan::lavaan(changeDupLab(generate@pt), sample.nobs=rep(200, max(generate@pt$group)))))
-			extraParamIndex <- generate@pt$op %in% c(">", "<", "==", ":=")
+			extraParamIndex <- generateO@pt$op %in% c(">", "<", "==", ":=")
 			extraParamName <- NULL
 			if(any(extraParamIndex)) {
-				extraparam <- collapseExtraParam(paramSet, generate@dgen, fill=TRUE, con=generate@con)
-				extraParamName <- renameExtraParam(generate@con$lhs, generate@con$op, generate@con$rhs)
+				extraparam <- collapseExtraParam(paramSet, generateO@dgen, fill=TRUE, con=generateO@con)
+				extraParamName <- renameExtraParam(generateO@con$lhs, generateO@con$op, generateO@con$rhs)
 				popParam[extraParamIndex] <- extraparam
 			}
-			indexstd <- (generate@pt$free != 0)& !(duplicated(generate@pt$free))
+			indexstd <- (generateO@pt$free != 0)& !(duplicated(generateO@pt$free))
 			index <- indexstd | extraParamIndex
 			popParam <- popParam[index]
 			stdPopParam <- stdPopParam[indexstd]
