@@ -25,7 +25,7 @@ itemGroups <- list(setx, set1, set2, set3)
 
 missModel <- miss(nforms=3, itemGroups=itemGroups, m=5)
 
-Output <- sim(5, n=1000, CFA.model, miss=missModel)
+Output <- sim(20, n=1000, CFA.model, miss=missModel)
 getCutoff(Output, 0.05)
 plotCutoff(Output, 0.05)
 summary(Output)

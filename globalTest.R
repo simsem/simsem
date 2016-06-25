@@ -110,7 +110,7 @@ globalTest <- function() {
 
 
 
-	install.packages("simsem_0.5-11.tar.gz", repos=NULL, type="source")
+	install.packages("simsem_0.5-14.tar.gz", repos=NULL, type="source")
 	result <- NULL
 	currentDir <- getwd()
 	currentDir <- gsub("/simsem/R", "", currentDir)
@@ -195,7 +195,7 @@ globalTest <- function() {
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/ex17/ex17.R"), "Example 17 (OpenMx)", subFrom = "sim\\(1000", subTo = "sim\\(10", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/ex18/ex18.R"), "Example 18 (OpenMx)", subFrom = "50:1000", subTo = "seq\\(50, 1000, 50\\)", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/ex19/ex19.R"), "Example 19 (OpenMx)", subFrom = "50:500", subTo = "seq\\(50, 500, 100\\)", result = result)
-	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/ex21/ex21.R"), "Example 21 (OpenMx)", subFrom = "25:500", subTo = "seq\\(25, 500, 50\\)", result = result)vx
+	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/ex21/ex21.R"), "Example 21 (OpenMx)", subFrom = "25:500", subTo = "seq\\(25, 500, 50\\)", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/ex22/ex22.R"), "Example 22 (OpenMx)", subFrom = "25:500", subTo = "seq\\(25, 500, 50\\)", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/ex24/ex24.R"), "Example 24 (OpenMx)", subFrom = "sim\\(1000", subTo = "sim\\(10", result = result)
 	result <- checkExample(paste0(currentDir, "/SupportingDocs/Examples/Version05mx/ex25/ex25.R"), "Example 25 (OpenMx)", subFrom = "50:500", subTo = "seq\\(50, 1000, 50\\)", result = result)

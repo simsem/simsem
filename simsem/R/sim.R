@@ -1041,7 +1041,7 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
 				ciupper <- result$ci.upper[index]
 				FMI1 <- result$fmi[index]
 				changept <- changeDupLab(outpt)
-				lab <- lavaan::lav_partable_labels(lapply(changept, "[", changept$free > 0 | (outpt$user == 1 & outpt$start !=0)))
+				lab <- lavaan::lav_partable_labels(lapply(changept, "[", changept$free > 0 | (outpt$user == 1 & outpt$start !=0 & outpt$se != 0)))
 				if(any(extraParamIndex)) {
 					if(!is.lavaancall(model)) {
 						lab <- c(lab, renameExtraParam(model@pt$lhs[extraParamIndex], model@pt$op[extraParamIndex], model@pt$rhs[extraParamIndex], refpt = outpt))
