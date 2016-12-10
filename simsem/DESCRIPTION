@@ -2,19 +2,19 @@ Package: simsem
 Type: Package
 Title: SIMulated Structural Equation Modeling
 Version: 0.5-14
-Date: 2016-06-25
+Date: 2016-12-10
 Authors@R: c(person(given = "Sunthud", family = "Pornprasertmanit", role = c("aut", "cre"), email = "psunthud@gmail.com"), 
 		person(given = "Patrick", family = "Miller", role = "aut", email="pmille13@nd.edu"), 
 		person(given = "Alexander", family = "Schoemann", role = "aut", email="schoemanna@ecu.edu"),
 		person(given = "Corbin", family = "Quick", role = "ctb", email="corbinq@umich.edu"), 
-		person(given = "Terry", family = "Jorgensen", role = "ctb", email="TJorgensen314@gmail.com"))
+		person(given = "Terrence", family = "Jorgensen", role = "ctb", email="TJorgensen314@gmail.com"))
 Author: Sunthud Pornprasertmanit [aut, cre], 
 		Patrick Miller [aut], 
 		Alexander Schoemann [aut], 
 		Corbin Quick [ctb], 
-		Terry Jorgensen [ctb]
+		Terrence Jorgensen [ctb]
 Maintainer: Sunthud Pornprasertmanit <psunthud@gmail.com>
-Depends: R(>= 3.3.1), methods, lavaan(>= 0.5-20), utils, stats, graphics
+Depends: R(>= 3.3.2), methods, lavaan(>= 0.5-22), utils, stats, graphics
 Suggests: parallel, Amelia, quantreg, splines, foreign, KernSmooth, semTools, OpenMx(>= 2.0.0), copula
 Description: Provides an easy framework for Monte Carlo simulation in structural equation modeling, which can be used for various purposes, such as such as model fit evaluation, power analysis, or missing data handling and planning. 
 License: GPL (>= 2)
