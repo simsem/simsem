@@ -1,6 +1,6 @@
 # pValue: Find a p-value from an object
 
-pValueVector <- function(target, 
+pValueVector <- function(target,
     dist, revDirec = FALSE, x = NULL, xval = NULL, condCutoff = TRUE, df = 0) {
     if (length(target) == 1) {
         if (is.null(x)) {
@@ -13,10 +13,10 @@ pValueVector <- function(target,
             # Assume that the target value is appropriate for the specific 'xval' only.
             # Thus, the conditional quantile method is used.
             if (condCutoff) {
-                return(pValueCondCutoff(target, dist, revDirec = revDirec, x = x, 
+                return(pValueCondCutoff(target, dist, revDirec = revDirec, x = x,
                   xval = xval, df = df))
             } else {
-                return(pValueVariedCutoff(rep(target, length(dist)), dist, revDirec = revDirec, 
+                return(pValueVariedCutoff(rep(target, length(dist)), dist, revDirec = revDirec,
                   x = x, xval = xval))
             }
         }
@@ -27,15 +27,15 @@ pValueVector <- function(target,
     }
 }
 
-pValueDataFrame <- function(target, 
+pValueDataFrame <- function(target,
     dist, revDirec = NULL, x = NULL, xval = NULL, df = 0, asLogical = FALSE) {
-    if (length(target) != ncol(dist)) 
+    if (length(target) != ncol(dist))
         stop("The length of target and the number of columns of dist are not equal")
     numVar <- length(target)
     if (is.null(revDirec)) {
         revDirec <- rep(FALSE, numVar)
     } else {
-        if (length(revDirec) != numVar) 
+        if (length(revDirec) != numVar)
             stop("The length of revDirec and the number of columns of dist are not equal")
     }
     if (asLogical) {
@@ -51,58 +51,58 @@ pValueDataFrame <- function(target,
     } else {
         result <- rep(NA, numVar)
         for (i in 1:numVar) {
-            result[i] <- pValueVector(target[i], dist[, i], revDirec[i], x = x, xval = xval, 
+            result[i] <- pValueVector(target[i], dist[, i], revDirec[i], x = x, xval = xval,
                 df = df)
         }
         return(result)
     }
 }
 
-pValue <- function(target, 
+pValue <- function(target,
     dist, usedFit = NULL, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, df = 0) {
 	if(!is(dist, "SimResult")) stop("The 'dist' object must be a result object.")
-	
+
     dist <- clean(dist)
 	usedFit <- cleanUsedFit(usedFit, colnames(dist@fit))
     revDirec <- (usedFit %in% getKeywords()$reversedFit)  # CFA --> FALSE, RMSEA --> TRUE
-    
-    if (is.null(nVal) || is.na(nVal)) 
+
+    if (is.null(nVal) || is.na(nVal))
         nVal <- NULL
-    if (is.null(pmMCARval) || is.na(pmMCARval)) 
+    if (is.null(pmMCARval) || is.na(pmMCARval))
         pmMCARval <- NULL
-    if (is.null(pmMARval) || is.na(pmMARval)) 
+    if (is.null(pmMARval) || is.na(pmMARval))
         pmMARval <- NULL
     Data <- as.data.frame(dist@fit[, usedFit])
-    condition <- c(length(unique(dist@pmMCAR)) > 1, length(unique(dist@pmMAR)) > 
+    condition <- c(length(unique(dist@pmMCAR)) > 1, length(unique(dist@pmMAR)) >
         1, length(unique(dist@n)) > 1)
     condValue <- cbind(dist@pmMCAR, dist@pmMAR, dist@n)
     colnames(condValue) <- c("Percent MCAR", "Percent MAR", "N")
     condValue <- condValue[, condition]
-    if (is.null(condValue) || length(condValue) == 0) 
+    if (is.null(condValue) || length(condValue) == 0)
         condValue <- NULL
     predictorVal <- rep(NA, 3)
     if (condition[3]) {
-        ifelse(is.null(nVal), stop("Please specify the sample size value, 'nVal', because the sample size in the result object is varying"), 
+        ifelse(is.null(nVal), stop("Please specify the sample size value, 'nVal', because the sample size in the result object is varying"),
             predictorVal[3] <- nVal)
     }
     if (condition[1]) {
-        ifelse(is.null(pmMCARval), stop("Please specify the percent of missing completely at random, 'pmMCARval', because the percent of missing completely at random in the result object is varying"), 
+        ifelse(is.null(pmMCARval), stop("Please specify the percent of missing completely at random, 'pmMCARval', because the percent of missing completely at random in the result object is varying"),
             predictorVal[1] <- pmMCARval)
     }
     if (condition[2]) {
-        ifelse(is.null(pmMARval), stop("Please specify the percent of missing at random, 'pmMARval', because the percent of missing at random in the result object is varying"), 
+        ifelse(is.null(pmMARval), stop("Please specify the percent of missing at random, 'pmMARval', because the percent of missing at random in the result object is varying"),
             predictorVal[2] <- pmMARval)
     }
     predictorVal <- predictorVal[condition]
 	if(is(target, "lavaan")) {
 		cutoff <- inspect(target, "fit")[usedFit]
 	} else if (is(target, "MxModel")) {
-		cutoff <- semTools::fitMeasuresMx(target)[usedFit]
+		cutoff <- fitMeasuresMx(target)[usedFit]
 	} else {
 		stop("The target argument must be a lavaan object or MxModel object.")
 	}
     if (any(condition)) {
-        result <- pValueDataFrame(cutoff, Data, revDirec, x = condValue, xval = predictorVal, 
+        result <- pValueDataFrame(cutoff, Data, revDirec, x = condValue, xval = predictorVal,
             df = df, asLogical = FALSE)
         names(result) <- usedFit
         return(result)
@@ -130,7 +130,7 @@ pValue <- function(target,
 # }
 # \arguments{
   # \item{target}{
-	# A target value used to find \code{p} values. 
+	# A target value used to find \code{p} values.
 # }
 # \item{dist}{
 	# The comparison distribution, which can be a vector of numbers, a data frame, or a result object.
@@ -145,23 +145,23 @@ pValue <- function(target,
 	# the values of predictor that researchers would like to find the fit indices cutoffs from.
 # }
   # \item{df}{
-	# the degree of freedom used in spline method in predicting the fit indices by the predictors. If \code{df} is 0, the spline method will not be applied. 
+	# the degree of freedom used in spline method in predicting the fit indices by the predictors. If \code{df} is 0, the spline method will not be applied.
 # }
 # }
 # \value{
 	# A vector of \emph{p} values based on the comparison.
 # }
 
-pValueCondCutoff <- function(target, dist, revDirec = FALSE, x = NULL, xval = NULL, 
+pValueCondCutoff <- function(target, dist, revDirec = FALSE, x = NULL, xval = NULL,
     df = 0) {
-    if (!is.matrix(x)) 
+    if (!is.matrix(x))
         x <- as.matrix(x)
     p <- ncol(x)
     name <- paste("x", 1:p, sep = "")
     colnames(x) <- name
     names(xval) <- name
     if (df == 0) {
-        name2 <- name	
+        name2 <- name
     } else {
         requireNamespace("splines")
 		if(!("package:splines" %in% search())) attachNamespace("splines")
@@ -261,21 +261,21 @@ revText <- function(val) {
 whichMonotonic <- function(vec, ord = NULL, anchor = NULL) {
     vec <- as.vector(vec)
     p <- length(vec)
-    if (is.null(anchor)) 
+    if (is.null(anchor))
         anchor <- round((p/2) + 0.001)  # Add a small decimal so that 0.5 will be rounded as 1 instead of 0
     testDirection <- vec[2:p] > vec[1:(p - 1)]
     directionCenter <- vec[anchor + 1] > vec[anchor - 1]
-    if (!directionCenter) 
+    if (!directionCenter)
         testDirection <- !testDirection
     notMonotone <- which(!testDirection)
     minchange <- 1
     maxchange <- p
     if (length(notMonotone) > 0) {
         lhs <- notMonotone < anchor
-        if (length(which(lhs)) > 0) 
+        if (length(which(lhs)) > 0)
             minchange <- notMonotone[max(which(lhs))] + 1
         rhs <- notMonotone > anchor
-        if (length(which(rhs)) > 0) 
+        if (length(which(rhs)) > 0)
             maxchange <- notMonotone[min(which(rhs))]
     }
     result <- vec[minchange:maxchange]
@@ -316,7 +316,7 @@ whichMonotonic <- function(vec, ord = NULL, anchor = NULL) {
 
 interpolate <- function(baselineVec, val, resultVec = NULL) {
     p <- length(baselineVec)
-    if (is.null(resultVec)) 
+    if (is.null(resultVec))
         resultVec <- names(baselineVec)
     lessThanVal <- which(baselineVec < val)
     if (length(lessThanVal) == 0) {
@@ -342,7 +342,7 @@ interpolate <- function(baselineVec, val, resultVec = NULL) {
 # Find a p value when the cutoff is specified as a vector given the values of predictors
 # }
 # \description{
-# Find a \emph{p} value when the cutoff is specified as a vector given the values of predictors. 
+# Find a \emph{p} value when the cutoff is specified as a vector given the values of predictors.
 # }
 # \usage{
 # pValueVariedCutoff(cutoff, obtainedValue, revDirec = FALSE, x = NULL, xval = NULL)
@@ -368,12 +368,12 @@ interpolate <- function(baselineVec, val, resultVec = NULL) {
 	# A vector of \emph{p} values based on the comparison.
 # }
 
-pValueVariedCutoff <- function(cutoff, obtainedValue, revDirec = FALSE, x = NULL, 
+pValueVariedCutoff <- function(cutoff, obtainedValue, revDirec = FALSE, x = NULL,
     xval = NULL) {
     # Change warning option to supress warnings
     warnT <- as.numeric(options("warn"))
     options(warn = -1)
-    
+
     sig <- NULL
     if (revDirec) {
         sig <- cutoff >= obtainedValue  # sig for CFI
@@ -389,7 +389,7 @@ pValueVariedCutoff <- function(cutoff, obtainedValue, revDirec = FALSE, x = NULL
     }
     ## Return warnings setting to user's settings
     options(warn = warnT)
-    
+
     return(result)
 }
- 
+
