@@ -1,39 +1,39 @@
 importFrom("methods", show, is, new, slot)
 importFrom("lavaan", summary, anova, inspect, coef, cor2cov, sqrtSymmetricMatrix)
-importFrom("stats", 
-           cov, nlminb, rnorm, runif, cov2cor, glm, qnorm, sd, quantile, predict, qchisq, fitted, density, loess.smooth, vcov, cor, binomial, pchisq)
-importFrom("utils", 
+importFrom("stats",
+           vcov, cor, cov, var, uniroot, nlminb, rnorm, runif, cov2cor, glm, qnorm, sd, quantile, predict, qchisq, fitted, density, loess.smooth, binomial, pchisq)
+importFrom("utils",
            data, capture.output, write.table, combn)
 importFrom("graphics", hist, plot, contour, persp, par, abline, lines, points, barplot, legend)
 
-exportClasses(SimMatrix, 
-	SimVector, 
+exportClasses(SimMatrix,
+	SimVector,
 	SimSem,
-	SimResult, 
-	SimDataDist, 
+	SimResult,
+	SimDataDist,
 	SimMissing)
-exportMethods(summary, summaryShort, 
+exportMethods(summary, summaryShort,
 	coef,
 	anova)
 export(bindDist, rawDraw,
 	model, model.cfa, model.path, model.sem,
 	estmodel, estmodel.cfa, estmodel.path, estmodel.sem,
 	model.lavaan,
-	impose, imposeMissing, 
+	impose, imposeMissing,
 	summaryFit, summaryParam, summaryMisspec, summaryConverge, summarySeed, summaryTime,
-	getCutoff, plotCutoff, 
-	findRecursiveSet, findPossibleFactorCor, findIndIntercept, findIndResidualVar, findFactorIntercept, findFactorResidualVar, 
-	findIndTotalVar, findIndMean, findFactorTotalVar, findFactorTotalCov, findFactorMean, 
+	getCutoff, plotCutoff,
+	findRecursiveSet, findPossibleFactorCor, findIndIntercept, findIndResidualVar, findFactorIntercept, findFactorResidualVar,
+	findIndTotalVar, findIndMean, findFactorTotalVar, findFactorTotalCov, findFactorMean,
 	getPower, plotPower, findPower, plotMisfit, getExtraOutput,
-	popMisfitMACS, 
-	popDiscrepancy, 
+	popMisfitMACS,
+	popDiscrepancy,
 	continuousPower, combineSim,
-	getCIwidth, plotCIwidth, 
-	getCoverage, continuousCoverage, plotCoverage, findCoverage, 
-	getPowerFit, getPowerFitNested, getPowerFitNonNested, 
+	getCIwidth, plotCIwidth,
+	getCoverage, continuousCoverage, plotCoverage, findCoverage,
+	getPowerFit, getPowerFitNested, getPowerFitNonNested,
 	plotPowerFit, plotPowerFitNested, plotCutoffNested, getCutoffNested, multipleAllEqual,
-	plotDist, 
-	summaryPopulation, getPopulation, setPopulation, 
+	plotDist,
+	summaryPopulation, getPopulation, setPopulation,
 	getCutoffNonNested, plotCutoffNonNested, plotPowerFitNonNested, likRatioFit, pValue, pValueNested, pValueNonNested,
 	bind, binds, generate, analyze, sim, draw, createData, miss, exportData,
 	plotLogitMiss)
