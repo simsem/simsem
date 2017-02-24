@@ -1,10 +1,14 @@
-importFrom("methods", show, is, new, slot)
-importFrom("lavaan", summary, anova, inspect, coef, cor2cov, sqrtSymmetricMatrix)
+
+importFrom("methods", show, is, new, slot, getMethod)
+importFrom("lavaan", summary, anova, coef, cor2cov)
 importFrom("stats",
-           vcov, cor, cov, var, uniroot, nlminb, rnorm, runif, cov2cor, glm, qnorm, sd, quantile, predict, qchisq, fitted, density, loess.smooth, binomial, pchisq)
+           vcov, cor, cov, var, sd, cov2cor, uniroot, nlminb,
+           rnorm, runif, qnorm, qchisq, pchisq, quantile, glm, predict, fitted,
+           density, loess.smooth, binomial)
 importFrom("utils",
            data, capture.output, write.table, combn)
-importFrom("graphics", hist, plot, contour, persp, par, abline, lines, points, barplot, legend)
+importFrom("graphics", hist, plot, contour, persp, par,
+           abline, lines, points, barplot, legend)
 
 exportClasses(SimMatrix,
 	SimVector,
@@ -12,9 +16,9 @@ exportClasses(SimMatrix,
 	SimResult,
 	SimDataDist,
 	SimMissing)
-exportMethods(summary, summaryShort,
-	coef,
-	anova)
+
+exportMethods(summary, summaryShort, coef, anova, inspect)
+
 export(bindDist, rawDraw,
 	model, model.cfa, model.path, model.sem,
 	estmodel, estmodel.cfa, estmodel.path, estmodel.sem,
@@ -22,7 +26,8 @@ export(bindDist, rawDraw,
 	impose, imposeMissing,
 	summaryFit, summaryParam, summaryMisspec, summaryConverge, summarySeed, summaryTime,
 	getCutoff, plotCutoff,
-	findRecursiveSet, findPossibleFactorCor, findIndIntercept, findIndResidualVar, findFactorIntercept, findFactorResidualVar,
+	findRecursiveSet, findPossibleFactorCor, findIndIntercept,
+	findIndResidualVar, findFactorIntercept, findFactorResidualVar,
 	findIndTotalVar, findIndMean, findFactorTotalVar, findFactorTotalCov, findFactorMean,
 	getPower, plotPower, findPower, plotMisfit, getExtraOutput,
 	popMisfitMACS,
@@ -34,6 +39,8 @@ export(bindDist, rawDraw,
 	plotPowerFit, plotPowerFitNested, plotCutoffNested, getCutoffNested, multipleAllEqual,
 	plotDist,
 	summaryPopulation, getPopulation, setPopulation,
-	getCutoffNonNested, plotCutoffNonNested, plotPowerFitNonNested, likRatioFit, pValue, pValueNested, pValueNonNested,
+	getCutoffNonNested, plotCutoffNonNested, plotPowerFitNonNested,
+	likRatioFit, # This function (and others in same file) are NEVER used in this package. Why do they exist?
+	pValue, pValueNested, pValueNonNested,
 	bind, binds, generate, analyze, sim, draw, createData, miss, exportData,
 	plotLogitMiss)

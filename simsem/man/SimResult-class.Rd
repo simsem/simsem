@@ -9,7 +9,7 @@
 This class will save data analysis results from multiple replications, such as fit indices cutoffs or power, parameter values, model misspecification, etc.
 }
 \section{Objects from the Class}{
-Objects can be created by \code{\link{sim}}. 
+Objects can be created by \code{\link{sim}}.
 }
 \section{Slots}{
   \describe{
@@ -18,7 +18,7 @@ Objects can be created by \code{\link{sim}}.
     \item{\code{coef}:}{Parameter estimates from each replication}
     \item{\code{se}:}{Standard errors of parameter estimates from each replication}
     \item{\code{fit}:}{Fit Indices values from each replication}
-    \item{\code{converged}:}{The convergence status of each replication: 0 = convergent, 1 = not convergent, 2 = nonconvergent in multiple imputed results, 3 = improper solutions for SE (less than 0 or NA), 4 = improper solution for variance (less than 0), 5 = improper solution for correlation (greater than 1 or less than -1) }
+    \item{\code{converged}:}{The convergence status of each replication: 0 = convergent, 1 = not convergent, 2 = nonconvergent in multiple imputed results, 3 = improper solutions for SE (less than 0 or NA), 4 = improper solution for latent covariance matrix (Heywood case), 5 = improper solution for observed covariance matrix (Heywood case). For multiple imputations, these codes are applied when the proporion of imputed data sets with that characteristic is below the \code{convergentCutoff} threshold (see \code{linkS4class{SimMissing}}).}
     \item{\code{seed}:}{Seed number. }
 	\item{\code{paramValue}:}{Population model underlying each simulated dataset.}
 	\item{\code{stdParamValue}:}{Standardized parameters of the population model underlying each simulated dataset.}
@@ -42,33 +42,33 @@ Objects can be created by \code{\link{sim}}.
 \section{Methods}{
 	The following methods are listed alphabetically. More details can be found by following the link of each method.
 	\itemize{
-		\item \code{\link[=anova,SimResult-method]{anova}} to find the averages of model fit statistics and indices for nested models, as well as the differences of model fit indices among models. This function requires at least two \code{SimResult} objects. 
+		\item \code{\link[=anova,SimResult-method]{anova}} to find the averages of model fit statistics and indices for nested models, as well as the differences of model fit indices among models. This function requires at least two \code{SimResult} objects.
 		\item \code{\link[=coef,SimResult-method]{coef}} to extract parameter estimates of each replication
 		\item \code{\link{findCoverage}} to find a value of independent variables (e.g., sample size) that provides a given value of coverage rate.
-		\item \code{\link{findPower}} to find a value of independent variables (e.g., sample size) that provides a given value of power of a parameter estimate. 
+		\item \code{\link{findPower}} to find a value of independent variables (e.g., sample size) that provides a given value of power of a parameter estimate.
 		\item \code{\link{getCoverage}} to get the coverage rate of the confidence interval of each parameter estimate
 		\item \code{\link{getCIwidth}} to get a median or percentile rank (assurance) of confidence interval widths of parameters estimates
 		\item \code{\link{getCutoff}} to get the cutoff of fit indices based on a priori alpha level.
-		\item \code{\link{getCutoffNested}} to get the cutoff of the difference in fit indices of nested models based on a priori alpha level. 
-		\item \code{\link{getCutoffNonNested}} to get the cutoff of the difference in fit indices of nonnested models based on a priori alpha level. 
+		\item \code{\link{getCutoffNested}} to get the cutoff of the difference in fit indices of nested models based on a priori alpha level.
+		\item \code{\link{getCutoffNonNested}} to get the cutoff of the difference in fit indices of nonnested models based on a priori alpha level.
 		\item \code{\link{getExtraOutput}} to get extra outputs that users requested before running a simulation
 		\item \code{\link{getPopulation}} to get population parameter values underlying each dataset
 		\item \code{\link{getPower}} to get the power of each parameter estimate
-		\item \code{\link{getPowerFit}} to get the power in rejecting alternative models based on absolute model fit cutoff. 
-		\item \code{\link{getPowerFitNested}} to get the power in rejecting alternative models based on the difference between model fit cutoffs of nested models. 
-		\item \code{\link{getPowerFitNonNested}} to get the power in rejecting alternative models based on the difference between model fit cutoffs of nonnested models.  
+		\item \code{\link{getPowerFit}} to get the power in rejecting alternative models based on absolute model fit cutoff.
+		\item \code{\link{getPowerFitNested}} to get the power in rejecting alternative models based on the difference between model fit cutoffs of nested models.
+		\item \code{\link{getPowerFitNonNested}} to get the power in rejecting alternative models based on the difference between model fit cutoffs of nonnested models.
 		\item \code{\link[=inspect,SimResult-method]{inspect}} Extract target information from the simulation result. The available information is listed in this \code{\link[=inspect,SimResult-method]{link}}
 		\item \code{\link{likRatioFit}} to find the likelihood ratio (or Bayes factor) based on the bivariate distribution of fit indices
 		\item \code{\link{plotCoverage}} to plot the coverage rate of confidence interval of parameter estimates
-		\item \code{\link{plotCIwidth}} to plot confidence interval widths with a line of a median or percentile rank (assurance) 
+		\item \code{\link{plotCIwidth}} to plot confidence interval widths with a line of a median or percentile rank (assurance)
 		\item \code{\link{plotCutoff}} to plot sampling distributions of fit indices with an option to draw fit indices cutoffs by specifying a priori alpha level.
 		\item \code{\link{plotCutoffNested}} to plot sampling distributions of the difference in fit indices between nested models with an option to draw fit indices cutoffs by specifying a priori alpha level.
 		\item \code{\link{plotCutoffNonNested}} to plot sampling distributions of the difference in fit indices between nonnested models with an option to draw fit indices cutoffs by specifying a priori alpha level.
 		\item \code{\link{plotMisfit}} to visualize the population misfit and misspecified parameter values
-		\item \code{\link{plotPower}} to plot power of parameter estimates 
+		\item \code{\link{plotPower}} to plot power of parameter estimates
 		\item \code{\link{plotPowerFit}} to plot the power in rejecting alternative models based on absolute model fit cutoff.
-		\item \code{\link{plotPowerFitNested}} to plot the power in rejecting alternative models based on the difference between model fit cutoffs of nested models. 
-		\item \code{\link{plotPowerFitNonNested}} to plot the power in rejecting alternative models based on the difference between model fit cutoffs of nonnested models.   
+		\item \code{\link{plotPowerFitNested}} to plot the power in rejecting alternative models based on the difference between model fit cutoffs of nested models.
+		\item \code{\link{plotPowerFitNonNested}} to plot the power in rejecting alternative models based on the difference between model fit cutoffs of nonnested models.
 		\item \code{\link{pValue}} to find a p-value in comparing sample fit indices with the null sampling distribution of fit indices
 		\item \code{\link{pValueNested}} to find a p-value in comparing the difference in sample fit indices between nested models with the null sampling distribution of the difference in fit indices
 		\item \code{\link{pValueNonNested}} to find a p-value in comparing the difference in sample fit indices between nonnested models with the null sampling distribution of the difference in fit indices

@@ -94,8 +94,10 @@ pValue <- function(target,
             predictorVal[2] <- pmMARval)
     }
     predictorVal <- predictorVal[condition]
-	if(is(target, "lavaan")) {
-		cutoff <- inspect(target, "fit")[usedFit]
+	if (is(target, "lavaan")) {
+		cutoff <- lavaan::fitMeasures(target, fit.measures = usedFit)
+	} else if (is(target, "lavaan.mi")) {
+	  cutoff <- getMethod("anova", "lavaan.mi")(target, indices = usedFit)
 	} else if (is(target, "MxModel")) {
 		cutoff <- fitMeasuresMx(target)[usedFit]
 	} else {

@@ -48,7 +48,11 @@ pValueNested <- function(outNested, outParent, simNested, simParent, usedFit = N
 	if(is(outNested, "MxModel") & is(outParent, "MxModel")) {
 		cutoff <- fitMeasuresMx(outNested)[usedFit] - fitMeasuresMx(outParent)[usedFit]
 	} else if (is(outNested, "lavaan") & is(outParent, "lavaan")) {
-		cutoff <- inspect(outNested, "fit")[usedFit] - inspect(outParent, "fit")[usedFit]
+		cutoff <- lavaan::fitMeasures(outNested, fit.measures = usedFit) -
+		          lavaan::fitMeasures(outParent, fit.measures = usedFit)
+	} else if (is(outNested, "lavaan.mi") & is(outParent, "lavaan.mi")) {
+	  cutoff <- getMethod("anova", "lavaan.mi")(outNested, indices = usedFit) -
+	            getMethod("anova", "lavaan.mi")(outParent, indices = usedFit)
 	} else {
 		stop("The 'outNested' and 'outParent' arguments must be both lavaan objects or MxModel objects.")
 	}

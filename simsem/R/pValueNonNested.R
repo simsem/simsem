@@ -60,7 +60,11 @@ pValueNonNested <- function(outMod1, outMod2, dat1Mod1, dat1Mod2, dat2Mod1, dat2
     if(is(outMod1, "MxModel") & is(outMod2, "MxModel")) {
 		cutoff <- fitMeasuresMx(outMod1)[usedFit] - fitMeasuresMx(outMod2)[usedFit]
 	} else if (is(outMod1, "lavaan") & is(outMod2, "lavaan")) {
-		cutoff <- inspect(outMod1, "fit")[usedFit] - inspect(outMod2, "fit")[usedFit]
+	  cutoff <- lavaan::fitMeasures(outMod1, fit.measures = usedFit) -
+	            lavaan::fitMeasures(outMod2, fit.measures = usedFit)
+	} else if (is(outMod1, "lavaan.mi") & is(outMod2, "lavaan.mi")) {
+	  cutoff <- getMethod("anova", "lavaan.mi")(outMod1, indices = usedFit) -
+	            getMethod("anova", "lavaan.mi")(outMod2, indices = usedFit)
 	} else {
 		stop("The 'outMod1' and 'outMod2' arguments must be both lavaan objects or MxModel objects.")
 	}
