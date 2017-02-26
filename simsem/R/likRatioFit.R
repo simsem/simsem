@@ -4,8 +4,8 @@ likRatioFit <- function(outMod1, outMod2, dat1Mod1, dat1Mod2, dat2Mod1, dat2Mod2
     usedFit = NULL, prior = 1) {
 	usedFit <- cleanUsedFit(usedFit, colnames(dat1Mod1@fit), colnames(dat1Mod2@fit), colnames(dat2Mod1@fit), colnames(dat2Mod2@fit))
 
-  observedFit <- as.data.frame(rbind(lavaan::lavInspect(outMod1, "fit"),
-                                     lavaan::lavInspect(outMod2, "fit"))[,usedFit])
+  observedFit <- as.data.frame(rbind(lavInspect(outMod1, "fit"),
+                                     lavInspect(outMod2, "fit"))[,usedFit])
 
   mod1 <- clean(dat1Mod1, dat1Mod2, dat2Mod1, dat2Mod2)
   dat1Mod1 <- mod1[[1]]

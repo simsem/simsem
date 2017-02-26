@@ -2,15 +2,15 @@
 ## SimSem analysis/data generation template, and returns a raw data set,
 ## optionally with the drawn parameter values.
 
-generate <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "f0", 
-    averageNumMisspec = FALSE, optMisfit = NULL, optDraws = 50, createOrder = c(1, 2, 3), indDist = NULL, sequential = FALSE, 
-    facDist = NULL, errorDist = NULL, saveLatentVar = FALSE, indLab = NULL, modelBoot = FALSE, realData = NULL, covData = NULL, 
+generate <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "f0",
+    averageNumMisspec = FALSE, optMisfit = NULL, optDraws = 50, createOrder = c(1, 2, 3), indDist = NULL, sequential = FALSE,
+    facDist = NULL, errorDist = NULL, saveLatentVar = FALSE, indLab = NULL, modelBoot = FALSE, realData = NULL, covData = NULL,
     params = FALSE, group = NULL, empirical = FALSE, ...) {
 	if(is(model, "SimSem")) {
 		if(!is.null(group)) model@groupLab <- group
-		data <- generateSimSem(model = model, n = n, maxDraw = maxDraw, misfitBounds = misfitBounds, misfitType = misfitType, 
-			averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, createOrder = createOrder, indDist = indDist, sequential = sequential, 
-			facDist = facDist, errorDist = errorDist, saveLatentVar = saveLatentVar, indLab = indLab, modelBoot = modelBoot, realData = realData, covData = covData, 
+		data <- generateSimSem(model = model, n = n, maxDraw = maxDraw, misfitBounds = misfitBounds, misfitType = misfitType,
+			averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, createOrder = createOrder, indDist = indDist, sequential = sequential,
+			facDist = facDist, errorDist = errorDist, saveLatentVar = saveLatentVar, indLab = indLab, modelBoot = modelBoot, realData = realData, covData = covData,
 			params = params, empirical = empirical)
 	} else if (is(model, "MxModel")) {
 		data <- generateMx(object = model, n = n, indDist = indDist, groupLab = group, covData = covData, empirical = empirical)
@@ -22,8 +22,8 @@ generate <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "
 		} else if (is.lavaancall(model)) {
 			# Intentionally leave it blank
 		} else if (is(model, "lavaan")) {
-			temp <- model@ParTable
-			temp$ustart <- temp$est # model@Fit@est 
+			temp <- lavaan::parTable(model)
+			temp$ustart <- temp$est
 			model <- list(model = temp)
 		} else {
 			stop("Please specify an appropriate object for the 'model' argument: simsem model template, lavaan script, lavaan parameter table, OpenMx object, or list of options for the 'simulateData' function.")
@@ -36,14 +36,14 @@ generate <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "
 		model$empirical <- empirical
 		model <- c(model, list(...))
 		browser()
-		data <- do.call(lavaan::simulateData, model) 
+		data <- do.call(lavaan::simulateData, model)
 	}
 	return(data)
 }
 
-generateSimSem <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "f0", 
-    averageNumMisspec = FALSE, optMisfit = NULL, optDraws = 50, createOrder = c(1, 2, 3), indDist = NULL, sequential = FALSE, 
-    facDist = NULL, errorDist = NULL, saveLatentVar = FALSE, indLab = NULL, modelBoot = FALSE, realData = NULL, covData = NULL, 
+generateSimSem <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "f0",
+    averageNumMisspec = FALSE, optMisfit = NULL, optDraws = 50, createOrder = c(1, 2, 3), indDist = NULL, sequential = FALSE,
+    facDist = NULL, errorDist = NULL, saveLatentVar = FALSE, indLab = NULL, modelBoot = FALSE, realData = NULL, covData = NULL,
     params = FALSE, empirical = FALSE) {
     if (is.null(indLab)) {
         if (model@modelType == "path") {
@@ -56,7 +56,7 @@ generateSimSem <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitTy
 	if(model@modelType != "path") facLab <- unique(model@pt$lhs[model@pt$op == "=~"])
     free <- max(model@pt$free)
     ngroups <- max(model@pt$group)
-    
+
     # Wrap distributions in lists for mg
     if (!class(indDist) == "list") {
         indDist <- rep(list(indDist), ngroups)
@@ -67,12 +67,12 @@ generateSimSem <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitTy
     if (!class(errorDist) == "list") {
         errorDist <- rep(list(errorDist), ngroups)
     }
-    
+
 	if(ngroups > 1 && length(n) == 1) n <- rep(n, ngroups)
 
 	covLab <- unique(model@pt$lhs[model@pt$op == "~1" & model@pt$exo == 1])
 	if(!is.null(realData)) {
-		if((ngroups > 1) && !(model@groupLab %in% colnames(realData))) stop(paste0("The ", model@groupLab, " varaible does not in the realData argument"))	
+		if((ngroups > 1) && !(model@groupLab %in% colnames(realData))) stop(paste0("The ", model@groupLab, " varaible does not in the realData argument"))
 		if(is.null(covData) && (length(covLab) > 0)) {
 			usedCol <- covLab
 			if(ngroups > 1) usedCol <- c(usedCol, model@groupLab)
@@ -80,11 +80,11 @@ generateSimSem <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitTy
 		}
 		realData <- realData[,setdiff(colnames(realData), covLab)]
 	}
-	
+
 	if(length(covLab) > 0) {
 		if(is.null(covData)) stop("The covariate data must be specified.")
 		if(ngroups > 1) covLab <- c(covLab, model@groupLab)
-		covData <- covData[,covLab, drop=FALSE]		
+		covData <- covData[,covLab, drop=FALSE]
 		if(ncol(covData) != length(covLab)) stop(paste0("The covariate data must contain the following variable names: ", paste(covLab, collapse = ", ")))
 		if(any(is.na(covData))) stop("The covariate data must not have missing variables.")
 		indLab <- setdiff(indLab, covLab)
@@ -94,14 +94,14 @@ generateSimSem <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitTy
 			covData <- NULL
 		}
 	}
-    draws <- draw(model, maxDraw = maxDraw, misfitBounds = misfitBounds, misfitType = misfitType, 
+    draws <- draw(model, maxDraw = maxDraw, misfitBounds = misfitBounds, misfitType = misfitType,
         averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, createOrder = createOrder, covData = covData)
-	
+
 	# The data-generation model and analysis model may have different parameterization (residual factor varaince != 1) so the change of scale is needed
 	if (model@modelType %in% c("cfa", "sem")) {
 		draws <- changeScaleFactor(draws, model)
-	}	
-	
+	}
+
 	realDataGroup <- rep(list(NULL), ngroups)
 	covDataGroup <- rep(list(NULL), ngroups)
 	if (ngroups > 1) {
@@ -122,8 +122,8 @@ generateSimSem <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitTy
 	# realData must be separated into different groups
 	# covariates must be separated into different groups
 	# realData must not contain covariates
-    datal <- mapply(FUN = createData, draws, indDist, facDist, errorDist, n = n, realData = realDataGroup, 
-		covData = covDataGroup, MoreArgs = list(sequential = sequential, saveLatentVar = saveLatentVar, modelBoot = modelBoot, indLab = indLab, facLab = facLab, empirical = empirical), 
+    datal <- mapply(FUN = createData, draws, indDist, facDist, errorDist, n = n, realData = realDataGroup,
+		covData = covDataGroup, MoreArgs = list(sequential = sequential, saveLatentVar = saveLatentVar, modelBoot = modelBoot, indLab = indLab, facLab = facLab, empirical = empirical),
         SIMPLIFY = FALSE)
 	data <- NULL
 	extra <- NULL
@@ -149,7 +149,7 @@ generateSimSem <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitTy
     } else {
         return(data)
     }
-    
+
 }
 
 popMisfitParams <- function(psl, df = NULL, covData = NULL) {
@@ -170,15 +170,15 @@ popMisfitParams <- function(psl, df = NULL, covData = NULL) {
 	}
     macsreal <- mapply(createImpliedMACS, real, covStat, SIMPLIFY = FALSE)
     macsmis <- mapply(createImpliedMACS, realmis, covStat, SIMPLIFY = FALSE)
-    misfit <- popMisfitMACS(paramM = lapply(macsreal, "[[", 1), paramCM = lapply(macsreal, 
-        "[[", 2), misspecM = lapply(macsmis, "[[", 1), misspecCM = lapply(macsmis, 
+    misfit <- popMisfitMACS(paramM = lapply(macsreal, "[[", 1), paramCM = lapply(macsreal,
+        "[[", 2), misspecM = lapply(macsmis, "[[", 1), misspecCM = lapply(macsmis,
         "[[", 2), fit.measures = "all", dfParam = df)
     return(misfit)
-} 
+}
 
-		
+
 changeScaleFactor <- function(drawResult, gen) {
-	# Find the scales that are based on fixed factor 
+	# Find the scales that are based on fixed factor
 	dgen <- gen@dgen
 	pt <- gen@pt
 	addcon <- pt$op %in% c("==", "<", ">", ":=")
@@ -191,14 +191,14 @@ changeScaleFactor <- function(drawResult, gen) {
 	# Find which fixed factor
 	ptgroup <- split(as.data.frame(pt), pt$group)
 	ngroup <- length(ptgroup)
-	
+
 	facPos <- mapply(function(temppt, templab) which((temppt$lhs %in% templab) & (as.character(temppt$rhs) == as.character(temppt$lhs)) & (temppt$op == "~~")), temppt = ptgroup, templab = facLab, SIMPLIFY=FALSE) # assume that the order is good
 	fixedPos <- mapply(function(temppt, temppos) temppt$free[temppos] == 0, temppt=ptgroup, temppos=facPos, SIMPLIFY=FALSE)
-	fixedValue <- mapply(function(temppt, temppos) temppt$ustart[temppos], temppt=ptgroup, temppos=facPos, SIMPLIFY=FALSE)	
-	
+	fixedValue <- mapply(function(temppt, temppos) temppt$ustart[temppos], temppt=ptgroup, temppos=facPos, SIMPLIFY=FALSE)
+
 	param <- lapply(drawResult, "[[", "param")
 	misspec <- lapply(drawResult, "[[", "misspec")
-	
+
 	for(g in 1:ngroup) {
 		select <- fixedPos[[g]]
 		if(any(select)) {
@@ -216,7 +216,7 @@ changeScaleFactor <- function(drawResult, gen) {
 	}
 
 	# Find which manifest variable
-	
+
 	manifestPos <- vector("list", ngroup)
 	manifestValue <- vector("list", ngroup)
 	for(g in 1:ngroup) {
@@ -229,7 +229,7 @@ changeScaleFactor <- function(drawResult, gen) {
 			}
 		}
 	}
-	
+
 	for(g in 1:ngroup) {
 		if(!is.null(manifestPos[[g]])) {
 			select <- manifestPos[[g]][,2]
@@ -266,7 +266,7 @@ changeScaleFactor <- function(drawResult, gen) {
 			}
 		}
 	}
-	
+
 	for(g in 1:ngroup) {
 		param[[g]]$LY <- param[[g]]$LY %*% solve(scale[[g]])
 		param[[g]]$PS <- scale[[g]] %*% param[[g]]$PS %*% scale[[g]]
@@ -277,7 +277,7 @@ changeScaleFactor <- function(drawResult, gen) {
 			misspec[[g]]$LY <- misspec[[g]]$LY %*% solve(scale[[g]])
 			misspec[[g]]$PS <- scale[[g]] %*% misspec[[g]]$PS %*% scale[[g]]
 			if(!is.null(misspec[[g]]$BE)) misspec[[g]]$BE <- scale[[g]] %*% misspec[[g]]$BE %*% solve(scale[[g]])
-			misspec[[g]]$AL <- scale[[g]] %*% misspec[[g]]$AL		
+			misspec[[g]]$AL <- scale[[g]] %*% misspec[[g]]$AL
 			if(!is.null(misspec[[g]]$GA)) misspec[[g]]$GA <- scale[[g]] %*% misspec[[g]]$GA
 		}
 	}
@@ -292,11 +292,11 @@ semMACS <- function(param) {
 	ID <- matrix(0, nrow(param$PS), nrow(param$PS))
     diag(ID) <- 1
 	implied.mean <- solve(ID - param$BE) %*% param$AL
-        implied.covariance <- solve(ID - param$BE) %*% param$PS %*% 
+        implied.covariance <- solve(ID - param$BE) %*% param$PS %*%
             t(solve(ID - param$BE))
         if (!is.null(param$LY)) {
             implied.mean <- param$TY + (param$LY %*% implied.mean)
-            implied.covariance <- (param$LY %*% implied.covariance %*% 
+            implied.covariance <- (param$LY %*% implied.covariance %*%
                 t(param$LY)) + param$TE
         }
 		return(list(implied.mean, implied.covariance))
@@ -323,7 +323,7 @@ fleishman1978_abcd <- function(skewness, kurtosis) {
 	b. <- out$par[1L]; c. <- out$par[2L]; d. <- out$par[3L]; a. <- -c.
 	c(a.,b.,c.,d.)
 }
-	
+
 lavaanValeMaurelli1983 <- function(n=100L, COR, skewness, kurtosis) {
 
     getICOV <- function(b1, c1, d1, b2, c2, d2, R) {
@@ -390,7 +390,7 @@ lavaanValeMaurelli1983 <- function(n=100L, COR, skewness, kurtosis) {
 
     X
 }
-		
+
 HeadrickSawilowsky1999 <- function(n=100L, COR, skewness, kurtosis) {
     # number of variables
     p <- ncol(COR)
@@ -420,11 +420,11 @@ HeadrickSawilowsky1999 <- function(n=100L, COR, skewness, kurtosis) {
 		objFUN2 <- function(x, va, vb, vd, COR) {
 			r <- x^2
 			eq <- r*(vb[1]*vb[2] + 3*vb[2]*vd[1] + 3*vb[1]*vd[2] + 9*vd[1]*vd[2] + 2*va[1]*va[2]*r + 6*vd[1]*vd[2]*(r^2)) - COR
-			eq^2	
+			eq^2
 		}
 		out <- nlminb(start=targetR, objective=objFUN2,
                       scale=10, control=list(trace=0),
-                      va=FTable[,1], vb=FTable[,2], vd=FTable[,4], COR=targetR)		  
+                      va=FTable[,1], vb=FTable[,2], vd=FTable[,4], COR=targetR)
         if(out$convergence != 0) warning("no convergence")
         vr <- out$par[1L]
 		z1 <- rnorm(n, 0, 1)
@@ -461,7 +461,7 @@ HeadrickSawilowsky1999 <- function(n=100L, COR, skewness, kurtosis) {
 		out <- nlminb(start=start$par, objective=objFUN3,
                       scale=10, control=list(trace=0),
                       va=FTable[,1], vb=FTable[,2], vd=FTable[,4], targetR=targetR, rowindex = rowindex, colindex = colindex)
-					  
+
         if(out$convergence != 0) warning("no convergence")
 		z1 <- rnorm(n, 0, 1)
 		vr <- out$par
@@ -480,7 +480,7 @@ HeadrickSawilowsky1999 <- function(n=100L, COR, skewness, kurtosis) {
 		mat[(halfp + 1):p, (halfp + 1):p] <- TRUE
 		# This method does not make sense in this logic. In two or three variables, only one Z is needed. In four variables, two Zs are needed. However, in more than four variables, only two Zs are needed. If the number of Zs is doubled from two to four variables, isn't it doubled when from four to eight variables.
 		ctrlvec <- mat[lower.tri(mat)]
-		
+
 		findStartB <- function(x, targetR, rowindex, colindex, p, ctrlvec) {
 			r0 <- rep(x[1], length(targetR))
 			r0[ctrlvec] <- 1
@@ -493,7 +493,7 @@ HeadrickSawilowsky1999 <- function(n=100L, COR, skewness, kurtosis) {
                       scale=10, control=list(trace=0),
                       targetR=targetR, rowindex = rowindex, colindex = colindex, p = p, ctrlvec = ctrlvec, lower=-1, upper=1)
 		if(start$convergence != 0) warning("no convergence")
-		
+
 		objFUN4 <- function(x, va, vb, vd, targetR, rowindex, colindex, p, ctrlvec) {
 			r0 <- rep(x[1], length(targetR))
 			r0[ctrlvec] <- 1
@@ -514,7 +514,7 @@ HeadrickSawilowsky1999 <- function(n=100L, COR, skewness, kurtosis) {
 		out <- nlminb(start=start$par, objective=objFUN4,
                       scale=10, control=list(trace=0),
                       va=FTable[,1], vb=FTable[,2], vd=FTable[,4], targetR=targetR, rowindex = rowindex, colindex = colindex, p = p, ctrlvec = ctrlvec, lower=-1, upper=1)
-					  
+
         if(out$convergence != 0) warning("no convergence")
 		z1 <- rnorm(n, 0, 1)
 		v <- rnorm(n, 0, 1)
@@ -540,22 +540,22 @@ HeadrickSawilowsky1999 <- function(n=100L, COR, skewness, kurtosis) {
 
 ####### The following functions are copied from the plyr package.
 
-rbind.fill <- function (...) 
+rbind.fill <- function (...)
 {
     dfs <- list(...)
-    if (length(dfs) == 0) 
+    if (length(dfs) == 0)
         return()
     if (is.list(dfs[[1]]) && !is.data.frame(dfs[[1]])) {
         dfs <- dfs[[1]]
     }
     dfs <- compact(dfs)
-    if (length(dfs) == 0) 
+    if (length(dfs) == 0)
         return()
-    if (length(dfs) == 1) 
+    if (length(dfs) == 1)
         return(dfs[[1]])
     is_df <- vapply(dfs, is.data.frame, logical(1))
     if (any(!is_df)) {
-        stop("All inputs to rbind.fill must be data.frames", 
+        stop("All inputs to rbind.fill must be data.frames",
             call. = FALSE)
     }
     rows <- unlist(lapply(dfs, .row_names_info, 2L))
@@ -577,7 +577,7 @@ rbind.fill <- function (...)
     quickdf(lapply(getters, function(x) x()))
 }
 
-quickdf <- function (list) 
+quickdf <- function (list)
 {
     rows <- unique(unlist(lapply(list, NROW)))
     stopifnot(length(rows) == 1)
@@ -589,7 +589,7 @@ quickdf <- function (list)
 
 compact <- function (l) Filter(Negate(is.null), l)
 
-output_template <- function (dfs, nrows) 
+output_template <- function (dfs, nrows)
 {
     vars <- unique(unlist(lapply(dfs, base::names)))
     output <- vector("list", length(vars))
@@ -599,18 +599,18 @@ output_template <- function (dfs, nrows)
     for (df in dfs) {
         matching <- intersect(names(df), vars[!seen])
         for (var in matching) {
-            output[[var]] <- allocate_column(df[[var]], nrows, 
+            output[[var]] <- allocate_column(df[[var]], nrows,
                 dfs, var)
         }
         seen[matching] <- TRUE
-        if (all(seen)) 
+        if (all(seen))
             break
     }
-    list(setters = lapply(output, `[[`, "set"), getters = lapply(output, 
+    list(setters = lapply(output, `[[`, "set"), getters = lapply(output,
         `[[`, "get"))
 }
 
-allocate_column <- function (example, nrows, dfs, var) 
+allocate_column <- function (example, nrows, dfs, var)
 {
     a <- attributes(example)
     type <- typeof(example)
@@ -625,13 +625,13 @@ allocate_column <- function (example, nrows, dfs, var)
         if (length(dim(example)) > 1) {
             if ("dimnames" %in% names(a)) {
                 a$dimnames[1] <- list(NULL)
-                if (!is.null(names(a$dimnames))) 
+                if (!is.null(names(a$dimnames)))
                   names(a$dimnames)[1] <- ""
             }
-            df_has <- vapply(dfs, function(df) var %in% names(df), 
+            df_has <- vapply(dfs, function(df) var %in% names(df),
                 FALSE)
             dims <- unique(lapply(dfs[df_has], function(df) dim(df[[var]])[-1]))
-            if (length(dims) > 1) 
+            if (length(dims) > 1)
                 stop("Array variable ", var, " has inconsistent dims")
             a$dim <- c(nrows, dim(example)[-1])
             length <- prod(a$dim)
@@ -646,9 +646,9 @@ allocate_column <- function (example, nrows, dfs, var)
         length <- nrows
     }
     if (is.factor(example)) {
-        df_has <- vapply(dfs, function(df) var %in% names(df), 
+        df_has <- vapply(dfs, function(df) var %in% names(df),
             FALSE)
-        isfactor <- vapply(dfs[df_has], function(df) is.factor(df[[var]]), 
+        isfactor <- vapply(dfs[df_has], function(df) is.factor(df[[var]]),
             FALSE)
         if (all(isfactor)) {
             levels <- unique(unlist(lapply(dfs[df_has], function(df) levels(df[[var]]))))
@@ -696,17 +696,17 @@ allocate_column <- function (example, nrows, dfs, var)
     list(set = setter, get = getter)
 }
 
-make_assignment_call <- function (ndims) 
+make_assignment_call <- function (ndims)
 {
     assignment <- quote(column[rows] <<- what)
     if (ndims >= 2) {
-        assignment[[2]] <- as.call(c(as.list(assignment[[2]]), 
+        assignment[[2]] <- as.call(c(as.list(assignment[[2]]),
             rep(list(quote(expr = )), ndims - 1)))
     }
     assignment
 }
 
-make_names <- function (x, prefix = "X") 
+make_names <- function (x, prefix = "X")
 {
     nm <- names(x)
     if (is.null(nm)) {
@@ -722,11 +722,11 @@ make_names <- function (x, prefix = "X")
 temp.unstandardize.est.ov <- function(partable, ov.var=NULL, cov.std=TRUE) {
 
     # check if ustart is missing; if so, look for est
-    if(is.null(partable$ustart)) 
+    if(is.null(partable$ustart))
         partable$ustart <- partable$est
-  
+
     # check if group is missing
-    if(is.null(partable$group)) 
+    if(is.null(partable$group))
         partable$group <- rep(1L, length(partable$ustart))
 
     stopifnot(!any(is.na(partable$ustart)))
@@ -761,18 +761,18 @@ temp.unstandardize.est.ov <- function(partable, ov.var=NULL, cov.std=TRUE) {
         #             partable$group == g)
 
         # 2. "~" regressions (and "<~")
-        idx <- which((partable$op == "~" | partable$op == "<~") & 
+        idx <- which((partable$op == "~" | partable$op == "<~") &
                      partable$lhs %in% ov.names &
                      partable$group == g)
         out[idx] <- out[idx] * OV[ match(partable$lhs[idx], ov.names) ]
 
-        idx <- which((partable$op == "~" | partable$op == "<~") & 
+        idx <- which((partable$op == "~" | partable$op == "<~") &
                      partable$rhs %in% ov.names &
                      partable$group == g)
         out[idx] <- out[idx] / OV[ match(partable$rhs[idx], ov.names) ]
 
         # 3a. "~~" ov
-        # ATTENTION: in Mplus 4.1, the off-diagonal residual covariances 
+        # ATTENTION: in Mplus 4.1, the off-diagonal residual covariances
         #            were computed by the formula cov(i,j) / sqrt(i.var*j.var)
         #            were i.var and j.var where diagonal elements of OV
         #
@@ -780,7 +780,7 @@ temp.unstandardize.est.ov <- function(partable, ov.var=NULL, cov.std=TRUE) {
         #            elements are the 'THETA' diagonal elements!!
 
         # variances
-        rv.idx <- which(partable$op == "~~" & !(partable$lhs %in% lv.names) & 
+        rv.idx <- which(partable$op == "~~" & !(partable$lhs %in% lv.names) &
                         partable$lhs == partable$rhs &
                         partable$group == g)
         out[rv.idx] <- ( out[rv.idx] * OV[ match(partable$lhs[rv.idx], ov.names) ]

@@ -1130,16 +1130,17 @@ estmodel.sem <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL
 model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, TE = NULL,
     RTE = NULL, BE = NULL, VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL,
     AL = NULL, MY = NULL, ME = NULL, KA = NULL, GA = NULL) {
-    ngroups <- lavaan:lavInspect(object, "ngroups")
+    ngroups <- lavInspect(object, "ngroups")
     if (ngroups > 1L) {
-      name <- names(lavaan::lavInspect(object, "coef")[[1]])
+      name <- names(lavInspect(object, "coef")[[1]])
     } else {
-      name <- names(lavaan::lavInspect(object, "coef"))
+      name <- names(lavInspect(object, "coef"))
     }
     modelType <- NULL
     indLab <- NULL
     facLab <- NULL
-	covLab <- unique(object@ParTable$lhs[object@ParTable$op == "~~" & object@ParTable$exo == 1])
+  PT <- lavaan::parTable(object)
+	covLab <- unique(PT$lhs[PT$op == "~~" & PT$exo == 1])
 	if(length(covLab) == 0) covLab <- NULL
 
     if (isTRUE(all.equal(lavaan::lavNames(object, "ov"), lavaan::lavNames(object, "lv")))) {
@@ -1180,7 +1181,7 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
 			}
             x
         })
-        freeUnstd <- labelFree(lavaan::lavInspect(object, "free"), object@Model@isSymmetric)
+        freeUnstd <- labelFree(lavInspect(object, "free"), object@Model@isSymmetric)
 		if(!is.null(covLab)) freeUnstd <- reshuffleParamGroup(freeUnstd, covLab, indLab, facLab, ngroups)
         if (!is.null(PS))
             stop("Misspecification is not allowed in PS if 'std' is TRUE.")
@@ -1328,9 +1329,9 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
 		}
 
     } else {
-        est <- lavaan::lavInspect(object, "coef")
+        est <- lavInspect(object, "coef")
 		if(!is.null(covLab)) est <- reshuffleParamGroup(est, covLab, indLab, facLab, ngroups)
-        free <- labelFree(lavaan::lavInspect(object, "free"), object@Model@isSymmetric)
+        free <- labelFree(lavInspect(object, "free"), object@Model@isSymmetric)
 		if(!is.null(covLab)) free <- reshuffleParamGroup(free, covLab, indLab, facLab, ngroups)
         if (modelType == "path") {
             set1 <- lapply(free[names(free) == "beta"], function(x) findRecursiveSet(x)[[1]])
@@ -1484,9 +1485,8 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
 				"gamma"], z = GA, pttemp = ptg, MoreArgs = list(lhstemp = NULL, optemp = "~", rhstemp = covLab), SIMPLIFY = FALSE)
 		}
     }
-    groupLab <- object@Options$group
-    if (is.null(groupLab))
-        groupLab <- "group"
+    groupLab <- lavInspect(object, "group")
+    if (is.null(groupLab)) groupLab <- "group"
 
 
 	# Get the nonlinear constraints

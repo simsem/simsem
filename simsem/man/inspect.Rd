@@ -1,5 +1,6 @@
 \name{inspect}
 \alias{inspect,SimResult-method}
+\alias{inspect}
 \title{
 	Extract information from a simulation result
 }
@@ -45,7 +46,7 @@
 		\item \code{"mcar"}: Percent missing completely at random
 		\item \code{"mar"}: Percent missing at random
 		\item \code{"extra"}: Extra output from the \code{outfun} argument from the \code{\link{sim}} function)
-		\item *\code{"time"}: Time elapsed in running the simulation (equivalent to the \code{\link{summaryTime}} function) 
+		\item *\code{"time"}: Time elapsed in running the simulation (equivalent to the \code{\link{summaryTime}} function)
 		\item *\code{"converged"}: Convergence of each replication
 	}
 }

@@ -84,7 +84,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
 	} else if (is.lavaancall(model)) {
 		lavaanAnalysis <- TRUE
 	} else if (is(model, "lavaan")) {
-		model <- list(model = model@ParTable) ##### FIXME: use lavaan::parTable()
+		model <- list(model = lavaan::parTable(model))
 		lavaanAnalysis <- TRUE
 	} else if (is(model, "MxModel")) {
 		mxAnalysis <- TRUE
@@ -991,9 +991,9 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
         converged <- 5L
       } else converged <- 0L
     } else {
-      try(converged <- as.numeric(!lavaan::lavInspect(out, "converged")))
+      try(converged <- as.numeric(!lavInspect(out, "converged")))
       if (converged == 0L) {
-        seTemp <- lavaan::lavInspect(out, "se")
+        seTemp <- lavInspect(out, "se")
         improperSE <- any(unlist(seTemp) < 0) | any(is.na(unlist(seTemp))) | all(unlist(seTemp) == 0)
         if (improperSE) converged <- 3L
         if (checkVar(out)) {
@@ -1386,7 +1386,7 @@ checkCov <- function(object) {
 }
 
 checkCovLv <- function(object) {
-	covlvs <- lavaan::lavInspect(object, "cov.lv")
+	covlvs <- lavInspect(object, "cov.lv")
 	if (!is(covlvs, "list")) {
 		covlvs <- list(covlvs)
 	}
@@ -1402,7 +1402,7 @@ checkCovLv <- function(object) {
 
 collapseExtraParam <- function(pls, dgen, fill = TRUE, con = NULL) {
 	## Collapse all labels
-	if (length(pls) == 1 & length(pls) != 1) dgen <- list(dgen)
+	if (length(pls) == 1 & length(pls) != 1) dgen <- list(dgen) # FIX CONTRADICTION: length(pls) can never both == 1 and != 1
 	temp <- extractLab(pls, dgen, fill = fill, con = con)
 	target <- temp[[1]]
 	realval <- temp[[2]]

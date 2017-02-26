@@ -46,13 +46,12 @@ analyzeSimSem <- function(model, data, package = "lavaan",
         if(!is.null(miArgs$idvars)) {
           miArgs$idvars <- c(miArgs$idvars, model@groupLab)
         } else {
-          miArgs <- c(miArgs, list(idvars=model@groupLab))
+          miArgs <- c(miArgs, list(idvars = model@groupLab))
         }
       }
     }
-    Output <- semTools::runMI(model@pt, data, m = miss@m, miArgs = miArgs,
-                              chi = miss@chi, miPackage = miss@package,
-                              fun = "lavaan", ...) ## FIXME: return miList or methods output?
+    Output <- semTools::runMI(model@pt, data, fun = "lavaan", ..., m = miss@m,
+                              miArgs = miArgs, miPackage = miss@package)
   } else {
     ## If the missing argument is not specified and data have NAs, the default is fiml.
     if (is.null(args$missing)) {
@@ -67,7 +66,7 @@ analyzeSimSem <- function(model, data, package = "lavaan",
       attribute <- list(model=model@pt, aux = aux, data = data, group = groupLab,
                         model.type = model@modelType, missing = missing, fun = "lavaan")
       attribute <- c(attribute, args)
-      Output <- do.call(semTools::auxiliary, attribute) ## FIXME: should still work if returns lavaan with extra slot
+      Output <- do.call(semTools::auxiliary, attribute)
     } else {
       attribute <- list(model = model@pt, data = data, group = groupLab,
                         model.type = model@modelType, missing = missing)
@@ -108,12 +107,11 @@ analyzeLavaan <- function(args, fun = "lavaan", miss = NULL, aux = NULL) {
         }
       }
     }
+    args$fun <- fun
     args$m <- miss@m
     args$miArgs <- miArgs
-    args$chi <- miss@chi
     args$miPackage <- miss@package
-    args$fun <- fun
-    Output <- do.call(semTools::runMI, args) ## FIXME: return miList or methods output?
+    Output <- do.call(semTools::runMI, args)
   } else {
     ## If the missing argument is not specified and data have NAs, the default is fiml.
     if(is.null(args$missing)) {
@@ -126,7 +124,7 @@ analyzeLavaan <- function(args, fun = "lavaan", miss = NULL, aux = NULL) {
       if (is.numeric(aux)) aux <- colnames(model$data)[aux]
       args$aux <- aux
       args$fun <- fun
-      Output <- do.call(semTools::auxiliary, args) ## FIXME: should still work if returns lavaan with extra slot
+      Output <- do.call(semTools::auxiliary, args)
     } else {
       Output <- do.call(fun, args)
     }

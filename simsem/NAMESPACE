@@ -1,6 +1,6 @@
 
 importFrom("methods", show, is, new, slot, getMethod)
-importFrom("lavaan", summary, anova, coef, cor2cov)
+importFrom("lavaan", summary, anova, coef, cor2cov, lavInspect)
 importFrom("stats",
            vcov, cor, cov, var, sd, cov2cor, uniroot, nlminb,
            rnorm, runif, qnorm, qchisq, pchisq, quantile, glm, predict, fitted,
@@ -17,7 +17,7 @@ exportClasses(SimMatrix,
 	SimDataDist,
 	SimMissing)
 
-exportMethods(summary, summaryShort, coef, anova, inspect)
+exportMethods(summaryShort)#, summary, coef, anova, inspect)
 
 export(bindDist, rawDraw,
 	model, model.cfa, model.path, model.sem,

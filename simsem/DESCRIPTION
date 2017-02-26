@@ -1,21 +1,21 @@
 Package: simsem
 Type: Package
 Title: SIMulated Structural Equation Modeling
-Version: 0.5-14.1
-Date: 2017-01-14
+Version: 0.5-15
+Date: 2017-02-25
 Authors@R: c(person(given = "Sunthud", family = "Pornprasertmanit", role = c("aut", "cre"), email = "psunthud@gmail.com"), 
 		person(given = "Patrick", family = "Miller", role = "aut", email="pmille13@nd.edu"), 
-		person(given = "Alexander", family = "Schoemann", role = "aut", email="schoemanna@ecu.edu"),
-		person(given = "Corbin", family = "Quick", role = "ctb", email="corbinq@umich.edu"), 
-		person(given = "Terrence", family = "Jorgensen", role = "ctb", email="TJorgensen314@gmail.com"))
+		person(given = "Alexander", family = "Schoemann", role = "aut", email="schoemanna@ecu.edu"), 
+		person(given = "Terrence", family = "Jorgensen", role = "aut", email="TJorgensen314@gmail.com"),
+		person(given = "Corbin", family = "Quick", role = "ctb", email="corbinq@umich.edu"))
 Author: Sunthud Pornprasertmanit [aut, cre], 
-		Patrick Miller [aut], 
-		Alexander Schoemann [aut], 
-		Corbin Quick [ctb], 
-		Terrence Jorgensen [ctb]
+		Patrick Miller [aut],
+		Alexander Schoemann [aut],
+		Terrence Jorgensen [aut],
+		Corbin Quick [ctb]
 Maintainer: Sunthud Pornprasertmanit <psunthud@gmail.com>
-Depends: R(>= 3.3.2), methods, lavaan(>= 0.5-22), utils, stats, graphics
-Suggests: parallel, Amelia, quantreg, splines, foreign, KernSmooth, semTools, OpenMx(>= 2.0.0), copula
+Depends: R(>= 3.3.2), methods, lavaan(>= 0.5-23), utils, stats, graphics
+Suggests: parallel, Amelia, quantreg, splines, foreign, KernSmooth, semTools(>= 0.4-15), OpenMx(>= 2.0.0), copula
 Description: Provides an easy framework for Monte Carlo simulation in structural equation modeling, which can be used for various purposes, such as such as model fit evaluation, power analysis, or missing data handling and planning. 
 License: GPL (>= 2)
 LazyLoad: yes
