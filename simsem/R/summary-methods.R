@@ -29,7 +29,7 @@ setMethod("summary", signature = "SimSem", definition = function(object) {
 	if(length(temp) > 1) {
 		cat(paste("Number of groups:", length(temp), "\n"))
 		cat("Grouping Variable Label\n")
-		print(object@groupLab)		
+		print(object@groupLab)
 	}
     cat("========================Lavaan Analysis Model========================\n")
     print(as.data.frame(object@pt))
@@ -61,8 +61,9 @@ setMethod("summary", signature = "SimSem", definition = function(object) {
 	}
 })
 
-setMethod("summary", signature = "SimResult", definition = function(object, digits = 3, 
-    usedFit = NULL, alpha = NULL) {
+setMethod("summary", signature = "SimResult",
+          definition = function(object, digits = 3, improper = TRUE,
+                                usedFit = NULL, alpha = NULL) {
 	usedFit <- cleanUsedFit(usedFit, colnames(object@fit))
     cat("RESULT OBJECT\n")
     cat("Model Type\n")
@@ -75,15 +76,15 @@ setMethod("summary", signature = "SimResult", definition = function(object, digi
 			print(round(summaryFit(object, alpha = alpha, usedFit = usedFit), digits))
 		}
 		cat("========= Parameter Estimates and Standard Errors ============\n")
-		print(summaryParam(object, digits=digits))
+		print(summaryParam(object, digits=digits, improper = improper))
 		# Correlation between Fit Indices
 		if(haveFit) {
 			fit <- cleanObj@fit[, usedFit, drop = FALSE]
-			if (length(unique(object@n)) > 1) 
+			if (length(unique(object@n)) > 1)
 				fit <- data.frame(fit, n = cleanObj@n)
-			if (length(unique(object@pmMCAR)) > 1) 
+			if (length(unique(object@pmMCAR)) > 1)
 				fit <- data.frame(fit, pmMCAR = cleanObj@pmMCAR)
-			if (length(unique(object@pmMAR)) > 1) 
+			if (length(unique(object@pmMAR)) > 1)
 				fit <- data.frame(fit, pmMAR = cleanObj@pmMAR)
 			if(nrow(fit) > 1) {
 				variableCol <- apply(fit, 2, sd, na.rm=TRUE) > 0
@@ -106,25 +107,27 @@ setMethod("summary", signature = "SimResult", definition = function(object, digi
 		if(any(object@converged == 7)) {
 			cat(paste("   7.", "(OpenMx only) Optimal estimates could not be obtained (Status 6)", "=", sum(object@converged == 7), "\n"))
 		}
-		if (length(unique(object@n)) > 1) 
+		if (length(unique(object@n)) > 1)
 			cat("NOTE: The sample size is varying.\n")
-		if (length(unique(object@pmMCAR)) > 1) 
+		if (length(unique(object@pmMCAR)) > 1)
 			cat("NOTE: The percent of MCAR is varying.\n")
-		if (length(unique(object@pmMAR)) > 1) 
+		if (length(unique(object@pmMAR)) > 1)
 			cat("NOTE: The percent of MAR is varying.\n")
 		if (!is.null(object@paramValue)) {
 			targetVar <- match(colnames(object@coef), colnames(object@paramValue))
 			targetVar <- targetVar[!is.na(targetVar)]
 			targetVar <- colnames(object@paramValue)[targetVar]
-			if ((ncol(object@coef) != length(targetVar)) || !all(colnames(object@coef) == targetVar)) 
-				cat("NOTE: The data generation model is not the same as the analysis model. See the summary of the population underlying data generation by the summaryPopulation function.\n")
+			if ((ncol(object@coef) != length(targetVar)) || !all(colnames(object@coef) == targetVar))
+				cat("NOTE: The data generation model is not the same as the analysis",
+				    " model. See the summary of the population underlying data",
+				    " generation by the summaryPopulation function.\n")
 		}
 	} else {
 		cat("========= Population Values ============\n")
-		print(summaryPopulation(object), digits)	
+		print(summaryPopulation(object), digits)
 		if(!(all(dim(object@misspecValue) == 0))) {
 			cat("========= Model Misspecification ============\n")
-			print(round(summaryMisspec(object), digits))	
+			print(round(summaryMisspec(object), digits))
 		}
 	}
 })
@@ -161,12 +164,12 @@ setMethod("summary", signature = "SimMissing", definition = function(object) {
         cat("==========PLANNED MISSING DATA==========\n")
         cat("---------- N-Forms Design ----------\n")
         cat(paste("Number of forms:", ceiling(object@nforms), "\n"))
-        if (!(is.vector(object@itemGroups) && length(object@itemGroups) == 1 && object@itemGroups == 
+        if (!(is.vector(object@itemGroups) && length(object@itemGroups) == 1 && object@itemGroups ==
             0)) {
             if (is.list(object@itemGroups)) {
                 cat("Item Grouping in n-forms design:\n")
                 for (i in 1:length(object@itemGroups)) {
-                  cat(paste(i, ". ", paste(object@itemGroups[[i]], collapse = ", "), 
+                  cat(paste(i, ". ", paste(object@itemGroups[[i]], collapse = ", "),
                     "\n", sep = ""))
                 }
             }
@@ -177,7 +180,7 @@ setMethod("summary", signature = "SimMissing", definition = function(object) {
         cat("==========PLANNED MISSING DATA==========\n")
         cat("---------- Two-Method Design ----------\n")
         cat(paste("Proportion of the missing form:", object@twoMethod[2], "\n"))
-        cat(paste("Variables in the missing form:", paste(object@twoMethod[1], collapse = ", "), 
+        cat(paste("Variables in the missing form:", paste(object@twoMethod[1], collapse = ", "),
             "\n"))
     }
 })
@@ -185,9 +188,9 @@ setMethod("summary", signature = "SimMissing", definition = function(object) {
 setMethod("summary", signature = "SimDataDist", definition = function(object) {
     cat("DATA DISTRIBUTION OBJECT\n")
     cat(paste("The number of variables is", object@p, "\n"))
-    cat(paste("Keep means and variances of the original scales:", paste(object@keepScale, 
+    cat(paste("Keep means and variances of the original scales:", paste(object@keepScale,
         collapse = " / "), "\n"))
-    cat(paste("Reverse (mirror) distribution:", paste(object@reverse, collapse = " / "), 
+    cat(paste("Reverse (mirror) distribution:", paste(object@reverse, collapse = " / "),
         "\n"))
 	if(any(is.na(object@skewness))) {
 		cat("The list of distributions:\n")
@@ -201,18 +204,18 @@ setMethod("summary", signature = "SimDataDist", definition = function(object) {
 			show(object@copula)
 		}
 	} else {
-		cat(paste("Skewness:", paste(object@skewness, 
+		cat(paste("Skewness:", paste(object@skewness,
 			collapse = " / "), "\n"))
-		cat(paste("(Excessive) Kurtosis:", paste(object@kurtosis, 
-			collapse = " / "), "\n"))	
+		cat(paste("(Excessive) Kurtosis:", paste(object@kurtosis,
+			collapse = " / "), "\n"))
 	}
-}) 
+})
 
 # printIfNotNull: Provide basic summary of each object if that object is not
 # NULL. Mainly call from summary function from SimSet.c object.
 
 # \title{
-	# Provide basic summary of each object if that object is not NULL. 
+	# Provide basic summary of each object if that object is not NULL.
 # }
 # \description{
 	# Provide basic summary of each object if that object is not NULL. This function is mainly used in the \code{summary} function from the \code{linkS4class{SimSet}} object.
@@ -234,11 +237,11 @@ setMethod("summary", signature = "SimDataDist", definition = function(object) {
 
 printIfNotNull <- function(object, name = NULL) {
     if (!is.null(object)) {
-        if (!is.null(name)) 
+        if (!is.null(name))
             cat(name, "\n")
         summaryShort(object)
     }
-} 
+}
 
 cleanUsedFit <- function(txt, ...) {
 	arg <- list(...)

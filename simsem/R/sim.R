@@ -49,7 +49,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
 		} else if (is.lavaancall(generate)) {
 			lavaanGenerate <- TRUE
 		} else if (is(generate, "lavaan")) {
-			temp <- lavaan::parTable(generate)
+			temp <- parTable(generate)
 			temp$ustart <- temp$est
 			generate <- list(model = temp)
 			lavaanGenerate <- TRUE
@@ -84,7 +84,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
 	} else if (is.lavaancall(model)) {
 		lavaanAnalysis <- TRUE
 	} else if (is(model, "lavaan")) {
-		model <- list(model = lavaan::parTable(model))
+		model <- list(model = parTable(model))
 		lavaanAnalysis <- TRUE
 	} else if (is(model, "MxModel")) {
 		mxAnalysis <- TRUE
@@ -475,7 +475,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
     generate2$sample.nobs <- simConds[[1]][[2]]
     generate2$return.fit <- TRUE
     lavaanfit <- attr(do.call(lavaan::simulateData, generate2), "fit")
-    pt <- lavaan::parTable(lavaanfit)
+    pt <- parTable(lavaanfit)
     if (is.partable(generate$model)) pt <- generate$model
     stdpt <- lavaan::standardizedSolution(lavaanfit, remove.eq = FALSE,
                                           remove.ineq = FALSE, remove.def = FALSE)
@@ -889,12 +889,12 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
     ## If users provide their own data there may be a case with auxiliary variables and no missing object
     if (is(model, "function")) {
       if (stopOnError) {
-        out <- model(data)
+        out <- model(data, ...)
       } else if (silent) {
-        invisible(capture.output(suppressMessages(try(out <- model(data),
+        invisible(capture.output(suppressMessages(try(out <- model(data, ...),
                                                       silent = TRUE))))
       } else {
-        try(out <- model(data))
+        try(out <- model(data, ...))
       }
     } else if (is.lavaancall(model)) {
       model$data <- data
@@ -983,11 +983,11 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
     } else  if (is(out, "lavaan.mi")) {
       if (mean(sapply(out@convergence, "[[", "converged")) < miss@convergentCutoff) {
         converged <- 2L
-      } else if (mean(sapply(out@convergence, "[[", "SE")) < miss@convergentCutoff) {
+      } else if (mean(sapply(out@convergence, "[[", "SE"), na.rm = TRUE) < miss@convergentCutoff) {
         converged <- 3L
-      } else if (mean(sapply(out@convergence, "[[", "Heywood.lv")) < miss@convergentCutoff) {
+      } else if (mean(sapply(out@convergence, "[[", "Heywood.lv"), na.rm = TRUE) < miss@convergentCutoff) {
         converged <- 4L
-      } else if (mean(sapply(out@convergence, "[[", "Heywood.ov")) < miss@convergentCutoff) {
+      } else if (mean(sapply(out@convergence, "[[", "Heywood.ov"), na.rm = TRUE) < miss@convergentCutoff) {
         converged <- 5L
       } else converged <- 0L
     } else {
@@ -1069,7 +1069,7 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
     } else {
 
       if (is.null(citype)) citype <- formals(lavaan::parameterEstimates)$boot.ci.type
-      outpt <- lavaan::parTable(out)
+      outpt <- parTable(out)
       extraParamIndex <- outpt$op %in% c(">", "<", "==", ":=")
       index <- ((outpt$free != 0) & !(duplicated(outpt$free))) | extraParamIndex
 
@@ -1079,12 +1079,11 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
         result <- getMethod("summary", "lavaan.mi")(out, standardized = "std.all",
                                                     level = cilevel, fmi = TRUE,
                                                     add.attributes = FALSE)
+        outpt$se <- result$se
         stdse <- NULL
         if (converged %in% c(0L, 3:5)) {
           FMI1 <- result$fmi1[index]
           FMI2 <- result$fmi2[index]
-          names(FMI1) <- lab
-          names(FMI2) <- lab
         }
       } else {
         fit <- lavaan::fitMeasures(out)
@@ -1100,14 +1099,15 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
         FMI2 <- NULL
       }
 
+      changept <- changeDupLab(outpt)
+      lab <- lavaan::lav_partable_labels(lapply(changept, "[", changept$free > 0 | (outpt$user == 1 & outpt$start !=0 & outpt$se != 0)))
+
       coef <- result$est[index]
-      se <- out@Fit@se[index]
+      se <- result$se[index]
       std <- result$std.all[index]
       cilower <- result$ci.lower[index]
       ciupper <- result$ci.upper[index]
 
-      changept <- changeDupLab(outpt)
-      lab <- lavaan::lav_partable_labels(lapply(changept, "[", changept$free > 0 | (outpt$user == 1 & outpt$start !=0 & outpt$se != 0)))
       if (any(extraParamIndex)) {
         if (!is.lavaancall(model)) {
           lab <- c(lab, renameExtraParam(model@pt$lhs[extraParamIndex],
@@ -1122,10 +1122,11 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
       names(coef) <- lab
       names(se) <- lab
       names(std) <- lab
-      if (!(length(stdse) == 1L && is.na(stdse))) names(stdse) <- lab
+      if (!(length(stdse) == 1L && is.na(stdse)) && !is.null(stdse)) names(stdse) <- lab
       if (!is.null(cilower)) names(cilower) <- lab
       if (!is.null(ciupper)) names(ciupper) <- lab
       if (!is.null(FMI1)) names(FMI1) <- lab
+      if (!is.null(FMI2)) names(FMI2) <- lab
     }
   } else {
     if (is(model, "function")) {

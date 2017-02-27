@@ -1,6 +1,5 @@
 
 importFrom("methods", show, is, new, slot, getMethod)
-importFrom("lavaan", summary, anova, coef, cor2cov, lavInspect)
 importFrom("stats",
            vcov, cor, cov, var, sd, cov2cor, uniroot, nlminb,
            rnorm, runif, qnorm, qchisq, pchisq, quantile, glm, predict, fitted,
@@ -9,6 +8,8 @@ importFrom("utils",
            data, capture.output, write.table, combn)
 importFrom("graphics", hist, plot, contour, persp, par,
            abline, lines, points, barplot, legend)
+
+importFrom("lavaan", summary, anova, coef, cor2cov, lavInspect, parTable)
 
 exportClasses(SimMatrix,
 	SimVector,

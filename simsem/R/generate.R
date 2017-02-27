@@ -22,7 +22,7 @@ generate <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "
 		} else if (is.lavaancall(model)) {
 			# Intentionally leave it blank
 		} else if (is(model, "lavaan")) {
-			temp <- lavaan::parTable(model)
+			temp <- parTable(model)
 			temp$ustart <- temp$est
 			model <- list(model = temp)
 		} else {

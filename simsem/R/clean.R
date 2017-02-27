@@ -18,7 +18,7 @@
 	# The cleaned result objects
 # }
 
-clean <- function(..., improper = FALSE) {
+clean <- function(..., improper = TRUE) {
     object.l <- list(...)
 	paramOnly <- sapply(object.l, slot, name = "paramOnly")
 	if(all(!paramOnly)) {
@@ -61,7 +61,7 @@ clean <- function(..., improper = FALSE) {
 	# The cleaned result object
 # }
 
-cleanSimResult <- function(object, converged = NULL, improper = FALSE) {
+cleanSimResult <- function(object, converged = NULL, improper = TRUE) {
     if (is.null(converged)) {
 		targetRep <- 0
 		if(improper) targetRep <- c(0, 3:7)

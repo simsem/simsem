@@ -1139,7 +1139,7 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
     modelType <- NULL
     indLab <- NULL
     facLab <- NULL
-  PT <- lavaan::parTable(object)
+  PT <- parTable(object)
 	covLab <- unique(PT$lhs[PT$op == "~~" & PT$exo == 1])
 	if(length(covLab) == 0) covLab <- NULL
 
@@ -1158,7 +1158,7 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
     }
 
 	# Handle the equality constraints
-	pt <- lavaan::parTable(object)
+	pt <- parTable(object)
 	eqpos <- which(pt$op %in% ":=")
 	iseqposfromlavaan <- pt$lhs[eqpos] %in% pt$plabel & pt$rhs[eqpos] %in% pt$plabel
 	eqposfromlavaan <- eqpos[iseqposfromlavaan]

@@ -5,12 +5,12 @@
 # and standard error.
 
 summaryParam <- function(object, alpha = 0.05, std = FALSE, detail = FALSE,
-                         improper = FALSE, digits = NULL, matchParam = FALSE) {
+                         improper = TRUE, digits = NULL, matchParam = FALSE) {
   object <- clean(object, improper = improper)
   usedCoef <- object@coef
   usedSe <- object@se
   if (std) {
-    if (all(dim(object@stdCoef) == 1) && is.na(object@stdCoef))
+    if (length(object@stdCoef) == 0L)
       stop("The standardized coefficients cannot be summarized because there",
            " are no standardized coefficients in the object")
     usedCoef <- object@stdCoef
@@ -20,11 +20,12 @@ summaryParam <- function(object, alpha = 0.05, std = FALSE, detail = FALSE,
   real.se <- sapply(usedCoef, sd, na.rm = TRUE)
   result <- cbind(coef, real.se)
   colnames(result) <- c("Estimate Average", "Estimate SD")
-  crit <- qnorm(1 - alpha/2)
-  if (!all(is.na(usedSe))) {
+  ## 26 Feb 2017, Terry moved above if-block, as suggested by Minkko
     estimated.se <- colMeans(usedSe, na.rm = TRUE)
     estimated.se[estimated.se == 0] <- NA
-    z <- usedCoef/usedSe
+    crit <- qnorm(1 - alpha/2)
+  if (!all(is.na(usedSe))) {
+    z <- usedCoef / usedSe
     sig <- abs(z) > crit
     pow <- apply(sig, 2, mean, na.rm = TRUE)
     result <- cbind(result, "Average SE" = estimated.se, "Power (Not equal 0)" = pow)
@@ -41,8 +42,8 @@ summaryParam <- function(object, alpha = 0.05, std = FALSE, detail = FALSE,
       stdRealSE <- c(stdRealSE, temp)
       stdEstSE <- c(stdEstSE, temp)
     }
-    resultStd <- cbind(stdCoef, stdRealSE, stdEstSE)
-    colnames(resultStd) <- c("Std Est", "Std Est SD", "Std Ave SE")
+    resultStd <- cbind("Std Est" = stdCoef, "Std Est SD" = stdRealSE,
+                       "Std Ave SE" = stdEstSE)
     result <- cbind(result, resultStd[rownames(result),])
   }
 
@@ -105,10 +106,10 @@ summaryParam <- function(object, alpha = 0.05, std = FALSE, detail = FALSE,
         relative.bias.se <- NULL
         if (nrow(object@paramValue) == 1) {
           std.bias <- average.bias/real.se
-          relative.bias.se <- (estimated.se - real.se)/real.se
+          relative.bias.se <- (estimated.se - real.se) / real.se
         } else {
           std.bias <- average.bias/sd.bias
-          relative.bias.se <- (estimated.se - sd.bias)/sd.bias
+          relative.bias.se <- (estimated.se - sd.bias) / sd.bias
         }
         width <- upperBound - lowerBound
         average.width <- apply(width, 2, mean, na.rm = TRUE)
@@ -198,7 +199,7 @@ switchLavaanName <- function(name) {
 # summaryMisspec: This function will summarize the obtained fit indices and
 # generate a data frame.
 
-summaryMisspec <- function(object, improper = FALSE) {
+summaryMisspec <- function(object, improper = TRUE) {
   object <- clean(object, improper = improper)
   if (all(dim(object@misspecValue) == 0)) {
     stop("This object does not have any model misspecification.")
@@ -215,7 +216,7 @@ summaryMisspec <- function(object, improper = FALSE) {
 
 # summaryPopulation: Summarize population values behind data generation model
 
-summaryPopulation <- function(object, std = FALSE, improper = FALSE) {
+summaryPopulation <- function(object, std = FALSE, improper = TRUE) {
   object <- clean(object, improper = improper)
   paramValue <- object@paramValue
   if (std) {
@@ -243,7 +244,7 @@ summaryPopulation <- function(object, std = FALSE, improper = FALSE) {
 # summaryFit: This function will summarize the obtained fit indices and
 # generate a data frame.
 
-summaryFit <- function(object, alpha = NULL, improper = FALSE, usedFit = NULL) {
+summaryFit <- function(object, alpha = NULL, improper = TRUE, usedFit = NULL) {
   cleanObj <- clean(object, improper = improper)
   usedFit <- cleanUsedFit(usedFit, colnames(object@fit))
   condition <- c(length(unique(object@pmMCAR)) > 1, length(unique(object@pmMAR)) >
@@ -298,7 +299,7 @@ summaryFit <- function(object, alpha = NULL, improper = FALSE, usedFit = NULL) {
 # summaryMisspec: This function will summarize the obtained fit indices and
 # generate a data frame.
 
-summaryConverge <- function(object, std = FALSE, improper = FALSE) {
+summaryConverge <- function(object, std = FALSE, improper = TRUE) {
   result <- list()
   converged <- object@converged == 0
   numnonconverged <- sum(!converged)
@@ -493,11 +494,11 @@ setPopulation <- function(target, population) {
                                     sample.nobs = rep(200, max(population@pt$group)))
     names(popParam) <- c(names(coef(tempFit4Names)), extraParamName)
   } else if (is(population, "lavaan")) {
-    pt <- lavaan::partable(population)
+    pt <- parTable(population)
     popParam <- pt$est
     names(popParam) <- lavaan::lav_partable_labels(pt)
   } else if (is(population, "character")) {
-    pt <- lavaan::partable(lavaan::lavaan(population))
+    pt <- parTable(lavaan::lavaan(population))
     popParam <- pt$est
     names(popParam) <- lavaan::lav_partable_labels(pt)
   } else if (is(population, "list")) {
@@ -522,7 +523,7 @@ setPopulation <- function(target, population) {
 
 # getPopulation: Description: Extract the population value from an object
 
-getPopulation <- function(object, std = FALSE, improper = FALSE, nonconverged = FALSE) {
+getPopulation <- function(object, std = FALSE, improper = TRUE, nonconverged = FALSE) {
   toextract <- "param"
   if (std) toextract <- "stdparam"
   inspect(object, toextract, improper = improper, nonconverged = nonconverged)
@@ -530,7 +531,7 @@ getPopulation <- function(object, std = FALSE, improper = FALSE, nonconverged = 
 
 # getExtraOutput: Extract the extra output that users set in the 'outfun' argument
 
-getExtraOutput <- function(object, improper = FALSE, nonconverged = FALSE) {
+getExtraOutput <- function(object, improper = TRUE, nonconverged = FALSE) {
   targetRep <- 0
   if (improper) targetRep <- c(targetRep, 3:7)
   if (nonconverged) targetRep <- c(targetRep, 1:2)
@@ -542,15 +543,15 @@ getExtraOutput <- function(object, improper = FALSE, nonconverged = FALSE) {
 }
 
 setMethod("coef", "SimResult",
-          function(object, improper = FALSE, nonconverged = FALSE) {
+          function(object, improper = TRUE, nonconverged = FALSE) {
             inspect(object, "coef", improper = improper, nonconverged = nonconverged)
           })
 
 setGeneric("inspect",
-           function(object, what="coef", improper = FALSE, nonconverged = FALSE)
+           function(object, what="coef", improper = TRUE, nonconverged = FALSE)
              standardGeneric("inspect"))
 setMethod("inspect", "SimResult", function(object, what = "coef",
-                                           improper = FALSE, nonconverged = FALSE) {
+                                           improper = TRUE, nonconverged = FALSE) {
   targetRep <- 0
   if (improper) targetRep <- c(targetRep, 3:7)
   if (nonconverged) targetRep <- c(targetRep, 1:2)

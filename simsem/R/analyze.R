@@ -41,9 +41,9 @@ analyzeSimSem <- function(model, data, package = "lavaan",
   }
   if (!is.null(miss) && length(miss@package) != 0 && miss@package %in% c("Amelia", "mice")) {
     miArgs <- miss@args
-    if(miss@package == "Amelia") {
-      if(model@groupLab %in% colnames(data)) {
-        if(!is.null(miArgs$idvars)) {
+    if (miss@package == "Amelia") {
+      if (model@groupLab %in% colnames(data)) {
+        if (!is.null(miArgs$idvars)) {
           miArgs$idvars <- c(miArgs$idvars, model@groupLab)
         } else {
           miArgs <- c(miArgs, list(idvars = model@groupLab))
@@ -61,15 +61,16 @@ analyzeSimSem <- function(model, data, package = "lavaan",
       missing <- args$missing
       args$missing <- NULL
     }
+    model.type <- if (tolower(model@modelType) == "sem") "sem" else "cfa"
     if (!is.null(aux)) {
       if (is.numeric(aux)) aux <- colnames(data)[aux]
       attribute <- list(model=model@pt, aux = aux, data = data, group = groupLab,
-                        model.type = model@modelType, missing = missing, fun = "lavaan")
+                        model.type = model.type, missing = missing, fun = "lavaan")
       attribute <- c(attribute, args)
       Output <- do.call(semTools::auxiliary, attribute)
     } else {
       attribute <- list(model = model@pt, data = data, group = groupLab,
-                        model.type = model@modelType, missing = missing)
+                        model.type = model.type, missing = missing)
       attribute <- c(attribute, args)
       Output <- do.call(lavaan::lavaan, attribute)
     }
