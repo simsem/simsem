@@ -154,7 +154,7 @@ sim(nRep, model, n, generate = NULL, ..., rawData = NULL, miss = NULL, datafun=N
 	If \code{TRUE}, stop running the simulation when the error occurs during the data analysis on any replications.
 }
   \item{\dots}{ 
-	Additional arguments to be passed to lavaan.
+	Additional arguments to be passed to \code{\link[lavaan]{lavaan}}. See also \code{\link[lavaan]{lavOptions}}
 }
 }
 \details{

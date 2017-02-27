@@ -33,7 +33,7 @@ analyze(model, data, package="lavaan", miss=NULL, aux=NULL, group = NULL,
     A logical whether to the analysis model is a mixture model. This argument is applicable when \code{MxModel} is used in the \code{model} argument only.
 }
   \item{\dots}{ 
-	Additional arguments in the \code{\link[lavaan]{lavaan}} function
+	Additional arguments in the \code{\link[lavaan]{lavaan}} function. See also \code{\link[lavaan]{lavOptions}}
 }
 }
 \value{
