@@ -8,7 +8,7 @@
 Missing information imposing on the complete dataset
 }
 \section{Objects from the Class}{
-Objects can be created by \code{\link{miss}} function. 
+Objects can be created by \code{\link{miss}} function.
 }
 \section{Slots}{
   \describe{
@@ -23,16 +23,15 @@ Objects can be created by \code{\link{miss}} function.
 		planned missing data research design. }
 	\item{\code{prAttr}:}{Probability (or vector of probabilities) of an entire case being removed due to attrition at a given time point. See \code{\link{imposeMissing}} for further details.}
 	\item{\code{m}:}{The number of imputations. The default is 0 such that the full information maximum likelihood is used.}
-	\item{\code{chi}:}{The chi-square pooling method. See \code{\link[semTools]{runMI}} function for further details.}
-	\item{\code{package}:}{The package to be used in multiple imputation. The default value of this function is \code{"default"}. For the default option, if \code{m} is 0, the full information maximum likelihood is used. If \code{m} is greater than 0, the Amelia package is used.}
+	\item{\code{package}:}{The package to be used in multiple imputation. The default value of this function is \code{"default"}. For the default option, if \code{m} is 0, the full information maximum likelihood is used. If \code{m} is greater than 0, the \code{mice} package is used.}
 	\item{\code{convergentCutoff}:}{If the proportion of convergent results across imputations are greater than the specified value (the default is 80\%), the analysis on the dataset is considered as convergent. Otherwise, the analysis is considered as nonconvergent. This attribute is applied for multiple imputation only.}
     \item{\code{timePoints}:}{Number of timepoints items were measured over. For longitudinal data, planned missing designs will be implemented within each timepoint.}
-	\item{\code{ignoreCols}:}{The columns not imposed any missing values for any missing data patterns} 
+	\item{\code{ignoreCols}:}{The columns not imposed any missing values for any missing data patterns}
 	\item{\code{threshold}:}{The threshold of covariates that divide between the area to impose missing and the area not to impose missing. The default threshold is the mean of the covariate.}
 	\item{\code{covAsAux}:}{If \code{TRUE}, the covariate listed in the object will be used as auxiliary variables when putting in the model object. If \code{FALSE}, the covariate will be included in the analysis.}
 	\item{\code{logical}:}{A matrix of logical values (\code{TRUE/FALSE}). If a value in the dataset is corresponding to the \code{TRUE} in the logical matrix, the value will be missing.}
 	\item{\code{args}:}{A list of additional options to be passed to the multiple impuatation function in each package.}
-}  
+}
 }
 \section{Methods}{
 	\itemize{
@@ -42,7 +41,7 @@ Objects can be created by \code{\link{miss}} function.
 }
 \author{
 	Patrick Miller (University of Notre Dame; \email{pmille13@nd.edu})
-	Alexander M. Schoemann (East Carolina University; \email{schoemanna@ecu.edu})  
+	Alexander M. Schoemann (East Carolina University; \email{schoemanna@ecu.edu})
 	Kyle Lang (University of Kansas; \email{kylelang@ku.edu})
     Sunthud Pornprasertmanit (\email{psunthud@gmail.com})
 }
