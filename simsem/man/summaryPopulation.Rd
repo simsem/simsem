@@ -7,7 +7,7 @@
 	Summarize the population model used for data generation underlying a result object
 }
 \usage{
-summaryPopulation(object, std = FALSE, improper = FALSE)
+summaryPopulation(object, std = FALSE, improper = TRUE)
 }
 \arguments{
   \item{object}{

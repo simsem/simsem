@@ -7,7 +7,7 @@ Provide summary of the population misfit and misspecified-parameter values acros
 This function provides the summary of the population misfit and misspecified-parameter values across replications. The summary will be summarized for the convergent replications only.
 }
 \usage{
-summaryMisspec(object, improper = FALSE)
+summaryMisspec(object, improper = TRUE)
 }
 \arguments{
   \item{object}{

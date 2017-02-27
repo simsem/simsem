@@ -7,7 +7,7 @@ Provide a comparison between the characteristics of convergent replications and 
 This function provides a comparison between the characteristics of convergent replications and nonconvergent replications. The comparison includes sample size (if varying), percent missing completely at random (if varying), percent missing at random (if varying), parameter values, misspecified-parameter values (if applicable), and population misfit (if applicable).
 }
 \usage{
-summaryConverge(object, std = FALSE, improper = FALSE)
+summaryConverge(object, std = FALSE, improper = TRUE)
 }
 \arguments{
   \item{object}{

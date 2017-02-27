@@ -8,7 +8,7 @@
 }
 \usage{
 summaryParam(object, alpha = 0.05, std = FALSE, detail = FALSE, 
-    improper = FALSE, digits = NULL, matchParam = FALSE)
+    improper = TRUE, digits = NULL, matchParam = FALSE)
 }
 \arguments{
   \item{object}{

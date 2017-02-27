@@ -7,7 +7,7 @@
 This function will extract the data generation population model underlying a result object (\code{linkS4class{SimResult}}).
 }
 \usage{
-getPopulation(object, std = FALSE, improper = FALSE, nonconverged = FALSE)
+getPopulation(object, std = FALSE, improper = TRUE, nonconverged = FALSE)
 }
 \arguments{
   \item{object}{

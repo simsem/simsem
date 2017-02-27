@@ -45,8 +45,6 @@ analyze(model, data, package="lavaan", miss=NULL, aux=NULL, group = NULL,
 }
 \seealso{
 	Note that users can use functions provided by \code{lavaan} package (\code{\link[lavaan]{lavaan}}, \code{\link[lavaan]{cfa}}, \code{\link[lavaan]{sem}}, or \code{\link[lavaan]{growth}}) if they wish to analyze data by lavaan directly. 
-	
-	For the \code{OpenMx} result, users may request standardized measures and additional fit indices by the \code{\link[semTools]{standardizeMx}} and \code{\link[semTools]{fitMeasuresMx}} functions in the \code{semTools} package.
 }
 \examples{
 loading <- matrix(0, 6, 2)

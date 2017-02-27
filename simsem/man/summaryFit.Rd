@@ -7,7 +7,7 @@
 	This function will provide fit index cutoffs for values of alpha, and mean fit index values across all replications.
 }
 \usage{
-summaryFit(object, alpha = NULL, improper = FALSE, usedFit = NULL)
+summaryFit(object, alpha = NULL, improper = TRUE, usedFit = NULL)
 }
 \arguments{
   \item{object}{
