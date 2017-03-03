@@ -1132,9 +1132,9 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
     AL = NULL, MY = NULL, ME = NULL, KA = NULL, GA = NULL) {
     ngroups <- lavInspect(object, "ngroups")
     if (ngroups > 1L) {
-      name <- names(lavInspect(object, "coef")[[1]])
+      name <- names(lavInspect(object, "est")[[1]])
     } else {
-      name <- names(lavInspect(object, "coef"))
+      name <- names(lavInspect(object, "est"))
     }
     modelType <- NULL
     indLab <- NULL
@@ -1329,7 +1329,7 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
 		}
 
     } else {
-        est <- lavInspect(object, "coef")
+        est <- lavInspect(object, "est")
 		if(!is.null(covLab)) est <- reshuffleParamGroup(est, covLab, indLab, facLab, ngroups)
         free <- labelFree(lavInspect(object, "free"), object@Model@isSymmetric)
 		if(!is.null(covLab)) free <- reshuffleParamGroup(free, covLab, indLab, facLab, ngroups)
