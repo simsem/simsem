@@ -805,7 +805,7 @@ estmodel <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE
             } else {
                 if (!is.list(RPS))
                   RPS <- list(RPS)
-                RPS <- binds(RPS)
+                RPS <- lapply(RPS, binds)
                 if (!is.null(VPS))
                   if (is.list(VPS)) {
                     VPS <- lapply(VPS, bind)
@@ -909,7 +909,7 @@ estmodel <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE
             } else {
                 if (!is.list(RPS))
                   RPS <- list(RPS)
-                RPS <- binds(RPS)
+                RPS <- lapply(RPS, binds)
                 if (!is.null(VPS))
                   if (is.list(VPS)) {
                     VPS <- lapply(VPS, bind)
@@ -980,7 +980,7 @@ estmodel <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE
             } else {
                 if (!is.list(RPS))
                   RPS <- list(RPS)
-                RPS <- binds(RPS)
+                RPS <- lapply(RPS, binds)
                 if (!is.null(VPS))
                   if (is.list(VPS)) {
                     VPS <- lapply(VPS, bind)

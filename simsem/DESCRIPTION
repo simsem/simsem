@@ -1,7 +1,7 @@
 Package: simsem
 Type: Package
 Title: SIMulated Structural Equation Modeling
-Version: 0.5-14.901
+Version: 0.5-14.902
 Date: 2017-03-10
 Authors@R: c(person(given = c("Terrence","D."), family = "Jorgensen", role = c("aut", "cre"), email="TJorgensen314@gmail.com"),
         person(given = "Sunthud", family = "Pornprasertmanit", role = "aut", email = "psunthud@gmail.com"), 
