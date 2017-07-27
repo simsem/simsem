@@ -1,3 +1,6 @@
+### Sunthud Pornprasertmanit & Terrence D. Jorgensen (anyone else?)
+### Last updated: 27 July 2017
+### Primary engines for simulation.  Everything else is added details.
 
 sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
                 rawData = NULL, miss = NULL, datafun = NULL, lavaanfun = "lavaan",
@@ -385,7 +388,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
     }
   } else {
     numJobs <- length(simConds)
-
+browser()
     Result.l <- lapply(1:length(simConds), function(i, ...) {
       ## Write progress
       if (!silent) cat("Progress:", i, "/", numJobs, "\n")
@@ -1110,14 +1113,16 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
 
       if (any(extraParamIndex)) {
         if (!is.lavaancall(model)) {
-          lab <- c(lab, renameExtraParam(model@pt$lhs[extraParamIndex],
+          lab <- union(lab, renameExtraParam(model@pt$lhs[extraParamIndex],
                                          model@pt$op[extraParamIndex],
                                          model@pt$rhs[extraParamIndex], refpt = outpt))
         } else {
-          lab <- c(lab, renameExtraParam(outpt$lhs[extraParamIndex],
+          ## 27 July 2017: Terry changed c() to union() above and below to
+          ## prevent adding duplicates of := parameters
+          lab <- union(lab, renameExtraParam(outpt$lhs[extraParamIndex],
                                          outpt$op[extraParamIndex],
                                          outpt$rhs[extraParamIndex], refpt = outpt))
-        }
+           }
       }
       names(coef) <- lab
       names(se) <- lab
