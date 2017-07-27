@@ -388,7 +388,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
     }
   } else {
     numJobs <- length(simConds)
-browser()
+
     Result.l <- lapply(1:length(simConds), function(i, ...) {
       ## Write progress
       if (!silent) cat("Progress:", i, "/", numJobs, "\n")
