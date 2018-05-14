@@ -1,5 +1,5 @@
 ### Sunthud Pornprasertmanit & Terrence D. Jorgensen (anyone else?)
-### Last updated: 27 July 2017
+### Last updated: 14 May 2018
 ### Primary engines for simulation.  Everything else is added details.
 
 sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
@@ -17,7 +17,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
                 stopOnError = FALSE) {
   mc <- match.call()
 	## Update function. Takes results object. Or takes model object.
-	## Speed things: functions in c or c++ (maybe drawparam), look at sugar functions
+	## Speed things: functions in C or C++ (maybe drawparam), look at sugar functions
 	## Difference percent missing in different groups
   start.time0 <- start.time <- proc.time()[3]
   timing <- list()
@@ -1079,15 +1079,15 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
 
       ## lavaan.mi results come from different source than lavaan
       if (is(out, "lavaan.mi")) {
-        fit <- getMethod("anova", "lavaan.mi")(out, indices = "all")
+        fit <- semTools::fitMeasures(out)
         result <- getMethod("summary", "lavaan.mi")(out, standardized = "std.all",
                                                     level = cilevel, fmi = TRUE,
                                                     add.attributes = FALSE)
         outpt$se <- result$se
         stdse <- NULL
         if (converged %in% c(0L, 3:5)) {
-          FMI1 <- result$fmi1[index]
-          FMI2 <- result$fmi2[index]
+          FMI1 <- result$fmi[index] # result$fmi1[index]
+          FMI2 <- NULL              # result$fmi2[index]
         }
       } else {
         fit <- lavaan::fitMeasures(out)
