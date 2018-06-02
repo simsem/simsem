@@ -39,6 +39,9 @@ analyzeSimSem <- function(model, data, package = "lavaan",
     args$group <- NULL
     groupLab <- NULL
   }
+  ## TDJ 2 June 2016: lavaan >= 0.6-1 requires a ParTable to have "block"
+  if (is.null(model@pt$block)) model@pt$block <- model@pt$group
+
   if (!is.null(miss) && length(miss@package) != 0 && miss@package %in% c("Amelia", "mice")) {
     miArgs <- miss@args
     if (miss@package == "Amelia") {
