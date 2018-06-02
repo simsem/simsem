@@ -1,5 +1,5 @@
 ### pValueNonNested: Find p value for a nonnested model comparison
-### Last updated: 14 May 2018
+### Last updated: 3 June 2018
 
 pValueNonNested <- function(outMod1, outMod2, dat1Mod1, dat1Mod2, dat2Mod1, dat2Mod2,
     usedFit = NULL, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, df = 0, onetailed = FALSE) {
@@ -64,8 +64,8 @@ pValueNonNested <- function(outMod1, outMod2, dat1Mod1, dat1Mod2, dat2Mod1, dat2
 	  cutoff <- lavaan::fitMeasures(outMod1, fit.measures = usedFit) -
 	            lavaan::fitMeasures(outMod2, fit.measures = usedFit)
 	} else if (is(outMod1, "lavaan.mi") & is(outMod2, "lavaan.mi")) {
-	  cutoff <- semTools::fitMeasures(outMod1, fit.measures = usedFit) -
-	            semTools::fitMeasures(outMod2, fit.measures = usedFit)
+	  cutoff <- getMethod("fitMeasures", "lavaan.mi")(outMod1, fit.measures = usedFit) -
+	            getMethod("fitMeasures", "lavaan.mi")(outMod2, fit.measures = usedFit)
 	} else {
 		stop("The 'outMod1' and 'outMod2' arguments must be both lavaan(.mi) objects or MxModel objects.")
 	}

@@ -1,5 +1,5 @@
 ### pValueNested: Find p value for a nested model comparison
-### Last updated: 14 May 2018
+### Last updated: 2 June 2018
 
 pValueNested <- function(outNested, outParent, simNested, simParent, usedFit = NULL,
     nVal = NULL, pmMCARval = NULL, pmMARval = NULL, df = 0) {
@@ -52,8 +52,8 @@ pValueNested <- function(outNested, outParent, simNested, simParent, usedFit = N
 		cutoff <- lavaan::fitMeasures(outNested, fit.measures = usedFit) -
 		          lavaan::fitMeasures(outParent, fit.measures = usedFit)
 	} else if (is(outNested, "lavaan.mi") & is(outParent, "lavaan.mi")) {
-	  cutoff <- semTools::fitMeasures(outNested, fit.measures = usedFit) -
-	            semTools::fitMeasures(outParent, fit.measures = usedFit)
+	  cutoff <- getMethod("fitMeasures", "lavaan.mi")(outNested, fit.measures = usedFit) -
+	            getMethod("fitMeasures", "lavaan.mi")(outParent, fit.measures = usedFit)
 	} else {
 		stop("The 'outNested' and 'outParent' arguments must be both lavaan objects or MxModel objects.")
 	}

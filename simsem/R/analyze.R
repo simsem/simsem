@@ -1,3 +1,7 @@
+### Sunthud Pornprasertmanit & Terrence D. Jorgensen (anyone else?)
+### Last updated: 3 June 2018
+### functions to fit a model (lavaan, OpenMx, SimSem, or custom function) to data
+
 analyze <- function(model, data, package = "lavaan", miss = NULL,
                     aux = NULL, group = NULL, mxMixture = FALSE, ...) {
 	mc <- match.call()

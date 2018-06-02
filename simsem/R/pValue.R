@@ -1,5 +1,5 @@
 ### pValue: Find a p-value from an object
-### Last updated: 14 May 2018
+### Last updated: 3 June 2018
 
 pValueVector <- function(target,
     dist, revDirec = FALSE, x = NULL, xval = NULL, condCutoff = TRUE, df = 0) {
@@ -98,7 +98,7 @@ pValue <- function(target,
 	if (is(target, "lavaan")) {
 		cutoff <- lavaan::fitMeasures(target, fit.measures = usedFit)
 	} else if (is(target, "lavaan.mi")) {
-	  cutoff <- semTools::fitMeasures(target, fit.measures = usedFit)
+	  cutoff <- getMethod("fitMeasures", "lavaan.mi")(target, fit.measures = usedFit)
 	} else if (is(target, "MxModel")) {
 		cutoff <- fitMeasuresMx(target)[usedFit]
 	} else {

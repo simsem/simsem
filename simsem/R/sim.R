@@ -1,5 +1,5 @@
 ### Sunthud Pornprasertmanit & Terrence D. Jorgensen (anyone else?)
-### Last updated: 14 May 2018
+### Last updated: 3 June 2018
 ### Primary engines for simulation.  Everything else is added details.
 
 sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
@@ -1079,7 +1079,7 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
 
       ## lavaan.mi results come from different source than lavaan
       if (is(out, "lavaan.mi")) {
-        fit <- semTools::fitMeasures(out)
+        fit <- suppressMessages(getMethod("fitMeasures", "lavaan.mi")(out))
         result <- getMethod("summary", "lavaan.mi")(out, standardized = "std.all",
                                                     level = cilevel, fmi = TRUE,
                                                     add.attributes = FALSE)

@@ -1,3 +1,8 @@
+### Sunthud Pornprasertmanit & Terrence D. Jorgensen (anyone else?)
+### Last updated: 3 June 2018
+### functions for specifying an analysis model that utilizes lavaan
+
+
 ## Takes model specification matrices of type SimMatrix (or lists of these
 ## matrices for multiple groups).  Returns a SimSem object that contains
 ## templates for data generation and analyis.
@@ -1131,7 +1136,9 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
     RTE = NULL, BE = NULL, VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL,
     AL = NULL, MY = NULL, ME = NULL, KA = NULL, GA = NULL) {
     ngroups <- lavInspect(object, "ngroups")
-    if (ngroups > 1L) {
+    if (is(object, "lavaan.mi")) {
+      name <- unique(names(object@GLIST))
+    } else if (ngroups > 1L) {
       name <- names(lavInspect(object, "est")[[1]])
     } else {
       name <- names(lavInspect(object, "est"))
@@ -1173,7 +1180,7 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
 	# Put labels in it
 
     if (std) {
-        est <- standardize(object)
+        est <- standardize(object) # already takes lavaan.mi into account
 		if(!is.null(covLab)) est <- reshuffleParamGroup(est, covLab, indLab, facLab, ngroups)
         free <- lapply(est, function(x) {
 			if(!is.null(x)) {
@@ -1329,7 +1336,18 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
 		}
 
     } else {
-        est <- lavInspect(object, "est")
+      if (is(object, "lavaan.mi")) {
+        est <- object@GLIST
+        for (mm in 1:length(est)) dimnames(est[[mm]]) <- object@Model@dimNames[[mm]]
+        if (ngroups > 1L) {
+          GLIST <- est
+          est <- list()
+          for (gg in 1:ngroups) {
+            nMats <- length(GLIST) / ngroups
+            est[[gg]] <- GLIST[ (1:nMats) + (gg - 1L)*nMats ]
+          }
+        }
+      } else est <- lavInspect(object, "est")
 		if(!is.null(covLab)) est <- reshuffleParamGroup(est, covLab, indLab, facLab, ngroups)
         free <- labelFree(lavInspect(object, "free"), object@Model@isSymmetric)
 		if(!is.null(covLab)) free <- reshuffleParamGroup(free, covLab, indLab, facLab, ngroups)
@@ -1506,7 +1524,8 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
 		tempcov <- matrix(rnorm(100), ncol = ncol(KA[[1]]@free))
 		colnames(tempcov) <- covLab
 	}
-	tryCatch(draw(result, covData = tempcov), error = function(e) print("The regression matrix is not recursive. Simsem template does not support non-recursive matrix."))
+	tryCatch(draw(result, covData = tempcov),
+	         error = function(e) print("The regression matrix is not recursive. Simsem template does not support non-recursive matrix."))
     return(result)
 }
 
@@ -1534,24 +1553,29 @@ labelFree <- function(free, symmetric) {
 ## taken shamelessly from param.value in lavaan.
 standardize <- function(object) {
 
+  if (is(object, "lavaan.mi")) {
+    GLIST <- object@GLIST
+    est.std <- getMethod("summary", "lavaan.mi")(object, standardized = "std.all",
+                                                 add.attributes = FALSE)$std.all
+  } else {
     GLIST <- object@Model@GLIST
     est.std <- lavaan::standardizedSolution(object)$est.std
+  }
 
-    for (mm in 1:length(GLIST)) {
-        ## labels
-        dimnames(GLIST[[mm]]) <- object@Model@dimNames[[mm]]
+  for (mm in 1:length(GLIST)) {
+    ## labels
+    dimnames(GLIST[[mm]]) <- object@Model@dimNames[[mm]]
 
-        ## fill in starting values
-        m.user.idx <- object@Model@m.user.idx[[mm]]
-        x.user.idx <- object@Model@x.user.idx[[mm]]
-        GLIST[[mm]][m.user.idx] <- est.std[x.user.idx]
+    ## fill in starting values
+    m.user.idx <- object@Model@m.user.idx[[mm]]
+    x.user.idx <- object@Model@x.user.idx[[mm]]
+    GLIST[[mm]][m.user.idx] <- est.std[x.user.idx]
 
-        ## class
-        class(GLIST[[mm]]) <- c("matrix")
+    ## set class
+    class(GLIST[[mm]]) <- c("matrix")
+  }
 
-
-    }
-    GLIST
+  GLIST
 }
 
 reshuffleParamGroup <- function(set, covLab, indLab, facLab, ngroups) {
