@@ -33,7 +33,7 @@ bindDist(margins = NULL, ..., p = NULL, keepScale = TRUE, reverse = FALSE,
 	A vector of skewness of each variable. The Vale & Maurelli (1983) method is used in data generation.
 }
   \item{kurtosis}{
-	A vector of (excessive) skewness of each variable. The Vale & Maurelli (1983) method is used in data generation.
+	A vector of (excessive) kurtosis of each variable. The Vale & Maurelli (1983) method is used in data generation.
 }
 }
 \value{
