@@ -76,6 +76,7 @@ createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist 
               }
               else{
                 fac <-mvrnorm(n, usedParam$AL, usedParam$PS, empirical = empirical)
+                if (n == 1) fac <- rbind(fac, deparse.level = 0)
               }
 				if(!is.null(covData)) {
 					latentResidualScore <- fac
@@ -89,6 +90,7 @@ createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist 
 				}
 				else{
 				  errorScore <- mvrnorm(n, usedParam$TY, usedParam$TE, empirical = empirical)
+				  if (n == 1) errorScore <- rbind(errorScore, deparse.level = 0)
 				}
 
 				measurementErrorScore <- errorScore
@@ -110,6 +112,7 @@ createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist 
                 } else{
                   fac <-mvrnorm(n, usedParam2$AL[iv],
                                 usedParam2$PS[iv, iv], empirical = empirical)
+                  if (n == 1) fac <- rbind(fac, deparse.level = 0)
                 }
 				if(!is.null(covData)) {
 					latentResidualScore <- fac
@@ -128,6 +131,7 @@ createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist 
                   else{
                     res <- mvrnorm(n, usedParam2$AL[dv],
                                    usedParam2$PS[dv, dv], empirical = empirical)
+                    if (n == 1) res <- rbind(res, deparse.level = 0)
                   }
 				  latentResidualScore <- cbind(latentResidualScore, res)
                   new <- pred + res
@@ -149,9 +153,9 @@ createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist 
 
                   if(!is.null(errorDist)){
                     errorScore <- dataGen(errorDist, n, usedParam2$TY, usedParam2$TE, empirical = empirical)
-                  }
-                  else{
+                  } else {
                     errorScore <- mvrnorm(n, usedParam2$TY, usedParam2$TE, empirical = empirical)
+                    if (n == 1) errorScore <- rbind(errorScore, deparse.level = 0)
                   }
 				  measurementErrorScore <- errorScore
                   Data <- trueScore + errorScore
@@ -183,6 +187,7 @@ createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist 
 					Data <- dataGen(indDist, n, macs$M, macs$CM, empirical = empirical)
 				} else {
 					Data <- mvrnorm(n, macs$M, macs$CM, empirical = empirical)
+					if (n == 1) Data <- rbind(Data, deparse.level = 0)
 				}
 			} else {
 				macs <- createImpliedConditionalMACS(usedParam, covData)
@@ -279,6 +284,7 @@ dataGen <- function(dataDist, n, m, cm, empirical = FALSE) {
             Data <- scale(Data)
             Data[is.na(Data)] <- 0
             fakeDat <- mvrnorm(n, m, cm, empirical = empirical)
+            if (n == 1) fakeDat <- rbind(fakeDat, deparse.level = 0)
             fakeMean <- apply(fakeDat, 2, mean)
             fakeSD <- apply(fakeDat, 2, sd)
             Data <- t(apply(Data, 1, function(y, m, s) {
@@ -289,6 +295,7 @@ dataGen <- function(dataDist, n, m, cm, empirical = FALSE) {
             Data <- t(Data)
     } else {
         Data <- mvrnorm(n, m, cm, empirical = empirical)
+        if (n == 1) Data <- rbind(Data, deparse.level = 0)
     }
     return(Data)
 }
