@@ -9,7 +9,7 @@ importFrom("utils",
 importFrom("graphics", hist, plot, contour, persp, par,
            abline, lines, points, barplot, legend)
 
-importFrom("lavaan", summary, anova, coef, cor2cov, lavInspect, parTable)
+importFrom("lavaan", summary, anova, coef, cor2cov, lavInspect, lavTech, parTable)
 
 exportClasses(SimMatrix,
 	SimVector,
