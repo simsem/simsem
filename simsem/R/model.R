@@ -1,5 +1,5 @@
 ### Sunthud Pornprasertmanit & Terrence D. Jorgensen (anyone else?)
-### Last updated: 3 June 2018
+### Last updated: 6 August 2019
 ### functions for specifying an analysis model that utilizes lavaan
 
 
@@ -1188,7 +1188,7 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
 			}
             x
         })
-        freeUnstd <- labelFree(lavInspect(object, "free"), object@Model@isSymmetric)
+        freeUnstd <- labelFree(lavTech(object, "free"), object@Model@isSymmetric)
 		if(!is.null(covLab)) freeUnstd <- reshuffleParamGroup(freeUnstd, covLab, indLab, facLab, ngroups)
         if (!is.null(PS))
             stop("Misspecification is not allowed in PS if 'std' is TRUE.")
@@ -1347,9 +1347,9 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
             est[[gg]] <- GLIST[ (1:nMats) + (gg - 1L)*nMats ]
           }
         }
-      } else est <- lavInspect(object, "est")
+      } else est <- lavTech(object, "est")
 		if(!is.null(covLab)) est <- reshuffleParamGroup(est, covLab, indLab, facLab, ngroups)
-        free <- labelFree(lavInspect(object, "free"), object@Model@isSymmetric)
+        free <- labelFree(lavTech(object, "free"), object@Model@isSymmetric)
 		if(!is.null(covLab)) free <- reshuffleParamGroup(free, covLab, indLab, facLab, ngroups)
         if (modelType == "path") {
             set1 <- lapply(free[names(free) == "beta"], function(x) findRecursiveSet(x)[[1]])
