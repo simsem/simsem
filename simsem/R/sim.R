@@ -1,5 +1,5 @@
 ### Sunthud Pornprasertmanit & Terrence D. Jorgensen (anyone else?)
-### Last updated: 3 June 2018
+### Last updated: 8 August 2019
 ### Primary engines for simulation.  Everything else is added details.
 
 sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
@@ -1358,7 +1358,7 @@ reduceMisspecSet <- function(misspecSet, latent, indLab = NULL, facLab = NULL, c
             temp <- c(temp, param)
         }
 
-		if(ngroups > 1) names(temp) <- paste0(g, ".", names(temp))
+		if(ngroups > 1 && length(names(temp))) names(temp) <- paste0(g, ".", names(temp))
 		final <- c(final, temp)
 	}
     final
