@@ -1602,8 +1602,8 @@ parsePopulation <- function(paramSet, draws, group = 1, std = FALSE, covData = N
 }
 
 is.partable <- function(object) {
-  ALLNAMES <- c("id","lhs","op","rhs","user","group","free","ustart","exo",
-                "label","plabel","start","est","se","eq.id","unco")
+  ALLNAMES <- c("id","lhs","op","rhs","user","block","group","level","free",
+                "ustart","exo","label","plabel","start","est","se","eq.id","unco")
   # leave eq.id and unco for reverse comptability.
   ## 14 April 2016:  Terry added new names "est" and "se"
 	is.list(object) && all(names(object) %in% ALLNAMES)
