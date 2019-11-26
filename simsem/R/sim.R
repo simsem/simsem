@@ -1,5 +1,5 @@
 ### Sunthud Pornprasertmanit & Terrence D. Jorgensen (anyone else?)
-### Last updated: 8 August 2019
+### Last updated: 26 November 2019
 ### Primary engines for simulation.  Everything else is added details.
 
 sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
@@ -47,7 +47,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
 			generate <- list(model = generate)
 			lavaanGenerate <- TRUE
 		} else if (is.partable(generate)) {
-			generate$ustart <- generate$start <- generate$est
+			generate$ustart <- generate$start <- generate$est # TDJ added 26 Nov 2019
 			generate <- list(model = generate)
 			lavaanGenerate <- TRUE
 		} else if (is.lavaancall(generate)) {
@@ -79,6 +79,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
 	lavaanAnalysis <- FALSE
 	mxAnalysis <- FALSE
 	functionAnalysis <- FALSE
+	.om. <- model # TDJ 29 Nov 2019: save original argument, in case needed for generate=NULL
 	if (is.character(model)) {
 		model <- list(model = model)
 		lavaanAnalysis <- TRUE
@@ -105,6 +106,24 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
 	if (lavaanAnalysis) {
 		model <- c(model, list(...))
 		if (!("group" %in% names(model)) & "group" %in% names(mc)) model$group <- group
+
+		## TDJ addition (26 Nov 2019):
+		if (is.null(generate)) {
+		  lavaanGenerate <- TRUE
+		  generate <- .om.
+		  ## scroll through options again
+		  if (is.character(generate)) {
+		    generate <- list(model = generate)
+		  } else if (is.partable(generate)) {
+		    generate$ustart <- generate$start <- generate$est
+		    generate <- list(model = generate)
+		  } else if (is(generate, "lavaan")) {
+		    temp <- parTable(generate)
+		    temp$ustart <- temp$start <- temp$est
+		    generate <- list(model = temp)
+		  }
+		}
+		## end TDJ addition
 	}
 
 	if (mxAnalysis) {
