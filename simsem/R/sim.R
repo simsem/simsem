@@ -47,13 +47,14 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
 			generate <- list(model = generate)
 			lavaanGenerate <- TRUE
 		} else if (is.partable(generate)) {
+			generate$ustart <- generate$start <- generate$est
 			generate <- list(model = generate)
 			lavaanGenerate <- TRUE
 		} else if (is.lavaancall(generate)) {
 			lavaanGenerate <- TRUE
 		} else if (is(generate, "lavaan")) {
 			temp <- parTable(generate)
-			temp$ustart <- temp$est
+			temp$ustart <- temp$start <- temp$est
 			generate <- list(model = temp)
 			lavaanGenerate <- TRUE
 		} else if (is(generate, "MxModel")) {
