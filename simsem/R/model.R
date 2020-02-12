@@ -1,5 +1,5 @@
 ### Sunthud Pornprasertmanit & Terrence D. Jorgensen (anyone else?)
-### Last updated: 6 August 2019
+### Last updated: 12 February 2020
 ### functions for specifying an analysis model that utilizes lavaan
 
 
@@ -571,7 +571,6 @@ parseFree <- function(simDat, group, pt, op, lhs = NULL, rhs = NULL,
     }
 
     id <- startId:(startId + (numElem) - 1)
-    op <- rep(op, length(id))
     user <- rep(0, numElem)
     group <- rep(group, numElem)
     free <- freeIdx(freeDat, start = startFree, symm = (op == "~~"))
@@ -585,9 +584,12 @@ parseFree <- function(simDat, group, pt, op, lhs = NULL, rhs = NULL,
     label <- names(eq.id)
     eq.id <- as.vector(eq.id)
     unco <- uncoIdx(freeDat, start = startUnco, symm = (op == "~~"))
-    return(list(id = id, lhs = as.character(lhs), op = as.character(op), rhs = as.character(rhs),
-        user = user, group = as.integer(group), free = as.integer(free), ustart = ustart,
-        exo = exo, eq.id = eq.id, label = as.character(label), unco = as.integer(unco)))
+    return(list(id = id, lhs = as.character(lhs),
+                op = as.character(rep(op, length(id))),
+                rhs = as.character(rhs),
+                user = user, group = as.integer(group), free = as.integer(free),
+                ustart = ustart, exo = exo, eq.id = eq.id,
+                label = as.character(label), unco = as.integer(unco)))
 }
 
 ## Calculates the indices of free parameters by lavaan rules.  1. Each unique
@@ -1734,8 +1736,7 @@ attachConPt <- function(pt, con) {
 }
 
 patMerge <- function (pt1 = NULL, pt2 = NULL, remove.duplicated = FALSE,
-    fromLast = FALSE, warn = TRUE)
-{
+                      fromLast = FALSE, warn = TRUE) {
     pt1 <- as.data.frame(pt1, stringsAsFactors = FALSE)
     pt2 <- as.data.frame(pt2, stringsAsFactors = FALSE)
     stopifnot(!is.null(pt1$lhs), !is.null(pt1$op), !is.null(pt1$rhs),
