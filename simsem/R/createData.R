@@ -42,7 +42,7 @@ createData <- function(paramSet, n, indDist = NULL, sequential = FALSE, facDist 
 
     Data <- NULL
 	ExtraData <- NULL
-    param <- paramSet$param
+    param <- paramSet$param #FIXME: Should this be paramSet[[1]]$param? check last line of /inst/tests/test_drawParam.R
     usedParam <- NULL
     if (!is.null(paramSet$misspec)) {
         usedParam <- paramSet$misspec

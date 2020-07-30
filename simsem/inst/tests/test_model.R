@@ -1,7 +1,5 @@
-source("../../R/model.R")
-source("../../R/AllClass.R")
-source("../../R/bind.R")
-library(lavaan)
+library(simsem)
+library(testthat)
 
 
 ## Needed tests:
@@ -10,7 +8,7 @@ library(lavaan)
 
 
 
-context("CFA")
+#context("CFA")
 
 loading <- matrix(0, 6, 2)
 loading[1:3, 1] <- NA
@@ -27,8 +25,7 @@ RTE <- bind(error.cor,1,symmetric=TRUE)
 
 # Needs model type
 expect_error(model(LY=LY,RPS=RPS,RTE=RTE))
-cfat <- model(LY=LY,RPS=RPS,RTE=RTE,modelType="CFA",smartStart=TRUE)
-cfat <- model(LY=LY,RPS=RPS,RTE=RTE,modelType="CFA",smartStart=FALSE) #doesn't make much difference for easy models...
+cfat <- model(LY=LY,RPS=RPS,RTE=RTE,modelType="CFA")
 
 ## # a useful test data structure
  paramSet <- list(LY=LY,RPS=RPS,PS=NULL,TE=NULL,RTE=RTE,BE=NULL,VTE=NULL,VY=NULL,
@@ -38,7 +35,7 @@ cfat <- model(LY=LY,RPS=RPS,RTE=RTE,modelType="CFA",smartStart=FALSE) #doesn't m
 ##                  VPS=NULL,TY=NULL,AL=NULL,MY=NULL,ME=NULL)
 
 
-context("CFA2")
+#context("CFA2")
 
 loading <- matrix(0, 9, 3)
 loading[1:3, 1] <- c(1, NA, NA)
@@ -63,7 +60,7 @@ TE <- bind(errorCov, errorCovVal, symmetric=TRUE)
 AL <- bind(rep(NA, 3), 0)
 TY <- bind(c(0, NA, NA, 0, NA, NA, 0, NA, NA), 0)
 
-context("Path")
+#context("Path")
 
 path.BE <- matrix(0, 4, 4)
 path.BE[3, 1:2] <- NA
@@ -80,7 +77,7 @@ RPS <- bind(residual.error, "rnorm(1,0.3,0.1)", symmetric=TRUE)
 ME <- bind(rep(NA, 4), 0)
 
 
-context("SEM")
+#context("SEM")
 
 loading <- matrix(0, 8, 3)
 loading[1:3, 1] <- NA
@@ -107,7 +104,7 @@ BE <- bind(path, path.start)
 
 expect_error(model(LY=cfa$LY, RPS=cfa$RPS, RTE=cfa$RTE))
 
-context("Lavaan Example")
+#context("Lavaan Example")
 
 loading <- matrix(0,9,3)
 loading[2:3,1] <- NA
@@ -122,12 +119,14 @@ factor.cor <- diag(3)
 diag(factor.cor) <- NA
 factor.cor[lower.tri(factor.cor)] <- factor.cor[upper.tri(factor.cor)] <- NA
 RPS <- bind(factor.cor,symmetric=TRUE)
+VE <- bind(rep(NA, 3), rep(1, 3))
 
 rte <- diag(9)
 diag(rte) <- NA
 RTE <- bind(rte, symmetric=TRUE)
 
-lavtemp <- model(LY=LY,RPS=RPS,RTE=RTE,modelType="CFA")
+lavtemp <- model(LY=LY, RPS=RPS, RTE=RTE, VE=VE, modelType="CFA",
+                 facLab = paste0("y", 1:3), indLab = paste0("x",1:9))
 
 fit1 <- lavaan(lavtemp@pt,data=HolzingerSwineford1939)
 est1 <- parameterEstimates(fit1)[,1:5]
@@ -137,19 +136,9 @@ HS.model <- '
   y1  =~ x1 + x2 + x3
   y2 =~ x4 + x5 + x6
   y3   =~ x7 + x8 + x9
-  x1 ~ 1
-  x2 ~ 1
-  x3 ~ 1
-  x4 ~ 1
-  x5 ~ 1
-  x6 ~ 1
-  x7 ~ 1
-  x8 ~ 1
-  x9 ~ 1'
+'
 
-fit <- lavaan(HS.model, data=HolzingerSwineford1939,
-              auto.var=TRUE, auto.fix.first=TRUE,
-              auto.cov.lv.x=TRUE)
+fit <- cfa(HS.model, data=HolzingerSwineford1939, meanstructure = TRUE)
 
 # Match up parameter estimates
 est <- parameterEstimates(fit)[,1:5]

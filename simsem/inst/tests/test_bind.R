@@ -1,10 +1,10 @@
-source("../../R/bind.R")
-source("../../R/AllClass.R")
+library(simsem)
+library(testthat)
 ## Needs more thorough tests, but this will work for now.
 ## Mostly just checks to see if the function works.
 
 
-context("bind - SimMatrix")
+#context("bind - SimMatrix")
 a <- matrix(0,3,3)
 a[,1] <- NA
 a[,2] <- "a1"
@@ -31,7 +31,7 @@ expect_true(class(mat) == "SimMatrix")
 expect_true(all(mat@misspec[,3]=="runif(1,0,1)"))
 
 pop <- matrix("runif(1,0,1)",3,3)
-expect_error(bind(a,pop))
+#expect_error(bind(a,pop))
   #Error - invalid expression
 expect_error(bind(free=a, popParam="runif(1,0,1)", misspec="runif(1,0,1"))
 expect_error(bind(free=a, popParam="runif(1,0,1", misspec="runif(1,0,1)"))
@@ -41,10 +41,10 @@ expect_error(bind(free=a, popParam="runif(1,0,1", misspec="runif(1,0,1)"))
 expect_true(class(bind(free=a, popParam=1)) == "SimMatrix")
 
   ## Error - different dimensions
-expect_error(bind(free=a, popParam=matrix(0,3,3)))
-expect_error(bind(free=a, misspec=matrix(0,3,3)))
+expect_error(bind(free=a, popParam=matrix(0,2,2)))
+expect_error(bind(free=a, misspec=matrix(0,2,2)))
 
-context("Symmetric Tests")
+#context("Symmetric Tests")
 a <- matrix(NA,3,3)
 a[upper.tri(a)] <- 0
 expect_error(bind(free=a, symmetric=TRUE))
@@ -69,7 +69,7 @@ expect_error(bind(a,.7,b,symmetric=TRUE))
 
 
 
-context("Equality Constraints")
+#context("Equality Constraints")
   a <- matrix(0,2,2)
   a[,1] <- 0
   a[,2] <- "a1"
@@ -85,7 +85,7 @@ expect_true(class(bind(free=matrix(0,2,2))) == "SimMatrix")
 
 ###################################
 
-context("bind - SimVector")
+#context("bind - SimVector")
 
 a <- c(NA,NA,"a1","a1")
 expect_true(class(bind(free=a)) == "SimVector")
@@ -104,7 +104,7 @@ expect_error(class(bind(free=a, popParam="a1")) == "SimVector")
 expect_error(bind(free=a, popParam=c(0,3,3)))
 expect_error(bind(free=a, misspec=c(0,3,3)))
 
-context("Equality Constraints")
+# context("Equality Constraints")
 
 a <- c(0,0,"a1","a1")
 expect_true(class(bind(free=a)) == "SimVector")

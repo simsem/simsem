@@ -1,14 +1,5 @@
-source("../../R/AllClass.R")
-source("../../R/model.R")
-source("../../R/drawParam.R")
-source("../../R/bind.R")
-source("../../R/find.R")
-source("../../R/validate.R")
-source("../../R/createData.R")
-source("../../R/simDist-constructor.R")
-source("../../R/generate.R")
-source("../../R/analyze.R")
-
+library(simsem)
+library(testthat)
 ## Tests that check correct calculated parameter values?
 ## Tests that check matrices correctly reduced?
 ## - Check sg for all model Types
@@ -18,7 +9,7 @@ source("../../R/analyze.R")
 ## So far: examples to show that combinations of arguments work. Very little assurance of correctness.
 
 cfaT <- function() {
-  
+
   loading <- matrix(0, 6, 2)
   loading[1:3, 1] <- NA
   loading[4:5, 2] <- "a1"
@@ -83,7 +74,7 @@ path <- function() {
   RPS <- bind(residual.error, "rnorm(1,0.3,0.1)",symmetric=TRUE)
 
   ME <- bind(rep(NA, 4), 0)
-  
+
   return(list(BE=BE,RPS=RPS,ME=ME))
 }
                                         # SEM
@@ -113,7 +104,7 @@ sem <- function() {
   path.start[3, 2] <- "runif(1,0.3,0.5)"
   BE <- bind(path, path.start)
 
-  
+
   return(list(LY=LY,RTE=RTE,RPS=RPS,BE=BE))
 }
 
@@ -137,7 +128,7 @@ holz <- function() {
   RTE <- bind(rte,symmetric=TRUE)
 
   template <- model(LY=LY,RPS=RPS,RTE=RTE,modelType="CFA")
-  
+
   fit <- lavaan(template@pt,data=HolzingerSwineford1939)
 }
 
@@ -161,62 +152,60 @@ tcfamg <- model(LY=c(cfa$LY,cfa$LY2),RPS=cfa$RPS,RTE=cfa$RTE, modelType="CFA")
 tcfamg2 <- model(LY=list(cfa$LY,cfa$LY),RPS=list(cfa$RPS,cfa$RPS),RTE=cfa$RTE, modelType="CFA")
 
 ## tcf
-tcfa2 <- model(LY=cfa2$LY,PS=cfa2$PS,TE=cfa2$TE,AL=cfa2$AL,TY=cfa2$TY, modelType="CFA") 
+tcfa2 <- model(LY=cfa2$LY,PS=cfa2$PS,TE=cfa2$TE,AL=cfa2$AL,TY=cfa2$TY, modelType="CFA")
 tpath <- model(BE=path$BE, RPS=path$RPS, ME=path$ME, modelType="Path")
 tsem <- model(LY=sem$LY, RTE=sem$RTE, RPS=sem$RPS, BE=sem$BE, modelType="SEM")
 
 
-## drawParam(tcfa)
-## drawParam(tcfa2)
-## drawParam(tpath)
-## drawParam(tsem)
+## simsem:::drawParam(tcfa)
+## simsem:::drawParam(tcfa2)
+## simsem:::drawParam(tpath)
+## simsem:::drawParam(tsem)
 
-context("multiple group")
-drawParam(tcfamg@dgen)
+#context("multiple group")
+simsem:::drawParam(tcfamg@dgen)
 # Options with multiple group that actually work
-p1 <- drawParam(tcfamg@dgen,maxDraw=20,numFree=max(tcfamg@pt$free))
-p2 <- drawParam(tcfamg@dgen,maxDraw=20,numFree=max(tcfamg@pt$free),misfitBounds=c(.0001,.01))
-expect_error(p3 <- drawParam(tcfamg@dgen,maxDraw=3,numFree=max(tcfamg@pt$free),misfitBounds=c(.0001,.01),misfitType="rmsea"))
-p4 <- drawParam(tcfamg@dgen,maxDraw=3,numFree=max(tcfamg@pt$free),misfitBounds=c(.01,.03),misfitType="rmsea")
-p5 <- drawParam(tcfamg@dgen,maxDraw=3,numFree=max(tcfamg@pt$free),misfitBounds=c(.0001,.01),misfitType="srmr")
-p6 <- drawParam(tcfamg@dgen,maxDraw=3,numFree=max(tcfamg@pt$free),misfitBounds=c(.0001,.01),averageNumMisspec=TRUE)
-p7 <- drawParam(tcfamg@dgen,maxDraw=3,numFree=max(tcfamg@pt$free),optMisfit="max",optDraws=3)
-p8 <- drawParam(tcfamg@dgen,maxDraw=3,numFree=max(tcfamg@pt$free),optMisfit="min",optDraws=3)
-p9 <- drawParam(tcfamg@dgen,maxDraw=3,numFree=max(tcfamg@pt$free),optMisfit="min",optDraws=20,misfitType="rmsea")
-p10 <- drawParam(tcfamg@dgen,maxDraw=3,numFree=max(tcfamg@pt$free),optMisfit="max",optDraws=20,misfitType="rmsea")
-p11 <- drawParam(tcfamg@dgen,maxDraw=3,numFree=max(tcfamg@pt$free),optMisfit="max",optDraws=20,misfitType="srmr")
-expect_error(p12 <- drawParam(tcfamg@dgen,maxDraw=2,numFree=max(tcfamg@pt$free),misfitBounds=c(.05,.08),optMisfit="max",optDraws=2,misfitType="rmsea"))
-expect_error(p13 <- drawParam(tcfamg@dgen,maxDraw=5,numFree=max(tcfamg@pt$free),misfitBounds=c(.0001,.0005),optMisfit="max",optDraws=20,misfitType="f0"))
-p14 <- drawParam(tcfamg@dgen,maxDraw=5,numFree=max(tcfamg@pt$free),misfitBounds=c(.0001,.001),averageNumMisspec=TRUE,optMisfit="max",optDraws=20)
+p1 <- simsem:::drawParam(tcfamg@dgen,maxDraw=20,numFree=max(tcfamg@pt$free))
+p2 <- simsem:::drawParam(tcfamg@dgen,maxDraw=20,numFree=max(tcfamg@pt$free),misfitBounds=c(.0001,.01))
+expect_error(p3 <- simsem:::drawParam(tcfamg@dgen,maxDraw=3,numFree=max(tcfamg@pt$free),misfitBounds=c(.0001,.01),misfitType="rmsea"))
+p4 <- simsem:::drawParam(tcfamg@dgen,maxDraw=3,numFree=max(tcfamg@pt$free),misfitBounds=c(.01,.03),misfitType="rmsea")
+p5 <- simsem:::drawParam(tcfamg@dgen,maxDraw=3,numFree=max(tcfamg@pt$free),misfitBounds=c(.0001,.01),misfitType="srmr")
+p6 <- simsem:::drawParam(tcfamg@dgen,maxDraw=3,numFree=max(tcfamg@pt$free),misfitBounds=c(.0001,.01),averageNumMisspec=TRUE)
+p7 <- simsem:::drawParam(tcfamg@dgen,maxDraw=3,numFree=max(tcfamg@pt$free),optMisfit="max",optDraws=3)
+p8 <- simsem:::drawParam(tcfamg@dgen,maxDraw=3,numFree=max(tcfamg@pt$free),optMisfit="min",optDraws=3)
+p9 <- simsem:::drawParam(tcfamg@dgen,maxDraw=3,numFree=max(tcfamg@pt$free),optMisfit="min",optDraws=20,misfitType="rmsea")
+p10 <- simsem:::drawParam(tcfamg@dgen,maxDraw=3,numFree=max(tcfamg@pt$free),optMisfit="max",optDraws=20,misfitType="rmsea")
+p11 <- simsem:::drawParam(tcfamg@dgen,maxDraw=3,numFree=max(tcfamg@pt$free),optMisfit="max",optDraws=20,misfitType="srmr")
+expect_error(p12 <- simsem:::drawParam(tcfamg@dgen,maxDraw=2,numFree=max(tcfamg@pt$free),misfitBounds=c(.05,.08),optMisfit="max",optDraws=2,misfitType="rmsea"))
+expect_error(p13 <- simsem:::drawParam(tcfamg@dgen,maxDraw=5,numFree=max(tcfamg@pt$free),misfitBounds=c(.0001,.0005),optMisfit="max",optDraws=20,misfitType="f0"))
+p14 <- simsem:::drawParam(tcfamg@dgen,maxDraw=5,numFree=max(tcfamg@pt$free),misfitBounds=c(.0001,.001),averageNumMisspec=TRUE,optMisfit="max",optDraws=20)
 
 # single group tests
-psg1 <- drawParam(tcfa@dgen,maxDraw=20,numFree=max(tcfa@pt$free))
-psg2 <- drawParam(tcfa@dgen,maxDraw=20,numFree=max(tcfa@pt$free),misfitBounds=c(.0001,.01))
-expect_error(psg3 <- drawParam(tcfa@dgen,maxDraw=3,numFree=max(tcfa@pt$free),misfitBounds=c(.0001,.01),misfitType="rmsea"))
-psg4 <- drawParam(tcfa@dgen,maxDraw=3,numFree=max(tcfa@pt$free),misfitBounds=c(.01,.03),misfitType="rmsea")
-psg5 <- drawParam(tcfa@dgen,maxDraw=3,numFree=max(tcfa@pt$free),misfitBounds=c(.0001,.02),misfitType="srmr")
-psg6 <- drawParam(tcfa@dgen,maxDraw=3,numFree=max(tcfa@pt$free),misfitBounds=c(.0001,.01),averageNumMisspec=TRUE)
-psg7 <- drawParam(tcfa@dgen,maxDraw=3,numFree=max(tcfa@pt$free),optMisfit="max",optDraws=3)
-psg8 <- drawParam(tcfa@dgen,maxDraw=3,numFree=max(tcfa@pt$free),optMisfit="min",optDraws=3)
-psg9 <- drawParam(tcfa@dgen,maxDraw=3,numFree=max(tcfa@pt$free),optMisfit="min",optDraws=20,misfitType="rmsea")
-psg10 <- drawParam(tcfa@dgen,maxDraw=3,numFree=max(tcfa@pt$free),optMisfit="max",optDraws=20,misfitType="rmsea")
-psg11 <- drawParam(tcfa@dgen,maxDraw=3,numFree=max(tcfa@pt$free),optMisfit="max",optDraws=20,misfitType="srmr")
-expect_error(psg12 <- drawParam(tcfa@dgen,maxDraw=2,numFree=max(tcfa@pt$free),misfitBounds=c(.05,.08),optMisfit="max",optDraws=2,misfitType="rmsea"))
-expect_error(psg13 <- drawParam(tcfa@dgen,maxDraw=5,numFree=max(tcfa@pt$free),misfitBounds=c(.0001,.0005),optMisfit="max",optDraws=20,misfitType="f0"))
-psg14 <- drawParam(tcfa@dgen,maxDraw=5,numFree=max(tcfa@pt$free),misfitBounds=c(.0001,.001),averageNumMisspec=TRUE,optMisfit="max",optDraws=20)
+psg1 <- simsem:::drawParam(tcfa@dgen,maxDraw=20,numFree=max(tcfa@pt$free))
+psg2 <- simsem:::drawParam(tcfa@dgen,maxDraw=20,numFree=max(tcfa@pt$free),misfitBounds=c(.0001,.01))
+expect_error(psg3 <- simsem:::drawParam(tcfa@dgen,maxDraw=3,numFree=max(tcfa@pt$free),misfitBounds=c(.0001,.01),misfitType="rmsea"))
+psg4 <- simsem:::drawParam(tcfa@dgen,maxDraw=3,numFree=max(tcfa@pt$free),misfitBounds=c(.01,.03),misfitType="rmsea")
+psg5 <- simsem:::drawParam(tcfa@dgen,maxDraw=3,numFree=max(tcfa@pt$free),misfitBounds=c(.0001,.02),misfitType="srmr")
+psg6 <- simsem:::drawParam(tcfa@dgen,maxDraw=3,numFree=max(tcfa@pt$free),misfitBounds=c(.0001,.01),averageNumMisspec=TRUE)
+psg7 <- simsem:::drawParam(tcfa@dgen,maxDraw=3,numFree=max(tcfa@pt$free),optMisfit="max",optDraws=3)
+psg8 <- simsem:::drawParam(tcfa@dgen,maxDraw=3,numFree=max(tcfa@pt$free),optMisfit="min",optDraws=3)
+psg9 <- simsem:::drawParam(tcfa@dgen,maxDraw=3,numFree=max(tcfa@pt$free),optMisfit="min",optDraws=20,misfitType="rmsea")
+psg10 <- simsem:::drawParam(tcfa@dgen,maxDraw=3,numFree=max(tcfa@pt$free),optMisfit="max",optDraws=20,misfitType="rmsea")
+psg11 <- simsem:::drawParam(tcfa@dgen,maxDraw=3,numFree=max(tcfa@pt$free),optMisfit="max",optDraws=20,misfitType="srmr")
+expect_error(psg12 <- simsem:::drawParam(tcfa@dgen,maxDraw=2,numFree=max(tcfa@pt$free),misfitBounds=c(.05,.08),optMisfit="max",optDraws=2,misfitType="rmsea"))
+expect_error(psg13 <- simsem:::drawParam(tcfa@dgen,maxDraw=5,numFree=max(tcfa@pt$free),misfitBounds=c(.0001,.0005),optMisfit="max",optDraws=20,misfitType="f0"))
+psg14 <- simsem:::drawParam(tcfa@dgen,maxDraw=5,numFree=max(tcfa@pt$free),misfitBounds=c(.0001,.001),averageNumMisspec=TRUE,optMisfit="max",optDraws=20)
 
 # Other model Types
-pcfa2 <- drawParam(tcfa2@dgen,maxDraw=20,numFree=max(tcfa2@pt$free))
-ppath <- drawParam(tpath@dgen,maxDraw=20,numFree=max(tpath@pt$free))
-psem <- drawParam(tsem@dgen,maxDraw=20,numFree=max(tpath@pt$free))
+pcfa2 <- simsem:::drawParam(tcfa2@dgen,maxDraw=20,numFree=max(tcfa2@pt$free))
+ppath <- simsem:::drawParam(tpath@dgen,maxDraw=20,numFree=max(tpath@pt$free))
+psem <- simsem:::drawParam(tsem@dgen,maxDraw=20,numFree=max(tpath@pt$free))
 
 
 
-p <- drawParam(tcfa)
+p <- simsem:::drawParam(tcfa@dgen)
 
-dat <- createData(p,100,"CFA")
-indDist <- simDataDist(simNorm(10,2),p=6)
+#FIXME: dat <- createData(p[[1]]$param,100,"CFA")
 
-dat <- createData(p,100,"CFA",indDist=indDist)
 
 
