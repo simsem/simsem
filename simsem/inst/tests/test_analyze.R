@@ -1,17 +1,7 @@
-source("../../R/AllClass.R")
-source("../../R/model.R")
-source("../../R/drawParam.R")
-source("../../R/bind.R")
-source("../../R/find.R")
-source("../../R/validate.R")
-source("../../R/createData.R")
-source("../../R/simDist-constructor.R")
-source("../../R/generate.R")
-source("../../R/analyze.R")
-source("../../R/miss.R")
+library(simsem)
 
 cfaT <- function() {
-  
+
   loading <- matrix(0, 6, 2)
   loading[1:3, 1] <- NA
   loading[4:5, 2] <- "a1"
@@ -76,7 +66,7 @@ path <- function() {
   RPS <- bind(residual.error, "rnorm(1,0.3,0.1)",symmetric=TRUE)
 
   ME <- bind(rep(NA, 4), 0)
-  
+
   return(list(BE=BE,RPS=RPS,ME=ME))
 }
                                         # SEM
@@ -106,7 +96,7 @@ sem <- function() {
   path.start[3, 2] <- "runif(1,0.3,0.5)"
   BE <- bind(path, path.start)
 
-  
+
   return(list(LY=LY,RTE=RTE,RPS=RPS,BE=BE))
 }
 
@@ -130,7 +120,7 @@ holz <- function() {
   RTE <- bind(rte,symmetric=TRUE)
 
   template <- model(LY=LY,RPS=RPS,RTE=RTE,modelType="CFA")
-  
+
   fit <- lavaan(template@pt,data=HolzingerSwineford1939)
 }
 
@@ -155,7 +145,7 @@ tcfamg <- model(LY=c(cfa$LY,cfa$LY2),RPS=cfa$RPS,RTE=cfa$RTE, modelType="CFA")
 tcfamg2 <- model(LY=list(cfa$LY,cfa$LY),RPS=list(cfa$RPS,cfa$RPS),RTE=cfa$RTE, modelType="CFA")
 
 ## tcf
-tcfa2 <- model(LY=cfa2$LY,PS=cfa2$PS,TE=cfa2$TE,AL=cfa2$AL,TY=cfa2$TY, modelType="CFA") 
+tcfa2 <- model(LY=cfa2$LY,PS=cfa2$PS,TE=cfa2$TE,AL=cfa2$AL,TY=cfa2$TY, modelType="CFA")
 tpath <- model(BE=path$BE, RPS=path$RPS, ME=path$ME, modelType="Path")
 tsem <- model(LY=sem$LY, RTE=sem$RTE, RPS=sem$RPS, BE=sem$BE, modelType="SEM")
 
@@ -163,7 +153,7 @@ impt <- miss(package="Amelia",m=5)
 
 dat <- generate(tcfa,100)
 out <- analyze(tcfa,dat)
-out <- anal(tcfa,dat)
+out <- analyze(tcfa,dat)
 
 dat2 <- generate(tcfamg,100)
 out <- analyze(tcfamg,dat2)
