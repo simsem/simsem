@@ -68,7 +68,7 @@ facCov <- matrix(NA, 3, 3)
 facCovVal <- diag(c(0.8, 0.9, 0.4))
 facCovVal[lower.tri(facCovVal)] <- c(0.4, 0.2, 0.3)
 facCovVal[upper.tri(facCovVal)] <- c(0.4, 0.2, 0.3)
-PS <- bind(facCov, facCovVal)
+PS <- binds(facCov, facCovVal)
 
 errorCov <- diag(NA, 9)
 errorCovVal <- diag(c(0.5, 1.1, 0.8, 0.4, 0.4, 0.8, 0.8, 0.5, 0.6))

@@ -31,7 +31,7 @@ percentmis <- mean(replicate(10,sum(is.na(imposeMissing(dataC,cov=20,pmMCAR=.1))
 
 #context("MAR")
 percentmis <- mean(replicate(10,sum(is.na(imposeMissing(dataC,cov=20,pmMAR=.1)))/length(dataC)))
-expect_true((percentmis > .099) && (percentmis < .101))
+expect_true((percentmis > .09) && (percentmis < .10))
 
 percentmis <- mean(replicate(10,sum(is.na(imposeMissing(dataCE,cov=21,pmMAR=.1)))/length(dataCE)))
 #expect_true((percentmis > .099) && (percentmis < .101))
