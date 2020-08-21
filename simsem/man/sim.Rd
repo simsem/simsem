@@ -219,7 +219,7 @@ CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
 Output <- sim(5, CFA.Model, n=200)
 summary(Output)
 
-# Example of using simsem model template
+# Example of using lavaan model syntax
 
 popModel <- "
 f1 =~ 0.7*y1 + 0.7*y2 + 0.7*y3

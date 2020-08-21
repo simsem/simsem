@@ -1,5 +1,5 @@
 ### Sunthud Pornprasertmanit & Terrence D. Jorgensen (anyone else?)
-### Last updated: 26 November 2019
+### Last updated: 21 August 2020
 ### Primary engines for simulation.  Everything else is added details.
 
 sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
@@ -977,8 +977,9 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
     if (is(model, "function")) {
       converged <- out$converged
       if (is.null(converged)) stop("In the function for data analysis, ",
-                                   "please specify the 'converged' in the ",
-                                   "resulting list")
+                                   "please specify an integer indicating the",
+                                   " 'converged' status in the returned list. ",
+                                   "Values are described in class?SimResult.")
       if (is.logical(converged)) {
         if (converged) {
           converged <- 0L
@@ -1009,10 +1010,9 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
         converged <- 2L
       } else if (mean(sapply(out@convergence, "[[", "SE"), na.rm = TRUE) < miss@convergentCutoff) {
         converged <- 3L
-      } else if (mean(sapply(out@convergence, "[[", "Heywood.lv"), na.rm = TRUE) < miss@convergentCutoff) {
+      } else if (mean(sapply(out@convergence, "[[", "Heywood.lv"), na.rm = TRUE) < miss@convergentCutoff ||
+                 mean(sapply(out@convergence, "[[", "Heywood.ov"), na.rm = TRUE) < miss@convergentCutoff) {
         converged <- 4L
-      } else if (mean(sapply(out@convergence, "[[", "Heywood.ov"), na.rm = TRUE) < miss@convergentCutoff) {
-        converged <- 5L
       } else converged <- 0L
     } else {
       try(converged <- as.numeric(!lavInspect(out, "converged")))
@@ -1020,13 +1020,7 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
         seTemp <- lavInspect(out, "se")
         improperSE <- any(unlist(seTemp) < 0) | any(is.na(unlist(seTemp))) | all(unlist(seTemp) == 0)
         if (improperSE) converged <- 3L
-        if (checkVar(out)) {
-          converged <- 4L
-        } else if(checkCov(out)) {
-          converged <- 5L
-        } else if(checkCovLv(out)) {
-          converged <- 6L
-        }
+        if (checkNPD(out)) converged <- 4L
       }
     }
   }
@@ -1393,34 +1387,14 @@ is.random <- function(dat) {
     return(isRandom)
 }
 
-checkVar <- function(object) {
-    GLIST <- object@Model@GLIST
-    covGLIST <- GLIST[names(GLIST) %in% c("theta", "psi")]
-    return(any(sapply(covGLIST, function(x) any(diag(x) < 0))))
-}
-
-checkCov <- function(object) {
-    GLIST <- object@Model@GLIST
-    covGLIST <- GLIST[names(GLIST) %in% c("theta", "psi")]
-	reducedCov <- lapply(covGLIST, function(x) {improper <- (diag(x) > 0); x[improper, improper, drop=FALSE]})
-    return(any(sapply(reducedCov, function(x) {
-		if(nrow(x) > 1) {
-		y <- lower.tri(cov2cor(x)); any((y < -1) | (y > 1))
-		} else {
-		return(FALSE)
-		}
-	})))
-}
-
-checkCovLv <- function(object) {
-	covlvs <- lavInspect(object, "cov.lv")
-	if (!is(covlvs, "list")) {
-		covlvs <- list(covlvs)
-	}
-	result <- rep(FALSE, length(covlvs))
-	for (i in seq_along(covlvs)) {
-		if (nrow(covlvs[[i]]) >= 1) {
-			ev <- eigen(covlvs[[i]])$values
+## TDJ: check for any improper solutions
+checkNPD <- function(object) {
+  GLIST <- object@Model@GLIST
+  covGLIST <- GLIST[names(GLIST) %in% c("theta", "psi")]
+	result <- rep(FALSE, length(covGLIST))
+	for (i in seq_along(covGLIST)) {
+		if (nrow(covGLIST[[i]]) >= 1) {
+			ev <- eigen(covGLIST[[i]])$values
 			if (any(ev < 0)) result[i] <- TRUE
 		}
 	}
