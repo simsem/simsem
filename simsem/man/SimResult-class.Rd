@@ -18,8 +18,8 @@ Objects can be created by \code{\link{sim}}.
     \item{\code{coef}:}{Parameter estimates from each replication}
     \item{\code{se}:}{Standard errors of parameter estimates from each replication}
     \item{\code{fit}:}{Fit Indices values from each replication}
-    \item{\code{converged}:}{The convergence status of each replication: 0 = convergent, 1 = not convergent, 2 = nonconvergent in multiple imputed results, 3 = improper solutions for SE (less than 0 or NA), 4 = converged with improper solution for latent or observed (residual) covariance matrix (i.e., nonpositive definite, possible due to a Heywood case). For multiple imputations, these codes are applied when the proporion of imputed data sets with that characteristic is below the \code{convergentCutoff} threshold (see \code{linkS4class{SimMissing}}).}
-    \item{\code{seed}:}{Seed number. }
+    \item{\code{converged}:}{The convergence status of each replication: 0 = convergent, 1 = not convergent, 2 = nonconvergent in multiple imputed results, 3 = improper solutions for SE (less than 0 or NA), 4 = converged with improper solution for latent or observed (residual) covariance matrix (i.e., nonpositive definite, possible due to a Heywood case). For multiple imputations, these codes are applied when the proporion of imputed data sets with that characteristic is below the \code{convergentCutoff} threshold (see \code{linkS4class{SimMissing}}). For \code{OpenMx} analyses only, a code "7" indicates Optimal estimates could not be obtained ("Status 6" in \code{OpenMx}).}
+    \item{\code{seed}:}{\code{integer} used to set the seed for the L'Ecuyer-CMRG pseudorandom number generator. }
 	\item{\code{paramValue}:}{Population model underlying each simulated dataset.}
 	\item{\code{stdParamValue}:}{Standardized parameters of the population model underlying each simulated dataset.}
 	\item{\code{paramOnly}:}{If \code{TRUE}, the result object saves only population characteristics and do not save sample characteristics (e.g., parameter estimates and standard errors.}

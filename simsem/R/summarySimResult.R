@@ -309,9 +309,10 @@ summaryConverge <- function(object, std = FALSE, improper = TRUE) {
                                          num.nonconverged = numnonconverged)))
   reasons <- c("Nonconvergent" = sum(object@converged %in% 1:2),
                "Improper SE" = sum(object@converged == 3),
-               "Improper Variance" = sum(object@converged == 4),
-               "Improper Correlation" = sum(object@converged == 5),
-               "Not-positive-definite model-implied covariance matrix of latent variables" = sum(object@converged == 6),
+               "Nonpositive definite matrix" = sum(object@converged == 4),
+               # "Improper Variance" = sum(object@converged == 4),
+               # "Improper Correlation" = sum(object@converged == 5),
+               # "Not-positive-definite model-implied covariance matrix of latent variables" = sum(object@converged == 6),
                "Optimal estimates were not guaranteed" = sum(object@converged == 7))
   reasons <- as.matrix(reasons)
   colnames(reasons) <- "count"

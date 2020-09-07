@@ -101,9 +101,11 @@ setMethod("summary", signature = "SimResult",
 		cat(paste("   1.", "Nonconvergent Results", "=", sum(object@converged == 1), "\n"))
 		cat(paste("   2.", "Nonconvergent results from multiple imputation", "=", sum(object@converged == 2), "\n"))
 		cat(paste("   3.", "At least one SE were negative or NA", "=", sum(object@converged == 3), "\n"))
-		cat(paste("   4.", "At least one variance estimates were negative", "=", sum(object@converged == 4), "\n"))
-		cat(paste("   5.", "At least one correlation estimates were greater than 1 or less than -1", "=", sum(object@converged == 5), "\n"))
-		cat(paste("   6.", "Model-implied covariance matrices of any groups of latent variables are not positive definite", "=", sum(object@converged == 6), "\n"))
+		cat(paste("   4.", "Nonpositive-definite latent or observed (residual) covariance matrix \n",
+		          "     (e.g., Heywood case or linear dependency)", "=", sum(object@converged == 4), "\n"))
+		# cat(paste("   4.", "At least one variance estimates were negative", "=", sum(object@converged == 4), "\n"))
+		# cat(paste("   5.", "At least one correlation estimates were greater than 1 or less than -1", "=", sum(object@converged == 5), "\n"))
+		# cat(paste("   6.", "Model-implied covariance matrices of any groups of latent variables are not positive definite", "=", sum(object@converged == 6), "\n"))
 		if(any(object@converged == 7)) {
 			cat(paste("   7.", "(OpenMx only) Optimal estimates could not be obtained (Status 6)", "=", sum(object@converged == 7), "\n"))
 		}
