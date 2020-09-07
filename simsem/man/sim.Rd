@@ -197,7 +197,7 @@ Any combination of data-generation methods and data-analysis methods are valid. 
 \examples{
 # Please go to www.simsem.org for more examples.
 
-# Example of using simsem model template
+## Example of using simsem model template
 library(lavaan)
 
 loading <- matrix(0, 6, 2)
@@ -219,7 +219,9 @@ CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
 Output <- sim(5, CFA.Model, n=200)
 summary(Output)
 
-# Example of using lavaan model syntax
+
+
+## Example of using lavaan model syntax
 
 popModel <- "
 f1 =~ 0.7*y1 + 0.7*y2 + 0.7*y3
@@ -243,24 +245,25 @@ f2 =~ y4 + y5 + y6
 Output <- sim(5, model=analysisModel, n=200, generate=popModel, std.lv=TRUE, lavaanfun = "cfa")
 summary(Output)
 
-# Example of using population data
 
+
+## Example of using raw data as the population
 pop <- data.frame(y1 = rnorm(100000, 0, 1), y2 = rnorm(100000, 0, 1))
-
-covModel <- "
-y1 ~~ y2
-"
-
+covModel <- " y1 ~~ y2 "
 Output <- sim(5, model=covModel, n=200, rawData=pop, lavaanfun = "cfa")
 summary(Output)
 
-# Example of data transformation: Transforming to standard score
+
+
+## Example of user-defined functions:
+
+# data-transformation function: Transforming to standard score
 fun1 <- function(data) {
 	temp <- scale(data)
 	as.data.frame(temp)
 }
 
-# Example of additional output: Extract modification indices from lavaan
+# additional-output function: Extract modification indices from lavaan
 fun2 <- function(out) {
 	inspect(out, "mi")
 }
@@ -272,21 +275,23 @@ summary(Output)
 # Get modification indices
 getExtraOutput(Output)
 
-# Example of additional output: Comparing latent variable correlation
+
+
+## Example of additional output: Comparing latent variable correlation
 
 outfundata <- function(out, data) {
-	predictcor <- inspect(out, "coef")$psi[2, 1]
+	predictcor <- lavInspect(out, "est")$psi[2, 1]
 	latentvar <- attr(data, "latentVar")[,c("f1", "f2")]
 	latentcor <- cor(latentvar)[2,1]
 	latentcor - predictcor
 }
-
-Output <- sim(5, CFA.Model,n=200, sequential = TRUE, saveLatentVar = TRUE,
-	outfundata = outfundata)
-
+Output <- sim(5, CFA.Model, n=200, sequential = TRUE, saveLatentVar = TRUE,
+            	outfundata = outfundata)
 getExtraOutput(Output)
 
-# Example of analyze using a function
+
+
+## Example of analyze using a function
 
 analyzeFUN <- function(data) {
 	out <- lm(y2 ~ y1, data=data)
@@ -296,7 +301,6 @@ analyzeFUN <- function(data) {
 	converged <- TRUE # Assume to be convergent all the time
 	return(list(coef = coef, se = se, fit = fit, converged = converged))
 }
-
 Output <- sim(5, model=analyzeFUN, n=200, rawData=pop, lavaanfun = "cfa")
 summary(Output)
 }
