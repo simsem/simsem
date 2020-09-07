@@ -1,5 +1,5 @@
 ### Sunthud Pornprasertmanit & Terrence D. Jorgensen (anyone else?)
-### Last updated: 21 August 2020
+### Last updated: 7 September2020
 ### Primary engines for simulation.  Everything else is added details.
 
 sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
@@ -364,7 +364,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
     if (is.null(numProc)) numProc <- parallel::detectCores() ## FIXME: subtract 1 for master node?
     if (sys == "windows") {
       cl <- parallel::makeCluster(rep("localhost", numProc), type = "SOCK")
-      ########### FIXME: models don't converge using next line
+      parallel::clusterExport(cl, lavaanfun) # TODO: need to export any other objects?
       Result.l <- parallel::clusterApplyLB(cl, simConds, runRep, model = model,
                                            generateO = generate, miss = miss,
                                            datafun = datafun, lavaanfun = lavaanfun,
