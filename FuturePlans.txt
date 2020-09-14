@@ -1,0 +1,4 @@
+
+optionally use mnonr package for nonnormality instead of Vale-Maurelli
+- https://doi.org/10.3758/s13428-019-01291-5
+
