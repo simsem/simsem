@@ -1,5 +1,5 @@
 ### Sunthud Pornprasertmanit & Terrence D. Jorgensen (anyone else?)
-### Last updated: 7 September2020
+### Last updated: 23 September 2020
 ### Primary engines for simulation.  Everything else is added details.
 
 sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
@@ -108,7 +108,8 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
 		if (!("group" %in% names(model)) & "group" %in% names(mc)) model$group <- group
 
 		## TDJ addition (26 Nov 2019):
-		if (is.null(generate)) {
+		## added is.null(rawData) on 23 Sep 2020
+		if (is.null(generate) && is.null(rawData)) {
 		  lavaanGenerate <- TRUE
 		  generate <- .om.
 		  ## scroll through options again
