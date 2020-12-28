@@ -1,4 +1,23 @@
 
-optionally use mnonr package for nonnormality instead of Vale-Maurelli
-- https://doi.org/10.3758/s13428-019-01291-5
+New nonnormality tools:
+- mnonr package
+  - also provides Vale--Maurelli we already use
+  - https://doi.org/10.3758/s13428-019-01291-5
+- covsim package
+  - much more flexibility, costs computational efficiency
+  - coauthor (with covsim authors) a vignette showing how to use vita() in
+    custom function to pass to sim(..., generate=)
+  - or custom function's output & pass to sim(..., rawData=)
+    - example could be log-transforming nonnormal variable(s)
+
+
+Need to make lavaaList() an option
+- without gutting all of simsem? Or introducing probability of more errors?
+- consider a new "simsemList" package that provides an interface to simply
+  rely on lavaanList() functionality
+  - simlavaanList(), with wrappers simcfaList() and simsemList() that call
+    lavaanList() with FUN= and *List= arguments, return SimResult object
+  - dataFunction= can do the work of both generate= and datafun=
+    - generate= function can only have 1 argument (n=), but lavaanList() has dataFunction.args=
+  - FUN= can do the work of outfun= (still need simsem for outfundata=)
 
