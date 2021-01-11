@@ -1,5 +1,5 @@
 ### Terrence D. Jorgensen
-### Last updated: 28 December 2020
+### Last updated: 11 January 2021
 ### example of moderated mediation simulation, in response to this thread:
 ### https://groups.google.com/d/msg/lavaan/otcOcc7Rclw/1pQ22N9dAAAJ
 
@@ -151,21 +151,12 @@ simMod
 
 
 
-## ---------------------------
-## Specify parameters matrices
-## ---------------------------
+## --------------
+## Run simulation
+## --------------
 
 out <- sim(nRep = 200, n = N, model = simMod, covData = covData)
 summaryParam(out, matchParam = TRUE) #FIXME: average estimates != parameters
 
-## The problem is that exogenous effects are assigned in the wrong order.
-## See the labels in the parameter table:
-data.frame(simMod@pt[c("lhs","op","rhs","label")])[simMod@pt$op == "~",]
-## The "a" labels should all be effects on M, and "c" labels are effects on Y.
-## Instead, the labels (and thus, population parameters) appear to be assigned
-## in the order produced by vectorizing the kappa matrix:
-simMod@dgen$GA@free
-as.character(simMod@dgen$GA@free) # wrong order
-as.numeric(simMod@dgen$GA@popParam) # likewise
 
 

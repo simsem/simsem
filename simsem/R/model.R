@@ -1,5 +1,5 @@
 ### Sunthud Pornprasertmanit & Terrence D. Jorgensen (anyone else?)
-### Last updated: 12 February 2020
+### Last updated: 11 January 2021
 ### functions for specifying an analysis model that utilizes lavaan
 
 
@@ -492,37 +492,36 @@ buildPT <- function(paramSet, pt = NULL, group = 1, facLab = NULL, indLab = NULL
 
     ## GA - Regressions of factors on covariates
     if (!is.null(paramSet$GA)) {
-        nf <- nrow(paramSet$GA@free)
-        nz <- ncol(paramSet$GA@free)
-        if (is.null(psLab)) {
-            lhs <- rep(paste(psLetter, 1:nf, sep = ""), each = nz)
-        } else {
-            lhs <- rep(psLab, each = nz)
-        }
-		if (is.null(covLab)) {
-			covLab <- paste("z", 1:nz, sep = "") # Save for create covariances and means among covariates
-		}
-		rhs <- rep(covLab, times = nf)
-        pt <- mapply(pt, parseFree(paramSet$GA, group = group, pt = pt, op = "~",
-            lhs, rhs), FUN = c, SIMPLIFY = FALSE)
+      nf <- nrow(paramSet$GA@free)
+      nz <- ncol(paramSet$GA@free)
+
+      if (is.null(psLab)) {
+        lhs <- rep(paste(psLetter, 1:nf, sep = ""), times = nz)
+      } else lhs <- rep(psLab, times = nz)
+
+  		if (is.null(covLab)) covLab <- paste("z", 1:nz, sep = "") # Save to create covariances and means among covariates
+  		rhs <- rep(covLab, each = nf)
+
+      pt <- mapply(FUN = c, pt, parseFree(paramSet$GA, group = group, pt = pt,
+                                          op = "~", lhs = lhs, rhs = rhs),
+                   SIMPLIFY = FALSE)
     }
 
     ## KA - Regressions of factors on indicators
     if (!is.null(paramSet$KA)) {
-        ni <- nrow(paramSet$KA@free)
-        nz <- ncol(paramSet$KA@free)
+      ni <- nrow(paramSet$KA@free)
+      nz <- ncol(paramSet$KA@free)
 
-		if (is.null(indLab)) {
-            lhs <- rep(paste0("y", 1:ni) , each = nz)
-        } else {
-            lhs <- rep(indLab, each = nz)
-        }
-		if (is.null(covLab)) {
-			covLab <- paste("z", 1:nz, sep = "") # Save for create covariances and means among covariates
-		}
-		rhs <- rep(covLab, times = ni)
-        pt <- mapply(pt, parseFree(paramSet$KA, group = group, pt = pt, op = "~",
-            lhs, rhs), FUN = c, SIMPLIFY = FALSE)
+  		if (is.null(indLab)) {
+  		  lhs <- rep(paste0("y", 1:ni) , times = nz)
+  		} else lhs <- rep(indLab, times = nz)
+
+  		if (is.null(covLab)) covLab <- paste("z", 1:nz, sep = "") # Save to create covariances and means among covariates
+  		rhs <- rep(covLab, each = ni)
+
+      pt <- mapply(FUN = c, pt, parseFree(paramSet$KA, group = group, pt = pt,
+                                          op = "~", lhs = lhs, rhs = rhs),
+                   SIMPLIFY = FALSE)
     }
 
 	# Create parameter table for covariates
@@ -592,10 +591,11 @@ parseFree <- function(simDat, group, pt, op, lhs = NULL, rhs = NULL,
                 label = as.character(label), unco = as.integer(unco)))
 }
 
-## Calculates the indices of free parameters by lavaan rules.  1. Each unique
-## free parameter (NA) gets a unique index 2. The first constrained free
-## parameter gets a unique index 3. Constrained parameters with identical
-## labels get identical indices 4. Fixed parameters are 0
+## Calculates the indices of free parameters by lavaan rules:
+## 1. Each unique free parameter (NA) gets a unique index
+## 2. The first constrained free parameter gets a unique index
+## 3. Constrained parameters with identical labels get identical indices
+## 4. Fixed parameters are 0
 freeIdx <- function(mat, start = 1, symm = FALSE) {
     if (is.matrix(mat) && symm) {
         flat <- as.vector(mat[lower.tri(mat, diag = TRUE)])
@@ -611,6 +611,7 @@ freeIdx <- function(mat, start = 1, symm = FALSE) {
 
     j <- 1
     for (i in seq_along(flat)) {
+
         if (is.na(flat[i])) {
             free.idx[i] <- avail[j]
             j <- j + 1
@@ -621,13 +622,9 @@ freeIdx <- function(mat, start = 1, symm = FALSE) {
                 names(conList)[length(conList)] <- label
                 free.idx[i] <- avail[j]
                 j <- j + 1
-            } else {
-                idx <- conList[label]
-                free.idx[i] <- idx
-            }
-        } else {
-            ## Do nothing
-        }
+            } else free.idx[i] <- conList[label]
+        } # else Do nothing
+
     }
     return(free.idx)
 }
@@ -694,7 +691,7 @@ eqIdx <- function(mat, id, symm = FALSE) {
 
 ## Calculate starting values. Needs work, but no time to finish yet.
 startingVal <- function(free, popParam, smart = FALSE, symm = FALSE) {
-	# smartStart & smart are depreciated from the model set of functions. Will be provided in the sim function instead.
+	# smartStart & smart are deprecated from the model set of functions. Will be provided in the sim function instead.
     if (is.matrix(free) && symm) {
         flat <- as.vector(free[lower.tri(free, diag = TRUE)])
         flat[is.label(flat)] <- NA
