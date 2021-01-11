@@ -156,7 +156,7 @@ simMod
 ## --------------
 
 out <- sim(nRep = 200, n = N, model = simMod, covData = covData)
-summaryParam(out, matchParam = TRUE) #FIXME: average estimates != parameters
+summaryParam(out, matchParam = TRUE)
 
 
 
