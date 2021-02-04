@@ -32,6 +32,8 @@ To simplify the most common case, \code{popParam} can take 1 value or distributi
 Bind is the first step in the \code{bind} -> \code{model} -> \code{sim} workflow of \emph{simsem}, and this document outlines the user interface or language used to describe these simulations. This interface, while complex, enables a wide array of simulation specifications for structural equation models by building on LISREL-style parameter specifications.
 
 In simulations supported by \emph{simsem}, a given parameter may be either fixed or freed for analysis, but may optionally also have a population value or distribution for data generation, or a value or distribution of misspecification. The purpose of bind is to stack these multiple meanings of a parameter into an object recognized by \emph{simsem}, a \code{\linkS4class{SimMatrix}}. Each matrix in the Lisrel notation (e.g. LY, PS, TE, BE) becomes a \code{\linkS4class{SimMatrix}}, and is passed to the function \code{model}, which builds the data generation template and an analysis template (a lavaan parameter table), collectively forming a \code{SimSem} object, which can be passed to the function \code{sim} for simulation.
+
+Note that any \code{(dim)names} attributes will be set to NULL for any vectors or matrices passed to \code{free}, \code{popParam}, or \code{misspec} in order to prevent errors elsewhere in the workflow. To set custom variable names, please use any of the \code{indLab}, \code{facLab}, \code{covLab}, or \code{groupLab} arguments to \code{\link{model}()}.
 }
 \value{ \code{\linkS4class{SimMatrix}} or \code{\linkS4class{SimVector}} object that used for model specification for analysis and data generation in simsem.}
 
