@@ -1107,8 +1107,8 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
       } else {
         fit <- lavaan::fitMeasures(out)
         result <- lavaan::parameterEstimates(out, standardized = TRUE,
-                                             boot.ci.type = citype,
-                                             level = cilevel, remove.eq = FALSE,
+                                             boot.ci.type = citype, level = cilevel,
+                                             remove.eq = FALSE, remove.system.eq = FALSE,
                                              remove.ineq = FALSE, remove.def = FALSE,
                                              fmi = !is.null(miss))
         errstdse <- try(resultstd <- lavaan::standardizedSolution(out, remove.eq = FALSE,
