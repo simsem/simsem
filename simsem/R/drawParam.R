@@ -21,7 +21,7 @@ draw <- function(model, maxDraw = 50, misfitBounds = NULL, averageNumMisspec = F
 		if(length(groupseq) > 1) covLab <- c(covLab, model@groupLab)
 		covData <- covData[,covLab, drop=FALSE]
 		if(ncol(covData) != length(covLab)) stop(paste0("The covariate data must contain the following variable names: ", paste(covLab, collapse = ", ")))
-		if(any(is.na(covData))) stop("The covariate data must not have missing variables.")
+		if(any(is.na(covData))) stop("The covariate data must not have missing values.")
 	} else {
 		if(!is.null(covData)) {
 			warnings("CONFLICT: The model template does not have any covariates but the covaraite data are specified. The covaraite data are ignored.")

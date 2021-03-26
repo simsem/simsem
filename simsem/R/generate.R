@@ -85,7 +85,7 @@ generateSimSem <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitTy
 		if(ngroups > 1) covLab <- c(covLab, model@groupLab)
 		covData <- covData[,covLab, drop=FALSE]
 		if(ncol(covData) != length(covLab)) stop(paste0("The covariate data must contain the following variable names: ", paste(covLab, collapse = ", ")))
-		if(any(is.na(covData))) stop("The covariate data must not have missing variables.")
+		if(any(is.na(covData))) stop("The covariate data must not have missing values.")
 		indLab <- setdiff(indLab, covLab)
 	} else {
 		if(!is.null(covData)) {

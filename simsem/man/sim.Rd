@@ -1,7 +1,7 @@
 \name{sim}
 \alias{sim}
 \title{
-	Run a monte carlo simulation with a structural equation model.
+	Run a Monte Carlo simulation with a structural equation model.
 }
 \description{
 	This function can be used to generate data, analyze the generated data, and summarized into a result object where parameter estimates, standard errors, fit indices, and other characteristics of each replications are saved.
@@ -21,13 +21,15 @@ sim(nRep, model, n, generate = NULL, ..., rawData = NULL, miss = NULL, datafun=N
 }
 \arguments{
   \item{nRep}{
-	Number of replications. If any of the \code{n}, \code{pmMCAR}, or \code{pmMAR} arguments are specified as lists, the number of replications will default to the length of the list(s), and \code{nRep} need not be specified.
+	Number of replications. If any of the \code{n}, \code{pmMCAR}, or \code{pmMAR} arguments are specified as lists, the number of replications will default to the length of the list(s), and \code{nRep} need not be specified (can be set \code{NULL}).
 }
   \item{model}{
 	There are three options for this argument: 1. \code{\linkS4class{SimSem}} object created by \code{\link{model}}, 2. \code{lavaan} script, \code{lavaan} parameter table, fitted \code{lavaan} object matching the analysis model, or a list that contains all argument that users use to run \code{lavaan} (including \code{cfa}, \code{sem}, \code{lavaan}), 3. \code{MxModel} object from the \code{OpenMx} package, or 4. a function that takes a data set and return a list of \code{coef}, \code{se}, and \code{converged} (see details below). For the \code{\linkS4class{SimSem}} object, if the \code{generate} argument is not specified, then the object in the \code{model} argument will be used for both data generation and analysis. If \code{generate} is specified, then the \code{model} argument will be used for data analysis only.
 }
   \item{n}{
-	Sample size. Either a single value, or a list of values to vary sample size across replications. The \code{n} argument can also be specified as a random distribution object; if any resulting values are non-integers, the decimal will be rounded.
+	Sample size(s). In single-group models, either a single \code{integer}, or a vector of integers to vary sample size across replications. In multigroup models, either a \code{list} of single integers (for constant group sizes across replications) or a \code{list} of vectors (to vary group sizes across replications).
+	%The \code{n} argument can also be specified as a random distribution object.
+	Any non-integers will be rounded.
 }
   \item{generate}{
 	There are four options for this argument: 1. \code{\linkS4class{SimSem}} object created by \code{\link{model}}, 2. \code{lavaan} script, \code{lavaan} parameter table (for data generation; see \code{\link[lavaan]{simulateData}}), fitted \code{lavaan} object that estimated all nonzero population parameters, or a list that contains all argument that users use to run \code{\link[lavaan]{simulateData}}, 3. \code{MxModel} object with population parameters specified in the starting values of all matrices in the model, 4. a function that take only one sample size argument (by integer for single-group model or by a vector of integers for multiple-group model). The \code{generate} argument cannot be specified the same time as the \code{rawData} argument.
@@ -106,7 +108,7 @@ sim(nRep, model, n, generate = NULL, ..., rawData = NULL, miss = NULL, datafun=N
     The names of auxiliary variables saved in a vector.
 }
   \item{group}{
-    The name of the group variable. This argument is used when \code{lavaan} script or \code{MxModel} is used in the \code{model} only.
+    The name of the group variable. This argument is used when \code{lavaan} script or \code{MxModel} is used in the \code{model} only. When generating data from a multigroup population model, the grouping variable in each generated data set will be named "group", so when additionally using a multigroup analysis model, users must specify this argument as \code{group="group"}.
 }
   \item{mxFit}{
     A logical whether to find an extensive list of fit measures (which will be slower). This argument is applicable when \code{MxModel} is used in the \code{model} argument only.
@@ -195,7 +197,7 @@ Any combination of data-generation methods and data-analysis methods are valid. 
 	}
 }
 \examples{
-# Please go to www.simsem.org for more examples.
+# Please go to www.simsem.org for more examples in the Vignettes.
 
 ## Example of using simsem model template
 library(lavaan)
