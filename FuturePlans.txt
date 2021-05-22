@@ -1,4 +1,7 @@
 
+continuousPower()
+- add interval= and level= arguments for uncertainty of estimate
+
 New nonnormality tools:
 - mnonr package
   - also provides Vale--Maurelli we already use
@@ -11,7 +14,7 @@ New nonnormality tools:
     - example could be log-transforming nonnormal variable(s)
 
 
-Need to make lavaaList() an option
+Need to make lavaanList() an option
 - without gutting all of simsem? Or introducing probability of more errors?
 - consider a new "simsemList" package that provides an interface to simply
   rely on lavaanList() functionality

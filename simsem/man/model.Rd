@@ -7,23 +7,23 @@
 	Data generation template and analysis template for simulation.
 }
 \description{
-	This function creates a model template (lavaan parameter table), which can be used for data generation and/or analysis for simulated structural equation modeling using simsem. Models are specified using Y-side parameter matrices with LISREL syntax notation. Each parameter matrix must be a \code{\linkS4class{SimMatrix}} or \code{\linkS4class{SimVector}} built using \code{bind}. In addition to the usual Y-side matrices in LISREL, both PS and TE can be specified using correlation matrices (RPS, RTE) and scaled by a vector of residual variances (VTE, VPS) or total variances (VY, VE). Multiple group models can be created by passing lists of \code{\linkS4class{SimMatrix}} or \code{\linkS4class{SimVector}} to arguments, or by simply specifying the number of groups when all group models are identical. 
+	This function creates a model template (lavaan parameter table), which can be used for data generation and/or analysis for simulated structural equation modeling using simsem. Models are specified using Y-side parameter matrices with LISREL syntax notation. Each parameter matrix must be a \code{\linkS4class{SimMatrix}} or \code{\linkS4class{SimVector}} built using \code{bind}. In addition to the usual Y-side matrices in LISREL, both PS and TE can be specified using correlation matrices (RPS, RTE) and scaled by a vector of residual variances (VTE, VPS) or total variances (VY, VE). Multiple group models can be created by passing lists of \code{\linkS4class{SimMatrix}} or \code{\linkS4class{SimVector}} to arguments, or by simply specifying the number of groups when all group models are identical.
 }
 \usage{
-model(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = NULL, 
-	VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, MY = NULL, 
-	ME = NULL, KA = NULL, GA = NULL, modelType, indLab = NULL, facLab = NULL, 
+model(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = NULL,
+	VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, MY = NULL,
+	ME = NULL, KA = NULL, GA = NULL, modelType, indLab = NULL, facLab = NULL,
 	covLab = NULL, groupLab = "group", ngroups = 1, con = NULL)
-model.cfa(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, VTE = NULL, 
-	VY = NULL, VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, 
-	KA = NULL, GA = NULL, indLab = NULL, facLab = NULL, covLab = NULL, 
+model.cfa(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, VTE = NULL,
+	VY = NULL, VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL,
+	KA = NULL, GA = NULL, indLab = NULL, facLab = NULL, covLab = NULL,
 	groupLab = "group", ngroups = 1, con = NULL)
-model.path(PS = NULL, RPS = NULL, BE = NULL, VPS = NULL, VE=NULL, AL = NULL, 
-	ME = NULL, KA = NULL, GA = NULL, indLab = NULL, facLab = NULL, covLab = NULL, 
+model.path(PS = NULL, RPS = NULL, BE = NULL, VPS = NULL, VE=NULL, AL = NULL,
+	ME = NULL, KA = NULL, GA = NULL, indLab = NULL, facLab = NULL, covLab = NULL,
 	groupLab = "group", ngroups = 1, con = NULL)
-model.sem(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL, 
-	VTE = NULL, VY = NULL, VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NULL, 
-	ME = NULL, KA = NULL, GA = NULL, indLab = NULL, facLab = NULL, covLab = NULL, 
+model.sem(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL,
+	VTE = NULL, VY = NULL, VPS = NULL, VE=NULL, TY = NULL, AL = NULL, MY = NULL,
+	ME = NULL, KA = NULL, GA = NULL, indLab = NULL, facLab = NULL, covLab = NULL,
 	groupLab = "group", ngroups = 1, con = NULL)
 }
 \arguments{
@@ -43,7 +43,7 @@ model.sem(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL,
 	Measurement error correlation matrix among Y indicators (must be \code{\linkS4class{SimMatrix}} object). Either RTE or TE (but not both) must be specified in SEM and CFA models.
 }
   \item{BE}{
-	Regression coefficient matrix among endogenous factors (must be \code{\linkS4class{SimMatrix}} object). BE must be specified in path analysis and SEM models. 
+	Regression coefficient matrix among endogenous factors (must be \code{\linkS4class{SimMatrix}} object). BE must be specified in path analysis and SEM models.
 }
   \item{VTE}{
 	Measurement error variance of indicators (must be \code{\linkS4class{SimVector}} object). Either VTE or VY (but not both) can be specified when RTE (instead of TE) is specified.
@@ -55,16 +55,16 @@ model.sem(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL,
 	Residual variance of factors (must be \code{\linkS4class{SimVector}} object). Either VPS or VE (but not both) can be specified when RPS (instead of PS) is specified.
 }
   \item{VE}{
-  Total variance of of factors (must be \code{\linkS4class{SimVector}} object). Either VPS or VE (but not both) can be specified when RPS (instead of PS) is specified.
-}  
+  Total variance of factors (must be \code{\linkS4class{SimVector}} object). Either VPS or VE (but not both) can be specified when RPS (instead of PS) is specified.
+}
   \item{TY}{
-	Measurement intercepts of Y indicators (must be \code{\linkS4class{SimVector}} object). Either TY or MY (but not both) can be specified. 
+	Measurement intercepts of Y indicators (must be \code{\linkS4class{SimVector}} object). Either TY or MY (but not both) can be specified.
 }
   \item{AL}{
-	Endogenous factor intercepts (must be \code{\linkS4class{SimVector}} object). Either AL or ME (but not both) can be specified. 
+	Endogenous factor intercepts (must be \code{\linkS4class{SimVector}} object). Either AL or ME (but not both) can be specified.
 }
   \item{MY}{
-	Y indicator means (must be \code{\linkS4class{SimVector}} object). Either TY or MY (but not both) can be specified. 
+	Y indicator means (must be \code{\linkS4class{SimVector}} object). Either TY or MY (but not both) can be specified.
 }
   \item{ME}{
 	Total mean of endogenous factors (must be \code{\linkS4class{SimVector}} object). NOTE: Either endogenous factor intercept or total mean of endogenous factor is specified. Both cannot be simultaneously specified.
@@ -81,10 +81,10 @@ model.sem(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL,
   \item{indLab}{
 	Character vector of indicator labels. If left blank, automatic labels will be generated as  \code{y1}, \code{y2}, ... \code{yy}.
 }
-  \item{facLab}{ 
+  \item{facLab}{
 	Character vector of factor labels. If left blank, automatic labels will be generated as \code{f1}, \code{f2}, ... \code{ff}
 }
-  \item{covLab}{ 
+  \item{covLab}{
 	Character vector of covariate labels. If left blank, automatic labels will be generated as \code{z1}, \code{z2}, ... \code{zz}
 }
   \item{groupLab}{
@@ -94,7 +94,7 @@ model.sem(LY = NULL,PS = NULL,RPS = NULL, TE = NULL,RTE = NULL, BE = NULL,
 	Number of groups for data generation (defaults to 1). Should only be specified for multiple group models in which all parameter matrices are identical across groups (when ngroups > 1, specified matrices are replicated for all groups). For multiple group models in which parameter matrices differ among groups, parameter matrices should instead be specified as a list (if any matrix argument is a list, the number of groups will be equal to the list's length, and the ngroups argument will be ignored).
 }
   \item{con}{
-	Additional parameters (phantom variables), equality constraints, and inequality constraints. Additional parameters must be specified using lavaan syntax. Allowed operators are ":=" (is defined as), "==" (is equal to), "<" (is less than), and ">" (is greater than). Names used in syntax must correspond to labels defined on free parameters in the model (with the exception that the name to the left of ":=" is a new parameter name). On the right hand side of all operators, any mathematical expressions are allowed, e.g., \code{"newparam := (load1 + load2 + load3)/3"}. For the "<" and ">" operators in data generation, if the specified relation is at odds with parameter specifications (e.g., the parameter to the left of the ">" operator is less that the parameter to the right), the left hand side parameter will be changed so that the relation holds with a very small difference (i.e., 0.000001). For example, in "load1 > load2", if load1 is 0.5 and load2 is 0.6, load1 will be changed to 0.6 + 0.000001 = 0.600001. 
+	Additional parameters (phantom variables), equality constraints, and inequality constraints. Additional parameters must be specified using lavaan syntax. Allowed operators are ":=" (is defined as), "==" (is equal to), "<" (is less than), and ">" (is greater than). Names used in syntax must correspond to labels defined on free parameters in the model (with the exception that the name to the left of ":=" is a new parameter name). On the right hand side of all operators, any mathematical expressions are allowed, e.g., \code{"newparam := (load1 + load2 + load3)/3"}. For the "<" and ">" operators in data generation, if the specified relation is at odds with parameter specifications (e.g., the parameter to the left of the ">" operator is less that the parameter to the right), the left hand side parameter will be changed so that the relation holds with a very small difference (i.e., 0.000001). For example, in "load1 > load2", if load1 is 0.5 and load2 is 0.6, load1 will be changed to 0.6 + 0.000001 = 0.600001.
 }
 }
 
@@ -103,7 +103,7 @@ The \emph{simsem} package is intricately tied to the \emph{lavaan} package for a
 
 The data generation template is simply a list of \code{SimMatrix} or \code{SimVector} objects. The \code{SimSem} object can be passed to the function \code{generate} to generate data, or can be passed to the function \code{sim} to generate and/or analyze data.
 
-To simulate multiple group data, users can either specify a integer in the ngroups argument (which creates a list of identical model arguments for each group), or pass a list of  \code{SimMatrix} or \code{SimVector} to any of the matrix arguments with length(s) equal to the number of groups desired (this approach will cause the ngroups argument to be ignored). If only one argument is a list, all other arguments will be replicated across groups (with the same parameter identification, population parameter values/distributions, and misspecification). If equality constraints are specified, these parameters will be constrained to be equal across groups.	
+To simulate multiple group data, users can either specify a integer in the ngroups argument (which creates a list of identical model arguments for each group), or pass a list of  \code{SimMatrix} or \code{SimVector} to any of the matrix arguments with length(s) equal to the number of groups desired (this approach will cause the ngroups argument to be ignored). If only one argument is a list, all other arguments will be replicated across groups (with the same parameter identification, population parameter values/distributions, and misspecification). If equality constraints are specified, these parameters will be constrained to be equal across groups.
 
 The \code{model.cfa}, \code{model.path}, and \code{model.sem} are the shortcuts for the \code{model} function when \code{modelType} are \code{"CFA"}, \code{"Path"}, and \code{"SEM"}, respectively.
 }
@@ -113,7 +113,7 @@ The \code{model.cfa}, \code{model.path}, and \code{model.sem} are the shortcuts 
 }
 
 \author{
-	Patrick Miller (University of Notre Dame; \email{pmille13@nd.edu}), 
+	Patrick Miller (University of Notre Dame; \email{pmille13@nd.edu}),
     Sunthud Pornprasertmanit (\email{psunthud@gmail.com})
 }
 \seealso{
@@ -154,7 +154,7 @@ RTE <- binds(diag(6))
 
 VTE <- bind(rep(NA, 6), 0.51)
 
-CFA.Model <- model(LY = LY, RPS = list(RPS, RPS), RTE = list(RTE, RTE), VTE=list(VTE, VTE), 
+CFA.Model <- model(LY = LY, RPS = list(RPS, RPS), RTE = list(RTE, RTE), VTE=list(VTE, VTE),
 	ngroups=2, modelType = "CFA")
 
 # Example 3: Linear growth curve model with model misspecification
@@ -202,7 +202,7 @@ ME <- bind(rep(NA, 4), 0)
 
 Path.Model <- model(RPS = RPS, BE = BE, ME = ME, modelType="Path")
 
-# Example 5: Full SEM model 
+# Example 5: Full SEM model
 loading <- matrix(0, 8, 3)
 loading[1:3, 1] <- NA
 loading[4:6, 2] <- NA
@@ -248,7 +248,7 @@ RTE <- binds(diag(6))
 
 VTE <- bind(rep(NA, 6), 0.51)
 
-noninvariance <- model(LY = list(LY1, LY2), RPS = list(RPS1, RPS2), RTE = list(RTE, RTE), 
+noninvariance <- model(LY = list(LY1, LY2), RPS = list(RPS1, RPS2), RTE = list(RTE, RTE),
 	VTE=list(VTE, VTE), ngroups=2, modelType = "CFA")
 
 # Example 7: Inequality Constraints
@@ -282,6 +282,6 @@ sth2 := load1 - load2
 "
 
 # Model Template
-weak <- model(LY = LY.in, RPS = RPS, VPS=list(VPS1, VPS2), RTE = RTE, VTE=VTE, ngroups=2, 
+weak <- model(LY = LY.in, RPS = RPS, VPS=list(VPS1, VPS2), RTE = RTE, VTE=VTE, ngroups=2,
 	modelType = "CFA", con=script)
 }

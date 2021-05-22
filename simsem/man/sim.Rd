@@ -197,7 +197,7 @@ Any combination of data-generation methods and data-analysis methods are valid. 
 	}
 }
 \examples{
-# Please go to www.simsem.org for more examples in the Vignettes.
+# Please go to https://simsem.org/ for more examples in the Vignettes.
 
 ## Example of using simsem model template
 library(lavaan)
