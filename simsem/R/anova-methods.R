@@ -1,6 +1,6 @@
 # this is based on the anova function in the lmer/lavaan package
 
-anovaSimResult <- function(object, ..., usedFit = NULL) {
+anova.SimResult <- function(object, ..., usedFit = NULL) {
   usedFit <- cleanUsedFit(usedFit, colnames(object@fit))
   if ("df" %in% colnames(object@fit) & "chisq" %in% colnames(object@fit)) {
     usedFit <- c("chisq", "df", setdiff(usedFit, c("chisq", "df")))
@@ -18,7 +18,8 @@ anovaSimResult <- function(object, ..., usedFit = NULL) {
 
   # list of models
   mods <- c(list(object), dots[modp])
-  names(mods) <- sapply(as.list(mcall)[c(FALSE, TRUE, modp)], as.character)
+  names(mods)[ 1] <- as.character(as.list(mcall)[2])
+  names(mods)[-1] <- sapply(substitute(list(...))[-1], deparse)
 
   # Make sure models come from the same seed else stop and give warning
   nseed <- mods[[1]]@seed[1]
@@ -120,7 +121,7 @@ anovaSimResult <- function(object, ..., usedFit = NULL) {
   } else if (length(mods) > 2) {
     diffStats <-  sapply(matDelta, rowMeans)
     colnames(diffStats) <- paste(colnames(diffStats), "diff")
-    rownames(diffStats) <- paste(names(mods)[2:length(mods)], "-",
+    rownames(diffStats) <- paste(names(mods)[2:length(mods)], "vs.",
                                  names(mods)[-length(mods)])
 
     # Power of test at alpha=.05
@@ -158,6 +159,15 @@ anovaSimResult <- function(object, ..., usedFit = NULL) {
     colnames(varyResult) <- c(names(pred), paste("power.", 1:ncol(temp), sep = ""))
     rownames(varyResult) <- NULL
   }
+
+  val <- as.data.frame(val)
+  class(val) <- c("lavaan.data.frame","data.frame")
+  attr(val, "header") <- "Fit Measures per Model:"
+
+  diffStats <- as.data.frame(diffStats)
+  class(diffStats) <- c("lavaan.data.frame","data.frame")
+  attr(diffStats, "header") <- "Nested Model Comparisons:"
+
   result <- list(summary = val, diff = diffStats, varyParam = varyResult)
   return(result)
 
@@ -165,4 +175,4 @@ anovaSimResult <- function(object, ..., usedFit = NULL) {
   # in the list that provide the conditional median of the varying parameter.
 }
 
-setMethod("anova", signature(object = "SimResult"), anovaSimResult)
+setMethod("anova", "SimResult", anova.SimResult)
