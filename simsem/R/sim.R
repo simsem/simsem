@@ -1,5 +1,5 @@
 ### Sunthud Pornprasertmanit & Terrence D. Jorgensen (anyone else?)
-### Last updated: 23 September 2020
+### Last updated: 24 May 2021
 ### Primary engines for simulation.  Everything else is added details.
 
 sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
@@ -12,7 +12,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
                 createOrder = c(1, 2, 3), aux = NULL, group = NULL, mxFit = FALSE,
                 mxMixture = FALSE, citype = NULL, cilevel = 0.95, seed = 123321,
                 silent = FALSE, multicore = options('simsem.multicore')[[1]],
-                cluster = FALSE, numProc = NULL, paramOnly = FALSE, dataOnly = FALSE,
+                numProc = NULL, paramOnly = FALSE, dataOnly = FALSE,
                 smartStart = FALSE, previousSim = NULL, completeRep = FALSE,
                 stopOnError = FALSE) {
   mc <- match.call()
@@ -690,8 +690,8 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
                     optDraws = optDraws, createOrder = createOrder, aux = aux,
                     group = group, mxFit = mxFit, mxMixture = mxMixture,
                     citype = citype, cilevel = cilevel, seed = seed,
-                    silent = silent, multicore = multicore, cluster = cluster,
-                    numProc = numProc, paramOnly = paramOnly, dataOnly = dataOnly,
+                    silent = silent, multicore = multicore, numProc = numProc,
+                    paramOnly = paramOnly, dataOnly = dataOnly,
                     smartStart = smartStart, previousSim = Result,
                     completeRep = completeRep, stopOnError = stopOnError, ...)
     }

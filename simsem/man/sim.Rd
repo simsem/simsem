@@ -14,9 +14,9 @@ sim(nRep, model, n, generate = NULL, ..., rawData = NULL, miss = NULL, datafun=N
 	covData = NULL, maxDraw = 50, misfitType = "f0", misfitBounds = NULL,
 	averageNumMisspec = FALSE, optMisfit=NULL, optDraws = 50,
 	createOrder = c(1, 2, 3), aux = NULL, group = NULL, mxFit = FALSE,
-	mxMixture = FALSE, citype = NULL, cilevel = 0.95, seed = 123321, silent = FALSE,
-	multicore = options('simsem.multicore')[[1]], cluster = FALSE,
-	numProc = NULL, paramOnly = FALSE, dataOnly=FALSE, smartStart=FALSE,
+	mxMixture = FALSE, citype = NULL, cilevel = 0.95, seed = 123321,
+	silent = FALSE, multicore = options('simsem.multicore')[[1]], numProc = NULL,
+	paramOnly = FALSE, dataOnly=FALSE, smartStart=FALSE,
 	previousSim = NULL, completeRep = FALSE, stopOnError = FALSE)
 }
 \arguments{
@@ -123,16 +123,13 @@ sim(nRep, model, n, generate = NULL, ..., rawData = NULL, miss = NULL, datafun=N
     Confidence level. For the current version, this argument will be forwarded to the \code{"level"} argument in the  \code{\link[lavaan]{parameterEstimates}} function from the \code{lavaan} package. This argument is not active when the \code{OpenMx} package is used.
 }
   \item{seed}{
-	Random number seed. Note that the seed number is always fixed in the \code{simsem} so that users can always replicate the same simulatin or can be confidence that the same data set are generated. Reproducibility across multiple cores or clusters is ensured using R'Lecuyer package.
+	Random number seed. Note that the seed number is always fixed in the \code{simsem} so that users can always replicate the same simulation or can be confidence that the same data set are generated. Reproducibility across multiple cores or clusters is ensured using R'Lecuyer package.
 }
   \item{silent}{
 	If \code{TRUE}, suppress warnings.
 }
   \item{multicore}{
 	Users may put \code{TRUE} or \code{FALSE}. If \code{TRUE}, multiple processors within a computer will be utilized. The default value is \code{FALSE}. Users may permanently change the default value by assigning the following line: \code{options('simsem.multicore' = TRUE)}
-}
-  \item{cluster}{
-	Not applicable now. Used to specify nodes in hpc in order to be parallelizable.
 }
   \item{numProc}{
 	Number of processors for using multiple processors. If it is \code{NULL}, the package will find the maximum number of processors.
