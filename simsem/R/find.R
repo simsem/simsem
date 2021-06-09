@@ -3,10 +3,11 @@
 
 # findFactorIntercept: Find the factor intercept if regression coefficients and
 # factor means are specified
-
-findFactorIntercept <- function(beta, factorMean = NULL, gamma = NULL, covmean = NULL) {
-	if(!is.null(gamma)) {
-		beta <- parseGammaToBeta(beta, gamma)
+findFactorIntercept <- function(beta, factorMean = NULL,
+                                gamma = NULL, covmean = NULL) {
+	if (!is.null(gamma)) {
+	  if (is.null(factorMean)) factorMean <- rep(0, nrow(beta))
+	  beta <- parseGammaToBeta(beta, gamma)
 		factorMean <- c(covmean, factorMean)
 	}
     ni <- nrow(beta)
@@ -29,28 +30,28 @@ findFactorIntercept <- function(beta, factorMean = NULL, gamma = NULL, covmean =
             iv.mean <- factorMean[agg]
         }
     }
-	if(!is.null(gamma)) {
+	if (!is.null(gamma)) {
 		intercept <- intercept[(length(covmean) + 1):length(intercept)]
 	}
     return(as.vector(intercept))
 }
 
+
 # findFactorResidualVar: Find the factor residual variance if total variances,
 # correlation, and regression coefficients are specified.
-
-findFactorResidualVar <- function(beta, corPsi, totalVarPsi = NULL, gamma = NULL, covcov = NULL) {
-	if(!is.null(gamma)) {
-		beta <- parseGammaToBeta(beta, gamma)
+findFactorResidualVar <- function(beta, corPsi, totalVarPsi = NULL,
+                                  gamma = NULL, covcov = NULL) {
+	if (!is.null(gamma)) {
+	  if (is.null(totalVarPsi)) totalVarPsi <- rep(1, nrow(beta))
+	  beta <- parseGammaToBeta(beta, gamma)
 		corPsi <- parseCovCovToPsi(corPsi, cov2cor(covcov))
 		totalVarPsi <- c(diag(covcov), totalVarPsi)
 	}
-    if (sum(diag(corPsi)) == 0)
-        diag(corPsi) <- 1
+    if (sum(diag(corPsi)) == 0) diag(corPsi) <- 1
     ni <- nrow(beta)
     set <- findRecursiveSet(beta)
     errorVar <- rep(1, ni)
-    if (is.null(totalVarPsi))
-        totalVarPsi <- rep(1, ni)
+    if (is.null(totalVarPsi))  totalVarPsi <- rep(1, ni)
     errorVar[set[[1]]] <- totalVarPsi[set[[1]]]
     iv <- NULL
     ivCor <- corPsi[set[[1]], set[[1]]]
@@ -86,18 +87,19 @@ findFactorResidualVar <- function(beta, corPsi, totalVarPsi = NULL, gamma = NULL
             ivCov <- solve(ID - temp.path2) %*% real.tempPsi %*% t(solve(ID - temp.path2))
         }
     }
-	if(!is.null(gamma)) {
+	if (!is.null(gamma)) {
 		errorVar <- errorVar[(nrow(covcov) + 1):length(errorVar)]
 	}
     return(as.vector(errorVar))
 }
 
+
 # findFactorTotalVar: Find the factor total variance if regression
 # coefficients, factor correlation, and factor residual variances are
 # specified.
-
-findFactorTotalVar <- function(beta, corPsi, residualVarPsi, gamma = NULL, covcov = NULL) {
-	if(!is.null(gamma)) {
+findFactorTotalVar <- function(beta, corPsi, residualVarPsi,
+                               gamma = NULL, covcov = NULL) {
+	if (!is.null(gamma)) {
 		beta <- parseGammaToBeta(beta, gamma)
 		corPsi <- parseCovCovToPsi(corPsi, cov2cor(covcov))
 		residualVarPsi <- c(diag(covcov), residualVarPsi)
@@ -109,24 +111,25 @@ findFactorTotalVar <- function(beta, corPsi, residualVarPsi, gamma = NULL, covco
     diag(ID) <- 1
     iv.cov <- solve(ID - beta) %*% real.psi %*% t(solve(ID - beta))
     factor.var <- diag(iv.cov)
-	if(!is.null(gamma)) {
+	if (!is.null(gamma)) {
 		factor.var <- factor.var[(nrow(covcov) + 1):length(factor.var)]
 	}
     return(as.vector(factor.var))
 }
 
+
 # findFactorMean: Find the factor mean if regression coefficients and factor
 # intercept are specified.
-
-findFactorMean <- function(beta, alpha = NULL, gamma = NULL, covmean = NULL) {
-	if(!is.null(gamma)) {
+findFactorMean <- function(beta, alpha = NULL,
+                           gamma = NULL, covmean = NULL) {
+	if (!is.null(gamma)) {
 		beta <- parseGammaToBeta(beta, gamma)
 		alpha <- c(covmean, alpha)
 	}
     ni <- nrow(beta)
     set <- findRecursiveSet(beta)
     factor.mean <- rep(0, ni)
-    if (is.null(alpha)) 
+    if (is.null(alpha))
         alpha <- rep(0, ni)
     factor.mean[set[[1]]] <- alpha[set[[1]]]
     iv <- NULL
@@ -142,87 +145,88 @@ findFactorMean <- function(beta, alpha = NULL, gamma = NULL, covmean = NULL) {
             iv.mean <- factor.mean[agg]
         }
     }
-	if(!is.null(gamma)) {
+	if (!is.null(gamma)) {
 		factor.mean <- factor.mean[(length(covmean) + 1):length(factor.mean)]
 	}
     return(as.vector(factor.mean))
 }
 
+
 # findFactorTotalCov: Find the factor total covariance if regression
 # coefficients and factor covariances (which may be made from factor
 # correlation, total factor variances, and error factor variances) are
 # specified
-
-findFactorTotalCov <- function(beta, psi = NULL, corPsi = NULL, totalVarPsi = NULL, 
-    errorVarPsi = NULL, gamma = NULL, covcov = NULL) {
-    if (is.null(psi)) {
-        if (is.null(errorVarPsi)) 
-            errorVarPsi <- findFactorResidualVar(beta, corPsi, totalVarPsi)
-        psi <- suppressWarnings(cor2cov(as.matrix(corPsi), sqrt(errorVarPsi)))
-    }
-    iden <- diag(nrow(beta))
+findFactorTotalCov <- function(beta, psi = NULL, corPsi = NULL,
+                               totalVarPsi = NULL, errorVarPsi = NULL,
+                               gamma = NULL, covcov = NULL) {
+  if (is.null(psi)) {
+    if (is.null(errorVarPsi))
+       errorVarPsi <- findFactorResidualVar(beta, corPsi, totalVarPsi)
+    psi <- suppressWarnings(cor2cov(as.matrix(corPsi), sqrt(errorVarPsi)))
+  }
+  iden <- diag(nrow(beta))
 	temp <- solve(iden - beta)
     facTotalCov <- temp %*% psi %*% t(temp)
-	if(!is.null(gamma)) {
+	if (!is.null(gamma)) {
 		facTotalCov <- facTotalCov + (temp %*% gamma %*% covcov %*% t(gamma) %*% t(temp))
 	}
-    return(facTotalCov)
+  return(facTotalCov)
 }
+
 
 # findIndTotalVar: Find indicator total variances based on loading matrix,
 # total factor covariance, and measurement error variances.
-findIndTotalVar <- function(lambda, totalFactorCov, residualVarTheta, kappa = NULL, covcov = NULL) {
+findIndTotalVar <- function(lambda, totalFactorCov, residualVarTheta,
+                            kappa = NULL, covcov = NULL) {
     factor.part <- lambda %*% totalFactorCov %*% t(lambda)
     indicator.var <- diag(factor.part) + residualVarTheta
-	
-	if(!is.null(kappa)) indicator.var <- indicator.var + diag(kappa %*% covcov %*% t(kappa))
-    return(as.vector(indicator.var))
+
+	if (!is.null(kappa)) indicator.var <- indicator.var + diag(kappa %*% covcov %*% t(kappa))
+  return(as.vector(indicator.var))
 }
+
 
 # findIndIntercept: Find the measurement intercept if factor loading, total
 # factor covariance, and total indicator variances are specified
-
-findIndIntercept <- function(lambda, factorMean = NULL, indicatorMean = NULL, kappa = NULL, covmean = NULL) {
-    ni <- nrow(lambda)
-    nk <- ncol(lambda)
-    if (is.null(factorMean)) 
-        factorMean <- rep(0, nk)
-    if (is.null(indicatorMean)) 
-        indicatorMean <- rep(0, ni)
-    factor.part <- lambda %*% factorMean
-    intercept <- indicatorMean - factor.part
-	if(!is.null(kappa)) intercept <- intercept - (kappa %*% covmean)
-    return(as.vector(intercept))
+findIndIntercept <- function(lambda, factorMean = NULL, indicatorMean = NULL,
+                             kappa = NULL, covmean = NULL) {
+  ni <- nrow(lambda)
+  nk <- ncol(lambda)
+  if (is.null(factorMean)) factorMean <- rep(0, nk)
+  if (is.null(indicatorMean)) indicatorMean <- rep(0, ni)
+  factor.part <- lambda %*% factorMean
+  intercept <- indicatorMean - factor.part
+	if (!is.null(kappa)) intercept <- intercept - (kappa %*% covmean)
+  return(as.vector(intercept))
 }
+
 
 # findIndResidualVar: Find the residual variances of indicators if factor
 # loading, total factor covariance, and total indicator variances are specified
-
-findIndResidualVar <- function(lambda, totalFactorCov, totalVarTheta = NULL, kappa = NULL, covcov = NULL) {
-    ni <- nrow(lambda)
-    if (is.null(totalVarTheta)) 
-        totalVarTheta <- rep(1, ni)
-    factor.part <- lambda %*% totalFactorCov %*% t(lambda)
-    error.var <- totalVarTheta - diag(factor.part)
-	if(!is.null(kappa)) error.var <- error.var - diag(kappa %*% covcov %*% t(kappa))
-    error.var[(error.var < 0) & (totalVarTheta == 0)] <- 0
-    return(as.vector(error.var))
+findIndResidualVar <- function(lambda, totalFactorCov, totalVarTheta = NULL,
+                               kappa = NULL, covcov = NULL) {
+  ni <- nrow(lambda)
+  if (is.null(totalVarTheta)) totalVarTheta <- rep(1, ni)
+  factor.part <- lambda %*% totalFactorCov %*% t(lambda)
+  error.var <- totalVarTheta - diag(factor.part)
+	if (!is.null(kappa)) error.var <- error.var - diag(kappa %*% covcov %*% t(kappa))
+  error.var[(error.var < 0) & (totalVarTheta == 0)] <- 0
+  return(as.vector(error.var))
 }
+
 
 # findIndMean: Find indicator means based on loading matrix, factor means, and
 # measurement intercept.
-
-findIndMean <- function(lambda, factorMean = NULL, tau = NULL, kappa = NULL, covmean = NULL) {
-    ni <- nrow(lambda)
-    nk <- ncol(lambda)
-    if (is.null(factorMean)) 
-        factorMean <- rep(0, nk)
-    if (is.null(tau)) 
-        tau <- rep(0, ni)
-    factor.part <- lambda %*% factorMean
-    indicator.mean <- tau + factor.part
-	if(!is.null(kappa)) indicator.mean <- indicator.mean + (kappa %*% covmean)
-    return(as.vector(indicator.mean))
+findIndMean <- function(lambda, factorMean = NULL, tau = NULL,
+                        kappa = NULL, covmean = NULL) {
+  ni <- nrow(lambda)
+  nk <- ncol(lambda)
+  if (is.null(factorMean)) factorMean <- rep(0, nk)
+  if (is.null(tau)) tau <- rep(0, ni)
+  factor.part <- lambda %*% factorMean
+  indicator.mean <- tau + factor.part
+	if (!is.null(kappa)) indicator.mean <- indicator.mean + (kappa %*% covmean)
+  return(as.vector(indicator.mean))
 }
 
 # findPossibleFactorCor: From the set of regression coefficients, this function
@@ -258,7 +262,7 @@ findRecursiveSet <- function(beta) {
     i <- 1
     while (ni.sofar < ni) {
         temp <- findRowZero(beta, fix.variable)
-        if (is.null(temp)) 
+        if (is.null(temp))
             stop("The matrix is not recursive.")
         fix.variable[temp] <- TRUE
         result[[i]] <- temp
@@ -269,7 +273,7 @@ findRecursiveSet <- function(beta) {
 }
 
 # \title{
-	# Find rows in a matrix that all elements are zero in non-fixed subset rows and columns. 
+	# Find rows in a matrix that all elements are zero in non-fixed subset rows and columns.
 # }
 # \description{
 	# Find rows in a matrix that all elements are zero in non-fixed subset rows and columns. This function will be used in the \code{\link{findRecursiveSet}} function
@@ -292,7 +296,7 @@ findRecursiveSet <- function(beta) {
 findRowZero <- function(square.matrix, is.row.fixed = FALSE) {
     ni <- nrow(square.matrix)
     if (length(is.row.fixed) == 1) {
-        if (is.row.fixed == FALSE) 
+        if (is.row.fixed == FALSE)
             is.row.fixed <- rep(FALSE, ni)
     }
     result <- NULL
@@ -300,9 +304,9 @@ findRowZero <- function(square.matrix, is.row.fixed = FALSE) {
     for (i in 1:ni) {
         if (is.row.fixed[i] == FALSE) {
             temp <- sum(square.matrix[i, !is.row.fixed] == 0, na.rm = TRUE)
-            if (temp == desired.zero) 
+            if (temp == desired.zero)
                 result <- c(result, i)
         }
     }
     return(result)
-} 
+}
