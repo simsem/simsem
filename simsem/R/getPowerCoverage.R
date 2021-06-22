@@ -41,7 +41,8 @@ getCoverage <- function(simResult, coverValue = NULL, contParam = NULL, coverPar
     }
 }
 
-getPred <- function(contParam = NULL, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, paramVal = NULL) {
+getPred <- function(contParam = NULL, nVal = NULL, pmMCARval = NULL,
+                    pmMARval = NULL, paramVal = NULL) {
 	pred <- NULL
 	pred$N <- nVal
 	pred$MCAR <- pmMCARval
@@ -66,19 +67,25 @@ getPred <- function(contParam = NULL, nVal = NULL, pmMCARval = NULL, pmMARval = 
 	pred
 }
 
-continuousPower <- function(simResult, contN = TRUE, contMCAR = FALSE, contMAR = FALSE,
-    contParam = NULL, alpha = 0.05, powerParam = NULL, pred = NULL) {
+continuousPower <- function(simResult, contN = TRUE, contMCAR = FALSE,
+                            contMAR = FALSE, contParam = NULL, alpha = 0.05,
+                            powerParam = NULL, pred = NULL) {
 	object <- clean(simResult)
     crit.value <- qnorm(1 - alpha/2)
     sig <- 0 + (abs(object@coef/object@se) > crit.value)
-	continuousLogical(simResult, logical = sig, contN = contN, contMCAR = contMCAR, contMAR = contMAR, contParam = contParam, logicalParam = powerParam, pred = pred)
+	continuousLogical(object, logical = sig, contN = contN, contMCAR = contMCAR,
+	                  contMAR = contMAR, contParam = contParam,
+	                  logicalParam = powerParam, pred = pred)
 }
 
-continuousCoverage <- function(simResult, coverValue = NULL, contN = TRUE, contMCAR = FALSE, contMAR = FALSE,
-    contParam = NULL, coverParam = NULL, pred = NULL) {
+continuousCoverage <- function(simResult, coverValue = NULL, contN = TRUE,
+                               contMCAR = FALSE, contMAR = FALSE,
+                               contParam = NULL, coverParam = NULL, pred = NULL) {
 	object <- clean(simResult)
 	cover <- calcCoverMatrix(object, coverValue = coverValue)
-	continuousLogical(simResult, logical = cover, contN = contN, contMCAR = contMCAR, contMAR = contMAR, contParam = contParam, logicalParam = coverParam, pred = pred)
+	continuousLogical(object, logical = cover, contN = contN, contMCAR = contMCAR,
+	                  contMAR = contMAR, contParam = contParam,
+	                  logicalParam = coverParam, pred = pred)
 }
 
 calcCoverMatrix <- function(object, coverValue = NULL) {
@@ -105,8 +112,9 @@ calcCoverMatrix <- function(object, coverValue = NULL) {
 # parameters Will calculate power over continuously varying n, percent missing,
 # or parameters
 
-continuousLogical <- function(object, logical, contN = TRUE, contMCAR = FALSE, contMAR = FALSE,
-    contParam = NULL, logicalParam = NULL, pred = NULL) {
+continuousLogical <- function(object, logical, contN = TRUE, contMCAR = FALSE,
+                              contMAR = FALSE, contParam = NULL,
+                              logicalParam = NULL, pred = NULL) {
 
     # Change warning option to supress warnings
     warnT <- as.numeric(options("warn"))
