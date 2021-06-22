@@ -3,15 +3,15 @@
 
 
 
-getPower <- function(simResult, alpha = 0.05, contParam = NULL, powerParam = NULL, 
+getPower <- function(simResult, alpha = 0.05, contParam = NULL, powerParam = NULL,
     nVal = NULL, pmMCARval = NULL, pmMARval = NULL, paramVal = NULL) {
     object <- clean(simResult)
-    condition <- c(length(unique(object@pmMCAR)) > 1, length(unique(object@pmMAR)) > 
+    condition <- c(length(unique(object@pmMCAR)) > 1, length(unique(object@pmMAR)) >
         1, length(unique(object@n)) > 1)
     if (any(condition)) {
         pred <- getPred(contParam, nVal, pmMCARval, pmMARval, paramVal)
-        pow <- continuousPower(object, length(unique(object@n)) > 1, length(unique(object@pmMCAR)) > 
-            1, length(unique(object@pmMAR)) > 1, contParam = contParam, alpha = alpha, 
+        pow <- continuousPower(object, length(unique(object@n)) > 1, length(unique(object@pmMCAR)) >
+            1, length(unique(object@pmMAR)) > 1, contParam = contParam, alpha = alpha,
             powerParam = powerParam, pred = pred)
         return(pow)
     } else {
@@ -23,15 +23,15 @@ getPower <- function(simResult, alpha = 0.05, contParam = NULL, powerParam = NUL
     }
 }
 
-getCoverage <- function(simResult, coverValue = NULL, contParam = NULL, coverParam = NULL, 
+getCoverage <- function(simResult, coverValue = NULL, contParam = NULL, coverParam = NULL,
     nVal = NULL, pmMCARval = NULL, pmMARval = NULL, paramVal = NULL) {
     object <- clean(simResult)
-    condition <- c(length(unique(object@pmMCAR)) > 1, length(unique(object@pmMAR)) > 
+    condition <- c(length(unique(object@pmMCAR)) > 1, length(unique(object@pmMAR)) >
         1, length(unique(object@n)) > 1)
     if (any(condition)) {
         pred <- getPred(contParam, nVal, pmMCARval, pmMARval, paramVal)
-        pow <- continuousCoverage(object, coverValue = coverValue, contN = length(unique(object@n)) > 1, contMCAR = length(unique(object@pmMCAR)) > 
-            1, contMAR = length(unique(object@pmMAR)) > 1, contParam = contParam, 
+        pow <- continuousCoverage(object, coverValue = coverValue, contN = length(unique(object@n)) > 1, contMCAR = length(unique(object@pmMCAR)) >
+            1, contMAR = length(unique(object@pmMAR)) > 1, contParam = contParam,
             coverParam = coverParam, pred = pred)
         return(pow)
     } else {
@@ -48,7 +48,7 @@ getPred <- function(contParam = NULL, nVal = NULL, pmMCARval = NULL, pmMARval = 
 	pred$MAR <- pmMARval
 	if (!is.null(paramVal)) {
 		if (is(paramVal, "list")) {
-			if (is.null(names(paramVal))) 
+			if (is.null(names(paramVal)))
 			  names(paramVal) <- contParam
 			pred <- c(pred, paramVal)
 		} else if (is.vector(paramVal)) {
@@ -66,7 +66,7 @@ getPred <- function(contParam = NULL, nVal = NULL, pmMCARval = NULL, pmMARval = 
 	pred
 }
 
-continuousPower <- function(simResult, contN = TRUE, contMCAR = FALSE, contMAR = FALSE, 
+continuousPower <- function(simResult, contN = TRUE, contMCAR = FALSE, contMAR = FALSE,
     contParam = NULL, alpha = 0.05, powerParam = NULL, pred = NULL) {
 	object <- clean(simResult)
     crit.value <- qnorm(1 - alpha/2)
@@ -74,7 +74,7 @@ continuousPower <- function(simResult, contN = TRUE, contMCAR = FALSE, contMAR =
 	continuousLogical(simResult, logical = sig, contN = contN, contMCAR = contMCAR, contMAR = contMAR, contParam = contParam, logicalParam = powerParam, pred = pred)
 }
 
-continuousCoverage <- function(simResult, coverValue = NULL, contN = TRUE, contMCAR = FALSE, contMAR = FALSE, 
+continuousCoverage <- function(simResult, coverValue = NULL, contN = TRUE, contMCAR = FALSE, contMAR = FALSE,
     contParam = NULL, coverParam = NULL, pred = NULL) {
 	object <- clean(simResult)
 	cover <- calcCoverMatrix(object, coverValue = coverValue)
@@ -89,7 +89,7 @@ calcCoverMatrix <- function(object, coverValue = NULL) {
 		usedParam <- intersect(colnames(lowerBound), colnames(paramValue)) # colnames of lower and upper bounds are the same
 		lowerBound <- lowerBound[,usedParam]
 		upperBound <- upperBound[,usedParam]
-		paramValue <- paramValue[,usedParam]	
+		paramValue <- paramValue[,usedParam]
 		if(nrow(paramValue) == 1) {
 			paramValue <- matrix(rep(paramValue, each = nrow(lowerBound)), nrow(lowerBound))
 			colnames(paramValue) <- usedParam
@@ -105,33 +105,33 @@ calcCoverMatrix <- function(object, coverValue = NULL) {
 # parameters Will calculate power over continuously varying n, percent missing,
 # or parameters
 
-continuousLogical <- function(object, logical, contN = TRUE, contMCAR = FALSE, contMAR = FALSE, 
+continuousLogical <- function(object, logical, contN = TRUE, contMCAR = FALSE, contMAR = FALSE,
     contParam = NULL, logicalParam = NULL, pred = NULL) {
-    
+
     # Change warning option to supress warnings
     warnT <- as.numeric(options("warn"))
     options(warn = -1)
-    
+
     # Clean simResult object and get a replications by parameters matrix of 0s and
     # 1s for logistic regression
     nrep <- dim(logical)[[1]]
-    
+
     # Find paramaterss to get power for
     if (!is.null(logicalParam)) {
         j <- match(logicalParam, dimnames(logical)[[2]])  # Return column indices that start with 'param'
-        logical <- data.frame(logical[, j])
+        logical <- data.frame(logical[, j, drop = FALSE])
     }
 
     # Create matrix of predictors (randomly varying params)
     x <- NULL
     predDefault <- is.null(pred)
-    
+
     if (contN) {
         if (!length(object@n) == nrep) {
             stop("Number of random sample sizes is not the same as the number of replications, check to see if N varied across replications")
         }
         x <- cbind(x, object@n)
-        if (predDefault) 
+        if (predDefault)
             pred$N <- min(object@n):max(object@n)
     }
     if (contMCAR) {
@@ -139,37 +139,38 @@ continuousLogical <- function(object, logical, contN = TRUE, contMCAR = FALSE, c
             stop("Number of random pmMCARs is not the same as the number of replications, check to see if pmMCAR varied across replications")
         }
         x <- cbind(x, object@pmMCAR)
-        if (predDefault) 
+        if (predDefault)
             pred$MCAR <- seq(min(object@pmMCAR), max(object@pmMCAR), by = 0.01)
-        
+
     }
     if (contMAR) {
         if (!length(object@pmMAR) == nrep) {
             stop("Number of random pmMARs is not the same as the number of replications, check to see if pmMAR varied across replications")
         }
         x <- cbind(x, object@pmMAR)
-        if (predDefault) 
+        if (predDefault)
             pred$MAR <- seq(min(object@pmMAR), max(object@pmMAR), by = 0.01)
-        
+
     }
     if (!is.null(contParam)) {
         if (!(dim(object@paramValue)[[1]] == nrep)) {
             stop("Number of random parameters is not the same as the number of replications, check to see if parameters varied across replications")
         }
         j <- match(contParam, names(object@paramValue))  # Return column indices that start with 'contParam'
-        x <- cbind(x, object@paramValue[, j])
+        x <- cbind(x, as.matrix(object@paramValue[, j, drop = FALSE])) #TDJ fix on 22-6-2021
         if (predDefault) {
             paramVal <- list()
             for (i in 1:length(contParam)) {
-                temp <- seq(min(object@paramValue[, contParam[i]]), max(object@paramValue[, 
-                  contParam[i]]), length.out = 5)
+                temp <- seq(from = min(object@paramValue[, contParam[i]]),
+                            to = max(object@paramValue[, contParam[i]]),
+                            length.out = 5)
                 paramVal[[i]] <- unique(temp)
             }
             names(paramVal) <- contParam
             pred <- c(pred, paramVal)
         }
     }
-    
+
     res <- NULL
     powVal <- data.frame(expand.grid(pred))
     powVal <- cbind(rep(1, dim(powVal)[1]), powVal)
@@ -187,11 +188,11 @@ continuousLogical <- function(object, logical, contN = TRUE, contMCAR = FALSE, c
     colnames(powVal) <- paste("iv.", colnames(powVal), sep = "")
     pow <- cbind(powVal[, -1], res)
     colnames(pow) <- c(colnames(powVal)[-1], colnames(res))
-    
-    
+
+
     ## Return warnings setting to user's settings
     options(warn = warnT)
-    
+
     return(pow)
 }
 
@@ -232,4 +233,4 @@ predProb <- function(newdat, glmObj, alpha = 0.05) {
 	if(round(pp[2], 6) == 0) pp[1] <- 0
     return(pp)
 }
- 
+
