@@ -22,7 +22,15 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
   start.time0 <- start.time <- proc.time()[3]
   timing <- list()
 	timing$StartTime <- Sys.time()
-  RNGkind("L'Ecuyer-CMRG")
+	if (RNGkind()[1L] != "L'Ecuyer-CMRG") {
+	  message('The RNGkind() was changed from "', RNGkind()[1L],
+	          '" to RNGkind("L\'Ecuyer-CMRG") in order to enable the multiple ',
+	          'streams in the parallel package.\nTo set a RNG seed using the ',
+	          'previous RNGkind(), you can use\n\tRNGkind("',
+	          paste(RNGkind(), collapse = '","'), '")\n or \n\t',
+	          'set.seed(seed, kind = "', RNGkind()[1L], '")')
+	  RNGkind("L'Ecuyer-CMRG")
+	}
 	if (is.null(previousSim)) {
 		set.seed(seed)
 	} else {

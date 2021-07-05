@@ -24,6 +24,9 @@ Why does this constrain pop. loadings for first factor, not second?
 continuousPower()
 - add interval= and level= arguments for uncertainty of estimate
 
+:::continuousLogical()
+- only linear, so fucks up when random parameters are centered around 0
+
 New nonnormality tools:
 - mnonr package
   - also provides Vale--Maurelli we already use
