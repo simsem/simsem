@@ -1,0 +1,21 @@
+citHeader("The maintainer and *primary* contributors to this package are listed as authors, but we are also grateful for the contributions of others.  You may also be interested in citing sources that provide tutorials involving simsem, such as those listed at http://simsem.org/papers")
+
+year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", meta$Date, perl = TRUE)
+vers <- paste("R package version", meta$Version)
+url <- "https://CRAN.R-project.org/package=simsem"
+
+citEntry(entry = "Manual",
+  title        = "\\texttt{simsem}: {SIM}ulated structural equation modeling",
+  author       = c(person(given = "Sunthud", family = "Pornprasertmanit"),
+                   person(given = "Patrick", family = "Miller"),
+                   person(given = c("Alexander","M."), family = "Schoemann"),
+                   person(given = c("Terrence","D."), family = "Jorgensen")),
+  year         = year,
+  note         = vers,
+  url          = url,
+
+  textVersion  =
+  paste("Pornprasertmanit, S., Miller, P., Schoemann, A. M., & Jorgensen, T. D. (",
+        year, "). simsem: SIMulated structural equation modeling. ",
+        vers, ". Retrieved from ", url, sep = "")
+)
