@@ -1,5 +1,5 @@
 ### Sunthud Pornprasertmanit & Terrence D. Jorgensen (anyone else?)
-### Last updated: 24 May 2021
+### Last updated: 4 November 2021
 ### Primary engines for simulation.  Everything else is added details.
 
 sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
@@ -373,7 +373,14 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
     if (is.null(numProc)) numProc <- parallel::detectCores() ## FIXME: subtract 1 for master node?
     if (sys == "windows") {
       cl <- parallel::makeCluster(rep("localhost", numProc), type = "SOCK")
-      parallel::clusterExport(cl, lavaanfun) # TODO: need to export any other objects?
+      args4clApply <- c("model","generate","miss","datafun","lavaanfun","outfun",
+                        "outfundata","silent","facDist","indDist","errorDist",
+                        "sequential","saveLatentVar","realData","covData","maxDraw",
+                        "misfitBounds","averageNumMisspec","optMisfit","optDraws",
+                        "createOrder","misfitType","aux","paramOnly","dataOnly",
+                        "smartStart","popData","group","mxFit","mxMixture","citype",
+                        "cilevel","stopOnError")
+      parallel::clusterExport(cl, varlist = args4clApply) # must include any objects passed below
       Result.l <- parallel::clusterApplyLB(cl, simConds, runRep, model = model,
                                            generateO = generate, miss = miss,
                                            datafun = datafun, lavaanfun = lavaanfun,
