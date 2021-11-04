@@ -373,14 +373,17 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
     if (is.null(numProc)) numProc <- parallel::detectCores() ## FIXME: subtract 1 for master node?
     if (sys == "windows") {
       cl <- parallel::makeCluster(rep("localhost", numProc), type = "SOCK")
-      args4clApply <- c("model","generate","miss","datafun","lavaanfun","outfun",
+      #FIXME: necessary to export all these objects?
+      args4clApply <- c("model","generate","miss","datafun","outfun",
                         "outfundata","silent","facDist","indDist","errorDist",
                         "sequential","saveLatentVar","realData","covData","maxDraw",
                         "misfitBounds","averageNumMisspec","optMisfit","optDraws",
                         "createOrder","misfitType","aux","paramOnly","dataOnly",
                         "smartStart","popData","group","mxFit","mxMixture","citype",
                         "cilevel","stopOnError")
-      parallel::clusterExport(cl, varlist = args4clApply) # must include any objects passed below
+      ## remove NULL objects
+      args4clApply <- args4clApply[sapply(args4clApply, function(x) !is.null(eval(as.name(x))))]
+      parallel::clusterExport(cl, varlist = c(lavaanfun, args4clApply))
       Result.l <- parallel::clusterApplyLB(cl, simConds, runRep, model = model,
                                            generateO = generate, miss = miss,
                                            datafun = datafun, lavaanfun = lavaanfun,
