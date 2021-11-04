@@ -7,7 +7,8 @@
 	Get extra outputs from a simulation result object (\code{\linkS4class{SimResult}}). Users can ask this package to extra output from the \code{\linkS4class{lavaan}} object in each iteration by setting the \code{outfun} argument (in the \code{sim} function). See the example below.
 }
 \usage{
-getExtraOutput(object, improper = TRUE, nonconverged = FALSE)
+getExtraOutput(object, improper = TRUE, nonconverged = FALSE,
+               simplify = FALSE, USE.NAMES = FALSE)
 }
 \arguments{
   \item{object}{
@@ -19,9 +20,10 @@ getExtraOutput(object, improper = TRUE, nonconverged = FALSE)
   \item{nonconverged}{
     Specify whether to include the information from the nonconvergent replications
 }
+  \item{simplify, USE.NAMES}{See \code{\link{sapply}}}
 }
 \value{
-	A list of extra outputs
+	A \code{list} of extra outputs, optionally simplified to a vector or matrix.
 }
 \author{
     Sunthud Pornprasertmanit (\email{psunthud@gmail.com})
