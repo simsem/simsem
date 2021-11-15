@@ -153,6 +153,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
 	## for TRUE, add up to 10% more replications
 	if (is.logical(completeRep) && completeRep) completeRep <- nRep*1.1
 	completeRep <- as.integer(completeRep)
+	if (completeRep < 0) completeRep <- 0L
 	## otherwise, make sure it is actually a maximum > nRep
 	if (completeRep > 0 && completeRep <= nRep) {
 	  message('completeRep= should be logical, or an integer > nRep to indicate ',
