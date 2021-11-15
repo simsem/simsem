@@ -147,7 +147,7 @@ sim(nRep, model, n, generate = NULL, ..., rawData = NULL, miss = NULL, datafun=N
 	A result object that users wish to add the results of the current simulation in
 }
   \item{completeRep}{
-  \code{integer} indicating how many samples are allowed to be drawn in order to obtain at least \code{nRep} results without convergence issues (including Heywood cases or no standard errors). Ignored unless \code{completeRep > nRep}. Can also be \code{logical}, where \code{FALSE} (or \code{0}, the default) indicates only \code{nRep} samples may be drawn.  If \code{TRUE}, up to 10\% additional samples may be drawn by default (i.e., \code{completeRep = as.integer(nRep*1.1)}).
+  Nonnegative \code{integer} indicating how many samples are allowed to be drawn in order to obtain at least \code{nRep} results without convergence issues (including Heywood cases or no standard errors). Ignored unless \code{completeRep > nRep}. Can also be \code{logical}, where \code{FALSE} (or \code{0}, the default) indicates only \code{nRep} samples may be drawn.  If \code{TRUE}, up to 10\% additional samples may be drawn by default (i.e., \code{completeRep = as.integer(nRep*1.1)}).
 }
   \item{stopOnError}{
 	If \code{TRUE}, stop running the simulation when the error occurs during the data analysis on any replications.
