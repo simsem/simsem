@@ -1,5 +1,5 @@
 ### Sunthud Pornprasertmanit & Terrence D. Jorgensen (anyone else?)
-### Last updated: 4 November 2021
+### Last updated: 15 November 2021
 ### Primary engines for simulation.  Everything else is added details.
 
 sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
@@ -147,14 +147,20 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
 		}
 	}
 
-	## Save arguments for completeRep = TRUE
-	if (is.logical(completeRep)) {
-		if (completeRep) {
-			completeRep <- nRep
-		} else {
-			completeRep <- 0L
-		}
-	}
+	##TDJ updated the completeRep section:
+	## Save arguments for completeRep = TRUE (or an integer)
+	stopifnot(is.logical(completeRep) || is.numeric(completeRep))
+	## for TRUE, add up to 10% more replications
+	if (is.logical(completeRep) && completeRep) completeRep <- nRep*1.1
+	completeRep <- as.integer(completeRep)
+	## otherwise, make sure it is actually a maximum > nRep
+	if (completeRep > 0 && completeRep <= nRep) {
+	  message('completeRep= should be logical, or an integer > nRep to indicate ',
+	          'a maximum number of replications to try achieving at least ',
+	          'nRep converged samples. completeRep=', completeRep, 'is ignored.')
+	  completeRep <- 0L
+	} # else completeRep > nRep
+
 	nInitial <- n
 	pmMCARInitial <- pmMCAR
 	pmMARInitial <- pmMAR
@@ -685,12 +691,15 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
     Result <- combineSim(previousSim, Result)
   }
 
-  ## If completeRep = TRUE, check whether the number of converged results
+  ## TDJ updated completeRep= to be an integer > nRep for max(tries).
+  ## If completeRep > nRep, check the number of converged results.
   if (completeRep > 0 & !is.null(nRepInitial)) {
-    success <- sum(Result@converged == 0)
-    pSuccess <- success / Result@nRep
-    if (success < completeRep) {
-      nRepNew <- ceiling((completeRep - success) / pSuccess)
+    nSuccess <- sum(Result@converged == 0)
+    # if (nSuccess < completeRep) {
+    while (nSuccess < nRepInitial && Result@nRep < completeRep) {
+      pSuccess <- nSuccess / Result@nRep
+      nRepNew <- min(ceiling((nRepInitial - nSuccess) / pSuccess),
+                     completeRep - Result@nRep)
       Result <- sim(nRep = nRepNew, model = model, n = nInitial, generate = generate,
                     rawData = rawData, miss = miss, datafun = datafun,
                     lavaanfun = lavaanfun, outfun = outfun, outfundata = outfundata,
@@ -707,6 +716,8 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
                     paramOnly = paramOnly, dataOnly = dataOnly,
                     smartStart = smartStart, previousSim = Result,
                     completeRep = completeRep, stopOnError = stopOnError, ...)
+      ## update to break while() loop
+      nSuccess <- sum(Result@converged == 0)
     }
   }
 

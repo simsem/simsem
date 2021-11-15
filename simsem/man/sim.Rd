@@ -21,7 +21,7 @@ sim(nRep, model, n, generate = NULL, ..., rawData = NULL, miss = NULL, datafun=N
 }
 \arguments{
   \item{nRep}{
-	Number of replications. If any of the \code{n}, \code{pmMCAR}, or \code{pmMAR} arguments are specified as lists, the number of replications will default to the length of the list(s), and \code{nRep} need not be specified (can be set \code{NULL}).
+	Number of replications. If any of the \code{n}, \code{pmMCAR}, or \code{pmMAR} arguments are specified as lists, the number of replications will default to the length of the list(s), and \code{nRep} need not be specified (can be set \code{NULL}).  When \code{completeRep > 0} (see description below), then \code{nRep} is the target number of replications for which no convergence issues are detected.
 }
   \item{model}{
 	There are three options for this argument: 1. \code{\linkS4class{SimSem}} object created by \code{\link{model}}, 2. \code{lavaan} script, \code{lavaan} parameter table, fitted \code{lavaan} object matching the analysis model, or a list that contains all argument that users use to run \code{lavaan} (including \code{cfa}, \code{sem}, \code{lavaan}), 3. \code{MxModel} object from the \code{OpenMx} package, or 4. a function that takes a data set and return a list of \code{coef}, \code{se}, and \code{converged} (see details below). For the \code{\linkS4class{SimSem}} object, if the \code{generate} argument is not specified, then the object in the \code{model} argument will be used for both data generation and analysis. If \code{generate} is specified, then the \code{model} argument will be used for data analysis only.
@@ -147,7 +147,7 @@ sim(nRep, model, n, generate = NULL, ..., rawData = NULL, miss = NULL, datafun=N
 	A result object that users wish to add the results of the current simulation in
 }
   \item{completeRep}{
-	If \code{TRUE}, the function will run until the number of convergent replication equal to the specified \code{nRep}.
+  \code{integer} indicating how many samples are allowed to be drawn in order to obtain at least \code{nRep} results without convergence issues (including Heywood cases or no standard errors). Ignored unless \code{completeRep > nRep}. Can also be \code{logical}, where \code{FALSE} (or \code{0}, the default) indicates only \code{nRep} samples may be drawn.  If \code{TRUE}, up to 10\% additional samples may be drawn by default (i.e., \code{completeRep = as.integer(nRep*1.1)}).
 }
   \item{stopOnError}{
 	If \code{TRUE}, stop running the simulation when the error occurs during the data analysis on any replications.

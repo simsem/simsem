@@ -20,8 +20,6 @@ Why does this constrain pop. loadings for first factor, not second?
     out@paramValue
 
 
-make completeRep= accept an integer > nRep
-- internally, convert to logical and save a stopAfter flag for the while loop?
 
 continuousPower()
 - add interval= and level= arguments for uncertainty of estimate
