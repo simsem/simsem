@@ -381,6 +381,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
     if (sys == "windows") {
       cl <- parallel::makeCluster(rep("localhost", numProc), type = "SOCK")
       parallel::clusterExport(cl, varlist = lavaanfun) # from .GlobalEnv
+      parallel::clusterEvalQ(cl, require("semTools"))
       #FIXME: necessary to export all these objects?
       args2export <- c("datafun","outfun","outfundata")
       ## remove NULL objects
