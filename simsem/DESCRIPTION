@@ -1,8 +1,8 @@
 Package: simsem
 Type: Package
 Title: SIMulated Structural Equation Modeling
-Version: 0.5-16.909
-Date: 2022-04-25
+Version: 0.5-16.910
+Date: 2023-05-12
 Authors@R: c(person(given = "Sunthud", family = "Pornprasertmanit", role = "aut", email = "psunthud@gmail.com"), 
 		         person(given = "Patrick", family = "Miller", role = "aut", email="pmille13@nd.edu"), 
 		         person(given = c("Alexander", "M."), family = "Schoemann", role = "aut", email="schoemanna@ecu.edu", comment = c(ORCID = "0000-0002-8479-8798")), 
