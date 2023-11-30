@@ -531,7 +531,8 @@ getPopulation <- function(object, std = FALSE, improper = TRUE, nonconverged = F
 }
 
 # getExtraOutput: Extract the extra output that users set in the 'outfun' argument
-# TDJ added simplify() 4 Nov 2021
+# TDJ added simplify= to apply() on 4 Nov 2021
+# TDJ corrected the call to apply() on 30 Nov 2023
 getExtraOutput <- function(object, improper = TRUE, nonconverged = FALSE,
                            simplify = FALSE, USE.NAMES = FALSE) {
   targetRep <- 0
@@ -540,7 +541,12 @@ getExtraOutput <- function(object, improper = TRUE, nonconverged = FALSE,
   if (length(object@extraOut) == 0) {
     stop("This simulation result does not contain any extra results")
   }
-  sapply(object@extraOut, "[", i = object@converged %in% targetRep,
+  ## check whether to return anything
+  getTheseReps <- which(object@converged %in% targetRep)
+  if (!length(getTheseReps)) stop('No replications meet the convergence criteria ',
+                                  'specified by arguments improper= and nonconverged=')
+  ## return list, potentially simplified
+  sapply(object@extraOut[getTheseReps], "[",
          simplify = simplify, USE.NAMES = USE.NAMES)
 }
 
