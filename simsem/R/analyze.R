@@ -91,8 +91,11 @@ anal <- function(model, data, package = "lavaan", ...) {
 	if (length(unique(model@pt$group[model@pt$op %in% c("=~", "~~", "~", "~1", "|")])) == 1L) {
 		groupLab <- NULL
 	}
+	## synchronize model@modelType with lavaan's model.type
+	model.type <- if (tolower(model@modelType) == "sem") "sem" else "cfa"
+
   Output <- lavaan::lavaan(model@pt, data = data, group = groupLab,
-                           model.type = model@modelType, ...)
+                           model.type = model.type, ...)
   return(Output)
 }
 
