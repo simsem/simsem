@@ -1,5 +1,5 @@
 ### Sunthud Pornprasertmanit & Terrence D. Jorgensen (anyone else?)
-### Last updated: 15 November 2021
+### Last updated: 23 April 2024
 ### Primary engines for simulation.  Everything else is added details.
 
 sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
@@ -1121,11 +1121,12 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
       ## lavaan.mi results come from different source than lavaan
       if (is(out, "lavaan.mi")) {
         fit <- suppressMessages(getMethod("fitMeasures", "lavaan.mi")(out))
+        #FIXME: use lavaan.mi::parameterEstimates.mi()
         result <- getMethod("summary", "lavaan.mi")(out, standardized = "std.all",
                                                     level = cilevel, fmi = TRUE,
                                                     add.attributes = FALSE)
         outpt$se <- result$se
-        stdse <- NULL
+        stdse <- NULL  #FIXME: use lavaan.mi::standardizedSolution.mi()
         if (converged %in% c(0L, 3:5)) {
           FMI1 <- result$fmi[index] # result$fmi1[index]
           FMI2 <- NULL              # result$fmi2[index]

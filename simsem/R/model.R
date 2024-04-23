@@ -1,5 +1,5 @@
 ### Sunthud Pornprasertmanit & Terrence D. Jorgensen (anyone else?)
-### Last updated: 11 January 2021
+### Last updated: 23 April 2024
 ### functions for specifying an analysis model that utilizes lavaan
 
 
@@ -1131,12 +1131,13 @@ estmodel.sem <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL
         indLab = indLab, facLab = facLab, covLab = covLab, groupLab = groupLab, ngroups = ngroups, con = con)
 }
 
+#FIXME: this does not seem to be used anywhere
 model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, TE = NULL,
     RTE = NULL, BE = NULL, VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL,
     AL = NULL, MY = NULL, ME = NULL, KA = NULL, GA = NULL) {
     ngroups <- lavInspect(object, "ngroups")
     if (is(object, "lavaan.mi")) {
-      name <- unique(names(object@GLIST))
+      name <- unique(names(object@Model@GLIST))
     } else if (ngroups > 1L) {
       name <- names(lavInspect(object, "est")[[1]])
     } else {
@@ -1337,7 +1338,12 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
 
     } else {
       if (is(object, "lavaan.mi")) {
-        est <- object@GLIST
+        ## pooled estimates for standardizedSolution()
+        COEF <- getMethod("coef", "lavaan.mi")(object)
+        ## update @Model@GLIST
+        object@Model <- lavaan::lav_model_set_parameters(object@Model, x = COEF)
+        ## extract GLIST
+        est <- object@Model@GLIST
         for (mm in 1:length(est)) dimnames(est[[mm]]) <- object@Model@dimNames[[mm]]
         if (ngroups > 1L) {
           GLIST <- est
@@ -1555,7 +1561,13 @@ labelFree <- function(free, symmetric) {
 standardize <- function(object) {
 
   if (is(object, "lavaan.mi")) {
-    GLIST <- object@GLIST
+    ## pooled estimates for standardizedSolution()
+    COEF <- getMethod("coef", "lavaan.mi")(object)
+    ## update @Model@GLIST
+    object@Model <- lavaan::lav_model_set_parameters(object@Model, x = COEF)
+    ## extract GLIST
+    GLIST <- object@Model@GLIST
+    #FIXME: use lavaan.mi::standardizedSolution.mi()
     est.std <- getMethod("summary", "lavaan.mi")(object, standardized = "std.all",
                                                  add.attributes = FALSE)$std.all
   } else {

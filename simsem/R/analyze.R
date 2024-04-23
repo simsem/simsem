@@ -1,5 +1,5 @@
 ### Sunthud Pornprasertmanit & Terrence D. Jorgensen (anyone else?)
-### Last updated: 3 June 2018
+### Last updated: 23 April 2024
 ### functions to fit a model (lavaan, OpenMx, SimSem, or custom function) to data
 
 analyze <- function(model, data, package = "lavaan", miss = NULL,
