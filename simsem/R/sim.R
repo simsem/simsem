@@ -60,7 +60,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
 			lavaanGenerate <- TRUE
 		} else if (is.lavaancall(generate)) {
 			lavaanGenerate <- TRUE
-		} else if (is(generate, "lavaan")) {
+		} else if (inherits(generate, "lavaan")) {
 			temp <- parTable(generate)
 			temp$ustart <- temp$start <- temp$est
 			generate <- list(model = temp)
@@ -116,8 +116,11 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
 		if (!("group" %in% names(model)) & "group" %in% names(mc)) model$group <- group
 
 		## TDJ addition (26 Nov 2019):
-		## added is.null(rawData) on 23 Sep 2020
-		if (is.null(generate) && is.null(rawData)) {
+		##  - added is.null(rawData) on 23 Sep 2020
+		##  - added is.null(popData) on 17 May 2024
+		if (is.null(generate) && is.null(rawData) && is.null(popData)) {
+		  ## No other mechanisms to generate data, so must(?) use analysis model.
+		  ## FIXME: Without parameter values, simulateData() will set all == 1s / 0s
 		  lavaanGenerate <- TRUE
 		  generate <- .om.
 		  ## scroll through options again
@@ -515,7 +518,8 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
     if (!is.null(popResult$std)) stdparam <- as.data.frame(t(popResult$std))
   }
 
-  if (lavaanGenerate || (is.null(generate) && lavaanAnalysis && is.null(rawData))) {
+  if (lavaanGenerate ||
+      (lavaanAnalysis && is.null(generate) && is.null(rawData) && is.null(popData))) {
     if (is.null(generate) && lavaanAnalysis) generate <- model
     generate2 <- generate
     generate2$sample.nobs <- simConds[[1]][[2]]
