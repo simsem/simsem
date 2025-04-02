@@ -25,8 +25,8 @@ Objects can be created by \code{\link{bindDist}} function. It can also be called
 }
 \section{Methods}{
 	\itemize{
-		\item{summary}{To summarize the object}
-		\item{plotDist}{To plot a density distribution (for one variable) or a contour plot (for two variables).}
+		\item{\code{summary()}: To summarize the object}
+		\item{\code{plotDist()}: To plot a density distribution (for one variable) or a contour plot (for two variables).}
 	}
 }
 \author{
@@ -34,7 +34,7 @@ Objects can be created by \code{\link{bindDist}} function. It can also be called
 }
 \seealso{
 	\itemize{
-		\item \code{\link{bindDist}} The constructor of this class.	
+		\item \code{\link{bindDist}} The constructor of this class.
 	}
 }
 \examples{

@@ -4,7 +4,7 @@
 	Data analysis using the model specification
 }
 \description{
-	Data analysis using the model specification (\code{linkS4class{SimSem}}) or the mx model object (\code{MxModel}).
+	Data analysis using the model specification (\code{\linkS4class{SimSem}}) or the \code{MxModel} object.
 }
 \usage{
 analyze(model, data, package="lavaan", miss=NULL, aux=NULL, group = NULL,
@@ -12,7 +12,7 @@ analyze(model, data, package="lavaan", miss=NULL, aux=NULL, group = NULL,
 }
 \arguments{
   \item{model}{
-	The simsem model template (\code{linkS4class{SimSem}}) or the mx model object (\code{MxModel})
+	The simsem model template (\code{\linkS4class{SimSem}}) or the \code{MxModel} object.
 }
   \item{data}{
 	The target dataset
@@ -21,7 +21,7 @@ analyze(model, data, package="lavaan", miss=NULL, aux=NULL, group = NULL,
 	The package used in data analysis. Currently, only \code{lavaan} package can be used.
 }
   \item{miss}{
-	The \code{SimMissing-class} object with the specification of auxiliary variable(s) used for analysis with FIML.
+	The \code{\linkS4class{SimMissing-class}} object with the specification of auxiliary variable(s) used for analysis with FIML.
 }
   \item{aux}{
 	List of auxiliary variables
@@ -37,7 +37,7 @@ analyze(model, data, package="lavaan", miss=NULL, aux=NULL, group = NULL,
 }
 }
 \value{
-	The \code{\linkS4class{lavaan}} object containing the output
+	The \code{lavaan-class} object containing the output
 }
 \author{
 	Patrick Miller (University of Notre Dame; \email{pmille13@nd.edu}),

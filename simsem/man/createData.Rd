@@ -4,11 +4,11 @@
 	Create data from a set of drawn parameters.
 }
 \description{
-	This function can be used to create data from a set of parameters created from \code{\link{draw}}, called a code{paramSet}. This function is used internally to create data, and is available publicly for accessibility and debugging.
+	This function can be used to create data from a set of parameters created from \code{\link{draw}}, called a \code{paramSet}. This function is used internally to create data, and is available publicly for accessibility and debugging.
 }
 \usage{
-createData(paramSet, n, indDist=NULL, sequential=FALSE, facDist=NULL, 
-errorDist=NULL, saveLatentVar = FALSE, indLab=NULL, facLab = NULL, 
+createData(paramSet, n, indDist=NULL, sequential=FALSE, facDist=NULL,
+errorDist=NULL, saveLatentVar = FALSE, indLab=NULL, facLab = NULL,
 modelBoot=FALSE, realData=NULL, covData=NULL, empirical = FALSE)
 }
 \arguments{
@@ -30,7 +30,7 @@ modelBoot=FALSE, realData=NULL, covData=NULL, empirical = FALSE)
   \item{errorDist}{
 	An object or list of objects of type \code{SimDataDist} indicating the distribution of errors. If a single \code{SimDataDist} is specified, each error will be genrated with that distribution.
 }
-  \item{saveLatentVar}{ 
+  \item{saveLatentVar}{
 	If \code{TRUE}, the total latent variable scores, residual latent variable scores, and measurement error scores are also provided as the \code{"latentVar"} attribute of the generated data by the following line: \code{attr(generatedData, "latentVar")}. The \code{sequential} argument must be \code{TRUE} in order to use this option.
 }
   \item{indLab}{
@@ -45,10 +45,10 @@ modelBoot=FALSE, realData=NULL, covData=NULL, empirical = FALSE)
   \item{realData}{
 	A data.frame containing real data. The data generated will follow the distribution of this data set.
 }
-  \item{covData}{ 
+  \item{covData}{
 	A data.frame containing covariate data, which can have any distributions. This argument is required when users specify \code{GA} or \code{KA} matrices in the model template (\code{\linkS4class{SimSem}}).
 }
-  \item{empirical}{ 
+  \item{empirical}{
 	Logical. If \code{TRUE}, the specified parameters are treated as sample statistics and data are created to get the specified sample statistics. This argument is applicable when multivariate normal distribution is specified only.
 }
 }
@@ -64,7 +64,7 @@ It the data distribution object is specified, either the copula model or the Val
 
 See \code{\link{bindDist}} for further details. For the Vale and Maurelli's (1983) method, the code is brought from the \code{lavaan} package.
 
-For the model-based bootstrap, the transformation proposed by Yung & Bentler (1996) is used. This procedure is the expansion from the Bollen and Stine (1992) bootstrap including a mean structure. The model-implied mean vector and covariance matrix with trivial misspecification will be used in the model-based bootstrap if \code{misspec} is specified. See page 133 of Bollen and Stine (1992) for a reference. 
+For the model-based bootstrap, the transformation proposed by Yung & Bentler (1996) is used. This procedure is the expansion from the Bollen and Stine (1992) bootstrap including a mean structure. The model-implied mean vector and covariance matrix with trivial misspecification will be used in the model-based bootstrap if \code{misspec} is specified. See page 133 of Bollen and Stine (1992) for a reference.
 
 Internally, parameters are first drawn, and data is then created from these parameters. Both of these steps are available via the \code{\link{draw}} and \code{\link{createData}} functions respectively.
 }
@@ -77,7 +77,7 @@ Vale, C. D. & Maurelli, V. A. (1983) Simulating multivariate nonormal distributi
 
 Yung, Y.-F., & Bentler, P. M. (1996). Bootstrapping techniques in analysis of mean and covariance structures. In G. A. Marcoulides & R. E. Schumacker (Eds.), \emph{Advanced structural equation modeling: Issues and techniques} (pp. 195-226). Mahwah, NJ: Erlbaum.
 }
-\author{	
+\author{
     Sunthud Pornprasertmanit (\email{psunthud@gmail.com}), Patrick Miller (University of Notre Dame; \email{pmille13@nd.edu}). The original code of \code{mvrnorm} function is based on the \code{MASS} package slightly modified by Paul E. Johnson. The code for data-transformation in multivariate copula is based on Mair et al. (2012) article. The code for Vale and Maurelli (1983) is slightly modified from the function provided in the \code{lavaan} package.
 }
 \examples{
@@ -100,5 +100,5 @@ CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
 param <- draw(CFA.Model)
 
 # Generate data from the first group in the paramList.
-dat <- createData(param[[1]], n = 200) 
+dat <- createData(param[[1]], n = 200)
 }

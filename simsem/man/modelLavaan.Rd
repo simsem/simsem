@@ -4,7 +4,7 @@
 	Build the data generation template and analysis template from the lavaan result
 }
 \description{
-	Creates a data generation and analysis template (lavaan parameter table) for simulations with the \code{\linkS4class{lavaan}} result. Model misspecification may be added into the template by a vector, a matrix, or a list of vectors or matrices (for multiple groups). 
+	Creates a data generation and analysis template (lavaan parameter table) for simulations with the \code{lavaan-class} result. Model misspecification may be added into the template by a vector, a matrix, or a list of vectors or matrices (for multiple groups). 
 }
 \usage{
 model.lavaan(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
@@ -14,7 +14,7 @@ model.lavaan(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL,
 }
 \arguments{
   \item{object}{
-	A \code{\linkS4class{lavaan}} object to be used to build the data generation and analysis template.
+	A \code{lavaan-class} object to be used to build the data generation and analysis template.
 }
   \item{std}{
 	If TRUE, use the resulting standardized parameters for data generation. If FALSE, use the unstandardized parameters for data generation.

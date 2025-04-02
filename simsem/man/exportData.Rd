@@ -4,7 +4,7 @@
 	Export data sets for analysis with outside SEM program.
 }
 \description{
-	This function can be used to export data created from a set of parameters created from \code{\link{draw}}, called a code{paramSet}. This function can export data to be analyzed with either Mplus or LISREL.
+	This function can be used to export data created from a set of parameters created from \code{\link{draw}}, called a \code{paramSet}. This function can export data to be analyzed with either Mplus or LISREL.
 }
 \usage{
 exportData(nRep, model, n, program = "Mplus", fileStem = "sim", miss = NULL,

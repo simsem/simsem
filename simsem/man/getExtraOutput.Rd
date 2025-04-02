@@ -4,7 +4,7 @@
 	Get extra outputs from the result of simulation
 }
 \description{
-	Get extra outputs from a simulation result object (\code{\linkS4class{SimResult}}). Users can ask this package to extra output from the \code{\linkS4class{lavaan}} object in each iteration by setting the \code{outfun} argument (in the \code{sim} function). See the example below.
+	Get extra outputs from a simulation result object (\code{\linkS4class{SimResult}}). Users can ask this package to extra output from the \code{lavaan-class} object in each iteration by setting the \code{outfun} argument (in the \code{sim} function). See the example below.
 }
 \usage{
 getExtraOutput(object, improper = TRUE, nonconverged = FALSE,

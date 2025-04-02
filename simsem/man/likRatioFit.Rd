@@ -12,10 +12,10 @@ usedFit=NULL, prior=1)
 }
 \arguments{
   \item{outMod1}{
-	\code{\linkS4class{lavaan}} that saves the analysis result of the first model from the target dataset
+	\code{lavaan-class} that saves the analysis result of the first model from the target dataset
 }
   \item{outMod2}{
-	\code{\linkS4class{lavaan}} that saves the analysis result of the second model from the target dataset
+	\code{lavaan-class} that saves the analysis result of the second model from the target dataset
 }
   \item{dat1Mod1}{
 	\code{\linkS4class{SimResult}} that saves the simulation of analyzing Model 1 by datasets created from Model 1

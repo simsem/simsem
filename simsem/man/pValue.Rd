@@ -4,7 +4,7 @@
 	Find p-values (1 - percentile) by comparing a single analysis output from the result object
 }
 \description{
-	This function will provide \emph{p} value from comparing a \code{\linkS4class{lavaan}}) or a OpenMx result from the simulation result (in \code{\linkS4class{SimResult}}).
+	This function will provide \emph{p} value from comparing a \code{lavaan-class}) or a OpenMx result from the simulation result (in \code{\linkS4class{SimResult}}).
 }
 \usage{
 pValue(target, dist, usedFit = NULL, nVal = NULL, pmMCARval = NULL, 
