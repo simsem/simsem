@@ -20,6 +20,8 @@ Why does this constrain pop. loadings for first factor, not second?
     out@paramValue
 
 
+How to incorporate lavaan.mi, without allowing internal calls to mice/Amelia?
+ - See solution & vignette here: https://github.com/simsem/simsem/issues/86
 
 continuousPower()
 - add interval= and level= arguments for uncertainty of estimate

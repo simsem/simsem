@@ -1036,7 +1036,7 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
         improperSE <- any(unlist(seTemp) < 0) | any(is.na(unlist(seTemp))) | all(unlist(seTemp) == 0)
         if (improperSE) converged <- 3L
       }
-    } else  if (is(out, "lavaan.mi")) {
+    } else if (is(out, "lavaan.mi")) {
       if (mean(sapply(out@convergence, "[[", "converged")) < miss@convergentCutoff) {
         converged <- 2L
       } else if (mean(sapply(out@convergence, "[[", "SE"), na.rm = TRUE) < miss@convergentCutoff) {
@@ -1125,12 +1125,14 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
       ## lavaan.mi results come from different source than lavaan
       if (is(out, "lavaan.mi")) {
         fit <- suppressMessages(getMethod("fitMeasures", "lavaan.mi")(out))
-        #FIXME: use lavaan.mi::parameterEstimates.mi()
-        result <- getMethod("summary", "lavaan.mi")(out, standardized = "std.all",
-                                                    level = cilevel, fmi = TRUE,
-                                                    add.attributes = FALSE)
+        result <- lavaan.mi::parameterEstimates.mi(out, standardized = "std.all",
+                                                   level = cilevel, fmi = TRUE,
+                                                   remove.eq = FALSE, remove.system.eq = FALSE,
+                                                   remove.ineq = FALSE, remove.def = FALSE)
         outpt$se <- result$se
-        stdse <- NULL  #FIXME: use lavaan.mi::standardizedSolution.mi()
+        errstdse <- try(resultstd <- lavaan.mi::standardizedSolution.mi(out, remove.eq = FALSE,
+                                                                        remove.ineq = FALSE, remove.def = FALSE))
+        if (!is(errstdse, "try-error")) stdse <- resultstd$se[index]
         if (converged %in% c(0L, 3:5)) {
           FMI1 <- result$fmi[index] # result$fmi1[index]
           FMI2 <- NULL              # result$fmi2[index]

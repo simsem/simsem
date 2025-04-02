@@ -4,10 +4,10 @@
 	Data analysis using the model specification
 }
 \description{
-	Data analysis using the model specification (\code{linkS4class{SimSem}}) or the mx model object (\code{MxModel}). Data will be multiply imputed if the \code{miss} argument is specified. 
+	Data analysis using the model specification (\code{linkS4class{SimSem}}) or the mx model object (\code{MxModel}).
 }
 \usage{
-analyze(model, data, package="lavaan", miss=NULL, aux=NULL, group = NULL, 
+analyze(model, data, package="lavaan", miss=NULL, aux=NULL, group = NULL,
 	mxMixture = FALSE, ...)
 }
 \arguments{
@@ -15,24 +15,24 @@ analyze(model, data, package="lavaan", miss=NULL, aux=NULL, group = NULL,
 	The simsem model template (\code{linkS4class{SimSem}}) or the mx model object (\code{MxModel})
 }
   \item{data}{
-	The target dataset 
+	The target dataset
 }
   \item{package}{
 	The package used in data analysis. Currently, only \code{lavaan} package can be used.
 }
-  \item{miss}{ 
-	The missing object with the specification of auxiliary variable or the specification for the multiple imputation.
+  \item{miss}{
+	The \code{SimMissing-class} object with the specification of auxiliary variable(s) used for analysis with FIML.
 }
-  \item{aux}{ 
+  \item{aux}{
 	List of auxiliary variables
 }
-  \item{group}{ 
+  \item{group}{
 	A group variable. This argument is applicable only when the \code{model} argument is a \code{MxModel} object.
 }
   \item{mxMixture}{
     A logical whether to the analysis model is a mixture model. This argument is applicable when \code{MxModel} is used in the \code{model} argument only.
 }
-  \item{\dots}{ 
+  \item{\dots}{
 	Additional arguments in the \code{\link[lavaan]{lavaan}} function. See also \code{\link[lavaan]{lavOptions}}
 }
 }
@@ -40,11 +40,11 @@ analyze(model, data, package="lavaan", miss=NULL, aux=NULL, group = NULL,
 	The \code{\linkS4class{lavaan}} object containing the output
 }
 \author{
-	Patrick Miller (University of Notre Dame; \email{pmille13@nd.edu}), 
+	Patrick Miller (University of Notre Dame; \email{pmille13@nd.edu}),
     Sunthud Pornprasertmanit (\email{psunthud@gmail.com})
 }
 \seealso{
-	Note that users can use functions provided by \code{lavaan} package (\code{\link[lavaan]{lavaan}}, \code{\link[lavaan]{cfa}}, \code{\link[lavaan]{sem}}, or \code{\link[lavaan]{growth}}) if they wish to analyze data by lavaan directly. 
+	Note that users can use functions provided by \code{lavaan} package (\code{\link[lavaan]{lavaan}}, \code{\link[lavaan]{cfa}}, \code{\link[lavaan]{sem}}, or \code{\link[lavaan]{growth}}) if they wish to analyze data by lavaan directly.
 }
 \examples{
 loading <- matrix(0, 6, 2)

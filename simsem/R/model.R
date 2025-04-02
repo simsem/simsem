@@ -1,5 +1,5 @@
 ### Sunthud Pornprasertmanit & Terrence D. Jorgensen (anyone else?)
-### Last updated: 23 April 2024
+### Last updated: 1 April 2025
 ### functions for specifying an analysis model that utilizes lavaan
 
 
@@ -1567,9 +1567,10 @@ standardize <- function(object) {
     object@Model <- lavaan::lav_model_set_parameters(object@Model, x = COEF)
     ## extract GLIST
     GLIST <- object@Model@GLIST
-    #FIXME: use lavaan.mi::standardizedSolution.mi()
-    est.std <- getMethod("summary", "lavaan.mi")(object, standardized = "std.all",
-                                                 add.attributes = FALSE)$std.all
+    #TODO: Delete code for OLDlavaan.mi
+    # est.std <- getMethod("summary", "lavaan.mi")(object, standardized = "std.all",
+    #                                              add.attributes = FALSE)$std.all
+    est.std <- lavaan.mi::standardizedSolution.mi(object)$std.all
   } else {
     GLIST <- object@Model@GLIST
     est.std <- lavaan::standardizedSolution(object)$est.std

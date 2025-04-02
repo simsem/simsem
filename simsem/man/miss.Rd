@@ -8,8 +8,8 @@ Specifying the missing template (\code{\linkS4class{SimMissing}}) to impose on a
 }
 \usage{
 miss(cov = 0, pmMCAR = 0, pmMAR = 0, logit = "", nforms = 0, itemGroups = list(),
-     timePoints = 1, twoMethod = 0, prAttr = 0, m = 0,
-	   package = "default", convergentCutoff = 0.8, ignoreCols = 0,
+     timePoints = 1, twoMethod = 0, prAttr = 0,
+     convergentCutoff = 0.8, ignoreCols = 0,
      threshold = 0, covAsAux = TRUE, logical = NULL, ...)
 }
 \arguments{
@@ -22,14 +22,13 @@ miss(cov = 0, pmMCAR = 0, pmMAR = 0, logit = "", nforms = 0, itemGroups = list()
     \item{timePoints}{Number of timepoints items were measured over. For longitudinal data, planned missing designs will be implemented within each timepoint.}
     \item{twoMethod}{With missing on one variable: vector of (column index, percent missing). Will put a given percent missing on that column in the matrix to simulate a two method planned missing data research design. With missing on two or more variables: list of (column indices, percent missing). }
 	\item{prAttr}{Probability (or vector of probabilities) of an entire case being removed due to attrition at a given time point. See \code{\link{imposeMissing}} for further details.}
-    \item{m}{The number of imputations. The default is 0 such that the full information maximum likelihood is used.}
-    \item{package}{The package to be used in multiple imputation. The default value of this function is \code{"default"}. For the default option, if \code{m} is 0, the full information maximum likelihood is used. If \code{m} is greater than 0, the \code{"mice"} package is used. The possible inputs are \code{"default"}, \code{"Amelia"}, or \code{"mice"}.}
-    \item{convergentCutoff}{If the proportion of convergent results across imputations are greater than the specified value (the default is 80\%), the analysis on the dataset is considered as convergent. Otherwise, the analysis is considered as nonconvergent. This attribute is applied for multiple imputation only. }
-	\item{ignoreCols}{The columns not imposed any missing values for any missing data patterns}
+  \item{m}{The number of imputations (DEPRECATED). The only currently accepted value is 0, indicating to use full information maximum likelihood estimation.}
+  \item{convergentCutoff}{DEPRECATED. If the proportion of convergent results across imputations are greater than the specified value (the default is 80\%), the analysis on the dataset is considered as convergent. Otherwise, the analysis is considered as nonconvergent. This attribute is applied for multiple imputation only (currently not supported). }
+  \item{ignoreCols}{The columns not imposed any missing values for any missing data patterns}
 	\item{threshold}{The threshold of covariates that divide between the area to impose missing and the area not to impose missing. The default threshold is the mean of the covariate.}
 	\item{covAsAux}{If \code{TRUE}, the covariate listed in the object will be used as auxiliary variables when putting in the model object. If \code{FALSE}, the covariate will be included in the analysis.}
 	\item{logical}{A matrix of logical values (\code{TRUE/FALSE}). If a value in the dataset is corresponding to the \code{TRUE} in the logical matrix, the value will be missing.}
-	\item{\dots}{Additional arguments used in multiple imputation function.}
+	\item{\dots}{DEPRECATED. Additional arguments passed to a multiple-imputation function (no longer supported).}
 }
 \value{
 	A missing object that contains missing-data template (\code{\linkS4class{SimMissing}})
@@ -44,7 +43,7 @@ miss(cov = 0, pmMCAR = 0, pmMAR = 0, logit = "", nforms = 0, itemGroups = list()
 	}
 }
 \examples{
-#Example of imposing 10% MCAR missing in all variables with no imputations (FIML method)
+#Example of imposing 10% MCAR missing in all variables (FIML estimation)
 Missing <- miss(pmMCAR=0.1, ignoreCols="group")
 summary(Missing)
 
@@ -83,9 +82,10 @@ Missing2 <- miss(logit=script)
 summary(Missing2)
 datmiss2 <- impose(Missing2, dat)
 
-#Example to create simMissing object for 3 forms design at 3 timepoints with 10 imputations
-Missing <- miss(nforms=3, timePoints=3, numImps=10)
-
-#Missing template for data analysis with multiple imputation
-Missing <- miss(package="mice", m=10, convergentCutoff=0.6)
+#Example to create simMissing object for 3 forms design at 3 timepoints
+Missing <- miss(nforms=3, timePoints=3,
+                itemGroups = list(X = 1:3,
+                                  A = 4:6,
+                                  B = 7:9,
+                                  D = 10:12))
 }

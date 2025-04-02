@@ -22,9 +22,9 @@ Objects can be created by \code{\link{miss}} function.
 		missing on that column in the matrix to simulate a two method
 		planned missing data research design. }
 	\item{\code{prAttr}:}{Probability (or vector of probabilities) of an entire case being removed due to attrition at a given time point. See \code{\link{imposeMissing}} for further details.}
-	\item{\code{m}:}{The number of imputations. The default is 0 such that the full information maximum likelihood is used.}
-	\item{\code{package}:}{The package to be used in multiple imputation. The default value of this function is \code{"default"}. For the default option, if \code{m} is 0, the full information maximum likelihood is used. If \code{m} is greater than 0, the \code{mice} package is used.}
-	\item{\code{convergentCutoff}:}{If the proportion of convergent results across imputations are greater than the specified value (the default is 80\%), the analysis on the dataset is considered as convergent. Otherwise, the analysis is considered as nonconvergent. This attribute is applied for multiple imputation only.}
+	\item{\code{m}:}{DEPRECATED. Formerly, the number of imputations (no longer supported). The only accepted value is now 0, indicating full information maximum likelihood is used for incomplete data.}
+	\item{\code{package}:}{DEPRECATED. The package to be used in multiple imputation (no longer supported).}
+  \item{\code{convergentCutoff}:}{DEPRECATED. If the proportion of convergent results across imputations are greater than the specified value (the default is 80\%), the analysis on the dataset is considered as convergent. Otherwise, the analysis is considered as nonconvergent. This attribute is applied for multiple imputation only.}
     \item{\code{timePoints}:}{Number of timepoints items were measured over. For longitudinal data, planned missing designs will be implemented within each timepoint.}
 	\item{\code{ignoreCols}:}{The columns not imposed any missing values for any missing data patterns}
 	\item{\code{threshold}:}{The threshold of covariates that divide between the area to impose missing and the area not to impose missing. The default threshold is the mean of the covariate.}
