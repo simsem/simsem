@@ -1,4 +1,56 @@
+### Sunthud Pornprasertmanit; with contributions by Terrence D. Jorgensen
+### Last updated: 5 March 2026
+### combine multiple SimResult objects into a single result object
 
+#' Combine simulation results
+#'
+#' Combines multiple \code{SimResult} objects into a single object by
+#' stacking results from multiple simulation replications. This is useful when simulation
+#' results are generated in separate runs (e.g., parallel jobs on an HPC
+#' cluster) and need to be merged into a single result object for
+#' analysis.
+#'
+#' The function checks that all input objects are of class
+#' \code{SimResult} and that they correspond to the same model type.
+#' Simulation outputs (parameter estimates, fit statistics, convergence
+#' indicators, and other stored results) are concatenated across
+#' replications.
+#'
+#' @param ... One or more \code{SimResult} objects to combine.
+#'
+#' @details
+#' This function is typically used when simulation replications are
+#' distributed across multiple jobs and saved separately. The resulting
+#' objects can then be combined into a single \code{SimResult} object for
+#' summarization and analysis.
+#'
+#' The function performs several consistency checks:
+#' \itemize{
+#' \item All inputs must be \code{SimResult} objects.
+#' \item All models must have the same \code{modelType}.
+#' \item Seeds are checked to warn about potential overlap.
+#' }
+#'
+#' Parameter estimates, standard errors, fit indices, convergence
+#' indicators, and other stored values are concatenated across
+#' replications. Timing information is also combined appropriately.
+#'
+#' @return
+#' A single \code{SimResult} object containing all replications from the
+#' input objects.
+#'
+#' @seealso
+#' \code{\link{SimResult-class}}, \code{\link{summary}}, \code{\link{summaryShort}}
+#'
+#' @examples
+#' \dontrun{
+#' result1 <- sim(...)
+#' result2 <- sim(...)
+#'
+#' combined <- combineSim(result1, result2)
+#' }
+#'
+#' @export
 combineSim <- function(...) {
   s4list <- list(...)
   if (!all(sapply(s4list, is, "SimResult"))) {
@@ -12,7 +64,7 @@ combineSim <- function(...) {
   ## check that all models are the same type
   mT <- sapply(s4list, function(dat) slot(dat, "modelType"))
   if (length(unique(mT)) > 1) {
-    stop("Model Types are not identical. Do not combine SimResults from structurally different models. \n")
+    stop("Model Types are not identical. Do not combine SimResults from structurally different models.")
   } else mT = mT[1]
   
   nRep <- sum(sapply(s4list, function(dat) dat@nRep))
@@ -42,7 +94,9 @@ combineSim <- function(...) {
   stdSe <- do.call("rbind", lapply(s4list, stackEm, "stdSe"))
   nobs <- do.call("rbind", lapply(s4list, stackEm, "nobs"))
   
-  if(all(is.na(misspecValue))) misspecValue <- data.frame(V1 = NA)
+  if (length(misspecValue) > 0 && all(is.na(misspecValue))) {
+    misspecValue <- data.frame(V1 = NA)
+  }
   if(all(is.na(popFit))) popFit <- data.frame(V1 = NA)
    
   ## function to stack paramValues so nrows == nReps, (unless it already is, e.g. random parameters)
@@ -53,10 +107,18 @@ combineSim <- function(...) {
       return(paramVec)
     } else return(dat@paramValue)
   }
-  ## save stacked paramValues
   pv <- do.call("rbind", lapply(s4list, stackParams))
   if (nrow(unique(pv)) == 1) pv <- unique(pv)
-  stdpv <- do.call("rbind", lapply(s4list, stackParams))
+  
+  ## SP: FIX BUGS: stdpv should be the stacked standardized parameters
+  stackStdParams <- function(dat) {
+    if (nrow(dat@stdParamValue) == 1) {
+      paramVec <- dat@stdParamValue
+      for (i in 2:dat@nRep) paramVec <- rbind(paramVec, dat@stdParamValue)
+      return(paramVec)
+    } else return(dat@stdParamValue)
+  }
+  stdpv <- do.call("rbind", lapply(s4list, stackStdParams))
   if (nrow(unique(stdpv)) == 1) stdpv <- unique(stdpv)
   
   ## save vectors. If single values, save them as vectors to match nReps rows in data.frames

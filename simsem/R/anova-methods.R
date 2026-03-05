@@ -1,5 +1,69 @@
-# this is based on the anova function in the lmer/lavaan package
+### Sunthud Pornprasertmanit; with contributions by Terrence D. Jorgensen
+### Last updated: 5 March 2026
+### functions for comparing simulation results using nested-model tests
 
+# Based on the anova() implementations in the lme4 and lavaan packages
+
+#' Compare nested simulation models
+#'
+#' Performs nested-model comparisons for simulation results stored in
+#' \code{SimResult} objects. The function compares fit statistics across
+#' simulation replications and summarizes differences between competing
+#' models.
+#'
+#' The comparison is based on fit measures stored in the \code{fit} slot
+#' of each \code{SimResult} object. When chi-square statistics and degrees
+#' of freedom are available, the function also computes the empirical
+#' rejection rate (power) for the chi-square difference test at
+#' \eqn{\alpha = .05}.
+#'
+#' Multiple models can be compared as long as they are based on the same
+#' simulated datasets (i.e., identical random seeds, sample sizes, and
+#' missing-data conditions).
+#'
+#' @param object A \code{SimResult} object representing the baseline model.
+#' @param ... Additional \code{SimResult} objects to be compared with
+#'   \code{object}.
+#' @param usedFit Character vector specifying fit indices to include in
+#'   the comparison. If \code{NULL}, all available fit indices are used.
+#'
+#' @details
+#' The function first ensures that all models are based on the same
+#' simulation conditions, including random seeds, sample sizes, and
+#' missing-data mechanisms. Models are then ordered by degrees of freedom
+#' and pairwise differences in fit statistics are computed.
+#'
+#' For two models, the output includes the mean difference in fit
+#' statistics across replications and the empirical power of the
+#' chi-square difference test (when available). For more than two models,
+#' comparisons are performed sequentially between adjacent models in the
+#' ordered list.
+#'
+#' If sample size or missing-data conditions vary across replications,
+#' the function also reports power estimates conditional on those
+#' varying parameters.
+#'
+#' @return
+#' A list containing:
+#' \item{summary}{A data frame of mean fit statistics for each model.}
+#' \item{diff}{A data frame summarizing differences in fit statistics
+#'   between nested models.}
+#' \item{varyParam}{Optional results showing how power varies with
+#'   simulation conditions such as sample size or missingness.}
+#'
+#' @seealso
+#' \code{\link{SimResult}}, \code{\link{summaryFit}}
+#'
+#' @examples
+#' \dontrun{
+#' result1 <- sim(...)
+#' result2 <- sim(...)
+#'
+#' anova(result1, result2)
+#' }
+#'
+#' @export
+#' @method anova SimResult
 anova.SimResult <- function(object, ..., usedFit = NULL) {
   usedFit <- cleanUsedFit(usedFit, colnames(object@fit))
   if ("df" %in% colnames(object@fit) & "chisq" %in% colnames(object@fit)) {
@@ -27,7 +91,7 @@ anova.SimResult <- function(object, ..., usedFit = NULL) {
     nseed <- rbind(nseed, mods[[1]]@seed[1])
   }
   if (any(!duplicated(nseed)[2:length(mods)]))
-    stop("simSEM ERROR: Models are based on different data and cannont be compared, check you random seed")
+    stop("simSEM ERROR: Models are based on different data and cannot be compared, check you random seed")
 
   # put them in order (using number of free parameters) nfreepar <-
   # sapply(lapply(mods, logLik), attr, 'df')

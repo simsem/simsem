@@ -1,9 +1,27 @@
-# A collection of summary*, get*, and set* functions for the result object
+### Sunthud Pornprasertmanit; with contributions by Terrence D. Jorgensen
+### Last updated: 5 March 2026
+### A collection of summary*, get*, and set* functions for the result object
 
-
-# summaryParam: This function will summarize the obtained parameter estimates
-# and standard error.
-
+#' Summarize parameter estimates
+#'
+#' This function summarizes the obtained parameter estimates and standard errors
+#' from a simulation result object.
+#'
+#' @param object A \code{SimResult} object.
+#' @param alpha Significance level used to compute power.
+#' @param std Logical indicating whether standardized estimates should be used.
+#' @param detail Logical indicating whether additional detailed statistics should be returned.
+#' @param improper Logical indicating whether improper solutions should be included.
+#' @param digits Optional number of digits used to round the results.
+#' @param matchParam Logical indicating whether parameters should be matched to
+#' population parameters.
+#'
+#' @return A data frame summarizing parameter estimates, standard errors,
+#' bias, coverage, and other statistics.
+#'
+#' @seealso \code{\link{summaryPopulation}}, \code{\link{summaryFit}}
+#'
+#' @export
 summaryParam <- function(object, alpha = 0.05, std = FALSE, detail = FALSE,
                          improper = TRUE, digits = NULL, matchParam = FALSE) {
   object <- clean(object, improper = improper)
@@ -77,8 +95,7 @@ summaryParam <- function(object, alpha = 0.05, std = FALSE, detail = FALSE,
 
       noci <- setdiff(rownames(result), colnames(lowerBound))
       if (length(noci) > 0) {
-        if (length(selectci) > 0) warning("Some CIs are Wald CI and others",
-                                          " are calculated inside the simulation.")
+        if (length(selectci) > 0) warning("Some CIs are Wald CI and others are calculated inside the simulation.")
         selectCoef <- usedCoef[,noci]
         selectSE <- usedSe[,noci]
 
@@ -178,27 +195,17 @@ summaryParam <- function(object, alpha = 0.05, std = FALSE, detail = FALSE,
   return(as.data.frame(result))
 }
 
-matchLavaanName <- function(name1, name2) {
-  result1 <- match(name1, name2)
-  result2 <- match(name1, switchLavaanName(name2))
-  result1[is.na(result1)] <- result2[is.na(result1)]
-  result1
-}
-
-switchLavaanName <- function(name) {
-  nameX <- strsplit(name, "\\.")
-  nameGroup <- sapply(nameX, "[", 1)
-  nameParam <- sapply(nameX, "[", 2)
-  target <- grep("~~", nameParam)
-  varTarget <- strsplit(nameParam[target], "~~")
-  nameParam[target] <- paste0(sapply(varTarget, "[", 2), "~~", sapply(varTarget, "[", 1))
-  nameX <- paste0(nameGroup, ".", nameParam)
-  nameX
-}
-
-# summaryMisspec: This function will summarize the obtained fit indices and
-# generate a data frame.
-
+#' Summarize model misspecification
+#'
+#' This function summarizes the obtained model misspecification values and
+#' population fit indices.
+#'
+#' @param object A \code{SimResult} object.
+#' @param improper Logical indicating whether improper solutions should be included.
+#'
+#' @return A data frame summarizing model misspecification and population fit values.
+#'
+#' @export
 summaryMisspec <- function(object, improper = TRUE) {
   object <- clean(object, improper = improper)
   if (all(dim(object@misspecValue) == 0)) {
@@ -214,8 +221,19 @@ summaryMisspec <- function(object, improper = TRUE) {
   }
 }
 
-# summaryPopulation: Summarize population values behind data generation model
-
+#' Summarize population parameter values
+#'
+#' This function summarizes the population parameter values used in the
+#' data-generation model.
+#'
+#' @param object A \code{SimResult} object.
+#' @param std Logical indicating whether standardized population parameters
+#' should be returned.
+#' @param improper Logical indicating whether improper solutions should be included.
+#'
+#' @return A matrix summarizing the population parameter values.
+#'
+#' @export
 summaryPopulation <- function(object, std = FALSE, improper = TRUE) {
   object <- clean(object, improper = improper)
   paramValue <- object@paramValue
@@ -241,9 +259,18 @@ summaryPopulation <- function(object, std = FALSE, improper = TRUE) {
   return(result)
 }
 
-# summaryFit: This function will summarize the obtained fit indices and
-# generate a data frame.
-
+#' Summarize fit indices
+#'
+#' This function summarizes the fit indices obtained from the simulation.
+#'
+#' @param object A \code{SimResult} object.
+#' @param alpha Significance level used for computing cutoff values.
+#' @param improper Logical indicating whether improper solutions should be included.
+#' @param usedFit Optional vector specifying which fit indices to summarize.
+#'
+#' @return A data frame summarizing fit indices.
+#'
+#' @export
 summaryFit <- function(object, alpha = NULL, improper = TRUE, usedFit = NULL) {
   cleanObj <- clean(object, improper = improper)
   usedFit <- cleanUsedFit(usedFit, colnames(object@fit))
@@ -279,7 +306,6 @@ summaryFit <- function(object, alpha = NULL, improper = TRUE, usedFit = NULL) {
     cutoffs <- matrix(as.numeric(cutoffs), length(usedFit), length(alpha))
     if (ncol(as.matrix(cutoffs)) == 1) {
       cutoffs <- t(cutoffs)
-      # rownames(cutoffs) <- usedFit
     }
 
     fit <- as.data.frame(cleanObj@fit[, usedFit])
@@ -290,15 +316,23 @@ summaryFit <- function(object, alpha = NULL, improper = TRUE, usedFit = NULL) {
     colnames(result) <- c(alpha, "Mean", "SD")
     rownames(result) <- usedFit
     names(dimnames(result)) <- c("Fit Indices", "Alpha")
-    # print(as.data.frame(cutoffs))
   }
 
   return(result)
 }
 
-# summaryMisspec: This function will summarize the obtained fit indices and
-# generate a data frame.
-
+#' Summarize convergence information
+#'
+#' This function summarizes convergence results across simulation replications.
+#'
+#' @param object A \code{SimResult} object.
+#' @param std Logical indicating whether standardized population parameters
+#' should be used.
+#' @param improper Logical indicating whether improper solutions should be included.
+#'
+#' @return A list summarizing convergence statistics.
+#'
+#' @export
 summaryConverge <- function(object, std = FALSE, improper = TRUE) {
   result <- list()
   converged <- object@converged == 0
@@ -330,15 +364,15 @@ summaryConverge <- function(object, std = FALSE, improper = TRUE) {
   misspecValue <- object@misspecValue
   popFit <- object@popFit
   nonconverged <- !converged
-  improprep <- rep(FALSE, length(converged))
+  improperRep <- rep(FALSE, length(converged))
   if (improper) {
     nonconverged <- object@converged %in% 1:2
-    improprep <- object@converged %in% 3:7
+    improperRep <- object@converged %in% 3:7
   }
   if (length(unique(n)) > 1) {
     temp1 <- n[converged]
     temp2 <- n[nonconverged]
-    temp3 <- n[improprep]
+    temp3 <- n[improperRep]
     resultTemp <- c(mean.convergence = mean(temp1), sd.convergence = sd(temp1))
     resultDiff <- NULL
     if (length(temp2) > 0) {
@@ -356,7 +390,7 @@ summaryConverge <- function(object, std = FALSE, improper = TRUE) {
   if (length(unique(pmMCAR)) > 1) {
     temp1 <- pmMCAR[converged]
     temp2 <- pmMCAR[nonconverged]
-    temp3 <- pmMCAR[improprep]
+    temp3 <- pmMCAR[improperRep]
     resultTemp <- c(mean.convergence = mean(temp1), sd.convergence = sd(temp1))
     resultDiff <- NULL
     if (length(temp2) > 0) {
@@ -376,7 +410,7 @@ summaryConverge <- function(object, std = FALSE, improper = TRUE) {
   if (length(unique(pmMAR)) > 1) {
     temp1 <- pmMAR[converged]
     temp2 <- pmMAR[nonconverged]
-    temp3 <- pmMAR[improprep]
+    temp3 <- pmMAR[improperRep]
     resultTemp <- c(mean.convergence = mean(temp1), sd.convergence = sd(temp1))
     resultDiff <- NULL
     if (length(temp2) > 0) {
@@ -396,7 +430,7 @@ summaryConverge <- function(object, std = FALSE, improper = TRUE) {
   if (nrow(paramValue) > 1) {
     temp1 <- paramValue[converged, , drop = FALSE]
     temp2 <- paramValue[nonconverged, , drop = FALSE]
-    temp3 <- paramValue[improprep, , drop = FALSE]
+    temp3 <- paramValue[improperRep, , drop = FALSE]
     resultTemp <- cbind(mean.convergence = apply(temp1, 2, mean),
                         sd.convergence = apply(temp1, 2, sd))
     resultDiff <- NULL
@@ -419,7 +453,7 @@ summaryConverge <- function(object, std = FALSE, improper = TRUE) {
   if (!all(dim(misspecValue) == 0) && nrow(misspecValue) > 1) {
     temp1 <- misspecValue[converged, ]
     temp2 <- misspecValue[nonconverged, ]
-    temp3 <- misspecValue[improprep, ]
+    temp3 <- misspecValue[improperRep, ]
     resultTemp <- cbind(mean.convergence = apply(temp1, 2, mean),
                         sd.convergence = apply(temp1, 2, sd))
     resultDiff <- NULL
@@ -442,7 +476,7 @@ summaryConverge <- function(object, std = FALSE, improper = TRUE) {
   if (!all(dim(popFit) == 0) && nrow(popFit) > 1) {
     temp1 <- popFit[converged, ]
     temp2 <- popFit[nonconverged, ]
-    temp3 <- popFit[improprep, ]
+    temp3 <- popFit[improperRep, ]
     resultTemp <- cbind(mean.convergence = apply(temp1, 2, mean),
                         sd.convergence = apply(temp1, 2, sd))
     resultDiff <- NULL
@@ -465,8 +499,18 @@ summaryConverge <- function(object, std = FALSE, improper = TRUE) {
   return(result)
 }
 
-# setPopulation: Set population parameter values
-
+#' Set population parameter values
+#'
+#' This function extracts and sets population parameter values from a
+#' population model specification.
+#'
+#' @param target A \code{SimResult} object.
+#' @param population A population model specification. This can be a
+#' \code{SimSem} object, a lavaan object, a lavaan model syntax, or a parameter table.
+#'
+#' @return The updated \code{SimResult} object with population parameter values set.
+#'
+#' @export
 setPopulation <- function(target, population) {
   popParam <- NULL
   if (is(population, "SimSem")) {
@@ -522,8 +566,18 @@ setPopulation <- function(target, population) {
   return(target)
 }
 
-# getPopulation: Description: Extract the population value from an object
-
+#' Extract population parameter values
+#'
+#' This function extracts population parameter values from a simulation result object.
+#'
+#' @param object A \code{SimResult} object.
+#' @param std Logical indicating whether standardized parameters should be returned.
+#' @param improper Logical indicating whether improper solutions should be included.
+#' @param nonconverged Logical indicating whether nonconverged replications should be included.
+#'
+#' @return Population parameter values.
+#'
+#' @export
 getPopulation <- function(object, std = FALSE, improper = TRUE, nonconverged = FALSE) {
   toextract <- "param"
   if (std) toextract <- "stdparam"
@@ -533,6 +587,21 @@ getPopulation <- function(object, std = FALSE, improper = TRUE, nonconverged = F
 # getExtraOutput: Extract the extra output that users set in the 'outfun' argument
 # TDJ added simplify= to apply() on 4 Nov 2021
 # TDJ corrected the call to apply() on 30 Nov 2023
+
+#' Extract extra outputs from simulation
+#'
+#' This function extracts additional outputs specified by the user through
+#' the \code{outfun} argument in the simulation.
+#'
+#' @param object A \code{SimResult} object.
+#' @param improper Logical indicating whether improper solutions should be included.
+#' @param nonconverged Logical indicating whether nonconverged replications should be included.
+#' @param simplify Logical indicating whether the result should be simplified.
+#' @param USE.NAMES Logical indicating whether names should be used.
+#'
+#' @return A list containing the extra outputs.
+#'
+#' @export
 getExtraOutput <- function(object, improper = TRUE, nonconverged = FALSE,
                            simplify = FALSE, USE.NAMES = FALSE) {
   targetRep <- 0
@@ -550,11 +619,35 @@ getExtraOutput <- function(object, improper = TRUE, nonconverged = FALSE,
          simplify = simplify, USE.NAMES = USE.NAMES)
 }
 
+#' Extract parameter estimates
+#'
+#' Method for extracting parameter estimates from a \code{SimResult} object.
+#'
+#' @param object A \code{SimResult} object.
+#' @param improper Logical indicating whether improper solutions should be included.
+#' @param nonconverged Logical indicating whether nonconverged replications should be included.
+#'
+#' @return A matrix of parameter estimates.
+#'
+#' @rdname coef
+#' @export
 setMethod("coef", "SimResult",
           function(object, improper = TRUE, nonconverged = FALSE) {
             inspect(object, "coef", improper = improper, nonconverged = nonconverged)
           })
 
+#' Inspect simulation results
+#'
+#' Extract various components from a \code{SimResult} object.
+#'
+#' @param object A \code{SimResult} object.
+#' @param what Character string specifying what to extract.
+#' @param improper Logical indicating whether improper solutions should be included.
+#' @param nonconverged Logical indicating whether nonconverged replications should be included.
+#'
+#' @return Extracted information from the simulation result object.
+#'
+#' @export
 setGeneric("inspect",
            function(object, what="coef", improper = TRUE, nonconverged = FALSE)
              standardGeneric("inspect"))
@@ -717,8 +810,16 @@ setMethod("inspect", "SimResult", function(object, what = "coef",
 
 })
 
-# summaryPopulation: Summarize population values behind data generation model
-
+#' Summarize simulation timing
+#'
+#' This function summarizes the timing information recorded during the simulation.
+#'
+#' @param object A \code{SimResult} object.
+#' @param units Units used to display time.
+#'
+#' @return Printed timing summary.
+#'
+#' @export
 summaryTime <- function(object, units = "seconds") {
   timing <- object@timing
   timing1 <- timing[-which(names(timing) %in% c("StartTime", "EndTime"))]
@@ -790,7 +891,47 @@ summaryTime <- function(object, units = "seconds") {
   cat(t0.txt, "  ", units, "\n", sep="")
 }
 
+#' Summarize simulation seed
+#'
+#' This function summarizes the seed values used during the simulation.
+#'
+#' @param object A \code{SimResult} object.
+#'
+#' @return A list containing the seed information.
+#'
+#' @export
 summarySeed <- function(object) {
   seed <- object@seed
   list("Seed number" = object@seed[1], "L'Ecuyer seed of the last replication" = object@seed[-1])
+}
+
+## ----------------
+## Hidden Functions
+## ----------------
+
+# matchLavaanName()
+# ------------------------------------------------------------------
+# Match parameter names between two lavaan-style name vectors,
+# accounting for equivalent residual covariance names (e.g., y1~~y2 vs y2~~y1).
+matchLavaanName <- function(name1, name2) {
+  result1 <- match(name1, name2)
+  result2 <- match(name1, switchLavaanName(name2))
+  result1[is.na(result1)] <- result2[is.na(result1)]
+  result1
+}
+
+# switchLavaanName()
+# ------------------------------------------------------------------
+# Reverse the order of variables in lavaan residual covariance
+# parameter names (e.g., "group.y1~~y2" becomes "group.y2~~y1") to allow matching
+# of equivalent covariance parameters.
+switchLavaanName <- function(name) {
+  nameX <- strsplit(name, "\\.")
+  nameGroup <- sapply(nameX, "[", 1)
+  nameParam <- sapply(nameX, "[", 2)
+  target <- grep("~~", nameParam)
+  varTarget <- strsplit(nameParam[target], "~~")
+  nameParam[target] <- paste0(sapply(varTarget, "[", 2), "~~", sapply(varTarget, "[", 1))
+  nameX <- paste0(nameGroup, ".", nameParam)
+  nameX
 }
