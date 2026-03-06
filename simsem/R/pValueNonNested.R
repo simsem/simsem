@@ -1,6 +1,125 @@
-### pValueNonNested: Find p value for a nonnested model comparison
-### Last updated: 3 June 2018
+### Sunthud Pornprasertmanit & Terrence D. Jorgensen
+### Last updated: 6 March 2026
+### Fit index p-value utilities used in dynamic cutoff evaluation for a non-nested model comparison
 
+#' Find p-values (1 - percentile) for a non-nested model comparison
+#'
+#' This function provides \emph{p}-values by comparing the results of fitting
+#' real data to two competing models against simulation results obtained by
+#' fitting simulated data from both models to both models. The \emph{p}-values
+#' are computed using sampling distributions obtained under the datasets
+#' generated from each model.
+#'
+#' @param outMod1 A \code{lavaan}-class object that saves the analysis result
+#' of the first model from the target dataset.
+#' @param outMod2 A \code{lavaan}-class object that saves the analysis result
+#' of the second model from the target dataset.
+#' @param dat1Mod1 A \code{\linkS4class{SimResult}} object containing the
+#' simulation results from analyzing Model 1 using datasets generated from Model 1.
+#' @param dat1Mod2 A \code{\linkS4class{SimResult}} object containing the
+#' simulation results from analyzing Model 2 using datasets generated from Model 1.
+#' @param dat2Mod1 A \code{\linkS4class{SimResult}} object containing the
+#' simulation results from analyzing Model 1 using datasets generated from Model 2.
+#' @param dat2Mod2 A \code{\linkS4class{SimResult}} object containing the
+#' simulation results from analyzing Model 2 using datasets generated from Model 2.
+#' @param usedFit Vector of names of fit indices that researchers wish to obtain
+#' cutoffs from. The default is to use all available fit indices.
+#' @param nVal The sample size value for which researchers wish to compute the
+#' \emph{p}-value.
+#' @param pmMCARval The percent missing completely at random value for which
+#' researchers wish to compute the \emph{p}-value.
+#' @param pmMARval The percent missing at random value for which researchers
+#' wish to compute the \emph{p}-value.
+#' @param df The degree of freedom used in spline methods for predicting fit
+#' indices by predictors. If \code{df = 0}, the spline method is not applied.
+#' @param onetailed Logical indicating whether a one-tailed test should be
+#' used. If \code{FALSE}, two-tailed \emph{p}-values are returned.
+#'
+#' @return
+#' A list containing two vectors of \emph{p}-values:
+#'
+#' \itemize{
+#' \item \code{pValueMod1}: p-values based on the sampling distribution when
+#' Model 1 generated the data.
+#' \item \code{pValueMod2}: p-values based on the sampling distribution when
+#' Model 2 generated the data.
+#' }
+#'
+#' Each vector contains the \emph{p}-values of the requested fit indices along
+#' with two additional summary values:
+#'
+#' \itemize{
+#' \item \code{andRule}: The proportion of replications in which all fit indices
+#' indicate a better model than the observed data. This represents the most
+#' stringent rule for retaining a hypothesized model.
+#'
+#' \item \code{orRule}: The proportion of replications in which at least one fit
+#' index indicates a better model than the observed data. This represents the
+#' most lenient rule for retaining a hypothesized model.
+#' }
+#'
+#' @details
+#' In comparing fit indices, the \emph{p}-value is the proportion of replications
+#' that provide less preference for either Model 1 or Model 2 than the analysis
+#' result obtained from the observed data.
+#'
+#' In a two-tailed test, the function reports the proportion of values in the
+#' sampling distribution that are more extreme than the value obtained from the
+#' real data. If the resulting \emph{p}-value is high (> .05) for one model and
+#' low (< .05) for the other model, the model with the higher \emph{p}-value is
+#' preferred. If both \emph{p}-values are either high or low, the decision is
+#' considered undetermined.
+#'
+#' @seealso
+#' \code{\linkS4class{SimResult}}
+#'
+#' @examples
+#' \dontrun{
+#' # Model A; Factor 1 --> Factor 2; Factor 2 --> Factor 3
+#' library(lavaan)
+#' loading <- matrix(0, 11, 3)
+#' loading[1:3, 1] <- NA
+#' loading[4:7, 2] <- NA
+#' loading[8:11, 3] <- NA
+#' path.A <- matrix(0, 3, 3)
+#' path.A[2, 1] <- NA
+#' path.A[3, 2] <- NA
+#' model.A <- estmodel(LY=loading, BE=path.A, modelType="SEM",
+#'     indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
+#'
+#' out.A <- analyze(model.A, PoliticalDemocracy)
+#'
+#' # Model B; Factor 1 --> Factor 3; Factor 3 --> Factor 2
+#' path.B <- matrix(0, 3, 3)
+#' path.B[3, 1] <- NA
+#' path.B[2, 3] <- NA
+#' model.B <- estmodel(LY=loading, BE=path.B, modelType="SEM",
+#'     indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
+#'
+#' out.B <- analyze(model.B, PoliticalDemocracy)
+#'
+#' loading.mis <- matrix("runif(1, -0.2, 0.2)", 11, 3)
+#' loading.mis[is.na(loading)] <- 0
+#'
+#' datamodel.A <- model.lavaan(out.A, std=TRUE, LY=loading.mis)
+#' datamodel.B <- model.lavaan(out.B, std=TRUE, LY=loading.mis)
+#'
+#' n <- nrow(PoliticalDemocracy)
+#'
+#' output.A.A <- sim(20, n=n, model.A, generate=datamodel.A)
+#' output.A.B <- sim(20, n=n, model.B, generate=datamodel.A)
+#' output.B.A <- sim(20, n=n, model.A, generate=datamodel.B)
+#' output.B.B <- sim(20, n=n, model.B, generate=datamodel.B)
+#'
+#' pValueNonNested(out.A, out.B,
+#'                 output.A.A, output.A.B,
+#'                 output.B.A, output.B.B)
+#'
+#' # If the p-value for model A is significant but the p-value for model B
+#' # is not significant, model B is preferred.
+#' }
+#'
+#' @export
 pValueNonNested <- function(outMod1, outMod2, dat1Mod1, dat1Mod2, dat2Mod1, dat2Mod2,
     usedFit = NULL, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, df = 0, onetailed = FALSE) {
     mod1 <- clean(dat1Mod1, dat1Mod2)
@@ -100,12 +219,16 @@ pValueNonNested <- function(outMod1, outMod2, dat1Mod1, dat1Mod2, dat2Mod1, dat2
     return(list(pValueMod1 = result1, pValueMod2 = result2))
 }
 
-# twoTaledPValue: Find two-tailed \emph{p} value from one-tailed \emph{p} value
-
-# arguments: vec A vector of one-tailed \emph{p} value.
-
-# value A vector of two-tailed \emph{p} value.
-
+#' Convert one-tailed p-values to two-tailed p-values
+#'
+#' Internal helper that converts one-tailed \emph{p}-values into
+#' two-tailed \emph{p}-values.
+#'
+#' @param vec A vector of one-tailed \emph{p}-values.
+#'
+#' @return A vector of two-tailed \emph{p}-values.
+#'
+#' @keywords internal
 twoTailedPValue <- function(vec) {
     apply(cbind(vec, 1 - vec), 1, min) * 2
 }

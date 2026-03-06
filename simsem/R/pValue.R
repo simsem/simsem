@@ -1,6 +1,24 @@
-### pValue: Find a p-value from an object
-### Last updated: 3 June 2018
+### Sunthud Pornprasertmanit & Terrence D. Jorgensen
+### Last updated: 6 March 2026
+### Fit index p-value utilities used in dynamic cutoff evaluation
 
+#' Compute p-values for a single fit index
+#'
+#' Internal helper used by \code{\link{pValue}} to compute a p-value
+#' comparing a target statistic against a simulated distribution.
+#'
+#' @param target Target value used to compute the p-value.
+#' @param dist Simulated distribution of the statistic.
+#' @param revDirec Logical indicating whether the comparison direction
+#' should be reversed.
+#' @param x Predictor matrix for conditional p-value estimation.
+#' @param xval Specific predictor value for conditional estimation.
+#' @param condCutoff Logical indicating whether conditional cutoffs are used.
+#' @param df Degrees of freedom used for spline modeling.
+#'
+#' @return A p-value.
+#'
+#' @keywords internal
 pValueVector <- function(target,
     dist, revDirec = FALSE, x = NULL, xval = NULL, condCutoff = TRUE, df = 0) {
     if (length(target) == 1) {
@@ -28,6 +46,24 @@ pValueVector <- function(target,
     }
 }
 
+#' Compute p-values for multiple fit indices
+#'
+#' Internal helper function used to compute p-values for multiple
+#' fit indices simultaneously.
+#'
+#' @param target Vector of target values.
+#' @param dist Data frame containing simulated distributions.
+#' @param revDirec Logical vector indicating whether comparisons
+#' should be reversed.
+#' @param x Predictor values used for conditional estimation.
+#' @param xval Predictor values corresponding to the target.
+#' @param df Degrees of freedom for spline estimation.
+#' @param asLogical Logical indicating whether logical comparisons
+#' should be returned instead of probabilities.
+#'
+#' @return A vector of p-values or a logical matrix.
+#'
+#' @keywords internal
 pValueDataFrame <- function(target,
     dist, revDirec = NULL, x = NULL, xval = NULL, df = 0, asLogical = FALSE) {
     if (length(target) != ncol(dist))
@@ -59,6 +95,47 @@ pValueDataFrame <- function(target,
     }
 }
 
+#' Compute p-values for fit indices based on a simulated distribution
+#'
+#' Compute \emph{p}-values for model fit indices by comparing a target model
+#' against the empirical distribution of fit indices obtained from a
+#' simulation result object.
+#'
+#' The function extracts fit indices from a model object (lavaan or OpenMx)
+#' and compares them with the distribution of fit indices stored in a
+#' \code{SimResult} object. When simulation conditions vary (e.g., sample size
+#' or missing data proportions), conditional comparisons can be performed.
+#'
+#' @param target A fitted model object (e.g., a \code{lavaan}, \code{lavaan.mi},
+#' or \code{MxModel} object) whose fit indices will be evaluated.
+#' @param dist A \code{SimResult} object containing the simulated distribution
+#' of fit indices.
+#' @param usedFit Character vector specifying which fit indices should be used.
+#' @param nVal Sample size value used when the simulation includes varying
+#' sample sizes.
+#' @param pmMCARval Percent missing completely at random used when simulations
+#' vary in MCAR levels.
+#' @param pmMARval Percent missing at random used when simulations vary in MAR
+#' levels.
+#' @param df Degrees of freedom used in spline-based conditional estimation.
+#'
+#' @return
+#' A named vector of \emph{p}-values corresponding to the requested fit indices.
+#' When conditions do not vary, additional summary statistics are returned:
+#'
+#' \itemize{
+#' \item individual fit index probabilities
+#' \item \code{andRule}: proportion of replications satisfying all criteria
+#' \item \code{orRule}: proportion satisfying at least one criterion
+#' }
+#'
+#' @examples
+#' \dontrun{
+#' fit <- lavaan::cfa(model, data)
+#' pValue(fit, simResult)
+#' }
+#'
+#' @export
 pValue <- function(target,
     dist, usedFit = NULL, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, df = 0) {
 	if(!is(dist, "SimResult")) stop("The 'dist' object must be a result object.")
@@ -119,42 +196,28 @@ pValue <- function(target,
     }
 }
 
-# pValueCondCutoff: Find the p-value comparing between a cutoff and a
-# distribution when a cutoff is conditional on a predictor value
-
-# \title{
-# Find a p value when the target is conditional (valid) on a specific value of a predictor
-# }
-# \description{
-# Find a \emph{p} value when the target is conditional (valid) on a specific value of a predictor. That is, the target value is applicable only a given value of a predictor.
-# }
-# \usage{
-# pValueCondCutoff(target, dist, revDirec = FALSE, x = NULL, xval = NULL, df = 0)
-# }
-# \arguments{
-  # \item{target}{
-	# A target value used to find \code{p} values.
-# }
-# \item{dist}{
-	# The comparison distribution, which can be a vector of numbers, a data frame, or a result object.
-# }
-# \item{revDirec}{
-	# A logical argument whether to reverse the direction of comparison. If \code{TRUE}, the proportion of the \code{dist} that is lower than \code{target} value is reported. If \code{FALSE}, the proportion of the \code{dist} that is higher than the \code{target} value is reported.
-# }
-  # \item{x}{
-	# the \code{data.frame} of the predictor values. The number of rows of the \code{x} argument should be equal to the number of rows in the \code{dist}
-# }
-  # \item{xval}{
-	# the values of predictor that researchers would like to find the fit indices cutoffs from.
-# }
-  # \item{df}{
-	# the degree of freedom used in spline method in predicting the fit indices by the predictors. If \code{df} is 0, the spline method will not be applied.
-# }
-# }
-# \value{
-	# A vector of \emph{p} values based on the comparison.
-# }
-
+#' Find a p value when the target is conditional on predictor values
+#'
+#' Find a \emph{p} value when the target value is conditional (valid)
+#' only for a specific value of a predictor.
+#'
+#' That is, the target value is applicable only at a given value of a
+#' predictor, and the p-value is computed relative to that conditional
+#' distribution.
+#'
+#' @param target A target value used to find \code{p} values.
+#' @param dist The comparison distribution.
+#' @param revDirec Logical indicating whether to reverse the direction
+#' of comparison.
+#' @param x Data frame of predictor values. The number of rows must match
+#' the number of rows in \code{dist}.
+#' @param xval Predictor value at which the conditional p-value is evaluated.
+#' @param df Degrees of freedom used in spline modeling. If \code{df = 0},
+#' splines are not used.
+#'
+#' @return A vector of \emph{p}-values based on the comparison.
+#'
+#' @keywords internal
 pValueCondCutoff <- function(target, dist, revDirec = FALSE, x = NULL, xval = NULL,
     df = 0) {
     if (!is.matrix(x))
@@ -195,26 +258,17 @@ pValueCondCutoff <- function(target, dist, revDirec = FALSE, x = NULL, xval = NU
     return(result)
 }
 
-# revText: Reverse the direction of p value such as '> .98' to '< .02'
-
-# \title{
-	# Reverse the proportion value by subtracting it from 1
-# }
-# \description{
-	# Reverse the proportion value by subtracting it from 1. This function can reverse a value reported in text, such as from "> .98" to "< .02"
-# }
-# \usage{
-# revText(val)
-# }
-# \arguments{
-  # \item{val}{
-	# The value to be reversed
-# }
-# }
-# \value{
-	# The reversed value or text
-# }
-
+#' Reverse the direction of a proportion value
+#'
+#' Reverse the proportion value by subtracting it from 1.
+#' This function can also reverse text representations such as
+#' \code{"> .98"} to \code{"< .02"}.
+#'
+#' @param val Value or character representation of a proportion.
+#'
+#' @return The reversed value or text.
+#'
+#' @keywords internal
 revText <- function(val) {
     if (suppressWarnings(is.na(as.numeric(val)))) {
         ntext <- nchar(val)
@@ -234,33 +288,19 @@ revText <- function(val) {
     return(result)
 }
 
-# whichMonotonic: Find the center of a vector that is monotonically increasing
-# or decreasing
-
-# \title{
-	# Extract a part of a vector that is monotonically increasing or decreasing
-# }
-# \description{
-	# Extract a part of a vector that is monotonically increasing or decreasing. This function will go to the anchor value and extract the neighbor values that are monotonically increasing or decreasing.
-# }
-# \usage{
-# whichMonotonic(vec, ord=NULL, anchor=NULL)
-# }
-# \arguments{
-  # \item{vec}{
-	# The target vector to be extracted
-# }
-  # \item{ord}{
-	# The names of each element of the vector to be attached
-# }
-  # \item{anchor}{
-	# The position of the element to be anchored. The default value is the middle position.
-# }
-# }
-# \value{
-	# The monotonic part of a vector
-# }
-
+#' Extract the monotonic portion of a vector
+#'
+#' Extract the portion of a vector that is monotonically increasing
+#' or decreasing. The function identifies an anchor point and retains
+#' neighboring elements that follow a consistent monotonic direction.
+#'
+#' @param vec Target vector.
+#' @param ord Optional names associated with vector elements.
+#' @param anchor Position of the anchor element.
+#'
+#' @return A monotonic subset of the vector.
+#'
+#' @keywords internal
 whichMonotonic <- function(vec, ord = NULL, anchor = NULL) {
     vec <- as.vector(vec)
     p <- length(vec)
@@ -290,33 +330,21 @@ whichMonotonic <- function(vec, ord = NULL, anchor = NULL) {
     return(result)
 }
 
-# interpolate: Find a specific percentile value by a linear interpolation of a
-# closed value
-
-# \title{
-	# Find the value of one vector relative to a value of another vector by interpolation
-# }
-# \description{
-	# Find the value of the resulting vector that have the position similar to the value of the baseline vector. If the starting value in the baseline vector is in between two elements, the resulting value will be predicted by linear interpolation.
-# }
-# \usage{
-# interpolate(baselineVec, val, resultVec=NULL)
-# }
-# \arguments{
-  # \item{baselineVec}{
-	# The target vector to be used as a baseline. The resulting vector can be attached as the element names of this vector.
-# }
-  # \item{val}{
-	# The value relative to the baseline vector to be used for projecting the resulting value
-# }
-  # \item{resultVec}{
-	# The vector that the resulting value will be used to base their result form
-# }
-# }
-# \value{
-	# The interpolated value from the resulting vector relative to the value in the baseline vector
-# }
-
+#' Interpolate values relative to a baseline vector
+#'
+#' Find the value of one vector relative to a value in another vector
+#' using linear interpolation.
+#'
+#' If the target value lies between two baseline values, the resulting
+#' value is estimated by linear interpolation.
+#'
+#' @param baselineVec Baseline vector used for interpolation.
+#' @param val Value relative to the baseline vector.
+#' @param resultVec Vector from which resulting values are taken.
+#'
+#' @return Interpolated value relative to the baseline vector.
+#'
+#' @keywords internal
 interpolate <- function(baselineVec, val, resultVec = NULL) {
     p <- length(baselineVec)
     if (is.null(resultVec))
@@ -339,38 +367,21 @@ interpolate <- function(baselineVec, val, resultVec = NULL) {
     }
 }
 
-# pValueVariedCutoff: Find a value when the cutoffs are specified as a vector
-
-# \title{
-# Find a p value when the cutoff is specified as a vector given the values of predictors
-# }
-# \description{
-# Find a \emph{p} value when the cutoff is specified as a vector given the values of predictors.
-# }
-# \usage{
-# pValueVariedCutoff(cutoff, obtainedValue, revDirec = FALSE, x = NULL, xval = NULL)
-# }
-# \arguments{
-  # \item{cutoff}{
-	# A vector of values used to find \code{p} values. Each value in the vector should be the target value conditional (applicable) to each value of the predictors (\code{x}) respectively.
-# }
-# \item{obtainedValue}{
-	# The comparison distribution, which can be a vector of numbers, a data frame, or a result object.
-# }
-# \item{revDirec}{
-	# A logical argument whether to reverse the direction of comparison. If \code{TRUE}, the proportion of the \code{dist} that is lower than \code{target} value is reported. If \code{FALSE}, the proportion of the \code{dist} that is higher than the \code{target} value is reported.
-# }
-  # \item{x}{
-	# the \code{data.frame} of the predictor values. The number of rows of the \code{x} argument should be equal to the number of rows in the \code{dist}
-# }
-  # \item{xval}{
-	# the values of predictor that researchers would like to find the fit indices cutoffs from.
-# }
-# }
-# \value{
-	# A vector of \emph{p} values based on the comparison.
-# }
-
+#' Compute p values for varying cutoff values
+#'
+#' Compute a \emph{p} value when cutoff values vary across simulation
+#' conditions, typically as a function of predictor variables.
+#'
+#' @param cutoff Vector of cutoff values.
+#' @param obtainedValue Comparison distribution.
+#' @param revDirec Logical indicating whether the comparison direction
+#' should be reversed.
+#' @param x Predictor matrix.
+#' @param xval Predictor value at which the p-value is evaluated.
+#'
+#' @return A vector of \emph{p}-values.
+#'
+#' @keywords internal
 pValueVariedCutoff <- function(cutoff, obtainedValue, revDirec = FALSE, x = NULL,
     xval = NULL) {
     # Change warning option to supress warnings

@@ -1,7 +1,107 @@
-### Sunthud Pornprasertmanit & Terrence D. Jorgensen (anyone else?)
-### Last updated: 23 April 2024
+### Sunthud Pornprasertmanit & Terrence D. Jorgensen; with contributions from many others (see GitHub history)
+### Last updated: 6 March 2026
 ### Primary engines for simulation.  Everything else is added details.
 
+#' Simulation engine for structural equation modeling
+#'
+#' The primary function for running Monte Carlo simulations in **simsem**.
+#' The function generates data, analyzes each dataset using the specified model,
+#' and summarizes results across replications.
+#'
+#' The simulation procedure typically consists of the following steps:
+#'
+#' 1. Define a population model or data-generation mechanism.
+#' 2. Generate data based on specified sample sizes and distributions.
+#' 3. Optionally impose missing data mechanisms.
+#' 4. Analyze generated datasets using lavaan, OpenMx, or user-defined functions.
+#' 5. Collect parameter estimates, standard errors, fit indices, and other statistics.
+#'
+#' The function supports a wide range of simulation scenarios including:
+#'
+#' - Multiple-group models
+#' - Missing-data mechanisms (MCAR and MAR)
+#' - Non-normal indicator distributions
+#' - Parallel processing
+#' - User-defined data generation and analysis functions
+#'
+#' @param nRep Number of replications.
+#' @param model Model used for analysis. Can be a simsem template, lavaan model,
+#'   OpenMx model, or a user-defined function.
+#' @param n Sample size (vector or list for multiple groups).
+#' @param generate Data-generation mechanism. Can be a simsem template,
+#'   lavaan syntax, OpenMx model, or a function that returns generated data.
+#' @param ... Additional arguments passed to the analysis function.
+#' @param rawData Optional list of empirical datasets used instead of simulated data.
+#' @param miss A \code{SimMissing} object specifying missing-data mechanisms.
+#' @param datafun Optional function applied to generated data before analysis.
+#' @param lavaanfun Name of the lavaan estimation function (default \code{"lavaan"}).
+#' @param outfun Optional function applied to model output.
+#' @param outfundata Optional function applied to both output and data.
+#' @param pmMCAR Proportion of missing completely at random.
+#' @param pmMAR Proportion of missing at random.
+#' @param facDist Distribution specification for latent variables.
+#' @param indDist Distribution specification for indicators.
+#' @param errorDist Distribution specification for measurement errors.
+#' @param sequential Logical. Generate parameters sequentially across replications.
+#' @param saveLatentVar Logical. Save latent-variable scores during simulation.
+#' @param modelBoot Logical. Use bootstrap model generation.
+#' @param realData Empirical data used for parameter generation.
+#' @param covData Covariate data for population generation.
+#' @param maxDraw Maximum number of parameter draws for constrained simulations.
+#' @param misfitType Type of population misfit constraint.
+#' @param misfitBounds Bounds for population misfit.
+#' @param averageNumMisspec Logical indicating whether misspecification is averaged.
+#' @param optMisfit Target misfit level.
+#' @param optDraws Number of draws when optimizing misfit.
+#' @param createOrder Order for creating model components.
+#' @param aux Auxiliary variables used in missing-data analysis.
+#' @param group Group variable for multi-group models.
+#' @param mxFit Logical indicating whether OpenMx fit indices are computed.
+#' @param mxMixture Logical indicating mixture-model estimation in OpenMx.
+#' @param citype Type of confidence interval used by lavaan.
+#' @param cilevel Confidence level for intervals.
+#' @param seed Random seed.
+#' @param silent Logical indicating whether warnings are suppressed.
+#' @param multicore Logical indicating whether parallel processing is used.
+#' @param numProc Number of processors for parallel computing.
+#' @param paramOnly Logical. Return only population parameters.
+#' @param dataOnly Logical. Return only generated data.
+#' @param smartStart Logical indicating whether starting values use population parameters.
+#' @param previousSim Previous simulation result used to extend runs.
+#' @param completeRep Logical or integer controlling additional replications
+#'   until enough converged solutions are obtained.
+#' @param stopOnError Logical indicating whether errors should stop execution.
+#'
+#' @return
+#' An object of class \code{SimResult} containing:
+#'
+#' - parameter estimates
+#' - standard errors
+#' - model fit indices
+#' - convergence information
+#' - population parameter values
+#' - simulation timing information
+#'
+#' @seealso
+#' \code{\link{SimResult}}
+#'
+#' @examples
+#' \dontrun{
+#'
+#' model <- "
+#'   f1 =~ x1 + x2 + x3
+#' "
+#'
+#' result <- sim(
+#'   nRep = 100,
+#'   model = model,
+#'   n = 200
+#' )
+#'
+#' summary(result)
+#' }
+#'
+#' @export
 sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
                 rawData = NULL, miss = NULL, datafun = NULL, lavaanfun = "lavaan",
                 outfun = NULL, outfundata = NULL, pmMCAR = NULL, pmMAR = NULL,
@@ -732,8 +832,16 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
 }
 
 
-## runRep: Run one replication
-
+#' Run a single simulation replication
+#'
+#' Internal function used by \code{\link{sim}} to execute a single
+#' Monte Carlo replication. The function generates data, applies missingness,
+#' analyzes the dataset, and extracts relevant results.
+#'
+#' @return
+#' A list containing results from a single replication.
+#'
+#' @keywords internal
 runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NULL,
                    lavaanfun = NULL, outfun = NULL, outfundata = NULL,
                    facDist = NULL, indDist = NULL, indLab = NULL, errorDist = NULL,
@@ -1261,7 +1369,12 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
   return(Result)
 }
 
-## MispecSet is still needed but paramSet above can be replaced
+#' Reduce misspecification parameter sets
+#'
+#' Internal function used to convert misspecification matrices into
+#' named parameter vectors used in simulation summaries.
+#'
+#' @keywords internal
 reduceMisspecSet <- function(misspecSet, latent, indLab = NULL, facLab = NULL, covLab = NULL) {
 
     final <- NULL
@@ -1412,7 +1525,9 @@ reduceMisspecSet <- function(misspecSet, latent, indLab = NULL, facLab = NULL, c
     final
 }
 
-## Check to see if random parameters are in the model. Can use to simplfy runRep
+#' Check to see if random parameters are in the model. Can use to simplfy runRep
+#' 
+#' @keywords internal
 is.random <- function(dat) {
     dat[is.empty(dat)] <- "0"
     isRandom <- sapply(dat, FUN = function(x) {
@@ -1421,7 +1536,12 @@ is.random <- function(dat) {
     return(isRandom)
 }
 
-## TDJ: check for any improper solutions
+#' Check for non–positive-definite covariance matrices
+#'
+#' Detects improper solutions where covariance matrices contain
+#' negative eigenvalues.
+#'
+#' @keywords internal
 checkNPD <- function(object) {
   GLIST <- object@Model@GLIST
   covGLIST <- GLIST[names(GLIST) %in% c("theta", "psi")]
@@ -1435,6 +1555,12 @@ checkNPD <- function(object) {
 	any(result)
 }
 
+#' Collapse extra parameters generated by equality constraints
+#'
+#' Internal helper used to compute derived parameters defined
+#' through lavaan constraints.
+#'
+#' @keywords internal
 collapseExtraParam <- function(pls, dgen, fill = TRUE, con = NULL) {
 	## Collapse all labels
 	if (length(pls) == 1 & length(pls) != 1) dgen <- list(dgen) # FIX CONTRADICTION: length(pls) can never both == 1 and != 1
@@ -1462,6 +1588,11 @@ collapseExtraParam <- function(pls, dgen, fill = TRUE, con = NULL) {
 	result
 }
 
+#' Rename extra parameters from constraint expressions
+#'
+#' Converts lavaan constraint syntax into readable parameter labels.
+#'
+#' @keywords internal
 renameExtraParam <- function(lhs, op, rhs, refpt = NULL) {
 	for(i in 1:length(lhs)) {
 		lablhs <- lhs[i]
@@ -1484,8 +1615,12 @@ renameExtraParam <- function(lhs, op, rhs, refpt = NULL) {
 }
 
 
-
-## The steps follows the buildPT function.
+#' Parse population parameter values
+#'
+#' Internal function used to compute population parameter values
+#' based on generated parameter matrices.
+#'
+#' @keywords internal
 parsePopulation <- function(paramSet, draws, group = 1, std = FALSE, covData = NULL) {
 	if(std) {
 		temp <- draws
@@ -1629,6 +1764,9 @@ parsePopulation <- function(paramSet, draws, group = 1, std = FALSE, covData = N
     return(ustart)
 }
 
+#' Check if object is a lavaan parameter table
+#'
+#' @keywords internal
 is.partable <- function(object) {
   ALLNAMES <- c("id","lhs","op","rhs","user","block","group","level","free",
                 "ustart","exo","label","plabel","start","est","se","eq.id","unco")
@@ -1637,10 +1775,16 @@ is.partable <- function(object) {
 	is.list(object) && all(names(object) %in% ALLNAMES)
 }
 
+#' Check if object is a lavaan function call
+#'
+#' @keywords internal
 is.lavaancall <- function(object) {
 	is.list(object) && ("model" %in% names(object))
 }
 
+#' Handle duplicated parameter labels in lavaan parameter tables
+#'
+#' @keywords internal
 changeDupLab <- function(pt) {
 	temppt <- pt
 	temppt$label <- rep("", length(temppt$label))
