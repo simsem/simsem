@@ -1,7 +1,73 @@
-# getCutoffNonNested: get the cutoff from the simulated sampling distribution
-# of difference in fit indices
+### Sunthud Pornprasertmanit
+### Last updated: 6 March 2026
+### Compute cutoffs from the simulated sampling distribution of differences in fit indices
 
-# Compute fit1 - fit2
+#' Compute Cutoffs for Differences in Fit Indices Between Non-Nested Models
+#'
+#' Computes cutoff values for differences in fit indices between two competing
+#' (non-nested) models using simulated sampling distributions. The function
+#' evaluates the distribution of differences in fit indices between two models
+#' estimated from the same simulated datasets.
+#'
+#' The function can optionally compare models under two different data-generating
+#' conditions. In that case, cutoffs are computed separately for each condition.
+#'
+#' @param dat1Mod1 A simulation result object for Model 1 under the first
+#'   data-generating condition.
+#' @param dat1Mod2 A simulation result object for Model 2 under the first
+#'   data-generating condition.
+#' @param dat2Mod1 Optional simulation result object for Model 1 under the
+#'   second data-generating condition.
+#' @param dat2Mod2 Optional simulation result object for Model 2 under the
+#'   second data-generating condition.
+#' @param alpha Numeric value representing the Type I error rate used to
+#'   determine the cutoff. Default is \code{0.05}.
+#' @param usedFit Character vector specifying which fit indices should be used.
+#'   If \code{NULL}, all available fit indices are used.
+#' @param onetailed Logical. If \code{TRUE}, one-tailed cutoffs are computed.
+#'   Otherwise, two-tailed cutoffs are returned.
+#' @param nVal Optional numeric value specifying the sample size condition when
+#'   multiple sample sizes were simulated.
+#' @param pmMCARval Optional numeric value specifying the proportion of missing
+#'   completely at random (MCAR) when multiple MCAR conditions were simulated.
+#' @param pmMARval Optional numeric value specifying the proportion of missing
+#'   at random (MAR) when multiple MAR conditions were simulated.
+#' @param df Degrees of freedom used when estimating conditional quantiles
+#'   using spline regression. Default is \code{0}.
+#'
+#' @return A list containing cutoff intervals for each fit index. If only one
+#' data-generating condition is provided, the list contains a single element
+#' (\code{model1}). If two data-generating conditions are provided, the list
+#' contains two elements (\code{model1} and \code{model2}).
+#'
+#' Each element is a matrix with rows:
+#' \describe{
+#'   \item{lower}{Lower cutoff bound.}
+#'   \item{upper}{Upper cutoff bound.}
+#' }
+#'
+#' @details
+#' Differences in fit indices are computed as
+#'
+#' \deqn{\Delta Fit = Fit_{Model1} - Fit_{Model2}}
+#'
+#' Cutoff values are obtained from the simulated sampling distribution of these
+#' differences. When \code{onetailed = TRUE}, the cutoff corresponds to the
+#' specified tail of the distribution. When \code{onetailed = FALSE}, symmetric
+#' two-tailed cutoffs are returned.
+#'
+#' All compared models must be estimated from the same simulated datasets and
+#' share identical simulation conditions (e.g., parameter values, sample sizes,
+#' and missingness rates).
+#'
+#' @seealso
+#' \code{\link{getCutoff}},
+#' \code{\link{getCutoffNested}},
+#' \code{\link{getCutoffDataFrame}}
+#'
+#' @keywords simulation
+#'
+#' @export
 getCutoffNonNested <- function(dat1Mod1, dat1Mod2, dat2Mod1 = NULL, dat2Mod2 = NULL, 
     alpha = 0.05, usedFit = NULL, onetailed = FALSE, nVal = NULL, pmMCARval = NULL, 
     pmMARval = NULL, df = 0) {

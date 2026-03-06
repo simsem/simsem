@@ -1,5 +1,6 @@
-### Sunthud Pornprasertmanit & Terrence D. Jorgensen (anyone else?)
-### Last updated: 12 February 2020
+### Sunthud Pornprasertmanit, Terrence D. Jorgensen, & Patrick Miller
+### Last updated: 6 March 2026
+### Parameter drawing and population misfit utilities for simsem
 
 ## Arguments: misfitBound should be a vector with upper and lower bounds
 
@@ -9,10 +10,52 @@
 ## Population parameter values with misspecification [[3]] $mis -
 ## Misspecification only
 
-
+#' Draw population parameter values from a simulation template
+#'
+#' Generates population parameter values for data generation based on a
+#' \code{\linkS4class{SimSem}} simulation template. The function draws
+#' parameter values according to the specifications in the template and
+#' optionally incorporates model misspecification.
+#'
+#' This function is typically used internally by \code{\link{sim}} but is
+#' also available for users who want direct access to the population
+#' parameter sets used for simulation.
+#'
+#' @param model A \code{\linkS4class{SimSem}} object specifying the simulation
+#' model template.
+#' @param maxDraw Maximum number of attempts to obtain a valid parameter set.
+#' @param misfitBounds Optional numeric vector specifying lower and upper
+#' bounds for acceptable population misfit.
+#' @param averageNumMisspec Logical. If \code{TRUE}, misfit is averaged across
+#' the number of misspecified parameters.
+#' @param optMisfit Character specifying whether to optimize misspecification
+#' draws by minimizing or maximizing population misfit. Options are
+#' \code{"min"} or \code{"max"}.
+#' @param optDraws Number of candidate misspecification draws when
+#' \code{optMisfit} is used.
+#' @param misfitType Type of population misfit used for screening parameter
+#' sets. Options include \code{"f0"}, \code{"rmsea"}, \code{"srmr"}, or
+#' \code{"all"}.
+#' @param createOrder Order in which constraints, misspecifications, and
+#' parameter completion are applied.
+#' @param covData Optional data frame containing covariate data used when
+#' models include exogenous covariates.
+#'
+#' @return
+#' A list of parameter sets, one for each group. Each element contains:
+#' \itemize{
+#' \item \code{param}: Population parameters used for data generation
+#' \item \code{misspec}: Population parameters including misspecification
+#' \item \code{misOnly}: Misspecification values only
+#' }
+#'
+#' @seealso
+#' \code{\link{sim}}, \code{\link{createData}}, \code{\linkS4class{SimSem}}
+#'
+#' @export
 draw <- function(model, maxDraw = 50, misfitBounds = NULL, averageNumMisspec = FALSE,
     optMisfit = NULL, optDraws = 50, misfitType = "f0", createOrder = c(1, 2, 3), covData = NULL) {
-    stopifnot(class(model) == "SimSem")
+    stopifnot(is(model, "SimSem"))
 	covLab <- unique(model@pt$lhs[model@pt$op == "~1" & model@pt$exo == 1])
 
 	if(length(covLab) > 0) {
@@ -24,7 +67,7 @@ draw <- function(model, maxDraw = 50, misfitBounds = NULL, averageNumMisspec = F
 		if(any(is.na(covData))) stop("The covariate data must not have missing values.")
 	} else {
 		if(!is.null(covData)) {
-			warnings("CONFLICT: The model template does not have any covariates but the covaraite data are specified. The covaraite data are ignored.")
+			warning("CONFLICT: The model template does not have any covariates but the covariate data are specified. The covariate data are ignored.")
 			covData <- NULL
 		}
 	}
@@ -35,6 +78,8 @@ draw <- function(model, maxDraw = 50, misfitBounds = NULL, averageNumMisspec = F
 }
 
 # Order 1 = constraint, 2 = misspec, 3 = filling parameters
+
+#' @keywords internal
 drawParam <- function(paramSet, maxDraw = 50, numFree = 1, misfitBounds = NULL, averageNumMisspec = FALSE,
     optMisfit = NULL, optDraws = 50, misfitType = "f0", con = NULL, ord = c(1, 2, 3), covData = NULL) {
     if (!is.list(paramSet[[1]])) {
@@ -283,13 +328,28 @@ drawParam <- function(paramSet, maxDraw = 50, numFree = 1, misfitBounds = NULL, 
 }
 
 
-## Takes one SimMatrix and returns a matrix with numerical values for
-## population parameters.  If constraint = TRUE, then constraints are applied
-## simultaneously.  if misSpec = TRUE, then a list is returned with [[1]]
-## parameters with no misspec and [[2]] same parameters + misspec (if any) if
-## missOnly = TRUE, then only the parameters + misspecification is returned If
-## a matrix is symmetric, it is arbitrarily chosen that parameters on the upper
-## tri are set equal to the parameters on the lower tri.
+#' Draw raw parameter values from a SimMatrix or SimVector
+#'
+#' Internal helper used by \code{\link{draw}} to generate numeric parameter
+#' values from simulation templates. The function applies constraints,
+#' random draws, and optional misspecification.
+#'
+#' @param simDat A \code{SimMatrix} or \code{SimVector} object.
+#' @param constraint Logical indicating whether equality constraints should
+#' be applied.
+#' @param misSpec Logical indicating whether misspecification should be
+#' applied.
+#' @param parMisOnly Logical indicating whether only misspecified parameters
+#' should be returned.
+#' @param misOnly Logical indicating whether only the misspecification values
+#' should be returned.
+#'
+#' @return
+#' Depending on the arguments, returns a list containing population parameters,
+#' parameters including misspecification, and raw misspecification values,
+#' or a matrix/vector of drawn parameter values.
+#'
+#' @keywords internal
 rawDraw <- function(simDat, constraint = TRUE, misSpec = TRUE, parMisOnly = FALSE,
     misOnly = FALSE) {
     if (class(simDat) == "SimMatrix" || class(simDat) == "SimVector") {
@@ -381,6 +441,8 @@ rawDraw <- function(simDat, constraint = TRUE, misSpec = TRUE, parMisOnly = FALS
 }
 
 # Auto-completition of parameters
+
+#' @keywords internal
 fillParam <- function(rawParamSet, covStat = NULL) {
     LY <- rawParamSet$LY
     VTE <- rawParamSet$VTE
@@ -501,6 +563,8 @@ fillParam <- function(rawParamSet, covStat = NULL) {
 }
 
 # Reduce RPS/RTE to PS/TE if present.
+
+#' @keywords internal
 reduceMatrices <- function(paramSet) {
     if (is.null(paramSet$PS))
         paramSet$PS <- suppressWarnings(cor2cov(paramSet$RPS, sqrt(paramSet$VPS)))
@@ -515,6 +579,7 @@ reduceMatrices <- function(paramSet) {
     return(reducedParamSet)
 }
 
+#' @keywords internal
 createImpliedMACS <- function(reducedParamSet, covStat = NULL) {
     implied.mean <- NULL
     implied.covariance <- NULL
@@ -544,6 +609,7 @@ createImpliedMACS <- function(reducedParamSet, covStat = NULL) {
     return(list(M = as.vector(implied.mean), CM = implied.covariance))
 }
 
+#' @keywords internal
 createImpliedConditionalMACS <- function(reducedParamSet, covData) {
     implied.mean <- list()
     implied.covariance <- NULL
@@ -569,6 +635,7 @@ createImpliedConditionalMACS <- function(reducedParamSet, covData) {
     return(list(M = implied.mean, CM = implied.covariance))
 }
 
+#' @keywords internal
 combineParamSetCov <- function(reducedParamSet, covStat = NULL) {
 	nz <- length(covStat$MZ)
 	if(!is.null(reducedParamSet$BE)) reducedParamSet$BE <- parseGammaToBeta(reducedParamSet$BE, reducedParamSet$GA)
@@ -582,6 +649,7 @@ combineParamSetCov <- function(reducedParamSet, covStat = NULL) {
 	reducedParamSet
 }
 
+#' @keywords internal
 parseGammaToBeta <- function(beta, gamma) {
 	nf <- nrow(beta)
 	nz <- ncol(gamma)
@@ -591,6 +659,7 @@ parseGammaToBeta <- function(beta, gamma) {
 	result
 }
 
+#' @keywords internal
 parseCovCovToPsi <- function(psi, sigmaxx) {
 	nf <- nrow(psi)
 	nz <- ncol(sigmaxx)
@@ -600,6 +669,7 @@ parseCovCovToPsi <- function(psi, sigmaxx) {
 	result
 }
 
+#' @keywords internal
 parseKappaToLambda <- function(lambda, kappa) {
 	ni <- nrow(lambda)
 	nf <- ncol(lambda)
@@ -611,6 +681,7 @@ parseKappaToLambda <- function(lambda, kappa) {
 	result
 }
 
+#' @keywords internal
 parseCovToTheta <- function(theta, sigmaxx) {
 	nz <- ncol(sigmaxx)
 	ni <- nrow(theta)
@@ -619,8 +690,29 @@ parseCovToTheta <- function(theta, sigmaxx) {
 	result
 }
 
-## Now takes lists for the matrices for mg
-
+#' Population model misfit measures
+#'
+#' Computes population-level misfit between two sets of mean and covariance
+#' structures. This function is primarily used internally to evaluate
+#' misspecification in simulation studies.
+#'
+#' @param paramM Population mean vector under the correctly specified model.
+#' @param paramCM Population covariance matrix under the correctly specified
+#' model.
+#' @param misspecM Population mean vector under the misspecified model.
+#' @param misspecCM Population covariance matrix under the misspecified model.
+#' @param dfParam Degrees of freedom used for RMSEA calculation.
+#' @param fit.measures Character vector specifying which misfit indices to
+#' compute. Options include \code{"f0"}, \code{"rmsea"}, \code{"srmr"}, or
+#' \code{"all"}.
+#'
+#' @return
+#' A numeric vector containing population misfit indices.
+#'
+#' @references
+#' Browne, M. W., & Cudeck, R. (1992). Alternative ways of assessing model fit.
+#'
+#' @export
 popMisfitMACS <- function(paramM, paramCM, misspecM, misspecCM, dfParam = NULL, fit.measures = "all") {
     if (!is.list(paramM))
         paramM <- list(paramM)
@@ -681,9 +773,24 @@ popMisfitMACS <- function(paramM, paramCM, misspecM, misspecCM, dfParam = NULL, 
     return(result)
 }
 
-# F0 in population: The discrepancy due to approximation (Browne & Cudeck,
-# 1992)
-
+#' Population discrepancy function
+#'
+#' Computes the population discrepancy function between two mean and
+#' covariance structures.
+#'
+#' This corresponds to the population discrepancy due to approximation
+#' described by Browne and Cudeck (1992).
+#'
+#' @param paramM Population mean vector under the correctly specified model.
+#' @param paramCM Population covariance matrix under the correctly specified
+#' model.
+#' @param misspecM Population mean vector under the misspecified model.
+#' @param misspecCM Population covariance matrix under the misspecified model.
+#'
+#' @return
+#' Numeric value of the population discrepancy function.
+#'
+#' @keywords internal
 popDiscrepancy <- function(paramM, paramCM, misspecM, misspecCM) {
     p <- length(misspecM)
     inv <- solve(paramCM)
@@ -702,6 +809,7 @@ popDiscrepancy <- function(paramM, paramCM, misspecM, misspecCM) {
 # cov2corMod: The cov2cor function that takes care of the zero-variance
 # variables
 
+#' @keywords internal
 cov2corMod <- function(V) {
     targetCol <- which(diag(V) != 0)
     if (!length(targetCol) == 0) {
@@ -710,6 +818,7 @@ cov2corMod <- function(V) {
     return(V)
 }
 
+#' @keywords internal
 equalCon <- function(pls, dgen, fill=FALSE, con=NULL) {
 	# Collapse all labels
 	temp <- extractLab(pls, dgen, fill=fill, con=con)
@@ -752,7 +861,7 @@ equalCon <- function(pls, dgen, fill=FALSE, con=NULL) {
 
 }
 
-
+#' @keywords internal
 extractLab <- function(pls, dgen, fill=FALSE, con=NULL) {
 	if(any(names(dgen) %in% c("LY", "PS", "RPS", "TE", "RTE", "BE", "VTE", "VY", "VPS", "VE", "TY", "AL", "MY",  "ME", "KA", "GA"))) dgen <- list(dgen)
 	free <- lapply(dgen, function(x) lapply(x, function(y) if(is.null(y)) { return(NULL) } else { return(slot(y, "free")) }))
@@ -823,6 +932,8 @@ extractLab <- function(pls, dgen, fill=FALSE, con=NULL) {
 }
 
 # Make the variable name very very weird so that the assign and get functions will work by setting the labels in the internal environment
+
+#' @keywords internal
 applyConScript <- function(xxxtargetxxx, xxxvalxxx, xxxconxxx, xxxthresholdxxx = 0.00001, refpt = NULL) {
 	for(i in 1:length(xxxtargetxxx)) {
 		assign(xxxtargetxxx[i], xxxvalxxx[i])
@@ -864,6 +975,7 @@ applyConScript <- function(xxxtargetxxx, xxxvalxxx, xxxconxxx, xxxthresholdxxx =
 	list(xxxalltargetxxx, xxxresultxxx)
 }
 
+#' @keywords internal
 misspecOrder <- function(real, misDraw, paramSet, con, ord=c(1, 2, 3), covStat=NULL) {
 	pls <- list()
 	mpls <- list()
@@ -911,6 +1023,7 @@ misspecOrder <- function(real, misDraw, paramSet, con, ord=c(1, 2, 3), covStat=N
 	list(pls, mpls)
 }
 
+#' @keywords internal
 imposeMis <- function(real, misDraw) {
 	result <- list()
 	for (j in 1:length(real)) {

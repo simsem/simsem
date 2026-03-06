@@ -1,25 +1,27 @@
-# getKeywords: List of all keywords used in the simsem package
+### Sunthud Pornprasertmanit
+### Last updated: 6 March 2026
+### Internal keywords used across the simsem package
 
-# \title{
-	# List of all keywords used in the \code{simsem} package
-# }
-# \description{
-	# List of all keywords used in the \code{simsem} package
-# }
-# \usage{
-# getKeywords()
-# }
-# \value{
-	# A list of all keywords used in this package
-	# \itemize{
-		# \item \code{usedFit} Fit indices used as the default for providing output
-		# \item \code{usedFitPop} Population fit indices used as the default for providing input
-		# \item \code{optMin} The method picking the minimum value of misfit across misspecification sets
-		# \item \code{optMax} The method picking the maximum value of misfit across misspecification sets
-		# \item \code{optNone} Not using the optimization method
-	# }
-# }
-
+#' Internal Keyword Definitions for simsem
+#'
+#' Provides a centralized list of keywords used internally across the
+#' \code{simsem} package. These keywords define default fit indices,
+#' optimization options, and identifiers used in various utility functions.
+#'
+#' @return A list containing keyword groups:
+#' \describe{
+#'   \item{usedFit}{Default fit indices returned by simulation summaries.}
+#'   \item{usedFitScaled}{Scaled versions of fit indices when available.}
+#'   \item{reversedFit}{Fit indices where larger values indicate better fit
+#'   and therefore require reversed cutoff logic.}
+#'   \item{usedFitPop}{Population fit indices used as input in simulation
+#'   generation.}
+#'   \item{optMin}{Keywords specifying minimum misfit selection methods.}
+#'   \item{optMax}{Keywords specifying maximum misfit selection methods.}
+#'   \item{optNone}{Keywords indicating that no optimization method is used.}
+#' }
+#'
+#' @keywords internal
 getKeywords <- function() {
     
     usedFit <- c("chisq", "aic", "bic", "rmsea", "cfi", "tli", "srmr")

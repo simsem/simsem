@@ -1,7 +1,88 @@
-## Higher level wrapper function for createData and drawParameters. Takes a
-## SimSem analysis/data generation template, and returns a raw data set,
-## optionally with the drawn parameter values.
+### Sunthud Pornprasertmanit, Terry D. Jorgensen, & Patrick Miller
+### Last updated: 6 March 2026
+### Higher-level wrapper for createData and drawParameters. Takes a SimSem analysis/data-generation template and returns a raw dataset, optionally with the drawn parameter values.
 
+#' Generate simulated data
+#'
+#' A high-level wrapper for data generation from structural equation
+#' models. The function takes a model specification and produces a
+#' simulated dataset. When a \code{SimSem} model template is supplied,
+#' parameters are drawn using \code{\link{draw}} and data are generated
+#' using \code{createData}. When a lavaan model specification is
+#' supplied, the function calls \code{lavaan::simulateData}.
+#'
+#' The function supports simulation from several model formats,
+#' including \code{SimSem} templates, lavaan syntax, lavaan parameter
+#' tables, fitted lavaan objects, and OpenMx models.
+#'
+#' @param model A model specification. Supported types include a
+#' \code{SimSem} object, lavaan syntax, a lavaan parameter table,
+#' a fitted lavaan object, an \code{MxModel}, or a list of arguments
+#' for \code{lavaan::simulateData}.
+#'
+#' @param n Sample size.
+#'
+#' @param maxDraw Maximum number of attempts for drawing parameters
+#' satisfying population misfit constraints.
+#'
+#' @param misfitBounds Bounds on acceptable population misfit.
+#'
+#' @param misfitType Type of population misfit measure used when
+#' drawing parameters.
+#'
+#' @param averageNumMisspec Logical indicating whether the number
+#' of misspecified parameters should be averaged when computing
+#' population misfit.
+#'
+#' @param optMisfit Optional optimization criterion when drawing
+#' parameters.
+#'
+#' @param optDraws Number of candidate parameter draws when
+#' optimizing misfit.
+#'
+#' @param createOrder Order of data generation steps.
+#'
+#' @param indDist Distribution specification for indicators.
+#'
+#' @param sequential Logical indicating whether indicators are
+#' generated sequentially.
+#'
+#' @param facDist Distribution specification for latent variables.
+#'
+#' @param errorDist Distribution specification for measurement errors.
+#'
+#' @param saveLatentVar Logical indicating whether generated latent
+#' variables should be stored as an attribute of the dataset.
+#'
+#' @param indLab Indicator labels.
+#'
+#' @param modelBoot Logical indicating whether bootstrap sampling
+#' from empirical data should be used.
+#'
+#' @param realData Optional empirical dataset used for bootstrap
+#' data generation.
+#'
+#' @param covData Covariate data used during data generation.
+#'
+#' @param params Logical indicating whether drawn parameter values
+#' should also be returned.
+#'
+#' @param group Optional group labels for multigroup simulations.
+#'
+#' @param empirical Logical indicating whether simulated data should
+#' match empirical moments.
+#'
+#' @param ... Additional arguments passed to
+#' \code{lavaan::simulateData}.
+#'
+#' @return
+#' A simulated dataset. If \code{params = TRUE}, a list containing
+#' the dataset and the drawn parameter values is returned.
+#'
+#' @seealso
+#' \code{\link{draw}}, \code{\link{createData}}, \code{lavaan::simulateData}
+#'
+#' @export
 generate <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "f0",
     averageNumMisspec = FALSE, optMisfit = NULL, optDraws = 50, createOrder = c(1, 2, 3), indDist = NULL, sequential = FALSE,
     facDist = NULL, errorDist = NULL, saveLatentVar = FALSE, indLab = NULL, modelBoot = FALSE, realData = NULL, covData = NULL,
@@ -40,6 +121,12 @@ generate <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "
 	return(data)
 }
 
+#' Internal data generation engine for SimSem models
+#'
+#' Generates data for a \code{SimSem} model after parameters have been
+#' drawn. This function is used internally by \code{\link{generate}}.
+#'
+#' @keywords internal
 generateSimSem <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "f0",
     averageNumMisspec = FALSE, optMisfit = NULL, optDraws = 50, createOrder = c(1, 2, 3), indDist = NULL, sequential = FALSE,
     facDist = NULL, errorDist = NULL, saveLatentVar = FALSE, indLab = NULL, modelBoot = FALSE, realData = NULL, covData = NULL,
@@ -89,7 +176,7 @@ generateSimSem <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitTy
 		indLab <- setdiff(indLab, covLab)
 	} else {
 		if(!is.null(covData)) {
-			warnings("CONFLICT: The model template does not have any covariates but the covariate data are specified. The covariate data are ignored.")
+			warning("CONFLICT: The model template does not have any covariates but the covariate data are specified. The covariate data are ignored.")
 			covData <- NULL
 		}
 	}
@@ -151,6 +238,12 @@ generateSimSem <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitTy
 
 }
 
+#' Compute population misfit measures
+#'
+#' Computes population misfit measures based on generated model
+#' parameters.
+#'
+#' @keywords internal
 popMisfitParams <- function(psl, df = NULL, covData = NULL) {
     ngroups <- length(psl)
     real <- lapply(psl, "[[", 1)
@@ -175,7 +268,12 @@ popMisfitParams <- function(psl, df = NULL, covData = NULL) {
     return(misfit)
 }
 
-
+#' Adjust factor scales for generated parameters
+#'
+#' Rescales factor loadings, variances, and related parameters to
+#' match the parameterization used in the data-generation model.
+#'
+#' @keywords internal
 changeScaleFactor <- function(drawResult, gen) {
 	# Find the scales that are based on fixed factor
 	dgen <- gen@dgen
@@ -287,6 +385,11 @@ changeScaleFactor <- function(drawResult, gen) {
 	return(drawResult)
 }
 
+#' Compute implied means and covariances
+#'
+#' Computes implied means and covariance matrices from SEM parameters.
+#'
+#' @keywords internal
 semMACS <- function(param) {
 	ID <- matrix(0, nrow(param$PS), nrow(param$PS))
     diag(ID) <- 1
@@ -303,6 +406,12 @@ semMACS <- function(param) {
 
 # The script below is modified from lavaan. Not being used anymore.
 
+#' Fleishman polynomial coefficients
+#'
+#' Computes Fleishman (1978) polynomial coefficients for generating
+#' non-normal variables with specified skewness and kurtosis.
+#'
+#' @keywords internal
 fleishman1978_abcd <- function(skewness, kurtosis) {
 	system.function <- function(x, skewness, kurtosis) {
 		b.=x[1L]; c.=x[2L]; d.=x[3L]
@@ -323,6 +432,12 @@ fleishman1978_abcd <- function(skewness, kurtosis) {
 	c(a.,b.,c.,d.)
 }
 
+#' Vale–Maurelli nonnormal data generator
+#'
+#' Generates multivariate nonnormal data using the Vale and Maurelli
+#' (1983) method.
+#'
+#' @keywords internal
 lavaanValeMaurelli1983 <- function(n=100L, COR, skewness, kurtosis) {
 
     getICOV <- function(b1, c1, d1, b2, c2, d2, R) {
@@ -393,6 +508,12 @@ lavaanValeMaurelli1983 <- function(n=100L, COR, skewness, kurtosis) {
     X
 }
 
+#' Headrick–Sawilowsky nonnormal data generator
+#'
+#' Generates multivariate nonnormal data using the Headrick and
+#' Sawilowsky (1999) method.
+#'
+#' @keywords internal
 HeadrickSawilowsky1999 <- function(n=100L, COR, skewness, kurtosis) {
     # number of variables
     p <- ncol(COR)
@@ -542,6 +663,11 @@ HeadrickSawilowsky1999 <- function(n=100L, COR, skewness, kurtosis) {
 
 ####### The following functions are copied from the plyr package.
 
+#' Row-bind data frames with different columns
+#'
+#' A simplified version of \code{plyr::rbind.fill}.
+#'
+#' @keywords internal
 rbind.fill <- function (...)
 {
     dfs <- list(...)
@@ -721,6 +847,11 @@ make_names <- function (x, prefix = "X")
 
 # Copy from lavaan to avoid using hidden function in lavaan
 
+#' Internal helper for unstandardizing estimates
+#'
+#' Adapted from lavaan to avoid dependence on internal lavaan functions.
+#'
+#' @keywords internal
 temp.unstandardize.est.ov <- function(partable, ov.var=NULL, cov.std=TRUE) {
 
     # check if ustart is missing; if so, look for est

@@ -1,8 +1,21 @@
+### Sunthud Pornprasertmanit, Terrence D. Jorgensen, & Patrick Miller
+### Last updated: 6 March 2026
+### Parameter calculation utilities for simsem
 
-
-
-# findFactorIntercept: Find the factor intercept if regression coefficients and
-# factor means are specified
+#' Find factor intercepts
+#'
+#' Computes factor intercepts implied by regression coefficients and
+#' factor means.
+#'
+#' @param beta Regression coefficient matrix among latent variables.
+#' @param factorMean Vector of factor means.
+#' @param gamma Optional matrix of regression coefficients from covariates
+#' to latent variables.
+#' @param covmean Mean vector of covariates.
+#'
+#' @return A numeric vector containing factor intercepts.
+#'
+#' @export
 findFactorIntercept <- function(beta, factorMean = NULL,
                                 gamma = NULL, covmean = NULL) {
 	if (!is.null(gamma)) {
@@ -37,8 +50,20 @@ findFactorIntercept <- function(beta, factorMean = NULL,
 }
 
 
-# findFactorResidualVar: Find the factor residual variance if total variances,
-# correlation, and regression coefficients are specified.
+#' Find factor residual variances
+#'
+#' Computes residual variances of latent variables when total variances,
+#' correlations, and regression coefficients are specified.
+#'
+#' @param beta Regression coefficient matrix among latent variables.
+#' @param corPsi Correlation matrix of latent variables.
+#' @param totalVarPsi Total variances of latent variables.
+#' @param gamma Optional regression coefficients from covariates.
+#' @param covcov Covariance matrix of covariates.
+#'
+#' @return A numeric vector of residual variances.
+#'
+#' @export
 findFactorResidualVar <- function(beta, corPsi, totalVarPsi = NULL,
                                   gamma = NULL, covcov = NULL) {
 	if (!is.null(gamma)) {
@@ -47,7 +72,7 @@ findFactorResidualVar <- function(beta, corPsi, totalVarPsi = NULL,
 		corPsi <- parseCovCovToPsi(corPsi, cov2cor(covcov))
 		totalVarPsi <- c(diag(covcov), totalVarPsi)
 	}
-    if (sum(diag(corPsi)) == 0) diag(corPsi) <- 1
+    if(all(diag(corPsi) == 0)) diag(corPsi) <- 1
     ni <- nrow(beta)
     set <- findRecursiveSet(beta)
     errorVar <- rep(1, ni)
@@ -94,9 +119,20 @@ findFactorResidualVar <- function(beta, corPsi, totalVarPsi = NULL,
 }
 
 
-# findFactorTotalVar: Find the factor total variance if regression
-# coefficients, factor correlation, and factor residual variances are
-# specified.
+#' Find factor total variances
+#'
+#' Computes total variances of latent variables implied by regression
+#' coefficients and latent residual variances.
+#'
+#' @param beta Regression coefficient matrix among latent variables.
+#' @param corPsi Correlation matrix of latent variables.
+#' @param residualVarPsi Residual variances of latent variables.
+#' @param gamma Optional regression coefficients from covariates.
+#' @param covcov Covariance matrix of covariates.
+#'
+#' @return Numeric vector of total latent variances.
+#'
+#' @export
 findFactorTotalVar <- function(beta, corPsi, residualVarPsi,
                                gamma = NULL, covcov = NULL) {
 	if (!is.null(gamma)) {
@@ -118,8 +154,19 @@ findFactorTotalVar <- function(beta, corPsi, residualVarPsi,
 }
 
 
-# findFactorMean: Find the factor mean if regression coefficients and factor
-# intercept are specified.
+#' Find factor means
+#'
+#' Computes latent variable means implied by regression coefficients
+#' and factor intercepts.
+#'
+#' @param beta Regression coefficient matrix among latent variables.
+#' @param alpha Factor intercepts.
+#' @param gamma Optional regression coefficients from covariates.
+#' @param covmean Mean vector of covariates.
+#'
+#' @return Numeric vector of latent variable means.
+#'
+#' @export
 findFactorMean <- function(beta, alpha = NULL,
                            gamma = NULL, covmean = NULL) {
 	if (!is.null(gamma)) {
@@ -152,10 +199,22 @@ findFactorMean <- function(beta, alpha = NULL,
 }
 
 
-# findFactorTotalCov: Find the factor total covariance if regression
-# coefficients and factor covariances (which may be made from factor
-# correlation, total factor variances, and error factor variances) are
-# specified
+#' Find factor total covariance
+#'
+#' Computes the total covariance matrix of latent variables implied by
+#' regression coefficients and latent residual covariance structure..
+#'
+#' @param beta Regression coefficient matrix among latent variables.
+#' @param psi Residual covariance matrix of latent variables.
+#' @param corPsi Correlation matrix of latent variables.
+#' @param totalVarPsi Total variances of latent variables.
+#' @param errorVarPsi Residual variances of latent variables.
+#' @param gamma Optional regression coefficients from covariates.
+#' @param covcov Covariance matrix of covariates.
+#'
+#' @return Covariance matrix of latent variables.
+#'
+#' @export
 findFactorTotalCov <- function(beta, psi = NULL, corPsi = NULL,
                                totalVarPsi = NULL, errorVarPsi = NULL,
                                gamma = NULL, covcov = NULL) {
@@ -174,8 +233,20 @@ findFactorTotalCov <- function(beta, psi = NULL, corPsi = NULL,
 }
 
 
-# findIndTotalVar: Find indicator total variances based on loading matrix,
-# total factor covariance, and measurement error variances.
+#' Find indicator total variances
+#'
+#' Computes total variances of indicators implied by factor loadings,
+#' factor covariance, and residual variances.
+#'
+#' @param lambda Factor loading matrix.
+#' @param totalFactorCov Total covariance matrix of latent variables.
+#' @param residualVarTheta Residual variances of indicators.
+#' @param kappa Optional regression coefficients from covariates.
+#' @param covcov Covariance matrix of covariates.
+#'
+#' @return Numeric vector of indicator variances.
+#'
+#' @export
 findIndTotalVar <- function(lambda, totalFactorCov, residualVarTheta,
                             kappa = NULL, covcov = NULL) {
     factor.part <- lambda %*% totalFactorCov %*% t(lambda)
@@ -186,8 +257,20 @@ findIndTotalVar <- function(lambda, totalFactorCov, residualVarTheta,
 }
 
 
-# findIndIntercept: Find the measurement intercept if factor loading, total
-# factor covariance, and total indicator variances are specified
+#' Find indicator intercepts
+#'
+#' Computes measurement intercepts implied by factor loadings,
+#' factor means, and indicator means.
+#'
+#' @param lambda Factor loading matrix.
+#' @param factorMean Latent variable means.
+#' @param indicatorMean Indicator means.
+#' @param kappa Optional regression coefficients from covariates.
+#' @param covmean Mean vector of covariates.
+#'
+#' @return Numeric vector of indicator intercepts.
+#'
+#' @export
 findIndIntercept <- function(lambda, factorMean = NULL, indicatorMean = NULL,
                              kappa = NULL, covmean = NULL) {
   ni <- nrow(lambda)
@@ -201,8 +284,20 @@ findIndIntercept <- function(lambda, factorMean = NULL, indicatorMean = NULL,
 }
 
 
-# findIndResidualVar: Find the residual variances of indicators if factor
-# loading, total factor covariance, and total indicator variances are specified
+#' Find indicator residual variances
+#'
+#' Computes residual variances of indicators implied by factor loadings
+#' and total indicator variances.
+#'
+#' @param lambda Factor loading matrix.
+#' @param totalFactorCov Covariance matrix of latent variables.
+#' @param totalVarTheta Total indicator variances.
+#' @param kappa Optional regression coefficients from covariates.
+#' @param covcov Covariance matrix of covariates.
+#'
+#' @return Numeric vector of residual variances.
+#'
+#' @export
 findIndResidualVar <- function(lambda, totalFactorCov, totalVarTheta = NULL,
                                kappa = NULL, covcov = NULL) {
   ni <- nrow(lambda)
@@ -215,8 +310,20 @@ findIndResidualVar <- function(lambda, totalFactorCov, totalVarTheta = NULL,
 }
 
 
-# findIndMean: Find indicator means based on loading matrix, factor means, and
-# measurement intercept.
+#' Find indicator means
+#'
+#' Computes means of observed indicators implied by factor loadings,
+#' factor means, and measurement intercepts.
+#'
+#' @param lambda Factor loading matrix.
+#' @param factorMean Latent variable means.
+#' @param tau Measurement intercepts.
+#' @param kappa Optional regression coefficients from covariates.
+#' @param covmean Mean vector of covariates.
+#'
+#' @return Numeric vector of indicator means.
+#'
+#' @export
 findIndMean <- function(lambda, factorMean = NULL, tau = NULL,
                         kappa = NULL, covmean = NULL) {
   ni <- nrow(lambda)
@@ -229,9 +336,16 @@ findIndMean <- function(lambda, factorMean = NULL, tau = NULL,
   return(as.vector(indicator.mean))
 }
 
-# findPossibleFactorCor: From the set of regression coefficients, this function
-# will find the elements that is possible to free covariances or correlations
-
+#' Find possible factor correlations
+#'
+#' Determines which factor correlations may be freely estimated based on
+#' the regression structure among latent variables.
+#'
+#' @param beta Regression coefficient matrix among latent variables.
+#'
+#' @return A matrix indicating which factor correlations may be freely estimated.
+#'
+#' @export
 findPossibleFactorCor <- function(beta) {
     ni <- nrow(beta)
     set <- findRecursiveSet(beta)
@@ -251,9 +365,16 @@ findPossibleFactorCor <- function(beta) {
     return(psi)
 }
 
-# findRecursiveSet: Group variables together regarding the position in the
-# mediation chain
-
+#' Find recursive variable sets
+#'
+#' Groups variables according to their position in a recursive structural model 
+#' defined by the regression coefficient matrix.
+#'
+#' @param beta Regression coefficient matrix.
+#'
+#' @return A list of variable indices representing recursive levels.
+#'
+#' @export
 findRecursiveSet <- function(beta) {
     result <- list()
     ni <- nrow(beta)
@@ -272,27 +393,18 @@ findRecursiveSet <- function(beta) {
     return(result)
 }
 
-# \title{
-	# Find rows in a matrix that all elements are zero in non-fixed subset rows and columns.
-# }
-# \description{
-	# Find rows in a matrix that all elements are zero in non-fixed subset rows and columns. This function will be used in the \code{\link{findRecursiveSet}} function
-# }
-# \usage{
-# findRowZero(square.matrix, is.row.fixed = FALSE)
-# }
-# \arguments{
-  # \item{square.matrix}{
-	# Any square matrix
-# }
-  # \item{is.row.fixed}{
-	# A logical vector with the length equal to the dimension of the \code{square.matrix}. If \code{TRUE}, the function will skip examining this row.
-# }
-# }
-# \value{
-	# A vector of positions that contain rows of all zeros
-# }
-
+#' Find rows with zero elements
+#'
+#' Identifies rows of a square matrix that contain only zeros in the
+#' non-fixed subset of columns.
+#'
+#' @param square.matrix A square matrix.
+#' @param is.row.fixed Logical vector indicating rows that should be
+#' skipped when checking for zeros.
+#'
+#' @return Integer vector of row indices containing only zeros.
+#'
+#' @keywords internal
 findRowZero <- function(square.matrix, is.row.fixed = FALSE) {
     ni <- nrow(square.matrix)
     if (length(is.row.fixed) == 1) {
