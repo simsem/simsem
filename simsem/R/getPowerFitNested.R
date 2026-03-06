@@ -247,16 +247,21 @@ getPowerFitNestedNullObj <- function(altNested, altParent,
     return(temp)
 }
 
-#' Check Whether Multiple Objects Are Equal
+#' Test Whether All Objects Are Equal
 #'
-#' Determines whether all supplied objects are equal using
-#' \code{all.equal()}.
+#' Test whether all supplied objects are equal. The comparison is based on
+#' \code{\link{all.equal}}.
 #'
-#' @param ... Objects to compare.
+#' @param ... Objects to be compared.
 #'
-#' @return Logical value indicating whether all objects are equal.
+#' @return Logical value. Returns \code{TRUE} if all objects are equal and
+#'   \code{FALSE} otherwise.
 #'
-#' @keywords internal
+#' @examples
+#' multipleAllEqual(1:5, 1:5, seq(2, 10, 2)/2) # Should be TRUE
+#' multipleAllEqual(1:5, 1:6, seq(2, 10, 2)/2) # Should be FALSE
+#'
+#' @export
 multipleAllEqual <- function(...) {
     obj <- list(...)
     multipleAllEqualList(obj)
