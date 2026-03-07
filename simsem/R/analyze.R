@@ -216,7 +216,7 @@ analyzeLavaan <- function(args, fun = "lavaan", miss = NULL, aux = NULL) {
     ## If the missing argument is not specified and data have NAs, the default is fiml.
     if(is.null(args$missing)) {
       args$missing <- "default"
-      if ((!is.null(miss) && (miss@m == 0)) || anyNA(data)) {
+      if ((!is.null(miss) && (miss@m == 0)) || anyNA(args$data)) {
         args$missing <- "fiml"
       }
     }
