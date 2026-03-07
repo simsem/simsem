@@ -224,6 +224,7 @@ plotPowerFitDf <- function(altObject, nullObject = NULL, cutoff = NULL, usedFit 
 #'
 #' @return None. Produces overlapping histograms.
 #'
+#' @importFrom graphics abline legend par
 #' @keywords internal
 plotOverHist <- function(altObject, nullObject, cutoff = NULL, usedFit = NULL, alpha = 0.05, 
     cutoff2 = NULL, cutoff3 = NULL, cutoff4 = NULL) {
@@ -378,6 +379,7 @@ plotLogisticFit <- function(altObject, nullObject = NULL, cutoff = NULL, usedFit
 #'
 #' @return None. Produces scatter plots.
 #'
+#' @importFrom graphics par
 #' @keywords internal
 plotScatter <- function(altObject, nullObject = NULL, cutoff = NULL, usedFit = NULL, 
     x, alpha = 0.05, df = 5) {
@@ -443,6 +445,7 @@ plotScatter <- function(altObject, nullObject = NULL, cutoff = NULL, usedFit = N
 #'
 #' @return None. Produces a scatter plot.
 #'
+#' @importFrom graphics abline lines points
 #' @keywords internal
 plotIndividualScatter <- function(altVec, nullVec = NULL, cutoff = NULL, x, main = NULL) {
     maxAll <- max(c(altVec, nullVec), na.rm = TRUE)
@@ -491,6 +494,7 @@ plotIndividualScatter <- function(altVec, nullVec = NULL, cutoff = NULL, x, main
 #' \url{http://chrisamiller.com/science/2010/07/20/transparent-overlapping-histograms-in-r/}.
 #' Modified by Sunthud Pornprasertmanit.
 #'
+#' @importFrom graphics hist
 #' @keywords internal
 overlapHist <- function(a, b, colors = c("red", "blue", "purple"), breaks = NULL, 
     xlim = NULL, ylim = NULL, main = NULL, xlab = NULL, swap = FALSE) {

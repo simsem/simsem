@@ -81,7 +81,7 @@ findFactorResidualVar <- function(beta, corPsi, totalVarPsi = NULL,
     iv <- NULL
     ivCor <- corPsi[set[[1]], set[[1]]]
     startVar <- totalVarPsi[set[[1]]]
-    ivCov <- suppressWarnings(cor2cov(as.matrix(ivCor), sqrt(startVar)))
+    ivCov <- suppressWarnings(lav_cor2cov(as.matrix(ivCor), sqrt(startVar)))
     for (i in seq_len(length(set) - 1)) {
         iv <- c(iv, set[[i]])
         dv <- set[[i + 1]]
@@ -98,7 +98,7 @@ findFactorResidualVar <- function(beta, corPsi, totalVarPsi = NULL,
             }
         }
         if (i < (length(set) - 1)) {
-            tempPsi <- suppressWarnings(cor2cov(as.matrix(tempPsi), tempPsiSd))
+            tempPsi <- suppressWarnings(lav_cor2cov(as.matrix(tempPsi), tempPsiSd))
             real.tempPsi <- matrix(0, length(iv) + length(dv), length(iv) + length(dv))
             real.tempPsi[1:length(iv), 1:length(iv)] <- ivCov
             real.tempPsi[(length(iv) + 1):(length(iv) + length(dv)), (length(iv) +
@@ -142,7 +142,7 @@ findFactorTotalVar <- function(beta, corPsi, residualVarPsi,
 	}
     ni <- nrow(beta)
     set <- findRecursiveSet(beta)
-    real.psi <- suppressWarnings(cor2cov(as.matrix(corPsi), sqrt(residualVarPsi)))
+    real.psi <- suppressWarnings(lav_cor2cov(as.matrix(corPsi), sqrt(residualVarPsi)))
     ID <- matrix(0, ni, ni)
     diag(ID) <- 1
     iv.cov <- solve(ID - beta) %*% real.psi %*% t(solve(ID - beta))
@@ -221,7 +221,7 @@ findFactorTotalCov <- function(beta, psi = NULL, corPsi = NULL,
   if (is.null(psi)) {
     if (is.null(errorVarPsi))
        errorVarPsi <- findFactorResidualVar(beta, corPsi, totalVarPsi)
-    psi <- suppressWarnings(cor2cov(as.matrix(corPsi), sqrt(errorVarPsi)))
+    psi <- suppressWarnings(lav_cor2cov(as.matrix(corPsi), sqrt(errorVarPsi)))
   }
   iden <- diag(nrow(beta))
 	temp <- solve(iden - beta)

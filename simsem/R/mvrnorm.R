@@ -64,13 +64,6 @@ mvrnorm <-
 #'
 #' @return A correlation matrix with ones on the diagonal.
 #'
-#' @examples
-#' v <- c(0.1, 0.4, -0.9)
-#' vech2Corr(v)
-#'
-#' v <- c(0.1, 0.4, -0.9, 0.4, 0.5, 0.1)
-#' vech2Corr(v)
-#'
 #' @keywords internal
 vech2Corr <- function(vech) {
     ##compute number of rows from vech. diag not in the vech!

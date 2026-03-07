@@ -85,6 +85,7 @@ plotDist <- function(object, xlim = NULL, ylim = NULL, r = 0, var = NULL, contou
 #' Internal function used by \code{\link{plotDist}} to plot
 #' one-dimensional marginal distributions.
 #'
+#' @importFrom graphics lines
 #' @keywords internal
 plotDist1D <- function(distName, param, xlim = NULL, reverse = FALSE) {
     if (is.null(xlim)) {
@@ -115,6 +116,7 @@ plotDist1D <- function(distName, param, xlim = NULL, reverse = FALSE) {
 #' joint distributions of two variables using contour or
 #' perspective plots.
 #'
+#' @importFrom graphics contour persp
 #' @keywords internal
 plotDist2D <- function(object, xlim = NULL, ylim = NULL, r = 0, contour = TRUE) {
 	if(any(is.na(object@skewness)) && !is.null(object@copula) && is(object@copula, "NullCopula")) {

@@ -12,18 +12,18 @@
 # Value:
 #   Returns TRUE if the parameter set is valid.
 validateObject <- function(paramSet) {
-    if (validateCovariance(paramSet$VPS, paramSet$RPS, paramSet$VE)) 
+    if (!validateCovariance(paramSet$VPS, paramSet$RPS, paramSet$VE)) 
         return(FALSE)
     if (!is.null(paramSet$BE)) {
         # Path or SEM
-        if (validatePath(paramSet$BE, paramSet$VE, paramSet$VE)) 
+        if (!validatePath(paramSet$BE, paramSet$VE, paramSet$VE)) 
             return(FALSE)
     }
     if (!is.null(paramSet$LY)) {
         # SEM or CFA
-        if (validateCovariance(paramSet$VTE, paramSet$RTE, paramSet$VY)) 
+        if (!validateCovariance(paramSet$VTE, paramSet$RTE, paramSet$VY)) 
             return(FALSE)
-        if (validatePath(paramSet$LY, paramSet$VE, paramSet$VY)) 
+        if (!validatePath(paramSet$LY, paramSet$VE, paramSet$VY)) 
             return(FALSE)
     }
     return(TRUE)

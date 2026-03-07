@@ -30,8 +30,8 @@
 #' (e.g., a \code{lavaan} object or an \code{OpenMx} model).
 #'
 #' @seealso
-#' \code{\link{analyzeSimSem}}, \code{\link{lavaan::lavaan}},
-#' \code{\link{semTools::auxiliary}}
+#' \code{\link{analyzeSimSem}}, \code{\link[lavaan:lavaan]{lavaan}},
+#' \code{\link[semTools:auxiliary]{auxiliary}}
 #'
 #' @export
 analyze <- function(model, data, package = "lavaan", miss = NULL,
@@ -71,8 +71,7 @@ analyze <- function(model, data, package = "lavaan", miss = NULL,
 #' A fitted \code{lavaan} model object.
 #'
 #' @seealso
-#' \code{\link{analyze}}, \code{\link{lavaan::lavaan}},
-#' \code{\link{semTools::auxiliary}}
+#' \code{\link{analyze}}
 #'
 #' @keywords internal
 analyzeSimSem <- function(model, data, package = "lavaan",

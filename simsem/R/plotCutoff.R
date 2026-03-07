@@ -8,6 +8,7 @@
 #' plotting functions. It visualizes sampling distributions of fit indices
 #' and optionally overlays cutoff values.
 #'
+#' @importFrom graphics abline hist par
 #' @keywords internal
 plotCutoffDataFrame <- function(object, 
     cutoff = NULL, revDirec = FALSE, usedFit = NULL, vector1 = NULL, vector2 = NULL, 
@@ -178,6 +179,7 @@ plotCutoff <-  function(object,
 #' Internal function that builds contour or perspective plots of predicted
 #' quantiles from quantile regression models.
 #'
+#' @importFrom graphics contour persp
 #' @keywords internal
 plot3DQtile <- function(x, y, z, df = 0, qtile = 0.5, useContour = TRUE, xlab = NULL, 
     ylab = NULL, zlab = NULL, main = NULL) {
@@ -215,6 +217,7 @@ plot3DQtile <- function(x, y, z, df = 0, qtile = 0.5, useContour = TRUE, xlab = 
 #' Internal helper function used to visualize conditional quantiles
 #' estimated via quantile regression.
 #'
+#' @importFrom graphics lines
 #' @keywords internal
 plotQtile <- function(x, y, df = 0, qtile = NULL, ...) {
     xy <- data.frame(x = x, y = y)

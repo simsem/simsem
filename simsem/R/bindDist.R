@@ -51,7 +51,7 @@
 #'
 #' @examples
 #' # Specify normal marginal distributions
-#' bindDist(margins = "norm", p = 3)
+#' bindDist(rep("norm", 3))
 #'
 #' # Specify distributions using skewness and kurtosis
 #' bindDist(skewness = c(0, 1), kurtosis = c(0, 3))
@@ -65,6 +65,25 @@ bindDist <- function(margins = NULL, ..., p = NULL, keepScale = TRUE, reverse = 
 		skewness <- rep(NA, length(List))
 		kurtosis <- rep(NA, length(List))
 	} else {
+		## SP: BUG FIX: Allow margins-only specification (e.g., margins="norm", p=3)
+		if(!is.null(margins)) {
+
+			if(is.null(p)) {
+				if(!is.null(skewness)) {
+					p <- length(skewness)
+				} else if(!is.null(kurtosis)) {
+					p <- length(kurtosis)
+				} else {
+					p <- length(margins)
+				}
+			}
+
+			if(is.null(skewness) && is.null(kurtosis)) {
+				skewness <- rep(NA, p)
+				kurtosis <- rep(NA, p)
+			}
+
+		}
 		if(!is.null(skewness)) {
 			if(!is.null(kurtosis)) {
 				if(length(skewness) != length(kurtosis)) stop("CONFLICT: The length of skewness and kurtosis must be equal.")

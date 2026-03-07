@@ -83,7 +83,7 @@
 #' - simulation timing information
 #'
 #' @seealso
-#' \code{\link{SimResult}}
+#' \code{\link{SimResult-class}}
 #'
 #' @examples
 #' \dontrun{

@@ -52,7 +52,7 @@
 #'   simulation conditions such as sample size or missingness.}
 #'
 #' @seealso
-#' \code{\link{SimResult}}, \code{\link{summaryFit}}
+#' \code{\link{SimResult-class}}, \code{\link{summaryFit}}
 #'
 #' @examples
 #' \dontrun{

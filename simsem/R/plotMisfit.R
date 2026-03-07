@@ -63,6 +63,7 @@
 #' @seealso
 #' \code{\linkS4class{SimResult}}
 #'
+#' @importFrom graphics hist lines par
 #' @export
 plotMisfit <- function(object, usedFit = "default", misParam = NULL) {
     if (all(dim(object@misspecValue) == 0)) 

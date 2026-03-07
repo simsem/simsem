@@ -275,7 +275,7 @@ plannedMissing <- function(dims = c(0, 0), nforms = NULL,
             print("Number of forms has been set to the number of groups specified")
         }
 
-        if (((!is.null(itemGroups)) && (class(itemGroups) != "list"))) {
+        if (((!is.null(itemGroups)) && (!is.list(itemGroups)))) {
             stop("itemGroups not a list")
         }
 
@@ -701,6 +701,7 @@ parseSyntaxLogitMiss <- function(script) {
 #' y5 ~ -0.5'
 #' plotLogitMiss(script2)
 #'
+#' @importFrom graphics barplot contour lines par persp
 #' @export
 plotLogitMiss <- function(script, ylim = c(0, 1), x1lim = c(-3, 3),
                           x2lim = c(-3, 3), otherx = 0, useContour = TRUE) {

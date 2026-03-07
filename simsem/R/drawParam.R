@@ -303,6 +303,7 @@ drawParam <- function(paramSet, maxDraw = 50, numFree = 1, misfitBounds = NULL, 
                   break
                 }
             }
+
 			draw <- draw + 1
 			if (draw > maxDraw) {
 			  stop("Cannot obtain valid parameter set within maximum number of draws.")
@@ -352,7 +353,7 @@ drawParam <- function(paramSet, maxDraw = 50, numFree = 1, misfitBounds = NULL, 
 #' @keywords internal
 rawDraw <- function(simDat, constraint = TRUE, misSpec = TRUE, parMisOnly = FALSE,
     misOnly = FALSE) {
-    if (class(simDat) == "SimMatrix" || class(simDat) == "SimVector") {
+    if (is(simDat, "SimMatrix") || is(simDat, "SimVector")) {
         free <- as.vector(simDat@free)
         popParam <- as.vector(simDat@popParam)
         misspec <- as.vector(simDat@misspec)
@@ -415,7 +416,7 @@ rawDraw <- function(simDat, constraint = TRUE, misSpec = TRUE, parMisOnly = FALS
                 }
             }
         }
-        if (class(simDat) == "SimMatrix") {
+        if (is(simDat, "SimMatrix")) {
             param <- matrix(param, nrow = nrow(simDat@free), ncol = ncol(simDat@free))
             paramMis <- matrix(paramMis, nrow = nrow(simDat@free), ncol = ncol(simDat@free))
             missRaw <- matrix(missRaw, nrow = nrow(simDat@free), ncol = ncol(simDat@free))
@@ -476,7 +477,7 @@ fillParam <- function(rawParamSet, covStat = NULL) {
         if (is.null(PS)) {
 			#if(isCov) VE <-
 			VPS <- findFactorResidualVar(matrix(0, nrow(RPS), ncol(RPS)), RPS, totalVarPsi = VE, gamma = GA, covcov = CZ)
-            PS <- suppressWarnings(cor2cov(RPS, sqrt(VPS)))
+            PS <- suppressWarnings(lav_cor2cov(RPS, sqrt(VPS)))
         } else {
             VPS <- diag(PS)
             RPS <- cov2corMod(PS)
@@ -494,7 +495,7 @@ fillParam <- function(rawParamSet, covStat = NULL) {
                 VTE <- findIndResidualVar(LY, CE, VY, kappa = KA, covcov = CZ)
             if (is.null(VY))
                 VY <- findIndTotalVar(LY, CE, VTE, kappa = KA, covcov = CZ)
-            TE <- suppressWarnings(cor2cov(RTE, suppressWarnings(sqrt(VTE))))
+            TE <- suppressWarnings(lav_cor2cov(RTE, suppressWarnings(sqrt(VTE))))
         } else {
             VTE <- diag(TE)
             RTE <- cov2corMod(TE)
@@ -512,7 +513,7 @@ fillParam <- function(rawParamSet, covStat = NULL) {
                 VPS <- findFactorResidualVar(BE, RPS, VE, gamma = GA, covcov = CZ)
             if (is.null(VE))
                 VE <- findFactorTotalVar(BE, RPS, VPS, gamma = GA, covcov = CZ)
-            PS <- suppressWarnings(cor2cov(RPS, suppressWarnings(sqrt(VPS))))
+            PS <- suppressWarnings(lav_cor2cov(RPS, suppressWarnings(sqrt(VPS))))
         } else {
             VPS <- diag(PS)
             RPS <- cov2corMod(PS)
@@ -530,7 +531,7 @@ fillParam <- function(rawParamSet, covStat = NULL) {
                 VPS <- findFactorResidualVar(BE, RPS, VE, gamma = GA, covcov = CZ)
             if (is.null(VE))
                 VE <- findFactorTotalVar(BE, RPS, VPS, gamma = GA, covcov = CZ)
-            PS <- suppressWarnings(cor2cov(RPS, suppressWarnings(sqrt(VPS))))
+            PS <- suppressWarnings(lav_cor2cov(RPS, suppressWarnings(sqrt(VPS))))
         } else {
             VPS <- diag(PS)
             RPS <- cov2corMod(PS)
@@ -546,7 +547,7 @@ fillParam <- function(rawParamSet, covStat = NULL) {
                 VTE <- findIndResidualVar(LY, facCov, VY, kappa = KA, covcov = CZ)
             if (is.null(VY))
                 VY <- findIndTotalVar(LY, facCov, VTE, kappa = KA, covcov = CZ)
-            TE <- suppressWarnings(cor2cov(RTE, suppressWarnings(sqrt(VTE))))
+            TE <- suppressWarnings(lav_cor2cov(RTE, suppressWarnings(sqrt(VTE))))
         } else {
             RTE <- cov2corMod(TE)
             VTE <- diag(TE)
@@ -567,11 +568,11 @@ fillParam <- function(rawParamSet, covStat = NULL) {
 #' @keywords internal
 reduceMatrices <- function(paramSet) {
     if (is.null(paramSet$PS))
-        paramSet$PS <- suppressWarnings(cor2cov(paramSet$RPS, sqrt(paramSet$VPS)))
+        paramSet$PS <- suppressWarnings(lav_cor2cov(paramSet$RPS, sqrt(paramSet$VPS)))
 
     # If SEM or CFA, Convert RTE/VTE to TE
     if (!is.null(paramSet$LY) && is.null(paramSet$TE)) {
-        paramSet$TE <- suppressWarnings(cor2cov(paramSet$RTE, sqrt(paramSet$VTE)))
+        paramSet$TE <- suppressWarnings(lav_cor2cov(paramSet$RTE, sqrt(paramSet$VTE)))
     }
 
     reducedParamSet <- list(PS = paramSet$PS, BE = paramSet$BE, AL = paramSet$AL,

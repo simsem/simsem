@@ -60,6 +60,7 @@ likRatioFit <- function(outMod1, outMod2, dat1Mod1, dat1Mod2, dat2Mod1, dat2Mod2
 #'
 #' @return The estimated density corresponding to the pair of values.
 #'
+#' @importFrom graphics hist
 #' @keywords internal
 findphist <- function(value, hist) {
     if (is.na(hist)) {

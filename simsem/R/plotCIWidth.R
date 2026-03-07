@@ -83,6 +83,7 @@
 #' plotCIwidth(Output3, "f1~~f2", assurance = 0.80)
 #' }
 #'
+#' @importFrom graphics contour
 #' @export
 plotCIwidth <- function(object, targetParam, assurance = 0.50, useContour = TRUE) {
     object <- clean(object)

@@ -409,7 +409,7 @@ saturateMxSingleGroup <- function(data, title = "Saturate Model", groupnum = NUL
 
   startVar[categorical] <- 1
   startMeans[categorical] <- 0
-  startCov <- lavaan::cor2cov(startCor, sqrt(startVar))
+  startCov <- lav_cor2cov(startCor, sqrt(startVar))
   lab <- outer(1:p, 1:p, function(x, y) paste0("cov", x, y, "_", groupnum))
   lab2 <- outer(1:p, 1:p, function(x, y) paste0("cov", y, x, "_", groupnum))
   lab[upper.tri(lab)] <- lab2[upper.tri(lab2)]

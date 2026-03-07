@@ -12,9 +12,13 @@
 #' and \code{SimResult}.
 #'
 #' @param object An object to summarize.
-#' @param alpha Significance level used when computing fit-index cutoffs for
-#' \code{SimResult} objects.
-#' @param digits Number of digits used when printing fit statistics.
+#' @param ... Additional arguments passed to methods. For objects of class
+#'   \code{SimResult}, these include:
+#'   \describe{
+#'     \item{alpha}{Significance level used when computing fit-index cutoffs
+#'     for \code{SimResult} objects.}
+#'     \item{digits}{Number of digits used when printing fit statistics.}
+#'   }
 #'
 #' @return
 #' This function prints a concise summary of the object. The returned value
@@ -34,7 +38,6 @@ setMethod("summaryShort", signature = "ANY", definition = function(object) {
     summary(object)
 })
 
-#' @rdname summaryShort
 setMethod("summaryShort", signature = "SimMatrix", definition = function(object) {
     Data <- object@free
     Labels <- object@popParam
@@ -51,7 +54,6 @@ setMethod("summaryShort", signature = "SimMatrix", definition = function(object)
     print(Labels)
 })
 
-#' @rdname summaryShort
 setMethod("summaryShort", signature = "SimVector", definition = function(object) {
     Data <- object@free
     Labels <- object@popParam
@@ -68,7 +70,6 @@ setMethod("summaryShort", signature = "SimVector", definition = function(object)
     print(Labels)
 })
 
-#' @rdname summaryShort
 setMethod("summaryShort", signature = "SimResult",
           definition = function(object, alpha = 0.05, digits = 3) {
 

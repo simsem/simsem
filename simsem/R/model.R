@@ -71,7 +71,7 @@ model <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = 
         mgidx <- which(sapply(paramSet, is.list))
         mg <- names(mgidx)
         sgidx <- which(sapply(paramSet, FUN = function(x) {
-            class(x) == "SimMatrix" || class(x) == "SimVector"
+            is(x, "SimMatrix") || is(x, "SimVector")
         }))
         sg <- names(sgidx)
         n <- max(sapply(paramSet, length))
@@ -93,7 +93,7 @@ model <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = 
                 # Repeat single matrices
                 for (i in seq_along(sgidx)) {
                   temp <- NULL
-                  if (class(paramSet[sgidx][[i]]) == "SimMatrix") {
+                  if (is(paramSet[sgidx][[i]], "SimMatrix")) {
                     temp <- paramSet[sgidx][[i]]
                     paramSet[sgidx][[i]] <- replicate(n, new("SimMatrix", free = temp@free,
                       popParam = temp@popParam, misspec = temp@misspec, symmetric = temp@symmetric))
@@ -615,7 +615,7 @@ parseFree <- function(simDat, group, pt, op, lhs = NULL, rhs = NULL,
     }
     numElem <- NULL
 
-    if (class(simDat) == "SimVector") {
+    if (is(simDat, "SimVector")) {
         numElem <- length(freeDat)
     } else if (simDat@symmetric && op == "~~") {
         # Just get lower tri

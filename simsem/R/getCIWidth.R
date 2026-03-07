@@ -35,7 +35,7 @@
 #' condition values and computes quantile-based cutoff values using
 #' \code{getCutoffDataFrame()}.
 #'
-#' @seealso \code{\link{getCutoffDataFrame}}, \code{\link{clean}}
+#' @seealso \code{\link{getCutoffDataFrame}}
 #'
 #' @keywords simulation confidence-interval
 #'

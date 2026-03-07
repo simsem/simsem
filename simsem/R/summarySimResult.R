@@ -662,11 +662,15 @@ getExtraOutput <- function(object, improper = TRUE, nonconverged = FALSE,
 #' @param object A \code{SimResult} object.
 #' @param improper Logical indicating whether improper solutions should be included.
 #' @param nonconverged Logical indicating whether nonconverged replications should be included.
+#' @param ... Additional arguments passed to methods.
 #'
 #' @return A matrix of parameter estimates.
 #'
 #' @rdname coef
 #' @export
+setGeneric("coef", function(object, ...) standardGeneric("coef"))
+
+#' @rdname coef
 setMethod("coef", "SimResult",
           function(object, improper = TRUE, nonconverged = FALSE) {
             inspect(object, "coef", improper = improper, nonconverged = nonconverged)
@@ -697,7 +701,7 @@ setMethod("coef", "SimResult",
 #' \item \code{"stdparam"}: Standardized parameter values (equivalent to the
 #' \code{\link{getPopulation}} function with \code{std = TRUE})
 #' \item \code{"coef"}: Parameter estimates (equivalent to the
-#' \code{\link[=coef,SimResult-method]{coef}} method)
+#' \code{coef} method)
 #' \item \code{"se"}: Standard errors
 #' \item \code{"fit"}: Fit indices
 #' \item \code{"misspec"}: Misspecified parameter values
@@ -752,10 +756,13 @@ setMethod("coef", "SimResult",
 #' inspect(Output, "se", improper = TRUE, nonconverged = TRUE)
 #' }
 #'
+#' @rdname inspect
 #' @export
 setGeneric("inspect",
            function(object, what="coef", improper = TRUE, nonconverged = FALSE)
              standardGeneric("inspect"))
+
+#' @rdname inspect
 setMethod("inspect", "SimResult", function(object, what = "coef",
                                            improper = TRUE, nonconverged = FALSE) {
   targetRep <- 0

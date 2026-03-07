@@ -227,6 +227,7 @@ getXandPred <- function(object, contParam = NULL, contN = TRUE, contMCAR = TRUE,
 #' based on logistic regression given a matrix of significance indicators
 #' and predictor variables.
 #'
+#' @importFrom graphics contour lines par persp
 #' @keywords internal
 plotPowerSig <- function(sig, x = NULL, xval = NULL, mainName = NULL, useContour = TRUE) {
     warnT <- as.numeric(options("warn"))
