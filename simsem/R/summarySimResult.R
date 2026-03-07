@@ -588,18 +588,54 @@ getPopulation <- function(object, std = FALSE, improper = TRUE, nonconverged = F
 # TDJ added simplify= to apply() on 4 Nov 2021
 # TDJ corrected the call to apply() on 30 Nov 2023
 
-#' Extract extra outputs from simulation
+#' Get extra outputs from simulation results
 #'
-#' This function extracts additional outputs specified by the user through
-#' the \code{outfun} argument in the simulation.
+#' Extract extra outputs from a simulation result object
+#' (\code{\linkS4class{SimResult}}). Users can request additional output from
+#' the \code{lavaan} object in each iteration by specifying the \code{outfun}
+#' argument in the \code{\link{sim}} function. See the example below.
 #'
-#' @param object A \code{SimResult} object.
-#' @param improper Logical indicating whether improper solutions should be included.
-#' @param nonconverged Logical indicating whether nonconverged replications should be included.
-#' @param simplify Logical indicating whether the result should be simplified.
-#' @param USE.NAMES Logical indicating whether names should be used.
+#' @param object A \code{\linkS4class{SimResult}} object containing extra
+#' outputs extracted by the function defined in the \code{outfun} argument
+#' of the \code{\link{sim}} function.
 #'
-#' @return A list containing the extra outputs.
+#' @param improper Logical indicating whether to include replications with
+#' improper solutions.
+#'
+#' @param nonconverged Logical indicating whether to include nonconvergent
+#' replications.
+#'
+#' @param simplify,USE.NAMES See \code{\link{sapply}}.
+#'
+#' @return A \code{list} of extra outputs, optionally simplified to a vector
+#' or matrix.
+#'
+#' @seealso
+#' \itemize{
+#' \item \code{\link{sim}} to run a Monte Carlo simulation.
+#' }
+#'
+#' @examples
+#' \dontrun{
+#' loading <- matrix(0, 6, 1)
+#' loading[1:6, 1] <- NA
+#' LY <- bind(loading, 0.7)
+#' RPS <- binds(diag(1))
+#' RTE <- binds(diag(6))
+#' CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
+#'
+#' # Write a function to extract the modification index from lavaan object
+#' outfun <- function(out) {
+#'   result <- inspect(out, "mi")
+#' }
+#'
+#' # Use only 5 replications to save time.
+#' # In reality, more replications are needed.
+#' Output <- sim(5, n = 200, model = CFA.Model, outfun = outfun)
+#'
+#' # Get the modification index of each replication
+#' getExtraOutput(Output)
+#' }
 #'
 #' @export
 getExtraOutput <- function(object, improper = TRUE, nonconverged = FALSE,
@@ -636,16 +672,85 @@ setMethod("coef", "SimResult",
             inspect(object, "coef", improper = improper, nonconverged = nonconverged)
           })
 
-#' Inspect simulation results
+#' Extract information from a simulation result
 #'
-#' Extract various components from a \code{SimResult} object.
+#' Extract information from a simulation result.
 #'
-#' @param object A \code{SimResult} object.
-#' @param what Character string specifying what to extract.
-#' @param improper Logical indicating whether improper solutions should be included.
-#' @param nonconverged Logical indicating whether nonconverged replications should be included.
+#' @param object The target \code{\linkS4class{SimResult}} object.
+#' @param what The target component to be extracted. Please see details below.
+#' @param improper Specify whether to include the information from the
+#' replications with improper solutions.
+#' @param nonconverged Specify whether to include the information from the
+#' nonconvergent replications.
 #'
-#' @return Extracted information from the simulation result object.
+#' @details
+#' Here are the list of information that can be specified in the \code{what}
+#' argument. The items starting with * are the information that the
+#' \code{improper} and \code{nonconverged} arguments are not applicable.
+#'
+#' \itemize{
+#' \item *\code{"modeltype"}: The type of the simulation result
+#' \item *\code{"nrep"}: The number of overall replications, including
+#' converged and nonconverged replications
+#' \item \code{"param"}: Parameter values (equivalent to the
+#' \code{\link{getPopulation}} function)
+#' \item \code{"stdparam"}: Standardized parameter values (equivalent to the
+#' \code{\link{getPopulation}} function with \code{std = TRUE})
+#' \item \code{"coef"}: Parameter estimates (equivalent to the
+#' \code{\link[=coef,SimResult-method]{coef}} method)
+#' \item \code{"se"}: Standard errors
+#' \item \code{"fit"}: Fit indices
+#' \item \code{"misspec"}: Misspecified parameter values
+#' \item \code{"popfit"}: Population misfit
+#' \item \code{"fmi1"}: Fraction missings type 1
+#' \item \code{"fmi2"}: Fraction missings type 2
+#' \item \code{"std"}: Standardized Parameter Estimates
+#' \item \code{"stdse"}: Standard Errors of Standardized Values
+#' \item \code{"cilower"}: Lower bounds of confidence intervals
+#' \item \code{"ciupper"}: Upper bounds of confidence intervals
+#' \item \code{"ciwidth"}: Widths of confidence intervals
+#' \item *\code{"seed"}: Seed number (equivalent to the
+#' \code{\link{summarySeed}} function)
+#' \item \code{"ngroup"}: Sample size of each group
+#' \item \code{"ntotal"}: Total sample size
+#' \item \code{"mcar"}: Percent missing completely at random
+#' \item \code{"mar"}: Percent missing at random
+#' \item \code{"extra"}: Extra output from the \code{outfun} argument from the
+#' \code{\link{sim}} function
+#' \item *\code{"time"}: Time elapsed in running the simulation (equivalent to
+#' the \code{\link{summaryTime}} function)
+#' \item *\code{"converged"}: Convergence of each replication
+#' }
+#'
+#' @return The target information depending on the \code{what} argument.
+#'
+#' @seealso
+#' \code{\linkS4class{SimResult}} for the object input.
+#'
+#' @examples
+#' \dontrun{
+#' loading <- matrix(0, 6, 2)
+#' loading[1:3, 1] <- NA
+#' loading[4:6, 2] <- NA
+#' LY <- bind(loading, 0.7)
+#'
+#' latent.cor <- matrix(NA, 2, 2)
+#' diag(latent.cor) <- 1
+#' RPS <- binds(latent.cor, 0.5)
+#'
+#' RTE <- binds(diag(6))
+#'
+#' VY <- bind(rep(NA,6),2)
+#'
+#' CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
+#'
+#' # In reality, more than 5 replications are needed.
+#' Output <- sim(5, CFA.Model, n=200)
+#'
+#' inspect(Output, "coef")
+#' inspect(Output, "param")
+#' inspect(Output, "se", improper = TRUE, nonconverged = TRUE)
+#' }
 #'
 #' @export
 setGeneric("inspect",
