@@ -1,38 +1,76 @@
-## So one of the tricky things about this function is that we want to infer the
-## correct matrices and check input. The interface is designed to eliminate the
-## need to create many input matrices. This is done by specifying a free/fixed
-## matrix.  Syntax Free/Fixed:
+### Sunthud Pornprasertmanit and Patrick Miller; with contributions by Terrence D. Jorgensen
+### Last updated: 5 March 2026
+### functions for constructing parameter matrices used in simulations
 
-## Parameters that are freed are indicated by 'NA'.  Parameters that are fixed
-## are numbers.  Parameters that share the same character label are constrained
-## to be equal.  Population Parameters: An element of the matrix can be set to
-## a value or distribution. Data will be generated with those values.
-## Typically, we are interested in specifying the population value of the free
-## parameters in advance.  Misspecification: However, by setting fixed
-## parameters to values different from what they were fixed to, we can create
-## model misspecification.  Misspecification can also be done by passing a
-## value or distribution to the 'misspec' argument, in which all fixed
-## parameters will receive that value or distribution.
-
-## Rules: 1. If the free parameters are specified and if only 1 value or
-## distribution is passed to popParam, all free parameters have the same value
-## or distribution.  2. If the free parameters are specified, and if only 1
-## distribution is passed to misspec, all fixed parameters get that
-## distribution or value.  3. If equality constraints are specified, labels
-## can't be objects already in the environment or function names.  4. Any
-## numeric value in popParam or misspec (including 0) will be considered to be
-## a parameter value for data generation. Empty values should be either '' or
-## NA
-##
-## Validity checks: 1. Input matrices have the same dimensions or vectors have
-## same length 2. Distributions are converted to expressions and are valid 3.
-## All character vectors passed to popParam and misspec are able to be
-## evaluated 4. If both free and popParam are specified, all free parameters
-## have a population value 5. If labels are included in free (specifying
-## equality constraints), these labels are valid and at least one pair of the
-## labels is the same.
-
-
+#' Create a simulation parameter matrix or vector
+#'
+#' Creates a \code{SimMatrix} or \code{SimVector} object describing
+#' free parameters, population values, and model misspecification
+#' used in simulation studies.
+#'
+#' The function provides a compact interface for specifying model
+#' parameters without manually constructing multiple matrices.
+#' Parameters are defined using a free/fixed template in which
+#' free parameters are indicated by \code{NA} and fixed parameters
+#' are numeric values. Character labels can be used to specify
+#' equality constraints.
+#'
+#' @param free A matrix or vector specifying free and fixed parameters.
+#'   \itemize{
+#'   \item \code{NA} indicates a free parameter.
+#'   \item Numeric values indicate fixed parameters.
+#'   \item Character labels indicate equality constraints.
+#'   }
+#'
+#' @param popParam Population parameter values used to generate data.
+#'   Elements may be numeric values or expressions defining distributions.
+#'
+#' @param misspec Optional values used to introduce model misspecification.
+#'   These values replace the fixed values specified in \code{free} during
+#'   data generation.
+#'
+#' @param symmetric Logical indicating whether the matrix should be treated
+#'   as symmetric.
+#'
+#' @details
+#' The interface allows users to specify model parameters using a single
+#' free/fixed template rather than constructing separate matrices for
+#' population values and misspecification.
+#'
+#' Free parameters are indicated by \code{NA}. Fixed parameters are
+#' numeric values. Parameters sharing the same character label are
+#' constrained to be equal.
+#'
+#' Population values may be specified either as constants or as
+#' expressions defining random distributions. When a single value or
+#' distribution is provided, it is applied to all relevant parameters.
+#'
+#' Misspecification can be introduced by assigning values or
+#' distributions to the \code{misspec} argument, which replaces the
+#' fixed parameter values during data generation.
+#'
+#' Several validity checks are performed:
+#' \itemize{
+#' \item Input matrices must have matching dimensions.
+#' \item Character expressions must evaluate correctly.
+#' \item Population values must be provided for all free parameters.
+#' \item Equality constraint labels must be valid.
+#' }
+#'
+#' @return
+#' A \code{SimMatrix} or \code{SimVector} object depending on whether
+#' \code{free} is a matrix or vector.
+#'
+#' @seealso
+#' \code{\link{binds}}, \code{\link{SimMatrix-class}}, \code{\link{SimVector-class}}
+#'
+#' @examples
+#' free <- matrix(c(NA, 0.5,
+#'                  NA, NA), 2, 2)
+#'
+#' bind(free, popParam = 0.6)
+#'
+#' @export
 bind <- function(free = NULL, popParam = NULL, misspec = NULL, symmetric = FALSE) {
     ## SimMatrix
     if (is.matrix(free)) {
@@ -144,13 +182,36 @@ bind <- function(free = NULL, popParam = NULL, misspec = NULL, symmetric = FALSE
 
 }
 
+#' Symmetric version of \code{bind}
+#'
+#' Convenience wrapper for \code{bind()} that sets
+#' \code{symmetric = TRUE}.
+#'
+#' @inheritParams bind
+#'
+#' @return
+#' A \code{SimMatrix} object.
+#'
+#' @seealso
+#' \code{\link{bind}}
+#'
+#' @export
 binds <- function(free = NULL, popParam = NULL, misspec = NULL, symmetric = TRUE) {
     return(bind(free = free, popParam = popParam, misspec = misspec, symmetric = symmetric))
 }
 
 
-
-# Possible 'empty values': '', or NA
+#' Check whether elements are empty
+#'
+#' Internal helper used to identify empty elements
+#' (either \code{""} or \code{NA}).
+#'
+#' @param dat A vector or matrix.
+#'
+#' @return A logical object of the same shape indicating
+#' whether each element is empty.
+#'
+#' @keywords internal
 is.empty <- function(dat) {
     if (is.null(dim(dat))) {
         temp <- sapply(dat, FUN = function(x) if (x == "" || is.na(x)) {
@@ -170,11 +231,18 @@ is.empty <- function(dat) {
 }
 
 
-# Finds valid labels, checks all combinations of label pairs to make sure at
-# least one pair is the same.  Assumes that matrix has at least one character
-# label.
+#' Check validity of equality constraints
+#'
+#' Internal helper that verifies whether equality constraint
+#' labels are valid and appear at least twice.
+#'
+#' @param mat A matrix, vector, or simulation object.
+#'
+#' @return Logical indicating whether valid constraints exist.
+#'
+#' @keywords internal
 validConstraints <- function(mat) {
-    if (class(mat) == "SimMatrix" || class(mat) == "SimVector") {
+    if (is(mat, "SimMatrix") || is(mat, "SimVector")) {
         mat <- mat@free
     }
 
@@ -185,6 +253,15 @@ validConstraints <- function(mat) {
     return(any(res))
 }
 
+#' Identify character constraint labels
+#'
+#' Internal helper used to detect equality constraint labels.
+#'
+#' @param mat A matrix or vector.
+#'
+#' @return Logical vector indicating whether elements are labels.
+#'
+#' @keywords internal
 is.label <- function(mat) {
     flat <- as.vector(mat)
     flat[is.na(flat)] <- 0
@@ -194,6 +271,15 @@ is.label <- function(mat) {
     return(isLabel)
 }
 
+#' Identify free parameters
+#'
+#' Internal helper determining whether parameters are free.
+#'
+#' @param mat A matrix or vector.
+#'
+#' @return Logical vector indicating free parameters.
+#'
+#' @keywords internal
 is.free <- function(mat) {
     if (is.character(mat)) {
         isFree <- is.na(mat) | is.label(mat)

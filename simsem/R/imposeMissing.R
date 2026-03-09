@@ -1,5 +1,23 @@
-# imposeMissing: Function to impost planned, MAR and MCAR missing on a data set
+### Sunthud Pornprasertmanit, Terrence D. Jorgensen, & Alexander M. Schoemann
+### Last updated: 6 March 2026
+### Functions for imposing missing data under different missingness mechanisms
 
+#' Impose Missing Data Mechanisms on a Dataset
+#'
+#' Applies missing data mechanisms defined in a \code{SimMissing} object
+#' to a dataset. Missingness may include planned missing designs,
+#' missing completely at random (MCAR), missing at random (MAR),
+#' attrition, or logistic regression–based missingness.
+#'
+#' @param miss A \code{SimMissing} object specifying the missing data design.
+#' @param data.mat A data frame, matrix, or list containing a dataset.
+#' @param pmMCAR Optional proportion of missing completely at random.
+#' @param pmMAR Optional proportion of missing at random.
+#'
+#' @return A dataset with missing values imposed according to the
+#' specified missing-data mechanism.
+#'
+#' @export
 impose <- function(miss, data.mat, pmMCAR = NULL, pmMAR = NULL) {
     if (!is.null(pmMCAR))
         miss@pmMCAR <- pmMCAR
@@ -22,17 +40,36 @@ impose <- function(miss, data.mat, pmMCAR = NULL, pmMAR = NULL) {
     }
     return(data.mat)
 }
-## setMethod('run', signature = 'SimMissing', definition = function(object,
-## data, pmMCAR = NULL, pmMAR = NULL) {
-
-## })
 
 
-## The wrapper function for the various functions to impose missing values.
-## Currently, the function will delete x percent of eligible values for MAR and
-## MCAR, if you mark colums to be ignored.
-imposeMissing <- function(data.mat, cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, itemGroups = list(),
-    twoMethod = 0, prAttr = 0, timePoints = 1, ignoreCols = 0, threshold = 0, logit = "", logical = NULL) {
+#' Wrapper for Imposing Missing Data
+#'
+#' Applies various missing-data mechanisms to a dataset including
+#' planned missing designs, MCAR, MAR, attrition, and logistic
+#' regression–based missingness.
+#'
+#' @param data.mat Data frame containing the dataset.
+#' @param cov Covariate columns used in missingness mechanisms.
+#' @param pmMCAR Proportion of missing completely at random.
+#' @param pmMAR Proportion of missing at random.
+#' @param nforms Number of forms used in planned missing designs.
+#' @param itemGroups Optional list defining item groupings.
+#' @param twoMethod Two-method planned missing specification.
+#' @param prAttr Probability of attrition.
+#' @param timePoints Number of time points.
+#' @param ignoreCols Columns excluded from missingness.
+#' @param threshold Threshold value used in MAR or attrition mechanisms.
+#' @param logit Character string defining logistic missingness syntax.
+#' @param logical Logical matrix specifying additional missingness.
+#'
+#' @return A dataset with missing values imposed.
+#'
+#' @export
+imposeMissing <- function(data.mat, cov = 0, pmMCAR = 0, pmMAR = 0,
+                          nforms = 0, itemGroups = list(),
+                          twoMethod = 0, prAttr = 0, timePoints = 1,
+                          ignoreCols = 0, threshold = 0, logit = "",
+                          logical = NULL) {
     if (is.character(ignoreCols))
         ignoreCols <- match(ignoreCols, colnames(data.mat), nomatch = 0L)
     if (is.character(cov))
@@ -67,9 +104,8 @@ imposeMissing <- function(data.mat, cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, 
             ignoreCols)
 		log.all <- log.all | log.mat3
     }
-
     if (!is.null(logical) && !is.null(dim(logical)) && !all(dim(logical) == 1)) {
-        if (!(class(logical) %in% c("matrix", "data.frame")))
+        if (!(is.matrix(logical) || is.data.frame(logical)))
             stop("The logical argument must be matrix or data frame.")
         usecol <- setdiff(seq_len(ncol(data.mat)), ignoreCols)
         log.all2 <- log.all[, usecol]
@@ -85,12 +121,21 @@ imposeMissing <- function(data.mat, cov = 0, pmMCAR = 0, pmMAR = 0, nforms = 0, 
 
 }
 
-
-# Function to make MAR missing based on 1 covariate using the threshold method.
-
-# ToDo: Extend to multiple covariates
+#' Generate MAR Missingness Matrix
+#'
+#' Creates a logical matrix indicating values that should be deleted
+#' according to a missing-at-random (MAR) mechanism based on a covariate.
+#'
+#' @param data Data frame containing the dataset.
+#' @param pm Proportion of MAR missingness.
+#' @param cov Column index or name of the covariate.
+#' @param ignoreCols Columns excluded from missingness.
+#' @param threshold Threshold value defining eligibility for missingness.
+#'
+#' @return Logical matrix indicating values to be set to missing.
+#'
+#' @keywords internal
 makeMAR <- function(data, pm = NULL, cov = NULL, ignoreCols = NULL, threshold = NULL) {
-
     nrow <- dim(data)[1]
     ncol <- dim(data)[2]
     colList <- seq_len(ncol)
@@ -141,12 +186,19 @@ makeMAR <- function(data, pm = NULL, cov = NULL, ignoreCols = NULL, threshold = 
 }
 
 
-# Function to make some MCAR missing
-
-# Input: Data matrix dimensions, desired percent missing, columns of covariates
-# to not have missingness on
-
-# Output: Logical matrix of values to be deleted
+#' Generate MCAR Missingness Matrix
+#'
+#' Creates a logical matrix indicating values that should be deleted
+#' according to a missing completely at random (MCAR) mechanism.
+#'
+#' @param dims Dimensions of the data matrix.
+#' @param pm Proportion of missing completely at random.
+#' @param cov Columns treated as covariates.
+#' @param ignoreCols Columns excluded from missingness.
+#'
+#' @return Logical matrix indicating values to be set to missing.
+#'
+#' @keywords internal
 makeMCAR <- function(dims, pm = 0, cov = 0, ignoreCols = 0) {
     nrow <- dims[1]
     ncol <- dims[2]
@@ -165,24 +217,29 @@ makeMCAR <- function(dims, pm = 0, cov = 0, ignoreCols = 0) {
 }
 
 
-# Function to poke holes in the data for planned missing designs.
-
-# Input: Data Set
-
-# Output: Boolean matrix of values to delete
-#
-# Right now, function defaults to NULL missingness. If number of forms is
-# specified, items are divided equally and grouped sequentially. (i.e. columns
-# 1-5 are shared, 6-10 are A, 11-15 are B, and 16-20 are C)
-
-# TODO:
-
-# Warnings for illegal groupings
-
-# Check to see if item groupings are valid?
-plannedMissing <- function(dims = c(0, 0), nforms = NULL, itemGroups = NULL, twoMethod = NULL,
-    cov = NULL, timePoints = 1, ignoreCols = NULL) {
-
+#' Generate Planned Missingness Matrix
+#'
+#' Creates a logical matrix representing planned missing data designs
+#' such as matrix sampling or multi-form designs.
+#'
+#' @param dims Dimensions of the dataset.
+#' @param nforms Number of forms in the planned missing design.
+#' @param itemGroups Optional list defining item groups.
+#' @param twoMethod Two-method planned missing specification.
+#' @param cov Covariate columns.
+#' @param timePoints Number of measurement occasions.
+#' @param ignoreCols Columns excluded from missingness.
+#'
+#' @return Logical matrix indicating values to be set to missing.
+#'
+#' @keywords internal
+plannedMissing <- function(dims = c(0, 0), nforms = NULL,
+                           itemGroups = NULL, twoMethod = NULL,
+                           cov = NULL, timePoints = 1,
+                           ignoreCols = NULL) {
+	# TODO:
+	# Warnings for illegal groupings
+	# Check to see if item groupings are valid?
     if (!is.null(itemGroups) && is.list(itemGroups) && length(itemGroups) == 0)
         itemGroups <- NULL
     if (is.vector(twoMethod) && length(twoMethod) == 1 && twoMethod == 0)
@@ -217,7 +274,7 @@ plannedMissing <- function(dims = c(0, 0), nforms = NULL, itemGroups = NULL, two
             print("Number of forms has been set to the number of groups specified")
         }
 
-        if (((!is.null(itemGroups)) && (class(itemGroups) != "list"))) {
+        if (((!is.null(itemGroups)) && (!is.list(itemGroups)))) {
             stop("itemGroups not a list")
         }
 
@@ -305,14 +362,17 @@ plannedMissing <- function(dims = c(0, 0), nforms = NULL, itemGroups = NULL, two
     return(log.mat)
 }
 
-
-# Default generation method for item groupings and observation groupings.
-# Generates sequential groups of lists of column indices based on the desired
-# number of groups, and a range of the group column indices. You can also
-# exclude specific column indeces.
-
-# EX: generate.indices(3,1:12)
-
+#' Generate Sequential Index Groups
+#'
+#' Creates groups of indices used in planned missing designs.
+#'
+#' @param ngroups Number of groups.
+#' @param groupRange Vector of indices to divide into groups.
+#' @param excl Optional indices to exclude.
+#'
+#' @return A list of index vectors.
+#'
+#' @keywords internal
 generateIndices <- function(ngroups, groupRange, excl = NULL) {
 
     a <- groupRange
@@ -340,7 +400,17 @@ generateIndices <- function(ngroups, groupRange, excl = NULL) {
     return(index.list)
 }
 
-
+#' Generate All Permutations
+#'
+#' Internal implementation of permutation generation used in
+#' planned missing designs.
+#'
+#' @param x Vector of elements.
+#' @param fun Optional function applied to permutations.
+#'
+#' @return List of permutations.
+#'
+#' @keywords internal
 permn <- function(x, fun = NULL, ...) {
     # Taken from package combinat. Put here for easy loading.
     if (is.numeric(x) && length(x) == 1 && x > 0 && trunc(x) == x)
@@ -374,15 +444,24 @@ permn <- function(x, fun = NULL, ...) {
     out
 }
 
-# Implementing attrition using probability of attrition per TP as the
-# parameter, and optionally, a covariate.  The probability argument can be a
-# vector, allowing you to specify different probabilities for different time
-# points.  If there is only one value, this will be the probability of
-# attrition at each time time point.  If the length does not equal the number
-# of time points, the pattern will repeat to cover the remaining time points.
-
-attrition <- function(data, prob = NULL, timePoints = 1, cov = NULL, threshold = NULL,
-    ignoreCols = NULL) {
+#' Generate Attrition Missingness
+#'
+#' Simulates attrition across multiple time points based on specified
+#' probabilities.
+#'
+#' @param data Dataset.
+#' @param prob Probability of attrition at each time point.
+#' @param timePoints Number of time points.
+#' @param cov Covariate influencing attrition.
+#' @param threshold Threshold used in attrition mechanism.
+#' @param ignoreCols Columns excluded from attrition.
+#'
+#' @return Logical matrix indicating attrition-induced missing values.
+#'
+#' @keywords internal
+attrition <- function(data, prob = NULL, timePoints = 1,
+                      cov = NULL, threshold = NULL,
+                      ignoreCols = NULL) {
     dims <- dim(data)
     nrow <- dims[1]
 
@@ -461,9 +540,17 @@ attrition <- function(data, prob = NULL, timePoints = 1, cov = NULL, threshold =
     return(log.mat)
 }
 
-
-# Implementing logistic regression model for missing at random
-
+#' Generate Missingness from Logistic Model
+#'
+#' Applies a logistic regression model to generate missing values
+#' based on user-specified syntax.
+#'
+#' @param data Dataset.
+#' @param script Character string specifying logistic missingness syntax.
+#'
+#' @return Logical matrix indicating missing values.
+#'
+#' @keywords internal
 logitMiss <- function(data, script) {
 	model <- parseSyntaxLogitMiss(script)
 	logmat <- matrix(FALSE, nrow(data), ncol(data))
@@ -516,6 +603,15 @@ logitMiss <- function(data, script) {
 	logmat
 }
 
+#' Parse Logistic Missingness Syntax
+#'
+#' Parses the syntax used to specify logistic missingness models.
+#'
+#' @param script Character string specifying logistic missingness syntax.
+#'
+#' @return Parsed model expressions.
+#'
+#' @keywords internal
 parseSyntaxLogitMiss <- function(script) {
 # Most of the beginning of this codes are from lavaanify function in lavaan
 
@@ -560,6 +656,52 @@ parseSyntaxLogitMiss <- function(script) {
 	model
 }
 
+#' Visualize Missing Proportion from Logistic Missingness Models
+#'
+#' Visualize the missing proportion when the logistic regression method
+#' is used. The maximum number of independent variables supported for
+#' visualization is two. Any additional independent variables will be
+#' fixed at a specified value (default = 0).
+#'
+#' @param script The script used in specifying missing data using the
+#' logistic regression model. See further details in the \code{logit}
+#' argument of the \code{\link{miss}} function.
+#' @param ylim The range of missing proportion to be plotted.
+#' @param x1lim The range of the first independent variable to be plotted.
+#' @param x2lim The range of the second independent variable to be plotted.
+#' @param otherx The value used to fix additional independent variables.
+#' @param useContour If two independent variables are present, the function
+#' will produce a 3D representation. By default a contour plot is used.
+#' If \code{FALSE}, a perspective plot is produced instead.
+#'
+#' @return
+#' This function does not return a value. It produces a plot illustrating
+#' the missingness probability implied by the logistic model.
+#'
+#' * If the number of independent variables is 0, a bar plot is produced.
+#' * If the number of independent variables is 1, a logistic curve is plotted.
+#' * If the number of independent variables is 2, a contour or perspective plot
+#'   is produced.
+#'
+#' @seealso
+#' \code{\link{miss}} to create the missing data template \cr
+#' \code{\link{impose}} to impose missing data
+#'
+#' @examples
+#' script <- 'y1 ~ 0.05 + 0.1*y2 + 0.3*y3
+#' y4 ~ -2 + 0.1*y4
+#' y5 ~ -0.5'
+#' plotLogitMiss(script)
+#'
+#' script2 <- 'y1 ~ 0.05 + 0.5*y3
+#' y2 ~ p(0.2)
+#' y3 ~ p(0.1) + -1*y1
+#' y4 ~ p(0.3) + 0.2*y1 + -0.3*y2
+#' y5 ~ -0.5'
+#' plotLogitMiss(script2)
+#'
+#' @importFrom graphics barplot contour lines par persp
+#' @export
 plotLogitMiss <- function(script, ylim = c(0, 1), x1lim = c(-3, 3),
                           x2lim = c(-3, 3), otherx = 0, useContour = TRUE) {
 	warnT <- as.numeric(options("warn"))

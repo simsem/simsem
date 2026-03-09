@@ -1,6 +1,29 @@
-# Only work for single-group for now.
+### Sunthud Pornprasertmanit and Terrence D. Jorgensen
+### Last updated: 6 March 2026
+### Utility functions related to OpenMx models
 
-generateMx <- function(object, n, indDist = NULL, groupLab = NULL, covData = NULL, empirical = FALSE) {
+# NOTE: Currently supports only single-group models.
+
+# SP TODO (6 Mar 2026):
+# - Replace uses of assign() and eval(), which are fragile and difficult to maintain.
+# - Review recent developments in OpenMx and migrate functionality where possible.
+# - Potentially deprecate functions that replicate functionality now available in OpenMx
+#   (e.g., saturateMx, nullMx, checkConvergence).
+# - Update dependent functions (e.g., fitMeasuresMx, easyFitMx) to rely on the modern
+#   OpenMx API where appropriate.
+
+#' Generate Data from an OpenMx Model
+#'
+#' Internal utility used by simsem to generate data from an OpenMx model.
+#'
+#' @param object OpenMx model object.
+#' @param n Sample size.
+#'
+#' @return A data.frame containing simulated data.
+#'
+#' @keywords internal
+generateMx <- function(object, n, indDist = NULL, groupLab = NULL,
+                       covData = NULL, empirical = FALSE) {
 	if(length(object@submodels) > 1) {
 		ngroups <- length(object@submodels)
 		if(!is.list(n)) n <- as.list(n)
@@ -35,6 +58,7 @@ generateMx <- function(object, n, indDist = NULL, groupLab = NULL, covData = NUL
 	data
 }
 
+#' @keywords internal
 getInnerObjects <- function(xxxobjectxxx) {
 	xxxmatxxx <- xxxobjectxxx@matrices
 	xxxmatnamexxx <- names(xxxmatxxx)
@@ -63,6 +87,7 @@ getInnerObjects <- function(xxxobjectxxx) {
 	xxxresultxxx
 }
 
+#' @keywords internal
 generateMxSingleGroup <- function(object, n, indDist = NULL, covData = NULL, extraMatrices = NULL, empirical = FALSE) {
 
 	if(is(object@expectation, "MxExpectationRAM")) {
@@ -165,6 +190,7 @@ generateMxSingleGroup <- function(object, n, indDist = NULL, covData = NULL, ext
 	return(Data)
 }
 
+#' @keywords internal
 getImpliedStatML <- function(xxxobjectxxx, xxxcovdatatxxx = NULL, xxxextraxxx = NULL) {
 	if(!is.null(xxxextraxxx)) {
 		xxxmatnamexxx2 <- names(xxxextraxxx)
@@ -216,6 +242,7 @@ getImpliedStatML <- function(xxxobjectxxx, xxxcovdatatxxx = NULL, xxxextraxxx = 
 	list(xxximpliedMeanxxx, xxximpliedCovxxx, xxximpliedThresholdxxx)
 }
 
+#' @keywords internal
 analyzeMx <- function(object, data, groupLab = NULL, mxMixture = FALSE, ...) {
 	if(length(object@submodels) > 1 & !mxMixture) {
 		temp <- object@submodels
@@ -232,12 +259,14 @@ analyzeMx <- function(object, data, groupLab = NULL, mxMixture = FALSE, ...) {
 	return(fit)
 }
 
+#' @keywords internal
 findDefVars <- function(object) {
 	mat <- lapply(object@matrices, slot, "labels")
 	defvars <- sapply(mat, function(x) x[apply(x, c(1,2), OpenMx::imxIsDefinitionVariable)])
 	Reduce("c", defvars)
 }
 
+#' @keywords internal
 vectorizeMx <- function(object, free = TRUE) {
   multigroup <- length(object@submodels) > 0
   if(multigroup) {
@@ -267,6 +296,7 @@ vectorizeMx <- function(object, free = TRUE) {
   result[!duplicated(names(result))]
 }
 
+#' @keywords internal
 easyFitMx <- function(object, mxMixture = FALSE) {
 
 	if(length(object@submodels) > 1 & !mxMixture) {
@@ -318,6 +348,7 @@ easyFitMx <- function(object, mxMixture = FALSE) {
 #############################################
 
 
+#' @keywords internal
 saturateMx <- function(data, groupLab = NULL) {
   multipleGroup <- FALSE
   if(is.data.frame(data) && !is.null(groupLab) && groupLab %in% colnames(data)) multipleGroup <- TRUE
@@ -350,6 +381,7 @@ saturateMx <- function(data, groupLab = NULL) {
   fit
 }
 
+#' @keywords internal
 saturateMxSingleGroup <- function(data, title = "Saturate Model", groupnum = NULL) {
   if(!is(data, "MxData")) {
     data <- OpenMx::mxData(
@@ -377,7 +409,7 @@ saturateMxSingleGroup <- function(data, title = "Saturate Model", groupnum = NUL
 
   startVar[categorical] <- 1
   startMeans[categorical] <- 0
-  startCov <- lavaan::cor2cov(startCor, sqrt(startVar))
+  startCov <- lav_cor2cov(startCor, sqrt(startVar))
   lab <- outer(1:p, 1:p, function(x, y) paste0("cov", x, y, "_", groupnum))
   lab2 <- outer(1:p, 1:p, function(x, y) paste0("cov", y, x, "_", groupnum))
   lab[upper.tri(lab)] <- lab2[upper.tri(lab2)]
@@ -504,6 +536,7 @@ saturateMxSingleGroup <- function(data, title = "Saturate Model", groupnum = NUL
   Saturate
 }
 
+#' @keywords internal
 nullMx <- function(data, groupLab = NULL) {
   multipleGroup <- FALSE
   if(is.data.frame(data) && !is.null(groupLab) && groupLab %in% colnames(data)) multipleGroup <- TRUE
@@ -536,6 +569,7 @@ nullMx <- function(data, groupLab = NULL) {
   fit
 }
 
+#' @keywords internal
 nullMxSingleGroup <- function(data, title = "Null Model", groupnum = NULL) {
   if(!is(data, "MxData")) {
     data <- OpenMx::mxData(
@@ -683,10 +717,12 @@ nullMxSingleGroup <- function(data, title = "Null Model", groupnum = NULL) {
   NullModel
 }
 
+#' @keywords internal
 checkConvergence <- function(object) {
   (object@output$status[[1]] %in% c(0,1)) & (object@output$status[[2]] == 0)
 }
 
+#' @keywords internal
 fitMeasuresMx <- function(object, fit.measures="all") {
   mxMixture <- FALSE
   if(length(object@submodels) > 1) {
@@ -1300,6 +1336,7 @@ fitMeasuresMx <- function(object, fit.measures="all") {
   }
 }
 
+#' @keywords internal
 getImpliedStatRAM <- function(object) {
   A <- object@matrices$A@values
   I <- diag(nrow(A))
@@ -1316,6 +1353,7 @@ getImpliedStatRAM <- function(object) {
   list(impliedMean, impliedCov)
 }
 
+#' @keywords internal
 standardizeMx <- function(object, free = TRUE) {
   objectOrig <- object
   multigroup <- length(object@submodels) > 0
@@ -1334,6 +1372,7 @@ standardizeMx <- function(object, free = TRUE) {
   vectorizeMx(object, free=free)
 }
 
+#' @keywords internal
 standardizeMxSingleGroup <- function(object) {
   if(!is(object@expectation, "MxExpectationRAM")) stop("The standardizeMx function is available for the MxExpectationRAM only.")
   A <- object@matrices$A@values

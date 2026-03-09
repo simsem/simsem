@@ -1,6 +1,32 @@
-# getCutoff: This function will find a cutoff of each fit index based on a
-# priori alpha level from sampling distributions of fit indices
+### Sunthud Pornprasertmanit
+### Last updated: 6 March 2026
+### Find a cutoff of each fit index based on a priori alpha level from sampling distributions of fit indices
 
+#' Compute Fit-Index Cutoffs from Sampling Distributions
+#'
+#' Computes cutoff values for fit indices from their sampling distributions
+#' given a prespecified Type I error rate (\code{alpha}). The function extracts
+#' the required fit indices, computes the relevant quantiles, and optionally
+#' adjusts directions for fit indices whose interpretation is reversed
+#' (e.g., RMSEA).
+#'
+#' @param object A data frame containing simulated fit indices.
+#' @param alpha Numeric value representing the Type I error rate used to
+#'   determine the cutoff.
+#' @param revDirec Logical. If \code{TRUE}, the percentile direction is reversed.
+#' @param usedFit Character vector specifying which fit indices should be used.
+#' @param predictor Optional matrix of predictor variables used for conditional
+#'   quantile estimation.
+#' @param predictorVal Vector of predictor values at which the conditional
+#'   quantile should be evaluated.
+#' @param df Degrees of freedom used when fitting spline terms in conditional
+#'   quantile regression. Default is \code{0}.
+#'
+#' @return A data frame containing cutoff values for the specified fit indices.
+#'
+#' @seealso \code{\link{getCutoff}}, \code{\link{getCondQtile}}
+#'
+#' @keywords internal
 getCutoffDataFrame <- function(object, 
     alpha, revDirec = FALSE, usedFit = NULL, predictor = NULL, predictorVal = NULL, 
     df = 0) {
@@ -22,6 +48,31 @@ getCutoffDataFrame <- function(object,
     return(temp)
 }
 
+#' Obtain Fit-Index Cutoffs from Simulation Results
+#'
+#' Extracts simulated fit indices from a result object and computes cutoff
+#' values based on a prespecified Type I error rate (\code{alpha}). The function
+#' allows conditioning on simulation design factors such as sample size or
+#' missingness proportions.
+#'
+#' @param object A simulation result object containing fit indices.
+#' @param alpha Numeric value representing the Type I error rate used to
+#'   determine the cutoff.
+#' @param revDirec Logical. If \code{TRUE}, the percentile direction is reversed.
+#' @param usedFit Character vector specifying which fit indices should be used.
+#' @param nVal Optional numeric value specifying the sample size condition.
+#' @param pmMCARval Optional numeric value specifying the proportion of
+#'   missing completely at random (MCAR).
+#' @param pmMARval Optional numeric value specifying the proportion of
+#'   missing at random (MAR).
+#' @param df Degrees of freedom used in spline smoothing when estimating
+#'   conditional quantiles.
+#'
+#' @return A data frame containing cutoff values for each requested fit index.
+#'
+#' @seealso \code{\link{getCutoffDataFrame}}
+#'
+#' @export
 getCutoff <- function(object, 
     alpha, revDirec = FALSE, usedFit = NULL, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, 
     df = 0) {
@@ -40,6 +91,26 @@ getCutoff <- function(object,
     return(output)
 }
 
+#' Extract Predictor Values for Conditional Quantile Estimation
+#'
+#' Identifies which simulation design factors vary in the simulation results
+#' and prepares predictor matrices and corresponding values for conditional
+#' quantile estimation.
+#'
+#' @param object A simulation result object containing simulation conditions.
+#' @param nVal Numeric value specifying the sample size condition.
+#' @param pmMCARval Numeric value specifying the proportion of missing
+#'   completely at random (MCAR).
+#' @param pmMARval Numeric value specifying the proportion of missing
+#'   at random (MAR).
+#'
+#' @return A list containing two elements:
+#' \describe{
+#'   \item{condValue}{Matrix of predictor variables.}
+#'   \item{predictorVal}{Vector of predictor values used for evaluation.}
+#' }
+#'
+#' @keywords internal
 getCondValuePredictorVal <- function(object, nVal = NULL, pmMCARval = NULL, pmMARval = NULL) {
 	condition <- c(length(unique(object@pmMCAR)) > 1, length(unique(object@pmMAR)) > 
         1, length(unique(object@n)) > 1)
@@ -65,47 +136,31 @@ getCondValuePredictorVal <- function(object, nVal = NULL, pmMCARval = NULL, pmMA
 	list(condValue, predictorVal)
 }
 
-# setMethod("getCutoff", signature(object = "matrix"), definition = function(object, 
-    # alpha, revDirec = FALSE, usedFit = NULL, predictor = NULL, predictorVal = NULL, 
-    # df = 0) {
-    # object <- as.data.frame(object)
-    # output <- getCutoff(object, alpha, revDirec, usedFit, predictor = predictor, 
-        # predictorVal = predictorVal, df = df)
-    # return(output)
-# }) 
 
-## getCondQtile: Get a quantile of a variable given values of predictors
-
-# \title{
-	# Get a quantile of a variable given values of predictors
-# }
-# \description{
-# Find a quantile of a variable. If the predictors are specified, the result will provide the conditional quantile given specified value of predictors. The \code{quantreg} package is used to find conditional quantile.
-# }
-# \usage{
-# getCondQtile(y, x=NULL, xval=NULL, df = 0, qtile = 0.5)
-# }
-# \arguments{
-  # \item{y}{
-	# The variable that users wish to find a quantile from
-# }
-  # \item{x}{
-	# The predictors variables. If \code{NULL}, the unconditional quantile of the \code{y} is provided.
-# }
-  # \item{xval}{
-	# The vector of predictors' values that users wish to find the conditional quantile from. If \code{"all"} is specified, the function will provide the conditional quantile of every value in \code{x}.
-# }
-  # \item{df}{
-	# The degree of freedom used in spline method in predicting the fit indices by the predictors. If \code{df} is 0, the spline method will not be applied. 
-# }
-  # \item{qtile}{
-	# The quantile rank.
-# }
-# }
-# \value{
-	# A (conditional) quantile value
-# }
-
+#' Conditional Quantile Estimation
+#'
+#' Computes a quantile of a variable. If predictors are supplied, the function
+#' estimates the conditional quantile using quantile regression from the
+#' \pkg{quantreg} package.
+#'
+#' @param y Numeric vector containing the variable for which the quantile is
+#'   computed.
+#' @param x Optional predictor matrix used to estimate conditional quantiles.
+#'   If \code{NULL}, the unconditional quantile of \code{y} is returned.
+#' @param xval Vector of predictor values at which the conditional quantile
+#'   should be evaluated. If \code{"all"}, predictions are returned for all
+#'   observed predictor values.
+#' @param df Degrees of freedom used when fitting spline terms for predictors.
+#'   If \code{0}, spline terms are not used.
+#' @param qtile Numeric value specifying the desired quantile (e.g., 0.5 for
+#'   the median).
+#'
+#' @return A numeric value representing the requested (conditional) quantile.
+#'
+#' @references
+#' Koenker, R. (2005). \emph{Quantile Regression}. Cambridge University Press.
+#'
+#' @keywords internal
 getCondQtile <- function(y, x = NULL, xval = NULL, df = 0, qtile = 0.5) {
     if (is.null(x)) {
         return(quantile(y, probs = qtile, na.rm = TRUE))

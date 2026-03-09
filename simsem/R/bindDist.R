@@ -1,5 +1,62 @@
-# bindDist: A constructor of data distribution object
+### Sunthud Pornprasertmanit
+### Last updated: 5 March 2026
+### constructor for simulation data distribution objects
 
+#' Create a data distribution specification
+#'
+#' Constructs a \code{SimDataDist} object describing the marginal
+#' distributions and dependence structure used to generate simulated data.
+#'
+#' The function allows users to specify marginal distributions, distribution
+#' parameters, and optional skewness or kurtosis values for each variable.
+#' A copula may also be supplied to define the multivariate dependence
+#' structure.
+#'
+#' @param margins Character vector specifying the marginal distribution
+#'   type for each variable.
+#' @param ... Optional list of parameter specifications for the marginal
+#'   distributions. Each element corresponds to a variable and typically
+#'   contains a list of named parameters required by the distribution.
+#' @param p Integer specifying the number of variables. If not supplied,
+#'   the number of variables is inferred from the length of the distribution
+#'   parameter list or the skewness/kurtosis vectors.
+#' @param keepScale Logical indicating whether generated variables should
+#'   retain their original scale.
+#' @param reverse Logical vector indicating whether variables should be
+#'   reversed after generation.
+#' @param copula Optional copula object defining the multivariate dependence
+#'   structure between variables.
+#' @param skewness Numeric vector specifying skewness values for the
+#'   marginal distributions.
+#' @param kurtosis Numeric vector specifying kurtosis values for the
+#'   marginal distributions.
+#'
+#' @details
+#' The function constructs a \code{SimDataDist} object used internally
+#' by \code{simsem} to generate simulated data with user-specified
+#' marginal distributions and dependence structures.
+#'
+#' Marginal distributions can be specified either by providing a list of
+#' distribution parameters through \code{...}, or by specifying target
+#' skewness and kurtosis values.
+#'
+#' If a copula object is supplied, its dimension is automatically updated
+#' to match the number of variables.
+#'
+#' @return
+#' An object of class \code{SimDataDist}.
+#'
+#' @seealso
+#' \code{\link{SimDataDist-class}}
+#'
+#' @examples
+#' # Specify normal marginal distributions
+#' bindDist(rep("norm", 3))
+#'
+#' # Specify distributions using skewness and kurtosis
+#' bindDist(skewness = c(0, 1), kurtosis = c(0, 3))
+#'
+#' @export
 bindDist <- function(margins = NULL, ..., p = NULL, keepScale = TRUE, reverse = FALSE, copula = NULL, skewness = NULL, kurtosis = NULL) {
     List <- list(...)
 	if(length(List) > 0) {
@@ -8,6 +65,25 @@ bindDist <- function(margins = NULL, ..., p = NULL, keepScale = TRUE, reverse = 
 		skewness <- rep(NA, length(List))
 		kurtosis <- rep(NA, length(List))
 	} else {
+		## SP: BUG FIX: Allow margins-only specification (e.g., margins="norm", p=3)
+		if(!is.null(margins)) {
+
+			if(is.null(p)) {
+				if(!is.null(skewness)) {
+					p <- length(skewness)
+				} else if(!is.null(kurtosis)) {
+					p <- length(kurtosis)
+				} else {
+					p <- length(margins)
+				}
+			}
+
+			if(is.null(skewness) && is.null(kurtosis)) {
+				skewness <- rep(NA, p)
+				kurtosis <- rep(NA, p)
+			}
+
+		}
 		if(!is.null(skewness)) {
 			if(!is.null(kurtosis)) {
 				if(length(skewness) != length(kurtosis)) stop("CONFLICT: The length of skewness and kurtosis must be equal.")

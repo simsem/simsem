@@ -1,7 +1,15 @@
-# plotCutoff: This function will plot sampling distributions of fit indices
-# with vertical lines of cutoffs
+### Sunthud Pornprasertmanit 
+### Last updated: 6 March 2026
+### Plot sampling distributions of fit indices with vertical lines of cutoffs
 
-
+#' Plot sampling distributions of fit indices from a data frame
+#'
+#' Internal helper function used by \code{\link{plotCutoff}} and related
+#' plotting functions. It visualizes sampling distributions of fit indices
+#' and optionally overlays cutoff values.
+#'
+#' @importFrom graphics abline hist par
+#' @keywords internal
 plotCutoffDataFrame <- function(object, 
     cutoff = NULL, revDirec = FALSE, usedFit = NULL, vector1 = NULL, vector2 = NULL, 
     nameVector1 = NULL, nameVector2 = NULL, alpha = NULL, useContour = TRUE, cutoff2 = NULL) {
@@ -57,6 +65,83 @@ plotCutoffDataFrame <- function(object,
         par(obj)
 }
 
+#' Plot sampling distributions of fit indices with cutoff values
+#'
+#' Plot sampling distributions of fit indices from a
+#' \code{\linkS4class{SimResult}} object. Optional cutoff values can be
+#' added either by specifying an \code{alpha} level or by supplying
+#' predefined cutoffs.
+#'
+#' If simulation conditions vary (e.g., sample size or missing data rates),
+#' the function visualizes how cutoff values change across these conditions.
+#'
+#' @param object A \code{\linkS4class{SimResult}} object containing simulation
+#' results.
+#'
+#' @param alpha Significance level used to derive cutoff values.
+#'
+#' @param revDirec Logical indicating whether the direction of the cutoff
+#' should be reversed. By default, the cutoff is placed on the side that
+#' indicates worse fit (e.g., the right side of RMSEA or the left side of
+#' CFI).
+#'
+#' @param usedFit Character vector specifying which fit indices should
+#' be plotted.
+#'
+#' @param useContour Logical indicating whether contour plots should be
+#' used when two varying parameters are present. If \code{FALSE},
+#' perspective plots are produced instead.
+#'
+#' @return No value is returned. This function produces plots.
+#'
+#' @seealso
+#' \itemize{
+#' \item \code{\linkS4class{SimResult}} for simulation result objects.
+#' \item \code{\link{getCutoff}} to compute cutoff values based on
+#' null-hypothesis sampling distributions.
+#' }
+#'
+#' @examples
+#' \dontrun{
+#' loading <- matrix(0, 6, 2)
+#' loading[1:3, 1] <- NA
+#' loading[4:6, 2] <- NA
+#'
+#' loadingValues <- matrix(0, 6, 2)
+#' loadingValues[1:3, 1] <- 0.7
+#' loadingValues[4:6, 2] <- 0.7
+#'
+#' LY <- bind(loading, loadingValues)
+#'
+#' latent.cor <- matrix(NA, 2, 2)
+#' diag(latent.cor) <- 1
+#'
+#' RPS <- binds(latent.cor, 0.5)
+#'
+#' error.cor <- matrix(0, 6, 6)
+#' diag(error.cor) <- 1
+#'
+#' RTE <- binds(error.cor)
+#'
+#' CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
+#'
+#' Output <- sim(5, n = 200, model = CFA.Model)
+#'
+#' plotCutoff(Output, 0.05, usedFit = c("RMSEA", "SRMR", "CFI", "TLI"))
+#'
+#' Output2 <- sim(NULL, n = seq(450, 500, 10), model = CFA.Model)
+#'
+#' plotCutoff(Output2, 0.05)
+#'
+#' Output3 <- sim(NULL,
+#'                n = seq(450, 500, 10),
+#'                pmMCAR = c(0, 0.05, 0.1, 0.15),
+#'                model = CFA.Model)
+#'
+#' plotCutoff(Output3, 0.05)
+#' }
+#'
+#' @export
 plotCutoff <-  function(object, 
     alpha = NULL, revDirec = FALSE, usedFit = NULL, useContour = TRUE) {
     object <- clean(object)
@@ -89,55 +174,13 @@ plotCutoff <-  function(object,
     
 }
 
-# plot3DQtile: Build a persepctive plot or contour plot of a quantile of
-# predicted values
-
-# \title{
-	# Build a persepctive plot or contour plot of a quantile of predicted values
-# }
-# \description{
-	# Build a persepctive plot or contour plot of a quantile of predicted values
-# }
-# \usage{
-# plot3DQtile(x, y, z, df=0, qtile=0.5, useContour=TRUE, xlab=NULL, 
-	# ylab=NULL, zlab=NULL, main=NULL)
-# }
-# \arguments{
-  # \item{x}{
-	# The values of the first variable (e.g., a vector of sample size)
-# }
-  # \item{y}{
-	# The values of the second variable (e.g., a vector of percent missing)
-# }
-  # \item{z}{
-	# The values of the dependent variable
-# }
-  # \item{df}{
-	# The degree of freedom in spline method
-# }
-  # \item{qtile}{
-	# The quantile values used to plot a graph
-# }
-  # \item{useContour}{
-	# If \code{TRUE}, use contour plot. If \code{FALSE}, use perspective plot.
-# }
-  # \item{xlab}{
-	# The labels of x-axis
-# }
-  # \item{ylab}{
-	# The labels of y-axis
-# }
-  # \item{zlab}{
-	# The labels of z-axis
-# }
-  # \item{main}{
-	# The title of the graph
-# }
-# }
-# \value{
-	# None. This function will plot only.
-# }
-
+#' Plot quantile surfaces for two predictors
+#'
+#' Internal function that builds contour or perspective plots of predicted
+#' quantiles from quantile regression models.
+#'
+#' @importFrom graphics contour persp
+#' @keywords internal
 plot3DQtile <- function(x, y, z, df = 0, qtile = 0.5, useContour = TRUE, xlab = NULL, 
     ylab = NULL, zlab = NULL, main = NULL) {
     if (length(qtile) > 1) 
@@ -169,39 +212,13 @@ plot3DQtile <- function(x, y, z, df = 0, qtile = 0.5, useContour = TRUE, xlab = 
     }
 } 
 
-# plotQtile: Build a scatterplot with overlaying line of quantiles of predicted
-# values
-
-# \title{
-	# Build a scatterplot with overlaying line of quantiles of predicted values
-# }
-# \description{
-	# Build a scatterplot with overlaying line of quantiles of predicted values
-# }
-# \usage{
-# plotQtile(x, y, df=0, qtile=NULL, ...)
-# }
-# \arguments{
-  # \item{x}{
-	# The values of the independent variable (e.g., a vector of sample size)
-# }
-  # \item{y}{
-	# The values of the dependent variable
-# }
-  # \item{df}{
-	# The degree of freedom in spline method
-# }
-  # \item{qtile}{
-	# The quantile values used to plot a graph
-# }
-  # \item{\dots}{
-	# Other arguments in the \code{plot} command
-# }
-# }
-# \value{
-	# None. This function will plot only.
-# }
-
+#' Plot conditional quantile curves
+#'
+#' Internal helper function used to visualize conditional quantiles
+#' estimated via quantile regression.
+#'
+#' @importFrom graphics lines
+#' @keywords internal
 plotQtile <- function(x, y, df = 0, qtile = NULL, ...) {
     xy <- data.frame(x = x, y = y)
     plot(x, y, ...)

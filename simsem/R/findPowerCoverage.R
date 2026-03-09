@@ -1,12 +1,58 @@
-# findPower: Find a value of a given independent variable that provides a given
-# value of power. This function can handle multiple ivs by split data.
+### Sunthud Pornprasertmanit
+### Last updated: 6 March 2026
+### Determine design conditions (e.g., N, missingness) required for target power or coverage
 
+#' Find required values for target coverage
+#'
+#' Computes the value of a varying parameter that yields a specified
+#' coverage level. Coverage is computed as \eqn{1 - power}, and the
+#' function internally calls \code{\link{findPower}} to determine the
+#' corresponding parameter value.
+#'
+#' @param coverTable A data frame containing coverage results from a
+#' simulation study.
+#' @param iv The independent variable whose value should be determined.
+#' This can be specified either by column name or index.
+#' @param target The desired coverage level.
+#'
+#' @return
+#' A value (or set of values) of the varying parameter that achieves the
+#' desired coverage level.
+#'
+#' @seealso
+#' \code{\link{findPower}}
+#'
+#' @export
 findCoverage <- function(coverTable, iv, target) {
 	ivCol <- grep("iv", colnames(coverTable))
 	coverTable[, -ivCol] <- 1 - coverTable[, -ivCol]
 	findPower(coverTable, iv, 1 - target)
 }
 
+#' Find required values for target power
+#'
+#' Determines the value of a varying parameter that achieves a specified
+#' level of statistical power based on a power table from a simulation
+#' study.
+#'
+#' The function can handle multiple independent variables by splitting
+#' the data according to the remaining variables and applying the power
+#' search within each subset.
+#'
+#' @param powerTable A data frame containing power results from a
+#' simulation study.
+#' @param iv The independent variable whose value should be determined.
+#' This can be specified either by column name or index.
+#' @param power The desired level of statistical power.
+#'
+#' @return
+#' A value (or matrix of values) of the varying parameter that achieves
+#' the specified power level.
+#'
+#' @seealso
+#' \code{\link{findCoverage}}, \code{\link{findTargetPower}}
+#'
+#' @export
 findPower <- function(powerTable, iv, power) {
     ivCol <- grep("iv", colnames(powerTable))
     ivTable <- as.matrix(powerTable[, ivCol])
@@ -39,33 +85,26 @@ findPower <- function(powerTable, iv, power) {
     return(pow)
 }
 
-# findTargetPower: Find a value of a given independent variable that provides a
-# given value of power. This function can handle only one independent variable.
-
-# \title{
-	# Find a value of varying parameters that provides a given value of power. 
-# }
-# \description{
-	# Find a value of varying parameters that provides a given value of power. This function can deal with only one varying parameter only (\code{\link{findPower}} can deal with more than one varying parameter).
-# }
-# \usage{
-# findTargetPower(iv, dv, power)
-# }
-# \arguments{
-  # \item{iv}{
-	# A vector of the target varying parameter
-# }
-  # \item{dv}{
-	# A \code{data.frame} of the power table of target parameters
-# }
-  # \item{power}{
-	# A desired power.
-# }
-# }
-# \value{
-	# The value of the target varying parameter providing the desired power. If the value is \code{NA}, there is no value in the domain of varying parameters that provide the target power. If the value is the minimum value of the varying parameters, it means that the minimum value has already provided enough power. The value of varying parameters that provides exact desired power may be lower than the minimum value.
-# }
-
+#' Find parameter value achieving target power
+#'
+#' Computes the value of a varying parameter that achieves a specified
+#' level of statistical power for a single independent variable.
+#'
+#' This function is used internally by \code{\link{findPower}} when only
+#' one varying parameter is present.
+#'
+#' @param iv A vector of the varying parameter values.
+#' @param dv A data frame containing power values for the parameters of
+#' interest.
+#' @param power The desired level of statistical power.
+#'
+#' @return
+#' The value of the varying parameter that provides the desired power.
+#' If \code{NA}, no value in the domain of the varying parameter provides
+#' the desired power. If the minimum value of the varying parameter is
+#' returned, the minimum value already achieves the target power.
+#'
+#' @keywords internal
 findTargetPower <- function(iv, dv, power) {
     FUN <- function(dv, iv, power) {
         x <- dv > power

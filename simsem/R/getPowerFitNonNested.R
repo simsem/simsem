@@ -1,7 +1,64 @@
-# getPowerFitNested: This function will find a power of each fit index in
-# nested model comparison based on specified cutoffs of each fit index
+### Sunthud Pornprasertmanit
+### Last updated: 6 March 2026
+### Compute power of fit indices for non-nested model comparisons
 
-getPowerFitNonNested <- function(dat2Mod1, dat2Mod2, cutoff = NULL, dat1Mod1 = NULL, dat1Mod2 = NULL, revDirec = FALSE, usedFit = NULL, alpha = 0.05, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, condCutoff = TRUE, df = 0, onetailed = FALSE) {
+#' Estimate Power of Fit Indices for Non-Nested Model Comparisons
+#'
+#' Computes the statistical power of fit indices for comparisons between
+#' non-nested models. Power is defined as the probability that the difference
+#' in fit indices between two competing models exceeds a specified cutoff
+#' criterion.
+#'
+#' Cutoffs may be supplied directly or derived from simulated null-model
+#' results.
+#'
+#' @param dat2Mod1 Simulation result object for Model 1 under the alternative
+#' data-generating condition.
+#' @param dat2Mod2 Simulation result object for Model 2 under the alternative
+#' data-generating condition.
+#' @param cutoff Optional named numeric vector specifying cutoff values for
+#' each fit index.
+#' @param dat1Mod1 Optional simulation result object for Model 1 under the
+#' null data-generating condition.
+#' @param dat1Mod2 Optional simulation result object for Model 2 under the
+#' null data-generating condition.
+#' @param revDirec Logical indicating whether the rejection direction of the
+#' fit index should be reversed.
+#' @param usedFit Character vector specifying which fit indices should be used.
+#' @param alpha Significance level used when deriving cutoffs from null-model
+#' simulations.
+#' @param nVal Optional sample size value when sample size varies across
+#' simulations.
+#' @param pmMCARval Optional value specifying the proportion of missing
+#' completely at random (MCAR).
+#' @param pmMARval Optional value specifying the proportion of missing at
+#' random (MAR).
+#' @param condCutoff Logical indicating whether cutoffs should depend on
+#' simulation conditions.
+#' @param df Degrees of freedom used when estimating conditional cutoffs using
+#' spline regression.
+#' @param onetailed Logical indicating whether a one-tailed test should be used.
+#'
+#' @return
+#' A list containing two elements:
+#' \describe{
+#' \item{reject1FromNull2}{Power for rejecting Model 1 when Model 2 is the null.}
+#' \item{reject2FromNull1}{Power for rejecting Model 2 when Model 1 is the null.}
+#' }
+#'
+#' @seealso
+#' \code{\link{getPowerFit}},
+#' \code{\link{getPowerFitNested}},
+#' \code{\link{getCutoffNonNested}}
+#'
+#' @export
+getPowerFitNonNested <- function(dat2Mod1, dat2Mod2, cutoff = NULL,
+                                 dat1Mod1 = NULL, dat1Mod2 = NULL,
+                                 revDirec = FALSE, usedFit = NULL,
+                                 alpha = 0.05, nVal = NULL,
+                                 pmMCARval = NULL, pmMARval = NULL,
+                                 condCutoff = TRUE, df = 0,
+                                 onetailed = FALSE) {
 	result <- NULL
 	if(is.null(cutoff)) {
 		if(!is.null(dat1Mod1) & !is.null(dat1Mod2)) {
@@ -19,14 +76,69 @@ getPowerFitNonNested <- function(dat2Mod1, dat2Mod2, cutoff = NULL, dat1Mod1 = N
 	result
 }
 
-getPowerFitNonNestedCutoff <- function(dat2Mod1, dat2Mod2, cutoff, usedFit = NULL, revDirec = FALSE, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, condCutoff = TRUE, df = 0) {
+#' Compute Power for Non-Nested Models Given Fixed Fit-Index Cutoffs
+#'
+#' Internal helper used by \code{getPowerFitNonNested} when cutoff values
+#' are supplied directly. Power is computed using the distribution of
+#' differences in fit indices between two competing models.
+#'
+#' @param dat2Mod1 Simulation result object for Model 1.
+#' @param dat2Mod2 Simulation result object for Model 2.
+#' @param cutoff Named numeric vector specifying cutoff values for fit indices.
+#' @param usedFit Character vector specifying which fit indices should be used.
+#' @param revDirec Logical indicating whether rejection direction is reversed.
+#' @param nVal Optional sample size value.
+#' @param pmMCARval Optional MCAR missingness value.
+#' @param pmMARval Optional MAR missingness value.
+#' @param condCutoff Logical indicating whether cutoffs vary across conditions.
+#' @param df Degrees of freedom used in spline-based conditional estimation.
+#'
+#' @return A named vector of power estimates.
+#'
+#' @keywords internal
+getPowerFitNonNestedCutoff <- function(dat2Mod1, dat2Mod2, cutoff,
+                                       usedFit = NULL, revDirec = FALSE,
+                                       nVal = NULL, pmMCARval = NULL,
+                                       pmMARval = NULL, condCutoff = TRUE,
+                                       df = 0) {
     getPowerFitNested(altNested = dat2Mod1, altParent = dat2Mod2, cutoff = cutoff, 
         revDirec = revDirec, usedFit = usedFit, nVal = nVal, pmMCARval = pmMCARval, 
         pmMARval = pmMARval, condCutoff = condCutoff, df = df)
 }
 
-getPowerFitNonNestedNullObj <- function(dat2Mod1, dat2Mod2, dat1Mod1, dat1Mod2, usedFit = NULL, alpha = 0.05, revDirec = FALSE, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, df = 0, onetailed = FALSE) {
-    
+#' Compute Power for Non-Nested Models Using Null-Model Simulations
+#'
+#' Internal helper that computes power by deriving cutoff values from
+#' null-model simulations and applying them to alternative-model simulations
+#' for non-nested model comparisons.
+#'
+#' @param dat2Mod1 Simulation result object for Model 1 under the alternative
+#' condition.
+#' @param dat2Mod2 Simulation result object for Model 2 under the alternative
+#' condition.
+#' @param dat1Mod1 Simulation result object for Model 1 under the null
+#' condition.
+#' @param dat1Mod2 Simulation result object for Model 2 under the null
+#' condition.
+#' @param usedFit Character vector specifying which fit indices should be used.
+#' @param alpha Significance level used when computing cutoffs.
+#' @param revDirec Logical indicating whether rejection direction is reversed.
+#' @param nVal Optional sample size value.
+#' @param pmMCARval Optional MCAR missingness value.
+#' @param pmMARval Optional MAR missingness value.
+#' @param df Degrees of freedom used in spline-based conditional cutoff
+#' estimation.
+#' @param onetailed Logical indicating whether a one-tailed test should be used.
+#'
+#' @return A list containing power estimates for both rejection directions.
+#'
+#' @keywords internal
+getPowerFitNonNestedNullObj <- function(dat2Mod1, dat2Mod2,
+                                        dat1Mod1, dat1Mod2,
+                                        usedFit = NULL, alpha = 0.05,
+                                        revDirec = FALSE, nVal = NULL,
+                                        pmMCARval = NULL, pmMARval = NULL,
+                                        df = 0, onetailed = FALSE) {
 	usedFit <- cleanUsedFit(usedFit, colnames(dat2Mod1@fit), colnames(dat2Mod2@fit), colnames(dat1Mod1@fit), colnames(dat1Mod2@fit))
     mod1 <- clean(dat2Mod1, dat2Mod2)
     dat2Mod1 <- mod1[[1]]
@@ -143,24 +255,18 @@ getPowerFitNonNestedNullObj <- function(dat2Mod1, dat2Mod2, dat1Mod1, dat1Mod2, 
     return(list(reject1FromNull2 = power1, reject2FromNull1 = power2))
 }
 
-# \title{
-# Sort two objects in a list 
-# }
-# \description{
-# Sort two objects in a list by swapping the values of both objects so that the first object contains the lower value and the second object contains the larger value
-# }
-# \usage{
-# sortList(object)
-# }
-# \arguments{
-  # \item{object}{
-	# The list with two objects (e.g., vector, matrix)
-# }
-# }
-# \value{
-	# The sorted list
-# }
-
+#' Sort Two Objects Stored in a List
+#'
+#' Swaps values between two objects in a list so that the first object
+#' contains the smaller values and the second object contains the larger
+#' values element-wise.
+#'
+#' @param object A list containing two objects (e.g., vectors or matrices)
+#' of equal dimensions.
+#'
+#' @return A list containing the sorted objects.
+#'
+#' @keywords internal
 sortList <- function(object) {
     object1 <- object[[1]]
     object2 <- object[[2]]

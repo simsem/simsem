@@ -1,5 +1,73 @@
-# plotPower: plot the power curve given one or two varying parameters
+### Sunthud Pornprasertmanit 
+### Last updated: 6 March 2026
+### Plot the power/coverage curve given one or two varying parameters
 
+#' Plot statistical power curves for model parameters
+#'
+#' Plot statistical power for one or more parameters as a function of
+#' varying simulation conditions (e.g., sample size, percent missing,
+#' or randomly varying model parameters).
+#'
+#' Power is estimated by predicting whether each replication is
+#' statistically significant using logistic regression and then
+#' plotting the predicted probability of significance.
+#'
+#' @param object A \code{\linkS4class{SimResult}} object that includes at least
+#' one randomly varying parameter (e.g., sample size, percent missing,
+#' or model parameters).
+#'
+#' @param powerParam Vector of parameter names for which power should be
+#' plotted (e.g., `"f1=~y2"` or `"f1~~f2"`).
+#'
+#' @param alpha Significance level used to determine statistical significance.
+#'
+#' @param contParam Vector of parameter names that vary across replications
+#' and should be used as predictors in the power plot.
+#'
+#' @param contN Include varying sample size in the power plot if available.
+#'
+#' @param contMCAR Include varying percentage of missing completely at random
+#' (MCAR) in the power plot if available.
+#'
+#' @param contMAR Include varying percentage of missing at random (MAR)
+#' in the power plot if available.
+#'
+#' @param useContour If two varying parameters are plotted, a contour plot is
+#' used when \code{TRUE}. If \code{FALSE}, a perspective plot is used.
+#'
+#' @details
+#' The function predicts whether each replication is statistically significant
+#' using logistic regression without interaction terms, then plots the predicted
+#' probability of significance across varying simulation conditions.
+#'
+#' @return No value is returned. This function produces plots.
+#'
+#' @seealso
+#' \itemize{
+#' \item \code{\linkS4class{SimResult}} for simulation results with varying parameters.
+#' \item \code{\link{getPower}} to obtain numerical power estimates.
+#' }
+#'
+#' @examples
+#' \dontrun{
+#' loading <- matrix(0, 6, 1)
+#' loading[1:6, 1] <- NA
+#' LY <- bind(loading, 0.4)
+#' RPS <- binds(diag(1))
+#' RTE <- binds(diag(6))
+#'
+#' CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA")
+#'
+#' Output <- sim(NULL,
+#'               n = seq(100, 200, 20),
+#'               pmMCAR = c(0, 0.1, 0.2),
+#'               model = CFA.Model)
+#'
+#' plotPower(Output, "f1=~y1", contMCAR = FALSE)
+#' plotPower(Output, "f1=~y1")
+#' }
+#'
+#' @export
 plotPower <- function(object, powerParam, alpha = 0.05, contParam = NULL, contN = TRUE, 
     contMCAR = TRUE, contMAR = TRUE, useContour = TRUE) {
     object <- clean(object)
@@ -18,6 +86,72 @@ plotPower <- function(object, powerParam, alpha = 0.05, contParam = NULL, contN 
     
 }
 
+#' Plot confidence interval coverage rates
+#'
+#' Plot confidence interval coverage rates for parameters across varying
+#' simulation conditions (e.g., sample size, percent missing, or randomly
+#' varying parameters).
+#'
+#' Coverage is estimated by predicting whether the confidence interval
+#' contains the target value for each replication and modeling the probability
+#' of coverage using logistic regression.
+#'
+#' @param object A \code{\linkS4class{SimResult}} object that includes at least
+#' one randomly varying parameter.
+#'
+#' @param coverParam Vector of parameter names for which coverage should
+#' be plotted (e.g., `"f1=~y2"` or `"f1~~f2"`).
+#'
+#' @param coverValue Target value for coverage evaluation (e.g., 0).
+#' If \code{NULL}, the true parameter value is used.
+#'
+#' @param contParam Vector of parameter names that vary across replications
+#' and should be used as predictors in the plot.
+#'
+#' @param contN Include varying sample size in the coverage plot if available.
+#'
+#' @param contMCAR Include varying percentage of missing completely at random
+#' (MCAR) in the coverage plot if available.
+#'
+#' @param contMAR Include varying percentage of missing at random (MAR)
+#' in the coverage plot if available.
+#'
+#' @param useContour If two varying parameters are plotted, a contour plot is
+#' used when \code{TRUE}. If \code{FALSE}, a perspective plot is used.
+#'
+#' @details
+#' Logistic regression is used to model whether the confidence interval
+#' covers the target value across varying simulation conditions.
+#'
+#' @return No value is returned. This function produces plots.
+#'
+#' @seealso
+#' \itemize{
+#' \item \code{\linkS4class{SimResult}} for simulation results with varying parameters.
+#' \item \code{\link{getCoverage}} to obtain numerical coverage estimates.
+#' }
+#'
+#' @examples
+#' \dontrun{
+#' loading <- matrix(0, 6, 1)
+#' loading[1:6, 1] <- NA
+#' LY <- bind(loading, 0.4)
+#' RPS <- binds(diag(1))
+#' RTE <- binds(diag(6))
+#'
+#' CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA")
+#'
+#' Output <- sim(NULL,
+#'               n = seq(100, 200, 20),
+#'               pmMCAR = c(0, 0.1, 0.2),
+#'               model = CFA.Model)
+#'
+#' plotCoverage(Output, "f1=~y1", contMCAR = FALSE)
+#' plotCoverage(Output, "f1=~y1", coverValue = 0, contMCAR = FALSE)
+#' plotCoverage(Output, "f1=~y1")
+#' }
+#'
+#' @export
 plotCoverage <- function(object, coverParam, coverValue = NULL, contParam = NULL, contN = TRUE, 
     contMCAR = TRUE, contMAR = TRUE, useContour = TRUE) {
     object <- clean(object)
@@ -35,6 +169,12 @@ plotCoverage <- function(object, coverParam, coverValue = NULL, contParam = NULL
     
 }
 
+#' Construct predictor matrices for simulation plots
+#'
+#' Internal helper that extracts varying simulation parameters and
+#' constructs predictor matrices used in power and coverage plots.
+#'
+#' @keywords internal
 getXandPred <- function(object, contParam = NULL, contN = TRUE, contMCAR = TRUE, contMAR = TRUE) {
 	x <- NULL
     pred <- NULL
@@ -81,39 +221,14 @@ getXandPred <- function(object, contParam = NULL, contN = TRUE, contMCAR = TRUE,
 }
 
 
-# plotPowerSig: plot the power curve given one or two varying parameters when a
-# data frame of significance or not is specified
-
-# \title{
-# Plot multiple logistic curves given a significance result matrix
-# }
-# \description{
-# This function will plot the significance results given the value of predictors. 
-# }
-# \usage{
-# plotPowerSig(sig, x = NULL, xval=NULL, mainName = NULL, useContour = TRUE)
-# }
-# \arguments{
-  # \item{sig}{
-	# The \code{data.frame} of a significance result, which contains only \code{TRUE} for significance and \code{FALSE} for not significance.
-# }
-# \item{x}{
-	# The \code{data.frame} of the predictor values. The number of rows of the \code{x} argument should be equal to the number of rows in the \code{object}.
-# }
-# \item{xval}{
-	# The values of predictor that researchers would like to find the fit indices cutoffs from.
-# }
-  # \item{mainName}{
-	# A vector of the titles of the graphs
-# }
-  # \item{useContour}{
-	# If there are two of sample size, percent completely at random, and percent missing at random are varying, the \code{plotCutoff} function will provide 3D graph. Contour graph is a default. However, if this is specified as \code{FALSE}, perspective plot is used.
-# }
-# }
-# \value{
-	# NONE. Only plot the fit indices distributions.
-# }
-
+#' Plot power curves from significance indicators
+#'
+#' Internal function that plots predicted probabilities of significance
+#' based on logistic regression given a matrix of significance indicators
+#' and predictor variables.
+#'
+#' @importFrom graphics contour lines par persp
+#' @keywords internal
 plotPowerSig <- function(sig, x = NULL, xval = NULL, mainName = NULL, useContour = TRUE) {
     warnT <- as.numeric(options("warn"))
     options(warn = -1)

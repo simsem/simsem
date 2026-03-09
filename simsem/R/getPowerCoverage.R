@@ -1,8 +1,37 @@
-# getPower: automatically find the power for all values in the range of given
-# varying parameters or for a set of given value of varying parameters
+### Sunthud Pornprasertmanit & Terry D. Jorgensen
+### Last updated: 6 March 2026
+### Automatically find the power for all values in the range of given varying parameters or for a set of given value of varying parameters
 
 
-
+#' Estimate Statistical Power from Simulation Results
+#'
+#' Computes statistical power from simulation results. If simulation
+#' conditions vary (e.g., sample size, missingness, or parameter values),
+#' power is estimated as a continuous function of the varying parameters
+#' using logistic regression.
+#'
+#' If no simulation conditions vary, power is calculated as the proportion
+#' of replications in which the null hypothesis is rejected.
+#'
+#' @param simResult A simulation result object.
+#' @param alpha Significance level used for hypothesis testing. Default is
+#'   \code{0.05}.
+#' @param contParam Character vector specifying parameters that vary
+#'   continuously in the simulation.
+#' @param powerParam Character vector specifying parameters for which power
+#'   should be calculated.
+#' @param nVal Optional numeric value specifying the sample size when sample
+#'   size varies across simulations.
+#' @param pmMCARval Optional numeric value specifying the proportion of
+#'   missing completely at random (MCAR).
+#' @param pmMARval Optional numeric value specifying the proportion of
+#'   missing at random (MAR).
+#' @param paramVal Optional vector or list specifying values of varying
+#'   parameters at which power should be evaluated.
+#'
+#' @return A vector or data frame containing estimated power values.
+#'
+#' @export
 getPower <- function(simResult, alpha = 0.05, contParam = NULL, powerParam = NULL,
     nVal = NULL, pmMCARval = NULL, pmMARval = NULL, paramVal = NULL) {
     object <- clean(simResult)
@@ -23,6 +52,34 @@ getPower <- function(simResult, alpha = 0.05, contParam = NULL, powerParam = NUL
     }
 }
 
+#' Estimate Confidence Interval Coverage from Simulation Results
+#'
+#' Computes coverage rates of confidence intervals from simulation results.
+#' If simulation conditions vary, coverage is estimated as a function of the
+#' varying parameters using logistic regression.
+#'
+#' If no simulation conditions vary, coverage is calculated as the proportion
+#' of replications in which the confidence interval contains the target value.
+#'
+#' @param simResult A simulation result object.
+#' @param coverValue Optional value used to assess coverage. If \code{NULL},
+#'   the true parameter values stored in the simulation object are used.
+#' @param contParam Character vector specifying parameters that vary
+#'   continuously in the simulation.
+#' @param coverParam Character vector specifying parameters for which
+#'   coverage should be calculated.
+#' @param nVal Optional numeric value specifying the sample size when sample
+#'   size varies across simulations.
+#' @param pmMCARval Optional numeric value specifying the proportion of
+#'   missing completely at random (MCAR).
+#' @param pmMARval Optional numeric value specifying the proportion of
+#'   missing at random (MAR).
+#' @param paramVal Optional vector or list specifying values of varying
+#'   parameters at which coverage should be evaluated.
+#'
+#' @return A vector or data frame containing estimated coverage rates.
+#'
+#' @export
 getCoverage <- function(simResult, coverValue = NULL, contParam = NULL, coverParam = NULL,
     nVal = NULL, pmMCARval = NULL, pmMARval = NULL, paramVal = NULL) {
     object <- clean(simResult)
@@ -41,6 +98,20 @@ getCoverage <- function(simResult, coverValue = NULL, contParam = NULL, coverPar
     }
 }
 
+#' Construct Predictor Values for Continuous Simulation Conditions
+#'
+#' Creates a list of predictor values used for evaluating power or coverage
+#' when simulation conditions vary continuously.
+#'
+#' @param contParam Character vector specifying parameters that vary.
+#' @param nVal Sample size value.
+#' @param pmMCARval Proportion of MCAR missingness.
+#' @param pmMARval Proportion of MAR missingness.
+#' @param paramVal Values of continuously varying parameters.
+#'
+#' @return A list containing predictor values.
+#'
+#' @keywords internal
 getPred <- function(contParam = NULL, nVal = NULL, pmMCARval = NULL,
                     pmMARval = NULL, paramVal = NULL) {
 	pred <- NULL
@@ -67,6 +138,25 @@ getPred <- function(contParam = NULL, nVal = NULL, pmMCARval = NULL,
 	pred
 }
 
+#' Compute Power for Continuously Varying Simulation Conditions
+#'
+#' Estimates statistical power when simulation conditions vary continuously.
+#' Power is estimated using logistic regression applied to indicators of
+#' statistical significance across replications.
+#'
+#' @param simResult A simulation result object.
+#' @param contN Logical indicating whether sample size varies.
+#' @param contMCAR Logical indicating whether MCAR proportion varies.
+#' @param contMAR Logical indicating whether MAR proportion varies.
+#' @param contParam Character vector specifying continuously varying
+#'   parameters.
+#' @param alpha Significance level used to determine rejection.
+#' @param powerParam Parameters for which power should be calculated.
+#' @param pred Predictor values used for evaluating power.
+#'
+#' @return A data frame of predicted power values.
+#'
+#' @keywords internal
 continuousPower <- function(simResult, contN = TRUE, contMCAR = FALSE,
                             contMAR = FALSE, contParam = NULL, alpha = 0.05,
                             powerParam = NULL, pred = NULL) {
@@ -78,6 +168,24 @@ continuousPower <- function(simResult, contN = TRUE, contMCAR = FALSE,
 	                  logicalParam = powerParam, pred = pred)
 }
 
+#' Compute Coverage for Continuously Varying Simulation Conditions
+#'
+#' Estimates confidence interval coverage when simulation conditions vary
+#' continuously using logistic regression.
+#'
+#' @param simResult A simulation result object.
+#' @param coverValue Target value used to determine coverage.
+#' @param contN Logical indicating whether sample size varies.
+#' @param contMCAR Logical indicating whether MCAR proportion varies.
+#' @param contMAR Logical indicating whether MAR proportion varies.
+#' @param contParam Character vector specifying continuously varying
+#'   parameters.
+#' @param coverParam Parameters for which coverage should be calculated.
+#' @param pred Predictor values used for evaluating coverage.
+#'
+#' @return A data frame of predicted coverage rates.
+#'
+#' @keywords internal
 continuousCoverage <- function(simResult, coverValue = NULL, contN = TRUE,
                                contMCAR = FALSE, contMAR = FALSE,
                                contParam = NULL, coverParam = NULL, pred = NULL) {
@@ -88,6 +196,18 @@ continuousCoverage <- function(simResult, coverValue = NULL, contN = TRUE,
 	                  logicalParam = coverParam, pred = pred)
 }
 
+#' Compute Coverage Indicator Matrix
+#'
+#' Determines whether confidence intervals contain the target parameter
+#' values for each replication.
+#'
+#' @param object A simulation result object.
+#' @param coverValue Optional target value used to evaluate coverage.
+#'
+#' @return A logical matrix indicating whether each confidence interval
+#' contains the target value.
+#'
+#' @keywords internal
 calcCoverMatrix <- function(object, coverValue = NULL) {
 	lowerBound <- object@cilower
 	upperBound <- object@ciupper
@@ -108,10 +228,25 @@ calcCoverMatrix <- function(object, coverValue = NULL) {
 	cover
 }
 
-# continuousPower: Function to calculate power with continously varying
-# parameters Will calculate power over continuously varying n, percent missing,
-# or parameters
-
+#' Logistic Regression for Continuous Simulation Outcomes
+#'
+#' Fits logistic regression models to estimate probabilities of logical
+#' outcomes (e.g., power or coverage) when simulation conditions vary
+#' continuously.
+#'
+#' @param object A simulation result object.
+#' @param logical Logical matrix indicating outcomes across replications.
+#' @param contN Logical indicating whether sample size varies.
+#' @param contMCAR Logical indicating whether MCAR proportion varies.
+#' @param contMAR Logical indicating whether MAR proportion varies.
+#' @param contParam Character vector specifying continuously varying
+#'   parameters.
+#' @param logicalParam Parameters for which probabilities should be computed.
+#' @param pred Predictor values used for prediction.
+#'
+#' @return A data frame containing predicted probabilities.
+#'
+#' @keywords internal
 continuousLogical <- function(object, logical, contN = TRUE, contMCAR = FALSE,
                               contMAR = FALSE, contParam = NULL,
                               logicalParam = NULL, pred = NULL) {
@@ -204,29 +339,20 @@ continuousLogical <- function(object, logical, contN = TRUE, contMCAR = FALSE,
     return(pow)
 }
 
-## predProb: Function to get predicted probabilities from logistic regression
-
-# \title{
-	# Function to get predicted probabilities from logistic regression
-# }
-# \description{
-	# Function to get predicted probabilities from logistic regression
-# }
-# \usage{
-# predProb(newdat, glmObj)
-# }
-# \arguments{
-# \item{newdat}{
-	# A vector of values for all predictors, including the intercept
-# }
-  # \item{glmObj}{
-	# An object from a fitted glm run with a logit link
-# }
-# }
-# \value{
-	# Predictive probability of success given the values in the \code{newdat} argument.
-# }
-
+#' Predicted Probability from Logistic Regression
+#'
+#' Computes predicted probabilities and confidence bounds from a fitted
+#' logistic regression model.
+#'
+#' @param newdat Numeric vector containing predictor values including the
+#'   intercept.
+#' @param glmObj A fitted \code{glm} object with a logit link.
+#' @param alpha Significance level used to compute confidence bounds.
+#'
+#' @return A numeric vector containing the lower bound, predicted
+#' probability, and upper bound.
+#'
+#' @keywords internal
 predProb <- function(newdat, glmObj, alpha = 0.05) {
     slps <- as.numeric(coef(glmObj))
     logi <- sum(newdat * slps)

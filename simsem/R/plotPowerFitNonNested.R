@@ -1,6 +1,91 @@
-# plotPowerFitNested: This function will plot sampling distributions of
-# difference in fit indices that visualize power
+### Sunthud Pornprasertmanit 
+### Last updated: 6 March 2026
+### Plot sampling distributions of difference in fit indices that visualize power
 
+#' Plot power of rejecting a non-nested model based on a difference in fit index
+#'
+#' Plot the proportion of the differences in fit indices from one model that fall
+#' outside the sampling distribution from another model (rejecting the hypothesis
+#' that the dataset comes from the second model) or indicate worse fit than a
+#' specified cutoff. The plot can also show the proportion in the second model
+#' that falls outside the sampling distribution from the first model.
+#'
+#' @param dat2Mod1 A \code{\linkS4class{SimResult}} object containing the
+#' simulation results from analyzing Model 1 using datasets generated from Model 2.
+#' @param dat2Mod2 A \code{\linkS4class{SimResult}} object containing the
+#' simulation results from analyzing Model 2 using datasets generated from Model 2.
+#' @param dat1Mod1 A \code{\linkS4class{SimResult}} object containing the
+#' simulation results from analyzing Model 1 using datasets generated from Model 1.
+#' @param dat1Mod2 A \code{\linkS4class{SimResult}} object containing the
+#' simulation results from analyzing Model 2 using datasets generated from Model 1.
+#' @param cutoff A vector of a priori cutoffs for the differences in fit indices.
+#' @param usedFit Vector of names of fit indices that researchers wish to plot.
+#' @param alpha A priori alpha level.
+#' @param contN Logical indicating whether varying sample size should be included
+#' in the power plot when available.
+#' @param contMCAR Logical indicating whether varying MCAR (missing completely at
+#' random percentage) should be included in the power plot when available.
+#' @param contMAR Logical indicating whether varying MAR (missing at random
+#' percentage) should be included in the power plot when available.
+#' @param useContour If two of sample size, percent missing completely at random,
+#' and percent missing at random vary, a 3D plot is produced. By default, a
+#' contour plot is used. If \code{FALSE}, a perspective plot is used instead.
+#' @param logistic If \code{TRUE} and a varying parameter exists (e.g., sample
+#' size or percent missing), the plot based on logistic regression predicting
+#' significance from the varying parameters is used. If \code{FALSE}, an overlay
+#' scatterplot with a cutoff line is plotted.
+#' @param onetailed Logical indicating whether the cutoff should be based on a
+#' one-tailed test. If \code{FALSE}, the cutoff is based on a two-tailed test.
+#'
+#' @return
+#' None. The function produces plots of fit-index distributions or power curves.
+#'
+#' @seealso
+#' \itemize{
+#' \item \code{\linkS4class{SimResult}} for simulation results used in this function.
+#' \item \code{\link{getCutoffNonNested}} to compute cutoffs for differences in
+#' fit indices in non-nested model comparisons.
+#' \item \code{\link{plotCutoffNonNested}} to visualize cutoffs for differences
+#' in fit indices in non-nested model comparisons.
+#' \item \code{\link{getPowerFitNonNested}} to compute statistical power for
+#' rejecting a non-nested model based on fit-index cutoffs.
+#' }
+#'
+#' @examples
+#' \dontrun{
+#' # Model A: Factor 1 on Items 1-3 and Factor 2 on Items 4-8
+#' loading.A <- matrix(0, 8, 2)
+#' loading.A[1:3, 1] <- NA
+#' loading.A[4:8, 2] <- NA
+#' LY.A <- bind(loading.A, 0.7)
+#' latent.cor <- matrix(NA, 2, 2)
+#' diag(latent.cor) <- 1
+#' RPS <- binds(latent.cor, "runif(1, 0.7, 0.9)")
+#' RTE <- binds(diag(8))
+#' CFA.Model.A <- model(LY = LY.A, RPS = RPS, RTE = RTE, modelType="CFA")
+#'
+#' # Model B: Factor 1 on Items 1-4 and Factor 2 on Items 5-8
+#' loading.B <- matrix(0, 8, 2)
+#' loading.B[1:4, 1] <- NA
+#' loading.B[5:8, 2] <- NA
+#' LY.B <- bind(loading.B, 0.7)
+#' CFA.Model.B <- model(LY = LY.B, RPS = RPS, RTE = RTE, modelType="CFA")
+#'
+#' # The actual number of replications should be greater than 10.
+#' Output.A.A <- sim(10, n=500, model=CFA.Model.A, generate=CFA.Model.A)
+#' Output.A.B <- sim(10, n=500, model=CFA.Model.B, generate=CFA.Model.A)
+#' Output.B.A <- sim(10, n=500, model=CFA.Model.A, generate=CFA.Model.B)
+#' Output.B.B <- sim(10, n=500, model=CFA.Model.B, generate=CFA.Model.B)
+#'
+#' # Plot the power based on the derived cutoff for both models
+#' plotPowerFitNonNested(Output.B.A, Output.B.B,
+#'                       dat1Mod1=Output.A.A, dat1Mod2=Output.A.B)
+#'
+#' # Plot the power based on AIC and BIC cutoffs
+#' plotPowerFitNonNested(Output.B.A, Output.B.B, cutoff=c(AIC=0, BIC=0))
+#' }
+#'
+#' @export
 plotPowerFitNonNested <- function(dat2Mod1, dat2Mod2, dat1Mod1 = NULL, dat1Mod2 = NULL, 
     cutoff = NULL, usedFit = NULL, alpha = 0.05, contN = TRUE, contMCAR = TRUE, contMAR = TRUE, 
     useContour = TRUE, logistic = TRUE, onetailed = FALSE) {

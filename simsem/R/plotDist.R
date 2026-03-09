@@ -1,5 +1,63 @@
-# plotDist: This function will plot a distribution
+### Sunthud Pornprasertmanit 
+### Last updated: 6 March 2026
+### Plot marginal or joint distributions from a SimDataDist object
 
+#' Plot a distribution from a SimDataDist object
+#'
+#' Plot marginal or joint distributions from a
+#' \code{\linkS4class{SimDataDist}} object.
+#'
+#' If one variable is selected, a marginal density is plotted.
+#' If two variables are selected, a joint distribution is plotted
+#' using either a contour plot or a perspective plot.
+#'
+#' @param object A \code{\linkS4class{SimDataDist}} object describing
+#' the data distribution to plot.
+#'
+#' @param xlim Numeric vector of length two specifying the limits of the
+#' x-axis.
+#'
+#' @param ylim Numeric vector of length two specifying the limits of the
+#' y-axis. Only used for joint distributions of two variables.
+#'
+#' @param r Correlation between the two variables when plotting a joint
+#' distribution.
+#'
+#' @param var Vector of variable indices to plot. The length of the vector
+#' cannot exceed two.
+#'
+#' @param contour Logical indicating whether a contour plot should be used
+#' when plotting two variables. If \code{FALSE}, a perspective plot is used.
+#'
+#' @return No value is returned. This function produces plots.
+#'
+#' @seealso
+#' \itemize{
+#' \item \code{\linkS4class{SimDataDist}} for creating distribution objects.
+#' }
+#'
+#' @examples
+#' datadist <- bindDist(skewness = c(0, -2, 2), kurtosis = c(2, 4, 4))
+#'
+#' # Plot the joint distribution of variables 1 and 2
+#' plotDist(datadist, r = 0.5, var = 1:2)
+#'
+#' # Plot the marginal distribution of variable 3
+#' plotDist(datadist, var = 3)
+#'
+#' \dontrun{
+#' datadist2 <- bindDist(
+#'   c("chisq", "t", "f"),
+#'   list(df = 5),
+#'   list(df = 3),
+#'   list(df1 = 3, df2 = 5)
+#' )
+#'
+#' plotDist(datadist2, r = 0.5, var = 1:2)
+#' plotDist(datadist2, var = 3)
+#' }
+#'
+#' @export
 plotDist <- function(object, xlim = NULL, ylim = NULL, r = 0, var = NULL, contour = TRUE) {
     if (!is.null(var)) {
         if (!is.vector(var)) 
@@ -22,6 +80,13 @@ plotDist <- function(object, xlim = NULL, ylim = NULL, r = 0, var = NULL, contou
     }
 }
 
+#' Plot a marginal distribution
+#'
+#' Internal function used by \code{\link{plotDist}} to plot
+#' one-dimensional marginal distributions.
+#'
+#' @importFrom graphics lines
+#' @keywords internal
 plotDist1D <- function(distName, param, xlim = NULL, reverse = FALSE) {
     if (is.null(xlim)) {
         funmin <- c(list(get(paste("q", distName, sep = "")), 0.005), param)
@@ -45,6 +110,14 @@ plotDist1D <- function(distName, param, xlim = NULL, reverse = FALSE) {
     lines(xrange, yrange)
 }
 
+#' Plot a two-dimensional joint distribution
+#'
+#' Internal function used by \code{\link{plotDist}} to plot
+#' joint distributions of two variables using contour or
+#' perspective plots.
+#'
+#' @importFrom graphics contour persp
+#' @keywords internal
 plotDist2D <- function(object, xlim = NULL, ylim = NULL, r = 0, contour = TRUE) {
 	if(any(is.na(object@skewness)) && !is.null(object@copula) && is(object@copula, "NullCopula")) {
 		CopNorm <- copula::ellipCopula(family = "normal", dim = 2, dispstr = "un", param = r)

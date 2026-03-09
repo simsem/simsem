@@ -1,3 +1,4 @@
+Encoding: UTF-8
 Package: simsem
 Type: Package
 Title: SIMulated Structural Equation Modeling
@@ -15,3 +16,4 @@ Description: Provides an easy framework for Monte Carlo simulation in structural
 License: GPL (>= 2)
 LazyLoad: yes
 URL: https://simsem.org/
+RoxygenNote: 7.3.3

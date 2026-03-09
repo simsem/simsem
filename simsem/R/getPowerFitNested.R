@@ -1,7 +1,55 @@
-# getPowerFitNested: This function will find a power of each fit index in
-# nested model comparison based on specified cutoffs of each fit index
+### Sunthud Pornprasertmanit
+### Last updated: 6 March 2026
+### Compute power of fit indices for nested model comparisons
 
-getPowerFitNested <- function(altNested, altParent, cutoff = NULL, nullNested = NULL, nullParent = NULL, revDirec = FALSE, usedFit = NULL, alpha = 0.05, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, condCutoff = TRUE, df = 0) {
+#' Estimate Power of Fit Indices for Nested Model Comparisons
+#'
+#' Computes the statistical power of fit indices for nested model comparisons.
+#' Power is defined as the probability that the difference in fit indices
+#' between the nested and parent models exceeds a specified cutoff criterion.
+#'
+#' Cutoffs can either be provided directly or derived from simulation results
+#' representing the null model.
+#'
+#' @param altNested A simulation result object representing the nested model
+#' under the alternative hypothesis.
+#' @param altParent A simulation result object representing the parent model
+#' under the alternative hypothesis.
+#' @param cutoff Optional named numeric vector specifying cutoff values for
+#' each fit index.
+#' @param nullNested Optional simulation result object representing the nested
+#' model under the null hypothesis.
+#' @param nullParent Optional simulation result object representing the parent
+#' model under the null hypothesis.
+#' @param revDirec Logical indicating whether the rejection direction of the
+#' fit index should be reversed.
+#' @param usedFit Character vector specifying which fit indices should be used.
+#' @param alpha Significance level used when deriving cutoffs from null-model
+#' simulations.
+#' @param nVal Optional sample size value when sample size varies across
+#' simulations.
+#' @param pmMCARval Optional value specifying the proportion of missing
+#' completely at random (MCAR).
+#' @param pmMARval Optional value specifying the proportion of missing at
+#' random (MAR).
+#' @param condCutoff Logical indicating whether cutoffs should depend on
+#' simulation conditions.
+#' @param df Degrees of freedom used when estimating conditional cutoffs using
+#' spline regression.
+#'
+#' @return A named vector containing estimated power values for each fit index.
+#'
+#' @seealso
+#' \code{\link{getPowerFit}},
+#' \code{\link{getCutoffNested}}
+#'
+#' @export
+getPowerFitNested <- function(altNested, altParent, cutoff = NULL,
+                              nullNested = NULL, nullParent = NULL,
+                              revDirec = FALSE, usedFit = NULL,
+                              alpha = 0.05, nVal = NULL,
+                              pmMCARval = NULL, pmMARval = NULL,
+                              condCutoff = TRUE, df = 0) {
 	result <- NULL
 	if(is.null(cutoff)) {
 		if(!is.null(nullNested) & !is.null(nullParent)) {
@@ -19,9 +67,31 @@ getPowerFitNested <- function(altNested, altParent, cutoff = NULL, nullNested = 
 	result
 }
 
-getPowerFitNestedCutoff <- function(altNested, altParent, cutoff, revDirec = FALSE, 
-    usedFit = NULL, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, condCutoff = TRUE, 
-    df = 0) {
+#' Compute Power for Nested Models Given Fixed Fit-Index Cutoffs
+#'
+#' Internal helper used by \code{getPowerFitNested} when cutoff values are
+#' supplied directly. Power is computed from the distribution of differences
+#' in fit indices between nested and parent models.
+#'
+#' @param altNested Simulation result object for the nested model.
+#' @param altParent Simulation result object for the parent model.
+#' @param cutoff Named numeric vector specifying cutoff values for fit indices.
+#' @param revDirec Logical indicating whether rejection direction is reversed.
+#' @param usedFit Character vector specifying which fit indices should be used.
+#' @param nVal Optional sample size value.
+#' @param pmMCARval Optional MCAR missingness value.
+#' @param pmMARval Optional MAR missingness value.
+#' @param condCutoff Logical indicating whether cutoffs vary across conditions.
+#' @param df Degrees of freedom used in spline-based conditional estimation.
+#'
+#' @return A named vector of power estimates.
+#'
+#' @keywords internal
+getPowerFitNestedCutoff <- function(altNested, altParent, cutoff,
+                                    revDirec = FALSE, usedFit = NULL,
+                                    nVal = NULL, pmMCARval = NULL,
+                                    pmMARval = NULL, condCutoff = TRUE,
+                                    df = 0) {
     if (is.null(nVal) || is.na(nVal)) 
         nVal <- NULL
     if (is.null(pmMCARval) || is.na(pmMCARval)) 
@@ -68,9 +138,38 @@ getPowerFitNestedCutoff <- function(altNested, altParent, cutoff, revDirec = FAL
     return(output)
 }
 
-getPowerFitNestedNullObj <- function(altNested, altParent, 
-    nullNested, nullParent, revDirec = FALSE, usedFit = NULL, alpha = 0.05, nVal = NULL, 
-    pmMCARval = NULL, pmMARval = NULL, df = 0) {
+#' Compute Power for Nested Models Using Null-Model Simulations
+#'
+#' Internal helper that computes power by deriving cutoff values from
+#' simulated null-model results and applying them to alternative-model
+#' simulations.
+#'
+#' @param altNested Simulation result object representing the nested model
+#' under the alternative hypothesis.
+#' @param altParent Simulation result object representing the parent model
+#' under the alternative hypothesis.
+#' @param nullNested Simulation result object representing the nested model
+#' under the null hypothesis.
+#' @param nullParent Simulation result object representing the parent model
+#' under the null hypothesis.
+#' @param revDirec Logical indicating whether rejection direction is reversed.
+#' @param usedFit Character vector specifying which fit indices should be used.
+#' @param alpha Significance level used when computing cutoffs.
+#' @param nVal Optional sample size value.
+#' @param pmMCARval Optional MCAR missingness value.
+#' @param pmMARval Optional MAR missingness value.
+#' @param df Degrees of freedom used in spline-based conditional cutoff
+#' estimation.
+#'
+#' @return A named vector containing estimated power values for each fit index.
+#'
+#' @keywords internal
+getPowerFitNestedNullObj <- function(altNested, altParent,
+                                     nullNested, nullParent,
+                                     revDirec = FALSE, usedFit = NULL,
+                                     alpha = 0.05, nVal = NULL,
+                                     pmMCARval = NULL, pmMARval = NULL,
+                                     df = 0) {
     if (!multipleAllEqual(unique(altNested@n), unique(altParent@n), unique(nullNested@n), 
         unique(nullParent@n))) 
         stop("Models are based on different values of sample sizes")
@@ -148,14 +247,36 @@ getPowerFitNestedNullObj <- function(altNested, altParent,
     return(temp)
 }
 
-# multipleAllEqual: Check whether all objects are equal by using all.equal
-# function
-
+#' Test Whether All Objects Are Equal
+#'
+#' Test whether all supplied objects are equal. The comparison is based on
+#' \code{\link{all.equal}}.
+#'
+#' @param ... Objects to be compared.
+#'
+#' @return Logical value. Returns \code{TRUE} if all objects are equal and
+#'   \code{FALSE} otherwise.
+#'
+#' @examples
+#' multipleAllEqual(1:5, 1:5, seq(2, 10, 2)/2) # Should be TRUE
+#' multipleAllEqual(1:5, 1:6, seq(2, 10, 2)/2) # Should be FALSE
+#'
+#' @export
 multipleAllEqual <- function(...) {
     obj <- list(...)
     multipleAllEqualList(obj)
 }
 
+#' Check Equality of Objects in a List
+#'
+#' Internal helper that checks whether all elements of a list are equal
+#' using \code{all.equal()}.
+#'
+#' @param obj A list of objects.
+#'
+#' @return Logical value indicating whether all objects are equal.
+#'
+#' @keywords internal
 multipleAllEqualList <- function(obj) {
     for (i in 2:length(obj)) {
         for (j in 1:(i - 1)) {
@@ -167,11 +288,31 @@ multipleAllEqualList <- function(obj) {
     return(TRUE)
 } 
 
+#' Check Whether Any Objects Are Equal
+#'
+#' Determines whether any pair of supplied objects are equal using
+#' \code{all.equal()}.
+#'
+#' @param ... Objects to compare.
+#'
+#' @return Logical value indicating whether any objects are equal.
+#'
+#' @keywords internal
 multipleAnyEqual <- function(...) {
     obj <- list(...)
     multipleAnyEqualList(obj)
 }
 
+#' Check Whether Any Elements in a List Are Equal
+#'
+#' Internal helper that checks whether any pair of elements in a list
+#' are equal using \code{all.equal()}.
+#'
+#' @param obj A list of objects.
+#'
+#' @return Logical value indicating whether any objects are equal.
+#'
+#' @keywords internal
 multipleAnyEqualList <- function(obj) {
     for (i in 2:length(obj)) {
         for (j in 1:(i - 1)) {

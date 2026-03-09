@@ -1,11 +1,61 @@
-### Sunthud Pornprasertmanit & Terrence D. Jorgensen (anyone else?)
-### Last updated: 1 April 2025
-### functions for specifying an analysis model that utilizes lavaan
+### Sunthud Pornprasertmanit & Terrence D. Jorgensen; with contributions from Alex Schoemann and Patrick Miller
+### Last updated: 6 March 2026
+### Functions for specifying an analysis model that utilizes lavaan
 
 
-## Takes model specification matrices of type SimMatrix (or lists of these
-## matrices for multiple groups).  Returns a SimSem object that contains
-## templates for data generation and analyis.
+#' Specify a Simulation Model Using lavaan Syntax Components
+#'
+#' Creates a \code{SimSem} object representing a structural equation model
+#' for simulation using \code{lavaan}. The model can be specified using
+#' \code{SimMatrix} or \code{SimVector} objects describing factor loadings,
+#' covariances, regressions, and other SEM components.
+#'
+#' The function supports CFA, SEM, and path models, as well as multi-group
+#' models. The returned object contains the parameter table used for estimation and
+#' templates for generating simulated data.
+#'
+#' @param LY Factor loading matrix.
+#' @param PS Factor covariance matrix.
+#' @param RPS Factor correlation matrix.
+#' @param TE Measurement error covariance matrix.
+#' @param RTE Measurement error correlation matrix.
+#' @param BE Structural regression coefficient matrix.
+#' @param VTE Measurement error variances.
+#' @param VY Total indicator variances.
+#' @param VPS Factor variances.
+#' @param VE Total latent variances.
+#' @param TY Indicator intercepts.
+#' @param AL Latent intercepts.
+#' @param MY Indicator means.
+#' @param ME Latent means.
+#' @param KA Regression coefficients from covariates to indicators.
+#' @param GA Regression coefficients from covariates to latent variables.
+#' @param modelType Character string specifying the model type:
+#'   \code{"cfa"}, \code{"sem"}, or \code{"path"}.
+#' @param indLab Optional indicator labels.
+#' @param facLab Optional latent variable labels.
+#' @param covLab Optional covariate labels.
+#' @param groupLab Name of the grouping variable.
+#' @param ngroups Number of groups in the model.
+#' @param con Optional parameter constraints.
+#'
+#' @details
+#' Models are specified using \code{SimMatrix} and \code{SimVector} objects
+#' that define the structure of loadings, covariances, regressions, and means.
+#'
+#' The function automatically constructs the parameter table required by
+#' \code{lavaan} and generates templates used for simulating data.
+#'
+#' Multi-group models can be specified by supplying lists of matrices or by
+#' setting \code{ngroups > 1}.
+#' 
+#' @return A \code{SimSem} object containing the model specification and
+#' simulation templates.
+#'
+#' @seealso \code{\link{model.cfa}}, \code{\link{model.sem}},
+#' \code{\link{model.path}}, \code{\link{estmodel}}
+#'
+#' @export
 model <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = NULL,
     VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, MY = NULL,
     ME = NULL, KA = NULL, GA = NULL, modelType = NULL, indLab = NULL, facLab = NULL, covLab = NULL,
@@ -21,7 +71,7 @@ model <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = 
         mgidx <- which(sapply(paramSet, is.list))
         mg <- names(mgidx)
         sgidx <- which(sapply(paramSet, FUN = function(x) {
-            class(x) == "SimMatrix" || class(x) == "SimVector"
+            is(x, "SimMatrix") || is(x, "SimVector")
         }))
         sg <- names(sgidx)
         n <- max(sapply(paramSet, length))
@@ -43,7 +93,7 @@ model <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = 
                 # Repeat single matrices
                 for (i in seq_along(sgidx)) {
                   temp <- NULL
-                  if (class(paramSet[sgidx][[i]]) == "SimMatrix") {
+                  if (is(paramSet[sgidx][[i]], "SimMatrix")) {
                     temp <- paramSet[sgidx][[i]]
                     paramSet[sgidx][[i]] <- replicate(n, new("SimMatrix", free = temp@free,
                       popParam = temp@popParam, misspec = temp@misspec, symmetric = temp@symmetric))
@@ -109,6 +159,8 @@ model <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = 
 
 ## Takes a list of simMatrix/simVector (sg) and a model type and completes
 ## necessary matrices and checks the validity of the model specification.
+
+#' @keywords internal
 buildModel <- function(paramSet, modelType) {
 
     if (modelType == "cfa") {
@@ -216,7 +268,7 @@ buildModel <- function(paramSet, modelType) {
             {
                 paramSet$ME <- bind(rep(NA, ne), popParam = 0)
             }  ## Set factor intercepts to be free, pop value = 0
-		if (!is.null(paramSet$GA) & !is.null(paramSet$KA)) stop("Conflict: You cannot specify both the covaraite effects on indicators (KA) and factors (GA simultaneously)")
+		if (!is.null(paramSet$GA) & !is.null(paramSet$KA)) stop("Conflict: You cannot specify both the covariate effects on indicators (KA) and factors (GA simultaneously)")
         if (is.null(paramSet$GA)) {
 			if (!is.null(paramSet$KA)) {
 				paramSet$GA <- paramSet$KA
@@ -306,6 +358,7 @@ buildModel <- function(paramSet, modelType) {
 ## analysis with lavaan.  This time, PT will only take a sg paramSet. And while
 ## I'm at it, I'm taking out the df stuff.
 
+#' @keywords internal
 buildPT <- function(paramSet, pt = NULL, group = 1, facLab = NULL, indLab = NULL, covLab = NULL) {
 
     ## Convert a chunk at a time - starting with LY - factor loading. At least
@@ -539,6 +592,8 @@ buildPT <- function(paramSet, pt = NULL, group = 1, facLab = NULL, indLab = NULL
 }
 
 ## Returns a pt (list) of parsed SimMatrix/SimVector
+
+#' @keywords internal
 parseFree <- function(simDat, group, pt, op, lhs = NULL, rhs = NULL,
     swap = FALSE, exo = 0, forceUstart = NULL) {
     ## Calculate starting indices from previous pt
@@ -560,7 +615,7 @@ parseFree <- function(simDat, group, pt, op, lhs = NULL, rhs = NULL,
     }
     numElem <- NULL
 
-    if (class(simDat) == "SimVector") {
+    if (is(simDat, "SimVector")) {
         numElem <- length(freeDat)
     } else if (simDat@symmetric && op == "~~") {
         # Just get lower tri
@@ -596,6 +651,8 @@ parseFree <- function(simDat, group, pt, op, lhs = NULL, rhs = NULL,
 ## 2. The first constrained free parameter gets a unique index
 ## 3. Constrained parameters with identical labels get identical indices
 ## 4. Fixed parameters are 0
+
+#' @keywords internal
 freeIdx <- function(mat, start = 1, symm = FALSE) {
     if (is.matrix(mat) && symm) {
         flat <- as.vector(mat[lower.tri(mat, diag = TRUE)])
@@ -630,6 +687,8 @@ freeIdx <- function(mat, start = 1, symm = FALSE) {
 }
 
 ## Calculates the indices for unconstrained parameters
+
+#' @keywords internal
 uncoIdx <- function(mat, start = 1, symm = FALSE) {
 
     if (is.matrix(mat) && symm) {
@@ -657,6 +716,8 @@ uncoIdx <- function(mat, start = 1, symm = FALSE) {
 }
 
 ## The parameter index of labels that are the same
+
+#' @keywords internal
 eqIdx <- function(mat, id, symm = FALSE) {
 
     if (is.matrix(mat) && symm) {
@@ -690,6 +751,8 @@ eqIdx <- function(mat, id, symm = FALSE) {
 }
 
 ## Calculate starting values. Needs work, but no time to finish yet.
+
+#' @keywords internal
 startingVal <- function(free, popParam, smart = FALSE, symm = FALSE) {
 	# smartStart & smart are deprecated from the model set of functions. Will be provided in the sim function instead.
     if (is.matrix(free) && symm) {
@@ -720,6 +783,8 @@ startingVal <- function(free, popParam, smart = FALSE, symm = FALSE) {
 
 # Adjusts pt for between group constraints (if they exist). Adjusting here is
 # not very elegant and should probably be reworked into everything else.
+
+#' @keywords internal
 btwGroupCons <- function(pt) {
     ngroups <- max(pt$group)
     labelids <- which(pt$eq.id != 0)
@@ -750,6 +815,8 @@ btwGroupCons <- function(pt) {
 
 ######################## Create some shortcuts ########################
 
+#' @rdname model
+#' @export
 model.cfa <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, VTE = NULL,
     VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, MY = NULL, ME = NULL, KA = NULL, GA = NULL,
     indLab = NULL, facLab = NULL, covLab = NULL, groupLab = "group", ngroups = 1, con = NULL) {
@@ -758,6 +825,8 @@ model.cfa <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, V
         indLab = indLab, facLab = facLab, covLab = covLab, groupLab = groupLab, ngroups = ngroups, con = con)
 }
 
+#' @rdname model
+#' @export
 model.path <- function(PS = NULL, RPS = NULL, BE = NULL, VPS = NULL, VE = NULL, AL = NULL,
     ME = NULL, KA = NULL, GA = NULL, indLab = NULL, facLab = NULL, covLab = NULL, groupLab = "group", ngroups = 1, con = NULL) {
     model(LY = NULL, PS = PS, RPS = RPS, TE = NULL, RTE = NULL, BE = BE, VTE = NULL,
@@ -765,6 +834,8 @@ model.path <- function(PS = NULL, RPS = NULL, BE = NULL, VPS = NULL, VE = NULL, 
         indLab = indLab, facLab = facLab, groupLab = groupLab, covLab = covLab, ngroups = ngroups, con = con)
 }
 
+#' @rdname model
+#' @export
 model.sem <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = NULL,
     VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, MY = NULL,
     ME = NULL, KA = NULL, GA = NULL, indLab = NULL, facLab = NULL, covLab = NULL, groupLab = "group", ngroups = 1, con = NULL) {
@@ -773,6 +844,22 @@ model.sem <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, B
         indLab = indLab, facLab = facLab, groupLab = groupLab, covLab = covLab, ngroups = ngroups, con = con)
 }
 
+#' Specify an Estimation Model for Simulation
+#'
+#' Constructs a \code{SimSem} object describing the model used to analyze
+#' simulated data. This function is similar to
+#' \code{\link{model}} but is designed for estimation rather than data
+#' generation.
+#'
+#' @inheritParams model
+#' 
+#' @details
+#' This function is similar to \code{\link{model}} but is intended for
+#' specifying the analysis model used when fitting simulated datasets.
+#'
+#' @return A \code{SimSem} object representing the estimation model.
+#'
+#' @export
 estmodel <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = NULL,
     VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, MY = NULL,
     ME = NULL, KA = NULL, GA = NULL, modelType, indLab = NULL, facLab = NULL, covLab = NULL, groupLab = "group", ngroups = 1, con = NULL) {
@@ -1108,6 +1195,8 @@ estmodel <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE
         indLab = indLab, facLab = facLab, covLab = covLab, groupLab = groupLab, ngroups = ngroups, con = con)
 }
 
+#' @rdname estmodel
+#' @export
 estmodel.cfa <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL,
     VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL, MY = NULL,
     ME = NULL, KA = NULL, GA = NULL, indLab = NULL, facLab = NULL, covLab = NULL, groupLab = "group", ngroups = 1, con = NULL) {
@@ -1116,6 +1205,8 @@ estmodel.cfa <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL
         indLab = indLab, facLab = facLab, covLab = covLab, groupLab = groupLab, ngroups = ngroups, con = con)
 }
 
+#' @rdname estmodel
+#' @export
 estmodel.path <- function(PS = NULL, RPS = NULL, BE = NULL, VPS = NULL, VE = NULL,
     AL = NULL, ME = NULL, KA = NULL, GA = NULL, indLab = NULL, facLab = NULL, covLab = NULL, groupLab = "group", ngroups = 1, con = NULL) {
     estmodel(LY = NULL, PS = PS, RPS = RPS, TE = NULL, RTE = NULL, BE = BE, VTE = NULL,
@@ -1123,6 +1214,8 @@ estmodel.path <- function(PS = NULL, RPS = NULL, BE = NULL, VPS = NULL, VE = NUL
         indLab = indLab, facLab = facLab, covLab = covLab, groupLab = groupLab, ngroups = ngroups, con = con)
 }
 
+#' @rdname estmodel
+#' @export
 estmodel.sem <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL,
     BE = NULL, VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL, AL = NULL,
     MY = NULL, ME = NULL, KA = NULL, GA = NULL, indLab = NULL, facLab = NULL, covLab = NULL, groupLab = "group", ngroups = 1, con = NULL) {
@@ -1131,7 +1224,19 @@ estmodel.sem <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL
         indLab = indLab, facLab = facLab, covLab = covLab, groupLab = groupLab, ngroups = ngroups, con = con)
 }
 
-#FIXME: this does not seem to be used anywhere
+#' Convert a lavaan Model to a simsem Template
+#'
+#' Converts a fitted \code{lavaan} object into a \code{SimSem} template that
+#' can be used for simulation with \code{simsem}.
+#'
+#' @param object A fitted \code{lavaan} object.
+#' @param std Logical indicating whether standardized parameters should be
+#' used.
+#' @inheritParams model
+#'
+#' @return A \code{SimSem} object.
+#'
+#' @export
 model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, TE = NULL,
     RTE = NULL, BE = NULL, VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL,
     AL = NULL, MY = NULL, ME = NULL, KA = NULL, GA = NULL) {
@@ -1536,6 +1641,7 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
     return(result)
 }
 
+#' @keywords internal
 labelFree <- function(free, symmetric) {
 	free2 <- mapply(function(x, y) {
 	  if (y) {
@@ -1558,6 +1664,8 @@ labelFree <- function(free, symmetric) {
 }
 
 ## taken shamelessly from param.value in lavaan.
+
+#' @keywords internal
 standardize <- function(object) {
 
   if (is(object, "lavaan.mi")) {
@@ -1592,6 +1700,7 @@ standardize <- function(object) {
   GLIST
 }
 
+#' @keywords internal
 reshuffleParamGroup <- function(set, covLab, indLab, facLab, ngroups) {
 	if(ngroups > 1) {
 		groupvec <- rep(1:ngroups, each = length(set)/ngroups)
@@ -1605,6 +1714,7 @@ reshuffleParamGroup <- function(set, covLab, indLab, facLab, ngroups) {
 	return(result)
 }
 
+#' @keywords internal
 reshuffleParam <- function(set, covLab, indLab, facLab) {
 	lambda <- NULL
 	theta <- NULL
@@ -1642,7 +1752,7 @@ reshuffleParam <- function(set, covLab, indLab, facLab) {
 }
 
 
-
+#' @keywords internal
 parseSyntaxCon <- function(script) {
 	if(is.null(script)) return(list(NULL))
 	if(is(script, "list")) return(script)
@@ -1721,6 +1831,7 @@ parseSyntaxCon <- function(script) {
 	list(lhs=lhs, op=op, rhs=rhs)
 }
 
+#' @keywords internal
 attachConPt <- function(pt, con) {
 	if(is.null(con) || is.null(con[[1]])) {
 		return(pt)
@@ -1745,6 +1856,7 @@ attachConPt <- function(pt, con) {
 	# pt
 }
 
+#' @keywords internal
 patMerge <- function (pt1 = NULL, pt2 = NULL, remove.duplicated = FALSE,
                       fromLast = FALSE, warn = TRUE) {
     pt1 <- as.data.frame(pt1, stringsAsFactors = FALSE)
@@ -1849,6 +1961,7 @@ patMerge <- function (pt1 = NULL, pt2 = NULL, remove.duplicated = FALSE,
     NEW
 }
 
+#' @keywords internal
 addeqcon <- function(pt, con) {
 	pt$plabel <- paste0(".p", pt$id, ".")
 	eqcon <- setdiff(pt$label[duplicated(pt$label)], "")
