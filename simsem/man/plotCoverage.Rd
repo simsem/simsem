@@ -64,12 +64,13 @@ LY <- bind(loading, 0.4)
 RPS <- binds(diag(1))
 RTE <- binds(diag(6))
 
-CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType="CFA")
+CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
 
 Output <- sim(NULL,
-              n = seq(100, 200, 20),
-              pmMCAR = c(0, 0.1, 0.2),
-              model = CFA.Model)
+  n = seq(100, 200, 20),
+  pmMCAR = c(0, 0.1, 0.2),
+  model = CFA.Model
+)
 
 plotCoverage(Output, "f1=~y1", contMCAR = FALSE)
 plotCoverage(Output, "f1=~y1", coverValue = 0, contMCAR = FALSE)

@@ -23,16 +23,17 @@
 #'
 #' @keywords internal
 getKeywords <- function() {
-    
-    usedFit <- c("chisq", "aic", "bic", "rmsea", "cfi", "tli", "srmr")
-    usedFitScaled <- c("chisq.scaled", "aic", "bic", "rmsea.scaled", "cfi.scaled", "tli.scaled", "srmr")
-	reversedFit <- c("cfi", "tli", "nnfi", "nfi", "rfi", "ifi", "gfi", "agfi", "pnfi", "pgfi", "mfi", "rni")
-    usedFitPop <- c("f0", "rmsea", "srmr")
-    optMin <- c("min", "minimum", "lower")
-    optMax <- c("max", "maximum", "upper")
-    optNone <- c("none", "null")
-    
-    result <- list(usedFit = usedFit, usedFitScaled = usedFitScaled, reversedFit = reversedFit, usedFitPop = usedFitPop, optMin = optMin, optMax = optMax, 
-        optNone = optNone)
-    return(result)
-} 
+  usedFit <- c("chisq", "aic", "bic", "rmsea", "cfi", "tli", "srmr")
+  usedFitScaled <- c("chisq.scaled", "aic", "bic", "rmsea.scaled", "cfi.scaled", "tli.scaled", "srmr")
+  reversedFit <- c("cfi", "tli", "nnfi", "nfi", "rfi", "ifi", "gfi", "agfi", "pnfi", "pgfi", "mfi", "rni")
+  usedFitPop <- c("f0", "rmsea", "srmr")
+  optMin <- c("min", "minimum", "lower")
+  optMax <- c("max", "maximum", "upper")
+  optNone <- c("none", "null")
+
+  result <- list(
+    usedFit = usedFit, usedFitScaled = usedFitScaled, reversedFit = reversedFit, usedFitPop = usedFitPop, optMin = optMin, optMax = optMax,
+    optNone = optNone
+  )
+  return(result)
+}

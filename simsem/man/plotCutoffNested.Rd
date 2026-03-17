@@ -77,8 +77,10 @@ CFA.Model.ALT <- model(
 )
 
 Output.NULL.NULL <- sim(10, n = 500, model = CFA.Model.NULL)
-Output.NULL.ALT  <- sim(10, n = 500, model = CFA.Model.ALT,
-                        generate = CFA.Model.NULL)
+Output.NULL.ALT <- sim(10,
+  n = 500, model = CFA.Model.ALT,
+  generate = CFA.Model.NULL
+)
 
 # Plot cutoffs for nested model comparison
 plotCutoffNested(Output.NULL.NULL, Output.NULL.ALT, alpha = 0.05)

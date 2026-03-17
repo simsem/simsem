@@ -6,5 +6,5 @@
 # summaryShort: Generic function for concise summaries of simsem objects
 
 setGeneric("summaryShort", function(object, ...) {
-    return(standardGeneric("summaryShort"))
+  return(standardGeneric("summaryShort"))
 })

@@ -18,7 +18,7 @@ Test whether all supplied objects are equal. The comparison is based on
 \code{\link{all.equal}}.
 }
 \examples{
-multipleAllEqual(1:5, 1:5, seq(2, 10, 2)/2) # Should be TRUE
-multipleAllEqual(1:5, 1:6, seq(2, 10, 2)/2) # Should be FALSE
+multipleAllEqual(1:5, 1:5, seq(2, 10, 2) / 2) # Should be TRUE
+multipleAllEqual(1:5, 1:6, seq(2, 10, 2) / 2) # Should be FALSE
 
 }

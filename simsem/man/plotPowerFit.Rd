@@ -65,9 +65,9 @@ loading.null[1:6, 1] <- NA
 LY.NULL <- bind(loading.null, 0.7)
 RPS.NULL <- binds(diag(1))
 RTE <- binds(diag(6))
-CFA.Model.NULL <- model(LY = LY.NULL, RPS = RPS.NULL, RTE = RTE, modelType="CFA")
+CFA.Model.NULL <- model(LY = LY.NULL, RPS = RPS.NULL, RTE = RTE, modelType = "CFA")
 
-Output.NULL <- sim(50, n=50, model=CFA.Model.NULL, generate=CFA.Model.NULL)
+Output.NULL <- sim(50, n = 50, model = CFA.Model.NULL, generate = CFA.Model.NULL)
 
 # Alternative model: Two-factor model
 loading.alt <- matrix(0, 6, 2)
@@ -77,12 +77,14 @@ LY.ALT <- bind(loading.alt, 0.7)
 latent.cor.alt <- matrix(NA, 2, 2)
 diag(latent.cor.alt) <- 1
 RPS.ALT <- binds(latent.cor.alt, 0.5)
-CFA.Model.ALT <- model(LY = LY.ALT, RPS = RPS.ALT, RTE = RTE, modelType="CFA")
+CFA.Model.ALT <- model(LY = LY.ALT, RPS = RPS.ALT, RTE = RTE, modelType = "CFA")
 
-Output.ALT <- sim(50, n=50, model=CFA.Model.NULL, generate=CFA.Model.ALT)
+Output.ALT <- sim(50, n = 50, model = CFA.Model.NULL, generate = CFA.Model.ALT)
 
-plotPowerFit(Output.ALT, nullObject=Output.NULL,
-             usedFit=c("RMSEA","CFI","TLI","SRMR"))
+plotPowerFit(Output.ALT,
+  nullObject = Output.NULL,
+  usedFit = c("RMSEA", "CFI", "TLI", "SRMR")
+)
 }
 
 }

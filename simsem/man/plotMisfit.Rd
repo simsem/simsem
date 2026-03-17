@@ -47,7 +47,7 @@ mis.path.BE[4, 1:2] <- "runif(1, -0.1, 0.1)"
 BE <- bind(path.BE, starting.BE, misspec = mis.path.BE)
 
 residual.error <- diag(4)
-residual.error[1,2] <- residual.error[2,1] <- NA
+residual.error[1, 2] <- residual.error[2, 1] <- NA
 RPS <- binds(residual.error, "rnorm(1, 0.3, 0.1)")
 
 ME <- bind(rep(NA, 4), 0)
