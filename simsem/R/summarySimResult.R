@@ -513,7 +513,7 @@ summaryConverge <- function(object, std = FALSE, improper = TRUE) {
 #' @export
 setPopulation <- function(target, population) {
   popParam <- NULL
-  if (is(population, "SimSem")) {
+  if (inherits(population, "SimSem")) {
     psl <- generate(population, n = 20, params = TRUE)$psl
     paramSet <- lapply(psl, "[[", 1)
     generatedgen <- population@dgen
@@ -538,15 +538,15 @@ setPopulation <- function(target, population) {
     tempFit4Names <- lavaan::lavaan(population@pt,
                                     sample.nobs = rep(200, max(population@pt$group)))
     names(popParam) <- c(names(coef(tempFit4Names)), extraParamName)
-  } else if (is(population, "lavaan")) {
+  } else if (inherits(population, "lavaan")) {
     pt <- parTable(population)
     popParam <- pt$est
     names(popParam) <- lavaan::lav_partable_labels(pt)
-  } else if (is(population, "character")) {
+  } else if (is.character(population)) {
     pt <- parTable(lavaan::lavaan(population))
     popParam <- pt$est
     names(popParam) <- lavaan::lav_partable_labels(pt)
-  } else if (is(population, "list")) {
+  } else if (is.list(population)) {
     pt <- population
     popParam <- pt$est
     names(popParam) <- lavaan::lav_partable_labels(pt)

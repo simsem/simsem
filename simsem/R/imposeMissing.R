@@ -23,7 +23,7 @@ impose <- function(miss, data.mat, pmMCAR = NULL, pmMAR = NULL) {
         miss@pmMCAR <- pmMCAR
     if (!is.null(pmMAR))
         miss@pmMAR <- pmMAR
-    if (is(data.mat, "list")) {
+    if (is.list(data.mat)) {
         if (!("data" %in% names(data.mat)))
             stop("The list does not contain any dataset.")
         data.mat$data <- as.data.frame(imposeMissing(data.mat$data, cov = miss@cov,

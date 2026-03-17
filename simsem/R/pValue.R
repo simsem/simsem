@@ -138,7 +138,7 @@ pValueDataFrame <- function(target,
 #' @export
 pValue <- function(target,
     dist, usedFit = NULL, nVal = NULL, pmMCARval = NULL, pmMARval = NULL, df = 0) {
-	if(!is(dist, "SimResult")) stop("The 'dist' object must be a result object.")
+	if(!inherits(dist, "SimResult")) stop("The 'dist' object must be a result object.")
 
     dist <- clean(dist)
 	usedFit <- cleanUsedFit(usedFit, colnames(dist@fit))
@@ -172,11 +172,11 @@ pValue <- function(target,
             predictorVal[2] <- pmMARval)
     }
     predictorVal <- predictorVal[condition]
-	if (is(target, "lavaan")) {
+	if (inherits(target, "lavaan")) {
 		cutoff <- lavaan::fitMeasures(target, fit.measures = usedFit)
-	} else if (is(target, "lavaan.mi")) {
+	} else if (inherits(target, "lavaan.mi")) {
 	  cutoff <- getMethod("fitMeasures", "lavaan.mi")(target, fit.measures = usedFit)
-	} else if (is(target, "MxModel")) {
+	} else if (inherits(target, "MxModel")) {
 		cutoff <- fitMeasuresMx(target)[usedFit]
 	} else {
 		stop("The target argument must be a lavaan object or MxModel object.")

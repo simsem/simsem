@@ -87,13 +87,13 @@ generate <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "
     averageNumMisspec = FALSE, optMisfit = NULL, optDraws = 50, createOrder = c(1, 2, 3), indDist = NULL, sequential = FALSE,
     facDist = NULL, errorDist = NULL, saveLatentVar = FALSE, indLab = NULL, modelBoot = FALSE, realData = NULL, covData = NULL,
     params = FALSE, group = NULL, empirical = FALSE, ...) {
-	if(is(model, "SimSem")) {
+	if(inherits(model, "SimSem")) {
 		if(!is.null(group)) model@groupLab <- group
 		data <- generateSimSem(model = model, n = n, maxDraw = maxDraw, misfitBounds = misfitBounds, misfitType = misfitType,
 			averageNumMisspec = averageNumMisspec, optMisfit = optMisfit, optDraws = optDraws, createOrder = createOrder, indDist = indDist, sequential = sequential,
 			facDist = facDist, errorDist = errorDist, saveLatentVar = saveLatentVar, indLab = indLab, modelBoot = modelBoot, realData = realData, covData = covData,
 			params = params, empirical = empirical)
-	} else if (is(model, "MxModel")) {
+	} else if (inherits(model, "MxModel")) {
 		data <- generateMx(object = model, n = n, indDist = indDist, groupLab = group, covData = covData, empirical = empirical)
 	} else {
 		if(is.character(model)) {
@@ -102,7 +102,7 @@ generate <- function(model, n, maxDraw = 50, misfitBounds = NULL, misfitType = "
 			model <- list(model = model)
 		} else if (is.lavaancall(model)) {
 			# Intentionally leave it blank
-		} else if (is(model, "lavaan")) {
+		} else if (inherits(model, "lavaan")) {
 			temp <- parTable(model)
 			temp$ustart <- temp$est
 			model <- list(model = temp)

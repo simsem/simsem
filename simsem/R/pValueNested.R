@@ -145,12 +145,12 @@ pValueNested <- function(outNested, outParent, simNested, simParent, usedFit = N
             predictorVal[2] <- pmMARval)
     }
     predictorVal <- predictorVal[condition]
-	if(is(outNested, "MxModel") & is(outParent, "MxModel")) {
+	if(inherits(outNested, "MxModel") & inherits(outParent, "MxModel")) {
 		cutoff <- fitMeasuresMx(outNested)[usedFit] - fitMeasuresMx(outParent)[usedFit]
-	} else if (is(outNested, "lavaan") & is(outParent, "lavaan")) {
+	} else if (inherits(outNested, "lavaan") & inherits(outParent, "lavaan")) {
 		cutoff <- lavaan::fitMeasures(outNested, fit.measures = usedFit) -
 		          lavaan::fitMeasures(outParent, fit.measures = usedFit)
-	} else if (is(outNested, "lavaan.mi") & is(outParent, "lavaan.mi")) {
+	} else if (inherits(outNested, "lavaan.mi") & inherits(outParent, "lavaan.mi")) {
 	  cutoff <- getMethod("fitMeasures", "lavaan.mi")(outNested, fit.measures = usedFit) -
 	            getMethod("fitMeasures", "lavaan.mi")(outParent, fit.measures = usedFit)
 	} else {

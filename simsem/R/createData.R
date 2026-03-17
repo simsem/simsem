@@ -383,7 +383,7 @@ dataGen <- function(dataDist, n, m, cm, empirical = FALSE) {
 					}
 				}
 
-				if(!is(dataDist@copula, "NullCopula")) {
+				if(!inherits(dataDist@copula, "NullCopula")) {
 					Mvdc <- copula::mvdc(dataDist@copula, dataDist2@margins, dataDist2@paramMargins)
 					Data <- CopSEM(Mvdc, cm2, nw = n * 100, np = n)
 				} else {
@@ -448,7 +448,7 @@ dataGen <- function(dataDist, n, m, cm, empirical = FALSE) {
 
 extractSimDataDist <- function(object, pos) {
 	copula <- object@copula
-	if (!is(copula, "NullCopula")) {
+	if (!inherits(copula, "NullCopula")) {
 		copula@dimension <- 2L
 	}
     return(new("SimDataDist", margins = object@margins[pos], paramMargins = object@paramMargins[pos],

@@ -242,7 +242,7 @@ is.empty <- function(dat) {
 #'
 #' @keywords internal
 validConstraints <- function(mat) {
-    if (is(mat, "SimMatrix") || is(mat, "SimVector")) {
+    if (inherits(mat, "SimMatrix") || inherits(mat, "SimVector")) {
         mat <- mat@free
     }
 

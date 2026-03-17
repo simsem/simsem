@@ -177,12 +177,12 @@ pValueNonNested <- function(outMod1, outMod2, dat1Mod1, dat1Mod2, dat2Mod1, dat2
     Data1 <- as.data.frame((dat1Mod1@fit - dat1Mod2@fit)[, usedFit])
     Data2 <- as.data.frame((dat2Mod1@fit - dat2Mod2@fit)[, usedFit])
 
-    if(is(outMod1, "MxModel") & is(outMod2, "MxModel")) {
+    if(inherits(outMod1, "MxModel") & inherits(outMod2, "MxModel")) {
 		cutoff <- fitMeasuresMx(outMod1)[usedFit] - fitMeasuresMx(outMod2)[usedFit]
-	} else if (is(outMod1, "lavaan") & is(outMod2, "lavaan")) {
+	} else if (inherits(outMod1, "lavaan") & inherits(outMod2, "lavaan")) {
 	  cutoff <- lavaan::fitMeasures(outMod1, fit.measures = usedFit) -
 	            lavaan::fitMeasures(outMod2, fit.measures = usedFit)
-	} else if (is(outMod1, "lavaan.mi") & is(outMod2, "lavaan.mi")) {
+	} else if (inherits(outMod1, "lavaan.mi") & inherits(outMod2, "lavaan.mi")) {
 	  cutoff <- getMethod("fitMeasures", "lavaan.mi")(outMod1, fit.measures = usedFit) -
 	            getMethod("fitMeasures", "lavaan.mi")(outMod2, fit.measures = usedFit)
 	} else {

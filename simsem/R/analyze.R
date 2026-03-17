@@ -38,11 +38,11 @@ analyze <- function(model, data, package = "lavaan", miss = NULL,
                     aux = NULL, group = NULL, mxMixture = FALSE, ...) {
 	mc <- match.call()
 	args <- list(...)
-	if (is(model, "SimSem")) {
+	if (inherits(model, "SimSem")) {
 		if(!("group" %in% names(args)) & "group" %in% names(mc)) args$group <- group
 		args <- c(list(model = model, data = data, package = package, miss = miss, aux = aux), args)
 		out <- do.call("analyzeSimSem", args)
-	} else if (is(model, "MxModel")) {
+	} else if (inherits(model, "MxModel")) {
 		out <- analyzeMx(object = model, data = data, groupLab = group, mxMixture = mxMixture, ...)
 	} else {
 		stop("Please specify an appropriate object for the 'model' argument: ",
@@ -79,7 +79,7 @@ analyzeSimSem <- function(model, data, package = "lavaan",
   Output <- NULL
   groupLab <- model@groupLab
   args <- list(...)
-  if (is(data, "list")) {
+  if (is.list(data)) {
     if ("data" %in% names(data)) {
       data <- data$data
     } else {

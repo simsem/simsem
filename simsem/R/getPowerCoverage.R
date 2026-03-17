@@ -119,7 +119,7 @@ getPred <- function(contParam = NULL, nVal = NULL, pmMCARval = NULL,
 	pred$MCAR <- pmMCARval
 	pred$MAR <- pmMARval
 	if (!is.null(paramVal)) {
-		if (is(paramVal, "list")) {
+		if (is.list(paramVal)) {
 			if (is.null(names(paramVal)))
 			  names(paramVal) <- contParam
 			pred <- c(pred, paramVal)

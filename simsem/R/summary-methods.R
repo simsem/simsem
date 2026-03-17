@@ -201,7 +201,7 @@ setMethod("summary", signature = "SimDataDist", definition = function(object) {
 		for (i in 1:object@p) {
 			cat(i, ". ", out[i], "\n", sep = "")
 		}
-		if(!is(object@copula, "NullCopula")) {
+		if(!inherits(object@copula, "NullCopula")) {
 			cat(paste("Multivariate Copula:\n"))
 			show(object@copula)
 		}

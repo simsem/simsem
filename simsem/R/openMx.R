@@ -90,7 +90,7 @@ getInnerObjects <- function(xxxobjectxxx) {
 #' @keywords internal
 generateMxSingleGroup <- function(object, n, indDist = NULL, covData = NULL, extraMatrices = NULL, empirical = FALSE) {
 
-	if(is(object@expectation, "MxExpectationRAM")) {
+	if(inherits(object@expectation, "MxExpectationRAM")) {
 		# Create A, F, S, and M to suppress warnings when compiling the package.
 		F <- NULL
 		S <- NULL
@@ -123,7 +123,7 @@ generateMxSingleGroup <- function(object, n, indDist = NULL, covData = NULL, ext
 		object@algebras <- allAlgebras
 		object@expectation <- newExpectation
 	}
-	if (!is(object@expectation, "MxExpectationRAM") & !is(object@expectation, "MxExpectationNormal")) {
+	if (!inherits(object@expectation, "MxExpectationRAM") & !inherits(object@expectation, "MxExpectationNormal")) {
 		stop("This function supports only MxExpectationRAM or MxExpectationNormal.")
 	}
 	defVars <- findDefVars(object)
@@ -383,7 +383,7 @@ saturateMx <- function(data, groupLab = NULL) {
 
 #' @keywords internal
 saturateMxSingleGroup <- function(data, title = "Saturate Model", groupnum = NULL) {
-  if(!is(data, "MxData")) {
+  if(!inherits(data, "MxData")) {
     data <- OpenMx::mxData(
       observed=data,
       type="raw")
@@ -571,7 +571,7 @@ nullMx <- function(data, groupLab = NULL) {
 
 #' @keywords internal
 nullMxSingleGroup <- function(data, title = "Null Model", groupnum = NULL) {
-  if(!is(data, "MxData")) {
+  if(!inherits(data, "MxData")) {
     data <- OpenMx::mxData(
       observed=data,
       type="raw")
@@ -784,7 +784,7 @@ fitMeasuresMx <- function(object, fit.measures="all") {
   if(G == 0) G <- 1 # Correct when there is no submodel
 
   if(multigroup) {
-    if(is(object@submodels[[1]]@expectation, "MxExpectationRAM")) {
+    if(inherits(object@submodels[[1]]@expectation, "MxExpectationRAM")) {
       meanstructure <- !all(is.na(object@submodels[[1]]@expectation@M)) # Only ML objective
       categorical   <- !all(is.na(object@submodels[[1]]@expectation@thresholds)) # Only ML objective
     } else {
@@ -792,7 +792,7 @@ fitMeasuresMx <- function(object, fit.measures="all") {
       categorical   <- !all(is.na(object@submodels[[1]]@expectation@thresholds)) # Only ML objective
     }
   } else {
-    if(is(object@expectation, "MxExpectationRAM")) {
+    if(inherits(object@expectation, "MxExpectationRAM")) {
       meanstructure <- !all(is.na(object@expectation@M)) # Only ML objective
       categorical   <- !all(is.na(object@expectation@thresholds)) # Only ML objective
     } else {
@@ -1154,13 +1154,13 @@ fitMeasuresMx <- function(object, fit.measures="all") {
     }
     for(g in 1:G) {
       if(G > 1) {
-        if(is(objectSat@submodels[[g]]@expectation, "MxExpectationRAM")) {
+        if(inherits(objectSat@submodels[[g]]@expectation, "MxExpectationRAM")) {
           impliedSat <- getImpliedStatRAM(objectSat@submodels[[g]])
         } else {
           impliedSat <- getImpliedStatML(objectSat@submodels[[g]])
         }
       } else {
-        if(is(objectSat@expectation, "MxExpectationRAM")) {
+        if(inherits(objectSat@expectation, "MxExpectationRAM")) {
           impliedSat <- getImpliedStatRAM(objectSat)
         } else {
           impliedSat <- getImpliedStatML(objectSat)
@@ -1173,13 +1173,13 @@ fitMeasuresMx <- function(object, fit.measures="all") {
 
       # estimated
       if(G > 1) {
-        if(is(object@submodels[[g]]@expectation, "MxExpectationRAM")) {
+        if(inherits(object@submodels[[g]]@expectation, "MxExpectationRAM")) {
           implied <- getImpliedStatRAM(object@submodels[[g]])
         } else {
           implied <- getImpliedStatML(object@submodels[[g]], xxxextraxxx = upperLevelMatrices)
         }
       } else {
-        if(is(object@expectation, "MxExpectationRAM")) {
+        if(inherits(object@expectation, "MxExpectationRAM")) {
           implied <- getImpliedStatRAM(object)
         } else {
           implied <- getImpliedStatML(object)
@@ -1374,7 +1374,7 @@ standardizeMx <- function(object, free = TRUE) {
 
 #' @keywords internal
 standardizeMxSingleGroup <- function(object) {
-  if(!is(object@expectation, "MxExpectationRAM")) stop("The standardizeMx function is available for the MxExpectationRAM only.")
+  if(!inherits(object@expectation, "MxExpectationRAM")) stop("The standardizeMx function is available for the MxExpectationRAM only.")
   A <- object@matrices$A@values
   I <- diag(nrow(A))
   S <- object@matrices$S@values

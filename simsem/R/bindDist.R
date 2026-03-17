@@ -129,7 +129,7 @@ bindDist <- function(margins = NULL, ..., p = NULL, keepScale = TRUE, reverse = 
 	if (length(kurtosis) != p)
 		kurtosis <- rep(kurtosis, length.out = p)
 	if (!is.null(copula)) {
-		if(!is(copula, "copula")) stop("The 'copula' argument is not a multivariate copula")
+		if(!inherits(copula, "copula")) stop("The 'copula' argument is not a multivariate copula")
 		copula@dimension <- as.integer(p)
 	} else {
 		copula <- new("NullCopula")

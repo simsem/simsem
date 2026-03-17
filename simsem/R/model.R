@@ -71,7 +71,7 @@ model <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = 
         mgidx <- which(sapply(paramSet, is.list))
         mg <- names(mgidx)
         sgidx <- which(sapply(paramSet, FUN = function(x) {
-            is(x, "SimMatrix") || is(x, "SimVector")
+          inherits(x, "SimMatrix") || inherits(x, "SimVector")
         }))
         sg <- names(sgidx)
         n <- max(sapply(paramSet, length))
@@ -93,7 +93,7 @@ model <- function(LY = NULL, PS = NULL, RPS = NULL, TE = NULL, RTE = NULL, BE = 
                 # Repeat single matrices
                 for (i in seq_along(sgidx)) {
                   temp <- NULL
-                  if (is(paramSet[sgidx][[i]], "SimMatrix")) {
+                  if (inherits(paramSet[sgidx][[i]], "SimMatrix")) {
                     temp <- paramSet[sgidx][[i]]
                     paramSet[sgidx][[i]] <- replicate(n, new("SimMatrix", free = temp@free,
                       popParam = temp@popParam, misspec = temp@misspec, symmetric = temp@symmetric))
@@ -615,7 +615,7 @@ parseFree <- function(simDat, group, pt, op, lhs = NULL, rhs = NULL,
     }
     numElem <- NULL
 
-    if (is(simDat, "SimVector")) {
+    if (inherits(simDat, "SimVector")) {
         numElem <- length(freeDat)
     } else if (simDat@symmetric && op == "~~") {
         # Just get lower tri
@@ -1241,7 +1241,7 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
     RTE = NULL, BE = NULL, VTE = NULL, VY = NULL, VPS = NULL, VE = NULL, TY = NULL,
     AL = NULL, MY = NULL, ME = NULL, KA = NULL, GA = NULL) {
     ngroups <- lavInspect(object, "ngroups")
-    if (is(object, "lavaan.mi")) {
+    if (inherits(object, "lavaan.mi")) {
       name <- unique(names(object@Model@GLIST))
     } else if (ngroups > 1L) {
       name <- names(lavInspect(object, "est")[[1]])
@@ -1442,7 +1442,7 @@ model.lavaan <- function(object, std = FALSE, LY = NULL, PS = NULL, RPS = NULL, 
 		}
 
     } else {
-      if (is(object, "lavaan.mi")) {
+      if (inherits(object, "lavaan.mi")) {
         ## pooled estimates for standardizedSolution()
         COEF <- getMethod("coef", "lavaan.mi")(object)
         ## update @Model@GLIST
@@ -1668,7 +1668,7 @@ labelFree <- function(free, symmetric) {
 #' @keywords internal
 standardize <- function(object) {
 
-  if (is(object, "lavaan.mi")) {
+  if (inherits(object, "lavaan.mi")) {
     ## pooled estimates for standardizedSolution()
     COEF <- getMethod("coef", "lavaan.mi")(object)
     ## update @Model@GLIST
@@ -1755,7 +1755,7 @@ reshuffleParam <- function(set, covLab, indLab, facLab) {
 #' @keywords internal
 parseSyntaxCon <- function(script) {
 	if(is.null(script)) return(list(NULL))
-	if(is(script, "list")) return(script)
+	if(is.list(script)) return(script)
 
 # Most of the beginning of this codes are from lavaanify function in lavaan
 

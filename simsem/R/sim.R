@@ -165,11 +165,11 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
 			temp$ustart <- temp$start <- temp$est
 			generate <- list(model = temp)
 			lavaanGenerate <- TRUE
-		} else if (is(generate, "MxModel")) {
+		} else if (inherits(generate, "MxModel")) {
 			mxGenerate <- TRUE
-		} else if (is(generate, "function")) {
+		} else if (is.function(generate)) {
 			functionGenerate <- TRUE
-		} else if (is(generate, "SimSem")) {
+		} else if (inherits(generate, "SimSem")) {
 			## Do nothing
 		} else {
 			stop("Please specify an appropriate object for the 'generate' argument: ",
@@ -196,14 +196,14 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
 		lavaanAnalysis <- TRUE
 	} else if (is.lavaancall(model)) {
 		lavaanAnalysis <- TRUE
-	} else if (is(model, "lavaan")) {
+	} else if (inherits(model, "lavaan")) {
 		model <- list(model = parTable(model))
 		lavaanAnalysis <- TRUE
-	} else if (is(model, "MxModel")) {
+	} else if (inherits(model, "MxModel")) {
 		mxAnalysis <- TRUE
-	} else if (is(model, "SimSem")) {
+	} else if (inherits(model, "SimSem")) {
 		## Do nothing
-	} else if (is(model, "function")) {
+	} else if (is.function(model)) {
 		functionAnalysis <- TRUE
 	} else {
 		stop("Please specify an appropriate object for the 'model' argument: ",
@@ -229,7 +229,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
 		  } else if (is.partable(generate)) {
 		    generate$ustart <- generate$start <- generate$est
 		    generate <- list(model = generate)
-		  } else if (is(generate, "lavaan")) {
+		  } else if (inherits(generate, "lavaan")) {
 		    temp <- parTable(generate)
 		    temp$ustart <- temp$start <- temp$est
 		    generate <- list(model = temp)
@@ -240,11 +240,11 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
 
 	if (mxAnalysis) {
 		if (length(model@submodels) > 0) {
-			if (!is(model@submodels[[1]]@expectation, "MxExpectationRAM") && all(is.na(model@submodels[[1]]@expectation@means))) {
+			if (!inherits(model@submodels[[1]]@expectation, "MxExpectationRAM") && all(is.na(model@submodels[[1]]@expectation@means))) {
 			  stop("The expected means must be specified in the objective of the 'model' argument.")
 			}
 		} else {
-			if (!is(model@expectation, "MxExpectationRAM") && all(is.na(model@expectation@means))) {
+			if (!inherits(model@expectation, "MxExpectationRAM") && all(is.na(model@expectation@means))) {
 			  stop("The expected means must be specified in the objective of the 'model' argument.")
 			}
 		}
@@ -659,7 +659,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
     stdparam <- stdpt$est.std
     names(stdparam) <- paramNames #lavaan::lav_partable_labels(stdpt)
     stdparam <- as.data.frame(t(stdparam))
-  } else if (mxGenerate | (is.null(generate) & is(model, "MxModel"))) {
+  } else if (mxGenerate | (is.null(generate) & inherits(model, "MxModel"))) {
     if (is.null(generate)) generate <- model
     param <- vectorizeMx(generate)
     param <- as.data.frame(t(param))
@@ -668,10 +668,10 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
     if (length(generate@submodels) > 0) {
       defVars <- lapply(generate@submodels, findDefVars)
       defVars <- do.call(c, defVars)
-      if (is(generate@submodels[[1]]@expectation, "MxExpectationRAM") && !(length(defVars) > 0)) findStd <- TRUE
+      if (inherits(generate@submodels[[1]]@expectation, "MxExpectationRAM") && !(length(defVars) > 0)) findStd <- TRUE
     } else {
       defVars <- findDefVars(generate)
-      if (is(generate@expectation, "MxExpectationRAM") && !(length(defVars) > 0)) findStd <- TRUE
+      if (inherits(generate@expectation, "MxExpectationRAM") && !(length(defVars) > 0)) findStd <- TRUE
     }
     if (findStd) {
       try({stdparam <- standardizeMx(generate, free = TRUE) ; stdparam <- as.data.frame(t(stdparam))},
@@ -910,9 +910,9 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
       data <- popData
     } else {
       groupLab <- NULL
-      if (is(model, "SimSem")) {
+      if (inherits(model, "SimSem")) {
         groupLab <- model@groupLab
-      } else if (is(model, "function")) {
+      } else if (is.function(model)) {
         ## Intentionally leave as blank
       } else {
         groupLab <- model$group
@@ -928,7 +928,7 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
     }
   }
 
-  if (is.null(data) && is(generateO, "function")) {
+  if (is.null(data) && inherits(generateO, "function")) {
     if (stopOnError) {
       data <- generateO(n)
     } else if (silent) {
@@ -959,7 +959,7 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
     }
   }
 
-  if (is.null(data) && is(generateO, "MxModel")) {
+  if (is.null(data) && inherits(generateO, "MxModel")) {
     data <- generateMx(generateO, n = n, indDist = indDist, covData = covData)
   }
 
@@ -1050,7 +1050,7 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
     ## Impute missing and run results
     ## Will use analyze either when there is a missing object or auxiliary variables specified.
     ## If users provide their own data there may be a case with auxiliary variables and no missing object
-    if (is(model, "function")) {
+    if (is.function(model)) {
       if (stopOnError) {
         out <- model(data, ...)
       } else if (silent) {
@@ -1069,7 +1069,7 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
       } else {
         try(out <- analyzeLavaan(model, lavaanfun, miss, aux))
       }
-    } else if (is(model, "MxModel")) {
+    } else if (inherits(model, "MxModel")) {
       mxAnalysis <- TRUE
       multigroup <- length(model@submodels) > 0L
       if (multigroup) {
@@ -1113,7 +1113,7 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
   #### 6. Parse Lavaan Output
   if (dataOnly) return(data)
   if (!is.null(out)) {
-    if (is(model, "function")) {
+    if (is.function(model)) {
       converged <- out$converged
       if (is.null(converged)) stop("In the function for data analysis, ",
                                    "please specify an integer indicating the",
@@ -1144,7 +1144,7 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
         improperSE <- any(unlist(seTemp) < 0) | any(is.na(unlist(seTemp))) | all(unlist(seTemp) == 0)
         if (improperSE) converged <- 3L
       }
-    } else if (is(out, "lavaan.mi")) {
+    } else if (inherits(out, "lavaan.mi")) {
       if (mean(sapply(out@convergence, "[[", "converged")) < miss@convergentCutoff) {
         converged <- 2L
       } else if (mean(sapply(out@convergence, "[[", "SE"), na.rm = TRUE) < miss@convergentCutoff) {
@@ -1166,7 +1166,7 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
 
   if (converged %in% c(0L, 3:7)) {
 
-    if (is(model, "function")) {
+    if (is.function(model)) {
       fit <- out$fit
       coef <- out$coef
       se <- out$se
@@ -1213,10 +1213,10 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
       if (length(out@submodels) > 0) {
         defVars <- lapply(out@submodels, findDefVars)
         defVars <- do.call(c, defVars)
-        if (is(out@submodels[[1]]@expectation, "MxExpectationRAM") && !(length(defVars) > 0)) findStd <- TRUE
+        if (inherits(out@submodels[[1]]@expectation, "MxExpectationRAM") && !(length(defVars) > 0)) findStd <- TRUE
       } else {
         defVars <- findDefVars(out)
-        if (is(out@expectation, "MxExpectationRAM") && !(length(defVars) > 0)) findStd <- TRUE
+        if (inherits(out@expectation, "MxExpectationRAM") && !(length(defVars) > 0)) findStd <- TRUE
       }
       if (findStd) {
         std <- NA
@@ -1231,7 +1231,7 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
       index <- ((outpt$free != 0) & !(duplicated(outpt$free))) | extraParamIndex
 
       ## lavaan.mi results come from different source than lavaan
-      if (is(out, "lavaan.mi")) {
+      if (inherits(out, "lavaan.mi")) {
         fit <- suppressMessages(getMethod("fitMeasures", "lavaan.mi")(out))
         result <- lavaan.mi::parameterEstimates.mi(out, standardized = "std.all",
                                                    level = cilevel, fmi = TRUE,
@@ -1240,7 +1240,7 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
         outpt$se <- result$se
         errstdse <- try(resultstd <- lavaan.mi::standardizedSolution.mi(out, remove.eq = FALSE,
                                                                         remove.ineq = FALSE, remove.def = FALSE))
-        if (!is(errstdse, "try-error")) stdse <- resultstd$se[index]
+        if (!inherits(errstdse, "try-error")) stdse <- resultstd$se[index]
         if (converged %in% c(0L, 3:5)) {
           FMI1 <- result$fmi[index] # result$fmi1[index]
           FMI2 <- NULL              # result$fmi2[index]
@@ -1254,7 +1254,7 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
                                              fmi = !is.null(miss))
         errstdse <- try(resultstd <- lavaan::standardizedSolution(out, remove.eq = FALSE,
                                                                   remove.ineq = FALSE, remove.def = FALSE))
-        if(!is(errstdse, "try-error")) stdse <- resultstd$se[index]
+        if(!inherits(errstdse, "try-error")) stdse <- resultstd$se[index]
         FMI1 <- if (is.null(miss)) NULL else result$fmi[index]
         FMI2 <- NULL
       }
@@ -1291,7 +1291,7 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
       if (!is.null(FMI2)) names(FMI2) <- lab
     }
   } else {
-    if (is(model, "function")) {
+    if (is.function(model)) {
       try(fit <- out$fit, silent = TRUE)
       try(coef <- out$coef, silent = TRUE)
       try(se <- out$se, silent = TRUE)
