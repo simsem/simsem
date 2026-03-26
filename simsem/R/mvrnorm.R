@@ -1,4 +1,4 @@
-### Sunthud Pornprasertmanit 
+### Sunthud Pornprasertmanit
 ### Last updated: 6 March 2026
 ### Internal utilities for generating covariance and correlation structures
 
@@ -34,26 +34,25 @@
 #' @keywords internal
 #' @importFrom stats rnorm
 mvrnorm <-
-    function(n = 1, mu, Sigma, tol=1e-6, empirical = FALSE, EISPACK = FALSE)
-{
+  function(n = 1, mu, Sigma, tol = 1e-6, empirical = FALSE, EISPACK = FALSE) {
     p <- length(mu)
-    if(!all(dim(Sigma) == c(p,p))) stop("incompatible arguments")
+    if (!all(dim(Sigma) == c(p, p))) stop("incompatible arguments")
     if (missing(EISPACK)) EISPACK <- getOption("mvnorm_use_EISPACK", FALSE)
     eS <- eigen(Sigma, symmetric = TRUE, EISPACK = EISPACK)
     ev <- eS$values
-    if(!all(ev >= -tol*abs(ev[1L]))) stop("'Sigma' is not positive definite")
+    if (!all(ev >= -tol * abs(ev[1L]))) stop("'Sigma' is not positive definite")
     X <- matrix(rnorm(p * n), n, byrow = TRUE)
-    if(empirical) {
-        X <- scale(X, TRUE, FALSE) # remove means
-        X <- X %*% svd(X, nu = 0)$v # rotate to PCs
-        X <- scale(X, FALSE, TRUE) # rescale PCs to unit variance
+    if (empirical) {
+      X <- scale(X, TRUE, FALSE) # remove means
+      X <- X %*% svd(X, nu = 0)$v # rotate to PCs
+      X <- scale(X, FALSE, TRUE) # rescale PCs to unit variance
     }
     X <- drop(mu) + eS$vectors %*% diag(sqrt(pmax(ev, 0)), p) %*% t(X)
     nm <- names(mu)
-    if(is.null(nm) && !is.null(dn <- dimnames(Sigma))) nm <- dn[[1L]]
+    if (is.null(nm) && !is.null(dn <- dimnames(Sigma))) nm <- dn[[1L]]
     dimnames(X) <- list(nm, NULL)
-    if(n == 1) drop(X) else t(X)
-}
+    if (n == 1) drop(X) else t(X)
+  }
 
 #' Convert vech to a Correlation Matrix
 #'
@@ -66,15 +65,15 @@ mvrnorm <-
 #'
 #' @keywords internal
 vech2Corr <- function(vech) {
-    ##compute number of rows from vech. diag not in the vech!
-    n = (sqrt(1 + 8 * length(vech)) + 1)/2
-    if (!as.integer(n) == n) stop(deparse(substitute(vech)), " must have the correct number of elelemnts to fill in a strictly lower triangle in a square matrix.")
-    if(any(vech > 1 | vech < -1)) stop("All values in ", deparse(substitute(vech)), " must be in the interval [-1,1]")
-    X <- matrix(NA, nrow = n, ncol = n)
-    X[lower.tri(X, diag = FALSE)] <- vech
-    X[upper.tri(X)] <- t(X)[upper.tri(X)]
-    diag(X) <- 1
-    X
+  ## compute number of rows from vech. diag not in the vech!
+  n <- (sqrt(1 + 8 * length(vech)) + 1) / 2
+  if (!as.integer(n) == n) stop(deparse(substitute(vech)), " must have the correct number of elelemnts to fill in a strictly lower triangle in a square matrix.")
+  if (any(vech > 1 | vech < -1)) stop("All values in ", deparse(substitute(vech)), " must be in the interval [-1,1]")
+  X <- matrix(NA, nrow = n, ncol = n)
+  X[lower.tri(X, diag = FALSE)] <- vech
+  X[upper.tri(X)] <- t(X)[upper.tri(X)]
+  diag(X) <- 1
+  X
 }
 
 #' Create a Covariance Matrix from Correlations and Standard Deviations
@@ -92,22 +91,24 @@ vech2Corr <- function(vech) {
 #'
 #' @keywords internal
 lazyCov <- function(Rho, Sd, d) {
-    if (missing(Sd)) stop("lazyCov requires user to specify either a vector or a single common value for all standard deviations")
-    if (missing(Rho)) stop("lazyCov requires a symmstric correlation matrix or enough information to create one, either a vech of lower triangular values or a single common correlation value")
-    if (!missing(d) && (length(Sd) > 1) && (length(Sd) != d)) stop("lazyCov doesn't require a d argument, but if you provide one, it must be consistent with the length of a supplied Sd vector")
-    if (missing(d)){
-        if (length(Sd) > 1) d <- length(Sd)
-        else if (is.matrix(Rho)) d <- NROW(Rho)
-        else if (is.vector(Rho)) {
-            d <- (sqrt(1 + 8 * length(Rho)) + 1)/2
-            if (!isTRUE(all.equal(as.integer(d)- d, 0))) stop(deparse(substitute(vech)), " must have the correct number of elelemnts to fill in a strictly lower triangle in a square matrix.")
-        }
+  if (missing(Sd)) stop("lazyCov requires user to specify either a vector or a single common value for all standard deviations")
+  if (missing(Rho)) stop("lazyCov requires a symmstric correlation matrix or enough information to create one, either a vech of lower triangular values or a single common correlation value")
+  if (!missing(d) && (length(Sd) > 1) && (length(Sd) != d)) stop("lazyCov doesn't require a d argument, but if you provide one, it must be consistent with the length of a supplied Sd vector")
+  if (missing(d)) {
+    if (length(Sd) > 1) {
+      d <- length(Sd)
+    } else if (is.matrix(Rho)) {
+      d <- NROW(Rho)
+    } else if (is.vector(Rho)) {
+      d <- (sqrt(1 + 8 * length(Rho)) + 1) / 2
+      if (!isTRUE(all.equal(as.integer(d) - d, 0))) stop(deparse(substitute(vech)), " must have the correct number of elelemnts to fill in a strictly lower triangle in a square matrix.")
     }
-    if (length(Sd) == 1) Sd <- rep(Sd, d)
-    Rho <- lazyCor(Rho, d)
+  }
+  if (length(Sd) == 1) Sd <- rep(Sd, d)
+  Rho <- lazyCor(Rho, d)
 
-    covMat <- diag(Sd) %*% Rho %*% diag(Sd)
-    covMat
+  covMat <- diag(Sd) %*% Rho %*% diag(Sd)
+  covMat
 }
 
 #' Create a Correlation Matrix
@@ -124,18 +125,17 @@ lazyCov <- function(Rho, Sd, d) {
 #'
 #' @keywords internal
 lazyCor <- function(X, d) {
-    if (is.matrix(X)){
-        stopifnot (isSymmetric(X))
-        if (!dim(X)[1] == d) stop("lazyCor: the dimension of the matrix supplied is inconsistent with the dimension argument d")
-    } else if (length(X) == 1) {
-        if ( X < -1 | X > 1 ) stop(paste("The value of of a correlation should be in [-1,1]"))
-        X <- matrix(X, nrow = d, ncol = d)
-        diag(X) <- 1.0
-    } else if (is.vector(X)){
-        X <- vech2Corr(X)
-    } else {
-        stop(paste("lazyCor cannot understand the value supplied for argument", deparse(substitute(X)),".\n That should be either a", d, " x ", d, "symmetric matrix, \n or a vech of the strictly lower triangular part of a matrix, or \n one single value, which we will use to fill up a matrix."))
-    }
-    X
+  if (is.matrix(X)) {
+    stopifnot(isSymmetric(X))
+    if (!dim(X)[1] == d) stop("lazyCor: the dimension of the matrix supplied is inconsistent with the dimension argument d")
+  } else if (length(X) == 1) {
+    if (X < -1 | X > 1) stop(paste("The value of of a correlation should be in [-1,1]"))
+    X <- matrix(X, nrow = d, ncol = d)
+    diag(X) <- 1.0
+  } else if (is.vector(X)) {
+    X <- vech2Corr(X)
+  } else {
+    stop(paste("lazyCor cannot understand the value supplied for argument", deparse(substitute(X)), ".\n That should be either a", d, " x ", d, "symmetric matrix, \n or a vech of the strictly lower triangular part of a matrix, or \n one single value, which we will use to fill up a matrix."))
+  }
+  X
 }
-

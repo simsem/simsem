@@ -24,9 +24,9 @@
 #'
 #' @export
 findCoverage <- function(coverTable, iv, target) {
-	ivCol <- grep("iv", colnames(coverTable))
-	coverTable[, -ivCol] <- 1 - coverTable[, -ivCol]
-	findPower(coverTable, iv, 1 - target)
+  ivCol <- grep("iv", colnames(coverTable))
+  coverTable[, -ivCol] <- 1 - coverTable[, -ivCol]
+  findPower(coverTable, iv, 1 - target)
 }
 
 #' Find required values for target power
@@ -54,35 +54,37 @@ findCoverage <- function(coverTable, iv, target) {
 #'
 #' @export
 findPower <- function(powerTable, iv, power) {
-    ivCol <- grep("iv", colnames(powerTable))
-    ivTable <- as.matrix(powerTable[, ivCol])
-    dvTable <- as.matrix(powerTable[, -ivCol])
-    colnames(ivTable) <- colnames(powerTable)[ivCol]
-    ivName <- colnames(powerTable)[ivCol]
-    ivName <- gsub("iv.", "", ivName)
-    ivName <- gsub("pmMCAR", "MCAR", ivName)
-    ivName <- gsub("pmMAR", "MAR", ivName)
-    if (is.numeric(iv)) {
-        iv <- colnames(powerTable)[iv]
-    }
-    if (length(grep("iv.", iv)) != 0) 
-        iv <- gsub("iv.", "", iv)
-    temp <- grep(iv, ivName)
-    if (length(temp) == 0) 
-        stop("Cannot find the specified target column")
-    iv <- temp
-    if (length(ivName) == 1) {
-        pow <- findTargetPower(ivTable, dvTable, power)
-    } else {
-        powList <- split(as.data.frame(dvTable), as.data.frame(ivTable[, -iv]))
-        ivList <- split(as.data.frame(ivTable[, iv]), as.data.frame(ivTable[, -iv]))
-        pow <- mapply(findTargetPower, iv = ivList, dv = powList, power = power)
-        temp2 <- as.matrix(unique(ivTable[, -iv]))
-        colnames(temp2) <- colnames(ivTable)[-iv]
-        pow <- cbind(temp2, t(pow))
-        rownames(pow) <- NULL
-    }
-    return(pow)
+  ivCol <- grep("iv", colnames(powerTable))
+  ivTable <- as.matrix(powerTable[, ivCol])
+  dvTable <- as.matrix(powerTable[, -ivCol])
+  colnames(ivTable) <- colnames(powerTable)[ivCol]
+  ivName <- colnames(powerTable)[ivCol]
+  ivName <- gsub("iv.", "", ivName)
+  ivName <- gsub("pmMCAR", "MCAR", ivName)
+  ivName <- gsub("pmMAR", "MAR", ivName)
+  if (is.numeric(iv)) {
+    iv <- colnames(powerTable)[iv]
+  }
+  if (length(grep("iv.", iv)) != 0) {
+    iv <- gsub("iv.", "", iv)
+  }
+  temp <- grep(iv, ivName)
+  if (length(temp) == 0) {
+    stop("Cannot find the specified target column")
+  }
+  iv <- temp
+  if (length(ivName) == 1) {
+    pow <- findTargetPower(ivTable, dvTable, power)
+  } else {
+    powList <- split(as.data.frame(dvTable), as.data.frame(ivTable[, -iv]))
+    ivList <- split(as.data.frame(ivTable[, iv]), as.data.frame(ivTable[, -iv]))
+    pow <- mapply(findTargetPower, iv = ivList, dv = powList, power = power)
+    temp2 <- as.matrix(unique(ivTable[, -iv]))
+    colnames(temp2) <- colnames(ivTable)[-iv]
+    pow <- cbind(temp2, t(pow))
+    rownames(pow) <- NULL
+  }
+  return(pow)
 }
 
 #' Find parameter value achieving target power
@@ -106,23 +108,22 @@ findPower <- function(powerTable, iv, power) {
 #'
 #' @keywords internal
 findTargetPower <- function(iv, dv, power) {
-    FUN <- function(dv, iv, power) {
-        x <- dv > power
-        target <- which(x)
-        if (length(target) > 0) {
-            minIndex <- min(target)
-            maxIndex <- max(target)
-            if (dv[minIndex] > dv[maxIndex]) {
-                return(iv[maxIndex, ])
-            } else if (dv[minIndex] < dv[maxIndex]) {
-                return(iv[minIndex, ])
-            } else {
-                return(Inf)
-            }
-        } else {
-            return(NA)
-        }
+  FUN <- function(dv, iv, power) {
+    x <- dv > power
+    target <- which(x)
+    if (length(target) > 0) {
+      minIndex <- min(target)
+      maxIndex <- max(target)
+      if (dv[minIndex] > dv[maxIndex]) {
+        return(iv[maxIndex, ])
+      } else if (dv[minIndex] < dv[maxIndex]) {
+        return(iv[minIndex, ])
+      } else {
+        return(Inf)
+      }
+    } else {
+      return(NA)
     }
-    apply(dv, 2, FUN, iv = iv, power = power)
+  }
+  apply(dv, 2, FUN, iv = iv, power = power)
 }
- 

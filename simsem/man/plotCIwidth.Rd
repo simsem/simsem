@@ -69,9 +69,10 @@ Output2 <- sim(NULL, n = seq(450, 500, 10), model = CFA.Model)
 plotCIwidth(Output2, "f1~~f2", assurance = 0.80)
 
 Output3 <- sim(NULL,
-               n = seq(450, 500, 10),
-               pmMCAR = c(0, 0.05, 0.1, 0.15),
-               model = CFA.Model)
+  n = seq(450, 500, 10),
+  pmMCAR = c(0, 0.05, 0.1, 0.15),
+  model = CFA.Model
+)
 
 # Plot contour surfaces of CI width
 plotCIwidth(Output3, "f1~~f2", assurance = 0.80)

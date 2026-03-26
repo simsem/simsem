@@ -78,12 +78,12 @@ RPS <- binds(latent.cor, 0.5)
 
 RTE <- binds(diag(6))
 
-VY <- bind(rep(NA,6),2)
+VY <- bind(rep(NA, 6), 2)
 
 CFA.Model <- model(LY = LY, RPS = RPS, RTE = RTE, modelType = "CFA")
 
 # In reality, more than 5 replications are needed.
-Output <- sim(5, CFA.Model, n=200)
+Output <- sim(5, CFA.Model, n = 200)
 
 inspect(Output, "coef")
 inspect(Output, "param")

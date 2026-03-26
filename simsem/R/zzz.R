@@ -7,7 +7,7 @@
   packageStartupMessage(pkgname, " was first developed at the University of Kansas Center for")
   packageStartupMessage("Research Methods and Data Analysis, under NSF Grant 1053160.")
   packageStartupMessage("#################################################################")
-	options('simsem.multicore' = FALSE)
+  options("simsem.multicore" = FALSE)
 }
 
 #' @keywords internal

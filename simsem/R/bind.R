@@ -65,121 +65,124 @@
 #' \code{\link{binds}}, \code{\link{SimMatrix-class}}, \code{\link{SimVector-class}}
 #'
 #' @examples
-#' free <- matrix(c(NA, 0.5,
-#'                  NA, NA), 2, 2)
+#' free <- matrix(c(
+#'   NA, 0.5,
+#'   NA, NA
+#' ), 2, 2)
 #'
 #' bind(free, popParam = 0.6)
 #'
 #' @export
 bind <- function(free = NULL, popParam = NULL, misspec = NULL, symmetric = FALSE) {
-    ## SimMatrix
-    if (is.matrix(free)) {
+  ## SimMatrix
+  if (is.matrix(free)) {
+    if (symmetric) stopifnot(isSymmetric(free))
 
-        if (symmetric) stopifnot(isSymmetric(free))
-
-        ## PopParam Must be either character or numeric
-        if (is.character(popParam)) {
-            tryCatch(eval(parse(text = popParam)), error = function(e) stop(e))
-            if (!is.matrix(popParam)) {
-                paramMat <- ifelse(is.free(free), popParam, "")
-            }
-        } else if (is.numeric(popParam) && !is.matrix(popParam)) {
-            paramMat <- ifelse(is.free(free), popParam, "")
-        }
-
-        # Can optionally also be a matrix
-        if (is.matrix(popParam)) {
-            if (symmetric) stopifnot(isSymmetric(popParam))
-            if (!all(dim(free) == dim(popParam)))
-                stop("Free matrix and popParam are not of same dimension")
-			popParam[!is.free(free)] <- ""
-            if (any(!is.empty(popParam) != is.free(free))) {
-                stop("Please assign a value for any free parameters")
-            }
-            paramMat <- matrix(as.character(popParam), nrow = nrow(popParam), ncol = ncol(popParam))
-
-        }
-
-        if (is.null(popParam)) {
-            paramMat <- matrix(NaN)
-        }
-
-        # Misspec - same tests as above, almost.
-        if (is.character(misspec)) {
-            tryCatch(eval(parse(text = misspec)), error = function(e) stop(e))
-            if (!is.matrix(misspec))
-                misspecMat <- ifelse(!is.free(free), misspec, "")
-        } else if (is.numeric(misspec) && !is.matrix(misspec)) {
-            misspecMat <- ifelse(!is.free(free), misspec, "")
-        }
-
-        if (is.matrix(misspec)) {
-            if (symmetric) stopifnot(isSymmetric(misspec))
-            if (!all(dim(free) == dim(misspec)))
-                stop("Free matrix and misspec are not of same dimension")
-            misspecMat <- matrix(as.character(misspec), nrow = nrow(misspec), ncol = ncol(misspec))
-
-        }
-        if (is.null(misspec)) {
-            misspecMat <- matrix(NaN)
-        }
-
-        ## to prevent errors elsewhere, only use indLab= and facLab=
-        dimnames(free) <- NULL
-        dimnames(paramMat) <- NULL
-        dimnames(misspecMat) <- NULL
-
-        return(new("SimMatrix", free = free, popParam = paramMat, misspec = misspecMat,
-            symmetric = symmetric))
-
-        ## SimVector
-    } else if (is.vector(free)) {
-
-        if (symmetric) stop("A vector cannot be symmetric")
-
-        # popParam
-        if (is.character(popParam) && length(popParam == 1)) {
-            tryCatch(eval(parse(text = popParam)), error = function(e) stop(e))
-            paramVec <- ifelse(is.free(free), popParam, "")
-        } else if (is.numeric(popParam) && length(popParam) == 1) {
-            paramVec <- ifelse(is.free(free), popParam, "")
-        } else if (is.vector(popParam)) {
-            if ((length(free) != length(popParam)) && length(popParam) > 1)
-                stop("Free vector and popParam are not the same length")
-			popParam[!is.free(free)] <- ""
-            if (any(!is.empty(popParam) != is.free(free))) {
-                stop("Please assign a value for any free parameters")
-            }
-            paramVec <- as.character(popParam)
-        } else {
-            paramVec <- vector()
-        }
-
-        # Misspec
-        if (is.character(misspec) && length(misspec) == 1) {
-            tryCatch(eval(parse(text = misspec)), error = function(e) stop(e))
-            misspecVec <- ifelse(!is.free(free), misspec, "")
-        } else if (is.numeric(misspec) && length(misspec) == 1) {
-            misspecVec <- ifelse(!is.free(free), misspec, "")
-        } else if (is.vector(misspec)) {
-            if ((length(free) != length(misspec)) && length(misspec) > 1)
-                stop("Free vector and misspec are not the same length")
-            misspecVec <- as.character(misspec)
-        } else {
-            misspecVec <- vector()
-        }
-
-        ## to prevent errors elsewhere, only use indLab= and facLab=
-        names(free) <- NULL
-        names(paramVec) <- NULL
-        names(misspecVec) <- NULL
-
-        new("SimVector", free = free, popParam = paramVec, misspec = misspecVec)
-
-    } else {
-        stop("Please specify a free/fixed parameter matrix or vector.")
+    ## PopParam Must be either character or numeric
+    if (is.character(popParam)) {
+      tryCatch(eval(parse(text = popParam)), error = function(e) stop(e))
+      if (!is.matrix(popParam)) {
+        paramMat <- ifelse(is.free(free), popParam, "")
+      }
+    } else if (is.numeric(popParam) && !is.matrix(popParam)) {
+      paramMat <- ifelse(is.free(free), popParam, "")
     }
 
+    # Can optionally also be a matrix
+    if (is.matrix(popParam)) {
+      if (symmetric) stopifnot(isSymmetric(popParam))
+      if (!all(dim(free) == dim(popParam))) {
+        stop("Free matrix and popParam are not of same dimension")
+      }
+      popParam[!is.free(free)] <- ""
+      if (any(!is.empty(popParam) != is.free(free))) {
+        stop("Please assign a value for any free parameters")
+      }
+      paramMat <- matrix(as.character(popParam), nrow = nrow(popParam), ncol = ncol(popParam))
+    }
+
+    if (is.null(popParam)) {
+      paramMat <- matrix(NaN)
+    }
+
+    # Misspec - same tests as above, almost.
+    if (is.character(misspec)) {
+      tryCatch(eval(parse(text = misspec)), error = function(e) stop(e))
+      if (!is.matrix(misspec)) {
+        misspecMat <- ifelse(!is.free(free), misspec, "")
+      }
+    } else if (is.numeric(misspec) && !is.matrix(misspec)) {
+      misspecMat <- ifelse(!is.free(free), misspec, "")
+    }
+
+    if (is.matrix(misspec)) {
+      if (symmetric) stopifnot(isSymmetric(misspec))
+      if (!all(dim(free) == dim(misspec))) {
+        stop("Free matrix and misspec are not of same dimension")
+      }
+      misspecMat <- matrix(as.character(misspec), nrow = nrow(misspec), ncol = ncol(misspec))
+    }
+    if (is.null(misspec)) {
+      misspecMat <- matrix(NaN)
+    }
+
+    ## to prevent errors elsewhere, only use indLab= and facLab=
+    dimnames(free) <- NULL
+    dimnames(paramMat) <- NULL
+    dimnames(misspecMat) <- NULL
+
+    return(new("SimMatrix",
+      free = free, popParam = paramMat, misspec = misspecMat,
+      symmetric = symmetric
+    ))
+
+    ## SimVector
+  } else if (is.vector(free)) {
+    if (symmetric) stop("A vector cannot be symmetric")
+
+    # popParam
+    if (is.character(popParam) && length(popParam == 1)) {
+      tryCatch(eval(parse(text = popParam)), error = function(e) stop(e))
+      paramVec <- ifelse(is.free(free), popParam, "")
+    } else if (is.numeric(popParam) && length(popParam) == 1) {
+      paramVec <- ifelse(is.free(free), popParam, "")
+    } else if (is.vector(popParam)) {
+      if ((length(free) != length(popParam)) && length(popParam) > 1) {
+        stop("Free vector and popParam are not the same length")
+      }
+      popParam[!is.free(free)] <- ""
+      if (any(!is.empty(popParam) != is.free(free))) {
+        stop("Please assign a value for any free parameters")
+      }
+      paramVec <- as.character(popParam)
+    } else {
+      paramVec <- vector()
+    }
+
+    # Misspec
+    if (is.character(misspec) && length(misspec) == 1) {
+      tryCatch(eval(parse(text = misspec)), error = function(e) stop(e))
+      misspecVec <- ifelse(!is.free(free), misspec, "")
+    } else if (is.numeric(misspec) && length(misspec) == 1) {
+      misspecVec <- ifelse(!is.free(free), misspec, "")
+    } else if (is.vector(misspec)) {
+      if ((length(free) != length(misspec)) && length(misspec) > 1) {
+        stop("Free vector and misspec are not the same length")
+      }
+      misspecVec <- as.character(misspec)
+    } else {
+      misspecVec <- vector()
+    }
+
+    ## to prevent errors elsewhere, only use indLab= and facLab=
+    names(free) <- NULL
+    names(paramVec) <- NULL
+    names(misspecVec) <- NULL
+
+    new("SimVector", free = free, popParam = paramVec, misspec = misspecVec)
+  } else {
+    stop("Please specify a free/fixed parameter matrix or vector.")
+  }
 }
 
 #' Symmetric version of \code{bind}
@@ -197,7 +200,7 @@ bind <- function(free = NULL, popParam = NULL, misspec = NULL, symmetric = FALSE
 #'
 #' @export
 binds <- function(free = NULL, popParam = NULL, misspec = NULL, symmetric = TRUE) {
-    return(bind(free = free, popParam = popParam, misspec = misspec, symmetric = symmetric))
+  return(bind(free = free, popParam = popParam, misspec = misspec, symmetric = symmetric))
 }
 
 
@@ -213,21 +216,24 @@ binds <- function(free = NULL, popParam = NULL, misspec = NULL, symmetric = TRUE
 #'
 #' @keywords internal
 is.empty <- function(dat) {
-    if (is.null(dim(dat))) {
-        temp <- sapply(dat, FUN = function(x) if (x == "" || is.na(x)) {
-            TRUE
-        } else {
-            FALSE
-        })
-        names(temp) <- NULL
-        return(temp)
-    }
-    apply(dat, c(1, 2), FUN = function(x) if (x == "" || is.na(x)) {
+  if (is.null(dim(dat))) {
+    temp <- sapply(dat, FUN = function(x) {
+      if (x == "" || is.na(x)) {
         TRUE
-    } else {
+      } else {
         FALSE
+      }
     })
-
+    names(temp) <- NULL
+    return(temp)
+  }
+  apply(dat, c(1, 2), FUN = function(x) {
+    if (x == "" || is.na(x)) {
+      TRUE
+    } else {
+      FALSE
+    }
+  })
 }
 
 
@@ -242,15 +248,15 @@ is.empty <- function(dat) {
 #'
 #' @keywords internal
 validConstraints <- function(mat) {
-    if (is(mat, "SimMatrix") || is(mat, "SimVector")) {
-        mat <- mat@free
-    }
+  if (inherits(mat, "SimMatrix") || inherits(mat, "SimVector")) {
+    mat <- mat@free
+  }
 
-    labels <- is.label(mat)
-    combs <- combn(labels[labels], 2)
-    res <- combs[1, ] & combs[2, ]
+  labels <- is.label(mat)
+  combs <- combn(labels[labels], 2)
+  res <- combs[1, ] & combs[2, ]
 
-    return(any(res))
+  return(any(res))
 }
 
 #' Identify character constraint labels
@@ -263,12 +269,12 @@ validConstraints <- function(mat) {
 #'
 #' @keywords internal
 is.label <- function(mat) {
-    flat <- as.vector(mat)
-    flat[is.na(flat)] <- 0
-    isLabel <- sapply(flat, FUN = function(x) {
-        suppressWarnings(is.na(as.numeric(x)))
-    })
-    return(isLabel)
+  flat <- as.vector(mat)
+  flat[is.na(flat)] <- 0
+  isLabel <- sapply(flat, FUN = function(x) {
+    suppressWarnings(is.na(as.numeric(x)))
+  })
+  return(isLabel)
 }
 
 #' Identify free parameters
@@ -281,10 +287,10 @@ is.label <- function(mat) {
 #'
 #' @keywords internal
 is.free <- function(mat) {
-    if (is.character(mat)) {
-        isFree <- is.na(mat) | is.label(mat)
-    } else {
-        isFree <- is.na(mat)
-    }
-    return(isFree)
+  if (is.character(mat)) {
+    isFree <- is.na(mat) | is.label(mat)
+  } else {
+    isFree <- is.na(mat)
+  }
+  return(isFree)
 }

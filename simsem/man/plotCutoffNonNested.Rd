@@ -67,7 +67,7 @@ diag(latent.cor) <- 1
 RPS <- binds(latent.cor, "runif(1, 0.7, 0.9)")
 RTE <- binds(diag(8))
 
-CFA.Model.A <- model(LY = LY.A, RPS = RPS, RTE = RTE, modelType="CFA")
+CFA.Model.A <- model(LY = LY.A, RPS = RPS, RTE = RTE, modelType = "CFA")
 
 # Model B: Factor 1 on Items 1-4 and Factor 2 on Items 5-8
 loading.B <- matrix(0, 8, 2)
@@ -76,7 +76,7 @@ loading.B[5:8, 2] <- NA
 
 LY.B <- bind(loading.B, 0.7)
 
-CFA.Model.B <- model(LY = LY.B, RPS = RPS, RTE = RTE, modelType="CFA")
+CFA.Model.B <- model(LY = LY.B, RPS = RPS, RTE = RTE, modelType = "CFA")
 
 Output.A.A <- sim(10, n = 500, model = CFA.Model.A, generate = CFA.Model.A)
 Output.A.B <- sim(10, n = 500, model = CFA.Model.B, generate = CFA.Model.A)

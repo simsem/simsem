@@ -111,211 +111,221 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
                 averageNumMisspec = FALSE, optMisfit = NULL, optDraws = 50,
                 createOrder = c(1, 2, 3), aux = NULL, group = NULL, mxFit = FALSE,
                 mxMixture = FALSE, citype = NULL, cilevel = 0.95, seed = 123321,
-                silent = FALSE, multicore = options('simsem.multicore')[[1]],
+                silent = FALSE, multicore = options("simsem.multicore")[[1]],
                 numProc = NULL, paramOnly = FALSE, dataOnly = FALSE,
                 smartStart = FALSE, previousSim = NULL, completeRep = FALSE,
                 stopOnError = FALSE) {
   mc <- match.call()
-	## Update function. Takes results object. Or takes model object.
-	## Speed things: functions in C or C++ (maybe drawparam), look at sugar functions
-	## Difference percent missing in different groups
+  ## Update function. Takes results object. Or takes model object.
+  ## Speed things: functions in C or C++ (maybe drawparam), look at sugar functions
+  ## Difference percent missing in different groups
   start.time0 <- start.time <- proc.time()[3]
   timing <- list()
-	timing$StartTime <- Sys.time()
-	if (RNGkind()[1L] != "L'Ecuyer-CMRG") {
-	  message('The RNGkind() was changed from "', RNGkind()[1L],
-	          '" to RNGkind("L\'Ecuyer-CMRG") in order to enable the multiple ',
-	          'streams in the parallel package.\nTo set a RNG seed using the ',
-	          'previous RNGkind(), you can use\n\tRNGkind("',
-	          paste(RNGkind(), collapse = '","'), '")\n or \n\t',
-	          'set.seed(seed, kind = "', RNGkind()[1L], '")')
-	  RNGkind("L'Ecuyer-CMRG")
-	}
-	if (is.null(previousSim)) {
-		set.seed(seed)
-	} else {
-		assign(".Random.seed", as.integer(previousSim@seed[-1]), envir = .GlobalEnv)
-	}
+  timing$StartTime <- Sys.time()
+  if (RNGkind()[1L] != "L'Ecuyer-CMRG") {
+    message(
+      'The RNGkind() was changed from "', RNGkind()[1L],
+      '" to RNGkind("L\'Ecuyer-CMRG") in order to enable the multiple ',
+      "streams in the parallel package.\nTo set a RNG seed using the ",
+      'previous RNGkind(), you can use\n\tRNGkind("',
+      paste(RNGkind(), collapse = '","'), '")\n or \n\t',
+      'set.seed(seed, kind = "', RNGkind()[1L], '")'
+    )
+    RNGkind("L'Ecuyer-CMRG")
+  }
+  if (is.null(previousSim)) {
+    set.seed(seed)
+  } else {
+    assign(".Random.seed", as.integer(previousSim@seed[-1]), envir = .GlobalEnv)
+  }
 
-	isPopulation <- FALSE
-	popData <- NULL
-	if(!is.null(rawData)) {
-		if(!is.null(nRep) & !is.null(n)) {
-			isPopulation <- TRUE
-			popData <- rawData
-			rawData <- NULL
-		}
-	}
+  isPopulation <- FALSE
+  popData <- NULL
+  if (!is.null(rawData)) {
+    if (!is.null(nRep) & !is.null(n)) {
+      isPopulation <- TRUE
+      popData <- rawData
+      rawData <- NULL
+    }
+  }
 
-	lavaanGenerate <- FALSE
-	mxGenerate <- FALSE
-	functionGenerate <- FALSE
-	if (!is.null(generate)) {
-		if (is.character(generate)) {
-			generate <- list(model = generate)
-			lavaanGenerate <- TRUE
-		} else if (is.partable(generate)) {
-			generate$ustart <- generate$start <- generate$est # TDJ added 26 Nov 2019
-			generate <- list(model = generate)
-			lavaanGenerate <- TRUE
-		} else if (is.lavaancall(generate)) {
-			lavaanGenerate <- TRUE
-		} else if (inherits(generate, "lavaan")) {
-			temp <- parTable(generate)
-			temp$ustart <- temp$start <- temp$est
-			generate <- list(model = temp)
-			lavaanGenerate <- TRUE
-		} else if (is(generate, "MxModel")) {
-			mxGenerate <- TRUE
-		} else if (is(generate, "function")) {
-			functionGenerate <- TRUE
-		} else if (is(generate, "SimSem")) {
-			## Do nothing
-		} else {
-			stop("Please specify an appropriate object for the 'generate' argument: ",
-			     "simsem model template, lavaan script, lavaan parameter table, ",
-			     "OpenMx object, a list of options for the 'simulateData' function, ",
-			     "or a function that takes sample size and provides data as an output.")
-		}
-	}
+  lavaanGenerate <- FALSE
+  mxGenerate <- FALSE
+  functionGenerate <- FALSE
+  if (!is.null(generate)) {
+    if (is.character(generate)) {
+      generate <- list(model = generate)
+      lavaanGenerate <- TRUE
+    } else if (is.partable(generate)) {
+      generate$ustart <- generate$start <- generate$est # TDJ added 26 Nov 2019
+      generate <- list(model = generate)
+      lavaanGenerate <- TRUE
+    } else if (is.lavaancall(generate)) {
+      lavaanGenerate <- TRUE
+    } else if (inherits(generate, "lavaan")) {
+      temp <- parTable(generate)
+      temp$ustart <- temp$start <- temp$est
+      generate <- list(model = temp)
+      lavaanGenerate <- TRUE
+    } else if (inherits(generate, "MxModel")) {
+      mxGenerate <- TRUE
+    } else if (is.function(generate)) {
+      functionGenerate <- TRUE
+    } else if (inherits(generate, "SimSem")) {
+      ## Do nothing
+    } else {
+      stop(
+        "Please specify an appropriate object for the 'generate' argument: ",
+        "simsem model template, lavaan script, lavaan parameter table, ",
+        "OpenMx object, a list of options for the 'simulateData' function, ",
+        "or a function that takes sample size and provides data as an output."
+      )
+    }
+  }
 
-	if ((lavaanGenerate | mxGenerate | functionGenerate) & (sequential | saveLatentVar)) {
-		stop("The sequential or saveLatentVar features are supported by only the ",
-		     "data generation using the simsem template.")
-	}
+  if ((lavaanGenerate | mxGenerate | functionGenerate) & (sequential | saveLatentVar)) {
+    stop(
+      "The sequential or saveLatentVar features are supported by only the ",
+      "data generation using the simsem template."
+    )
+  }
 
-	lavaanAnalysis <- FALSE
-	mxAnalysis <- FALSE
-	functionAnalysis <- FALSE
-	.om. <- model # TDJ 29 Nov 2019: save original argument, in case needed for generate=NULL
-	if (is.character(model)) {
-		model <- list(model = model)
-		lavaanAnalysis <- TRUE
-	} else if (is.partable(model)) {
-		model <- list(model = model)
-		lavaanAnalysis <- TRUE
-	} else if (is.lavaancall(model)) {
-		lavaanAnalysis <- TRUE
-	} else if (is(model, "lavaan")) {
-		model <- list(model = parTable(model))
-		lavaanAnalysis <- TRUE
-	} else if (is(model, "MxModel")) {
-		mxAnalysis <- TRUE
-	} else if (is(model, "SimSem")) {
-		## Do nothing
-	} else if (is(model, "function")) {
-		functionAnalysis <- TRUE
-	} else {
-		stop("Please specify an appropriate object for the 'model' argument: ",
-		     "simsem model template, lavaan script, lavaan parameter table, list of ",
-		     "options for the 'lavaan' function, or a function written to analyze data.")
-	}
+  lavaanAnalysis <- FALSE
+  mxAnalysis <- FALSE
+  functionAnalysis <- FALSE
+  .om. <- model # TDJ 29 Nov 2019: save original argument, in case needed for generate=NULL
+  if (is.character(model)) {
+    model <- list(model = model)
+    lavaanAnalysis <- TRUE
+  } else if (is.partable(model)) {
+    model <- list(model = model)
+    lavaanAnalysis <- TRUE
+  } else if (is.lavaancall(model)) {
+    lavaanAnalysis <- TRUE
+  } else if (inherits(model, "lavaan")) {
+    model <- list(model = parTable(model))
+    lavaanAnalysis <- TRUE
+  } else if (inherits(model, "MxModel")) {
+    mxAnalysis <- TRUE
+  } else if (inherits(model, "SimSem")) {
+    ## Do nothing
+  } else if (is.function(model)) {
+    functionAnalysis <- TRUE
+  } else {
+    stop(
+      "Please specify an appropriate object for the 'model' argument: ",
+      "simsem model template, lavaan script, lavaan parameter table, list of ",
+      "options for the 'lavaan' function, or a function written to analyze data."
+    )
+  }
 
-	if (lavaanAnalysis) {
-		model <- c(model, list(...))
-		if (!("group" %in% names(model)) & "group" %in% names(mc)) model$group <- group
+  if (lavaanAnalysis) {
+    model <- c(model, list(...))
+    if (!("group" %in% names(model)) & "group" %in% names(mc)) model$group <- group
 
-		## TDJ addition (26 Nov 2019):
-		##  - added is.null(rawData) on 23 Sep 2020
-		##  - added is.null(popData) on 17 May 2024
-		if (is.null(generate) && is.null(rawData) && is.null(popData)) {
-		  ## No other mechanisms to generate data, so must(?) use analysis model.
-		  ## FIXME: Without parameter values, simulateData() will set all == 1s / 0s
-		  lavaanGenerate <- TRUE
-		  generate <- .om.
-		  ## scroll through options again
-		  if (is.character(generate)) {
-		    generate <- list(model = generate)
-		  } else if (is.partable(generate)) {
-		    generate$ustart <- generate$start <- generate$est
-		    generate <- list(model = generate)
-		  } else if (is(generate, "lavaan")) {
-		    temp <- parTable(generate)
-		    temp$ustart <- temp$start <- temp$est
-		    generate <- list(model = temp)
-		  }
-		}
-		## end TDJ addition
-	}
+    ## TDJ addition (26 Nov 2019):
+    ##  - added is.null(rawData) on 23 Sep 2020
+    ##  - added is.null(popData) on 17 May 2024
+    if (is.null(generate) && is.null(rawData) && is.null(popData)) {
+      ## No other mechanisms to generate data, so must(?) use analysis model.
+      ## FIXME: Without parameter values, simulateData() will set all == 1s / 0s
+      lavaanGenerate <- TRUE
+      generate <- .om.
+      ## scroll through options again
+      if (is.character(generate)) {
+        generate <- list(model = generate)
+      } else if (is.partable(generate)) {
+        generate$ustart <- generate$start <- generate$est
+        generate <- list(model = generate)
+      } else if (inherits(generate, "lavaan")) {
+        temp <- parTable(generate)
+        temp$ustart <- temp$start <- temp$est
+        generate <- list(model = temp)
+      }
+    }
+    ## end TDJ addition
+  }
 
-	if (mxAnalysis) {
-		if (length(model@submodels) > 0) {
-			if (!is(model@submodels[[1]]@expectation, "MxExpectationRAM") && all(is.na(model@submodels[[1]]@expectation@means))) {
-			  stop("The expected means must be specified in the objective of the 'model' argument.")
-			}
-		} else {
-			if (!is(model@expectation, "MxExpectationRAM") && all(is.na(model@expectation@means))) {
-			  stop("The expected means must be specified in the objective of the 'model' argument.")
-			}
-		}
-	}
+  if (mxAnalysis) {
+    if (length(model@submodels) > 0) {
+      if (!inherits(model@submodels[[1]]@expectation, "MxExpectationRAM") && all(is.na(model@submodels[[1]]@expectation@means))) {
+        stop("The expected means must be specified in the objective of the 'model' argument.")
+      }
+    } else {
+      if (!inherits(model@expectation, "MxExpectationRAM") && all(is.na(model@expectation@means))) {
+        stop("The expected means must be specified in the objective of the 'model' argument.")
+      }
+    }
+  }
 
-	##TDJ updated the completeRep section:
-	## Save arguments for completeRep = TRUE (or an integer)
-	stopifnot(is.logical(completeRep) || is.numeric(completeRep))
-	## for TRUE, add up to 10% more replications
-	if (is.logical(completeRep) && completeRep) completeRep <- nRep*1.1
-	completeRep <- as.integer(completeRep)
-	if (completeRep < 0) completeRep <- 0L
-	## otherwise, make sure it is actually a maximum > nRep
-	if (completeRep > 0 && completeRep <= nRep) {
-	  message('completeRep= should be logical, or an integer > nRep to indicate ',
-	          'a maximum number of replications to try achieving at least ',
-	          'nRep converged samples. completeRep=', completeRep, 'is ignored.')
-	  completeRep <- 0L
-	} # else completeRep > nRep
+  ## TDJ updated the completeRep section:
+  ## Save arguments for completeRep = TRUE (or an integer)
+  stopifnot(is.logical(completeRep) || is.numeric(completeRep))
+  ## for TRUE, add up to 10% more replications
+  if (is.logical(completeRep) && completeRep) completeRep <- nRep * 1.1
+  completeRep <- as.integer(completeRep)
+  if (completeRep < 0) completeRep <- 0L
+  ## otherwise, make sure it is actually a maximum > nRep
+  if (completeRep > 0 && completeRep <= nRep) {
+    message(
+      "completeRep= should be logical, or an integer > nRep to indicate ",
+      "a maximum number of replications to try achieving at least ",
+      "nRep converged samples. completeRep=", completeRep, "is ignored."
+    )
+    completeRep <- 0L
+  } # else completeRep > nRep
 
-	nInitial <- n
-	pmMCARInitial <- pmMCAR
-	pmMARInitial <- pmMAR
-	nRepInitial <- nRep
+  nInitial <- n
+  pmMCARInitial <- pmMCAR
+  pmMARInitial <- pmMAR
+  nRepInitial <- nRep
 
   #### 1. Set up correct data generation template (move inside the runRep).
 
 
-	## Find the number of groups
-	## Change in draw param so we always have a nested list (even with 1 group).
-	## Then get rid of the if/else.
-	ngroups <- 1L
-	if (!is.null(generate)) {
-		if (lavaanGenerate) {
-			if (is.partable(generate$model)) {
-				ngroups <- max(generate$model$group)
-			} else {
-				if (is.list(n)) ngroups <- length(n)
-			}
-		} else if (mxGenerate) {
-			ngroups <- length(generate@submodels)
-			if(ngroups == 0) ngroups <- 1
-		} else if (functionGenerate) {
-			if(is.list(n)) ngroups <- length(n)
-		} else {
-			ngroups <- max(generate@pt$group)
-		}
-	} else {
-		if (lavaanAnalysis) {
-			if (is.partable(model$model)) {
-				ngroups <- max(model$model$group)
-			} else {
-				if (!is.null(rawData) && !is.null(model$group)) {
-					if (is.data.frame(rawData) || is.matrix(rawData)) {
-						ngroups <- length(unique(rawData[ , model$group]))
-					} else {
-						ngroups <- length(unique(rawData[[1]][ , model$group]))
-					}
-				} else {
-					if (is.list(n)) ngroups <- length(n)
-				}
-			}
-		} else if (mxAnalysis) {
-			ngroups <- length(model@submodels)
-			if (ngroups == 0) ngroups <- 1L
-		} else if (functionAnalysis) {
-			ngroups <- 1L # 1 because to get this far, only raw data are provided. The number of group will does not matter.
-		} else {
-			ngroups <- max(model@pt$group)
-		}
-	}
+  ## Find the number of groups
+  ## Change in draw param so we always have a nested list (even with 1 group).
+  ## Then get rid of the if/else.
+  ngroups <- 1L
+  if (!is.null(generate)) {
+    if (lavaanGenerate) {
+      if (is.partable(generate$model)) {
+        ngroups <- max(generate$model$group)
+      } else {
+        if (is.list(n)) ngroups <- length(n)
+      }
+    } else if (mxGenerate) {
+      ngroups <- length(generate@submodels)
+      if (ngroups == 0) ngroups <- 1
+    } else if (functionGenerate) {
+      if (is.list(n)) ngroups <- length(n)
+    } else {
+      ngroups <- max(generate@pt$group)
+    }
+  } else {
+    if (lavaanAnalysis) {
+      if (is.partable(model$model)) {
+        ngroups <- max(model$model$group)
+      } else {
+        if (!is.null(rawData) && !is.null(model$group)) {
+          if (is.data.frame(rawData) || is.matrix(rawData)) {
+            ngroups <- length(unique(rawData[, model$group]))
+          } else {
+            ngroups <- length(unique(rawData[[1]][, model$group]))
+          }
+        } else {
+          if (is.list(n)) ngroups <- length(n)
+        }
+      }
+    } else if (mxAnalysis) {
+      ngroups <- length(model@submodels)
+      if (ngroups == 0) ngroups <- 1L
+    } else if (functionAnalysis) {
+      ngroups <- 1L # 1 because to get this far, only raw data are provided. The number of group will does not matter.
+    } else {
+      ngroups <- max(model@pt$group)
+    }
+  }
 
   timing$SimulationParams <- proc.time()[3] - start.time0
   start.time <- proc.time()[3]
@@ -323,88 +333,98 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
   #### 2. Compute full-factorial combinations of simulation parameters (MAR, MCAR, n)
 
 
-	if (is.null(rawData)) {
-		## If the rawData is not specified, the n value must be valid.
-		if (!is.list(n)) {
-			## If multiple groups then...
-			## Make n as a list to represent sample size of each group
-			if (length(n) == 1L && !is.null(nRep)) {
-			## For a single specified value of n, each rep has the same n
-				n <- rep(n, nRep)
-			}
-			## Make as a list, then the same sample size for all groups
-			n <- list(n)
-			n <- rep(n, ngroups)
-		} else {
-			## If n is a list, thus multiple groups, make sure that the length is equal.
-			## Length for each group can be 1 or nRep
-			if (length(unique(sapply(n, length))) != 1L) {
-				stop("You must specify the same number of sample sizes for each group; ",
-				     "each list component in the 'n' argument must have the same length.")
-			} else {
-			## This is for when there is a single sample size for all reps.
-				if (length(n[[1]]) == 1L && !is.null(nRep)) {
-					n <- lapply(n, rep, nRep)
-				}
-			}
-		}
-		## If the nRep is not NULL, the length of sample size currently must equal nRep
-		if (!is.null(nRep) && (length(n[[1]]) != nRep)) {
-		  stop("When the number of replications argument 'nRep' is used, sample ",
-		       "size 'n' must be a single value, a vector with length equal to ",
-		       "'nRep', or a vector with length equal to a multiple of 'nRep'")
-		}
-		if (is.null(nRep)) {
-			if (!is.null(pmMCAR) && !is.vector(pmMCAR))
-				stop("Please specify the number of replications 'nRep'")
-			if (!is.null(pmMAR) && !is.vector(pmMAR))
-				stop("Please specify the number of replications 'nRep'")
+  if (is.null(rawData)) {
+    ## If the rawData is not specified, the n value must be valid.
+    if (!is.list(n)) {
+      ## If multiple groups then...
+      ## Make n as a list to represent sample size of each group
+      if (length(n) == 1L && !is.null(nRep)) {
+        ## For a single specified value of n, each rep has the same n
+        n <- rep(n, nRep)
+      }
+      ## Make as a list, then the same sample size for all groups
+      n <- list(n)
+      n <- rep(n, ngroups)
+    } else {
+      ## If n is a list, thus multiple groups, make sure that the length is equal.
+      ## Length for each group can be 1 or nRep
+      if (length(unique(sapply(n, length))) != 1L) {
+        stop(
+          "You must specify the same number of sample sizes for each group; ",
+          "each list component in the 'n' argument must have the same length."
+        )
+      } else {
+        ## This is for when there is a single sample size for all reps.
+        if (length(n[[1]]) == 1L && !is.null(nRep)) {
+          n <- lapply(n, rep, nRep)
+        }
+      }
+    }
+    ## If the nRep is not NULL, the length of sample size currently must equal nRep
+    if (!is.null(nRep) && (length(n[[1]]) != nRep)) {
+      stop(
+        "When the number of replications argument 'nRep' is used, sample ",
+        "size 'n' must be a single value, a vector with length equal to ",
+        "'nRep', or a vector with length equal to a multiple of 'nRep'"
+      )
+    }
+    if (is.null(nRep)) {
+      if (!is.null(pmMCAR) && !is.vector(pmMCAR)) {
+        stop("Please specify the number of replications 'nRep'")
+      }
+      if (!is.null(pmMAR) && !is.vector(pmMAR)) {
+        stop("Please specify the number of replications 'nRep'")
+      }
 
-			usedMCAR <- NULL
-			usedMAR <- NULL
-			usedMCAR <- if (is.null(pmMCAR)) 0 else pmMCAR
-			usedMAR <- if (is.null(pmMAR)) 0 else pmMAR
+      usedMCAR <- NULL
+      usedMAR <- NULL
+      usedMCAR <- if (is.null(pmMCAR)) 0 else pmMCAR
+      usedMAR <- if (is.null(pmMAR)) 0 else pmMAR
 
-			out <- expand.grid(1:length(n[[1]]), usedMCAR, usedMAR)
+      out <- expand.grid(1:length(n[[1]]), usedMCAR, usedMAR)
 
-			if (!is.null(pmMCAR)) pmMCAR <- out[, 2]
-			if (!is.null(pmMAR)) pmMAR <- out[, 3]
-			n <- lapply(n, function(x, y) x[y], y = out[ , 1])
-			nRep <- nrow(out)
-		}
-	} else {
-		nRep <- length(rawData)
-		if (!is.null(n)) {
-			warning("The sample size argument 'n' is suppressed when 'rawData' is specified")
-			n <- NULL
-		}
-	}
+      if (!is.null(pmMCAR)) pmMCAR <- out[, 2]
+      if (!is.null(pmMAR)) pmMAR <- out[, 3]
+      n <- lapply(n, function(x, y) x[y], y = out[, 1])
+      nRep <- nrow(out)
+    }
+  } else {
+    nRep <- length(rawData)
+    if (!is.null(n)) {
+      warning("The sample size argument 'n' is suppressed when 'rawData' is specified")
+      n <- NULL
+    }
+  }
 
   #### 3. Adjust pmMCAR and pmMAR
 
-	if (!is.null(pmMCAR)) {
-		## If there is one sample size, pmMCAR and pmMAR specified
-		if (length(pmMCAR) == 1L) {
-			pmMCAR <- rep(pmMCAR, nRep)
-		} else if (length(pmMCAR) == nRep) {
-			## Do nothing
-		} else {
-			stop("When the 'rawData' argument is specified, the percent missing ",
-			     "completely at random 'pmMCAR' must either be a single value, or ",
-			     "a vector with length equal to the number of datasets")
-		}
-	}
-	if (!is.null(pmMAR)) {
-		if(length(pmMAR) == 1L) {
-			pmMAR <- rep(pmMAR, nRep)
-		} else if (length(pmMAR) == nRep) {
-			## Do nothing
-		} else {
-			stop("When the 'rawData' argument is specified, the percent missing ",
-			     "at random 'pmMCAR' must either be a single value, or a vector ",
-			     "with length equal to the number of datasets")
-		}
-	}
+  if (!is.null(pmMCAR)) {
+    ## If there is one sample size, pmMCAR and pmMAR specified
+    if (length(pmMCAR) == 1L) {
+      pmMCAR <- rep(pmMCAR, nRep)
+    } else if (length(pmMCAR) == nRep) {
+      ## Do nothing
+    } else {
+      stop(
+        "When the 'rawData' argument is specified, the percent missing ",
+        "completely at random 'pmMCAR' must either be a single value, or ",
+        "a vector with length equal to the number of datasets"
+      )
+    }
+  }
+  if (!is.null(pmMAR)) {
+    if (length(pmMAR) == 1L) {
+      pmMAR <- rep(pmMAR, nRep)
+    } else if (length(pmMAR) == nRep) {
+      ## Do nothing
+    } else {
+      stop(
+        "When the 'rawData' argument is specified, the percent missing ",
+        "at random 'pmMCAR' must either be a single value, or a vector ",
+        "with length equal to the number of datasets"
+      )
+    }
+  }
 
   timing$RandomSimParams <- (proc.time()[3] - start.time)
   start.time <- proc.time()[3]
@@ -419,18 +439,17 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
     numseed[[i]] <- s
     s <- parallel::nextRNGStream(s)
   }
-	## Save last seed numseed[[nRep]] to result object to use for update method?
+  ## Save last seed numseed[[nRep]] to result object to use for update method?
 
   if (is.null(rawData)) {
-
     for (i in seq_len(nRep)) {
       simConds[[i]] <- list()
-      simConds[[i]][[1]] <- NULL 				      # Rawdata
+      simConds[[i]][[1]] <- NULL # Rawdata
       simConds[[i]][[2]] <- sapply(n, "[", i) # Sample Size
-      simConds[[i]][[3]] <- pmMCAR[i] 		    # % Missing Completely at Random
-      simConds[[i]][[4]] <- pmMAR[i] 			    # % Missing at random
-      simConds[[i]][[5]] <- numseed[[i]] 		  # L'Ecuyer random seed
-      simConds[[i]][[6]] <- FALSE				      # Skip impose missing values
+      simConds[[i]][[3]] <- pmMCAR[i] # % Missing Completely at Random
+      simConds[[i]][[4]] <- pmMAR[i] # % Missing at random
+      simConds[[i]][[5]] <- numseed[[i]] # L'Ecuyer random seed
+      simConds[[i]][[6]] <- FALSE # Skip impose missing values
     }
     if (isPopulation) {
       if (is.matrix(popData)) {
@@ -451,8 +470,10 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
     } else if (is.matrix(rawData[[1]])) {
       rawData <- lapply(rawData, data.frame)
     } else {
-      stop("Check the list object specified in the 'rawData' argument; ",
-           "list must either contain matrices or data frames")
+      stop(
+        "Check the list object specified in the 'rawData' argument; ",
+        "list must either contain matrices or data frames"
+      )
     }
 
     for (i in seq_along(rawData)) {
@@ -465,8 +486,10 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
       simConds[[i]][[6]] <- FALSE
     }
   } else {
-    stop("Check the object specified in 'rawData' argument; object must ",
-         "either be a SimData class or a list of data frames.")
+    stop(
+      "Check the object specified in 'rawData' argument; object must ",
+      "either be a SimData class or a list of data frames."
+    )
   }
 
   timing$SimConditions <- (proc.time()[3] - start.time)
@@ -485,52 +508,56 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
       cl <- parallel::makeCluster(rep("localhost", numProc), type = "SOCK")
       parallel::clusterExport(cl, varlist = lavaanfun) # from .GlobalEnv
       parallel::clusterEvalQ(cl, require("semTools"))
-      #FIXME: necessary to export all these objects?
-      args2export <- c("datafun","outfun","outfundata")
+      # FIXME: necessary to export all these objects?
+      args2export <- c("datafun", "outfun", "outfundata")
       ## remove NULL objects
       args2export <- args2export[sapply(args2export, function(x) !is.null(eval(as.name(x))))]
       parallel::clusterExport(cl, varlist = args2export, envir = environment()) # from this environment
-      Result.l <- parallel::clusterApplyLB(cl, simConds, runRep, model = model,
-                                           generateO = generate, miss = miss,
-                                           datafun = datafun, lavaanfun = lavaanfun,
-                                           outfun = outfun, outfundata = outfundata,
-                                           silent = silent, facDist = facDist,
-                                           indDist = indDist, errorDist = errorDist,
-                                           sequential = sequential,
-                                           saveLatentVar = saveLatentVar,
-                                           realData = realData, covData = covData,
-                                           maxDraw = maxDraw, misfitBounds = misfitBounds,
-                                           averageNumMisspec = averageNumMisspec,
-                                           optMisfit = optMisfit, optDraws = optDraws,
-                                           createOrder = createOrder,
-                                           misfitType = misfitType, aux = aux,
-                                           paramOnly = paramOnly, dataOnly = dataOnly,
-                                           smartStart = smartStart, popData = popData,
-                                           group = group, mxFit = mxFit,
-                                           mxMixture = mxMixture, citype = citype,
-                                           cilevel = cilevel, stopOnError = stopOnError, ...)
+      Result.l <- parallel::clusterApplyLB(cl, simConds, runRep,
+        model = model,
+        generateO = generate, miss = miss,
+        datafun = datafun, lavaanfun = lavaanfun,
+        outfun = outfun, outfundata = outfundata,
+        silent = silent, facDist = facDist,
+        indDist = indDist, errorDist = errorDist,
+        sequential = sequential,
+        saveLatentVar = saveLatentVar,
+        realData = realData, covData = covData,
+        maxDraw = maxDraw, misfitBounds = misfitBounds,
+        averageNumMisspec = averageNumMisspec,
+        optMisfit = optMisfit, optDraws = optDraws,
+        createOrder = createOrder,
+        misfitType = misfitType, aux = aux,
+        paramOnly = paramOnly, dataOnly = dataOnly,
+        smartStart = smartStart, popData = popData,
+        group = group, mxFit = mxFit,
+        mxMixture = mxMixture, citype = citype,
+        cilevel = cilevel, stopOnError = stopOnError, ...
+      )
       parallel::stopCluster(cl)
     } else {
-      Result.l <- parallel::mclapply(simConds, runRep, model = model,
-                                     generateO = generate, miss = miss,
-                                     datafun = datafun, lavaanfun = lavaanfun,
-                                     outfun = outfun, outfundata = outfundata,
-                                     silent = silent, facDist = facDist,
-                                     indDist = indDist, errorDist = errorDist,
-                                     sequential = sequential,
-                                     saveLatentVar = saveLatentVar,
-                                     realData = realData, covData = covData,
-                                     maxDraw = maxDraw, misfitBounds = misfitBounds,
-                                     averageNumMisspec = averageNumMisspec,
-                                     optMisfit = optMisfit, optDraws = optDraws,
-                                     createOrder = createOrder,
-                                     misfitType = misfitType, aux = aux,
-                                     paramOnly = paramOnly, dataOnly = dataOnly,
-                                     smartStart = smartStart, popData = popData,
-                                     group = group, mxFit = mxFit,
-                                     mxMixture = mxMixture, citype = citype,
-                                     cilevel = cilevel, stopOnError = stopOnError,
-                                     mc.cores = numProc, ...)
+      Result.l <- parallel::mclapply(simConds, runRep,
+        model = model,
+        generateO = generate, miss = miss,
+        datafun = datafun, lavaanfun = lavaanfun,
+        outfun = outfun, outfundata = outfundata,
+        silent = silent, facDist = facDist,
+        indDist = indDist, errorDist = errorDist,
+        sequential = sequential,
+        saveLatentVar = saveLatentVar,
+        realData = realData, covData = covData,
+        maxDraw = maxDraw, misfitBounds = misfitBounds,
+        averageNumMisspec = averageNumMisspec,
+        optMisfit = optMisfit, optDraws = optDraws,
+        createOrder = createOrder,
+        misfitType = misfitType, aux = aux,
+        paramOnly = paramOnly, dataOnly = dataOnly,
+        smartStart = smartStart, popData = popData,
+        group = group, mxFit = mxFit,
+        mxMixture = mxMixture, citype = citype,
+        cilevel = cilevel, stopOnError = stopOnError,
+        mc.cores = numProc, ...
+      )
     }
   } else {
     numJobs <- length(simConds)
@@ -539,7 +566,8 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
       ## Write progress
       if (!silent) cat("Progress:", i, "/", numJobs, "\n")
       runRep(simConds[[i]], ...)
-    }, model = model, generateO = generate, miss = miss, datafun = datafun,
+    },
+    model = model, generateO = generate, miss = miss, datafun = datafun,
     lavaanfun = lavaanfun, outfun = outfun, outfundata = outfundata,
     silent = silent, facDist = facDist, indDist = indDist, errorDist = errorDist,
     sequential = sequential, saveLatentVar = saveLatentVar, realData = realData,
@@ -548,7 +576,8 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
     optDraws = optDraws, createOrder = createOrder, misfitType = misfitType,
     aux = aux, paramOnly = paramOnly, dataOnly = dataOnly, smartStart = smartStart,
     popData = popData, group = group, mxFit = mxFit, mxMixture = mxMixture,
-    citype = citype, cilevel = cilevel, stopOnError = stopOnError, ...)
+    citype = citype, cilevel = cilevel, stopOnError = stopOnError, ...
+    )
   }
 
   ################## Extract out popData ##################################
@@ -560,7 +589,9 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
   }
 
   ## Return data when dataOnly is requested
-  if (dataOnly) return(Result.l)
+  if (dataOnly) {
+    return(Result.l)
+  }
 
   ## Now we create a SimResult object
   timing.l <- lapply(Result.l, function(x) x$timing)
@@ -572,28 +603,28 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
 
 
   #### 6. Extract results from replication lists
-  fit.l       <- lapply(Result.l, function(rep) rep$fit)
-  coef.l      <- lapply(Result.l, function(rep) rep$coef)
-  se.l        <- lapply(Result.l, function(rep) rep$se)
+  fit.l <- lapply(Result.l, function(rep) rep$fit)
+  coef.l <- lapply(Result.l, function(rep) rep$coef)
+  se.l <- lapply(Result.l, function(rep) rep$se)
   converged.l <- lapply(Result.l, function(rep) rep$converged)
-  param.l     <- lapply(Result.l, function(rep) rep$param)
-  stdparam.l  <- lapply(Result.l, function(rep) rep$stdparam)
-  FMI1.l      <- lapply(Result.l, function(rep) rep$FMI1)
-  FMI2.l      <- lapply(Result.l, function(rep) rep$FMI2)
-  cilower.l   <- lapply(Result.l, function(rep) rep$cilower)
-  ciupper.l   <- lapply(Result.l, function(rep) rep$ciupper)
-  std.l       <- lapply(Result.l, function(rep) rep$std)
-  stdse.l     <- lapply(Result.l, function(rep) rep$stdse)
+  param.l <- lapply(Result.l, function(rep) rep$param)
+  stdparam.l <- lapply(Result.l, function(rep) rep$stdparam)
+  FMI1.l <- lapply(Result.l, function(rep) rep$FMI1)
+  FMI2.l <- lapply(Result.l, function(rep) rep$FMI2)
+  cilower.l <- lapply(Result.l, function(rep) rep$cilower)
+  ciupper.l <- lapply(Result.l, function(rep) rep$ciupper)
+  std.l <- lapply(Result.l, function(rep) rep$std)
+  stdse.l <- lapply(Result.l, function(rep) rep$stdse)
   extra <- list()
   if (!is.null(outfun) || !is.null(outfundata)) {
-    extra     <- lapply(Result.l, function(rep) rep$extra)
+    extra <- lapply(Result.l, function(rep) rep$extra)
   }
-  popMis.l    <- lapply(Result.l, function(rep) rep$popMis)
+  popMis.l <- lapply(Result.l, function(rep) rep$popMis)
   misfitOut.l <- lapply(Result.l, function(rep) rep$misfitOut)
 
   coef <- as.data.frame(do.call(rbind, coef.l))
-  se   <- as.data.frame(do.call(rbind, se.l))
-  fit  <- as.data.frame(do.call(rbind, fit.l))
+  se <- as.data.frame(do.call(rbind, se.l))
+  fit <- as.data.frame(do.call(rbind, fit.l))
   converged <- as.vector(unlist(converged.l))
 
   if (paramOnly) converged <- rep(TRUE, length(converged))
@@ -619,7 +650,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
   }
 
   if (lavaanGenerate ||
-      (lavaanAnalysis && is.null(generate) && is.null(rawData) && is.null(popData))) {
+    (lavaanAnalysis && is.null(generate) && is.null(rawData) && is.null(popData))) {
     if (is.null(generate) && lavaanAnalysis) generate <- model
     generate2 <- generate
     generate2$sample.nobs <- simConds[[1]][[2]]
@@ -627,18 +658,24 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
     lavaanfit <- attr(do.call(lavaan::simulateData, generate2), "fit")
     pt <- parTable(lavaanfit)
     if (is.partable(generate$model)) pt <- generate$model
-    stdpt <- lavaan::standardizedSolution(lavaanfit, remove.eq = FALSE,
-                                          remove.ineq = FALSE, remove.def = FALSE)
+    stdpt <- lavaan::standardizedSolution(lavaanfit,
+      remove.eq = FALSE,
+      remove.ineq = FALSE, remove.def = FALSE
+    )
     if (!("group" %in% colnames(stdpt))) stdpt <- data.frame(stdpt, group = 1)
     extraParamIndex <- pt$op %in% c(">", "<", "==", ":=")
     if (any(extraParamIndex)) {
-      con <- list(lhs = pt$lhs[extraParamIndex],
-                  op = pt$op[extraParamIndex],
-                  rhs = pt$rhs[extraParamIndex])
+      con <- list(
+        lhs = pt$lhs[extraParamIndex],
+        op = pt$op[extraParamIndex],
+        rhs = pt$rhs[extraParamIndex]
+      )
       hasLab <- pt$label != ""
       extraVal <- applyConScript(pt$label[hasLab][!duplicated(pt$label[hasLab])],
-                                 pt$ustart[hasLab][!duplicated(pt$label[hasLab])],
-                                 con, refpt = pt)
+        pt$ustart[hasLab][!duplicated(pt$label[hasLab])],
+        con,
+        refpt = pt
+      )
       toBeFill <- which(is.na(pt$ustart) & hasLab)
       for (i in seq_along(toBeFill)) {
         pt$ustart[toBeFill[i]] <- extraVal[[2]][extraVal[[1]] == pt$label[toBeFill[i]]]
@@ -646,20 +683,23 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
     }
     param <- pt$ustart
     changparampt <- changeDupLab(pt)
-    paramNames <- lavaan::lav_partable_labels(lapply(changparampt, "[",
-                                                     !(changparampt$op %in% c("==", ">", "<", ":="))))
+    paramNames <- lavaan::lav_partable_labels(lapply(
+      changparampt, "[",
+      !(changparampt$op %in% c("==", ">", "<", ":="))
+    ))
     if (any(extraParamIndex)) {
       paramNames <- c(paramNames, renameExtraParam(pt$lhs[extraParamIndex],
-                                                   pt$op[extraParamIndex],
-                                                   pt$rhs[extraParamIndex],
-                                                   refpt = pt))
+        pt$op[extraParamIndex],
+        pt$rhs[extraParamIndex],
+        refpt = pt
+      ))
     }
     names(param) <- paramNames
     param <- as.data.frame(t(param))
     stdparam <- stdpt$est.std
-    names(stdparam) <- paramNames #lavaan::lav_partable_labels(stdpt)
+    names(stdparam) <- paramNames # lavaan::lav_partable_labels(stdpt)
     stdparam <- as.data.frame(t(stdparam))
-  } else if (mxGenerate | (is.null(generate) & is(model, "MxModel"))) {
+  } else if (mxGenerate | (is.null(generate) & inherits(model, "MxModel"))) {
     if (is.null(generate)) generate <- model
     param <- vectorizeMx(generate)
     param <- as.data.frame(t(param))
@@ -668,21 +708,27 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
     if (length(generate@submodels) > 0) {
       defVars <- lapply(generate@submodels, findDefVars)
       defVars <- do.call(c, defVars)
-      if (is(generate@submodels[[1]]@expectation, "MxExpectationRAM") && !(length(defVars) > 0)) findStd <- TRUE
+      if (inherits(generate@submodels[[1]]@expectation, "MxExpectationRAM") && !(length(defVars) > 0)) findStd <- TRUE
     } else {
       defVars <- findDefVars(generate)
-      if (is(generate@expectation, "MxExpectationRAM") && !(length(defVars) > 0)) findStd <- TRUE
+      if (inherits(generate@expectation, "MxExpectationRAM") && !(length(defVars) > 0)) findStd <- TRUE
     }
     if (findStd) {
-      try({stdparam <- standardizeMx(generate, free = TRUE) ; stdparam <- as.data.frame(t(stdparam))},
-          silent = silent)
+      try(
+        {
+          stdparam <- standardizeMx(generate, free = TRUE)
+          stdparam <- as.data.frame(t(stdparam))
+        },
+        silent = silent
+      )
     }
   }
 
   if (!is.null(std.l[[1]])) {
     std <- as.data.frame(do.call(rbind, std.l))
-    if (sum(dim(std)) == 0)
+    if (sum(dim(std)) == 0) {
       std <- data.frame()
+    }
   } else {
     std <- data.frame()
   }
@@ -755,8 +801,9 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
         groupLab <- model@groupLab
       }
       if (is.null(groupLab)) groupLab <- "group"
-      nobs <- as.data.frame(t(sapply(rawData, function(x, col) table(x[,col]),
-                                     col = groupLab)))
+      nobs <- as.data.frame(t(sapply(rawData, function(x, col) table(x[, col]),
+        col = groupLab
+      )))
     } else {
       nobs <- as.data.frame(sapply(rawData, nrow))
     }
@@ -784,14 +831,16 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
   timing$CombineResults <- proc.time()[3] - start.time
   start.time <- proc.time()[3]
   timing$EndTime <- Sys.time()
-  Result <- new("SimResult", modelType = modelType, nRep = nRep, coef = coef,
-                se = se, fit = fit, converged = converged, seed = c(seed, s),
-                paramValue = param, stdParamValue = stdparam,
-                misspecValue = popMis, popFit = misfitOut,
-                FMI1 = FMI1, FMI2 = FMI2, cilower = cilower, ciupper = ciupper,
-                stdCoef = std, stdSe = stdse, n = n, nobs = nobs,
-                pmMCAR = pmMCAR, pmMAR = pmMAR, extraOut = extra,
-                paramOnly = paramOnly, timing = timing)
+  Result <- new("SimResult",
+    modelType = modelType, nRep = nRep, coef = coef,
+    se = se, fit = fit, converged = converged, seed = c(seed, s),
+    paramValue = param, stdParamValue = stdparam,
+    misspecValue = popMis, popFit = misfitOut,
+    FMI1 = FMI1, FMI2 = FMI2, cilower = cilower, ciupper = ciupper,
+    stdCoef = std, stdSe = stdse, n = n, nobs = nobs,
+    pmMCAR = pmMCAR, pmMAR = pmMAR, extraOut = extra,
+    paramOnly = paramOnly, timing = timing
+  )
 
   if (!is.null(previousSim)) {
     Result <- combineSim(previousSim, Result)
@@ -804,24 +853,28 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
     # if (nSuccess < completeRep) {
     while (nSuccess < nRepInitial && Result@nRep < completeRep) {
       pSuccess <- nSuccess / Result@nRep
-      nRepNew <- min(ceiling((nRepInitial - nSuccess) / pSuccess),
-                     completeRep - Result@nRep)
-      Result <- sim(nRep = nRepNew, model = model, n = nInitial, generate = generate,
-                    rawData = rawData, miss = miss, datafun = datafun,
-                    lavaanfun = lavaanfun, outfun = outfun, outfundata = outfundata,
-                    pmMCAR = pmMCARInitial, pmMAR = pmMARInitial, facDist = facDist,
-                    indDist = indDist, errorDist = errorDist, sequential = sequential,
-                    saveLatentVar = saveLatentVar, modelBoot = modelBoot,
-                    realData = realData, covData = covData, maxDraw = maxDraw,
-                    misfitType = misfitType, misfitBounds = misfitBounds,
-                    averageNumMisspec = averageNumMisspec, optMisfit = optMisfit,
-                    optDraws = optDraws, createOrder = createOrder, aux = aux,
-                    group = group, mxFit = mxFit, mxMixture = mxMixture,
-                    citype = citype, cilevel = cilevel, seed = seed,
-                    silent = silent, multicore = multicore, numProc = numProc,
-                    paramOnly = paramOnly, dataOnly = dataOnly,
-                    smartStart = smartStart, previousSim = Result,
-                    completeRep = completeRep, stopOnError = stopOnError, ...)
+      nRepNew <- min(
+        ceiling((nRepInitial - nSuccess) / pSuccess),
+        completeRep - Result@nRep
+      )
+      Result <- sim(
+        nRep = nRepNew, model = model, n = nInitial, generate = generate,
+        rawData = rawData, miss = miss, datafun = datafun,
+        lavaanfun = lavaanfun, outfun = outfun, outfundata = outfundata,
+        pmMCAR = pmMCARInitial, pmMAR = pmMARInitial, facDist = facDist,
+        indDist = indDist, errorDist = errorDist, sequential = sequential,
+        saveLatentVar = saveLatentVar, modelBoot = modelBoot,
+        realData = realData, covData = covData, maxDraw = maxDraw,
+        misfitType = misfitType, misfitBounds = misfitBounds,
+        averageNumMisspec = averageNumMisspec, optMisfit = optMisfit,
+        optDraws = optDraws, createOrder = createOrder, aux = aux,
+        group = group, mxFit = mxFit, mxMixture = mxMixture,
+        citype = citype, cilevel = cilevel, seed = seed,
+        silent = silent, multicore = multicore, numProc = numProc,
+        paramOnly = paramOnly, dataOnly = dataOnly,
+        smartStart = smartStart, previousSim = Result,
+        completeRep = completeRep, stopOnError = stopOnError, ...
+      )
       ## update to break while() loop
       nSuccess <- sum(Result@converged == 0)
     }
@@ -865,7 +918,7 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
   FMI2 <- NA
   cilower <- NA
   ciupper <- NA
-  popParam <- NA  # Real Data
+  popParam <- NA # Real Data
   stdPopParam <- NA # Real Data Standardized
   paramSet <- NULL
   converged <- 1
@@ -904,23 +957,24 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
   }
 
   ## 2. Generate data (data) & store parameter values (paramSet)
-  data <- simConds[[1]]  # either a paramSet or raw data
+  data <- simConds[[1]] # either a paramSet or raw data
   if (!is.null(popData)) {
     if (is.null(n)) {
       data <- popData
     } else {
       groupLab <- NULL
-      if (is(model, "SimSem")) {
+      if (inherits(model, "SimSem")) {
         groupLab <- model@groupLab
-      } else if (is(model, "function")) {
+      } else if (is.function(model)) {
         ## Intentionally leave as blank
       } else {
         groupLab <- model$group
       }
       if (!is.null(groupLab) && (groupLab %in% colnames(popData))) {
-        data <- split(popData, popData[ , groupLab])
+        data <- split(popData, popData[, groupLab])
         data <- mapply(function(dat, ss) dat[sample(nrow(dat), ss), ],
-                       dat = data, ss = n, SIMPLIFY = FALSE)
+          dat = data, ss = n, SIMPLIFY = FALSE
+        )
         data <- data.frame(do.call(rbind, data))
       } else {
         data <- popData[sample(nrow(popData), n), ]
@@ -928,7 +982,7 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
     }
   }
 
-  if (is.null(data) && is(generateO, "function")) {
+  if (is.null(data) && inherits(generateO, "function")) {
     if (stopOnError) {
       data <- generateO(n)
     } else if (silent) {
@@ -959,7 +1013,7 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
     }
   }
 
-  if (is.null(data) && is(generateO, "MxModel")) {
+  if (is.null(data) && inherits(generateO, "MxModel")) {
     data <- generateMx(generateO, n = n, indDist = indDist, covData = covData)
   }
 
@@ -979,15 +1033,17 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
     if (length(covLabGen) == 0L) covLabGen <- NULL
 
     ## Need to draw parameters
-    genout <- generateSimSem(model = generateO, n = n, maxDraw = maxDraw,
-                             misfitBounds = misfitBounds, misfitType = misfitType,
-                             averageNumMisspec = averageNumMisspec,
-                             optMisfit = optMisfit, optDraws = optDraws,
-                             createOrder = createOrder, indDist = indDist,
-                             sequential = sequential, saveLatentVar = saveLatentVar,
-                             facDist = facDist, errorDist = errorDist,
-                             indLab = indLab, modelBoot = modelBoot,
-                             realData = realData, covData = covData, params = TRUE)
+    genout <- generateSimSem(
+      model = generateO, n = n, maxDraw = maxDraw,
+      misfitBounds = misfitBounds, misfitType = misfitType,
+      averageNumMisspec = averageNumMisspec,
+      optMisfit = optMisfit, optDraws = optDraws,
+      createOrder = createOrder, indDist = indDist,
+      sequential = sequential, saveLatentVar = saveLatentVar,
+      facDist = facDist, errorDist = errorDist,
+      indLab = indLab, modelBoot = modelBoot,
+      realData = realData, covData = covData, params = TRUE
+    )
     data <- genout[[1]]
     psl <- genout[[2]] # these are randomly drawn parameters
 
@@ -1007,29 +1063,37 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
 
     if (length(covLab) > 0L) {
       if (ngroups > 1L) covLab <- c(covLab, model@groupLab)
-      if (!is.null(realData) && is.null(covData)) covData <- realData[ , covLab, drop = FALSE]
-      covData <- covData[ , covLab, drop = FALSE]
+      if (!is.null(realData) && is.null(covData)) covData <- realData[, covLab, drop = FALSE]
+      covData <- covData[, covLab, drop = FALSE]
       if (ngroups > 1L) {
-        covDataGroup <- split(covData[ , setdiff(covLab, model@groupLab), drop = FALSE],
-                              f = covData[ , model@groupLab])
+        covDataGroup <- split(covData[, setdiff(covLab, model@groupLab), drop = FALSE],
+          f = covData[, model@groupLab]
+        )
       } else {
         covDataGroup <- list(covData)
       }
     }
     for (i in seq_along(paramSet)) {
       popParam <- c(popParam, parsePopulation(generatedgen[[i]], paramSet[[i]], group = i))
-      stdPopParam <- c(stdPopParam,
-                       parsePopulation(generatedgen[[i]], paramSet[[i]],
-                                       group = i, std = TRUE,
-                                       covData = covDataGroup[[i]]))
+      stdPopParam <- c(
+        stdPopParam,
+        parsePopulation(generatedgen[[i]], paramSet[[i]],
+          group = i, std = TRUE,
+          covData = covDataGroup[[i]]
+        )
+      )
     }
     if (smartStart) {
       ## Once indLab and facLab are in the model object, sub them in for indLabGen and facLabGen
-      if (specifiedGenerate) stop("The smartStart option is unavailable when the ",
-                                  "analysis and data-generation models differ")
+      if (specifiedGenerate) {
+        stop(
+          "The smartStart option is unavailable when the ",
+          "analysis and data-generation models differ"
+        )
+      }
       model@pt$ustart <- c(popParam, rep(NA, length(model@pt$ustart) - length(popParam)))
     }
-  }  # else: do nothing. Raw data.
+  } # else: do nothing. Raw data.
 
   timing$GenerateData <- (proc.time()[3] - start.time)
   start.time <- proc.time()[3]
@@ -1050,12 +1114,13 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
     ## Impute missing and run results
     ## Will use analyze either when there is a missing object or auxiliary variables specified.
     ## If users provide their own data there may be a case with auxiliary variables and no missing object
-    if (is(model, "function")) {
+    if (is.function(model)) {
       if (stopOnError) {
         out <- model(data, ...)
       } else if (silent) {
         invisible(capture.output(suppressMessages(try(out <- model(data, ...),
-                                                      silent = TRUE))))
+          silent = TRUE
+        ))))
       } else {
         try(out <- model(data, ...))
       }
@@ -1065,11 +1130,12 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
         out <- analyzeLavaan(model, lavaanfun, miss, aux)
       } else if (silent) {
         invisible(capture.output(suppressMessages(try(out <- analyzeLavaan(model, lavaanfun, miss, aux),
-                                                      silent = TRUE))))
+          silent = TRUE
+        ))))
       } else {
         try(out <- analyzeLavaan(model, lavaanfun, miss, aux))
       }
-    } else if (is(model, "MxModel")) {
+    } else if (inherits(model, "MxModel")) {
       mxAnalysis <- TRUE
       multigroup <- length(model@submodels) > 0L
       if (multigroup) {
@@ -1081,7 +1147,8 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
         out <- analyzeMx(model, data, groupLab = group, ...)
       } else if (silent) {
         invisible(capture.output(suppressMessages(try(out <- analyzeMx(model, data, groupLab = group, ...),
-                                                      silent = TRUE))))
+          silent = TRUE
+        ))))
       } else {
         try(out <- analyzeMx(model, data, groupLab = group, mxMixture = mxMixture, ...))
       }
@@ -1091,7 +1158,8 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
           out <- analyzeSimSem(model, data, aux = aux, miss = miss, ...)
         } else if (silent) {
           invisible(capture.output(suppressMessages(try(out <- analyzeSimSem(model, data, aux = aux, miss = miss, ...),
-                                                        silent = TRUE))))
+            silent = TRUE
+          ))))
         } else {
           try(out <- analyzeSimSem(model, data, aux = aux, miss = miss, ...))
         }
@@ -1100,7 +1168,8 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
           out <- anal(model, data, ...)
         } else if (silent) {
           invisible(capture.output(suppressMessages(try(out <- anal(model, data, ...),
-                                                        silent = TRUE))))
+            silent = TRUE
+          ))))
         } else {
           try(out <- anal(model, data, ...))
         }
@@ -1111,14 +1180,20 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
   start.time <- proc.time()[3]
 
   #### 6. Parse Lavaan Output
-  if (dataOnly) return(data)
+  if (dataOnly) {
+    return(data)
+  }
   if (!is.null(out)) {
-    if (is(model, "function")) {
+    if (is.function(model)) {
       converged <- out$converged
-      if (is.null(converged)) stop("In the function for data analysis, ",
-                                   "please specify an integer indicating the",
-                                   " 'converged' status in the returned list. ",
-                                   "Values are described in class?SimResult.")
+      if (is.null(converged)) {
+        stop(
+          "In the function for data analysis, ",
+          "please specify an integer indicating the",
+          " 'converged' status in the returned list. ",
+          "Values are described in class?SimResult."
+        )
+      }
       if (is.logical(converged)) {
         if (converged) {
           converged <- 0L
@@ -1144,15 +1219,17 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
         improperSE <- any(unlist(seTemp) < 0) | any(is.na(unlist(seTemp))) | all(unlist(seTemp) == 0)
         if (improperSE) converged <- 3L
       }
-    } else if (is(out, "lavaan.mi")) {
+    } else if (inherits(out, "lavaan.mi")) {
       if (mean(sapply(out@convergence, "[[", "converged")) < miss@convergentCutoff) {
         converged <- 2L
       } else if (mean(sapply(out@convergence, "[[", "SE"), na.rm = TRUE) < miss@convergentCutoff) {
         converged <- 3L
       } else if (mean(sapply(out@convergence, "[[", "Heywood.lv"), na.rm = TRUE) < miss@convergentCutoff ||
-                 mean(sapply(out@convergence, "[[", "Heywood.ov"), na.rm = TRUE) < miss@convergentCutoff) {
+        mean(sapply(out@convergence, "[[", "Heywood.ov"), na.rm = TRUE) < miss@convergentCutoff) {
         converged <- 4L
-      } else converged <- 0L
+      } else {
+        converged <- 0L
+      }
     } else {
       try(converged <- as.numeric(!lavInspect(out, "converged")))
       if (converged == 0L) {
@@ -1165,8 +1242,7 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
   }
 
   if (converged %in% c(0L, 3:7)) {
-
-    if (is(model, "function")) {
+    if (is.function(model)) {
       fit <- out$fit
       coef <- out$coef
       se <- out$se
@@ -1185,8 +1261,10 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
           availfit <- names(fit)
           if ("saturate.status" %in% availfit) {
             set1 <- intersect(c("logl", "npar", "aic", "bic"), availfit)
-            set2 <- intersect(c("cfi", "tli", "nnfi", "pnfi", "rfi", "nfi", "ifi",
-                                "rni", "baseline.chisq", "baseline.pvalue"), availfit)
+            set2 <- intersect(c(
+              "cfi", "tli", "nnfi", "pnfi", "rfi", "nfi", "ifi",
+              "rni", "baseline.chisq", "baseline.pvalue"
+            ), availfit)
             set3 <- setdiff(availfit, c(set1, set2))
             if (!(fit["saturate.status"] %in% c(0, 1))) fit[c(set2, set3)] <- NA
             if (!(fit["null.status"] %in% c(0, 1))) fit[set2] <- NA
@@ -1204,8 +1282,8 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
       findStd <- FALSE
       ci <- out@output$confidenceIntervals
       if (!is.null(ci) && nrow(ci) > 0) {
-        cilower <- ci[,1]
-        ciupper <- ci[,2]
+        cilower <- ci[, 1]
+        ciupper <- ci[, 2]
         nameci <- gsub(paste0(out@name, "."), "", rownames(ci))
         names(cilower) <- nameci
         names(ciupper) <- nameci
@@ -1213,54 +1291,60 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
       if (length(out@submodels) > 0) {
         defVars <- lapply(out@submodels, findDefVars)
         defVars <- do.call(c, defVars)
-        if (is(out@submodels[[1]]@expectation, "MxExpectationRAM") && !(length(defVars) > 0)) findStd <- TRUE
+        if (inherits(out@submodels[[1]]@expectation, "MxExpectationRAM") && !(length(defVars) > 0)) findStd <- TRUE
       } else {
         defVars <- findDefVars(out)
-        if (is(out@expectation, "MxExpectationRAM") && !(length(defVars) > 0)) findStd <- TRUE
+        if (inherits(out@expectation, "MxExpectationRAM") && !(length(defVars) > 0)) findStd <- TRUE
       }
       if (findStd) {
         std <- NA
         try(std <- standardizeMx(out, free = TRUE), silent = silent)
       }
-
     } else {
-
       if (is.null(citype)) citype <- formals(lavaan::parameterEstimates)$boot.ci.type
       outpt <- parTable(out)
       extraParamIndex <- outpt$op %in% c(">", "<", "==", ":=")
       index <- ((outpt$free != 0) & !(duplicated(outpt$free))) | extraParamIndex
 
       ## lavaan.mi results come from different source than lavaan
-      if (is(out, "lavaan.mi")) {
+      if (inherits(out, "lavaan.mi")) {
         fit <- suppressMessages(getMethod("fitMeasures", "lavaan.mi")(out))
-        result <- lavaan.mi::parameterEstimates.mi(out, standardized = "std.all",
-                                                   level = cilevel, fmi = TRUE,
-                                                   remove.eq = FALSE, remove.system.eq = FALSE,
-                                                   remove.ineq = FALSE, remove.def = FALSE)
+        result <- lavaan.mi::parameterEstimates.mi(out,
+          standardized = "std.all",
+          level = cilevel, fmi = TRUE,
+          remove.eq = FALSE, remove.system.eq = FALSE,
+          remove.ineq = FALSE, remove.def = FALSE
+        )
         outpt$se <- result$se
-        errstdse <- try(resultstd <- lavaan.mi::standardizedSolution.mi(out, remove.eq = FALSE,
-                                                                        remove.ineq = FALSE, remove.def = FALSE))
-        if (!is(errstdse, "try-error")) stdse <- resultstd$se[index]
+        errstdse <- try(resultstd <- lavaan.mi::standardizedSolution.mi(out,
+          remove.eq = FALSE,
+          remove.ineq = FALSE, remove.def = FALSE
+        ))
+        if (!inherits(errstdse, "try-error")) stdse <- resultstd$se[index]
         if (converged %in% c(0L, 3:5)) {
           FMI1 <- result$fmi[index] # result$fmi1[index]
-          FMI2 <- NULL              # result$fmi2[index]
+          FMI2 <- NULL # result$fmi2[index]
         }
       } else {
         fit <- lavaan::fitMeasures(out)
-        result <- lavaan::parameterEstimates(out, standardized = TRUE,
-                                             boot.ci.type = citype, level = cilevel,
-                                             remove.eq = FALSE, remove.system.eq = FALSE,
-                                             remove.ineq = FALSE, remove.def = FALSE,
-                                             fmi = !is.null(miss))
-        errstdse <- try(resultstd <- lavaan::standardizedSolution(out, remove.eq = FALSE,
-                                                                  remove.ineq = FALSE, remove.def = FALSE))
-        if(!is(errstdse, "try-error")) stdse <- resultstd$se[index]
+        result <- lavaan::parameterEstimates(out,
+          standardized = TRUE,
+          boot.ci.type = citype, level = cilevel,
+          remove.eq = FALSE, remove.system.eq = FALSE,
+          remove.ineq = FALSE, remove.def = FALSE,
+          fmi = !is.null(miss)
+        )
+        errstdse <- try(resultstd <- lavaan::standardizedSolution(out,
+          remove.eq = FALSE,
+          remove.ineq = FALSE, remove.def = FALSE
+        ))
+        if (!inherits(errstdse, "try-error")) stdse <- resultstd$se[index]
         FMI1 <- if (is.null(miss)) NULL else result$fmi[index]
         FMI2 <- NULL
       }
 
       changept <- changeDupLab(outpt)
-      lab <- lavaan::lav_partable_labels(lapply(changept, "[", changept$free > 0 | (outpt$user == 1 & outpt$start !=0 & outpt$se != 0)))
+      lab <- lavaan::lav_partable_labels(lapply(changept, "[", changept$free > 0 | (outpt$user == 1 & outpt$start != 0 & outpt$se != 0)))
 
       coef <- result$est[index]
       se <- result$se[index]
@@ -1271,15 +1355,19 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
       if (any(extraParamIndex)) {
         if (!is.lavaancall(model)) {
           lab <- union(lab, renameExtraParam(model@pt$lhs[extraParamIndex],
-                                         model@pt$op[extraParamIndex],
-                                         model@pt$rhs[extraParamIndex], refpt = outpt))
+            model@pt$op[extraParamIndex],
+            model@pt$rhs[extraParamIndex],
+            refpt = outpt
+          ))
         } else {
           ## 27 July 2017: Terry changed c() to union() above and below to
           ## prevent adding duplicates of := parameters
           lab <- union(lab, renameExtraParam(outpt$lhs[extraParamIndex],
-                                         outpt$op[extraParamIndex],
-                                         outpt$rhs[extraParamIndex], refpt = outpt))
-           }
+            outpt$op[extraParamIndex],
+            outpt$rhs[extraParamIndex],
+            refpt = outpt
+          ))
+        }
       }
       names(coef) <- lab
       names(se) <- lab
@@ -1291,7 +1379,7 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
       if (!is.null(FMI2)) names(FMI2) <- lab
     }
   } else {
-    if (is(model, "function")) {
+    if (is.function(model)) {
       try(fit <- out$fit, silent = TRUE)
       try(coef <- out$coef, silent = TRUE)
       try(se <- out$se, silent = TRUE)
@@ -1319,9 +1407,11 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
     if (!is.null(psl[[1]]$misspec)) {
       misParamSet <- lapply(psl, "[[", 3)
       popMis <- reduceMisspecSet(misParamSet, generateO@modelType != "path",
-                                 indLabGen, facLabGen, covLab = covLabGen)
+        indLabGen, facLabGen,
+        covLab = covLabGen
+      )
       p <- length(indLabGen)
-      nElements <- (p + (p * (p + 1)/2)) * length(psl)
+      nElements <- (p + (p * (p + 1) / 2)) * length(psl)
       dfParam <- nElements - max(generateO@pt$free)
       misfitOut <- popMisfitParams(psl, df = dfParam, covData = covData)
     } else {
@@ -1347,10 +1437,9 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
     names(popParam) <- c(paramNames, extraParamName)
     names(stdPopParam) <- paramNames
   } else {
-    popMis <- NA  # Misspecfication
-    misfitOut <- NA  # Misfit indices for misspecification
+    popMis <- NA # Misspecfication
+    misfitOut <- NA # Misfit indices for misspecification
   }
-
 
 
   timing$ParseOutput <- (proc.time()[3] - start.time)
@@ -1361,11 +1450,13 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
     extra <- list(extra, extra2)
   }
 
-  Result <- list(coef = coef, se = se, fit = fit, converged = converged,
-                 param = popParam, stdparam = stdPopParam,
-                 FMI1 = FMI1, FMI2 = FMI2, std = std, stdse = stdse,
-                 timing = timing, extra = extra, popMis = popMis,
-                 cilower = cilower, ciupper = ciupper, misfitOut = misfitOut)
+  Result <- list(
+    coef = coef, se = se, fit = fit, converged = converged,
+    param = popParam, stdparam = stdPopParam,
+    FMI1 = FMI1, FMI2 = FMI2, std = std, stdse = stdse,
+    timing = timing, extra = extra, popMis = popMis,
+    cilower = cilower, ciupper = ciupper, misfitOut = misfitOut
+  )
   return(Result)
 }
 
@@ -1376,164 +1467,195 @@ runRep <- function(simConds, model, generateO = NULL, miss = NULL, datafun = NUL
 #'
 #' @keywords internal
 reduceMisspecSet <- function(misspecSet, latent, indLab = NULL, facLab = NULL, covLab = NULL) {
+  final <- NULL
+  psLab <- NULL
+  if (latent) {
+    psLab <- facLab
+  } else {
+    psLab <- indLab
+  }
+  ngroups <- length(misspecSet)
 
-    final <- NULL
-    psLab <- NULL
-    if (latent) {
-        psLab <- facLab
-    } else {
-        psLab <- indLab
+  for (g in seq_along(misspecSet)) {
+    temp <- NULL
+
+    tpset <- misspecSet[[g]]
+    tpset <- lapply(tpset, function(x) {
+      if (is.null(x) || (is.vector(x) && length(x) == 0)) {
+        return(NULL)
+      } else {
+        return(x)
+      }
+    })
+
+    if (!is.null(tpset$LY)) {
+      free <- tpset$LY != 0
+      lab <- outer(indLab, facLab[1:ncol(free)], function(x, y, op) {
+        paste0(
+          y,
+          op, x
+        )
+      }, op = "=~")
+      param <- tpset$LY[free]
+      names(param) <- lab[free]
+      temp <- c(temp, param)
     }
-	ngroups <- length(misspecSet)
+    if (!is.null(tpset$PS)) {
+      free <- tpset$PS != 0 & lower.tri(tpset$PS, diag = TRUE)
+      lab <- outer(psLab[1:ncol(free)], psLab[1:ncol(free)], function(x, y, op) {
+        paste0(
+          x, op,
+          y
+        )
+      }, op = "~~")
+      param <- tpset$PS[free]
+      names(param) <- lab[free]
+      temp <- c(temp, param)
+    }
+    if (!is.null(tpset$RPS)) {
+      free <- tpset$RPS != 0 & lower.tri(tpset$RPS, diag = FALSE)
+      lab <- outer(psLab[1:ncol(free)], psLab[1:ncol(free)], function(x, y, op) {
+        paste0(
+          x, op,
+          y
+        )
+      }, op = "~~*")
+      param <- tpset$RPS[free]
+      names(param) <- lab[free]
+      temp <- c(temp, param)
+    }
+    if (!is.null(tpset$VPS)) {
+      free <- tpset$VPS != 0
+      lab <- paste0(psLab[1:length(free)], "~~", psLab)
+      param <- tpset$VPS[free]
+      names(param) <- lab[free]
+      temp <- c(temp, param)
+    }
+    if (!is.null(tpset$VE)) {
+      free <- tpset$VE != 0
+      lab <- paste0(psLab[1:length(free)], "~~*", psLab)
+      param <- tpset$VE[free]
+      names(param) <- lab[free]
+      temp <- c(temp, param)
+    }
+    if (!is.null(tpset$TE)) {
+      free <- tpset$TE != 0 & lower.tri(tpset$TE, diag = TRUE)
+      lab <- outer(indLab, indLab, function(x, y, op) {
+        paste0(
+          x,
+          op, y
+        )
+      }, op = "~~")
+      param <- tpset$TE[free]
+      names(param) <- lab[free]
+      temp <- c(temp, param)
+    }
+    if (!is.null(tpset$RTE)) {
+      free <- tpset$RTE != 0 & lower.tri(tpset$RTE, diag = FALSE)
+      lab <- outer(indLab, indLab, function(x, y, op) {
+        paste0(
+          x,
+          op, y
+        )
+      }, op = "~~*")
+      param <- tpset$RTE[free]
+      names(param) <- lab[free]
+      temp <- c(temp, param)
+    }
+    if (!is.null(tpset$VTE)) {
+      free <- tpset$VTE != 0
+      lab <- paste0(indLab, "~~", indLab)
+      param <- tpset$VTE[free]
+      names(param) <- lab[free]
+      temp <- c(temp, param)
+    }
+    if (!is.null(tpset$VY)) {
+      free <- tpset$VY != 0
+      lab <- paste0(indLab, "~~*", indLab)
+      param <- tpset$VY[free]
+      names(param) <- lab[free]
+      temp <- c(temp, param)
+    }
+    if (!is.null(tpset$BE)) {
+      free <- tpset$BE != 0
+      lab <- outer(psLab[1:ncol(free)], psLab[1:ncol(free)], function(x, y, op) {
+        paste0(
+          x, op,
+          y
+        )
+      }, op = "~")
+      param <- tpset$BE[free]
+      names(param) <- lab[free]
+      temp <- c(temp, param)
+    }
+    if (!is.null(tpset$AL)) {
+      free <- tpset$AL != 0
+      lab <- paste0(psLab[1:length(free)], "~1")
+      param <- tpset$AL[free]
+      names(param) <- lab[free]
+      temp <- c(temp, param)
+    }
+    if (!is.null(tpset$ME)) {
+      free <- tpset$ME != 0
+      lab <- paste0(psLab[1:length(free)], "~1*")
+      param <- tpset$ME[free]
+      names(param) <- lab[free]
+      temp <- c(temp, param)
+    }
+    if (!is.null(tpset$TY)) {
+      free <- tpset$TY != 0
+      lab <- paste0(indLab, "~1")
+      param <- tpset$TY[free]
+      names(param) <- lab[free]
+      temp <- c(temp, param)
+    }
+    if (!is.null(tpset$MY)) {
+      free <- tpset$MY != 0
+      lab <- paste0(indLab, "~1*")
+      param <- tpset$MY[free]
+      names(param) <- lab[free]
+      temp <- c(temp, param)
+    }
+    if (!is.null(tpset$GA)) {
+      free <- tpset$GA != 0
+      lab <- outer(psLab[1:nrow(free)], covLab[1:ncol(free)], function(x, y, op) {
+        paste0(
+          x, op,
+          y
+        )
+      }, op = "~")
+      param <- tpset$GA[free]
+      names(param) <- lab[free]
+      temp <- c(temp, param)
+    }
+    if (!is.null(tpset$KA)) {
+      free <- tpset$KA != 0
+      lab <- outer(indLab[1:nrow(free)], covLab[1:ncol(free)], function(x, y, op) {
+        paste0(
+          x, op,
+          y
+        )
+      }, op = "~")
+      param <- tpset$KA[free]
+      names(param) <- lab[free]
+      temp <- c(temp, param)
+    }
 
-    for (g in seq_along(misspecSet)) {
-		temp <- NULL
-
-        tpset <- misspecSet[[g]]
-        tpset <- lapply(tpset, function(x) {
-            if (is.null(x) || (is.vector(x) && length(x) == 0)) {
-                return(NULL)
-            } else {
-                return(x)
-            }
-        })
-
-        if (!is.null(tpset$LY)) {
-            free <- tpset$LY != 0
-            lab <- outer(indLab, facLab[1:ncol(free)], function(x, y, op) paste0(y,
-                op, x), op = "=~")
-            param <- tpset$LY[free]
-            names(param) <- lab[free]
-            temp <- c(temp, param)
-        }
-        if (!is.null(tpset$PS)) {
-            free <- tpset$PS != 0 & lower.tri(tpset$PS, diag = TRUE)
-            lab <- outer(psLab[1:ncol(free)], psLab[1:ncol(free)], function(x, y, op) paste0(x, op,
-                y), op = "~~")
-            param <- tpset$PS[free]
-            names(param) <- lab[free]
-            temp <- c(temp, param)
-        }
-        if (!is.null(tpset$RPS)) {
-            free <- tpset$RPS != 0 & lower.tri(tpset$RPS, diag = FALSE)
-            lab <- outer(psLab[1:ncol(free)], psLab[1:ncol(free)], function(x, y, op) paste0(x, op,
-                y), op = "~~*")
-            param <- tpset$RPS[free]
-            names(param) <- lab[free]
-            temp <- c(temp, param)
-        }
-        if (!is.null(tpset$VPS)) {
-            free <- tpset$VPS != 0
-            lab <- paste0(psLab[1:length(free)], "~~", psLab)
-            param <- tpset$VPS[free]
-            names(param) <- lab[free]
-            temp <- c(temp, param)
-        }
-        if (!is.null(tpset$VE)) {
-            free <- tpset$VE != 0
-            lab <- paste0(psLab[1:length(free)], "~~*", psLab)
-            param <- tpset$VE[free]
-            names(param) <- lab[free]
-            temp <- c(temp, param)
-        }
-        if (!is.null(tpset$TE)) {
-            free <- tpset$TE != 0 & lower.tri(tpset$TE, diag = TRUE)
-            lab <- outer(indLab, indLab, function(x, y, op) paste0(x,
-                op, y), op = "~~")
-            param <- tpset$TE[free]
-            names(param) <- lab[free]
-            temp <- c(temp, param)
-        }
-        if (!is.null(tpset$RTE)) {
-            free <- tpset$RTE != 0 & lower.tri(tpset$RTE, diag = FALSE)
-            lab <- outer(indLab, indLab, function(x, y, op) paste0(x,
-                op, y), op = "~~*")
-            param <- tpset$RTE[free]
-            names(param) <- lab[free]
-            temp <- c(temp, param)
-        }
-        if (!is.null(tpset$VTE)) {
-            free <- tpset$VTE != 0
-            lab <- paste0(indLab, "~~", indLab)
-            param <- tpset$VTE[free]
-            names(param) <- lab[free]
-            temp <- c(temp, param)
-        }
-        if (!is.null(tpset$VY)) {
-            free <- tpset$VY != 0
-            lab <- paste0(indLab, "~~*", indLab)
-            param <- tpset$VY[free]
-            names(param) <- lab[free]
-            temp <- c(temp, param)
-        }
-        if (!is.null(tpset$BE)) {
-            free <- tpset$BE != 0
-            lab <- outer(psLab[1:ncol(free)], psLab[1:ncol(free)], function(x, y, op) paste0(x, op,
-                y), op = "~")
-            param <- tpset$BE[free]
-            names(param) <- lab[free]
-            temp <- c(temp, param)
-        }
-        if (!is.null(tpset$AL)) {
-            free <- tpset$AL != 0
-            lab <- paste0(psLab[1:length(free)], "~1")
-            param <- tpset$AL[free]
-            names(param) <- lab[free]
-            temp <- c(temp, param)
-        }
-        if (!is.null(tpset$ME)) {
-            free <- tpset$ME != 0
-            lab <- paste0(psLab[1:length(free)], "~1*")
-            param <- tpset$ME[free]
-            names(param) <- lab[free]
-            temp <- c(temp, param)
-        }
-        if (!is.null(tpset$TY)) {
-            free <- tpset$TY != 0
-            lab <- paste0(indLab, "~1")
-            param <- tpset$TY[free]
-            names(param) <- lab[free]
-            temp <- c(temp, param)
-        }
-        if (!is.null(tpset$MY)) {
-            free <- tpset$MY != 0
-            lab <- paste0(indLab, "~1*")
-            param <- tpset$MY[free]
-            names(param) <- lab[free]
-            temp <- c(temp, param)
-        }
-        if (!is.null(tpset$GA)) {
-            free <- tpset$GA != 0
-            lab <- outer(psLab[1:nrow(free)], covLab[1:ncol(free)], function(x, y, op) paste0(x, op,
-                y), op = "~")
-            param <- tpset$GA[free]
-            names(param) <- lab[free]
-            temp <- c(temp, param)
-        }
-        if (!is.null(tpset$KA)) {
-            free <- tpset$KA != 0
-            lab <- outer(indLab[1:nrow(free)], covLab[1:ncol(free)], function(x, y, op) paste0(x, op,
-                y), op = "~")
-            param <- tpset$KA[free]
-            names(param) <- lab[free]
-            temp <- c(temp, param)
-        }
-
-		if(ngroups > 1 && length(names(temp))) names(temp) <- paste0(g, ".", names(temp))
-		final <- c(final, temp)
-	}
-    final
+    if (ngroups > 1 && length(names(temp))) names(temp) <- paste0(g, ".", names(temp))
+    final <- c(final, temp)
+  }
+  final
 }
 
 #' Check to see if random parameters are in the model. Can use to simplfy runRep
-#' 
+#'
 #' @keywords internal
 is.random <- function(dat) {
-    dat[is.empty(dat)] <- "0"
-    isRandom <- sapply(dat, FUN = function(x) {
-        x <- suppressWarnings(is.na(as.numeric(x)))
-    })
-    return(isRandom)
+  dat[is.empty(dat)] <- "0"
+  isRandom <- sapply(dat, FUN = function(x) {
+    x <- suppressWarnings(is.na(as.numeric(x)))
+  })
+  return(isRandom)
 }
 
 #' Check for non–positive-definite covariance matrices
@@ -1545,14 +1667,14 @@ is.random <- function(dat) {
 checkNPD <- function(object) {
   GLIST <- object@Model@GLIST
   covGLIST <- GLIST[names(GLIST) %in% c("theta", "psi")]
-	result <- rep(FALSE, length(covGLIST))
-	for (i in seq_along(covGLIST)) {
-		if (nrow(covGLIST[[i]]) >= 1) {
-			ev <- eigen(covGLIST[[i]])$values
-			if (any(ev < 0)) result[i] <- TRUE
-		}
-	}
-	any(result)
+  result <- rep(FALSE, length(covGLIST))
+  for (i in seq_along(covGLIST)) {
+    if (nrow(covGLIST[[i]]) >= 1) {
+      ev <- eigen(covGLIST[[i]])$values
+      if (any(ev < 0)) result[i] <- TRUE
+    }
+  }
+  any(result)
 }
 
 #' Collapse extra parameters generated by equality constraints
@@ -1562,30 +1684,30 @@ checkNPD <- function(object) {
 #'
 #' @keywords internal
 collapseExtraParam <- function(pls, dgen, fill = TRUE, con = NULL) {
-	## Collapse all labels
-	if (length(pls) == 1 & length(pls) != 1) dgen <- list(dgen) # FIX CONTRADICTION: length(pls) can never both == 1 and != 1
-	temp <- extractLab(pls, dgen, fill = fill, con = con)
-	target <- temp[[1]]
-	realval <- temp[[2]]
-	#oldop <- con$op
-	for (i in 1:length(con[[1]])) {
-		if (con[[2]][i] %in% c(">", "==")) {
-			con[[3]][i] <- paste("(", con[[1]][i], ")", "-", "(", con[[3]][i], ")")
-			con[[1]][i] <- paste0("diff", i)
-			con[[2]][i] <- ":="
-		} else if (con[[2]][i] == "<") {
-			con[[3]][i] <- paste("(", con[[3]][i], ")", "-", "(", con[[1]][i], ")")
-			con[[1]][i] <- paste0("diff", i)
-			con[[2]][i] <- ":="
-		}
-	}
-	temp <- applyConScript(target, realval, con)
-	target <- temp[[1]]
-	realval <- temp[[2]]
-	pos <- match(con$lhs, target)
-	result <- realval[pos]
-	names(result) <- target[pos]
-	result
+  ## Collapse all labels
+  if (length(pls) == 1 & length(pls) != 1) dgen <- list(dgen) # FIX CONTRADICTION: length(pls) can never both == 1 and != 1
+  temp <- extractLab(pls, dgen, fill = fill, con = con)
+  target <- temp[[1]]
+  realval <- temp[[2]]
+  # oldop <- con$op
+  for (i in 1:length(con[[1]])) {
+    if (con[[2]][i] %in% c(">", "==")) {
+      con[[3]][i] <- paste("(", con[[1]][i], ")", "-", "(", con[[3]][i], ")")
+      con[[1]][i] <- paste0("diff", i)
+      con[[2]][i] <- ":="
+    } else if (con[[2]][i] == "<") {
+      con[[3]][i] <- paste("(", con[[3]][i], ")", "-", "(", con[[1]][i], ")")
+      con[[1]][i] <- paste0("diff", i)
+      con[[2]][i] <- ":="
+    }
+  }
+  temp <- applyConScript(target, realval, con)
+  target <- temp[[1]]
+  realval <- temp[[2]]
+  pos <- match(con$lhs, target)
+  result <- realval[pos]
+  names(result) <- target[pos]
+  result
 }
 
 #' Rename extra parameters from constraint expressions
@@ -1594,24 +1716,24 @@ collapseExtraParam <- function(pls, dgen, fill = TRUE, con = NULL) {
 #'
 #' @keywords internal
 renameExtraParam <- function(lhs, op, rhs, refpt = NULL) {
-	for(i in 1:length(lhs)) {
-		lablhs <- lhs[i]
-		labrhs <- rhs[i]
-		if(!is.null(refpt)) {
-			matchlhs <- match(lablhs, refpt$plabel)
-			matchrhs <- match(labrhs, refpt$plabel)
-			if(!is.na(matchlhs)) lablhs <- refpt$label[matchlhs]
-			if(!is.na(matchrhs)) labrhs <- refpt$label[matchrhs]
-		}
-		if(op[i] %in% c(">", "==")) {
-			lhs[i] <- paste("[", lablhs, "]", "-", "[", labrhs, "]")
-		} else if (op[i] == "<") {
-			lhs[i] <- paste("[", labrhs, "]", "-", "[", lablhs, "]")
-		}
-	}
-	dup <- duplicated(lhs) | duplicated(lhs, fromLast = TRUE)
-	lhs[dup] <- paste(lhs[dup], "#", 1:sum(dup))
-	lhs
+  for (i in 1:length(lhs)) {
+    lablhs <- lhs[i]
+    labrhs <- rhs[i]
+    if (!is.null(refpt)) {
+      matchlhs <- match(lablhs, refpt$plabel)
+      matchrhs <- match(labrhs, refpt$plabel)
+      if (!is.na(matchlhs)) lablhs <- refpt$label[matchlhs]
+      if (!is.na(matchrhs)) labrhs <- refpt$label[matchrhs]
+    }
+    if (op[i] %in% c(">", "==")) {
+      lhs[i] <- paste("[", lablhs, "]", "-", "[", labrhs, "]")
+    } else if (op[i] == "<") {
+      lhs[i] <- paste("[", labrhs, "]", "-", "[", lablhs, "]")
+    }
+  }
+  dup <- duplicated(lhs) | duplicated(lhs, fromLast = TRUE)
+  lhs[dup] <- paste(lhs[dup], "#", 1:sum(dup))
+  lhs
 }
 
 
@@ -1622,182 +1744,184 @@ renameExtraParam <- function(lhs, op, rhs, refpt = NULL) {
 #'
 #' @keywords internal
 parsePopulation <- function(paramSet, draws, group = 1, std = FALSE, covData = NULL) {
-	if(std) {
-		temp <- draws
+  if (std) {
+    temp <- draws
 
-		vareta <- draws$PS
-		if (!is.null(draws$BE)) {
-			numrow <- nrow(draws$BE)
-			ID <- diag(rep(1, numrow))
-			vareta <- solve(ID - draws$BE) %*% vareta %*% solve(t(ID - draws$BE))
-		}
-		if(!is.null(covData)) {
-			sigmax <- cov(covData)
-			tempvareta <- draws$GA %*% sigmax %*% t(draws$GA)
-			if (!is.null(draws$BE)) {
-				numrow <- nrow(draws$BE)
-				ID <- diag(rep(1, numrow))
-				tempvareta <- solve(ID - draws$BE) %*% tempvareta %*% solve(t(ID - draws$BE))
-			}
-			vareta <- vareta + tempvareta
-		}
-		vary <- vareta
-		if (!is.null(draws$LY)) {
-			vary <- draws$LY %*% vareta %*% t(draws$LY) + draws$TE
-			if(!is.null(covData)) {
-				sigmax <- cov(covData)
-				vary <- vary + draws$KA %*% sigmax %*% t(draws$KA)
-			}
-		}
-		deta <- sqrt(diag(vareta))
-		ifelse(length(deta) == 1, deta <- as.matrix(deta), deta <- diag(deta))
-		dy <- sqrt(diag(vary))
-		ifelse(length(dy) == 1, dy <- as.matrix(dy), dy <- diag(dy))
-		if (!is.null(draws$LY)) draws$LY <- solve(dy) %*% temp$LY %*% deta
-		if (!is.null(draws$PS)) draws$PS <- solve(deta) %*% temp$PS %*% solve(deta)
-		if (!is.null(draws$TE)) draws$TE <- solve(dy) %*% temp$TE %*% solve(dy)
-		if (!is.null(draws$BE)) draws$BE <- solve(deta) %*% temp$BE %*% deta
-		if (!is.null(draws$AL)) draws$AL <- solve(deta) %*% temp$AL
-		if (!is.null(draws$TY)) draws$TY <- solve(dy) %*% temp$TY
-		if(!is.null(covData)) {
-			sigmax <- cov(covData)
-			dx <- sqrt(diag(sigmax))
-			ifelse(length(dx) == 1, dx <- as.matrix(dx), dx <- diag(dx))
-			if (!is.null(draws$GA)) draws$GA <- solve(deta) %*% temp$GA %*% dx
-			if (!is.null(draws$KA)) draws$KA <- solve(dy) %*% temp$KA %*% dx
-		}
-	}
-    ustart <- NULL
-    if (!is.null(paramSet$LY)) {
-        ustart <- c(ustart, startingVal(paramSet$LY@free, draws$LY, smart = TRUE, symm = FALSE))
+    vareta <- draws$PS
+    if (!is.null(draws$BE)) {
+      numrow <- nrow(draws$BE)
+      ID <- diag(rep(1, numrow))
+      vareta <- solve(ID - draws$BE) %*% vareta %*% solve(t(ID - draws$BE))
+    }
+    if (!is.null(covData)) {
+      sigmax <- cov(covData)
+      tempvareta <- draws$GA %*% sigmax %*% t(draws$GA)
+      if (!is.null(draws$BE)) {
+        numrow <- nrow(draws$BE)
+        ID <- diag(rep(1, numrow))
+        tempvareta <- solve(ID - draws$BE) %*% tempvareta %*% solve(t(ID - draws$BE))
+      }
+      vareta <- vareta + tempvareta
+    }
+    vary <- vareta
+    if (!is.null(draws$LY)) {
+      vary <- draws$LY %*% vareta %*% t(draws$LY) + draws$TE
+      if (!is.null(covData)) {
+        sigmax <- cov(covData)
+        vary <- vary + draws$KA %*% sigmax %*% t(draws$KA)
+      }
+    }
+    deta <- sqrt(diag(vareta))
+    ifelse(length(deta) == 1, deta <- as.matrix(deta), deta <- diag(deta))
+    dy <- sqrt(diag(vary))
+    ifelse(length(dy) == 1, dy <- as.matrix(dy), dy <- diag(dy))
+    if (!is.null(draws$LY)) draws$LY <- solve(dy) %*% temp$LY %*% deta
+    if (!is.null(draws$PS)) draws$PS <- solve(deta) %*% temp$PS %*% solve(deta)
+    if (!is.null(draws$TE)) draws$TE <- solve(dy) %*% temp$TE %*% solve(dy)
+    if (!is.null(draws$BE)) draws$BE <- solve(deta) %*% temp$BE %*% deta
+    if (!is.null(draws$AL)) draws$AL <- solve(deta) %*% temp$AL
+    if (!is.null(draws$TY)) draws$TY <- solve(dy) %*% temp$TY
+    if (!is.null(covData)) {
+      sigmax <- cov(covData)
+      dx <- sqrt(diag(sigmax))
+      ifelse(length(dx) == 1, dx <- as.matrix(dx), dx <- diag(dx))
+      if (!is.null(draws$GA)) draws$GA <- solve(deta) %*% temp$GA %*% dx
+      if (!is.null(draws$KA)) draws$KA <- solve(dy) %*% temp$KA %*% dx
+    }
+  }
+  ustart <- NULL
+  if (!is.null(paramSet$LY)) {
+    ustart <- c(ustart, startingVal(paramSet$LY@free, draws$LY, smart = TRUE, symm = FALSE))
+  }
+
+  ## PS - factor covariance: Symmetric
+  if (!is.null(paramSet$PS)) {
+    ustart <- c(ustart, startingVal(paramSet$PS@free, draws$PS, smart = TRUE, symm = TRUE))
+  }
+
+  ## RPS - factor correlation (same as PS): Symmetric
+  if (!is.null(paramSet$RPS)) {
+    # Step 1: parse variance information to the RPS
+    if (!is.null(paramSet$VPS)) {
+      diag(paramSet$RPS@free) <- paramSet$VPS@free
+    } else if (!is.null(paramSet$VE)) {
+      # Intentionally use else if to select either VPS or VE
+      diag(paramSet$RPS@free) <- paramSet$VE@free
     }
 
-    ## PS - factor covariance: Symmetric
-    if (!is.null(paramSet$PS)) {
-		ustart <- c(ustart, startingVal(paramSet$PS@free, draws$PS, smart = TRUE, symm = TRUE))
+    # Step 2: create pt
+    ustart <- c(ustart, startingVal(paramSet$RPS@free, draws$PS, smart = TRUE, symm = TRUE))
+  }
+
+
+  ## TE - Covariance of measurement error: Symmetric
+  if (!is.null(paramSet$TE)) {
+    ustart <- c(ustart, startingVal(paramSet$TE@free, draws$TE, smart = TRUE, symm = TRUE))
+  }
+
+  ## RTE - Correlation of measurment error: Symmetric
+  if (!is.null(paramSet$RTE)) {
+    # Step 1: parse variance information to the RTE
+    if (!is.null(paramSet$VTE)) {
+      diag(paramSet$RTE@free) <- paramSet$VTE@free
+    } else if (!is.null(paramSet$VY)) {
+      # Intentionally use else if to select either VPS or VE
+      diag(paramSet$RTE@free) <- paramSet$VY@free
     }
 
-    ## RPS - factor correlation (same as PS): Symmetric
-    if (!is.null(paramSet$RPS)) {
-        # Step 1: parse variance information to the RPS
-        if (!is.null(paramSet$VPS)) {
-            diag(paramSet$RPS@free) <- paramSet$VPS@free
-        } else if (!is.null(paramSet$VE)) {
-            # Intentionally use else if to select either VPS or VE
-            diag(paramSet$RPS@free) <- paramSet$VE@free
-        }
+    # Step 2: create pt
+    ustart <- c(ustart, startingVal(paramSet$RTE@free, draws$TE, smart = TRUE, symm = TRUE))
+  }
 
-        # Step 2: create pt
-        ustart <- c(ustart, startingVal(paramSet$RPS@free, draws$PS, smart = TRUE, symm = TRUE))
-    }
+  ## BE - Regressions among factors
+  if (!is.null(paramSet$BE)) {
+    ustart <- c(ustart, startingVal(paramSet$BE@free, draws$BE, smart = TRUE, symm = FALSE))
+  }
 
 
-    ## TE - Covariance of measurement error: Symmetric
-    if (!is.null(paramSet$TE)) {
-        ustart <- c(ustart, startingVal(paramSet$TE@free, draws$TE, smart = TRUE, symm = TRUE))
-    }
+  ## AL - factor intercept
 
-    ## RTE - Correlation of measurment error: Symmetric
-    if (!is.null(paramSet$RTE)) {
-        # Step 1: parse variance information to the RTE
-        if (!is.null(paramSet$VTE)) {
-            diag(paramSet$RTE@free) <- paramSet$VTE@free
-        } else if (!is.null(paramSet$VY)) {
-            # Intentionally use else if to select either VPS or VE
-            diag(paramSet$RTE@free) <- paramSet$VY@free
-        }
+  # if ME is not null but AL is null
+  if (!is.null(paramSet$ME) && is.null(paramSet$AL)) {
+    paramSet$AL <- paramSet$ME
+  }
 
-        # Step 2: create pt
-        ustart <- c(ustart, startingVal(paramSet$RTE@free, draws$TE, smart = TRUE, symm = TRUE))
-    }
+  # Create pt
+  if (!is.null(paramSet$AL)) {
+    ustart <- c(ustart, startingVal(paramSet$AL@free, draws$AL, smart = TRUE, symm = FALSE))
+  }
 
-    ## BE - Regressions among factors
-    if (!is.null(paramSet$BE)) {
-        ustart <- c(ustart, startingVal(paramSet$BE@free, draws$BE, smart = TRUE, symm = FALSE))
-    }
+  ## TY - indicator intercept
 
+  # if MY is not null but TY is null
+  if (!is.null(paramSet$MY) && is.null(paramSet$TY)) {
+    paramSet$TY <- paramSet$MY
+  }
 
-    ## AL - factor intercept
-
-    # if ME is not null but AL is null
-    if (!is.null(paramSet$ME) && is.null(paramSet$AL)) {
-        paramSet$AL <- paramSet$ME
-    }
-
-    # Create pt
-    if (!is.null(paramSet$AL)) {
-        ustart <- c(ustart, startingVal(paramSet$AL@free, draws$AL, smart = TRUE, symm = FALSE))
-    }
-
-    ## TY - indicator intercept
-
-    # if MY is not null but TY is null
-    if (!is.null(paramSet$MY) && is.null(paramSet$TY)) {
-        paramSet$TY <- paramSet$MY
-    }
-
-    # Create pt
-    if (!is.null(paramSet$TY)) {
-        ustart <- c(ustart, startingVal(paramSet$TY@free, draws$TY, smart = TRUE, symm = FALSE))
-    }
+  # Create pt
+  if (!is.null(paramSet$TY)) {
+    ustart <- c(ustart, startingVal(paramSet$TY@free, draws$TY, smart = TRUE, symm = FALSE))
+  }
 
 
-	nz <- NULL # Save for create covariances and means among covariates
+  nz <- NULL # Save for create covariances and means among covariates
 
-    ## GA - Regressions of factors on covariates
-    if (!is.null(paramSet$GA)) {
-		nz <- ncol(paramSet$GA@free)
-        ustart <- c(ustart, startingVal(paramSet$GA@free, draws$GA, smart = TRUE, symm = FALSE))
-    }
+  ## GA - Regressions of factors on covariates
+  if (!is.null(paramSet$GA)) {
+    nz <- ncol(paramSet$GA@free)
+    ustart <- c(ustart, startingVal(paramSet$GA@free, draws$GA, smart = TRUE, symm = FALSE))
+  }
 
-    ## KA - Regressions of factors on indicators
-    if (!is.null(paramSet$KA)) {
-		nz <- ncol(paramSet$KA@free)
-        ustart <- c(ustart, startingVal(paramSet$KA@free, draws$KA, smart = TRUE, symm = FALSE))
-    }
+  ## KA - Regressions of factors on indicators
+  if (!is.null(paramSet$KA)) {
+    nz <- ncol(paramSet$KA@free)
+    ustart <- c(ustart, startingVal(paramSet$KA@free, draws$KA, smart = TRUE, symm = FALSE))
+  }
 
-	# Create parameter table for covariates
-	if(!is.null(nz)) {
-		ustart <- c(ustart, startingVal(matrix(0, nz, nz), matrix(0, nz, nz), smart = TRUE, symm = TRUE))
-		ustart <- c(ustart, startingVal(rep(0, nz), rep(0, nz), smart = TRUE, symm = FALSE))
-	}
-    return(ustart)
+  # Create parameter table for covariates
+  if (!is.null(nz)) {
+    ustart <- c(ustart, startingVal(matrix(0, nz, nz), matrix(0, nz, nz), smart = TRUE, symm = TRUE))
+    ustart <- c(ustart, startingVal(rep(0, nz), rep(0, nz), smart = TRUE, symm = FALSE))
+  }
+  return(ustart)
 }
 
 #' Check if object is a lavaan parameter table
 #'
 #' @keywords internal
 is.partable <- function(object) {
-  ALLNAMES <- c("id","lhs","op","rhs","user","block","group","level","free",
-                "ustart","exo","label","plabel","start","est","se","eq.id","unco")
+  ALLNAMES <- c(
+    "id", "lhs", "op", "rhs", "user", "block", "group", "level", "free",
+    "ustart", "exo", "label", "plabel", "start", "est", "se", "eq.id", "unco"
+  )
   # leave eq.id and unco for reverse comptability.
   ## 14 April 2016:  Terry added new names "est" and "se"
-	is.list(object) && all(names(object) %in% ALLNAMES)
+  is.list(object) && all(names(object) %in% ALLNAMES)
 }
 
 #' Check if object is a lavaan function call
 #'
 #' @keywords internal
 is.lavaancall <- function(object) {
-	is.list(object) && ("model" %in% names(object))
+  is.list(object) && ("model" %in% names(object))
 }
 
 #' Handle duplicated parameter labels in lavaan parameter tables
 #'
 #' @keywords internal
 changeDupLab <- function(pt) {
-	temppt <- pt
-	temppt$label <- rep("", length(temppt$label))
-	templab <- lavaan::lav_partable_labels(temppt)
-	uniquelab <- setdiff(pt$label, "")
-	for(i in seq_along(uniquelab)) {
-		pos <- which(uniquelab[i] == pt$label)
-		if(length(pos) > 1) {
-			for(j in pos) {
-				nameparam <- paste0("<- (", templab[j], ")")
-				pt$label[j] <- paste(pt$label[j], nameparam)
-			}
-		}
-	}
-	pt
+  temppt <- pt
+  temppt$label <- rep("", length(temppt$label))
+  templab <- lavaan::lav_partable_labels(temppt)
+  uniquelab <- setdiff(pt$label, "")
+  for (i in seq_along(uniquelab)) {
+    pos <- which(uniquelab[i] == pt$label)
+    if (length(pos) > 1) {
+      for (j in pos) {
+        nameparam <- paste0("<- (", templab[j], ")")
+        pt$label[j] <- paste(pt$label[j], nameparam)
+      }
+    }
+  }
+  pt
 }

@@ -109,8 +109,10 @@ loading[8:11, 3] <- NA
 path.A <- matrix(0, 3, 3)
 path.A[2, 1] <- NA
 path.A[3, 2] <- NA
-model.A <- estmodel(LY=loading, BE=path.A, modelType="SEM",
-    indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
+model.A <- estmodel(
+  LY = loading, BE = path.A, modelType = "SEM",
+  indLab = c(paste("x", 1:3, sep = ""), paste("y", 1:8, sep = ""))
+)
 
 out.A <- analyze(model.A, PoliticalDemocracy)
 
@@ -118,27 +120,31 @@ out.A <- analyze(model.A, PoliticalDemocracy)
 path.B <- matrix(0, 3, 3)
 path.B[3, 1] <- NA
 path.B[2, 3] <- NA
-model.B <- estmodel(LY=loading, BE=path.B, modelType="SEM",
-    indLab=c(paste("x", 1:3, sep=""), paste("y", 1:8, sep="")))
+model.B <- estmodel(
+  LY = loading, BE = path.B, modelType = "SEM",
+  indLab = c(paste("x", 1:3, sep = ""), paste("y", 1:8, sep = ""))
+)
 
 out.B <- analyze(model.B, PoliticalDemocracy)
 
 loading.mis <- matrix("runif(1, -0.2, 0.2)", 11, 3)
 loading.mis[is.na(loading)] <- 0
 
-datamodel.A <- model.lavaan(out.A, std=TRUE, LY=loading.mis)
-datamodel.B <- model.lavaan(out.B, std=TRUE, LY=loading.mis)
+datamodel.A <- model.lavaan(out.A, std = TRUE, LY = loading.mis)
+datamodel.B <- model.lavaan(out.B, std = TRUE, LY = loading.mis)
 
 n <- nrow(PoliticalDemocracy)
 
-output.A.A <- sim(20, n=n, model.A, generate=datamodel.A)
-output.A.B <- sim(20, n=n, model.B, generate=datamodel.A)
-output.B.A <- sim(20, n=n, model.A, generate=datamodel.B)
-output.B.B <- sim(20, n=n, model.B, generate=datamodel.B)
+output.A.A <- sim(20, n = n, model.A, generate = datamodel.A)
+output.A.B <- sim(20, n = n, model.B, generate = datamodel.A)
+output.B.A <- sim(20, n = n, model.A, generate = datamodel.B)
+output.B.B <- sim(20, n = n, model.B, generate = datamodel.B)
 
-pValueNonNested(out.A, out.B,
-                output.A.A, output.A.B,
-                output.B.A, output.B.B)
+pValueNonNested(
+  out.A, out.B,
+  output.A.A, output.A.B,
+  output.B.A, output.B.B
+)
 
 # If the p-value for model A is significant but the p-value for model B
 # is not significant, model B is preferred.

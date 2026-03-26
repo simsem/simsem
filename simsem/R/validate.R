@@ -12,21 +12,25 @@
 # Value:
 #   Returns TRUE if the parameter set is valid.
 validateObject <- function(paramSet) {
-    if (!validateCovariance(paramSet$VPS, paramSet$RPS, paramSet$VE)) 
-        return(FALSE)
-    if (!is.null(paramSet$BE)) {
-        # Path or SEM
-        if (!validatePath(paramSet$BE, paramSet$VE, paramSet$VE)) 
-            return(FALSE)
+  if (!validateCovariance(paramSet$VPS, paramSet$RPS, paramSet$VE)) {
+    return(FALSE)
+  }
+  if (!is.null(paramSet$BE)) {
+    # Path or SEM
+    if (!validatePath(paramSet$BE, paramSet$VE, paramSet$VE)) {
+      return(FALSE)
     }
-    if (!is.null(paramSet$LY)) {
-        # SEM or CFA
-        if (!validateCovariance(paramSet$VTE, paramSet$RTE, paramSet$VY)) 
-            return(FALSE)
-        if (!validatePath(paramSet$LY, paramSet$VE, paramSet$VY)) 
-            return(FALSE)
+  }
+  if (!is.null(paramSet$LY)) {
+    # SEM or CFA
+    if (!validateCovariance(paramSet$VTE, paramSet$RTE, paramSet$VY)) {
+      return(FALSE)
     }
-    return(TRUE)
+    if (!validatePath(paramSet$LY, paramSet$VE, paramSet$VY)) {
+      return(FALSE)
+    }
+  }
+  return(TRUE)
 }
 
 # validatePath()
@@ -42,29 +46,31 @@ validateObject <- function(paramSet) {
 # Value:
 #   Returns TRUE if the matrix is valid.
 validatePath <- function(path, var.iv, var.dv) {
-    # Need to account for multiple independent variables
-    if (isTRUE(all.equal(var.iv, round(var.iv)))) 
-        var.iv <- round(var.iv)
-    if (isTRUE(all.equal(var.dv, round(var.dv)))) 
-        var.dv <- round(var.dv)
-    singleIV <- apply(path, 1, function(object) {
-        x <- object[!is.na(object)]
-        sum(x != 0) == 1
-    })
-    if (all(singleIV == 0)) {
-        return(TRUE)
-    } else {
-        path <- path[which(singleIV), , drop=FALSE]
-        var.dv <- var.dv[singleIV]
-        inv.var.iv <- 1/as.vector(var.iv)
-        max.path <- sqrt(var.dv) %o% sqrt(inv.var.iv)
-        abs.path <- abs(path)
-		if(any(var.dv == 0)) {
-			tmp <- abs.path[var.dv == 0, , drop = FALSE]
-			if(length(tmp) > 0) max.path[var.dv == 0, ] <- tmp
-		}
-        ifelse(sum(abs.path > (max.path + sqrt(.Machine$double.eps))) > 0, return(FALSE), return(TRUE))
+  # Need to account for multiple independent variables
+  if (isTRUE(all.equal(var.iv, round(var.iv)))) {
+    var.iv <- round(var.iv)
+  }
+  if (isTRUE(all.equal(var.dv, round(var.dv)))) {
+    var.dv <- round(var.dv)
+  }
+  singleIV <- apply(path, 1, function(object) {
+    x <- object[!is.na(object)]
+    sum(x != 0) == 1
+  })
+  if (all(singleIV == 0)) {
+    return(TRUE)
+  } else {
+    path <- path[which(singleIV), , drop = FALSE]
+    var.dv <- var.dv[singleIV]
+    inv.var.iv <- 1 / as.vector(var.iv)
+    max.path <- sqrt(var.dv) %o% sqrt(inv.var.iv)
+    abs.path <- abs(path)
+    if (any(var.dv == 0)) {
+      tmp <- abs.path[var.dv == 0, , drop = FALSE]
+      if (length(tmp) > 0) max.path[var.dv == 0, ] <- tmp
     }
+    ifelse(sum(abs.path > (max.path + sqrt(.Machine$double.eps))) > 0, return(FALSE), return(TRUE))
+  }
 }
 
 # validateCovariance()
@@ -80,28 +86,33 @@ validatePath <- function(path, var.iv, var.dv) {
 # Value:
 #   Returns TRUE if the covariance structure is valid.
 validateCovariance <- function(resVar, correlation, totalVar = NULL) {
-    if (!isSymmetric(correlation)) 
+  if (!isSymmetric(correlation)) {
+    return(FALSE)
+  }
+  if (any(is.na(resVar)) || any(resVar < 0)) {
+    return(FALSE)
+  }
+  zero.row <- resVar == 0
+  if (sum(zero.row) > 0) {
+    target.rows <- correlation[which(zero.row), , drop = FALSE]
+    for (i in seq_len(nrow(target.rows))) {
+      temp <- target.rows[i, -zero.row[i]]
+      if (sum(temp != 0) > 0) {
         return(FALSE)
-    if (any(is.na(resVar)) || any(resVar < 0)) {
-        return(FALSE)
-	}
-    zero.row <- resVar == 0
-    if (sum(zero.row) > 0) {
-        target.rows <- correlation[which(zero.row), , drop = FALSE]
-        for (i in seq_len(nrow(target.rows))) {
-            temp <- target.rows[i, -zero.row[i]]
-            if (sum(temp != 0) > 0) 
-                return(FALSE)
-        }
-        if (det(correlation) < 0) 
-            return(FALSE)
-    } else {
-        if (det(correlation) <= 0) 
-            return(FALSE)
+      }
     }
-    if (!is.null(totalVar)) {
-        if (sum(totalVar < 0) > 0) 
-            return(FALSE)
+    if (det(correlation) < 0) {
+      return(FALSE)
     }
-    return(TRUE)
+  } else {
+    if (det(correlation) <= 0) {
+      return(FALSE)
+    }
+  }
+  if (!is.null(totalVar)) {
+    if (sum(totalVar < 0) > 0) {
+      return(FALSE)
+    }
+  }
+  return(TRUE)
 }

@@ -76,9 +76,10 @@ Output2 <- sim(NULL, n = seq(450, 500, 10), model = CFA.Model)
 plotCutoff(Output2, 0.05)
 
 Output3 <- sim(NULL,
-               n = seq(450, 500, 10),
-               pmMCAR = c(0, 0.05, 0.1, 0.15),
-               model = CFA.Model)
+  n = seq(450, 500, 10),
+  pmMCAR = c(0, 0.05, 0.1, 0.15),
+  model = CFA.Model
+)
 
 plotCutoff(Output3, 0.05)
 }

@@ -67,8 +67,10 @@ Several validity checks are performed:
 }
 }
 \examples{
-free <- matrix(c(NA, 0.5,
-                 NA, NA), 2, 2)
+free <- matrix(c(
+  NA, 0.5,
+  NA, NA
+), 2, 2)
 
 bind(free, popParam = 0.6)
 

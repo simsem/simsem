@@ -13,6 +13,6 @@ findRecursiveSet(beta)
 A list of variable indices representing recursive levels.
 }
 \description{
-Groups variables according to their position in a recursive structural model 
+Groups variables according to their position in a recursive structural model
 defined by the regression coefficient matrix.
 }

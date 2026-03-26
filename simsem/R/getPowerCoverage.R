@@ -32,24 +32,28 @@
 #' @return A vector or data frame containing estimated power values.
 #'
 #' @export
-getPower <- function(simResult, alpha = 0.05, contParam = NULL, powerParam = NULL,
-    nVal = NULL, pmMCARval = NULL, pmMARval = NULL, paramVal = NULL) {
-    object <- clean(simResult)
-    condition <- c(length(unique(object@pmMCAR)) > 1, length(unique(object@pmMAR)) >
-        1, length(unique(object@n)) > 1)
-    if (any(condition)) {
-        pred <- getPred(contParam, nVal, pmMCARval, pmMARval, paramVal)
-        pow <- continuousPower(object, length(unique(object@n)) > 1, length(unique(object@pmMCAR)) >
-            1, length(unique(object@pmMAR)) > 1, contParam = contParam, alpha = alpha,
-            powerParam = powerParam, pred = pred)
-        return(pow)
-    } else {
-        z <- object@coef/object@se
-        crit.value <- qnorm(1 - alpha/2)
-        sig <- abs(z) > crit.value
-        pow <- apply(sig, 2, mean, na.rm = TRUE)
-        return(pow)
-    }
+getPower <- function(
+  simResult, alpha = 0.05, contParam = NULL, powerParam = NULL,
+  nVal = NULL, pmMCARval = NULL, pmMARval = NULL, paramVal = NULL
+) {
+  object <- clean(simResult)
+  condition <- c(length(unique(object@pmMCAR)) > 1, length(unique(object@pmMAR)) >
+    1, length(unique(object@n)) > 1)
+  if (any(condition)) {
+    pred <- getPred(contParam, nVal, pmMCARval, pmMARval, paramVal)
+    pow <- continuousPower(object, length(unique(object@n)) > 1, length(unique(object@pmMCAR)) >
+      1, length(unique(object@pmMAR)) > 1,
+    contParam = contParam, alpha = alpha,
+    powerParam = powerParam, pred = pred
+    )
+    return(pow)
+  } else {
+    z <- object@coef / object@se
+    crit.value <- qnorm(1 - alpha / 2)
+    sig <- abs(z) > crit.value
+    pow <- apply(sig, 2, mean, na.rm = TRUE)
+    return(pow)
+  }
 }
 
 #' Estimate Confidence Interval Coverage from Simulation Results
@@ -80,22 +84,26 @@ getPower <- function(simResult, alpha = 0.05, contParam = NULL, powerParam = NUL
 #' @return A vector or data frame containing estimated coverage rates.
 #'
 #' @export
-getCoverage <- function(simResult, coverValue = NULL, contParam = NULL, coverParam = NULL,
-    nVal = NULL, pmMCARval = NULL, pmMARval = NULL, paramVal = NULL) {
-    object <- clean(simResult)
-    condition <- c(length(unique(object@pmMCAR)) > 1, length(unique(object@pmMAR)) >
-        1, length(unique(object@n)) > 1)
-    if (any(condition)) {
-        pred <- getPred(contParam, nVal, pmMCARval, pmMARval, paramVal)
-        pow <- continuousCoverage(object, coverValue = coverValue, contN = length(unique(object@n)) > 1, contMCAR = length(unique(object@pmMCAR)) >
-            1, contMAR = length(unique(object@pmMAR)) > 1, contParam = contParam,
-            coverParam = coverParam, pred = pred)
-        return(pow)
-    } else {
-        cover <- calcCoverMatrix(object, coverValue = coverValue)
-        coverrate <- apply(cover, 2, mean, na.rm = TRUE)
-        return(coverrate)
-    }
+getCoverage <- function(
+  simResult, coverValue = NULL, contParam = NULL, coverParam = NULL,
+  nVal = NULL, pmMCARval = NULL, pmMARval = NULL, paramVal = NULL
+) {
+  object <- clean(simResult)
+  condition <- c(length(unique(object@pmMCAR)) > 1, length(unique(object@pmMAR)) >
+    1, length(unique(object@n)) > 1)
+  if (any(condition)) {
+    pred <- getPred(contParam, nVal, pmMCARval, pmMARval, paramVal)
+    pow <- continuousCoverage(object,
+      coverValue = coverValue, contN = length(unique(object@n)) > 1, contMCAR = length(unique(object@pmMCAR)) >
+        1, contMAR = length(unique(object@pmMAR)) > 1, contParam = contParam,
+      coverParam = coverParam, pred = pred
+    )
+    return(pow)
+  } else {
+    cover <- calcCoverMatrix(object, coverValue = coverValue)
+    coverrate <- apply(cover, 2, mean, na.rm = TRUE)
+    return(coverrate)
+  }
 }
 
 #' Construct Predictor Values for Continuous Simulation Conditions
@@ -114,28 +122,29 @@ getCoverage <- function(simResult, coverValue = NULL, contParam = NULL, coverPar
 #' @keywords internal
 getPred <- function(contParam = NULL, nVal = NULL, pmMCARval = NULL,
                     pmMARval = NULL, paramVal = NULL) {
-	pred <- NULL
-	pred$N <- nVal
-	pred$MCAR <- pmMCARval
-	pred$MAR <- pmMARval
-	if (!is.null(paramVal)) {
-		if (is(paramVal, "list")) {
-			if (is.null(names(paramVal)))
-			  names(paramVal) <- contParam
-			pred <- c(pred, paramVal)
-		} else if (is.vector(paramVal)) {
-			if (length(contParam) == 1) {
-			  temp <- list(paramVal)
-			  names(temp) <- contParam
-			  pred <- c(pred, temp)
-			} else {
-			  temp <- as.list(paramVal)
-			  names(temp) <- contParam
-			  pred <- c(pred, temp)
-			}
-		}
-	}
-	pred
+  pred <- NULL
+  pred$N <- nVal
+  pred$MCAR <- pmMCARval
+  pred$MAR <- pmMARval
+  if (!is.null(paramVal)) {
+    if (is.list(paramVal)) {
+      if (is.null(names(paramVal))) {
+        names(paramVal) <- contParam
+      }
+      pred <- c(pred, paramVal)
+    } else if (is.vector(paramVal)) {
+      if (length(contParam) == 1) {
+        temp <- list(paramVal)
+        names(temp) <- contParam
+        pred <- c(pred, temp)
+      } else {
+        temp <- as.list(paramVal)
+        names(temp) <- contParam
+        pred <- c(pred, temp)
+      }
+    }
+  }
+  pred
 }
 
 #' Compute Power for Continuously Varying Simulation Conditions
@@ -160,12 +169,14 @@ getPred <- function(contParam = NULL, nVal = NULL, pmMCARval = NULL,
 continuousPower <- function(simResult, contN = TRUE, contMCAR = FALSE,
                             contMAR = FALSE, contParam = NULL, alpha = 0.05,
                             powerParam = NULL, pred = NULL) {
-	object <- clean(simResult)
-    crit.value <- qnorm(1 - alpha/2)
-    sig <- 0 + (abs(object@coef/object@se) > crit.value)
-	continuousLogical(object, logical = sig, contN = contN, contMCAR = contMCAR,
-	                  contMAR = contMAR, contParam = contParam,
-	                  logicalParam = powerParam, pred = pred)
+  object <- clean(simResult)
+  crit.value <- qnorm(1 - alpha / 2)
+  sig <- 0 + (abs(object@coef / object@se) > crit.value)
+  continuousLogical(object,
+    logical = sig, contN = contN, contMCAR = contMCAR,
+    contMAR = contMAR, contParam = contParam,
+    logicalParam = powerParam, pred = pred
+  )
 }
 
 #' Compute Coverage for Continuously Varying Simulation Conditions
@@ -189,11 +200,13 @@ continuousPower <- function(simResult, contN = TRUE, contMCAR = FALSE,
 continuousCoverage <- function(simResult, coverValue = NULL, contN = TRUE,
                                contMCAR = FALSE, contMAR = FALSE,
                                contParam = NULL, coverParam = NULL, pred = NULL) {
-	object <- clean(simResult)
-	cover <- calcCoverMatrix(object, coverValue = coverValue)
-	continuousLogical(object, logical = cover, contN = contN, contMCAR = contMCAR,
-	                  contMAR = contMAR, contParam = contParam,
-	                  logicalParam = coverParam, pred = pred)
+  object <- clean(simResult)
+  cover <- calcCoverMatrix(object, coverValue = coverValue)
+  continuousLogical(object,
+    logical = cover, contN = contN, contMCAR = contMCAR,
+    contMAR = contMAR, contParam = contParam,
+    logicalParam = coverParam, pred = pred
+  )
 }
 
 #' Compute Coverage Indicator Matrix
@@ -209,23 +222,23 @@ continuousCoverage <- function(simResult, coverValue = NULL, contN = TRUE,
 #'
 #' @keywords internal
 calcCoverMatrix <- function(object, coverValue = NULL) {
-	lowerBound <- object@cilower
-	upperBound <- object@ciupper
-	if(is.null(coverValue)) {
-		paramValue <- object@paramValue
-		usedParam <- intersect(colnames(lowerBound), colnames(paramValue)) # colnames of lower and upper bounds are the same
-		lowerBound <- lowerBound[,usedParam]
-		upperBound <- upperBound[,usedParam]
-		paramValue <- paramValue[,usedParam]
-		if(nrow(paramValue) == 1) {
-			paramValue <- matrix(rep(paramValue, each = nrow(lowerBound)), nrow(lowerBound))
-			colnames(paramValue) <- usedParam
-		}
-		cover <- (paramValue > as.matrix(lowerBound)) & (paramValue < as.matrix(upperBound))
-	} else {
-		cover <- (coverValue > as.matrix(lowerBound)) & (coverValue < as.matrix(upperBound))
-	}
-	cover
+  lowerBound <- object@cilower
+  upperBound <- object@ciupper
+  if (is.null(coverValue)) {
+    paramValue <- object@paramValue
+    usedParam <- intersect(colnames(lowerBound), colnames(paramValue)) # colnames of lower and upper bounds are the same
+    lowerBound <- lowerBound[, usedParam]
+    upperBound <- upperBound[, usedParam]
+    paramValue <- paramValue[, usedParam]
+    if (nrow(paramValue) == 1) {
+      paramValue <- matrix(rep(paramValue, each = nrow(lowerBound)), nrow(lowerBound))
+      colnames(paramValue) <- usedParam
+    }
+    cover <- (paramValue > as.matrix(lowerBound)) & (paramValue < as.matrix(upperBound))
+  } else {
+    cover <- (coverValue > as.matrix(lowerBound)) & (coverValue < as.matrix(upperBound))
+  }
+  cover
 }
 
 #' Logistic Regression for Continuous Simulation Outcomes
@@ -250,93 +263,95 @@ calcCoverMatrix <- function(object, coverValue = NULL) {
 continuousLogical <- function(object, logical, contN = TRUE, contMCAR = FALSE,
                               contMAR = FALSE, contParam = NULL,
                               logicalParam = NULL, pred = NULL) {
+  # Change warning option to supress warnings
+  warnT <- as.numeric(options("warn"))
+  options(warn = -1)
 
-    # Change warning option to supress warnings
-    warnT <- as.numeric(options("warn"))
-    options(warn = -1)
+  # Clean simResult object and get a replications by parameters matrix of 0s and
+  # 1s for logistic regression
+  nrep <- dim(logical)[[1]]
 
-    # Clean simResult object and get a replications by parameters matrix of 0s and
-    # 1s for logistic regression
-    nrep <- dim(logical)[[1]]
+  # Find paramaterss to get power for
+  if (!is.null(logicalParam)) {
+    j <- match(logicalParam, dimnames(logical)[[2]]) # Return column indices that start with 'param'
+    logical <- data.frame(logical[, j, drop = FALSE])
+  }
 
-    # Find paramaterss to get power for
-    if (!is.null(logicalParam)) {
-        j <- match(logicalParam, dimnames(logical)[[2]])  # Return column indices that start with 'param'
-        logical <- data.frame(logical[, j, drop = FALSE])
+  # Create matrix of predictors (randomly varying params)
+  x <- NULL
+  predDefault <- is.null(pred)
+
+  if (contN) {
+    if (!length(object@n) == nrep) {
+      stop("Number of random sample sizes is not the same as the number of replications, check to see if N varied across replications")
     }
-
-    # Create matrix of predictors (randomly varying params)
-    x <- NULL
-    predDefault <- is.null(pred)
-
-    if (contN) {
-        if (!length(object@n) == nrep) {
-            stop("Number of random sample sizes is not the same as the number of replications, check to see if N varied across replications")
-        }
-        x <- cbind(x, object@n)
-        if (predDefault)
-            pred$N <- min(object@n):max(object@n)
+    x <- cbind(x, object@n)
+    if (predDefault) {
+      pred$N <- min(object@n):max(object@n)
     }
-    if (contMCAR) {
-        if (!length(object@pmMCAR) == nrep) {
-            stop("Number of random pmMCARs is not the same as the number of replications, check to see if pmMCAR varied across replications")
-        }
-        x <- cbind(x, object@pmMCAR)
-        if (predDefault)
-            pred$MCAR <- seq(min(object@pmMCAR), max(object@pmMCAR), by = 0.01)
-
+  }
+  if (contMCAR) {
+    if (!length(object@pmMCAR) == nrep) {
+      stop("Number of random pmMCARs is not the same as the number of replications, check to see if pmMCAR varied across replications")
     }
-    if (contMAR) {
-        if (!length(object@pmMAR) == nrep) {
-            stop("Number of random pmMARs is not the same as the number of replications, check to see if pmMAR varied across replications")
-        }
-        x <- cbind(x, object@pmMAR)
-        if (predDefault)
-            pred$MAR <- seq(min(object@pmMAR), max(object@pmMAR), by = 0.01)
-
+    x <- cbind(x, object@pmMCAR)
+    if (predDefault) {
+      pred$MCAR <- seq(min(object@pmMCAR), max(object@pmMCAR), by = 0.01)
     }
-    if (!is.null(contParam)) {
-        if (!(dim(object@paramValue)[[1]] == nrep)) {
-            stop("Number of random parameters is not the same as the number of replications, check to see if parameters varied across replications")
-        }
-        j <- match(contParam, names(object@paramValue))  # Return column indices that start with 'contParam'
-        x <- cbind(x, as.matrix(object@paramValue[, j, drop = FALSE])) #TDJ fix on 22-6-2021
-        if (predDefault) {
-            paramVal <- list()
-            for (i in 1:length(contParam)) {
-                temp <- seq(from = min(object@paramValue[, contParam[i]]),
-                            to = max(object@paramValue[, contParam[i]]),
-                            length.out = 5)
-                paramVal[[i]] <- unique(temp)
-            }
-            names(paramVal) <- contParam
-            pred <- c(pred, paramVal)
-        }
+  }
+  if (contMAR) {
+    if (!length(object@pmMAR) == nrep) {
+      stop("Number of random pmMARs is not the same as the number of replications, check to see if pmMAR varied across replications")
     }
-
-    res <- NULL
-    powVal <- data.frame(expand.grid(pred))
-    powVal <- cbind(rep(1, dim(powVal)[1]), powVal)
-    x <- as.matrix(x)
-    for (i in 1:dim(logical)[[2]]) {
-        try(mod <- glm(logical[, i] ~ x, family = binomial(link = "logit")), silent = TRUE)
-        res[[dimnames(logical)[[2]][[i]]]] <- apply(powVal, 1, function(x) predProb(x, mod)[2])
+    x <- cbind(x, object@pmMAR)
+    if (predDefault) {
+      pred$MAR <- seq(min(object@pmMAR), max(object@pmMAR), by = 0.01)
     }
-    if (is.list(res)) {
-        res <- do.call(cbind, res)
-    } else {
-        res <- t(as.matrix(res))
+  }
+  if (!is.null(contParam)) {
+    if (!(dim(object@paramValue)[[1]] == nrep)) {
+      stop("Number of random parameters is not the same as the number of replications, check to see if parameters varied across replications")
     }
-    names(res) <- names(logical)
-    colnames(powVal) <- paste("iv.", colnames(powVal), sep = "")
-    pow <- cbind(powVal[, -1], res)
-    colnames(pow) <- c(colnames(powVal)[-1], colnames(res))
+    j <- match(contParam, names(object@paramValue)) # Return column indices that start with 'contParam'
+    x <- cbind(x, as.matrix(object@paramValue[, j, drop = FALSE])) # TDJ fix on 22-6-2021
+    if (predDefault) {
+      paramVal <- list()
+      for (i in 1:length(contParam)) {
+        temp <- seq(
+          from = min(object@paramValue[, contParam[i]]),
+          to = max(object@paramValue[, contParam[i]]),
+          length.out = 5
+        )
+        paramVal[[i]] <- unique(temp)
+      }
+      names(paramVal) <- contParam
+      pred <- c(pred, paramVal)
+    }
+  }
+
+  res <- NULL
+  powVal <- data.frame(expand.grid(pred))
+  powVal <- cbind(rep(1, dim(powVal)[1]), powVal)
+  x <- as.matrix(x)
+  for (i in 1:dim(logical)[[2]]) {
+    try(mod <- glm(logical[, i] ~ x, family = binomial(link = "logit")), silent = TRUE)
+    res[[dimnames(logical)[[2]][[i]]]] <- apply(powVal, 1, function(x) predProb(x, mod)[2])
+  }
+  if (is.list(res)) {
+    res <- do.call(cbind, res)
+  } else {
+    res <- t(as.matrix(res))
+  }
+  names(res) <- names(logical)
+  colnames(powVal) <- paste("iv.", colnames(powVal), sep = "")
+  pow <- cbind(powVal[, -1], res)
+  colnames(pow) <- c(colnames(powVal)[-1], colnames(res))
 
 
-    ## Return warnings setting to user's settings
-    options(warn = warnT)
+  ## Return warnings setting to user's settings
+  options(warn = warnT)
 
-    return(pow)
+  return(pow)
 }
 
 #' Predicted Probability from Logistic Regression
@@ -354,17 +369,16 @@ continuousLogical <- function(object, logical, contN = TRUE, contMCAR = FALSE,
 #'
 #' @keywords internal
 predProb <- function(newdat, glmObj, alpha = 0.05) {
-    slps <- as.numeric(coef(glmObj))
-    logi <- sum(newdat * slps)
-	predVal <- as.matrix(newdat)
-	se <- sqrt(t(predVal) %*% vcov(glmObj) %*% predVal)
-	critVal <- qnorm(1 - alpha/2)
-	logi <- c(logi - critVal * se, logi, logi + critVal * se)
-	logi[logi > 500] <- 500
-	logi[logi < -500] <- -500
-    pp <- exp(logi)/(1 + exp(logi))
-	if(round(pp[2], 6) == 1) pp[3] <- 1
-	if(round(pp[2], 6) == 0) pp[1] <- 0
-    return(pp)
+  slps <- as.numeric(coef(glmObj))
+  logi <- sum(newdat * slps)
+  predVal <- as.matrix(newdat)
+  se <- sqrt(t(predVal) %*% vcov(glmObj) %*% predVal)
+  critVal <- qnorm(1 - alpha / 2)
+  logi <- c(logi - critVal * se, logi, logi + critVal * se)
+  logi[logi > 500] <- 500
+  logi[logi < -500] <- -500
+  pp <- exp(logi) / (1 + exp(logi))
+  if (round(pp[2], 6) == 1) pp[3] <- 1
+  if (round(pp[2], 6) == 0) pp[1] <- 0
+  return(pp)
 }
-
