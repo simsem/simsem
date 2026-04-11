@@ -159,7 +159,7 @@ setClass(
 #'
 #' @slot modelType Analysis model type (CFA, Path, or SEM).
 #'
-#' @slot nRep Number of replications used to generate and analyze simulated data.
+#' @slot nRep Total number of replications specified in the simulation design
 #'
 #' @slot coef Parameter estimates from each replication.
 #'
@@ -205,6 +205,8 @@ setClass(
 #'
 #' @slot timing Timing information for simulation runs.
 #'
+#' @slot repRun Integer vector indicating the indices of replications included in this object.
+#'
 #' @aliases SimResult-class summary,SimResult-method summaryShort,SimResult-method
 #'
 #' @docType class
@@ -224,7 +226,7 @@ setClass(
     stdCoef = "data.frame", stdSe = "data.frame",
     seed = "numeric", n = "vector", nobs = "data.frame",
     pmMCAR = "vector", pmMAR = "vector", extraOut = "list",
-    paramOnly = "logical", timing = "list"
+    paramOnly = "logical", timing = "list", repRun = "integer"
   )
 )
 

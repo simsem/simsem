@@ -1805,6 +1805,7 @@ outBA <- sim(10, n = 200, model = modelA, generate = modelB)
 outBB <- sim(10, n = 200, model = modelB, generate = modelB)
 
 # anova for nonnested model comparison (needs update to anova method)
+# SP: EXPECT ERRORS
 anova(outAA, outAB)
 anova(outBB, outBA)
 

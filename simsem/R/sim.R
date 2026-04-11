@@ -64,6 +64,9 @@
 #' @param silent Logical indicating whether warnings are suppressed.
 #' @param multicore Logical indicating whether parallel processing is used.
 #' @param numProc Number of processors for parallel computing.
+#' @param repRun Integer vector specifying a subset of replication indices to
+#' execute. This allows partitioning of nRep across multiple runs
+#' (e.g., repRun = 11:20 executes only replications 11–20 when nRep = 1000).
 #' @param paramOnly Logical. Return only population parameters.
 #' @param dataOnly Logical. Return only generated data.
 #' @param smartStart Logical indicating whether starting values use population parameters.
@@ -112,7 +115,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
                 createOrder = c(1, 2, 3), aux = NULL, group = NULL, mxFit = FALSE,
                 mxMixture = FALSE, citype = NULL, cilevel = 0.95, seed = 123321,
                 silent = FALSE, multicore = options("simsem.multicore")[[1]],
-                numProc = NULL, paramOnly = FALSE, dataOnly = FALSE,
+                numProc = NULL, repRun = NULL, paramOnly = FALSE, dataOnly = FALSE,
                 smartStart = FALSE, previousSim = NULL, completeRep = FALSE,
                 stopOnError = FALSE) {
   mc <- match.call()
@@ -139,10 +142,25 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
     assign(".Random.seed", as.integer(previousSim@seed[-1]), envir = .GlobalEnv)
   }
 
+  if(!is.null(repRun) & completeRep > 0L) {
+    stop("Either repRun or completeRep = TRUE is used, not both.")
+  }
+  nRepLocal <- nRep
+  if(!is.null(repRun)) {
+    nRepLocal <- length(repRun)
+    if(!is.vector(repRun)) stop("repRun is not a vector.")
+    if (!is.numeric(repRun) || any(is.na(repRun)) || any(repRun != as.integer(repRun))) {
+      stop("'repRun' must be a vector of positive integers.")
+    }
+    repRun <- as.integer(repRun)
+    if(min(repRun) < 1) stop("The minimum value in 'repRun' must not be below 1.")
+    if(max(repRun) > nRep) stop("The maximum value in 'repRun' must not exceed 'nRep'.")
+    if(anyDuplicated(repRun)) stop("Duplicated values in 'repRun' are not allowed.")
+  }
   isPopulation <- FALSE
   popData <- NULL
   if (!is.null(rawData)) {
-    if (!is.null(nRep) & !is.null(n)) {
+    if (!is.null(nRepLocal) & !is.null(n)) {
       isPopulation <- TRUE
       popData <- rawData
       rawData <- NULL
@@ -387,9 +405,11 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
       if (!is.null(pmMAR)) pmMAR <- out[, 3]
       n <- lapply(n, function(x, y) x[y], y = out[, 1])
       nRep <- nrow(out)
+      if(is.null(nRepLocal)) nRepLocal <- nRep
     }
   } else {
     nRep <- length(rawData)
+    if(is.null(nRepLocal)) nRepLocal <- nRep
     if (!is.null(n)) {
       warning("The sample size argument 'n' is suppressed when 'rawData' is specified")
       n <- NULL
@@ -442,27 +462,27 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
   ## Save last seed numseed[[nRep]] to result object to use for update method?
 
   if (is.null(rawData)) {
-    for (i in seq_len(nRep)) {
+    for (i in seq_len(nRepLocal)) {
+      idx <- if (is.null(repRun)) i else repRun[i]
       simConds[[i]] <- list()
       simConds[[i]][[1]] <- NULL # Rawdata
-      simConds[[i]][[2]] <- sapply(n, "[", i) # Sample Size
-      simConds[[i]][[3]] <- pmMCAR[i] # % Missing Completely at Random
-      simConds[[i]][[4]] <- pmMAR[i] # % Missing at random
-      simConds[[i]][[5]] <- numseed[[i]] # L'Ecuyer random seed
+      simConds[[i]][[2]] <- sapply(n, "[", idx) # Sample Size
+      simConds[[i]][[3]] <- pmMCAR[idx] # % Missing Completely at Random
+      simConds[[i]][[4]] <- pmMAR[idx] # % Missing at random
+      simConds[[i]][[5]] <- numseed[[idx]] # L'Ecuyer random seed
       simConds[[i]][[6]] <- FALSE # Skip impose missing values
     }
     if (isPopulation) {
       if (is.matrix(popData)) {
         popData <- data.frame(popData)
       }
-
-      simConds[[nRep + 1]] <- list()
-      simConds[[nRep + 1]][[1]] <- NULL
-      simConds[[nRep + 1]][[2]] <- NULL
-      simConds[[nRep + 1]][[3]] <- 0
-      simConds[[nRep + 1]][[4]] <- 0
-      simConds[[nRep + 1]][[5]] <- s
-      simConds[[nRep + 1]][[6]] <- TRUE
+      simConds[[nRepLocal + 1]] <- list()
+      simConds[[nRepLocal + 1]][[1]] <- NULL
+      simConds[[nRepLocal + 1]][[2]] <- NULL
+      simConds[[nRepLocal + 1]][[3]] <- 0
+      simConds[[nRepLocal + 1]][[4]] <- 0
+      simConds[[nRepLocal + 1]][[5]] <- s
+      simConds[[nRepLocal + 1]][[6]] <- TRUE
     }
   } else if (is.list(rawData)) { ## FIXME: what if rawData is a single data.frame (also a list)?
     if (is.data.frame(rawData[[1]])) {
@@ -475,14 +495,19 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
         "list must either contain matrices or data frames"
       )
     }
-
-    for (i in seq_along(rawData)) {
+    if(is.null(repRun)) {
+      tempRepRun <- seq_along(rawData)
+    } else {
+      tempRepRun <- seq_along(repRun)
+    }
+    for (i in tempRepRun) {
+      idx <- if (is.null(repRun)) i else repRun[i]
       simConds[[i]] <- list()
-      simConds[[i]][[1]] <- rawData[[i]]
+      simConds[[i]][[1]] <- rawData[[idx]]
       simConds[[i]][[2]] <- NA
-      simConds[[i]][[3]] <- pmMCAR[i]
-      simConds[[i]][[4]] <- pmMAR[i]
-      simConds[[i]][[5]] <- numseed[[i]]
+      simConds[[i]][[3]] <- pmMCAR[idx]
+      simConds[[i]][[4]] <- pmMAR[idx]
+      simConds[[i]][[5]] <- numseed[[idx]]
       simConds[[i]][[6]] <- FALSE
     }
   } else {
@@ -584,8 +609,8 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
 
   popResult <- NULL
   if (isPopulation) {
-    popResult <- Result.l[[nRep + 1]]
-    Result.l[[nRep + 1]] <- NULL
+    popResult <- Result.l[[nRepLocal + 1]]
+    Result.l[[nRepLocal + 1]] <- NULL
   }
 
   ## Return data when dataOnly is requested
@@ -595,7 +620,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
 
   ## Now we create a SimResult object
   timing.l <- lapply(Result.l, function(x) x$timing)
-  timing$InReps <- colMeans(matrix(unlist(timing.l), nrow = nRep, byrow = TRUE))
+  timing$InReps <- colMeans(matrix(unlist(timing.l), nrow = nRepLocal, byrow = TRUE))
   names(timing$InReps) <- names(timing.l[[1]])
 
   timing$RunReplications <- (proc.time()[3] - start.time)
@@ -638,11 +663,17 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
   misfitOut <- NULL
   if (!is.null(param.l[[1]])) {
     param <- as.data.frame(do.call(rbind, param.l))
-    if (nrow(unique(param)) == 1) param <- unique(param)
+    if (nrow(unique(param)) == 1) {
+      param <- param[1, , drop = FALSE]
+      rownames(param) <- NULL
+    }
   }
   if (!is.null(stdparam.l[[1]])) {
     stdparam <- as.data.frame(do.call(rbind, stdparam.l))
-    if (nrow(unique(stdparam)) == 1) stdparam <- unique(stdparam)
+    if (nrow(unique(stdparam)) == 1) {
+      stdparam <- stdparam[1, , drop = FALSE]
+      rownames(stdparam) <- NULL
+    }
   }
   if (isPopulation) {
     param <- as.data.frame(t(popResult$coef))
@@ -831,6 +862,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
   timing$CombineResults <- proc.time()[3] - start.time
   start.time <- proc.time()[3]
   timing$EndTime <- Sys.time()
+  repIndex <- if (is.null(repRun)) seq_len(nRepLocal) else repRun
   Result <- new("SimResult",
     modelType = modelType, nRep = nRep, coef = coef,
     se = se, fit = fit, converged = converged, seed = c(seed, s),
@@ -839,7 +871,7 @@ sim <- function(nRep = NULL, model = NULL, n = NULL, generate = NULL, ...,
     FMI1 = FMI1, FMI2 = FMI2, cilower = cilower, ciupper = ciupper,
     stdCoef = std, stdSe = stdse, n = n, nobs = nobs,
     pmMCAR = pmMCAR, pmMAR = pmMAR, extraOut = extra,
-    paramOnly = paramOnly, timing = timing
+    paramOnly = paramOnly, timing = timing, repRun = repIndex
   )
 
   if (!is.null(previousSim)) {

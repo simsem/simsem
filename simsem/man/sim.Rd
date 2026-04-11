@@ -43,6 +43,7 @@ sim(
   silent = FALSE,
   multicore = options("simsem.multicore")[[1]],
   numProc = NULL,
+  repRun = NULL,
   paramOnly = FALSE,
   dataOnly = FALSE,
   smartStart = FALSE,
@@ -129,6 +130,10 @@ lavaan syntax, OpenMx model, or a function that returns generated data.}
 \item{multicore}{Logical indicating whether parallel processing is used.}
 
 \item{numProc}{Number of processors for parallel computing.}
+
+\item{repRun}{Integer vector specifying a subset of replication indices to
+execute. This allows partitioning of nRep across multiple runs
+(e.g., repRun = 11:20 executes only replications 11–20 when nRep = 1000).}
 
 \item{paramOnly}{Logical. Return only population parameters.}
 
