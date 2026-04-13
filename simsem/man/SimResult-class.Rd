@@ -16,7 +16,7 @@ etc.
 \describe{
 \item{\code{modelType}}{Analysis model type (CFA, Path, or SEM).}
 
-\item{\code{nRep}}{Number of replications used to generate and analyze simulated data.}
+\item{\code{nRep}}{Total number of replications specified in the simulation design}
 
 \item{\code{coef}}{Parameter estimates from each replication.}
 
@@ -61,6 +61,8 @@ etc.
 \item{\code{paramOnly}}{Logical indicating whether only parameters are stored.}
 
 \item{\code{timing}}{Timing information for simulation runs.}
+
+\item{\code{repRun}}{Integer vector indicating the indices of replications included in this object.}
 }}
 
 \section{Objects from the Class}{

@@ -42,6 +42,8 @@
 #' @seealso
 #' \code{\link{SimResult-class}}, \code{\link{summary}}, \code{\link{summaryShort}}
 #'
+#' @importFrom utils head
+#'
 #' @examples
 #' \dontrun{
 #' result1 <- sim(...)
@@ -56,9 +58,47 @@ combineSim <- function(...) {
   if (!all(sapply(s4list, is, "SimResult"))) {
     stop("This function only combines objects of S4 class 'SimResult' ")
   }
-  ## check whether seeds are all unique, remind user it might invalidate results
-  if (multipleAnyEqualList(lapply(s4list, slot, name = "seed"))) {
-    warning("Some result objects have common seed number.")
+  ## check whether seeds are all unique. If not, check any indices are run twice.
+  seeds <- lapply(s4list, slot, name = "seed")
+  repRuns <- lapply(s4list, slot, name = "repRun")
+
+  ## check whether all seeds are identical (HPC split case)
+  sameSeed <- length(unique(lapply(seeds, paste, collapse = ","))) == 1
+
+  ## check whether repRun are identical across objects
+  repRunStrings <- lapply(repRuns, paste, collapse = ",")
+  sameRepRun <- length(unique(repRunStrings)) == 1
+
+  if (!sameSeed && !sameRepRun) {
+    stop(
+      "Seeds differ and repRun also differ across SimResult objects. ",
+      "This is unexpected: unequal repRun is only allowed when all objects share the same seed ",
+      "(i.e., an HPC split of one common simulation run)."
+    )
+  }
+
+  if (sameSeed) {
+    allRepRun <- unlist(repRuns)
+
+    ## 1. no overlap
+    if (anyDuplicated(allRepRun)) {
+      stop("Overlapping replication indices (repRun) detected among objects with identical seeds.")
+    }
+
+    ## 2. each object must have internally valid repRun
+    invalid <- sapply(repRuns, function(r) {
+      if (length(r) <= 1) return(FALSE)
+
+      r_sorted <- sort(r)
+      !identical(r, r_sorted) || any(diff(r_sorted) != 1)
+    })
+
+    if (any(invalid)) {
+      stop("Each SimResult must have repRun sorted and increasing by 1 (e.g., 1:50, 51:100).")
+    }
+
+    ## 3. sort objects
+    s4list <- s4list[order(sapply(s4list, function(dat) min(dat@repRun)))]
   }
 
   ## check that all models are the same type
@@ -69,17 +109,45 @@ combineSim <- function(...) {
     mT <- mT[1]
   }
 
-  nRep <- sum(sapply(s4list, function(dat) dat@nRep))
+  allRepRun <- unlist(repRuns)
+  ## nRep = total number of pooled replications
+  ## (duplicates allowed when seeds differ)
+  nRep <- length(allRepRun)
+
+  if (sameSeed) {
+    nRepDesign <- unique(sapply(s4list, function(dat) dat@nRep))
+
+    if (length(nRepDesign) != 1) {
+      stop("Objects with identical seeds have different nRep values.")
+    }
+
+    allRepRun_sorted <- sort(allRepRun)
+    expected <- seq_len(nRepDesign)
+    missingRep <- setdiff(expected, allRepRun_sorted)
+
+    if (length(missingRep) > 0) {
+      warning(
+        sprintf(
+          "Some replications are missing from the pooled result. Expected repRun 1:%d, but %d replication(s) are missing (e.g., %s).",
+          nRepDesign,
+          length(missingRep),
+          paste(head(missingRep, 5), collapse = ", ")
+        )
+      )
+    }
+  }
+
   paramOnly <- any(sapply(s4list, function(dat) dat@paramOnly))
 
   ## function to stack data frames that may have nrows == 0 in some conditions
   stackEm <- function(dat, mySlot) {
-    if (nrow(slot(dat, mySlot)) == 0) {
-      DF <- data.frame()
-    } else {
-      DF <- slot(dat, mySlot)
+    DF <- slot(dat, mySlot)
+
+    if (is.null(DF) || nrow(DF) == 0) {
+      return(data.frame())
     }
-    return(DF)
+
+    DF
   }
 
   ## function to combine data frames
@@ -94,60 +162,120 @@ combineSim <- function(...) {
   ciupper <- do.call("rbind", lapply(s4list, stackEm, "ciupper"))
   stdCoef <- do.call("rbind", lapply(s4list, stackEm, "stdCoef"))
   stdSe <- do.call("rbind", lapply(s4list, stackEm, "stdSe"))
-  nobs <- do.call("rbind", lapply(s4list, stackEm, "nobs"))
 
-  if (length(misspecValue) > 0 && all(is.na(misspecValue))) {
-    misspecValue <- data.frame(V1 = NA)
+  if (nrow(misspecValue) > 0 && all(is.na(misspecValue))) {
+    misspecValue <- data.frame()
   }
-  if (all(is.na(popFit))) popFit <- data.frame(V1 = NA)
+  if (all(is.na(popFit))) popFit <- data.frame()
 
   ## function to stack paramValues so nrows == nReps, (unless it already is, e.g. random parameters)
   stackParams <- function(dat) {
-    if (nrow(dat@paramValue) == 1) {
-      paramVec <- dat@paramValue
-      for (i in 2:dat@nRep) paramVec <- rbind(paramVec, dat@paramValue)
-      return(paramVec)
-    } else {
-      return(dat@paramValue)
+    nLocal <- length(dat@repRun)
+    DF <- dat@paramValue
+
+    if (nrow(DF) == 1) {
+      DF <- DF[rep(1, nLocal), , drop = FALSE]
     }
+
+    DF
   }
+
   pv <- do.call("rbind", lapply(s4list, stackParams))
+
   if (nrow(unique(pv)) == 1) pv <- unique(pv)
 
-  ## SP: FIX BUGS: stdpv should be the stacked standardized parameters
+  ## same as stackParams
   stackStdParams <- function(dat) {
-    if (nrow(dat@stdParamValue) == 1) {
-      paramVec <- dat@stdParamValue
-      for (i in 2:dat@nRep) paramVec <- rbind(paramVec, dat@stdParamValue)
-      return(paramVec)
-    } else {
-      return(dat@stdParamValue)
+    nLocal <- length(dat@repRun)
+    DF <- dat@stdParamValue
+
+    if (nrow(DF) == 1) {
+      DF <- DF[rep(1, nLocal), , drop = FALSE]
     }
+
+    DF
   }
+
   stdpv <- do.call("rbind", lapply(s4list, stackStdParams))
+
   if (nrow(unique(stdpv)) == 1) stdpv <- unique(stdpv)
 
   ## save vectors. If single values, save them as vectors to match nReps rows in data.frames
   converged <- do.call("c", lapply(s4list, function(dat) dat@converged))
-  seed <- s4list[[length(s4list)]]@seed
-  n <- do.call("c", lapply(s4list, function(dat) rep(dat@n, length.out = dat@nRep)))
-  pmMCAR <- do.call("c", lapply(s4list, function(dat) rep(dat@pmMCAR, length.out = dat@nRep)))
-  pmMAR <- do.call("c", lapply(s4list, function(dat) rep(dat@pmMAR, length.out = dat@nRep)))
+  seed <- s4list[[length(s4list)]]@seed # SP: Intentional use 'seed' of the last object (if runRep is used, seed is the same and it is okay to use this.)
 
-  ## combine lists
+  # Account for repRun, single/multiple value of n/pmMCAR/pmMAR
+  expandVec <- function(x, nLocal) {
+    if (length(x) == 1) {
+      rep(x, nLocal)
+    } else if (length(x) == nLocal) {
+      x
+    } else {
+      stop("Length of vector does not match repRun.")
+    }
+  }
 
-  ### need nRep empty slots
-  extraOut <- do.call("c", lapply(s4list, function(dat) dat@extraOut))
+  n <- NULL
+  len_n <- sapply(s4list, function(dat) length(dat@n))
+  if(all(len_n == nRep)) {
+    all_same_n <- all(sapply(s4list[-1], function(dat) {
+      isTRUE(all.equal(dat@n, s4list[[1]]@n))
+    }))
+    if(all_same_n) {
+      n <- s4list[[1]]@n
+    } else {
+      stop("The 'n' slots are not equal across all SimResult objects.")
+    }
+  } else {
+    n <- do.call("c", lapply(s4list, function(dat) {
+      expandVec(dat@n, length(dat@repRun))
+    }))
+  }
+
+
+  nobs <- NULL
+  len_nobs <- sapply(s4list, function(dat) nrow(dat@nobs))
+  if(all(len_nobs == nRep)) {
+    all_same_nobs <- all(sapply(s4list[-1], function(dat) {
+      isTRUE(all.equal(dat@nobs, s4list[[1]]@nobs))
+    }))
+    if(all_same_nobs) {
+      nobs <- s4list[[1]]@nobs
+    } else {
+      stop("The 'nobs' slots are not equal across all SimResult objects.")
+    }
+  } else {
+    nobs <- do.call("rbind", lapply(s4list, stackEm, "nobs"))
+  }
+
+  pmMCAR <- do.call("c", lapply(s4list, function(dat) {
+    expandVec(dat@pmMCAR, length(dat@repRun))
+  }))
+
+  pmMAR <- do.call("c", lapply(s4list, function(dat) {
+    expandVec(dat@pmMAR, length(dat@repRun))
+  }))
+
+  allEmpty <- all(sapply(s4list, function(dat) length(dat@extraOut) == 0))
+
+  if (allEmpty) {
+    extraOut <- list()
+  } else {
+    extraOut <- do.call("c", lapply(s4list, function(dat) {
+      if (length(dat@extraOut) != length(dat@repRun)) {
+        stop("Length of extraOut does not match repRun.")
+      }
+      dat@extraOut
+    }))
+  }
 
   ### add list elements (always same order)
   FUN <- function(timing1, timing2) mapply("+", timing1, timing2, SIMPLIFY = FALSE)
-  timing <- Reduce(FUN, lapply(s4list, function(dat) dat@timing[-which(names(dat@timing) %in% c("StartTime", "EndTime"))]))
-
+  timing <- Reduce(FUN, lapply(s4list, function(dat) dat@timing[setdiff(names(dat@timing), c("StartTime", "EndTime"))]))
   inreps <- lapply(s4list, function(dat) dat@timing$InReps)
-  nreps <- lapply(s4list, function(dat) dat@nRep)
-  totaltime <- mapply("*", inreps, nreps, SIMPLIFY = TRUE)
-  totaltime <- apply(totaltime, 1, sum)
-  timing$InReps <- totaltime / nRep
+  nrepseach <- sapply(s4list, function(dat) length(dat@repRun))
+  totaltime <- Reduce(`+`, Map(function(x, n) x * n, inreps, nrepseach))
+  timing$InReps <- totaltime / sum(nrepseach)
   timing$StartTime <- Reduce(min, lapply(s4list, function(dat) dat@timing$StartTime))
   timing$EndTime <- Reduce(max, lapply(s4list, function(dat) dat@timing$EndTime))
 
