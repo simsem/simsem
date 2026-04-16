@@ -33,30 +33,27 @@
       <section id="main_content" class="inner">
         <h1>simsem: SIMulated Structural Equation Modeling</h1>
 
-<p>This R package has been developed for facilitating simulation and analysis of data within the structural equation modeling (SEM) framework. This package aims to help analysts create simulated data from hypotheses or analytic results from obtained data. The simulated data can be used for different purposes, such as power analysis, model fit evaluation, and planned missing design.</p>
-
+<p>This R package is designed to facilitate the simulation and analysis of data within the structural equation modeling (SEM) framework. It helps analysts generate simulated data based on hypotheses or analytic results from observed data. The simulated data can be used for various purposes, such as power analysis, model fit evaluation, and planned missing designs.</p>
+        
 <ol>
-<li><em>Building simulated sampling distribution for fit indices.</em> This package will help researchers tailor fit indices cutoffs based on a priori alpha level and a priori definition of trivial model misspecification. In other words, this package will help researchers simulate data based on their actual model with their defined trivial model misspecification. Then, the fit indices from the simulated data can be used to create empirical sampling distributions and find the fit indices cutoff based on the sampling distributions. Model parameters can be specified manually or obtained from the results of data analysis. If model parameters are obtained from the results of data analysis, this approach is also called the parametric bootstrap or Monte Carlo approach. The Bollen-Stine bootstrap approach for data generation is also available, as well as creating nonnormal distribution by Gaussian copula. </li>
-<li><em>Power analysis.</em> This package will help analysts find power of both parameter estimates and model evaluation. This package can find power when data are missing. Missing data imposed into simulated data can be 1) missing completely at random (MCAR), 2) missing at random (MAR), 3) missing not at random (NMAR), and 4) planned missing data (<em>n</em>-form design or two-method design). Longitudinal missing data (i.e., attrition) can be modeled as a MCAR or MAR process. Missing data can be handled through multiple imputation of Full Information Maximum Liklihood. Sample size and percent missing can be varied continuously and power plots given values of sample size or percent missing can be built.</li>
-<li><em>Methodological investigations.</em> This package can be used for methodological studies concerning SEM. Researchers can easily vary parameter values and model misspecification across parameters and easily summarize results from simulations. Nested models can be easily tested by comparing the results from two simulation runs. The powerful and flexible missing data options available in simsem make the package extremely useful in methodological investigations concerning SEM and missing data.</li>
+  
+<li><em>Building simulated sampling distributions for fit indices.</em> This package helps researchers tailor fit index cutoffs based on an a priori alpha level and a predefined definition of trivial model misspecification. In other words, users can simulate data based on their target model under controlled levels of misspecification. The resulting fit indices can then be used to construct empirical sampling distributions and determine appropriate cutoff values. Model parameters can be specified manually or derived from empirical data analysis. When parameters are based on empirical results, this approach corresponds to parametric bootstrap or Monte Carlo methods. The package also supports the Bollen–Stine bootstrap for data generation, as well as the generation of nonnormal data using a Gaussian copula.</li>
+
+<li><em>Power analysis.</em> This package allows analysts to evaluate the statistical power of both parameter estimates and model fit tests. Power can be assessed under various missing data mechanisms, including missing completely at random (MCAR), missing at random (MAR), missing not at random (NMAR), and planned missing designs (e.g., <em>n</em>-form or two-method designs). Longitudinal missingness (attrition) can also be modeled under MCAR or MAR assumptions. Missing data can be handled using multiple imputation or full information maximum likelihood (FIML). Sample size and the proportion of missing data can be varied continuously, and power curves can be generated accordingly.</li>
+
+<li><em>Methodological investigations.</em> This package supports methodological research in SEM by allowing users to systematically vary parameter values and model misspecifications and efficiently summarize simulation results. Nested models can be evaluated by comparing results across simulation conditions. The flexible handling of missing data further enhances its usefulness for methodological studies involving SEM and incomplete data.</li>
 
 </ol><h2>Announcements</h2>
 
-<h3>[June 06, 2016] Latest Update: simsem, Version 0.5-13</h3>
+<h3>[April 02, 2026] Latest Update: simsem, Version 0.5-17</h3>
 
-<p>This version is available on CRAN. This is simply a maintenance version.</p>
-
-<h3>[February 29, 2016] Latest Update: simsem, Version 0.5-12</h3>
-
-<p>This version is available on CRAN. The contact information is updated. This is simply a maintenance version.</p>
-
-<h3>[June 29, 2015] Latest Update: simsem, Version 0.5-11</h3>
-
-<p>This version is available on CRAN. Because lavaan changes the way to deal with equality constraints in parameter tables, the simsem package needs to change the codes that involves with lavaan parameter tables. This package does not have reverse compatibility. That is, the script in running simsem remains the same. However, the objects created from previous version may not run or produce erroneous results in this version.</p>
+<p>This is a maintenance release. All documentations has been converted to the roxygen format.</p>
 
 <h2>Main Developers</h2>
 
 <p><a href="https://www.sunthud.com">Sunthud Pornprasertmanit</a></p>
+
+<p><a href="https://github.com/TDJorgensen">Terry D. Jorgensen</a> (maintainer)</p>
 
 <p><a href="https://github.com/patr1ckm">Patrick Miller</a></p>
 
@@ -64,52 +61,42 @@
 
 <h2>Program</h2>
 
-<p>The project is still under development. The package can be installed by copying this line into R:</p>
+<p>The package is still under development. You can install it from CRAN using:</p>
 
 <pre><code>install.packages("simsem")
 </code></pre>
 
-<p>If you are interested in the source code, please click <a href="https://github.com/simsem/simsem">here</a>.</p>
+<p>If you are interested in the source code, please see the <a href="https://github.com/simsem/simsem">GitHub</a> repository.</p>
 
-<p>You may install the recently developed test version by downloading the latest version from the following link into the current R directory:
+<p>To install the development version, use:</p>
 
-<p><a href="https://github.com/simsem/simsem/tree/master/builds">https://github.com/simsem/simsem/tree/master/builds</a></p>
-
-<p>Make sure that you have the <strong>lavaan</strong> package in your personal library and then copy the following line into R:</p>
-
-<pre><code>install.packages("simsem_latestVersion.tar.gz", repos = NULL, type = "source")
+<pre><code>devtools::install_github("simsem/simsem", subdir = "simsem")
 </code></pre>
 
-<p>Note that <code>latestVersion</code> is the appropriate number of the latest version. For example, <code>"simsem_0.5-11.tar.gz"</code> is used.</p>
+<p>Note that <code>latestVersion</code> should be replaced with the current version number. For example, <code>"simsem_0.5-17.tar.gz"</code>.</p>
 
-<p>Here is how to install simsemClassic (version 0.2-8 of simsem) from KRAN only:</p>
+<p>If you wish to use the <strong>OpenMx</strong> package for data generation or analysis, please follow this <a href="https://openmx.ssri.psu.edu">link</a> for installation instructions.</p>
 
-<pre><code>install.packages("simsemClassic", repos="http://rweb.quant.ku.edu/kran", type="source")
-</code></pre>
-
-If users wish to use the <strong>OpenMx</strong> package for data generation or data analysis, please follow this <a href="http://openmx.psyc.virginia.edu/">link</a> to check the download instruction.
-
-<p>Please report any bugs or give me any suggestions by <a href="mailto:sunthud.pornprasertmanit@ttu.edu">email</a>.</p>
+<p>Please report any bugs or provide suggestions by opening an issue on <a href="https://github.com/simsem/simsem/issues">GitHub</a>.</p>
 
 <h2>Materials</h2>
 
 <ul>
 <li><a href="https://github.com/simsem/simsem/wiki/Vignette">simsem vignette and examples</a></li>
-<li><a href="https://github.com/simsem/simsem/tree/gh-pages/vignettes/hpc-simulation-simsem/simsem_hpc.html">HPC tutorial using simsem</a></li>
+<li><a href="https://simsem.org/vignettes/hpc-simulation-simsem/simsem_hpc.html">HPC tutorial using simsem</a></li>
 <li><a href="https://cran.r-project.org/web/packages/simsem/simsem.pdf">simsem package reference manual</a></li>
 </ul>
 
 <h2>Presentations and Papers</h2>
 <ul>
-<li><a href="http://simsem.org/papers">Presentations and Papers</a></li>
+<li><a href="https://simsem.org/papers">Presentations and Papers</a></li>
 </ul>
 <h2>Version History</h2>
 <ul>
-<li><a href="http://simsem.org/version">Version History</a></li>
-<li><a href="http://simsem.org/versiontech">Version History in Technical Details</a></li>
+<li><a href="https://simsem.org/version">Version History</a></li>
 </ul><h2>Acknowledgement</h2>
 
-<p>The development of <em>simsem</em> has been supported by the <a href="http://crmda.ku.edu">University of Kansas Center for Research Methods and Data Analysis</a>. </p>
+<p>The development of <em>simsem</em> has been supported by the University of Kansas Center for Research Methods and Data Analysis. </p>
 
 <p>Partial support for this project was provided by grant NSF 1053160 (Wei Wu &amp; Todd D. Little, co-PIs) and the Center for Research Methods and Data Analysis at the University of Kansas (Todd D. Little, director). Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the funding agencies.</p>
       </section>
@@ -119,7 +106,7 @@ If users wish to use the <strong>OpenMx</strong> package for data generation or 
     <div id="footer_wrap" class="outer">
       <footer class="inner">
         <p class="copyright">simsem maintained by <a href="https://github.com/simsem">simsem</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
       </footer>
     </div>
 
